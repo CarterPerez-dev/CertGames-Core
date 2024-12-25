@@ -184,11 +184,18 @@
   color: #000;
   border: 1px solid #000;
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  /* Slightly smaller padding and font-size */
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
   cursor: pointer;
   font-weight: bold;
   transition: all 0.3s ease;
+}
+
+/* Add a quick "clicked" animation feedback */
+.copy-button-payload:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 .copy-button-payload:hover {

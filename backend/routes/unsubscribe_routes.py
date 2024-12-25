@@ -1,5 +1,7 @@
+# unsubscribe_routes.py
+
 from flask import Blueprint, request, jsonify
-from models.user_subscription import remove_subscription, find_subscription
+from models.user_subscription import remove_subscription, find_subscription, cancel_all_scheduled_tasks
 
 unsubscribe_bp = Blueprint('unsubscribe_routes', __name__)
 
@@ -18,10 +20,13 @@ def unsubscribe():
 
         subscription = find_subscription(email)
         if not subscription:
-            return jsonify({"message": "Subscription not found"}), 404
+            return jsonify({"error": "You do not have a subscription."}), 404
 
         # Remove subscription from the database
         remove_subscription(email)
+
+        # Immediately revoke any queued tasks
+        cancel_all_scheduled_tasks(email)
 
         return jsonify({"message": "Successfully unsubscribed"}), 200
 

@@ -820,7 +820,6 @@ function Home() {
     };
   }, []);
 
-  
   const sanitizeInput = (input) => {
     const map = {
       '&': '&amp;',
@@ -837,14 +836,12 @@ function Home() {
   };
 
   const handleGeneratePayload = () => {
-    if (vulnerability || evasionTechnique) { 
+    if (vulnerability || evasionTechnique) {
       setLoading(true);
 
-     
       const sanitizedVulnerability = vulnerability ? sanitizeInput(vulnerability) : "";
       const sanitizedEvasionTechnique = evasionTechnique ? sanitizeInput(evasionTechnique) : "";
 
-     
       const requestData = {};
       if (sanitizedVulnerability) requestData.vulnerability = sanitizedVulnerability;
       if (sanitizedEvasionTechnique) requestData.evasion_technique = sanitizedEvasionTechnique;
@@ -874,7 +871,7 @@ function Home() {
           alert('Failed to connect to the backend server. Please check the server connection.');
           setLoading(false);
         });
-    } else { 
+    } else {
       alert("Please enter at least one of vulnerability or evasion technique");
     }
   };
@@ -889,11 +886,9 @@ function Home() {
     }
   };
 
-  
   const processPayload = (text) => {
     if (!text) return null;
 
-   
     const regex = /(\bor\b)|(\b\d+\b)|([!@#$%^&=+*()])|([:;"'>?<{}\[\]\\])|([-\/|])/gi;
 
     const elements = [];
@@ -904,12 +899,10 @@ function Home() {
       const [matchedText, orWord, number, yellowSymbol, greenSymbol, greySymbol] = match;
       const { index } = match;
 
-     
       if (index > lastIndex) {
         elements.push(text.substring(lastIndex, index));
       }
 
-    
       if (orWord) {
         elements.push(<span key={`or-word-${index}`} className="or-word">{matchedText}</span>);
       } else if (number) {
@@ -925,12 +918,32 @@ function Home() {
       lastIndex = regex.lastIndex;
     }
 
-   
     if (lastIndex < text.length) {
       elements.push(text.substring(lastIndex));
     }
 
     return elements;
+  };
+
+
+  const handleVulnerabilityChange = (e) => {
+    const chosenValue = e.target.value;
+    const found = vulnerabilitiesList.find((v) => v === chosenValue);
+    if (found) {
+      setVulnerability(found);
+    } else {
+      setVulnerability(chosenValue);
+    }
+  };
+
+  const handleEvasionTechniqueChange = (e) => {
+    const chosenValue = e.target.value;
+    const found = evasionTechniquesList.find((t) => t === chosenValue);
+    if (found) {
+      setEvasionTechnique(found);
+    } else {
+      setEvasionTechnique(chosenValue);
+    }
   };
 
   return (
@@ -939,12 +952,11 @@ function Home() {
       <h1 className="header-title">XploitCraft</h1>
 
       <div className="input-container-horizontal">
-        {/* Vulnerability Input */}
         <input
           type="text"
           placeholder="Enter Vulnerability or Xploit"
-          value={vulnerability}
-          onChange={(e) => setVulnerability(e.target.value)}
+          value={vulnerability.replace(/ example$/, '')}
+          onChange={handleVulnerabilityChange}
           className="input-field"
           list="vulnerability-list"
         />
@@ -952,18 +964,17 @@ function Home() {
           {vulnerabilitiesList.map((vuln, index) => (
             <option
               key={index}
-              label={vuln.replace(/ example$/, '')} 
-              value={vuln} 
+              label={vuln.replace(/ example$/, '')}
+              value={vuln}
             />
           ))}
         </datalist>
 
-        {/* Evasion Technique Input */}
         <input
           type="text"
           placeholder="Enter Evasion Technique or Delivery Method"
-          value={evasionTechnique}
-          onChange={(e) => setEvasionTechnique(e.target.value)}
+          value={evasionTechnique.replace(/ example$/, '')}
+          onChange={handleEvasionTechniqueChange}
           className="input-field"
           list="evasion-list"
         />
@@ -971,8 +982,8 @@ function Home() {
           {evasionTechniquesList.map((tech, index) => (
             <option
               key={index}
-              label={tech.replace(/ example$/, '')} 
-              value={tech} 
+              label={tech.replace(/ example$/, '')}
+              value={tech}
             />
           ))}
         </datalist>

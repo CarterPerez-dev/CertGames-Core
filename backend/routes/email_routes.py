@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
 from helpers.email_helper import send_email
 from helpers.emailopenai_helper import generate_email_content
-from helpers.scheduler_helper import schedule_email_task
+from helpers.schedule_tasks import schedule_emails_for_subscription
 
 email_bp = Blueprint('email_routes', __name__)
 
 @email_bp.route('/schedule_email', methods=['POST'])
-def schedule_email():
+def schedule_email_route():
     """
     Route to schedule an email for the Daily CyberBrief feature.
     """
@@ -19,12 +19,8 @@ def schedule_email():
         if not email or not cert_category or not time_slots:
             return jsonify({"error": "Missing required parameters."}), 400
 
-        # Generate content using OpenAI
-        email_content = generate_email_content(subject=f"Daily CyberBrief, prompt=prompt")
-
-        # Schedule email task using the scheduler helper
-        for time_slot in time_slots:
-            schedule_email_task(email, email_content, time_slot)
+        
+        schedule_emails_for_subscription(email, cert_category, time_slots)
 
         return jsonify({"message": "Emails scheduled successfully."}), 200
 

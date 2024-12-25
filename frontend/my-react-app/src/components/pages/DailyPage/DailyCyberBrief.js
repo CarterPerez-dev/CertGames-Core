@@ -32,8 +32,8 @@ const DailyCyberBrief = () => {
       // Simulate loading progress
       const loadingInterval = setInterval(() => {
         setLoadingProgress((prevProgress) => {
-          if (prevProgress < 9) {
-            return prevProgress + 10; // Gradually increase the loading bar to 90%
+          if (prevProgress < 90) {
+            return prevProgress + 10; // Gradually increase the loading bar to ~90%
           } else {
             clearInterval(loadingInterval);
             return prevProgress;
@@ -96,6 +96,8 @@ const DailyCyberBrief = () => {
         <h1 className="cyberbrief-title">Daily CyberBrief</h1>
         <p className="cyberbrief-description">
           Get daily updates on cybersecurity and certification objectives straight to your email.
+          <br />
+          <strong>Note:</strong> All scheduled times are in Eastern Time (ET).
         </p>
 
         <div className="cyberbrief-form">
@@ -164,6 +166,7 @@ const DailyCyberBrief = () => {
               Unsubscribe
             </button>
           </div>
+
           {loading && (
             <div className="loading-bar-container">
               <div className="loading-bar">

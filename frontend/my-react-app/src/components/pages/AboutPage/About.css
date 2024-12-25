@@ -235,12 +235,12 @@ body, html {
 
 
 .purple-text {
-  color: purple;
+  color: #4169e1;
 }
 
 
 .custom-email-link {
-  color: purple;
+  color:  #4169e1;
   text-decoration: none;
   margin-left: 5px;
 }
@@ -250,7 +250,6 @@ body, html {
 
 
 .contact-section,
-.readme-section,
 .portfolio-section {
   margin: 30px 0;
   background-color: rgba(0, 0, 0, 0.6);
@@ -260,6 +259,11 @@ body, html {
   transition: transform 0.3s;
 }
 
+.readme-section {
+  margin: 30px 0;
+  padding: 15px;
+  transition: transform 0.3s;
+}
 
 .section-title-glitch {
   color: #ff0000;
@@ -284,9 +288,10 @@ body, html {
   color: #C70039;
   font-weight: bold;
   text-decoration: none;
+  background-color: #000;
   border: 2px solid #ff0000;
-  border-radius: 5px;
-  padding: 5px 10px;
+  border-radius: 10px;
+  padding: 5px 15px;
   transition: background-color 0.3s;
 }
 

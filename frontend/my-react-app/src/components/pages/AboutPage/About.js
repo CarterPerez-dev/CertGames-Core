@@ -105,7 +105,18 @@ function About() {
         <section className="about-carter">
           <h2 className="carter-title">About Carter</h2>
           <p className="carter-description">
-            I am a 21-year-old Integration Technician at Sealing Tech, driven by a passion for making cybersecurity learning accessible and enjoyable. Formerly a general manager in the fast-food industry just one year ago, I’ve since changed paths and am now pursuing a master’s degree in Cybersecurity at UMGC. I draw inspiration from my favorite show, Mr. Robot, which is the theme of this webiste. Ouside of work I enjoy studying for certifcations and a hopbby of mine is to speedrun them as it chlannges me. I also enjoy learnbing new things such as programminga dn web design, aswell as coding prgrams to streamline my daily life, As I move toward becoming a cybersecurity analyst, then a penetration tester, I hope to onde day step into  CTOP role or start my own cyber secuirty company.
+           My name is Carter, I’m 21, and I work as an Integration Technician at Sealing Tech. Im driven by a passion for making cybersecurity learning both accessible and engaging. Just a year ago, I was a General Manager in the fast-food industry, but I decided to pivot toward a field that truly excites me. Now, I’m pursuing a master’s degree in Cybersecurity at UMGC while building a career that aligns with my goals and interests.
+
+My favorite show, Mr. Robot, inspires not only my mindset but also the aesthetic of this website—it’s a nod to the hacker culture that first sparked my curiosity in the field. Outside of work, I’m always challenging myself to learn and grow. One way I do this is by diving into certifications, aiming to complete them as efficiently as possible. It’s a rewarding way to learn new things, and deepen my expertise while tackling new challenges.
+
+I also enjoy programming, web design, and creating tools to make life easier. Whether it’s writing scripts to streamline workflows or building applications just for fun, I love the mix of creativity and problem-solving. My long-term goals include growing into a cybersecurity analyst role, then transitioning into penetration testing. Eventually, I hope to step into a Chief Technology Officer (CTO) position—or even launch my own cybersecurity company.
+
+For me, this journey isn’t just about building a career—it’s about constantly learning, creating, and making an impact in an ever-evolving industry. By the way, therss a simple little Easter Egg in this website, look through my git repo to find it or solve the riddle.
+ 
+ Riddle............ I’m the master of all, the start of the chain,
+Tap me once, and I’ll remain.
+Twice, however, and you’ll see,
+What lies behind the root of me.
           </p>
         </section>
 
