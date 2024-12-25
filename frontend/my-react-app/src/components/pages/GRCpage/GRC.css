@@ -79,7 +79,7 @@
 .grc-select:hover,
 .grc-select:focus {
   border-color: #cc0000;
-  background-color: #1a1a1a; /* Slight background change on hover/focus */
+  background-color: #1a1a1a; 
 }
 
 .grc-generate-btn {
@@ -109,7 +109,7 @@
   opacity: 0.6;
 }
 
-/* Spinner Styles */
+
 .grc-spinner {
   width: 24px;
   height: 24px;
@@ -163,11 +163,11 @@
 .grc-option-btn:hover:not(:disabled) {
   background-color: #696969;
   color: #000;
-  transform: translateY(-2px); /* Subtle lift effect */
+  transform: translateY(-2px); 
 }
 
 .grc-option-btn:active:not(:disabled) {
-  transform: translateY(0); /* Reset on click */
+  transform: translateY(0);
 }
 
 .grc-option-btn.selected {
@@ -192,13 +192,13 @@
 }
 
 .grc-feedback.correct {
-  background-color: #4caf50; /* Green background for correct */
+  background-color: #4caf50; 
   color: #fff;
   border: 0.125rem solid #2e7d32;
 }
 
 .grc-feedback.incorrect {
-  background-color: #f44336; /* Red background for incorrect */
+  background-color: #f44336; 
   color: #fff;
   border: 0.125rem solid #c62828;
 }
@@ -211,10 +211,17 @@
   color: #000;
   border: 0.0625rem solid #000;
   border-radius: 1.25rem;
-  padding: 0.3rem 0.6rem;
-  font-size: 0.7rem;
+
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+.copy-btn:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 .copy-btn:hover {
@@ -222,9 +229,7 @@
   color: #000;
 }
 
-/* Responsive Design */
 
-/* For Tablets and Larger Devices */
 @media (min-width: 768px) {
   .grc-wizard-container {
     padding: 2rem;
@@ -331,7 +336,7 @@
   }
 
   .grc-spinner {
-    margin-left: 0; /* Center spinner on mobile */
+    margin-left: 0; 
     margin-top: 10px;
   }
 }

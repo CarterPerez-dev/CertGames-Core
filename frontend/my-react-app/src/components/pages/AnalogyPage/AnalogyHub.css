@@ -157,13 +157,18 @@ body {
   color: #000;
   border: 0.125rem solid #000;
   border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
   cursor: pointer;
   font-weight: bold;
+}
+
+
+.copy-button:active {
+  transform: scale(0.95);
+  opacity: 0.8;
 }
 
 .copy-button:hover {
   background-color: #00CED1;
 }
-

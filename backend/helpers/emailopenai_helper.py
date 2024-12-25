@@ -1,30 +1,63 @@
 import os
 import logging
-from API.AI import client
+import re
+from API.AI import client  
 
 # Set up logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+
+
 def generate_email_content(subject, prompt):
     """
     Generate email content based on the given subject and prompt.
-    
-    Args:
-        subject (str): The subject of the email content to be generated.
-        prompt (str): The specific prompt to guide the email content generation.
-    
-    Returns:
-        str: The generated email content.
+    Returns cleaned HTML content.
     """
     try:
+        refined_prompt = (
+            f"{prompt}\n\n"
+            "Important instructions:\n"
+            "- Do NOT include lines beginning with 'Subject:' in the email body.\n"
+            "- Do NOT use placeholders like '[Recipient Name]', '[Your Name]', '[Phone Number]', etc.\n"
+            "- Structure the email in multiple paragraphs for readability.\n"
+            "- Conclude the email with:\n\n"
+            "Respectfully,\n"
+            "CarterPerez, Dev\n"
+            "CarterPerez-dev@proxyauthrequired.com\n"
+            "\n"
+            "Do not mention subscribers or that you're an AI. Keep the tone educational and engaging."
+        )
+
         response = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": refined_prompt}],
             model="gpt-4o",
             max_tokens=1000,
             temperature=0.7,
         )
-        return response.choices[0].message.content.strip()
+
+        raw_content = response.choices[0].message.content.strip()
+
+        # 1. Remove accidental "Subject:" lines
+        cleaned_content = re.sub(r'(?i)^subject:.*\n?', '', raw_content)
+
+        # 2. Replace placeholders if they appear
+        placeholder_patterns = [
+            r'\[Recipient(?:\'s)? Name\]',
+            r'\[Your Name\]',
+            r'\[Your Position\]',
+            r'\[Your Contact Information\]',
+            r'\[Phone Number\]'
+        ]
+        for pattern in placeholder_patterns:
+            cleaned_content = re.sub(pattern, '', cleaned_content, flags=re.IGNORECASE)
+
+        # 3. Convert newlines to <br> for HTML formatting
+        cleaned_content = cleaned_content.replace('\r\n', '\n')  # normalize
+        cleaned_content = cleaned_content.replace('\n\n', '<br><br>')
+        cleaned_content = cleaned_content.replace('\n', '<br>')
+
+        return cleaned_content
 
     except Exception as e:
         logger.error(f"Error generating email content: {e}")
@@ -32,27 +65,23 @@ def generate_email_content(subject, prompt):
 
 def generate_daily_email(subject, frequency):
     """
-    Generate daily email content based on the subject and frequency.
-    
-    Args:
-        subject (str): The subject for the daily email content.
-        frequency (int): Frequency (1-4) representing how many times an email should be generated in a day.
-    
-    Returns:
-        List[str]: A list of generated email content for each instance in the frequency.
+    (Optional) Generate multiple emails for daily distribution.
     """
     prompt = (
-        f"Create an engaging and educational email about the topic '{subject}', designed for daily subscribers interested in learning about this subject. "
-        "The email should be structured with a clear introduction, 2-3 actionable tips or insights, and a conclusion with a motivational or thought-provoking statement. "
-        "Incorporate unique examples, analogies, or real-world scenarios related to the topic to make it memorable and engaging. "
-        "Ensure the content is easy to read and provides value for both beginners and advanced learners. "
-        "Each email should be slightly different, using new examples, insights, or perspectives to keep the series fresh and engaging over time."
-        "Do not excplicity mention you are an AI or mention that you will do what I ask. Aslo do not mention subscribers or anything"
-        "At the end of the email replace - Best regards, [Your Name] [Your Position] [Your Contact Information] with - Respectfully, CarterPerez, Dev, CarterPerez-dev@proxyauthrequired.com"
+        f"Create an engaging and educational email about the '{subject}', "
+        "designed for daily readers who want to learn more about objectives/concepts found in the subject. "
+        "Include an introduction, 2-3 actionable tips or insights, and a conclusion. "
+        "Use unique examples or real-world scenarios, and or analogies to help teach the reader. "
+        "Do not mention AI or subscribers. "
+        "Use paragraphs. "
+        "End with the sign-off:\n\n"
+        "Respectfully,\n"
+        "CarterPerez, Dev\n"
+        "CarterPerez-dev@proxyauthrequired.com\n"
     )
 
     try:
-        generated_emails = []
+        emails = []
         for _ in range(frequency):
             response = client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt}],
@@ -60,9 +89,14 @@ def generate_daily_email(subject, frequency):
                 max_tokens=1000,
                 temperature=0.7,
             )
-            generated_emails.append(response.choices[0].message.content.strip())
+            raw_email = response.choices[0].message.content.strip()
+            cleaned_email = re.sub(r'(?i)^subject:.*\n?', '', raw_email)
+            cleaned_email = cleaned_email.replace('\r\n', '\n')
+            cleaned_email = cleaned_email.replace('\n\n', '<br><br>')
+            cleaned_email = cleaned_email.replace('\n', '<br>')
+            emails.append(cleaned_email)
 
-        return generated_emails
+        return emails
 
     except Exception as e:
         logger.error(f"Error generating daily email content: {e}")

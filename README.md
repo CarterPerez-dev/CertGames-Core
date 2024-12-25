@@ -502,6 +502,43 @@ nano .env
 ```env
 # .env
 
+
+
+## Nginx Configuration
+
+Make sure you navigate to the **nginx** directory in the root of this project, then into the **sites_enabled** directory.  
+Open (e.g., with `nano`) the **reverse_proxy.conf** file.  
+Change it from:
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name proxyauthrequired.com www.proxyauthrequired.com;
+
+    location / {
+        proxy_pass http://apache:8080;  
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name _; 
+
+    location / {
+        proxy_pass http://apache:8080;  
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
 # Backend Configuration
 FLASK_ENV=production
 FLASK_APP=app.py
