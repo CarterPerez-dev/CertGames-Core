@@ -1,5 +1,3 @@
-# unsubscribe_routes.py
-
 from flask import Blueprint, request, jsonify
 from models.user_subscription import remove_subscription, find_subscription, cancel_all_scheduled_tasks
 

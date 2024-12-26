@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar/Sidebar';
 
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
-import About from './components/pages/AboutPage/About'; // About component
+import About from './components/pages/AboutPage/About'; 
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
 import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
 import Log from './components/pages/LogPage/Log';
@@ -33,8 +33,8 @@ function App() {
             <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/donate" element={<Donate />} />
-            <Route path="/portfolio" element={<Portfolio />} />
-            <Route path="/portfolio_notegg" element={<Portfolio_notegg />} />
+            <Route path="/easteregg" element={<Portfolio />} />
+            <Route path="/portfolio" element={<Portfolio_notegg />} />
           </Routes>
         </div>
       </div>

@@ -33,7 +33,7 @@ def generate_email_content(subject, prompt):
             messages=[{"role": "user", "content": refined_prompt}],
             model="gpt-4o",
             max_tokens=1000,
-            temperature=0.7,
+            temperature=0.5,
         )
 
         raw_content = response.choices[0].message.content.strip()

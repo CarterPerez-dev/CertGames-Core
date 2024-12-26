@@ -6,23 +6,22 @@ from helpers.celery_app import app
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-
 MONGO_URI = os.getenv("MONGO_URI")
-
 client = MongoClient(MONGO_URI)
 db = client['xploitcraft']
 subscriptions_collection = db['user_subscriptions']
 
-def add_subscription(email, cert_category, frequency, time_slots, task_ids=None):
+def add_subscription(email, cert_category, frequency, time_slots):
     """
     Add a subscription to the database.
+    Store task_ids as an empty dict initially.
     """
     subscription_data = {
         "email": email,
         "cert_category": cert_category,
         "frequency": frequency,
         "time_slots": time_slots,
-        "task_ids": task_ids or []
+        "task_ids": {}  # <-- a dictionary keyed by slot
     }
     subscriptions_collection.insert_one(subscription_data)
 
@@ -47,35 +46,53 @@ def update_subscription(email, updated_data):
         {"$set": updated_data}
     )
 
-def add_task_id(email, task_id):
+def set_task_id_for_slot(email, slot, task_id):
     """
-    Add a Celery task ID to a user's subscription.
+    Store/Update a Celery task ID for a specific time slot in the subscription's dictionary.
     """
     subscriptions_collection.update_one(
         {"email": email},
-        {"$push": {"task_ids": task_id}}
+        {"$set": {f"task_ids.{slot}": task_id}}
     )
 
-def get_task_ids(email):
+def remove_task_id_for_slot(email, slot):
     """
-    Retrieve all Celery task IDs for a user's subscription.
+    Remove a Celery task ID for a specific time slot from the subscription.
+    """
+    subscriptions_collection.update_one(
+        {"email": email},
+        {"$unset": {f"task_ids.{slot}": ""}}
+    )
+
+def get_task_id_for_slot(email, slot):
+    """
+    Retrieve the Celery task ID for a specific time slot, if any.
     """
     subscription = find_subscription(email)
-    return subscription.get("task_ids", []) if subscription else []
+    if not subscription:
+        return None
+    return subscription.get("task_ids", {}).get(slot)
 
-def clear_task_ids(email):
+def get_all_task_ids(email):
     """
-    Clear all Celery task IDs from a user's subscription.
+    Return entire dictionary of slot -> task_id.
     """
-    subscriptions_collection.update_one(
-        {"email": email},
-        {"$set": {"task_ids": []}}
-    )
-
-
+    subscription = find_subscription(email)
+    if not subscription:
+        return {}
+    return subscription.get("task_ids", {})
 
 def cancel_all_scheduled_tasks(email):
-    task_ids = get_task_ids(email)
-    for task_id in task_ids:
-        app.control.revoke(task_id, terminate=True)
-    clear_task_ids(email)
+    """
+    Revoke all scheduled tasks (by slot) and clear the dictionary of task_ids.
+    """
+    task_ids_dict = get_all_task_ids(email)
+    for slot, task_id in task_ids_dict.items():
+        if task_id:
+            app.control.revoke(task_id, terminate=True)
+    # Clear the entire dictionary
+    subscriptions_collection.update_one(
+        {"email": email},
+        {"$set": {"task_ids": {}}}
+    )
+
