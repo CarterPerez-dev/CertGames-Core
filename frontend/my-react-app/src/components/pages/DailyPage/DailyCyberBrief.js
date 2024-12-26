@@ -120,9 +120,22 @@ const DailyCyberBrief = () => {
             <option value="CompTIA Network+">CompTIA Network+</option>
             <option value="CompTIA Security+">CompTIA Security+</option>
             <option value="CompTIA CySA+">CompTIA CySA+</option>
-            <option value="CompTIA Linux+">CompTIA Linux+</option>
+            <option value="CompTIA Pentest+">CompTIA Pentest+</option>
             <option value="CompTIA CASP+">CompTIA CASP+</option>
-            <option value="Cyber Fun Fact">Cyber Fun Fact</option>
+            <option value="CompTIA Linux+">CompTIA Linux+</option>
+            <option value="CompTIA Server+">CompTIA Server+</option>
+            <option value="CompTIA Project+">CompTIA Project+</option>
+            <option value="CompTIA Cloud+">CompTIA Cloud++</option>
+            <option value="CompTIA Data+">CompTIA Data+</option>
+            <option value="CompTIA ITF">CompTIA ITF</option>
+            <option value="ICS2 CISSP">ICS2 CISSP</option>
+            <option value="EC Council (CEH)">EC Council (CEH)</option>
+            <option value="GIAC GSEC">GIAC GIAC GSEC</option>
+            <option value="GIAC GPEN">GIAC GPEN</option>
+            <option value="GIAC GWAPT">GIAC GWAPT</option>
+            <option value="Offsec OSCP"> Offsec OSCP</option>
+            <option value="ISACA CISM">ISACA CISM</option>
+
           </select>
 
           <label>Frequency:</label>

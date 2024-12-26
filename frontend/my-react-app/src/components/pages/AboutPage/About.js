@@ -139,9 +139,9 @@ What lies behind the root of me.
         <section className="readme-section pulse-on-hover">
           <h2 className="section-title-glitch">ReadMe</h2>
           <div className="readme-links">
-            <a href="#" target="_blank" rel="noopener noreferrer">README.md </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">AWS.md </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">INSTALL.md </a>
+            <a href="https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/README.md" target="_blank" rel="noopener noreferrer">README.md </a>
+            <a href="https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/AWS.md" target="_blank" rel="noopener noreferrer">AWS.md </a>
+            <a href="https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/INSTALL.md" target="_blank" rel="noopener noreferrer">INSTALL.md </a>
           </div>
         </section>
 

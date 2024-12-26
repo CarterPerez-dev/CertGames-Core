@@ -4,7 +4,6 @@ from helpers.schedule_tasks import schedule_emails_for_subscription
 from helpers.emailopenai_helper import generate_email_content
 from helpers.email_helper import send_email
 
-
 subscribe_bp = Blueprint('subscribe_routes', __name__)
 
 @subscribe_bp.route('/', methods=['POST'])
@@ -29,7 +28,7 @@ def subscribe():
         # Add subscription to the database
         add_subscription(email, cert_category, frequency, time_slots)
 
-        # Schedule emails right away using the scheduling helper
+        # Schedule emails
         schedule_emails_for_subscription(email, cert_category, time_slots)
 
         return jsonify({"message": "Subscription successful!"}), 200
