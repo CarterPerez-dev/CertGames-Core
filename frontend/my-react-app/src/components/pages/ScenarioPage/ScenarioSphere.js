@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import './ScenarioSphere.css';
 import { ATTACK_TYPES } from './attacks'; 
 
-
 const ENDPOINT = "/api";
 
 const ScenarioSphere = () => {
@@ -23,13 +22,12 @@ const ScenarioSphere = () => {
   const [showAllSuggestions, setShowAllSuggestions] = useState(false); 
   const suggestionsRef = useRef(null);
 
-  // Handle clicks outside the suggestions dropdown to close it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setShowSuggestions(false);
         setActiveSuggestionIndex(-1);
-        setShowAllSuggestions(false); // Reset to default when clicking outside
+        setShowAllSuggestions(false);
       }
     };
 
@@ -40,7 +38,6 @@ const ScenarioSphere = () => {
   }, []);
 
   const handleGenerateClick = () => {
-    // Validate input fields before making the API call
     if (!attackType.trim()) {
       alert("Please enter the Type of Attack.");
       return;
@@ -69,10 +66,9 @@ const ScenarioSphere = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("Received data:", data); // Debugging line
+        console.log("Received data:", data);
         setGeneratedScenario(data.scenario);
         setInteractiveQuestions(data.interactive_questions || []);
-        console.log("Interactive Questions:", data.interactive_questions); // Debugging line
         setIsGenerating(false);
         setUserAnswers({});
         setFeedback({});
@@ -131,11 +127,10 @@ const ScenarioSphere = () => {
     ));
   };
 
-  // Handle input changes for the "Type of Attack" field
   const handleAttackTypeChange = (e) => {
     const userInput = e.target.value;
     setAttackType(userInput);
-    setShowAllSuggestions(false); // Reset to default when user types
+    setShowAllSuggestions(false);
 
     if (userInput.length > 0) {
       const filteredSuggestions = ATTACK_TYPES.filter(
@@ -151,21 +146,18 @@ const ScenarioSphere = () => {
     setActiveSuggestionIndex(-1);
   };
 
-  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setAttackType(suggestion);
     setSuggestions([]);
     setShowSuggestions(false);
     setActiveSuggestionIndex(-1);
-    setShowAllSuggestions(false); // Reset after selection
+    setShowAllSuggestions(false);
   };
 
-  // Handle "Show all options" click
   const handleShowAllSuggestionsClick = () => {
     setShowAllSuggestions(true);
   };
 
-  // Handle keyboard navigation in suggestions
   const handleKeyDown = (e) => {
     if (showSuggestions) {
       if (e.key === 'ArrowDown') {
@@ -182,13 +174,13 @@ const ScenarioSphere = () => {
           setSuggestions([]);
           setShowSuggestions(false);
           setActiveSuggestionIndex(-1);
-          setShowAllSuggestions(false); // Reset after selection
+          setShowAllSuggestions(false);
           e.preventDefault();
         }
       } else if (e.key === 'Escape') {
         setShowSuggestions(false);
         setActiveSuggestionIndex(-1);
-        setShowAllSuggestions(false); // Reset on escape
+        setShowAllSuggestions(false);
       }
     }
   };
@@ -200,7 +192,6 @@ const ScenarioSphere = () => {
           <h1 className="scenario-title">Scenario Sphere</h1>
           <p className="scenario-tagline">Step into the real world of cyber defense...</p>
 
-          {/* Industry Selection */}
           <div className="scenario-input-wrapper">
             <label htmlFor="industry-select">Industry</label>
             <select 
@@ -225,7 +216,6 @@ const ScenarioSphere = () => {
             </select>
           </div>
 
-          {/* Type of Attack with Autocomplete */}
           <div className="scenario-input-wrapper" ref={suggestionsRef}>
             <label htmlFor="attack-type-input">Type of Attack</label>
             <input
@@ -244,7 +234,7 @@ const ScenarioSphere = () => {
             />
             {showSuggestions && suggestions.length > 0 && (
               <ul className="suggestions-list">
-                { (showAllSuggestions ? suggestions : suggestions.slice(0, 10)).map((suggestion, index) => (
+                {(showAllSuggestions ? suggestions : suggestions.slice(0, 10)).map((suggestion, index) => (
                   <li
                     key={suggestion}
                     className={index === activeSuggestionIndex ? 'suggestion-active' : ''}
@@ -265,7 +255,6 @@ const ScenarioSphere = () => {
             )}
           </div>
 
-          {/* Skill Level Selection */}
           <div className="scenario-input-wrapper">
             <label htmlFor="skill-level-select">Skill Level</label>
             <select
@@ -281,7 +270,6 @@ const ScenarioSphere = () => {
             </select>
           </div>
 
-          {/* Threat Intensity Slider */}
           <div className="scenario-input-wrapper">
             <label htmlFor="threat-intensity-slider">Threat Intensity</label>
             <input
@@ -296,7 +284,6 @@ const ScenarioSphere = () => {
             <span className="threat-intensity-value">{threatIntensity}</span>
           </div>
 
-          {/* Generate Button and Loading Sphere */}
           <div className="button-and-sphere">
             <button
               className="scenario-generate-button"
@@ -306,12 +293,12 @@ const ScenarioSphere = () => {
               {isGenerating ? "Generating..." : "Generate Scenario"}
             </button>
             {isGenerating && (
+              // ======== UPDATED LOADING ELEMENT (Version 3) ========
               <div className="loading-sphere"></div>
             )}
           </div>
         </div>
 
-        {/* Scenario Output */}
         <div className="scenario-output-container">
           {generatedScenario && (
             <>
@@ -325,7 +312,6 @@ const ScenarioSphere = () => {
             </div>
           )}
 
-          {/* Interactive Questions */}
           {interactiveQuestions && interactiveQuestions.length > 0 && (
             <div className="interactive-questions">
               <h3>Interactive Questions</h3>

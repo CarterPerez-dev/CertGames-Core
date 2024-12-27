@@ -14,7 +14,7 @@ const Sidebar = () => {
 
   // Double-click handler to navigate to portfolio (Easter Egg)
   const handleRootDoubleClick = () => {
-    navigate('/portfolio');
+    navigate('/easteregg');
   };
 
   return (

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import './Resources.css';
+import './Resources.css'; 
 
-// Existing Resource Arrays
+
+
 const redditSubreddits = [
   { name: 'r/CompTIA', url: 'https://www.reddit.com/r/CompTIA/' },
   { name: 'r/CyberSecurity', url: 'https://www.reddit.com/r/cybersecurity/' },
@@ -12,14 +13,21 @@ const redditSubreddits = [
   { name: 'r/CCNA', url: 'https://www.reddit.com/r/ccna/' },
   { name: 'r/sysadmin', url: 'https://www.reddit.com/r/sysadmin/' },
   { name: 'r/linuxquestions/', url: 'https://www.reddit.com/r/linuxquestions/' },
+  { name: 'r/netsec', url: 'https://www.reddit.com/r/netsec/' },
+  { name: 'r/ReverseEngineering', url: 'https://www.reddit.com/r/ReverseEngineering/' },
+  { name: 'r/BlueTeamSec', url: 'https://www.reddit.com/r/BlueTeamSec/' },
+  { name: 'r/RedTeam', url: 'https://www.reddit.com/r/RedTeam/' },
+  { name: 'r/InformationSecurity', url: 'https://www.reddit.com/r/InformationSecurity/' },
+  { name: 'r/ethicalhacking', url: 'https://www.reddit.com/r/ethicalhacking/' },
+  { name: 'r/ITsecurity', url: 'https://www.reddit.com/r/ITsecurity/' },
+  { name: 'r/netsecstudents', url: 'https://www.reddit.com/r/netsecstudents/' },
 ];
 
 const redditPosts = [
-  { title: 'View my Reddit post- How I passed 9 CompTIA certs with no experience and key tips on how I got my job.', url: '#' },
-  { title: '##', url: '#' },
-  { title: '##', url: '#' },
-  { title: '##', url: '#' },
-  { title: 'How I passed COMPTIA A+ N+ S+', url: 'https://www.reddit.com/r/CompTIA/comments/1cra3cg/how_i_passed_comptia_a_n_s/' },
+  { title: '#', url: '#' },
+
+
+
 ];
 
 const youtubeChannels = [
@@ -30,50 +38,52 @@ const youtubeChannels = [
   { name: 'Cyberkraft', url: 'https://www.youtube.com/@cyberkraft' },
   { name: 'howtonetwork', url: 'https://www.youtube.com/@howtonetworkcom' },
   { name: 'MyCS1', url: 'https://www.youtube.com/@MyCS1/videos' },
-  
+  { name: 'CBT Nuggets', url: 'https://www.youtube.com/user/cbtnuggets' },
+  { name: 'Eli the Computer Guy', url: 'https://www.youtube.com/user/elithecomputerguy' },
+  { name: 'The Cyber Mentor', url: 'https://www.youtube.com/channel/UC0ArlFuFYMpEewyRBzdLHiw' },
+  { name: 'David Bombal', url: 'https://www.youtube.com/user/soloRaining' },
+  { name: 'Jason Dion', url: 'https://www.youtube.com/user/jasoncdion' },
+  { name: 'ITProTV', url: 'https://www.youtube.com/user/ITProTV' },
+  { name: 'freeCodeCamp.org', url: 'https://www.youtube.com/freecodecamp' },
 ];
 
 const youtubeVideos = [
-  { title: 'A+ Core 1 Overview', url: '#' },
-  { title: 'Security+ Latest Objectives Walkthrough', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
-  { title: '#', url: '#' },
+  { title: 'How to Pass your 220-1101 and 220-1102 A+ Exams - CompTIA A+ 220-1101', url: 'https://www.youtube.com/watch?v=87t6P5ZHTP0&list=PLG49S3nxzAnnOmvg5UGVenB_qQgsh01uC' },
+  { title: 'CompTIA A+ Full Course - FREE - [31+ Hours]', url: 'https://www.youtube.com/watch?v=1CZXXNKAY5o&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=5' },
+  { title: 'CompTIA A+ Certification Practice Test 2024 (Exam 220-1101) (40 Questions with Explained Answers)', url: 'https://www.youtube.com/watch?v=e16It3eYHgc&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=10' },
+  { title: 'How to Pass Your N10-008 Network+ Exam', url: 'https://www.youtube.com/watch?v=As6g6IXcVa4&list=PLG49S3nxzAnlCJiCrOYuRYb6cne864a7G' },
+  { title: 'Computer Networking Course - Network Engineering [CompTIA Network+ Exam Prep]', url: 'https://www.youtube.com/watch?v=qiQR5rTSshw&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=6' },
+  { title: 'Networking basics (2024) | What is a switch, router, gateway, subnet, gateway, firewall & DMZ', url: 'https://www.youtube.com/watch?v=_IOZ8_cPgu8&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=7' },
+  { title: 'How to Pass Your SY0-701 Security+ Exam', url: 'https://www.youtube.com/watch?v=KiEptGbnEBc&list=PLG49S3nxzAnl4QDVqK-hOnoqcSKEIDDuv' },
+  { title: 'Security+ Certification SY0-701 50 Practice Questions', url: 'https://www.youtube.com/watch?v=yPqSLJG8Rt0&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=2' },
+  { title: 'CompTIA Security+ SY0-701. 50 Exam Practice Question', url: 'https://www.youtube.com/watch?v=2qrPJbL9G6c&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=14' },
+  { title: 'CompTIA Security+ SY0-701 - Series Intro & Exam Prep Strategy', url: 'https://www.youtube.com/watch?v=1E7pI7PB4KI&list=PL7XJSuT7Dq_UDJgYoQGIW9viwM5hc4C7n' },
+  { title: 'CompTIA CySA+ // 2024 Crash Course // 10+ Hours for FREE', url: 'https://www.youtube.com/watch?v=qP9x0mucwVc&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=9' },
+  { title: 'COMPTIA Pentest+ Course Preparation TryHackMe', url: 'https://www.youtube.com/watch?v=cADW_cUJni0&list=PLqM63j87R5p4olmWpzqaXMhEP2zEnQhPD' },
+  { title: 'What is Subnetting? - Subnetting Mastery  NOTE: I HIGHLY RECOMMEND!', url: 'https://www.youtube.com/watch?v=BWZ-MHIhqjM&list=PLIFyRwBY_4bQUE4IB5c4VPRyDoLgOdExE' },
+  { title: 'IT Security Certifications: CySA+ vs PenTest+ vs CISSP', url: 'https://www.youtube.com/watch?v=YhCvNARSPo4' },
+  { title: 'Ethical Hacking in 15 Hours - 2023 Edition - Learn to Hack! (Part 1)', url: 'https://www.youtube.com/watch?v=3FNYvj2U0HM&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=13' },
+  { title: 'Paypal - Live bug bounty hunting on Hackerone | Live Recon | part 2', url: 'https://www.youtube.com/watch?v=Dtx4kNXj0OQ&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=11' },
+  { title: 'Complete Ethical hacking course 16 hours | ethical hacking full course with practical | Zero to Hero', url: 'https://www.youtube.com/watch?v=w_oxcjPOWos&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=4' },
+  { title: 'Full Ethical Hacking Course - Network Penetration Testing for Beginners (2019)', url: 'https://www.youtube.com/watch?v=3Kq1MIfTWCE&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=3' },
+  { title: 'How to Get an IT Job Without Experience', url: 'https://www.youtube.com/watch?v=XkTNQCtuRPY&list=PLG49S3nxzAnkUvxTH_ANPYQWGo9wYlz7h' },
+  { title: 'Start your IT Career with the CompTIA Trifecta? A+, Net+, Sec+', url: 'https://www.youtube.com/watch?v=IBKW0s20T8o&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=12' },
+  { title: 'How I Would Learn Cyber Security if I Could Start Over in 2024 (Beginner Roadmap)', url: 'https://www.youtube.com/watch?v=b12JrM-6DBY&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=15' },
+  { title: 'Network Protocols - ARP, FTP, SMTP, HTTP, SSL, TLS, HTTPS, DNS, DHCP - Networking Fundamentals - L6', url: 'https://www.youtube.com/watch?v=E5bSumTAHZE&list=PLejqXniG-4qmFqpxbWd7Oo235uH1ffG2x&index=16' },
+  { title: 'Network Devices - Hosts, IP Addresses, Networks - Networking Fundamentals', url: 'https://www.youtube.com/watch?v=bj-Yfakjllc&list=PLIFyRwBY_4bRLmKfP1KnZA6rZbRHtxmXi' },
+  { title: 'Python Full Course for free 🐍 (2024)', url: 'https://www.youtube.com/watch?v=ix9cRaBkVe0' },
+  
+  
 ];
 
 const udemyCourses = [
-  { title: 'CompTIA A+ Complete Course', url: '#' },
-  { title: 'CompTIA Security+ (SY0-601) Bootcamp', url: '#' },
+  { title: '#', url: '#' },
+ 
 ];
 
 const linkedInPeople = [
-  { name: 'John Doe (Cybersecurity Analyst)', url: '#' },
-  { name: 'Jane Smith (SOC Lead)', url: '#' },
+  { name: '#', url: '#' },
+  
 ];
 
 const otherResources = [
@@ -82,15 +92,19 @@ const otherResources = [
   { name: 'Cybrary', url: 'https://www.cybrary.it' },
   { name: 'OWASP Official Site', url: 'https://owasp.org' },
   { name: 'Pluralsight', url: 'https://www.pluralsight.com/' },
-  
-  
+  { name: 'Krebs on Security', url: 'https://krebsonsecurity.com/' },
+  { name: 'Dark Reading', url: 'https://www.darkreading.com/' },
+  { name: 'SANS Institute', url: 'https://www.sans.org/' },
+  { name: 'InfoSec Institute', url: 'https://www.infosecinstitute.com/' },
+  { name: 'Hack The Box', url: 'https://www.hackthebox.com/' },
+  { name: 'TryHackMe', url: 'https://tryhackme.com/' },
+  { name: 'Security Weekly', url: 'https://securityweekly.com/' },
 ];
-
 
 const comptiaObjectives = [
   { cert: 'A+ Core 1', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1101-exam-objectives-(3-0)' },
-  { cert: 'A+ Core 2', url:  'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1102-exam-objectives-(3-0)' },
-  { cert: 'Network+ (009)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-network-n10-009-exam-objectives-(4-0)' },
+  { cert: 'A+ Core 2', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1102-exam-objectives-(3-0)' },
+  { cert: 'Network+ (N10-009)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-network-n10-009-exam-objectives-(4-0)' },
   { cert: 'Security+ (701)', url: 'https://certblaster.com/wp-content/uploads/2023/11/CompTIA-Security-SY0-701-Exam-Objectives-1.pdf' },
   { cert: 'CySA+ (003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-cysa-cs0-003-exam-objectives-2-0.pdf' },
   { cert: 'CASP+ (004)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-casp-cas-004-exam-objectives-(4-0)' },
@@ -106,8 +120,8 @@ const comptiaObjectives = [
   { cert: 'ITF', url: 'https://www.comptia.jp/pdf/CompTIA%20IT%20Fundamentals%20FC0-U61%20Exam%20Objectives.pdf' },
   { cert: 'Tech+', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-tech-fc0-u71-exam-objectives-(1-2)' },
   { cert: 'SecurityX (CASP 005)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-securityx-cas-005-exam-objectives-(3-0)' }
-];
 
+];
 
 const securityFrameworks = [
   { name: 'NIST Cybersecurity Framework', url: 'https://www.nist.gov/cyberframework' },
@@ -217,16 +231,18 @@ const securityFrameworks = [
   { name: 'APEC Privacy Framework', url: 'https://www.apec.org/Publications/2017/08/APEC-Privacy-Framework-(2015)' },
   { name: 'NERC PRC Standards', url: 'https://www.nerc.com/pa/Stand/Pages/PRC-Reliability-Standards.aspx' },
   { name: 'Digital Identity Authentication and Fraud Prevention Framework', url: 'https://www.gsma.com/identity/digital-identity-programme/' },
+  { name: 'Zero Trust Architecture', url: 'https://csrc.nist.gov/publications/detail/sp/800-207/final' },
+  { name: 'MITRE Shield', url: 'https://shield.mitre.org/' },
+  { name: 'MITRE Engage', url: 'https://engage.mitre.org/' },
+  { name: 'NIST Cybersecurity Workforce Framework', url: 'https://www.nist.gov/cyberframework/workforce' },
 ];
-
 
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-// Constructing Resources Data with Certification Categories
+
 const resourcesData = {
-  // Existing Categories
   reddit: [
     ...redditSubreddits,
     ...redditPosts.map((post) => ({ name: post.title, url: post.url }))
@@ -240,154 +256,157 @@ const resourcesData = {
   other: [...otherResources],
   linkedin: [...linkedInPeople],
 
-  
   'CompTIA Certification Objectives': comptiaObjectives.map((obj) => ({ name: obj.cert, url: obj.url })),
 
 
-  // A+ Category
   'A+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().includes('a+ core'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'A+ Study Guide', url: '#' },
-    { name: 'A+ Practice Exams', url: '#' },
-    // Add more A+ specific resources here
+    { name: 'A+ Study Guide', url: 'https://www.examcompass.com/comptia/a-plus-certification/free-a-plus-practice-tests' },
+    { name: 'A+ Practice Exams', url: 'https://www.examcompass.com/comptia/a-plus-certification/free-a-plus-practice-tests' },
+    { name: 'Professor Messer\'s A+ Videos', url: 'https://www.youtube.com/playlist?list=PLEttE3jOf4oRW_qbN-VqVt5pYb0COgD49' },
+    { name: 'CompTIA A+ Labs', url: 'https://www.itsupportresume.com/labs-for-comptia-a-plus/' },
+    { name: 'CompTIA A+ Official Practice Tests', url: 'https://www.comptia.org/certifications/a/practice-tests' },
   ],
 
- 
+
   'Network+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('network+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Network+ Study Guide', url: '#' },
-    { name: 'Network+ Labs', url: '#' },
-    // Add more Network+ specific resources here
+    { name: 'Network+ Study Guide', url: 'https://www.examcompass.com/comptia/network-plus-certification/free-network-plus-practice-tests' },
+    { name: 'Network+ Labs', url: 'https://www.netacad.com/courses/networking/networking-lab-resources' },
+    { name: 'Network+ Practice Exams', url: 'https://www.comptia.org/certifications/network/practice-tests' },
+    { name: 'Professor Messer\'s Network+ Videos', url: 'https://www.youtube.com/playlist?list=PLEttE3jOf4oRgkxF62g6N6OIp50lR6QEz' },
+
   ],
 
-  
+
   'Security+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('security+') && !obj.cert.toLowerCase().includes('x'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
     { name: 'Security+ Study Guide', url: '#' },
     { name: 'Security+ Practice Labs', url: '#' },
-    // Add more Security+ specific resources here
+    { name: 'Security+ Practice Exams', url: '#'},
+    { name: 'Professor Messer\'s Security+ Videos', url: '#' },
+
   ],
 
-  
+
   'CySA+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('cysa+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
     { name: 'CySA+ Study Guide', url: '#' },
     { name: 'CySA+ Practice Exams', url: '#' },
-    // Add more CySA+ specific resources here
+    { name: 'CySA+ Labs and Exercises', url: '#' },
+
+
   ],
 
-  
+
   'SecurityX/CASP': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().includes('casp') || obj.cert.toLowerCase().includes('securityx'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'CASP+ Study Guide', url: '#' },
-    { name: 'SecurityX Practice Labs', url: '#' },
-    // Add more SecurityX/CASP specific resources here
+    { name: 'CASP+ Study Guide', url: 'https://www.examcompass.com/comptia/casp-plus-certification/free-casp-plus-practice-tests' },
+    { name: 'SecurityX Practice Labs', url: 'https://www.cybrary.it/course/comptia-casp-plus/' },
+    { name: 'CASP+ Practice Exams', url: 'https://www.comptia.org/certifications/casp/practice-tests' },
+    { name: 'Advanced SecurityX Training', url: 'https://www.youtube.com/watch?v=exampleSecurityXTraining' },
+
   ],
 
-  
+
   'PenTest+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('pentest+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'PenTest+ Study Guide', url: '#' },
-    { name: 'PenTest+ Labs', url: '#' },
-    // Add more PenTest+ specific resources here
+    { name: 'PenTest+ Study Guide', url: 'https://www.examcompass.com/comptia/pentest-plus-certification/free-pentest-plus-practice-tests' },
+    { name: 'PenTest+ Labs', url: 'https://www.hackthebox.com/' },
+    { name: 'PenTest+ Practice Exams', url: 'https://www.comptia.org/certifications/pentest/practice-tests' },
+    { name: 'HackerSploit PenTest+ Training', url: 'https://www.youtube.com/watch?v=examplePenTestPlusTraining' },
+
   ],
 
-  // Cloud+/Cloud Essentials Category
+
   'Cloud+/Cloud Essentials': [
-    // Objective Links
+
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().includes('cloud'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Cloud+ Study Guide', url: '#' },
-    { name: 'Cloud Essentials Training', url: '#' },
-    // Add more Cloud+/Cloud Essentials specific resources here
+
+    { name: 'Cloud+ Study Guide', url: 'https://www.examcompass.com/comptia/cloud-plus-certification/free-cloud-plus-practice-tests' },
+    { name: 'Cloud Essentials Training', url: 'https://www.comptia.org/certifications/cloud/overview' },
+    { name: 'Cloud+ Practice Labs', url: 'https://www.aws.training/' },
+    { name: 'Pluralsight Cloud+ Courses', url: 'https://www.pluralsight.com/paths/comptia-cloud-plus' },
+
   ],
 
-  // Linux+ Category
+
   'Linux+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('linux+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Linux+ Study Guide', url: '#' },
-    { name: 'Linux+ Practice Labs', url: '#' },
-    // Add more Linux+ specific resources here
+
+    { name: 'Linux+ Study Guide', url: 'https://www.examcompass.com/comptia/linux-plus-certification/free-linux-plus-practice-tests' },
+    { name: 'Linux+ Practice Labs', url: 'https://www.virtualbox.org/' },
+    { name: 'Linux+ Practice Exams', url: 'https://www.comptia.org/certifications/linux/practice-tests' },
+    { name: 'Linux+ Training by CBT Nuggets', url: 'https://www.udemy.com/course/comptia-linux-plus/' },
+
   ],
 
-  // Data+ Category
+
   'Data+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('data'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Data+ Study Guide', url: '#' },
-    { name: 'Data+ Practice Exams', url: '#' },
-    // Add more Data+ specific resources here
+    { name: 'Data+ Study Guide', url: 'https://www.examcompass.com/comptia/data-plus-certification/free-data-plus-practice-tests' },
+    { name: 'Data+ Practice Exams', url: 'https://www.comptia.org/certifications/data/practice-tests' },
+    { name: 'Data+ Training on Cybrary', url: 'https://www.cybrary.it/course/comptia-data-plus/' },
+    { name: 'Data+ Labs and Exercises', url: 'https://www.datacamp.com/' },
+
   ],
 
-  // Server+ Category
+
   'Server+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('server+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Server+ Study Guide', url: '#' },
-    { name: 'Server+ Labs', url: '#' },
-    // Add more Server+ specific resources here
+    { name: 'Server+ Study Guide', url: 'https://www.examcompass.com/comptia/server-plus-certification/free-server-plus-practice-tests' },
+    { name: 'Server+ Labs', url: 'https://www.vmware.com/products/vsphere.html' },
+    { name: 'Server+ Practice Exams', url: 'https://www.comptia.org/certifications/server/practice-tests' },
+    { name: 'Server+ Training on Pluralsight', url: 'https://www.pluralsight.com/courses/comptia-server-plus-fundamentals' },
+
   ],
 
-  // Project+ Category
+
   'Project+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('project+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'Project+ Study Guide', url: '#' },
-    { name: 'Project+ Practice Exams', url: '#' },
-    // Add more Project+ specific resources here
+    { name: 'Project+ Study Guide', url: 'https://www.examcompass.com/comptia/project-plus-certification/free-project-plus-practice-tests' },
+    { name: 'Project+ Practice Exams', url: 'https://www.comptia.org/certifications/project/practice-tests' },
+    { name: 'Project+ Training on Udemy', url: 'https://www.udemy.com/course/comptia-project-plus/' },
+    { name: 'Project Management Essentials', url: 'https://www.coursera.org/specializations/project-management' },
+
   ],
 
-  // ITF/TECH+ Category
+
   'ITF/TECH+': [
-    // Objective Links
     ...comptiaObjectives
       .filter(obj => obj.cert.toLowerCase().startsWith('itf') || obj.cert.toLowerCase().includes('tech+'))
       .map(obj => ({ name: obj.cert, url: obj.url })),
-    // Additional Resources
-    { name: 'ITF Study Guide', url: '#' },
-    { name: 'Tech+ Training Videos', url: '#' },
-    // Add more ITF/TECH+ specific resources here
+    { name: 'ITF Study Guide', url: 'https://www.examcompass.com/comptia-itf-certification/free-itf-practice-tests' },
+    { name: 'Tech+ Training Videos', url: 'https://www.youtube.com/playlist?list=PLr6-GrHUlVf0uIra4Hpph5OZyTbX_0i6m' },
+    { name: 'ITF/TECH+ Practice Exams', url: 'https://www.comptia.org/certifications/itf/practice-tests' },
+    { name: 'Tech+ Labs and Exercises', url: 'https://www.virtualbox.org/' },
+    
   ]
 };
+
+
 
 function Resources() {
   const [searchTerm, setSearchTerm] = useState("");

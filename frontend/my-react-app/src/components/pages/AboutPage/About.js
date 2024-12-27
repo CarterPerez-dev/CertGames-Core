@@ -150,7 +150,7 @@ What lies behind the root of me.
           <h2 className="section-title-glitch ">Portfolio</h2>
           <p>
             Check out my{" "}
-            <a href="/Portfolio_notegg" target="_blank" rel="noopener noreferrer">
+            <a href="/myportfolio" target="_blank" rel="noopener noreferrer">
               Portfolio
             </a> 
           </p>
