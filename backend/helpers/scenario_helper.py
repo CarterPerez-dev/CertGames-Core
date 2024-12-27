@@ -16,17 +16,18 @@ def generate_scenario(industry, attack_type, skill_level, threat_intensity):
             f"Imagine a cybersecurity incident involving the {industry} industry. "
             f"The attack is of type '{attack_type}', performed by someone with a skill level of '{skill_level}', "
             f"and the threat intensity is rated as '{threat_intensity}' on a scale from 1-100. "
-            "Provide enough details to explain context then on a new line output the text for actors then on new line output the text of potential risks then on a new line, "
-            "and mitigation steps text in new line, in a detailed story-like format. "
-            "Include context, actors, risks involved, and the chronological unfolding of the attack. each thing seperated by single space as paragraph"
+            "Provide enough details and a thorough story/scenario to explain the context/story aswell as throughly explain the attack in a technical way and how it works, then on a new line output the text for actors then on new line output the text of potential risks then on a new line,"
+            "output mitigation steps in depth text in new line, in a detailed story-like format. "
+            "Include context, actors, risks involved in depth, and the chronological unfolding of the attack. each thing seperated by single space as paragraph"
+            " Each section/paragraph should be easy to understand but also in depth and techincal and educational"
         )
 
         
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o",
-            max_tokens=1000,
-            temperature=0.7,
+            max_tokens=1200,
+            temperature=0.6,
         )
 
         

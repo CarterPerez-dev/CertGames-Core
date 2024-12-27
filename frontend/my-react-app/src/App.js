@@ -34,7 +34,7 @@ function App() {
             <Route path="/resources" element={<Resources />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/easteregg" element={<Portfolio />} />
-            <Route path="/portfolio" element={<Portfolio_notegg />} />
+            <Route path="/myportfolio" element={<Portfolio_notegg />} />
           </Routes>
         </div>
       </div>

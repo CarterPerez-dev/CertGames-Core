@@ -14,6 +14,9 @@ import PcepImg from './pcep.png';
 
 // NEW import for "Project One" image
 import Project1Img from './project1.jpg';
+import Project2Img from './project2.jpg';
+import Resume from './CarterPerez.pdf';
+
 
 function Portfolio() {
   const [showEggMessage, setShowEggMessage] = useState(false);
@@ -100,23 +103,23 @@ function Portfolio() {
           {/* Project 2 */}
           <div className="project-card pulse-hover">
             <img
-              src="https://via.placeholder.com/400x250"
+              src={Project2Img}
               alt="Project 2"
               className="project-image"
             />
             <div className="project-info">
               <h3>Project Two</h3>
               <p>
-                Coming Soon
+                Auto apply bot for Indeed and Linkiden
               </p>
               {/* Placeholder link */}
               <p>
                 <a
-                  href="#"
+                  href="https://github.com/CarterPerez-dev/AutoApplication"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Placeholder Link
+                  View On Github
                 </a>
               </p>
             </div>
@@ -210,7 +213,7 @@ function Portfolio() {
         <div className="resume-info">
           <p>View or download my detailed résumé below:</p>
           <a 
-            href="#"
+            href={Resume}
             target="_blank"
             rel="noopener noreferrer"
             className="resume-link"

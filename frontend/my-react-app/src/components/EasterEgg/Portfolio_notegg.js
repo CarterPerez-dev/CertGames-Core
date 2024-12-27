@@ -14,6 +14,9 @@ import PcepImg from './pcep.png';
 
 // NEW import for "Project One" image
 import Project1Img from './project1.jpg';
+import Project2Img from './project2.jpg';
+import Resume from './CarterPerez.pdf';
+
 
 function Portfolio_NotEgg() {
   return (
@@ -78,23 +81,23 @@ function Portfolio_NotEgg() {
           {/* Project 2 */}
           <div className="project-card pulse-hover">
             <img
-              src="https://via.placeholder.com/400x250"
+              src={Project2Img}
               alt="Project 2"
               className="project-image"
             />
             <div className="project-info">
-              <h3>Coming Soon</h3>
+              <h3>AutoApplication</h3>
               <p>
-                Coming Soon
+                Auto apply bot for Indeed and Linkiden
               </p>
               {/* Placeholder link */}
               <p>
                 <a
-                  href="#"
+                  href="https://github.com/CarterPerez-dev/AutoApplication"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Placeholder Link
+                  View on Github
                 </a>
               </p>
             </div>
@@ -183,7 +186,7 @@ function Portfolio_NotEgg() {
         <div className="resume-info">
           <p>View or download my detailed résumé below:</p>
           <a
-            href="#"
+            href="{Resume}"
             target="_blank"
             rel="noopener noreferrer"
             className="resume-link"
