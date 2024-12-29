@@ -100,6 +100,23 @@ services:
     networks:
       - xploitcraft_network
     restart: always
+    
+    
+  celery_beat:
+    container_name: celery_beat_service
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: celery -A helpers.celery_app beat --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - xploitcraft_network
+    restart: always
+
 
 networks:
   xploitcraft_network:

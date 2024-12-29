@@ -1,8 +1,6 @@
 # helpers/async_tasks.py
-
 import logging
 from helpers.celery_app import app
-
 
 from helpers.analogy_helper import (
     generate_single_analogy as _generate_single_analogy,
@@ -20,16 +18,12 @@ from helpers.xploitcraft_helper import Xploits as _Xploits
 
 from helpers.grc_helper import generate_grc_question as _generate_grc_question
 
-
-
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 # ---------------------------
 # Analogy Tasks
 # ---------------------------
-
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_single_analogy_task(self, concept, category):
     try:
@@ -57,7 +51,6 @@ def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, 
 # ---------------------------
 # Scenario Tasks
 # ---------------------------
-
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_scenario_task(self, industry, attack_type, skill_level, threat_intensity):
     try:
@@ -85,7 +78,6 @@ def generate_interactive_questions_task(self, scenario_text):
 # ---------------------------
 # Xploit/Payload Tasks
 # ---------------------------
-
 _xploit = _Xploits()
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
@@ -99,7 +91,6 @@ def generate_exploit_payload_task(self, vulnerability, evasion_technique):
 # ---------------------------
 # GRC Tasks
 # ---------------------------
-
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_grc_question_task(self, category, difficulty):
     try:
@@ -107,5 +98,4 @@ def generate_grc_question_task(self, category, difficulty):
     except Exception as e:
         logger.error(f"Celery generate_grc_question_task error: {e}")
         self.retry(exc=e)
-
 

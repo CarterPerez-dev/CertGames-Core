@@ -40,6 +40,7 @@ const Sidebar = () => {
           <li><Link to="/resources">/Study Resources</Link></li>
           <li><Link to="/donate">/Donation</Link></li>
           <li><Link to="/about">/About</Link></li>
+          <li><Link to="/admin">Admin</Link></li>
         </ul>
         <div className="sidebar-logo-container">
           <img src={sidebarLogo} alt="Sidebar Logo" className="sidebar-logo" />

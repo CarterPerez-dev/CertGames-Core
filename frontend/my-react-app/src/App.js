@@ -13,6 +13,7 @@ import Resources from './components/pages/ResourcesPage/Resources';
 import Donate from './components/pages/DonatePage/Donate';
 import Portfolio from './components/EasterEgg/Portfolio.js';
 import Portfolio_notegg from './components/EasterEgg/Portfolio_notegg.js';
+import AdminInterface from './components/pages/AdminInterface/AdminInterface';
 
 import './components/pages/XploitcraftPage/App.css';
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/donate" element={<Donate />} />
             <Route path="/easteregg" element={<Portfolio />} />
             <Route path="/myportfolio" element={<Portfolio_notegg />} />
+            <Route path="/admin" element={<AdminInterface />} />
           </Routes>
         </div>
       </div>
