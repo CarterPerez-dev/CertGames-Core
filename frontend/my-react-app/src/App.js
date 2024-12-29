@@ -12,7 +12,7 @@ import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
 import Resources from './components/pages/ResourcesPage/Resources';
 import Donate from './components/pages/DonatePage/Donate';
 import Portfolio from './components/EasterEgg/Portfolio.js';
-import Portfolio_notegg from './components/EasterEgg/Portfolio_notegg.js';
+import Portfolionotegg from './components/EasterEgg/Portfolio_notegg.js';
 import AdminInterface from './components/pages/AdminInterface/AdminInterface';
 
 import './components/pages/XploitcraftPage/App.css';
@@ -35,7 +35,7 @@ function App() {
             <Route path="/resources" element={<Resources />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/easteregg" element={<Portfolio />} />
-            <Route path="/myportfolio" element={<Portfolio_notegg />} />
+            <Route path="/myportfolio" element={<Portfolionotegg />} />
             <Route path="/admin" element={<AdminInterface />} />
           </Routes>
         </div>

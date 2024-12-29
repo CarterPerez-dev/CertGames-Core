@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
 import './AnalogyHub.css';
-import backgroundImage from './backround1.jpg';
 import loadingImage from './loading2.png';
 
 const ENDPOINT = "/api"; 

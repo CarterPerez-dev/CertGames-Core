@@ -18,7 +18,7 @@ import Project2Img from './project2.jpg';
 import Resume from './CarterPerez.pdf';
 
 
-function Portfolio_NotEgg() {
+function PortfolioNotEgg() {
   return (
     <div className="portfolio-container">
       {/* HERO SECTION */}
@@ -29,7 +29,7 @@ function Portfolio_NotEgg() {
             <span>Integration Technician</span> | <span>Cybersecurity Enthusiast</span>
           </p>
           <div className="hero-avatar">
-            <img src={meImage} className="profile-pic" />
+            <img src={meImage} alt="Profile" className="profile-pic" />
           </div>
         </div>
       </section>
@@ -172,7 +172,7 @@ function Portfolio_NotEgg() {
             <p>
               This blog I am currently still in the process of writing.
             </p>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="blog-link">
+            <a href="https://www.sealingtech.com/" target="_blank" rel="noopener noreferrer" className="blog-link">
               Read More
             </a>
           </div>
@@ -238,5 +238,5 @@ function Portfolio_NotEgg() {
   );
 }
 
-export default Portfolio_NotEgg;
+export default PortfolioNotEgg;
 
