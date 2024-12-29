@@ -888,7 +888,7 @@ function Home() {
 
   const processPayload = (text) => {
     if (!text) return null;
-
+    // eslint-disable-next-line no-useless-escape
     const regex = /(\bor\b)|(\b\d+\b)|([!@#$%^&=+*()])|([:;"'>?<{}\[\]\\])|([-\/|])/gi;
 
     const elements = [];

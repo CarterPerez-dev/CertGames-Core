@@ -1,0 +1,29 @@
+# Use Node.js base image
+FROM node:20-alpine
+
+# Install bash and essential tools
+RUN apk add --no-cache bash curl
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json (for caching)
+COPY package*.json ./
+
+RUN npm install -g npm@11.0.0
+
+# Install dependencies
+RUN npm install
+
+
+RUN npm audit --audit-level=high
+
+# Copy the rest of the files
+COPY . .
+
+
+# Expose the default development port
+EXPOSE 3000
+
+# Start the React app in development mode with hot-reloading
+CMD ["npm", "start"]

@@ -46,6 +46,7 @@ function Portfolio() {
           <div className="hero-avatar">
             <img
               src={meImage}
+              alt="Profile"
               className="profile-pic"
             />
           </div>
@@ -199,7 +200,7 @@ function Portfolio() {
             <p>
               This blog I am currently still in the process of writing.
             </p>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="blog-link">
+            <a href="https://www.sealingtech.com/" target="_blank" rel="noopener noreferrer" className="blog-link">
               Read More
             </a>
           </div>

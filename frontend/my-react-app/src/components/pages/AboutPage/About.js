@@ -1,6 +1,6 @@
 import React from 'react';
 import './About.css'; // Import the CSS for styling
-import Portfolio_notegg from '/app/src/components/EasterEgg/Portfolio_notegg';
+
 
 function About() {
   return (

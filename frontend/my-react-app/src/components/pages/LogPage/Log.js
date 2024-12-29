@@ -347,7 +347,6 @@ const App = () => {
       const duration = endTime - startTime;
       const simulateProgress = () => {
         const interval = 100;
-        const totalIntervals = Math.max(1, Math.floor(duration / interval));
         let currentInterval = 10;
         const progressInterval = setInterval(() => {
           currentInterval += 10;
