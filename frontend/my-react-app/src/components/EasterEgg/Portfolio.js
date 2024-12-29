@@ -60,11 +60,10 @@ function Portfolio() {
         <h2 className="section-title">Where I Work</h2>
         <div className="work-details">
           <p>
-            I currently work at Sealing Tech as an Integration Technician, where I focus on configuring and integrating various cybersecurity solutions. 
-            My role involves building secure environments, ensuring system reliability, and staying up to date with the latest threats and best practices.
+            I work at SealingTech as a System Integration Technician, where I build and configure custom cybersecurity and defense systems. My focus is on designing secure, reliable environments that meet client needs and perform under demanding conditions. I handle system assembly, optimization, and testing to ensure everything operates smoothly and efficiently. With attention to detail and quality, I help deliver solutions that support critical operations and long-term scalability.
           </p>
           <p>
-            Outside the 9-to-5, I’m constantly learning new skills—ranging from penetration testing labs to advanced coding. 
+            Outside the 9-to-5, I’m constantly learning new skills—ranging from penetration testing labs to advanced programming. 
             I believe in pushing the boundaries of what’s possible through curiosity and creative problem-solving.
           </p>
         </div>
@@ -108,7 +107,7 @@ function Portfolio() {
               className="project-image"
             />
             <div className="project-info">
-              <h3>Project Two</h3>
+              <h3>AutoApplication</h3>
               <p>
                 Auto apply bot for Indeed and Linkiden
               </p>
@@ -183,7 +182,7 @@ function Portfolio() {
           <div className="blog-post tilt-hover">
             <h3>Building Custom Solutions with Quality at the Core</h3>
             <p>
-              As a System Integration Technician at SealingTech, I build custom defense systems engineered to match each customer’s unique needs. From selecting hardware to organizing components for optimal airflow, every detail aims to maximize performance and reliability. My prior experience as a fast-food general manager honed my leadership and troubleshooting skills, which I now apply behind the scenes—this time, configuring networks and building carry-on compliant Cyber-Fly-Away Kits rather than managing a storefront. It’s a constant balancing act of speed, precision, and innovation to ensure we deliver solutions that truly support our cyber-warfighters.
+              The blog highlights the role of a System Integration Technician at SealingTech, showcasing how custom defense and cybersecurity systems are designed and built to meet specific client needs. It dives into the process of selecting and configuring hardware, optimizing system performance, and ensuring quality through rigorous testing and ISO 9001 standards. The post also explores the importance of cable management, airflow, and modular design in creating reliable, scalable solutions that support critical operations.
             </p>
             <a
               href="https://www.sealingtech.com/2024/10/03/building-custom-solutions-with-quality-at-the-core/"

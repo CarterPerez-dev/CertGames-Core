@@ -25,12 +25,12 @@ body, html {
 .left-bg, .right-bg {
   flex: 1;                /* Take up equal space on both sides */
   background: transparent;
-  min-height: 100vh; /* Ensure the background image is visible */
+  min-height: 100vh;      /* Ensure the background image is visible */
   background: url('./backround7.jpg') center center no-repeat;
   background-size: cover;
 }
 
-/* Daily Cyber Brief Container */
+/* Container */
 .daily-cyberbrief-container {
   background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
   padding: 20px;
@@ -43,7 +43,7 @@ body, html {
   color: #ffffff;
 }
 
-/* CyberBrief Title */
+/* Title */
 .cyberbrief-title {
   font-size: 2rem;
   color: #b30000;
@@ -54,7 +54,7 @@ body, html {
   margin-bottom: 20px;
 }
 
-/* CyberBrief Description */
+/* Description */
 .cyberbrief-description {
   margin-bottom: 20px;
   color: #ffffff;
@@ -65,7 +65,7 @@ body, html {
   line-height: 1.4;
 }
 
-/* CyberBrief Form Labels */
+/* Form Labels */
 .cyberbrief-form label {
   display: block;
   margin: 15px auto 5px;
@@ -76,7 +76,7 @@ body, html {
   text-align: center;
 }
 
-/* CyberBrief Inputs */
+/* Inputs */
 .cyberbrief-input {
   width: 80%;
   max-width: 300px;
@@ -89,20 +89,6 @@ body, html {
   display: block;
 }
 
-/* Time Slots Container */
-.time-slots-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-
-/* Time Slot Select */
-.time-slot {
-  width: 100%;
-  max-width: 150px;
-}
-
 /* Button Group */
 .button-group {
   display: flex;
@@ -112,7 +98,7 @@ body, html {
   margin-top: 20px;
 }
 
-/* Submit Buttons */
+/* Buttons */
 .cyberbrief-submit-button,
 .unsubscribe-button {
   padding: 10px 20px;
@@ -131,7 +117,7 @@ body, html {
   background-color: #006600;
 }
 
-/* CyberBrief Message */
+/* Message */
 .cyberbrief-message {
   text-align: center;
   margin-top: 20px;
@@ -198,9 +184,8 @@ body, html {
     margin: 0;
   }
 
-  /* Adjust inputs and time slots to full width */
-  .cyberbrief-input,
-  .time-slot {
+  /* Adjust inputs to full width */
+  .cyberbrief-input {
     max-width: 100%;
     width: 100%;
   }
