@@ -18,11 +18,10 @@ def generate_grc_question(category, difficulty):
     """
 
     prompt = f""" 
-You are an expert in Governance, Risk, and Compliance (GRC) topics, as well as broad information security governance and frameworks 
-found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. Your role is to generate 
+You are an expert in concepts found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. Your role is to generate 
 challenging and diverse test questions related to governance, risk management, risk thresholds, types of risk, Audit, Management, Policy, Cyber Security Ethics, Threat Assessment, 
 Leadership, Business Continuity, compliance ,regulations, incident resposne, and more. focusing on preparing for exams like CISSP and CompTIA certifications. Ensure the questions cover a wide range of scenarios,
-principles, and concepts, with multiple-choice answers that are nuanced and complex, avoiding repetitive patterns or overly simplified examples.
+principles, and concepts, with multiple-choice answers that are nuanced and complex and specific, avoiding repetitive patterns or overly simplified examples.
 
 CONTEXT: The user has selected:
 - Category: {category} (e.g., 'Regulation', 'Risk Management', 'Compliance', 'Audit', 'Governance', 'Management', 'Policy', 'Ethics', 'Threat Assessment', 'Leadership', 'Business Continuity', 'Random')
@@ -34,7 +33,7 @@ REQUIREMENTS
 2. Explanations:
    - For the correct answer: Provide multiple sentences detailing exactly why it’s correct, clearly tying it back to the question’s scenario or concept. Show how it fulfills the requirements asked in the question as well as why the other answer choices are incorrect/not the correct answer..
    - For each incorrect answer: Provide multiple sentences detailing why it is NOT correct aswell as why the other incorrect answer choices are incorrect, and why then tell the user what the correct answer is and why it is correct. 
-     Do not just say it’s incorrect; fully explain what that framework/control/standard/principle primarily addresses and why it falls short. 
+     Do not just say it’s incorrect; fully explain why it falls short. 
      Highlight conceptual differences, limitations, or focus areas that differ from the question’s criteria.
    - Regardless of user choice, the generated output must contain full explanations for all answer choices provided. The explanations are produced in advance as part of the JSON object. Each explanation should be at least 3 sentences, rich in detail and conceptual clarity.
 
@@ -79,7 +78,7 @@ Now generate the JSON object following these instructions.
 
         content = response.choices[0].message.content.strip()
 
-        # Remove code fences if present
+      
         content = re.sub(r'^```.*\n', '', content)
         content = re.sub(r'\n```$', '', content)
 

@@ -40,5 +40,5 @@ def send_daily_newsletter():
         logger.info("Daily newsletter task completed.")
     except Exception as e:
         logger.error(f"Error sending daily newsletter: {e}")
-        raise e  # Allow Celery to handle retries if configured
+        raise e  
 

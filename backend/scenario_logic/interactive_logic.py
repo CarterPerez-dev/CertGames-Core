@@ -46,10 +46,9 @@ def generate_interactive_questions(scenario_text):
 
         content = response.choices[0].message.content.strip()
 
-        # Attempt to parse JSON
+
         try:
             openai_generated_questions = json.loads(content)
-            # Validate and append questions
             for q in openai_generated_questions:
                 if (
                     isinstance(q, dict) and
@@ -58,7 +57,6 @@ def generate_interactive_questions(scenario_text):
                     'correct_answer' in q and
                     'explanation' in q
                 ):
-                    # Ensure options are properly formatted
                     if isinstance(q['options'], dict) and all(k in q['options'] for k in ['A', 'B', 'C', 'D']):
                         questions.append(q)
                     else:

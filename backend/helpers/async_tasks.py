@@ -21,9 +21,7 @@ from helpers.grc_helper import generate_grc_question as _generate_grc_question
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-# ---------------------------
-# Analogy Tasks
-# ---------------------------
+
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_single_analogy_task(self, concept, category):
     try:
@@ -48,9 +46,7 @@ def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, 
         logger.error(f"Celery generate_triple_comparison_analogy_task error: {e}")
         self.retry(exc=e)
 
-# ---------------------------
-# Scenario Tasks
-# ---------------------------
+
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_scenario_task(self, industry, attack_type, skill_level, threat_intensity):
     try:
@@ -75,9 +71,7 @@ def generate_interactive_questions_task(self, scenario_text):
         logger.error(f"Celery generate_interactive_questions_task error: {e}")
         self.retry(exc=e)
 
-# ---------------------------
-# Xploit/Payload Tasks
-# ---------------------------
+
 _xploit = _Xploits()
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
@@ -88,9 +82,7 @@ def generate_exploit_payload_task(self, vulnerability, evasion_technique):
         logger.error(f"Celery generate_exploit_payload_task error: {e}")
         self.retry(exc=e)
 
-# ---------------------------
-# GRC Tasks
-# ---------------------------
+
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_grc_question_task(self, category, difficulty):
     try:

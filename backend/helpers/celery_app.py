@@ -38,7 +38,7 @@ app.conf.update({
     'enable_utc': True,  
 })
 
-# Define Celery Beat schedule
+
 app.conf.beat_schedule = {
     'send-daily-newsletter-midnight': {
         'task': 'helpers.daily_newsletter_task.send_daily_newsletter',

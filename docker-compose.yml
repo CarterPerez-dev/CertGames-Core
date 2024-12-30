@@ -22,10 +22,7 @@ services:
     container_name: frontend_service
     build:
       context: ./frontend/my-react-app
-      dockerfile: Dockerfile.dev
-    volumes:
-      - ./frontend/my-react-app:/app
-      - /app/node_modules
+      dockerfile: Dockerfile.frontend
     ports:
       - "3000:3000"
     networks:
@@ -51,7 +48,12 @@ services:
     volumes:
       - /mnt/storage/redis_data:/data
       - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
-    command: redis-server /usr/local/etc/redis/redis.conf
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf
+      --requirepass ${REDIS_PASSWORD}
+      --appendonly yes
+      --protected-mode yes
+      --bind 0.0.0.0
     env_file:
       - .env
     networks:

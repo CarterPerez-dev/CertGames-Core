@@ -2,7 +2,7 @@ import os
 import logging
 from API.AI import client
 
-# Set up logging
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 

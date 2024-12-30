@@ -34,10 +34,7 @@ const AdminMonitorStatus = ({ apiKey }) => {
 
   useEffect(() => {
     fetchStatus();
-    // Optionally refresh every X seconds
-    // const interval = setInterval(() => fetchStatus(), 30000);
-    // return () => clearInterval(interval);
-    // eslint-disable-next-line
+ // eslint-disable-next-line
   }, []);
 
   return (

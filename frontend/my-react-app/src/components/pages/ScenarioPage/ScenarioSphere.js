@@ -15,7 +15,7 @@ const ScenarioSphere = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [feedback, setFeedback] = useState({});
 
-  // States for Autocomplete
+
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
@@ -293,7 +293,6 @@ const ScenarioSphere = () => {
               {isGenerating ? "Generating..." : "Generate Scenario"}
             </button>
             {isGenerating && (
-              // ======== UPDATED LOADING ELEMENT (Version 3) ========
               <div className="loading-sphere"></div>
             )}
           </div>

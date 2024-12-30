@@ -314,7 +314,7 @@ const App = () => {
 
   const analyzeIndividualLog = async (log) => {
     setLoading(true);
-    setProgress(10); // Start progress immediately
+    setProgress(10); 
     const startTime = Date.now();
     try {
       const response = await axios.post(`${ENDPOINT}/logs/analyze`, {
@@ -329,7 +329,6 @@ const App = () => {
         return;
       }
 
-      // Update the log in the main list
       setLogs((prevLogs) =>
         prevLogs.map((l) => (l.id === log.id ? { ...l, analysis: analyzedLog } : l))
       );

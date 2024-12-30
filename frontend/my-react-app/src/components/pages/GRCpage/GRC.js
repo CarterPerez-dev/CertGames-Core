@@ -121,8 +121,7 @@ const GRC = () => {
               onClick={fetchQuestion}
               disabled={loading}
               aria-label="Generate Question"
-            >
-              {/* When loading, show our "terminal typing" effect. Otherwise, show normal text. */}
+            >    
               {loading ? (
                 <span className="grc-button-loading-version1" aria-label="Loading">
                   Generating_
