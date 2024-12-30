@@ -453,7 +453,7 @@ The frontend is developed using modern JavaScript frameworks and libraries, ensu
 ---
 
 
-#@ DevOps and Deployment
+## DevOps and Deployment
 
 -  ## Apache:
 Apache acts as the core web server in my setup, handling requests from  Nginx and Amazon CloudFront and routing them to the appropriate backend services.
@@ -501,7 +501,7 @@ Utilizes AWS Web Application Firewall (WAF) for advanced protection against DDoS
 ---
 
 
-#2 API Documentation
+## API Documentation
 
 ### GRC Endpoint
 **POST /api/grc/generate_question**
@@ -527,10 +527,7 @@ Utilizes AWS Web Application Firewall (WAF) for advanced protection against DDoS
     "exam_tip": "Risk management is essential for business continuity."
   }
   ```
-# ProxyAuthRequired.com
 
-
-## API Documentation
 
 ### GRC Endpoint
 **POST /api/grc/generate_question**
