@@ -18,4 +18,8 @@ MONGO_URI=mongodb://mongodb:27017/xploitcraft
 CELERY_BROKER_URL=redis://redis:6379/
 CELERY_RESULT_BACKEND=redis://redis:6379/0
 
+ADMIN_API_KEY=create_password
+
+REDIS_PASSWORD=create_password
+
 

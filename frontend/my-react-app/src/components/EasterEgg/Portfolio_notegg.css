@@ -36,7 +36,7 @@
   text-shadow: 2px 2px #000;
 }
 
-/* Same glitch class name to avoid conflict with About.css */
+
 .portfolio-glitch {
   position: relative;
   display: inline-block;
@@ -167,7 +167,7 @@
   font-size: 0.95em;
 }
 
-/* Pulse Hover */
+
 .pulse-hover:hover {
   animation: pulse 1s infinite;
 }
@@ -216,7 +216,7 @@
   border: 2px solid #ff3d3d;
 }
 
-/* Scale Hover for certs */
+
 .scale-hover:hover {
   transform: scale(1.05);
 }
@@ -264,7 +264,7 @@
   color: #000;
 }
 
-/* Tilt Hover effect for blog posts */
+
 .tilt-hover:hover {
   transform: rotate(1deg) scale(1.02);
   transition: transform 0.3s;

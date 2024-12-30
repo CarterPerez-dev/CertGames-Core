@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import './Portfolio.css';
 
-// Existing imports for images
+
 import meImage from './me.png';
 import AImg from './A.png';
 import NetImg from './network.png';
@@ -12,7 +12,7 @@ import CaspImg from './CASP.png';
 import PentestImg from './pentest.png';
 import PcepImg from './pcep.png';
 
-// NEW import for "Project One" image
+
 import Project1Img from './project1.jpg';
 import Project2Img from './project2.jpg';
 import Resume from './CarterPerez.pdf';
@@ -76,7 +76,6 @@ function Portfolio() {
         <div className="projects-grid">
           {/* Project 1 */}
           <div className="project-card pulse-hover">
-            {/* Use the newly imported Project1Img */}
             <img
               src={Project1Img}
               alt="Project 1"
@@ -112,7 +111,6 @@ function Portfolio() {
               <p>
                 Auto apply bot for Indeed and Linkiden
               </p>
-              {/* Placeholder link */}
               <p>
                 <a
                   href="https://github.com/CarterPerez-dev/AutoApplication"

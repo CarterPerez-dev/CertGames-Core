@@ -38,7 +38,7 @@ const AnalogyHub = () => {
   const handleGenerateClick = () => {
     setIsGenerating(true);
 
-    // Prepare data to send to backend
+
     const data = {
       analogy_type: analogyType,
       category: analogyCategory,
@@ -47,7 +47,7 @@ const AnalogyHub = () => {
       concept3: inputValues[2] || ''
     };
 
-    // Make the request to backend
+ 
     fetch(`${ENDPOINT}/analogy/generate_analogy`, {
       method: 'POST',
       headers: {
@@ -74,10 +74,9 @@ const AnalogyHub = () => {
 
   const handleCopyClick = () => {
     if (generatedAnalogy) {
-      // Copy to clipboard
       navigator.clipboard.writeText(generatedAnalogy)
         .then(() => {
-          // Optional: you could show a small toast or notification that it's copied
+
           console.log('Copied to clipboard');
         })
         .catch(err => {

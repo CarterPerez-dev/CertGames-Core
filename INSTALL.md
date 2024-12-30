@@ -15,6 +15,10 @@ Before you begin, ensure that your system meets the following requirements:
 - Docker Compose
 - A text editor (e.g., nano, vim, gedit)
 
+### Sign Up for API's
+- Create an openai api account and create an api key
+- Create a Sendgrid account, verify your sender email, then create an api key
+
 ## Installation Steps
 
 ### Step 1: Open a Terminal
@@ -81,6 +85,9 @@ SENDGRID_API_KEY=Sendgrid_api_key # This is the api key to actually send the ema
 
 #Backend
 SECRET_KEY=create_a_long_complex_key
+ADMIN_API_KEY=create_password
+
+REDIS_PASSWORD=create_password
 
 #Mongo/Database
 MONGO_URI=mongodb://mongodb:27017/xploitcraft
@@ -126,18 +133,27 @@ server {
 
 ```nginx
 server {
-    listen 80;
-    listen [::]:80;
-    server_name _; 
+        listen 80;
+        listen [::]:80;
+        server_name _;
 
-    location / {
-        proxy_pass http://apache:8080;  
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+       
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+
+        location / {
+            proxy_pass http://apache:8080;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+        }
     }
-}
+
 ```
 
 ## Sendgrid email change
@@ -369,18 +385,6 @@ By following these detailed setup instructions, you can successfully run ProxyAu
 # Environment Variables
 
 
-| Variable              | Description                                |
-|----------------------|--------------------------------------------|
-| `OPENAI_API_KEY`     | API key for OpenAI integration.           |
-| `SMTP_SERVER`        | SMTP server for sending emails.           |
-| `SMTP_PORT`          | Port used for SMTP communication.         |
-| `SMTP_USER`          | Username for SMTP authentication.         |
-| `SMTP_PASSWORD`      | Password or API key for SMTP service.     |
-| `EMAIL_FROM`         | Default email sender address.             |
-| `SENDGRID_API_KEY`   | API key for SendGrid email service.       |
-| `SECRET_KEY`         | A long, complex secret key for app security. |
-| `MONGO_URI`          | mongodb://mongodb:27017/xploitcraft       |
-| `CELERY_BROKER_URL`  | redis://redis:6379/                       |
-| `CELERY_RESULT_BACKEND` | redis://redis:6379/0                   |
+
 
 

@@ -1,17 +1,15 @@
 // frontend/my-react-app/src/components/pages/AdminInterface/AdminInterface.js
 
 import React, { useState } from 'react';
-import { Tabs, Tab, Box } from '@mui/material';  // Material-UI tabs
+import { Tabs, Tab, Box } from '@mui/material';  
 import './AdminInterface.css';
 
-// Import each sub-component
 import AdminNewsletter from './AdminNewsletter';
 import AdminSubscribers from './AdminSubscribers';
 import AdminTriggerTasks from './AdminTriggerTasks';
 import AdminMonitorStatus from './AdminMonitorStatus';
 
-// Import the background image
-import adminBackground from './adminbackground.jpg'; // Ensure the path is correct
+import adminBackground from './adminbackground.jpg'; 
 
 const AdminInterface = () => {
   const [authKey, setAuthKey] = useState('');
@@ -20,32 +18,50 @@ const AdminInterface = () => {
   const [message, setMessage] = useState('');
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleAuthSubmit = () => {
+  const handleAuthSubmit = async () => {
     if (!authKey) {
       setMessage("API Key is required to proceed.");
       return;
     }
-    setApiKey(authKey.trim());
-    setIsAuthenticated(true);
-    setMessage('');
+
+    try {
+      const response = await fetch('/api/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password: authKey.trim() })
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+        setIsAuthenticated(true);
+        setApiKey(authKey.trim());
+        setMessage('');
+      } else {
+        setMessage(data.error || "Authentication failed.");
+      }
+    } catch (error) {
+      console.error('Error during authentication:', error);
+      setMessage("An error occurred. Please try again.");
+    }
   };
 
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
 
-  // Inline style for background image on the password page
   const authBackgroundStyle = {
     backgroundImage: `url(${adminBackground})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    minHeight: '100vh', /* Ensure the background covers the entire viewport */
+    minHeight: '100vh', 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   };
 
-  // Screen 1: Authentication
   if (!isAuthenticated) {
     return (
       <div className="admin-interface-container" style={authBackgroundStyle}>
@@ -73,7 +89,6 @@ const AdminInterface = () => {
     );
   }
 
-  // Screen 2: Admin Dashboard with Tabs
   return (
     <div className="admin-interface-container">
       <h2>Admin Interface</h2>

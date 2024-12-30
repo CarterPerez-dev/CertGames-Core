@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from helpers.xploitcraft_helper import Xploits
 import logging
 
-# Configure logger
+
 logger = logging.getLogger(__name__)
 
 xploit = Xploits()
@@ -13,8 +13,7 @@ def generate_payload_endpoint():
     data = request.get_json()
     logger.debug(f"Received data: {data}")
 
-    # Allow for either vulnerability or evasion_technique or both.
-    # If neither is provided, return error.
+
     if not data or (not data.get('vulnerability') and not data.get('evasion_technique')):
         logger.error("Invalid request payload - need at least one of vulnerability or evasion_technique")
         return jsonify({'error': 'Please provide at least one of vulnerability or evasion_technique'}), 400

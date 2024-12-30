@@ -16,7 +16,7 @@ def get_application_status():
     but you can do simple checks (like attempts to connect to services).
     For simplicity, we'll mock or do minimal checks here.
     """
-    # In real usage, you'd do actual checks: e.g., try connecting to Redis or Mongo.
+
     return {
         "backend": "Running",
         "mongodb": "Running",

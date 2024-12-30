@@ -11,7 +11,6 @@ db = client.get_database()
 users_collection = db["users"]
 
 def create_user(user_data):
-    # Example if you want to create a user
     email = user_data.get("email")
     if not email:
         raise ValueError("Email is required")

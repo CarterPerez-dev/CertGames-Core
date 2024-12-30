@@ -35,7 +35,7 @@ const AdminSubscribers = ({ apiKey }) => {
 
   useEffect(() => {
     fetchSubscribers();
-    // eslint-disable-next-line
+     // eslint-disable-next-line
   }, []);
 
   const handleSearch = (e) => {
@@ -50,7 +50,7 @@ const AdminSubscribers = ({ apiKey }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey, // Actually unsub route doesn't need API key if it's public, but let's keep it for consistency
+          'x-api-key': apiKey, 
         },
         body: JSON.stringify({ email }),
       });

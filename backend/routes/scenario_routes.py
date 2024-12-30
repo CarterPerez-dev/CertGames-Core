@@ -52,7 +52,6 @@ def generate_scenario_endpoint():
         return jsonify({'error': 'threat_intensity must be int 1-100'}), 400
 
     try:
-        # Celery calls
         scenario_result = generate_scenario_task.delay(industry, attack_type, skill_level, threat_intensity)
         scenario_text = scenario_result.get(timeout=300)  
 

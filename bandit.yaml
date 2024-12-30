@@ -5,5 +5,5 @@ exclude:
   - "backend/*/tests/*"
   - "backend/*.pyc"
   - "backend/database/*"  
-  - "backend/helpers/*/external/*"  
+
 

@@ -62,6 +62,16 @@ app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_KEY_PREFIX'] = 'flask_session:'
 app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0)
 
+
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')  
+
+app.config['SESSION_REDIS'] = redis.StrictRedis(
+    host='redis',
+    port=6379,
+    db=0,
+    password=REDIS_PASSWORD
+)
+
 Session(app)
 
 
@@ -98,9 +108,23 @@ def register():
         logger.error(f"Error registering user: {e}")
         return jsonify({"error": "Internal server error"}), 500
     
+ADMIN_API_KEY = os.getenv("ADMIN_API_KEY")   
+    
+@app.route('/authenticate', methods=['POST'])
+def authenticate():
+    data = request.get_json()
+    if not data or 'password' not in data:
+        return jsonify({"error": "Password is required."}), 400
+    
+    password = data['password']
+    
+    if password == ADMIN_API_KEY:
+        
+        return jsonify({"message": "Authentication successful."}), 200
+    else:
+        return jsonify({"error": "Invalid password."}), 401
 
 
-# WebSocket for real-time updates
 @socketio.on('connect')
 def handle_connect():
     logger.info('Client connected')

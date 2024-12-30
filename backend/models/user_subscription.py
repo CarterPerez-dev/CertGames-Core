@@ -13,7 +13,7 @@ db = client.get_database()
 
 users_collection = db["users"]
 
-# Set up logging
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'

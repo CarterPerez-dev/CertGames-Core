@@ -1,5 +1,5 @@
 import React from 'react';
-import './About.css'; // Import the CSS for styling
+import './About.css'; 
 
 
 function About() {
@@ -12,7 +12,7 @@ function About() {
         
         <section className="about-intro">
           <p>
-            ProxyAuthRequired is your personal launchpad into the realm of cybersecurity, combining a variety of tools—like analogy-driven explanations, daily emails, targeted test questions, and well-organized study materials—into one cohesive platform. Designed by Carter, an integration tech at Sealing Tech who thrives on making hard concepts understandable, ProxyAuthRequired encourages learners to explore content on their own terms. With its fusion of practical learning and interactive experiences, you'll move beyond rote memorization to truly grasp the why behind cybersecurity practices.
+            ProxyAuthRequired is your personal launchpad into the realm of cybersecurity, combining a variety of tools—like analogy-driven explanations, daily newsletters, targeted test questions, and well-organized study materials—into one cohesive platform. Designed by Carter, an integration tech at Sealing Tech who thrives on making hard concepts understandable, ProxyAuthRequired encourages learners to explore content on their own terms. With its fusion of practical learning and interactive experiences, you'll move beyond rote memorization to truly grasp the why behind cybersecurity practices.
           </p>
           <p>
             The result is a fun, immersive environment where theory meets real-world practice, ensuring you grow from curious beginner to confident professional.
@@ -24,7 +24,7 @@ function About() {
           <div className="tool-column">
             <div className="tool-card">
               <h3>Xploitcraft</h3>
-              <p>Xploitcraft allows you to specify a vulnerability and an evasion technique, then generates a realistic payload that attackers might use. By seeing this code in action, you gain insight into the logic and methods behind sophisticated exploits.</p>
+              <p>Xploitcraft allows you to specify a vulnerability and or an evasion technique, then generates a realistic payload that attackers might use. By seeing this code in action, you gain insight into the logic and methods behind sophisticated exploits.</p>
             </div>
             <div className="tool-card">
               <h3>Log Analysis</h3>
@@ -39,7 +39,7 @@ function About() {
             </div>
             <div className="tool-card">
               <h3>GRC Wizard</h3>
-              <p>GRC Wizard demystifies Governance, Risk, and Compliance frameworks, guiding you step-by-step through complex policies and standards. You can specify difficulty levels and choose particular frameworks—or let it pick one at random—to generate a focused test question. By tackling these questions, you’ll learn how to navigate regulatory mandates, implement controls, and manage risks efficiently. </p>
+              <p>GRC Wizard demystifies Governance, Risk, and Compliance frameworks, guiding you step-by-step through complex policies and standards. You can specify difficulty levels and choose particular categories—or let it pick one at random—to generate a focused test question. By tackling these questions, you’ll learn how to navigate regulatory mandates, implement controls, and manage risks efficiently. </p>
             </div>
           </div>
 
@@ -47,11 +47,11 @@ function About() {
           <div className="tool-column">
             <div className="tool-card">
               <h3>Scenario Sphere</h3>
-              <p>Scenario Sphere transports you into a tailored cybersecurity incident, letting you pick the threat type, skill level, and even the style of attack you want to face. Once set, it generates a realistic scenario that immerses you in the crisis, compelling you to think critically. After presenting the context, it provides four thought-provoking test questions, ensuring you truly internalize the lesson. By solving these scenario-based challenges, you sharpen your decision-making and adaptability under pressure.</p>
+              <p>Scenario Sphere transports you into a tailored cybersecurity incident, letting you pick the threat type, skill level, and over 2000 different types of attacks to choose from. Once set, it generates a realistic scenario that immerses you in the crisis, compelling you to think critically. After presenting the context, it provides four thought-provoking test questions, ensuring you truly internalize the lesson. By solving these scenario-based challenges, you sharpen your decision-making and adaptability under pressure.</p>
             </div>
             <div className="tool-card">
               <h3>Daily Cyber Brief</h3>
-              <p>Daily Cyber Brief delivers curated cybersecurity news, updates, CompTIA objectives, and best practices straight to your inbox each morning. Its concise format ensures you stay informed without feeling overwhelmed—just enough to keep you aware of evolving threats and defenses. By regularly receiving these summaries, you’ll maintain a steady awareness of industry shifts, from newly discovered vulnerabilities to emerging compliance requirements.</p>
+              <p>Daily Cyber Brief delivers curated cybersecurity news, updates, CompTIA objectives, study tips, and best practices straight to your inbox each morning. Its concise format ensures you stay informed without feeling overwhelmed—just enough to keep you aware of evolving threats and defenses. By regularly receiving these summaries, you’ll maintain a steady awareness of industry shifts, from newly discovered vulnerabilities to emerging compliance requirements.</p>
             </div>
           </div>
         </section>
@@ -111,7 +111,7 @@ My favorite show, Mr. Robot, inspires not only my mindset but also the aesthetic
 
 I also enjoy programming, web design, and creating tools to make life easier. Whether it’s writing scripts to streamline workflows or building applications just for fun, I love the mix of creativity and problem-solving. My long-term goals include growing into a cybersecurity analyst role, then transitioning into penetration testing. Eventually, I hope to step into a Chief Technology Officer (CTO) position—or even launch my own cybersecurity company.
 
-For me, this journey isn’t just about building a career—it’s about constantly learning, creating, and making an impact in an ever-evolving industry. By the way, therss a simple little Easter Egg in this website, look through my git repo to find it or solve the riddle.
+By the way, therss a simple little Easter Egg in this website, look through my git repo to find it or solve the riddle.
  
  Riddle............ I’m the master of all, the start of the chain,
 Tap me once, and I’ll remain.

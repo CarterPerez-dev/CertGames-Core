@@ -1,17 +1,12 @@
-/* ===================================
-   Enhanced Styles for Better Mobile 
-   Experience & Professional Look
-   =================================== */
 
-/* Define CSS Variables */
 :root {
   /* Primary Colors */
-  --primary-red: #cc0000;    /* Updated red */
-  --accent-red: #e60000;     /* Similar red for accents */
+  --primary-red: #cc0000;    
+  --accent-red: #e60000;     
   
   /* Blue Colors */
-  --primary-blue: #0000ff;   /* Pure blue */
-  --accent-blue: #0044cc;    /* Similar blue for accents */
+  --primary-blue: #0000ff;   
+  --accent-blue: #0044cc;    
   
   /* Neutral Colors */
   --white: #ffffff;
@@ -19,20 +14,20 @@
   --dark-grey: #121212;
   
   /* Input Colors */
-  --input-border: #cc0000;   /* Matching red */
-  --input-bg: #8c8c8c;       /* White background for inputs */
-  --text-color: #0000ff;     /* Proper blue text */
+  --input-border: #cc0000;   
+  --input-bg: #8c8c8c;      
+  --text-color: #0000ff;    
   
   /* Button Colors */
-  --button-bg: #cc0000;          /* Matching red */
-  --button-hover-bg: #ff3333;    /* Lighter red on hover */
-  --button-active-bg: #990000;   /* Darker red on active */
+  --button-bg: #cc0000;          
+  --button-hover-bg: #ff3333;    
+  --button-active-bg: #990000;   
   
   /* Log Entry Background */
-  --log-entry-bg: rgba(18, 18, 18, 0.85); /* Semi-transparent dark background */
+  --log-entry-bg: rgba(18, 18, 18, 0.85); 
 }
 
-/* Keyframes for Flicker Animation */
+
 @keyframes flicker {
   0% {
     opacity: 1;
@@ -59,7 +54,7 @@
   100% {opacity: 1;}
 }
 
-/* CRT Overlay Scanline Effect */
+
 .crt-overlay::before {
   content: "";
   position: fixed;
@@ -76,25 +71,25 @@
   opacity: 0.3;
 }
 
-/* Reset and Global Styles */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   box-sizing: border-box;
-  overflow-x: hidden; /* Disallow horizontal scroll on the entire page */
+  overflow-x: hidden; 
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
 
-/* Container with background and mild overlay */
+
 .log-page-container.crt-overlay {
   position: relative; 
 }
 
-/* Background image overlay */
+
 .log-page-container.crt-overlay::before {
   content: "";
   position: absolute;
@@ -108,14 +103,14 @@ html, body {
   border-radius: 15px; 
 }
 
-/* Neon Borders */
+
 .neon-border {
   border: 1px solid var(--accent-red);
   box-shadow: 0 0 8px var(--accent-red), inset 0 0 8px var(--accent-red);
   border-radius: 12px;
 }
 
-/* Title Styling */
+
 .log-page-title {
   text-align: center;
   font-size: 2.5rem;
@@ -126,7 +121,7 @@ html, body {
   font-weight: bold; 
 }
 
-/* Hacker Panel with Semi-Transparent Background */
+
 .hacker-panel {
   position: relative; 
   background: var(--log-entry-bg);
@@ -136,7 +131,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Pseudo-element for background image in panels */
+
 .hacker-panel::before {
   content: "";
   position: absolute;
@@ -151,7 +146,7 @@ html, body {
   border-radius: 15px;
 }
 
-/* Custom Scrollbar for scrollable areas */
+
 .hacker-scroll::-webkit-scrollbar {
   width: 10px;
 }
@@ -167,19 +162,19 @@ html, body {
   background-color: var(--button-hover-bg);
 }
 
-/* Controls Section */
+
 .log-controls {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 10px; /* Slight gap for better spacing */
+  gap: 10px; 
 }
 
 .control-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
-  flex: 1 1 180px; /* Slightly narrower to fit better on small screens */
+  flex: 1 1 180px; 
 }
 
 .control-group label {
@@ -189,7 +184,7 @@ html, body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Enhanced Input Styling */
+
 .control-group select,
 .control-group input[type="number"] {
   padding: 10px;
@@ -209,7 +204,7 @@ html, body {
   box-shadow: 0 0 8px var(--primary-red);
 }
 
-/* For "Max X" label next to the input */
+
 .max-count {
   margin-left: 5px;
   font-size: 0.9rem;
@@ -217,7 +212,7 @@ html, body {
   align-self: flex-end;
 }
 
-/* Buttons (Generate, Reset, etc.) */
+
 .generate-btn,
 .reset-btn,
 .history-controls button {
@@ -249,14 +244,13 @@ html, body {
   box-shadow: 0 0 20px var(--primary-red);
 }
 
-/* Disable State for Analyze Individual Button */
 .analyze-individual-btn:disabled {
   background-color: #555555;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-/* Neon button effect */
+
 .neon-btn::after {
   content: "";
   position: absolute;
@@ -270,7 +264,7 @@ html, body {
   left: 100%;
 }
 
-/* Progress Bar */
+
 .progress-bar-container {
   position: relative;
   width: 100%;
@@ -299,7 +293,7 @@ html, body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Logs Display */
+
 .log-list {
   display: flex;
   flex-direction: column;
@@ -350,16 +344,16 @@ html, body {
   overflow: auto;
   color: var(--text-color);
 
-  /* Allow horizontal scrolling if content is wide */
+
   white-space: pre;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
-/* Severity Highlights (Optional additions if desired) */
+
 .severity-critical { border-left: 5px solid var(--primary-red); }
 .severity-info { border-left: 5px solid var(--accent-red); }
 
-/* Analysis Result */
+
 .analysis-result {
   margin-top: 10px;
 }
@@ -374,7 +368,7 @@ html, body {
   border: 1px solid var(--accent-red);
 }
 
-/* History */
+
 .log-history {
   padding: 20px;
   border-radius: 20px;
@@ -413,7 +407,7 @@ html, body {
   word-wrap: break-word;
 }
 
-/* Actions (Export, Reset) */
+
 .log-actions {
   display: flex;
   justify-content: center;
@@ -457,7 +451,7 @@ html, body {
   background-color: var(--button-hover-bg);
 }
 
-/* Empty Logs Message */
+
 .empty-message {
   color: var(--primary-red);
   text-align: center;
@@ -467,7 +461,7 @@ html, body {
   font-family: 'Arial', sans-serif;
 }
 
-/* Footer (if needed) */
+
 .resources-footer {
   text-align: center;
   color: #aaaaaa;
@@ -475,9 +469,7 @@ html, body {
   font-size: 0.9rem;
 }
 
-/* ============================================================
-   Responsive Design Adjustments for Better Mobile Experience
-   ============================================================ */
+
 @media (max-width: 1024px) {
   .log-page-container {
     padding: 15px;
@@ -493,7 +485,7 @@ html, body {
     align-items: flex-start;
   }
   .log-list {
-    height: 450px; /* Slightly less tall for tablets */
+    height: 450px; 
   }
   .control-group {
     margin-right: 0;
@@ -530,7 +522,7 @@ html, body {
   .history-entry p {
     font-size: 0.85rem;
   }
-  /* Ensure no horizontal scroll on small screens */
+
   body, html {
     overflow-x: hidden;
   }

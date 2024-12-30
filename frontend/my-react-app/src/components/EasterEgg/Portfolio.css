@@ -1,4 +1,4 @@
-/* General Reset */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -13,7 +13,7 @@
   padding-bottom: 50px;
 }
 
-/* Optional ephemeral popup styling */
+
 .egg-popup {
   position: fixed;
   top: 60px;
@@ -22,7 +22,7 @@
   border: 2px solid #ff3d3d;
   border-radius: 8px;
   padding: 15px;
-  z-index: 9999; /* On top of everything */
+  z-index: 9999; 
   animation: fadeInUp 0.5s forwards;
 }
 
@@ -67,7 +67,7 @@
   text-shadow: 2px 2px #000;
 }
 
-/* Glitch class name to avoid conflict with About.css */
+
 .portfolio-glitch {
   position: relative;
   display: inline-block;
@@ -198,7 +198,7 @@
   font-size: 0.95em;
 }
 
-/* Pulse Hover */
+
 .pulse-hover:hover {
   animation: pulse 1s infinite;
 }
@@ -247,7 +247,7 @@
   border: 2px solid #ff3d3d;
 }
 
-/* Scale Hover for certs */
+
 .scale-hover:hover {
   transform: scale(1.05);
 }
@@ -295,7 +295,7 @@
   color: #000;
 }
 
-/* Tilt Hover effect for blog posts */
+
 .tilt-hover:hover {
   transform: rotate(1deg) scale(1.02);
   transition: transform 0.3s;

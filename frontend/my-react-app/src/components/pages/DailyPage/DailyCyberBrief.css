@@ -1,4 +1,3 @@
-/* Reset and Global Styles */
 body, html {
   margin: 0;
   padding: 0;
@@ -11,7 +10,7 @@ body, html {
   box-sizing: inherit;
 }
 
-/* Page Wrapper */
+
 .page-wrapper {
   display: flex;
   justify-content: center; 
@@ -21,29 +20,29 @@ body, html {
   box-sizing: border-box;
 }
 
-/* Left and Right Backgrounds */
+
 .left-bg, .right-bg {
-  flex: 1;                /* Take up equal space on both sides */
+  flex: 1;               
   background: transparent;
-  min-height: 100vh;      /* Ensure the background image is visible */
+  min-height: 100vh;      
   background: url('./backround7.jpg') center center no-repeat;
   background-size: cover;
 }
 
-/* Container */
+
 .daily-cyberbrief-container {
-  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.8); 
   padding: 20px;
   text-align: center;
   border: 2px solid #ff004d;
   border-radius: 10px;
   width: 100%;
   max-width: 600px;
-  margin: 0 20px; /* Space between container and backgrounds */
+  margin: 0 20px; 
   color: #ffffff;
 }
 
-/* Title */
+
 .cyberbrief-title {
   font-size: 2rem;
   color: #b30000;
@@ -54,7 +53,7 @@ body, html {
   margin-bottom: 20px;
 }
 
-/* Description */
+
 .cyberbrief-description {
   margin-bottom: 20px;
   color: #ffffff;
@@ -65,7 +64,7 @@ body, html {
   line-height: 1.4;
 }
 
-/* Form Labels */
+
 .cyberbrief-form label {
   display: block;
   margin: 15px auto 5px;
@@ -76,7 +75,7 @@ body, html {
   text-align: center;
 }
 
-/* Inputs */
+
 .cyberbrief-input {
   width: 80%;
   max-width: 300px;
@@ -89,7 +88,7 @@ body, html {
   display: block;
 }
 
-/* Button Group */
+
 .button-group {
   display: flex;
   justify-content: center;
@@ -98,7 +97,7 @@ body, html {
   margin-top: 20px;
 }
 
-/* Buttons */
+
 .cyberbrief-submit-button,
 .unsubscribe-button {
   padding: 10px 20px;
@@ -117,7 +116,7 @@ body, html {
   background-color: #006600;
 }
 
-/* Message */
+
 .cyberbrief-message {
   text-align: center;
   margin-top: 20px;
@@ -125,7 +124,7 @@ body, html {
   font-weight: bold;
 }
 
-/* Loading Bar Container */
+
 .loading-bar-container {
   display: flex;
   align-items: center;
@@ -135,7 +134,7 @@ body, html {
   flex-wrap: wrap;
 }
 
-/* Loading Bar */
+
 .loading-bar {
   height: 20px;
   width: 80%;
@@ -147,7 +146,7 @@ body, html {
   max-width: 300px;
 }
 
-/* Loading Bar Progress */
+
 .loading-bar-progress {
   height: 100%;
   width: 0%;
@@ -157,40 +156,38 @@ body, html {
   transition: width 0.5s ease-in-out;
 }
 
-/* Loading Percentage */
+
 .loading-percentage {
   font-size: 1em;
   color: #ffffff;
   font-weight: bold;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
-  /* Hide left and right backgrounds on smaller screens */
   .left-bg, .right-bg {
     display: none;
   }
 
-  /* Adjust page-wrapper to center content */
+
   .page-wrapper {
     justify-content: center;
     align-items: center;
     padding: 10px;
   }
 
-  /* Make the container full width */
+
   .daily-cyberbrief-container {
     max-width: 100%;
     margin: 0;
   }
 
-  /* Adjust inputs to full width */
   .cyberbrief-input {
     max-width: 100%;
     width: 100%;
   }
 
-  /* Stack buttons vertically */
+
   .button-group {
     flex-direction: column;
     gap: 10px;
