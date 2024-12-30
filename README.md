@@ -183,7 +183,6 @@ The project follows a modular structure, with clear separation of concerns:
 │       ├── interactive_logic.py
 │       └── scenario_flow_manager.py
 ├── bandit.yaml
-├── certificate.csr
 ├── database
 │   └── models.py
 ├── docker-compose.yml
@@ -289,13 +288,13 @@ The project follows a modular structure, with clear separation of concerns:
 │   ├── nginx.conf
 │   └── sites-enabled
 │       └── reverse_proxy.conf
-├── package-lock.json
 ├── redis
 │   └── redis.conf
 ├── requirements.txt
 └── xploitcraft.pem
 
-31 directories, 132 files
+31 directories, 130 files
+
 
 ```
 
