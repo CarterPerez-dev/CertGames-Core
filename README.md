@@ -453,7 +453,7 @@ The frontend is developed using modern JavaScript frameworks and libraries, ensu
 ---
 
 
-## DevOps and Deployment
+# DevOps and Deployment
 
 -  ## Apache:
 Apache acts as the core web server in my setup, handling requests from  Nginx and Amazon CloudFront and routing them to the appropriate backend services.
