@@ -43,8 +43,10 @@ jobs:
           # Stopping existing containers
           docker-compose down
 
+          docker system prune -a --volumes -f
+
           # Rebuilding containers with no cache
-          docker-compose build --no-cache
+          docker-compose build 
 
           # Starting the containers in detached mode
           docker-compose up -d --remove-orphans
