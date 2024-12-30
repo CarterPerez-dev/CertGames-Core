@@ -13,7 +13,7 @@
 4. [Key Features](#key-features)
 5. [Project Structure](#project-structure)
 6. [Technologies Used](#technologies-used)
-7. [Dev Ops and Deployment](#dev-ops-and-deployment)
+7. [DevOps and Deployment](#devops-and-deployment)
 8. [API Documentation](#api-documentation)
 9. [Future Enhancements](#future-enhancements)
 10. [Contact Me](#contact-me).
@@ -453,7 +453,7 @@ The frontend is developed using modern JavaScript frameworks and libraries, ensu
 ---
 
 
-# DevOps and Deployment
+#@ DevOps and Deployment
 
 -  ## Apache:
 Apache acts as the core web server in my setup, handling requests from  Nginx and Amazon CloudFront and routing them to the appropriate backend services.
@@ -501,7 +501,7 @@ Utilizes AWS Web Application Firewall (WAF) for advanced protection against DDoS
 ---
 
 
-# API Documentation
+#2 API Documentation
 
 ### GRC Endpoint
 **POST /api/grc/generate_question**
