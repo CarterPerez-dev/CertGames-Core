@@ -70,5 +70,5 @@ def generate_scenario_endpoint():
         }), 200
     except Exception as e:
         logger.error(f"Error generating scenario: {e}")
-        return jsonify({'error': 'An internal error occurred while generating the scenario.'}), 500
+        return jsonify({'error': 'An error occurred while generating the scenario.Please try again, in the process of fixing this'}), 500
 
