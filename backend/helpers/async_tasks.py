@@ -1,4 +1,5 @@
 # helpers/async_tasks.py
+
 import logging
 from helpers.celery_app import app
 
@@ -10,9 +11,9 @@ from helpers.analogy_helper import (
 
 from helpers.scenario_helper import (
     generate_scenario as _generate_scenario,
-    break_down_scenario as _break_down_scenario
+    break_down_scenario as _break_down_scenario,
+    generate_interactive_questions as _generate_interactive_questions  
 )
-from scenario_logic.interactive_logic import generate_interactive_questions as _generate_interactive_questions
 
 from helpers.xploitcraft_helper import Xploits as _Xploits
 
@@ -30,6 +31,7 @@ def generate_single_analogy_task(self, concept, category):
         logger.error(f"Celery generate_single_analogy_task error: {e}")
         self.retry(exc=e)
 
+
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_comparison_analogy_task(self, concept1, concept2, category):
     try:
@@ -37,6 +39,7 @@ def generate_comparison_analogy_task(self, concept1, concept2, category):
     except Exception as e:
         logger.error(f"Celery generate_comparison_analogy_task error: {e}")
         self.retry(exc=e)
+
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, category):
@@ -49,11 +52,18 @@ def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, 
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_scenario_task(self, industry, attack_type, skill_level, threat_intensity):
+    """
+    If _generate_scenario now returns a generator (streaming), we can consume it fully here,
+    returning a single string to Celery.
+    """
     try:
-        return _generate_scenario(industry, attack_type, skill_level, threat_intensity)
+        scenario_gen = _generate_scenario(industry, attack_type, skill_level, threat_intensity)
+        scenario_text = "".join(scenario_gen)
+        return scenario_text
     except Exception as e:
         logger.error(f"Celery generate_scenario_task error: {e}")
         self.retry(exc=e)
+
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def break_down_scenario_task(self, scenario_text):
@@ -63,10 +73,17 @@ def break_down_scenario_task(self, scenario_text):
         logger.error(f"Celery break_down_scenario_task error: {e}")
         self.retry(exc=e)
 
+
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_interactive_questions_task(self, scenario_text):
+    """
+    If _generate_interactive_questions now yields streaming tokens, 
+    we just gather them into one final string here.
+    """
     try:
-        return _generate_interactive_questions(scenario_text)
+        questions_gen = _generate_interactive_questions(scenario_text)
+        questions_text = "".join(questions_gen)
+        return questions_text
     except Exception as e:
         logger.error(f"Celery generate_interactive_questions_task error: {e}")
         self.retry(exc=e)
