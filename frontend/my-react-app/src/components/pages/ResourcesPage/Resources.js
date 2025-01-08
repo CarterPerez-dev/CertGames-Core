@@ -771,7 +771,7 @@ const resourcesData = {
       .filter((obj) => obj.cert.toLowerCase().startsWith('cysa+'))
       .map((obj) => ({ name: obj.cert, url: obj.url })),
 
-    { name: 'Practice Exams', url: 'https://www.examcompass.com/' },
+    { name: 'Practice Exams', url: 'https://www.101labs.net/free-cysa-practice-exam-cybersecurity/' },
 
     ...getAllMatchesForCategory('CySA+'),
   ],
@@ -787,7 +787,7 @@ const resourcesData = {
 
     {
       name: 'CASP+ Practice Exams',
-      url: 'https://www.comptia.org/certifications/casp/practice-tests',
+      url: 'https://www.howtonetwork.com/free/casp-practice-exam/',
     },
 
     ...getAllMatchesForCategory('SecurityX/CASP'),
@@ -800,7 +800,7 @@ const resourcesData = {
 
     {
       name: 'PenTest+ Practice Exams',
-      url: 'https://www.comptia.org/certifications/pentest/practice-tests',
+      url: 'https://www.howtonetwork.com/free/pentest-practice-exam/',
     },
 
 
@@ -825,12 +825,12 @@ const resourcesData = {
 
     {
       name: 'Linux+ Study Guide',
-      url: 'https://www.examcompass.com/comptia/linux-plus-certification/free-linux-plus-practice-tests',
+      url: 'https://www.howtonetwork.com/free/linux-practice-exam/',
     },
     { name: 'Linux+ Practice Labs', url: 'https://www.virtualbox.org/' },
     {
       name: 'Linux+ Practice Exams',
-      url: 'https://www.comptia.org/certifications/linux/practice-tests',
+      url: 'https://certblaster.com/certification-learning-resources/linux-plus-practice-test-sample-questions/',
     },
     {
       name: 'Linux+ Training by CBT Nuggets',
@@ -847,7 +847,7 @@ const resourcesData = {
 
     {
       name: 'Data+ Practice Exams',
-      url: 'https://www.examcompass.com/comptia/data-plus-certification/free-data-plus-practice-tests',
+      url: 'https://careeremployer.com/test-prep/practice-tests/comptia-data-practice-test/',
     },
 
     ...getAllMatchesForCategory('Data+'),
@@ -860,7 +860,7 @@ const resourcesData = {
 
     {
       name: 'Server+ Practice Exams',
-      url: 'https://www.examcompass.com/comptia/server-plus-certification/free-server-plus-practice-tests',
+      url: 'https://www.proprofs.com/quiz-school/story.php?title=comptia-server-practice-questions-125-set-1-4',
     },
 
     ...getAllMatchesForCategory('Server+'),
@@ -873,7 +873,7 @@ const resourcesData = {
 
     {
       name: 'Project+ Practice Exams',
-      url: 'https://www.examcompass.com/comptia/project-plus-certification/free-project-plus-practice-tests',
+      url: 'https://www.howtonetwork.com/free/comptia-project-practice-exam/',
     },
 
     ...getAllMatchesForCategory('Project+'),
@@ -890,7 +890,7 @@ const resourcesData = {
 
     {
       name: 'ITF Practice Exams',
-      url: 'https://www.examcompass.com/comptia-itf-certification/free-itf-practice-tests',
+      url: 'https://certblaster.com/it-fundamentals-practice-test/',
     },
 
     ...getAllMatchesForCategory('ITF/TECH+'),
