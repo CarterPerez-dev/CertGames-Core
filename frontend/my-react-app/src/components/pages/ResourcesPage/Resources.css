@@ -47,12 +47,15 @@ body, html {
 .resources-header {
   text-align: center;
   color: #256da7;
-  margin-bottom: 2rem;
+  margin-bottom: 2.4rem;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0.125rem 0.125rem #ffffff;
+  font-size: 2.7rem;
 }
 
 .resources-header h1 {
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-shadow: 0 0 5px #ff476f;
 }
 

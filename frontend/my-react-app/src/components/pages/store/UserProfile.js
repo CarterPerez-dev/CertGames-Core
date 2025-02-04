@@ -1,21 +1,27 @@
 // src/components/pages/store/UserProfile.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/userSlice';
+import { registerUser, loginUser, dailyLoginBonus, addXP, addCoins, fetchUserData, logout, setCurrentUserId } from '../store/userSlice';
+
 import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 const UserProfile = () => {
-  const { userId, username, xp, level, coins } = useSelector((state) => state.user);
+  const { userId, username, xp, level, coins, achievements: userAchievements = [] } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
-    // Optionally clear localStorage if you are using it for persistence
     localStorage.removeItem('userId');
     navigate('/login');
   };
+
+  // We assume that your achievements slice holds the full list of achievements.
+  const allAchievements = useSelector((state) => state.achievements.all);
+
+  // Filter for unlocked achievements.
+  const unlockedAchievements = allAchievements.filter(ach => userAchievements.includes(ach.achievementId));
 
   return (
     <div className="profile-container">
@@ -48,10 +54,7 @@ const UserProfile = () => {
             <button className="profile-btn">Change Password</button>
             <button className="profile-btn">Cancel Subscription</button>
           </div>
-          {/* 
-            For subscription cancellation, integrate with Stripe or your payment API here.
-            (This is a placeholder button.)
-          */}
+          {/* Placeholder: Integrate Stripe API for subscription cancellation */}
         </div>
       </div>
       
@@ -59,14 +62,21 @@ const UserProfile = () => {
         <div className="extra-card">
           <h2>Your Achievements</h2>
           <div className="extra-content">
-            {/* Replace with dynamic achievement list */}
-            <p>(Achievements will be displayed here.)</p>
+            {unlockedAchievements.length > 0 ? (
+              unlockedAchievements.map(ach => (
+                <div key={ach.achievementId} className="achievement-item">
+                  <h3>{ach.title}</h3>
+                  <p>{ach.description}</p>
+                </div>
+              ))
+            ) : (
+              <p>You haven't unlocked any achievements yet.</p>
+            )}
           </div>
         </div>
         <div className="extra-card">
           <h2>Purchased Items</h2>
           <div className="extra-content">
-            {/* Replace with dynamic purchased items list */}
             <p>(Purchased items will be listed here.)</p>
           </div>
         </div>

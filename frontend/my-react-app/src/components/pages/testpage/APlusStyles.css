@@ -1,5 +1,6 @@
-/* components/APlusStyles.css */
-
+/* ===================== */
+/* Global Reset & Basics */
+/* ===================== */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -7,17 +8,167 @@
 }
 
 body {
-  background: #000; /* darker background for game style */
+  /* Use same gradient as login/register/userprofile */
+  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
   font-family: 'Trebuchet MS', sans-serif;
   color: #fff;
 }
 
-/* Container */
+/* ===================== */
+/* Test List Container */
+/* (Full-screen container with login/register background) */
+/* ===================== */
+.tests-list-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+}
+
+.tests-list-title {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  /* Use blue for title text */
+  color: #cccccc;
+  text-shadow: 1px 1px 2px rgba(255,0,0,0.3);
+  text-align: center;
+}
+
+.tests-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Test Card (each individual test in the list) */
+.test-card {
+  position: relative;
+  background: linear-gradient(135deg, #400000, #600000);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #880000;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Force test 10 to appear centered in a three-column grid */
+.test-card[data-test-id="10"] {
+  grid-column: 2;
+}
+
+.test-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* Test Badge (number) - now blue */
+.test-badge {
+  font-size: 1.6rem;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  margin-bottom: 0.3rem;
+  color: #fff;
+}
+
+/* Difficulty label under test number */
+.difficulty-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  /* The color is set inline from JS */
+}
+
+/* Test Progress & Action Text - progress text now blue */
+/* Also, change the "Click to start" text color to purple */
+.test-progress {
+  font-size: 1rem;
+  color: #a9a9a9;
+  margin-bottom: 0.5rem;
+}
+
+/* (Existing rules for .tests-list-container, .tests-list-title, .tests-list-grid, .test-card, .test-badge, .difficulty-label, .test-progress, .test-action remain unchanged.) */
+
+/* New CSS for the additional buttons inside each test card */
+.test-card-buttons {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.resume-button {
+  background: #00aaff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.resume-button:hover {
+  background: #0088cc;
+}
+
+.restart-button-testlist {
+  background: #ff5555;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.restart-button-testlist:hover {
+  background: #ff0000;
+}
+
+/* The "Click to Start" button */
+.start-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: #595959;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-button:hover {
+  background: #00aaff;
+}
+
+.back-to-list-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #00aaff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.back-to-list-btn:hover {
+  background: #0088cc;
+}
+
+
+/* ===================== */
+/* APlus Test Container */
+/* (Test View - enlarged and using login/register background for extra space) */
+/* ===================== */
 .aplus-test-container {
-  max-width: 800px;
+  max-width: 900px; /* Increased width */
   margin: 2rem auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #303F9F, #5C6BC0);
+  background: linear-gradient(135deg, #2c0d0d, #600000);
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   position: relative;
@@ -26,12 +177,14 @@ body {
 /* Title */
 .aplus-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
   text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
 
-/* XP/Level display */
+/* ===================== */
+/* XP/Level & Coin Info */
+/* ===================== */
 .top-bar {
   display: flex;
   justify-content: space-around;
@@ -52,24 +205,18 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.avatar-level {
-  font-size: 0.9rem;
-  color: #FFD700;
-}
-
-.xp-level-display {
-  text-align: center;
-  font-size: 1rem;
-  color: #ffd700;
-}
-
+/* Set avatar level, XP, and coins text to blue */
+.avatar-level,
+.xp-level-display,
 .coins-display {
-  text-align: center;
   font-size: 1rem;
-  color: #ffc107;
+  color: #00aaff;
+  text-align: center;
 }
 
-/* Progress bar */
+/* ===================== */
+/* Progress Bar */
+/* ===================== */
 .progress-container {
   position: relative;
   height: 24px;
@@ -81,7 +228,6 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #FFD700, #FFA500);
   border-radius: 12px;
   text-align: center;
   color: #000;
@@ -90,7 +236,9 @@ body {
   transition: width 0.4s ease-in-out;
 }
 
+/* ===================== */
 /* Question Card */
+/* ===================== */
 .question-card {
   margin: 1.5rem 0;
   padding: 1.5rem;
@@ -112,7 +260,6 @@ body {
   margin: 0.5rem 0;
 }
 
-/* Option Button */
 .option-button {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -127,11 +274,12 @@ body {
   outline: none;
 }
 
+/* Change option hover to blue */
 .option-button:hover {
-  background: #FFC107;
+  background: #00aaff;
 }
 
-/* Correct/Incorrect Animations */
+/* Correct/Incorrect Animations remain unchanged */
 .correct-option {
   animation: correctAnswer 0.6s ease;
   background: #8BC34A !important;
@@ -139,18 +287,9 @@ body {
 }
 
 @keyframes correctAnswer {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 5px #8BC34A;
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px #8BC34A;
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 5px #8BC34A;
-  }
+  0% { transform: scale(1); box-shadow: 0 0 5px #8BC34A; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #8BC34A; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #8BC34A; }
 }
 
 .incorrect-option {
@@ -160,18 +299,9 @@ body {
 }
 
 @keyframes incorrectAnswer {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 0 5px #F44336;
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px #F44336;
-  }
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 5px #F44336;
-  }
+  0% { transform: scale(1); box-shadow: 0 0 5px #F44336; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #F44336; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #F44336; }
 }
 
 /* Explanation */
@@ -184,7 +314,9 @@ body {
   line-height: 1.4;
 }
 
+/* ===================== */
 /* Next Button */
+/* ===================== */
 .next-button {
   display: inline-block;
   margin-top: 1rem;
@@ -203,7 +335,9 @@ body {
   box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
 }
 
-/* Score Overlay */
+/* ===================== */
+/* Overlay (Score & Review) */
+/* ===================== */
 .score-overlay {
   position: fixed;
   top: 0;
@@ -244,30 +378,76 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.overlay-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
 .restart-button,
 .review-button,
-.next-test-button {
+.next-test-button,
+.back-btn {
   display: inline-block;
-  margin: 0.5rem 1rem;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background: #FFC107;
-  color: #000;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
-  transition: box-shadow 0.3s;
+  transition: box-shadow 0.3s, transform 0.2s;
 }
 
-.restart-button:hover,
-.review-button:hover,
+.restart-button {
+  background: linear-gradient(135deg, #ff5555, #ff0000);
+  color: #fff;
+}
+
+.restart-button:hover {
+  background: linear-gradient(135deg, #ff0000, #ff5555);
+  transform: scale(1.05);
+}
+
+.review-button {
+  background: linear-gradient(135deg, #4caf50, #43a047);
+  color: #fff;
+}
+
+.review-button:hover {
+  background: linear-gradient(135deg, #43a047, #4caf50);
+  transform: scale(1.05);
+}
+
+.next-test-button {
+  background: #FFC107;
+  color: #000;
+}
+
 .next-test-button:hover {
   box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
 }
 
+.back-btn {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background: #fff;
+  color: #000;
+  transform: scale(1.05);
+}
+
+/* ===================== */
 /* Level Up Overlay */
-.level-up-overlay {
+/* ===================== */
+.simple-level-up-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -289,13 +469,15 @@ body {
   100% { opacity: 0; }
 }
 
-.level-up-content {
+.simple-level-up-content {
   font-size: 3rem;
   font-weight: bold;
   text-shadow: 2px 2px 4px #000;
 }
 
+/* ===================== */
 /* Review Mode */
+/* ===================== */
 .review-mode-container {
   margin: 2rem 0;
 }
@@ -305,29 +487,267 @@ body {
   padding: 1rem;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 6px;
+  font-family: "Courier New", monospace;
 }
 
-/* Confetti Container */
-.confetti-container {
+/* Close button for Review Overlay - styled as a bold circled X */
+.close-review-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fff;
+  color: #ff5555;
+  border: 2px solid #ff5555;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-review-x:hover {
+  background: #ff5555;
+  color: #fff;
+}
+
+.close-review-btn {
+  margin-top: 1rem;
+}
+
+/* Ensure review overlay content is scrollable and larger */
+.score-content.review-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* ===================== */
+/* Minimal Level-Up Particle Burst */
+/* ===================== */
+.simple-level-up-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 99998;
+  z-index: 3000;
 }
 
+.simple-level-up-content {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  animation: simpleLevelUp 1s ease-out forwards;
+}
 
-@keyframes fall {
-  0% {
-    transform: translateY(-10px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(110vh) rotate(720deg);
-    opacity: 0;
-  }
+@keyframes simpleLevelUp {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* ===================== */
+/* New Control Bars for Test View */
+/* ===================== */
+
+/* Top Control Bar (Flag & Finish Test) */
+.top-control-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.top-control-bar .flag-btn,
+.top-control-bar .finish-test-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.top-control-bar .flag-btn {
+  background: #333;
+  color: #fff;
+}
+
+.top-control-bar .flag-btn:hover {
+  background: #555;
+}
+
+.top-control-bar .finish-test-btn {
+  background: #ff5555;
+  color: #fff;
+}
+
+.top-control-bar .finish-test-btn:hover {
+  background: #ff0000;
+}
+
+/* Upper Control Bar (Restart & Back to Test List) */
+.upper-control-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.upper-control-bar .restart-test-btn,
+.upper-control-bar .back-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.upper-control-bar .restart-test-btn {
+  background: #ff5555;
+  color: #fff;
+}
+
+.upper-control-bar .restart-test-btn:hover {
+  background: #ff0000;
+}
+
+/* Bottom Control Bar with Two Rows */
+/* First row: Previous and Next Question; Second row: Skip Question */
+.bottom-control-bar {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.bottom-control-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.next-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #00aaff; /* Blue for Next Question */
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.next-question-btn:hover {
+  background: #0088cc;
+}
+
+/* Align second row (Skip Question) to the right */
+.skip-row {
+  justify-content: flex-end;
+}
+
+.skip-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #FFC107; /* Yellow for Skip Question */
+  color: #000;
+  transition: background 0.3s;
+}
+
+.skip-question-btn:hover {
+  background: #e6ac00;
+}
+
+.prev-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #4caf50;
+  color: #fff;
+  transition: background 0.3s;
+}
+
+.prev-question-btn:hover {
+  background: #43a047;
+}
+
+/* ===================== */
+/* Confirmation Popup Styles */
+/* ===================== */
+.confirm-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.confirm-popup-content {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+.confirm-popup-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.confirm-popup-yes,
+.confirm-popup-no {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.confirm-popup-yes {
+  background: #00aaff;
+  color: #fff;
+}
+
+.confirm-popup-yes:hover {
+  background: #0088cc;
+}
+
+.confirm-popup-no {
+  background: #ff5555;
+  color: #fff;
+}
+
+.confirm-popup-no:hover {
+  background: #ff0000;
 }
 

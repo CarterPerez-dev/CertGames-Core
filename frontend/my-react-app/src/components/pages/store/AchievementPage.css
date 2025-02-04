@@ -1,0 +1,149 @@
+/* AchievementPage.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+.achievement-page {
+  padding: 2rem;
+  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+  min-height: 100vh;
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.achievement-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  animation: fadeInDown 1s ease-out;
+}
+
+.achievement-header h1 {
+  font-size: 3rem;
+  color: #ff5555;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+.achievement-header p {
+  font-size: 1.3rem;
+  color: #cccccc;
+  margin-top: 0.5rem;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 1.5s ease-out;
+}
+
+.achievement-card {
+  position: relative;
+  background: #1f1f1f;
+  border: 2px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.achievement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.achievement-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.achievement-title {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  color: #ff5555;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.achievement-description {
+  font-size: 1rem;
+  color: #cccccc;
+  margin-bottom: 1rem;
+}
+
+/* Unlocked achievement appearance */
+.achievement-card.unlocked {
+  opacity: 1;
+  filter: none;
+}
+
+/* -------------------------------------------------------------------- */
+/* TWO OPTIONS FOR LOCKED ACHIEVEMENTS – choose ONE and comment out the other */
+/* -------------------------------------------------------------------- */
+
+/* ------------------------- Option 1 ------------------------- */
+/* Partially gray out but still show some color. */
+.achievement-card.locked {
+  opacity: 0.6;            /* slightly faded */
+  filter: grayscale(50%);  /* partially grayscale so color is still visible */
+}
+
+/* ------------------------- Option 2 ------------------------- */
+/*
+.achievement-card.locked {
+  position: relative;
+  opacity: 1;      
+  filter: none;    
+}
+.achievement-card.locked::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);  
+  border-radius: 12px;
+  pointer-events: none;
+}
+*/
+
+/* -------------------------------------------------------------------- */
+
+/* The “Not Yet Earned” overlay text */
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0); /* Transparent so it won’t block icons/text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 12px;
+  color: #ccccff; /* Set text color to pure white */
+}
+
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .achievement-header h1 {
+    font-size: 2.5rem;
+  }
+  .achievement-header p {
+    font-size: 1.1rem;
+  }
+}
+

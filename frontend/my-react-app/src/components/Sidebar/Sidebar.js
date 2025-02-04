@@ -1,4 +1,4 @@
-// components/Sidebar/Sidebar.js
+// src/components/Sidebar/Sidebar.js
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
@@ -45,10 +45,15 @@ const Sidebar = () => {
         </h2>
 
         <ul className="sidebar-list">
-          {/* Top-level links: Profile and Shop */}
+          {/* Top-level links: Profile, Achievements, and Shop */}
           <li>
             <NavLink to="/profile" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/achievements" className={({ isActive }) => isActive ? 'active-link' : ''}>
+              /Achievements
             </NavLink>
           </li>
           <li>

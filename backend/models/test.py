@@ -32,22 +32,8 @@ def get_user_by_identifier(identifier):
 def create_user(user_data):
     """
     Create a new user document in mainusers_collection.
-    user_data should include keys like:
-      - username (str)
-      - email (str)
-      - password (str) or passwordHash if hashed
-      - subscriptionActive (bool) - default False
-      - subscriptionPlan (str) or None
-      - coins (int) - default 0
-      - xp (int) - default 0
-      - level (int) - default 1
-      - achievements (list) - default []
-      - lastDailyClaim (datetime) - default None
-      - purchasedItems (list) - default []
-      - testsProgress (dict) - default {}
     """
-
-    # Example check if username/email already exists:
+    # Check if username/email already exists:
     existing_user = mainusers_collection.find_one({
         "$or": [
             {"username": user_data["username"]},
@@ -68,14 +54,12 @@ def create_user(user_data):
     user_data.setdefault("purchasedItems", [])
     user_data.setdefault("testsProgress", {})
 
-    # Insert into Mongo
     result = mainusers_collection.insert_one(user_data)
     return result.inserted_id
 
 def get_user_by_id(user_id):
     """
     Fetch a user document by its ObjectId (as string).
-    Returns None if user not found.
     """
     try:
         oid = ObjectId(user_id)
@@ -85,7 +69,7 @@ def get_user_by_id(user_id):
 
 def update_user_coins(user_id, amount):
     """
-    Increment a user's 'coins' field by 'amount' (can be positive or negative).
+    Increment a user's 'coins' field by 'amount'.
     """
     try:
         oid = ObjectId(user_id)
@@ -95,8 +79,8 @@ def update_user_coins(user_id, amount):
 
 def update_user_xp(user_id, xp_to_add):
     """
-    Add xp_to_add to the user's xp, and handle level-up logic if xp exceeds threshold.
-    Returns a dict { "xp": new_xp, "level": new_level } or None if user not found.
+    Add xp_to_add to the user's xp, and update level if necessary.
+    Returns a dict { "xp": new_xp, "level": new_level }.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -104,8 +88,7 @@ def update_user_xp(user_id, xp_to_add):
 
     new_xp = user.get("xp", 0) + xp_to_add
     new_level = user.get("level", 1)
-
-    # Example level-up logic: each level requires 100 * current_level XP
+    # Each level requires 100 * current_level XP
     while new_xp >= 100 * new_level:
         new_level += 1
 
@@ -119,7 +102,6 @@ def update_user_xp(user_id, xp_to_add):
 def apply_daily_bonus(user_id):
     """
     Grants a daily coin bonus if lastDailyClaim is older than 24 hours.
-    Returns dict with { "success": bool, "message": str } or None if user not found.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -131,10 +113,7 @@ def apply_daily_bonus(user_id):
     if not last_claimed or (now - last_claimed) > timedelta(hours=24):
         mainusers_collection.update_one(
             {"_id": user["_id"]},
-            {
-                "$inc": {"coins": 50},
-                "$set": {"lastDailyClaim": now}
-            }
+            {"$inc": {"coins": 50}, "$set": {"lastDailyClaim": now}}
         )
         return {"success": True, "message": "Daily bonus applied"}
     else:
@@ -142,14 +121,13 @@ def apply_daily_bonus(user_id):
 
 def get_shop_items():
     """
-    Returns a list of all shop items from shop_collection.
+    Returns a list of all shop items.
     """
     return list(shop_collection.find({}))
 
 def purchase_item(user_id, item_id):
     """
-    Deduct cost from user, add item to user's purchasedItems if user has enough coins.
-    Returns { "success": bool, "message": str }.
+    Deduct cost from user, add item to purchasedItems.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -166,44 +144,79 @@ def purchase_item(user_id, item_id):
 
     user_coins = user.get("coins", 0)
     cost = item.get("cost", 0)
-
     if user_coins < cost:
         return {"success": False, "message": "Not enough coins"}
 
-    # Deduct the cost
     mainusers_collection.update_one({"_id": user["_id"]}, {"$inc": {"coins": -cost}})
-
-    # Mark the item as purchased
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$addToSet": {"purchasedItems": item["_id"]}}
     )
-
     return {"success": True, "message": "Purchase successful"}
 
 def get_achievements():
     """
-    Returns a list of all achievements from achievements_collection.
+    Returns all achievements from the achievements_collection.
     """
     return list(achievements_collection.find({}))
 
 def get_test_by_id(test_id):
     """
-    Fetches a single test document by its integer testId.
-    Typical doc:
-      {
-        "category": "aplus",
-        "testId": 1,
-        "testName": "A+ Practice Test #1",
-        "xpPerCorrect": 10,
-        "questions": [ ... ]
-      }
-    Returns None if not found.
+    Fetch a test document by its integer testId.
     """
     try:
         test_id_int = int(test_id)
     except:
         return None
-
     return tests_collection.find_one({"testId": test_id_int})
+
+# New function to check and unlock achievements
+def check_and_unlock_achievements(user_id):
+    """
+    Check the user's progress against achievement criteria and update unlocked achievements.
+    Returns a list of newly unlocked achievement IDs.
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return []
+    
+    # Retrieve user's stats from their document.
+    xp = user.get("xp", 0)
+    level = user.get("level", 1)
+    coins = user.get("coins", 0)
+    tests_progress = user.get("testsProgress", {})
+    testCount = 0
+    for category in tests_progress.values():
+        testCount += len(category)
+
+    # Get all global achievements.
+    achievements = get_achievements()
+    unlocked = user.get("achievements", [])
+    newly_unlocked = []
+    
+    for ach in achievements:
+        criteria = ach.get("criteria", {})
+        # Check test count criteria.
+        if "testCount" in criteria and testCount >= criteria["testCount"]:
+            if ach["achievementId"] not in unlocked:
+                unlocked.append(ach["achievementId"])
+                newly_unlocked.append(ach["achievementId"])
+        # Check level criteria.
+        if "level" in criteria and level >= criteria["level"]:
+            if ach["achievementId"] not in unlocked:
+                unlocked.append(ach["achievementId"])
+                newly_unlocked.append(ach["achievementId"])
+        # Check coins criteria.
+        if "coins" in criteria and coins >= criteria["coins"]:
+            if ach["achievementId"] not in unlocked:
+                unlocked.append(ach["achievementId"])
+                newly_unlocked.append(ach["achievementId"])
+        # (Additional criteria such as minScore, perfectTests, etc. can be added here.)
+    
+    if newly_unlocked:
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"achievements": unlocked}}
+        )
+    return newly_unlocked
 

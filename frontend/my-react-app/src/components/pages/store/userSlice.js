@@ -1,16 +1,25 @@
-// store/userSlice.js
+// src/store/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-/* -----------------------------
-   THUNKS FOR REGISTER/LOGIN
------------------------------ */
+const initialUserId = localStorage.getItem('userId');
 
-// Register user
+const initialState = {
+  userId: initialUserId ? initialUserId : null,
+  username: '',
+  xp: 0,
+  level: 1,
+  coins: 0,
+  achievements: [], // Unlocked achievement IDs
+  status: 'idle',   // e.g., 'idle', 'loading', 'succeeded'
+  loading: false,   // For register/login operations
+  error: null,
+};  
+  
+// Async thunk to register a new user
 export const registerUser = createAsyncThunk(
   'user/registerUser',
   async (formData, { rejectWithValue }) => {
     try {
-      // POST to /api/test/user
       const response = await fetch('/api/test/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,12 +37,11 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Login user
+// Async thunk to login a user
 export const loginUser = createAsyncThunk(
   'user/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      // POST to /api/test/login
       const response = await fetch('/api/test/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,7 +51,7 @@ export const loginUser = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
-      // Expected: { user_id, username, coins, xp, level }
+      // Expected: { user_id, username, coins, xp, level, achievements }
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -51,34 +59,25 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-/* -----------------------------
-   THUNKS FOR USER DATA
------------------------------ */
-
-// Fetch user data from MongoDB
+// Async thunk to fetch user data
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async (userId, { rejectWithValue }) => {
     try {
-      // GET to /api/test/user/<userId>
       const response = await fetch(`/api/test/user/${userId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      // Expected: user document
-      return await response.json();
+      if (!response.ok) throw new Error('Failed to fetch user data');
+      return await response.json(); // Expected: user document with achievements field
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Daily bonus
+// Async thunk for daily login bonus
 export const dailyLoginBonus = createAsyncThunk(
   'user/dailyLoginBonus',
   async (userId, { rejectWithValue }) => {
     try {
-      // POST to /api/test/user/<userId>/daily-bonus
       const response = await fetch(`/api/test/user/${userId}/daily-bonus`, {
         method: 'POST',
       });
@@ -93,12 +92,11 @@ export const dailyLoginBonus = createAsyncThunk(
   }
 );
 
-// Add XP
+// Async thunk to add XP
 export const addXP = createAsyncThunk(
   'user/addXP',
   async ({ userId, xp }, { rejectWithValue }) => {
     try {
-      // POST to /api/test/user/<userId>/add-xp
       const response = await fetch(`/api/test/user/${userId}/add-xp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -116,12 +114,11 @@ export const addXP = createAsyncThunk(
   }
 );
 
-// Add Coins
+// Async thunk to add coins
 export const addCoins = createAsyncThunk(
   'user/addCoins',
   async ({ userId, coins }, { rejectWithValue }) => {
     try {
-      // POST to /api/test/user/<userId>/add-coins
       const response = await fetch(`/api/test/user/${userId}/add-coins`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -131,6 +128,7 @@ export const addCoins = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.message || 'Add coins failed');
       }
+      // Expected: { coinsToAdd: coins }
       return { coinsToAdd: coins };
     } catch (error) {
       return rejectWithValue(error.message);
@@ -138,58 +136,39 @@ export const addCoins = createAsyncThunk(
   }
 );
 
-/* -----------------------------
-   SLICE DEFINITION
------------------------------ */
-
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    userId: null,
-    username: '',
-    xp: 0,
-    level: 1,
-    coins: 0,
-    status: 'idle',   // For fetch statuses
-    loading: false,   // For register/login
-    error: null,
-  },
+  initialState,
   reducers: {
     setCurrentUserId(state, action) {
       state.userId = action.payload;
     },
     logout(state) {
-      // Clear user data on logout
       state.userId = null;
       state.username = '';
-      state.coins = 0;
       state.xp = 0;
       state.level = 1;
+      state.coins = 0;
+      state.achievements = [];
+      state.status = 'idle';
     },
   },
   extraReducers: (builder) => {
-    /* --------------------------------
-       Register user
-    -------------------------------- */
+    // (Your extraReducers code remains unchanged)
     builder
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerUser.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
-        // If you want to auto-login after registration,
-        // set state.userId = action.payload.user_id or dispatch loginUser.
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-    /* --------------------------------
-       Login user
-    -------------------------------- */
+      // Login User
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -197,65 +176,56 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
-        // The backend returns: { user_id, username, coins, xp, level }
-        const { user_id, username, coins, xp, level } = action.payload;
+        const { user_id, username, coins, xp, level, achievements } = action.payload;
         state.userId = user_id;
         state.username = username;
         state.coins = coins;
         state.xp = xp;
         state.level = level;
+        state.achievements = achievements || [];
+        // Also, persist the userId to localStorage:
+        localStorage.setItem('userId', user_id);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-
-    /* --------------------------------
-       fetchUserData
-    -------------------------------- */
+      // Fetch User Data
       .addCase(fetchUserData.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.error = null;
-        // The response is the entire user doc from DB
         const userDoc = action.payload;
         state.userId = userDoc._id;
         state.username = userDoc.username;
         state.xp = userDoc.xp || 0;
         state.level = userDoc.level || 1;
         state.coins = userDoc.coins || 0;
+        state.achievements = userDoc.achievements || [];
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
       })
-
-    /* --------------------------------
-       dailyLoginBonus
-    -------------------------------- */
+      // Daily Login Bonus
       .addCase(dailyLoginBonus.fulfilled, (state, action) => {
-        // If the server returns additional coins, you can update state here.
         if (action.payload.coins) {
           state.coins += action.payload.coins;
         }
       })
-
-    /* --------------------------------
-       addXP
-    -------------------------------- */
+      // Add XP
       .addCase(addXP.fulfilled, (state, action) => {
-        // { xp: new_xp, level: new_level }
         state.xp = action.payload.xp;
         state.level = action.payload.level;
+        // Optionally merge in any newly unlocked achievements if provided:
+        if (action.payload.newAchievements) {
+          state.achievements = Array.from(new Set([...state.achievements, ...action.payload.newAchievements]));
+        }
       })
-
-    /* --------------------------------
-       addCoins
-    -------------------------------- */
+      // Add Coins
       .addCase(addCoins.fulfilled, (state, action) => {
-        // { coinsToAdd }
         state.coins += action.payload.coinsToAdd;
       });
   },

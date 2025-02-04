@@ -1,7 +1,8 @@
+// GRC.js
 import React, { useState, useCallback } from "react";
 import "./GRC.css";
 
-const ENDPOINT = "/api"; 
+const ENDPOINT = "/api";
 
 const GRC = () => {
   const [category, setCategory] = useState("Random");
@@ -12,9 +13,18 @@ const GRC = () => {
   const [feedback, setFeedback] = useState("");
 
   const categories = [
-    "Regulation", "Risk Management", "Compliance", "Audit", "Governance", 
-    "Management", "Policy", "Ethics", "Threat Assessment", "Leadership", 
-    "Business Continuity", "Random"
+    "Regulation",
+    "Risk Management",
+    "Compliance",
+    "Audit",
+    "Governance",
+    "Management",
+    "Policy",
+    "Ethics",
+    "Threat Assessment",
+    "Leadership",
+    "Business Continuity",
+    "Random"
   ];
   const difficulties = ["Easy", "Medium", "Hard"];
 
@@ -46,28 +56,32 @@ const GRC = () => {
     }
   }, [category, difficulty]);
 
-  const handleAnswer = useCallback((index) => {
-    if (!questionData) return;
-    const correctIndex = questionData.correct_answer_index;
-    if (index === correctIndex) {
-      setFeedback(
-        `✅ Correct! ${questionData.explanations[index.toString()]}\nExam Tip: ${questionData.exam_tip}`
-      );
-    } else {
-      setFeedback(
-        `❌ Incorrect. ${questionData.explanations[index.toString()]}\nExam Tip: ${questionData.exam_tip}`
-      );
-    }
-  }, [questionData]);
+  const handleAnswer = useCallback(
+    (index) => {
+      if (!questionData) return;
+      const correctIndex = questionData.correct_answer_index;
+      if (index === correctIndex) {
+        setFeedback(
+          `✅ Correct! ${questionData.explanations[index.toString()]}\nExam Tip: ${questionData.exam_tip}`
+        );
+      } else {
+        setFeedback(
+          `❌ Incorrect. ${questionData.explanations[index.toString()]}\nExam Tip: ${questionData.exam_tip}`
+        );
+      }
+    },
+    [questionData]
+  );
 
   const handleCopy = useCallback(() => {
     if (!questionData || !feedback) return;
     const textToCopy = `Question: ${questionData.question}\n${feedback}`;
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard
+      .writeText(textToCopy)
       .then(() => {
         console.log("Copied to clipboard");
       })
-      .catch(err => console.error("Failed to copy:", err));
+      .catch((err) => console.error("Failed to copy:", err));
   }, [questionData, feedback]);
 
   return (
@@ -82,7 +96,9 @@ const GRC = () => {
 
         <div className="grc-wizard-controls">
           <div className="grc-control">
-            <label className="grc-label" htmlFor="category-select">Category</label>
+            <label className="grc-label" htmlFor="category-select">
+              Category
+            </label>
             <select
               id="category-select"
               className="grc-select"
@@ -99,7 +115,9 @@ const GRC = () => {
           </div>
 
           <div className="grc-control">
-            <label className="grc-label" htmlFor="difficulty-select">Difficulty</label>
+            <label className="grc-label" htmlFor="difficulty-select">
+              Difficulty
+            </label>
             <select
               id="difficulty-select"
               className="grc-select"
@@ -121,9 +139,12 @@ const GRC = () => {
               onClick={fetchQuestion}
               disabled={loading}
               aria-label="Generate Question"
-            >    
+            >
               {loading ? (
-                <span className="grc-button-loading-version1" aria-label="Loading">
+                <span
+                  className="grc-button-loading-version1"
+                  aria-label="Loading"
+                >
                   Generating_
                 </span>
               ) : (
@@ -140,7 +161,9 @@ const GRC = () => {
               {questionData.options.map((option, index) => (
                 <button
                   key={index}
-                  className={`grc-option-btn ${selectedOption === index ? "selected" : ""}`}
+                  className={`grc-option-btn ${
+                    selectedOption === index ? "selected" : ""
+                  }`}
                   onClick={() => {
                     setSelectedOption(index);
                     handleAnswer(index);
@@ -162,7 +185,11 @@ const GRC = () => {
             }`}
           >
             {feedback}
-            <button className="copy-btn" onClick={handleCopy} aria-label="Copy Feedback">
+            <button
+              className="copy-btn"
+              onClick={handleCopy}
+              aria-label="Copy Feedback"
+            >
               Copy
             </button>
           </div>

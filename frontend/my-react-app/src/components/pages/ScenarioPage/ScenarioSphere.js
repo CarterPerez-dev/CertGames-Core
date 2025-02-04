@@ -1,3 +1,4 @@
+// ScenarioSphere.js
 import React, { useState, useRef, useEffect } from 'react';
 import './ScenarioSphere.css';
 import { ATTACK_TYPES } from './attacks';
@@ -15,7 +16,6 @@ const ScenarioSphere = () => {
   const [interactiveQuestions, setInteractiveQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [feedback, setFeedback] = useState({});
-
 
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -182,11 +182,7 @@ const ScenarioSphere = () => {
           reader.read().then(({ done, value }) => {
             if (done) {
               try {
-                console.log("Accumulated Questions JSON:", jsonAccumulator); 
-
-
                 const parsed = JSON.parse(jsonAccumulator);
-
                 if (Array.isArray(parsed)) {
                   const errorObj = parsed.find(q => q.error);
                   if (errorObj) {
@@ -263,11 +259,7 @@ const ScenarioSphere = () => {
           ))}
         </div>
         {feedback.hasOwnProperty(index) && (
-          <div
-            className={`feedback ${
-              feedback[index].isCorrect ? 'correct' : 'incorrect'
-            }`}
-          >
+          <div className={`feedback ${feedback[index].isCorrect ? 'correct' : 'incorrect'}`}>
             {feedback[index].isCorrect ? "✅ Correct!" : "❌ Incorrect."}
             <p className="explanation">
               Explanation: {feedback[index].explanation}
@@ -331,11 +323,7 @@ const ScenarioSphere = () => {
                   (suggestion, index) => (
                     <li
                       key={suggestion}
-                      className={
-                        index === activeSuggestionIndex
-                          ? 'suggestion-active'
-                          : ''
-                      }
+                      className={index === activeSuggestionIndex ? 'suggestion-active' : ''}
                       onClick={() => {
                         setAttackType(suggestion);
                         setSuggestions([]);
@@ -349,10 +337,7 @@ const ScenarioSphere = () => {
                   )
                 )}
                 {!showAllSuggestions && suggestions.length > 10 && (
-                  <li
-                    className="show-all-suggestions"
-                    onClick={handleShowAllSuggestionsClick}
-                  >
+                  <li className="show-all-suggestions" onClick={handleShowAllSuggestionsClick}>
                     Show all options
                   </li>
                 )}
@@ -405,14 +390,7 @@ const ScenarioSphere = () => {
           {scenarioText && (
             <>
               <h2 className="scenario-output-title">Generated Scenario</h2>
-              {/* 
-                white-space: pre-wrap to preserve 
-                newlines (paragraphs) from the model
-              */}
-              <div
-                className="scenario-output-box"
-                style={{ whiteSpace: 'pre-wrap' }}
-              >
+              <div className="scenario-output-box" style={{ whiteSpace: 'pre-wrap' }}>
                 {scenarioText}
               </div>
             </>

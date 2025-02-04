@@ -4,8 +4,14 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
-  const { userId } = useSelector((state) => state.user);
-  // If no userId exists, redirect to login
+  const { userId, status } = useSelector((state) => state.user);
+  
+  // If user data is still loading, return a loader (or null)
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+  
+  // If userId exists, render the protected content; otherwise, redirect to login.
   return userId ? children : <Navigate to="/login" replace />;
 };
 

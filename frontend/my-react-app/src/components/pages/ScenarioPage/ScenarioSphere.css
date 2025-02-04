@@ -1,137 +1,116 @@
+/* ScenarioSphere.css */
+
+/* Import digital fonts */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
 body, html {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
 }
 
-.main-content {
-  margin-left: 220px;
-  transition: margin-left 0.3s ease;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.sidebar.collapsed ~ .main-content {
-  margin-left: 0;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-
+/* Global styling for the scenario body */
 .scenario-body {
+  position: relative;
+  background: #000; /* fallback black */
   background-image: url('backround5.jpg');
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'VT323', monospace;
+  color: #FFF;
   width: 100%;
   min-height: 100vh;
-  color: #cc0000;
   box-sizing: border-box;
 }
 
+/* Subtle animated binary overlay for extra hacker vibe */
 
+
+@keyframes binaryScroll {
+  from { transform: translate(-10%, -10%) rotate(-15deg); }
+  to { transform: translate(-20%, -20%) rotate(-15deg); }
+}
+
+/* Main container styling */
 .scenario-container {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 40px auto;
+  padding: 20px;
 }
 
+/* Input and Output sections */
 .scenario-input-section,
 .scenario-output-container {
-  background-color: rgba(30, 30, 30, 0.85);
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #FF0000;
   border-radius: 12px;
   padding: 20px;
   flex: 1 1 100%;
   box-sizing: border-box;
 }
 
-
-.suggestions-list {
-  position: absolute;
-  background-color: #2a2a2a;
-  border: 1px solid #ccc;
-  border-top: none;
-  max-height: 200px;
-  overflow-y: auto;
-  width: 100%;
-  z-index: 1000;
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 3.75rem;
-  border-radius: 0 0 8px 8px;
-}
-
-.suggestions-list li {
-  padding: 10px;
-  cursor: pointer;
-  color: #f5f5f5;
-}
-
-.suggestions-list li:hover,
-.suggestion-active {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.show-all-suggestions {
-  padding: 10px;
-  cursor: pointer;
-  color: #00ffcc;
-  border-top: 1px solid #ccc;
-  font-weight: bold;
-}
-
-.show-all-suggestions:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.scenario-input-wrapper {
-  position: relative;
-}
-
-
+/* Titles and Taglines */
 .scenario-title {
-  color: #cc0000;
-  font-size: 2em;
+  font-size: 3.5em;
   text-align: center;
   margin-bottom: 10px;
+  color: #FF0000;
+  text-shadow: 0.125rem 0.125rem #ffffff;
 }
 
 .scenario-tagline {
-  color: #00ffcc;
+  font-size: 1.2em;
   text-align: center;
   margin-bottom: 30px;
+  color: #FFF;
 }
 
+/* Input Wrapper */
 .scenario-input-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
 }
 
-.scenario-input-field, .scenario-input-slider {
+/* Labels */
+.scenario-input-wrapper label {
+  font-size: 1.3rem;
+  color: #FFF;
+  margin-bottom: 5px;
+}
+
+/* Input Fields and Selects */
+.scenario-input-field {
   padding: 12px;
+  border: 2px solid #FF0000;
   border-radius: 8px;
-  border: 2px solid #fff;
-  background: #2a2a2a;
-  color: #f5f5f5;
-  margin-top: 5px;
+  background: #111;
+  color: #FFF;
   font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.scenario-input-field:focus, .scenario-input-slider:focus, select:focus {
+.scenario-input-field:focus {
   outline: none;
-  border-color: #00ffcc;
+  border-color: #FF5555;
+  box-shadow: 0 0 8px #FF5555;
 }
 
+/* Slider */
 .scenario-input-slider {
   -webkit-appearance: none;
   width: 100%;
   height: 8px;
-  background: #ccc;
+  background: #222;
   border-radius: 4px;
   outline: none;
   margin-top: 10px;
@@ -143,32 +122,82 @@ body, html {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #00ffcc;
+  background: #FF0000;
+  border: 2px solid #FFF;
   cursor: pointer;
-  border: 2px solid #fff;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .scenario-input-slider::-webkit-slider-thumb:hover {
-  background: #00e6b8;
   transform: scale(1.1);
+  background: #FF5555;
 }
 
 .scenario-input-slider::-moz-range-thumb {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #00ffcc;
+  background: #FF0000;
+  border: 2px solid #FFF;
   cursor: pointer;
-  border: 2px solid #fff;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .scenario-input-slider::-moz-range-thumb:hover {
-  background: #00e6b8;
   transform: scale(1.1);
+  background: #FF5555;
 }
 
+/* Threat intensity value display */
+.threat-intensity-value {
+  margin-top: 5px;
+  font-size: 1.3rem;
+  color: #FFF;
+  text-align: right;
+}
+
+/* Suggestions List */
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #222;
+  border: 1px solid #FF0000;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  border-radius: 0 0 8px 8px;
+}
+
+.suggestions-list li {
+  padding: 10px;
+  cursor: pointer;
+  color: #FFF;
+  transition: background 0.2s ease;
+}
+
+.suggestions-list li:hover,
+.suggestion-active {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+.show-all-suggestions {
+  padding: 10px;
+  cursor: pointer;
+  color: #FF5555;
+  border-top: 1px solid #FF0000;
+  font-weight: bold;
+}
+
+.show-all-suggestions:hover {
+  background: rgba(255, 0, 0, 0.2);
+}
+
+/* Button and Loading Sphere */
 .button-and-sphere {
   display: flex;
   align-items: center;
@@ -179,32 +208,32 @@ body, html {
 }
 
 .scenario-generate-button {
-  background-color: #cc0000;
-  color: #fff;
+  background: #FF0000;
+  color: #FFF;
   padding: 10px 20px;
   border: none;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .scenario-generate-button:hover {
-  background-color: #00ffcc;
+  background: #FF5555;
   color: #000;
 }
 
-
+/* Loading Sphere */
 .loading-sphere {
   position: relative;
   width: 60px;
   height: 60px;
   background: #000;
-  border: 2px solid #00ffcc;
-  overflow: hidden;
+  border: 2px solid #FF0000;
   border-radius: 50%;
-  box-shadow: 0 0 15px #00ffcc;
+  overflow: hidden;
+  box-shadow: 0 0 15px #FF0000;
 }
 
 .loading-sphere::before,
@@ -217,8 +246,8 @@ body, html {
   left: 0;
   background: repeating-linear-gradient(
     to right,
-    rgba(0,255,204,0.2) 0,
-    rgba(0,255,204,0.2) 2px,
+    rgba(255,0,0,0.2) 0,
+    rgba(255,0,0,0.2) 2px,
     transparent 2px,
     transparent 4px
   );
@@ -228,8 +257,8 @@ body, html {
 .loading-sphere::after {
   background: repeating-linear-gradient(
     to bottom,
-    rgba(0,255,204,0.4) 0,
-    rgba(0,255,204,0.4) 2px,
+    rgba(255,0,0,0.4) 0,
+    rgba(255,0,0,0.4) 2px,
     transparent 2px,
     transparent 4px
   );
@@ -238,69 +267,59 @@ body, html {
 }
 
 @keyframes rotateGrid {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-
+/* Output Box */
 .scenario-output-box {
   padding: 20px;
-  background-color: #2a2a2a;
-  color: #f5f5f5;
+  background: #111;
+  border: 2px solid #FF0000;
+  border-radius: 8px;
+  color: #FFF;
   line-height: 1.6;
   margin-top: 20px;
-  border-radius: 8px;
   font-size: 1rem;
   white-space: pre-wrap;
   overflow-y: auto;
   max-height: 400px;
+  font-family: "Courier New", monospace;
 }
 
+/* Output Title */
 .scenario-output-title {
-  color: #cc0000;
   font-size: 1.5em;
   text-align: left;
   margin-top: 5px;
   font-weight: bold;
+  color: #FF0000;
 }
 
+/* Interactive Questions */
 .interactive-questions {
   margin-top: 20px;
 }
 
 .interactive-questions h3 {
-  color: #cc0000;
   font-size: 1.3em;
   margin-bottom: 15px;
-}
-
-.interactive-questions ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.interactive-questions li {
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 15px;
-  line-height: 1.4;
+  color: #FF0000;
 }
 
 .question-container {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #FF0000;
   border-radius: 8px;
 }
 
 .question-text {
   font-size: 1.1rem;
   margin-bottom: 10px;
-  color: #f5f5f5;
+  color: #FFF;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .options-container {
@@ -314,133 +333,122 @@ body, html {
   display: flex;
   align-items: center;
   padding: 8px;
+  border: 1px solid transparent;
   border-radius: 6px;
-  transition: background-color 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .option-label:hover,
 .option-label:focus-within {
-  background-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 0, 0, 0.2);
+  border-color: #FF0000;
 }
 
 .option-text {
   margin-left: 8px;
-  color: #ffffff;
+  color: #FFF;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .option-label input[type="radio"] {
-  accent-color: #00ffcc;
-  font-weight: bold;
+  accent-color: #FF0000;
+  transform: scale(1.2);
 }
 
-.option-label:focus-within {
-  outline: 2px solid #00ffcc;
-}
-
+/* Feedback */
 .feedback {
   margin-top: 10px;
   padding: 10px;
   border-radius: 6px;
   font-weight: bold;
+  font-size: 1rem;
 }
 
 .feedback.correct {
-  background-color: #181818;
-  color: #00e600;
+  background: #000;
+  color: #00FF00;
+  border: 1px solid #00FF00;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .feedback.incorrect {
-  background-color: #181818;
-  color: #ff0000;
+  background: #000;
+  color: #FF0000;
+  border: 1px solid #FF0000;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .explanation {
   margin-top: 5px;
   font-weight: normal;
   font-size: 0.95rem;
-  color: #f5f5f5;
+  color: #FFF;
+  font-family: 'Orbitron', sans-serif;
 }
 
-.feedback.correct,
-.feedback.incorrect {
-  font-size: 1rem;
-}
+/* Responsive Media Queries */
 
-@media (min-width: 768px) {
+/* Tablets and small devices */
+@media (max-width: 768px) {
   .scenario-container {
-    flex-direction: row;
+    flex-direction: column;
+    margin: 20px;
+    padding: 10px;
   }
-
+  
   .scenario-title {
     font-size: 1.8em;
   }
-
-  .question-container {
-    padding: 15px;
-  }
-
-  .question-text {
-    font-size: 1.2rem;
-  }
-
-  .option-label {
-    padding: 10px;
-  }
-
-  .explanation {
-    font-size: 1rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .scenario-container {
-    flex-direction: row;
-  }
-
-  .question-container {
-    padding: 20px;
-  }
-
-  .question-text {
-    font-size: 1.3rem;
-  }
-
-  .option-label {
-    padding: 12px;
-  }
-
-  .explanation {
-    font-size: 1.05rem;
-  }
-}
-
-@media (max-width: 767px) {
-  .scenario-container {
-    flex-direction: column;
-  }
-
-  .scenario-title {
-    font-size: 1.5em;
-  }
-
+  
   .scenario-input-section,
   .scenario-output-container {
-    flex: 1 1 100%;
+    padding: 15px;
   }
-
+  
   .question-container {
     padding: 10px;
   }
-
-  .question-text {
-    font-size: 1rem;
-  }
-
+  
   .option-label {
     padding: 8px;
   }
-
+  
   .explanation {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile Phones */
+@media (max-width: 480px) {
+  .scenario-container {
+    margin: 10px;
+    padding: 5px;
+  }
+  
+  .scenario-input-field,
+  .scenario-input-slider {
+    font-size: 0.9rem;
+  }
+  
+  .scenario-title {
+    font-size: 1.5em;
+  }
+  
+  .scenario-tagline {
+    font-size: 1em;
+  }
+  
+  .scenario-generate-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  
+  .loading-sphere {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .scenario-output-box {
     font-size: 0.9rem;
   }
 }

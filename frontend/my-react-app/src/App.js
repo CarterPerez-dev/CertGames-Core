@@ -1,8 +1,12 @@
 // src/App.js
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentUserId, fetchUserData } from './components/pages/store/userSlice';
+import { fetchUserData } from './components/pages/store/userSlice';
+
+// Import ToastContainer from react-toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';
@@ -10,10 +14,10 @@ import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
 
-// Protected pages (wrapped with ProtectedRoute)
+// Protected pages
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar/Sidebar';
-import AchievementPopups from './components/pages/store/AchievementPopups';
+import AchievementPage from './components/pages/store/AchievementPage';
 
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
@@ -37,33 +41,42 @@ function App() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user);
 
-  // On app load, check for persisted user info
   useEffect(() => {
-    const storedUserId = localStorage.getItem('userId');
-    if (storedUserId && !userId) {
-      dispatch(setCurrentUserId(storedUserId));
-      dispatch(fetchUserData(storedUserId));
+    if (userId) {
+      dispatch(fetchUserData(userId));
     }
   }, [dispatch, userId]);
 
   return (
     <div className="App">
-      {/* Render Sidebar only when user is logged in */}
       {userId && <Sidebar />}
-      <AchievementPopups />
-      {/* Apply a conditional class to main-content */}
+      {/* React Toastify container for notifications */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className={`main-content ${userId ? 'with-sidebar' : 'no-sidebar'}`}>
         <Routes>
-          {/* Public Routes */}
           <Route path="/" element={<InfoPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Protected Routes */}
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />
+            </ProtectedRoute>
+          }/>
+          <Route path="/achievements" element={
+            <ProtectedRoute>
+              <AchievementPage />
             </ProtectedRoute>
           }/>
           <Route path="/shop" element={
@@ -110,14 +123,17 @@ function App() {
               <PBQWizard />
             </ProtectedRoute>
           }/>
-          <Route path="/practice-tests/a-plus" element={<Navigate to="/practice-tests/a-plus/1" replace />} />
+          {/* Test Routes */}
+          <Route path="/practice-tests/a-plus" element={
+            <ProtectedRoute>
+              <APlusTestPage />
+            </ProtectedRoute>
+          }/>
           <Route path="/practice-tests/a-plus/:testId" element={
             <ProtectedRoute>
               <APlusTestPage />
             </ProtectedRoute>
           }/>
-
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
