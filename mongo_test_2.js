@@ -1,7 +1,4 @@
 db.tests.insertOne({
-  "_id": {
-    "$oid": "GENERATED_OBJECT_ID_TEST2_1"
-  },
   "category": "aplus",
   "testId": 2,
   "testName": "A+ Practice Test #2 (Very Easy)",
