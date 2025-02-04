@@ -1,11 +1,13 @@
-// store/achievementsSlice.js
+// src/store/achievementsSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { registerUser, loginUser, dailyLoginBonus, addXP, addCoins, fetchUserData, logout, setCurrentUserId } from '../store/userSlice';
+
 
 export const fetchAchievements = createAsyncThunk(
   'achievements/fetchAchievements',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/test/achievements');
+      const response = await fetch('/api/test/achievements');
       if (!response.ok) throw new Error('Failed to fetch achievements');
       return await response.json();
     } catch (error) {
@@ -20,9 +22,17 @@ const achievementsSlice = createSlice({
     all: [],
     status: 'idle',
     error: null,
-    popups: []
+    popups: []  // This can be used for temporary popup notifications
   },
-  reducers: {},
+  reducers: {
+    // If you want to push a new achievement popup (for example, after unlocking an achievement)
+    addPopup: (state, action) => {
+      state.popups.push(action.payload);
+    },
+    removePopup: (state) => {
+      state.popups.shift();
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAchievements.pending, (state) => {
@@ -39,5 +49,6 @@ const achievementsSlice = createSlice({
   }
 });
 
+export const { addPopup, removePopup } = achievementsSlice.actions;
 export default achievementsSlice.reducer;
 

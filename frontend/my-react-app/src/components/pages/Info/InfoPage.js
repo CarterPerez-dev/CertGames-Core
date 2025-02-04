@@ -18,7 +18,7 @@ const InfoPage = () => {
   return (
     <div className="info-container">
       <header className="info-header">
-        <h1 className="site-title">proxyauthrequired.com</h1>
+        <h1 className="site-title">407:  ProxyAuthRequired</h1>
         <p className="tagline">
           Your Ultimate Digital Hub for Exam Mastery &amp; Interactive Tools
         </p>

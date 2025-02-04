@@ -1,0 +1,8 @@
+/* src/components/pages/store/AchievementToast.css */
+.Toastify__toast--info {
+  background: #222 !important;
+  border: 2px solid #ff476f;
+  font-family: 'Orbitron', sans-serif;
+  border-radius: 8px;
+}
+
