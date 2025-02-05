@@ -1,19 +1,240 @@
-QUESTIONS 17-100
 
-  db.tests.insertOne({
-    "category": "aplus",
-    "testId": 6,
-    "testName": "A+ Practice Test #6 (Formidable)",
-    "xpPerCorrect": 10,
-    "questions": [
-      {
-        "id": 17,
-        "question": "A technician is analyzing network traffic and observes a high volume of UDP packets being broadcast to ports 67 and 68. Which network service is MOST likely generating this traffic?",
-        "options": [
-          "DNS (Domain Name System)",
-          "DHCP (Dynamic Host Configuration Protocol)",
-          "SNMP (Simple Network Management Protocol)",
-          "TFTP (Trivial File Transfer Protocol)"
+
+db.tests.insertOne({
+  "category": "aplus",
+  "testId": 6,
+  "testName": "A+ Practice Test #6 (Formidable)",
+  "xpPerCorrect": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "A user attempts to install an M.2 NVMe SSD in a laptop that previously had an M.2 SATA drive, but the drive is not recognized in the BIOS/UEFI. Which of the following is the MOST likely reason?",
+      "options": [
+        "The drive is not seated properly.",
+        "NVMe drives are not compatible with SATA-only M.2 slots.",
+        "The laptop battery is not providing enough power to the drive.",
+        "The SATA cable is disconnected."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Some M.2 slots support only SATA-based drives, while NVMe drives require an M.2 slot with PCIe/NVMe support. If the slot is SATA-only, an NVMe drive will not be recognized by the system.",
+      "examTip": "Verify whether the M.2 slot supports SATA, NVMe, or both before upgrading an SSD."
+    },
+    {
+      "id": 2,
+      "question": "A technician installs a new dedicated graphics card in a desktop PC, but upon boot, the system powers on with no video output. Which step is MOST likely to resolve the issue?",
+      "options": [
+        "Re-enable the integrated GPU in the BIOS.",
+        "Connect the PCIe power cables from the PSU to the GPU.",
+        "Move the card to a different PCIe x1 slot.",
+        "Reseat the CPU in the socket."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "High-performance GPUs often require dedicated PCIe power connectors from the power supply. If these are not connected, the GPU may receive insufficient power and fail to output video.",
+      "examTip": "Always check whether the GPU has 6-pin, 8-pin, or other PCIe power requirements. No power = no video."
+    },
+    {
+      "id": 3,
+      "question": "A user's desktop boots to a black screen with a cursor after a Windows update. The user can access Task Manager via Ctrl+Alt+Delete. Which advanced startup option is MOST likely to help revert the system to a functional state?",
+      "options": [
+        "Safe Mode with Networking",
+        "System Restore",
+        "Command Prompt",
+        "Startup Repair"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "System Restore can revert recent OS changes that might have caused issues. This is often the fastest way to restore a functional state following a problematic update.",
+      "examTip": "System Restore is a powerful rollback feature. Use it if a new update or driver installation breaks the OS."
+    },
+    {
+      "id": 4,
+      "question": "A technician is configuring a SOHO router. Which of the following changes is the BEST initial step to improve wireless security from default settings?",
+      "options": [
+        "Enable DHCP for all wireless clients.",
+        "Change the default SSID and Wi-Fi password.",
+        "Set up port forwarding for remote access.",
+        "Increase the router's transmit power."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Changing the default SSID and Wi-Fi passphrase is the first step in securing a wireless network. Default credentials are widely known, making the network vulnerable if unchanged.",
+      "examTip": "Always change default usernames, passwords, and SSIDs on new routers to prevent unauthorized access."
+    },
+    {
+      "id": 5,
+      "question": "After plugging in an external USB mouse, a laptop’s built-in trackpad becomes unresponsive. The mouse works, but the trackpad does not. Which is the MOST likely fix?",
+      "options": [
+        "Replace the laptop motherboard.",
+        "Reinstall the operating system.",
+        "Press the function-key combination to enable the trackpad.",
+        "Physically reseat the trackpad cable inside the chassis."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "On many laptops, a function-key toggle (e.g., Fn + F5) enables or disables the trackpad. It's easy to accidentally disable the trackpad after using external peripherals.",
+      "examTip": "Check for accidental function-key presses or settings that disable the trackpad when another pointing device is detected."
+    },
+    {
+      "id": 6,
+      "question": "Which type of printer relies on the 'charging, exposing, developing, transferring, fusing' process to produce a printed image?",
+      "options": [
+        "Inkjet",
+        "Laser",
+        "Thermal",
+        "Dot matrix"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Laser printers use an electro-photographic process that includes these key steps to apply toner and fuse it to the paper.",
+      "examTip": "Know the distinct print processes: laser printing has multiple steps involving static charges and toner."
+    },
+    {
+      "id": 7,
+      "question": "A user hears loud clicking noises from a desktop PC that eventually fails to load the operating system. Which hardware component is MOST likely causing this symptom?",
+      "options": [
+        "RAM",
+        "Power Supply",
+        "Hard Disk Drive (HDD)",
+        "CPU fan"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A failing mechanical HDD commonly makes loud clicking sounds (the 'click of death') and can cause system boot failures or data corruption.",
+      "examTip": "Always back up data immediately if an HDD starts making unusual clicking or grinding noises."
+    },
+    {
+      "id": 8,
+      "question": "A technician needs to configure an iOS device to securely retrieve corporate email. Which protocol is MOST likely used for secure email downloading?",
+      "options": [
+        "POP3",
+        "IMAP over SSL (IMAPS)",
+        "SMTP",
+        "Telnet"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "IMAP over SSL (IMAPS) provides an encrypted channel for receiving email, ensuring data confidentiality. POP3 is less commonly used today, and SMTP is primarily for sending email.",
+      "examTip": "For secure email retrieval, look for IMAP/POP with SSL/TLS (often referred to as IMAPS or POP3S)."
+    },
+    {
+      "id": 9,
+      "question": "Which CPU feature allows a single physical core to appear as two logical processors, improving multitasking performance?",
+      "options": [
+        "Overclocking",
+        "Hyper-Threading",
+        "Integrated graphics",
+        "Dual-channel memory"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Hyper-Threading (Intel) enables one physical CPU core to handle multiple threads simultaneously, making it appear as two logical cores to the operating system.",
+      "examTip": "Hyper-Threading helps with parallel processing and is especially useful for multi-threaded applications."
+    },
+    {
+      "id": 10,
+      "question": "Which cable choice is BEST for achieving full Thunderbolt 3 or 4 speeds when connecting an external high-speed storage device to a laptop?",
+      "options": [
+        "Cat 6 Ethernet cable",
+        "USB 2.0 Type-A cable",
+        "USB 3.0 Type-A to Type-B cable",
+        "USB-C Thunderbolt-certified cable"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Thunderbolt 3/4 can deliver up to 40 Gbps but requires a certified USB-C Thunderbolt cable. Other cable options won't achieve Thunderbolt’s maximum data rates.",
+      "examTip": "Thunderbolt often uses the same USB-C connector form factor, but the cable and port must specifically support Thunderbolt."
+    },
+    {
+      "id": 11,
+      "question": "A technician wants to upgrade a laptop’s memory. Which specification is MOST crucial to ensure the new RAM functions properly?",
+      "options": [
+        "Brand name of the RAM modules",
+        "ECC vs. non-ECC classification",
+        "Correct form factor (SODIMM) and compatible speed",
+        "Color of the heat spreader"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Laptops use SODIMMs (smaller form factor), and the new RAM must match or be compatible with the existing speed/timings. Brand and aesthetics are far less critical than form factor and speed.",
+      "examTip": "Always confirm form factor (SODIMM vs. DIMM) and memory specifications before purchasing laptop RAM."
+    },
+    {
+      "id": 12,
+      "question": "A corporate user’s VoIP desk phone shows 'No network link.' The user’s PC, which connects through the same phone, also has no network access. Which is the MOST likely cause?",
+      "options": [
+        "The phone’s power adapter is missing.",
+        "The switch port has not been configured for the correct VLAN tagging.",
+        "The user’s PC NIC driver is outdated.",
+        "The user’s domain password has expired."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "VoIP phones often require a specific VLAN configuration at the switch. If the switch port isn't set for voice/data VLAN tagging, both the phone and pass-through PC can lose network connectivity.",
+      "examTip": "Always verify VLAN or PoE settings for VoIP phones. A misconfigured port can disrupt both phone and PC network access."
+    },
+    {
+      "id": 13,
+      "question": "During a laptop keyboard replacement, the technician notices the battery is swollen. Which action should be taken FIRST?",
+      "options": [
+        "Carefully discharge and puncture the battery to relieve pressure.",
+        "Ignore the battery issue and finish the keyboard replacement.",
+        "Stop and replace the swollen battery to avoid a potential safety hazard.",
+        "Place the battery in a freezer to reduce swelling."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A swollen battery poses a significant safety risk and must be removed/replaced immediately. Continuing to use or tamper with it can cause leaks, fire, or explosions.",
+      "examTip": "Swollen or damaged lithium-ion batteries are unsafe. Proper disposal/replacement is mandatory."
+    },
+    {
+      "id": 14,
+      "question": "A technician replaced a faulty power supply with a new, higher-wattage PSU. After the fix, the system’s date and time reset on every boot. Which component is MOST likely the culprit?",
+      "options": [
+        "A defective CPU",
+        "A failing CMOS battery on the motherboard",
+        "An insufficient +12V rail on the new PSU",
+        "A corrupted operating system"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "When a system repeatedly loses its time/date settings after power cycling, the CMOS battery is typically dead or failing. The PSU wattage does not directly cause loss of BIOS time.",
+      "examTip": "If your BIOS time keeps resetting, suspect a dead CMOS battery first."
+    },
+    {
+      "id": 15,
+      "question": "A user has connected a second monitor to their workstation with DisplayPort, but it’s only mirroring the primary display instead of extending it. Where is the BEST place to change the display mode?",
+      "options": [
+        "BIOS/UEFI advanced settings",
+        "The second monitor’s on-screen display (OSD) menu",
+        "Operating system or GPU driver display settings",
+        "A KVM switch configuration interface"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Extended vs. mirrored display modes are typically configured in the OS display settings (or via GPU driver software). The BIOS does not control multi-monitor modes, and a KVM switch is unrelated to how the display is arranged.",
+      "examTip": "Use the Display Settings (Windows) or System Preferences (macOS) to configure multi-monitor layouts."
+    },
+    {
+      "id": 16,
+      "question": "A user connects a brand-new USB 3.2 external SSD to a front USB port but notices only USB 2.0 speeds. The drive is labeled 'USB 3.2' yet the OS shows it as 'High-Speed USB 2.0.' What is the MOST likely cause?",
+      "options": [
+        "The external SSD enclosure is defective.",
+        "The front USB port is wired to an older USB 2.0 header on the motherboard.",
+        "The drive firmware needs an update.",
+        "The operating system must be reinstalled."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Many PC cases have front ports that connect to older USB headers, capping speeds at USB 2.0. To achieve USB 3.x speeds, the port and the header on the motherboard must both support 3.x.",
+      "examTip": "Check which header the front ports use. If it’s a USB 2.0 header, performance will be limited regardless of the device’s specs."
+    },
+    {
+      "id": 17,
+      "question": "A user wants to share one USB printer between two PCs without configuring printer sharing via the OS. Which device allows both computers to connect directly to the same USB printer, one at a time?",
+      "options": [
+        "A basic USB hub",
+        "A USB switch",
+        "A KVM switch",
+        "A dedicated print server"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A USB switch (sometimes called a USB sharing switch) is specifically designed to let multiple computers access a single USB device without configuring network-based sharing. The user toggles which computer controls the printer.",
+      "examTip": "A USB hub does not switch input from multiple hosts; a USB switch is the hardware solution for sharing a single peripheral between two machines."
+    },
+    {   
+      "id": 17,
+      "question": "A technician is analyzing network traffic and observes a high volume of UDP packets being broadcast to ports 67 and 68. Which network service is MOST likely generating this traffic?",
+      "options": [
+        "DNS (Domain Name System)",
+        "DHCP (Dynamic Host Configuration Protocol)",
+        "SNMP (Simple Network Management Protocol)",
+        "TFTP (Trivial File Transfer Protocol)"
         ],
         "correctAnswerIndex": 1,
         "explanation": "DHCP (Dynamic Host Configuration Protocol) is MOST likely generating this traffic. DHCP uses UDP ports 67 (DHCP server) and 68 (DHCP client) for broadcast-based IP address assignment and configuration. DNS uses UDP port 53, SNMP uses UDP ports 161 and 162, and TFTP uses UDP port 69.",
