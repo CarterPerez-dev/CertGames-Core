@@ -19,7 +19,7 @@ export const showAchievementToast = (achievement) => {
     </div>,
     {
       position: "top-right",
-      autoClose: 3000,
+      autoClose: 4000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
