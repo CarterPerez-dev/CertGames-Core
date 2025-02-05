@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "aplus",
   "testId": 10,
   "testName": "A+ Practice Test #10 (Ultra Level)",
@@ -1303,5 +1303,5 @@
       "correctAnswerIndex": 3,
       "explanation": "RDP (Remote Desktop Protocol) over TCP port 3389 is the standard method for secure remote GUI access on Windows servers.",
       "examTip": "For Windows GUI remote access, always use RDP over port 3389 with proper security measures."
-      }
-    ]
+    }
+  ]
