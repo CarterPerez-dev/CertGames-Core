@@ -1,5 +1,3 @@
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
