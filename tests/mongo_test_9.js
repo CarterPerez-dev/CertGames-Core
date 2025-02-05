@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "aplus",
   "testId": 9,
   "testName": "A+ Practice Test #9 (Ruthless)",
@@ -1305,4 +1305,4 @@
       "examTip": "Hybrid cloud integration is complex. Be prepared for challenges in bridging different environments, ensuring consistent data flow, and reconciling diverse security models."
     }
   ]
-}
+});
