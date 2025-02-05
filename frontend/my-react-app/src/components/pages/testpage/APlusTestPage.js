@@ -15,13 +15,13 @@ import {
   FaBook, 
   FaBrain, 
   FaCheckCircle, 
-  FaRegSmile, 
+  FaRegSmile,
   FaMagic 
 } from 'react-icons/fa';
 
 /* -------------------------
    Define Icon and Color Mappings
-   ------------------------- */
+------------------------- */
 const iconMapping = {
   "test_rookie": FaTrophy,
   "accuracy_king": FaMedal,
@@ -112,6 +112,7 @@ const TestListView = () => {
   const totalQuestions = 100; // For demo purposes
   const { userId } = useSelector((state) => state.user);
 
+  // Helper to get saved progress data using a key that includes the userId.
   const getProgressData = (id) => {
     if (!userId) return null;
     const key = `testProgress_${userId}_${id}`;
@@ -138,6 +139,7 @@ const TestListView = () => {
     return "No progress yet";
   };
 
+  // Mapping difficulty data per test.
   const getDifficultyData = (id) => {
     const data = {
       1: { label: "Normal", color: "hsl(0, 0%, 100%)" },
@@ -237,6 +239,7 @@ const TestView = ({ testId }) => {
   const { xp, level, coins, userId } = useSelector((state) => state.user);
   const achievements = useSelector((state) => state.achievements.all);
 
+  // Local state
   const [currentTest, setCurrentTest] = useState(null);
   const [loadingTest, setLoadingTest] = useState(true);
   const [error, setError] = useState(null);
@@ -256,7 +259,7 @@ const TestView = ({ testId }) => {
   const [showNextPopup, setShowNextPopup] = useState(false);
   const [progressLoaded, setProgressLoaded] = useState(false);
 
-  // Use a user-specific key for saving progress.
+  // Create a user‑specific progress key.
   const progressKey = `testProgress_${userId}_${testId}`;
 
   // ---------- Fetch Test Data ----------
@@ -328,11 +331,20 @@ const TestView = ({ testId }) => {
     setProgressLoaded(true);
   }, [progressKey]);
 
-  // ---------- Save Test Progress ----------
+  // ---------- Save Test Progress Effect ----------
   useEffect(() => {
     if (!progressLoaded) return;
     if (isFinished) return;
-    const progress = { currentQuestionIndex, answers, score };
+    if (!currentTest) return; // <-- This ensures we don't skip calling this Hook altogether.
+    
+    const totalQuestions = currentTest.questions.length;
+    const progress = { 
+      currentQuestionIndex, 
+      answers, 
+      score,
+      totalQuestions: totalQuestions,
+      category: currentTest?.category || "aplus"
+    };
     localStorage.setItem(progressKey, JSON.stringify(progress));
     if (userId) {
       fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
@@ -343,34 +355,29 @@ const TestView = ({ testId }) => {
         console.error("Failed to update test progress on backend", err)
       );
     }
-  }, [currentQuestionIndex, answers, score, testId, userId, progressLoaded, isFinished]);
+  }, [
+    currentQuestionIndex,
+    answers,
+    score,
+    testId,
+    userId,
+    progressLoaded,
+    isFinished,
+    currentTest,
+  ]);
 
-  // ---------- Early Returns ----------
-  if (loadingTest) {
-    return <div style={{ color: "#fff" }}>Loading test...</div>;
-  }
-  if (error) {
-    return (
-      <div style={{ color: "#fff" }}>
-        <h2>Error: {error}</h2>
-      </div>
-    );
-  }
+  // ---------- Define totalQuestions and questionData AFTER currentTest is loaded ----------
   if (!currentTest) {
-    return (
-      <div style={{ color: "#fff", textAlign: "center", marginTop: "2rem" }}>
-        <h2>This test is not yet available!</h2>
-        <button style={{ marginTop: "1rem" }} onClick={() => navigate("/practice-tests/a-plus")}>
-          Back to Test List
-        </button>
-      </div>
-    );
+    return <div style={{ color: "#fff" }}>Loading test...</div>;
   }
 
   const totalQuestions = currentTest.questions.length;
   const questionData = currentTest.questions[currentQuestionIndex];
 
-  // ---------- Dynamic Progress Color ----------
+  if (!currentTest || error) {
+    return <div style={{ color: "#fff" }}>{error ? error : "Loading test..."}</div>;
+  }
+
   const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
@@ -419,9 +426,18 @@ const TestView = ({ testId }) => {
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex === totalQuestions - 1) {
-      const finishedProgress = { currentQuestionIndex, answers, score, finished: true };
+      const finishedProgress = { 
+        currentQuestionIndex, 
+        answers, 
+        score, 
+        finished: true,
+        totalQuestions: totalQuestions,
+        category: currentTest?.category || "aplus",
+        finishedAt: new Date().toISOString()
+      };
       localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
       setIsFinished(true);
+      setShowScoreOverlay(true);
       setShowReviewMode(true);
       return;
     }
@@ -452,7 +468,15 @@ const TestView = ({ testId }) => {
   };
 
   const handleFinishTest = () => {
-    const finishedProgress = { currentQuestionIndex, answers, score, finished: true };
+    const finishedProgress = { 
+      currentQuestionIndex, 
+      answers, 
+      score, 
+      finished: true,
+      totalQuestions: totalQuestions,
+      category: currentTest?.category || "aplus",
+      finishedAt: new Date().toISOString()
+    };
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
     setIsFinished(true);
     setShowScoreOverlay(true);

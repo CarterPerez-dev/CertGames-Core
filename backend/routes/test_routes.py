@@ -152,9 +152,11 @@ def update_test_progress(user_id, test_id):
       {
         "currentQuestionIndex": <int>,
         "answers": <list>,
-        "score": <int>
+        "score": <int>,
+        "finished": <bool>,
+        "totalQuestions": <int>
       }
-    Updates the user's testsProgress field for the given test.
+    Appends this attempt into the user's testsProgress for the given test.
     """
     data = request.json
     if not data:
@@ -164,15 +166,17 @@ def update_test_progress(user_id, test_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Get the existing testsProgress object (or an empty dict)
     tests_progress = user.get("testsProgress", {})
-    # Save the progress under the test_id key.
-    tests_progress[test_id] = data
+
+    # Use a list to store multiple attempts.
+    if test_id in tests_progress and isinstance(tests_progress[test_id], list):
+        tests_progress[test_id].append(data)
+    else:
+        tests_progress[test_id] = [data]
 
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"testsProgress": tests_progress}}
     )
     return jsonify({"message": "Test progress updated"}), 200
-
 
