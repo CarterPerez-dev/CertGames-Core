@@ -613,7 +613,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "DVDs are a common type of optical storage media that use lasers to read and write data.",
-      "examTip": "Optical media include CDs, DVDs, and Blu-ray discs."
+      "examTip": "Optical storage includes CDs, DVDs, and Blu-ray discs."
     },
     {
       "id": 48,
@@ -665,7 +665,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 3,
       "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
-      "examTip": "Remember, malware comes in many forms including Trojans, worms, and ransomware."
+      "examTip": "Remember, malware comes in many forms including Trojans, worms, or ransomware."
     },
     {
       "id": 52,
@@ -703,7 +703,7 @@ db.tests.insertOne({
         "Browsing the internet"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Email is used for sending and receiving digital messages electronically.",
+      "explanation": "Email is used for sending and receiving digital messages.",
       "examTip": "Email stands for electronic mail."
     },
     {
@@ -782,7 +782,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Cloud computing involves storing and accessing data and programs over the internet instead of locally.",
-      "examTip": "Cloud computing enables access to data from anywhere with an internet connection."
+      "examTip": "Cloud computing enables access to resources from anywhere via the internet."
     },
     {
       "id": 61,
@@ -807,7 +807,7 @@ db.tests.insertOne({
         "Creating strong passwords"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Phishing involves deceptive attempts to steal personal information, often via email or fake websites.",
+      "explanation": "Phishing involves deceptive attempts to steal personal information, often via emails or fake websites.",
       "examTip": "Be cautious of emails asking for personal details."
     },
     {
@@ -820,8 +820,8 @@ db.tests.insertOne({
         "Network Interface Card (NIC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A heat sink (often paired with a fan) is essential for cooling the CPU by dissipating heat.",
-      "examTip": "A good heat sink keeps the CPU from overheating."
+      "explanation": "A heat sink (usually with a fan) is essential for cooling the CPU by dissipating heat.",
+      "examTip": "Effective CPU cooling typically involves a heat sink and fan."
     },
     {
       "id": 64,
@@ -833,8 +833,8 @@ db.tests.insertOne({
         "To install new software"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Disk defragmentation reorganizes files so that data is stored contiguously, which can speed up access times.",
-      "examTip": "Defragmenting an HDD can improve its performance by reducing fragmentation."
+      "explanation": "Disk defragmentation reorganizes fragmented data on a hard drive, making file access faster.",
+      "examTip": "Defragmenting helps improve the performance of mechanical hard drives."
     },
     {
       "id": 65,
@@ -860,7 +860,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "A GPU processes and displays images and video on the monitor.",
-      "examTip": "GPUs are essential for rendering images, videos, and games."
+      "examTip": "GPUs are vital for rendering graphics in games and video applications."
     },
     {
       "id": 67,
@@ -898,255 +898,255 @@ db.tests.insertOne({
         "All of the above"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
-      "examTip": "Remember, malware can come as Trojans, worms, or ransomware."
-    },
-    {
-      "id": 70,
-      "question": "What is the purpose of a 'printer driver'?",
-      "options": [
-        "To translate computer commands into printer language",
-        "To physically install a printer",
-        "To refill printer ink cartridges",
-        "To troubleshoot network connectivity"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A printer driver translates computer commands into a language the printer understands.",
-      "examTip": "Printer drivers are essential for communication between your computer and printer."
-    },
-    {
-      "id": 71,
-      "question": "Which of these is a common type of internet browser?",
-      "options": [
-        "Google Chrome",
-        "Mozilla Firefox",
-        "Microsoft Edge",
-        "All of the above"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "Google Chrome, Mozilla Firefox, and Microsoft Edge are all common internet browsers.",
-      "examTip": "Popular browsers include Chrome, Firefox, Safari, and Edge."
-    },
-    {
-      "id": 72,
-      "question": "What is 'email' used for?",
-      "options": [
-        "Sending and receiving digital messages",
-        "Storing files and documents",
-        "Running applications",
-        "Browsing the internet"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Email is used for sending and receiving digital messages.",
-      "examTip": "Email stands for electronic mail and is used for communication."
-    },
-    {
-      "id": 73,
-      "question": "Which of these is a storage medium that uses flash memory?",
-      "options": [
-        "Solid State Drive (SSD)",
-        "Hard Disk Drive (HDD)",
-        "Optical Disc (DVD)",
-        "Floppy Disk"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Solid State Drives (SSDs) use flash memory, making them faster and more durable than HDDs.",
-      "examTip": "SSDs use flash memory for quick data access."
-    },
-    {
-      "id": 74,
-      "question": "What is the function of a 'monitor'?",
-      "options": [
-        "To display images and video",
-        "To input text",
-        "To print documents",
-        "To play audio"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A monitor displays images and video from the computer.",
-      "examTip": "Monitors are output devices that show you the computer's output."
-    },
-    {
-      "id": 75,
-      "question": "Which of these is a type of network protocol?",
-      "options": [
-        "TCP/IP",
-        "HTTP",
-        "FTP",
-        "All of the above"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "TCP/IP, HTTP, and FTP are all network protocols used for internet communication.",
-      "examTip": "These protocols form the backbone of internet communications."
-    },
-    {
-      "id": 76,
-      "question": "What is the purpose of 'data backup'?",
-      "options": [
-        "To create copies of important data for recovery",
-        "To delete unnecessary files",
-        "To speed up system performance",
-        "To organize files into folders"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Data backup involves creating copies of important data so that it can be recovered in case of loss.",
-      "examTip": "Backups are crucial for data recovery in case of hardware failure or data loss."
-    },
-    {
-      "id": 77,
-      "question": "Which of these is a common type of computer port for connecting peripherals?",
-      "options": [
-        "USB port",
-        "Ethernet port",
-        "HDMI port",
-        "Audio port"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "USB ports are commonly used to connect peripherals such as keyboards and mice.",
-      "examTip": "USB ports are the standard connection for many peripheral devices."
-    },
-    {
-      "id": 78,
-      "question": "What is 'cloud computing'?",
-      "options": [
-        "Storing and accessing data and programs over the internet",
-        "Using only desktop applications",
-        "Using only wired network connections",
-        "Processing data only on local computers"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Cloud computing is about storing and accessing data and programs over the internet.",
-      "examTip": "Cloud computing enables access to resources from anywhere via the internet."
-    },
-    {
-      "id": 79,
-      "question": "Which of these is a function of a 'web server'?",
-      "options": [
-        "To host and deliver website content",
-        "To browse websites",
-        "To send emails",
-        "To manage computer hardware"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A web server hosts and delivers website content to users.",
-      "examTip": "Web servers provide the content you see when you visit a website."
-    },
-    {
-      "id": 80,
-      "question": "What is 'phishing' in cybersecurity?",
-      "options": [
-        "Deceptive attempts to steal personal information",
-        "Improving network speed",
-        "A type of antivirus software",
-        "Creating strong passwords"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing involves deceptive attempts to steal personal information, often via emails or fake websites.",
-      "examTip": "Be cautious of unsolicited emails asking for sensitive data."
-    },
-    {
-      "id": 81,
-      "question": "Which component is essential for cooling the CPU in a computer?",
-      "options": [
-        "Heat sink",
-        "Power supply unit (PSU)",
-        "RAM module",
-        "Network Interface Card (NIC)"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A heat sink (usually with a fan) is essential for cooling the CPU by dissipating heat.",
-      "examTip": "Effective CPU cooling typically involves a heat sink and fan."
-    },
-    {
-      "id": 82,
-      "question": "What is the purpose of 'disk defragmentation'?",
-      "options": [
-        "To reorganize files on a hard drive for faster access",
-        "To delete files permanently",
-        "To increase storage capacity",
-        "To install new software"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Disk defragmentation reorganizes fragmented data on a hard drive, making file access faster.",
-      "examTip": "Defragmenting helps improve the performance of mechanical hard drives."
-    },
-    {
-      "id": 83,
-      "question": "Which of these is a common type of optical storage media?",
-      "options": [
-        "DVD",
-        "SSD",
-        "HDD",
-        "USB flash drive"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "DVDs are a common type of optical storage media that use lasers to read and write data.",
-      "examTip": "Optical storage includes CDs, DVDs, and Blu-ray discs."
-    },
-    {
-      "id": 84,
-      "question": "What is the function of a 'graphics card' or 'GPU'?",
-      "options": [
-        "To process and display images and video",
-        "To manage network connections",
-        "To store files and documents",
-        "To regulate power supply"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A GPU processes and displays images and video on the monitor.",
-      "examTip": "GPUs are vital for rendering graphics in games and video applications."
-    },
-    {
-      "id": 85,
-      "question": "Which of the following is a type of computer network based on geographic scale?",
-      "options": [
-        "Local Area Network (LAN)",
-        "USB network",
-        "Bluetooth network",
-        "Powerline network"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "A LAN covers a small geographic area such as an office or home.",
-      "examTip": "LANs are limited to small areas, while WANs and MANs cover larger areas."
-    },
-    {
-      "id": 86,
-      "question": "What is the purpose of 'cookies' in web browsing?",
-      "options": [
-        "To store small pieces of data about your browsing activity",
-        "To block advertisements",
-        "To speed up website loading times",
-        "To protect against viruses"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Cookies store small pieces of data about your browsing activity, such as preferences or session identifiers.",
-      "examTip": "Cookies help websites remember information about you."
-    },
-    {
-      "id": 87,
-      "question": "Which of these is a common type of computer virus?",
-      "options": [
-        "Trojan horse",
-        "Worm",
-        "Ransomware",
-        "All of the above"
-      ],
-      "correctAnswerIndex": 3,
       "explanation": "Trojan horses, worms, and ransomware are all types of malware (often referred to as computer viruses).",
       "examTip": "Malware includes many types, such as Trojans, worms, and ransomware."
     },
     {
-      "id": 88,
-      "question": "What is the purpose of a 'printer driver'?",
+      "id": 70,
+      "question": "A technician is diagnosing a smartphone that randomly shuts down even though the battery level is above 50%. Which combination of factors is MOST likely responsible?",
       "options": [
-        "To translate computer commands into printer language",
-        "To physically install a printer",
-        "To refill printer ink cartridges",
-        "To troubleshoot network connectivity"
+        "A faulty battery sensor combined with a recent firmware glitch.",
+        "Excessive background app activity and a misconfigured power management setting.",
+        "Physical damage to the battery contacts and a degraded battery cell.",
+        "All of the above."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Random shutdowns can be caused by multiple factors: a faulty battery sensor or firmware glitch may misreport battery levels; background apps and power management issues can drain resources unexpectedly; physical damage can also lead to power delivery problems. When these issues combine, the result is unpredictable shutdowns.",
+      "examTip": "Consider both hardware diagnostics and software settings when troubleshooting intermittent power issues."
+    },
+    {
+      "id": 71,
+      "question": "During the assembly of a desktop PC, a technician notices that the system intermittently fails to boot and produces POST beep codes. Which combination of factors could be causing this issue?",
+      "options": [
+        "Loose or improperly seated memory modules and an incompatible CPU cooler.",
+        "Incorrect BIOS settings combined with insufficient PSU wattage.",
+        "Poorly seated memory modules, improperly installed CPU, and outdated BIOS firmware.",
+        "A defective hard drive and an improperly connected GPU."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Intermittent boot failures and POST beeps often point to hardware installation issues such as loosely seated memory or CPU, compounded by outdated BIOS firmware that cannot correctly interpret hardware changes.",
+      "examTip": "Always re-seat critical components and update BIOS firmware to resolve ambiguous POST errors."
+    },
+    {
+      "id": 72,
+      "question": "A technician is troubleshooting a laptop that overheats and throttles performance during extended use. Which combination of internal factors is MOST likely contributing to the overheating?",
+      "options": [
+        "Dust buildup in the cooling vents, a failing fan, and dried-out thermal paste.",
+        "Incompatible RAM modules and a malfunctioning SSD.",
+        "An outdated graphics driver and insufficient system memory.",
+        "A misconfigured power plan and background software updates."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A printer driver translates commands from the computer into a language the printer can understand.",
-      "examTip": "Printer drivers act as intermediaries between the computer and the printer."
+      "explanation": "Overheating is most commonly due to physical issues such as dust accumulation, a failing fan that does not move enough air, and degraded thermal paste that no longer transfers heat efficiently from the CPU/GPU.",
+      "examTip": "Physical cleaning and reapplication of thermal paste are key steps in addressing thermal throttling."
+    },
+    {
+      "id": 73,
+      "question": "A user experiences intermittent Wi-Fi connectivity on their laptop even though other devices on the same network function normally. Which combination of hardware and software issues is MOST likely contributing to the problem?",
+      "options": [
+        "Outdated wireless adapter drivers, power-saving settings that disable the adapter, and interference from other wireless devices.",
+        "A faulty router and an incompatible cable modem.",
+        "Misconfigured VPN settings and an overactive firewall on the laptop.",
+        "A defective Ethernet port and damaged Wi-Fi antenna."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Intermittent Wi-Fi on one device can be due to outdated drivers, aggressive power management settings that turn off the wireless adapter, and external interference. These combined factors can lead to unreliable connections.",
+      "examTip": "Update drivers, check power management settings, and assess environmental interference when troubleshooting wireless issues."
+    },
+    {
+      "id": 74,
+      "question": "A technician is configuring a dual-boot system with Windows and Linux on a single hard drive. Which combination of steps is essential to ensure both operating systems install successfully without interfering with each other?",
+      "options": [
+        "Creating separate primary partitions, installing Windows first, and configuring the GRUB bootloader.",
+        "Using the entire drive for Windows and installing Linux on an external drive.",
+        "Installing Linux first, then Windows, and using a third-party boot manager.",
+        "Creating one large partition and using virtual machines for the other OS."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A best practice for dual-boot systems is to install Windows first (which can overwrite boot settings), then install Linux and use its GRUB bootloader to manage both OS choices. Creating separate partitions ensures each OS has its own space.",
+      "examTip": "Always back up data and plan partitioning carefully when setting up a dual-boot configuration."
+    },
+    {
+      "id": 75,
+      "question": "A desktop PC exhibits random shutdowns and blue screens under heavy load. Which combination of issues is MOST likely responsible?",
+      "options": [
+        "Overheating due to inadequate cooling, a failing power supply unit (PSU), and mismatched memory timings.",
+        "A corrupt operating system installation and outdated applications.",
+        "A faulty keyboard and an underperforming mouse.",
+        "Defective optical drive and a misconfigured monitor."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Random shutdowns and blue screens under load are often due to hardware stress: inadequate cooling leads to overheating, a failing PSU cannot supply stable power, and mismatched or misconfigured RAM timings can cause system instability.",
+      "examTip": "Monitor temperatures and check power supply ratings as part of troubleshooting high-load system failures."
+    },
+    {
+      "id": 76,
+      "question": "A technician is upgrading the RAM in a laptop but finds that the system only recognizes one of the two new memory modules. Which combination of factors should be considered?",
+      "options": [
+        "Incompatible memory speeds, faulty memory module, and improper seating of the module.",
+        "Outdated BIOS, insufficient disk space, and driver conflicts.",
+        "A misconfigured operating system and an overloaded USB bus.",
+        "Interference from external devices and an outdated graphics card."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "When a new memory module is not recognized, the technician should check that both modules have compatible speeds, that each is properly seated, and that one of them isn’t defective.",
+      "examTip": "Test each memory stick individually and check the system BIOS for memory configuration."
+    },
+    {
+      "id": 77,
+      "question": "A user reports that their monitor displays a flickering image and intermittent color distortions. Which combination of troubleshooting steps should be prioritized?",
+      "options": [
+        "Check the cable connections, update the graphics driver, test with an alternate monitor, and verify the refresh rate settings.",
+        "Reinstall the operating system, replace the CPU, and update the motherboard BIOS.",
+        "Replace the keyboard, test the power supply, and update the printer driver.",
+        "Disable all background applications and change the desktop wallpaper."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A flickering monitor with color distortions may result from a loose or damaged video cable, outdated or corrupt graphics drivers, or an incorrect refresh rate. Testing with a different monitor can help isolate the issue.",
+      "examTip": "Always start with the simplest fixes—cable and driver checks—before considering hardware replacement."
+    },
+    {
+      "id": 78,
+      "question": "A technician notices that a PC's USB ports are not functioning correctly. Which combination of potential causes is MOST likely?",
+      "options": [
+        "Outdated chipset drivers, disabled USB controller in the BIOS, and aggressive power management settings in the OS.",
+        "A failing hard drive and a misconfigured printer.",
+        "A virus infection and an overloaded CPU.",
+        "Incorrect video settings and a defective monitor."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "When USB ports fail, common causes include outdated or corrupt chipset drivers, BIOS settings that disable the USB controller, and power management features that shut down the ports to save energy.",
+      "examTip": "Verify BIOS settings and update drivers as first steps when USB ports malfunction."
+    },
+    {
+      "id": 79,
+      "question": "A user finds that their laptop's touchpad is unresponsive while an external mouse is connected, even though the settings appear correct. Which combination of factors could be contributing to this behavior?",
+      "options": [
+        "A feature that automatically disables the touchpad when an external device is detected, an outdated touchpad driver, and a BIOS setting that turns off the internal pointing device.",
+        "A defective external mouse and a damaged USB port.",
+        "Overheating of the CPU and low battery levels.",
+        "Misconfigured audio settings and an outdated operating system."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Many laptops include a setting to disable the touchpad when an external mouse is connected. Additionally, outdated drivers or a BIOS option could be causing the issue.",
+      "examTip": "Check both the OS settings and BIOS configuration when the internal touchpad stops working in the presence of an external mouse."
+    },
+    {
+      "id": 80,
+      "question": "A technician is tasked with setting up a secure wireless network for a small office. Which combination of settings is MOST essential for ensuring network security?",
+      "options": [
+        "Changing the default SSID, enabling WPA2 or WPA3 encryption, disabling WPS, and updating the router firmware.",
+        "Enabling MAC address filtering only.",
+        "Using a weak pre-shared key to ensure compatibility with all devices.",
+        "Broadcasting the network name and enabling guest networking by default."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A secure wireless network relies on changing default settings, using strong encryption methods (WPA2/3), disabling potentially insecure features like WPS, and keeping firmware up to date.",
+      "examTip": "Always use a strong, unique passphrase and disable unnecessary features to protect your wireless network."
+    },
+    {
+      "id": 81,
+      "question": "A technician needs to configure a network printer so that multiple users can access it. Which combination of configuration steps is MOST crucial?",
+      "options": [
+        "Assigning the printer a static IP address, installing the correct printer driver on each client, configuring printer sharing, and ensuring proper network firewall settings.",
+        "Installing the printer on a single workstation and then sharing that computer's internet connection.",
+        "Connecting the printer via USB to one client and relying on that client to print for everyone.",
+        "Enabling Bluetooth printing and using a mobile app."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Network printers should have a static IP address so that clients can reliably locate them. Installing the proper driver, enabling sharing, and configuring network permissions are all critical steps.",
+      "examTip": "Plan your network printer deployment by setting a static IP and ensuring all clients have the correct drivers installed."
+    },
+    {
+      "id": 82,
+      "question": "During troubleshooting, a technician suspects that a desktop's frequent freezes are due to a failing hard drive. Which combination of diagnostic tests and observations is MOST effective?",
+      "options": [
+        "Running SMART diagnostics, checking for bad sectors with disk scanning tools, listening for unusual noises, and monitoring system temperatures.",
+        "Reinstalling the operating system and updating the graphics driver.",
+        "Testing the power supply unit and checking for overheating of the CPU.",
+        "Disabling unnecessary startup programs and updating the BIOS."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SMART diagnostics and disk scanning tools are designed to detect failing hard drives by identifying bad sectors and other issues, while unusual noises and temperature spikes support the diagnosis.",
+      "examTip": "Use multiple diagnostic tools to confirm a suspected hard drive failure before data recovery procedures."
+    },
+    {
+      "id": 83,
+      "question": "A user complains that their system has become significantly slower after installing new software. Which combination of troubleshooting steps should be performed to identify the cause?",
+      "options": [
+        "Checking for high CPU or memory usage in Task Manager, reviewing startup programs, scanning for malware, and examining disk fragmentation.",
+        "Reinstalling the operating system immediately.",
+        "Replacing the hard drive without further investigation.",
+        "Disconnecting all peripherals and then reconnecting them one at a time."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Performance issues after new software installations can be due to excessive resource usage, unwanted startup programs, malware, or disk fragmentation. A systematic check using Task Manager and diagnostic tools is essential.",
+      "examTip": "Begin troubleshooting by identifying processes that use excessive resources and by scanning for malware."
+    },
+    {
+      "id": 84,
+      "question": "A technician upgrades a desktop with a new high-performance CPU, but after installation the system fails to boot. Which combination of issues is MOST likely the cause?",
+      "options": [
+        "An incompatible motherboard BIOS, improper CPU seating, and missing thermal paste application.",
+        "A defective power cable and a failed USB port.",
+        "Outdated antivirus software and misconfigured network settings.",
+        "An incorrectly formatted hard drive and a broken monitor cable."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "When a new CPU is installed, the motherboard must support it (often requiring a BIOS update), the CPU must be properly seated with correct thermal paste application, or else the system may not boot.",
+      "examTip": "Always verify CPU–motherboard compatibility and ensure proper installation techniques when upgrading a CPU."
+    },
+    {
+      "id": 85,
+      "question": "A user experiences audio distortions and intermittent sound dropouts during video calls. Which combination of factors is MOST likely responsible?",
+      "options": [
+        "Outdated audio drivers, interference from other wireless devices, malfunctioning headset jack, and improper audio settings.",
+        "A failing hard drive and outdated operating system.",
+        "An incompatible keyboard and a broken mouse.",
+        "A misconfigured video card and incorrect monitor settings."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Audio distortions and dropouts are commonly caused by driver issues, hardware problems with the audio port or headset, and interference from wireless devices affecting audio peripherals.",
+      "examTip": "Begin by updating audio drivers and checking both hardware connections and wireless interference."
+    },
+    {
+      "id": 86,
+      "question": "A technician is tasked with securing a laptop against potential malware attacks. Which combination of best practices is MOST effective?",
+      "options": [
+        "Installing reputable antivirus software, keeping the operating system and drivers up to date, enabling the firewall, and practicing safe browsing habits.",
+        "Disabling the firewall and relying solely on user caution.",
+        "Installing multiple antivirus programs simultaneously for redundancy.",
+        "Removing all network connectivity to prevent any attack."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A layered security approach—combining updated antivirus software, OS patches, firewall protection, and cautious user behavior—is the most effective way to protect against malware.",
+      "examTip": "Regular updates and a multi-layered security strategy are key to defending against modern malware threats."
+    },
+    {
+      "id": 87,
+      "question": "A company plans to migrate its desktop applications to a virtual desktop infrastructure (VDI). Which combination of factors must be evaluated to ensure a successful transition?",
+      "options": [
+        "Network bandwidth requirements, hardware compatibility, virtualization software capabilities, and user training/support.",
+        "Only the cost of new hardware.",
+        "The color and design of the virtual desktops.",
+        "The number of USB ports on each workstation."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A successful VDI migration requires evaluating network capacity to handle virtual traffic, ensuring existing hardware is compatible, verifying that the virtualization solution meets performance needs, and preparing end users through training and support.",
+      "examTip": "A thorough assessment of infrastructure, software capabilities, and user readiness is essential when moving to VDI."
+    },
+    {
+      "id": 88,
+      "question": "After a recent Windows update, several peripheral devices are no longer recognized by a laptop. Which combination of troubleshooting steps is MOST appropriate?",
+      "options": [
+        "Rolling back the Windows update, updating the device drivers, checking BIOS settings, and testing the peripherals on another system.",
+        "Reinstalling all applications and formatting the hard drive immediately.",
+        "Replacing the laptop's battery and power adapter.",
+        "Ignoring the issue since it will likely resolve itself."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "When peripheral devices stop working after an update, it is wise to roll back the update or update drivers, check BIOS settings (which may have been reset), and test the devices elsewhere to isolate the issue.",
+      "examTip": "Always verify driver compatibility and BIOS configurations after an operating system update."
     },
     {
       "id": 89,
@@ -1189,92 +1189,120 @@ db.tests.insertOne({
     },
     {
       "id": 92,
-      "question":
-
-        "id": 93,
-        "question": "A technician needs to install a 2.5in HDD into a desktop. Which adapter or mounting solution is MOST commonly required?",                                               
-        options": [
-          "3.5in to 2.5in drive bay adapter',
-          "USB to eSATA cable",
-          "Server rackmount rails",
-          "M.2 to PCI Express riser"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation": "A 3.5in to 2.5in drive bay adapter is correct because desktop bays are usually 3.5in. A USB-to-eSATA cable is for external connectivity. Server rack rails are for rack-mounted systems. An M.2 to PCIe riser is for M.2 SSDs, not SATA 2.5in drives. Exam tip: Always match the physical form factor with an adapter or bracket if needed."                      
-      },
-      {
-        "id": 94,
-        "question": "A technician wants to install a Linux VM on top of an existing Windows 10 operating system. Which hypervisor type is needed?",                                         
-        options": [
-          "Type 1 (bare-metal) hypervisor",
-          "Type 2 (hosted) hypervisor",
-          "Container-based virtualization",
-          "Dedicated hardware emulator card"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Type 2 (hosted) hypervisor is correct because it runs on top of Windows (the host OS). Type 1 requires direct hardware access (no host OS). Containers share the host OS kernel. A hardware emulator card is not standard for VMs. Exam tip: VMware Workstation and Oracle VirtualBox are typical Type 2 hypervisors for desktop use.'                        
-      },
-      {
-        "id": 95,
-        "question": "Which of the following addresses is a valid IPv6 link-local address typically starting with FE80::?",                                                                  
-        options": [
-          "169.254.0.10",
-          "192.168.1.10",
-          "FE80::1C2B:3FFF:FE4A:1234",
-          "FEC0::/10"
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "FE80::1C2B:3FFF:FE4A:1234 is correct because APIPA automatically assigns addresses in the 169.254.x.x range. 192.168.0.100, 10.0.0.50, and 172.16.100.1 are private addresses but not APIPA. Exam tip: If you see a 169.254.x.x address, it usually indicates DHCP failure or no DHCP server.'                                                                            
-      },
-      {
-        "id": 96,
-        "question": "A user cannot access internal network resources when plugged into a specific wall jack, though the cable tests fine. Which tool helps confirm the jack’s wiring path to the switch port?",                                                                          
-        options": [
-          "Punchdown tool",
-          "Tone generator and probe",
-          "Multimeter",
-          "Crimper"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Tone generator and probe is correct for tracing the cable route in walls and finding which switch port it terminates on. A punchdown tool is for physically terminating cables, a multimeter checks electrical continuity/voltage, and a crimper attaches RJ45 plugs. Exam tip: Toner/probe kits are indispensable for tracking cables in complex cabling setups.'                                                                                         
-      },
-      {
-        "id": 97,
-        "question": "A user wants to connect a smartphone to an external display wirelessly for presentations. Which technology is commonly used for screen mirroring on Android devices?", 
-        options": [ 'RDP', 'Bluetooth tethering', 'Miracast', 'USB tethering' ],
-        "correctAnswerIndex": 2,
-        "explanation": "Miracast is correct for Android wireless display mirroring on compatible devices/TVs. RDP is remote desktop. Bluetooth tethering is for data connectivity, not screen sharing. USB tethering shares data over USB, not the display. Exam tip: For Android screen mirroring, Miracast or Chromecast are typical solutions.'                                    
-      },
-      {
-        "id": 98,
-        "question": 'Which scenario is MOST likely if a RAID 5 array loses two drives simultaneously?',                                                                                     
-        options": [
-          'Array continues to function normally',
-          'All data is still intact due to mirroring',
-          'Data is lost until at least one drive is replaced and rebuilt',
-          'No impact because parity can rebuild both drives at once'
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "Data is lost until at least one drive is replaced and rebuilt is correct because RAID 5 can only tolerate one drive failure. Losing two drives simultaneously breaks the array. It does not mirror two drives, and parity can’t rebuild if two drives are missing. Exam tip: RAID 5 requires all but one drive functional to remain online.'                  
-      },
-      {
-        "id": 99,
-        "question": 'Which cloud computing model involves hosting desktop environments in the cloud, allowing users to stream a full OS session remotely?',                                 
-        options": [ 'IaaS', 'PaaS', 'DaaS', 'SaaS' ],
-        "correctAnswerIndex": 2,
-        "explanation": "DaaS (Desktop as a Service) is correct because it hosts entire desktop sessions in the cloud. IaaS provides raw compute infrastructure. PaaS offers a development platform. SaaS delivers software applications. Exam tip: DaaS solutions let users access a virtual desktop from anywhere, managed by a cloud provider.'                                     
-      },
-      {
-        "id": 100,
-        "question": 'A laptop displays artifacts and random color blocks during gaming. Which is the MOST likely cause?',                                                                   
-        options": [
-          'Display cable not seated',
-          'Video driver or dedicated GPU hardware failure',
-          'Low battery threshold set in BIOS',
-          'WiFi antenna interference'
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Video driver or dedicated GPU hardware failure is correct because corrupted graphics are often linked to GPU or driver issues. A loose display cable usually causes flickering or a blank screen, not color artifacts. Battery threshold doesn’t affect rendering. WiFi interference impacts network, not GPU output. Exam tip: Artifacts often signal overheating or driver/hardware issues in the GPU.'                                                  
-      }
-    ]
-  });
+      "question": "A corporate network is experiencing intermittent connectivity issues, slow data transfers, and occasional packet loss. The network consists of multiple VLANs and a mix of wired and wireless access points. Which combination of issues is MOST likely contributing to these symptoms?",
+      "options": [
+        "A faulty switch port combined with outdated network drivers on client machines.",
+        "Network congestion due to improper VLAN segmentation and a failing router interface.",
+        "Interference from unauthorized wireless access points and misconfigured QoS settings on the router.",
+        "Physical cable damage in the backbone combined with an overloaded firewall."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Improper VLAN segmentation can lead to broadcast storms and misrouted traffic, while a failing router interface can drop packets—together causing intermittent connectivity and slow data transfers.",
+      "examTip": "Evaluate both network configuration and hardware performance when diagnosing connectivity issues."
+    },
+    {
+      "id": 93,
+      "question": "A technician needs to install a 2.5in HDD into a desktop system. Which adapter or mounting solution is MOST commonly required?",
+      "options": [
+        "3.5in to 2.5in drive bay adapter",
+        "USB to eSATA cable",
+        "Server rackmount rails",
+        "M.2 to PCI Express riser"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Desktop bays are typically designed for 3.5in drives, so a 3.5in to 2.5in drive bay adapter is needed for 2.5in HDDs.",
+      "examTip": "Always match the drive size to the bay or use the proper adapter to ensure a secure fit."
+    },
+    {
+      "id": 94,
+      "question": "A technician wants to install a Linux virtual machine on top of an existing Windows 10 operating system. Which hypervisor type is required?",
+      "options": [
+        "Type 1 (bare-metal) hypervisor",
+        "Type 2 (hosted) hypervisor",
+        "Container-based virtualization",
+        "Dedicated hardware emulator card"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A Type 2 (hosted) hypervisor runs on top of an existing operating system, which is necessary when installing a VM on a Windows 10 desktop.",
+      "examTip": "Examples include VMware Workstation and Oracle VirtualBox for desktop virtualization."
+    },
+    {
+      "id": 95,
+      "question": "Which of the following addresses is a valid IPv6 link-local address typically starting with FE80::?",
+      "options": [
+        "169.254.0.10",
+        "192.168.1.10",
+        "FE80::1C2B:3FFF:FE4A:1234",
+        "FEC0::/10"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "FE80::1C2B:3FFF:FE4A:1234 is a properly formatted IPv6 link-local address. The others are either IPv4 or not in the correct range.",
+      "examTip": "IPv6 link-local addresses always begin with FE80:: and are used for local network communications."
+    },
+    {
+      "id": 96,
+      "question": "A user cannot access internal network resources when plugged into a specific wall jack, even though the cable tests fine. Which tool helps confirm the jack’s wiring path to the switch port?",
+      "options": [
+        "Punchdown tool",
+        "Tone generator and probe",
+        "Multimeter",
+        "Crimper"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A tone generator and probe is used to trace the wiring path through walls and locate the corresponding switch port.",
+      "examTip": "Toner/probe kits are invaluable when mapping network cabling in large or complex installations."
+    },
+    {
+      "id": 97,
+      "question": "A user wants to connect a smartphone to an external display wirelessly for presentations. Which technology is most commonly used for screen mirroring on Android devices?",
+      "options": [
+        "RDP",
+        "Bluetooth tethering",
+        "Miracast",
+        "USB tethering"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Miracast is a standard for wireless screen mirroring on Android (and other) devices, whereas the other options are used for different purposes.",
+      "examTip": "For Android screen mirroring, Miracast (or Chromecast-based solutions) is typically used."
+    },
+    {
+      "id": 98,
+      "question": "Which scenario is MOST likely if a RAID 5 array loses two drives simultaneously?",
+      "options": [
+        "The array continues to function normally.",
+        "All data remains intact due to mirroring.",
+        "Data is lost until at least one drive is replaced and rebuilt.",
+        "No impact because parity can rebuild both drives at once."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "RAID 5 is designed to tolerate a single drive failure. Losing two drives exceeds its fault tolerance, leading to array failure and potential data loss.",
+      "examTip": "Understand the limitations of RAID 5 and always maintain current backups."
+    },
+    {
+      "id": 99,
+      "question": "Which cloud computing model involves hosting desktop environments in the cloud, allowing users to stream a full operating system session remotely?",
+      "options": [
+        "IaaS",
+        "PaaS",
+        "DaaS",
+        "SaaS"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Desktop as a Service (DaaS) provides virtual desktops that are streamed to the end user from the cloud.",
+      "examTip": "DaaS is a key option for organizations looking to provide remote desktop experiences without local hardware investments."
+    },
+    {
+      "id": 100,
+      "question": "A laptop displays artifacts and random color blocks during gaming. Which is the MOST likely cause?",
+      "options": [
+        "Display cable not seated",
+        "Video driver or dedicated GPU hardware failure",
+        "Low battery threshold set in BIOS",
+        "WiFi antenna interference"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Artifacts and color blocks on the screen are typically due to issues with the video driver or a failing dedicated GPU, especially under high load conditions.",
+      "examTip": "Check for overheating, update video drivers, and test with another display cable when diagnosing graphics issues."
+    }
+  ]
+});
