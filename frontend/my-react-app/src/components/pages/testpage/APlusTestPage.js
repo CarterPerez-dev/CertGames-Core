@@ -286,70 +286,70 @@ const TestView = ({ testId }) => {
   /* ------------------------------------------------------------------
      handleOptionClick -> calls /submit-answer to award XP/coins once
   ------------------------------------------------------------------ */
-  const handleOptionClick = async (optionIndex) => {
-    if (isAnswered) return;
-    setSelectedOptionIndex(optionIndex);
 
-    try {
-      const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          testId,
-          questionId: questionData.id, // your unique question ID
-          correctAnswerIndex: questionData.correctAnswerIndex,
-          selectedIndex: optionIndex,
-          xpPerCorrect: currentTest.xpPerCorrect || 10,
-          coinsPerCorrect: 5 
-        })
-      });
-      const result = await response.json();
-      /*
-         result = {
-           isCorrect: bool,
-           alreadyCorrect: bool,
-           awardedXP: number,
-           awardedCoins: number
-         }
-       */
+const handleOptionClick = async (optionIndex) => {
+  if (isAnswered) return;
+  setSelectedOptionIndex(optionIndex);
 
-      // If we want optional feedback:
-      if (result.isCorrect && !result.alreadyCorrect && result.awardedXP > 0) {
-        // Optionally show a toast: "You earned 10 XP!"
-        // Or do any other UI feedback
-      }
-
-      // Update local state
-      const isCorrect = result.isCorrect;
-      if (isCorrect) {
-        // Increase local score if correct
-        setScore(prev => prev + 1);
-      }
-
-      // Record the user's answer in local 'answers'
-      const updatedAnswers = [...answers];
-      const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
-
-      const newAnswerObj = {
-        questionId: questionData.id,
-        userAnswerIndex: optionIndex,
+  try {
+    const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        testId,
+        questionId: questionData.id, // must be a unique question ID
         correctAnswerIndex: questionData.correctAnswerIndex,
-      };
-      if (existingIndex >= 0) {
-        updatedAnswers[existingIndex] = newAnswerObj;
-      } else {
-        updatedAnswers.push(newAnswerObj);
+        selectedIndex: optionIndex,
+        xpPerCorrect: currentTest.xpPerCorrect || 10,
+        coinsPerCorrect: 5
+      })
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      // Deconstruct fields from the backend
+      const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
+
+      // If user is correct this time, and not previously correct for this question
+      if (isCorrect && !alreadyCorrect && awardedXP > 0) {
+        // Update Redux with new totals
+        dispatch(setXPAndCoins({
+          xp: newXP,
+          coins: newCoins
+        }));
       }
-      setAnswers(updatedAnswers);
 
-      setIsAnswered(true);
-
-    } catch (err) {
-      console.error("Failed to submit answer to backend", err);
-      // If the backend fails, you could fallback to local awarding or do nothing
+      // Update local 'score' if correct
+      if (isCorrect) {
+        setScore((prev) => prev + 1);
+      }
+    } else {
+      console.error("submit-answer error:", result);
     }
+  } catch (err) {
+    console.error("Failed to submit answer to backend", err);
+  }
+
+  // Record the user's answer in local 'answers'
+  const updatedAnswers = [...answers];
+  const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
+
+  const newAnswerObj = {
+    questionId: questionData.id,
+    userAnswerIndex: optionIndex,
+    correctAnswerIndex: questionData.correctAnswerIndex
   };
 
+  if (existingIndex >= 0) {
+    updatedAnswers[existingIndex] = newAnswerObj;
+  } else {
+    updatedAnswers.push(newAnswerObj);
+  }
+  setAnswers(updatedAnswers);
+
+  // Mark this question as answered
+  setIsAnswered(true);
+};
   /* Move to next question or finish if last */
   const handleNextQuestion = () => {
     if (currentQuestionIndex === totalQuestions - 1) {
