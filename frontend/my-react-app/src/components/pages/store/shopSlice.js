@@ -1,76 +1,50 @@
-// store/shopSlice.js
+// src/store/shopSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-// Fetch items from MongoDB
+// Async thunk to fetch shop items from the backend
 export const fetchShopItems = createAsyncThunk(
   'shop/fetchShopItems',
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/test/shop');
-      if (!response.ok) throw new Error('Failed to fetch shop items');
-      return await response.json();
+      if (!response.ok) {
+        throw new Error('Failed to fetch shop items');
+      }
+      const data = await response.json();
+      return data; // Expected to be an array of shop item objects
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Handle purchase requests
-// Note: You must pass in { itemId, userId } to let the backend know who is buying
-export const purchaseItem = createAsyncThunk(
-  'shop/purchaseItem',
-  async ({ itemId, userId }, { rejectWithValue }) => {
-    try {
-      const response = await fetch(`/api/test/shop/purchase/${itemId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId })
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Purchase failed');
-      }
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+const initialState = {
+  items: [],
+  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null,
+};
 
 const shopSlice = createSlice({
   name: 'shop',
-  initialState: {
-    items: [],
-    status: 'idle',
-    error: null
+  initialState,
+  reducers: {
+    // Optionally add reducers for filtering items or updating local shop state
+    // e.g., setFilter(state, action) { state.filter = action.payload; }
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchShopItems.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchShopItems.fulfilled, (state, action) => {
-        state.items = action.payload;
         state.status = 'succeeded';
+        state.items = action.payload;
       })
       .addCase(fetchShopItems.rejected, (state, action) => {
-        state.error = action.payload;
         state.status = 'failed';
-      })
-
-      .addCase(purchaseItem.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(purchaseItem.fulfilled, (state) => {
-        state.status = 'succeeded';
-      })
-      .addCase(purchaseItem.rejected, (state, action) => {
         state.error = action.payload;
-        state.status = 'failed';
       });
-  }
+  },
 });
 
 export default shopSlice.reducer;
-
