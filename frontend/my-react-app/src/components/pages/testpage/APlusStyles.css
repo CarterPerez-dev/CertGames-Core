@@ -36,15 +36,15 @@ body {
 
 .tests-list-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.6rem;
 }
 
 /* Test Card (each individual test in the list) */
 .test-card {
   position: relative;
   background: linear-gradient(135deg, #400000, #600000);
-  padding: 1.5rem;
+  padding: 1.7rem;
   border-radius: 8px;
   border: 1px solid #880000;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -248,8 +248,12 @@ body {
 }
 
 .question-text {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 1rem;
+  font-family: 'Trebuchet MS', sans-serif;
+  line-height: 1.3;
+  color: #E2DFD2;
+  font-weight: bold;
 }
 
 .options-list {
@@ -363,19 +367,23 @@ body {
   border-radius: 12px;
   text-align: center;
   color: #ffffff;
-  max-width: 500px;
+  max-width: 50rem;
   width: 80%;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 .score-title {
-  font-size: 2rem;
+  font-size: 2.8rem;
   margin-bottom: 1rem;
+  color: #7c0024;
+  font-weight: bold;
 }
 
 .score-details {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #fff;
 }
 
 .overlay-buttons {
@@ -390,7 +398,7 @@ body {
 .next-test-button,
 .back-btn {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: .75rem 1.5rem;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
@@ -407,6 +415,49 @@ body {
 .restart-button:hover {
   background: linear-gradient(135deg, #ff0000, #ff5555);
   transform: scale(1.05);
+}
+
+
+.review-filter-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.review-filter-buttons button {
+  background: #0024a9;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 1rem 2.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.review-filter-buttons button:hover {
+  background: #0445f3;
+}
+
+.review-filter-buttons .active-filter {
+  background: #7c0024;
+}
+/* Show the final score line in review */
+.review-score-line {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #000e34; 
+  font-weight: bold;
+}
+
+/* Optionally, style the "Questions shown: X" text in the review */
+.score-details {
+  margin: 0.5rem 0 1rem 0;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #64001d;
+  font-weight: bold;
 }
 
 .review-button {
@@ -487,7 +538,9 @@ body {
   padding: 1rem;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  font-family: "Courier New", monospace;
+  font-family: 'Trebuchet MS', sans-serif;
+  line-height: 1.6;
+  font-size: 1.2rem;
 }
 
 /* Close button for Review Overlay - styled as a bold circled X */
