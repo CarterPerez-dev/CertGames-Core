@@ -1,54 +1,133 @@
-/* src/components/pages/store/ShopPage.css */
-.shop-container {
+/* ShopPage.css */
+
+/* Overall container for the shop page */
+.shop-page {
   padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
+  background: #0e0e0e; /* Dark background */
+  color: #fff;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.shop-container h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.shop-items {
+/* Header section with title and user info */
+.shop-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 1rem;
 }
 
+.shop-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  color: #ffcc00; /* Neon accent color */
+}
+
+.shop-user-info {
+  text-align: right;
+  font-size: 1.2rem;
+}
+
+.shop-user-info p {
+  margin: 0.25rem 0;
+}
+
+/* Purchase status message */
+.purchase-status {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #222;
+  border-radius: 4px;
+  text-align: center;
+  color: #ff5555;
+  font-weight: bold;
+}
+
+/* Shop section wrapper */
+.shop-section {
+  margin-bottom: 2rem;
+}
+
+/* Section title */
+.shop-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #444;
+  padding-bottom: 0.5rem;
+  color: #66ff66;
+}
+
+/* Grid layout for items */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Individual shop item card */
 .shop-item {
-  background: #444;
-  color: #ffffff;
-  padding: 1rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
   border-radius: 8px;
-  width: 200px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
-.shop-item h3 {
-  margin: 0 0 0.5rem 0;
+.shop-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
 }
 
-.shop-description {
-  font-size: 0.9rem;
+/* Item image */
+.shop-item-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #333;
+}
+
+/* Information container for each shop item */
+.shop-item-info {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.shop-item-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: #ffcc00;
+}
+
+.shop-item-info p {
+  margin: 0.25rem 0;
+  font-size: 1rem;
   color: #ccc;
 }
 
-.shop-item button {
-  margin-top: 0.5rem;
-  padding: 0.5rem;
-  background: #FFC107;
+/* Purchase button styling */
+.shop-item-info button {
+  margin-top: auto; /* Push button to bottom */
+  padding: 0.5rem 1rem;
+  background: #00aaff;
   border: none;
   border-radius: 4px;
+  color: #fff;
   cursor: pointer;
-  font-weight: 600;
   transition: background 0.3s ease;
 }
 
-.shop-item button:hover {
-  background: #e6ac00;
+.shop-item-info button:disabled,
+.shop-item-info button.purchased-button {
+  background: #555;
+  cursor: not-allowed;
 }
 
+.shop-item-info button:hover:not(:disabled) {
+  background: #0088cc;
+}
