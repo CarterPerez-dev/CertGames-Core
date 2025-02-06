@@ -201,21 +201,7 @@ def update_test_progress(user_id, test_id):
 
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
-    """
-    The frontend sends:
-      {
-        "testId": <str or int>,
-        "questionId": <str>,
-        "correctAnswerIndex": <int>,
-        "selectedIndex": <int>,
-        "xpPerCorrect": <int>,
-        "coinsPerCorrect": <int>
-      }
-    We'll check if 'questionId' is already recorded as correct for this test
-    in user's perTestCorrect. If not, we award XP/coins, then record it.
-    """
     data = request.json or {}
-    print("DEBUG submit_answer data:", data)  # <-- Debug log
     test_id = str(data.get("testId"))
     question_id = data.get("questionId")
     selected_index = data.get("selectedIndex")
@@ -227,16 +213,14 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Some users might not have "perTestCorrect" or it might be the wrong type
+    # Ensure user has the "perTestCorrect" dict
     per_test_correct = user.get("perTestCorrect", {})
     if not isinstance(per_test_correct, dict):
         per_test_correct = {}
 
-    # If we haven't tracked this test yet, start with an empty list
     if test_id not in per_test_correct:
         per_test_correct[test_id] = []
 
-    # Convert existing list to a Python set so we can do .add() / membership test
     existing_correct_set = set(per_test_correct[test_id])
 
     is_correct = (selected_index == correct_index)
@@ -246,25 +230,32 @@ def submit_answer(user_id):
     awarded_coins = 0
 
     if is_correct and not already_correct:
-        # Award XP and coins once
+        # Award XP and coins
         update_user_xp(user_id, xp_per_correct)
         update_user_coins(user_id, coins_per_correct)
         existing_correct_set.add(question_id)
         awarded_xp = xp_per_correct
         awarded_coins = coins_per_correct
 
-    # Store back as a list
+    # Convert set -> list
     per_test_correct[test_id] = list(existing_correct_set)
 
-    # Update in DB
+    # Save "perTestCorrect" back to user doc
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"perTestCorrect": per_test_correct}}
     )
 
+    # <-- NEW: fetch user again to get updated XP & coins
+    updated_user = get_user_by_id(user_id)
+    new_xp = updated_user.get("xp", 0)
+    new_coins = updated_user.get("coins", 0)
+
     return jsonify({
         "isCorrect": is_correct,
         "alreadyCorrect": already_correct,
         "awardedXP": awarded_xp,
-        "awardedCoins": awarded_coins
+        "awardedCoins": awarded_coins,
+        "newXP": new_xp,            # total user XP after awarding
+        "newCoins": new_coins       # total user coins after awarding
     }), 200
