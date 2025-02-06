@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import { useSelector, useDispatch } from "react-redux";
-import { dailyLoginBonus, addXP, addCoins } from "../store/userSlice";
+import { dailyLoginBonus } from "../store/userSlice"; 
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "../store/AchievementToast";
-import APlusTestList from "./APlusTestList"; // <-- Import our new Test List file
+import APlusTestList from "./APlusTestList"; // <-- Import the Test List file
 import "./APlusStyles.css";
 import { 
   FaTrophy, 
@@ -65,8 +65,8 @@ const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
 };
 
 /* ------------------------------------------------------------------
-   Main Export: APlusTestPage
-   If testId is present, we show the test view; otherwise, show list
+   APlusTestPage
+   Renders the test list if no :testId param, else the test view
 ------------------------------------------------------------------ */
 const APlusTestPage = () => {
   const { testId } = useParams();
@@ -106,10 +106,11 @@ const TestView = ({ testId }) => {
   // Filter for the review mode: 'all', 'skipped', 'flagged', 'incorrect', 'correct'
   const [reviewFilter, setReviewFilter] = useState("all");
 
+  // Has local progress loaded
   const [progressLoaded, setProgressLoaded] = useState(false);
   const progressKey = `testProgress_${userId}_${testId}`;
 
-  /* 1. Fetch Test Data */
+  /* (1) Fetch Test Data */
   useEffect(() => {
     const fetchTestData = async () => {
       setLoadingTest(true);
@@ -159,14 +160,14 @@ const TestView = ({ testId }) => {
     fetchTestData();
   }, [testId, progressKey]);
 
-  /* 2. Daily Login Bonus */
+  /* (2) Daily Login Bonus */
   useEffect(() => {
     if (userId) {
       dispatch(dailyLoginBonus(userId));
     }
   }, [dispatch, userId]);
 
-  /* 3. Level-Up Overlay */
+  /* (3) Level-Up Overlay Check */
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -176,7 +177,7 @@ const TestView = ({ testId }) => {
     }
   }, [level, localLevel]);
 
-  /* 4. Load Saved Progress */
+  /* (4) Load Saved Progress from localStorage */
   useEffect(() => {
     if (!currentTest) return;
     const savedProgressStr = localStorage.getItem(progressKey);
@@ -208,7 +209,7 @@ const TestView = ({ testId }) => {
     }
   }, [currentTest, progressKey]);
 
-  /* 5. Sync local "selectedOptionIndex" & "isAnswered" */
+  /* (5) Sync local "selectedOptionIndex" & "isAnswered" when questionIndex changes */
   useEffect(() => {
     if (!currentTest || !progressLoaded) return;
     const question = currentTest.questions[currentQuestionIndex];
@@ -224,7 +225,7 @@ const TestView = ({ testId }) => {
     }
   }, [currentQuestionIndex, currentTest, progressLoaded, answers]);
 
-  /* 6. Save Test Progress Effect */
+  /* (6) Save Test Progress Effect */
   useEffect(() => {
     if (!progressLoaded) return;
     if (!currentTest) return;
@@ -276,59 +277,74 @@ const TestView = ({ testId }) => {
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
-  /* Handlers */
-  const handleOptionClick = (optionIndex) => {
+  /* ------------------------------------------------------------------
+     handleOptionClick -> calls /submit-answer to award XP/coins once
+  ------------------------------------------------------------------ */
+  const handleOptionClick = async (optionIndex) => {
     if (isAnswered) return;
     setSelectedOptionIndex(optionIndex);
 
-    const isCorrect = (optionIndex === questionData.correctAnswerIndex);
-    if (isCorrect && userId) {
-      dispatch(addXP({ userId, xp: currentTest.xpPerCorrect }))
-        .unwrap()
-        .then((data) => {
-          if (data.newAchievements && data.newAchievements.length > 0) {
-            data.newAchievements.forEach((achievementId) => {
-              const achievement = achievements.find(a => a.achievementId === achievementId);
-              if (achievement) {
-                const IconComponent = iconMapping[achievement.achievementId] || null;
-                const color = colorMapping[achievement.achievementId] || "#fff";
-                showAchievementToast({
-                  title: achievement.title,
-                  description: achievement.description,
-                  icon: IconComponent ? <IconComponent /> : null,
-                  color: color
-                });
-              }
-            });
-          }
+    try {
+      const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          testId,
+          questionId: questionData.id, // your unique question ID
+          correctAnswerIndex: questionData.correctAnswerIndex,
+          selectedIndex: optionIndex,
+          xpPerCorrect: currentTest.xpPerCorrect || 10,
+          coinsPerCorrect: 5 
         })
-        .catch((err) => console.error(err));
-      dispatch(addCoins({ userId, coins: 5 }));
-    }
+      });
+      const result = await response.json();
+      /*
+         result = {
+           isCorrect: bool,
+           alreadyCorrect: bool,
+           awardedXP: number,
+           awardedCoins: number
+         }
+       */
 
-    // Record answer
-    const updatedAnswers = [...answers];
-    const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
-    const newAnswerObj = {
-      questionId: questionData.id,
-      userAnswerIndex: optionIndex,
-      correctAnswerIndex: questionData.correctAnswerIndex,
-    };
+      // If we want optional feedback:
+      if (result.isCorrect && !result.alreadyCorrect && result.awardedXP > 0) {
+        // Optionally show a toast: "You earned 10 XP!"
+        // Or do any other UI feedback
+      }
 
-    if (existingIndex >= 0) {
-      updatedAnswers[existingIndex] = newAnswerObj;
-    } else {
-      updatedAnswers.push(newAnswerObj);
-    }
-    setAnswers(updatedAnswers);
+      // Update local state
+      const isCorrect = result.isCorrect;
+      if (isCorrect) {
+        // Increase local score if correct
+        setScore(prev => prev + 1);
+      }
 
-    // Increment local 'score' if correct
-    if (isCorrect) {
-      setScore(prev => prev + 1);
+      // Record the user's answer in local 'answers'
+      const updatedAnswers = [...answers];
+      const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
+
+      const newAnswerObj = {
+        questionId: questionData.id,
+        userAnswerIndex: optionIndex,
+        correctAnswerIndex: questionData.correctAnswerIndex,
+      };
+      if (existingIndex >= 0) {
+        updatedAnswers[existingIndex] = newAnswerObj;
+      } else {
+        updatedAnswers.push(newAnswerObj);
+      }
+      setAnswers(updatedAnswers);
+
+      setIsAnswered(true);
+
+    } catch (err) {
+      console.error("Failed to submit answer to backend", err);
+      // If the backend fails, you could fallback to local awarding or do nothing
     }
-    setIsAnswered(true);
   };
 
+  /* Move to next question or finish if last */
   const handleNextQuestion = () => {
     if (currentQuestionIndex === totalQuestions - 1) {
       finishTestProcess();
@@ -368,8 +384,12 @@ const TestView = ({ testId }) => {
     reShuffleQuestions();
   };
 
+  /* ------------------------------------------------------------------
+     finishTestProcess -> recalc final score, mark test finished,
+     and call /test-progress for achievements
+  ------------------------------------------------------------------ */
   const finishTestProcess = () => {
-    // Recalc final score from answers, to ensure it's correct in localStorage
+    // Recalc final score from answers array
     const finalScore = answers.reduce((acc, ans) => (
       ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc
     ), 0);
@@ -386,7 +406,36 @@ const TestView = ({ testId }) => {
       shuffledQuestions: currentTest.questions
     };
 
+    // Save final progress to localStorage
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
+
+    // Mark the test as finished in the backend => triggers achievements
+    fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(finishedProgress)
+    })
+      .then(r => r.json())
+      .then(data => {
+        // If the backend returns newlyUnlocked achievements, show them
+        if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
+          data.newlyUnlocked.forEach(achievementId => {
+            const achievement = achievements.find(a => a.achievementId === achievementId);
+            if (achievement) {
+              const IconComponent = iconMapping[achievement.achievementId] || null;
+              const color = colorMapping[achievement.achievementId] || "#fff";
+              showAchievementToast({
+                title: achievement.title,
+                description: achievement.description,
+                icon: IconComponent ? <IconComponent /> : null,
+                color: color
+              });
+            }
+          });
+        }
+      })
+      .catch(err => console.error("Failed to mark test as finished", err));
+
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(true);
@@ -718,7 +767,6 @@ const TestView = ({ testId }) => {
     "subject_finisher": "#7fff00"
   };
 
-  /* Render */
   const avatarUrl =
     level >= 5
       ? "https://via.placeholder.com/60/FF0000/FFFFFF?text=LVL5+Avatar"
@@ -727,6 +775,7 @@ const TestView = ({ testId }) => {
   return (
     <div className="aplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
@@ -841,4 +890,3 @@ const TestView = ({ testId }) => {
 };
 
 export default APlusTestPage;
-
