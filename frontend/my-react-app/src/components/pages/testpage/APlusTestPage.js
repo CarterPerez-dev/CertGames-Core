@@ -109,7 +109,7 @@ const TestView = ({ testId }) => {
   // Has local progress loaded
   const [progressLoaded, setProgressLoaded] = useState(false);
   const progressKey = `testProgress_${userId}_${testId}`;
-
+   
   /* (1) Fetch Test Data */
   useEffect(() => {
     const fetchTestData = async () => {
@@ -127,6 +127,12 @@ const TestView = ({ testId }) => {
         }
         const data = await response.json();
 
+        data.questions.forEach((q, index) => {
+          if (!q.id) {
+            // fallback e.g. "test1_q0"
+            q.id = `test${testId}_q${index}`;
+          }
+        });
         // Attempt to load saved progress
         const savedProgressStr = localStorage.getItem(progressKey);
         if (savedProgressStr) {
