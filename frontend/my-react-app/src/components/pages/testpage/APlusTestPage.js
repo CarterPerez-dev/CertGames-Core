@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom"; 
 import { useSelector, useDispatch } from "react-redux";
-import { dailyLoginBonus } from "../store/userSlice"; 
+import { dailyLoginBonus, setXPAndCoins } from "../store/userSlice"; 
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "../store/AchievementToast";
 import APlusTestList from "./APlusTestList"; // <-- Import the Test List file
