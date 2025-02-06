@@ -1,9 +1,10 @@
 # test_routes.py
+
 from flask import Blueprint, request, jsonify
 from models.database import mainusers_collection
 from models.test import (
-    get_user_by_username,        # For login by username
-    get_user_by_identifier,      # For login by username or email
+    get_user_by_username,
+    get_user_by_identifier,
     create_user,
     get_user_by_id,
     update_user_coins,
@@ -13,7 +14,7 @@ from models.test import (
     purchase_item,
     get_achievements,
     get_test_by_id,
-    check_and_unlock_achievements  # New achievement checking function
+    check_and_unlock_achievements
 )
 
 api_bp = Blueprint('test', __name__)
@@ -47,18 +48,13 @@ def login():
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
 
-    # Use field 'usernameOrEmail' for login
     identifier = data.get("usernameOrEmail")
     password = data.get("password")
-
     if not identifier or not password:
         return jsonify({"error": "Username (or Email) and password are required"}), 400
 
     user = get_user_by_identifier(identifier)
-    if not user:
-        return jsonify({"error": "Invalid username or password"}), 401
-
-    if user.get("password") != password:
+    if not user or user.get("password") != password:
         return jsonify({"error": "Invalid username or password"}), 401
 
     return jsonify({
@@ -84,7 +80,6 @@ def add_xp_route(user_id):
     updated = update_user_xp(user_id, xp_to_add)
     if not updated:
         return jsonify({"error": "User not found"}), 404
-    # Check for achievements after updating XP/level.
     new_achievements = check_and_unlock_achievements(user_id)
     updated["newAchievements"] = new_achievements
     return jsonify(updated), 200
@@ -142,8 +137,10 @@ def fetch_test_by_id_route(test_id):
     return jsonify(test_doc), 200
 
 
+# -----------------------------
+# PROGRESS ROUTES
+# -----------------------------
 
-# test_routes.py
 @api_bp.route('/user/<user_id>/test-progress/<test_id>', methods=['POST'])
 def update_test_progress(user_id, test_id):
     """
@@ -154,9 +151,13 @@ def update_test_progress(user_id, test_id):
         "answers": <list>,
         "score": <int>,
         "finished": <bool>,
-        "totalQuestions": <int>
+        "totalQuestions": <int>,
+        ...
       }
-    Appends this attempt into the user's testsProgress for the given test.
+
+    Appends or updates the user's testsProgress for the given test.
+    But we only keep the last 5 attempts to avoid document bloat.
+    If finished==true, we also trigger achievement checks.
     """
     data = request.json
     if not data:
@@ -168,35 +169,53 @@ def update_test_progress(user_id, test_id):
 
     tests_progress = user.get("testsProgress", {})
 
-    # Use a list to store multiple attempts.
-    if test_id in tests_progress and isinstance(tests_progress[test_id], list):
-        tests_progress[test_id].append(data)
-    else:
-        tests_progress[test_id] = [data]
+    # Ensure we have a list for this test
+    attempts = tests_progress.get(test_id, [])
+    if not isinstance(attempts, list):
+        attempts = [attempts]
 
+    # Append the new attempt
+    attempts.append(data)
+    # Keep only the last 5 attempts to prevent doc from growing indefinitely
+    if len(attempts) > 5:
+        attempts = attempts[-5:]
+
+    tests_progress[test_id] = attempts
+
+    # Update in DB
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"testsProgress": tests_progress}}
     )
+
+    # If the test is finished, run achievement checks
+    if data.get("finished"):
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        return jsonify({
+            "message": "Test progress updated, achievements checked",
+            "newlyUnlocked": newly_unlocked
+        }), 200
+
     return jsonify({"message": "Test progress updated"}), 200
+
 
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
     """
-    Called from the frontend whenever the user answers a question.
     The frontend sends:
       {
         "testId": <str or int>,
         "questionId": <str>,
         "correctAnswerIndex": <int>,
         "selectedIndex": <int>,
-        "xpPerCorrect": <int>    # e.g. 10
-        "coinsPerCorrect": <int> # e.g. 5
+        "xpPerCorrect": <int>,
+        "coinsPerCorrect": <int>
       }
     We'll check if 'questionId' is already recorded as correct for this test
-    in user's testsProgress. If not, award XP/coins, then store it.
+    in user's perTestCorrect. If not, we award XP/coins, then record it.
     """
     data = request.json or {}
+    print("DEBUG submit_answer data:", data)  # <-- Debug log
     test_id = str(data.get("testId"))
     question_id = data.get("questionId")
     selected_index = data.get("selectedIndex")
@@ -208,41 +227,40 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Make sure testsProgress structure exists
-    tests_progress = user.get("testsProgress", {})
-    if test_id not in tests_progress:
-        tests_progress[test_id] = []
-    elif not isinstance(tests_progress[test_id], list):
-        tests_progress[test_id] = [tests_progress[test_id]]
-
-    # We'll look for a 'globalCorrectQuestions' set for the user for this test
-    # to track which questionIds they've previously gotten correct. We'll store
-    # it in the newest attempt or create a small helper function to unify them.
-    # For simplicity, let's unify it in "perTestCorrect" at the user root:
+    # Some users might not have "perTestCorrect" or it might be the wrong type
     per_test_correct = user.get("perTestCorrect", {})
-    if test_id not in per_test_correct:
-        per_test_correct[test_id] = set()
+    if not isinstance(per_test_correct, dict):
+        per_test_correct = {}
 
-    # Check if user is correct
+    # If we haven't tracked this test yet, start with an empty list
+    if test_id not in per_test_correct:
+        per_test_correct[test_id] = []
+
+    # Convert existing list to a Python set so we can do .add() / membership test
+    existing_correct_set = set(per_test_correct[test_id])
+
     is_correct = (selected_index == correct_index)
-    # Check if they've already gotten it correct in a prior attempt
-    already_correct = question_id in per_test_correct[test_id]
+    already_correct = question_id in existing_correct_set
 
     awarded_xp = 0
     awarded_coins = 0
 
     if is_correct and not already_correct:
-        # Award XP and coins
+        # Award XP and coins once
         update_user_xp(user_id, xp_per_correct)
         update_user_coins(user_id, coins_per_correct)
-        # Mark question as correct
-        per_test_correct[test_id].add(question_id)
+        existing_correct_set.add(question_id)
         awarded_xp = xp_per_correct
         awarded_coins = coins_per_correct
 
-    # Update the user doc
-    user_updates = {"perTestCorrect": {k: list(v) for k, v in per_test_correct.items()}}
-    mainusers_collection.update_one({"_id": user["_id"]}, {"$set": user_updates})
+    # Store back as a list
+    per_test_correct[test_id] = list(existing_correct_set)
+
+    # Update in DB
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"perTestCorrect": per_test_correct}}
+    )
 
     return jsonify({
         "isCorrect": is_correct,
