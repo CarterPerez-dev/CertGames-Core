@@ -180,3 +180,73 @@ def update_test_progress(user_id, test_id):
     )
     return jsonify({"message": "Test progress updated"}), 200
 
+@api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
+def submit_answer(user_id):
+    """
+    Called from the frontend whenever the user answers a question.
+    The frontend sends:
+      {
+        "testId": <str or int>,
+        "questionId": <str>,
+        "correctAnswerIndex": <int>,
+        "selectedIndex": <int>,
+        "xpPerCorrect": <int>    # e.g. 10
+        "coinsPerCorrect": <int> # e.g. 5
+      }
+    We'll check if 'questionId' is already recorded as correct for this test
+    in user's testsProgress. If not, award XP/coins, then store it.
+    """
+    data = request.json or {}
+    test_id = str(data.get("testId"))
+    question_id = data.get("questionId")
+    selected_index = data.get("selectedIndex")
+    correct_index = data.get("correctAnswerIndex")
+    xp_per_correct = data.get("xpPerCorrect", 10)
+    coins_per_correct = data.get("coinsPerCorrect", 5)
+
+    user = get_user_by_id(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # Make sure testsProgress structure exists
+    tests_progress = user.get("testsProgress", {})
+    if test_id not in tests_progress:
+        tests_progress[test_id] = []
+    elif not isinstance(tests_progress[test_id], list):
+        tests_progress[test_id] = [tests_progress[test_id]]
+
+    # We'll look for a 'globalCorrectQuestions' set for the user for this test
+    # to track which questionIds they've previously gotten correct. We'll store
+    # it in the newest attempt or create a small helper function to unify them.
+    # For simplicity, let's unify it in "perTestCorrect" at the user root:
+    per_test_correct = user.get("perTestCorrect", {})
+    if test_id not in per_test_correct:
+        per_test_correct[test_id] = set()
+
+    # Check if user is correct
+    is_correct = (selected_index == correct_index)
+    # Check if they've already gotten it correct in a prior attempt
+    already_correct = question_id in per_test_correct[test_id]
+
+    awarded_xp = 0
+    awarded_coins = 0
+
+    if is_correct and not already_correct:
+        # Award XP and coins
+        update_user_xp(user_id, xp_per_correct)
+        update_user_coins(user_id, coins_per_correct)
+        # Mark question as correct
+        per_test_correct[test_id].add(question_id)
+        awarded_xp = xp_per_correct
+        awarded_coins = coins_per_correct
+
+    # Update the user doc
+    user_updates = {"perTestCorrect": {k: list(v) for k, v in per_test_correct.items()}}
+    mainusers_collection.update_one({"_id": user["_id"]}, {"$set": user_updates})
+
+    return jsonify({
+        "isCorrect": is_correct,
+        "alreadyCorrect": already_correct,
+        "awardedXP": awarded_xp,
+        "awardedCoins": awarded_coins
+    }), 200
