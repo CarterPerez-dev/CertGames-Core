@@ -1,4 +1,5 @@
 # models.py
+
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -22,7 +23,8 @@ def create_user(user_data):
     })
     if existing_user:
         raise ValueError("Username or email is already taken")
-    # Set defaults:
+
+    # Set defaults for new user:
     user_data.setdefault("coins", 0)
     user_data.setdefault("xp", 0)
     user_data.setdefault("level", 1)
@@ -32,6 +34,9 @@ def create_user(user_data):
     user_data.setdefault("lastDailyClaim", None)
     user_data.setdefault("purchasedItems", [])
     user_data.setdefault("testsProgress", {})
+    # NEW: For the new /submit-answer logic
+    user_data.setdefault("perTestCorrect", {})  # dict { testId: [questionIds] }
+
     result = mainusers_collection.insert_one(user_data)
     return result.inserted_id
 
@@ -53,10 +58,13 @@ def update_user_xp(user_id, xp_to_add):
     user = get_user_by_id(user_id)
     if not user:
         return None
+
     new_xp = user.get("xp", 0) + xp_to_add
     new_level = user.get("level", 1)
+    # Simple leveling logic:
     while new_xp >= 100 * new_level:
         new_level += 1
+
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"xp": new_xp, "level": new_level}}
@@ -67,6 +75,7 @@ def apply_daily_bonus(user_id):
     user = get_user_by_id(user_id)
     if not user:
         return None
+
     now = datetime.utcnow()
     last_claimed = user.get("lastDailyClaim")
     if not last_claimed or (now - last_claimed) > timedelta(hours=24):
@@ -96,6 +105,7 @@ def purchase_item(user_id, item_id):
     cost = item.get("cost", 0)
     if user_coins < cost:
         return {"success": False, "message": "Not enough coins"}
+
     mainusers_collection.update_one({"_id": user["_id"]}, {"$inc": {"coins": -cost}})
     mainusers_collection.update_one(
         {"_id": user["_id"]},
@@ -127,11 +137,11 @@ def check_and_unlock_achievements(user_id):
     if not user:
         return []
     
-    tests_progress = user.get("testsProgress", {})  # test_id -> progress data or list of attempts
+    tests_progress = user.get("testsProgress", {})
     finished_tests = []
-    # Flatten the progress: if there are multiple attempts, consider only finished ones.
+
+    # Flatten the progress: if multiple attempts, consider only finished ones
     for tid, progress_entry in tests_progress.items():
-        # Support storing a single progress object or a list of attempts.
         attempts = progress_entry if isinstance(progress_entry, list) else [progress_entry]
         for attempt in attempts:
             if attempt.get("finished"):
@@ -146,11 +156,10 @@ def check_and_unlock_achievements(user_id):
                 })
     
     total_finished = len(finished_tests)
-    # Count perfect tests (100% score)
+    # Perfect tests
     perfect_tests = sum(1 for ft in finished_tests if ft["percentage"] == 100)
     
-    # For Memory Master, compute the maximum consecutive perfect test streak.
-    # (Assuming test_id can be converted to integer and tests are ordered by test number.)
+    # Consecutive perfect tests (Memory Master)
     perfect_tests_list = [ft for ft in finished_tests if ft["percentage"] == 100]
     try:
         perfect_tests_list.sort(key=lambda x: int(x["test_id"]))
@@ -164,7 +173,7 @@ def check_and_unlock_achievements(user_id):
             current_id = int(ft["test_id"])
         except Exception:
             current_id = None
-        if previous_test_id is None or current_id is None or previous_test_id is None:
+        if previous_test_id is None or current_id is None:
             current_streak = 1
         else:
             if current_id == previous_test_id + 1:
@@ -174,56 +183,50 @@ def check_and_unlock_achievements(user_id):
         max_consecutive = max(max_consecutive, current_streak)
         previous_test_id = current_id
 
-    # For category-specific achievements, group finished tests by category.
+    # Category grouping
+    from collections import defaultdict
     category_groups = defaultdict(list)
     for ft in finished_tests:
-        category = ft.get("category", "aplus")
-        category_groups[category].append(ft)
+        cat = ft.get("category", "aplus")
+        category_groups[cat].append(ft)
     
-    # Assume TOTAL_TESTS is the number of tests in the platform.
+    # Assume total # of tests = 80 for some achievements
     TOTAL_TESTS = 80
 
-    # Retrieve the current unlocked achievements.
     unlocked = user.get("achievements", [])
     newly_unlocked = []
-    
     all_achievements = get_achievements()
     
     for ach in all_achievements:
         aid = ach["achievementId"]
         criteria = ach.get("criteria", {})
-        
-        # 1. Test Count (e.g., Bronze Grinder, Silver Scholar, etc.)
+
+        # 1. Test Count
         if "testCount" in criteria:
             if total_finished >= criteria["testCount"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 2. Coins (e.g., Coin Collector, etc.)
+        # 2. Coins
         if "coins" in criteria:
             if user.get("coins", 0) >= criteria["coins"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
         # 3. Level
         if "level" in criteria:
             if user.get("level", 1) >= criteria["level"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 4. Accuracy King: any finished test with percentage >= minScore
+        # 4. Accuracy King
         if "minScore" in criteria:
             if any(ft["percentage"] >= criteria["minScore"] for ft in finished_tests) and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 5. Exam Conqueror: all finished tests must have percentage >= minScoreGlobal
+        # 5. Exam Conqueror
         if "minScoreGlobal" in criteria:
             if finished_tests and all(ft["percentage"] >= criteria["minScoreGlobal"] for ft in finished_tests) and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 6. Subject Specialist: for at least one category, every finished test in that category meets minScoreInCategory
+        # 6. Subject Specialist
         if "minScoreInCategory" in criteria:
             for cat, tests in category_groups.items():
                 if tests and all(t["percentage"] >= criteria["minScoreInCategory"] for t in tests):
@@ -231,45 +234,39 @@ def check_and_unlock_achievements(user_id):
                         unlocked.append(aid)
                         newly_unlocked.append(aid)
                     break
-        
-        # 7. Perfect Tests: a simple count (for Perfectionist, Double Trouble, Error404)
+        # 7. Perfect Tests (count)
         if "perfectTests" in criteria:
             if perfect_tests >= criteria["perfectTests"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 8. Memory Master: check consecutive perfect tests
+        # 8. Memory Master (consecutive perfects)
         if "consecutivePerfects" in criteria:
             if max_consecutive >= criteria["consecutivePerfects"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 9. Test Finisher: all tests completed (assuming finished tests count equals TOTAL_TESTS)
+        # 9. Test Finisher
         if "allTestsCompleted" in criteria and criteria["allTestsCompleted"] is True:
             if total_finished >= TOTAL_TESTS and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        
-        # 10. Subject Finisher: for at least one category, the number of finished tests meets testsCompletedInCategory
+        # 10. Subject Finisher
         if "testsCompletedInCategory" in criteria:
-            for cat, count in {cat: len(tests) for cat, tests in category_groups.items()}.items():
-                if count >= criteria["testsCompletedInCategory"] and aid not in unlocked:
+            for cat, ccount in {cat: len(tests) for cat, tests in category_groups.items()}.items():
+                if ccount >= criteria["testsCompletedInCategory"] and aid not in unlocked:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
                     break
-        
-        # 11. Redemption Arc: require a test with a low score and then one with a high score.
+        # 11. Redemption Arc
         if "minScoreBefore" in criteria and "minScoreAfter" in criteria:
-            if (any(ft["percentage"] <= criteria["minScoreBefore"] for ft in finished_tests) and
-                any(ft["percentage"] >= criteria["minScoreAfter"] for ft in finished_tests) and
-                aid not in unlocked):
+            if (any(ft["percentage"] <= criteria["minScoreBefore"] for ft in finished_tests)
+                and any(ft["percentage"] >= criteria["minScoreAfter"] for ft in finished_tests)
+                and aid not in unlocked):
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-    
+
     if newly_unlocked:
         mainusers_collection.update_one(
             {"_id": user["_id"]},
             {"$set": {"achievements": unlocked}}
         )
     return newly_unlocked
-
