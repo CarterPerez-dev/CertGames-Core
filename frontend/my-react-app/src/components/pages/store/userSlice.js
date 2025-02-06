@@ -153,6 +153,12 @@ const userSlice = createSlice({
       state.status = 'idle';
       localStorage.removeItem('userId');
     },
+
+    setXPAndCoins(state, action) {
+      const { xp, coins } = action.payload;
+      state.xp = xp;
+      state.coins = coins;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -234,5 +240,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setCurrentUserId, logout } = userSlice.actions;
+export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
 export default userSlice.reducer;
