@@ -4,15 +4,19 @@ from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from collections import defaultdict
 from models.database import mainusers_collection, shop_collection, achievements_collection, tests_collection
+import math
+
 
 def get_user_by_username(username):
     return mainusers_collection.find_one({"username": username})
+
 
 def get_user_by_identifier(identifier):
     if "@" in identifier:
         return mainusers_collection.find_one({"email": identifier})
     else:
         return get_user_by_username(identifier)
+
 
 def create_user(user_data):
     existing_user = mainusers_collection.find_one({
@@ -34,11 +38,12 @@ def create_user(user_data):
     user_data.setdefault("lastDailyClaim", None)
     user_data.setdefault("purchasedItems", [])
     user_data.setdefault("testsProgress", {})
-    # NEW: For the new /submit-answer logic
+    # For /submit-answer logic
     user_data.setdefault("perTestCorrect", {})  # dict { testId: [questionIds] }
 
     result = mainusers_collection.insert_one(user_data)
     return result.inserted_id
+
 
 def get_user_by_id(user_id):
     try:
@@ -47,6 +52,7 @@ def get_user_by_id(user_id):
         return None
     return mainusers_collection.find_one({"_id": oid})
 
+
 def update_user_coins(user_id, amount):
     try:
         oid = ObjectId(user_id)
@@ -54,22 +60,156 @@ def update_user_coins(user_id, amount):
         return None
     mainusers_collection.update_one({"_id": oid}, {"$inc": {"coins": amount}})
 
+
+##############################################
+# [Piecewise XP Logic] 
+#  Build a "delta" array for levels 1..99 
+#  so total XP at L=100 = 75,000. Then 
+#  define a mild infinite ratio for L>100.
+##############################################
+
+def build_custom_delta_array():
+    """
+    Returns a list 'delta' of length at least 100,
+    where delta[L] is how much XP is needed to go from level L -> L+1
+    for L in [1..99].
+
+    We'll define 4 segments (A–D) for L=1..9, 10..49, 50..90, 91..99,
+    fill them with approximate values/ratios, then do a final scaling
+    so that the total sum at L=100 = 75,000 exactly.
+    """
+    delta = [0]*200  # enough for indexing up to 99
+
+    # Segment A: L=1..9
+    # linear ramp 200 -> 500
+    startA = 200.0
+    endA = 500.0
+    stepsA = 9  # (1->2 ... 9->10)
+    for i in range(1, 10):
+        frac = (i-1)/(stepsA-1) if stepsA>1 else 0
+        delta[i] = startA + frac*(endA - startA)
+
+    # Segment B: L=10..49 (40 increments)
+    # ratio=1.06, start=600
+    delta[10] = 600.0
+    ratioB = 1.06
+    for L in range(11, 50):
+        delta[L] = delta[L-1] * ratioB
+
+    # Segment C: L=50..90 (41 increments)
+    # ratio=1.08, start=1200
+    delta[50] = 1200.0
+    ratioC = 1.08
+    for L in range(51, 91):
+        delta[L] = delta[L-1] * ratioC
+
+    # Segment D: L=91..99 (9 increments)
+    # ratio=1.05, start=8000
+    delta[91] = 8000.0
+    ratioD = 1.05
+    for L in range(92, 100):
+        delta[L] = delta[L-1] * ratioD
+
+    # Sum from L=1->2.. L=99->100
+    sumX = 0.0
+    for L in range(1, 100):
+        sumX += delta[L]
+
+    # Scale to exactly 75,000
+    factor = 75_000 / sumX
+    for L in range(1, 100):
+        delta[L] *= factor
+
+    return delta
+
+
+# Create the array once
+delta_array = build_custom_delta_array()
+
+# For L>100 => ratio=1.02
+ratioE = 1.02
+
+
+def xp_for_level_under_100(level):
+    """Sum delta[1..(level-1)] for level <= 100."""
+    total = 0.0
+    for L in range(1, level):
+        total += delta_array[L]
+    return total
+
+
+def xp_for_level_over_100(level):
+    """
+    For L>100, total XP = 75k + sum of infinite segment
+    from L=100->101..(level-1)->level.
+    baseE = cost from L=99->100 in the array, then ratioE^k
+    """
+    xp_at_100 = 75000.0
+    baseE = delta_array[99]
+
+    steps = level - 100
+    if steps <= 0:
+        return xp_at_100
+
+    # geometric sum
+    sum_infinite = baseE * ((ratioE**steps) - 1)/(ratioE - 1)
+    return xp_at_100 + sum_infinite
+
+
+def xp_required_for_level(level):
+    """
+    Returns total XP required to *be* at 'level'.
+    level=1 => 0 XP
+    2..100 => sum of delta array
+    >100 => 75k + infinite segment
+    """
+    if level < 1:
+        return 0
+    if level == 1:
+        return 0
+    if level <= 100:
+        return int(round(xp_for_level_under_100(level)))
+    # else L>100
+    return int(round(xp_for_level_over_100(level)))
+
+
 def update_user_xp(user_id, xp_to_add):
+    """
+    Adds xp_to_add to the user's XP, then checks if they level up.
+    We have infinite leveling with ratio=1.02 beyond L=100.
+    """
     user = get_user_by_id(user_id)
     if not user:
         return None
 
-    new_xp = user.get("xp", 0) + xp_to_add
-    new_level = user.get("level", 1)
-    # Simple leveling logic:
-    while new_xp >= 100 * new_level:
-        new_level += 1
+    old_xp = user.get("xp", 0)
+    old_level = user.get("level", 1)
 
+    new_xp = old_xp + xp_to_add
+    new_level = old_level
+
+    # keep leveling while new_xp >= xp_required_for_level(new_level+1)
+    while True:
+        next_level_required = xp_required_for_level(new_level + 1)
+        if new_xp >= next_level_required:
+            new_level += 1
+        else:
+            break
+
+    # no max level clamp (optional)
     mainusers_collection.update_one(
         {"_id": user["_id"]},
-        {"$set": {"xp": new_xp, "level": new_level}}
+        {"$set": {
+            "xp": new_xp,
+            "level": new_level
+        }}
     )
     return {"xp": new_xp, "level": new_level}
+
+
+##############################################
+# apply_daily_bonus, etc.
+##############################################
 
 def apply_daily_bonus(user_id):
     user = get_user_by_id(user_id)
@@ -87,8 +227,10 @@ def apply_daily_bonus(user_id):
     else:
         return {"success": False, "message": "Already claimed daily bonus"}
 
+
 def get_shop_items():
     return list(shop_collection.find({}))
+
 
 def purchase_item(user_id, item_id):
     user = get_user_by_id(user_id)
@@ -113,8 +255,10 @@ def purchase_item(user_id, item_id):
     )
     return {"success": True, "message": "Purchase successful"}
 
+
 def get_achievements():
     return list(achievements_collection.find({}))
+
 
 def get_test_by_id(test_id):
     try:
@@ -123,24 +267,25 @@ def get_test_by_id(test_id):
         return None
     return tests_collection.find_one({"testId": test_id_int})
 
+
 def check_and_unlock_achievements(user_id):
     """
     Checks the user's progress and unlocks achievements accordingly.
-    Expects that each test progress saved for a user includes:
+    Expects each test attempt to have:
       - finished: bool
       - totalQuestions: int
       - score: int
-      - category: string
-      - finishedAt: string (ISO timestamp)
+      - category: str
+      - finishedAt: ISO timestamp
     """
     user = get_user_by_id(user_id)
     if not user:
         return []
-    
+
     tests_progress = user.get("testsProgress", {})
     finished_tests = []
 
-    # Flatten the progress: if multiple attempts, consider only finished ones
+    # Flatten progress: if multiple attempts, consider only finished
     for tid, progress_entry in tests_progress.items():
         attempts = progress_entry if isinstance(progress_entry, list) else [progress_entry]
         for attempt in attempts:
@@ -154,12 +299,11 @@ def check_and_unlock_achievements(user_id):
                     "category": attempt.get("category", "aplus"),
                     "finishedAt": attempt.get("finishedAt")
                 })
-    
+
     total_finished = len(finished_tests)
-    # Perfect tests
     perfect_tests = sum(1 for ft in finished_tests if ft["percentage"] == 100)
-    
-    # Consecutive perfect tests (Memory Master)
+
+    # Consecutive perfect tests
     perfect_tests_list = [ft for ft in finished_tests if ft["percentage"] == 100]
     try:
         perfect_tests_list.sort(key=lambda x: int(x["test_id"]))
@@ -183,20 +327,19 @@ def check_and_unlock_achievements(user_id):
         max_consecutive = max(max_consecutive, current_streak)
         previous_test_id = current_id
 
-    # Category grouping
     from collections import defaultdict
     category_groups = defaultdict(list)
     for ft in finished_tests:
         cat = ft.get("category", "aplus")
         category_groups[cat].append(ft)
-    
-    # Assume total # of tests = 80 for some achievements
+
+    # Assume 80 total tests exist
     TOTAL_TESTS = 80
 
     unlocked = user.get("achievements", [])
     newly_unlocked = []
     all_achievements = get_achievements()
-    
+
     for ach in all_achievements:
         aid = ach["achievementId"]
         criteria = ach.get("criteria", {})
@@ -228,18 +371,18 @@ def check_and_unlock_achievements(user_id):
                 newly_unlocked.append(aid)
         # 6. Subject Specialist
         if "minScoreInCategory" in criteria:
-            for cat, tests in category_groups.items():
-                if tests and all(t["percentage"] >= criteria["minScoreInCategory"] for t in tests):
+            for cat, tests_ in category_groups.items():
+                if tests_ and all(t["percentage"] >= criteria["minScoreInCategory"] for t in tests_):
                     if aid not in unlocked:
                         unlocked.append(aid)
                         newly_unlocked.append(aid)
                     break
-        # 7. Perfect Tests (count)
+        # 7. Perfect Tests
         if "perfectTests" in criteria:
             if perfect_tests >= criteria["perfectTests"] and aid not in unlocked:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
-        # 8. Memory Master (consecutive perfects)
+        # 8. Memory Master (consecutivePerfects)
         if "consecutivePerfects" in criteria:
             if max_consecutive >= criteria["consecutivePerfects"] and aid not in unlocked:
                 unlocked.append(aid)
@@ -251,7 +394,7 @@ def check_and_unlock_achievements(user_id):
                 newly_unlocked.append(aid)
         # 10. Subject Finisher
         if "testsCompletedInCategory" in criteria:
-            for cat, ccount in {cat: len(tests) for cat, tests in category_groups.items()}.items():
+            for cat, ccount in {cat: len(tests_) for cat, tests_ in category_groups.items()}.items():
                 if ccount >= criteria["testsCompletedInCategory"] and aid not in unlocked:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
@@ -269,4 +412,5 @@ def check_and_unlock_achievements(user_id):
             {"_id": user["_id"]},
             {"$set": {"achievements": unlocked}}
         )
+
     return newly_unlocked
