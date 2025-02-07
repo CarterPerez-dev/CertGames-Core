@@ -1,8 +1,18 @@
 # test_routes.py
+
 from flask import Blueprint, request, jsonify
-from models.database import mainusers_collection
+from bson.objectid import ObjectId
+from datetime import datetime
+
+from models.database import (
+    mainusers_collection,
+    shop_collection,
+    achievements_collection,
+    tests_collection,
+    testAttempts_collection,
+    correctAnswers_collection
+)
 from models.test import (
-    get_user_by_username,
     get_user_by_identifier,
     create_user,
     get_user_by_id,
@@ -15,20 +25,16 @@ from models.test import (
     get_test_by_id,
     check_and_unlock_achievements
 )
-from bson.objectid import ObjectId
 
 api_bp = Blueprint('test', __name__)
 
-# Helper function to serialize a user document
 def serialize_user(user):
+    """Helper function to convert _id and other fields to strings if needed."""
     if not user:
-        return user
-    # Convert the primary _id to string
+        return None
     user['_id'] = str(user['_id'])
-    # Convert currentAvatar if exists and not null
     if 'currentAvatar' in user and user['currentAvatar']:
         user['currentAvatar'] = str(user['currentAvatar'])
-    # Optionally, convert purchasedItems if present
     if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
         user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
     return user
@@ -39,10 +45,12 @@ def serialize_user(user):
 
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
+    # NOTE: Exclude large fields with projection if needed:
+    # user = mainusers_collection.find_one({"_id": ObjectId(user_id)}, {"testsProgress": 0, "perTestCorrect": 0})
     user = get_user_by_id(user_id)
-    user = serialize_user(user)
     if not user:
         return jsonify({"error": "User not found"}), 404
+    user = serialize_user(user)
     return jsonify(user), 200
 
 @api_bp.route('/user', methods=['POST'])
@@ -71,9 +79,7 @@ def login():
     if not user or user.get("password") != password:
         return jsonify({"error": "Invalid username or password"}), 401
 
-    # Serialize the user document before returning
     user = serialize_user(user)
-
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -81,10 +87,11 @@ def login():
         "xp": user.get("xp", 0),
         "level": user.get("level", 1),
         "achievements": user.get("achievements", []),
-        # Optional shop fields:
         "xpBoost": user.get("xpBoost", 1.0),
         "currentAvatar": user.get("currentAvatar"),
-        "nameColor": user.get("nameColor")
+        "nameColor": user.get("nameColor"),
+        # if you want, fetch purchasedItems with a separate projection or store it here
+        "purchasedItems": user.get("purchasedItems", [])
     }), 200
 
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
@@ -118,23 +125,13 @@ def add_coins_route(user_id):
 
 @api_bp.route('/shop', methods=['GET'])
 def fetch_shop():
-    """
-    Returns all shop items.
-    Each shop item document should include:
-      - _id, type, title, description, cost, imageUrl, effectValue, unlockLevel (optional)
-    """
     items = get_shop_items()
-    # Convert ObjectIds for shop items
     for item in items:
         item["_id"] = str(item["_id"])
     return jsonify(items), 200
 
 @api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
 def purchase_item_route(item_id):
-    """
-    Expects JSON: { "userId": "<>" }
-    Deducts coins, adds item to purchasedItems, and updates user fields based on item type.
-    """
     data = request.json or {}
     user_id = data.get("userId")
     if not user_id:
@@ -148,11 +145,6 @@ def purchase_item_route(item_id):
 
 @api_bp.route('/shop/equip', methods=['POST'])
 def equip_item_route():
-    """
-    Allows the user to equip an avatar (or other equippable item).
-    Expects JSON: { "userId": "...", "itemId": "..." }
-    This endpoint now allows equipping an avatar if the user's level is high enough.
-    """
     data = request.json or {}
     user_id = data.get("userId")
     item_id = data.get("itemId")
@@ -169,34 +161,23 @@ def equip_item_route():
     except Exception:
         return jsonify({"success": False, "message": "Invalid item ID"}), 400
 
-    # Allow equipping if the item is purchased OR if the user's level is high enough to unlock it
+    # Make sure user purchased it or meets unlock level
+    from models.test import shop_collection
+    item_doc = shop_collection.find_one({"_id": oid})
+    if not item_doc:
+        return jsonify({"success": False, "message": "Item not found in shop"}), 404
+
     if oid not in user.get("purchasedItems", []):
-        # Fetch item document from shop
-        from models.test import shop_collection
-        item_doc = shop_collection.find_one({"_id": oid})
-        if not item_doc:
-            return jsonify({"success": False, "message": "Item not found in shop"}), 404
-        # Check if user's level meets the unlock requirement
+        # Check if user is high enough level to equip
         if user.get("level", 1) < item_doc.get("unlockLevel", 1):
             return jsonify({"success": False, "message": "Item not unlocked"}), 400
 
-    # Equip the avatar by updating currentAvatar field
+    # Equip
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"currentAvatar": oid}}
     )
     return jsonify({"success": True, "message": "Avatar equipped"}), 200
-
-# -----------------------------
-# ACHIEVEMENTS ROUTES
-# -----------------------------
-
-@api_bp.route('/achievements', methods=['GET'])
-def fetch_achievements():
-    ach_list = get_achievements()
-    for ach in ach_list:
-        ach["_id"] = str(ach["_id"])
-    return jsonify(ach_list), 200
 
 # -----------------------------
 # TESTS ROUTES
@@ -211,73 +192,112 @@ def fetch_test_by_id_route(test_id):
     return jsonify(test_doc), 200
 
 # -----------------------------
-# PROGRESS ROUTES
+# PROGRESS / ATTEMPTS ROUTES
 # -----------------------------
 
-@api_bp.route('/user/<user_id>/test-progress/<test_id>', methods=['POST'])
-def update_test_progress(user_id, test_id):
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
+def get_test_attempt(user_id, test_id):
     """
-    Expects JSON with test progress data:
+    Fetch the user's test attempt data from testAttempts_collection,
+    if any (or create a partial doc if you want).
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    attempt = testAttempts_collection.find_one({"userId": user_oid, "testId": test_id, "finished": False})
+    if not attempt:
+        # Optionally create a new doc if none found
+        return jsonify({"attempt": None}), 200
+    
+    # Convert _id to string
+    attempt["_id"] = str(attempt["_id"])
+    return jsonify({"attempt": attempt}), 200
+
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
+def update_test_attempt(user_id, test_id):
+    """
+    Store partial progress (answers, currentQuestionIndex, etc.) in testAttempts_collection.
+    Example request body:
       {
-        "currentQuestionIndex": <int>,
-        "answers": <list>,
-        "score": <int>,
-        "finished": <bool>,
-        "totalQuestions": <int>,
-        ...
+        "answers": [...],
+        "score": <number>,
+        "totalQuestions": 20,
+        "category": "aplus",
+        "finished": false
       }
-    Appends or updates the user's testsProgress for the given test.
-    Keeps only the last 5 attempts.
-    If finished==true, triggers achievement checks.
     """
-    data = request.json
-    if not data:
-        return jsonify({"error": "No progress data provided"}), 400
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
 
-    user = get_user_by_id(user_id)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
+    # Upsert attempt
+    filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
+    update_doc = {
+        "$set": {
+            "userId": user_oid,
+            "testId": test_id,
+            "category": data.get("category", "aplus"),
+            "answers": data.get("answers", []),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0),
+            "finished": data.get("finished", False)
+        }
+    }
+    testAttempts_collection.update_one(filter_, update_doc, upsert=True)
+    return jsonify({"message": "Progress updated"}), 200
 
-    tests_progress = user.get("testsProgress", {})
-    attempts = tests_progress.get(test_id, [])
-    if not isinstance(attempts, list):
-        attempts = [attempts]
+@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
+def finish_test_attempt(user_id, test_id):
+    """
+    Mark the attempt as finished, set finishedAt, trigger achievements, etc.
+    Example request body might contain final score, answers, etc.
+    """
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
 
-    attempts.append(data)
-    if len(attempts) > 5:
-        attempts = attempts[-5:]
-    tests_progress[test_id] = attempts
+    # Mark attempt as finished
+    filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
+    update_doc = {
+        "$set": {
+            "finished": True,
+            "finishedAt": datetime.utcnow(),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0),
+        }
+    }
+    testAttempts_collection.update_one(filter_, update_doc)
 
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$set": {"testsProgress": tests_progress}}
-    )
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    return jsonify({
+        "message": "Test attempt finished",
+        "newlyUnlocked": newly_unlocked
+    }), 200
 
-    if data.get("finished"):
-        newly_unlocked = check_and_unlock_achievements(user_id)
-        return jsonify({
-            "message": "Test progress updated, achievements checked",
-            "newlyUnlocked": newly_unlocked
-        }), 200
-
-    return jsonify({"message": "Test progress updated"}), 200
-
+# -----------------------------
+# FIRST-TIME-CORRECT ANSWERS
+# -----------------------------
 
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
     """
     Expects JSON:
       {
-        "testId": <str or int>,
+        "testId": <str>,
         "questionId": <str>,
         "correctAnswerIndex": <int>,
         "selectedIndex": <int>,
         "xpPerCorrect": <int>,
         "coinsPerCorrect": <int>
       }
-    Checks if the question was already answered correctly in previous attempts.
-    If not, awards XP and coins and records the question as correctly answered.
-    Returns new total XP and coins.
+    Awards XP/coins only the first time user gets that Q correct, 
+    stored in correctAnswers_collection.
     """
     data = request.json or {}
     test_id = str(data.get("testId"))
@@ -291,45 +311,46 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    per_test_correct = user.get("perTestCorrect", {})
-    if not isinstance(per_test_correct, dict):
-        per_test_correct = {}
-
-    if test_id not in per_test_correct:
-        per_test_correct[test_id] = []
-
-    existing_correct_set = set(per_test_correct[test_id])
+    # Determine if correct
     is_correct = (selected_index == correct_index)
-    already_correct = question_id in existing_correct_set
+
+    # Check if user previously answered this question correct
+    already_correct = correctAnswers_collection.find_one({
+        "userId": user["_id"],
+        "testId": test_id,
+        "questionId": question_id
+    })
 
     awarded_xp = 0
     awarded_coins = 0
 
     if is_correct and not already_correct:
+        # Insert record so we know user has gotten it correct once
+        correctAnswers_collection.insert_one({
+            "userId": user["_id"],
+            "testId": test_id,
+            "questionId": question_id
+        })
+        # Award XP and coins
         update_user_xp(user_id, xp_per_correct)
         update_user_coins(user_id, coins_per_correct)
-        existing_correct_set.add(question_id)
         awarded_xp = xp_per_correct
         awarded_coins = coins_per_correct
 
-    per_test_correct[test_id] = list(existing_correct_set)
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$set": {"perTestCorrect": per_test_correct}}
-    )
+    # Optionally also update the testAttempts doc with the user’s chosen answer
+    # to keep the answers array in sync. It's optional, but typically you'd do:
+    #   testAttempts_collection.update_one(...)
 
-    # Fetch updated user to return new totals
+    # Return updated user coins, xp
     updated_user = get_user_by_id(user_id)
-    updated_user = serialize_user(updated_user)
     new_xp = updated_user.get("xp", 0)
     new_coins = updated_user.get("coins", 0)
 
     return jsonify({
         "isCorrect": is_correct,
-        "alreadyCorrect": already_correct,
+        "alreadyCorrect": True if already_correct else False,
         "awardedXP": awarded_xp,
         "awardedCoins": awarded_coins,
         "newXP": new_xp,
         "newCoins": new_coins
     }), 200
-
