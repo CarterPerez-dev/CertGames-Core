@@ -1,133 +1,252 @@
-/* ShopPage.css */
+/* src/components/pages/store/ShopPage.css */
 
-/* Overall container for the shop page */
-.shop-page {
-  padding: 2rem;
-  background: #0e0e0e; /* Dark background */
-  color: #fff;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Import a futuristic/cyber style font if desired: */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Root variables for neon colors and easy theme changes */
+:root {
+  --main-bg-color: #0f0f0f;
+  --neon-pink: #ff00ff;
+  --neon-blue: #00eaff;
+  --neon-green: #00ff9f;
+  --neon-purple: #b200ff;
+  --text-color: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border: rgba(255, 255, 255, 0.2);
+  --transition-speed: 0.3s;
+  --font-family: 'Press Start 2P', monospace;
 }
 
-/* Header section with title and user info */
+/* Overall page styling */
+.shop-page.cyber-shop-page {
+  background: var(--main-bg-color) 
+    url('https://images.unsplash.com/photo-1565060552124-250ceb0ada28?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDF8fGh1ZGZhfGVufDB8fHx8MTYwMTU0NzM5NQ&ixlib=rb-1.2.1&w=1600') 
+    no-repeat center center / cover;
+  min-height: 100vh;
+  color: var(--text-color);
+  font-family: var(--font-family);
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header area */
 .shop-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid #444;
-  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 2px solid var(--neon-blue);
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.shop-header h1 {
-  font-size: 2.5rem;
+.shop-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--neon-blue);
+  animation: glow 2s ease-in-out infinite alternate;
   margin: 0;
-  color: #ffcc00; /* Neon accent color */
 }
 
+/* Animate the header text glow */
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 5px var(--neon-blue), 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue);
+  }
+  100% {
+    text-shadow: 0 0 10px var(--neon-purple), 0 0 20px var(--neon-purple), 0 0 40px var(--neon-purple);
+  }
+}
+
+/* User info in header */
 .shop-user-info {
-  text-align: right;
-  font-size: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
 }
 
-.shop-user-info p {
-  margin: 0.25rem 0;
-}
-
-/* Purchase status message */
-.purchase-status {
-  margin-bottom: 1rem;
-  padding: 0.75rem;
-  background: #222;
+.shop-user-coins,
+.shop-user-level {
+  background: var(--card-bg);
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--card-border);
   border-radius: 4px;
+}
+
+/* Purchase status message box */
+.purchase-status {
+  margin: 0 auto 2rem auto;
+  padding: 1rem 2rem;
+  border: 1px solid var(--neon-pink);
+  background: rgba(0, 0, 0, 0.7);
+  animation: fade-in 0.5s ease-in-out forwards;
+  width: fit-content;
   text-align: center;
-  color: #ff5555;
+  color: var(--neon-pink);
   font-weight: bold;
 }
 
-/* Shop section wrapper */
-.shop-section {
-  margin-bottom: 2rem;
+/* Subtle fade-in animation for status */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-/* Section title */
-.shop-section h2 {
-  font-size: 2rem;
+/* Section titles */
+.shop-section-title {
   margin-bottom: 1rem;
-  border-bottom: 1px solid #444;
-  padding-bottom: 0.5rem;
-  color: #66ff66;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--neon-green);
+  font-size: 1.5rem;
+  position: relative;
+  text-align: center;
 }
 
-/* Grid layout for items */
+/* Glowing border behind section titles */
+.shop-section-title::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -0.5rem;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: var(--neon-green);
+  box-shadow: 0 0 8px var(--neon-green), 0 0 16px var(--neon-green);
+}
+
+/* The grid that holds items */
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 2rem;
 }
 
-/* Individual shop item card */
+/* Each item card container */
 .shop-item {
-  background: #1a1a1a;
-  border: 1px solid #333;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  display: flex;
-  flex-direction: column;
-}
-
-.shop-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
-}
-
-/* Item image */
-.shop-item-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-bottom: 1px solid #333;
-}
-
-/* Information container for each shop item */
-.shop-item-info {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
   padding: 1rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  overflow: hidden;
 }
 
-.shop-item-info h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-  color: #ffcc00;
+/* Subclasses to differentiate xp boosts vs avatars (you can style differently if you wish) */
+.xp-boost-item {
+  box-shadow: 0 0 10px 2px var(--neon-purple);
+}
+.avatar-item {
+  box-shadow: 0 0 10px 2px var(--neon-blue);
 }
 
-.shop-item-info p {
-  margin: 0.25rem 0;
-  font-size: 1rem;
-  color: #ccc;
+/* Hover effect for shop items */
+.shop-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 12px 4px var(--neon-pink);
 }
 
-/* Purchase button styling */
-.shop-item-info button {
-  margin-top: auto; /* Push button to bottom */
+/* Item images */
+.shop-item-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto 1rem auto;
+}
+
+/* Circular avatars */
+.avatar-image {
+  border-radius: 50%;
+  border: 2px solid var(--neon-blue);
+  box-shadow: 0 0 8px var(--neon-blue);
+}
+
+/* If you want to give xpBoost images a different shape, you can do so. Example: hex shape. */
+.xpboost-image {
+  /* This is purely optional; here's a cool clip-path shape */
+  clip-path: polygon(25% 5%, 75% 5%, 95% 50%, 75% 95%, 25% 95%, 5% 50%);
+  border: 2px solid var(--neon-purple);
+  box-shadow: 0 0 8px var(--neon-purple);
+}
+
+/* Item info text */
+.shop-item-info {
+  text-align: center;
+}
+.shop-item-title {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.2rem;
+  color: var(--neon-pink);
+}
+.shop-item-description {
+  font-size: 0.8rem;
+  margin-bottom: 0.8rem;
+}
+.shop-item-cost,
+.shop-item-unlock,
+.shop-item-default {
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+/* The buy/equip/etc. buttons */
+.shop-item-button {
+  background: none;
+  color: var(--text-color);
+  border: 2px solid var(--neon-green);
   padding: 0.5rem 1rem;
-  background: #00aaff;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-.shop-item-info button:disabled,
-.shop-item-info button.purchased-button {
-  background: #555;
+/* Button hover and disabled states */
+.shop-item-button:hover:not(:disabled) {
+  background: var(--neon-green);
+  color: #000;
+  box-shadow: 0 0 8px var(--neon-green);
+}
+
+.shop-item-button:disabled {
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
-.shop-item-info button:hover:not(:disabled) {
-  background: #0088cc;
+/* Loading and error states */
+.shop-loading, .shop-error {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 1.1rem;
+  animation: fade-in 0.5s forwards;
 }
+
+/* Animate the entire .shop-section container if you wish */
+.shop-section {
+  margin-bottom: 3rem;
+  animation: reveal 0.8s ease-in-out forwards;
+  opacity: 0;
+}
+
+@keyframes reveal {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+

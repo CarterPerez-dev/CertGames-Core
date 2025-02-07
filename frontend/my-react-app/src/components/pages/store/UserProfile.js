@@ -1,15 +1,38 @@
 // src/components/pages/store/UserProfile.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { registerUser, loginUser, dailyLoginBonus, addXP, addCoins, fetchUserData, logout, setCurrentUserId } from '../store/userSlice';
-
+import { logout, fetchUserData } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 const UserProfile = () => {
-  const { userId, username, xp, level, coins, achievements: userAchievements = [] } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Retrieve user data from the user slice
+  const { 
+    userId, 
+    username, 
+    xp, 
+    level, 
+    coins, 
+    achievements: userAchievements = [],
+    currentAvatar 
+  } = useSelector((state) => state.user);
+
+  // Retrieve shop items from the shop slice (to look up avatar image URL)
+  const { items: shopItems } = useSelector((state) => state.shop);
+
+  // Determine the profile picture URL.
+  // If currentAvatar is set and we can find the matching shop item,
+  // use its imageUrl; otherwise, fall back to a default image.
+  let profilePicUrl = '/avatars/avatar1.png'; // fallback default
+  if (currentAvatar && shopItems && shopItems.length > 0) {
+    const avatarItem = shopItems.find(item => item._id === currentAvatar);
+    if (avatarItem && avatarItem.imageUrl) {
+      profilePicUrl = avatarItem.imageUrl;
+    }
+  }
 
   const handleLogout = () => {
     dispatch(logout());
@@ -17,16 +40,13 @@ const UserProfile = () => {
     navigate('/login');
   };
 
-  // We assume that your achievements slice holds the full list of achievements.
-  const allAchievements = useSelector((state) => state.achievements.all);
-
-  // Filter for unlocked achievements.
-  const unlockedAchievements = allAchievements.filter(ach => userAchievements.includes(ach.achievementId));
-
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <h1 className="profile-title">User Profile</h1>
+        <div className="profile-picture">
+          <img src={profilePicUrl} alt="Profile Avatar" />
+        </div>
+        <h1 className="profile-title">{username}'s Profile</h1>
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
@@ -36,7 +56,6 @@ const UserProfile = () => {
         <div className="profile-card">
           <h2>Overview</h2>
           <div className="profile-details">
-            <p><span className="detail-label">Username:</span> {username}</p>
             <p><span className="detail-label">User ID:</span> {userId}</p>
             <p><span className="detail-label">Level:</span> {level}</p>
             <p><span className="detail-label">XP:</span> {xp}</p>
@@ -62,11 +81,11 @@ const UserProfile = () => {
         <div className="extra-card">
           <h2>Your Achievements</h2>
           <div className="extra-content">
-            {unlockedAchievements.length > 0 ? (
-              unlockedAchievements.map(ach => (
-                <div key={ach.achievementId} className="achievement-item">
-                  <h3>{ach.title}</h3>
-                  <p>{ach.description}</p>
+            {userAchievements.length > 0 ? (
+              userAchievements.map((ach) => (
+                <div key={ach} className="achievement-item">
+                  <h3>{ach}</h3>
+                  {/* You can expand to show description if needed */}
                 </div>
               ))
             ) : (

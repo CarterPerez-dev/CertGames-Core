@@ -1,27 +1,32 @@
 // src/components/pages/testpage/APlusTestPage.js
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom"; 
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo
+} from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { dailyLoginBonus, setXPAndCoins } from "../store/userSlice"; 
+import { dailyLoginBonus, setXPAndCoins } from "../store/userSlice";
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "../store/AchievementToast";
-import APlusTestList from "./APlusTestList"; // <-- Import the Test List file
+import APlusTestList from "./APlusTestList"; // Import the Test List file
 import "./APlusStyles.css";
-import { 
-  FaTrophy, 
-  FaMedal, 
-  FaStar, 
-  FaCrown, 
-  FaBolt, 
-  FaBook, 
-  FaBrain, 
-  FaCheckCircle, 
+import {
+  FaTrophy,
+  FaMedal,
+  FaStar,
+  FaCrown,
+  FaBolt,
+  FaBook,
+  FaBrain,
+  FaCheckCircle,
   FaRegSmile,
-  FaMagic 
-} from 'react-icons/fa';
+  FaMagic
+} from "react-icons/fa";
 
 /* ------------------------------------------------------------------
-   Shuffle Options for a Single Question
+   Helper: Shuffle Options for a Single Question
 ------------------------------------------------------------------ */
 const shuffleOptions = (question) => {
   const originalOptions = question.options.slice();
@@ -33,18 +38,18 @@ const shuffleOptions = (question) => {
     [indices[i], indices[j]] = [indices[j], indices[i]];
   }
 
-  const shuffledOptions = indices.map(i => originalOptions[i]);
+  const shuffledOptions = indices.map((i) => originalOptions[i]);
   const newCorrectIndex = indices.indexOf(correctIndex);
 
   return {
     ...question,
     options: shuffledOptions,
-    correctAnswerIndex: newCorrectIndex
+    correctAnswerIndex: newCorrectIndex,
   };
 };
 
 /* ------------------------------------------------------------------
-   Confirmation Popup
+   Confirmation Popup Component
 ------------------------------------------------------------------ */
 const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
   return (
@@ -65,8 +70,9 @@ const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
 };
 
 /* ------------------------------------------------------------------
-   APlusTestPage
-   Renders the test list if no :testId param, else the test view
+   Main Component: APlusTestPage
+   Renders the test list if no :testId parameter is provided,
+   else renders the Test View.
 ------------------------------------------------------------------ */
 const APlusTestPage = () => {
   const { testId } = useParams();
@@ -75,24 +81,24 @@ const APlusTestPage = () => {
 
 /* ============================
    Test View Component
-   ============================ */
+   ============================
+   All hooks are declared at the top level.
+*/
 const TestView = ({ testId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { xp, level, coins, userId } = useSelector((state) => state.user);
+  const { xp, level, coins, userId, xpBoost } = useSelector((state) => state.user);
   const achievements = useSelector((state) => state.achievements.all);
 
-  // Local test states
+  // Local state variables
   const [currentTest, setCurrentTest] = useState(null);
   const [loadingTest, setLoadingTest] = useState(true);
   const [error, setError] = useState(null);
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState([]); 
-
+  const [answers, setAnswers] = useState([]);
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [showReviewMode, setShowReviewMode] = useState(false);
   const [flaggedQuestions, setFlaggedQuestions] = useState([]);
@@ -102,15 +108,14 @@ const TestView = ({ testId }) => {
   const [showRestartPopup, setShowRestartPopup] = useState(false);
   const [showFinishPopup, setShowFinishPopup] = useState(false);
   const [showNextPopup, setShowNextPopup] = useState(false);
-
-  // Filter for the review mode: 'all', 'skipped', 'flagged', 'incorrect', 'correct'
   const [reviewFilter, setReviewFilter] = useState("all");
-
-  // Has local progress loaded
   const [progressLoaded, setProgressLoaded] = useState(false);
+
   const progressKey = `testProgress_${userId}_${testId}`;
-   
-  /* (1) Fetch Test Data */
+
+  // ---------------------------
+  // (1) Fetch Test Data
+  // ---------------------------
   useEffect(() => {
     const fetchTestData = async () => {
       setLoadingTest(true);
@@ -125,14 +130,14 @@ const TestView = ({ testId }) => {
           }
           throw new Error(errorData.error || "Failed to fetch test data");
         }
-        const data = await response.json();
 
+        const data = await response.json();
         data.questions.forEach((q, index) => {
           if (!q.id) {
-            // fallback e.g. "test1_q0"
             q.id = `test${testId}_q${index}`;
           }
         });
+
         // Attempt to load saved progress
         const savedProgressStr = localStorage.getItem(progressKey);
         if (savedProgressStr) {
@@ -141,8 +146,8 @@ const TestView = ({ testId }) => {
             data.questions = saved.shuffledQuestions;
           }
         } else {
-          // No progress => shuffle
-          const shuffled = data.questions.map(q => shuffleOptions(q));
+          // No saved progress: shuffle questions and initialize progress
+          const shuffled = data.questions.map((q) => shuffleOptions(q));
           data.questions = shuffled;
           const initProgress = {
             currentQuestionIndex: 0,
@@ -151,11 +156,10 @@ const TestView = ({ testId }) => {
             totalQuestions: data.questions.length,
             category: data.category || "aplus",
             shuffledQuestions: shuffled,
-            finished: false
+            finished: false,
           };
           localStorage.setItem(progressKey, JSON.stringify(initProgress));
         }
-
         setCurrentTest(data);
       } catch (err) {
         setError(err.message);
@@ -166,14 +170,18 @@ const TestView = ({ testId }) => {
     fetchTestData();
   }, [testId, progressKey]);
 
-  /* (2) Daily Login Bonus */
+  // ---------------------------
+  // (2) Daily Login Bonus
+  // ---------------------------
   useEffect(() => {
     if (userId) {
       dispatch(dailyLoginBonus(userId));
     }
   }, [dispatch, userId]);
 
-  /* (3) Level-Up Overlay Check */
+  // ---------------------------
+  // (3) Level-Up Overlay Check
+  // ---------------------------
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -183,7 +191,9 @@ const TestView = ({ testId }) => {
     }
   }, [level, localLevel]);
 
-  /* (4) Load Saved Progress from localStorage */
+  // ---------------------------
+  // (4) Load Saved Progress
+  // ---------------------------
   useEffect(() => {
     if (!currentTest) return;
     const savedProgressStr = localStorage.getItem(progressKey);
@@ -191,7 +201,6 @@ const TestView = ({ testId }) => {
       setProgressLoaded(true);
       return;
     }
-
     try {
       const progress = JSON.parse(savedProgressStr);
       if (typeof progress.currentQuestionIndex === "number") {
@@ -215,13 +224,14 @@ const TestView = ({ testId }) => {
     }
   }, [currentTest, progressKey]);
 
-  /* (5) Sync local "selectedOptionIndex" & "isAnswered" when questionIndex changes */
+  // ---------------------------
+  // (5) Sync Selected Option when Question Changes
+  // ---------------------------
   useEffect(() => {
     if (!currentTest || !progressLoaded) return;
     const question = currentTest.questions[currentQuestionIndex];
     if (!question) return;
-
-    const existingAnswer = answers.find(a => a.questionId === question.id);
+    const existingAnswer = answers.find((a) => a.questionId === question.id);
     if (existingAnswer) {
       setSelectedOptionIndex(existingAnswer.userAnswerIndex);
       setIsAnswered(true);
@@ -231,33 +241,34 @@ const TestView = ({ testId }) => {
     }
   }, [currentQuestionIndex, currentTest, progressLoaded, answers]);
 
-  /* (6) Save Test Progress Effect */
+  // ---------------------------
+  // (6) Debounced Save Test Progress Effect
+  // ---------------------------
   useEffect(() => {
-    if (!progressLoaded) return;
-    if (!currentTest) return;
-    if (isFinished) return;
-
+    if (!progressLoaded || !currentTest || isFinished) return;
     const totalQuestions = currentTest.questions.length;
-    const progress = { 
+    const progress = {
       currentQuestionIndex,
       answers,
       score,
       totalQuestions,
       category: currentTest?.category || "aplus",
       shuffledQuestions: currentTest.questions,
-      finished: false
+      finished: false,
     };
-
-    localStorage.setItem(progressKey, JSON.stringify(progress));
-    if (userId) {
-      fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(progress)
-      }).catch((err) => {
-        console.error("Failed to update test progress on backend", err);
-      });
-    }
+    const handler = setTimeout(() => {
+      localStorage.setItem(progressKey, JSON.stringify(progress));
+      if (userId) {
+        fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(progress),
+        }).catch((err) => {
+          console.error("Failed to update test progress on backend", err);
+        });
+      }
+    }, 500);
+    return () => clearTimeout(handler);
   }, [
     currentQuestionIndex,
     answers,
@@ -269,136 +280,103 @@ const TestView = ({ testId }) => {
     currentTest,
   ]);
 
-  if (!currentTest) {
-    return <div style={{ color: "#fff" }}>Loading test...</div>;
-  }
-  if (error) {
-    return <div style={{ color: "#fff" }}>{error}</div>;
-  }
+  // ---------------------------
+  // (7) Memoize Filtered Questions for Review Mode
+  // ---------------------------
+  const filteredQuestions = useMemo(() => {
+    if (!currentTest) return [];
+    return currentTest.questions.filter((q) => {
+      const userAnswer = answers.find((a) => a.questionId === q.id);
+      const isFlagged = flaggedQuestions.includes(q.id);
+      if (!userAnswer) {
+        return reviewFilter === "skipped" || reviewFilter === "all";
+      }
+      const isSkipped = userAnswer.userAnswerIndex === null;
+      const isCorrect = userAnswer.userAnswerIndex === q.correctAnswerIndex;
 
-  const totalQuestions = currentTest.questions.length;
-  const questionData = currentTest.questions[currentQuestionIndex];
+      if (reviewFilter === "all") return true;
+      if (reviewFilter === "skipped" && isSkipped) return true;
+      if (reviewFilter === "flagged" && isFlagged) return true;
+      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
+      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
+      return false;
+    });
+  }, [currentTest, answers, flaggedQuestions, reviewFilter]);
 
-  const progressPercentage = Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100);
+  // -------------------------------------------------------------
+  // (9) Derived variables (use optional chaining to avoid errors)
+  // -------------------------------------------------------------
+  const totalQuestions = currentTest?.questions?.length || 0;
+  const questionData = currentTest?.questions?.[currentQuestionIndex];
+  const progressPercentage =
+    totalQuestions > 0 ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100) : 0;
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
-  /* ------------------------------------------------------------------
-     handleOptionClick -> calls /submit-answer to award XP/coins once
-  ------------------------------------------------------------------ */
+  // ---------------------------
+  // (10) Callback Handlers
+  // ---------------------------
+  const handleOptionClick = useCallback(
+    async (optionIndex) => {
+      if (isAnswered || !questionData) return;
+      setSelectedOptionIndex(optionIndex);
+      try {
+        // Calculate effective XP using xpBoost
+        const baseXP = currentTest.xpPerCorrect || 10;
+        const effectiveXP = baseXP * xpBoost;
+        const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            testId,
+            questionId: questionData.id, // must be a unique question ID
+            correctAnswerIndex: questionData.correctAnswerIndex,
+            selectedIndex: optionIndex,
+            xpPerCorrect: effectiveXP,
+            coinsPerCorrect: 5,
+          }),
+        });
+        const result = await response.json();
 
-const handleOptionClick = async (optionIndex) => {
-  if (isAnswered) return;
-  setSelectedOptionIndex(optionIndex);
+        if (response.ok) {
+          const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
+          if (isCorrect && !alreadyCorrect && awardedXP > 0) {
+            dispatch(setXPAndCoins({ xp: newXP, coins: newCoins }));
+          }
+          if (isCorrect) {
+            setScore((prev) => prev + 1);
+          }
+        } else {
+          console.error("submit-answer error:", result);
+        }
+      } catch (err) {
+        console.error("Failed to submit answer to backend", err);
+      }
 
-  try {
-    const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        testId,
-        questionId: questionData.id, // must be a unique question ID
+      const updatedAnswers = [...answers];
+      const existingIndex = updatedAnswers.findIndex((a) => a.questionId === questionData.id);
+      const newAnswerObj = {
+        questionId: questionData.id,
+        userAnswerIndex: optionIndex,
         correctAnswerIndex: questionData.correctAnswerIndex,
-        selectedIndex: optionIndex,
-        xpPerCorrect: currentTest.xpPerCorrect || 10,
-        coinsPerCorrect: 5
-      })
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      // Deconstruct fields from the backend
-      const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
-
-      // If user is correct this time, and not previously correct for this question
-      if (isCorrect && !alreadyCorrect && awardedXP > 0) {
-        // Update Redux with new totals
-        dispatch(setXPAndCoins({
-          xp: newXP,
-          coins: newCoins
-        }));
+      };
+      if (existingIndex >= 0) {
+        updatedAnswers[existingIndex] = newAnswerObj;
+      } else {
+        updatedAnswers.push(newAnswerObj);
       }
+      setAnswers(updatedAnswers);
+      setIsAnswered(true);
+    },
+    [isAnswered, questionData, currentTest, xpBoost, answers, userId, testId, dispatch]
+  );
 
-      // Update local 'score' if correct
-      if (isCorrect) {
-        setScore((prev) => prev + 1);
-      }
-    } else {
-      console.error("submit-answer error:", result);
-    }
-  } catch (err) {
-    console.error("Failed to submit answer to backend", err);
-  }
-
-  // Record the user's answer in local 'answers'
-  const updatedAnswers = [...answers];
-  const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
-
-  const newAnswerObj = {
-    questionId: questionData.id,
-    userAnswerIndex: optionIndex,
-    correctAnswerIndex: questionData.correctAnswerIndex
-  };
-
-  if (existingIndex >= 0) {
-    updatedAnswers[existingIndex] = newAnswerObj;
-  } else {
-    updatedAnswers.push(newAnswerObj);
-  }
-  setAnswers(updatedAnswers);
-
-  // Mark this question as answered
-  setIsAnswered(true);
-};
-  /* Move to next question or finish if last */
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex === totalQuestions - 1) {
-      finishTestProcess();
-      return;
-    }
-    setCurrentQuestionIndex((prev) => prev + 1);
-  };
-
-  const handlePreviousQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex((prev) => prev - 1);
-    }
-  };
-
-  const reShuffleQuestions = () => {
-    if (currentTest?.questions) {
-      const shuffled = currentTest.questions.map(q => {
-        const unshuffledQ = { ...q, options: q.options.slice() };
-        return shuffleOptions(unshuffledQ);
-      });
-      setCurrentTest(prev => ({ ...prev, questions: shuffled }));
-    }
-  };
-
-  const handleRestartTest = () => {
-    localStorage.removeItem(progressKey);
-    setCurrentQuestionIndex(0);
-    setSelectedOptionIndex(null);
-    setIsAnswered(false);
-    setScore(0);
-    setAnswers([]);
-    setFlaggedQuestions([]);
-    setIsFinished(false);
-    setShowReviewMode(false);
-    setShowScoreOverlay(false);
-
-    reShuffleQuestions();
-  };
-
-  /* ------------------------------------------------------------------
-     finishTestProcess -> recalc final score, mark test finished,
-     and call /test-progress for achievements
-  ------------------------------------------------------------------ */
-  const finishTestProcess = () => {
-    // Recalc final score from answers array
-    const finalScore = answers.reduce((acc, ans) => (
-      ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc
-    ), 0);
+  const finishTestProcess = useCallback(() => {
+    const finalScore = answers.reduce(
+      (acc, ans) =>
+        ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc,
+      0
+    );
     setScore(finalScore);
 
     const finishedProgress = {
@@ -409,43 +387,92 @@ const handleOptionClick = async (optionIndex) => {
       totalQuestions,
       category: currentTest?.category || "aplus",
       finishedAt: new Date().toISOString(),
-      shuffledQuestions: currentTest.questions
+      shuffledQuestions: currentTest?.questions || [],
     };
 
-    // Save final progress to localStorage
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
 
-    // Mark the test as finished in the backend => triggers achievements
     fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(finishedProgress)
+      body: JSON.stringify(finishedProgress),
     })
-      .then(r => r.json())
-      .then(data => {
-        // If the backend returns newlyUnlocked achievements, show them
+      .then((r) => r.json())
+      .then((data) => {
         if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-          data.newlyUnlocked.forEach(achievementId => {
-            const achievement = achievements.find(a => a.achievementId === achievementId);
+          data.newlyUnlocked.forEach((achievementId) => {
+            const achievement = achievements.find(
+              (a) => a.achievementId === achievementId
+            );
             if (achievement) {
-              const IconComponent = iconMapping[achievement.achievementId] || null;
+              const IconComponent =
+                iconMapping[achievement.achievementId] || null;
               const color = colorMapping[achievement.achievementId] || "#fff";
               showAchievementToast({
                 title: achievement.title,
                 description: achievement.description,
                 icon: IconComponent ? <IconComponent /> : null,
-                color: color
+                color: color,
               });
             }
           });
         }
       })
-      .catch(err => console.error("Failed to mark test as finished", err));
+      .catch((err) =>
+        console.error("Failed to mark test as finished", err)
+      );
 
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(true);
-  };
+  }, [
+    answers,
+    currentQuestionIndex,
+    currentTest,
+    totalQuestions,
+    userId,
+    testId,
+    achievements,
+    progressKey
+  ]);
+
+  const handleNextQuestion = useCallback(() => {
+    if (currentQuestionIndex === totalQuestions - 1) {
+      finishTestProcess();
+      return;
+    }
+    setCurrentQuestionIndex((prev) => prev + 1);
+  }, [currentQuestionIndex, totalQuestions, finishTestProcess]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex((prev) => prev - 1);
+    }
+  }, [currentQuestionIndex]);
+
+  const reShuffleQuestions = useCallback(() => {
+    if (currentTest?.questions) {
+      const shuffled = currentTest.questions.map((q) => {
+        const unshuffledQ = { ...q, options: q.options.slice() };
+        return shuffleOptions(unshuffledQ);
+      });
+      setCurrentTest((prev) => ({ ...prev, questions: shuffled }));
+    }
+  }, [currentTest]);
+
+  const handleRestartTest = useCallback(() => {
+    localStorage.removeItem(progressKey);
+    setCurrentQuestionIndex(0);
+    setSelectedOptionIndex(null);
+    setIsAnswered(false);
+    setScore(0);
+    setAnswers([]);
+    setFlaggedQuestions([]);
+    setIsFinished(false);
+    setShowReviewMode(false);
+    setShowScoreOverlay(false);
+    reShuffleQuestions();
+  }, [reShuffleQuestions, progressKey]);
 
   const handleFinishTest = () => {
     finishTestProcess();
@@ -463,11 +490,13 @@ const handleOptionClick = async (optionIndex) => {
 
   const handleSkipQuestion = () => {
     const updatedAnswers = [...answers];
-    const existingIndex = updatedAnswers.findIndex(a => a.questionId === questionData.id);
+    const existingIndex = updatedAnswers.findIndex(
+      (a) => a.questionId === questionData?.id
+    );
     const skipAnswerObj = {
-      questionId: questionData.id,
+      questionId: questionData?.id,
       userAnswerIndex: null,
-      correctAnswerIndex: questionData.correctAnswerIndex,
+      correctAnswerIndex: questionData?.correctAnswerIndex,
     };
     if (existingIndex >= 0) {
       updatedAnswers[existingIndex] = skipAnswerObj;
@@ -475,12 +504,12 @@ const handleOptionClick = async (optionIndex) => {
       updatedAnswers.push(skipAnswerObj);
     }
     setAnswers(updatedAnswers);
-
     setIsAnswered(true);
     handleNextQuestion();
   };
 
   const handleFlagQuestion = () => {
+    if (!questionData) return;
     const qId = questionData.id;
     if (flaggedQuestions.includes(qId)) {
       setFlaggedQuestions(flaggedQuestions.filter((id) => id !== qId));
@@ -489,15 +518,17 @@ const handleOptionClick = async (optionIndex) => {
     }
   };
 
-  const onNextClick = () => {
+  const onNextClick = useCallback(() => {
     if (!isAnswered) {
       setShowNextPopup(true);
     } else {
       handleNextQuestion();
     }
-  };
+  }, [isAnswered, handleNextQuestion]);
 
-  /* Overlays & Popups */
+  // ---------------------------
+  // Render Overlays & Popups
+  // ---------------------------
   const renderRestartPopup = () => {
     if (!showRestartPopup) return null;
     return (
@@ -542,7 +573,9 @@ const handleOptionClick = async (optionIndex) => {
 
   const renderScoreOverlay = () => {
     if (!showScoreOverlay) return null;
-    const percentage = Math.round((score / totalQuestions) * 100);
+    const percentage = totalQuestions
+      ? Math.round((score / totalQuestions) * 100)
+      : 0;
     return (
       <div className="score-overlay">
         <div className="score-content">
@@ -576,28 +609,6 @@ const handleOptionClick = async (optionIndex) => {
 
   const renderReviewMode = () => {
     if (!showReviewMode) return null;
-    const filteredQuestions = currentTest.questions.filter((q) => {
-      const userAnswer = answers.find((a) => a.questionId === q.id);
-      const isFlagged = flaggedQuestions.includes(q.id);
-
-      if (!userAnswer) {
-        if (reviewFilter === "skipped") return true;
-        return reviewFilter === "all";
-      }
-
-      const isSkipped = userAnswer.userAnswerIndex === null;
-      const isCorrect = (userAnswer.userAnswerIndex === q.correctAnswerIndex);
-
-      if (reviewFilter === "all") return true;
-      if (reviewFilter === "skipped" && isSkipped) return true;
-      if (reviewFilter === "flagged" && isFlagged) return true;
-      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
-      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
-      return false;
-    });
-
-    const finalPercentage = Math.round((score / totalQuestions) * 100);
-
     return (
       <div className="score-overlay review-overlay">
         <div className="score-content review-content">
@@ -606,17 +617,20 @@ const handleOptionClick = async (optionIndex) => {
               Go Back to Test List
             </button>
           ) : (
-            <button className="close-review-x" onClick={handleCloseReview}>X</button>
+            <button className="close-review-x" onClick={handleCloseReview}>
+              X
+            </button>
           )}
-
           <h2 className="score-title">Review Mode</h2>
-
           {isFinished && (
             <p className="review-score-line">
-              Your final score: {score}/{totalQuestions} ({finalPercentage}%)
+              Your final score: {score}/{totalQuestions} (
+              {totalQuestions
+                ? Math.round((score / totalQuestions) * 100)
+                : 0
+              }%)
             </p>
           )}
-
           <div className="review-filter-buttons">
             <button
               className={reviewFilter === "all" ? "active-filter" : ""}
@@ -649,9 +663,7 @@ const handleOptionClick = async (optionIndex) => {
               Correct
             </button>
           </div>
-
           <p className="score-details">Questions shown: {filteredQuestions.length}</p>
-
           <div className="review-mode-container">
             {filteredQuestions.map((q) => {
               const userAnswer = answers.find((a) => a.questionId === q.id);
@@ -673,7 +685,7 @@ const handleOptionClick = async (optionIndex) => {
               }
 
               const isSkipped = userAnswer.userAnswerIndex === null;
-              const isCorrect = (userAnswer.userAnswerIndex === q.correctAnswerIndex);
+              const isCorrect = userAnswer.userAnswerIndex === q.correctAnswerIndex;
 
               return (
                 <div key={q.id} className="review-question-card">
@@ -686,8 +698,7 @@ const handleOptionClick = async (optionIndex) => {
                     {isSkipped ? "Skipped" : q.options[userAnswer.userAnswerIndex]}
                   </p>
                   <p>
-                    <strong>Correct Answer:</strong>{" "}
-                    {q.options[q.correctAnswerIndex]}
+                    <strong>Correct Answer:</strong> {q.options[q.correctAnswerIndex]}
                   </p>
                   {!isSkipped && (
                     <p style={{ color: isCorrect ? "#8BC34A" : "#F44336" }}>
@@ -699,7 +710,6 @@ const handleOptionClick = async (optionIndex) => {
               );
             })}
           </div>
-
           {!isFinished && (
             <button className="review-button close-review-btn" onClick={handleCloseReview}>
               Close Review
@@ -710,78 +720,87 @@ const handleOptionClick = async (optionIndex) => {
     );
   };
 
-  /* Achievement Icon & Color Mapping */
+  // ---------------------------
+  // Static Achievement Icon & Color Mapping
+  // ---------------------------
   const iconMapping = {
-    "test_rookie": FaTrophy,
-    "accuracy_king": FaMedal,
-    "bronze_grinder": FaBook,
-    "silver_scholar": FaStar,
-    "gold_god": FaCrown,
-    "platinum_pro": FaMagic,
-    "walking_encyclopedia": FaBrain,
-    "redemption_arc": FaBolt,
-    "memory_master": FaRegSmile,
-    "coin_collector_5000": FaBook,
-    "coin_hoarder_10000": FaBook,
-    "coin_tycoon_50000": FaBook,
-    "perfectionist_1": FaCheckCircle,
-    "double_trouble_2": FaCheckCircle,
-    "error404_failure_not_found": FaCheckCircle,
-    "level_up_5": FaTrophy,
-    "mid_tier_grinder_25": FaMedal,
-    "elite_scholar_50": FaStar,
-    "ultimate_master_100": FaCrown,
-    "category_perfectionist": FaBolt,
-    "absolute_perfectionist": FaBolt,
-    "exam_conqueror": FaMedal,
-    "subject_specialist": FaMedal,
-    "answer_machine_1000": FaBook,
-    "knowledge_beast_5000": FaBrain,
-    "question_terminator": FaBrain,
-    "test_finisher": FaCheckCircle,
-    "subject_finisher": FaCheckCircle
+    test_rookie: FaTrophy,
+    accuracy_king: FaMedal,
+    bronze_grinder: FaBook,
+    silver_scholar: FaStar,
+    gold_god: FaCrown,
+    platinum_pro: FaMagic,
+    walking_encyclopedia: FaBrain,
+    redemption_arc: FaBolt,
+    memory_master: FaRegSmile,
+    coin_collector_5000: FaBook,
+    coin_hoarder_10000: FaBook,
+    coin_tycoon_50000: FaBook,
+    perfectionist_1: FaCheckCircle,
+    double_trouble_2: FaCheckCircle,
+    error404_failure_not_found: FaCheckCircle,
+    level_up_5: FaTrophy,
+    mid_tier_grinder_25: FaMedal,
+    elite_scholar_50: FaStar,
+    ultimate_master_100: FaCrown,
+    category_perfectionist: FaBolt,
+    absolute_perfectionist: FaBolt,
+    exam_conqueror: FaMedal,
+    subject_specialist: FaMedal,
+    answer_machine_1000: FaBook,
+    knowledge_beast_5000: FaBrain,
+    question_terminator: FaBrain,
+    test_finisher: FaCheckCircle,
+    subject_finisher: FaCheckCircle,
   };
 
   const colorMapping = {
-    "test_rookie": "#ff5555",
-    "accuracy_king": "#ffa500",
-    "bronze_grinder": "#cd7f32",
-    "silver_scholar": "#c0c0c0",
-    "gold_god": "#ffd700",
-    "platinum_pro": "#e5e4e2",
-    "walking_encyclopedia": "#00fa9a",
-    "redemption_arc": "#ff4500",
-    "memory_master": "#8a2be2",
-    "coin_collector_5000": "#ff69b4",
-    "coin_hoarder_10000": "#ff1493",
-    "coin_tycoon_50000": "#ff0000",
-    "perfectionist_1": "#adff2f",
-    "double_trouble_2": "#7fff00",
-    "error404_failure_not_found": "#00ffff",
-    "level_up_5": "#f08080",
-    "mid_tier_grinder_25": "#ff8c00",
-    "elite_scholar_50": "#ffd700",
-    "ultimate_master_100": "#ff4500",
-    "category_perfectionist": "#00ced1",
-    "absolute_perfectionist": "#32cd32",
-    "exam_conqueror": "#1e90ff",
-    "subject_specialist": "#8a2be2",
-    "answer_machine_1000": "#ff69b4",
-    "knowledge_beast_5000": "#00fa9a",
-    "question_terminator": "#ff1493",
-    "test_finisher": "#adff2f",
-    "subject_finisher": "#7fff00"
+    test_rookie: "#ff5555",
+    accuracy_king: "#ffa500",
+    bronze_grinder: "#cd7f32",
+    silver_scholar: "#c0c0c0",
+    gold_god: "#ffd700",
+    platinum_pro: "#e5e4e2",
+    walking_encyclopedia: "#00fa9a",
+    redemption_arc: "#ff4500",
+    memory_master: "#8a2be2",
+    coin_collector_5000: "#ff69b4",
+    coin_hoarder_10000: "#ff1493",
+    coin_tycoon_50000: "#ff0000",
+    perfectionist_1: "#adff2f",
+    double_trouble_2: "#7fff00",
+    error404_failure_not_found: "#00ffff",
+    level_up_5: "#f08080",
+    mid_tier_grinder_25: "#ff8c00",
+    elite_scholar_50: "#ffd700",
+    ultimate_master_100: "#ff4500",
+    category_perfectionist: "#00ced1",
+    absolute_perfectionist: "#32cd32",
+    exam_conqueror: "#1e90ff",
+    subject_specialist: "#8a2be2",
+    answer_machine_1000: "#ff69b4",
+    knowledge_beast_5000: "#00fa9a",
+    question_terminator: "#ff1493",
+    test_finisher: "#adff2f",
+    subject_finisher: "#7fff00",
   };
 
-  const avatarUrl =
-    level >= 5
-      ? "https://via.placeholder.com/60/FF0000/FFFFFF?text=LVL5+Avatar"
-      : "https://via.placeholder.com/60";
+  // For the avatar image, you may use a placeholder or derive from user.currentAvatar.
+  // Here we simply use a placeholder.
+  const avatarUrl = "https://via.placeholder.com/60";
 
-  return (
+  // ---------------------------
+  // Final Return (one return only)
+  // ---------------------------
+  return error ? (
+    <div style={{ color: "#fff" }}>Error: {error}</div>
+  ) : !currentTest ||
+    !currentTest.questions ||
+    currentTest.questions.length === 0 ? (
+    <div style={{ color: "#fff" }}>Loading test...</div>
+  ) : (
     <div className="aplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
-
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
@@ -807,9 +826,13 @@ const handleOptionClick = async (optionIndex) => {
       </div>
 
       <h1 className="aplus-title">{currentTest.testName}</h1>
+
       <div className="top-bar">
         <div className="avatar-section">
-          <div className="avatar-image" style={{ backgroundImage: `url(${avatarUrl})` }}></div>
+          <div
+            className="avatar-image"
+            style={{ backgroundImage: `url(${avatarUrl})` }}
+          ></div>
           <div className="avatar-level">Lvl {level}</div>
         </div>
         <div className="xp-level-display">XP: {xp}</div>
@@ -896,3 +919,4 @@ const handleOptionClick = async (optionIndex) => {
 };
 
 export default APlusTestPage;
+
