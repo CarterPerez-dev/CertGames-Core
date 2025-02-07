@@ -377,10 +377,12 @@ def check_and_unlock_achievements(user_id):
                     newly_unlocked.append(aid)
                     break
 
-        if "minScoreBefore" in criteria and "minScoreAfter" in criteria:
-            if (any(ft["percentage"] <= criteria["minScoreBefore"] for ft in finished_tests)
-                and any(ft["percentage"] >= criteria["minScoreAfter"] for ft in finished_tests)
-                and aid not in unlocked):
+        # 8) redemption arc style (optional):
+        if ("minScoreBefore" in criteria and 
+            "minScoreAfter" in criteria and 
+            aid not in unlocked):
+            if (any(ft["percentage"] <= criteria["minScoreBefore"] for ft in finished_tests) and
+                any(ft["percentage"] >= criteria["minScoreAfter"] for ft in finished_tests)):
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
