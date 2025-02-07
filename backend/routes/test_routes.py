@@ -1,5 +1,4 @@
 # test_routes.py
-
 from flask import Blueprint, request, jsonify
 from models.database import mainusers_collection
 from models.test import (
@@ -16,8 +15,23 @@ from models.test import (
     get_test_by_id,
     check_and_unlock_achievements
 )
+from bson.objectid import ObjectId
 
 api_bp = Blueprint('test', __name__)
+
+# Helper function to serialize a user document
+def serialize_user(user):
+    if not user:
+        return user
+    # Convert the primary _id to string
+    user['_id'] = str(user['_id'])
+    # Convert currentAvatar if exists and not null
+    if 'currentAvatar' in user and user['currentAvatar']:
+        user['currentAvatar'] = str(user['currentAvatar'])
+    # Optionally, convert purchasedItems if present
+    if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
+        user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
+    return user
 
 # -----------------------------
 # USER ROUTES
@@ -26,9 +40,9 @@ api_bp = Blueprint('test', __name__)
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = get_user_by_id(user_id)
+    user = serialize_user(user)
     if not user:
         return jsonify({"error": "User not found"}), 404
-    user["_id"] = str(user["_id"])
     return jsonify(user), 200
 
 @api_bp.route('/user', methods=['POST'])
@@ -57,8 +71,11 @@ def login():
     if not user or user.get("password") != password:
         return jsonify({"error": "Invalid username or password"}), 401
 
+    # Serialize the user document before returning
+    user = serialize_user(user)
+
     return jsonify({
-        "user_id": str(user["_id"]),
+        "user_id": user["_id"],
         "username": user["username"],
         "coins": user.get("coins", 0),
         "xp": user.get("xp", 0),
@@ -66,7 +83,7 @@ def login():
         "achievements": user.get("achievements", []),
         # Optional shop fields:
         "xpBoost": user.get("xpBoost", 1.0),
-        "currentAvatar": str(user.get("currentAvatar")) if user.get("currentAvatar") else None,
+        "currentAvatar": user.get("currentAvatar"),
         "nameColor": user.get("nameColor")
     }), 200
 
@@ -107,6 +124,7 @@ def fetch_shop():
       - _id, type, title, description, cost, imageUrl, effectValue, unlockLevel (optional)
     """
     items = get_shop_items()
+    # Convert ObjectIds for shop items
     for item in items:
         item["_id"] = str(item["_id"])
     return jsonify(items), 200
@@ -133,6 +151,7 @@ def equip_item_route():
     """
     Allows the user to equip an avatar (or other equippable item).
     Expects JSON: { "userId": "...", "itemId": "..." }
+    This endpoint now allows equipping an avatar if the user's level is high enough.
     """
     data = request.json or {}
     user_id = data.get("userId")
@@ -150,17 +169,18 @@ def equip_item_route():
     except Exception:
         return jsonify({"success": False, "message": "Invalid item ID"}), 400
 
+    # Allow equipping if the item is purchased OR if the user's level is high enough to unlock it
     if oid not in user.get("purchasedItems", []):
-        return jsonify({"success": False, "message": "Item not purchased"}), 400
+        # Fetch item document from shop
+        from models.test import shop_collection
+        item_doc = shop_collection.find_one({"_id": oid})
+        if not item_doc:
+            return jsonify({"success": False, "message": "Item not found in shop"}), 404
+        # Check if user's level meets the unlock requirement
+        if user.get("level", 1) < item_doc.get("unlockLevel", 1):
+            return jsonify({"success": False, "message": "Item not unlocked"}), 400
 
-    # Optionally verify that the item is an avatar
-    from models.test import shop_collection
-    item_doc = shop_collection.find_one({"_id": oid})
-    if not item_doc:
-        return jsonify({"success": False, "message": "Item not found in shop"}), 404
-    if item_doc.get("type") != "avatar":
-        return jsonify({"success": False, "message": "Item is not an avatar"}), 400
-
+    # Equip the avatar by updating currentAvatar field
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"currentAvatar": oid}}
@@ -300,6 +320,7 @@ def submit_answer(user_id):
 
     # Fetch updated user to return new totals
     updated_user = get_user_by_id(user_id)
+    updated_user = serialize_user(updated_user)
     new_xp = updated_user.get("xp", 0)
     new_coins = updated_user.get("coins", 0)
 
@@ -311,3 +332,4 @@ def submit_answer(user_id):
         "newXP": new_xp,
         "newCoins": new_coins
     }), 200
+

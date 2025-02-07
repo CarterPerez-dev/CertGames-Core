@@ -1,53 +1,46 @@
 // src/components/pages/store/ShopPage.js
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchShopItems } from '../../../store/shopSlice'; // Adjust path if needed
-import { fetchUserData } from '../../../store/userSlice';   // Adjust path if needed
-import './ShopPage.css';  // We'll do CSS in a separate step
+import { fetchShopItems } from '../store/shopSlice'; // Adjust path if needed
+import { fetchUserData } from '../store/userSlice';   // Adjust path if needed
+import './ShopPage.css';
 
 const ShopPage = () => {
   const dispatch = useDispatch();
 
-  // Select shop state from store
+  // Get shop items and status from the shop slice
   const { items, status, error } = useSelector((state) => state.shop);
 
-  // Select user data from store
+  // Get user details from the user slice
   const {
     userId,
     coins,
     level,
-    achievements,
     xpBoost,
     currentAvatar,
-    nameColor,
-    // If your user doc has purchasedItems in Redux, select it here.
-    // Otherwise, we can re-check "already purchased" by looking at the user doc from the backend each time.
+    purchasedItems = [] // Ensure we have an array of purchased item IDs
   } = useSelector((state) => state.user);
 
-  // Local state to store a loading indicator or error message for purchases
+  // Define xpBoostItems and avatarItems by filtering the shop items
+  const xpBoostItems = items.filter((item) => item.type === 'xpBoost');
+  const avatarItems  = items.filter((item) => item.type === 'avatar');
+
+  // Local state for displaying purchase/equip status messages
   const [purchaseStatus, setPurchaseStatus] = useState(null);
 
-  // On component mount, fetch shop items
+  // On component mount, fetch shop items if not already fetched
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchShopItems());
     }
   }, [status, dispatch]);
 
-  // Group shop items by type
-  const xpBoostItems = items.filter((item) => item.type === 'xpBoost');
-  const avatarItems  = items.filter((item) => item.type === 'avatar');
-  // Later, if you add more types (e.g. "nameColor"), you can filter them similarly.
-
-  // Helper: Check if the user has purchased an item
-  const hasPurchased = (itemId) => {
-    // If your user doc includes purchasedItems in Redux, do:
-    // return purchasedItems?.some(id => id === itemId);
-    // or if user doesn't have purchasedItems in Redux, use another approach:
-    return false; // We'll replace this if you store purchasedItems in Redux
+  // Helper: Check if an item is already purchased
+  const isPurchased = (itemId) => {
+    return purchasedItems.includes(itemId);
   };
 
-  // Handler to purchase an item
+  // Handler: Purchase an item
   const handlePurchase = async (itemId) => {
     if (!userId) {
       setPurchaseStatus('Please log in to make a purchase.');
@@ -61,13 +54,11 @@ const ShopPage = () => {
         body: JSON.stringify({ userId })
       });
       const data = await response.json();
-
       if (response.ok) {
-        // Purchase successful: refresh user data (so coins, purchasedItems, xpBoost, etc. update)
+        // Refresh user data to update coins, purchasedItems, xpBoost, etc.
         dispatch(fetchUserData(userId));
         setPurchaseStatus(data.message || 'Purchase successful!');
       } else {
-        // Purchase failed
         setPurchaseStatus(data.message || 'Purchase failed.');
       }
     } catch (err) {
@@ -75,42 +66,70 @@ const ShopPage = () => {
     }
   };
 
+  // Handler: Equip an avatar
+  const handleEquip = async (itemId) => {
+    if (!userId) {
+      setPurchaseStatus('Please log in to equip an avatar.');
+      return;
+    }
+    setPurchaseStatus('Equipping avatar...');
+    try {
+      const response = await fetch(`/api/test/shop/equip`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, itemId })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        dispatch(fetchUserData(userId));
+        setPurchaseStatus(data.message || 'Avatar equipped!');
+      } else {
+        setPurchaseStatus(data.message || 'Equip failed.');
+      }
+    } catch (err) {
+      setPurchaseStatus('Error: ' + err.message);
+    }
+  };
+
+  // Render XP Boost Items
   const renderXpBoosts = () => {
     if (!xpBoostItems.length) return null;
     return (
-      <div className="shop-section">
-        <h2>XP Boosts</h2>
+      <div className="shop-section xp-boost-section">
+        <h2 className="shop-section-title">XP Boosts</h2>
         <div className="shop-grid">
           {xpBoostItems.map((boost) => {
             const canAfford = coins >= boost.cost;
-            // If you store purchased items in Redux, check if purchased here
-            const alreadyPurchased = hasPurchased(boost._id);
+            const isActiveBoost = xpBoost === boost.effectValue;
+            const buttonText = isActiveBoost ? 'Active' : 'Buy';
+            const buttonDisabled = isActiveBoost || !canAfford;
 
             const handleClick = () => {
-              if (!canAfford) return;
-              if (alreadyPurchased) return;
+              if (!canAfford || isActiveBoost) return;
               handlePurchase(boost._id);
             };
 
             return (
-              <div className="shop-item" key={boost._id}>
-                <img src={boost.imageUrl} alt={boost.title} className="shop-item-image" />
+              <div
+                className="shop-item xp-boost-item"
+                key={boost._id}
+              >
+                <img
+                  src={boost.imageUrl}
+                  alt={boost.title}
+                  className="shop-item-image xpboost-image"
+                />
                 <div className="shop-item-info">
-                  <h3>{boost.title}</h3>
-                  <p>{boost.description}</p>
-                  <p>Cost: {boost.cost} coins</p>
-                  {alreadyPurchased ? (
-                    <button className="purchased-button" disabled>
-                      Purchased
-                    </button>
-                  ) : (
-                    <button
-                      disabled={!canAfford}
-                      onClick={handleClick}
-                    >
-                      Buy
-                    </button>
-                  )}
+                  <h3 className="shop-item-title">{boost.title}</h3>
+                  <p className="shop-item-description">{boost.description}</p>
+                  <p className="shop-item-cost">Cost: {boost.cost} coins</p>
+                  <button
+                    disabled={buttonDisabled}
+                    onClick={handleClick}
+                    className="shop-item-button"
+                  >
+                    {buttonText}
+                  </button>
                 </div>
               </div>
             );
@@ -120,44 +139,68 @@ const ShopPage = () => {
     );
   };
 
+  // Render Avatar Items with unlock and equip logic
   const renderAvatars = () => {
     if (!avatarItems.length) return null;
     return (
-      <div className="shop-section">
-        <h2>Avatars</h2>
+      <div className="shop-section avatar-section">
+        <h2 className="shop-section-title">Avatars</h2>
         <div className="shop-grid">
           {avatarItems.map((avatar) => {
-            const canAfford = coins >= avatar.cost;
-            // If the user's level < unlockLevel, disable purchase
-            const meetsLevel = level >= avatar.unlockLevel;
-            // If user doc includes purchased items, check that
-            const alreadyPurchased = hasPurchased(avatar._id);
+            const autoUnlocked = avatar.cost === null || avatar.cost === 0;
+            const levelUnlocked = level >= avatar.unlockLevel;
+            const purchased = isPurchased(avatar._id);
+            const unlocked = autoUnlocked || levelUnlocked || purchased;
+            const isEquipped = currentAvatar === avatar._id;
 
-            const handleClick = () => {
-              if (!canAfford || !meetsLevel || alreadyPurchased) return;
-              handlePurchase(avatar._id);
-            };
+            let buttonText = '';
+            let buttonDisabled = false;
+            let onClickAction = null;
+
+            if (!unlocked) {
+              // Not unlocked: show "Buy" button
+              buttonText = 'Buy';
+              buttonDisabled = coins < avatar.cost;
+              onClickAction = () => handlePurchase(avatar._id);
+            } else {
+              // Unlocked
+              if (isEquipped) {
+                buttonText = 'Equipped';
+                buttonDisabled = true;
+              } else {
+                buttonText = 'Equip';
+                buttonDisabled = false;
+                onClickAction = () => handleEquip(avatar._id);
+              }
+            }
 
             return (
-              <div className="shop-item" key={avatar._id}>
-                <img src={avatar.imageUrl} alt={avatar.title} className="shop-item-image" />
+              <div
+                className="shop-item avatar-item"
+                key={avatar._id}
+              >
+                <img
+                  src={avatar.imageUrl}
+                  alt={avatar.title}
+                  className="shop-item-image avatar-image"
+                />
                 <div className="shop-item-info">
-                  <h3>{avatar.title}</h3>
-                  <p>{avatar.description}</p>
-                  <p>Unlock Level: {avatar.unlockLevel}</p>
-                  <p>Cost: {avatar.cost} coins</p>
-                  {alreadyPurchased ? (
-                    <button className="purchased-button" disabled>
-                      Purchased
-                    </button>
-                  ) : (
-                    <button
-                      disabled={!canAfford || !meetsLevel}
-                      onClick={handleClick}
-                    >
-                      Buy
-                    </button>
+                  <h3 className="shop-item-title">{avatar.title}</h3>
+                  <p className="shop-item-description">{avatar.description}</p>
+                  <p className="shop-item-unlock">Unlock Level: {avatar.unlockLevel}</p>
+                  {(!autoUnlocked && !unlocked) && (
+                    <p className="shop-item-cost">Cost: {avatar.cost} coins</p>
                   )}
+                  {autoUnlocked && (
+                    <p className="shop-item-default">(Default Avatar)</p>
+                  )}
+                  <button
+                    disabled={buttonDisabled}
+                    onClick={onClickAction}
+                    className="shop-item-button"
+                  >
+                    {buttonText}
+                  </button>
                 </div>
               </div>
             );
@@ -167,12 +210,12 @@ const ShopPage = () => {
     );
   };
 
-  // If you want to handle different states: loading, error, etc.
+  // Determine content based on the shop status
   let content;
   if (status === 'loading') {
-    content = <p>Loading shop items...</p>;
+    content = <p className="shop-loading">Loading shop items...</p>;
   } else if (status === 'failed') {
-    content = <p>Error loading shop items: {error}</p>;
+    content = <p className="shop-error">Error loading shop items: {error}</p>;
   } else {
     content = (
       <>
@@ -183,13 +226,12 @@ const ShopPage = () => {
   }
 
   return (
-    <div className="shop-page">
+    <div className="shop-page cyber-shop-page">
       <header className="shop-header">
-        <h1>Shop</h1>
+        <h1 className="shop-title">Shop</h1>
         <div className="shop-user-info">
-          <p>Coins: {coins}</p>
-          <p>Level: {level}</p>
-          {/* Optionally show xpBoost, currentAvatar, etc. */}
+          <p className="shop-user-coins">Coins: {coins}</p>
+          <p className="shop-user-level">Level: {level}</p>
         </div>
       </header>
 
@@ -205,3 +247,4 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
+
