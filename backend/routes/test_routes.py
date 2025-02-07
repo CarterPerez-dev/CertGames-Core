@@ -3,6 +3,7 @@
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime
+import redis, json
 
 from models.database import (
     mainusers_collection,
@@ -27,6 +28,7 @@ from models.test import (
 )
 
 api_bp = Blueprint('test', __name__)
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 def serialize_user(user):
     """Helper function to convert _id and other fields to strings if needed."""
@@ -389,3 +391,22 @@ def submit_answer(user_id):
         "newXP": new_xp,
         "newCoins": new_coins
     }), 200
+
+#A cheivement route
+
+@api_bp.route('/achievements', methods=['GET'])
+def fetch_achievements_route():
+    # 1) Try reading from Redis
+    cached = r.get("achievements_list")
+    if cached:
+        # If we have them cached, just return them
+        ach_list = json.loads(cached)
+    else:
+        # 2) Not in cache -> fetch from DB, store in Redis
+        ach_list = get_achievements()
+        # Convert _id to str
+        for ach in ach_list:
+            ach["_id"] = str(ach["_id"])
+        r.set("achievements_list", json.dumps(ach_list), ex=3600)  # e.g., 1 hour expiry
+
+    return jsonify(ach_list), 200
