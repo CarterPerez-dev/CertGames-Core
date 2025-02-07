@@ -8,9 +8,10 @@ import React, {
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { dailyLoginBonus, setXPAndCoins } from "../store/userSlice";
+import { fetchShopItems } from "../store/shopSlice";
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "../store/AchievementToast";
-import APlusTestList from "./APlusTestList"; // Import the Test List file
+import APlusTestList from "./APlusTestList"; // Import the Test List
 import "./APlusStyles.css";
 import {
   FaTrophy,
@@ -86,8 +87,38 @@ const APlusTestPage = () => {
 const TestView = ({ testId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { xp, level, coins, userId, xpBoost } = useSelector((state) => state.user);
+
+  // Grabbing user data
+  const {
+    xp,
+    level,
+    coins,
+    userId,
+    xpBoost,
+    currentAvatar
+  } = useSelector((state) => state.user);
+
+  // Grabbing achievements from the store
   const achievements = useSelector((state) => state.achievements.all);
+
+  // Grabbing shop items so we can look up the equipped avatar's image
+  const { items: shopItems, status: shopStatus } = useSelector((state) => state.shop);
+
+  // Attempt to fetch shop items if not already fetched
+  useEffect(() => {
+    if (shopStatus === "idle") {
+      dispatch(fetchShopItems());
+    }
+  }, [shopStatus, dispatch]);
+
+  // Determine the avatar image URL
+  let avatarUrl = "https://via.placeholder.com/60"; // fallback
+  if (currentAvatar && shopItems && shopItems.length > 0) {
+    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
+    if (avatarItem && avatarItem.imageUrl) {
+      avatarUrl = avatarItem.imageUrl;
+    }
+  }
 
   // Local state
   const [currentTest, setCurrentTest] = useState(null);
@@ -110,7 +141,7 @@ const TestView = ({ testId }) => {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [progressLoaded, setProgressLoaded] = useState(false);
 
-  // For local in-browser saving
+  // Key for localStorage progress
   const progressKey = `testProgress_${userId}_${testId}`;
 
   /* ------------------------------------------------------------------
@@ -138,7 +169,7 @@ const TestView = ({ testId }) => {
           }
         });
 
-        // Attempt to load any saved progress from localStorage
+        // Attempt localStorage progress
         const savedProgressStr = localStorage.getItem(progressKey);
         if (savedProgressStr) {
           const saved = JSON.parse(savedProgressStr);
@@ -146,7 +177,7 @@ const TestView = ({ testId }) => {
             data.questions = saved.shuffledQuestions;
           }
         } else {
-          // No saved progress: shuffle questions and initialize
+          // No saved progress: shuffle & init
           const shuffled = data.questions.map((q) => shuffleOptions(q));
           data.questions = shuffled;
           const initProgress = {
@@ -225,7 +256,7 @@ const TestView = ({ testId }) => {
   }, [currentTest, progressKey]);
 
   /* ------------------------------------------------------------------
-     (5) Sync Selected Option when Question Changes
+     (5) Sync Selected Option on Question Change
   ------------------------------------------------------------------ */
   useEffect(() => {
     if (!currentTest || !progressLoaded) return;
@@ -243,7 +274,6 @@ const TestView = ({ testId }) => {
 
   /* ------------------------------------------------------------------
      (6) Debounced Save Test Progress
-     to localStorage and separate collection
   ------------------------------------------------------------------ */
   useEffect(() => {
     if (!progressLoaded || !currentTest || isFinished) return;
@@ -262,7 +292,7 @@ const TestView = ({ testId }) => {
       // 1) localStorage
       localStorage.setItem(progressKey, JSON.stringify(progress));
 
-      // 2) Post partial progress to /api/test/attempts/<userId>/<testId>
+      // 2) server partial progress
       if (userId) {
         fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -294,7 +324,7 @@ const TestView = ({ testId }) => {
   ]);
 
   /* ------------------------------------------------------------------
-     (7) Memoized Filtered Questions for Review Mode
+     (7) Memo: Filtered Questions for Review
   ------------------------------------------------------------------ */
   const filteredQuestions = useMemo(() => {
     if (!currentTest) return [];
@@ -416,7 +446,6 @@ const TestView = ({ testId }) => {
 
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
 
-    // POST to /attempts/<userId>/<testId>/finish
     fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -497,7 +526,6 @@ const TestView = ({ testId }) => {
     setShowReviewMode(false);
     setShowScoreOverlay(false);
     reShuffleQuestions();
-    // Optionally remove partial attempts doc in the DB if you prefer
   }, [reShuffleQuestions, progressKey]);
 
   const handleFinishTest = () => {
@@ -773,7 +801,7 @@ const TestView = ({ testId }) => {
   };
 
   /* ------------------------------------------------------------------
-     Static Achievement Icon & Color Mapping
+     Achievement Icon & Color
   ------------------------------------------------------------------ */
   const iconMapping = {
     test_rookie: FaTrophy,
@@ -837,9 +865,6 @@ const TestView = ({ testId }) => {
     subject_finisher: "#7fff00",
   };
 
-  // Placeholder avatar
-  const avatarUrl = "https://via.placeholder.com/60";
-
   /* ------------------------------------------------------------------
      Final Return
   ------------------------------------------------------------------ */
@@ -859,6 +884,7 @@ const TestView = ({ testId }) => {
       {renderScoreOverlay()}
       {renderReviewMode()}
 
+      {/* Top control bar (flag & finish) */}
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {flaggedQuestions.includes(questionData.id) ? "Unflag" : "Flag"}
@@ -868,6 +894,7 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
+      {/* Upper control bar (restart & back) */}
       <div className="upper-control-bar">
         <button className="restart-test-btn" onClick={() => setShowRestartPopup(true)}>
           Restart Test
@@ -879,6 +906,7 @@ const TestView = ({ testId }) => {
 
       <h1 className="aplus-title">{currentTest.testName}</h1>
 
+      {/* Top bar with avatar, xp, coins */}
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -891,6 +919,7 @@ const TestView = ({ testId }) => {
         <div className="coins-display">Coins: {coins}</div>
       </div>
 
+      {/* Progress bar */}
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -900,6 +929,7 @@ const TestView = ({ testId }) => {
         </div>
       </div>
 
+      {/* Question card */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">{questionData.question}</div>
