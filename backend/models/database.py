@@ -12,41 +12,14 @@ app = Flask(__name__)
 app.config["MONGO_URI"] = os.getenv("MONGO_URI")  
 mongo = PyMongo(app)
 
-# Expose the db object for collections
 db = mongo.db
 
-"""
-------------------------------------------------------------------------------
- mainusers_collection
-------------------------------------------------------------------------------
-"""
+# Existing collections
 mainusers_collection = db.mainusers
-
-"""
-------------------------------------------------------------------------------
- shop_collection
-------------------------------------------------------------------------------
-"""
 shop_collection = db.shopItems
-
-"""
-------------------------------------------------------------------------------
- achievements_collection
-------------------------------------------------------------------------------
-"""
 achievements_collection = db.achievements
-
-"""
-------------------------------------------------------------------------------
- tests_collection
-------------------------------------------------------------------------------
-"""
 tests_collection = db.tests
 
-"""
-------------------------------------------------------------------------------
- testProgress_collection (Optional)
-------------------------------------------------------------------------------
-"""
-testProgress_collection = db.testProgress
-
+# NEW collections for attempts and correct answers:
+testAttempts_collection = db.testAttempts
+correctAnswers_collection = db.correctAnswers
