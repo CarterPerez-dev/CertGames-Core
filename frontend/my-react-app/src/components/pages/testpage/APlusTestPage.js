@@ -111,11 +111,12 @@ const TestView = ({ testId }) => {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [progressLoaded, setProgressLoaded] = useState(false);
 
+  // For local in-browser saving, we keep a progressKey in localStorage.
   const progressKey = `testProgress_${userId}_${testId}`;
 
-  // ---------------------------
-  // (1) Fetch Test Data
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (1) Fetch Test Data
+  ------------------------------------------------------------------ */
   useEffect(() => {
     const fetchTestData = async () => {
       setLoadingTest(true);
@@ -133,12 +134,13 @@ const TestView = ({ testId }) => {
 
         const data = await response.json();
         data.questions.forEach((q, index) => {
+          // Assign fallback ID if question lacks one
           if (!q.id) {
             q.id = `test${testId}_q${index}`;
           }
         });
 
-        // Attempt to load saved progress
+        // Attempt to load any saved progress from localStorage
         const savedProgressStr = localStorage.getItem(progressKey);
         if (savedProgressStr) {
           const saved = JSON.parse(savedProgressStr);
@@ -146,7 +148,7 @@ const TestView = ({ testId }) => {
             data.questions = saved.shuffledQuestions;
           }
         } else {
-          // No saved progress: shuffle questions and initialize progress
+          // No saved progress: shuffle questions and initialize progress in localStorage
           const shuffled = data.questions.map((q) => shuffleOptions(q));
           data.questions = shuffled;
           const initProgress = {
@@ -170,18 +172,18 @@ const TestView = ({ testId }) => {
     fetchTestData();
   }, [testId, progressKey]);
 
-  // ---------------------------
-  // (2) Daily Login Bonus
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (2) Daily Login Bonus
+  ------------------------------------------------------------------ */
   useEffect(() => {
     if (userId) {
       dispatch(dailyLoginBonus(userId));
     }
   }, [dispatch, userId]);
 
-  // ---------------------------
-  // (3) Level-Up Overlay Check
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (3) Level-Up Overlay Check
+  ------------------------------------------------------------------ */
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -191,9 +193,9 @@ const TestView = ({ testId }) => {
     }
   }, [level, localLevel]);
 
-  // ---------------------------
-  // (4) Load Saved Progress
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (4) Load Saved Progress from localStorage
+  ------------------------------------------------------------------ */
   useEffect(() => {
     if (!currentTest) return;
     const savedProgressStr = localStorage.getItem(progressKey);
@@ -224,9 +226,9 @@ const TestView = ({ testId }) => {
     }
   }, [currentTest, progressKey]);
 
-  // ---------------------------
-  // (5) Sync Selected Option when Question Changes
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (5) Sync Selected Option when Question Changes
+  ------------------------------------------------------------------ */
   useEffect(() => {
     if (!currentTest || !progressLoaded) return;
     const question = currentTest.questions[currentQuestionIndex];
@@ -241,9 +243,10 @@ const TestView = ({ testId }) => {
     }
   }, [currentQuestionIndex, currentTest, progressLoaded, answers]);
 
-  // ---------------------------
-  // (6) Debounced Save Test Progress Effect
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (6) Debounced Save Test Progress to localStorage and to server
+     but now storing in testAttempts_collection (i.e., new route).
+  ------------------------------------------------------------------ */
   useEffect(() => {
     if (!progressLoaded || !currentTest || isFinished) return;
     const totalQuestions = currentTest.questions.length;
@@ -256,18 +259,30 @@ const TestView = ({ testId }) => {
       shuffledQuestions: currentTest.questions,
       finished: false,
     };
+
     const handler = setTimeout(() => {
+      // 1) Save to local storage
       localStorage.setItem(progressKey, JSON.stringify(progress));
+
+      // 2) Save partial progress to separate attempts collection
+      //    Using the new route: /api/test/attempts/<userId>/<testId>
       if (userId) {
-        fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
+        fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(progress),
+          body: JSON.stringify({
+            answers,
+            score,
+            totalQuestions,
+            category: currentTest.category || "aplus",
+            finished: false,
+          }),
         }).catch((err) => {
-          console.error("Failed to update test progress on backend", err);
+          console.error("Failed to update test attempt on backend", err);
         });
       }
     }, 500);
+
     return () => clearTimeout(handler);
   }, [
     currentQuestionIndex,
@@ -278,11 +293,12 @@ const TestView = ({ testId }) => {
     progressLoaded,
     isFinished,
     currentTest,
+    progressKey
   ]);
 
-  // ---------------------------
-  // (7) Memoize Filtered Questions for Review Mode
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (7) Memoize Filtered Questions for Review Mode
+  ------------------------------------------------------------------ */
   const filteredQuestions = useMemo(() => {
     if (!currentTest) return [];
     return currentTest.questions.filter((q) => {
@@ -304,7 +320,7 @@ const TestView = ({ testId }) => {
   }, [currentTest, answers, flaggedQuestions, reviewFilter]);
 
   // -------------------------------------------------------------
-  // (9) Derived variables (use optional chaining to avoid errors)
+  // Derived variables
   // -------------------------------------------------------------
   const totalQuestions = currentTest?.questions?.length || 0;
   const questionData = currentTest?.questions?.[currentQuestionIndex];
@@ -313,9 +329,9 @@ const TestView = ({ testId }) => {
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
-  // ---------------------------
-  // (10) Callback Handlers
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     (10) Callback Handlers
+  ------------------------------------------------------------------ */
   const handleOptionClick = useCallback(
     async (optionIndex) => {
       if (isAnswered || !questionData) return;
@@ -324,12 +340,14 @@ const TestView = ({ testId }) => {
         // Calculate effective XP using xpBoost
         const baseXP = currentTest.xpPerCorrect || 10;
         const effectiveXP = baseXP * xpBoost;
+        // The route for awarding XP/coins only once is still /api/test/user/<userId>/submit-answer
+        // That logic can remain unchanged if it references correctAnswers_collection now.
         const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             testId,
-            questionId: questionData.id, // must be a unique question ID
+            questionId: questionData.id,
             correctAnswerIndex: questionData.correctAnswerIndex,
             selectedIndex: optionIndex,
             xpPerCorrect: effectiveXP,
@@ -340,9 +358,11 @@ const TestView = ({ testId }) => {
 
         if (response.ok) {
           const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
+          // If first time correct -> XP/coins added
           if (isCorrect && !alreadyCorrect && awardedXP > 0) {
             dispatch(setXPAndCoins({ xp: newXP, coins: newCoins }));
           }
+          // Always update local score for correct
           if (isCorrect) {
             setScore((prev) => prev + 1);
           }
@@ -353,6 +373,7 @@ const TestView = ({ testId }) => {
         console.error("Failed to submit answer to backend", err);
       }
 
+      // Update local answers array
       const updatedAnswers = [...answers];
       const existingIndex = updatedAnswers.findIndex((a) => a.questionId === questionData.id);
       const newAnswerObj = {
@@ -372,13 +393,14 @@ const TestView = ({ testId }) => {
   );
 
   const finishTestProcess = useCallback(() => {
+    // Tally final score from local answers
     const finalScore = answers.reduce(
-      (acc, ans) =>
-        ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc,
+      (acc, ans) => (ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc),
       0
     );
     setScore(finalScore);
 
+    // Prepare the final object for local storage
     const finishedProgress = {
       currentQuestionIndex,
       answers,
@@ -390,23 +412,29 @@ const TestView = ({ testId }) => {
       shuffledQuestions: currentTest?.questions || [],
     };
 
+    // Save to local storage
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
 
-    fetch(`/api/test/user/${userId}/test-progress/${testId}`, {
+    // Also tell the server we have finished. We'll use the new route:
+    // /api/test/attempts/<userId>/<testId>/finish
+    fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(finishedProgress),
+      body: JSON.stringify({
+        score: finalScore,
+        totalQuestions,
+      }),
     })
       .then((r) => r.json())
       .then((data) => {
+        // The new route returns newlyUnlocked achievements, if any
         if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
           data.newlyUnlocked.forEach((achievementId) => {
             const achievement = achievements.find(
               (a) => a.achievementId === achievementId
             );
             if (achievement) {
-              const IconComponent =
-                iconMapping[achievement.achievementId] || null;
+              const IconComponent = iconMapping[achievement.achievementId] || null;
               const color = colorMapping[achievement.achievementId] || "#fff";
               showAchievementToast({
                 title: achievement.title,
@@ -418,9 +446,7 @@ const TestView = ({ testId }) => {
           });
         }
       })
-      .catch((err) =>
-        console.error("Failed to mark test as finished", err)
-      );
+      .catch((err) => console.error("Failed to mark test as finished", err));
 
     setIsFinished(true);
     setShowScoreOverlay(true);
@@ -461,6 +487,7 @@ const TestView = ({ testId }) => {
   }, [currentTest]);
 
   const handleRestartTest = useCallback(() => {
+    // Clear local storage
     localStorage.removeItem(progressKey);
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
@@ -472,6 +499,9 @@ const TestView = ({ testId }) => {
     setShowReviewMode(false);
     setShowScoreOverlay(false);
     reShuffleQuestions();
+
+    // Optionally, you might also call an endpoint to remove or reset partial attempts if you want
+    // but typically the user might just start a new attempt. 
   }, [reShuffleQuestions, progressKey]);
 
   const handleFinishTest = () => {
@@ -526,9 +556,9 @@ const TestView = ({ testId }) => {
     }
   }, [isAnswered, handleNextQuestion]);
 
-  // ---------------------------
-  // Render Overlays & Popups
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     Render Overlays & Popups
+  ------------------------------------------------------------------ */
   const renderRestartPopup = () => {
     if (!showRestartPopup) return null;
     return (
@@ -590,13 +620,18 @@ const TestView = ({ testId }) => {
             <button className="review-button" onClick={handleReviewAnswers}>
               View Review
             </button>
-            <button className="back-btn" onClick={() => navigate("/practice-tests/a-plus")}>
+            <button
+              className="back-btn"
+              onClick={() => navigate("/practice-tests/a-plus")}
+            >
               Back to Test List
             </button>
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() => navigate(`/practice-tests/a-plus/${Number(testId) + 1}`)}
+                onClick={() =>
+                  navigate(`/practice-tests/a-plus/${Number(testId) + 1}`)
+                }
               >
                 Next Test
               </button>
@@ -613,7 +648,10 @@ const TestView = ({ testId }) => {
       <div className="score-overlay review-overlay">
         <div className="score-content review-content">
           {isFinished ? (
-            <button className="back-to-list-btn" onClick={() => navigate("/practice-tests/a-plus")}>
+            <button
+              className="back-to-list-btn"
+              onClick={() => navigate("/practice-tests/a-plus")}
+            >
               Go Back to Test List
             </button>
           ) : (
@@ -663,7 +701,9 @@ const TestView = ({ testId }) => {
               Correct
             </button>
           </div>
-          <p className="score-details">Questions shown: {filteredQuestions.length}</p>
+          <p className="score-details">
+            Questions shown: {filteredQuestions.length}
+          </p>
           <div className="review-mode-container">
             {filteredQuestions.map((q) => {
               const userAnswer = answers.find((a) => a.questionId === q.id);
@@ -676,8 +716,13 @@ const TestView = ({ testId }) => {
                       Q{q.id}: {q.question}{" "}
                       {isFlagged && <span className="flagged-icon">🚩</span>}
                     </h3>
-                    <p><strong>Your Answer:</strong> Unanswered</p>
-                    <p><strong>Correct Answer:</strong> {q.options[q.correctAnswerIndex]}</p>
+                    <p>
+                      <strong>Your Answer:</strong> Unanswered
+                    </p>
+                    <p>
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
+                    </p>
                     <p style={{ color: "#F44336" }}>No Answer</p>
                     <p>{q.explanation}</p>
                   </div>
@@ -685,7 +730,8 @@ const TestView = ({ testId }) => {
               }
 
               const isSkipped = userAnswer.userAnswerIndex === null;
-              const isCorrect = userAnswer.userAnswerIndex === q.correctAnswerIndex;
+              const isCorrect =
+                userAnswer.userAnswerIndex === q.correctAnswerIndex;
 
               return (
                 <div key={q.id} className="review-question-card">
@@ -695,13 +741,20 @@ const TestView = ({ testId }) => {
                   </h3>
                   <p>
                     <strong>Your Answer:</strong>{" "}
-                    {isSkipped ? "Skipped" : q.options[userAnswer.userAnswerIndex]}
+                    {isSkipped
+                      ? "Skipped"
+                      : q.options[userAnswer.userAnswerIndex]}
                   </p>
                   <p>
-                    <strong>Correct Answer:</strong> {q.options[q.correctAnswerIndex]}
+                    <strong>Correct Answer:</strong>{" "}
+                    {q.options[q.correctAnswerIndex]}
                   </p>
                   {!isSkipped && (
-                    <p style={{ color: isCorrect ? "#8BC34A" : "#F44336" }}>
+                    <p
+                      style={{
+                        color: isCorrect ? "#8BC34A" : "#F44336",
+                      }}
+                    >
                       {isCorrect ? "Correct!" : "Incorrect!"}
                     </p>
                   )}
@@ -711,7 +764,10 @@ const TestView = ({ testId }) => {
             })}
           </div>
           {!isFinished && (
-            <button className="review-button close-review-btn" onClick={handleCloseReview}>
+            <button
+              className="review-button close-review-btn"
+              onClick={handleCloseReview}
+            >
               Close Review
             </button>
           )}
@@ -720,9 +776,9 @@ const TestView = ({ testId }) => {
     );
   };
 
-  // ---------------------------
-  // Static Achievement Icon & Color Mapping
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     Static Achievement Icon & Color Mapping
+  ------------------------------------------------------------------ */
   const iconMapping = {
     test_rookie: FaTrophy,
     accuracy_king: FaMedal,
@@ -785,13 +841,12 @@ const TestView = ({ testId }) => {
     subject_finisher: "#7fff00",
   };
 
-  // For the avatar image, you may use a placeholder or derive from user.currentAvatar.
-  // Here we simply use a placeholder.
+  // Placeholder for avatar
   const avatarUrl = "https://via.placeholder.com/60";
 
-  // ---------------------------
-  // Final Return (one return only)
-  // ---------------------------
+  /* ------------------------------------------------------------------
+     Final Return
+  ------------------------------------------------------------------ */
   return error ? (
     <div style={{ color: "#fff" }}>Error: {error}</div>
   ) : !currentTest ||
@@ -800,13 +855,17 @@ const TestView = ({ testId }) => {
     <div style={{ color: "#fff" }}>Loading test...</div>
   ) : (
     <div className="aplus-test-container">
+      {/* Level-up confetti */}
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
+      {/* Overlays & popups */}
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
       {renderScoreOverlay()}
       {renderReviewMode()}
 
+      {/* Top control bar for Flag & Finish */}
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {flaggedQuestions.includes(questionData.id) ? "Unflag" : "Flag"}
@@ -816,6 +875,7 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
+      {/* Upper control bar for Restart & Back */}
       <div className="upper-control-bar">
         <button className="restart-test-btn" onClick={() => setShowRestartPopup(true)}>
           Restart Test
@@ -825,8 +885,10 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
+      {/* Test Title */}
       <h1 className="aplus-title">{currentTest.testName}</h1>
 
+      {/* Top bar with avatar, level, xp, coins */}
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -839,6 +901,7 @@ const TestView = ({ testId }) => {
         <div className="coins-display">Coins: {coins}</div>
       </div>
 
+      {/* Progress Bar */}
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -848,6 +911,7 @@ const TestView = ({ testId }) => {
         </div>
       </div>
 
+      {/* Question Card */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">{questionData.question}</div>
@@ -919,4 +983,3 @@ const TestView = ({ testId }) => {
 };
 
 export default APlusTestPage;
-
