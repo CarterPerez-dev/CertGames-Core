@@ -82,7 +82,6 @@ const APlusTestPage = () => {
 /* ============================
    Test View Component
    ============================
-   All hooks are declared at the top level.
 */
 const TestView = ({ testId }) => {
   const navigate = useNavigate();
@@ -90,7 +89,7 @@ const TestView = ({ testId }) => {
   const { xp, level, coins, userId, xpBoost } = useSelector((state) => state.user);
   const achievements = useSelector((state) => state.achievements.all);
 
-  // Local state variables
+  // Local state
   const [currentTest, setCurrentTest] = useState(null);
   const [loadingTest, setLoadingTest] = useState(true);
   const [error, setError] = useState(null);
@@ -111,7 +110,7 @@ const TestView = ({ testId }) => {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [progressLoaded, setProgressLoaded] = useState(false);
 
-  // For local in-browser saving, we keep a progressKey in localStorage.
+  // For local in-browser saving
   const progressKey = `testProgress_${userId}_${testId}`;
 
   /* ------------------------------------------------------------------
@@ -134,7 +133,6 @@ const TestView = ({ testId }) => {
 
         const data = await response.json();
         data.questions.forEach((q, index) => {
-          // Assign fallback ID if question lacks one
           if (!q.id) {
             q.id = `test${testId}_q${index}`;
           }
@@ -148,7 +146,7 @@ const TestView = ({ testId }) => {
             data.questions = saved.shuffledQuestions;
           }
         } else {
-          // No saved progress: shuffle questions and initialize progress in localStorage
+          // No saved progress: shuffle questions and initialize
           const shuffled = data.questions.map((q) => shuffleOptions(q));
           data.questions = shuffled;
           const initProgress = {
@@ -244,8 +242,8 @@ const TestView = ({ testId }) => {
   }, [currentQuestionIndex, currentTest, progressLoaded, answers]);
 
   /* ------------------------------------------------------------------
-     (6) Debounced Save Test Progress to localStorage and to server
-     but now storing in testAttempts_collection (i.e., new route).
+     (6) Debounced Save Test Progress
+     to localStorage and separate collection
   ------------------------------------------------------------------ */
   useEffect(() => {
     if (!progressLoaded || !currentTest || isFinished) return;
@@ -261,11 +259,10 @@ const TestView = ({ testId }) => {
     };
 
     const handler = setTimeout(() => {
-      // 1) Save to local storage
+      // 1) localStorage
       localStorage.setItem(progressKey, JSON.stringify(progress));
 
-      // 2) Save partial progress to separate attempts collection
-      //    Using the new route: /api/test/attempts/<userId>/<testId>
+      // 2) Post partial progress to /api/test/attempts/<userId>/<testId>
       if (userId) {
         fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -297,7 +294,7 @@ const TestView = ({ testId }) => {
   ]);
 
   /* ------------------------------------------------------------------
-     (7) Memoize Filtered Questions for Review Mode
+     (7) Memoized Filtered Questions for Review Mode
   ------------------------------------------------------------------ */
   const filteredQuestions = useMemo(() => {
     if (!currentTest) return [];
@@ -319,29 +316,27 @@ const TestView = ({ testId }) => {
     });
   }, [currentTest, answers, flaggedQuestions, reviewFilter]);
 
-  // -------------------------------------------------------------
-  // Derived variables
-  // -------------------------------------------------------------
+  // Derived
   const totalQuestions = currentTest?.questions?.length || 0;
   const questionData = currentTest?.questions?.[currentQuestionIndex];
   const progressPercentage =
-    totalQuestions > 0 ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100) : 0;
+    totalQuestions > 0
+      ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)
+      : 0;
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
   /* ------------------------------------------------------------------
-     (10) Callback Handlers
+     (10) Handlers
   ------------------------------------------------------------------ */
   const handleOptionClick = useCallback(
     async (optionIndex) => {
       if (isAnswered || !questionData) return;
       setSelectedOptionIndex(optionIndex);
+
       try {
-        // Calculate effective XP using xpBoost
         const baseXP = currentTest.xpPerCorrect || 10;
         const effectiveXP = baseXP * xpBoost;
-        // The route for awarding XP/coins only once is still /api/test/user/<userId>/submit-answer
-        // That logic can remain unchanged if it references correctAnswers_collection now.
         const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -358,11 +353,9 @@ const TestView = ({ testId }) => {
 
         if (response.ok) {
           const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
-          // If first time correct -> XP/coins added
           if (isCorrect && !alreadyCorrect && awardedXP > 0) {
             dispatch(setXPAndCoins({ xp: newXP, coins: newCoins }));
           }
-          // Always update local score for correct
           if (isCorrect) {
             setScore((prev) => prev + 1);
           }
@@ -373,9 +366,10 @@ const TestView = ({ testId }) => {
         console.error("Failed to submit answer to backend", err);
       }
 
-      // Update local answers array
       const updatedAnswers = [...answers];
-      const existingIndex = updatedAnswers.findIndex((a) => a.questionId === questionData.id);
+      const existingIndex = updatedAnswers.findIndex(
+        (a) => a.questionId === questionData.id
+      );
       const newAnswerObj = {
         questionId: questionData.id,
         userAnswerIndex: optionIndex,
@@ -389,18 +383,26 @@ const TestView = ({ testId }) => {
       setAnswers(updatedAnswers);
       setIsAnswered(true);
     },
-    [isAnswered, questionData, currentTest, xpBoost, answers, userId, testId, dispatch]
+    [
+      isAnswered,
+      questionData,
+      currentTest,
+      xpBoost,
+      answers,
+      userId,
+      testId,
+      dispatch
+    ]
   );
 
   const finishTestProcess = useCallback(() => {
-    // Tally final score from local answers
     const finalScore = answers.reduce(
-      (acc, ans) => (ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc),
+      (acc, ans) =>
+        ans.userAnswerIndex === ans.correctAnswerIndex ? acc + 1 : acc,
       0
     );
     setScore(finalScore);
 
-    // Prepare the final object for local storage
     const finishedProgress = {
       currentQuestionIndex,
       answers,
@@ -412,22 +414,19 @@ const TestView = ({ testId }) => {
       shuffledQuestions: currentTest?.questions || [],
     };
 
-    // Save to local storage
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
 
-    // Also tell the server we have finished. We'll use the new route:
-    // /api/test/attempts/<userId>/<testId>/finish
+    // POST to /attempts/<userId>/<testId>/finish
     fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         score: finalScore,
-        totalQuestions,
+        totalQuestions
       }),
     })
       .then((r) => r.json())
       .then((data) => {
-        // The new route returns newlyUnlocked achievements, if any
         if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
           data.newlyUnlocked.forEach((achievementId) => {
             const achievement = achievements.find(
@@ -487,7 +486,6 @@ const TestView = ({ testId }) => {
   }, [currentTest]);
 
   const handleRestartTest = useCallback(() => {
-    // Clear local storage
     localStorage.removeItem(progressKey);
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
@@ -499,9 +497,7 @@ const TestView = ({ testId }) => {
     setShowReviewMode(false);
     setShowScoreOverlay(false);
     reShuffleQuestions();
-
-    // Optionally, you might also call an endpoint to remove or reset partial attempts if you want
-    // but typically the user might just start a new attempt. 
+    // Optionally remove partial attempts doc in the DB if you prefer
   }, [reShuffleQuestions, progressKey]);
 
   const handleFinishTest = () => {
@@ -841,7 +837,7 @@ const TestView = ({ testId }) => {
     subject_finisher: "#7fff00",
   };
 
-  // Placeholder for avatar
+  // Placeholder avatar
   const avatarUrl = "https://via.placeholder.com/60";
 
   /* ------------------------------------------------------------------
@@ -855,17 +851,14 @@ const TestView = ({ testId }) => {
     <div style={{ color: "#fff" }}>Loading test...</div>
   ) : (
     <div className="aplus-test-container">
-      {/* Level-up confetti */}
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
 
-      {/* Overlays & popups */}
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
       {renderScoreOverlay()}
       {renderReviewMode()}
 
-      {/* Top control bar for Flag & Finish */}
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {flaggedQuestions.includes(questionData.id) ? "Unflag" : "Flag"}
@@ -875,7 +868,6 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
-      {/* Upper control bar for Restart & Back */}
       <div className="upper-control-bar">
         <button className="restart-test-btn" onClick={() => setShowRestartPopup(true)}>
           Restart Test
@@ -885,10 +877,8 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
-      {/* Test Title */}
       <h1 className="aplus-title">{currentTest.testName}</h1>
 
-      {/* Top bar with avatar, level, xp, coins */}
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -901,7 +891,6 @@ const TestView = ({ testId }) => {
         <div className="coins-display">Coins: {coins}</div>
       </div>
 
-      {/* Progress Bar */}
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -911,7 +900,6 @@ const TestView = ({ testId }) => {
         </div>
       </div>
 
-      {/* Question Card */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">{questionData.question}</div>
