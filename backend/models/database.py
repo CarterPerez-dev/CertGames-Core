@@ -9,7 +9,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # MongoDB Connection
-app.config["MONGO_URI"] = os.getenv("MONGO_URI")  # e.g. "mongodb://localhost:27017/yourdb"
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")  
 mongo = PyMongo(app)
 
 # Expose the db object for collections
