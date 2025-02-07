@@ -20,8 +20,8 @@ def get_user_by_identifier(identifier):
 
 def create_user(user_data):
     """
-    Creates a new user document, setting default fields including
-    coins, xp, level, purchasedItems, xpBoost, etc.
+    Creates a new user document, setting default fields including coins, xp, level,
+    purchasedItems, xpBoost, etc.
     """
     existing_user = mainusers_collection.find_one({
         "$or": [
@@ -44,10 +44,10 @@ def create_user(user_data):
     user_data.setdefault("testsProgress", {})
     user_data.setdefault("perTestCorrect", {})  # for /submit-answer logic
 
-    # NEW FIELDS FOR SHOP + XP INTEGRATION
-    user_data.setdefault("xpBoost", 1.0)         # user’s current XP multiplier
-    user_data.setdefault("currentAvatar", None)  # store an ObjectId from shopItems
-    user_data.setdefault("nameColor", None)      # e.g., "blue" or "#ff0000"
+    # NEW FIELDS FOR SHOP + XP INTEGRATION:
+    user_data.setdefault("xpBoost", 1.0)         # User’s current XP multiplier (default: 1.0)
+    user_data.setdefault("currentAvatar", None)  # Stores an ObjectId from shopItems if an avatar is equipped
+    user_data.setdefault("nameColor", None)      # For example: "blue" or "#ff0000"
 
     result = mainusers_collection.insert_one(user_data)
     return result.inserted_id
@@ -55,7 +55,7 @@ def create_user(user_data):
 
 def get_user_by_id(user_id):
     """
-    Retrieves a user by ID, returns None if invalid or not found.
+    Retrieves a user by ID. Returns None if invalid or not found.
     """
     try:
         oid = ObjectId(user_id)
@@ -66,7 +66,7 @@ def get_user_by_id(user_id):
 
 def update_user_coins(user_id, amount):
     """
-    Increments (or decrements) the user's coins by 'amount'.
+    Increments (or decrements) the user's coins by the specified amount.
     """
     try:
         oid = ObjectId(user_id)
@@ -76,108 +76,57 @@ def update_user_coins(user_id, amount):
 
 
 ##############################################
-# Piecewise XP Logic
-#  - builds a "delta array" for L=1..99 => total 75K at L=100
-#  - For L>100 => mild ratio=1.02 infinite
+# Leveling System
 ##############################################
-
-def build_custom_delta_array():
-    """
-    Returns a list 'delta' where delta[L] is XP needed from level L -> L+1
-    for L in [1..99]. We'll define 4 segments A-D, then scale so L=100 sums to 75k.
-    """
-    delta = [0]*200  # index 0..199 so that L=1..99 is valid
-
-    # Segment A: L=1..9 => linear from 200 -> 500
-    startA = 200.0
-    endA = 500.0
-    stepsA = 9
-    for i in range(1, 10):  # i=1..9
-        frac = (i-1)/(stepsA-1) if stepsA > 1 else 0
-        delta[i] = startA + frac*(endA - startA)
-
-    # Segment B: L=10..49 => ratio=1.06, start=600
-    delta[10] = 600.0
-    ratioB = 1.06
-    for L in range(11, 50):
-        delta[L] = delta[L-1] * ratioB
-
-    # Segment C: L=50..90 => ratio=1.08, start=1200
-    delta[50] = 1200.0
-    ratioC = 1.08
-    for L in range(51, 91):
-        delta[L] = delta[L-1] * ratioC
-
-    # Segment D: L=91..99 => ratio=1.05, start=8000
-    delta[91] = 8000.0
-    ratioD = 1.05
-    for L in range(92, 100):
-        delta[L] = delta[L-1] * ratioD
-
-    # Sum them to see total at L=100
-    sumX = 0.0
-    for L in range(1, 100):
-        sumX += delta[L]
-
-    # Scale so total => 75k
-    factor = 75_000 / sumX
-    for L in range(1, 100):
-        delta[L] *= factor
-
-    return delta
-
-
-# Create array once
-delta_array = build_custom_delta_array()
-ratioE = 1.02  # For L>100, 2% growth each level
-
-
-def xp_for_level_under_100(level):
-    """Sum up delta[1..(level-1)] for L<=100."""
-    total = 0.0
-    for L in range(1, level):
-        total += delta_array[L]
-    return total
-
-
-def xp_for_level_over_100(level):
-    """
-    For L>100, total XP = 75k + sum of infinite segment from 100->101..(level-1)->level.
-    baseE = cost from L=99->100 in delta_array, ratio=1.02
-    """
-    xp_at_100 = 75000.0
-    baseE = delta_array[99]  # cost from 99->100
-
-    steps = level - 100
-    if steps <= 0:
-        return xp_at_100
-
-    # geometric sum baseE * (ratio^steps -1)/(ratio-1)
-    sum_inf = baseE * ((ratioE**steps) - 1)/(ratioE - 1)
-    return xp_at_100 + sum_inf
-
+# New leveling progression:
+#   - Level 1: 0 XP.
+#   - Levels 2–30: Each level-up requires 500 XP.
+#       XP required for level L (2 ≤ L ≤ 30) = 500 * (L - 1)
+#   - Levels 31–60: Each level-up requires 750 XP.
+#       XP required for level L (31 ≤ L ≤ 60) = (500 * 29) + 750 * (L - 30)
+#   - Levels 61–100: Each level-up requires 1000 XP.
+#       XP required for level L (61 ≤ L ≤ 100) = (500 * 29) + (750 * 30) + 1000 * (L - 60)
+#   - Levels above 100: Each level-up requires 1500 XP.
+#       XP required for level L (> 100) = (500*29) + (750*30) + (1000*40) + 1500 * (L - 100)
 
 def xp_required_for_level(level):
     """
-    Returns total XP needed to *be* at 'level'.
-    L=1 => 0 XP
-    2..100 => sum of delta array
-    >100 => 75k + infinite
+    Returns the total XP required to reach a given level.
+    Level 1 starts at 0 XP.
+    For levels 2-30, each level-up requires 500 XP.
+    For levels 31-60, each level-up requires 750 XP.
+    For levels 61-100, each level-up requires 1000 XP.
+    For levels beyond 100, each level-up requires 1500 XP.
     """
     if level < 1:
         return 0
     if level == 1:
         return 0
-    if level <= 100:
-        return int(round(xp_for_level_under_100(level)))
-    # else
-    return int(round(xp_for_level_over_100(level)))
+    if level <= 30:
+        # Levels 2 to 30: (L - 1) increments at 500 XP each.
+        return 500 * (level - 1)
+    elif level <= 60:
+        # Total XP at level 30: 500 * 29 = 14500
+        base = 500 * 29
+        # Levels 31 to L: (L - 30) increments at 750 XP each.
+        return base + 750 * (level - 30)
+    elif level <= 100:
+        # Total XP at level 60: 500*29 + 750*30
+        base = 500 * 29 + 750 * 30  # 14500 + 22500 = 37000
+        # Levels 61 to L: (L - 60) increments at 1000 XP each.
+        return base + 1000 * (level - 60)
+    else:
+        # For levels > 100, total XP at level 100:
+        base = 500 * 29 + 750 * 30 + 1000 * 40  # 37000 + 40000 = 77000
+        # Each level-up beyond 100 requires 1500 XP.
+        return base + 1500 * (level - 100)
 
 
 def update_user_xp(user_id, xp_to_add):
     """
-    Adds xp_to_add to user.xp, then while new_xp >= xp_required_for_level(currentLvl+1),
-    increment level. No max. 
+    Adds xp_to_add to the user's XP. Then, while the new XP total is greater than or
+    equal to the requirement for the next level, increments the level.
+    There is no maximum level; beyond level 100, each level-up costs 1500 XP.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -189,15 +138,10 @@ def update_user_xp(user_id, xp_to_add):
     new_xp = old_xp + xp_to_add
     new_level = old_level
 
-    # keep leveling while we meet the requirement for next level
-    while True:
-        required_next = xp_required_for_level(new_level + 1)
-        if new_xp >= required_next:
-            new_level += 1
-        else:
-            break
+    # Loop to update level until the new XP total is insufficient for the next level.
+    while new_xp >= xp_required_for_level(new_level + 1):
+        new_level += 1
 
-    # update doc
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"xp": new_xp, "level": new_level}}
@@ -211,7 +155,8 @@ def update_user_xp(user_id, xp_to_add):
 
 def apply_daily_bonus(user_id):
     """
-    If >24h since lastDailyClaim or never claimed, add 50 coins.
+    If the user has not claimed the daily bonus within the last 24 hours,
+    adds 50 coins and updates lastDailyClaim.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -235,14 +180,10 @@ def apply_daily_bonus(user_id):
 
 def get_shop_items():
     """
-    Returns all shop items from shop_collection.
-    e.g. item doc: {
-      "_id": ObjectId(...),
-      "type": "xpBoost"|"avatar"|"nameColor",
-      "title": "...",
-      "cost": <int>,
-      ...
-    }
+    Returns all shop items from the shop_collection.
+    Each shop item document might include:
+      - _id, type ("xpBoost", "avatar", "nameColor"), title, cost,
+        description, imageUrl, effectValue, unlockLevel (optional)
     """
     return list(shop_collection.find({}))
 
@@ -250,25 +191,23 @@ def get_shop_items():
 def purchase_item(user_id, item_id):
     """
     Attempts to purchase an item from the shop:
-      - checks user coins
-      - ensures not already purchased
-      - deduct cost, add to purchasedItems
-      - if type= xpBoost => set xpBoost
-      - if type= avatar => optionally equip?
-      - if type= nameColor => set user.nameColor
-    Returns { "success": bool, "message": str }
+      - Checks if the user has enough coins.
+      - Ensures the item has not already been purchased.
+      - Deducts the cost and adds the item to purchasedItems.
+      - For xpBoost items, sets the user's xpBoost.
+      - For avatar items, optionally auto-equip (or leave for a separate equip action).
+      - For nameColor items, sets the user's nameColor.
+    Returns a dictionary: { "success": bool, "message": str }
     """
     user = get_user_by_id(user_id)
     if not user:
         return {"success": False, "message": "User not found"}
 
-    # parse item_id
     try:
         oid = ObjectId(item_id)
     except Exception:
         return {"success": False, "message": "Invalid item ID"}
 
-    # find item doc
     item = shop_collection.find_one({"_id": oid})
     if not item:
         return {"success": False, "message": "Item not found"}
@@ -278,30 +217,31 @@ def purchase_item(user_id, item_id):
     if user_coins < cost:
         return {"success": False, "message": "Not enough coins"}
 
-    # check if already purchased
     purchased = user.get("purchasedItems", [])
     if oid in purchased:
         return {"success": False, "message": "Item already purchased"}
 
-    # deduct cost
-    mainusers_collection.update_one({"_id": user["_id"]}, {"$inc": {"coins": -cost}})
-    # add to purchasedItems
+    # Deduct cost
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$inc": {"coins": -cost}}
+    )
+    # Add to purchasedItems
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$addToSet": {"purchasedItems": oid}}
     )
 
-    # handle item types
+    # Handle item types
     item_type = item.get("type")
     if item_type == "xpBoost":
         new_boost = item.get("effectValue", 1.0)
-        # override user's xpBoost with new_boost
         mainusers_collection.update_one(
             {"_id": user["_id"]},
             {"$set": {"xpBoost": new_boost}}
         )
     elif item_type == "avatar":
-        # optionally equip automatically
+        # Optionally, you might auto-equip here:
         # mainusers_collection.update_one(
         #     {"_id": user["_id"]},
         #     {"$set": {"currentAvatar": oid}}
@@ -336,12 +276,12 @@ def get_test_by_id(test_id):
 def check_and_unlock_achievements(user_id):
     """
     Checks the user's progress and unlocks achievements accordingly.
-    Expects each finished test attempt to have:
-      finished: bool
-      totalQuestions: int
-      score: int
-      category: str
-      finishedAt: str (ISO)
+    Each finished test attempt should include:
+      - finished: bool
+      - totalQuestions: int
+      - score: int
+      - category: str
+      - finishedAt: ISO timestamp string
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -350,14 +290,14 @@ def check_and_unlock_achievements(user_id):
     tests_progress = user.get("testsProgress", {})
     finished_tests = []
 
-    # flatten progress
+    # Flatten the progress
     for tid, progress_entry in tests_progress.items():
         attempts = progress_entry if isinstance(progress_entry, list) else [progress_entry]
         for attempt in attempts:
             if attempt.get("finished"):
                 tq = attempt.get("totalQuestions", 100)
                 sc = attempt.get("score", 0)
-                pct = (sc / tq)*100 if tq else 0
+                pct = (sc / tq) * 100 if tq else 0
                 finished_tests.append({
                     "test_id": tid,
                     "percentage": pct,
@@ -368,13 +308,12 @@ def check_and_unlock_achievements(user_id):
     total_finished = len(finished_tests)
     perfect_tests = sum(1 for ft in finished_tests if ft["percentage"] == 100)
 
-    # consecutive perfect tests
+    # Consecutive perfect tests
     perfect_list = [ft for ft in finished_tests if ft["percentage"] == 100]
     try:
         perfect_list.sort(key=lambda x: int(x["test_id"]))
     except Exception:
         perfect_list.sort(key=lambda x: x["test_id"])
-
     max_consecutive = 0
     current_streak = 0
     previous_test_id = None
@@ -399,7 +338,7 @@ def check_and_unlock_achievements(user_id):
         cat = ft.get("category", "aplus")
         category_groups[cat].append(ft)
 
-    # assume 80 total tests exist
+    # Assume 80 total tests for certain achievement criteria
     TOTAL_TESTS = 80
 
     unlocked = user.get("achievements", [])
@@ -460,7 +399,7 @@ def check_and_unlock_achievements(user_id):
                 newly_unlocked.append(aid)
         # 10. testsCompletedInCategory
         if "testsCompletedInCategory" in criteria:
-            for ccat, ccount in {c: len(ts) for c, ts in category_groups.items()}.items():
+            for ccat, ccount in {ccat: len(ts) for ccat, ts in category_groups.items()}.items():
                 if ccount >= criteria["testsCompletedInCategory"] and aid not in unlocked:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
