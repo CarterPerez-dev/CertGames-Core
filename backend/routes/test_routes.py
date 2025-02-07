@@ -281,9 +281,44 @@ def finish_test_attempt(user_id, test_id):
     }), 200
 
 # -----------------------------
+# PAGINATION ROUTE (NEW)
+# -----------------------------
+@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
+def list_test_attempts(user_id):
+    """
+    Returns a paginated list of attempts for the given user.
+    Optional query params: ?page=1&page_size=50
+    Example usage: GET /attempts/<user_id>/list?page=2&page_size=10
+    """
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    page = request.args.get("page", default=1, type=int)
+    page_size = request.args.get("page_size", default=50, type=int)
+    skip_count = (page - 1) * page_size
+
+    # We can sort by finishedAt descending to show most recent attempts first
+    cursor = testAttempts_collection.find(
+        {"userId": user_oid}
+    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
+
+    attempts = []
+    for doc in cursor:
+        doc["_id"] = str(doc["_id"])
+        doc["userId"] = str(doc["userId"])
+        attempts.append(doc)
+
+    return jsonify({
+        "page": page,
+        "page_size": page_size,
+        "attempts": attempts
+    }), 200
+
+# -----------------------------
 # FIRST-TIME-CORRECT ANSWERS
 # -----------------------------
-
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
     """
