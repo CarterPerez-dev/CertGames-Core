@@ -3,7 +3,7 @@ db.shopItems.insertMany([
     type: "xpBoost",
     title: "XP Boost 10",
     description: "Increase your XP gain by 10%.",
-    cost: 100,  // adjust 
+    cost: 15000,   
     imageUrl: "/xp/xp10.png",
     effectValue: 1.10
   },
@@ -11,7 +11,7 @@ db.shopItems.insertMany([
     type: "xpBoost",
     title: "XP Boost 25",
     description: "Increase your XP gain by 25%.",
-    cost: 200,  // adjust 
+    cost: 40000,  // adjust 
     imageUrl: "/xp/xp25.png",
     effectValue: 1.25
   },
@@ -19,7 +19,7 @@ db.shopItems.insertMany([
     type: "xpBoost",
     title: "XP Boost 50",
     description: "Increase your XP gain by 50%.",
-    cost: 300,  // adjust 
+    cost: 75000,  // adjust 
     imageUrl: "/xp/xp50.png",
     effectValue: 1.50
   },
@@ -27,7 +27,7 @@ db.shopItems.insertMany([
     type: "xpBoost",
     title: "XP Boost 100",
     description: "Increase your XP gain by 100%.",
-    cost: 400, 
+    cost: 100000, 
     imageUrl: "/xp/xp100.png",
     effectValue: 2.00
   },
@@ -35,7 +35,7 @@ db.shopItems.insertMany([
     type: "xpBoost",
     title: "XP Boost 200",
     description: "Increase your XP gain by 200%.",
-    cost: 500, 
+    cost: 150000, 
     imageUrl: "/xp/xp200.png",
     effectValue: 3.00
   }
