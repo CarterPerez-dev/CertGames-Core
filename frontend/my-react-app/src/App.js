@@ -26,13 +26,26 @@ import Log from './components/pages/LogPage/Log';
 import GRC from './components/pages/GRCpage/GRC';
 import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
 import Resources from './components/pages/ResourcesPage/Resources';
-import Portfolio from './components/EasterEgg/Portfolio';
-import Portfolionotegg from './components/EasterEgg/Portfolio_notegg';
 import AdminInterface from './components/pages/AdminInterface/AdminInterface';
 import PBQWizard from './components/pages/PBQpage/PBQWizard';
-import APlusTestPage from './components/pages/testpage/APlusTestPage';
 import ShopPage from './components/pages/store/ShopPage';
 import UserProfile from './components/pages/store/UserProfile';
+
+// Test Pages
+import APlusTestPage from './components/pages/aplus/APlusTestPage';
+import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
+import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
+import SecurityPlusTestPage from './components/pages/secplus/SecurityPlusTestPage';
+import CySAPlusTestPage from './components/pages/cysa/CySAPlusTestPage';
+import PenPlusTestPage from './components/pages/penplus/PenPlusTestPage';
+import CaspPlusTestPage from './components/pages/casp/CaspPlusTestPage';
+import LinuxPlusTestPage from './components/pages/linuxplus/LinuxPlusTestPage';
+import CloudPlusTestPage from './components/pages/cloudplus/CloudPlusTestPage';
+import DataPlusTestPage from './components/pages/dataplus/DataPlusTestPage';
+import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage';
+import CisspTestPage from './components/pages/cissp/CisspTestPage';
+import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
+
 
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
@@ -111,8 +124,6 @@ function App() {
           }/>
           <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
-          <Route path="/easteregg" element={<Portfolio />} />
-          <Route path="/myportfolio" element={<Portfolionotegg />} />
           <Route path="/admin" element={
             <ProtectedRoute>
               <AdminInterface />
@@ -134,6 +145,129 @@ function App() {
               <APlusTestPage />
             </ProtectedRoute>
           }/>
+          <Route path="/practice-tests/aplus-core2" element={
+            <ProtectedRoute>
+              <APlusCore2TestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aplus-core2/:testId" element={
+            <ProtectedRoute>
+              <APlusCore2TestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/network-plus" element={
+            <ProtectedRoute>
+              <NetworkPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/network-plus/:testId" element={
+            <ProtectedRoute>
+              <NetworkPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/security-plus" element={
+            <ProtectedRoute>
+              <SecurityPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/security-plus/:testId" element={
+            <ProtectedRoute>
+              <SecurityPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cysa-plus" element={
+            <ProtectedRoute>
+              <CySAPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cysa-plus/:testId" element={
+            <ProtectedRoute>
+              <CySAPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/pen-plus" element={
+            <ProtectedRoute>
+              <PenPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/pen-plus/:testId" element={
+            <ProtectedRoute>
+              <PenPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/casp-plus" element={
+            <ProtectedRoute>
+              <CaspPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/casp-plus/:testId" element={
+            <ProtectedRoute>
+              <CaspPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/linux-plus" element={
+            <ProtectedRoute>
+              <LinuxPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/linux-plus/:testId" element={
+            <ProtectedRoute>
+              <linuxPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cloud-plus" element={
+            <ProtectedRoute>
+              <CloudPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cloud-plus/:testId" element={
+            <ProtectedRoute>
+              <CloudPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/data-plus" element={
+            <ProtectedRoute>
+              <DataPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/data-plus/:testId" element={
+            <ProtectedRoute>
+              <DataPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/server-plus" element={
+            <ProtectedRoute>
+              <ServerPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/server-plus/:testId" element={
+            <ProtectedRoute>
+              <ServerPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cissp" element={
+            <ProtectedRoute>
+              <CisspTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cissp/:testId" element={
+            <ProtectedRoute>
+              <CisspTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aws-cloud" element={
+            <ProtectedRoute>
+              <AWSCloudTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aws-cloud/:testId" element={
+            <ProtectedRoute>
+              <AWSCloudTestPage />
+            </ProtectedRoute>
+          }/>
+
+          
+          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

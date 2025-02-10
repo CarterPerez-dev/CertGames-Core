@@ -6,8 +6,8 @@ import sidebarLogo from './sidebarlogo.png'; // Adjust path if necessary
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(true);       // Overall sidebar collapsed state
-  const [toolsOpen, setToolsOpen] = useState(false);        // For the Tools group
+  const [collapsed, setCollapsed] = useState(true); // Overall sidebar collapsed state
+  const [toolsOpen, setToolsOpen] = useState(false); // For the Tools group
   const [practiceTestsOpen, setPracticeTestsOpen] = useState(false); // For the Practice Tests group
 
   const navigate = useNavigate();
@@ -27,11 +27,6 @@ const Sidebar = () => {
     setPracticeTestsOpen(!practiceTestsOpen);
   };
 
-  // Double-click on title for easter egg (Portfolio)
-  const handleRootDoubleClick = () => {
-    navigate('/easteregg');
-  };
-
   return (
     <>
       {/* Sidebar Toggle Button */}
@@ -40,7 +35,7 @@ const Sidebar = () => {
       </button>
 
       <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-        <h2 className="sidebar-title" onDoubleClick={handleRootDoubleClick}>
+        <h2 className="sidebar-title">
           root@
         </h2>
 
@@ -135,7 +130,12 @@ const Sidebar = () => {
               <ul className="group-sublist">
                 <li>
                   <NavLink to="/practice-tests/a-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
-                    A+
+                    A+ Core 1
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/aplus-core2" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    A+ Core 2
                   </NavLink>
                 </li>
                 <li>
@@ -154,18 +154,43 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/practice-tests/pentest-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                  <NavLink to="/practice-tests/pen-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
                     Pentest+
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/practice-tests/casp" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                  <NavLink to="/practice-tests/casp-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
                     CASP+
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/practice-tests/linux" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                  <NavLink to="/practice-tests/linux-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
                     Linux+
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/cloud-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    Cloud+
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/data-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    Data+
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/server-plus" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    Server+
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/cissp" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    CISSP
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/practice-tests/aws-cloud" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
+                    AWS Cloud Practitioner
                   </NavLink>
                 </li>
               </ul>

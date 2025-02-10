@@ -74,7 +74,7 @@ const ShopPage = () => {
     }
     setPurchaseStatus('Equipping avatar...');
     try {
-      const response = await fetch(`/api/test/shop/equip`, {
+      const response = await fetch('/api/test/shop/equip', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, itemId })
@@ -95,38 +95,35 @@ const ShopPage = () => {
   const renderXpBoosts = () => {
     if (!xpBoostItems.length) return null;
     return (
-      <div className="shop-section xp-boost-section">
-        <h2 className="shop-section-title">XP Boosts</h2>
+      <div className="shop-section xpboost-section">
+        <h2 className="section-title">XP Boosts</h2>
         <div className="shop-grid">
           {xpBoostItems.map((boost) => {
             const canAfford = coins >= boost.cost;
+            const alreadyPurchased = isPurchased(boost._id);
             const isActiveBoost = xpBoost === boost.effectValue;
-            const buttonText = isActiveBoost ? 'Active' : 'Buy';
+            const buttonText = isActiveBoost ? "Active" : "Buy";
             const buttonDisabled = isActiveBoost || !canAfford;
-
             const handleClick = () => {
               if (!canAfford || isActiveBoost) return;
               handlePurchase(boost._id);
             };
 
             return (
-              <div
-                className="shop-item xp-boost-item"
-                key={boost._id}
-              >
+              <div className="shop-item boost-item" key={boost._id}>
                 <img
                   src={boost.imageUrl}
                   alt={boost.title}
-                  className="shop-item-image xpboost-image"
+                  className="shop-item-image"
                 />
                 <div className="shop-item-info">
-                  <h3 className="shop-item-title">{boost.title}</h3>
-                  <p className="shop-item-description">{boost.description}</p>
-                  <p className="shop-item-cost">Cost: {boost.cost} coins</p>
+                  <h3>{boost.title}</h3>
+                  <p>{boost.description}</p>
+                  <p className="cost">Cost: {boost.cost} coins</p>
                   <button
                     disabled={buttonDisabled}
                     onClick={handleClick}
-                    className="shop-item-button"
+                    className="purchase-button"
                   >
                     {buttonText}
                   </button>
@@ -139,12 +136,12 @@ const ShopPage = () => {
     );
   };
 
-  // Render Avatar Items with unlock and equip logic
+  // Render Avatar Items
   const renderAvatars = () => {
     if (!avatarItems.length) return null;
     return (
       <div className="shop-section avatar-section">
-        <h2 className="shop-section-title">Avatars</h2>
+        <h2 className="section-title">Avatars</h2>
         <div className="shop-grid">
           {avatarItems.map((avatar) => {
             const autoUnlocked = avatar.cost === null || avatar.cost === 0;
@@ -153,51 +150,46 @@ const ShopPage = () => {
             const unlocked = autoUnlocked || levelUnlocked || purchased;
             const isEquipped = currentAvatar === avatar._id;
 
-            let buttonText = '';
+            let buttonText = "";
             let buttonDisabled = false;
             let onClickAction = null;
 
             if (!unlocked) {
-              // Not unlocked: show "Buy" button
-              buttonText = 'Buy';
+              buttonText = "Buy";
               buttonDisabled = coins < avatar.cost;
               onClickAction = () => handlePurchase(avatar._id);
             } else {
-              // Unlocked
               if (isEquipped) {
-                buttonText = 'Equipped';
+                buttonText = "Equipped";
                 buttonDisabled = true;
               } else {
-                buttonText = 'Equip';
+                buttonText = "Equip";
                 buttonDisabled = false;
                 onClickAction = () => handleEquip(avatar._id);
               }
             }
 
             return (
-              <div
-                className="shop-item avatar-item"
-                key={avatar._id}
-              >
+              <div className="shop-item avatar-item" key={avatar._id}>
                 <img
                   src={avatar.imageUrl}
                   alt={avatar.title}
-                  className="shop-item-image avatar-image"
+                  className="shop-item-image"
                 />
                 <div className="shop-item-info">
-                  <h3 className="shop-item-title">{avatar.title}</h3>
-                  <p className="shop-item-description">{avatar.description}</p>
-                  <p className="shop-item-unlock">Unlock Level: {avatar.unlockLevel}</p>
+                  <h3>{avatar.title}</h3>
+                  <p>{avatar.description}</p>
+                  <p className="unlock-level">Unlock Level: {avatar.unlockLevel}</p>
                   {(!autoUnlocked && !unlocked) && (
-                    <p className="shop-item-cost">Cost: {avatar.cost} coins</p>
+                    <p className="cost">Cost: {avatar.cost} coins</p>
                   )}
                   {autoUnlocked && (
-                    <p className="shop-item-default">(Default Avatar)</p>
+                    <p className="default-tag">(Default Avatar)</p>
                   )}
                   <button
                     disabled={buttonDisabled}
                     onClick={onClickAction}
-                    className="shop-item-button"
+                    className="purchase-button"
                   >
                     {buttonText}
                   </button>
@@ -210,12 +202,11 @@ const ShopPage = () => {
     );
   };
 
-  // Determine content based on the shop status
   let content;
   if (status === 'loading') {
-    content = <p className="shop-loading">Loading shop items...</p>;
+    content = <p className="loading-text">Loading shop items...</p>;
   } else if (status === 'failed') {
-    content = <p className="shop-error">Error loading shop items: {error}</p>;
+    content = <p className="error-text">Error loading shop items: {error}</p>;
   } else {
     content = (
       <>
@@ -226,12 +217,12 @@ const ShopPage = () => {
   }
 
   return (
-    <div className="shop-page cyber-shop-page">
+    <div className="shop-page mario-kart-theme">
       <header className="shop-header">
-        <h1 className="shop-title">Shop</h1>
+        <h1 className="main-title">Shop</h1>
         <div className="shop-user-info">
-          <p className="shop-user-coins">Coins: {coins}</p>
-          <p className="shop-user-level">Level: {level}</p>
+          <p className="user-stat">Coins: {coins}</p>
+          <p className="user-stat">Level: {level}</p>
         </div>
       </header>
 

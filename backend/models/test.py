@@ -318,7 +318,7 @@ def check_and_unlock_achievements(user_id):
         category_groups[cat].append(ft)
 
     # If you assume 80 total tests exist for "allTestsCompleted" criteria
-    TOTAL_TESTS = 80
+    TOTAL_TESTS = 130
 
     unlocked = user.get("achievements", [])
     newly_unlocked = []

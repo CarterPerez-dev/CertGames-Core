@@ -1,6 +1,6 @@
 // SimpleLevelUpAnimation.js (Simplified)
 import React from "react";
-import "./APlusStyles.css";
+import "./test.css";
 
 const ConfettiAnimation = ({ trigger, level }) => {
   if (!trigger) return null;

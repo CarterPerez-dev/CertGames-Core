@@ -1,18 +1,21 @@
-// src/components/pages/testpage/APlusTestList.js
+// src/components/pages/dataplus/DataPlusTestList.js
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "./APlusStyles.css"; // Same styling file as the test view
+import "../../test.css";
 
-const APlusTestList = () => {
+const DataPlusTestList = () => {
   const navigate = useNavigate();
-  const totalQuestions = 100; 
+  const totalQuestions = 100;
   const { userId } = useSelector((state) => state.user);
 
+  // We'll call this category "dataplus"
+  const category = "dataplus";
+
   // Retrieve saved progress from localStorage
-  const getProgressData = (id) => {
+  const getProgressData = (testNumber) => {
     if (!userId) return null;
-    const key = `testProgress_${userId}_${id}`;
+    const key = `testProgress_${userId}_${category}_${testNumber}`;
     const saved = localStorage.getItem(key);
     if (!saved) return null;
     try {
@@ -23,21 +26,25 @@ const APlusTestList = () => {
     }
   };
 
-  const getProgressDisplay = (id) => {
-    const progressData = getProgressData(id);
+  const getProgressDisplay = (testNumber) => {
+    const progressData = getProgressData(testNumber);
     if (progressData) {
       if (progressData.finished) {
-        const percentage = Math.round((progressData.score / totalQuestions) * 100);
+        const percentage = Math.round(
+          (progressData.score / totalQuestions) * 100
+        );
         return `Final Score: ${percentage}% (${progressData.score}/${totalQuestions})`;
       } else if (typeof progressData.currentQuestionIndex === "number") {
-        return `Progress: ${progressData.currentQuestionIndex + 1} / ${totalQuestions}`;
+        return `Progress: ${
+          progressData.currentQuestionIndex + 1
+        } / ${totalQuestions}`;
       }
     }
     return "No progress yet";
   };
 
-  // Simple difficulty mapping
-  const getDifficultyData = (id) => {
+  // Optional difficulty mapping
+  const getDifficultyData = (testNumber) => {
     const data = {
       1: { label: "Normal", color: "hsl(0, 0%, 100%)" },
       2: { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
@@ -50,23 +57,26 @@ const APlusTestList = () => {
       9: { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
       10: { label: "Ultra Level", color: "#000" }
     };
-    return data[id] || { label: "", color: "#fff" };
+    return data[testNumber] || { label: "", color: "#fff" };
   };
 
   return (
     <div className="tests-list-container">
-      <h1 className="tests-list-title">CompTIA A+ Practice Tests</h1>
+      <h1 className="tests-list-title">CompTIA Data+ Practice Tests</h1>
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
-          const id = i + 1;
-          const difficulty = getDifficultyData(id);
-          const progressData = getProgressData(id);
-          const progressDisplay = getProgressDisplay(id);
+          const testNumber = i + 1;
+          const difficulty = getDifficultyData(testNumber);
+          const progressData = getProgressData(testNumber);
+          const progressDisplay = getProgressDisplay(testNumber);
 
           return (
-            <div key={id} className="test-card">
-              <div className="test-badge">Test {id}</div>
-              <div className="difficulty-label" style={{ color: difficulty.color }}>
+            <div key={testNumber} className="test-card">
+              <div className="test-badge">Test {testNumber}</div>
+              <div
+                className="difficulty-label"
+                style={{ color: difficulty.color }}
+              >
                 {difficulty.label}
               </div>
               <p className="test-progress">{progressDisplay}</p>
@@ -77,16 +87,18 @@ const APlusTestList = () => {
                     <>
                       <button
                         className="resume-button"
-                        onClick={() => navigate(`/practice-tests/a-plus/${id}`)}
+                        onClick={() =>
+                          navigate(`/practice-tests/data-plus/${testNumber}`)
+                        }
                       >
                         View Review
                       </button>
                       <button
                         className="restart-button-testlist"
                         onClick={() => {
-                          const key = `testProgress_${userId}_${id}`;
+                          const key = `testProgress_${userId}_${category}_${testNumber}`;
                           localStorage.removeItem(key);
-                          navigate(`/practice-tests/a-plus/${id}`);
+                          navigate(`/practice-tests/data-plus/${testNumber}`);
                         }}
                       >
                         Restart Test
@@ -96,16 +108,18 @@ const APlusTestList = () => {
                     <>
                       <button
                         className="resume-button"
-                        onClick={() => navigate(`/practice-tests/a-plus/${id}`)}
+                        onClick={() =>
+                          navigate(`/practice-tests/data-plus/${testNumber}`)
+                        }
                       >
                         Resume Test
                       </button>
                       <button
                         className="restart-button-testlist"
                         onClick={() => {
-                          const key = `testProgress_${userId}_${id}`;
+                          const key = `testProgress_${userId}_${category}_${testNumber}`;
                           localStorage.removeItem(key);
-                          navigate(`/practice-tests/a-plus/${id}`);
+                          navigate(`/practice-tests/data-plus/${testNumber}`);
                         }}
                       >
                         Restart Test
@@ -116,7 +130,9 @@ const APlusTestList = () => {
               ) : (
                 <button
                   className="start-button"
-                  onClick={() => navigate(`/practice-tests/a-plus/${id}`)}
+                  onClick={() =>
+                    navigate(`/practice-tests/data-plus/${testNumber}`)
+                  }
                 >
                   Click to Start
                 </button>
@@ -129,5 +145,5 @@ const APlusTestList = () => {
   );
 };
 
-export default APlusTestList;
+export default DataPlusTestList;
 
