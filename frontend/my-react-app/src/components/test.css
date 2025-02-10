@@ -8,29 +8,28 @@
 }
 
 body {
-  /* Use same gradient as login/register/userprofile */
-  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+  /* Urban Graffiti Theme Background: Dark concrete with a subtle gradient */
+  background: linear-gradient(135deg, #2f2f2f, #000000);
   font-family: 'Trebuchet MS', sans-serif;
-  color: #fff;
+  color: #e0e0e0;
 }
 
 /* ===================== */
 /* Test List Container */
-/* (Full-screen container with login/register background) */
 /* ===================== */
 .tests-list-container {
   width: 100%;
   min-height: 100vh;
   padding: 2rem;
-  background: linear-gradient(135deg, #0e0e0e, #1a1a1a);
+  background: linear-gradient(135deg, #2f2f2f, #000000);
 }
 
 .tests-list-title {
   font-size: 2.8rem;
   margin-bottom: 1rem;
-  /* Use blue for title text */
-  color: #cccccc;
-  text-shadow: 1px 1px 2px rgba(255,0,0,0.3);
+  /* Bold neon yellow with a spray-paint feel */
+  color: #ffea00;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   text-align: center;
 }
 
@@ -40,13 +39,17 @@ body {
   gap: 1.6rem;
 }
 
+/* ===================== */
 /* Test Card (each individual test in the list) */
+/* ===================== */
 .test-card {
   position: relative;
-  background: linear-gradient(135deg, #400000, #600000);
+  /* Dark, textured background reminiscent of worn urban walls */
+  background: linear-gradient(135deg, #3a3a3a, #1f1f1f);
   padding: 1.7rem;
   border-radius: 8px;
-  border: 1px solid #880000;
+  /* A bold neon pink border as a spray-painted accent */
+  border: 1px solid #ff4081;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
   overflow: hidden;
@@ -59,34 +62,33 @@ body {
 
 .test-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.7);
 }
 
-/* Test Badge (number) - now blue */
+/* Test Badge (number) */
 .test-badge {
   font-size: 1.6rem;
   font-weight: bold;
   font-family: 'Orbitron', sans-serif;
   margin-bottom: 0.3rem;
-  color: #fff;
+  /* A vivid neon orange for an attention-grabbing look */
+  color: #ff9100;
 }
 
 /* Difficulty label under test number */
 .difficulty-label {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
-  /* The color is set inline from JS */
+  /* (The color is set inline from JS) */
 }
 
-/* Test Progress & Action Text - progress text now blue */
-/* Also, change the "Click to start" text color to purple */
+/* Test Progress & Action Text */
 .test-progress {
   font-size: 1rem;
-  color: #a9a9a9;
+  /* A striking neon blue */
+  color: #00e5ff;
   margin-bottom: 0.5rem;
 }
-
-/* (Existing rules for .tests-list-container, .tests-list-title, .tests-list-grid, .test-card, .test-badge, .difficulty-label, .test-progress, .test-action remain unchanged.) */
 
 /* New CSS for the additional buttons inside each test card */
 .test-card-buttons {
@@ -97,8 +99,8 @@ body {
 }
 
 .resume-button {
-  background: #00aaff;
-  color: #fff;
+  background: #00e5ff; /* Electric blue */
+  color: #000;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 6px;
@@ -107,11 +109,11 @@ body {
 }
 
 .resume-button:hover {
-  background: #0088cc;
+  background: #00b0ff;
 }
 
 .restart-button-testlist {
-  background: #ff5555;
+  background: #d50000; /* Bold red */
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;
@@ -121,7 +123,7 @@ body {
 }
 
 .restart-button-testlist:hover {
-  background: #ff0000;
+  background: #c51162;
 }
 
 /* The "Click to Start" button */
@@ -129,7 +131,7 @@ body {
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
-  background: #595959;
+  background: #6a1b9a; /* Deep purple */
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -138,15 +140,15 @@ body {
 }
 
 .start-button:hover {
-  background: #00aaff;
+  background: #4a148c;
 }
 
 .back-to-list-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #00aaff;
-  color: #fff;
+  background: #00e5ff;
+  color: #000;
   border: none;
   border-radius: 6px;
   padding: 0.5rem 1rem;
@@ -156,30 +158,28 @@ body {
 }
 
 .back-to-list-btn:hover {
-  background: #0088cc;
+  background: #00b0ff;
 }
-
 
 /* ===================== */
 /* APlus Test Container */
-/* (Test View - enlarged and using login/register background for extra space) */
 /* ===================== */
 .aplus-test-container {
-  max-width: 900px; /* Increased width */
+  max-width: 900px;
   margin: 2rem auto;
   padding: 2rem;
-  background: linear-gradient(135deg, #2c0d0d, #600000);
+  /* Using the same dark concrete look for consistency */
+  background: linear-gradient(135deg, #2f2f2f, #000000);
   border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
   position: relative;
 }
 
-/* Title */
 .aplus-title {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* ===================== */
@@ -199,18 +199,19 @@ body {
 .avatar-image {
   width: 60px;
   height: 60px;
+  /* Placeholder image styled to resemble a graffiti sticker */
   background: url('https://via.placeholder.com/60') no-repeat center/cover;
-  border: 2px solid #FFF;
+  border: 2px solid #ff4081;
   border-radius: 50%;
   margin-bottom: 0.5rem;
 }
 
-/* Set avatar level, XP, and coins text to blue */
 .avatar-level,
 .xp-level-display,
 .coins-display {
   font-size: 1rem;
-  color: #00aaff;
+  /* Neon pink accents for a consistent graffiti look */
+  color: #ff4081;
   text-align: center;
 }
 
@@ -220,7 +221,7 @@ body {
 .progress-container {
   position: relative;
   height: 24px;
-  background-color: #ffffff25;
+  background-color: #424242;
   border-radius: 12px;
   margin: 0.75rem 0 1rem 0;
   overflow: hidden;
@@ -242,9 +243,10 @@ body {
 .question-card {
   margin: 1.5rem 0;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  /* A semi-opaque dark layer that mimics spray-painted stencils */
+  background: rgba(50, 50, 50, 0.9);
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .question-text {
@@ -252,7 +254,8 @@ body {
   margin-bottom: 1rem;
   font-family: 'Trebuchet MS', sans-serif;
   line-height: 1.3;
-  color: #E2DFD2;
+  /* Neon yellow to pop against the dark background */
+  color: #ffeb3b;
   font-weight: bold;
 }
 
@@ -272,50 +275,52 @@ body {
   border-radius: 6px;
   cursor: pointer;
   text-align: left;
-  background: #ffffff;
-  color: #333;
+  /* A dark base with a hint of urban texture */
+  background: #212121;
+  /* Neon green text for a bold statement */
+  color: #00e676;
   transition: background 0.3s ease;
   outline: none;
 }
 
-/* Change option hover to blue */
 .option-button:hover {
-  background: #00aaff;
+  background: #424242;
 }
 
-/* Correct/Incorrect Animations remain unchanged */
+/* Correct/Incorrect Animations */
 .correct-option {
-  animation: correctAnswer 0.6s ease;
-  background: #8BC34A !important;
+  animation: correctAnswer 0.3s ease;
+  background: #00e676 !important;
   color: #fff !important;
 }
 
 @keyframes correctAnswer {
-  0% { transform: scale(1); box-shadow: 0 0 5px #8BC34A; }
-  50% { transform: scale(1.05); box-shadow: 0 0 10px #8BC34A; }
-  100% { transform: scale(1); box-shadow: 0 0 5px #8BC34A; }
+  0% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #00e676; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
 }
 
 .incorrect-option {
-  animation: incorrectAnswer 0.6s ease;
-  background: #F44336 !important;
+  animation: incorrectAnswer 0.3s ease;
+  background: #ff1744 !important;
   color: #fff !important;
 }
 
 @keyframes incorrectAnswer {
-  0% { transform: scale(1); box-shadow: 0 0 5px #F44336; }
-  50% { transform: scale(1.05); box-shadow: 0 0 10px #F44336; }
-  100% { transform: scale(1); box-shadow: 0 0 5px #F44336; }
+  0% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #ff1744; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
 }
 
-/* Explanation */
 .explanation {
   margin-top: 1rem;
-  background: rgba(255,255,255,0.2);
+  /* A translucent layer of neon blue to hint at urban murals */
+  background: rgba(0, 229, 255, 0.2);
   padding: 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
   line-height: 1.4;
+  font-family: 'Trebuchet MS', sans-serif;
 }
 
 /* ===================== */
@@ -326,7 +331,8 @@ body {
   margin-top: 1rem;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background: linear-gradient(135deg, #FFC107, #FF9800);
+  /* A vibrant neon gradient combining pink and magenta */
+  background: linear-gradient(135deg, #ff4081, #f50057);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -336,7 +342,7 @@ body {
 }
 
 .next-button:hover {
-  box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+  box-shadow: 0 0 10px rgba(245, 0, 87, 0.5);
 }
 
 /* ===================== */
@@ -348,12 +354,13 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
   animation: fadeIn 0.5s forwards;
   z-index: 9999;
+  font-family: 'Trebuchet MS', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -362,20 +369,23 @@ body {
 }
 
 .score-content {
-  background: linear-gradient(135deg, #2196F3, #3F51B5);
+  /* A bold graffiti-inspired gradient of neon purple and electric blue */
+  background: linear-gradient(135deg, #6a1b9a, #2979ff);
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
-  color: #ffffff;
+  color: #fff;
   max-width: 50rem;
   width: 80%;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  font-family: 'Trebuchet MS', sans-serif;
 }
 
 .score-title {
   font-size: 2.8rem;
   margin-bottom: 1rem;
-  color: #7c0024;
+  /* Neon yellow for maximum impact */
+  color: #ffeb3b;
   font-weight: bold;
 }
 
@@ -383,7 +393,8 @@ body {
   font-size: 1.4rem;
   margin-bottom: 1.5rem;
   font-weight: bold;
-  color: #fff;
+  color: #e0e0e0;
+  font-family: 'Trebuchet MS', sans-serif;
 }
 
 .overlay-buttons {
@@ -398,25 +409,24 @@ body {
 .next-test-button,
 .back-btn {
   display: inline-block;
-  padding: .75rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: bold;
   transition: box-shadow 0.3s, transform 0.2s;
 }
 
 .restart-button {
-  background: linear-gradient(135deg, #ff5555, #ff0000);
+  background: linear-gradient(135deg, #ff1744, #d50000);
   color: #fff;
 }
 
 .restart-button:hover {
-  background: linear-gradient(135deg, #ff0000, #ff5555);
+  background: linear-gradient(135deg, #d50000, #ff1744);
   transform: scale(1.05);
 }
-
 
 .review-filter-buttons {
   display: flex;
@@ -426,7 +436,7 @@ body {
 }
 
 .review-filter-buttons button {
-  background: #0024a9;
+  background: #212121;
   color: #fff;
   border: 1px solid #fff;
   padding: 1rem 2.8rem;
@@ -436,47 +446,46 @@ body {
 }
 
 .review-filter-buttons button:hover {
-  background: #0445f3;
+  background: #424242;
 }
 
 .review-filter-buttons .active-filter {
-  background: #7c0024;
+  background: #ff1744;
 }
-/* Show the final score line in review */
+
 .review-score-line {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #000e34; 
+  color: #000;
   font-weight: bold;
 }
 
-/* Optionally, style the "Questions shown: X" text in the review */
 .score-details {
   margin: 0.5rem 0 1rem 0;
   font-size: 1.3rem;
   text-align: center;
-  color: #64001d;
+  color: #e0e0e0;
   font-weight: bold;
 }
 
 .review-button {
-  background: linear-gradient(135deg, #4caf50, #43a047);
-  color: #fff;
+  background: linear-gradient(135deg, #00e5ff, #00bcd4);
+  color: #000;
 }
 
 .review-button:hover {
-  background: linear-gradient(135deg, #43a047, #4caf50);
+  background: linear-gradient(135deg, #00bcd4, #00e5ff);
   transform: scale(1.05);
 }
 
 .next-test-button {
-  background: #FFC107;
+  background: #ffea00;
   color: #000;
 }
 
 .next-test-button:hover {
-  box-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+  box-shadow: 0 0 10px rgba(255, 234, 0, 0.5);
 }
 
 .back-btn {
@@ -504,8 +513,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 255, 0, 0.7);
-  color: #fff;
+  background-color: rgba(255, 193, 7, 0.7);
+  color: #000;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -536,21 +545,20 @@ body {
 .review-question-card {
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(237, 201, 175, 0.15);
   border-radius: 6px;
   font-family: 'Trebuchet MS', sans-serif;
   line-height: 1.6;
   font-size: 1.2rem;
 }
 
-/* Close button for Review Overlay - styled as a bold circled X */
 .close-review-x {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #fff;
-  color: #ff5555;
-  border: 2px solid #ff5555;
+  background: #fdf6e3;
+  color: #d84315;
+  border: 2px solid #d84315;
   border-radius: 50%;
   width: 30px;
   height: 30px;
@@ -562,15 +570,14 @@ body {
 }
 
 .close-review-x:hover {
-  background: #ff5555;
-  color: #fff;
+  background: #d84315;
+  color: #fdf6e3;
 }
 
 .close-review-btn {
   margin-top: 1rem;
 }
 
-/* Ensure review overlay content is scrollable and larger */
 .score-content.review-content {
   max-height: 80vh;
   overflow-y: auto;
@@ -611,8 +618,6 @@ body {
 /* ===================== */
 /* New Control Bars for Test View */
 /* ===================== */
-
-/* Top Control Bar (Flag & Finish Test) */
 .top-control-bar {
   display: flex;
   justify-content: space-between;
@@ -631,24 +636,23 @@ body {
 }
 
 .top-control-bar .flag-btn {
-  background: #333;
+  background: #212121;
   color: #fff;
 }
 
 .top-control-bar .flag-btn:hover {
-  background: #555;
+  background: #424242;
 }
 
 .top-control-bar .finish-test-btn {
-  background: #ff5555;
+  background: #d84315;
   color: #fff;
 }
 
 .top-control-bar .finish-test-btn:hover {
-  background: #ff0000;
+  background: #bf360c;
 }
 
-/* Upper Control Bar (Restart & Back to Test List) */
 .upper-control-bar {
   display: flex;
   justify-content: space-between;
@@ -667,16 +671,14 @@ body {
 }
 
 .upper-control-bar .restart-test-btn {
-  background: #ff5555;
+  background: #d84315;
   color: #fff;
 }
 
 .upper-control-bar .restart-test-btn:hover {
-  background: #ff0000;
+  background: #bf360c;
 }
 
-/* Bottom Control Bar with Two Rows */
-/* First row: Previous and Next Question; Second row: Skip Question */
 .bottom-control-bar {
   display: flex;
   flex-direction: column;
@@ -696,16 +698,15 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  background: #00aaff; /* Blue for Next Question */
+  background: #2979ff;
   color: #fff;
   transition: background 0.3s;
 }
 
 .next-question-btn:hover {
-  background: #0088cc;
+  background: #1565c0;
 }
 
-/* Align second row (Skip Question) to the right */
 .skip-row {
   justify-content: flex-end;
 }
@@ -717,13 +718,13 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  background: #FFC107; /* Yellow for Skip Question */
+  background: #ffea00;
   color: #000;
   transition: background 0.3s;
 }
 
 .skip-question-btn:hover {
-  background: #e6ac00;
+  background: #ffd600;
 }
 
 .prev-question-btn {
@@ -733,13 +734,13 @@ body {
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  background: #4caf50;
+  background: #2979ff;
   color: #fff;
   transition: background 0.3s;
 }
 
 .prev-question-btn:hover {
-  background: #43a047;
+  background: #1565c0;
 }
 
 /* ===================== */
@@ -759,14 +760,14 @@ body {
 }
 
 .confirm-popup-content {
-  background: #fff;
+  background: #212121;
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  color: #000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  color: #fff;
 }
 
 .confirm-popup-buttons {
@@ -787,20 +788,20 @@ body {
 }
 
 .confirm-popup-yes {
-  background: #00aaff;
+  background: #2979ff;
   color: #fff;
 }
 
 .confirm-popup-yes:hover {
-  background: #0088cc;
+  background: #1565c0;
 }
 
 .confirm-popup-no {
-  background: #ff5555;
+  background: #d84315;
   color: #fff;
 }
 
 .confirm-popup-no:hover {
-  background: #ff0000;
+  background: #bf360c;
 }
 

@@ -1,4 +1,4 @@
-// src/components/pages/testpage/APlusTestPage.js
+// src/components/pages/penplus/PenPlusTestPage.js
 import React, {
   useState,
   useEffect,
@@ -9,10 +9,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { dailyLoginBonus, setXPAndCoins } from "../store/userSlice";
 import { fetchShopItems } from "../store/shopSlice";
-import ConfettiAnimation from "./ConfettiAnimation";
+import ConfettiAnimation from "../../ConfettiAnimation";
 import { showAchievementToast } from "../store/AchievementToast";
-import APlusTestList from "./APlusTestList"; // Import the Test List
-import "./APlusStyles.css";
+
+// Import the TestList for PenTest+ (you'll create PenPlusTestList similarly)
+import PenPlusTestList from "./PenPlusTestList";
+
+import "../../test.css";
+
 import {
   FaTrophy,
   FaMedal,
@@ -27,12 +31,12 @@ import {
 } from "react-icons/fa";
 
 /* ------------------------------------------------------------------
-   Helper: Shuffle Options for a Single Question
+   Helper: Shuffle Options
 ------------------------------------------------------------------ */
 const shuffleOptions = (question) => {
   const originalOptions = question.options.slice();
   const correctIndex = question.correctAnswerIndex;
-  const indices = originalOptions.map((_, index) => index);
+  const indices = originalOptions.map((_, i) => i);
 
   for (let i = indices.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -50,45 +54,42 @@ const shuffleOptions = (question) => {
 };
 
 /* ------------------------------------------------------------------
-   Confirmation Popup Component
+   Confirmation Popup
 ------------------------------------------------------------------ */
-const ConfirmPopup = ({ message, onConfirm, onCancel }) => {
-  return (
-    <div className="confirm-popup-overlay">
-      <div className="confirm-popup-content">
-        <p>{message}</p>
-        <div className="confirm-popup-buttons">
-          <button className="confirm-popup-yes" onClick={onConfirm}>
-            Yes
-          </button>
-          <button className="confirm-popup-no" onClick={onCancel}>
-            No
-          </button>
-        </div>
+const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
+  <div className="confirm-popup-overlay">
+    <div className="confirm-popup-content">
+      <p>{message}</p>
+      <div className="confirm-popup-buttons">
+        <button className="confirm-popup-yes" onClick={onConfirm}>
+          Yes
+        </button>
+        <button className="confirm-popup-no" onClick={onCancel}>
+          No
+        </button>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 /* ------------------------------------------------------------------
-   Main Component: APlusTestPage
-   Renders the test list if no :testId parameter is provided,
-   else renders the Test View.
+   Main Component: PenPlusTestPage
+   If no :testId => show PenPlusTestList,
+   else show the TestView
 ------------------------------------------------------------------ */
-const APlusTestPage = () => {
+const PenPlusTestPage = () => {
   const { testId } = useParams();
-  return testId ? <TestView testId={testId} /> : <APlusTestList />;
+  return testId ? <TestView testId={testId} /> : <PenPlusTestList />;
 };
 
 /* ============================
    Test View Component
-   ============================
-*/
+============================ */
 const TestView = ({ testId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Grabbing user data
+  // Grab user data
   const {
     xp,
     level,
@@ -98,21 +99,19 @@ const TestView = ({ testId }) => {
     currentAvatar
   } = useSelector((state) => state.user);
 
-  // Grabbing achievements from the store
+  // Achievements
   const achievements = useSelector((state) => state.achievements.all);
 
-  // Grabbing shop items so we can look up the equipped avatar's image
+  // Shop items (for avatar images)
   const { items: shopItems, status: shopStatus } = useSelector((state) => state.shop);
-
-  // Attempt to fetch shop items if not already fetched
   useEffect(() => {
     if (shopStatus === "idle") {
       dispatch(fetchShopItems());
     }
   }, [shopStatus, dispatch]);
 
-  // Determine the avatar image URL
-  let avatarUrl = "https://via.placeholder.com/60"; // fallback
+  // Determine avatar image
+  let avatarUrl = "https://via.placeholder.com/60";
   if (currentAvatar && shopItems && shopItems.length > 0) {
     const avatarItem = shopItems.find((item) => item._id === currentAvatar);
     if (avatarItem && avatarItem.imageUrl) {
@@ -120,7 +119,7 @@ const TestView = ({ testId }) => {
     }
   }
 
-  // Local state
+  // Local states
   const [currentTest, setCurrentTest] = useState(null);
   const [loadingTest, setLoadingTest] = useState(true);
   const [error, setError] = useState(null);
@@ -141,8 +140,9 @@ const TestView = ({ testId }) => {
   const [reviewFilter, setReviewFilter] = useState("all");
   const [progressLoaded, setProgressLoaded] = useState(false);
 
-  // Key for localStorage progress
-  const progressKey = `testProgress_${userId}_${testId}`;
+  // We'll call this category "penplus"
+  const category = "penplus";
+  const progressKey = `testProgress_${userId}_${category}_${testId}`;
 
   /* ------------------------------------------------------------------
      (1) Fetch Test Data
@@ -156,16 +156,16 @@ const TestView = ({ testId }) => {
           let errorData;
           try {
             errorData = await response.json();
-          } catch (e) {
+          } catch (err) {
             errorData = { error: "Unknown error from server." };
           }
           throw new Error(errorData.error || "Failed to fetch test data");
         }
 
         const data = await response.json();
-        data.questions.forEach((q, index) => {
+        data.questions.forEach((q, idx) => {
           if (!q.id) {
-            q.id = `test${testId}_q${index}`;
+            q.id = `test${testId}_q${idx}`;
           }
         });
 
@@ -177,7 +177,7 @@ const TestView = ({ testId }) => {
             data.questions = saved.shuffledQuestions;
           }
         } else {
-          // No saved progress: shuffle & init
+          // No saved progress => shuffle & init
           const shuffled = data.questions.map((q) => shuffleOptions(q));
           data.questions = shuffled;
           const initProgress = {
@@ -185,9 +185,9 @@ const TestView = ({ testId }) => {
             answers: [],
             score: 0,
             totalQuestions: data.questions.length,
-            category: data.category || "aplus",
+            category: data.category || "penplus",
             shuffledQuestions: shuffled,
-            finished: false,
+            finished: false
           };
           localStorage.setItem(progressKey, JSON.stringify(initProgress));
         }
@@ -223,7 +223,7 @@ const TestView = ({ testId }) => {
   }, [level, localLevel]);
 
   /* ------------------------------------------------------------------
-     (4) Load Saved Progress from localStorage
+     (4) Load Saved Progress
   ------------------------------------------------------------------ */
   useEffect(() => {
     if (!currentTest) return;
@@ -273,7 +273,7 @@ const TestView = ({ testId }) => {
   }, [currentQuestionIndex, currentTest, progressLoaded, answers]);
 
   /* ------------------------------------------------------------------
-     (6) Debounced Save Test Progress
+     (6) Debounced Save
   ------------------------------------------------------------------ */
   useEffect(() => {
     if (!progressLoaded || !currentTest || isFinished) return;
@@ -283,16 +283,16 @@ const TestView = ({ testId }) => {
       answers,
       score,
       totalQuestions,
-      category: currentTest?.category || "aplus",
+      category: currentTest?.category || "penplus",
       shuffledQuestions: currentTest.questions,
-      finished: false,
+      finished: false
     };
 
     const handler = setTimeout(() => {
-      // 1) localStorage
+      // localStorage
       localStorage.setItem(progressKey, JSON.stringify(progress));
 
-      // 2) server partial progress
+      // server partial progress
       if (userId) {
         fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -301,9 +301,9 @@ const TestView = ({ testId }) => {
             answers,
             score,
             totalQuestions,
-            category: currentTest.category || "aplus",
-            finished: false,
-          }),
+            category: currentTest.category || "penplus",
+            finished: false
+          })
         }).catch((err) => {
           console.error("Failed to update test attempt on backend", err);
         });
@@ -324,7 +324,7 @@ const TestView = ({ testId }) => {
   ]);
 
   /* ------------------------------------------------------------------
-     (7) Memo: Filtered Questions for Review
+     (7) Filtered Questions for Review Mode
   ------------------------------------------------------------------ */
   const filteredQuestions = useMemo(() => {
     if (!currentTest) return [];
@@ -376,8 +376,8 @@ const TestView = ({ testId }) => {
             correctAnswerIndex: questionData.correctAnswerIndex,
             selectedIndex: optionIndex,
             xpPerCorrect: effectiveXP,
-            coinsPerCorrect: 5,
-          }),
+            coinsPerCorrect: 5
+          })
         });
         const result = await response.json();
 
@@ -403,7 +403,7 @@ const TestView = ({ testId }) => {
       const newAnswerObj = {
         questionId: questionData.id,
         userAnswerIndex: optionIndex,
-        correctAnswerIndex: questionData.correctAnswerIndex,
+        correctAnswerIndex: questionData.correctAnswerIndex
       };
       if (existingIndex >= 0) {
         updatedAnswers[existingIndex] = newAnswerObj;
@@ -439,20 +439,20 @@ const TestView = ({ testId }) => {
       score: finalScore,
       finished: true,
       totalQuestions,
-      category: currentTest?.category || "aplus",
+      category: currentTest?.category || "penplus",
       finishedAt: new Date().toISOString(),
-      shuffledQuestions: currentTest?.questions || [],
+      shuffledQuestions: currentTest?.questions || []
     };
 
     localStorage.setItem(progressKey, JSON.stringify(finishedProgress));
 
-    fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
+    fetch(`/api/test/user/${userId}/${testId}/finish`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         score: finalScore,
         totalQuestions
-      }),
+      })
     })
       .then((r) => r.json())
       .then((data) => {
@@ -462,13 +462,14 @@ const TestView = ({ testId }) => {
               (a) => a.achievementId === achievementId
             );
             if (achievement) {
-              const IconComponent = iconMapping[achievement.achievementId] || null;
+              const IconComponent =
+                iconMapping[achievement.achievementId] || null;
               const color = colorMapping[achievement.achievementId] || "#fff";
               showAchievementToast({
                 title: achievement.title,
                 description: achievement.description,
                 icon: IconComponent ? <IconComponent /> : null,
-                color: color,
+                color
               });
             }
           });
@@ -550,7 +551,7 @@ const TestView = ({ testId }) => {
     const skipAnswerObj = {
       questionId: questionData?.id,
       userAnswerIndex: null,
-      correctAnswerIndex: questionData?.correctAnswerIndex,
+      correctAnswerIndex: questionData?.correctAnswerIndex
     };
     if (existingIndex >= 0) {
       updatedAnswers[existingIndex] = skipAnswerObj;
@@ -587,7 +588,7 @@ const TestView = ({ testId }) => {
     if (!showRestartPopup) return null;
     return (
       <ConfirmPopup
-        message="Are you sure you want to restart the test? Your progress will be lost."
+        message="Are you sure you want to restart? Your progress will be lost."
         onConfirm={() => {
           handleRestartTest();
           setShowRestartPopup(false);
@@ -644,9 +645,10 @@ const TestView = ({ testId }) => {
             <button className="review-button" onClick={handleReviewAnswers}>
               View Review
             </button>
+            {/* Link back to /practice-tests/pen-plus */}
             <button
               className="back-btn"
-              onClick={() => navigate("/practice-tests/a-plus")}
+              onClick={() => navigate("/practice-tests/pen-plus")}
             >
               Back to Test List
             </button>
@@ -654,7 +656,7 @@ const TestView = ({ testId }) => {
               <button
                 className="next-test-button"
                 onClick={() =>
-                  navigate(`/practice-tests/a-plus/${Number(testId) + 1}`)
+                  navigate(`/practice-tests/pen-plus/${Number(testId) + 1}`)
                 }
               >
                 Next Test
@@ -674,7 +676,7 @@ const TestView = ({ testId }) => {
           {isFinished ? (
             <button
               className="back-to-list-btn"
-              onClick={() => navigate("/practice-tests/a-plus")}
+              onClick={() => navigate("/practice-tests/pen-plus")}
             >
               Go Back to Test List
             </button>
@@ -774,11 +776,7 @@ const TestView = ({ testId }) => {
                     {q.options[q.correctAnswerIndex]}
                   </p>
                   {!isSkipped && (
-                    <p
-                      style={{
-                        color: isCorrect ? "#8BC34A" : "#F44336",
-                      }}
-                    >
+                    <p style={{ color: isCorrect ? "#8BC34A" : "#F44336" }}>
                       {isCorrect ? "Correct!" : "Incorrect!"}
                     </p>
                   )}
@@ -801,7 +799,7 @@ const TestView = ({ testId }) => {
   };
 
   /* ------------------------------------------------------------------
-     Achievement Icon & Color
+     Achievement Icon & Color Mappings
   ------------------------------------------------------------------ */
   const iconMapping = {
     test_rookie: FaTrophy,
@@ -831,7 +829,7 @@ const TestView = ({ testId }) => {
     knowledge_beast_5000: FaBrain,
     question_terminator: FaBrain,
     test_finisher: FaCheckCircle,
-    subject_finisher: FaCheckCircle,
+    subject_finisher: FaCheckCircle
   };
 
   const colorMapping = {
@@ -862,7 +860,7 @@ const TestView = ({ testId }) => {
     knowledge_beast_5000: "#00fa9a",
     question_terminator: "#ff1493",
     test_finisher: "#adff2f",
-    subject_finisher: "#7fff00",
+    subject_finisher: "#7fff00"
   };
 
   /* ------------------------------------------------------------------
@@ -875,7 +873,7 @@ const TestView = ({ testId }) => {
     currentTest.questions.length === 0 ? (
     <div style={{ color: "#fff" }}>Loading test...</div>
   ) : (
-    <div className="aplus-test-container">
+    <div className="penplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
 
       {renderRestartPopup()}
@@ -884,7 +882,6 @@ const TestView = ({ testId }) => {
       {renderScoreOverlay()}
       {renderReviewMode()}
 
-      {/* Top control bar (flag & finish) */}
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {flaggedQuestions.includes(questionData.id) ? "Unflag" : "Flag"}
@@ -894,19 +891,24 @@ const TestView = ({ testId }) => {
         </button>
       </div>
 
-      {/* Upper control bar (restart & back) */}
       <div className="upper-control-bar">
-        <button className="restart-test-btn" onClick={() => setShowRestartPopup(true)}>
+        <button
+          className="restart-test-btn"
+          onClick={() => setShowRestartPopup(true)}
+        >
           Restart Test
         </button>
-        <button className="back-btn" onClick={() => navigate("/practice-tests/a-plus")}>
+        {/* Link back to /practice-tests/pen-plus */}
+        <button
+          className="back-btn"
+          onClick={() => navigate("/practice-tests/pen-plus")}
+        >
           Back to Test List
         </button>
       </div>
 
-      <h1 className="aplus-title">{currentTest.testName}</h1>
+      <h1 className="penplus-title">{currentTest.testName}</h1>
 
-      {/* Top bar with avatar, xp, coins */}
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -919,7 +921,6 @@ const TestView = ({ testId }) => {
         <div className="coins-display">Coins: {coins}</div>
       </div>
 
-      {/* Progress bar */}
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -929,7 +930,6 @@ const TestView = ({ testId }) => {
         </div>
       </div>
 
-      {/* Question card */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">{questionData.question}</div>
@@ -940,7 +940,11 @@ const TestView = ({ testId }) => {
 
               if (isAnswered && idx === correctIndex) {
                 optionClass += " correct-option";
-              } else if (isAnswered && idx === selectedOptionIndex && idx !== correctIndex) {
+              } else if (
+                isAnswered &&
+                idx === selectedOptionIndex &&
+                idx !== correctIndex
+              ) {
                 optionClass += " incorrect-option";
               }
 
@@ -1000,4 +1004,5 @@ const TestView = ({ testId }) => {
   );
 };
 
-export default APlusTestPage;
+export default PenPlusTestPage;
+
