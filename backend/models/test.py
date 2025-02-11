@@ -11,8 +11,8 @@ from models.database import (
     shop_collection,
     achievements_collection,
     tests_collection,
-    testAttempts_collection,      # <-- new
-    correctAnswers_collection     # <-- new
+    testAttempts_collection,
+    correctAnswers_collection
 )
 
 def get_user_by_username(username):
@@ -27,7 +27,7 @@ def get_user_by_identifier(identifier):
 def create_user(user_data):
     """
     Creates a new user document, setting default fields including coins, xp, level,
-    purchasedItems, xpBoost, etc. (NO giant embedded attempts arrays).
+    purchasedItems, xpBoost, etc. Also automatically equips the default avatar if found.
     """
     existing_user = mainusers_collection.find_one({
         "$or": [
@@ -50,12 +50,25 @@ def create_user(user_data):
 
     # Remove big embedded docs:
     # user_data.setdefault("testsProgress", {})
-    # user_data.setdefault("perTestCorrect", {})  # now replaced by separate collections
+    # user_data.setdefault("perTestCorrect", {})  # replaced by separate collections
 
     # Shop + XP fields
     user_data.setdefault("xpBoost", 1.0)        # XP multiplier
     user_data.setdefault("currentAvatar", None) # e.g., an ObjectId from shop
     user_data.setdefault("nameColor", None)     # e.g., "blue" or "#ff0000"
+
+    # ------------------------------
+    # Automatically equip a default avatar:
+    # (Here we look for an avatar with cost=0. 
+    #  If instead you identify it by a specific title, 
+    #  you could do: {"title": "Default Avatar"} )
+    # ------------------------------
+    default_avatar = shop_collection.find_one({"type": "avatar", "cost": 0})
+    if default_avatar:
+        user_data["currentAvatar"] = default_avatar["_id"]
+        if default_avatar["_id"] not in user_data["purchasedItems"]:
+            user_data["purchasedItems"].append(default_avatar["_id"])
+    # ------------------------------
 
     result = mainusers_collection.insert_one(user_data)
     return result.inserted_id
@@ -271,7 +284,7 @@ def check_and_unlock_achievements(user_id):
         "$expr": {"$eq": ["$score", "$totalQuestions"]}
     })
 
-    # For advanced logic (categories, consecutive perfect, etc.), we can load them:
+    # For advanced logic (categories, consecutive perfect, etc.)
     finished_cursor = testAttempts_collection.find({"userId": user_oid, "finished": True})
     finished_tests = []
     for doc in finished_cursor:
@@ -287,7 +300,6 @@ def check_and_unlock_achievements(user_id):
 
     # Example: consecutive perfect logic
     perfect_list = [ft for ft in finished_tests if ft["percentage"] == 100]
-    # Sort by test_id if numeric
     try:
         perfect_list.sort(key=lambda x: int(x["test_id"]))
     except:
@@ -332,7 +344,6 @@ def check_and_unlock_achievements(user_id):
         if aid in unlocked:
             continue
 
-        # Example checks:
         # 1) testCount
         if "testCount" in criteria:
             if total_finished >= criteria["testCount"]:
