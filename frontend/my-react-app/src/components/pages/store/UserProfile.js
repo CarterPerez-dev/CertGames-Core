@@ -5,7 +5,6 @@ import { logout } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
-// Import some icons for achievements
 import {
   FaTrophy,
   FaMedal,
@@ -19,6 +18,7 @@ import {
   FaMagic
 } from 'react-icons/fa';
 
+// Map achievementId -> icon
 const iconMapping = {
   test_rookie: FaTrophy,
   accuracy_king: FaMedal,
@@ -54,6 +54,7 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Pull everything from user slice
   const {
     userId,
     username,
@@ -65,11 +66,14 @@ const UserProfile = () => {
     purchasedItems
   } = useSelector((state) => state.user);
 
-  // Shop items (already fetched in store)
+  // Pull all achievements from store, to find title/desc
+  const allAchievements = useSelector((state) => state.achievements.all);
+
+  // Shop items for listing purchased items & avatar
   const { items: shopItems } = useSelector((state) => state.shop);
 
-  // Determine the profile picture URL:
-  let profilePicUrl = '/avatars/avatar1.png'; // fallback
+  // Determine default/fallback avatar
+  let profilePicUrl = '/avatars/avatar1.png'; 
   if (currentAvatar && shopItems && shopItems.length > 0) {
     const avatarItem = shopItems.find(item => item._id === currentAvatar);
     if (avatarItem && avatarItem.imageUrl) {
@@ -77,7 +81,7 @@ const UserProfile = () => {
     }
   }
 
-  // Collect purchased items (excluding avatars). We'll show them with their titles.
+  // Filter purchased items (excluding avatars)
   const purchasedItemsDetail = (shopItems || []).filter(
     (shopItem) => purchasedItems.includes(shopItem._id) && shopItem.type !== 'avatar'
   );
@@ -130,13 +134,23 @@ const UserProfile = () => {
           <div className="achievements-list">
             {userAchievements.length > 0 ? (
               userAchievements.map((achId) => {
+                // Find the full achievement doc in allAchievements
+                const achievementDoc = allAchievements.find(
+                  (ach) => ach.achievementId === achId
+                );
+
+                // Fallback if not found
+                const displayTitle = achievementDoc ? achievementDoc.title : achId;
                 const IconComp = iconMapping[achId] || FaTrophy;
+
                 return (
                   <div key={achId} className="achievement-display">
                     <span className="achievement-icon">
                       <IconComp />
                     </span>
-                    <span className="achievement-id">{achId}</span>
+                    <span className="achievement-title">
+                      {displayTitle}
+                    </span>
                   </div>
                 );
               })
@@ -154,7 +168,6 @@ const UserProfile = () => {
                 <div key={item._id} className="purchased-item-display">
                   <div className="purchased-item-title">{item.title}</div>
                   <div className="purchased-item-type">Type: {item.type}</div>
-                  {/* If you want, show item description or image */}
                 </div>
               ))
             ) : (
