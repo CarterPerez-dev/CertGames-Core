@@ -4,7 +4,6 @@ from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime
 
-
 from models.database import (
     mainusers_collection,
     shop_collection,
@@ -46,8 +45,6 @@ def serialize_user(user):
 
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
-    # NOTE: Exclude large fields with projection if needed:
-    # user = mainusers_collection.find_one({"_id": ObjectId(user_id)}, {"testsProgress": 0, "perTestCorrect": 0})
     user = get_user_by_id(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
@@ -91,7 +88,6 @@ def login():
         "xpBoost": user.get("xpBoost", 1.0),
         "currentAvatar": user.get("currentAvatar"),
         "nameColor": user.get("nameColor"),
-        # if you want, fetch purchasedItems with a separate projection or store it here
         "purchasedItems": user.get("purchasedItems", [])
     }), 200
 
@@ -162,18 +158,16 @@ def equip_item_route():
     except Exception:
         return jsonify({"success": False, "message": "Invalid item ID"}), 400
 
-    # Make sure user purchased it or meets unlock level
-    from models.test import shop_collection
     item_doc = shop_collection.find_one({"_id": oid})
     if not item_doc:
         return jsonify({"success": False, "message": "Item not found in shop"}), 404
 
+    # If user hasn't purchased it, check level-based unlock
     if oid not in user.get("purchasedItems", []):
-        # Check if user is high enough level to equip
         if user.get("level", 1) < item_doc.get("unlockLevel", 1):
             return jsonify({"success": False, "message": "Item not unlocked"}), 400
 
-    # Equip
+    # Equip the avatar
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"currentAvatar": oid}}
@@ -198,10 +192,6 @@ def fetch_test_by_id_route(test_id):
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
 def get_test_attempt(user_id, test_id):
-    """
-    Fetch the user's test attempt data from testAttempts_collection,
-    if any (or create a partial doc if you want).
-    """
     try:
         user_oid = ObjectId(user_id)
     except:
@@ -209,33 +199,19 @@ def get_test_attempt(user_id, test_id):
 
     attempt = testAttempts_collection.find_one({"userId": user_oid, "testId": test_id, "finished": False})
     if not attempt:
-        # Optionally create a new doc if none found
         return jsonify({"attempt": None}), 200
     
-    # Convert _id to string
     attempt["_id"] = str(attempt["_id"])
     return jsonify({"attempt": attempt}), 200
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
-    """
-    Store partial progress (answers, currentQuestionIndex, etc.) in testAttempts_collection.
-    Example request body:
-      {
-        "answers": [...],
-        "score": <number>,
-        "totalQuestions": 20,
-        "category": "aplus",
-        "finished": false
-      }
-    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
     except:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # Upsert attempt
     filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
     update_doc = {
         "$set": {
@@ -255,7 +231,7 @@ def update_test_attempt(user_id, test_id):
 def finish_test_attempt(user_id, test_id):
     """
     Mark the attempt as finished, set finishedAt, trigger achievements, etc.
-    Example request body might contain final score, answers, etc.
+    Returns newly unlocked achievements so the frontend can show popups.
     """
     data = request.json or {}
     try:
@@ -263,7 +239,6 @@ def finish_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # Mark attempt as finished
     filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
     update_doc = {
         "$set": {
@@ -281,16 +256,8 @@ def finish_test_attempt(user_id, test_id):
         "newlyUnlocked": newly_unlocked
     }), 200
 
-# -----------------------------
-# PAGINATION ROUTE (NEW)
-# -----------------------------
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
-    """
-    Returns a paginated list of attempts for the given user.
-    Optional query params: ?page=1&page_size=50
-    Example usage: GET /attempts/<user_id>/list?page=2&page_size=10
-    """
     try:
         user_oid = ObjectId(user_id)
     except:
@@ -300,7 +267,6 @@ def list_test_attempts(user_id):
     page_size = request.args.get("page_size", default=50, type=int)
     skip_count = (page - 1) * page_size
 
-    # We can sort by finishedAt descending to show most recent attempts first
     cursor = testAttempts_collection.find(
         {"userId": user_oid}
     ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
@@ -322,19 +288,6 @@ def list_test_attempts(user_id):
 # -----------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
-    """
-    Expects JSON:
-      {
-        "testId": <str>,
-        "questionId": <str>,
-        "correctAnswerIndex": <int>,
-        "selectedIndex": <int>,
-        "xpPerCorrect": <int>,
-        "coinsPerCorrect": <int>
-      }
-    Awards XP/coins only the first time user gets that Q correct, 
-    stored in correctAnswers_collection.
-    """
     data = request.json or {}
     test_id = str(data.get("testId"))
     question_id = data.get("questionId")
@@ -347,10 +300,8 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Determine if correct
     is_correct = (selected_index == correct_index)
 
-    # Check if user previously answered this question correct
     already_correct = correctAnswers_collection.find_one({
         "userId": user["_id"],
         "testId": test_id,
@@ -361,23 +312,16 @@ def submit_answer(user_id):
     awarded_coins = 0
 
     if is_correct and not already_correct:
-        # Insert record so we know user has gotten it correct once
         correctAnswers_collection.insert_one({
             "userId": user["_id"],
             "testId": test_id,
             "questionId": question_id
         })
-        # Award XP and coins
         update_user_xp(user_id, xp_per_correct)
         update_user_coins(user_id, coins_per_correct)
         awarded_xp = xp_per_correct
         awarded_coins = coins_per_correct
 
-    # Optionally also update the testAttempts doc with the user’s chosen answer
-    # to keep the answers array in sync. It's optional, but typically you'd do:
-    #   testAttempts_collection.update_one(...)
-
-    # Return updated user coins, xp
     updated_user = get_user_by_id(user_id)
     new_xp = updated_user.get("xp", 0)
     new_coins = updated_user.get("coins", 0)
@@ -391,15 +335,50 @@ def submit_answer(user_id):
         "newCoins": new_coins
     }), 200
 
-#A cheivement route
-
+# -----------------------------
+# ACHIEVEMENTS
+# -----------------------------
 @api_bp.route('/achievements', methods=['GET'])
 def fetch_achievements_route():
-    """
-    Returns the full list of achievements from the DB.
-    The frontend uses this to display locked/unlocked achievements.
-    """
     ach_list = get_achievements()
     for ach in ach_list:
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
+
+# ---------------------------------------------------------------
+# NEW! Leaderboard Route
+# ---------------------------------------------------------------
+@api_bp.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    """
+    Returns the top 100 users by level (descending).
+    Embeds avatarUrl from shop_collection if the user
+    has a currentAvatar set.
+    """
+    top_users_cursor = mainusers_collection.find(
+        {},
+        {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
+    ).sort("level", -1).limit(100)
+
+    results = []
+    rank = 1
+    for user in top_users_cursor:
+        # Basic fields
+        user_data = {
+            "username": user.get("username", "unknown"),
+            "level": user.get("level", 1),
+            "xp": user.get("xp", 0),
+            "rank": rank,
+            "avatarUrl": None
+        }
+
+        # Lookup avatar image if exists
+        if user.get("currentAvatar"):
+            avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+            if avatar_item and "imageUrl" in avatar_item:
+                user_data["avatarUrl"] = avatar_item["imageUrl"]
+
+        results.append(user_data)
+        rank += 1
+
+    return jsonify(results), 200
