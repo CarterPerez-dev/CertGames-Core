@@ -30,6 +30,7 @@ import AdminInterface from './components/pages/AdminInterface/AdminInterface';
 import PBQWizard from './components/pages/PBQpage/PBQWizard';
 import ShopPage from './components/pages/store/ShopPage';
 import UserProfile from './components/pages/store/UserProfile';
+import UserProfile from './components/pages/store/LeaderboardPage';
 
 // Test Pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
@@ -75,7 +76,7 @@ function App() {
         draggable
         pauseOnHover
       />
-      <div className={`main-content ${userId ? 'with-sidebar' : 'no-sidebar'}`}>
+      <div className="main-content"
         <Routes>
           <Route path="/" element={<InfoPage />} />
           <Route path="/login" element={<Login />} />
@@ -95,6 +96,11 @@ function App() {
           <Route path="/shop" element={
             <ProtectedRoute>
               <ShopPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <LeaderboardPage />
             </ProtectedRoute>
           }/>
           <Route path="/xploitcraft" element={
