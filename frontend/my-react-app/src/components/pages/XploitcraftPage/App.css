@@ -142,10 +142,6 @@
   }
 }
 
-.main-content {
-  margin-left: 13.75rem; 
-  padding: 0;
-}
 
 ::-webkit-calendar-picker-indicator {
   display: none;
