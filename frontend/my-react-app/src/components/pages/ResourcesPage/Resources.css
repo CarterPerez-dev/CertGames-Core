@@ -8,9 +8,7 @@ body, html {
 
 
 
-.sidebar.collapsed ~ .main-content {
-  margin-left: 0;
-}
+
 
 .resources-background {
   display: flex;
