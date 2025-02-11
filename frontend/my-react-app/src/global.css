@@ -1,15 +1,4 @@
-/* global.css */
-.main-content.with-sidebar {
-  margin-left: 220px;
-  transition: margin-left 0.3s ease;
+.main-content {
+  /* no margin-left at all */
+  transition: all 0.3s ease;  /* optional if you want smoothness */
 }
-
-.main-content.no-sidebar {
-  margin-left: 0;
-  transition: margin-left 0.3s ease;
-}
-
-
-
-/* (Optional) General resets or global typography styles could also be added here */
-
