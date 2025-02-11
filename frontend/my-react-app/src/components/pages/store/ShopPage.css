@@ -96,11 +96,12 @@
 /* Grid container for items */
 .shop-grid {
   display: grid;
+  /* Using auto-fill for responsive wrapping */
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  justify-items: center;
+  justify-items: center;    /* Centers each item’s contents */
+  justify-content: center;  /* Centers the entire row of items */
 }
-
 /* Individual item containers */
 .shop-item {
   background: #333;
