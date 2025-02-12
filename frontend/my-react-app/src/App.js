@@ -30,7 +30,7 @@ import AdminInterface from './components/pages/AdminInterface/AdminInterface';
 import PBQWizard from './components/pages/PBQpage/PBQWizard';
 import ShopPage from './components/pages/store/ShopPage';
 import UserProfile from './components/pages/store/UserProfile';
-import UserProfile from './components/pages/store/LeaderboardPage';
+import LeaderboardPage from './components/pages/store/LeaderboardPage';
 
 // Test Pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
@@ -76,7 +76,7 @@ function App() {
         draggable
         pauseOnHover
       />
-      <div className="main-content"
+      <div className="main-content">
         <Routes>
           <Route path="/" element={<InfoPage />} />
           <Route path="/login" element={<Login />} />

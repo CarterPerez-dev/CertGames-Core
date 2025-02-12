@@ -16,14 +16,14 @@ from routes.analogy_routes import analogy_bp
 from routes.subscribe_routes import subscribe_bp
 from routes.unsubscribe_routes import unsubscribe_bp
 from routes.admin_newsletter_routes import admin_newsletter_bp
-from database.models import create_user
+from models.user_subscription import create_user
 from routes.grc_routes import grc_bp
 from routes.log_routes import log_bp
 from routes.celery_routes import celery_bp
 from routes.status_routes import status_bp
 from routes.pbq_routes import pbq_bp
 from routes.test_routes import api_bp
-from models.database import db
+from mongodb.database import db
 
 
 

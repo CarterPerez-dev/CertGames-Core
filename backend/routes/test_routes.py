@@ -4,7 +4,7 @@ from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime
 
-from models.database import (
+from mongodb.database import (
     mainusers_collection,
     shop_collection,
     achievements_collection,
@@ -217,7 +217,7 @@ def update_test_attempt(user_id, test_id):
         "$set": {
             "userId": user_oid,
             "testId": test_id,
-            "category": data.get("category", "aplus"),
+            "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
             "totalQuestions": data.get("totalQuestions", 0),

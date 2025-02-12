@@ -1,6 +1,6 @@
-/* ScenarioSphere.css */
-
-/* Import digital fonts */
+/*******************************************/
+/* Imports & Base Styles                   */
+/*******************************************/
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
 
@@ -26,15 +26,18 @@ body, html {
   box-sizing: border-box;
 }
 
-/* Subtle animated binary overlay for extra hacker vibe */
-
-
+/*******************************************/
+/* (Optional) Animated Binary Overlay      */
+/* (You can uncomment or add styles if used)*/
+/*******************************************/
 @keyframes binaryScroll {
   from { transform: translate(-10%, -10%) rotate(-15deg); }
   to { transform: translate(-20%, -20%) rotate(-15deg); }
 }
 
-/* Main container styling */
+/*******************************************/
+/* Main Container                          */
+/*******************************************/
 .scenario-container {
   position: relative;
   z-index: 1;
@@ -46,7 +49,7 @@ body, html {
   padding: 20px;
 }
 
-/* Input and Output sections */
+/* Input & Output sections */
 .scenario-input-section,
 .scenario-output-container {
   background: rgba(0, 0, 0, 0.85);
@@ -57,7 +60,9 @@ body, html {
   box-sizing: border-box;
 }
 
-/* Titles and Taglines */
+/*******************************************/
+/* Titles & Taglines                       */
+/*******************************************/
 .scenario-title {
   font-size: 3.5em;
   text-align: center;
@@ -73,7 +78,9 @@ body, html {
   color: #FFF;
 }
 
-/* Input Wrapper */
+/*******************************************/
+/* Input Wrapper, Fields, Selects, Sliders */
+/*******************************************/
 .scenario-input-wrapper {
   position: relative;
   display: flex;
@@ -81,14 +88,12 @@ body, html {
   margin-bottom: 20px;
 }
 
-/* Labels */
 .scenario-input-wrapper label {
   font-size: 1.3rem;
   color: #FFF;
   margin-bottom: 5px;
 }
 
-/* Input Fields and Selects */
 .scenario-input-field {
   padding: 12px;
   border: 2px solid #FF0000;
@@ -105,7 +110,9 @@ body, html {
   box-shadow: 0 0 8px #FF5555;
 }
 
-/* Slider */
+/*******************************************/
+/* Slider                                  */
+/*******************************************/
 .scenario-input-slider {
   -webkit-appearance: none;
   width: 100%;
@@ -115,7 +122,6 @@ body, html {
   outline: none;
   margin-top: 10px;
 }
-
 .scenario-input-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -127,12 +133,10 @@ body, html {
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
 }
-
 .scenario-input-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
   background: #FF5555;
 }
-
 .scenario-input-slider::-moz-range-thumb {
   width: 24px;
   height: 24px;
@@ -142,13 +146,14 @@ body, html {
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
 }
-
 .scenario-input-slider::-moz-range-thumb:hover {
   transform: scale(1.1);
   background: #FF5555;
 }
 
-/* Threat intensity value display */
+/*******************************************/
+/* Threat Intensity Value                  */
+/*******************************************/
 .threat-intensity-value {
   margin-top: 5px;
   font-size: 1.3rem;
@@ -156,7 +161,9 @@ body, html {
   text-align: right;
 }
 
-/* Suggestions List */
+/*******************************************/
+/* Suggestions List                        */
+/*******************************************/
 .suggestions-list {
   position: absolute;
   top: 100%;
@@ -179,7 +186,6 @@ body, html {
   color: #FFF;
   transition: background 0.2s ease;
 }
-
 .suggestions-list li:hover,
 .suggestion-active {
   background: rgba(255, 0, 0, 0.2);
@@ -192,12 +198,13 @@ body, html {
   border-top: 1px solid #FF0000;
   font-weight: bold;
 }
-
 .show-all-suggestions:hover {
   background: rgba(255, 0, 0, 0.2);
 }
 
-/* Button and Loading Sphere */
+/*******************************************/
+/* Button & Loading Sphere Row             */
+/*******************************************/
 .button-and-sphere {
   display: flex;
   align-items: center;
@@ -218,7 +225,6 @@ body, html {
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
 }
-
 .scenario-generate-button:hover {
   background: #FF5555;
   color: #000;
@@ -235,7 +241,6 @@ body, html {
   overflow: hidden;
   box-shadow: 0 0 15px #FF0000;
 }
-
 .loading-sphere::before,
 .loading-sphere::after {
   content: "";
@@ -253,7 +258,6 @@ body, html {
   );
   animation: rotateGrid 1.5s linear infinite;
 }
-
 .loading-sphere::after {
   background: repeating-linear-gradient(
     to bottom,
@@ -271,7 +275,9 @@ body, html {
   100% { transform: rotate(360deg); }
 }
 
-/* Output Box */
+/*******************************************/
+/* Scenario Output                         */
+/*******************************************/
 .scenario-output-box {
   padding: 20px;
   background: #111;
@@ -287,7 +293,6 @@ body, html {
   font-family: "Courier New", monospace;
 }
 
-/* Output Title */
 .scenario-output-title {
   font-size: 1.5em;
   text-align: left;
@@ -296,11 +301,12 @@ body, html {
   color: #FF0000;
 }
 
-/* Interactive Questions */
+/*******************************************/
+/* Interactive Questions                   */
+/*******************************************/
 .interactive-questions {
   margin-top: 20px;
 }
-
 .interactive-questions h3 {
   font-size: 1.3em;
   margin-bottom: 15px;
@@ -337,7 +343,6 @@ body, html {
   border-radius: 6px;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
-
 .option-label:hover,
 .option-label:focus-within {
   background: rgba(255, 0, 0, 0.2);
@@ -355,7 +360,9 @@ body, html {
   transform: scale(1.2);
 }
 
-/* Feedback */
+/*******************************************/
+/* Feedback                                */
+/*******************************************/
 .feedback {
   margin-top: 10px;
   padding: 10px;
@@ -363,21 +370,18 @@ body, html {
   font-weight: bold;
   font-size: 1rem;
 }
-
 .feedback.correct {
   background: #000;
   color: #00FF00;
   border: 1px solid #00FF00;
   font-family: 'Orbitron', sans-serif;
 }
-
 .feedback.incorrect {
   background: #000;
   color: #FF0000;
   border: 1px solid #FF0000;
   font-family: 'Orbitron', sans-serif;
 }
-
 .explanation {
   margin-top: 5px;
   font-weight: normal;
@@ -386,69 +390,194 @@ body, html {
   font-family: 'Orbitron', sans-serif;
 }
 
-/* Responsive Media Queries */
+/*******************************************/
+/* RESPONSIVE MEDIA QUERIES               */
+/*******************************************/
 
-/* Tablets and small devices */
+/* 1) Extra-Small Devices: max-width 320px */
+@media (max-width: 320px) {
+  .scenario-container {
+    margin: 20px 10px;
+    padding: 15px;
+    flex-direction: column;
+  }
+
+  .scenario-title {
+    font-size: 1.8em;
+  }
+  .scenario-tagline {
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+
+  .scenario-input-section,
+  .scenario-output-container {
+    padding: 15px;
+  }
+
+  /* Reduce size of input fields, sliders, etc. */
+  .scenario-input-field {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+  .scenario-input-slider {
+    margin-top: 5px;
+  }
+
+  /* Buttons and Loading Sphere */
+  .scenario-generate-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  .loading-sphere {
+    width: 50px;
+    height: 50px;
+  }
+
+  /* Output box font & height */
+  .scenario-output-box {
+    font-size: 0.9rem;
+    max-height: 300px;
+  }
+
+  .question-text {
+    font-size: 1rem;
+  }
+  .explanation {
+    font-size: 0.85rem;
+  }
+}
+
+/* 2) Small Devices: max-width 480px */
+@media (max-width: 480px) {
+  .scenario-container {
+    margin: 10px;
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .scenario-title {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  .scenario-tagline {
+    font-size: 1em;
+    margin-bottom: 20px;
+  }
+
+  .scenario-input-section,
+  .scenario-output-container {
+    padding: 15px;
+  }
+
+  .scenario-input-field {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+  .scenario-input-slider {
+    margin-top: 6px;
+  }
+
+  .scenario-generate-button {
+    font-size: 0.95rem;
+    padding: 8px 18px;
+  }
+  .loading-sphere {
+    width: 55px;
+    height: 55px;
+  }
+
+  .scenario-output-box {
+    font-size: 0.95rem;
+    max-height: 350px;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+  .explanation {
+    font-size: 0.9rem;
+  }
+}
+
+/* 3) Medium-Small Devices: max-width 600px */
+@media (max-width: 600px) {
+  .scenario-container {
+    margin: 20px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .scenario-title {
+    font-size: 2.2em;
+  }
+  .scenario-tagline {
+    font-size: 1.1em;
+    margin-bottom: 25px;
+  }
+
+  .scenario-input-section,
+  .scenario-output-container {
+    padding: 15px;
+  }
+
+  .scenario-input-field {
+    font-size: 1rem;
+  }
+  .scenario-input-slider {
+    margin-top: 8px;
+  }
+
+  .scenario-generate-button {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+  .loading-sphere {
+    width: 58px;
+    height: 58px;
+  }
+
+  .scenario-output-box {
+    font-size: 1rem;
+    max-height: 380px;
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+  }
+  .explanation {
+    font-size: 0.95rem;
+  }
+}
+
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/* (Original rules expanded) */
 @media (max-width: 768px) {
   .scenario-container {
     flex-direction: column;
     margin: 20px;
     padding: 10px;
   }
-  
+
   .scenario-title {
-    font-size: 1.8em;
+    font-size: 1.8em; /* Adjust if you want bigger */
   }
-  
+
   .scenario-input-section,
   .scenario-output-container {
     padding: 15px;
   }
-  
+
   .question-container {
     padding: 10px;
   }
-  
+
   .option-label {
     padding: 8px;
   }
-  
-  .explanation {
-    font-size: 0.9rem;
-  }
-}
 
-/* Mobile Phones */
-@media (max-width: 480px) {
-  .scenario-container {
-    margin: 10px;
-    padding: 5px;
-  }
-  
-  .scenario-input-field,
-  .scenario-input-slider {
-    font-size: 0.9rem;
-  }
-  
-  .scenario-title {
-    font-size: 1.5em;
-  }
-  
-  .scenario-tagline {
-    font-size: 1em;
-  }
-  
-  .scenario-generate-button {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-  }
-  
-  .loading-sphere {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .scenario-output-box {
+  .explanation {
     font-size: 0.9rem;
   }
 }
