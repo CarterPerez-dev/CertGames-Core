@@ -1,7 +1,7 @@
 {
   "category": "aplus2",
   "testId": 6,
-  "testName": "XYZ Practice Test #6 (Formidable)",
+  "testName": "Practice Test #6 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
