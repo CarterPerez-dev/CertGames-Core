@@ -2,7 +2,7 @@
 {
   "category": "aplus2",
   "testId": 4,
-  "testName": "XYZ Practice Test #4 (Moderate)",
+  "testName": "Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
   "questions": [
     {
