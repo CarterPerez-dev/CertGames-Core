@@ -6,7 +6,7 @@ from collections import defaultdict
 import math
 
 # Import the new collections from database
-from models.database import (
+from mongodb.database import (
     mainusers_collection,
     shop_collection,
     achievements_collection,
@@ -27,7 +27,10 @@ def get_user_by_identifier(identifier):
 def create_user(user_data):
     """
     Creates a new user document, setting default fields including coins, xp, level,
-    purchasedItems, xpBoost, etc. Also automatically equips the default avatar if found.
+    purchasedItems, xpBoost, etc. Also automatically equips a default avatar if found.
+    
+    NOTE: We now assume the default avatar in shop_collection has:
+        { "type": "avatar", "cost": null }
     """
     existing_user = mainusers_collection.find_one({
         "$or": [
@@ -58,12 +61,10 @@ def create_user(user_data):
     user_data.setdefault("nameColor", None)     # e.g., "blue" or "#ff0000"
 
     # ------------------------------
-    # Automatically equip a default avatar:
-    # (Here we look for an avatar with cost=0. 
-    #  If instead you identify it by a specific title, 
-    #  you could do: {"title": "Default Avatar"} )
+    # Automatically equip default avatar
+    # (We look for an avatar with cost: null)
     # ------------------------------
-    default_avatar = shop_collection.find_one({"type": "avatar", "cost": 0})
+    default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
     if default_avatar:
         user_data["currentAvatar"] = default_avatar["_id"]
         if default_avatar["_id"] not in user_data["purchasedItems"]:
@@ -175,11 +176,13 @@ def apply_daily_bonus(user_id):
 
 def get_shop_items():
     """
-    Returns all shop items from shop_collection.
-    Each shop item includes:
-      - _id, type ("xpBoost", "avatar", "nameColor"), title, cost, ...
+    Returns all shop items from shop_collection,
+    in ascending order by title (or another field),
+    to ensure stable ordering.
     """
-    return list(shop_collection.find({}))
+    # If you want them returned in a particular order,
+    # you can do .sort("title", 1) or another field:
+    return list(shop_collection.find({}).sort("title", 1))
 
 def purchase_item(user_id, item_id):
     """
@@ -204,7 +207,7 @@ def purchase_item(user_id, item_id):
         return {"success": False, "message": "Item not found"}
 
     user_coins = user.get("coins", 0)
-    cost = item.get("cost", 0)
+    cost = item.get("cost", 0) if item.get("cost") is not None else 0
     if user_coins < cost:
         return {"success": False, "message": "Not enough coins"}
 
@@ -265,40 +268,41 @@ def check_and_unlock_achievements(user_id):
     Checks the user's progress by querying testAttempts_collection
     (instead of user.testsProgress) to see how many tests are finished,
     how many are perfect, etc. Then unlock achievements as needed.
+    Returns (newly_unlocked).
     """
     user = get_user_by_id(user_id)
     if not user:
         return []
 
     user_oid = user["_id"]
-    # Query total finished attempts
+    # total finished attempts
     total_finished = testAttempts_collection.count_documents({
         "userId": user_oid,
         "finished": True
     })
 
-    # Count how many are perfect
+    # perfect tests
     perfect_tests = testAttempts_collection.count_documents({
         "userId": user_oid,
         "finished": True,
         "$expr": {"$eq": ["$score", "$totalQuestions"]}
     })
 
-    # For advanced logic (categories, consecutive perfect, etc.)
+    # fetch finished attempts
     finished_cursor = testAttempts_collection.find({"userId": user_oid, "finished": True})
     finished_tests = []
     for doc in finished_cursor:
         tq = doc.get("totalQuestions", 0)
         sc = doc.get("score", 0)
         pct = (sc / tq) * 100 if tq else 0
-        cat = doc.get("category", "aplus")
+        cat = doc.get("category", "global")
         finished_tests.append({
             "test_id": doc.get("testId", "0"),
             "percentage": pct,
             "category": cat
         })
 
-    # Example: consecutive perfect logic
+    # consecutive perfect logic
     perfect_list = [ft for ft in finished_tests if ft["percentage"] == 100]
     try:
         perfect_list.sort(key=lambda x: int(x["test_id"]))
@@ -323,13 +327,14 @@ def check_and_unlock_achievements(user_id):
         max_consecutive = max(max_consecutive, current_streak)
         previous_test_id = cid
 
-    # Group by category
+    # group by category
+    from collections import defaultdict
     category_groups = defaultdict(list)
     for ft in finished_tests:
         cat = ft["category"]
         category_groups[cat].append(ft)
 
-    # If you assume 80 total tests exist for "allTestsCompleted" criteria
+    # total test threshold
     TOTAL_TESTS = 130
 
     unlocked = user.get("achievements", [])
@@ -340,7 +345,6 @@ def check_and_unlock_achievements(user_id):
         aid = ach["achievementId"]
         criteria = ach.get("criteria", {})
 
-        # Skip if already unlocked
         if aid in unlocked:
             continue
 
@@ -388,7 +392,7 @@ def check_and_unlock_achievements(user_id):
                     newly_unlocked.append(aid)
                     break
 
-        # 8) redemption arc style (optional):
+        # 8) redemption arc style
         if ("minScoreBefore" in criteria and 
             "minScoreAfter" in criteria and 
             aid not in unlocked):
@@ -404,3 +408,4 @@ def check_and_unlock_achievements(user_id):
         )
 
     return newly_unlocked
+

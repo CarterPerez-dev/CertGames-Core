@@ -45,6 +45,7 @@
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 5px;
   margin-bottom: 20px;
+  font-family: 'Orbitron', sans-serif;
 }
 
 
@@ -98,7 +99,7 @@
   font-size: 1em;
   color: #000;
   background-color: #cc0000;
-  border: 2px solid #fff;
+  border: 1px solid #fff;
   border-radius: 5px;
   cursor: pointer;
   min-width: 120px;

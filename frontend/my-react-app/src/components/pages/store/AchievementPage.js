@@ -92,7 +92,7 @@ const AchievementPage = () => {
     }
   }, [dispatch, achievements]);
 
-  // Temporary function to test a popup.
+  // This function remains if you ever want to trigger a test popup programmatically
   const testPopup = (achievementId) => {
     const achievement = achievements.find((ach) => ach.achievementId === achievementId);
     if (achievement) {
@@ -111,20 +111,19 @@ const AchievementPage = () => {
     <div className="achievement-page">
       <header className="achievement-header">
         <h1>Achievements</h1>
-        <p>Discover your milestones and track your progress on our gamified platform!</p>
-        {/* Temporary test buttons for simulating achievement popups */}
-        <div className="test-popup-buttons">
-          <button onClick={() => testPopup("test_rookie")}>Test Popup: Test Rookie</button>
-          <button onClick={() => testPopup("gold_god")}>Test Popup: Gold God</button>
-        </div>
+        <p>Discover your milestones and track your progress on our gamified platform! 🏆</p>
       </header>
+
       <div className="achievement-grid">
         {achievements.map((ach) => {
           const isUnlocked = userAchievements.includes(ach.achievementId);
           const IconComponent = iconMapping[ach.achievementId] || FaTrophy;
           const iconColor = colorMapping[ach.achievementId] || "#ffffff";
           return (
-            <div key={ach.achievementId} className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`}>
+            <div
+              key={ach.achievementId}
+              className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`}
+            >
               <div className="achievement-icon" style={{ color: iconColor }}>
                 <IconComponent />
               </div>

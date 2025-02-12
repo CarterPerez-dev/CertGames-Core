@@ -3,35 +3,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .achievement-page {
+  /* Existing styles */
   padding: 2rem;
   min-height: 100vh;
-  background: url('ach.png') center center no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  color: #e0e0e0;
-  font-family: 'Roboto', sans-serif;
+  color: #fff;
   position: relative;
-}
+
+  /* The faded background image */
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.2), /* top overlay transparency */
+      rgba(0, 0, 0, 0.2)  /* bottom overlay transparency */
+    ),
+    url('./achbgs1.jpg') /* path in public folder */
+      no-repeat
+      center
+      center
+      fixed;
+  background-size: cover;
+  background-attachment: fixed;  /* keeps it fixed on scroll */
+  background-position: center;
+  }
 
 .achievement-header {
   text-align: center;
   margin-bottom: 2rem;
+  font-weight: bold;
   animation: fadeInDown 1s ease-out;
-  font-family: 'Press Start 2P', cursive, sans-serif;
-  text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
-  color: #F5F5F5;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 1px 1px 0 #000, 1px 1px 0 #808080;
+  color: #fff;
 }
 
 .achievement-header h1 {
   font-size: 3rem;
-  color: #F5F5F5;
+  color: #fff;
   margin: 0;
-  text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
+  text-shadow: 2px 2px 0 #000, 4px 4px 0 #808080;
+  font-family: 'Orbitron', sans-serif;
 }
 
 .achievement-header p {
-  font-size: 1rem;
-  color: #F5F5F5;
+  font-size: 1.2rem;
+  color: #fff;
   margin-top: 0.5rem;
 }
 
@@ -41,7 +54,7 @@
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
-  animation: fadeIn 1.5s ease-out;
+  animation: fadeIn 3s ease-out;
 }
 
 .achievement-card {
@@ -67,7 +80,7 @@
 .achievement-title {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
-  color: #ff5555;
+  color: #fff;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
   font-family: 'Press Start 2P', cursive, sans-serif;
   text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
@@ -94,7 +107,7 @@
 /* ------------------------- Option 1 ------------------------- */
 /* Partially gray out but still show some color. */
 .achievement-card.locked {
-  opacity: 0.6;            /* slightly faded */
+  opacity: 0.9;            /* slightly faded */
   filter: grayscale(50%);  /* partially grayscale so color is still visible */
 }
 
@@ -121,21 +134,7 @@
 /* -------------------------------------------------------------------- */
 
 /* The “Not Yet Earned” overlay text */
-.lock-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0); /* Transparent so it won’t block icons/text */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  border-radius: 12px;
-  color: #ccccff; /* Set text color to pure white */
-}
+
 
 
 @keyframes fadeInDown {
@@ -148,13 +147,232 @@
   to   { opacity: 1; }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+/*******************************************/
+/* 1) Extra-Small Devices: max-width 320px */
+/*******************************************/
+@media (max-width: 320px) {
+  /* Page & text scaling */
+  .achievement-page {
+    padding: 1rem !important;
+    font-size: 0.85rem !important;
+    overflow-x: hidden !important; /* Prevent horizontal scroll */
+  }
+
   .achievement-header h1 {
-    font-size: 2.5rem;
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.75rem !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
   }
   .achievement-header p {
-    font-size: 1.1rem;
+    font-size: 0.9rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Single-column grid to avoid overlap/cutoff */
+  .achievement-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  /* Card & content scaling */
+  .achievement-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto 1rem auto !important;
+    padding: 1rem !important;
+  }
+  .achievement-icon {
+    font-size: 2.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .achievement-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .achievement-description {
+    font-size: 0.7rem !important;
+    line-height: 1rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* Lock overlay scaled to fit smaller screens */
+  .lock-overlay {
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    padding: 0.5rem !important;
+  }
+}
+
+/*******************************************/
+/* 2) Small Devices: max-width 480px       */
+/*******************************************/
+@media (max-width: 480px) {
+  /* Page & header */
+  .achievement-page {
+    padding: 1.2rem !important;
+    font-size: 0.9rem !important;
+    overflow-x: hidden !important;
+  }
+
+  .achievement-header h1 {
+    font-size: 2.2rem !important;
+    margin-bottom: 0.75rem !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  .achievement-header p {
+    font-size: 1rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Often still single-column for best readability */
+  .achievement-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .achievement-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto 1rem !important;
+    padding: 1.2rem !important;
+  }
+  .achievement-icon {
+    font-size: 2.8rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .achievement-title {
+    font-size: 1.05rem !important;
+  }
+  .achievement-description {
+    font-size: 0.75rem !important;
+    line-height: 1.1rem !important;
+  }
+
+  .lock-overlay {
+    font-size: 1rem !important;
+    padding: 0.5rem !important;
+  }
+}
+
+/*******************************************/
+/* 3) Medium-Small Devices: max-width 600px*/
+/*******************************************/
+@media (max-width: 600px) {
+  .achievement-page {
+    padding: 1.5rem !important;
+    font-size: 0.95rem !important;
+    overflow-x: hidden !important;
+  }
+
+  .achievement-header h1 {
+    font-size: 2.4rem !important;
+    margin-bottom: 1rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  .achievement-header p {
+    font-size: 1rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Possibly 1 or 2 columns if there's enough space */
+  .achievement-grid {
+    grid-template-columns: 1fr !important; /* Or repeat(2, 1fr) if you prefer 2 columns */
+    gap: 1.2rem !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  .achievement-card {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 auto 1rem !important;
+    padding: 1.3rem !important;
+  }
+  .achievement-icon {
+    font-size: 3rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  .achievement-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .achievement-description {
+    font-size: 0.8rem !important;
+    line-height: 1.2rem !important;
+  }
+
+  .lock-overlay {
+    font-size: 1rem !important;
+    padding: 0.5rem !important;
+  }
+}
+
+/*******************************************/
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/*******************************************/
+@media (max-width: 768px) {
+  .achievement-page {
+    padding: 1.8rem !important;
+    font-size: 1rem !important;
+    overflow-x: hidden !important;
+  }
+
+  .achievement-header h1 {
+    font-size: 2.5rem !important;
+    margin-bottom: 1rem !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+  .achievement-header p {
+    font-size: 1.1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Usually 2 columns by 768px, but you can keep 1 if you prefer */
+  .achievement-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    max-width: 200px !important;
+    margin: 0 auto !important;
+  }
+
+  .achievement-card {
+    width: 100% !important;
+    max-width: 200px !important;
+    margin: 0 auto 1.5rem !important;
+    padding: 1.5rem !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important
+  }
+  .achievement-icon {
+    font-size: 3.2rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  .achievement-title {
+    font-size: 1.2rem !important;
+  }
+  .achievement-description {
+    font-size: 0.85rem !important;
+    line-height: 1.3rem !important;
+  }
+
+  .lock-overlay {
+    font-size: 1.1rem !important;
+    padding: 0.75rem !important;
   }
 }
 

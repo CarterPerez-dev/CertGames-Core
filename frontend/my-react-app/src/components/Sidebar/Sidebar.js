@@ -1,46 +1,66 @@
-// src/components/Sidebar/Sidebar.js
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Sidebar.css';
-import sidebarLogo from './sidebarlogo.png'; // Adjust path if necessary
+import sidebarLogo from './sidebarlogo.png'; 
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(true); // Overall sidebar collapsed state
-  const [toolsOpen, setToolsOpen] = useState(false); // For the Tools group
-  const [practiceTestsOpen, setPracticeTestsOpen] = useState(false); // For the Practice Tests group
+  const [collapsed, setCollapsed] = useState(true);
+  const [toolsOpen, setToolsOpen] = useState(false);
+  const [practiceTestsOpen, setPracticeTestsOpen] = useState(false);
 
   const navigate = useNavigate();
+  const sidebarRef = useRef(null);
+  const toggleButtonRef = useRef(null);
 
-  // Toggle entire sidebar collapse
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
   };
 
-  // Toggle Tools group collapse
   const toggleTools = () => {
     setToolsOpen(!toolsOpen);
   };
 
-  // Toggle Practice Tests group collapse
   const togglePracticeTests = () => {
     setPracticeTestsOpen(!practiceTestsOpen);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // if sidebar is open
+      if (!collapsed) {
+        // check if clicked inside sidebar
+        const clickedInsideSidebar = sidebarRef.current?.contains(event.target);
+        // check if clicked on the toggle button
+        const clickedToggleButton = toggleButtonRef.current?.contains(event.target);
+
+        // if the click is outside sidebar AND not on the toggle button, collapse
+        if (!clickedInsideSidebar && !clickedToggleButton) {
+          setCollapsed(true);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [collapsed]);
+
   return (
     <>
       {/* Sidebar Toggle Button */}
-      <button className="sidebar-toggle" onClick={toggleSidebar}>
-        {collapsed ? '☰' : '✖'}
+      <button
+        ref={toggleButtonRef}
+        className="sidebar-toggle"
+        onClick={toggleSidebar}
+      >
+        {collapsed ? '≣' : '⛌ '}
       </button>
 
-      <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
-        <h2 className="sidebar-title">
-          root@
-        </h2>
-
+      <div ref={sidebarRef} className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+        <h2 className="sidebar-title">root@</h2>
         <ul className="sidebar-list">
-          {/* Top-level links: Profile, Achievements, and Shop */}
           <li>
             <NavLink to="/profile" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Profile
@@ -58,22 +78,20 @@ const Sidebar = () => {
           </li>
           <li>
             <NavLink to="/leaderboard" className={({ isActive }) => isActive ? 'active-link' : ''}>
-              /LeaderboardPage
+              /Leaderboard
             </NavLink>
           </li>
 
-
-
-
-
-          {/* Tools group: Contains several tool pages */}
+          {/* Tools group */}
           <li className="sidebar-group">
             <div
               className="group-header"
               onClick={toggleTools}
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => { if (e.key === 'Enter') toggleTools(); }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') toggleTools();
+              }}
             >
               <span>/Tools</span>
               {toolsOpen ? <FaChevronUp /> : <FaChevronDown />}
@@ -109,14 +127,14 @@ const Sidebar = () => {
             )}
           </li>
 
-          {/* Daily CyberBrief (remains separate) */}
+          {/* Daily CyberBrief */}
           <li>
             <NavLink to="/dailycyberbrief" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Daily CyberBrief
             </NavLink>
           </li>
 
-          {/* Study Resources (remains separate) */}
+          {/* Study Resources */}
           <li>
             <NavLink to="/resources" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Study Resources
@@ -130,7 +148,9 @@ const Sidebar = () => {
               onClick={togglePracticeTests}
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => { if (e.key === 'Enter') togglePracticeTests(); }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') togglePracticeTests();
+              }}
             >
               <span>/Practice Tests</span>
               {practiceTestsOpen ? <FaChevronUp /> : <FaChevronDown />}
@@ -216,3 +236,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

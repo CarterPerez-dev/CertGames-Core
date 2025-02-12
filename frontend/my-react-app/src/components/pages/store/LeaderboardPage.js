@@ -34,7 +34,7 @@ const LeaderboardPage = () => {
 
   return (
     <div className="leaderboard-container">
-      <h1 className="leaderboard-title">Top 100 Leaderboard</h1>
+      <h1 className="leaderboard-title">Top 100 Leader Board</h1>
       <div className="leaderboard-list">
         {leaders.map((user) => {
           // Special styling for top 3

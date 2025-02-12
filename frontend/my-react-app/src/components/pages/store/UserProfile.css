@@ -1,4 +1,25 @@
-/* src/components/pages/store/UserProfile.css */
+/* FULL-SCREEN BACKGROUND (only if .profile-container is in DOM) */
+body:has(.profile-container) {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url('./user.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed; /* might not work on some mobile browsers */
+  background-position: center;
+}
+
+/*******************************************/
+/* Base styles (as provided)               */
+/*******************************************/
 
 .profile-container {
   color: #fff;
@@ -23,9 +44,10 @@
 }
 
 .profile-title {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-family: 'Orbitron', sans-serif;
-  color: #ffcccc;
+  color: #b30000;
+  text-shadow: 1px 1px 0px #fff;
   margin: 0;
 }
 
@@ -65,7 +87,7 @@
 .extra-card h2 {
   margin-top: 0;
   font-family: 'Orbitron', sans-serif;
-  color: #cc0000;
+  color: #b30000;
 }
 
 .profile-details p {
@@ -73,7 +95,7 @@
 }
 .profile-details .detail-label {
   font-weight: bold;
-  color: #ffcccc;
+  color: #b30000;
 }
 
 .action-buttons {
@@ -83,7 +105,7 @@
 }
 .profile-btn {
   background: #cc0000;
-  border: none;
+  border: solid 1px #000;
   color: #fff;
   padding: 8px 12px;
   border-radius: 5px;
@@ -114,7 +136,7 @@
 }
 
 .achievement-icon {
-  font-size: 1.3rem;
+  font-size: 3rem;
   color: #ffd700;
 }
 
@@ -133,18 +155,237 @@
   color: #ffcccc;
 }
 
-/* Basic responsive for small screens */
-@media (max-width: 480px) {
+/*******************************************/
+/* 1) Extra-Small Devices: max-width 320px */
+/*******************************************/
+@media (max-width: 320px) {
+  .profile-container {
+    padding: 10px;
+    max-width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
   .profile-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
   }
+
+  .profile-picture img {
+    width: 50px;
+    height: 50px;
+    border-width: 2px;
+  }
+
+  .profile-title {
+    font-size: 1.4rem;
+  }
+
+  .logout-button {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 10px;
+  }
+
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1rem;
+  }
+
+  .profile-details p {
+    font-size: 0.9rem; 
+  }
+
+  .profile-btn {
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+
+  .achievement-icon {
+    font-size: 1rem;
+  }
+
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 0.9rem;
+  }
+}
+
+/*******************************************/
+/* 2) Small Devices: max-width 480px       */
+/*******************************************/
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 15px;
+    max-width: 100%;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
   .profile-picture img {
     width: 60px;
     height: 60px;
+    border-width: 2px;
+  }
+
+  .profile-title {
+    font-size: 1.5rem;
   }
   .logout-button {
     margin-left: 0;
     margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 12px;
+  }
+
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+
+  .profile-btn {
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+
+  .achievement-icon {
+    font-size: 1.1rem;
+  }
+
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
   }
 }
+
+/*******************************************/
+/* 3) Medium-Small Devices: max-width 600px*/
+/*******************************************/
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 15px;
+    max-width: 95%;
+  }
+  
+  .profile-header {
+    gap: 20px;
+  }
+
+  .profile-picture img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-title {
+    font-size: 1.6rem;
+  }
+
+  .logout-button {
+    padding: 7px 14px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 14px;
+  }
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+  .profile-btn {
+    padding: 7px 12px;
+    font-size: 1rem;
+  }
+
+  .achievement-icon {
+    font-size: 1.2rem;
+  }
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
+  }
+}
+
+/*******************************************/
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/*******************************************/
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .profile-header {
+    gap: 25px;
+  }
+  
+  .profile-title {
+    font-size: 1.7rem;
+  }
+
+  .logout-button {
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 16px;
+  }
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+
+  .profile-btn {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .achievement-icon {
+    font-size: 1.3rem;
+  }
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
+  }
+}
+

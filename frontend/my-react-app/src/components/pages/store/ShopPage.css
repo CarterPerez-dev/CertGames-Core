@@ -1,21 +1,23 @@
-/* src/components/pages/store/ShopPage.css */
-
-/* 
-  Global container styled like a Mario Kart character select screen.
-  We've shifted the yellow theme to a darkish/bright red vibe, added a 
-  background image (shopbg.png) that blends with a dark gradient, and made 
-  the containers (avatars & XP boosts) slightly transparent.
-*/
-
+/*******************************************/
+/* Base Imports & Fonts                   */
+/*******************************************/
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/*******************************************/
+/* Base Styles for ShopPage               */
+/*******************************************/
 
 /* Root container for the page */
 .shop-page.mario-kart-theme {
   font-family: 'Press Start 2P', cursive, sans-serif;
-  background: 
+  /* Faded overlay + background image */
+  background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
-    url('shopbg.png') no-repeat center fixed;
+    url('./shopbg1.jpg') no-repeat center fixed;
   background-size: cover;
+  background-attachment: fixed;  /* keeps it fixed on scroll */
+  background-position: center;
+  
   min-height: 100vh;
   color: #fff;
   padding: 20px;
@@ -72,10 +74,8 @@
   margin: 20px 0;
 }
 
-/* 
-  Section containers for XP Boosts and Avatars 
-  with a transparent background that lets the blended background show through.
-*/
+/* Section containers for XP Boosts and Avatars 
+   with a transparent background that lets the background show through. */
 .shop-section {
   margin-bottom: 40px;
   border: 2px dashed #c0392b;
@@ -96,13 +96,12 @@
 /* Grid container for items */
 .shop-grid {
   display: grid;
-  /* Using auto-fill for responsive wrapping */
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
-  justify-items: center;    /* Centers each item’s contents */
-  justify-content: center;  /* Centers the entire row of items */
+  justify-items: center;
 }
-/* Individual item containers */
+
+/* Individual item containers (shared by XP boosts and avatars) */
 .shop-item {
   background: #333;
   border: 2px solid #c0392b;
@@ -174,16 +173,319 @@
   background: #e74c3c;
 }
 
-/* Disabled button styling */
 .purchase-button:disabled {
   background: #bbb;
   color: #777;
   cursor: not-allowed;
 }
 
-/* Additional flair for XP Boost items */
+/*******************************************/
+/* Optional: Avatar-Specific Classes       */
+/*******************************************/
 
+/* If you want a distinct container look for avatars */
+.avatar-section {
+  /* Currently inherits .shop-section styles. 
+     Add any unique styling if desired. */
+}
 
-/* Additional flair for Avatars */
+/* If you want a distinct look for avatar items. 
+   They already inherit from .shop-item. */
+.avatar-item {
+  /* Additional/override styles for Avatars go here if needed. */
+}
 
+/*******************************************/
+/* Media Queries                           */
+/*******************************************/
+
+/*******************************************/
+/* 1) Extra-Small Devices: max-width 320px */
+/*******************************************/
+@media (max-width: 320px) {
+  .shop-page.mario-kart-theme {
+    padding: 10px;
+    font-size: 0.8rem; /* Scale down the base font size */
+  }
+
+  .shop-header .main-title {
+    font-size: 2rem;
+    margin-bottom: 5px;
+  }
+
+  .shop-user-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.7rem;
+  }
+
+  .purchase-status {
+    width: 90%;
+    font-size: 0.8rem;
+    padding: 8px;
+    margin-bottom: 15px;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 15px;
+  }
+
+  /* XP/Avatar grid: single column for tiny screens */
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .shop-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .shop-item-image {
+    max-width: 80px;
+    margin-bottom: 5px;
+  }
+  .shop-item-info h3 {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+  .shop-item-info p {
+    font-size: 0.7rem;
+    line-height: 1rem;
+  }
+
+  .purchase-button {
+    font-size: 0.6rem;
+    padding: 6px 8px;
+    margin-top: 5px;
+  }
+  
+  /* Avatars (if you want them separate, same fix) */
+  .avatar-section .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .avatar-section .shop-item.avatar-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .avatar-section .shop-item.avatar-item .shop-item-image {
+    max-width: 80px;
+    margin-bottom: 5px;
+  }
+}
+
+/*******************************************/
+/* 2) Small Devices: max-width 480px       */
+/*******************************************/
+@media (max-width: 480px) {
+  .shop-page.mario-kart-theme {
+    padding: 15px;
+    font-size: 0.85rem;
+  }
+
+  .shop-header .main-title {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+  }
+
+  .shop-user-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.75rem;
+  }
+
+  .purchase-status {
+    width: 80%;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  /* Keep it single column or minimal columns at 480px */
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .shop-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .shop-item-image {
+    max-width: 100px;
+    margin-bottom: 8px;
+  }
+  .shop-item-info h3 {
+    font-size: 1rem;
+  }
+  .shop-item-info p {
+    font-size: 0.75rem;
+    line-height: 1.1rem;
+  }
+
+  .purchase-button {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+  }
+  
+  /* Avatars */
+  .avatar-section .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .avatar-section .shop-item.avatar-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .avatar-section .shop-item.avatar-item .shop-item-image {
+    max-width: 100px;
+  }
+}
+
+/*******************************************/
+/* 3) Medium-Small Devices: max-width 600px*/
+/*******************************************/
+@media (max-width: 600px) {
+  .shop-page.mario-kart-theme {
+    padding: 20px;
+    font-size: 0.9rem;
+  }
+
+  .shop-header .main-title {
+    font-size: 2.7rem;
+  }
+
+  .shop-user-info {
+    justify-content: center;
+    gap: 15px;
+    font-size: 0.8rem;
+  }
+
+  .purchase-status {
+    width: 75%;
+    font-size: 0.9rem;
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+  }
+
+  /* Potentially 1 column for safety, or 2 columns if you prefer */
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .shop-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .shop-item-image {
+    max-width: 110px;
+    margin-bottom: 10px;
+  }
+  .shop-item-info h3 {
+    font-size: 1.05rem;
+  }
+  .shop-item-info p {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+  }
+
+  .purchase-button {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+  }
+  
+  /* Avatars */
+  .avatar-section .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .avatar-section .shop-item.avatar-item {
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+  }
+  .avatar-section .shop-item.avatar-item .shop-item-image {
+    max-width: 110px;
+  }
+}
+
+/*******************************************/
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/*******************************************/
+@media (max-width: 768px) {
+  .shop-page.mario-kart-theme {
+    padding: 25px;
+    font-size: 1rem;
+  }
+
+  .shop-header .main-title {
+    font-size: 3rem;
+  }
+
+  .shop-user-info {
+    font-size: 0.85rem;
+  }
+
+  .purchase-status {
+    width: 70%;
+    font-size: 0.95rem;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  /* Keep it simple: single column or up to 2 columns if you prefer */
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .shop-item {
+    max-width: 260px;
+    padding: 14px;
+  }
+  .shop-item-image {
+    max-width: 120px;
+    margin-bottom: 10px;
+  }
+  .shop-item-info h3 {
+    font-size: 1.1rem;
+  }
+  .shop-item-info p {
+    font-size: 0.85rem;
+    line-height: 1.3rem;
+  }
+  .purchase-button {
+    font-size: 0.75rem;
+    padding: 8px 14px;
+  }
+  
+  /* Avatars */
+  .avatar-section .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .avatar-section .shop-item.avatar-item {
+    max-width: 150px;
+    margin: 0 auto;
+  }
+  .avatar-section .shop-item.avatar-item .shop-item-image {
+    max-width: 120px;
+  }
+}
 
