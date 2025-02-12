@@ -88,13 +88,11 @@ E.g., “Remember to apply the principle of least privilege when configuring use
 5. Final Format for MongoDB Insertion
 Each test (from testId: 1 to testId: 10) is inserted as follows. Below is an example for Test #1 with the “Normal” difficulty. You will adapt the structure for Tests #2–#10 and their corresponding difficulty levels.
 
-js
-Copy
-Edit
+
 db.tests.insertOne({
-  "category": "aplus2",                             
+  "category": "nplus",                             
   "testId": 1,                    //this will go from 1-10                
-  "testName": "XYZ Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on tes 2-10
+  "testName": " Network Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on test 2-10
   "xpPerCorrect": 10,                             
   "questions": [ //these questions are purely examples, do not replciate theese examples
     {
@@ -141,32 +139,27 @@ Link to the CURRICULUM AND KEEP WITHIN SCOPE OF CURRICULUM/OBJECTIVES
 
 HERE IS TEH CURRCIULUM THE TESTS SHOULD BE ABOUT
 
-CompTIA A+
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+CompTIA Network+ 
 Certification Exam
-Core 2 Objectives
-EXAM NUMBER: CORE 2 (220-1102)
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
+Objectives
+EXAM NUMBER: N10-009
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
 About the Exam
-Candidates are encouraged to use this document to help prepare for the CompTIA A+ 220-1102 
-certification exam. In order to receive the CompTIA A+ certification, you must pass two exams: Core 1 
-(220-1101) and Core 2 (220-1102). The CompTIA A+ Core 1 (220-1101) and Core 2 (220-1102) certification 
-exams will verify the successful candidate has the knowledge and skills required to: 
-• Install, configure, and maintain computer equipment, mobile devices, and software for end users
-• Service components based on customer requirements
-• Understand networking basics and apply basic cybersecurity methods to mitigate threats
-• Properly and safely diagnose, resolve, and document common hardware and software issues
-• Apply troubleshooting skills and provide customer support using appropriate communication skills
-• Understand the basics of scripting, cloud technologies, virtualization, and multi-OS deployments in 
-corporate environments
-This is equivalent to 12 months of hands-on experience working in a help desk support, desktop support 
-technician, or field service technician job role. These content examples are meant to clarify the test 
-objectives and should not be construed as a comprehensive listing of all the content of this examination. 
-EXAM ACCREDITATION 
-The CompTIA A+ Core 2 (220-1102) exam is accredited by ANSI to show compliance with the ISO 17024 
-standard and, as such, undergoes regular reviews and updates to the exam objectives.
+The CompTIA Network+ certification exam will certify the successful candidate has the knowledge 
+and skills required to:
+• Establish network connectivity by deploying wired and wireless devices.
+• Explain the purpose of documentation and maintain network documentation.
+• Configure common network services.
+• Explain basic data-center, cloud, and virtual-networking concepts.
+• Monitor network activity and troubleshoot performance and availability issues.
+• Implement network security hardening techniques.
+• Manage, configure, and troubleshoot network infrastructure.
 EXAM DEVELOPMENT 
-CompTIA exams result from subject-matter expert workshops and industry-wide survey results 
-regarding the skills and knowledge required of an entry-level IT professional. 
+CompTIA exams result from subject matter expert workshops and industry-wide survey results 
+regarding the skills and knowledge required of an IT professional.
 CompTIA AUTHORIZED MATERIALS USE POLICY 
 CompTIA Certifications, LLC is not affiliated with and does not authorize, endorse, or condone utilizing 
 any content provided by unauthorized third-party training sites (aka “brain dumps”). Individuals who 
@@ -176,1312 +169,988 @@ effort to more clearly communicate CompTIA’s exam policies on use of unauthori
 CompTIA directs all certification candidates to the CompTIA Certification Exam Policies. Please review 
 all CompTIA policies before beginning the study process for any CompTIA exam. Candidates will be 
 required to abide by the CompTIA Candidate Agreement. If a candidate has a question as to whether 
-study materials are considered unauthorized (aka “brain dumps”), he/she should contact CompTIA at 
+study materials are considered unauthorized (aka “brain dumps”), they should contact CompTIA at 
 examsecurity@comptia.org to confirm. 
 PLEASE NOTE 
 The lists of examples provided in bulleted format are not exhaustive lists. Other examples of 
 technologies, processes, or tasks pertaining to each objective may also be included on the exam, 
 although not listed or covered in this objectives document. CompTIA is constantly reviewing the 
 content of our exams and updating test questions to be sure our exams are current, and the security 
-of the questions is protected. When necessary, we will publish updated exams based on existing exam 
-objectives. Please know that all related exam preparation materials will still be valid.
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
+of the questions is protected. When necessary, we will publish updated exams based on existing 
+exam objectives. Please know that all related exam preparation materials will still be valid.
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
 TEST DETAILS
-Required exam A+ Core 2 (220-1102)
+Required exam N10-009
 Number of questions Maximum of 90
 Types of questions Multiple-choice and performance-based
 Length of test 90 minutes
-Recommended experience 12 months of hands-on experience in a help 
-desk support technician, desktop support 
-technician, or field service technician job role
-Passing score 700 (on a scale of 100-900) 
+Recommended experience A minimum of 9–12 months of experience 
+in the IT networking field
 EXAM OBJECTIVES (DOMAINS)
 The table below lists the domains measured by this examination 
 and the extent to which they are represented.
 DOMAIN PERCENTAGE OF EXAMINATION
-1.0 Operating Systems 31%
-2.0 Security 25%
-3.0 Software Troubleshooting 22%
-4.0 Operational Procedures 22%
+1.0 Networking Concepts 23%
+2.0 Network Implementation 20%
+3.0 Network Operations 19%
+4.0 Network Security 14%
+5.0 Network Troubleshooting 24%
 Total 100%
-NOTE ON WINDOWS 11
-Versions of Microsoft® Windows® that are not end of Mainstream Support (as determined by 
-Microsoft), up to and including Windows 11, are intended content areas of the certification. As such, 
-objectives in which a specific version of Microsoft Windows is not indicated in the main objective 
-title can include content related to Windows 10 and Windows 11, as it relates to the job role.
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-1.0 Operating Systems
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+1.0 Networking Concepts
 1.1
 1.2
-Identify basic features of Microsoft Windows editions.
-• Windows 10 editions
-- Home 
-- Pro
-- Pro for Workstations
-- Enterprise
-• Feature differences
-- Domain access vs. workgroup
-- Desktop styles/user interface
-- Availability of Remote Desktop 
-Protocol (RDP)
-- Random-access memory (RAM) 
-support limitations
-- BitLocker
-- gpedit.msc
-• Upgrade paths
-- In-place upgrade
-Given a scenario, use the appropriate Microsoft command-line tool.
-• Navigation
-- cd
-- dir
-- md
-- rmdir
-- Drive navigation inputs:
-M C: or D: or x:
-• Command-line tools
-- ipconfig
-- ping
-- hostname
-- netstat
-- nslookup
-- chkdsk
-- net user
-- net use
-- tracert
-- format
-- xcopy
-- copy
-- robocopy
-- gpupdate
-- gpresult
-- shutdown
-- sfc
-- [command name] /?
-- diskpart
-- pathping
-- winver
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-1.4 Given a scenario, use the appropriate Microsoft Windows 10 
-Control Panel utility.
-• Internet Options
-• Devices and Printers
-• Programs and Features
-• Network and Sharing Center
-• System
-• Windows Defender Firewall
-• Mail
-• Sound
-• User Accounts
-• Device Manager
-• Indexing Options
-• Administrative Tools
-• File Explorer Options
-- Show hidden files
-- Hide extensions
-- General options
-- View options
-• Power Options
-- Hibernate
-- Power plans
-- Sleep/suspend
-- Standby
-- Choose what closing the lid does
-- Turn on fast startup
-- Universal Serial Bus (USB) 
-selective suspend
-• Ease of Access
-1.0 | Operating Systems
-1.3 Given a scenario, use features and tools of the Microsoft 
-Windows 10 operating system (OS).
-• Task Manager
-- Services
-- Startup
-- Performance
-- Processes
-- Users
-• Microsoft Management Console 
-(MMC) snap-in
-- Event Viewer (eventvwr.msc)
-- Disk Management (diskmgmt.msc)
-- Task Scheduler (taskschd.msc)
-- Device Manager (devmgmt.msc)
-- Certificate Manager (certmgr.msc)
-- Local Users and Groups 
-(lusrmgr.msc)
-- Performance Monitor 
-(perfmon.msc)
-- Group Policy Editor (gpedit.msc)
-• Additional tools
-- System Information (msinfo32.
-exe)
-- Resource Monitor (resmon.exe)
-- System Configuration (msconfig.
-exe)
-- Disk Cleanup (cleanmgr.exe)
-- Disk Defragment (dfrgui.exe)
-- Registry Editor (regedit.exe)
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Given a scenario, use the appropriate Windows settings.
-• Time and Language
-• Update and Security
-• Personalization
-• Apps
-• Privacy
-• System
-• Devices
-• Network and Internet
-• Gaming
-• Accounts
+Explain concepts related to the Open Systems Interconnection 
+(OSI) reference model.
+• Layer 1 - Physical
+• Layer 2 - Data link
+• Layer 3 - Network
+• Layer 4 - Transport
+• Layer 5 - Session
+• Layer 6 - Presentation
+• Layer 7 - Application
+Compare and contrast networking appliances, applications, 
+and functions. 
+• Physical and virtual appliances
+- Router
+- Switch
+- Firewall
+- Intrusion detection system 
+(IDS)/intrusion prevention 
+system (IPS)
+- Load balancer
+- Proxy
+- Network-attached storage (NAS)
+- Storage area network (SAN)
+- Wireless
+o Access point (AP)
+o Controller
+• Applications
+- Content delivery network (CDN)
+• Functions
+- Virtual private network (VPN)
+- Quality of service (QoS)
+- Time to live (TTL)
+1.3 Summarize cloud concepts and connectivity options. 
+• Network functions virtualization 
+(NFV)
+• Virtual private cloud (VPC)
+• Network security groups
+• Network security lists
+• Cloud gateways
+- Internet gateway
+- Network address translation 
+(NAT) gateway
+• Cloud connectivity options
+- VPN
+- Direct Connect
+• Deployment models
+- Public
+- Private
+- Hybrid
+• Service models
+- Software as a service (SaaS)
+- Infrastructure as a service (IaaS)
+- Platform as a service (PaaS)
+• Scalability
+• Elasticity
+• Multitenancy
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+1.4 Explain common networking ports, protocols, services, 
+and traffic types. 
+Protocols Ports
+File Transfer Protocol (FTP) 20/21
+Secure File Transfer Protocol (SFTP) 22
+Secure Shell (SSH) 22
+Telnet 23
+Simple Mail Transfer Protocol (SMTP) 25
+Domain Name System (DNS) 53
+Dynamic Host Configuration Protocol (DHCP) 67/68
+Trivial File Transfer Protocol (TFTP) 69
+Hypertext Transfer Protocol (HTTP) 80
+Network Time Protocol (NTP) 123
+Simple Network Management Protocol (SNMP) 161/162
+Lightweight Directory Access Protocol (LDAP) 389
+Hypertext Transfer Protocol Secure (HTTPS) 443
+Server Message Block (SMB) 445
+Syslog 514
+Simple Mail Transfer Protocol Secure (SMTPS) 587
+Lightweight Directory Access Protocol over SSL (LDAPS) 636
+1.0 | Networking Concepts
+• Internet Protocol (IP) types
+- Internet Control Message 
+Protocol (ICMP)
+- Transmission Control Protocol 
+(TCP)
+- User Datagram Protocol (UDP)
+- Generic Routing Encapsulation 
+(GRE)
+- Internet Protocol Security 
+(IPSec)
+o Authentication Header (AH)
+o Encapsulating Security 
+ Payload (ESP)
+o Internet Key Exchange (IKE)
+• Traffic types
+- Unicast
+- Multicast
+- Anycast
+- Broadcast
+Structured Query Language (SQL) Server 1433
+Remote Desktop Protocol (RDP) 3389
+Session Initiation Protocol (SIP) 5060/5061
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
 1.5
 1.6
 1.7
-Given a scenario, configure Microsoft Windows networking 
-features on a client/desktop.
-• Workgroup vs. domain setup
-- Shared resources
-- Printers
-- File servers
-- Mapped drives
-• Local OS firewall settings
-- Application restrictions and 
-exceptions
-- Configuration
-• Client network configuration
-- Internet Protocol (IP) addressing 
-scheme
-- Domain Name System (DNS) 
-settings
-- Subnet mask
-- Gateway
-- Static vs. dynamic
-• Establish network connections
-- Virtual private network (VPN)
-- Wireless
-- Wired
-- Wireless wide area network 
-(WWAN)
-• Proxy settings
-• Public network vs. private network
-• File Explorer navigation – network 
-paths
-• Metered connections and limitations
-Given a scenario, apply application installation and configuration 
-concepts.
-• System requirements for 
-applications
-- 32-bit vs. 64-bit dependent 
-application requirements
-- Dedicated graphics card vs. 
-integrated
-- Video random-access memory 
-(VRAM) requirements
-- RAM requirements
-- Central processing unit (CPU) 
-requirements
-- External hardware tokens
-- Storage requirements
-• OS requirements for applications
-- Application to OS compatibility
-- 32-bit vs. 64-bit OS
-• Distribution methods
-- Physical media vs. downloadable
-- ISO mountable
-• Other considerations for new 
-applications
-- Impact to device
-- Impact to network
-- Impact to operation
-- Impact to business
-1.0 | Operating Systems
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Explain common OS types and their purposes. 1.8
-1.9
-• Workstation OSs
-- Windows
-- Linux
-- macOS
-- Chrome OS
-• Cell phone/tablet OSs
-- iPadOS
-- iOS
-- Android
-• Various filesystem types
-- New Technology File System 
-(NTFS)
-- File Allocation Table 32 (FAT32)
-- Third extended filesystem (ext3)
-- Fourth extended filesystem 
-(ext4)
-- Apple File System (APFS)
-- Extensible File Allocation Table 
-(exFAT)
-• Vendor life-cycle limitations
-- End-of-life (EOL)
-- Update limitations
-• Compatibility concerns between 
-OSs
-Given a scenario, perform OS installations and upgrades in a 
-diverse OS environment.
-• Boot methods
-- USB
-- Optical media
-- Network
-- Solid-state/flash drives
-- Internet-based
-- External/hot-swappable drive
-- Internal hard drive (partition)
-• Types of installations
-- Upgrade
-- Recovery partition
-- Clean install
-- Image deployment
-- Repair installation
-- Remote network installation
-- Other considerations
-M Third-party drivers
-• Partitioning
-- GUID [globally unique identifier] 
-Partition Table (GPT)
-- Master boot record (MBR)
-• Drive format
-• Upgrade considerations
-- Backup files and user 
-preferences
-- Application and driver support/
-backward compatibility
-- Hardware compatibility
-• Feature updates
-- Product life cycle
-1.0 | Operating Systems
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-1.10 Identify common features and tools of the macOS/desktop OS.
-1.11
-• Installation and uninstallation of 
-applications
-- File types
-M .dmg
-M .pkg
-M .app
-- App Store
-- Uninstallation process
-• Apple ID and corporate 
-restrictions
-• Best practices
-- Backups
-- Antivirus
-- Updates/patches
-• System Preferences
-- Displays
-- Networks
-- Printers
-- Scanners
-- Privacy
-- Accessibility
-- Time Machine
-• Features
-- Multiple desktops
-- Mission Control
-- Keychain
-- Spotlight
-- iCloud
-- Gestures
-- Finder
-- Remote Disc
-- Dock
-• Disk Utility
-• FileVault
-• Terminal
-• Force Quit
-Identify common features and tools of the Linux client/desktop OS.
-• Common commands
-- ls
-- pwd
-- mv
-- cp
-- rm
-- chmod
-- chown
-- su/sudo
-- apt-get
-- yum
-- ip
-- df
-- grep
-- ps
-- man
-- top
-- find
-- dig
-- cat
-- nano
-• Best practices
-- Backups
-- Antivirus
-- Updates/patches
-• Tools
-- Shell/terminal
-- Samba
-1.0 | Operating Systems
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-2.0 Security
+Compare and contrast transmission media and transceivers. 
+Compare and contrast network topologies, architectures, 
+and types. 
+Given a scenario, use appropriate IPv4 network addressing. 
+1.0 | Networking Concepts
+• Wireless
+- 802.11 standards
+- Cellular
+- Satellite
+• Wired
+- 802.3 standards
+- Single-mode vs. multimode fiber
+- Direct attach copper 
+(DAC) cable
+o Twinaxial cable
+- Coaxial cable
+- Cable speeds
+- Plenum vs. non-plenum cable
+• Transceivers
+- Protocol
+o Ethernet
+o Fibre Channel (FC)
+- Form factors
+o Small form-factor pluggable 
+ (SFP)
+o Quad small form-factor 
+ pluggable (QSFP)
+• Connector types
+- Subscriber connector (SC)
+- Local connector (LC)
+- Straight tip (ST)
+- Multi-fiber push on (MPO)
+- Registered jack (RJ)11
+- RJ45
+- F-type
+- Bayonet Neill–Concelman (BNC)
+• Mesh
+• Hybrid
+• Star/hub and spoke
+• Spine and leaf
+• Point to point
+• Three-tier hierarchical model
+- Core 
+- Distribution 
+- Access
+• Collapsed core
+• Traffic flows
+- North-south
+- East-west
+• Public vs. private
+- Automatic Private IP Addressing 
+(APIPA)
+- RFC1918
+- Loopback/localhost
+• Subnetting
+- Variable Length Subnet Mask 
+(VLSM)
+- Classless Inter-domain Routing 
+(CIDR)
+• IPv4 address classes
+- Class A
+- Class B
+- Class C
+- Class D
+- Class E
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+1.8 Summarize evolving use cases for modern network environments.
+ 
+1.0 | Networking Concepts
+• Software-defined network (SDN) 
+and software-defined wide area 
+network (SD-WAN)
+- Application aware 
+- Zero-touch provisioning
+- Transport agnostic
+- Central policy management
+• Virtual Extensible Local Area 
+Network (VXLAN)
+- Data center interconnect (DCI)
+- Layer 2 encapsulation
+• Zero trust architecture (ZTA)
+- Policy-based authentication
+- Authorization
+- Least privilege access
+• Secure Access Secure Edge 
+(SASE)/Security Service Edge 
+(SSE)
+• Infrastructure as code (IaC)
+- Automation
+o Playbooks/templates/
+ reusable tasks
+o Configuration drift/compliance
+o Upgrades
+o Dynamic inventories
+- Source control
+o Version control
+o Central repository 
+o Conflict identification
+o Branching
+• IPv6 addressing
+- Mitigating address exhaustion
+- Compatibility requirements
+o Tunneling
+o Dual stack
+o NAT64
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+2.0 Network Implementation
 2.1
 2.2
-Summarize various security measures and their purposes.
-• Physical security
-- Access control vestibule
-- Badge reader
-- Video surveillance
-- Alarm systems
-- Motion sensors
-- Door locks
-- Equipment locks
-- Guards
-- Bollards
-- Fences
-• Physical security for staff
-- Key fobs
-- Smart cards
-- Keys
-- Biometrics
-M Retina scanner
-M Fingerprint scanner
-M Palmprint scanner
-- Lighting
-- Magnetometers
-• Logical security
-- Principle of least privilege
-- Access control lists (ACLs)
-- Multifactor authentication (MFA)
-- Email
-- Hard token
-- Soft token
-- Short message service (SMS)
-- Voice call
-- Authenticator application
-• Mobile device management 
-(MDM)
-• Active Directory
-- Login script
-- Domain
-- Group Policy/updates
-- Organizational units
-- Home folder
-- Folder redirection
-- Security groups
-Compare and contrast wireless security protocols and 
-authentication methods.
-• Protocols and encryption
-- WiFi Protected Access 2 (WPA2)
+Explain characteristics of routing technologies. 
+• Static routing
+• Dynamic routing
+- Border Gateway Protocol (BGP)
+- Enhanced Interior Gateway 
+Routing Protocol (EIGRP)
+- Open Shortest Path First (OSPF)
+• Route selection
+- Administrative distance
+- Prefix length
+- Metric
+• Address translation
+- NAT
+- Port address translation (PAT)
+• First Hop Redundancy Protocol 
+(FHRP)
+• Virtual IP (VIP)
+• Subinterfaces
+Given a scenario, configure switching technologies and features. 
+• Virtual Local Area Network 
+(VLAN)
+- VLAN database
+- Switch Virtual Interface (SVI)
+• Interface configuration
+- Native VLAN
+- Voice VLAN
+- 802.1Q tagging
+- Link aggregation
+- Speed
+- Duplex
+• Spanning tree
+• Maximum transmission unit (MTU)
+- Jumbo frames
+2.3 Given a scenario, select and configure wireless devices and 
+technologies. 
+• Channels
+- Channel width
+- Non-overlapping channels
+- Regulatory impacts
+o 802.11h
+• Frequency options
+- 2.4GHz
+- 5GHz
+- 6GHz
+- Band steering
+• Service set identifier (SSID)
+- Basic service set identifier 
+(BSSID)
+- Extended service set identifier 
+(ESSID)
+• Network types
+- Mesh networks
+- Ad hoc
+- Point to point
+- Infrastructure
+• Encryption
+- Wi-Fi Protected Access 2 
+(WPA2)
 - WPA3
-- Temporal Key Integrity Protocol 
-(TKIP)
-- Advanced Encryption Standard 
-(AES)
+• Guest networks
+- Captive portals
 • Authentication
-- Remote Authentication Dial-In 
-User Service (RADIUS)
-- Terminal Access Controller 
-Access-Control System 
-(TACACS+)
-- Kerberos
-- Multifactor
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Given a scenario, detect, remove, and prevent malware using the 
-appropriate tools and methods.
-• Malware
-- Trojan
-- Rootkit
-- Virus
-- Spyware
-- Ransomware
-- Keylogger
-- Boot sector virus
-- Cryptominers
-• Tools and methods
-- Recovery mode
-- Antivirus
-- Anti-malware
-- Software firewalls
-- Anti-phishing training
-- User education regarding 
-common threats
-- OS reinstallation
-2.3
-2.4 Explain common social-engineering attacks, threats, and 
-vulnerabilities.
-• Social engineering
-- Phishing
-- Vishing
-- Shoulder surfing
-- Whaling
-- Tailgating
-- Impersonation
-- Dumpster diving
-- Evil twin
-• Threats
-- Distributed denial of service 
-(DDoS)
-- Denial of service (DoS)
-- Zero-day attack
-- Spoofing
-- On-path attack
-- Brute-force attack
-- Dictionary attack
-- Insider threat
-- Structured Query Language 
-(SQL) injection
-- Cross-site scripting (XSS)
-• Vulnerabilities
-- Non-compliant systems
-- Unpatched systems
-- Unprotected systems (missing 
-antivirus/missing firewall)
-- EOL OSs
-- Bring your own device (BYOD)
-2.0 | Security
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Given a scenario, configure a workstation to meet best 
-practices for security.
-• Data-at-rest encryption
-• Password best practices
-- Complexity requirements
-M Length
-M Character types
-- Expiration requirements
-- Basic input/output system (BIOS)/
-Unified Extensible Firmware 
-Interface (UEFI) passwords
-• End-user best practices
-- Use screensaver locks
-- Log off when not in use
-- Secure/protect critical hardware 
-(e.g., laptops)
-- Secure personally identifiable 
-information (PII) and passwords
-• Account management
-- Restrict user permissions
-- Restrict login times 
-- Disable guest account
-- Use failed attempts lockout
-- Use timeout/screen lock
-• Change default administrator’s 
-user account/password
-• Disable AutoRun
-• Disable AutoPlay
-2.6
-2.7 Explain common methods for securing mobile and embedded 
-devices.
-• Screen locks
-- Facial recognition
-- PIN codes
-- Fingerprint
-- Pattern
-- Swipe
-• Remote wipes
-• Locator applications
-• OS updates
-• Device encryption
-• Remote backup applications
-• Failed login attempts restrictions
-• Antivirus/anti-malware
-• Firewalls
-• Policies and procedures
-- BYOD vs. corporate owned
-- Profile security requirements
-• Internet of Things (IoT)
-2.5 Given a scenario, manage and configure basic security settings in 
-the Microsoft Windows OS.
-• Defender Antivirus
-- Activate/deactivate
-- Updated definitions
-• Firewall
-- Activate/deactivate
-- Port security
-- Application security
-• Users and groups
-- Local vs. Microsoft account
-- Standard account
-- Administrator
-- Guest user
-- Power user
-• Login OS options
-- Username and password
-- Personal identification number 
-(PIN)
-- Fingerprint
-- Facial recognition
-- Single sign-on (SSO)
-• NTFS vs. share permissions
-- File and folder attributes
-- Inheritance
-• Run as administrator vs. standard 
-user
-- User Account Control (UAC)
-• BitLocker
-• BitLocker To Go
-• Encrypting File System (EFS)
-2.0 | Security
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-2.8
-2.9
-2.10
-Given a scenario, use common data destruction and 
-disposal methods.
-• Physical destruction
-- Drilling
-- Shredding
-- Degaussing
-- Incinerating
-• Recycling or repurposing best 
-practices
-- Erasing/wiping
-- Low-level formatting
-- Standard formatting
-• Outsourcing concepts
-- Third-party vendor
-- Certification of destruction/
-recycling
-Given a scenario, configure appropriate security settings on small 
-office/home office (SOHO) wireless and wired networks.
-• Home router settings
-- Change default passwords
-- IP filtering
-- Firmware updates
-- Content filtering
-- Physical placement/secure 
-locations
-- Dynamic Host Configuration 
-Protocol (DHCP) reservations
-- Static wide-area network (WAN) 
-IP
-- Universal Plug and Play (UPnP)
-- Screened subnet
-• Wireless specific
-- Changing the service set 
-identifier (SSID)
-- Disabling SSID broadcast
-- Encryption settings
-- Disabling guest access
-- Changing channels
-• Firewall settings
-- Disabling unused ports
-- Port forwarding/mapping
-Given a scenario, install and configure browsers and relevant 
-security settings.
-• Browser download/installation
-- Trusted sources
-M Hashing
-- Untrusted sources
-• Extensions and plug-ins
-- Trusted sources
-- Untrusted sources
-• Password managers
-• Secure connections/sites – 
-valid certificates 
-• Settings
-- Pop-up blocker
-- Clearing browsing data
-- Clearing cache
-- Private-browsing mode
-- Sign-in/browser data 
-synchronization
-- Ad blockers
-2.0 | Security
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-3.0 Software Troubleshooting
+- Pre-shared key (PSK) vs. 
+Enterprise
+• Antennas
+- Omnidirectional vs. directional
+• Autonomous vs. lightweight 
+access point
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+2.4 Explain important factors of physical installations. 
+• Important installation implications
+- Locations
+o Intermediate distribution 
+ frame (IDF)
+o Main distribution frame (MDF)
+- Rack size
+- Port-side exhaust/intake
+- Cabling
+o Patch panel
+o Fiber distribution panel
+- Lockable
+• Power 
+- Uninterruptible power supply 
+(UPS)
+- Power distribution unit (PDU)
+- Power load
+- Voltage
+• Environmental factors
+- Humidity
+- Fire suppression 
+- Temperature
+2.0 | Network Implementation
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+3.0 Network Operations
 3.1
 3.2
-Given a scenario, troubleshoot common Windows OS problems.
-• Common symptoms
-- Blue screen of death (BSOD)
-- Sluggish performance
-- Boot problems
-- Frequent shutdowns
-- Services not starting
-- Applications crashing
-- Low memory warnings
-- USB controller resource 
-warnings
-- System instability
-- No OS found
-- Slow profile load
-- Time drift
-• Common troubleshooting steps
-- Reboot
-- Restart services
-- Uninstall/reinstall/update 
-applications
-- Add resources
-- Verify requirements
-- System file check
-- Repair Windows
-- Restore
-- Reimage
-- Roll back updates
-- Rebuild Windows profiles
-Given a scenario, troubleshoot common personal computer (PC) 
-security issues.
-• Common symptoms
-- Unable to access the network
-- Desktop alerts
-- False alerts regarding antivirus 
-protection
-- Altered system or personal files
-M Missing/renamed files
-- Unwanted notifications within 
-the OS
-- OS update failures
-• Browser-related symptoms
-- Random/frequent pop-ups
-- Certificate warnings
-- Redirection
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Given a scenario, use best practice procedures for 
-malware removal.
+Explain the purpose of organizational processes and 
+procedures.  s  
+• Documentation
+- Physical vs. logical diagrams 
+- Rack diagrams
+- Cable maps and diagrams
+- Network diagrams
+o Layer 1
+o Layer 2
+o Layer 3
+- Asset inventory
+o Hardware
+o Software
+o Licensing
+o Warranty support
+- IP address management (IPAM)
+- Service-level agreement (SLA)
+- Wireless survey/heat map
+• Life-cycle management
+- End-of-life (EOL)
+- End-of-support (EOS)
+- Software management
+o Patches and bug fixes
+o Operating system (OS)
+o Firmware
+- Decommissioning
+• Change management
+- Request process tracking/
+service request
+• Configuration management
+- Production configuration
+- Backup configuration
+- Baseline/golden configuration
+Given a scenario, use network monitoring technologies. 
+• Methods
+- SNMP
+o Traps
+ o Management information base 
+ (MIB)
+ o Versions
+o v2c
+o v3
+o Community strings
+ o Authentication
+- Flow data
+- Packet capture
+- Baseline metrics
+ o Anomaly alerting/notification
+- Log aggregation
+o Syslog collector
+ o Security information and 
+ event management (SIEM)
+- Application programming 
+interface (API) integration
+- Port mirroring
+• Solutions
+- Network discovery
+o Ad hoc
+o Scheduled
+- Traffic analysis
+- Performance monitoring
+- Availability monitoring
+- Configuration monitoring
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
 3.3
 3.4
 3.5
-1. Investigate and verify malware 
-symptoms
-2.Quarantine infected systems
-3.Disable System Restore in 
-Windows
-4.Remediate infected systems
-a. Update anti-malware software
-b.Scanning and removal 
-techniques (e.g., safe mode, 
-preinstallation environment)
-5.Schedule scans and run updates
-6.Enable System Restore and create 
-a restore point in Windows
-7. Educate the end user
-Given a scenario, troubleshoot common mobile OS and 
-application issues.
-• Common symptoms
-- Application fails to launch
-- Application fails to close/crashes
-- Application fails to update
-- Slow to respond
-- OS fails to update
-- Battery life issues
-- Randomly reboots
-- Connectivity issues
-M Bluetooth
-M WiFi
-M Near-field communication 
-(NFC)
-M AirDrop
-- Screen does not autorotate
-3.0 | Software Troubleshooting
-Given a scenario, troubleshoot common mobile OS and 
-application security issues.
-• Security concerns
-- Android package (APK) source
-- Developer mode
-- Root access/jailbreak
-- Bootleg/malicious application
-M Application spoofing
-• Common symptoms
-- High network traffic
-- Sluggish response time
-- Data-usage limit notification
-- Limited Internet connectivity
-- No Internet connectivity
-- High number of ads
-- Fake security warnings
-- Unexpected application behavior
-- Leaked personal files/data
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-4.0 Operational Procedures
+Explain disaster recovery (DR) concepts. 
+Given a scenario, implement IPv4 and IPv6 network services.
+Compare and contrast network access and management 
+methods. 
+• DR metrics
+- Recovery point objective (RPO)
+- Recovery time objective (RTO)
+- Mean time to repair (MTTR)
+- Mean time between failures 
+(MTBF)
+• DR sites
+- Cold site
+- Warm site
+- Hot site
+• High-availability approaches
+- Active-active
+- Active-passive
+• Testing
+- Tabletop exercises
+- Validation tests
+• Dynamic addressing
+- DHCP
+ o Reservations
+ o Scope
+ o Lease time
+ o Options
+ o Relay/IP helper
+ o Exclusions
+- Stateless address 
+autoconfiguration (SLAAC)
+• Name resolution
+- DNS
+ o Domain Name Security 
+ Extensions (DNSSEC)
+ o DNS over HTTPS (DoH) 
+ and DNS over TLS (DoT)
+ o Record types
+o Address (A)
+o AAAA
+o Canonical name (CNAME)
+o Mail exchange (MX)
+o Text (TXT) 
+o Nameserver (NS)
+o Pointer (PTR)
+ o Zone types
+o Forward
+o Reverse
+ o Authoritative vs. 
+ non-authoritative
+ o Primary vs. secondary
+ o Recursive
+- Hosts file
+• Time protocols
+- NTP
+- Precision Time Protocol (PTP)
+- Network Time Security (NTS)
+• Site-to-site VPN
+• Client-to-site VPN
+- Clientless
+- Split tunnel vs. full tunnel
+• Connection methods
+- SSH
+- Graphical user interface (GUI)
+- API
+- Console
+• Jump box/host
+• In-band vs. out-of-band 
+management
+3.0 | Network Operations
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+4.0 Network Security
 4.1
 4.2
-Given a scenario, implement best practices associated with 
-documentation and support systems information management.
-• Ticketing systems
-- User information
-- Device information 
-- Description of problems
-- Categories
-- Severity
-- Escalation levels
-- Clear, concise written 
-communication
-M Problem description
-M Progress notes
-M Problem resolution
-• Asset management
-- Inventory lists
-- Database system
-- Asset tags and IDs
-- Procurement life cycle
-- Warranty and licensing
-- Assigned users
-• Types of documents
-- Acceptable use policy (AUP)
-- Network topology diagram
-- Regulatory compliance 
-requirements
-M Splash screens
-- Incident reports
-- Standard operating procedures
-M Procedures for custom 
-installation of software 
-package
-- New-user setup checklist
-- End-user termination checklist
-• Knowledge base/articles
-Explain basic change-management best practices.
-• Documented business processes
-- Rollback plan
-- Sandbox testing
-- Responsible staff member
-• Change management
-- Request forms
-- Purpose of the change
-- Scope of the change
-- Date and time of the change
-- Affected systems/impact
-- Risk analysis
-M Risk level
-- Change board approvals
-- End-user acceptance
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Given a scenario, implement workstation backup and 
-recovery methods.
-4.3
-4.4
-4.5
-• Backup and recovery
-- Full
-- Incremental
-- Differential
-- Synthetic
-• Backup testing
-- Frequency
-• Backup rotation schemes
-- On site vs. off site
-- Grandfather-father-son (GFS)
-- 3-2-1 backup rule
-Given a scenario, use common safety procedures.
-• Electrostatic discharge (ESD) 
-straps
-• ESD mats
-• Equipment grounding
-• Proper power handling
-• Proper component handling 
-and storage
-• Antistatic bags
-• Compliance with government 
-regulations
-• Personal safety
-- Disconnect power before 
-repairing PC
-- Lifting techniques
-- Electrical fire safety
-- Safety goggles
-- Air filtration mask
-Summarize environmental impacts and local environmental 
-controls.
-• Material safety data sheet 
-(MSDS)/documentation for 
-handling and disposal
-- Proper battery disposal
-- Proper toner disposal
-- Proper disposal of other devices 
-and assets
-• Temperature, humidity-level 
-awareness, and proper ventilation
-- Location/equipment placement
-- Dust cleanup
-- Compressed air/vacuums
-• Power surges, under-voltage 
-events, and power failures
-- Battery backup
-- Surge suppressor
-4.0 | Operational Procedures
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Explain the importance of prohibited content/activity and 
-privacy, licensing, and policy concepts.
-4.6
-4.7
-• Incident response
-- Chain of custody
-- Inform management/law 
-enforcement as necessary
-- Copy of drive (data integrity and 
-preservation)
-- Documentation of incident
-• Licensing/digital rights 
-management (DRM)/end-user 
-license agreement (EULA)
-- Valid licenses
-- Non-expired licenses
-- Personal use license vs. 
-corporate use license
-- Open-source license
-• Regulated data
-- Credit card transactions
-- Personal government-issued 
-information
-- PII
-- Healthcare data
-- Data retention requirements
-Given a scenario, use proper communication techniques and 
-professionalism.
-• Professional appearance and attire
-- Match the required attire of the 
-given environment
-M Formal
-M Business casual
-• Use proper language and avoid 
-jargon, acronyms, and slang, when 
+Explain the importance of basic network security concepts.
+• Logical security
+- Encryption
+ o Data in transit
+ o Data at rest
+- Certificates
+ o Public key infrastructure (PKI)
+ o Self-signed
+- Identity and access management 
+(IAM)
+ o Authentication
+ o Multifactor authentication 
+(MFA)
+ o Single sign-on (SSO)
+ o Remote Authentication 
+Dial-in User Service 
+(RADIUS)
+ o LDAP
+ o Security Assertion Markup 
+Language (SAML)
+ o Terminal Access Controller 
+Access Control System Plus 
+(TACACS+)
+ o Time-based authentication
+ o Authorization
+ o Least privilege 
+ o Role-based access control 
+- Geofencing
+• Physical security
+- Camera
+- Locks
+• Deception technologies
+- Honeypot 
+- Honeynet
+• Common security terminology
+- Risk
+- Vulnerability
+- Exploit
+- Threat
+- Confidentiality, Integrity, and 
+Availability (CIA) triad
+• Audits and regulatory compliance
+- Data locality
+- Payment Card Industry Data 
+Security Standards (PCI DSS)
+- General Data Protection 
+Regulation (GDPR)
+• Network segmentation 
+enforcement
+- Internet of Things (IoT) and 
+Industrial Internet of Things 
+(IIoT)
+- Supervisory control and data 
+acquisition (SCADA), industrial 
+control System (ICS), operational 
+technology (OT)
+- Guest
+- Bring your own device (BYOD)
+Summarize various types of attacks and their impact to 
+the network. 
+• Denial-of-service (DoS)/
+distributed denial-of-service 
+(DDoS)
+• VLAN hopping
+• Media Access Control (MAC) 
+flooding
+• Address Resolution Protocol 
+(ARP) poisoning
+• ARP spoofing
+• DNS poisoning
+• DNS spoofing
+• Rogue devices and services
+- DHCP
+- AP
+• Evil twin
+• On-path attack 
+• Social engineering
+- Phishing
+- Dumpster diving
+- Shoulder surfing
+- Tailgating
+• Malware
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+4.3 Given a scenario, apply network security features, defense 
+techniques, and solutions. 
+• Device hardening
+- Disable unused ports and 
+services
+- Change default passwords
+• Network access control (NAC)
+- Port security
+- 802.1X
+- MAC filtering
+• Key management
+• Security rules
+- Access control list (ACL)
+- Uniform Resource Locator (URL) 
+filtering
+- Content filtering
+• Zones
+- Trusted vs. untrusted
+- Screened subnet
+4.0 | Network Security
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+5.0 Network Troubleshooting
+5.1
+5.2
+Explain the troubleshooting methodology. 
+• Identify the problem
+- Gather information
+- Question users
+- Identify symptoms
+- Determine if anything has 
+changed
+- Duplicate the problem, if 
+possible
+- Approach multiple problems 
+individually
+• Establish a theory of probable 
+cause
+- Question the obvious
+- Consider multiple approaches
+ o Top-to-bottom/bottom-to-top 
+ OSI model
+ o Divide and conquer
+• Test the theory to determine the 
+cause
+- If theory is confirmed, determine 
+next steps to resolve problem
+- If theory is not confirmed, 
+establish a new theory or 
+escalate
+• Establish a plan of action to 
+resolve the problem and identify 
+potential effects
+• Implement the solution or escalate 
+as necessary
+• Verify full system functionality and 
+implement preventive measures if 
 applicable
-• Maintain a positive attitude/
-project confidence
-• Actively listen, take notes, and 
-avoid interrupting the customer
-• Be culturally sensitive
-- Use appropriate professional 
-titles, when applicable
-• Be on time (if late, contact the 
-customer)
-• Avoid distractions
-- Personal calls
-- Texting/social media sites
-- Personal interruptions
-• Dealing with difficult customers or 
-situations
-- Do not argue with customers or 
-be defensive
-- Avoid dismissing customer 
-problems
-- Avoid being judgmental
-- Clarify customer statements (ask 
-open-ended questions to narrow 
-the scope of the problem, 
-restate the issue, or question to 
-verify understanding)
-- Do not disclose experience via 
-social media outlets
-• Set and meet expectations/time 
-line and communicate status with 
-the customer
-- Offer repair/replacement 
-options, as needed
-- Provide proper documentation 
-on the services provided
-- Follow up with customer/user at 
-a later date to verify satisfaction
-• Deal appropriately with 
-customers’ confidential and 
-private materials
-- Located on a computer, desktop, 
-printer, etc.
-4.0 | Operational Procedures
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-4.8 Identify the basics of scripting.
-4.9
-• Script file types
-- .bat
-- .ps1
-- .vbs
-- .sh
-- .js
-- .py
-• Use cases for scripting
-- Basic automation
-- Restarting machines
-- Remapping network drives
-- Installation of applications
-- Automated backups
-- Gathering of information/data
-- Initiating updates
-• Other considerations when using 
-scripts
-- Unintentionally introducing 
-malware
-- Inadvertently changing system 
-settings
-- Browser or system crashes due 
-to mishandling of resources
-Given a scenario, use remote access technologies.
-• Methods/tools
-- RDP
-- VPN
-- Virtual network computer (VNC)
-- Secure Shell (SSH)
-- Remote monitoring and 
-management (RMM)
-- Microsoft Remote Assistance 
-(MSRA)
-- Third-party tools
-M Screen-sharing software
-M Video-conferencing software
-M File transfer software
-M Desktop management 
-software
-• Security considerations of each 
-access method
-4.0 | Operational Procedures
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-CompTIA A+ Core 2 (220-1102) Acronym List
-The following is a list of acronyms that appear on the CompTIA A+ 
-Core 2 (220-1102) exam. Candidates are encouraged to review the complete 
+• Document findings, actions, 
+outcomes, and lessons learned 
+throughout the process
+Given a scenario, troubleshoot common cabling and 
+physical interface issues.
+• Cable issues
+- Incorrect cable
+ o Single mode vs. multimode
+ o Category 5/6/7/8
+ o Shielded twisted pair (STP) 
+ vs. unshielded twisted pair 
+ (UTP)
+- Signal degradation 
+ o Crosstalk
+ o Interference
+ o Attenuation
+- Improper termination
+- Transmitter (TX)/Receiver (RX) 
+transposed
+• Interface issues
+- Increasing interface counters
+ o Cyclic redundancy check 
+ (CRC) 
+ o Runts
+ o Giants
+ o Drops
+- Port status
+ o Error disabled
+ o Administratively down
+ o Suspended
+• Hardware issues
+- Power over Ethernet (PoE)
+ o Power budget exceeded
+ o Incorrect standard
+- Transceivers
+ o Mismatch
+ o Signal strength
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+5.3
+5.4
+5.5
+Given a scenario, troubleshoot common issues with 
+network services. 
+Given a scenario, troubleshoot common performance issues. 
+Given a scenario, use the appropriate tool or protocol to 
+solve networking issues. 
+• Switching issues
+- STP
+o Network loops
+o Root bridge selection
+o Port roles
+o Port states
+- Incorrect VLAN assignment
+- ACLs
+• Route selection
+- Routing table
+- Default routes
+• Address pool exhaustion 
+• Incorrect default gateway
+• Incorrect IP address
+- Duplicate IP address
+• Incorrect subnet mask
+• Congestion/contention
+• Bottlenecking
+• Bandwidth
+- Throughput capacity
+• Latency
+• Packet loss
+• Jitter
+• Wireless
+- Interference
+o Channel overlap
+- Signal degradation or loss
+- Insufficient wireless coverage
+- Client disassociation issues
+- Roaming misconfiguration
+• Software tools
+- Protocol analyzer
+- Command line
+o ping
+o traceroute/tracert 
+o nslookup
+o tcpdump
+o dig
+o netstat
+o ip/ifconfig/ipconfig
+o arp
+- Nmap
+- Link Layer Discovery Protocol 
+(LLDP)/Cisco Discovery Protocol 
+(CDP)
+- Speed tester
+• Hardware tools
+- Toner
+- Cable tester
+- Taps
+- Wi-Fi analyzer
+- Visual fault locator
+• Basic networking device 
+commands
+- show mac-address-table
+- show route
+- show interface
+- show config
+- show arp
+- show vlan
+- show power
+5.0 | Network Troubleshooting
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+CompTIA Network+ N10-009 Acronym List
+The following is a list of acronyms that appear on the CompTIA Network+ 
+N10-009 exam. Candidates are encouraged to review the complete 
 list and attain a working knowledge of all listed acronyms as part of a 
 comprehensive exam preparation program.
-Acronym Definition
-AAA Authentication, Authorization, and 
-Accounting
-AC Alternating Current
+Acronym Spelled Out
+A Address
 ACL Access Control List
-ADF Automatic Document Feeder
-AES Advanced Encryption Standard
+AH Authentication Header
 AP Access Point
-APFS Apple File System
+API Application Programming Interface
 APIPA Automatic Private Internet Protocol 
-Addressing
-APK Android Package
-ARM Advanced RISC [Reduced Instruction Set 
-Computer] Machine
+Addressing 
 ARP Address Resolution Protocol
-ATA Advanced Technology Attachment
-ATM Asynchronous Transfer Mode
-ATX Advanced Technology Extended
 AUP Acceptable Use Policy
-BIOS Basic Input/Output System
-BSOD Blue Screen of Death
+BGP Border Gateway Protocol
+BNC Bayonet Neill–Concelman
+BSSID Basic Service Set Identifier
 BYOD Bring Your Own Device
-CAPTCHA Completely Automated Public Turing Test 
-to Tell Computers and Humans Apart
-CD Compact Disc
-CDFS Compact Disc File System
-CDMA Code-Division Multiple Access
-CERT Computer Emergency Response Team
-CIFS Common Internet File System
-CMD Command Prompt
-CMOS Complementary Metal-Oxide 
-Semiconductor
+CAM Content-addressable Memory
+CDN Content Delivery Network
+CDP Cisco Discovery Protocol
+CIA Confidentiality, Integrity, and Availability
+CIDR Classless Inter-domain Routing
+CLI Command-line Interface
+CNAME Canonical Name
 CPU Central Processing Unit
-CRL Certificate Revocation List
-DC Direct Current
-DDoS Distributed Denial of Service
-DDR Double Data Rate
-Acronym Definition
+CRC Cyclic Redundancy Check
+DAC Direct Attach Copper
+DAS Direct-attached Storage
+DCI Data Center Interconnect
+DDoS Distributed Denial-of-service
 DHCP Dynamic Host Configuration Protocol
-DIMM Dual Inline Memory Module
-DKIM DomainKeys Identified Mail
-DMA Direct Memory Access
-DMARC Domain-based Message Authentication, 
-Reporting, and Conformance
+DLP Data Loss Prevention
 DNS Domain Name System
-DoS Denial of Service
-DRAM Dynamic Random-Access Memory
-DRM Digital Rights Management
-DSL Digital Subscriber Line
-DVI Digital Visual Interface
-DVI-D Digital Visual Interface-Digital
-ECC Error Correcting Code
-EFS Encrypting File System
-EMI Electromagnetic Interference
-EOL End-of-Life
-eSATA External Serial Advanced Technology 
-Attachment
-ESD Electrostatic Discharge
-EULA End-User License Agreement
-exFAT Extensible File Allocation Table
-ext Extended File System
-FAT File Allocation Table
-FAT12 12-bit File Allocation Table
-FAT16 16-bit File Allocation Table
-FAT32 32-bit File Allocation Table
-FSB Front-Side Bus
+DNSSEC Domain Name System Security Extensions
+DoH DNS over Hypertext Transfer Protocol 
+Secure
+DoS Denial-of-service
+DoT DNS over Transport Layer Security
+DR Disaster Recovery
+EAPoL Extensible Authentication Protocol over LAN
+Acronym Spelled Out
+EIGRP Enhanced Interior Gateway Routing Protocol
+EOL End-of-life
+EOS End-of-support
+ESP Encapsulating Security Payload
+ESSID Extended Service Set Identifier
+EULA End User License Agreement
+FC Fibre Channel
+FHRP First Hop Redundancy Protocol
 FTP File Transfer Protocol
-GFS Grandfather-Father-Son
-GPS Global Positioning System
-GPT GUID [Globally Unique Identifier] Partition 
-Table
-GPU Graphics Processing Unit
-GSM Global System for Mobile Communications
+GDPR General Data Protection Regulation
+GRE Generic Routing Encapsulation
 GUI Graphical User Interface
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Acronym Definition 
-GUID Globally Unique Identifier
-HAL Hardware Abstraction Layer
-HAV Hardware-assisted Virtualization
-HCL Hardware Compatibility List
-HDCP High-bandwidth Digital Content Protection
-HDD Hard Disk Drive
-HDMI High-Definition Multimedia Interface
-HSM Hardware Security Module
-HTML Hypertext Markup Language
 HTTP Hypertext Transfer Protocol
 HTTPS Hypertext Transfer Protocol Secure
-I/O Input/Output
 IaaS Infrastructure as a Service
-ICR Intelligent Character Recognition
-IDE Integrated Drive Electronics
+IaC Infrastructure as Code
+IAM Identity and Access Management
+ICMP Internet Control Message Protocol
+ICS Industrial Control System
+IDF Intermediate Distribution Frame
 IDS Intrusion Detection System
-IEEE Institute of Electrical and Electronics 
-Engineers
-IMAP Internet Mail Access Protocol
-IOPS Input/Output Operations Per Second
 IoT Internet of Things
+IIoT Industrial Internet of Things
+IKE Internet Key Exchange
 IP Internet Protocol
+IPAM Internet Protocol Address Management
 IPS Intrusion Prevention System
-IPS In-plane Switching
 IPSec Internet Protocol Security
-IR Infrared
-IrDA Infrared Data Association
-IRP Incident Response Plan
-ISO International Organization for 
-Standardization
-ISP Internet Service Provider
-ITX Information Technology eXtended
-KB Knowledge Base
-KVM Keyboard-Video-Mouse
+IS-IS Intermediate System to Intermediate System
+LACP Link Aggregation Control Protocol
 LAN Local Area Network
-LC Lucent Connector
-LCD Liquid Crystal Display
+LC Local Connector
 LDAP Lightweight Directory Access Protocol
-LED Light-emitting Diode
-MAC Media Access Control/Mandatory Access 
-Control
-MAM Mobile Application Management
-MAN Metropolitan Area Network
-MBR Master Boot Record
-MDM Mobile Device Management
+LDAPS Lightweight Directory Access Protocol over 
+SSL
+LLDP Link Layer Discovery Protocol
+CompTIA Network+ N10-009 Certification Exam: Exam Objectives Version 4.0
+Copyright © 2023 CompTIA, Inc. All rights reserved.
+Acronym Spelled Out
+MAC Media Access Control
+MDF Main Distribution Frame
+MDIX Medium Dependent Interface Crossover
 MFA Multifactor Authentication
-MFD Multifunction Device
-MFP Multifunction Printer
-MMC Microsoft Management Console
-Acronym Definition
-MOU Memorandum of Understanding
-MSDS Material Safety Data Sheet
-MSRA Microsoft Remote Assistance
+MIB Management Information Base
+MPO Multifiber Push On
+MTBF Mean Time Between Failure
+MTTR Mean Time To Repair 
+MTU Maximum Transmission Unit
 MX Mail Exchange
 NAC Network Access Control
+NAS Network-attached Storage
 NAT Network Address Translation
-NDA Non-disclosure Agreement
-NetBIOS Networked Basic Input/Output System
-NetBT NetBIOS over TCP/IP [Transmission Control 
-Protocol/Internet Protocol]
-NFC Near-field Communication
-NFS Network File System
-NIC Network Interface Card
-NTFS New Technology File System
-NVMe Non-volatile Memory Express
-OCR Optical Character Recognition
-OLED Organic Light-emitting Diode
-ONT Optical Network Terminal
+NFV Network Functions Virtualization
+NIC Network Interface Cards
+NS Name Server
+NTP Network Time Protocol
+NTS Network Time Security
 OS Operating System
+OSPF Open Shortest Path First
+OSI Open Systems Interconnection
+OT Operational Technology
 PaaS Platform as a Service
-PAN Personal Area Network
-PC Personal Computer
-PCIe Peripheral Component Interconnect Express
-PCL Printer Command Language
-PE Preinstallation Environment
-PII Personally Identifiable Information
-PIN Personal Identification Number
+PAT Port Address Translation
+PCI DSS Payment Card Industry Data Security 
+Standards
+PDU Power Distribution Unit
 PKI Public Key Infrastructure
 PoE Power over Ethernet
-POP3 Post Office Protocol 3
-POST Power-on Self-Test
-PPP Point-to-Point Protocol
-PRL Preferred Roaming List
-PSU Power Supply Unit
-PXE Preboot Execution Environment
+PSK Pre-shared Key
+PTP Precision Time Protocol
+PTR Pointer
+QoS Quality of Service
+QSFP Quad Small Form-factor Pluggable
 RADIUS Remote Authentication Dial-in User Service
-RAID Redundant Array of Independent (or 
-Inexpensive) Disks
-RAM Random-access Memory
 RDP Remote Desktop Protocol
-RF Radio Frequency
-RFI Radio Frequency Interference
-RFID Radio Frequency Identification
-RJ11 Registered Jack Function 11
-RJ45 Registered Jack Function 45
-RMM Remote Monitoring and Management
+RFID Radio Frequency Identifier
+RIP Routing Information Protocol
+RJ Registered Jack
+RPO Recovery Point Objective
+RSTP Rapid Spanning Tree Protocol
 RTO Recovery Time Objective
+RX Receiver
 SaaS Software as a Service
+SAML Security Assertion Markup Language
 SAN Storage Area Network
-CompTIA A+ Certification Exam: Core 2 (220-1102) Exam Objectives Version 4.0
-Acronym Definition
-SAS Serial Attached SCSI [Small Computer 
-System Interface]
-SATA Serial Advanced Technology Attachment
+SASE Secure Access Service Edge
 SC Subscriber Connector
+Acronym Spelled Out
 SCADA Supervisory Control and Data Acquisition
-SCP Secure Copy Protection
-SCSI Small Computer System Interface 
-SDN Software-defined Networking
+SDN Software-defined Network
+SD-WAN Software-defined Wide Area Network
+SFP Small Form-factor Pluggable
 SFTP Secure File Transfer Protocol
-SIM Subscriber Identity Module
-SIMM Single Inline Memory Module
-S.M.A.R.T. Self-monitoring Analysis and Reporting 
-Technology
+SIP Session Initiation Protocol
+SIEM Security Information and Event Management
+SLA Service-level Agreement
+SLAAC Stateless Address Autoconfiguration
 SMB Server Message Block
-SMS Short Message Service
 SMTP Simple Mail Transfer Protocol
+SMTPS Simple Mail Transfer Protocol Secure
 SNMP Simple Network Management Protocol
-SNTP Simple Network Time Protocol
-SODIMM Small Outline Dual Inline Memory Module
-SOHO Small Office/Home Office
-SPF Sender Policy Framework
+SOA Start of Authority
 SQL Structured Query Language
-SRAM Static Random-access Memory
-SSD Solid-State Drive
+SSE Security Service Edge 
 SSH Secure Shell
 SSID Service Set Identifier
-SSL Secure Sockets Layer
+SSL Secure Socket Layer
 SSO Single Sign-on
 ST Straight Tip
 STP Shielded Twisted Pair
-TACACS Terminal Access Controller Access-Control 
-System
-TCP Transmission Control Protocol
-TCP/IP Transmission Control Protocol/Internet 
-Protocol
-Acronym Definition
+SVI Switch Virtual Interface
+TACAS+ Terminal Access Controller Access Control 
+System Plus
+TCP Transmission Control Protocol 
 TFTP Trivial File Transfer Protocol
-TKIP Temporal Key Integrity Protocol
-TLS Transport Layer Security
-TN Twisted Nematic
-TPM Trusted Platform Module
-UAC User Account Control
+TTL Time to Live
+TX Transmitter
+TXT Text
 UDP User Datagram Protocol
-UEFI Unified Extensible Firmware Interface
-UNC Universal Naming Convention
-UPnP Universal Plug and Play
 UPS Uninterruptible Power Supply
+URL Uniform Resource Locator
 USB Universal Serial Bus
 UTM Unified Threat Management
 UTP Unshielded Twisted Pair
-VA Vertical Alignment
-VDI Virtual Desktop Infrastructure
-VGA Video Graphics Array
-VLAN Virtual LAN [Local Area Network]
-VM Virtual Machine
-VNC Virtual Network Computer
-VoIP Voice over Internet Protocol
+VIP Virtual IP
+VLAN Virtual Local Area Network
+VLSM Variable Length Subnet Mask
+VoIP Voice over IP
+VPC Virtual Private Cloud
 VPN Virtual Private Network
-VRAM Video Random-access Memory
 WAN Wide Area Network
-WEP Wired Equivalent Privacy
-WISP Wireless Internet Service Provider
-WLAN Wireless LAN [Local Area Network]
-WMN Wireless Mesh Network
-WPA WiFi Protected Access
-WWAN Wireless Wide Area Network
-XSS Cross-site Scripting
-CompTIA A+ Core 2 (220-1102) 
-Proposed Hardware and Software List
-**CompTIA has included this sample list of hardware and software to 
-assist candidates as they prepare for the A+ Core 2 (220-1102) exam. This 
-list may also be helpful for training companies that wish to create a lab 
-component to their training offering. The bulleted lists below each topic 
-are sample lists and are not exhaustive.
+WPA Wi-Fi Protected Access
+WPS Wi-Fi Protected Setup 
+VXLAN Virtual Extensible LAN 
+ZTA Zero Trust Architecture
+© 2023 CompTIA, Inc., used under license by CompTIA, Inc. All rights reserved. All certification programs and education related to such 
+programs are operated exclusively by CompTIA, Inc. CompTIA is a registered trademark of CompTIA, Inc. in the U.S. and internationally. 
+Other brands and company names mentioned herein may be trademarks or service marks of CompTIA, Inc. or of their respective owners. 
+Reproduction or dissemination prohibited without the written consent of CompTIA, Inc. Printed in the U.S. 10461-May2023
+CompTIA Network+ Proposed Hardware 
+and Software List
+CompTIA has included this sample list of hardware and software to assist 
+candidates as they prepare for the Network+ exam. This list may also be 
+helpful for training companies who wish to create a lab component to their 
+training offering. The bulleted lists below each topic are a sample list and 
+not exhaustive. 
 Equipment
-• Apple tablet/smartphone 
-• Android tablet/smartphone
-• Windows tablet
-• Chromebook
-• Windows laptop/Mac laptop/Linux 
-laptop
-• Windows desktop/Mac desktop/
-Linux desktop
-• Windows server with Active 
-Directory and Print Management
-• Monitors
-• Projectors 
-• SOHO router/switch
-• Access point
-• Voice over Internet Protocol (VoIP) 
-phone
-• Printer
-- Laser/inkjet
-- Wireless 
-- 3-D printer
-- Thermal
-• Surge suppressor
-• Uninterruptible power supply 
-(UPS)
-• Smart devices (Internet of Things 
-[IoT] devices)
-• Server with a hypervisor
-• Punchdown block
-• Patch panel
-• Webcams
-• Speakers
-• Microphones
-Spare parts/hardware
-• Motherboards
-• RAM
-• Hard drives
+• Optical and copper patch panels
+• Layer 3 switch/managed switch/PoE switch
+• Router
+• Firewall
+• Wireless access point
+• Basic laptops that support virtualization
+• Voice over IP (VoIP) phone
+Spare Hardware
+• Network interface card (NIC)
 • Power supplies
-• Video cards
-• Sound cards
-• Network cards
-• Wireless network interface cards 
-(NICs)
-• Fans/cooling devices/heat sink
-• CPUs
-• Assorted connectors/cables
-- USB
-- High-Definition Multimedia 
-Interface (HDMI)
-- DisplayPort 
-- Digital visual interface (DVI)
-- Video graphics array (VGA)
-• Adapters
-- Bluetooth adapter
-• Network cables
-• Unterminated network cable/
-connectors
-• Alternating current (AC) adapters
-• Optical drives
-• Screws/standoffs
-• Cases
-• Maintenance kit
-• Mice/keyboards
-• Keyboard-video-mouse (KVM)
-• Console cable
-• Solid-state drive (SSD)
+• SFPs
+• Wireless access point
+• UPS
+• PoE injector
+Spare Parts
+• Patch cables
+- Fiber
+- Copper
+• Antennas
+• Bluetooth/wireless adapters
+• Console cables [Universal Serial Bus (USB) to RS-232 
+serial adapter]
+• Additional NIC/USB NIC
 Tools
-• Screwdriver
-• Multimeter
-• Wire cutters
-• Punchdown tool
-• Crimper
-• Power supply tester
-• Cable stripper
-• Standard technician toolkit
-• Electrostatic discharge (ESD) strap
-• Thermal paste
 • Cable tester
-• Cable toner
-• WiFi analyzer
-• Serial advanced technology 
-attachment (SATA) to USB 
-connectors
+• Tone generator
+• Optical power meter
+• PoE Tester
 Software
-• OSs
-- Linux
-- Chrome OS
-- Microsoft Windows
-- macOS
-- Android
-- iOS
-• Preinstallation environment (PE) 
-disk/live compact disc (CD)
-• Antivirus software
-• Virtualization software
-• Anti-malware
-• Driver software
-© 2021 CompTIA, Inc., used under license by CompTIA, Inc. All rights reserved. All certification programs and education related to such 
-programs are operated exclusively by CompTIA, Inc. CompTIA is a registered trademark of CompTIA, Inc. in the U.S. and internationally. Other 
-brands and company names mentioned herein may be trademarks or service marks of CompTIA, Inc. or of their respective owners. Reproduction or dissemination prohibited without the written consent of CompTIA, Inc. Printed in the U.S. 08301-Nov2020
-
-
+• Protocol analyzer/packet capture
+• Terminal emulation software
+• Linux/Windows operating systems
+• Software firewall
+• Software IDS/IPS
+• Network mapper
+• Hypervisor software
+• IaaS cloud lab/demo accounts
+• Virtual network environment
+• Wi-Fi analyzer
+• Spectrum analyzer
+• Network monitoring tools
+• Flow data analyzer
+• TFTP server
+• Various firmware versions
+Other
+• Sample network documentation
+• Sample logs
+• Defective cables
+• Cloud network diagrams
+• Sample configuration playbook/runbook
 7. Putting It All Together
 When generating your 1,000 questions:
 
