@@ -1,4 +1,4 @@
-db.yourCollectionName.insertMany([
+db.achievements.insertMany([
   {
     _id: ObjectId("679ef42d82ed36852c544cb2"),
     achievementId: "test_rookie",
