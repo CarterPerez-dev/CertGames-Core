@@ -98,7 +98,7 @@ db.yourCollectionName.insertMany([
   {
     _id: ObjectId("679ef42e82ed36852c544cbe"),
     achievementId: "perfectionist_1",
-    title: "✅ Perfectionist (1 Test)",
+    title: "✅ Perfection (1 Test)",
     description: "Score 100% on a test. (One down, many to go!)",
     category: "global",
     criteria: { perfectTests: 1 }
@@ -154,7 +154,7 @@ db.yourCollectionName.insertMany([
   {
     _id: ObjectId("679f10a782ed36852c544cc5"),
     achievementId: "category_perfectionist",
-    title: "✅ Category Perfectionist",
+    title: "✅ Category Perfection",
     description: "Score 100% on all 10 tests in one exam category. (Master of a subject!)",
     category: "global",
     criteria: { perfectTestsInCategory: 10 }
@@ -162,7 +162,7 @@ db.yourCollectionName.insertMany([
   {
     _id: ObjectId("679f10a782ed36852c544cc6"),
     achievementId: "absolute_perfectionist",
-    title: "✅ Absolute Perfectionist",
+    title: "✅ Absolute Perfection",
     description: "Score 100% on all tests in the entire platform. (The GOAT of test-taking!)",
     category: "global",
     criteria: { perfectTestsGlobal: true }
