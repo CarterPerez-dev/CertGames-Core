@@ -4,7 +4,7 @@ db.yourCollectionName.insertMany([
     achievementId: "test_rookie",
     title: "🏆 Test Rookie",
     description: "Complete your first test. (Welcome to the grind!)",
-    category: "aplus",
+    category: "global",
     criteria: { testCount: 1 }
   },
   {
@@ -12,7 +12,7 @@ db.yourCollectionName.insertMany([
     achievementId: "accuracy_king",
     title: "🎯 Accuracy King",
     description: "Score 90% or higher on any test. (Are you even human?!)",
-    category: "aplus",
+    category: "global",
     criteria: { minScore: 90 }
   },
   {
@@ -20,7 +20,7 @@ db.yourCollectionName.insertMany([
     achievementId: "bronze_grinder",
     title: "🏅 Bronze Grinder",
     description: "Complete 10 tests. (You’re putting in the work!)",
-    category: "aplus",
+    category: "global",
     criteria: { testCount: 10 }
   },
   {
@@ -28,7 +28,7 @@ db.yourCollectionName.insertMany([
     achievementId: "silver_scholar",
     title: "🥈 Silver Scholar",
     description: "Complete 25 tests. (Starting to look like a pro!)",
-    category: "aplus",
+    category: "global",
     criteria: { testCount: 25 }
   },
   {
@@ -36,7 +36,7 @@ db.yourCollectionName.insertMany([
     achievementId: "gold_god",
     title: "🥇 Gold God",
     description: "Complete 50 tests. (Unstoppable!)",
-    category: "aplus",
+    category: "global",
     criteria: { testCount: 50 }
   },
   {
@@ -44,7 +44,7 @@ db.yourCollectionName.insertMany([
     achievementId: "platinum_pro",
     title: "💎 Platinum Pro",
     description: "Complete 80 tests. (No life, just tests!)",
-    category: "aplus",
+    category: "global",
     criteria: { testCount: 80 }
   },
   {
@@ -60,7 +60,7 @@ db.yourCollectionName.insertMany([
     achievementId: "redemption_arc",
     title: "🔄 Redemption Arc",
     description: "Score 40% or lower on a test, then retake and score 90%+. (A true comeback story!)",
-    category: "aplus",
+    category: "global",
     criteria: { minScoreBefore: 40, minScoreAfter: 90 }
   },
   {
@@ -68,7 +68,7 @@ db.yourCollectionName.insertMany([
     achievementId: "memory_master",
     title: "🧠 Memory Master",
     description: "Get 5 perfect scores in a row. (Your brain is on fire!)",
-    category: "aplus",
+    category: "global",
     criteria: { consecutivePerfects: 5 }
   },
   {
@@ -100,7 +100,7 @@ db.yourCollectionName.insertMany([
     achievementId: "perfectionist_1",
     title: "✅ Perfectionist (1 Test)",
     description: "Score 100% on a test. (One down, many to go!)",
-    category: "aplus",
+    category: "global",
     criteria: { perfectTests: 1 }
   },
   {
@@ -108,7 +108,7 @@ db.yourCollectionName.insertMany([
     achievementId: "double_trouble_2",
     title: "✅ Double Trouble (2 Tests)",
     description: "Score 100% on two different tests. (You're on a roll!)",
-    category: "aplus",
+    category: "global",
     criteria: { perfectTests: 2 }
   },
   {
@@ -116,7 +116,7 @@ db.yourCollectionName.insertMany([
     achievementId: "error404_failure_not_found",
     title: "✅ Error 404 - Failure Not Found (3 Tests)",
     description: "Score 100% on three different tests. (Perfection is your middle name!)",
-    category: "aplus",
+    category: "global",
     criteria: { perfectTests: 3 }
   },
   {
