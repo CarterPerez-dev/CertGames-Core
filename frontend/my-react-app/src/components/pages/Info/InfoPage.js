@@ -18,7 +18,7 @@ const InfoPage = () => {
   return (
     <div className="info-container">
       <header className="info-header">
-        <h1 className="site-title">407:  ProxyAuthRequired</h1>
+        <h1 className="site-title"> Cert Games </h1>
         <p className="tagline">
           Your Ultimate Digital Hub for Exam Mastery &amp; Interactive Tools
         </p>
@@ -130,7 +130,7 @@ const InfoPage = () => {
       </section>
 
       <footer className="info-footer">
-        <p>&copy; {new Date().getFullYear()} proxyauthrequired.com. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Certgames.com. All rights reserved.</p>
       </footer>
     </div>
   );
