@@ -978,331 +978,362 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Local Security Policy (secpol.msc) is the tool used to configure security settings, including account lockout policies and password requirements, on a local machine.",
       "examTip": "Access Local Security Policy through secpol.msc to fine-tune security settings for compliance with organizational policies."
-    },
-    {
-      "id": 76,
-      "question": "Scenario: A remote user complains of very slow file transfer speeds when connected to the company VPN. What is the FIRST step you should take to diagnose the issue?",
-      "options": [
-        "Replace the user's VPN client software immediately",
-        "Verify the user's network connection and check for bandwidth limitations",
-        "Instruct the user to reboot their computer",
-        "Disable the VPN on the company firewall"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Verifying the user's network connection and checking for bandwidth limitations is the most logical first step, as it helps determine whether the slow speeds are due to network constraints rather than software issues. Replacing the VPN client or rebooting may be considered later if no network issues are found. Disabling the VPN on the firewall is too disruptive and not justified without further diagnosis.",
-      "examTip": "Always start with the basics: check network speed and connectivity before modifying client or server configurations."
-    },
-    {
-      "id": 77,
-      "question": "Which command is MOST suitable to display active TCP connections and listening ports on a Windows system?",
-      "options": [
-        "ipconfig",
-        "netstat",
-        "tracert",
-        "ping"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "netstat displays active TCP connections and listening ports, making it the best tool for diagnosing network connection issues. ipconfig shows IP configuration details, tracert traces routing paths, and ping checks connectivity.",
-      "examTip": "Using 'netstat -an' can help you quickly identify which ports are open and in use, aiding in network troubleshooting."
-    },
-    {
-      "id": 78,
-      "question": "A user reports that their Windows 10 PC sometimes fails to connect to the company domain during logon. Which of the following is the BEST explanation for this intermittent issue?",
-      "options": [
-        "The user's account password has expired",
-        "Network connectivity issues between the PC and the domain controller",
-        "The computer is running too many applications at startup",
-        "A virus is corrupting the local user profile"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Intermittent failures to connect to the domain are most commonly due to network connectivity issues between the PC and the domain controller. An expired password would cause consistent failures, and while too many startup applications can slow logon, they are less likely to block domain connectivity. Virus activity typically affects performance or triggers alerts rather than isolated logon connectivity.",
-      "examTip": "When domain connectivity issues are reported, always check network reliability and verify that the client can consistently reach the domain controller."
-    },
-    {
-      "id": 79,
-      "question": "Scenario: A user finds that a critical business application crashes frequently after a recent update. What is the BEST first step to address this problem?",
-      "options": [
-        "Uninstall the latest update immediately",
-        "Run the application in compatibility mode",
-        "Check the Event Viewer for error logs related to the application",
-        "Reinstall the operating system"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Checking the Event Viewer for error logs is the best first step as it provides insights into the cause of the crashes, such as driver conflicts or specific error codes. Uninstalling updates or using compatibility mode might be options later, but log analysis is critical before taking further action. Reinstalling the OS is excessive without further investigation.",
-      "examTip": "Event Viewer is an invaluable tool for diagnosing application crashes. Always review the logs before making configuration changes."
-    },
-    {
-      "id": 80,
-      "question": "What is the purpose of the 'robocopy' command in Windows?",
-      "options": [
-        "To move files between directories without preserving attributes",
-        "To create a backup of system files",
-        "To copy files and directories while preserving attributes and resuming interrupted transfers",
-        "To display network configuration details"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "robocopy is designed for robust copying of files and directories, preserving file attributes and supporting resume functionality for interrupted transfers. It is not used for moving files without attributes, creating system backups per se, or displaying network configuration details.",
-      "examTip": "Robocopy is a powerful tool for large file migrations and backup scripts. Familiarize yourself with its numerous options for effective use."
-    },
-    {
-      "id": 81,
-      "question": "Which utility in Windows provides a graphical interface to manage disk partitions?",
-      "options": [
-        "Disk Cleanup",
-        "Disk Management",
-        "Device Manager",
-        "System Configuration (msconfig)"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Disk Management is the utility that offers a graphical interface for creating, modifying, and deleting disk partitions. Disk Cleanup frees up space, Device Manager manages hardware, and msconfig handles startup settings.",
-      "examTip": "Access Disk Management by typing 'diskmgmt.msc' in the Run dialog to view and adjust your disk partitions."
-    },
-    {
-      "id": 82,
-      "question": "Scenario: After installing a new printer on a Windows PC, a user is unable to print and receives a 'Printer Offline' error. What is the FIRST action you should take?",
-      "options": [
-        "Reinstall the printer drivers",
-        "Check the printer’s physical connection and power status",
-        "Format the printer’s memory",
-        "Update the PC's BIOS"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Checking the printer’s physical connection and power status is the most immediate and practical step. If the printer is not powered or properly connected, it will appear offline regardless of driver status. Reinstalling drivers might be necessary later, but hardware issues must be ruled out first. Formatting printer memory or updating the BIOS is unrelated.",
-      "examTip": "When troubleshooting peripheral devices, always start with verifying physical connections and power supplies."
-    },
-    {
-      "id": 83,
-      "question": "Which command in Linux is used to search for a specific string within files?",
-      "options": [
-        "grep",
-        "awk",
-        "sed",
-        "cut"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "grep searches for patterns within files and prints matching lines, making it ideal for text search operations. awk, sed, and cut have different text processing functions.",
-      "examTip": "Combine grep with other commands using pipes to efficiently filter and analyze log files."
-    },
-    {
-      "id": 84,
-      "question": "What is the BEST practice for a technician when a user's Windows computer repeatedly prompts for the Keychain password on macOS after a recent Apple ID change?",
-      "options": [
-        "Delete the Keychain and recreate it without a password",
-        "Update the local Keychain to match the new Apple ID password",
-        "Ignore the prompts as they will disappear after a reboot",
-        "Disable FileVault encryption"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Updating the local Keychain to match the new Apple ID password is the correct approach to resolve the inconsistency causing repeated prompts. Deleting the Keychain can result in loss of saved credentials, and ignoring the issue does not solve the problem. Disabling FileVault is unrelated to Keychain password synchronization.",
-      "examTip": "Keychain issues on macOS are often resolved by re-syncing with your updated credentials. Use Keychain Access to reset or update the stored passwords."
-    },
-    {
-      "id": 85,
-      "question": "Which direct command in Windows displays the version and build number of the operating system?",
-      "options": [
-        "winver",
-        "ver",
-        "msinfo32",
-        "systeminfo"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "winver opens a window that displays the version and build number of Windows. ver and systeminfo provide similar details in the command prompt, but winver is the most straightforward graphical method.",
-      "examTip": "Using winver is a quick way to verify your Windows version without digging through multiple system settings."
-    },
-    {
-      "id": 86,
-      "question": "Scenario: A help desk technician receives multiple reports that several users are unable to access a specific network share. What is the MOST likely cause that should be checked FIRST?",
-      "options": [
-        "The file server's DNS entry is missing",
-        "User permissions on the share have changed",
-        "The network cable to the file server is unplugged",
-        "The antivirus software on the file server is outdated"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "User permissions on the share changing is the most common cause for access issues in a network environment. While DNS or hardware issues could cause access problems, permissions are the likely culprit if only specific users are affected. Antivirus software being outdated is less directly related.",
-      "examTip": "When file share access fails, check NTFS and share permissions first before investigating hardware or network connectivity issues."
-    },
-    {
-      "id": 87,
-      "question": "Which tool in Windows is primarily used to view real-time performance metrics, such as CPU and memory usage?",
-      "options": [
-        "Task Manager",
-        "Disk Management",
-        "Registry Editor",
-        "Control Panel"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Task Manager provides real-time performance metrics and a list of running processes, making it ideal for monitoring system performance.",
-      "examTip": "Open Task Manager with Ctrl+Shift+Esc to quickly check system performance and identify resource-intensive applications."
-    },
-    {
-      "id": 88,
-      "question": "Scenario: A technician discovers that a Windows PC’s user is encountering frequent blue screen errors after installing new hardware. What is the BEST immediate step?",
-      "options": [
-        "Run a disk defragmentation",
-        "Uninstall the newly installed hardware drivers",
-        "Update the antivirus software",
-        "Disable User Account Control (UAC)"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Uninstalling the newly installed hardware drivers is the best immediate step since new drivers are a common cause of blue screen errors. Disk defragmentation, antivirus updates, or disabling UAC do not directly address hardware conflicts.",
-      "examTip": "When blue screen errors occur after hardware changes, focus on rolling back or updating the new drivers first."
-    },
-    {
-      "id": 89,
-      "question": "Which command in Linux is used to display detailed information about disk usage by directories and files?",
-      "options": [
-        "df",
-        "du",
-        "ls",
-        "ps"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "The 'du' command reports disk usage for files and directories, making it useful for identifying large directories.",
-      "examTip": "Using 'du -sh *' in a directory gives you a summary of each subdirectory’s size."
-    },
-    {
-      "id": 90,
-      "question": "What is the MOST effective way to prevent unauthorized changes to a critical system file on a Windows PC?",
-      "options": [
-        "Disable the file using Task Manager",
-        "Set file permissions to allow only the Administrator account to modify it",
-        "Rename the file to an obscure name",
-        "Disable Windows Defender"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Setting file permissions so that only the Administrator can modify a critical system file is the most secure approach to prevent unauthorized changes.",
-      "examTip": "Using NTFS permissions to restrict file access is a fundamental security measure to protect sensitive system files."
-    },
-    {
-      "id": 91,
-      "question": "Scenario: A user notices that after a system crash, Windows automatically reboots instead of displaying a blue screen with error details. Which setting should be adjusted to view error information?",
-      "options": [
-        "Disable automatic restart on system failure",
-        "Enable fast startup in Control Panel",
-        "Increase virtual memory size",
-        "Update the graphics driver"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Disabling automatic restart on system failure will allow the blue screen error message to be displayed, making troubleshooting easier.",
-      "examTip": "You can disable automatic restart by accessing the Advanced System Settings and selecting 'Settings' under Startup and Recovery."
-    },
-    {
-      "id": 92,
-      "question": "Which Linux command is used to display the current user's username?",
-      "options": [
-        "whoami",
-        "id",
-        "uname",
-        "useradd"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "The 'whoami' command outputs the username of the current user, making it a simple way to confirm login credentials.",
-      "examTip": "Both 'whoami' and 'id -un' can be used to retrieve the current user's name on Linux systems."
-    },
-    {
-      "id": 93,
-      "question": "Scenario: A user complains that their Windows PC takes an excessively long time to shut down. Which of the following is the BEST first step to investigate the issue?",
-      "options": [
-        "Check for pending Windows updates or processes in the shutdown log",
-        "Increase the PC’s RAM",
-        "Disable the antivirus software permanently",
-        "Reformat the hard drive"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Checking for pending updates or background processes that delay shutdown is the best initial step. Increasing RAM or disabling antivirus may not impact shutdown speed, and reformatting is too drastic for shutdown delays.",
-      "examTip": "Reviewing the shutdown logs in Event Viewer can reveal which processes or updates are causing delays."
-    },
-    {
-      "id": 94,
-      "question": "What does the 'ipconfig /flushdns' command do in Windows?",
-      "options": [
-        "It clears the DNS resolver cache",
-        "It resets the network adapter",
-        "It updates the system’s IP address",
-        "It displays current DNS settings"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "'ipconfig /flushdns' clears the DNS resolver cache, forcing the system to retrieve new DNS information.",
-      "examTip": "Use this command to resolve issues where outdated DNS information might be causing connectivity problems."
-    },
-    {
-      "id": 95,
-      "question": "Which command in Windows is used to check for and repair file system errors on a disk?",
-      "options": [
-        "chkdsk",
-        "sfc",
-        "diskpart",
-        "defrag"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "The 'chkdsk' command checks for and repairs errors on the file system, including disk errors and bad sectors.",
-      "examTip": "Running 'chkdsk /f /r' can help resolve deeper disk issues, but always back up data before initiating a repair."
-    },
-    {
-      "id": 96,
-      "question": "Scenario: A technician needs to reset a forgotten local administrator password on a Windows workstation. What is the BEST method to achieve this without reinstalling the OS?",
-      "options": [
-        "Use a password reset disk or bootable utility designed for password recovery",
-        "Disable the user account and create a new one",
-        "Reformat the system drive",
-        "Update Group Policy settings from the domain controller"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Using a password reset disk or a bootable password recovery utility is the most effective method to reset a forgotten local administrator password without reinstalling the OS. Disabling the account or reformatting the drive is more disruptive, and updating Group Policy is not relevant for local accounts.",
-      "examTip": "Password reset tools like Offline NT Password & Registry Editor can be very effective in these scenarios. Always create a reset disk beforehand if possible."
-    },
-    {
-      "id": 97,
-      "question": "Which of the following actions should be taken to secure a workstation from unauthorized remote access in a home office setting?",
-      "options": [
-        "Enable Remote Desktop and share the login credentials",
-        "Configure the firewall to block inbound connections and use a VPN for remote access",
-        "Allow all remote connections by default",
-        "Install third-party screen sharing software without password protection"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Configuring the firewall to block unsolicited inbound connections and requiring VPN access for remote connectivity is the best security practice for a home office. Enabling Remote Desktop without additional protections exposes the system, while allowing all connections or using unprotected software compromises security.",
-      "examTip": "Always combine a secure firewall configuration with VPN usage to protect remote access in untrusted environments."
-    },
-    {
-      "id": 98,
-      "question": "What command in Windows can be used to display a detailed report of the system's configuration, including hardware, software, and network information?",
-      "options": [
-        "msinfo32",
-        "systeminfo",
-        "winver",
-        "dxdiag"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "msinfo32 opens the System Information tool, which provides a comprehensive overview of the system's hardware, software, and network configuration.",
-      "examTip": "Use msinfo32 to quickly gather detailed information about a system for troubleshooting or inventory purposes."
-    },
-    {
-      "id": 99,
-      "question": "Scenario: A user reports that after a recent hardware upgrade, their computer now fails to boot with a 'No Boot Device Found' error. Which step is the MOST logical first action to troubleshoot this problem?",
-      "options": [
-        "Verify that the new hardware is properly seated and recognized in BIOS/UEFI",
-        "Immediately reinstall the operating system",
-        "Disable the new hardware device from Device Manager",
-        "Update the graphics driver"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Verifying that the new hardware is properly installed and recognized in BIOS/UEFI is the most logical first step, as a boot device error often points to connection or recognition issues. Reinstalling the OS or disabling hardware in Device Manager should come later if the hardware is confirmed to be properly connected. Updating the graphics driver is unrelated.",
-      "examTip": "Always start by checking BIOS/UEFI settings and physical connections when encountering boot device errors after a hardware change."
-    },
-    {
-      "id": 100,
-      "question": "Which built-in Windows tool allows you to manage the local security policy, including account lockout thresholds and password policies?",
-      "options": [
-        "Local Security Policy (secpol.msc)",
-        "Task Scheduler",
-        "Registry Editor",
-        "Windows Update"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Local Security Policy (secpol.msc) is the tool used to configure security settings, including account lockout policies and password requirements, on a local machine.",
-      "examTip": "Access Local Security Policy through secpol.msc to fine-tune security settings for compliance with organizational policies."
     }
   ]
 });
+
+
+
+
+
+
+
+
+db.tests.insertOne({
+  "category": "aplus2",
+  "testId": 3,
+  "testName": "A+ Practice Test #3 (Easy) - New Questions",
+  "xpPerCorrect": 10,
+  "questions": [
+    {
+      "id": 76,
+      "question": "A user complains that their laptop battery drains unusually fast even when not running resource-intensive applications. What is the MOST likely cause?",
+      "options": [
+        "High screen brightness settings",
+        "A faulty or aging battery",
+        "Excessive background applications",
+        "A recent BIOS update"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A faulty or aging battery loses capacity over time, leading to rapid drain even under light usage. Although high screen brightness and background applications can contribute, they are typically adjusted by the user. A BIOS update is unlikely to cause this issue.",
+      "examTip": "If a battery drains quickly despite normal usage, consider checking its age or calibration; replacing an aging battery is often the best solution."
+    },
+    {
+      "id": 77,
+      "question": "A user reports intermittent Wi-Fi connectivity issues on their laptop. Which troubleshooting step should be performed FIRST?",
+      "options": [
+        "Update the wireless adapter drivers",
+        "Check for physical obstructions and interference",
+        "Reset the router to factory settings",
+        "Disable the firewall temporarily"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Intermittent Wi-Fi problems are often caused by physical obstructions or radio interference. While driver updates and router resets might eventually be needed, inspecting the physical environment is a quick and effective first step.",
+      "examTip": "Always check the physical location and nearby electronic interference when troubleshooting intermittent Wi-Fi issues."
+    },
+    {
+      "id": 78,
+      "question": "Which command in Linux is used to update package lists on a Debian-based system?",
+      "options": [
+        "apt-get update",
+        "apt-get upgrade",
+        "dpkg --configure -a",
+        "apt-cache search"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The command 'apt-get update' retrieves the latest package lists from the repositories. It does not install updates—that's the role of 'apt-get upgrade'.",
+      "examTip": "Always run 'apt-get update' before installing or upgrading packages to ensure your package list is current."
+    },
+    {
+      "id": 79,
+      "question": "A technician needs to secure a workstation by ensuring that only trusted applications run on it. Which Windows feature can enforce this policy?",
+      "options": [
+        "Windows Defender Firewall",
+        "AppLocker",
+        "System Restore",
+        "BitLocker"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "AppLocker allows administrators to create rules that restrict which applications can run, thus ensuring that only trusted software is executed on the workstation.",
+      "examTip": "Use AppLocker to enforce application whitelisting, especially in environments where security is critical."
+    },
+    {
+      "id": 80,
+      "question": "Which of the following best describes the purpose of UEFI in modern computer systems?",
+      "options": [
+        "It provides a graphical user interface for the operating system",
+        "It initializes hardware and launches the operating system",
+        "It manages user permissions on the system",
+        "It encrypts data stored on the disk"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "UEFI (Unified Extensible Firmware Interface) initializes hardware during the boot process and then hands control over to the operating system.",
+      "examTip": "Remember that UEFI is the modern replacement for BIOS, offering faster boot times and additional security features."
+    },
+    {
+      "id": 81,
+      "question": "A user experiences slow boot times on their Windows 10 PC. Which of the following is the MOST effective initial troubleshooting step?",
+      "options": [
+        "Disable unnecessary startup programs",
+        "Increase the amount of physical RAM",
+        "Reinstall the operating system",
+        "Replace the hard drive with an SSD"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Disabling unnecessary startup programs can free up system resources and lead to faster boot times. This is a simple, noninvasive first step before considering hardware upgrades or OS reinstallation.",
+      "examTip": "Use Task Manager’s Startup tab to disable non-essential programs from launching at boot."
+    },
+    {
+      "id": 82,
+      "question": "Which of the following commands in Windows is used to generate a list of installed updates?",
+      "options": [
+        "systeminfo",
+        "wmic qfe list",
+        "winver",
+        "ipconfig"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The command 'wmic qfe list' displays a list of Quick Fix Engineering updates (installed updates) on the system.",
+      "examTip": "Use 'wmic qfe list' to audit installed updates when troubleshooting issues related to recent patches."
+    },
+    {
+      "id": 83,
+      "question": "A technician is troubleshooting a network printer that isn’t printing. Which of the following is the MOST appropriate first step?",
+      "options": [
+        "Check if the printer is set as the default printer",
+        "Verify that the printer has paper and toner/ink",
+        "Update the printer’s firmware",
+        "Uninstall and reinstall the printer driver"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Before delving into software troubleshooting, the technician should first check the simplest issues such as whether the printer has paper and sufficient toner/ink.",
+      "examTip": "Always inspect the physical supplies of a printer (paper, toner/ink) as an initial troubleshooting step."
+    },
+    {
+      "id": 84,
+      "question": "Which Linux command is used to view real-time system performance, similar to Windows Task Manager?",
+      "options": [
+        "top",
+        "df",
+        "ps",
+        "netstat"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The 'top' command displays a real-time view of running processes along with CPU and memory usage, making it similar to Windows Task Manager.",
+      "examTip": "Use 'top' to quickly identify processes that are consuming excessive resources on a Linux system."
+    },
+    {
+      "id": 85,
+      "question": "A user reports that their computer is overheating and shutting down unexpectedly. Which of the following is the MOST important first step?",
+      "options": [
+        "Replace the CPU",
+        "Clean dust from the internal components",
+        "Reinstall the operating system",
+        "Disable overclocking settings"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Overheating is most often caused by dust buildup on fans and heatsinks. Cleaning the internal components is the safest and simplest initial step.",
+      "examTip": "Regularly clean computer fans and heatsinks to maintain proper cooling and prevent overheating."
+    },
+    {
+      "id": 86,
+      "question": "Which command in Windows is used to view detailed network configuration information, including IP address, subnet mask, and gateway?",
+      "options": [
+        "ipconfig /all",
+        "netstat -r",
+        "tracert",
+        "ping -t"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The 'ipconfig /all' command displays comprehensive network configuration details, including IP addresses, subnet masks, and default gateways for all network adapters.",
+      "examTip": "Use 'ipconfig /all' when troubleshooting network connectivity issues to verify that all settings are correct."
+    },
+    {
+      "id": 87,
+      "question": "A technician is configuring a new wireless router. Which of the following security protocols is considered the most secure?",
+      "options": [
+        "WEP",
+        "WPA",
+        "WPA2",
+        "Open (no encryption)"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "WPA2 is widely recognized as the most secure encryption protocol among those listed, providing robust protection for wireless communications.",
+      "examTip": "Always configure your wireless router with WPA2 or WPA3 encryption for the best security."
+    },
+    {
+      "id": 88,
+      "question": "Which command in Linux is used to change the current directory?",
+      "options": [
+        "ls",
+        "cd",
+        "mv",
+        "chmod"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The 'cd' command is used to change directories in Linux.",
+      "examTip": "Use 'cd' followed by the target directory name to navigate the file system."
+    },
+    {
+      "id": 89,
+      "question": "A user is unable to access a shared folder on the network. Which of the following should be checked first?",
+      "options": [
+        "Verify that the shared folder has a valid share name",
+        "Check the network cable connecting to the computer",
+        "Confirm that the user has the appropriate NTFS permissions",
+        "Reboot the file server"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "If a user cannot access a shared folder, the first step is to verify that they have the proper NTFS and share permissions. This is often the root cause of access issues.",
+      "examTip": "Always review both share and NTFS permissions when troubleshooting access problems on network shares."
+    },
+    {
+      "id": 90,
+      "question": "Which Windows utility is best suited for diagnosing hardware issues by performing a memory test?",
+      "options": [
+        "Windows Memory Diagnostic",
+        "Device Manager",
+        "Event Viewer",
+        "System Information"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Windows Memory Diagnostic is specifically designed to test the computer’s RAM for errors and is the best tool for diagnosing memory-related hardware issues.",
+      "examTip": "Run Windows Memory Diagnostic during startup to check for any RAM errors that might be affecting system performance."
+    },
+    {
+      "id": 91,
+      "question": "Which Linux command is used to change file ownership?",
+      "options": [
+        "chmod",
+        "chown",
+        "ln",
+        "mv"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The 'chown' command is used to change the ownership of files and directories in Linux.",
+      "examTip": "Use 'chown user:group filename' to modify file ownership as needed."
+    },
+    {
+      "id": 92,
+      "question": "A technician notices that a Windows computer's performance has degraded after installing a recent driver update. What should be the technician's FIRST action?",
+      "options": [
+        "Rollback the driver to a previous version",
+        "Perform a full system reinstall",
+        "Disable the driver in Device Manager",
+        "Update the operating system"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Rolling back the driver to a previous version is an effective first step to determine if the new driver is causing the performance issues.",
+      "examTip": "Always create a system restore point before updating critical drivers so you can easily revert if problems arise."
+    },
+    {
+      "id": 93,
+      "question": "Which command in Windows is used to check the system file integrity and repair corrupted files?",
+      "options": [
+        "sfc /scannow",
+        "chkdsk /r",
+        "diskpart",
+        "format"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The 'sfc /scannow' command runs the System File Checker, which scans for and repairs corrupted Windows system files.",
+      "examTip": "If you suspect system file corruption, running 'sfc /scannow' can often resolve the issue without further troubleshooting."
+    },
+    {
+      "id": 94,
+      "question": "A user complains that their computer is running slow. Which of the following should be checked FIRST to rule out a common cause?",
+      "options": [
+        "Verify that the hard drive is not nearly full",
+        "Increase the amount of RAM",
+        "Reinstall the operating system",
+        "Replace the CPU"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A nearly full hard drive can significantly degrade performance. Checking disk space is a quick and simple troubleshooting step before considering hardware upgrades.",
+      "examTip": "Regularly monitor disk usage and clean up unnecessary files to help maintain system performance."
+    },
+    {
+      "id": 95,
+      "question": "Which command in Linux is used to update all installed packages on a Debian-based system?",
+      "options": [
+        "apt-get upgrade",
+        "apt-get update",
+        "apt-get install",
+        "dpkg -l"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The 'apt-get upgrade' command updates all installed packages to their latest versions after the package lists have been refreshed.",
+      "examTip": "Always run 'apt-get update' before 'apt-get upgrade' to ensure that you are upgrading to the latest available package versions."
+    },
+    {
+      "id": 96,
+      "question": "A technician needs to determine the serial number of a computer’s hard drive in Windows. Which tool is most likely to provide this information?",
+      "options": [
+        "Device Manager",
+        "System Information (msinfo32)",
+        "Command Prompt using 'wmic diskdrive get serialnumber'",
+        "Disk Management"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Using the WMIC command in Command Prompt with 'wmic diskdrive get serialnumber' retrieves the hard drive's serial number.",
+      "examTip": "Run 'wmic diskdrive get serialnumber' to quickly obtain hard drive serial numbers when needed."
+    },
+    {
+      "id": 97,
+      "question": "Which built-in Windows feature provides a secure method for remotely connecting to a computer, ensuring encrypted communication?",
+      "options": [
+        "Remote Desktop Protocol (RDP)",
+        "Telnet",
+        "FTP",
+        "VNC"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Remote Desktop Protocol (RDP) is designed for remote connections and uses encryption to protect the data transmitted between the client and the host computer.",
+      "examTip": "Always secure RDP connections with strong passwords and, when possible, use Network Level Authentication."
+    },
+    {
+      "id": 98,
+      "question": "A user complains that their Windows PC's performance degrades significantly after running multiple applications simultaneously. Which of the following should be considered FIRST?",
+      "options": [
+        "Upgrade the graphics card",
+        "Increase the virtual memory (page file) size",
+        "Add more physical RAM",
+        "Disable unnecessary startup programs"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Disabling unnecessary startup programs reduces background resource consumption, often leading to improved performance when multiple applications are running.",
+      "examTip": "Review the Startup tab in Task Manager to disable non-essential programs and free up system resources."
+    },
+    {
+      "id": 99,
+      "question": "Which command in Windows is used to display a summary of disk usage, including free and used space on each partition?",
+      "options": [
+        "chkdsk",
+        "diskpart",
+        "wmic logicaldisk get size,freespace,caption",
+        "defrag"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The command 'wmic logicaldisk get size,freespace,caption' provides a summary of each partition's total, free, and used space.",
+      "examTip": "Use this WMIC command to quickly review disk usage details when troubleshooting storage issues."
+    },
+    {
+      "id": 100,
+      "question": "A technician is reviewing a Windows system's event logs to diagnose a recurring error. Which tool is used to view these logs?",
+      "options": [
+        "Event Viewer",
+        "System Information",
+        "Device Manager",
+        "Task Manager"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Event Viewer is the built-in Windows tool that displays system, security, and application logs, which are essential for diagnosing errors and system issues.",
+      "examTip": "Filter logs by date or severity in Event Viewer to quickly pinpoint the source of recurring errors."
+    }
+  ]
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
