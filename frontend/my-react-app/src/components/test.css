@@ -1641,7 +1641,25 @@ body {
 /* 1) Extra-Small Devices: max-width 320px */
 /*******************************************/
 @media (max-width: 320px) {
-  /* Titles & Grid */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
+
+
   .tests-list-title {
     font-size: 2.2rem;
     margin-bottom: 0.75rem;
@@ -1684,6 +1702,23 @@ body {
 /* 2) Small Devices: max-width 480px       */
 /*******************************************/
 @media (max-width: 480px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
   .tests-list-title {
     font-size: 2.4rem;
     margin-bottom: 1rem;
@@ -1719,7 +1754,24 @@ body {
 /* 3) Medium-Small Devices: max-width 600px*/
 /*******************************************/
 @media (max-width: 600px) {
-  /* Possibly 2 columns now if there's room */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
+
   .tests-list-grid {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
@@ -1751,7 +1803,22 @@ body {
 /* 4) Tablets / Larger Mobiles: max-width 768px */
 /*******************************************/
 @media (max-width: 768px) {
-  /* Possibly keep 2 columns or 3, depends on your preference */
+  body {
+    overflow-x: hidden;
+  }
+  
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+  
   .tests-list-grid {
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }

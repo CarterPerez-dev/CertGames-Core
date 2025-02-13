@@ -205,7 +205,9 @@
 @media (max-width: 320px) {
   .shop-page.mario-kart-theme {
     padding: 10px;
-    font-size: 0.8rem; /* Scale down the base font size */
+    font-size: 0.8rem; 
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .shop-header .main-title {
@@ -285,6 +287,8 @@
   .shop-page.mario-kart-theme {
     padding: 15px;
     font-size: 0.85rem;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .shop-header .main-title {
@@ -325,7 +329,7 @@
     margin-bottom: 8px;
   }
   .shop-item-info h3 {
-    font-size: 1rem;
+    font-size: 0.7rem;
   }
   .shop-item-info p {
     font-size: 0.75rem;
@@ -359,6 +363,8 @@
   .shop-page.mario-kart-theme {
     padding: 20px;
     font-size: 0.9rem;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .shop-header .main-title {
@@ -396,10 +402,10 @@
     margin-bottom: 10px;
   }
   .shop-item-info h3 {
-    font-size: 1.05rem;
+    font-size: 0.7rem;
   }
   .shop-item-info p {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     line-height: 1.2rem;
   }
 
@@ -430,6 +436,8 @@
   .shop-page.mario-kart-theme {
     padding: 25px;
     font-size: 1rem;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .shop-header .main-title {
@@ -464,11 +472,11 @@
     margin-bottom: 10px;
   }
   .shop-item-info h3 {
-    font-size: 1.1rem;
+    font-size: 0.7rem;
   }
   .shop-item-info p {
-    font-size: 0.85rem;
-    line-height: 1.3rem;
+    font-size: 0.6rem;
+    line-height: 1rem;
   }
   .purchase-button {
     font-size: 0.75rem;

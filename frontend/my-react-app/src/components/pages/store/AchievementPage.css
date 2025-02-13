@@ -155,7 +155,9 @@
   .achievement-page {
     padding: 1rem !important;
     font-size: 0.85rem !important;
-    overflow-x: hidden !important; /* Prevent horizontal scroll */
+    overflow-x: hidden !important; 
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .achievement-header h1 {
@@ -218,6 +220,8 @@
     padding: 1.2rem !important;
     font-size: 0.9rem !important;
     overflow-x: hidden !important;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .achievement-header h1 {
@@ -252,10 +256,10 @@
     margin-bottom: 0.5rem !important;
   }
   .achievement-title {
-    font-size: 1.05rem !important;
+    font-size: 0.7rem !important;
   }
   .achievement-description {
-    font-size: 0.75rem !important;
+    font-size: 0.5rem !important;
     line-height: 1.1rem !important;
   }
 
@@ -273,6 +277,8 @@
     padding: 1.5rem !important;
     font-size: 0.95rem !important;
     overflow-x: hidden !important;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .achievement-header h1 {
@@ -293,6 +299,8 @@
     gap: 1.2rem !important;
     max-width: 100% !important;
     margin: 0 auto !important;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .achievement-card {
@@ -306,11 +314,11 @@
     margin-bottom: 0.8rem !important;
   }
   .achievement-title {
-    font-size: 1.1rem !important;
+    font-size: 0.7rem !important;
     margin-bottom: 0.5rem !important;
   }
   .achievement-description {
-    font-size: 0.8rem !important;
+    font-size: 0.6rem !important;
     line-height: 1.2rem !important;
   }
 
@@ -328,6 +336,8 @@
     padding: 1.8rem !important;
     font-size: 1rem !important;
     overflow-x: hidden !important;
+    background-attachment: scroll !important;
+    background-position: center top !important; 
   }
 
   .achievement-header h1 {
@@ -363,10 +373,10 @@
     margin-bottom: 0.8rem !important;
   }
   .achievement-title {
-    font-size: 1.2rem !important;
+    font-size: 0.7rem !important;
   }
   .achievement-description {
-    font-size: 0.85rem !important;
+    font-size: 0.6rem !important;
     line-height: 1.3rem !important;
   }
 

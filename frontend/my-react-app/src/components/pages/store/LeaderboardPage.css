@@ -110,9 +110,14 @@ body:has(.leaderboard-container) {
 
 /* Basic responsiveness */
 @media (max-width: 320px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+
   .leaderboard-container {
     padding: 15px;
-    font-size: 0.9rem; /* Slightly smaller text if desired */
+    font-size: 0.9rem; 
   }
 
   .leaderboard-title {
@@ -156,6 +161,11 @@ body:has(.leaderboard-container) {
 /* 2) Small Devices: max-width 480px       */
 /*******************************************/
 @media (max-width: 480px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
   .leaderboard-container {
     padding: 15px;
     font-size: 0.95rem; /* Base font can be slightly smaller */
@@ -203,6 +213,11 @@ body:has(.leaderboard-container) {
 /* 3) Medium-Small Devices: max-width 600px*/
 /*******************************************/
 @media (max-width: 600px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
   .leaderboard-container {
     padding: 20px;
     font-size: 1rem;
@@ -249,6 +264,11 @@ body:has(.leaderboard-container) {
 /* 4) Tablets / Larger Mobiles: max-width 768px */
 /*******************************************/
 @media (max-width: 768px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
   .leaderboard-container {
     padding: 20px;
     font-size: 1rem;
