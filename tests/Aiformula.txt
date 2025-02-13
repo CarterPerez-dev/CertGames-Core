@@ -90,9 +90,9 @@ Each test (from testId: 1 to testId: 10) is inserted as follows. Below is an exa
 
 
 db.tests.insertOne({
-  "category": "cysa",                             
+  "category": "penplus",                             
   "testId": 1,                    //this will go from 1-10                
-  "testName": " CySa Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on test 2-10
+  "testName": " Pentest Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on test 2-10
   "xpPerCorrect": 10,                             
   "questions": [ //these questions are purely examples, do not replciate theese examples
     {
@@ -139,742 +139,1003 @@ Link to the CURRICULUM AND KEEP WITHIN SCOPE OF CURRICULUM/OBJECTIVES
 
 HERE IS TEH CURRCIULUM THE TESTS SHOULD BE ABOUT
 
-CompTIA Cybersecurity
-Analyst (CySA+)
-Certification Exam
-Objectives
-EXAM NUMBER: CS0-003
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
+CompTIA PenTest+ 
+Certification 
+Exam Objectives
+EXAM NUMBER: PT0-002
 About the Exam
-The CompTIA Cybersecurity Analyst (CySA+) certification exam will certify the successful candidate
-has the knowledge and skills required to:
-• Detect and analyze indicators of malicious activity
-• Understand threat hunting and threat intelligence concepts
-• Use appropriate tools and methods to manage, prioritize, and respond to attacks and vulnerabilities
-• Perform incident response processes
-• Understand reporting and communication concepts related to vulnerability management and incident
- response activities
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+Candidates are encouraged to use this document to help prepare for the CompTIA 
+PenTest+ (PT0-002) certification exam. The CompTIA PenTest+ certification exam will 
+verify the successful candidate has the knowledge and skills required to: 
+• Plan and scope a penetration testing engagement
+• Understand legal and compliance requirements
+• Perform vulnerability scanning and penetration testing using appropriate 
+tools and techniques, and then analyze the results
+• Produce a written report containing proposed remediation techniques, effectively 
+communicate results to the management team, and provide practical recommendations
+This is equivalent to three to four years of hands-on experience working 
+in a security consultant or penetration tester job role.
+These content examples are meant to clarify the test objectives and should not be 
+construed as a comprehensive listing of all the content of this examination. 
+EXAM ACCREDITATION 
+The CompTIA PenTest+ (PT0-002) exam is accredited by ANSI to show compliance with the ISO 17024 
+standard and, as such, undergoes regular reviews and updates to the exam objectives.
 EXAM DEVELOPMENT
-CompTIA exams result from subject matter expert workshops and industry-wide survey results
-regarding the skills and knowledge required of an advanced IT professional.
-CompTIA AUTHORIZED MATERIALS USE POLICY
-CompTIA Certifications, LLC is not affiliated with and does not authorize, endorse, or condone utilizing
-any content provided by unauthorized third-party training sites (aka “brain dumps”). Individuals who
-utilize such materials in preparation for any CompTIA examination will have their certifications revoked
-and be suspended from future testing in accordance with the CompTIA Candidate Agreement. In an
-effort to more clearly communicate CompTIA’s exam policies on use of unauthorized study materials,
-CompTIA directs all certification candidates to the CompTIA Certification Exam Policies. Please review
-all CompTIA policies before beginning the study process for any CompTIA exam. Candidates will be
-required to abide by the CompTIA Candidate Agreement. If a candidate has a question as to whether
-study materials are considered unauthorized (aka “brain dumps”), he/she should contact CompTIA at
-examsecurity@comptia.org to confirm.
+CompTIA exams result from subject-matter expert workshops and industry-wide survey 
+results regarding the skills and knowledge required of an IT professional. 
+CompTIA AUTHORIZED MATERIALS USE POLICY 
+CompTIA Certifications, LLC is not affiliated with and does not authorize, endorse, or condone utilizing any 
+content provided by unauthorized third-party training sites (aka “brain dumps”). Individuals who utilize 
+such materials in preparation for any CompTIA examination will have their certifications revoked and be 
+suspended from future testing in accordance with the CompTIA Candidate Agreement. In an effort to more 
+clearly communicate CompTIA’s exam policies on use of unauthorized study materials, CompTIA directs 
+all certification candidates to the CompTIA Certification Exam Policies. Please review all CompTIA policies 
+before beginning the study process for any CompTIA exam. Candidates will be required to abide by the 
+CompTIA Candidate Agreement. If a candidate has a question as to whether study materials are considered 
+unauthorized (aka “brain dumps”), he/she should contact CompTIA at examsecurity@comptia.org to confirm. 
 PLEASE NOTE
-The lists of examples provided in bulleted format are not exhaustive lists. Other examples of
-technologies, processes, or tasks pertaining to each objective may also be included on the exam,
-although not listed or covered in this objectives document. CompTIA is constantly reviewing the
-content of our exams and updating test questions to be sure our exams are current, and the security
-of the questions is protected. When necessary, we will publish updated exams based on existing
+The lists of examples provided in bulleted format are not exhaustive lists. Other examples of 
+technologies, processes, or tasks pertaining to each objective may also be included on the exam 
+although not listed or covered in this objectives document. CompTIA is constantly reviewing the 
+content of our exams and updating test questions to be sure our exams are current, and the security 
+of the questions is protected. When necessary, we will publish updated exams based on existing 
 exam objectives. Please know that all related exam preparation materials will still be valid.
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
 TEST DETAILS
-Required exam CS0-003
+Required exam PT0-002
 Number of questions Maximum of 85
 Types of questions Multiple-choice and performance-based
 Length of test 165 minutes
-Recommended experience 4 years of hands-on experience as an
-incident response analyst or security
-operations center (SOC) analyst
+Recommended experience 3–4 years of hands-on experience performing 
+penetration tests, vulnerability assessments, 
+and code analysis
+Passing score 750 (on a scale of 100-900)
 EXAM OBJECTIVES (DOMAINS)
-The table below lists the domains measured by this examination
+The table below lists the domains measured by this examination 
 and the extent to which they are represented.
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
 DOMAIN PERCENTAGE OF EXAMINATION
-1.0 Security Operations 33%
-2.0 Vulnerability Management 30%
-3.0 Incident Response and Management 20%
-4.0 Reporting and Communication 17%
+1.0 Planning and Scoping 14%
+2.0 Information Gathering and Vulnerability Scanning 22%
+3.0 Attacks and Exploits 30%
+4.0 Reporting and Communication 18%
+5.0 Tools and Code Analysis 16%
 Total 100%
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-1.0 Security Operations
+• Regulatory compliance considerations
+- Payment Card Industry Data 
+ Security Standard (PCI DSS)
+- General Data Protection 
+ Regulation (GDPR)
+• Location restrictions
+- Country limitations
+- Tool restrictions
+- Local laws
+- Local government requirements
+ - Privacy requirements
+• Legal concepts
+- Service-level agreement (SLA)
+- Confidentiality
+- Statement of work
+- Non-disclosure agreement (NDA)
+- Master service agreement
+• Permission to attack
+• Standards and methodologies
+- MITRE ATT&CK
+- Open Web Application 
+ Security Project (OWASP)
+- National Institute of Standards 
+ and Technology (NIST)
+- Open-source Security Testing 
+ Methodology Manual (OSSTMM)
+- Penetration Testing 
+ Execution Standard (PTES)
+- Information Systems Security 
+ Assessment Framework (ISSAF)
+• Rules of engagement
+- Time of day
+- Types of allowed/disallowed tests
+- Other restrictions
+• Environmental considerations
+- Network
+- Application
+- Cloud
+• Target list/in-scope assets
+- Wireless networks
+- Internet Protocol (IP) ranges
+- Domains
+- Application programming 
+ interfaces (APIs)
+- Physical locations
+- Domain name system (DNS)
+- External vs. internal targets
+- First-party vs. third-party hosted
+• Validate scope of engagement
+- Question the client/review contracts
+- Time management
+- Strategy
+ - Unknown-environment vs. 
+ known-environment testing
+• Background checks of 
+ penetration testing team
+• Adhere to specific scope of engagement
+• Identify criminal activity
+• Immediately report breaches/
+ criminal activity
+• Limit the use of tools to a 
+ particular engagement
+• Limit invasiveness based on scope
+• Maintain confidentiality 
+ of data/information
+• Risks to the professional
+- Fees/fines
+- Criminal charges
+1.0 Planning and Scoping
+Compare and contrast governance, risk, and compliance concepts.
+Explain the importance of scoping and 
+organizational/customer requirements. 
+Given a scenario, demonstrate an ethical hacking mindset 
+by maintaining professionalism and integrity.
 1.1
 1.2
-Explain the importance of system and network architecture
-concepts in security operations.
-• Log ingestion
-- Time synchronization
-- Logging levels
-• Operating system (OS) concepts
-- Windows Registry
-- System hardening
-- File structure
-o Configuration file locations
-- System processes
-- Hardware architecture
-• Infrastructure concepts
-- Serverless
-- Virtualization
-- Containerization
-• Network architecture
-- On-premises
-- Cloud
-- Hybrid
-- Network segmentation
-- Zero trust
-- Secure access secure edge
-(SASE)
-- Software-defined networking
-(SDN)
-• Identity and access management
-- Multifactor authentication (MFA)
-- Single sign-on (SSO)
-- Federation
-- Privileged access management
-(PAM)
-- Passwordless
-- Cloud access security broker
-(CASB)
-• Encryption
-- Public key infrastructure (PKI)
-- Secure sockets layer (SSL)
-inspection
-• Sensitive data protection
-- Data loss prevention (DLP)
-- Personally identifiable
-information (PII)
-- Cardholder data (CHD)
-Given a scenario, analyze indicators of potentially malicious activity.
-• Network-related
-- Bandwidth consumption
-- Beaconing
-- Irregular peer-to-peer
-communication
-- Rogue devices on the network
-- Scans/sweeps
-- Unusual traffic spikes
-- Activity on unexpected ports
-• Host-related
-- Processor consumption
-- Memory consumption
-- Drive capacity consumption
-- Unauthorized software
-- Malicious processes
-- Unauthorized changes
-- Unauthorized privileges
-- Data exfiltration
-- Abnormal OS process behavior
-- File system changes or
-anomalies
-- Registry changes or anomalies
-- Unauthorized scheduled tasks
-• Application-related
-- Anomalous activity
-- Introduction of new accounts
-- Unexpected output
-- Unexpected outbound
-communication
-- Service interruption
-- Application logs
-• Other
-- Social engineering attacks
-- Obfuscated links
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-1.4 Compare and contrast threat-intelligence and threat-hunting
-concepts.
-• Threat actors
-- Advanced persistent threat
-(APT)
-- Hacktivists
-- Organized crime
-- Nation-state
-- Script kiddie
-- Insider threat
-o Intentional
-o Unintentional
-- Supply chain
-• Tactics, techniques, and
-procedures (TTP)
-• Confidence levels
-- Timeliness
-- Relevancy
-- Accuracy
-• Collection methods and sources
-- Open source
-o Social media
-o Blogs/forums
-o Government bulletins
-o Computer emergency
- response team (CERT)
-o Cybersecurity incident
- response team (CSIRT)
-o Deep/dark web
-- Closed source
-o Paid feeds
-o Information sharing
- organizations
-o Internal sources
-• Threat intelligence sharing
-- Incident response
-- Vulnerability management
-- Risk management
-- Security engineering
-- Detection and monitoring
-• Threat hunting
-- Indicators of compromise (IoC)
-o Collection
-o Analysis
-o Application
-- Focus areas
-o Configurations/
- misconfigurations
-o Isolated networks
-o Business-critical assets
- and processes
-- Active defense
-- Honeypot
-1.0 | Security Operations
-1.3 Given a scenario, use appropriate tools or techniques to
-determine malicious activity.
-• Tools
-- Packet capture
-o Wireshark
-o tcpdump
-- Log analysis/correlation
-o Security information and
- event management (SIEM)
-o Security orchestration,
- automation, and response
- (SOAR)
-- Endpoint security
-o Endpoint detection and
- response (EDR)
-- Domain name service (DNS) and
-Internet Protocol (IP) reputation
-o WHOIS
-o AbuseIPDB
-- File analysis
-o Strings
-o VirusTotal
-- Sandboxing
-o Joe Sandbox
-o Cuckoo Sandbox
-• Common techniques
-- Pattern recognition
-o Command and control
-- Interpreting suspicious
-commands
-- Email analysis
-o Header
-o Impersonation
-o DomainKeys Identified Mail
- (DKIM)
-o Domain-based Message
- Authentication, Reporting,
- and Conformance (DMARC)
-o Sender Policy Framework
- (SPF)
-o Embedded links
-- File analysis
-o Hashing
-- User behavior analysis
-o Abnormal account activity
-o Impossible travel
-• Programming languages/scripting
-- JavaScript Object Notation
-(JSON)
-- Extensible Markup Language
-(XML)
-- Python
-- PowerShell
-- Shell script
-- Regular expressions
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-1.5 Explain the importance of efficiency and process improvement
-in security operations.
-• Standardize processes
-- Identification of tasks suitable for automation
-o Repeatable/do not require human interaction
-- Team coordination to manage and facilitate automation
-• Streamline operations
-- Automation and orchestration
-o Security orchestration, automation, and response (SOAR)
-- Orchestrating threat intelligence data
-o Data enrichment
-o Threat feed combination
-- Minimize human engagement
-• Technology and tool integration
-- Application programming interface (API)
-- Webhooks
-- Plugins
-• Single pane of glass
-1.0 | Security Operations
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-2.0 Vulnerability Management
+1.3
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+2.0 Information Gathering 
+ and Vulnerability Scanning
+• DNS lookups
+• Identify technical contacts
+• Administrator contacts
+• Cloud vs. self-hosted
+• Social media scraping
+- Key contacts/job responsibilities
+- Job listing/technology stack
+• Cryptographic flaws
+- Secure Sockets Layer (SSL) certificates
+- Revocation
+• Company reputation/security posture
+• Data
+- Password dumps
+- File metadata
+- Strategic search engine 
+ analysis/enumeration
+- Website archive/caching
+- Public source-code repositories
+• Open-source intelligence (OSINT) 
+- Tools
+ - Shodan
+ - Recon-ng
+- Sources
+ - Common weakness 
+ enumeration (CWE)
+ - Common vulnerabilities 
+ and exposures (CVE)
+• Enumeration
+- Hosts
+- Services
+- Domains
+- Users
+- Uniform resource locators (URLs)
+• Website reconnaissance
+- Crawling websites
+- Scraping websites
+- Manual inspection of web links
+ - robots.txt
+• Packet crafting
+- Scapy
+• Defense detection
+- Load balancer detection
+- Web application firewall 
+ (WAF) detection
+- Antivirus
+- Firewall
+• Tokens
+- Scoping
+- Issuing
+- Revocation
+• Wardriving
+• Network traffic
+- Capture API requests and responses
+- Sniffing
+• Cloud asset discovery
+• Third-party hosted services
+• Detection avoidance
+Given a scenario, perform passive reconnaissance.
+Given a scenario, perform active reconnaissance.
 2.1
 2.2
-Given a scenario, implement vulnerability scanning methods
-and concepts.
-• Asset discovery
-- Map scans
-- Device fingerprinting
-• Special considerations
-- Scheduling
-- Operations
-- Performance
-- Sensitivity levels
-- Segmentation
-- Regulatory requirements
-• Internal vs. external scanning
-• Agent vs. agentless
-• Credentialed vs. non-credentialed
-• Passive vs. active
-• Static vs. dynamic
-- Reverse engineering
-- Fuzzing
-• Critical infrastructure
-- Operational technology (OT)
-- Industrial control systems (ICS)
-- Supervisory control and data
-acquisition (SCADA)
-• Security baseline scanning
-• Industry frameworks
-- Payment Card Industry Data
-Security Standard (PCI DSS)
-- Center for Internet Security
-(CIS) benchmarks
-- Open Web Application Security
-Project (OWASP)
-- International Organization for
-Standardization (ISO) 27000
-series
-Given a scenario, analyze output from vulnerability assessment tools.
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+2.0 Information Gathering and Vulnerability Scanning
+Given a scenario, analyze the results of a reconnaissance exercise. 2.3
+• Fingerprinting
+- Operating systems (OSs)
+- Networks
+- Network devices
+- Software
+• Analyze output from:
+- DNS lookups
+- Crawling websites
+- Network traffic
+- Address Resolution 
+ Protocol (ARP) traffic
+- Nmap scans
+- Web logs
+• Considerations of vulnerability scanning
+- Time to run scans
+- Protocols
+- Network topology
+- Bandwidth limitations
+- Query throttling
+- Fragile systems
+- Non-traditional assets
+• Scan identified targets for vulnerabilities
+• Set scan settings to avoid detection
+• Scanning methods
+- Stealth scan
+- Transmission Control 
+ Protocol (TCP) connect scan
+- Credentialed vs. non-credentialed
+• Nmap
+- Nmap Scripting Engine (NSE) scripts
+- Common options
+ -A
+ -sV
+ -sT
+ -Pn
+ -O
+ -sU
+ -sS
+ -T 1-5
+ -script=vuln
+ -p
+• Vulnerability testing tools 
+ that facilitate automation
+Given a scenario, perform vulnerability scanning. 2.4
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+3.0 Attacks and Exploits
+• Stress testing for availability
+• Exploit resources
+- Exploit database (DB)
+- Packet storm
+• Attacks
+- ARP poisoning
+- Exploit chaining
+- Password attacks
+ - Password spraying
+ - Hash cracking
+ - Brute force
+ - Dictionary 
+- On-path (previously known 
+ as man-in-the-middle)
+- Kerberoasting
+- DNS cache poisoning
+- Virtual local area network 
+ (VLAN) hopping
+- Network access control (NAC) bypass
+- Media access control (MAC) spoofing
+- Link-Local Multicast Name 
+ Resolution (LLMNR)/NetBIOS-
+ Name Service (NBT-NS) poisoning
+- New Technology LAN Manager 
+ (NTLM) relay attacks
 • Tools
-- Network scanning and mapping
-o Angry IP Scanner
-o Maltego
-- Web application scanners
-o Burp Suite
-o Zed Attack Proxy (ZAP)
-o Arachni
-o Nikto
-- Vulnerability scanners
-o Nessus
-o OpenVAS
-- Debuggers
-o Immunity debugger
-o GNU debugger (GDB)
-- Multipurpose
-o Nmap
-o Metasploit framework (MSF)
-o Recon-ng
-- Cloud infrastructure assessment
-tools
-o Scout Suite
-o Prowler
-o Pacu
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-2.3
-2.4
-2.5
-Given a scenario, analyze data to prioritize vulnerabilities.
-• Common Vulnerability Scoring
-System (CVSS) interpretation
-- Attack vectors
-- Attack complexity
-- Privileges required
-- User interaction
-- Scope
-- Impact
-o Confidentiality
-o Integrity
-o Availability
-• Validation
-- True/false positives
-- True/false negatives
-• Context awareness
-- Internal
-- External
-- Isolated
-• Exploitability/weaponization
-• Asset value
-• Zero-day
-Given a scenario, recommend controls to mitigate attacks and
-software vulnerabilities.
-Explain concepts related to vulnerability response, handling,
-and management.
-• Cross-site scripting
-- Reflected
-- Persistent
-• Overflow vulnerabilities
-- Buffer
-- Integer
-- Heap
-- Stack
-• Data poisoning
-• Broken access control
-• Cryptographic failures
-• Injection flaws
-• Cross-site request forgery
-• Directory traversal
-• Insecure design
-• Security misconfiguration
-• End-of-life or outdated
-components
-• Identification and authentication
-failures
-• Server-side request forgery
-• Remote code execution
-• Privilege escalation
-• Local file inclusion (LFI)/remote
-file inclusion (RFI)
-• Compensating control
-• Control types
-- Managerial
-- Operational
-- Technical
-- Preventative
-- Detective
-- Responsive
-- Corrective
-• Patching and configuration
-management
-- Testing
-- Implementation
-- Rollback
-- Validation
-• Maintenance windows
-• Exceptions
-• Risk management principles
-- Accept
-- Transfer
-- Avoid
-- Mitigate
-• Policies, governance, and servicelevel objectives (SLOs)
-• Prioritization and escalation
-• Attack surface management
-- Edge discovery
-- Passive discovery
-- Security controls testing
-- Penetration testing and
-adversary emulation
-- Bug bounty
-- Attack surface reduction
-• Secure coding best practices
-- Input validation
-- Output encoding
-- Session management
-- Authentication
-- Data protection
-- Parameterized queries
-• Secure software development
-life cycle (SDLC)
-• Threat modeling
-2.0 | Vulnerability Management
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-3.0 Incident Response and
-Management
+- Metasploit
+- Netcat
+- Nmap
+• Attack methods
+- Eavesdropping
+- Data modification
+- Data corruption
+- Relay attacks
+- Spoofing
+- Deauthentication
+- Jamming
+- Capture handshakes
+- On-path
+• Attacks
+- Evil twin
+- Captive portal
+- Bluejacking
+- Bluesnarfing
+- Radio-frequency identification 
+ (RFID) cloning
+- Bluetooth Low Energy (BLE) attack
+- Amplification attacks [Near-
+ field communication (NFC)]
+- WiFi protected setup (WPS) PIN attack
+• Tools
+- Aircrack-ng suite
+- Amplified antenna
+Given a scenario, research attack vectors and perform network attacks.
+Given a scenario, research attack vectors and perform wireless attacks.
 3.1
 3.2
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+3.0 Attacks and Exploits
+Given a scenario, research attack vectors and 
+perform application-based attacks.
+Given a scenario, research attack vectors and 
+perform attacks on cloud technologies.
 3.3
-Explain concepts related to attack methodology frameworks.
-• Cyber kill chains
-• Diamond Model of Intrusion
-Analysis
-• MITRE ATT&CK
-• Open Source Security Testing
-Methodology Manual (OSS TMM)
-• OWASP Testing Guide
-Given a scenario, perform incident response activities.
-• Detection and analysis
-- IoC
-- Evidence acquisitions
-o Chain of custody
-o Validating data integrity
-o Preservation
-o Legal hold
-- Data and log analysis
-• Containment, eradication,
-and recovery
-- Scope
-- Impact
-- Isolation
-- Remediation
-- Re-imaging
-- Compensating controls
-Explain the preparation and post-incident activity phases of
-the incident management life cycle.
-• Preparation
-- Incident response plan
+3.4
+• OWASP Top 10
+• Server-side request forgery
+• Business logic flaws
+• Injection attacks
+- Structured Query Language 
+ (SQL) injection
+ - Blind SQL
+ - Boolean SQL
+ - Stacked queries
+- Command injection
+- Cross-site scripting
+ - Persistent
+ - Reflected
+- Lightweight Directory Access 
+ Protocol (LDAP) injection
+• Application vulnerabilities
+- Race conditions
+- Lack of error handling
+- Lack of code signing
+- Insecure data transmission
+- Session attacks
+ - Session hijacking
+ - Cross-site request forgery (CSRF)
+ - Privilege escalation
+ - Session replay
+ - Session fixation
+• API attacks
+- Restful
+- Extensible Markup Language-
+ Remote Procedure Call (XML-RPC)
+- Soap
+• Directory traversal
+• Tools
+- Web proxies 
+ - OWASP Zed Attack Proxy (ZAP)
+ - Burp Suite community edition
+- SQLmap
+- DirBuster
+• Resources
+- Word lists
+• Attacks
+- Credential harvesting
+- Privilege escalation
+- Account takeover
+- Metadata service attack
+- Misconfigured cloud assets
+ - Identity and access 
+ management (IAM)
+ - Federation misconfigurations
+ - Object storage
+ - Containerization technologies
+- Resource exhaustion
+- Cloud malware injection attacks
+- Denial-of-service attacks
+- Side-channel attacks
+- Direct-to-origin attacks
+• Tools
+- Software development kit (SDK)
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+Explain common attacks and vulnerabilities 
+against specialized systems.
+Given a scenario, perform a social engineering or physical attack.
+3.5
+3.6
+• Mobile
+- Attacks
+ - Reverse engineering
+ - Sandbox analysis
+ - Spamming
+- Vulnerabilities
+ - Insecure storage
+ - Passcode vulnerabilities
+ - Certificate pinning
+ - Using known 
+ vulnerable components 
+ (i) Dependency vulnerabilities
+ (ii) Patching fragmentation
+ - Execution of activities using root
+ - Over-reach of permissions
+ - Biometrics integrations
+ - Business logic vulnerabilities
 - Tools
-- Playbooks
-- Tabletop
-- Training
-- Business continuity (BC)/
-disaster recovery (DR)
-• Post-incident activity
-- Forensic analysis
-- Root cause analysis
-- Lessons learned
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
+ - Burp Suite
+ - Drozer
+ - Needle
+ - Mobile Security Framework (MobSF)
+ - Postman
+ - Ettercap
+ - Frida 
+ - Objection
+ - Android SDK tools
+ - Androzer
+ - ApkX
+ - APK Studio
+• Internet of Things (IoT) devices
+- BLE attacks
+- Special considerations
+ - Fragile environment
+ - Availability concerns
+ - Data corruption
+ - Data exfiltration
+- Vulnerabilities
+ - Insecure defaults
+ - Cleartext communication
+ - Hard-coded configurations
+ - Outdated firmware/hardware
+ - Data leakage
+ - Use of insecure or 
+ outdated components
+• Data storage system vulnerabilities
+- Misconfigurations—on-premises 
+ and cloud-based
+ - Default/blank 
+ username/password
+ - Network exposure
+- Lack of user input sanitization
+- Underlying software vulnerabilities
+- Error messages and debug handling
+- Injection vulnerabilities
+ - Single quote method
+• Management interface vulnerabilities
+- Intelligent platform 
+ management interface (IPMI)
+• Vulnerabilities related to supervisory 
+ control and data acquisition (SCADA)/
+ Industrial Internet of Things (IIoT)/
+ industrial control system (ICS)
+• Vulnerabilities related to 
+ virtual environments
+- Virtual machine (VM) escape
+- Hypervisor vulnerabilities
+- VM repository vulnerabilities
+• Vulnerabilities related to 
+ containerized workloads
+• Pretext for an approach
+• Social engineering attacks 
+- Email phishing
+ - Whaling
+ - Spear phishing
+- Vishing
+- Short message service (SMS) phishing
+- Universal Serial Bus (USB) drop key
+- Watering hole attack
+• Physical attacks
+- Tailgating
+- Dumpster diving
+- Shoulder surfing
+- Badge cloning
+• Impersonation
+• Tools
+- Browser exploitation 
+ framework (BeEF)
+- Social engineering toolkit
+- Call spoofing tools
+• Methods of influence
+- Authority
+- Scarcity
+- Social proof
+- Urgency
+- Likeness
+- Fear
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+3.0 Attacks and Exploits
+Given a scenario, perform post-exploitation techniques. 3.7
+• Post-exploitation tools
+- Empire
+- Mimikatz
+- BloodHound
+• Lateral movement
+- Pass the hash
+• Network segmentation testing
+• Privilege escalation
+- Horizontal
+- Vertical
+• Upgrading a restrictive shell
+• Creating a foothold/persistence
+- Trojan
+- Backdoor
+ - Bind shell
+ - Reverse shell
+- Daemons
+- Scheduled tasks
+• Detection avoidance
+- Living-off-the-land 
+ techniques/fileless malware
+ - PsExec
+ - Windows Management 
+ Instrumentation (WMI)
+ - PowerShell (PS) remoting/Windows 
+ Remote Management (WinRM)
+- Data exfiltration
+- Covering your tracks
+- Steganography
+- Establishing a covert channel
+• Enumeration
+- Users
+- Groups
+- Forests
+- Sensitive data
+- Unencrypted files
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+3.0 Attacks and Exploits
 4.0 Reporting and Communication
+• Report audience
+- C-suite
+- Third-party stakeholders
+- Technical staff
+- Developers
+• Report contents (** not 
+ in a particular order)
+- Executive summary
+- Scope details
+- Methodology
+ - Attack narrative
+- Findings
+ - Risk rating (reference framework)
+ - Risk prioritization
+ - Business impact analysis
+- Metrics and measures
+- Remediation
+- Conclusion
+- Appendix
+• Storage time for report
+• Secure distribution
+• Note taking
+- Ongoing documentation during test
+- Screenshots
+• Common themes/root causes
+- Vulnerabilities
+- Observations
+- Lack of best practices
+• Technical controls
+- System hardening
+- Sanitize user input/
+ parameterize queries
+- Implemented multifactor 
+ authentication
+- Encrypt passwords
+- Process-level remediation
+- Patch management
+- Key rotation
+- Certificate management
+- Secrets management solution
+- Network segmentation
+• Administrative controls
+- Role-based access control
+- Secure software 
+ development life cycle
+- Minimum password requirements
+- Policies and procedures
+• Operational controls
+- Job rotation
+- Time-of-day restrictions
+- Mandatory vacations
+- User training
+• Physical controls
+- Access control vestibule
+- Biometric controls
+- Video surveillance
+Compare and contrast important components of written reports.
+Given a scenario, analyze the findings and recommend 
+the appropriate remediation within a report. 
 4.1
 4.2
-Explain the importance of vulnerability management reporting
-and communication.
-• Vulnerability management
-reporting
-- Vulnerabilities
-- Affected hosts
-- Risk score
-- Mitigation
-- Recurrence
-- Prioritization
-• Compliance reports
-• Action plans
-- Configuration management
-- Patching
-- Compensating controls
-- Awareness, education, and
-training
-- Changing business requirements
-• Inhibitors to remediation
-- Memorandum of understanding
-(MOU)
-- Service-level agreement (SLA)
-- Organizational governance
-- Business process interruption
-- Degrading functionality
-- Legacy systems
-- Proprietary systems
-• Metrics and key performance
-indicators (KPIs)
-- Trends
-- Top 10
-- Critical vulnerabilities and
-zero-days
-- SLOs
-• Stakeholder identification
-and communication
-Explain the importance of incident response reporting and
-communication.
-• Stakeholder identification
-and communication
-• Incident declaration and
-escalation
-• Incident response reporting
-- Executive summary
-- Who, what, when, where,
-and why
-- Recommendations
-- Timeline
-- Impact
-- Scope
-- Evidence
-• Communications
-- Legal
-- Public relations
-o Customer communication
-o Media
-- Regulatory reporting
-- Law enforcement
-• Root cause analysis
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+4.0 Reporting and Communication
+Explain the importance of communication 
+during the penetration testing process.
+4.3
+• Communication path
+- Primary contact
+- Technical contact
+- Emergency contact
+• Communication triggers
+- Critical findings
+- Status reports
+- Indicators of prior compromise
+• Reasons for communication
+- Situational awareness
+- De-escalation
+- Deconfliction
+- Identifying false positives
+- Criminal activity
+• Goal reprioritization
+• Presentation of findings
+• Post-engagement cleanup
+- Removing shells
+- Removing tester-created credentials
+- Removing tools
+• Client acceptance
 • Lessons learned
-• Metrics and KPIs
-- Mean time to detect
-- Mean time to respond
-- Mean time to remediate
-- Alert volume
-CompTIA CySA+ CS0-003 Acronym List
-The following is a list of acronyms that appears on the CompTIA CySA+
-CS0-003 exam. Candidates are encouraged to review the complete
-list and attain a working knowledge of all listed acronyms as part of a
-comprehensive exam preparation program.
-Acronym Spelled Out
+• Follow-up actions/retest
+• Attestation of findings
+• Data destruction process
+Explain post-report delivery activities. 4.4
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+5.0 Tools and Code Analysis
+• Logic constructs
+- Loops
+- Conditionals
+- Boolean operator
+- String operator
+- Arithmetic operator
+• Data structures
+- JavaScript Object Notation (JSON)
+- Key value
+- Arrays
+- Dictionaries
+- Comma-separated values (CSV)
+- Lists
+- Trees
+• Libraries
+• Classes
+• Procedures
+• Functions
+• Shells
+- Bash
+- PS
+• Programming languages
+- Python
+- Ruby
+- Perl
+- JavaScript
+• Analyze exploit code to:
+- Download files
+- Launch remote access
+- Enumerate users
+- Enumerate assets
+• Opportunities for automation
+- Automate penetration testing process
+ - Perform port scan and then 
+ automate next 
+ steps based on results
+ - Check configurations 
+ and produce a report
+- Scripting to modify IP addresses 
+ during a test
+- Nmap scripting to enumerate 
+ cyphers and produce reports
+Explain the basic concepts of scripting and software development.
+Given a scenario, analyze a script or code 
+sample for use in a penetration test.
+5.1
+5.2
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+5.0 Tools and Code Analysis
+Explain use cases of the following tools during 
+the phases of a penetration test.
+(**The intent of this objective is NOT to test specific vendor feature sets.)
+5.3
+• Scanners
+- Nikto 
+- Open vulnerability assessment 
+ scanner (Open VAS)
+- SQLmap
+- Nessus
+- Open Security Content 
+ Automation Protocol (SCAP)
+- Wapiti
+- WPScan
+- Brakeman
+- Scout Suite
+• Credential testing tools
+- Hashcat
+- Medusa
+- Hydra
+- CeWL
+- John the Ripper
+- Cain
+- Mimikatz
+- Patator
+- DirBuster
+- w3af
+• Debuggers
+- OllyDbg
+- Immunity Debugger
+- GNU Debugger (GDB)
+- WinDbg
+- Interactive Disassembler (IDA)
+- Covenant
+- SearchSploit
+• OSINT
+- WHOIS
+- Nslookup
+- Fingerprinting Organization 
+ with Collected Archives (FOCA)
+- theHarvester
+- Shodan
+- Maltego
+- Recon-ng
+- Censys
+• Wireless
+- Aircrack-ng suite
+- Kismet
+- Wifite
+- Rogue access point
+- EAPHammer
+- mdk4
+- Spooftooph
+- Reaver
+- Wireless Geographic 
+ Logging Engine (WiGLE)
+- Fern
+• Web application tools
+- OWASP ZAP
+- Burp Suite
+- Gobuster
+• Social engineering tools
+- Social Engineering Toolkit (SET)
+- BeEF
+• Remote access tools
+- Secure Shell (SSH)
+- Ncat
+- Netcat
+- ProxyChains
+• Networking tools
+- Wireshark
+- Hping
+• Misc.
+- SearchSploit
+- PowerSploit
+- Responder
+- Impacket tools
+- Empire
+- Metasploit
+- mitm6
+- CrackMapExec
+- TruffleHog
+- Censys
+• Steganography tools
+- Open steg
+- Steghide
+- Snow
+- Coagula
+- Sonic Visualiser
+- TinEye
+- Metagoofil
+- Online SSL checkers
+• Cloud tools
+- Scout Suite
+- CloudBrute
+- Pacu
+- Cloud Custodian
+CompTIA PenTest+ Certification Exam Objectives 4.0 (Exam Number: PT0-002)
+ACRONYM SPELLED OUT
+AAA Authentication, Authorization and Accounting
 ACL Access Control List
+AES Advanced Encryption Standard
+AP Access Point
 API Application Programming Interface
 APT Advanced Persistent Threat
 ARP Address Resolution Protocol
-AV Antivirus
-BC Business Continuity
-BCP Business Continuity Plan
-BGP Border Gateway Protocol
-BIA Business Impact Analysis
-C2 Command and Control
+AS2 Applicability Statement 2
+BeEF Browser Exploitation Framework
+BLE Bluetooth Low Energy
+BSSID Basic Service Set Identifiers
 CA Certificate Authority
-CASB Cloud Access Security Broker
-CDN Content Delivery Network
-CERT Computer Emergency Response Team
-CHD Cardholder Data
-CI/CD Continuous Integration and Continuous
-Delivery
-CIS Center for Internet Security
-COBIT Control Objectives for Information and
-Related Technologies
-CSIRT Cybersecurity Incident Response Team
-CSRF Cross-site Request Forgery
+CAPEC Common Attack Pattern 
+Enumeration and Classification
+CLI Command-Line Interface
+CSRF Cross-Site Request Forgery
+CSV Comma-Separated Values
 CVE Common Vulnerabilities and Exposures
-CVSS Common Vulnerability Scoring System
-DDoS Distributed Denial of Service
-DoS Denial of Service
-DKIM Domain Keys Identified Mail
+CVSS Common Vulnerability Scoring Systems
+CWE Common Weakness Enumeration
+DB Database
+DDoS Distributed Denial-of-Service
+DHCP Dynamic Host Configuration Protocol
+DLL Dynamic Link Library
 DLP Data Loss Prevention
-DMARC Domain-based Message Authentication,
-Reporting, and Conformance
-DNS Domain Name Service
-DR Disaster Recovery
-EDR Endpoint Detection and Response
-FIM File Integrity Monitoring
+DNS Domain Name System
+DNSSEC Domain Name System Security Extensions
+EAP Extensible Authentication Protocol
+FOCA Fingerprinting Organization with 
+Collected Archives
 FTP File Transfer Protocol
+FTPS File Transfer Protocol Secure
 GDB GNU Debugger
-GPO Group Policy Objects
-Acronym Spelled Out
-HIDS Host-based Intrusion Detection System
-HIPS Host-based Intrusion Prevention System
+GDPR General Data Protection Regulation
+GPU Graphics Processing Unit
 HTTP Hypertext Transfer Protocol
 HTTPS Hypertext Transfer Protocol Secure
+ACRONYM SPELLED OUT
 IaaS Infrastructure as a Service
+IAM Identity and Access Management
 ICMP Internet Control Message Protocol
-ICS Industrial Control Systems
+ICS Industrial Control System
+IDA Interactive Disassembler
 IDS Intrusion Detection System
-IoC Indicators of Compromise
+IIoT Industrial Internet of Things
+IMEIs International Mobile Equipment Identity
+IoT Internet of Things
 IP Internet Protocol
+IPMI Intelligent Platform Management Interface
 IPS Intrusion Prevention System
-IR Incident Response
-ISO International Organization for
-Standardization
-IT Information Technology
-ITIL Information Technology Infrastructure
-Library
+ISO International Organization for Standardization
+ISP Internet Service Provider
+ISSAF Information Systems Security 
+Assessment Framework
 JSON JavaScript Object Notation
-KPI Key Performance Indicator
 LAN Local Area Network
-LDAPS Lightweight Directory Access Protocol
-LFI Local File Inclusion
-LOI Letter of Intent
+LDAP Lightweight Directory Access Protocol
+LLMNR Link-Local Multicast Name Resolution
+LSASS Local Security Authority Subsystem Service
 MAC Media Access Control
-MFA Multifactor Authentication
+MDM Mobile Device Management
+MobSF Mobile Security Framework
 MOU Memorandum of Understanding
-MSF Metasploit Framework
-MSP Managed Service Provider
-MSSP Managed Security Service Provider
-MTTD Mean Time to Detect
-MTTR Mean Time to Repair
+MSA Master Service Agreement
+MX Mail Exchange
 NAC Network Access Control
+NBT-NS NetBIOS Name Service
 NDA Non-disclosure Agreement
-NGFW Next-generation Firewall
-NIDS Network-based Intrusion Detection System
+NFC Near-Field Communication
+NIST National Institute of Standards and Technology
+NIST SP National Institute of Standards 
+and Technology Special Publication
+NS Name Server
+NSE Nmap Scripting Engine
+NTLM New Technology LAN Manager
+The following is a list of acronyms that appear on the CompTIA PenTest+ exam. 
+Candidates are encouraged to review the complete list and attain a working 
+knowledge of all listed acronyms as part of a comprehensive exam 
+preparation program.
+PenTest+ (PT0-002) Acronym List
+ACRONYM SPELLED OUT
 NTP Network Time Protocol
-OpenVAS Open Vulnerability Assessment Scanner
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-CompTIA Cybersecurity Analyst (CySA+) CS0-003 Certification Exam: Exam Objectives Version 3.0
-Copyright © 2022 CompTIA, Inc. All rights reserved.
-Acronym Spelled Out
 OS Operating System
-OSSTMM Open Source Security Testing
+OSINT Open-source Intelligence
+OSSTMM Open-source Security Testing 
 Methodology Manual
-OT Operational Technology
 OWASP Open Web Application Security Project
-PAM Privileged Access Management
-PCI DSS Payment Card Industry Data Security
-Standard
-PHP Hypertext Preprocessor
-PID Process Identifier
-PII Personally Identifiable Information
+PBKDF2 Password-Based Key Deviation Function 2
+PCI DSS Payment Card Industry Data Security Standard
+PHP Hypertextm Preprocessor
+PII Personal Identifiable Information
 PKI Public Key Infrastructure
 PLC Programmable Logic Controller
-POC Proof of Concept
-RCE Remote Code Execution
+PS PowerShell
+PSK Pre-Shared Key
+PTES Penetration Testing Execution Standard
+RAT Remote Access Trojan
 RDP Remote Desktop Protocol
-REST Representational State Transfer
-RFI Remote File Inclusion
-RXSS Reflected Cross-site Scripting
-SaaS Software as a Service
-SAML Security Assertion Markup Language
-SASE Secure Access Secure Edge
+RF Radio Frequency
+RFC Request for Comment
+RFID Radio-Frequency Identification
+ROE Rules of Engagement
 SCADA Supervisory Control and Data Acquisition
+SCAP Security Content Automation Protocol
+SDK Software Development Kit
 SDLC Software Development Life Cycle
-SDN Software-defined Networking
-SFTP Secure File Transfer Protocol
+SDR Software-defined Radio
+SET Social Engineering Toolkit
+SGID Set Group ID
 SIEM Security Information and Event Management
+SIP Session Initiation Protocol
 SLA Service-level Agreement
-SLO Service-level Objective
-SOAR Security Orchestration, Automation, and
-Response
-Acronym Spelled Out
 SMB Server Message Block
+S/MIME Secure/Multipurpose Internet Mail Extensions
+SMS Short Message Service
 SMTP Simple Mail Transfer Protocol
 SNMP Simple Network Management Protocol
 SOC Security Operations Center
-SPF Sender Policy Framework
-SQL Structured Query Languge
+SOW Statement of Work
+SQL Structured Query Language
+SSD Solid-State Drive
+SSH Secure Shell
+SSHD Solid-State Hybrid Drive
+SSID Service Set Identifier
 SSL Secure Sockets Layer
-SSO Single Sign-on
-SSRF Server-side Request Forgery
-STIX Structured Threat Information Expression
-SWG Secure Web Gateway
+SSO Single Sign-On
+SUID Set User ID
 TCP Transmission Control Protocol
-TFTP Trivial File Transfer Protocol
+TKIP Temporal Key Integrity Protocol
 TLS Transport Layer Security
-TRACE Trade Reporting and Compliance Engine
-TTP Tactics, Techniques, and Procedures
-UEBA User and Entity Behavior Analytics
-URI Uniform Resource Identifier
+TTL Time to Live
+TTPs Tactics, Techniques and Procedures
+UDP User Datagram Protocol
+ACRONYM SPELLED OUT
 URL Uniform Resource Locator
+URI Uniform Resource Identifier
 USB Universal Serial Bus
-VLAN Virtual LAN
+UTF Unicode Transformation Format
+VAS Vulnerability Assessment Scanner
+VLAN Virtual Local Area Network
 VM Virtual Machine
+VoIP Voice over Internet Protocol
 VPN Virtual Private Network
+VPS Virtual Private Server
 WAF Web Application Firewall
-WAN Wide Area Network
-XDR Extended Detection Response
-XML Extensible Markup Language
-XSS Cross-site Scripting
-XXE XML External Entity
+WEP Wired Equivalent Privacy
+WiGLE Wireless Geographic Logging Engine
+WinRM Windows Remote Management
+WMI Windows Management Instrumentation
+WPA Wi-Fi Protected Access
+WPS Wi-Fi Protected Setup
+XML-RPC Extensible Markup Language-Remote 
+Procedure Call
+XSS Cross-Site Scripting
 ZAP Zed Attack Proxy
-ZTNA Zero Trust Network Access
-© 2022 CompTIA, Inc., used under license by CompTIA, Inc. All rights reserved. All certification programs and education related to such
-programs are operated exclusively by CompTIA, Inc. CompTIA is a registered trademark of CompTIA, Inc. in the U.S. and internationally.
-Other brands and company names mentioned herein may be trademarks or service marks of CompTIA, Inc. or of their respective owners.
-Reproduction or dissemination prohibited without the written consent of CompTIA, Inc. Printed in the U.S. 09804-Jul2022
-CompTIA CySA+ CS0-003 Hardware and
-Software List
-CompTIA has included this sample list of hardware and software to assist
-candidates as they prepare for the CySA+ CS0-003 certification exam.
-This list may also be helpful for training companies that wish to create a
-lab component for their training offering. The bulleted lists below each
-topic are sample lists and are not exhaustive.
-Equipment
-• Workstations (or laptop) with ability to run VM
-• Firewall
-• IDS/IPS
+© 2020 CompTIA, Inc., used under license by CompTIA, Inc. All rights reserved. All certification programs and education related to such programs are operated 
+exclusively by CompTIA, Inc. CompTIA is a registered trademark of CompTIA, Inc. in the U.S. and internationally. Other brands and company names mentioned 
+herein may be trademarks or service marks of CompTIA, Inc. or of their respective owners. Reproduction or dissemination prohibited without the written consent 
+of CompTIA, Inc. Printed in the U.S. 08301-Nov2020
+EQUIPMENT
+• Laptops
+• Wireless access points
 • Servers
-Software
-• Windows operating systems
-- Commando VM
-• Linux operating systems
-- Kali
-• Open-source UTM appliance
-• Metasploitable
-• SIEM
-- Greylog
-- ELK
-- Splunk
-• TCPDump
-• Wireshark
-• Vulnerability scanner (i.e., OpenVAS)
-• Nessus
-• Access to cloud instances
-- Azure
-- AWS
-- GCP
+• Graphics processing units (GPUs)
+• Switches
+• Cabling
+• Monitors
+• Firewalls
+• HID/door access controls
+• Wireless adapters capable 
+ of packet injection
+• Directional antenna
+• Mobile device
+• IoT equipment (cameras, 
+ Raspberry Pi, smart TV, etc.)
+• Bluetooth adapter
+• Access to cloud environment
+ - Command-line interface (CLI) access
+ - Management console access
+ - Instances of cloud services
+• Multifunction printers (wired/
+ wireless enabled)
+• Domain joined printer
+• RFID readers
+• Biometric device
+• Programmable logic controller
+ - Software-defined radio (SDR) kit
+• USB flash drives
+ - Weaponized USB drive
+SPARE HARDWARE
+• Cables
+• Keyboards
+• Mouse
+• Power supplies
+• Dongles/adapters
+SPARE PARTS
+• HDMI cables
+• Spare hard drives
+• Spare monitors
+TOOLS
+• Lock pick kit
+• Badge cloner
+• Fingerprint lifter
+• Nail polish (to mask fingerprints)
+SOFTWARE
+• OS licensing
+• Open-source OS
+• Penetration testing frameworks
+• VM software
+• Scanning tools
+• Credential testing tools
+ - Spraying tools
+ - Password crackers
+• Debuggers
+• Fuzzing tools
+• Software assurance tools
+• Wireless testing tools
+• Web proxying tools
+• Social engineering tools
+• Remote access tools
+• Network tools
+• Mobility testing tools
+• Security information and event 
+ management (SIEM)/intrusion 
+ detection system (IDS)/intrusion 
+ prevention system (IPS)
+• Command and control tools
+• Detection and avoidance tools
+CompTIA has included this sample list of hardware and software to assist 
+candidates as they prepare for the PenTest+ exam. This list may also be helpful for 
+training companies that wish to create a lab component to their training offering. 
+The bulleted lists below each topic are sample lists and are not exhaustive.
+PenTest+ Proposed Hardware and Software List
+
+
 
 When generating your 1,000 questions:
 
