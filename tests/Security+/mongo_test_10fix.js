@@ -135,6 +135,36 @@ db.tests.insertOne({
         "explanation": "Cryptographic agility is about *flexibility and adaptability* in the face of evolving cryptographic threats and advancements. As new vulnerabilities are discovered in existing algorithms (or as computing power increases, making brute-force attacks more feasible), organizations need to be able to transition to stronger algorithms or key lengths *without* major system overhauls. This is particularly relevant with the potential threat of quantum computing to current cryptographic methods.",
         "examTip": "Cryptographic agility is crucial for maintaining long-term security in a constantly changing threat landscape. Systems should be designed to support algorithm and key length upgrades."
      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
      {
       "id": 11,
       "question": "A web application uses cookies to manage user sessions.  However, the cookies are not marked with the 'Secure' flag and are transmitted over both HTTP and HTTPS connections. What is the PRIMARY security risk, and how should it be mitigated?",
@@ -265,6 +295,43 @@ db.tests.insertOne({
          "explanation": "BEC attacks are highly targeted and often very sophisticated. They rely on *social engineering and impersonation*, often targeting employees with access to company finances or sensitive data.  *MFA* can prevent the initial account compromise. *Email security gateways* can filter some phishing attempts. *Employee training* is crucial for recognizing suspicious requests. *Strict financial controls* (e.g., dual authorization for large transfers, verifying payment details out-of-band) can prevent fraudulent transactions. *DMARC/DKIM/SPF* help prevent email spoofing. It's a *multi-faceted* defense.",
         "examTip": "BEC attacks can be very costly and damaging, requiring a combination of technical controls, policies, and employee awareness training."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
        "id": 21,
         "question": "Which of the following is the MOST accurate description of 'data minimization' in the context of data privacy?",
@@ -395,6 +462,40 @@ db.tests.insertOne({
          "explanation": "A CRL is a critical mechanism for managing trust in digital certificates. If a certificate's private key is compromised, or if the certificate was issued improperly, the CA needs a way to *invalidate* it *before* it expires naturally. The CRL provides this mechanism. Browsers and other software check the CRL (or use the Online Certificate Status Protocol - OCSP) to verify that a certificate is still valid and hasn't been revoked.",
          "examTip": "Always check the CRL or use OCSP to verify the validity of a digital certificate before trusting it."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
         "id": 31,
          "question":"What is 'security through obscurity' and why is it generally considered a WEAK security practice?",
@@ -525,6 +626,39 @@ db.tests.insertOne({
         "explanation": "HSMs are *specialized hardware* devices designed for secure cryptographic operations. They provide a *higher level of security* than software-based key management because they are *tamper-resistant* and designed to protect keys even if the host system is compromised. They are used for key generation, storage, and cryptographic processing (encryption, decryption, digital signing). They are *not* password managers, firewalls, or general encryption tools.",
         "examTip": "HSMs are commonly used in environments where the security of cryptographic keys is paramount, such as for PKI, database encryption, and financial transactions."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
        "id": 41,
         "question":"A web application allows users to upload files. Without proper security measures, what is the MOST significant risk?",
@@ -655,6 +789,42 @@ db.tests.insertOne({
           "explanation": "Defense in depth is a *fundamental security principle*. It recognizes that *no single security control is perfect* or foolproof. By implementing *multiple, independent* controls, you create a more *resilient and robust* security posture. If one layer is breached, others are in place to prevent or limit the damage. It's like having multiple locks on a door, or a castle with multiple walls and defenses.",
          "examTip": "Think of defense in depth like an onion – multiple layers of security protecting the core. Or like a medieval castle with multiple walls, moats, and defensive positions."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
         "id": 51,
         "question": "A company experiences a security breach where customer data is stolen. What is the MOST important immediate action to take after containing the breach?",
@@ -785,6 +955,38 @@ db.tests.insertOne({
          "explanation": "DNS requests to *known malicious domains* are a strong indicator of malware infection. The malware is likely attempting to communicate with a *command-and-control (C2) server* to receive instructions or exfiltrate data. The *first* step is *containment*: isolate the workstation from the network to prevent further communication and potential spread.  Then, forensic analysis (examining logs, memory, running processes, etc.) should begin to determine the nature of the malware and the extent of the compromise. Routine updates would *not* typically involve known malicious domains.",
         "examTip": "DNS traffic analysis can be a valuable tool for detecting malware infections and identifying compromised systems."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
      {
          "id": 61,
          "question": "What is a 'digital signature' and how does it provide BOTH authentication and integrity for digital documents?",
@@ -915,6 +1117,40 @@ db.tests.insertOne({
          "explanation": "Threat modeling is a *proactive* security practice. It's about thinking like an attacker to identify potential weaknesses and vulnerabilities *before* they are coded into the application. By performing threat modeling *early* in the SDLC (during design and requirements gathering), you can address security issues *before* they become costly and difficult to fix. It's a continuous process, revisited as the application evolves.",
           "examTip": "'Shift security left' – integrate threat modeling and other security activities into the earliest stages of the SDLC."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
         "id": 71,
         "question": "What is 'vishing' and why is it a particularly effective form of social engineering?",
@@ -1045,6 +1281,40 @@ db.tests.insertOne({
         "explanation": "A *DRP* is specifically focused on *IT recovery*. It outlines the steps to restore IT systems, applications, and data after a major disruption (natural disaster, cyberattack, hardware failure, etc.). A *BCP* is a *broader* plan that addresses how to maintain *all essential business functions* (not just IT) during and after a disruption.  The DRP is typically a *part of* the overall BCP. The BCP covers things like communication plans, alternative work locations, manual workarounds, and other strategies to keep the business running.",
          "examTip": "A DRP is focused on IT recovery; a BCP is focused on overall business resilience."
       },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
      {
        "id": 81,
       "question": "A user receives an email that appears to be from their bank, warning them about suspicious activity on their account and urging them to click a link to verify their details. The email contains several grammatical errors, a generic greeting ("Dear Customer"), and the link points to a URL that is slightly different from the bank's official website. What type of attack is this MOST likely, and what is the BEST course of action for the user?",
@@ -1175,6 +1445,33 @@ db.tests.insertOne({
          "explanation": "BEC attacks are highly targeted and often very sophisticated. They rely on *social engineering and impersonation*, often targeting employees with access to company finances or sensitive data. Because BEC attacks often use *legitimate* email accounts (that have been compromised) or *very convincing spoofed emails*, they can *bypass traditional email security filters* that rely on detecting malicious attachments, links, or known spam patterns.  The email content itself might be text-only and appear perfectly legitimate, making detection difficult.",
          "examTip": "BEC attacks require a multi-layered defense, including strong email security, multi-factor authentication, employee training, and robust financial controls and verification procedures."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
         "id": 91,
         "question": "A software development team is building a new web application. What is the MOST effective approach to ensure the application's security?",
