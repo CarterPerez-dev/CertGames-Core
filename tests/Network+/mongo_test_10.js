@@ -1008,333 +1008,335 @@ db.tests.insertOne({
 
 
 
+   {
+  "questions": [
     {
-       "id": 76,
-        "question": "A network administrator is troubleshooting a slow network. Using a protocol analyzer, they see many TCP packets with the PSH flag set, even for relatively small data transfers. What does the PSH flag indicate, and is frequent use of the PSH flag generally considered normal or a potential sign of a problem?",
-      "options":[
+      "id": 76,
+      "question": "A network administrator is troubleshooting a slow network. Using a protocol analyzer, they see many TCP packets with the PSH flag set, even for relatively small data transfers. What does the PSH flag indicate, and is frequent use of the PSH flag generally considered normal or a potential sign of a problem?",
+      "options": [
         "The PSH flag indicates that the packet should be prioritized for faster delivery; frequent use is normal.",
-         "The PSH flag indicates that the data in the TCP segment should be delivered to the receiving application immediately, without waiting to buffer more data; while occasional use is normal, *frequent* use of the PSH flag, especially with small packets, can be inefficient and may indicate an application or network problem.",
-         "The PSH flag indicates that the packet is part of a fragmented IP datagram.",
+        "The PSH flag indicates that the data in the TCP segment should be delivered to the receiving application immediately, without waiting to buffer more data; while occasional use is normal, *frequent* use of the PSH flag, especially with small packets, can be inefficient and may indicate an application or network problem.",
+        "The PSH flag indicates that the packet is part of a fragmented IP datagram.",
         "The PSH flag indicates that the packet is an acknowledgment (ACK)."
       ],
-        "correctAnswerIndex": 1,
-        "explanation": "The TCP *PSH (Push)* flag is a hint to the receiving TCP stack. It tells the receiver to *immediately deliver* the data in the current segment to the *receiving application*, without waiting to buffer more data. *Occasional* use of the PSH flag is normal, especially for interactive applications. *However*, *frequent* use of the PSH flag, particularly with *small* data transfers, can be *inefficient*. It can indicate that: *Application behavior:* The application might be sending data in very small chunks and requesting immediate delivery, even when it's not strictly necessary. *Network problems:* The application might be trying to 'force' data through a congested or unreliable network by setting the PSH flag frequently. This *can actually worsen congestion*. While not *always* a problem, *excessive* PSH flags warrant investigation, especially when combined with other symptoms like slow performance or retransmissions. It's *not* about prioritization in the *network* (QoS handles that), fragmentation, or acknowledgments (ACK flag).",
-        "examTip": "While the PSH flag itself isn't inherently bad, frequent use, especially with small packets, can indicate application behavior or underlying network issues and may reduce efficiency."
-      },
-       {
-         "id": 77,
-        "question": "You are configuring a Cisco router to participate in OSPF. The router has multiple interfaces, and you only want *some* of them to participate in OSPF. You also want to specify different OSPF *areas* for different interfaces. Which command, used within the OSPF process configuration (`router ospf [process-id]`), is used to define which interfaces participate in OSPF and which area they belong to, and what is the *critical* difference between how this command uses IP address information compared to commands like `ip address` on an interface?",
-        "options":[
-            "The `passive-interface` command; it uses IP addresses and subnet masks.",
-           "The `network` command; it uses IP addresses and *wildcard masks*, not subnet masks.",
-            "The `area` command; it uses IP addresses and subnet masks.",
-            "The `redistribute` command; it uses IP addresses and subnet masks."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "The `network` command, used *within* the OSPF process configuration (`router ospf [process-id]`), is how you tell OSPF which interfaces should participate in the routing protocol and which OSPF *area* those interfaces belong to. The *critical difference* is that the `network` command uses *wildcard masks*, *not* subnet masks. The syntax is: `network [network-address] [wildcard-mask] area [area-id]` *`[network-address]`*:  An IP address that falls *within* the network you want to include. *`[wildcard-mask]`*:  The *inverse* of the subnet mask.  A '0' bit in the wildcard mask means "match this bit exactly".  A '1' bit means "don't care about this bit". *`[area-id]`*: The OSPF area to which the interfaces matching this network statement will belong. For example: `network 192.168.1.0 0.0.0.255 area 0`  This includes any interface with an IP address in the 192.168.1.0/24 network in area 0. `passive-interface` prevents OSPF from *sending* hellos, but doesn't define participation. `area` defines area parameters, not participating networks. `redistribute` is for bringing routes *from other protocols* into OSPF.",
-        "examTip": "The `network` command in OSPF configuration uses *wildcard masks*, not subnet masks, to specify which interfaces participate in OSPF and their area assignments."
-      },
-     {
+      "correctAnswerIndex": 1,
+      "explanation": "The TCP *PSH (Push)* flag is a hint to the receiving TCP stack. It tells the receiver to *immediately deliver* the data in the current segment to the *receiving application*, without waiting to buffer more data. *Occasional* use of the PSH flag is normal, especially for interactive applications. *However*, *frequent* use of the PSH flag, particularly with *small* data transfers, can be *inefficient*. It can indicate that: *Application behavior:* The application might be sending data in very small chunks and requesting immediate delivery, even when it's not strictly necessary. *Network problems:* The application might be trying to 'force' data through a congested or unreliable network by setting the PSH flag frequently. This *can actually worsen congestion*. While not *always* a problem, *excessive* PSH flags warrant investigation, especially when combined with other symptoms like slow performance or retransmissions. It's *not* about prioritization in the *network* (QoS handles that), fragmentation, or acknowledgments (ACK flag).",
+      "examTip": "While the PSH flag itself isn't inherently bad, frequent use, especially with small packets, can indicate application behavior or underlying network issues and may reduce efficiency."
+    },
+    {
+      "id": 77,
+      "question": "You are configuring a Cisco router to participate in OSPF. The router has multiple interfaces, and you only want *some* of them to participate in OSPF. You also want to specify different OSPF *areas* for different interfaces. Which command, used within the OSPF process configuration (`router ospf [process-id]`), is used to define which interfaces participate in OSPF and which area they belong to, and what is the *critical* difference between how this command uses IP address information compared to commands like `ip address` on an interface?",
+      "options":[
+        "The `passive-interface` command; it uses IP addresses and subnet masks.",
+        "The `network` command; it uses IP addresses and *wildcard masks*, not subnet masks.",
+        "The `area` command; it uses IP addresses and subnet masks.",
+        "The `redistribute` command; it uses IP addresses and subnet masks."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The `network` command, used *within* the OSPF process configuration (`router ospf [process-id]`), is how you tell OSPF which interfaces should participate in the routing protocol and which OSPF *area* those interfaces belong to. The *critical difference* is that the `network` command uses *wildcard masks*, *not* subnet masks. The syntax is: `network [network-address] [wildcard-mask] area [area-id]` *`[network-address]`*:  An IP address that falls *within* the network you want to include. *`[wildcard-mask]`*:  The *inverse* of the subnet mask.  A '0' bit in the wildcard mask means \"match this bit exactly\".  A '1' bit means \"don't care about this bit\". *`[area-id]`*: The OSPF area to which the interfaces matching this network statement will belong. For example: `network 192.168.1.0 0.0.0.255 area 0`  This includes any interface with an IP address in the 192.168.1.0/24 network in area 0. `passive-interface` prevents OSPF from *sending* hellos, but doesn't define participation. `area` defines area parameters, not participating networks. `redistribute` is for bringing routes *from other protocols* into OSPF.",
+      "examTip": "The `network` command in OSPF configuration uses *wildcard masks*, not subnet masks, to specify which interfaces participate in OSPF and their area assignments."
+    },
+    {
       "id": 78,
       "question": "A network administrator wants to configure a Cisco switch to prevent rogue DHCP servers from operating on the network. They enable DHCP snooping globally. What additional configuration steps are required on the switch to make DHCP snooping effective, and what is the specific purpose of each step?",
-     "options":[
-      "No additional configuration is needed; DHCP snooping is fully automatic.",
-       "Configure all switch ports as access ports. This automatically enables DHCP snooping on those ports.",
-       "Configure the switch ports connected to legitimate DHCP servers as *trusted* ports using the `ip dhcp snooping trust` command in interface configuration mode. All other ports are *untrusted* by default.  Optionally, enable DHCP snooping on specific VLANs using `ip dhcp snooping vlan [vlan-list]`.",
+      "options":[
+        "No additional configuration is needed; DHCP snooping is fully automatic.",
+        "Configure all switch ports as access ports. This automatically enables DHCP snooping on those ports.",
+        "Configure the switch ports connected to legitimate DHCP servers as *trusted* ports using the `ip dhcp snooping trust` command in interface configuration mode. All other ports are *untrusted* by default.  Optionally, enable DHCP snooping on specific VLANs using `ip dhcp snooping vlan [vlan-list]`.",
         "Configure all switch ports as trunk ports."
-     ],
-     "correctAnswerIndex": 2,
-      "explanation": "DHCP snooping works by classifying switch ports as *trusted* or *untrusted*: *Trusted ports:* Ports connected to *legitimate* DHCP servers. The switch allows *all* DHCP traffic (both client requests and server responses) on these ports. *Untrusted ports:* Ports connected to client devices (or potentially to rogue servers). The switch *only* allows DHCP *client* requests (like DHCPDISCOVER, DHCPREQUEST) to be forwarded from these ports. It *drops* any DHCP *server* responses (like DHCPOFFER, DHCPACK, DHCPNAK) received on untrusted ports. After enabling DHCP snooping globally (`ip dhcp snooping`), you *must* configure the ports connected to legitimate DHCP servers as *trusted* using the `ip dhcp snooping trust` command in *interface configuration mode*. By default, *all ports are untrusted* when DHCP snooping is enabled. Optionally you can also enable DHCP snooping per VLAN: `ip dhcp snooping vlan [vlan-list]` Configuring ports as access or trunk ports is a separate VLAN configuration step, and *doesn't* directly enable or configure DHCP snooping. DHCP snooping is *not* fully automatic.",
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "DHCP snooping works by classifying switch ports as *trusted* or *untrusted*: *Trusted ports:* Ports connected to *legitimate* DHCP servers. The switch allows *all* DHCP traffic (both client requests and server responses) on these ports. *Untrusted ports:* Ports connected to client devices (or potentially to rogue servers). The switch *only* allows DHCP *client* requests (like DHCPDISCOVER, DHCPREQUEST) to be forwarded from these ports. It *drops* any DHCP *server* responses (like DHCPOFFER, DHCPACK, DHCPNAK) received on untrusted ports. After enabling DHCP snooping globally (`ip dhcp snooping`), you *must* configure the ports connected to legitimate DHCP servers as *trusted* using the `ip dhcp snooping trust` command in *interface configuration mode*. By default, *all ports are untrusted* when DHCP snooping is enabled. Configuring ports as access or trunk ports is a separate VLAN configuration step, and *doesn't* directly enable or configure DHCP snooping. DHCP snooping is *not* fully automatic.",
       "examTip": "DHCP snooping requires enabling it globally, configuring trusted ports (connected to legitimate DHCP servers), and optionally enabling it per VLAN."
-     },
-    {
-        "id": 79,
-        "question": "You are troubleshooting an IPsec VPN tunnel that is not establishing. You have verified basic IP connectivity between the VPN gateways. Using the `show crypto isakmp sa` command on a Cisco router, you see *no* active ISAKMP SAs.  What does this indicate, and what are some potential causes?",
-        "options":[
-          "The IPsec tunnel (Phase 2) is not establishing, but ISAKMP (Phase 1) is working correctly.",
-         "The ISAKMP (Phase 1) negotiation is failing, preventing the establishment of the secure channel needed for IPsec (Phase 2). Potential causes include mismatched ISAKMP policies (encryption, hashing, authentication, Diffie-Hellman group, lifetime), incorrect pre-shared keys or certificate configurations, or firewall rules blocking ISAKMP traffic (UDP port 500).",
-           "The routing configuration is incorrect.",
-            "The network cable is faulty."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "IPsec VPN establishment has two phases: *Phase 1 (ISAKMP - Internet Security Association and Key Management Protocol):* Establishes a secure, authenticated *control channel* between the VPN gateways. This channel is used to negotiate the parameters for the actual IPsec tunnel (Phase 2). *Phase 2 (IPsec):*  Establishes the *IPsec SAs (Security Associations)* that protect the data traffic flowing through the tunnel. The `show crypto isakmp sa` command displays the status of ISAKMP SAs. If you see *no active ISAKMP SAs*, it means that *Phase 1 is failing*.  The secure control channel is not being established, so Phase 2 *cannot* proceed. Potential causes of ISAKMP failure include: *Mismatched ISAKMP policies:*  The two gateways must agree on the encryption algorithm, hashing algorithm, authentication method, Diffie-Hellman group, and lifetime. *Incorrect pre-shared keys or certificate configurations:* If using pre-shared keys, they must match on both sides. If using certificates, they must be valid and trusted. *Firewall rules blocking ISAKMP traffic:* ISAKMP uses UDP port 500.  A firewall might be blocking this traffic. Basic IP connectivity is confirmed, so that's not the *primary* issue. Routing is important for traffic *after* the tunnel is established, but not for the tunnel establishment itself.",
-        "examTip": "If `show crypto isakmp sa` shows no active SAs, Phase 1 of the IPsec VPN establishment is failing; check ISAKMP policies, pre-shared keys/certificates, and firewall rules."
     },
     {
-        "id": 80,
-       "question": "A network administrator configures a Cisco router with the following commands: `router eigrp 100` `network 192.168.1.0 0.0.0.255` `passive-interface GigabitEthernet0/0` What is the effect of the `passive-interface GigabitEthernet0/0` command in this EIGRP configuration?",
+      "id": 79,
+      "question": "You are troubleshooting an IPsec VPN tunnel that is not establishing. You have verified basic IP connectivity between the VPN gateways. Using the `show crypto isakmp sa` command on a Cisco router, you see *no* active ISAKMP SAs.  What does this indicate, and what are some potential causes?",
       "options":[
-       "It disables EIGRP routing on the GigabitEthernet0/0 interface.",
-       "It prevents the router from sending EIGRP hello packets *out* the GigabitEthernet0/0 interface, thus preventing it from forming EIGRP neighbor adjacencies with any routers connected to that interface. However, the network connected to GigabitEthernet0/0 will still be advertised to other EIGRP neighbors.",
-      "It prevents the router from receiving EIGRP updates on the GigabitEthernet0/0 interface.",
-       "It configures the GigabitEthernet0/0 interface with a static IP address."
+        "The IPsec tunnel (Phase 2) is not establishing, but ISAKMP (Phase 1) is working correctly.",
+        "The ISAKMP (Phase 1) negotiation is failing, preventing the establishment of the secure channel needed for IPsec (Phase 2). Potential causes include mismatched ISAKMP policies (encryption, hashing, authentication, Diffie-Hellman group, lifetime), incorrect pre-shared keys or certificate configurations, or firewall rules blocking ISAKMP traffic (UDP port 500).",
+        "The routing configuration is incorrect.",
+        "The network cable is faulty."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The `passive-interface` command, when used within a routing protocol configuration (like EIGRP), has a specific effect: *It prevents the router from sending routing protocol updates (hellos, updates) *out* that interface.* This means the router will *not* form neighbor adjacencies with any other routers connected to that interface. *However*, the network connected to the passive interface will *still be advertised* to other EIGRP neighbors (assuming it's included in a `network` statement). It *does not* disable EIGRP *entirely* on the interface; the router will *still receive* updates *on* that interface (if any are sent by other routers). It's *not* about static IP configuration.",
-      "examTip": "The `passive-interface` command in EIGRP (and other routing protocols) prevents the sending of routing updates out an interface, but the connected network is still advertised."
+      "explanation": "IPsec VPN establishment has two phases: *Phase 1 (ISAKMP)*: Establishes a secure channel for negotiating the IPsec SAs. If `show crypto isakmp sa` shows *no* active SAs, it means Phase 1 is failing. Mismatched ISAKMP policies, incorrect PSKs or certs, or blocked UDP 500 can cause it. A missing route might hamper communication, but the question states basic IP connectivity is verified, so the more likely cause is a Phase 1 mismatch or firewall block. A cable issue would break IP connectivity altogether, so that’s not it.",
+      "examTip": "If `show crypto isakmp sa` shows no active SAs, Phase 1 is failing. Check ISAKMP policy parameters, keys, or firewall rules."
     },
     {
-        "id": 81,
-        "question": "You are troubleshooting a network where users report intermittent connectivity to a web server. The web server is hosted behind a load balancer, and the load balancer is configured to distribute traffic across multiple web server instances.  Which of the following troubleshooting steps would be MOST effective in isolating the problem?",
-        "options": [
-            "Check the DNS server configuration.",
-            "Check the DHCP server's lease table.",
-            "Bypass the load balancer and test connectivity to each web server instance *directly* by its IP address. If some servers work and others don't, focus on the non-working servers. Also, check the load balancer's configuration and health checks.",
-            "Reboot the client computers."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "Since the problem is *intermittent*, and a load balancer is involved, the *most likely* cause is an issue with *one or more of the web server instances* behind the load balancer, *or* with the *load balancer itself*. The best approach is to *isolate* the problem: 1. *Bypass the load balancer:* Try to access each web server instance *directly* by its IP address (or a dedicated test URL if available). This will tell you if the problem is with *specific servers* or with the *load balancer*. 2.  *Check the load balancer configuration:* Ensure the load balancer is configured correctly, that all web servers are correctly registered, and that the health checks are working properly.  A misconfigured load balancer could be sending traffic to a non-functional server. DNS and DHCP are unlikely to be the cause if the issue is *intermittent* and affects only *some* users/connections. Rebooting clients is a general troubleshooting step, but less targeted than directly testing the servers and load balancer.",
-        "examTip": "When troubleshooting issues with load-balanced applications, bypass the load balancer to test connectivity to each server instance directly, and check the load balancer's configuration."
-    },
-     {
-       "id": 82,
-        "question": "A network administrator configures a Cisco router with the following access control list (ACL): ``` access-list 101 permit tcp any host 192.168.1.100 eq 80 access-list 101 permit tcp any host 192.168.1.100 eq 443 access-list 101 deny ip any any ``` The administrator then applies this ACL to the router's GigabitEthernet0/0 interface using the command `ip access-group 101 in`. What is the effect of this configuration on traffic *entering* the router through the GigabitEthernet0/0 interface?",
-       "options":[
-         "All traffic is permitted.",
-         "All traffic is denied.",
-         "Only HTTP (port 80) and HTTPS (port 443) traffic destined for the host 192.168.1.100 is permitted; all other traffic is blocked.",
-         "All traffic is permitted except HTTP and HTTPS traffic destined for the host 192.168.1.100."
-       ],
-      "correctAnswerIndex": 2,
-        "explanation": "Let's break down the ACL and its application: *`access-list 101 permit tcp any host 192.168.1.100 eq 80`*: This line *permits* TCP traffic from *any* source (`any`) to the host with IP address 192.168.1.100, *specifically on port 80* (HTTP). *`access-list 101 permit tcp any host 192.168.1.100 eq 443`*: This line *permits* TCP traffic from *any* source (`any`) to the host with IP address 192.168.1.100, *specifically on port 443* (HTTPS). *`access-list 101 deny ip any any`*: This line *denies all other IP traffic* (any protocol, any source, any destination). *`ip access-group 101 in`*: This command *applies* ACL 101 to the *inbound* traffic on the GigabitEthernet0/0 interface. This means the ACL will filter traffic *entering* the router through that interface. *Combined Effect:* The ACL, when applied inbound, will: 1.  Permit HTTP (port 80) and HTTPS (port 443) traffic *to* the host 192.168.1.100 from any source. 2.  Deny *all other traffic* (any other protocol, any other port, or traffic to any other destination). Remember that ACLs are processed *sequentially*, and there is an *implicit deny any any* at the end of every ACL. The explicit `deny ip any any` here makes this clear, but it would have the same effect even if it were omitted (due to the implicit deny).",
-        "examTip": "Cisco ACLs are processed sequentially, with an implicit `deny any any` at the end. The `ip access-group` command applies an ACL to an interface in either the inbound or outbound direction."
-      },
-    {
-     "id": 83,
-     "question": "A network administrator is configuring a site-to-site IPsec VPN between two Cisco routers. They have configured the ISAKMP policy (Phase 1) and the IPsec transform set (Phase 2).  They have also configured the crypto map and applied it to the appropriate interface. However, the VPN tunnel is not establishing.  Which of the following commands would be MOST helpful in verifying that the *interesting traffic* (the traffic that should trigger the VPN tunnel) is being correctly identified and processed by the crypto map?",
-    "options":[
-      "show crypto isakmp sa",
-      "show crypto ipsec sa",
-       "show crypto map",
-       "show interfaces"
-    ],
-    "correctAnswerIndex": 2, //Correct - Shows crypto map details
-    "explanation": "To troubleshoot IPsec VPN tunnel establishment, you need to check each phase: *Phase 1 (ISAKMP):*  `show crypto isakmp sa` (We've covered this in previous questions) *Phase 2 (IPsec):* `show crypto ipsec sa` (Covered previously) *Crypto Map Configuration:* `show crypto map` This command is crucial. It displays the configured crypto maps, including: *The interfaces to which they are applied.* *The peer IP addresses.* *The *access control lists (ACLs)* that define the *interesting traffic*.  This is key! The ACL defines which traffic should be encrypted and sent through the VPN tunnel. *The transform sets used.* *Sequence numbers.* If the *interesting traffic* is *not* being correctly identified by the crypto map (due to a misconfigured ACL), the VPN tunnel *will not establish*.  The ACL might be: *Missing:* The ACL might not be configured at all. *Incorrect:* The ACL might not match the actual traffic you want to send through the tunnel. *Not applied:* The crypto map might not be applied to the correct interface. `show interfaces` shows *general* interface status, but not crypto map specifics.",
-    "examTip": "Use `show crypto map` to verify the configuration of crypto maps, including the ACLs that define the interesting traffic for IPsec VPN tunnels."
-    },
-      {
-        "id": 84,
-        "question": "A network is using EIGRP as its routing protocol. The network administrator wants to summarize multiple contiguous networks into a single route advertisement to reduce the size of the routing tables on neighboring routers. Which command, and in which configuration context, should the administrator use to configure EIGRP route summarization on a Cisco router?",
-        "options":[
-           "Under the `router eigrp [autonomous-system-number]` configuration, use the `summary-address` command.",
-            "Under the interface configuration mode for the interface *sending* the summarized route, use the `ip summary-address eigrp [as-number] [summary-address] [subnet-mask] [administrative-distance]` command.",
-            "Under the `router eigrp [autonomous-system-number]` configuration, use the `auto-summary` command.",
-           "Under the interface configuration mode for the interface *receiving* the summarized route, use the `ip summary-address eigrp [as-number] [summary-address] [subnet-mask]` command."
-
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "EIGRP route summarization is configured on the *outbound interface* that will be *sending* the summarized route. The command and context are: `interface [interface-name]` (Enter interface configuration mode for the relevant interface) `ip summary-address eigrp [as-number] [summary-address] [subnet-mask] [administrative-distance]` *`[as-number]`*: The EIGRP autonomous system number. *`[summary-address]`*: The IP address of the summary route. *`[subnet-mask]`*: The subnet mask of the summary route. *`[administrative-distance]`*: (Optional) An administrative distance to assign to the summary route. If omitted, the default AD of 5 is used for EIGRP summary routes. Option A is incorrect; there's no `summary-address` command directly under `router eigrp`. Option C is incorrect; `auto-summary` is a different feature (automatic summarization at classful network boundaries – generally *not* recommended in modern networks). Option D is incorrect; summarization is configured on the *sending*, not *receiving*, interface.",
-        "examTip": "EIGRP route summarization is configured on the *outbound* interface using the `ip summary-address eigrp` command."
-    },
-      {
-      "id": 85,
-       "question": "A network administrator is troubleshooting a wireless network. Users report intermittent connectivity and slow performance. The administrator suspects RF interference. Besides other Wi-Fi networks, what are some common *non-Wi-Fi* sources of interference that can affect wireless networks operating in the 2.4 GHz band?",
-       "options":[
-          "FM radio broadcasts.",
-          "Microwave ovens, Bluetooth devices, cordless phones (older models), wireless video cameras, poorly shielded electrical equipment, and some industrial equipment.",
-          "Satellite communications.",
-           "Cellular phone networks."
-       ],
-       "correctAnswerIndex": 1,
-       "explanation": "The 2.4 GHz band is an *unlicensed* band, meaning it's used by a wide variety of devices, *not just Wi-Fi*.  Common sources of interference include: *Microwave ovens:* Can cause significant interference when operating. *Bluetooth devices:* Use the 2.4 GHz band for short-range communication. *Cordless phones:* *Older* cordless phones often operate in the 2.4 GHz band (newer ones often use DECT, which operates in a different band). *Wireless video cameras:* Some models use 2.4 GHz for transmission. *Poorly shielded electrical equipment:*  Motors, transformers, and other electrical devices can emit electromagnetic interference (EMI) that affects 2.4 GHz Wi-Fi. *Other Wi-Fi networks:* Operating on overlapping channels. FM radio (*A*) uses much lower frequencies. Satellite communications (*C*) use much higher frequencies. Cellular networks (*D*) use different, licensed frequency bands.",
-       "examTip": "Be aware of common non-Wi-Fi sources of interference in the 2.4 GHz band, such as microwave ovens, Bluetooth devices, and older cordless phones."
-      },
-    {
-     "id": 86,
-    "question": "A user reports that they can access some internal network resources but cannot access the internet.  They are using a Windows computer.  Which of the following commands would be MOST helpful in *quickly* determining if the user's computer has a valid IP address, subnet mask, and *default gateway* configured?",
-     "options":[
-     "ping 8.8.8.8",
-     "tracert 8.8.8.8",
-      "ipconfig /all",
-     "nslookup www.google.com"
-    ],
-      "correctAnswerIndex": 2,
-      "explanation": "`ipconfig /all` displays *detailed* network configuration information for all network adapters on a Windows computer, including: *IP Address* *Subnet Mask* *Default Gateway* *DNS Servers* *MAC Address* *DHCP Status* This is the *single best command* to quickly check the essential IP configuration settings. `ping` tests basic connectivity, but doesn't show the *configured* default gateway. `tracert` shows the route, but not the *configured* default gateway. `nslookup` is for DNS resolution.",
-     "examTip": "`ipconfig /all` is a fundamental troubleshooting command on Windows for verifying network configuration settings."
-    },
-    {
-       "id": 87,
-      "question": "What is 'BGP hijacking', and what is a key characteristic of this type of attack that makes it difficult to prevent with traditional routing security measures?",
-       "options":[
-        "A method for encrypting BGP routing updates to ensure confidentiality.",
-        "An attack where a malicious actor compromises a router (or exploits a misconfiguration) and falsely advertises BGP routes for IP address prefixes that they do not legitimately control, redirecting traffic. It's difficult to prevent because BGP traditionally relies on trust between autonomous systems, and route validation mechanisms are not universally deployed.",
-        "A technique used to dynamically assign IP addresses to BGP routers.",
-        "A way to prioritize certain BGP routes over others based on their origin."
-       ],
+      "id": 80,
+      "question": "A network administrator configures a Cisco router with the following commands: `router eigrp 100` `network 192.168.1.0 0.0.0.255` `passive-interface GigabitEthernet0/0` What is the effect of the `passive-interface GigabitEthernet0/0` command in this EIGRP configuration?",
+      "options":[
+        "It disables EIGRP routing on the GigabitEthernet0/0 interface.",
+        "It prevents the router from sending EIGRP hello packets *out* the GigabitEthernet0/0 interface, thus preventing it from forming EIGRP neighbor adjacencies with any routers connected to that interface. However, the network connected to GigabitEthernet0/0 will still be advertised to other EIGRP neighbors.",
+        "It prevents the router from receiving EIGRP updates on the GigabitEthernet0/0 interface.",
+        "It configures the GigabitEthernet0/0 interface with a static IP address."
+      ],
       "correctAnswerIndex": 1,
-       "explanation": "BGP (Border Gateway Protocol) is the protocol that routes traffic *between* different autonomous systems (ASes) on the internet. BGP hijacking exploits the *trust-based* nature of BGP: *Compromise/Misconfiguration:*  An attacker gains control of a router (through hacking or exploiting a misconfiguration), or there's a misconfiguration within a legitimate AS. *False Route Advertisements:*  The attacker uses the compromised/misconfigured router to advertise BGP routes for IP address prefixes that they *do not own*. *Traffic Redirection:* Other routers on the internet believe these false advertisements and start sending traffic intended for the legitimate owner of the IP addresses to the *attacker's network*. *Difficulty of Prevention:* *Inherent Trust:* BGP traditionally relies on the assumption that ASes will only advertise legitimate routes. *Lack of Universal Validation:* While mechanisms like RPKI (Resource Public Key Infrastructure) and IRR (Internet Routing Registry) filtering exist to validate BGP announcements, they are *not universally deployed or enforced*. It's *not* encryption, DHCP, or route prioritization *within* an AS.",
-      "examTip": "BGP hijacking exploits the trust-based nature of BGP and the lack of universal route validation to redirect internet traffic."
-    },
-       {
-       "id": 88,
-        "question": "You are troubleshooting a network where devices are experiencing intermittent connectivity. You suspect a problem with duplicate IP addresses. Which of the following techniques would be the MOST reliable way to identify devices with duplicate IP addresses on a network segment?",
-        "options": [
-            "Ping each IP address on the network sequentially.",
-            "Use a protocol analyzer (like Wireshark) to capture and analyze ARP traffic, looking for multiple MAC addresses responding to ARP requests for the same IP address.",
-            "Check the DHCP server's lease table.",
-            "Reboot all network devices."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Duplicate IP addresses cause *ARP conflicts*.  When a device needs to communicate with another device on the same subnet, it sends an ARP request to find the MAC address associated with the target IP address.  If *multiple devices* have the *same IP address*, they will *all respond* to the ARP request with their *different MAC addresses*. A protocol analyzer (like Wireshark) capturing traffic on the affected network segment will reveal this: You'll see *multiple ARP replies* for the *same IP address*, but with *different source MAC addresses*. This is the *definitive* sign of a duplicate IP. Pinging is *unreliable* for detecting duplicates; you might only reach *one* of the conflicting devices. Checking the DHCP server might show *reservations* or *leases*, but it won't necessarily show you if a device has a *statically configured* duplicate IP. Rebooting might *temporarily* resolve the conflict, but it won't *identify* the devices involved.",
-        "examTip": "Use a protocol analyzer to capture ARP traffic and look for multiple MAC addresses responding to ARP requests for the same IP address to identify duplicate IP addresses."
+      "explanation": "In EIGRP, `passive-interface` stops sending hellos (and hence no adjacency forms), but the connected subnet is still advertised if it’s included under the `network` command. It doesn’t disable EIGRP entirely, just outbound updates on that interface. The router can still learn updates inbound, but effectively that interface is used only for that network’s advertisement, not neighbor relationships.",
+      "examTip": "`passive-interface` in EIGRP or OSPF stops outbound hellos, preventing adjacency. The subnet is still advertised if matched in a `network` statement."
     },
     {
-    "id": 89,
-     "question": "A network administrator configures a Cisco switch with the following commands: interface GigabitEthernet0/1 switchport mode trunk switchport trunk encapsulation dot1q switchport trunk allowed vlan 10,20,30 switchport trunk native vlan 99 What is the purpose and effect of the `switchport trunk native vlan 99` command in this configuration?",
-    "options":[
-     "It disables VLAN tagging for all traffic on the trunk.",
-      "It specifies that untagged frames received on the trunk port will be assigned to VLAN 99. It is a security best practice to use a native VLAN other than the default VLAN 1.",
-     "It specifies that VLAN 99 is the only VLAN allowed on the trunk.",
-     "It encrypts traffic on VLAN 99."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation": "On a Cisco switch, a *trunk port* carries traffic for *multiple VLANs*. 802.1Q tagging is used to identify which VLAN each frame belongs to. *However*, there's also the concept of a *native VLAN*: *Untagged Frames:* Frames received on a trunk port that *do not have an 802.1Q tag* are assigned to the *native VLAN*. *Default Native VLAN:* By default, the native VLAN is VLAN 1. *`switchport trunk native vlan 99`:* This command changes the native VLAN to VLAN 99. This means any *untagged* traffic received on that trunk port will be treated as belonging to VLAN 99. *Security Best Practice:* It's a security best practice to change the native VLAN to something *other than* the default VLAN 1. This is because some attacks might try to exploit the default VLAN. This command does *not* disable tagging for *all* traffic (tagged frames for VLANs 10, 20, and 30 will still be tagged). It doesn't make VLAN 99 the *only* allowed VLAN; it only affects *untagged* traffic. It's *not* about encryption.",
-    "examTip": "The native VLAN on a trunk port handles untagged traffic; change it from the default VLAN 1 for security."
+      "id": 81,
+      "question": "You are troubleshooting a network where devices are experiencing intermittent connectivity. You suspect a problem with the load balancer that distributes traffic to multiple web server instances. Which of the following troubleshooting steps would be MOST effective in isolating the problem?",
+      "options":[
+        "Check the DNS server configuration.",
+        "Bypass the load balancer and test connectivity to each web server instance directly by its IP address. If some servers work and others do not, focus on the non-working servers. Also check the load balancer's configuration and health checks.",
+        "Check the DHCP server's lease table.",
+        "Reboot the client computers."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "With intermittent connectivity and a load balancer in place, the best approach is to test each server behind the balancer directly. This determines if certain instances are malfunctioning or if the load balancer config is incorrect. DNS and DHCP are less likely to cause *intermittent* issues specifically with load-balanced services. Rebooting clients is a general step but doesn’t address the potential server or balancer misconfiguration.",
+      "examTip": "When troubleshooting load-balanced environments, test each backend server individually and verify the load balancer’s health checks and config."
     },
-     {
+    {
+      "id": 82,
+      "question": "A network administrator configures a Cisco router with the following access control list (ACL): ``` access-list 101 permit tcp any host 192.168.1.100 eq 80 access-list 101 permit tcp any host 192.168.1.100 eq 443 access-list 101 deny ip any any ``` The administrator then applies this ACL to the router's GigabitEthernet0/0 interface using the command `ip access-group 101 in`. What is the effect of this configuration on traffic *entering* the router through the GigabitEthernet0/0 interface?",
+      "options":[
+        "All traffic is permitted.",
+        "All traffic is denied.",
+        "Only HTTP (port 80) and HTTPS (port 443) traffic destined for the host 192.168.1.100 is permitted; all other traffic is blocked.",
+        "All traffic is permitted except HTTP and HTTPS traffic destined for the host 192.168.1.100."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The ACL explicitly permits TCP traffic from any source to 192.168.1.100 on ports 80 and 443, then denies all other IP traffic. Applying it inbound on GigabitEthernet0/0 means any traffic entering that interface must match one of those permit statements or else it’s denied. So only HTTP/HTTPS to .100 is allowed; everything else is dropped.",
+      "examTip": "Inbound ACLs apply to traffic as it arrives on the interface. If not explicitly permitted, it’s implicitly (or explicitly) denied."
+    },
+    {
+      "id": 83,
+      "question": "A network administrator is configuring a site-to-site IPsec VPN between two Cisco routers. They have configured the ISAKMP policy (Phase 1) and the IPsec transform set (Phase 2).  They have also configured the crypto map and applied it to the appropriate interface. However, the VPN tunnel is not establishing.  Which of the following commands would be MOST helpful in verifying that the *interesting traffic* (the traffic that should trigger the VPN tunnel) is being correctly identified and processed by the crypto map?",
+      "options":[
+        "show crypto isakmp sa",
+        "show crypto ipsec sa",
+        "show crypto map",
+        "show interfaces"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "`show crypto map` displays the crypto map configuration, including the ACL that defines interesting traffic. If the ACL doesn’t match the real traffic flows or is misconfigured, the tunnel won’t be triggered. `show crypto isakmp sa` and `show crypto ipsec sa` focus on established SAs or Phase 1/2 states, but if the ACL never matches, you won’t see SAs. `show interfaces` is too general.",
+      "examTip": "`show crypto map` is crucial for verifying which ACLs define the interesting traffic and checking if they match your intended traffic."
+    },
+    {
+      "id": 84,
+      "question": "A network uses EIGRP as its routing protocol. The network administrator wants to summarize multiple contiguous networks into a single route advertisement to reduce the size of the routing tables on neighboring routers. Which command, and in which configuration context, should the administrator use to configure EIGRP route summarization on a Cisco router?",
+      "options":[
+        "Under the `router eigrp [autonomous-system-number]` configuration, use the `summary-address` command.",
+        "Under the interface configuration mode for the interface *sending* the summarized route, use the `ip summary-address eigrp [as-number] [summary-address] [subnet-mask] [administrative-distance]` command.",
+        "Under the `router eigrp [autonomous-system-number]` configuration, use the `auto-summary` command.",
+        "Under the interface configuration mode for the interface *receiving* the summarized route, use the `ip summary-address eigrp [as-number] [summary-address] [subnet-mask]` command."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "EIGRP summarization is done *per interface* on the outbound side. The command is `ip summary-address eigrp [asn] [summary] [mask] [distance]` under the interface config. `auto-summary` is older style classful summarization, generally not recommended in modern networks. `summary-address` does not exist under router config in EIGRP. You do it under the interface to which you’re sending the summary.",
+      "examTip": "In EIGRP, to summarize, use `ip summary-address eigrp` on the interface sending the summary route."
+    },
+    {
+      "id": 85,
+      "question": "A network administrator is troubleshooting a wireless network. Users report intermittent connectivity and slow performance. The administrator suspects RF interference. Besides other Wi-Fi networks, what are some common *non-Wi-Fi* sources of interference that can affect wireless networks operating in the 2.4 GHz band?",
+      "options":[
+        "FM radio broadcasts.",
+        "Microwave ovens, Bluetooth devices, cordless phones (older models), wireless video cameras, poorly shielded electrical equipment, and some industrial equipment.",
+        "Satellite communications.",
+        "Cellular phone networks."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Because 2.4 GHz is an unlicensed band, many devices, from microwaves to older cordless phones, can cause interference. FM radio is in a different range, as are satellites and cellular. Bluetooth and wireless cameras or poorly shielded motors, etc., can degrade Wi-Fi signals if they share the 2.4 GHz spectrum.",
+      "examTip": "Non-802.11 devices in 2.4 GHz, like microwaves, Bluetooth, older cordless phones, can wreak havoc with Wi-Fi performance."
+    },
+    {
+      "id": 86,
+      "question": "A network is experiencing intermittent connectivity issues. A user reports being unable to access a specific web server. They are using a Windows computer. Which of the following commands would be MOST helpful in *quickly* determining if the user's computer has a valid IP address, subnet mask, and default gateway configured?",
+      "options":[
+        "ping 8.8.8.8",
+        "tracert 8.8.8.8",
+        "ipconfig /all",
+        "nslookup www.google.com"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The `ipconfig /all` command on a Windows computer displays *detailed* network configuration information, *including the default gateway*. This is the *fastest* way to verify IP address, subnet mask, and default gateway settings on the user’s machine. Pinging 8.8.8.8 only tests external connectivity, `tracert` shows routes (not local config), and `nslookup` is for DNS queries.",
+      "examTip": "`ipconfig /all` is a fundamental troubleshooting command on Windows for verifying network configuration settings."
+    },
+    {
+      "id": 87,
+      "question": "What is 'BGP hijacking', and what is a key characteristic of this type of attack that makes it difficult to prevent with traditional routing security measures?",
+      "options": [
+        "A method for encrypting BGP routing updates to ensure confidentiality.",
+        "A type of phishing attack targeting network administrators.",
+        "An attack where a malicious actor compromises a router (or exploits a misconfiguration) and falsely advertises BGP routes for IP address prefixes that they do not legitimately control, redirecting traffic to the attacker's network, potentially allowing interception, modification, or denial of service. It's difficult to detect because BGP inherently trusts announcements from peers, and validation mechanisms are not universally deployed.",
+        "A technique for dynamically assigning IP addresses to BGP routers."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "BGP (Border Gateway Protocol) is the routing protocol that connects different autonomous systems (ASes). BGP hijacking occurs when an attacker or misconfiguration causes false route advertisements to spread, hijacking traffic. Traditional BGP is trust-based; it does not require cryptographic validation of route origins. While RPKI and IRR exist, they’re not yet universally enforced, making hijacking hard to detect. It’s not an encryption method, phishing, or IP assignment technique.",
+      "examTip": "BGP hijacking exploits BGP’s trust model; route validation tools exist (like RPKI), but aren’t universally deployed, making prevention challenging."
+    },
+    {
+      "id": 88,
+      "question": "You are troubleshooting a network where devices are experiencing intermittent connectivity. You suspect a problem with duplicate IP addresses. Which of the following techniques would be the MOST reliable way to identify devices with duplicate IP addresses on a network segment?",
+      "options": [
+        "Ping each IP address on the network sequentially.",
+        "Use a protocol analyzer (like Wireshark) to capture and analyze ARP traffic, looking for multiple MAC addresses responding to ARP requests for the same IP address.",
+        "Check the DHCP server's lease table.",
+        "Reboot all network devices."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Duplicate IPs manifest as conflicting ARP replies. If two devices claim the same IP, they’ll both respond to ARP requests. A packet capture with a protocol analyzer can catch multiple replies to the same ARP request with different MAC addresses. Pinging each address might only reach one device. The DHCP table might not show static or rogue IP devices. Rebooting won’t necessarily solve or reveal duplicates.",
+      "examTip": "Use a protocol analyzer to watch ARP replies for signs of multiple devices answering for the same IP."
+    },
+    {
+      "id": 89,
+      "question": "A network administrator configures a Cisco switch with the following command: `switchport trunk native vlan 99`. What is the purpose and effect of this command, and what is a potential security best practice related to the native VLAN?",
+      "options": [
+        "It disables VLAN tagging for all traffic on the trunk.",
+        "It specifies that untagged frames received on the trunk port will be assigned to VLAN 99. It is a security best practice to use a native VLAN other than the default VLAN 1.",
+        "It specifies that VLAN 99 is the only VLAN allowed on the trunk.",
+        "It encrypts traffic on VLAN 99."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "In 802.1Q trunking, the native VLAN is the VLAN to which untagged traffic belongs. By default, it’s VLAN 1. Changing it to VLAN 99 (for instance) helps avoid potential VLAN-hopping attacks or confusion from the default VLAN. It doesn’t disable tagging, nor does it make VLAN 99 the only one allowed. No traffic is encrypted by this command alone.",
+      "examTip": "The trunk native VLAN handles untagged frames; changing it from VLAN 1 to a different VLAN is often recommended for security."
+    },
+    {
       "id": 90,
       "question": "A network administrator configures a Cisco router with the following command sequence, in global configuration mode: `access-list 101 permit tcp any host 192.168.1.100 eq 22` `access-list 101 deny ip any any` `line vty 0 4` `transport input ssh` `access-class 101 in` What is the combined effect of THESE specific commands, in this order?",
-      "options":[
-          "All traffic is permitted to the router.",
-          "All traffic is denied to the router.",
-         "Only SSH traffic (TCP port 22) from any source to the router's VTY lines is permitted. All other traffic to the VTY lines is blocked. The ACL does not affect traffic routed *through* the router, only traffic *to* the router's VTY lines for management.",
-          "Only SSH traffic from the host 192.168.1.100 is permitted to the router's VTY lines."
-      ],
-      "correctAnswerIndex": 2, //Corrected: ACL on VTY, not general traffic
-      "explanation": "This configuration restricts *remote management access* to the router's VTY lines (used for SSH and Telnet). Let's break it down: 1. **`access-list 101 permit tcp any host 192.168.1.100 eq 22`**: Creates an access control list (ACL) named '101'. This line *permits* TCP traffic from *any* source (`any`) to the host with IP address 192.168.1.100, *specifically on port 22* (SSH). *Important Note:* The question *does not specify what IP address is on the management interface of the Router. The question asks overall what traffic will be permitted based on this ACL, and the answer is, traffic destined for 192.168.1.100:22. 2. **`access-list 101 deny ip any any`**: This line *denies all other IP traffic*. Because there is an implicit deny at the end of the ACL. 3. **`line vty 0 4`**: Enters configuration mode for the virtual terminal lines (VTY 0-4). 4. **`transport input ssh`**: *Restricts remote access to only SSH*. This is a crucial security best practice. 5. **`access-class 101 in`**: *Applies* ACL 101 to the *incoming* traffic on the VTY lines. *Combined Effect:* The ACL, when applied to the VTY lines with `access-class`, controls *remote management access* to the router itself.  It *does not* affect traffic that is being *routed through* the router to other destinations. This configuration: *Permits SSH (port 22) traffic from any source to host 192.168.1.100. * *Blocks* all other traffic *to the router's VTY lines*. The implicit deny and explicit deny in an ACL are functionally equivalent. ",
-      "examTip": "The `access-class` command, applied to VTY lines, controls remote management access to the router's CLI, not general traffic routing."
-    },
-    {
-        "id": 91,
-         "question": "A network administrator is troubleshooting a slow file transfer between two computers on the same subnet. Pings between the computers show low latency and no packet loss. The administrator has already verified that there are no duplex mismatches and that the interface error counters are not increasing.  What is the NEXT most likely area to investigate?",
-        "options":[
-          "The DNS server configuration.",
-          "The DHCP server configuration.",
-          "Resource utilization (CPU, memory, disk I/O) on both the sending and receiving computers, and the application-level protocols being used for the file transfer.",
-          "The Spanning Tree Protocol configuration."
-        ],
-        "correctAnswerIndex": 2, // Resources are next logical check
-        "explanation": "Since the computers are on the *same subnet*, routing is *not* involved. Low latency and no packet loss with pings, combined with no duplex mismatches or interface errors, rule out basic network connectivity and physical layer issues. DNS and DHCP are also not relevant to *ongoing file transfer speeds* within the same subnet. The *next most likely* cause of slow file transfers in this scenario is a *resource bottleneck* on *either the sending or receiving computer*: *High CPU utilization:*  If the CPU is overloaded, it can't process data quickly enough. *Memory exhaustion:*  If the system is running out of RAM, it will start using the (much slower) hard drive for virtual memory, significantly impacting performance. *Slow disk I/O:* The hard drive might be slow, fragmented, or failing, limiting the speed at which data can be read or written. *Application-Level Protocols:* The protocol that they are transferring the files could be slow. The administrator should investigate *resource utilization (CPU, memory, disk I/O)* on *both* computers and analyze *which application protocol* is in use to identify the bottleneck.",
-        "examTip": "If basic network connectivity is good (low latency, no packet loss), but file transfers are slow, suspect resource bottlenecks (CPU, memory, disk I/O) on the sending or receiving computers, or application protocol inefficiencies."
-      },
-    {
-       "id": 92,
-      "question": "A network administrator is configuring a Cisco router to act as a DHCP server. They have defined the DHCP pool, network, default gateway, and DNS servers. They also want to create a static mapping (reservation) to ensure that a specific device with MAC address 00:11:22:33:44:55 always receives the IP address 192.168.1.50. Which of the following commands, entered in global configuration mode within the DHCP pool configuration, would correctly achieve this?",
-     "options":[
-       "host 192.168.1.50 /24",
-      "host 192.168.1.50 255.255.255.0 \n client-identifier 0100.1122.3344.55",
-       "static-bind ip-address 192.168.1.50 mac-address 00:11:22:33:44:55",
-       "address 192.168.1.50 client-id 001122334455"
-     ],
-     "correctAnswerIndex": 1, //Correct and complete
-     "explanation": "To create a static mapping (reservation) within a DHCP pool on a Cisco router, you use the `host` command *within the DHCP pool configuration*. The correct syntax and commands are: 1. `ip dhcp pool [pool-name]` (Enter the DHCP pool configuration). 2. `host 192.168.1.50 255.255.255.0` : Specifies the IP address and subnet mask to be assigned to the client. 3. `client-identifier 0100.1122.3344.55`:  Specifies the client's MAC address, but in a *specific format required by Cisco IOS*. The MAC address `00:11:22:33:44:55` is represented as `0100.1122.3344.55`. The `01` is a code indicating an Ethernet MAC address. Option A is missing the subnet mask and the client identifier. Option C uses incorrect syntax (`static-bind` is not a valid command). Option D missies the subnet mask.",
-     "examTip": "To create a static mapping (reservation) within a DHCP pool on a Cisco router, use the `host` command with the correct IP address, subnet mask, and the `client-identifier` in the correct format (01 + hex MAC address)."
-    },
-     {
-        "id": 93,
-        "question": "A network uses OSPF as its routing protocol. The network is divided into multiple areas.  A network administrator wants to reduce the size of the routing tables on routers within a specific area by preventing external routes (routes learned from outside the OSPF domain) from being advertised into that area. Which type of OSPF area should the administrator configure, and what is the key characteristic of that area type?",
-        "options": [
-           "Standard area; it allows all types of OSPF LSAs.",
-            "Stub area; it blocks Type 5 LSAs (External LSAs) and uses a default route to reach external destinations.",
-           "Totally stubby area; it blocks Type 3, Type 4, and Type 5 LSAs.",
-            "Not-so-stubby area (NSSA); it allows Type 5 LSAs."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "OSPF *stub areas* are designed to reduce the size of the routing tables within an area. They achieve this by *blocking Type 5 LSAs (External LSAs)*. Type 5 LSAs represent routes learned from *outside* the OSPF autonomous system (e.g., routes redistributed from another routing protocol like EIGRP or BGP). Routers within a stub area *do not receive* detailed information about external routes. Instead, the *Area Border Router (ABR)* connecting the stub area to the backbone area (area 0) injects a *default route* (0.0.0.0/0) into the stub area. Routers within the stub area use this default route to reach all external destinations. *Standard areas* allow all LSA types. *Totally stubby areas* are even *more* restrictive, blocking Type 3, 4, *and* 5 LSAs. *NSSAs* allow a *limited* form of external route injection using Type 7 LSAs.",
-        "examTip": "Stub areas in OSPF block external routes (Type 5 LSAs) and use a default route to reach destinations outside the OSPF domain, reducing routing table size."
-    },
-     {
-        "id": 94,
-        "question": "A network administrator is troubleshooting an issue where users cannot access a particular website. They have verified that the users' computers have valid IP configurations and can ping other internal and external resources. They suspect a DNS problem. Which command-line tool, and with what specific syntax, would allow the administrator to query a *specific* DNS server (e.g., 8.8.8.8) to resolve a *specific* domain name (e.g., www.example.com) and examine the response, including the record type and the returned IP address?",
-       "options":[
-        "ping www.example.com",
-        "tracert www.example.com",
-        "ipconfig /all",
-         "nslookup www.example.com 8.8.8.8 (or dig www.example.com @8.8.8.8 on Linux/macOS)"
-       ],
-       "correctAnswerIndex": 3,
-       "explanation": "`nslookup` (Windows) and `dig` (Linux/macOS) are command-line tools specifically designed for querying DNS servers. The key here is to be able to query a *specific* server to isolate the problem. The correct syntax is: *Windows:* `nslookup [domain_name] [dns_server]` *Linux/macOS:* `dig [domain_name] @[dns_server]` For example: `nslookup www.example.com 8.8.8.8` (Windows) `dig www.example.com @8.8.8.8` (Linux/macOS) This command queries the DNS server at 8.8.8.8 (Google's public DNS server) for the IP address of `www.example.com`. The output will show you: *The DNS server that was queried.* *The type of DNS record returned (e.g., A record for IPv4, AAAA record for IPv6).* *The IP address(es) associated with the domain name.* `ping` tests basic connectivity but doesn't give you DNS resolution details. `tracert` shows the route, not DNS resolution. `ipconfig /all` shows your *current* DNS server settings, but doesn't let you actively *query* a specific server.",
-      "examTip": "Use `nslookup [domain] [dns_server]` (Windows) or `dig [domain] @[dns_server]` (Linux/macOS) to query a specific DNS server and diagnose resolution problems."
-     },
-    {
-     "id": 95,
-    "question": "A network is experiencing intermittent connectivity issues. A network administrator captures packets using a protocol analyzer. They observe a large number of TCP packets with the RST flag set. What does the RST flag indicate, and what are some potential causes of a high volume of RST packets?",
-     "options":[
-      "Successful and graceful termination of a TCP connection.",
-        "The RST flag indicates an abrupt termination of a TCP connection. Potential causes include application crashes, firewall rules blocking or resetting connections, network devices forcibly closing connections, misconfigured TCP keepalive settings, or network instability.",
-       "Successful DNS resolution.",
-        "Successful DHCP address assignment."
-     ],
-     "correctAnswerIndex": 1,
-     "explanation":"A TCP RST (reset) packet signifies an *abrupt termination* of a TCP connection. It's *not* part of the normal connection establishment (SYN, SYN-ACK, ACK) or graceful teardown (FIN, FIN-ACK, ACK) process. A large number of RST packets indicates that connections are being *forcibly closed*, which is *not* normal. Potential causes include: *Application crashes:* If an application crashes, the operating system might send RST packets to close open connections. *Firewall rules:* A firewall might be configured to block certain traffic or to close connections that violate security policies, sending RSTs. *Network devices:* Routers or other network devices might forcibly close connections due to security policies, resource constraints, or misconfiguration. *Misconfigured TCP keepalives:* If keepalive settings are too aggressive, connections might be prematurely terminated. *Network instability:* Severe congestion, packet loss, or other network issues can sometimes lead to RST packets. It's *not* about successful connection establishment/termination, DNS, or DHCP (though issues with those *could* cause *other* problems).",
-      "examTip": "A high volume of TCP RST packets indicates abrupt termination of TCP connections, often due to application issues, firewall rules, or network device intervention."
-    },
-      {
-         "id": 96,
-         "question": "A network administrator is configuring a wireless network and wants to implement the strongest possible security. Which wireless security protocol should they choose, and what are its key security features compared to older protocols?",
-        "options":[
-         "WEP (Wired Equivalent Privacy); it provides strong encryption and is easy to configure.",
-           "WPA3-Enterprise; it offers stronger encryption (GCMP-256), individualized data encryption, and improved authentication mechanisms (including SAE - Simultaneous Authentication of Equals) compared to WPA2 and earlier protocols.",
-           "WPA2-Personal with a strong pre-shared key (PSK); it's the most secure option.",
-          "An open network with no encryption, combined with MAC address filtering."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "*WPA3-Enterprise* is the *most secure* wireless security protocol currently available. It offers significant improvements over WPA2 and earlier protocols: *Stronger Encryption:* WPA3 uses *GCMP-256* (Galois/Counter Mode Protocol with 256-bit key) for encryption, which is stronger than the AES-CCMP used in WPA2. *Individualized Data Encryption:* WPA3 provides *individualized data encryption* for each client, even on open networks (using Opportunistic Wireless Encryption - OWE), making it harder for attackers to eavesdrop on traffic. *Improved Authentication (SAE):* WPA3 uses *Simultaneous Authentication of Equals (SAE)* for the initial key exchange, which is more resistant to offline dictionary attacks than the PSK (Pre-Shared Key) method used in WPA2-Personal. *Management Frame Protection:* WPA3 provides better protection for *management frames*, which are used for controlling the wireless network (association, authentication, etc.), making it harder for attackers to disrupt the network. *WPA3-Enterprise also requires the use of a RADIUS server for authentication.* WEP is *extremely insecure* and should *never* be used. WPA2-Personal with a strong PSK is *better* than WEP or WPA, but *significantly less secure* than WPA3-Enterprise. An open network with no encryption is *extremely insecure*.",
-        "examTip": "Use WPA3-Enterprise for the strongest wireless security, offering stronger encryption, individualized data encryption, and improved authentication compared to previous protocols."
-      },
-      {
-         "id": 97,
-          "question": "A network administrator wants to configure a Cisco switch to prevent rogue DHCP servers from operating on the network. They enable DHCP snooping globally with the `ip dhcp snooping` command. They then configure the port connected to the legitimate DHCP server as a trusted port using the `ip dhcp snooping trust` command.  However, they forget to configure any VLANs for DHCP snooping. What will be the effect of this configuration?",
-         "options":[
-           "DHCP snooping will be effective on all VLANs.",
-           "DHCP snooping will only be effective on VLAN 1.",
-            "DHCP snooping will not be effective on any VLAN until it is explicitly enabled on specific VLANs using the `ip dhcp snooping vlan [vlan-list]` command.",
-            "DHCP snooping will cause the switch to crash."
-         ],
-         "correctAnswerIndex": 0, // Correct: Effective on all VLANs by default
-         "explanation": "When DHCP snooping is enabled globally with the `ip dhcp snooping` command on a Cisco switch, it is, *by default, active on all VLANs*.  You do *not* need to explicitly enable it on each VLAN *unless* you want to enable it *only* on *specific* VLANs.  If you want to enable it *only* on specific VLANs, you use the `ip dhcp snooping vlan [vlan-list]` command.  But if that command is *not* used, it's active on *all* VLANs. So, in this scenario, even though no VLANs are explicitly configured for DHCP snooping, it will still be *effective on all VLANs* because it's enabled globally. The key is to remember that global enablement applies to all VLANs unless specifically overridden.",
-         "examTip": "DHCP snooping, when enabled globally, is active on all VLANs by default unless explicitly configured otherwise using the `ip dhcp snooping vlan` command."
-    },
-      {
-        "id": 98,
-         "question": "A company has a network with multiple VLANs.  A Layer 3 switch is used for inter-VLAN routing.  A network administrator configures an access control list (ACL) on the Layer 3 switch to control traffic flow between the VLANs.  The ACL is as follows: ``` access-list 101 permit tcp any host 192.168.10.50 eq 80 access-list 101 permit tcp any host 192.168.10.50 eq 443 access-list 101 deny ip any any ``` The administrator then applies this ACL to the SVI (Switched Virtual Interface) for VLAN 10 using the command `ip access-group 101 in`.  Assuming VLAN 10 has the subnet 192.168.10.0/24, and the server with IP address 192.168.10.50 is on a *different* VLAN, what traffic will be allowed *from* VLAN 10 *to* the server at 192.168.10.50?",
-          "options": [
-          "All traffic from VLAN 10 to the server will be allowed.",
-          "Only HTTP (port 80) and HTTPS (port 443) traffic from VLAN 10 to the server will be allowed; all other traffic will be blocked.",
-            "All traffic from VLAN 10 to any destination will be allowed."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Let's break down the ACL and its application: *`access-list 101 permit tcp any host 192.168.10.50 eq 80`*: Permits TCP traffic from *any* source to the host 192.168.10.50, *specifically on port 80* (HTTP). *`access-list 101 permit tcp any host 192.168.1.100 eq 443`*: Permits TCP traffic from *any* source to the host 192.168.10.50, *specifically on port 443* (HTTPS). *`access-list 101 deny ip any any`*: Denies *all other IP traffic*. *`ip access-group 101 in` (applied to the SVI for VLAN 10):* This applies ACL 101 to the *inbound* traffic on the SVI for VLAN 10. This means it filters traffic *originating from* devices in VLAN 10 *going to* other networks (including the server on a different VLAN). *Combined Effect:* The ACL, when applied *inbound* to the VLAN 10 SVI, will: 1.  Permit HTTP (port 80) and HTTPS (port 443) traffic from *any host in VLAN 10* to the server at 192.168.10.50. 2.  Deny *all other traffic* originating from VLAN 10 to *any* destination (due to the `deny ip any any` and the implicit deny at the end of every ACL).  So, *only* HTTP and HTTPS traffic *from* VLAN 10 *to* the server will be allowed. All other traffic *from* VLAN 10 (to any other destination, or to the server on any other port) will be blocked.",
-        "examTip": "When applying ACLs to SVIs for inter-VLAN traffic control, remember that `in` filters traffic *originating from* the VLAN associated with the SVI, and `out` filters traffic *destined for* that VLAN."
-      },
-    {
-       "id": 99,
-        "question": "You are troubleshooting a network performance issue. Users report that a specific web application is extremely slow.  You use a protocol analyzer to capture network traffic and observe the following: *   A large number of TCP retransmissions. *   Frequent duplicate ACKs. *   Many TCP packets with the PSH flag set. *   Occasional TCP ZeroWindow messages *from the web server*. *   The 'Time' column in your protocol analyzer shows significant delays between the client's requests and the server's responses, even for small requests. Which of the following is the MOST accurate and complete diagnosis of the problem, based on these observations?",
-        "options": [
-           "The problem is likely caused by a DNS server misconfiguration.",
-            "The problem is likely caused by a faulty network cable.",
-            "The problem is likely caused by network congestion, packet loss, and/or a resource bottleneck on the web server (CPU, memory, disk I/O, or network interface). The frequent PSH flags might indicate the application is trying to force data through a congested or unreliable network, potentially exacerbating the problem.",
-            "The problem is likely caused by the user's web browser being misconfigured."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "The combination of these symptoms points to a significant performance problem, likely related to packet loss and/or a bottleneck on the *server*: *TCP Retransmissions:* Indicate that packets are being lost on the network. *Duplicate ACKs:*  Suggest that packets are arriving out of order, often due to packet loss. *Frequent PSH flags:* The application might be trying to push data through quickly, possibly due to perceived delays. However, excessive use of PSH can *worsen* congestion. *TCP ZeroWindow messages *from the server*::* This is a *critical* clue. It means the server's receive buffer is *full*, and it's telling the client to stop sending data temporarily. This often indicates a *server-side resource bottleneck* (CPU, memory, disk I/O, or network interface). *High latency:* The delays between requests and responses confirm a performance problem. The problem is *not* likely to be DNS (that would affect name resolution, not ongoing performance), a faulty cable (which would usually cause complete connection failures, not just slowness), or the user's browser (which wouldn't cause these specific TCP-level issues). The *most likely* causes are: *Network congestion:*  Too much traffic on the network, causing packet loss and delays. *Faulty network hardware:*  A problem with a router, switch, or network interface card along the path. *Server resource bottleneck:* The web server might be overloaded (CPU, memory, disk I/O) or have a network interface problem.",
-        "examTip": "The combination of TCP retransmissions, duplicate ACKs, frequent PSH flags, ZeroWindow messages (especially from the server), and high latency strongly suggests packet loss due to network congestion or a server-side bottleneck."
-    },
-      {
-      "id": 100,
-     "question": "A company's network is configured with multiple VLANs, and a Layer 3 switch is used for inter-VLAN routing. The network administrator wants to control which types of traffic are allowed to flow *between* specific VLANs. Which of the following technologies, and where should it be configured, would BEST achieve this?",
-      "options":[
-         "Spanning Tree Protocol (STP) on the switch ports.",
-        "Port security on the switch ports.",
-        "Access control lists (ACLs) applied to the Switched Virtual Interfaces (SVIs) on the Layer 3 switch, or to the physical interfaces if routing directly on those.",
-       "DHCP snooping on the switch."
+      "options": [
+        "All traffic is permitted to the router.",
+        "All traffic is denied to the router.",
+        "Only SSH traffic (TCP port 22) from any source to the router's VTY lines is permitted. All other traffic to the VTY lines is blocked. The ACL does not affect traffic routed *through* the router, only traffic *to* the router's VTY lines for management.",
+        "Only SSH traffic from the host 192.168.1.100 is permitted to the router's VTY lines."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "To control traffic flow *between* VLANs, you need to use *access control lists (ACLs)*. ACLs are sets of rules that define which traffic is permitted or denied based on criteria like source/destination IP address, port numbers, and protocols. Since inter-VLAN routing is happening on the *Layer 3 switch*, the ACLs should be applied to the *Switched Virtual Interfaces (SVIs)* that correspond to the VLANs, *or* to the physical interfaces if routing directly on those and not using SVIs. *Inbound ACLs* on an SVI filter traffic *originating from* the VLAN associated with that SVI. *Outbound ACLs* on an SVI filter traffic *destined for* the VLAN associated with that SVI. STP prevents loops, port security restricts access *to a port* based on MAC address, and DHCP snooping prevents rogue DHCP servers; none of these directly control traffic flow *between* VLANs.",
-      "examTip": "Use access control lists (ACLs) applied to SVIs (or physical interfaces if routing directly on those) on a Layer 3 switch to control traffic flow between VLANs."
+      "explanation": "This ACL (101) permits tcp any -> host 192.168.1.100 eq 22, then denies all else. Applying with `access-class 101 in` on the VTY lines restricts *management* access (SSH) to the router. It doesn’t affect transit traffic. The router will accept SSH from any IP to 192.168.1.100:22, but no other protocols or ports are allowed to these VTY lines. That’s a best practice for secure remote management.",
+      "examTip": "Applying `access-class` on VTY lines filters inbound management connections to the router itself, not transit traffic."
+    },
+    {
+      "id": 91,
+      "question": "A network administrator is troubleshooting a slow file transfer between two computers on the same subnet. Pings between the computers show low latency and no packet loss. The administrator has already verified that there are no duplex mismatches and that the interface error counters are not increasing.  What is the NEXT most likely area to investigate?",
+      "options":[
+        "The DNS server configuration.",
+        "The DHCP server configuration.",
+        "Resource utilization (CPU, memory, disk I/O) on both the sending and receiving computers, and the application-level protocols being used for the file transfer.",
+        "The Spanning Tree Protocol configuration."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "With no packet loss and correct duplex settings, the physical/network layers seem fine. Slow file transfers can result from CPU, RAM, or disk I/O bottlenecks on either host, or from inefficiencies in the application protocol (e.g., SMB version issues). DNS or DHCP wouldn’t cause persistent slow throughput once the initial resolution or lease is done, and STP typically affects layer 2 path availability, not speed within a single VLAN if no loops are present.",
+      "examTip": "After ruling out physical/network issues, check host resource constraints and app-layer factors for slow transfers."
+    },
+    {
+      "id": 92,
+      "question": "A network administrator is configuring a Cisco router to act as a DHCP server. They have defined the DHCP pool, network, default gateway, and DNS servers. They also want to create a static mapping (reservation) to ensure that a specific device with MAC address 00:11:22:33:44:55 always receives the IP address 192.168.1.50. Which of the following commands, entered in global configuration mode within the DHCP pool configuration, would correctly achieve this?",
+      "options": [
+        "host 192.168.1.50 /24",
+        "host 192.168.1.50 255.255.255.0 \n client-identifier 0100.1122.3344.55",
+        "static-bind ip-address 192.168.1.50 mac-address 00:11:22:33:44:55",
+        "address 192.168.1.50 client-id 001122334455"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Cisco routers require the `host` command plus the `client-identifier` for DHCP reservations. The MAC 00:11:22:33:44:55 is written as 0100.1122.3344.55 in Cisco’s required format (`01` indicates an Ethernet MAC). `static-bind` is not valid syntax on Cisco IOS, nor is `address x client-id y` in that manner. The correct sequence is `host 192.168.1.50 255.255.255.0` and `client-identifier 0100.1122.3344.55` under the DHCP pool.",
+      "examTip": "Cisco DHCP reservations use `host [ip] [mask]` and `client-identifier 01[mac]`, all under `ip dhcp pool`."
+    },
+    {
+      "id": 93,
+      "question": "A network uses OSPF as its routing protocol. The network is divided into multiple areas.  A network administrator wants to reduce the size of the routing tables on routers within a specific area by preventing external routes (routes learned from outside the OSPF domain) from being advertised into that area. Which type of OSPF area should the administrator configure, and what is the key characteristic of that area type?",
+      "options": [
+        "Standard area; it allows all types of OSPF LSAs.",
+        "Stub area; it blocks external LSAs (Type 5) and uses a default route to reach external destinations.",
+        "Totally stubby area; it blocks Type 3, Type 4, and Type 5 LSAs.",
+        "Not-so-stubby area (NSSA); it allows Type 5 LSAs."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Stub areas do not allow Type 5 external LSAs. Instead, a default route is injected by the ABR for external destinations. This reduces the routing table size within the stub area. Standard areas allow all LSAs, NSSA allows a limited form of external routes (Type 7 LSAs), and a totally stubby area is even more restrictive (blocking Type 3, 4, and 5).",
+      "examTip": "A stub area omits external LSAs (Type 5), relying on a default route for external reachability."
+    },
+    {
+      "id": 94,
+      "question": "You are troubleshooting a network connectivity issue where users cannot access a particular website. They have valid IP configurations and can ping other external sites. You suspect a DNS problem. Which command-line tool, and with what specific syntax, would allow you to query a *specific* DNS server (e.g., 8.8.8.8) to resolve a specific domain name (e.g., www.example.com) and examine the response?",
+      "options": [
+        "ping www.example.com 8.8.8.8",
+        "tracert www.example.com 8.8.8.8",
+        "ipconfig /all",
+        "nslookup www.example.com 8.8.8.8 (or dig www.example.com @8.8.8.8 on Linux/macOS)"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The `nslookup` (Windows) or `dig` (Linux/macOS) utility allows querying a *specific* DNS server. For example, `nslookup www.example.com 8.8.8.8` or `dig www.example.com @8.8.8.8` queries Google’s DNS server (8.8.8.8) for the name resolution. ping/tracert do not let you specify a DNS server for resolution, and ipconfig /all just shows local config.",
+      "examTip": "Use `nslookup` or `dig` with the desired DNS server to diagnose DNS issues and confirm correct resolution."
+    },
+    {
+      "id": 95,
+      "question": "A network is experiencing intermittent connectivity issues. A network administrator captures packets using a protocol analyzer. They observe a large number of TCP RST packets. What does the RST flag indicate, and what are some potential causes of a high volume of RST packets?",
+      "options": [
+        "Successful and graceful termination of a TCP connection.",
+        "Successful DNS resolution.",
+        "Abrupt termination of a TCP connection. Potential causes include application crashes, firewall rules blocking or resetting connections, network devices forcibly closing connections, misconfigured TCP keepalive settings, or network instability.",
+        "Successful DHCP address assignment."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A TCP RST forcibly tears down a connection immediately, bypassing the normal FIN sequence. A high volume of RSTs suggests abrupt terminations, often from security devices, firewall policies, application crashes, or misconfigurations. DNS resolution and DHCP assignment do not generate RSTs in normal operation. A graceful close uses FIN, not RST.",
+      "examTip": "RST signals abrupt termination of a TCP connection; investigate firewalls, app issues, or misconfigurations if you see many RST packets."
+    },
+    {
+      "id": 96,
+      "question": "A network administrator is configuring a wireless network and wants to implement the strongest possible security. Which wireless security protocol should they choose, and what are its key security features compared to older protocols?",
+      "options":[
+        "WEP (Wired Equivalent Privacy); it provides strong encryption and is easy to configure.",
+        "WPA3-Enterprise; it offers stronger encryption (GCMP-256), individualized data encryption, and improved authentication mechanisms (including SAE - Simultaneous Authentication of Equals) compared to WPA2 and earlier protocols.",
+        "WPA2-Personal with a strong pre-shared key (PSK); it's the most secure option.",
+        "An open network with no encryption, combined with MAC address filtering."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "WPA3-Enterprise provides the highest level of security available for Wi-Fi, surpassing WPA2-Enterprise. It features stronger encryption ciphers (GCMP-256), improved key exchange (SAE), and better management frame protection. WEP is highly insecure, WPA2-Personal uses a shared PSK (less secure for enterprise), and open networks with MAC filtering are trivially bypassed.",
+      "examTip": "For the strongest wireless security, choose WPA3-Enterprise with robust encryption and authentication enhancements over WPA2."
+    },
+    {
+      "id": 97,
+      "question": "A network administrator wants to configure a Cisco switch to prevent rogue DHCP servers from operating on the network. They enable DHCP snooping globally with the `ip dhcp snooping` command. They then configure the port connected to the legitimate DHCP server as a trusted port using the `ip dhcp snooping trust` command.  However, they forget to configure any VLANs for DHCP snooping. What will be the effect of this configuration?",
+      "options":[
+        "DHCP snooping will be effective on all VLANs.",
+        "DHCP snooping will only be effective on VLAN 1.",
+        "DHCP snooping will not be effective on any VLAN until it is explicitly enabled on specific VLANs using the `ip dhcp snooping vlan [vlan-list]` command.",
+        "DHCP snooping will cause the switch to crash."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "By default, when you enable DHCP snooping globally (`ip dhcp snooping`), it is actually enabled for *all* VLANs unless you specify otherwise with `ip dhcp snooping vlan [vlan-list]`. So forgetting to specify VLANs typically means DHCP snooping is active on *every* VLAN. In some older IOS versions you might need to enable it explicitly per VLAN, but in most modern Cisco IOS, global enable applies to all VLANs unless restricted.",
+      "examTip": "In most current Cisco switches, enabling DHCP snooping globally covers all VLANs unless you limit it with `ip dhcp snooping vlan`."
+    },
+    {
+      "id": 98,
+      "question": "A company has a network with multiple VLANs.  A Layer 3 switch is used for inter-VLAN routing.  A network administrator configures an access control list (ACL) on the Layer 3 switch to control traffic flow between the VLANs.  The ACL is as follows: ``` access-list 101 permit tcp any host 192.168.10.50 eq 80 access-list 101 permit tcp any host 192.168.10.50 eq 443 access-list 101 deny ip any any ``` The administrator then applies this ACL to the SVI (Switched Virtual Interface) for VLAN 10 using the command `ip access-group 101 in`.  Assuming VLAN 10 has the subnet 192.168.10.0/24, and the server with IP address 192.168.10.50 is on a *different* VLAN, what traffic will be allowed *from* VLAN 10 *to* the server at 192.168.10.50?",
+      "options": [
+        "All traffic from VLAN 10 to the server will be allowed.",
+        "All traffic from VLAN 10 to the server will be denied.",
+        "Only HTTP (port 80) and HTTPS (port 443) traffic from VLAN 10 to the server will be allowed; all other traffic is blocked.",
+        "All traffic is permitted except HTTP and HTTPS."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Applying the ACL inbound on VLAN 10’s SVI means it filters traffic *originating* from VLAN 10. The permit statements explicitly allow TCP port 80 and 443 to 192.168.10.50. All else is denied by the final `deny ip any any`. Thus only HTTP and HTTPS traffic flows from VLAN 10 to that server, and nothing else. If the server is in a different VLAN, the traffic must traverse the L3 switch, so the ACL applies.",
+      "examTip": "Inbound ACL on an SVI filters traffic from that VLAN to other networks; specify which ports/protocols are permitted."
+    },
+    {
+      "id": 99,
+      "question": "You are troubleshooting a network performance issue. Users report that a specific web application is extremely slow.  You use a protocol analyzer to capture network traffic and observe the following: *   A large number of TCP retransmissions. *   Frequent duplicate ACKs. *   Many TCP packets with the PSH flag set. *   Occasional TCP ZeroWindow messages *from the web server*. *   The 'Time' column in your protocol analyzer shows significant delays between the client's requests and the server's responses, even for small requests. Which of the following is the MOST accurate and complete diagnosis of the problem, based on these observations?",
+      "options": [
+        "The problem is likely caused by a DNS server misconfiguration.",
+        "The problem is likely caused by a faulty network cable.",
+        "The problem is likely caused by network congestion, packet loss, and/or a resource bottleneck on the web server (CPU, memory, disk I/O, or network interface). The frequent PSH flags might indicate the application is trying to force data through a congested or unreliable network, potentially exacerbating the problem.",
+        "The problem is likely caused by the user's web browser being misconfigured."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Multiple signs point to significant performance issues: *Lots of retransmissions and dup ACKs* suggest packet loss or severe network problems. *TCP ZeroWindow messages from the server* indicate the server can’t process incoming data quickly enough (resource bottleneck). *Frequent PSH flags with small packets* might be an app that’s pushing data aggressively, possibly worsening congestion or revealing an underlying performance issue. It’s not purely DNS, not a simple cable fault, nor a mere browser misconfiguration.",
+      "examTip": "Congestion, server resource limits, and excessive PSH usage can cause retransmissions, zero windows, and poor performance in TCP-based applications."
+    },
+    {
+      "id": 100,
+      "question": "A company's network is configured with multiple VLANs, and a Layer 3 switch is used for inter-VLAN routing. The network administrator wants to control which types of traffic are allowed to flow *between* specific VLANs. Which of the following technologies, and where should it be configured, would BEST achieve this?",
+      "options":[
+        "Spanning Tree Protocol (STP) on the switch ports.",
+        "Port security on the switch ports.",
+        "Access control lists (ACLs) applied to the Switched Virtual Interfaces (SVIs) on the Layer 3 switch, or to the physical interfaces if routing directly on those.",
+        "DHCP snooping on the switch."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "To control traffic flowing from one VLAN to another, you need a Layer 3 solution—namely ACLs on the Layer 3 switch. By applying ACLs to the SVIs (or the router interfaces if using external routing), you can permit or deny specific traffic types. STP prevents loops, port security restricts MAC addresses, and DHCP snooping is for rogue DHCP server prevention; none address controlling inter-VLAN traffic in detail.",
+      "examTip": "Apply ACLs at Layer 3 (on SVIs or router interfaces) to restrict/permit traffic between VLANs in a Layer 3-switched environment."
     }
   ]
-});
+}
 
 
 
