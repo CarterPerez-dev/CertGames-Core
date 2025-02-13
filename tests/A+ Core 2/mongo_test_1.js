@@ -1301,8 +1301,8 @@ db.tests.insertOne({
         "All"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "",
-      "examTip": ""
+      "explanation": "Wearing an ESD strap is the recommended precaution because it grounds any static electricity on your body, preventing damage to sensitive electronic components inside the computer. While disconnecting the power cord and being cautious about touching metal parts are also important safety measures, the ESD strap specifically protects against electrostatic discharge.",
+      "examTip": "Always wear an ESD strap when working inside a computer case to prevent static electricity from damaging critical components."
     }
   ]
 });
