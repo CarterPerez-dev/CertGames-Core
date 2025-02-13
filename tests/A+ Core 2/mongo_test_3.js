@@ -4,7 +4,6 @@ db.tests.insertOne({
   "testName": "A+ Practice Test #3 (Easy)",
   "xpPerCorrect": 10,
   "questions": [
-    // Block 1 – Questions 1 to 25 (unchanged)
     {
       "id": 1,
       "question": "A user reports that every time they boot their Windows 10 laptop connected to a projector in a conference room, the screen resolution becomes very low. They have to manually adjust it back to a higher resolution after each reboot. What is MOST likely causing this scenario?",
@@ -330,8 +329,6 @@ db.tests.insertOne({
       "explanation": "Task Scheduler enables you to configure scripts or programs to run at specific intervals or triggers. Services.msc is for modifying Windows services. Windows Defender Firewall manages network traffic rules. Disk Management is for managing partitions and volumes.\nExam Tip: Use Task Scheduler for automating routine jobs such as running backups, system cleanups, or custom reporting scripts on a defined schedule.",
       "examTip": "Use Task Scheduler for automating routine jobs such as running backups, system cleanups, or custom reporting scripts on a defined schedule."
     },
-
-    // Block 2 – Questions 26 to 50 (unchanged)
     {
       "id": 26,
       "question": "Which Windows feature lets administrators control which programs can run on specific user accounts by creating rules that allow or deny software execution?",
@@ -657,12 +654,6 @@ db.tests.insertOne({
       "explanation": "Enforcing a screen lock or passcode is critical on employee-owned devices to protect corporate data in case of device loss or theft. Allowing free access to all shares poses a security risk. Disabling device encryption weakens security. Smartphones do not typically have a 'guest account' concept relevant to BYOD policies.\nExam Tip: BYOD policies should mandate passcodes, remote wipe, and possibly MDM (Mobile Device Management) solutions to protect corporate data on personal devices.",
       "examTip": "BYOD policies should mandate passcodes, remote wipe, and possibly MDM (Mobile Device Management) solutions to protect corporate data on personal devices."
     },
-
-    // Block 3 – Originally provided as questions with ids 76–100.
-    // To have a continuous sequence from 1 to 100 we now duplicate these 25 questions.
-    // The first copy will be renumbered as questions 51–75,
-    // and the second copy will be renumbered as questions 76–100.
-    // --- First copy (new ids 51–75) ---
     {
       "id": 51,
       "question": "Scenario: A remote user complains of very slow file transfer speeds when connected to the company VPN. What is the FIRST step you should take to diagnose the issue?",
@@ -988,8 +979,6 @@ db.tests.insertOne({
       "explanation": "Local Security Policy (secpol.msc) is the tool used to configure security settings, including account lockout policies and password requirements, on a local machine.",
       "examTip": "Access Local Security Policy through secpol.msc to fine-tune security settings for compliance with organizational policies."
     },
-
-    // --- Second copy of Block 3 – New ids 76 to 100 (same content as the original Block 3) ---
     {
       "id": 76,
       "question": "Scenario: A remote user complains of very slow file transfer speeds when connected to the company VPN. What is the FIRST step you should take to diagnose the issue?",
