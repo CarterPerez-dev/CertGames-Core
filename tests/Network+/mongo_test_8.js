@@ -1,5 +1,3 @@
-Okay, let's create Test #8 (Very Challenging difficulty) with 100 questions for the CompTIA Network+ N10-009 exam. This test will push the boundaries of understanding, requiring deep technical knowledge, critical thinking, and the ability to analyze complex situations and configurations. It will incorporate nuanced scenarios, edge cases, and interactions between multiple networking technologies.
-
 db.tests.insertOne({
   "category": "nplus",
   "testId": 8,
