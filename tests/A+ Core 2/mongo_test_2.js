@@ -4,7 +4,6 @@ db.tests.insertOne({
   "testName": "A+ Practice Test #2 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
-    // Block 1 (original IDs 1–25)
     {
       "id": 1,
       "question": "Which Windows tool can be used to manage startup applications and boot processes for troubleshooting purposes?",
@@ -330,7 +329,6 @@ db.tests.insertOne({
       "explanation": "Creating an inbound rule for the application is correct because inbound traffic on that specific port must be allowed from external sources to reach the website. Creating a new outbound rule is incorrect since the server is receiving requests. Disabling all firewall profiles is highly insecure. Limiting ephemeral ports is unrelated to explicitly allowing a specific TCP port for a service.",
       "examTip": "When hosting a website or service, inbound firewall rules define what traffic can enter. Outbound rules limit what your server sends out."
     },
-    // Block 2 (original IDs 26–41 remain in order)
     {
       "id": 26,
       "question": "A user reports that they cannot access shared folders on the local network, even though they can browse the internet. Which Windows utility is the FIRST place to check for network discovery and sharing settings?",
@@ -539,7 +537,6 @@ db.tests.insertOne({
       "explanation": "Incorrect system date and time is correct because certificates rely on valid dates for trust validation. If the date/time is far off, browsers reject certificates. A local firewall blocking secure traffic would typically result in connection timeouts, not trust errors. Malware could remove certificates, but widespread immediate errors across many sites typically indicate a date/time issue. A DNS server not responding leads to inability to resolve hostnames, not certificate trust failures.",
       "examTip": "Always check system clock accuracy when facing widespread SSL certificate trust issues. Certificates are time-sensitive and break if the clock drifts too much."
     },
-    // Block 3 (originally IDs 51–60; renumbered to 42–51)
     {
       "id": 42,
       "question": "A user's laptop keeps prompting for a password right after the manufacturer logo appears during startup, before Windows boots. Which of the following passwords is MOST likely being requested?",
@@ -722,7 +719,6 @@ db.tests.insertOne({
       "explanation": "Incremental backup is correct because it includes files changed since the last backup—whether full or incremental—and then clears the archive bit. A full backup copies all data and resets the bit. A differential backup does not reset the bit; it copies changes since the last full backup. A snapshot backup is a point-in-time image of a system or volume, conceptually different from the typical incremental approach.",
       "examTip": "Remember: incrementals build on each other from the last backup (any type), while differentials only reference the last full backup."
     },
-    // Block 4 (originally IDs 76–100; renumbered to 56–76)
     {
       "id": 56,
       "question": "A technician is assisting a user who regularly stands up from their desk and forgets to lock their Windows workstation. Which Windows feature can help enforce an automatic lockout after a certain period of inactivity?",
