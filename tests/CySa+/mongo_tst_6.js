@@ -602,7 +602,7 @@ What type of malicious activity is MOST likely indicated by this log sequence?",
     [2024-10-27 11:15:25] Failed login attempt for user 'administrator' from IP: 203.0.113.55
     [2024-10-27 11:15:28] Failed login attempt for user 'administrator' from IP: 203.0.113.55
     ...
-Use code with caution.
+ 
 JavaScript
 What type of attack is MOST likely indicated, and what immediate action should be considered?",
 "options": [
@@ -677,7 +677,7 @@ What type of attack is MOST likely indicated, and what immediate action should b
 "question": "A company's web application allows users to submit comments on blog posts. An attacker submits a comment containing the following:
 
 ```html
-Use code with caution.
+ .
 <script>alert('XSS');</script>
 If the application is vulnerable, what type of attack is being attempted, and what is the expected outcome?",
 "options":[
@@ -983,7 +983,7 @@ The payload is JavaScript code, not SQL. DoS aims for unavailability, not code i
 {
  "id": 65,
   "question": "A security analyst observes the following in a web server's access log:
-Use code with caution.
+ .
 JavaScript
 10.0.0.1 - - [27/Oct/2024:14:33:51 -0400] "GET /page.php?id=123 HTTP/1.1" 200 4567 "-" "Mozilla/5.0..."
 10.0.0.1 - - [27/Oct/2024:14:33:53 -0400] "GET /page.php?id=../../../etc/passwd HTTP/1.1" 403 234 "-" "Mozilla/5.0..."
@@ -1087,7 +1087,7 @@ The log entries are not indicative of SQL injection, XSS, or DoS. The second log
 {
 "id": 72,
 "question": "You are analyzing a compromised web server and find the following line in the Apache access logs:
-Use code with caution.
+ .
 198.51.100.4 - - [28/Oct/2024:11:22:33 -0400] "GET /admin.php?debug=../../../../etc/passwd HTTP/1.1" 404 278 "-" "curl/7.81.0"
 
 What type of attack is MOST likely being attempted, and what does the HTTP status code suggest?",
@@ -1245,7 +1245,7 @@ What type of attack is MOST likely being attempted, and what does the HTTP statu
 {
  "id": 83,
  "question": "A security analyst is reviewing a web server's access logs and notices the following entry:
-Use code with caution.
+ .
 192.168.1.100 - - [28/Oct/2024:15:45:12 -0400] "GET /search.php?q=<script>alert('XSS');</script> HTTP/1.1" 200 512 "-" "Mozilla/5.0..."
 
 What type of attack is being attempted, and how can you tell?",
@@ -1406,7 +1406,7 @@ What type of attack is being attempted, and how can you tell?",
 
   ```bash
   nc -nvlp 4444 -e /bin/bash
-Use code with caution.
+ .
 JavaScript
 What is this command MOST likely doing, and why is it a security concern?",
 "options":[
@@ -1522,7 +1522,7 @@ What is this command MOST likely doing, and why is it a significant security con
 "options": [
 "The command is creating a new user account on the system; this is a moderate security concern.",
    "The command is downloading and executing a file from a remote server, bypassing security restrictions; this is a major security concern.",
-Use code with caution.
+ .
 "The command is encrypting a file on the system using PowerShell's built-in encryption capabilities; this is not inherently malicious.",
 "The command is displaying the contents of a text file on the system; this is not inherently malicious."
 ],
@@ -1545,7 +1545,7 @@ This decoded command does the following:
          4. Executes the downloaded file (`test.exe`).
 
    This is a *major security concern* because the command downloads and executes a potentially malicious file from a remote server, bypassing standard security measures. The obfuscation (Base64 encoding) is a common tactic to evade detection.",
-Use code with caution.
+ .
 "examTip": "Be extremely cautious of PowerShell commands that use -Enc (EncodedCommand) and download/execute remote files."
 }
 ]
