@@ -1,1311 +1,1377 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 2,
-  "testName": "CySA Practice Test #2 (Very Easy)",
+  "testName": " CySa Practice Test #2 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
       "question": "What does the acronym 'VPN' stand for?",
       "options": [
-        "Virtual Private Network",
-        "Very Personal Network",
+        "Very Private Network",
         "Virtual Public Network",
-        "Visual Protocol Navigation"
+        "Virtual Private Network",
+        "Verified Public Network"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "VPN stands for Virtual Private Network. It creates a secure, encrypted connection over a less secure network, like the internet. Options B, C, and D are not real terms related to networking.",
-      "examTip": "Remember VPNs are used to establish secure connections, especially when using public Wi-Fi."
+      "correctAnswerIndex": 2,
+      "explanation":
+        "The correct answer is Virtual Private Network. It creates a secure connection over a public network.",
+      "examTip": "VPNs are used for secure remote access."
     },
     {
       "id": 2,
-      "question": "Which of the following is a type of malware?",
+      "question": "Which of the following is a common type of malware?",
       "options": [
-        "Firewall",
+        "Hardware",
+        "Software",
         "Virus",
-        "Router",
-        "Operating System"
+        "Firewall"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A virus is a type of malware that replicates itself by attaching to other files or programs. A firewall (Option A) is a security *system*. A router (Option C) is a networking device. An operating system (Option D) is the core software that manages the computer.",
-      "examTip": "Malware is a general term for malicious software, including viruses, worms, and Trojans."
+      "correctAnswerIndex": 2,
+      "explanation":
+        "Hardware is physical equipment. Software is a general term. A Firewall is a security tool. A Virus is a specific type of malicious software designed to harm computer systems.",
+      "examTip": "Malware is short for 'malicious software'."
     },
     {
       "id": 3,
-      "question": "What is the primary purpose of a firewall?",
+      "question": "What is a strong password?",
       "options": [
-        "To store files.",
-        "To control network traffic and block unauthorized access.",
-        "To connect to the internet.",
-        "To send emails."
+        "A short word.",
+        "Your pet's name.",
+        "A mix of upper and lowercase letters, numbers, and symbols.",
+        "Your birthday."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a barrier between networks (like your home network and the internet), allowing or blocking traffic based on rules. Storing files (Option A), connecting to the internet (Option C), and sending emails (Option D) are functions of other systems.",
-      "examTip": "Think of a firewall as a gatekeeper for your network, deciding who and what gets in and out."
+      "correctAnswerIndex": 2,
+      "explanation":
+        "Short words, pet names, and birthdays are easily guessed. A strong password is complex and difficult to guess, combining different character types.",
+      "examTip": "Use long, complex passwords to protect your accounts."
     },
     {
       "id": 4,
-      "question": "What does 'PII' stand for?",
+      "question": "What is the purpose of a firewall?",
       "options": [
-        "Personal Internet Information",
-        "Private Identification Index",
-        "Personally Identifiable Information",
-        "Protected Internet Interface"
+        "To play music.",
+        "To block unauthorized network access.",
+        "To store files.",
+        "To print documents."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "PII stands for Personally Identifiable Information. This includes data like names, social security numbers, and addresses that can be used to identify an individual.  The other options are not standard security terms.",
-      "examTip": "Protecting PII is crucial for privacy and compliance with regulations."
+      "correctAnswerIndex": 1,
+      "explanation":
+        "Firewalls don't play music, store files, or print.  A firewall's main job is to control network traffic, blocking anything that doesn't match its rules.",
+      "examTip": "Firewalls are like security guards for your network."
     },
     {
       "id": 5,
-      "question": "Which of the following is an example of a strong password?",
+      "question": "What does 'phishing' mean?",
       "options": [
-        "password123",
-        "123456",
-        "MyStrongP@ssw0rd!",
-        "MyName123"
+        "A type of fishing sport.",
+        "A way to cook fish.",
+        "Tricking someone into giving personal information through fake emails or websites.",
+        "A type of computer hardware."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A strong password is long, uses a combination of uppercase and lowercase letters, numbers, and symbols, and is not easily guessable. Options A, B, and D are common and easily cracked passwords.",
-      "examTip": "Use a password manager to generate and store unique, complex passwords for each of your accounts."
+      "explanation":
+        "Phishing has nothing to do with actual fishing. Phishing is a cybercrime where attackers pretend to be trustworthy to steal data like passwords or credit card numbers.",
+      "examTip": "Be suspicious of emails asking for personal information."
     },
     {
-        "id": 6,
-        "question": "What is 'phishing'?",
-        "options":[
-            "A type of fishing sport.",
-            "A method of securing a network.",
-            "A type of social engineering attack that uses deceptive emails or websites.",
-            "A tool for analyzing network traffic."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "Phishing is a social engineering attack where attackers impersonate legitimate entities, often via email, to trick individuals into revealing sensitive information.  It's not a sport (Option A), a security method (Option B) or a network analysis tool (Option D).",
-        "examTip":"Always verify the sender's email address and be cautious of links and attachments in unsolicited emails."
+      "id": 6,
+      "question": "Which of the following is an example of PII?",
+      "options": [
+        "The color of your computer.",
+        "Your name.",
+        "The speed of your internet.",
+        "The type of mouse you use."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation":
+        "Computer color, internet speed, and mouse type don't identify you.  PII (Personally Identifiable Information) is any data that can reveal your identity, like your name.",
+      "examTip": "Protect your PII to prevent identity theft."
     },
     {
-        "id": 7,
-        "question": "What does 'encryption' do?",
-        "options":[
-            "Makes data unreadable to unauthorized users.",
-            "Deletes data permanently.",
-            "Backs up data to a remote server.",
-            "Scans a computer for viruses."
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"Encryption transforms data into a coded format (ciphertext) that can only be read with the correct decryption key. It doesn't delete data (Option B), back up data (Option C) or scan for viruses (Option D).",
-        "examTip":"Encryption is essential for protecting sensitive data both in transit and at rest."
+      "id": 7,
+      "question": "What does 'encryption' do?",
+      "options": [
+        "Makes data unreadable to unauthorized users.",
+        "Deletes data.",
+        "Makes data larger.",
+        "Prints data."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation":
+        "Encryption doesn't delete, enlarge, or print data. Encryption scrambles data so only authorized users with the correct key can read it.",
+      "examTip": "Encryption protects data confidentiality."
     },
     {
-        "id": 8,
-        "question":"Which of the following is a good security practice?",
-        "options":[
-            "Sharing your password with colleagues.",
-            "Using the same password for all your accounts.",
-            "Regularly updating your software.",
-            "Opening email attachments from unknown senders."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation":"Regularly updating software, including the operating system and applications, helps patch security vulnerabilities that attackers could exploit.  The other options are all bad security practices.",
-        "examTip":"Enable automatic updates whenever possible to stay protected against the latest threats."
+      "id": 8,
+      "question": "What is a 'hacker'?",
+      "options": [
+        "Someone who repairs computers.",
+        "Someone who tries to gain unauthorized access to computer systems.",
+        "Someone who writes computer programs.",
+        "Someone who sells computers."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation":
+        "Computer repair, programming, and sales are legitimate activities.  A hacker is someone who tries to break into computer systems, often with malicious intent.",
+      "examTip": "Hackers can be a threat to cybersecurity."
     },
     {
-        "id": 9,
-        "question":"What does 'malware' stand for?",
-        "options":[
-            "Malicious Software",
-            "Multiple Accessware",
-            "Mainframe Architecture",
-            "Mobile Application Resource"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"Malware is short for 'Malicious Software,' which is a broad term for any software designed to harm or disrupt a computer system.  The other options are not related to cybersecurity.",
-        "examTip":"Malware includes viruses, worms, Trojans, ransomware, and spyware."
+      "id": 9,
+      "question": "What does 'backup' mean in computing?",
+      "options": [
+        "To delete files.",
+        "To make a copy of data to protect against loss.",
+        "To turn off the computer.",
+        "To install software."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation":
+          "Backups aren't about deleting, shutting down, or installing. A backup is a copy of your data, stored separately, so you can restore it if the original is lost or damaged.",
+      "examTip": "Regular backups are essential for data protection."
     },
     {
-        "id": 10,
-        "question":"What is a common sign of a computer virus infection?",
-        "options":[
-            "The computer runs faster than usual.",
-            "The computer displays unexpected error messages or pop-ups.",
-            "The computer's battery lasts longer.",
-            "The computer connects to the internet more quickly."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Unexpected error messages, pop-ups, slow performance, or unusual system behavior can indicate a malware infection. Improved performance (Options A, C, and D) would be the opposite of what you'd expect.",
-        "examTip":"Be aware of unusual changes in your computer's behavior, as they could be signs of malware."
+      "id": 10,
+      "question": "What does 'malware' stand for?",
+      "options": [
+        "Many Applications",
+        "Malicious Software",
+        "Main Software",
+        "Multiple Wares"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation":
+        "Malware is short for Malicious Software. It's any software designed to harm or disrupt a computer system.",
+      "examTip": "Protect your devices from malware with antivirus software."
     },
     {
-        "id": 11,
-        "question":"What does 'DDoS' stand for?",
-        "options":[
-            "Distributed Denial of Service",
-            "Data Disk Operating System",
-            "Digital Document Storage",
-            "Direct Drive Online Service"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"DDoS stands for Distributed Denial of Service. This type of attack overwhelms a system or network with traffic from multiple sources, making it unavailable to legitimate users. The other options are not related cybersecurity terms.",
-        "examTip":"DDoS attacks are often launched using botnets (networks of compromised computers)."
-    },
-     {
-        "id": 12,
-        "question":"What is the purpose of an 'antivirus' program?",
-        "options":[
-            "To speed up your computer.",
-            "To detect and remove malware.",
-            "To organize your files.",
-            "To connect to Wi-Fi networks."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Antivirus software is designed to identify and eliminate or quarantine malicious software, such as viruses, worms, and Trojans. It doesn't primarily speed up your computer (Option A), organize files (Option C) or connect to Wi-Fi (Option D).",
-        "examTip":"Keep your antivirus software up to date and run regular scans to protect your system."
-    },
+    "id": 11,
+    "question": "What is a computer virus?",
+    "options": [
+        "A type of computer hardware.",
+        "A program that helps your computer run faster.",
+        "A type of malware that can replicate itself and spread to other computers.",
+        "A tool for creating documents."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+       "A virus is not hardware, a performance booster, or a document creation tool.  A computer virus is a specific type of malware.  It's designed to spread from one computer to another, often by attaching itself to other files.",
+    "examTip": "Antivirus software helps protect against computer viruses."
+},
+{
+    "id": 12,
+    "question": "What is 'antivirus software'?",
+    "options":[
+        "Software that makes your computer run faster.",
+        "Software that helps protect your computer from malware.",
+        "Software that lets you play games.",
+        "Software that creates documents."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":"Antivirus software doesn't speed up your computer, focus on games, or create documents. Antivirus software is designed to detect, prevent, and remove malware, such as viruses, worms, and Trojans.",
+    "examTip": "Keep your antivirus software up to date for the best protection."
+},
+{
+    "id": 13,
+    "question": "What is an 'IP address'?",
+   "options":[
+        "A type of password.",
+        "A unique number that identifies a device on a network.",
+        "A type of computer screen.",
+        "The name of a computer program."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+        "An IP address is not a password, screen type, or program name. An IP address is like a phone number for a device on a network (like the internet or a local network).  It allows devices to communicate with each other.",
+    "examTip": "Every device connected to the internet has an IP address."
+},
+{
+    "id": 14,
+    "question": "What does 'cybersecurity' mean?",
+     "options":[
+        "The study of plants.",
+        "Protecting computer systems and networks from digital attacks.",
+        "Building houses.",
+        "Cooking food."
+
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":"Cybersecurity doesn't involve plants, construction, or cooking. Cybersecurity is the practice of protecting computers, networks, and data from unauthorized access, use, disclosure, disruption, modification, or destruction.",
+    "examTip":"Cybersecurity is important for protecting our digital lives."
+
+},
+{
+    "id": 15,
+    "question":"What should you do if you receive a suspicious email?",
+     "options":[
+        "Click on all the links.",
+        "Reply to the email and ask for more information.",
+        "Delete the email without opening any attachments or clicking any links.",
+        "Forward the email to all your friends."
+     ],
+     "correctAnswerIndex": 2,
+     "explanation":"Clicking links, replying, or forwarding can spread malware or lead to phishing scams. The safest action is to delete the suspicious email immediately without interacting with it.",
+     "examTip":"Be cautious with emails from unknown senders."
+},
+{
+  "id": 16,
+    "question": "What is 'two-factor authentication (2FA)'?",
+    "options": [
+        "Using the same password twice.",
+        "Using a username and password only.",
+        "Using a username, password, and an additional verification method, like a code from your phone.",
+        "Using a very long password."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+       "2FA is not using the same password twice or just a username/password. A long password is good, but not 2FA. Two-factor authentication adds an *extra* layer of security.  In addition to your password, you need something else, like a code sent to your phone.",
+    "examTip": "Enable 2FA whenever possible for added security."
+
+},
+{
+  "id": 17,
+    "question": "What is a 'password manager'?",
+     "options":[
+        "A person who remembers your passwords for you.",
+        "A program that helps you create and store strong, unique passwords securely.",
+        "A book where you write down your passwords.",
+        "A type of computer virus."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation": "It is not a person, physical book, or virus. A password manager is a software application that helps you generate strong, unique passwords and stores them in an encrypted database.  This helps you avoid using weak or reused passwords.",
+     "examTip":"Password managers help you manage your passwords securely."
+},
     {
-        "id": 13,
-        "question": "What does 'CIA' stand for in the CIA Triad?",
-        "options":[
-            "Control, Integrity, Access",
-            "Confidentiality, Integrity, Availability",
-            "Central Intelligence Agency",
-            "Computer Information Access"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"The CIA Triad represents the three core principles of information security: Confidentiality (keeping data secret), Integrity (ensuring data accuracy), and Availability (ensuring authorized users can access data when needed).",
-        "examTip":"The CIA Triad is a fundamental model for guiding security policies and practices."
-    },
-    {
-        "id": 14,
-        "question": "Which of these is a type of network attack?",
-        "options":[
-            "Reading a book",
-            "Sending a letter",
-            "SQL Injection",
-            "Watching a movie"
-        ],
-        "correctAnswerIndex": 2,
-        "explanation":"SQL Injection is a code injection technique used to attack data-driven applications, where malicious SQL statements are inserted into an entry field for execution. The other options are unrelated activities.",
-        "examTip":"SQL Injection attacks target vulnerabilities in web applications that interact with databases."
-    },
-     {
-        "id": 15,
-        "question":"What is a 'hacker'?",
-        "options":[
-            "Someone who plays golf.",
-            "Someone who tries to gain unauthorized access to computer systems.",
-            "Someone who repairs computers.",
-            "Someone who writes software."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A hacker is someone who uses their technical skills to gain unauthorized access to computer systems or networks. While some hackers use their skills ethically (white hat hackers), others engage in malicious activities (black hat hackers).",
-        "examTip":"Hacking can be used for both ethical and unethical purposes."
-    },
-    {
-        "id": 16,
-        "question":"What is 'two-factor authentication' (2FA)?",
-        "options":[
-            "Using two different passwords.",
-            "Using a password and another form of verification, like a code from your phone.",
-            "Using a very long password.",
-            "Having two separate user accounts."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Two-factor authentication (2FA) adds an extra layer of security by requiring something you *know* (like a password) and something you *have* (like a phone) or something you *are* (like a fingerprint). It's not just two passwords (Option A), a long password (Option C), or multiple accounts (Option D).",
-        "examTip":"Enable 2FA whenever possible, especially for important accounts."
-    },
-    {
-        "id":17,
-        "question":"What is the purpose of backing up your data?",
-        "options":[
-            "To make your computer run faster.",
-            "To have a copy of your data in case of loss or damage.",
-            "To free up space on your hard drive.",
-            "To protect your computer from viruses."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Backing up data creates a copy that can be used to restore the original data if it's lost, corrupted, or destroyed due to hardware failure, malware, or accidental deletion. It's not primarily for speed (Option A), freeing space (Option C), or virus protection (Option D).",
-        "examTip":"Regularly back up your data to an external drive, cloud storage, or another secure location."
-    },
-     {
         "id": 18,
-        "question": "What is a 'patch' in software?",
+        "question": "Why is it important to update your software regularly?",
         "options":[
-            "A sticker you put on your computer.",
-            "A piece of code that fixes a bug or security vulnerability.",
-            "A type of computer hardware.",
-            "A program that helps you draw."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A software patch is a small piece of code released by software developers to fix bugs, address security vulnerabilities, or improve performance. It's not a physical sticker (Option A), hardware (Option C), or a drawing program (Option D).",
-        "examTip":"Apply software patches promptly to keep your systems secure and stable."
-    },
-      {
-        "id": 19,
-        "question": "What is the purpose of an 'IDS'?",
-        "options":[
-            "To prevent intrusions.",
-            "To detect intrusions.",
-            "To encrypt data.",
-            "To manage passwords."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"An Intrusion Detection System (IDS) monitors network traffic or system activity for suspicious behavior and generates alerts. An IPS (Intrusion Prevention System) *can* prevent intrusions (Option A), but an IDS primarily *detects*. It's not primarily for encryption (Option C) or password management (Option D).",
-        "examTip":"An IDS acts like a security camera, watching for suspicious activity."
-    },
-    {
-        "id": 20,
-        "question":"What does 'HTTPS' stand for?",
-        "options":[
-            "Hypertext Transfer Protocol Secure",
-            "High Transfer Protocol Standard",
-            "Hypertext Transmission Process Security",
-            "Home Technology Protocol System"
-
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"HTTPS stands for Hypertext Transfer Protocol Secure. It's the secure version of HTTP, using encryption (SSL/TLS) to protect communication between a web browser and a website. The other options are incorrect variations.",
-        "examTip":"Look for the 'HTTPS' and padlock icon in your browser's address bar when visiting websites, especially when entering sensitive information."
-    },
-        {
-        "id": 21,
-        "question":"What is 'social engineering'?",
-        "options":[
-            "Building bridges and roads.",
-            "Tricking people into revealing confidential information or taking actions.",
-            "Designing computer networks.",
-            "Writing software code."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Social engineering exploits human psychology rather than technical vulnerabilities to gain access or information.  It involves manipulating people into breaking normal security procedures. It is not related to civil engineering (Option A), network design (Option C), or programming (Option D).",
-        "examTip": "Be suspicious of unsolicited requests for information, and always verify the identity of the requester."
-    },
-    {
-        "id": 22,
-        "question": "What is a 'firewall'?",
-        "options": [
-            "A wall made of fire.",
-            "A security system that monitors and controls network traffic.",
-            "A program for creating documents.",
-            "A type of computer game."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A firewall is a network security device or software that acts as a barrier, controlling traffic between networks (e.g., your home network and the internet) based on predefined rules. It's not a literal wall of fire (Option A), a document program (Option C) or a game (Option D).",
-        "examTip": "Think of a firewall as a gatekeeper, allowing or blocking network traffic based on rules."
-    },
-    {
-        "id": 23,
-        "question": "What does 'Wi-Fi' stand for?",
-        "options": [
-            "Wireless Fidelity",
-            "Wired Finder",
-            "Web File",
-            "Windows Interface"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation": "Wi-Fi stands for Wireless Fidelity. It's a technology that allows devices to connect to a network wirelessly using radio waves. The other options are not related terms.",
-        "examTip": "Always secure your Wi-Fi network with a strong password and encryption (WPA2 or WPA3)."
-    },
-    {
-        "id": 24,
-        "question": "What is a 'password manager'?",
-        "options": [
-            "A person who remembers all your passwords.",
-            "A program that helps you create and store strong, unique passwords.",
-            "A list of all your passwords written on a piece of paper.",
-            "A type of computer hardware."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A password manager is a software application that securely stores and manages your passwords, often generating strong, unique passwords for each of your accounts. It's not a person (Option A), a physical list (Option C), or hardware (Option D).",
-        "examTip": "Using a password manager is highly recommended to improve your password security and avoid password reuse."
-    },
-        {
-        "id": 25,
-        "question": "What is 'ransomware'?",
-        "options":[
-            "A type of computer hardware.",
-            "Malware that encrypts your files and demands a ransom to decrypt them.",
-            "A program that helps you organize your files.",
-            "A type of computer game."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Ransomware is a type of malware that encrypts a victim's files, making them inaccessible, and then demands a ransom payment (usually in cryptocurrency) to restore access. It is not hardware (Option A), a file organizer (Option C), or a game (Option D).",
-        "examTip":"Regular backups are the best defense against ransomware, as they allow you to restore your data without paying the ransom."
-    },
-    {
-        "id": 26,
-        "question":"What is a 'computer virus'?",
-        "options":[
-           "A type of bacteria.",
-           "A program that can replicate itself and spread to other computers.",
-           "A type of computer hardware.",
-           "A healthy part of a computer."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A computer virus is a type of malware that spreads by attaching itself to other files or programs.  When the infected file is executed, the virus replicates and spreads further.  It's not a biological organism (Option A), hardware (Option C) or beneficial (Option D).",
-        "examTip":"Use antivirus software and practice safe computing habits to avoid virus infections."
-    },
-    {
-        "id":27,
-        "question":"What does 'spam' mean in email?",
-        "options":[
-            "A type of canned meat.",
-            "Unsolicited or unwanted email, often sent in bulk.",
-            "A type of important email.",
-            "A way to organize your email inbox."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Spam refers to unsolicited and unwanted email messages, often sent in bulk for advertising or malicious purposes.  It's not a food product (Option A), important email (Option C) or an organizational tool (Option D).",
-        "examTip":"Be cautious of spam emails, and avoid clicking on links or opening attachments from unknown senders."
-    },
-    {
-        "id": 28,
-        "question":"What is 'multi-factor authentication' (MFA)?",
-        "options":[
-           "Using multiple passwords.",
-           "Using a username, password, and something else you have or are (like a fingerprint or code).",
-           "Using a very long password.",
-           "Having multiple user accounts."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Multi-factor authentication (MFA) requires multiple forms of verification to prove your identity, such as something you *know* (password), something you *have* (phone), or something you *are* (fingerprint). It's not just multiple passwords (Option A), a long password (Option C) or multiple accounts (Option D).",
-        "examTip":"Enable MFA whenever possible to significantly increase the security of your accounts."
-    },
-    {
-        "id": 29,
-        "question": "What is an 'operating system' (OS)?",
-        "options":[
-          "A type of computer game.",
-          "The software that manages computer hardware and software resources.",
-          "A type of computer monitor.",
-          "A device for connecting to the internet."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"The operating system (OS) is the core software that manages all of the hardware and software on a computer, providing a platform for applications to run. It's not a game (Option A), a monitor (Option C), or an internet device (Option D).",
-        "examTip":"Examples of operating systems include Windows, macOS, Linux, iOS, and Android."
-    },
-    {
-        "id": 30,
-        "question": "What is 'cybersecurity'?",
-        "options":[
-           "The study of plants.",
-           "The practice of protecting computer systems and networks from digital attacks.",
-           "A type of sport.",
-           "A type of food."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Cybersecurity is the practice of protecting computer systems, networks, and data from theft, damage, or unauthorized access. It involves various technologies, processes, and practices. It is not related to botany (Option A), sports (Option C) or food (Option D).",
-        "examTip":"Cybersecurity is an increasingly important field in today's interconnected world."
-    },
-     {
-        "id": 31,
-        "question": "Which of the following is a good practice for creating a strong password?",
-        "options": [
-            "Using your pet's name.",
-            "Using a common word.",
-            "Using a mix of upper and lowercase letters, numbers, and symbols.",
-            "Using your birthday."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "A strong password is complex and difficult to guess. It should include a combination of uppercase and lowercase letters, numbers, and symbols, and be at least 12 characters long. Options A, B, and D are easily guessable and should be avoided.",
-        "examTip": "Use a password manager to help you create and manage strong, unique passwords for each of your accounts."
-    },
-    {
-        "id": 32,
-        "question": "What is 'data backup'?",
-        "options": [
-            "Deleting files permanently.",
-            "Making a copy of your data to protect against loss or damage.",
-            "Encrypting your data.",
-            "Scanning your computer for viruses."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Data backup involves creating a copy of your data and storing it separately (e.g., on an external hard drive, cloud storage). This allows you to restore your data if the original is lost, corrupted, or destroyed. It's not deletion (Option A), encryption (Option C), or virus scanning (Option D).",
-        "examTip": "Regularly back up your important data to protect against data loss."
-    },
-    {
-        "id": 33,
-        "question": "What does 'HTTPS' in a website address indicate?",
-        "options": [
-            "The website is fast.",
-            "The website is secure and encrypts data.",
-            "The website is about sports.",
-            "The website is free to use."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "HTTPS (Hypertext Transfer Protocol Secure) indicates that the communication between your web browser and the website is encrypted using SSL/TLS. This protects your data from eavesdropping and tampering. It doesn't necessarily mean the site is fast (Option A), about sports (Option C), or free (Option D).",
-        "examTip": "Always look for the 'HTTPS' and padlock icon in the address bar when entering sensitive information online."
-    },
-    {
-        "id": 34,
-        "question": "What is an 'update' for software?",
-        "options": [
-            "A new version of the software.",
-            "A piece of code that fixes bugs, improves performance, or adds new features.",
-            "A way to make the software look different.",
-            "A type of computer virus."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Software updates often include important security patches that fix vulnerabilities, as well as bug fixes and performance improvements. While a new version *might* be an update (Option A), the core purpose of an update is to improve the existing software. It's not just cosmetic (Option C) or a virus (Option D).",
-        "examTip":"Enable automatic updates whenever possible to keep your software secure and up-to-date."
-    },
-    {
-        "id": 35,
-        "question": "What is a good practice for using public Wi-Fi?",
-        "options":[
-            "Sharing your passwords with others.",
-            "Avoiding accessing sensitive information or entering passwords.",
-            "Using the same password for all your accounts.",
-            "Leaving your Wi-Fi settings open."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Public Wi-Fi networks are often unsecured, making it easier for attackers to intercept your data. It's best to avoid accessing sensitive information (like banking websites) or entering passwords when using public Wi-Fi. The other options are all bad security practices.",
-        "examTip": "Use a VPN when connecting to public Wi-Fi to encrypt your traffic and protect your data."
-    },
-     {
-        "id": 36,
-        "question": "Which of the following is NOT a type of malware?",
-        "options": [
-          "Virus",
-          "Firewall",
-          "Trojan Horse",
-          "Worm"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A firewall is a *security system* that protects networks and computers from unauthorized access. It's not a type of malware. Viruses, Trojan Horses, and Worms are all types of malware.",
-        "examTip": "Understand the difference between security tools (like firewalls) and malicious software (malware)."
-      },
-      {
-        "id": 37,
-        "question": "What is a 'worm' in computer terms?",
-        "options": [
-          "A type of insect.",
-          "A self-replicating malware that spreads across networks.",
-          "A tool for finding information on the internet.",
-          "A type of fishing equipment."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A computer worm is a type of malware that replicates itself and spreads to other computers, often without any user interaction.  It's not a biological organism (Option A), a search tool (Option C) or fishing gear (Option D).",
-        "examTip": "Worms can spread rapidly through networks, causing significant damage."
-      },
-      {
-        "id": 38,
-        "question": "What is a 'Trojan horse'?",
-        "options": [
-          "A gift from a friend.",
-          "Malware disguised as legitimate software.",
-          "A type of computer hardware.",
-          "A strong password."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A Trojan horse is a type of malware that disguises itself as a harmless or useful program to trick users into installing it. Once installed, it can perform malicious actions. It is not a gift (Option A), hardware (option C) or password (Option D)",
-        "examTip": "Be cautious when downloading and installing software from untrusted sources."
-      },
-      {
-        "id": 39,
-        "question": "What is a 'botnet'?",
-        "options": [
-          "A network of robots.",
-          "A network of compromised computers controlled by an attacker.",
-          "A type of secure network.",
-          "A program for creating websites."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "A botnet is a network of computers infected with malware (bots) and controlled remotely by an attacker (botmaster).  Botnets are often used to launch DDoS attacks, send spam, or steal data. It is not physical robots (Option A), a secure network (Option C) or web design software (Option D).",
-        "examTip": "Botnets are a significant threat because they can be used to launch large-scale attacks."
-      },
-      {
-        "id": 40,
-        "question":"What is the main purpose of a SIEM system?",
-        "options":[
-            "Blocking viruses.",
-            "Collecting and analyzing security logs.",
-            "Encrypting emails.",
-            "Creating backups."
-
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A Security Information and Event Management (SIEM) system collects, aggregates, and analyzes security log data from various sources across an organization's IT infrastructure.  This helps security teams detect and respond to security incidents. It's not primarily for blocking viruses (Option A), encrypting emails (Option C) or creating backups (Option D).",
-        "examTip":"SIEM systems are essential for centralized security monitoring and incident response."
-      },
-       {
-        "id": 41,
-        "question":"Which of the following is a type of cyberattack that tries to guess passwords?",
-        "options":[
-           "Fishing",
-           "Brute-force attack",
-           "Swimming",
-           "Dancing"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A brute-force attack involves systematically trying different combinations of usernames and passwords until the correct one is found.  It's a trial-and-error method used to gain unauthorized access to accounts.  It's not related to fishing (Option A), swimming (Option C) or dancing (Option D).",
-        "examTip":"Strong, unique passwords and multi-factor authentication are effective defenses against brute-force attacks."
-       },
-       {
-        "id": 42,
-        "question":"What is an 'IP address'?",
-        "options":[
-           "A type of password.",
-           "A unique number that identifies a device on a network.",
-           "A type of computer virus.",
-           "A person's physical address."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"An IP (Internet Protocol) address is a numerical label assigned to each device connected to a computer network that uses the Internet Protocol for communication. It serves as an identifier for the device, similar to a postal address. It's not a password (Option A), virus (Option C) or physical address (Option D).",
-        "examTip":"IP addresses can be static (permanent) or dynamic (assigned temporarily)."
-       },
-       {
-        "id": 43,
-        "question": "What does 'IoT' stand for?",
-        "options":[
-            "Internet of Things",
-            "Input Output Technology",
-            "Inside Operating Terminal",
-            "Internal Online Transfer"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"IoT stands for Internet of Things. This refers to the network of physical devices (vehicles, home appliances, etc.) embedded with electronics, software, sensors, and connectivity, which enables them to connect and exchange data. The other options are incorrect.",
-        "examTip":"IoT devices are becoming increasingly common, presenting both opportunities and security challenges."
-       },
-       {
-        "id": 44,
-        "question": "What is 'malware'?",
-        "options":[
-          "Good software.",
-          "Software designed to harm or disrupt a computer system.",
-          "A type of computer hardware.",
-          "A type of food."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Malware, short for malicious software, is any software intentionally designed to cause damage to a computer, server, client, or computer network. It's not good software (Option A), hardware (Option C) or food (Option D).",
-        "examTip":"Malware comes in many forms, including viruses, worms, Trojans, ransomware, and spyware."
-       },
-       {
-        "id": 45,
-        "question": "What should you do if you receive a suspicious email?",
-        "options":[
-            "Open it immediately.",
-            "Click on all the links.",
-            "Forward it to all your friends.",
-            "Delete it without opening it or report it as spam."
-        ],
-        "correctAnswerIndex": 3,
-        "explanation":"If you receive a suspicious email, the safest course of action is to delete it without opening it or clicking on any links.  You can also report it as spam to your email provider. Opening it (Option A), clicking links (Option B), or forwarding it (Option C) could expose you to malware or phishing attacks.",
-        "examTip":"When in doubt, throw it out! Don't take chances with suspicious emails."
-       },
-       {
-        "id": 46,
-        "question": "Which of the following is the safest place to store your passwords?",
-        "options":[
-            "Written on a sticky note on your monitor.",
-            "In your head.",
-            "In a password manager program.",
-            "In a text file on your desktop."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "A password manager is a secure and convenient way to store your passwords. It encrypts your passwords and protects them from unauthorized access.  The other options are all insecure and easily compromised.",
-        "examTip": "Use a reputable password manager to generate and store strong, unique passwords for all your accounts."
-    },
-    {
-        "id": 47,
-        "question": "What does 'encrypting' data mean?",
-        "options": [
-            "Deleting the data.",
-            "Making the data unreadable to unauthorized users.",
-            "Copying the data.",
-            "Moving the data to a different folder."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Encryption transforms data into an unreadable format (ciphertext) using an algorithm and a key. Only someone with the correct decryption key can convert the data back to its original, readable form (plaintext). It's not deletion (Option A), copying (Option C), or moving (Option D).",
-        "examTip": "Encryption is essential for protecting sensitive data, both when it's stored (at rest) and when it's being transmitted (in transit)."
-       },
-       {
-        "id": 48,
-        "question":"What is a 'vulnerability' in computer security?",
-        "options":[
-            "A type of computer virus.",
-            "A weakness in a system that can be exploited by an attacker.",
-            "A strong password.",
-            "A security update."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A vulnerability is a flaw or weakness in a system's design, implementation, or configuration that can be exploited by an attacker to compromise the system's security. It's not a virus (Option A), a strong password (Option C), or an update (Option D).",
-        "examTip":"Vulnerability scanning and penetration testing are used to identify and assess vulnerabilities."
-       },
-              {
-        "id": 49,
-        "question":"What does 'authentication' mean?",
-        "options":[
-           "Deleting files.",
-           "Verifying the identity of a user or device.",
-           "Encrypting data.",
-           "Scanning for viruses."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Authentication is the process of verifying that someone or something is who or what they claim to be. This is typically done by checking credentials, such as a username and password, or using other factors like biometrics.  It's not deleting files (Option A), encrypting data (Option C) or scanning for viruses (Option D).",
-        "examTip":"Authentication is a fundamental part of access control."
-       },
-       {
-        "id": 50,
-        "question": "What is a 'digital signature' used for?",
-        "options":[
-          "To draw pictures on a computer.",
-          "To verify the authenticity and integrity of digital documents.",
-          "To create strong passwords.",
-          "To speed up your internet connection."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A digital signature is a cryptographic technique used to verify that a digital document or message hasn't been tampered with and that it comes from a specific sender. It's like a digital version of a handwritten signature. It is not for drawing (Option A), passwords (Option C) or internet speed (Option D).",
-        "examTip":"Digital signatures provide assurance that a document is genuine and hasn't been altered."
-       },
-       {
-        "id": 51,
-        "question": "What is a benefit of using cloud storage?",
-        "options":[
-          "Your data is only accessible on one computer.",
-          "Your data can be accessed from anywhere with an internet connection.",
-          "Your data is less secure.",
-          "Your computer runs faster."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Cloud storage allows you to store data on remote servers accessed over the internet, making it accessible from multiple devices and locations. It's not limited to one computer (Option A), and reputable cloud providers offer strong security (making Option C incorrect). It doesn't directly impact computer speed (Option D).",
-        "examTip": "Cloud storage offers convenience and data redundancy, but it's important to choose a reputable provider and understand their security practices."
-       },
-              {
-        "id": 52,
-        "question": "What does 'SQL' stand for in 'SQL injection'?",
-        "options":[
-           "Secure Question Language",
-           "Structured Query Language",
-           "System Query Logic",
-           "Simple Question List"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"SQL stands for Structured Query Language. It's a standard language used to communicate with and manage databases. The other options are not real terms related to databases.",
-        "examTip":"SQL injection attacks exploit vulnerabilities in web applications that use SQL databases."
-       },
-       {
-        "id": 53,
-        "question":"What is a 'zero-day' vulnerability?",
-        "options":[
-          "A vulnerability that is easy to fix.",
-          "A vulnerability that is unknown to the software vendor and has no patch.",
-          "A vulnerability that is not important.",
-          "A vulnerability that only affects old computers."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A zero-day vulnerability is a software flaw that is unknown to the vendor or has no available fix.  This makes it extremely dangerous because attackers can exploit it before a defense is available. It's not easy to fix (Option A), unimportant (Option C), or limited to old computers (Option D).",
-        "examTip":"Zero-day vulnerabilities are highly sought after by attackers and require proactive security measures."
-       },
-        {
-        "id": 54,
-        "question":"What is a 'white hat' hacker?",
-        "options":[
-           "A hacker who wears a white hat.",
-           "An ethical hacker who helps organizations find and fix security vulnerabilities.",
-           "A hacker who breaks into systems for malicious purposes.",
-           "A hacker who only uses old computers."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"White hat hackers, also known as ethical hackers, use their skills to help organizations improve their security. They conduct penetration tests and vulnerability assessments with permission. It's not about hat color (Option A), malicious intent (Option C) or old computers (Option D).",
-        "examTip":"White hat hackers are the 'good guys' of the hacking world."
-       },
-       {
-        "id": 55,
-        "question": "What does 'DLP' stand for?",
-        "options":[
-          "Data Loss Prevention",
-          "Digital Light Processing",
-          "Document Layout Program",
-          "Data Link Protocol"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"DLP stands for Data Loss Prevention. DLP systems and tools are designed to detect and prevent sensitive data from leaving an organization's control, whether intentionally or unintentionally. The other options are not related cybersecurity terms.",
-        "examTip":"DLP is crucial for protecting confidential information and complying with data privacy regulations."
-       },
-       {
-        "id": 56,
-        "question": "Which is generally safer, HTTP or HTTPS?",
-        "options":[
-          "HTTP",
-          "HTTPS",
-          "They are the same",
-          "Neither"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"HTTPS (Hypertext Transfer Protocol Secure) uses encryption (SSL/TLS) to protect the communication between your browser and a website, making it significantly safer than HTTP (Hypertext Transfer Protocol), which transmits data in plain text. ",
-        "examTip":"Always look for HTTPS in the address bar when entering sensitive information on a website."
-       },
-       {
-        "id": 57,
-        "question":"What is 'biometric' authentication?",
-        "options":[
-            "Using a password.",
-            "Using a physical characteristic, like a fingerprint or face scan.",
-            "Using a security question.",
-            "Using a one-time code."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Biometric authentication uses unique biological traits, such as fingerprints, facial recognition, or iris scans, to verify a person's identity.  It's not a password (Option A), security question (Option C) or one-time code (Option D), although those can be *combined* with biometrics for multi-factor authentication.",
-        "examTip":"Biometrics offer a convenient and secure form of authentication, but they are not foolproof."
-       },
-              {
-        "id": 58,
-        "question": "What is a 'cookie' in web browsing?",
-        "options":[
-           "A type of food.",
-           "A small text file stored on your computer by a website.",
-           "A type of computer virus.",
-           "A type of computer hardware."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A cookie is a small text file that a website stores on your computer to remember information about you, such as your login details, preferences, or shopping cart items. It's not a food item (Option A), a virus (Option C) or hardware (Option D).",
-        "examTip":"Cookies can be used for both legitimate purposes (like remembering your login) and for tracking your online activity."
-       },
-       {
-        "id": 59,
-        "question": "What does 'IT' stand for?",
-        "options":[
-            "Information Technology",
-            "Internet Thing",
-            "Inside Terminal",
-            "Instant Transfer"
-        ],
-        "correctAnswerIndex": 0,
-        "explanation":"IT stands for Information Technology. This encompasses the use of computers, storage, networking, and other physical devices, infrastructure, and processes to create, process, store, secure, and exchange all forms of electronic data. The other options are incorrect.",
-        "examTip":"IT is a broad field that covers all aspects of managing and processing information using technology."
-       },
-       {
-        "id": 60,
-        "question":"What is 'encryption'?",
-        "options":[
-           "Deleting files.",
-           "Scrambling data to make it unreadable without a key.",
-           "Copying files.",
-           "Organizing files."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Encryption is the process of converting data into a coded format (ciphertext) that can only be deciphered with the correct decryption key. It protects data confidentiality by making it unreadable to unauthorized individuals. It's not deleting (Option A), copying (Option C) or organizing (Option D) files.",
-        "examTip":"Encryption is a fundamental security technique for protecting sensitive data."
-       },
-       {
-        "id": 61,
-        "question": "What is a 'digital certificate'?",
-        "options":[
-           "A type of computer virus.",
-           "An electronic document used to verify the identity of a website or user.",
-           "A type of password.",
-           "A type of computer hardware."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A digital certificate is an electronic document that uses a digital signature to bind a public key with an identity – information such as the name of a person or an organization, their address, and so forth. Certificates help establish trust online. They are not viruses (Option A), passwords (Option C) or hardware (Option D).",
-        "examTip":"Digital certificates are used in HTTPS to secure websites and verify their authenticity."
-       },
-              {
-        "id": 62,
-        "question": "What is the 'cloud' in cloud computing?",
-        "options":[
-           "A type of weather.",
-           "A network of remote servers that store and manage data.",
-           "A type of computer hardware.",
-           "A type of software."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"In cloud computing, the 'cloud' refers to a network of remote servers hosted on the internet, used to store, manage, and process data, rather than a local server or personal computer. It's not weather (Option A), hardware (Option C), or a single piece of software (Option D).",
-        "examTip":"Cloud computing offers benefits like scalability, cost savings, and accessibility."
-       },
-       {
-        "id": 63,
-        "question": "What is a 'keylogger'?",
-        "options":[
-          "A device for opening doors.",
-          "Software or hardware that records every keystroke made on a computer.",
-          "A type of password.",
-          "A type of computer monitor."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A keylogger is a type of surveillance technology (software or hardware) used to monitor and record each keystroke typed on a specific computer's keyboard. It is often used maliciously to steal passwords and other sensitive information.  It's not a door opener (Option A), a password (Option C) or a monitor (Option D).",
-        "examTip":"Keyloggers are a serious threat because they can capture sensitive information without the user's knowledge."
-       },
-       {
-        "id": 64,
-        "question": "What is 'pharming'?",
-        "options":[
-           "A type of agriculture.",
-           "Redirecting users to a fake website without their knowledge.",
-           "A type of fishing.",
-           "A type of computer game."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Pharming is a cyberattack that redirects users to a fake website that looks like a legitimate one, often by compromising DNS servers or modifying a user's local host file. The goal is to steal credentials or install malware. It is not related to agriculture (Option A), fishing (option C) or gaming (Option D)",
-        "examTip":"Pharming is more sophisticated than phishing because it doesn't require the user to click on a deceptive link."
-       },
-              {
-        "id": 65,
-        "question": "What is 'spyware'?",
-        "options":[
-           "A type of glasses.",
-           "Malware that secretly gathers information about a user's activity.",
-           "A type of computer hardware.",
-           "A tool for cleaning your computer screen."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Spyware is a type of malware that is installed on a computer without the user's knowledge and secretly gathers information about their activities, such as browsing history, keystrokes, and personal data. It is not eyewear (Option A), hardware (Option C) or a cleaning tool (Option D).",
-        "examTip":"Spyware can be difficult to detect and can compromise your privacy and security."
-       },
-              {
-        "id": 66,
-        "question":"What is a 'script kiddie'?",
-        "options":[
-           "A child who writes computer programs.",
-           "An unskilled attacker who uses pre-made hacking tools.",
-           "A skilled hacker.",
-           "A type of computer virus."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A script kiddie is a derogatory term for an unskilled individual who uses hacking tools and scripts created by others to compromise computer systems or networks. They often lack a deep understanding of the underlying concepts. They are not child programmers (Option A), skilled hackers (Option C) or viruses (Option D).",
-        "examTip":"Script kiddies can still cause damage, even though they may not be highly skilled."
-       },
-              {
-        "id": 67,
-        "question":"What is 'adware'?",
-        "options":[
-            "A type of computer hardware.",
-            "Software that automatically displays advertisements.",
-            "A type of malware that steals your passwords.",
-            "A tool for organizing your files."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Adware is software that automatically displays or downloads advertising material (often unwanted) to a computer after a program is installed or while the application is being used. It's not hardware (Option A), password-stealing malware (Option C) or a file organizer (Option D).",
-        "examTip":"While not always malicious, adware can be annoying and can sometimes track your browsing habits."
-       },
-       {
-        "id": 68,
-        "question": "What does 'DoS' stand for in 'DoS attack'?",
-        "options":[
-           "Disk Operating System",
-           "Denial of Service",
-           "Data Online Security",
-           "Digital Output System"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"DoS stands for Denial of Service. A DoS attack attempts to make a machine or network resource unavailable to its intended users by temporarily or indefinitely disrupting services of a host connected to the Internet. The other options are not related cybersecurity terms.",
-        "examTip":"A DDoS (Distributed Denial of Service) attack is a DoS attack launched from multiple sources, making it more difficult to stop."
-       },
-       {
-        "id": 69,
-        "question":"What is a 'firewall'?",
-        "options":[
-            "A wall made of fire.",
-            "A security system that blocks unauthorized access to a network.",
-            "A program for drawing pictures.",
-            "A type of computer game."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A firewall is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules.  It acts as a barrier between a trusted internal network and untrusted external networks, such as the Internet.  It's not a physical wall (Option A), a drawing program (Option C) or a game (Option D).",
-        "examTip":"Firewalls are a fundamental part of network security."
-       },
-       {
-        "id": 70,
-        "question":"What is a 'computer worm'?",
-        "options":[
-            "A type of insect.",
-            "A self-replicating malware that spreads across networks.",
-            "A tool for cleaning your computer.",
-            "A type of fishing bait."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"A computer worm is a standalone malware program that replicates itself in order to spread to other computers. Unlike a virus, it does not need to attach itself to an existing program.  It's not a biological organism (Option A), a cleaning tool (Option C) or fishing bait (Option D).",
-        "examTip":"Worms can spread rapidly through networks, causing widespread damage."
-       },
-       {
-        "id": 71,
-        "question": "What is the FIRST step you should take if you suspect your computer is infected with malware?",
-        "options": [
-          "Turn off your computer immediately.",
-          "Disconnect your computer from the network.",
-          "Run a full system scan with your antivirus software.",
-          "Delete all your files."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Disconnecting from the network (including Wi-Fi) prevents the malware from spreading to other devices or communicating with a command-and-control server. While running a scan (Option C) is important, it comes *after* containment. Turning off the computer (Option A) might lose volatile data. Deleting files (Option D) is drastic and unnecessary.",
-        "examTip": "Isolate the infected system first to prevent further damage."
-      },
-      {
-        "id": 72,
-        "question": "What is the BEST way to protect yourself from phishing attacks?",
-        "options": [
-          "Install antivirus software.",
-          "Be suspicious of emails asking for personal information and verify their authenticity.",
-          "Use a strong password.",
-          "Keep your software updated."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "While antivirus (Option A), strong passwords (Option C), and updates (Option D) are important security measures, being cautious and verifying email authenticity is the *most* effective defense against phishing, which relies on social engineering.  Attackers can craft emails that bypass technical controls.",
-        "examTip": "Think before you click! Verify requests for personal information, and don't trust unsolicited emails."
-      },
-      {
-        "id": 73,
-        "question": "Which of the following is a good practice for securing your home Wi-Fi network?",
-        "options": [
-          "Using WEP encryption.",
-          "Using WPA2 or WPA3 encryption with a strong password.",
-          "Leaving the default network name (SSID) unchanged.",
-          "Disabling the firewall on your router."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "WPA2 or WPA3 encryption provides strong security for wireless networks. WEP (Option A) is outdated and easily cracked. Changing the default SSID (Option C) offers minimal security benefit and is not the *best* practice. Disabling the firewall (Option D) is extremely dangerous.",
-        "examTip": "Always use the strongest available encryption protocol (currently WPA3) for your Wi-Fi network."
-      },
-      {
-        "id": 74,
-        "question": "What does 'scanning for vulnerabilities' mean?",
-        "options": [
-          "Looking for physical weaknesses in a building.",
-          "Checking a computer system or network for security weaknesses that could be exploited.",
-          "Looking for viruses on your computer screen.",
-          "Searching the internet for information."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Vulnerability scanning involves using software tools to identify potential security weaknesses in systems, networks, or applications. It's not about physical security (Option A), visual inspection for viruses (Option C) or general internet searching (Option D).",
-        "examTip": "Regular vulnerability scanning helps identify and address security weaknesses before attackers can exploit them."
-      },
-       {
-        "id": 75,
-        "question":"What is a 'bot' in the context of a botnet?",
-        "options":[
-            "A helpful robot.",
-            "A computer that has been compromised and is controlled remotely by an attacker.",
-            "A type of computer game.",
-            "A program that helps you write code."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"In a botnet, a 'bot' is a computer that has been infected with malware and is under the control of an attacker (botmaster).  It's not a helpful robot (Option A), a game (Option C) or coding software (Option D).",
-        "examTip":"Bots in a botnet can be used for malicious activities without the owner's knowledge."
-       },
-       {
-        "id": 76,
-        "question": "What is a common characteristic of a 'weak' password?",
-        "options": [
-            "It is long and complex.",
-            "It includes numbers, symbols, and uppercase and lowercase letters.",
-            "It is easy to guess, such as a dictionary word or personal information.",
-            "It is stored in a password manager."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation": "Weak passwords are easy to guess or crack using automated tools. They often include dictionary words, names, birthdays, or simple sequences like '123456'.  The other options describe characteristics of *strong* passwords.",
-        "examTip": "Avoid using easily guessable information in your passwords."
-    },
-     {
-        "id": 77,
-        "question": "What is 'information security' primarily concerned with?",
-        "options":[
-            "Protecting only digital information.",
-            "Protecting the confidentiality, integrity, and availability of information.",
-            "Protecting only physical security.",
-            "Protecting only network security"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Info security protect CIA",
-        "examTip":"Information Security"
-    },
-     {
-        "id": 78,
-        "question":"What is 'two-factor authentication' (2FA)?",
-        "options":[
-            "Using the same password for everything.",
-            "Using a password AND something else, like a code from your phone, to log in.",
-            "Having a backup password.",
-            "Writing your password down."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Two-factor authentication",
-        "examTip":"2FA"
-    },
-    {
-        "id": 79,
-        "question": "What is the BEST way to avoid getting a computer virus?",
-        "options":[
-           "Never use the internet.",
-           "Be careful about what you download and click on, and use antivirus software.",
-           "Only use your computer for games.",
-           "Share your computer with everyone."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Be careful",
-        "examTip": "Safe Practices"
-    },
-     {
-        "id": 80,
-        "question": "What does 'confidentiality' mean in cybersecurity?",
-        "options":[
-           "Making sure data is available when needed.",
-           "Making sure data is accurate.",
-           "Keeping information secret and only allowing authorized access.",
-           "Deleting data securely."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation":"Keep information secret and only allow access",
-        "examTip": "Confidentiality"
-    },
-     {
-        "id": 81,
-         "question":"What does a 'firewall' do?",
-         "options":[
-            "Heats up your computer.",
-            "Acts like a gatekeeper, controlling what network traffic is allowed in and out.",
-            "Makes your computer run faster.",
-            "Helps you draw pictures."
-         ],
-         "correctAnswerIndex": 1,
-         "explanation":"Controls what traffic is in and out",
-         "examTip":"Firewall"
-     },
-     {
-        "id": 82,
-        "question":"What is a good way to protect your privacy online?",
-        "options":[
-          "Share all your personal information on social media.",
-          "Be careful about what information you share online and review privacy settings.",
-          "Use the same password for every website.",
-          "Click on every link you see."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Be careful what info you share and review privacy",
-        "examTip":"Privacy Online"
-     },
-     {
-        "id": 83,
-        "question": "What does 'integrity' mean in cybersecurity?",
-        "options":[
-           "Making sure data is kept secret.",
-           "Making sure data is accurate and hasn't been tampered with.",
-           "Making sure data is always available.",
-           "Making sure data is easy to understand."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Data accurate and hasnt been tampered with",
-        "examTip":"Integrity"
-     },
-      {
-        "id": 84,
-        "question": "What is a 'security update' for software?",
-        "options":[
-            "A new game.",
-            "A patch that fixes security vulnerabilities and improves protection.",
-            "A new way to make the software look different.",
-            "A type of computer virus."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Fixes security and improves",
-        "examTip":"Security Update"
-    },
-    {
-        "id": 85,
-        "question": "Why is it important to keep your software updated?",
-        "options":[
-            "To make your computer look cooler.",
-            "To get the latest features and security patches.",
+            "To make your computer look different.",
+            "To get new features and security patches that fix vulnerabilities.",
             "To make your computer run slower.",
             "To use more disk space."
         ],
         "correctAnswerIndex": 1,
-        "explanation":"Updates often include security patches that fix vulnerabilities that attackers could exploit. Keeping software updated is a crucial security practice.",
-        "examTip":"Enable automatic updates whenever possible."
+        "explanation":"Updates are not for appearance, slowing down, or wasting space. Software updates often include *security patches* that fix vulnerabilities that hackers could exploit. Updates also often include new features and bug fixes.",
+        "examTip":"Keep your software up to date to protect against the latest threats."
     },
-     {
-        "id": 86,
-        "question":"What is a 'hacker'?",
-        "options":[
-            "Someone who fixes computers.",
-            "Someone who tries to get into computer systems without permission.",
-            "Someone who sells computers.",
-            "Someone who builds houses."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Someone who tries to get into computer systems",
-        "examTip":"Hacker"
-    },
-    {
-        "id": 87,
-        "question": "What is a 'digital footprint'?",
-        "options":[
-           "A mark left by a computer mouse.",
-           "The trail of data you leave behind when you use the internet.",
-           "A type of computer virus.",
-           "A picture of your foot."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Trail of data left behind",
-        "examTip":"Digital Footprint"
-    },
-     {
-        "id": 88,
-        "question": "What is a good way to protect yourself from malware?",
-        "options":[
-            "Download files from any website.",
-            "Use antivirus software and be careful about what you download and click.",
-            "Share your passwords with everyone.",
-            "Open every email attachment you receive."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Use antivirus and be careful",
-        "examTip":"Malware Protection"
-    },
-    {
-        "id": 89,
-        "question": "What is 'ransomware'?",
-        "options":[
-           "A type of helpful software.",
-           "Malware that locks your files and demands money to unlock them.",
-           "A type of computer hardware.",
-           "A game where you rescue people."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Locks your files and demands money",
-        "examTip":"Ransomware"
-    },
-    {
-        "id": 90,
-        "question":"What does 'phishing' try to do?",
-        "options":[
-          "Catch fish in the ocean.",
-          "Trick you into giving away personal information, like passwords.",
-          "Help you organize your email inbox.",
-          "Make your computer run faster."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Trick you into giving away personal info",
-        "examTip":"Phishing"
-    },
-     {
-        "id": 91,
-        "question": "What is 'multi-factor authentication'?",
-        "options":[
-            "Using many different passwords.",
-            "Using a password and another form of identification, like a code sent to your phone.",
-            "Having multiple computers.",
-            "Writing your password down multiple times."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Password and another form of ID",
-        "examTip":"Multi-factor Authentication"
-    },
-    {
-        "id": 92,
-        "question":"What does 'CIA' stand for in information security?",
-        "options":[
-          "Central Intelligence Agency.",
-          "Confidentiality, Integrity, and Availability.",
-          "Computers, Internet, and Applications.",
-          "Control, Input, and Access."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Confidentiality, Integrity, and Availability are the three core principles of information security. Confidentiality means keeping data secret, integrity means ensuring data accuracy, and availability means ensuring authorized users can access data when needed.",
-        "examTip":"The CIA triad is a fundamental model for information security."
+{
+    "id": 19,
+    "question":"What is 'social engineering'?",
+     "options":[
+        "Building bridges.",
+        "Tricking people into revealing confidential information or performing actions.",
+        "Studying social behavior.",
+        "Designing websites."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation": "It is not about construction, sociology, or web design. Social engineering is a *psychological* attack. Attackers manipulate people into breaking security procedures, often by impersonating someone trustworthy or creating a sense of urgency.",
+      "examTip": "Be wary of requests for sensitive information, even if they seem to come from a trusted source."
 
-    },
-    {
-        "id": 93,
-        "question":"What is a 'VPN'?",
-        "options":[
-           "A very popular network.",
-           "A virtual private network, which helps secure your internet connection.",
-           "A type of computer virus.",
-           "A video player network."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Helps secure internet",
-        "examTip":"VPN"
-    },
-    {
-        "id": 94,
-        "question": "What should you do if you get a suspicious email asking for your password?",
-        "options":[
-            "Reply with your password.",
-            "Forward it to all your friends.",
-            "Delete it and report it as spam.",
-            "Click on any links in the email."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation":"Delete and report as spam.",
-        "examTip":"Suspicious email"
-    },
-     {
-        "id": 95,
-        "question":"What is the safest way to create a strong password?",
-        "options":[
-            "Use your pet's name.",
-            "Use a mix of letters, numbers, and symbols that is long and hard to guess.",
-            "Use the word 'password'.",
-            "Use your birthday."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Mix of letters, numbers, and symbols",
-        "examTip":"Strong Password"
-    },
-    {
-        "id": 96,
-        "question": "Is it safe to use public Wi-Fi for online banking?",
-        "options":[
-            "Yes, always.",
-            "No, it's generally not secure.",
-            "Only if the Wi-Fi network has a password.",
-            "Only if you have antivirus software."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation": "Public Wi-Fi networks are often unsecured, making it easier for attackers to intercept your data. Avoid sensitive transactions on public Wi-Fi.",
-        "examTip": "Use a VPN or your mobile data connection for sensitive activities when on public Wi-Fi."
-    },
-    {
-        "id": 97,
-        "question": "What is 'cyberbullying'?",
-        "options":[
-          "A type of computer game.",
-          "Using technology to harass, threaten, or embarrass someone.",
-          "A type of antivirus software.",
-          "A way to make friends online."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Harass or threaten someone",
-        "examTip":"Cyberbullying"
-    },
-    {
-        "id": 98,
-        "question": "What does 'IoT' stand for?",
-        "options":[
-          "Internet of Toasters.",
-          "Internet of Things.",
-          "Inside Our Technology.",
-          "Intelligent Operating Tools."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Internet of things",
-        "examTip":"IoT"
-    },
-     {
-        "id": 99,
-        "question": "What does it mean to 'log out' of an account?",
-        "options":[
-            "To write down your password.",
-            "To sign out and end your session, preventing unauthorized access.",
-            "To delete your account.",
-            "To turn off your computer."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":"Sign out and end session",
-        "examTip":"Log out"
-    },
-    {
-    "id": 100,
-    "question": "What is 'personal information' online?",
+},
+{
+ "id": 20,
+    "question": "What is a 'firewall'?",
     "options": [
-        "Your favorite color.",
-        "Information that can be used to identify you, like your name, address, or social security number.",
-        "The type of computer you use.",
-        "Your high score in a game."
+       "A type of computer.",
+       "A security system that monitors and controls network traffic.",
+       "A program for drawing pictures.",
+       "A type of internet connection."
     ],
     "correctAnswerIndex": 1,
-    "explanation": "Information that can be used to ID you",
-    "examTip": "Personal Information"
+    "explanation":
+        "It is not a specific computer, art program, or connection. A firewall acts like a gatekeeper for your network, blocking unauthorized access and allowing legitimate traffic based on predefined rules.",
+    "examTip": "A firewall is a crucial part of network security."
+
+},
+{
+ "id": 21,
+  "question": "What is 'spyware'?",
+  "options":[
+    "A type of hardware.",
+    "Malware that secretly gathers information about your activities.",
+    "A tool for cleaning your computer screen.",
+    "A program for writing documents."
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "It's not hardware, a cleaning tool, or a word processor. Spyware is a type of malware that secretly monitors your computer usage, collecting data like your browsing history, keystrokes, and even passwords, without your knowledge or consent.",
+   "examTip": "Use anti-spyware software to protect your privacy."
+
+},
+{
+ "id": 22,
+  "question":"What does 'HTTPS' in a website address indicate?",
+   "options":[
+    "The website is fast.",
+    "The website is secure and encrypts communication.",
+    "The website is about horses.",
+    "The website is new."
+   ],
+   "correctAnswerIndex": 1,
+   "explanation": "HTTPS does not mean fast, about horses, or a new site. The 'S' in HTTPS stands for 'Secure'. It means the communication between your browser and the website is encrypted, protecting your data from eavesdropping.",
+    "examTip":"Look for 'HTTPS' in the address bar when entering sensitive information on a website."
+
+},
+{
+    "id": 23,
+    "question":"Which of the following is a good practice for creating a strong password?",
+    "options":[
+        "Using your birthday.",
+        "Using a common word like 'password'.",
+        "Using a mix of uppercase and lowercase letters, numbers, and symbols.",
+        "Using the same password for all your accounts."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+       "Birthdays, common words, and reused passwords are easy to guess.  A strong password should be complex and unique, combining different character types to make it difficult to crack.",
+    "examTip": "Use a password manager to help you create and manage strong passwords."
+},
+{
+    "id": 24,
+    "question":"What does 'ransomware' do?",
+     "options":[
+        "Helps you find your lost files.",
+        "Encrypts your files and demands a ransom to decrypt them.",
+        "Cleans your computer from viruses.",
+        "Makes your computer run faster."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation":
+        "Ransomware doesn't help find files, clean viruses, or speed up your computer. Ransomware is a type of malware that encrypts your files, making them inaccessible. The attackers then demand a payment (ransom) to provide the decryption key.",
+     "examTip": "Regular backups are the best defense against ransomware."
+},
+{
+    "id": 25,
+    "question": "What should you do if you think your computer is infected with malware?",
+    "options": [
+        "Continue using the computer as normal.",
+        "Run a scan with your antivirus software.",
+        "Share your files with others.",
+        "Turn off your monitor."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+         "Continuing to use the computer, sharing files, or simply turning off the monitor won't address the infection. If you suspect malware, run a full scan with your antivirus software to detect and remove it. You might also need to seek professional help.",
+    "examTip": "Take immediate action if you suspect a malware infection."
+},
+{
+    "id": 26,
+    "question": "What information does a website's privacy policy usually contain?",
+    "options":[
+        "The website's source code.",
+        "How the website collects, uses, and protects your personal information.",
+        "The website owner's favorite color.",
+        "A list of all the website's visitors."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+       "It's not about source code, favorite colors, or visitor lists. A privacy policy explains how a website handles your personal data – what they collect, how they use it, who they share it with, and how they protect it. It's important to read these policies to understand your privacy rights.",
+    "examTip":"Read privacy policies to understand how websites handle your personal data."
+},
+{
+    "id":27,
+    "question":"Which is safer, HTTP or HTTPS?",
+    "options":[
+        "HTTP",
+        "HTTPS",
+        "They are the same",
+        "Neither"
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":"HTTPS is significantly safer because it encrypts the communication between your browser and the website, protecting your data from eavesdropping.",
+    "examTip": "Always prefer HTTPS websites, especially when dealing with sensitive information."
+},
+{
+  "id": 28,
+  "question": "Is it safe to use the same password for all your online accounts?",
+  "options":[
+    "Yes",
+    "No",
+    "Only if it's a strong password",
+    "Only if the accounts are unimportant"
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "Using the same password everywhere is a major security risk. If one account is compromised, *all* your accounts are vulnerable. Even a strong password, if reused, becomes a single point of failure.",
+  "examTip": "Use unique passwords for every online account."
+},
+{
+    "id": 29,
+    "question":"What is a 'digital certificate' used for?",
+    "options":[
+        "To prove your age.",
+        "To verify the identity of a website or server.",
+        "To get discounts online.",
+        "To decorate your computer screen."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+        "Digital certificates are not for age verification, discounts, or decoration. A digital certificate is like an online ID card for a website or server.  It's issued by a trusted authority (a Certificate Authority) and verifies that the website is who it claims to be, helping to prevent man-in-the-middle attacks.",
+    "examTip": "Digital certificates help establish trust in online communications."
+},
+{
+    "id": 30,
+    "question": "Is it safe to open email attachments from unknown senders?",
+    "options":[
+      "Yes",
+      "No",
+      "Only if the file extension is .txt",
+      "Only if your antivirus is up to date"
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Opening attachments from unknown senders is extremely risky.  They could contain malware, even if your antivirus is updated (it might not catch *new* threats). The file extension isn't a reliable indicator of safety.",
+     "examTip": "Never open attachments from unknown or untrusted senders."
+},
+        {
+    "id": 31,
+    "question": "What is a 'patch' in software?",
+    "options":[
+      "A sticker for your computer.",
+      "A fix for a software bug or security vulnerability.",
+      "A type of computer hardware.",
+      "A game you play online."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+      "A patch is not a sticker, hardware, or game. A software patch is a small update released by a software vendor to fix problems, including security vulnerabilities, bugs, or to add minor features.",
+    "examTip": "Apply software patches promptly to keep your systems secure."
+},
+{
+    "id": 32,
+    "question": "Which of the following is an example of a biometric authentication method?",
+    "options":[
+      "Password",
+      "PIN code",
+      "Fingerprint scan",
+      "Security question"
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+      "Passwords, PINs, and security questions are not biometric. Biometrics uses unique biological traits for identification. A fingerprint scan is a common example of biometric authentication.",
+    "examTip": "Biometrics uses unique physical characteristics for identification."
+},
+{
+ "id": 33,
+    "question":"What is 'multi-factor authentication'?",
+     "options":[
+        "Using the same password for multiple accounts.",
+        "Using a very long password.",
+        "Using two or more different authentication factors.",
+        "Using a password and a PIN."
+     ],
+     "correctAnswerIndex": 2, //Although 3 is an example, 2 is the best general definition.
+     "explanation":
+       "It's not about password reuse or length. While a password and PIN are *an example* of MFA, the *definition* is using *two or more* different *types* of authentication factors (something you know, have, or are).",
+     "examTip": "MFA adds extra layers of security beyond just a password."
+
+},
+{
+    "id": 34,
+    "question": "Is it a good idea to click on links in emails from people you don't know?",
+    "options":[
+        "Yes",
+        "No",
+        "Only if the link looks interesting",
+        "Only if the email is from a company"
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":"Clicking links in emails from unknown senders is a common way to fall victim to phishing attacks or download malware. Even if it looks interesting or is from a company, it could be faked.",
+    "examTip": "Be very cautious about clicking links in emails, especially from unknown senders."
+},
+{
+    "id": 35,
+    "question": "What is 'spam' email?",
+    "options":[
+      "Important emails from your bank.",
+      "Unsolicited, bulk email, often advertising or phishing attempts.",
+      "Emails from your friends.",
+      "Emails you send to yourself."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Spam is not important bank emails, messages from friends, or self-sent emails. Spam is *unwanted* email, usually sent in bulk for advertising, phishing, or spreading malware.  It's often called 'junk mail'.",
+     "examTip": "Be careful not to click on links or open attachments in spam emails."
+},
+{
+ "id": 36,
+ "question": "What is 'data breach'?",
+ "options":[
+  "A type of computer screen.",
+  "The unauthorized access or disclosure of sensitive information.",
+  "A fast internet connection.",
+  "A way to organize files."
+ ],
+  "correctAnswerIndex": 1,
+ "explanation":"A data breach isn't a screen, fast internet, or file organization. A data breach is a security incident where confidential data is accessed, stolen, or exposed without authorization.",
+ "examTip":"Data breaches can have serious consequences for individuals and organizations."
+},
+{
+  "id":37,
+  "question":"What is an 'operating system' (OS)?",
+  "options":[
+     "A type of computer game.",
+     "The main software that manages a computer's hardware and resources.",
+     "A type of keyboard.",
+     "A website."
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "An OS isn't a game, keyboard, or website. The operating system (OS) is the core software of a computer.  It manages everything – the hardware, other software, files, etc. Examples include Windows, macOS, and Linux.",
+  "examTip": "Your computer needs an operating system to function."
+},
+{
+ "id": 38,
+ "question":"What is the 'internet'?",
+  "options":[
+    "A single computer.",
+    "A global network of connected computers.",
+    "A type of software.",
+    "A type of printer."
+  ],
+   "correctAnswerIndex": 1,
+  "explanation": "The internet is not a single computer, software, or printer. The internet is a vast, worldwide network that connects billions of computers and other devices, allowing them to communicate and share information.",
+   "examTip": "The internet connects computers all over the world."
+},
+{
+  "id": 39,
+    "question":"What does 'download' mean?",
+    "options":[
+        "To copy data from a remote computer to your computer.",
+        "To copy data from your computer to a remote computer.",
+        "To delete files.",
+        "To turn off your computer."
+    ],
+    "correctAnswerIndex": 0,
+    "explanation":
+      "Downloading is not sending data, deleting files, or shutting down. Downloading means copying data *from* a server on the internet (or another network) *to* your computer.",
+    "examTip": "Be careful what you download from the internet, as it could contain malware."
+},
+{
+    "id": 40,
+    "question": "What does 'upload' mean?",
+     "options":[
+       "To copy data from a remote computer to your computer.",
+       "To copy data from your computer to a remote computer.",
+       "To print a document.",
+       "To open a program."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation":
+        "Uploading is the opposite of downloading. It is not printing or opening a file. Uploading means sending data *from* your computer *to* a server or another computer on the internet (or another network).",
+      "examTip": "Uploading and downloading are how we transfer files over the internet."
+},
+{
+    "id": 41,
+        "question": "What is a 'browser'?",
+        "options":[
+            "A type of computer.",
+            "A program used to access and view websites.",
+            "A type of printer.",
+            "A way to organize files."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+            "A browser is not a computer, printer, or file organizer. A web browser (or simply 'browser') is a software application used to access and view websites on the internet. Examples include Chrome, Firefox, Safari, and Edge.",
+        "examTip": "You use a web browser to surf the internet."
+
+},
+ {
+    "id": 42,
+        "question": "Which is a better security practice?",
+        "options":[
+            "Sharing your passwords with friends.",
+            "Keeping your passwords secret.",
+            "Writing your passwords down on a piece of paper.",
+            "Using the same password for all accounts."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+            "Sharing, writing down (unsecured), and reusing passwords are all bad practices.  Your passwords should be kept secret and known *only* to you.  This helps prevent unauthorized access to your accounts.",
+        "examTip": "Never share your passwords with anyone."
+    },
+     {
+        "id": 43,
+        "question": "What does it mean to 'log in' to a computer or website?",
+        "options":[
+          "To turn off the computer.",
+          "To enter your username and password to access your account.",
+          "To open a new web page.",
+          "To delete files."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+          "Logging in is not turning off, opening a page, or deleting. Logging in is the process of identifying yourself to a computer system or website, usually by entering a username and password, to gain access to your account.",
+        "examTip": "Always log out of your accounts when you're finished using them, especially on shared computers."
+    },
+    {
+        "id": 44,
+        "question":"What does 'log out' mean?",
+         "options":[
+            "To turn on the computer.",
+            "To exit your account and prevent unauthorized access.",
+            "To open a new program.",
+            "To save a file."
+         ],
+         "correctAnswerIndex": 1,
+         "explanation":"Logging out is not turning on, opening programs, or saving. Logging out is the opposite of logging in. It ends your session and signs you out of your account, preventing others from accessing it without your credentials.",
+          "examTip":"Always log out of accounts on public or shared computers."
+    },
+{
+ "id": 45,
+  "question": "What is a 'URL'?",
+  "options":[
+    "A type of computer virus.",
+    "The address of a website.",
+    "A type of keyboard.",
+    "A program for drawing."
+  ],
+  "correctAnswerIndex": 1,
+  "explanation":
+    "A URL is not a virus, keyboard, or drawing program. A URL (Uniform Resource Locator) is the address of a specific website or resource on the internet.  It's what you type into your browser's address bar (e.g., www.example.com).",
+ "examTip":"The URL tells your browser where to find a website."
+},
+{
+    "id": 46,
+    "question": "What is a 'computer network'?",
+    "options":[
+     "A single computer.",
+     "A group of connected computers that can share resources and information.",
+     "A type of software.",
+     "A type of monitor."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":"A network is not a single computer, specific software, or monitor type. A computer network is two or more computers connected together, allowing them to share data, printers, internet access, and other resources.",
+    "examTip": "Networks allow computers to communicate and share information."
+
+},
+{
+ "id":47,
+ "question": "What does 'WiFi' stand for?",
+ "options":[
+  "Wireless Fidelity",
+  "Wired Fidelity",
+  "Window Finder",
+  "Web Finder"
+ ],
+  "correctAnswerIndex": 0,
+ "explanation":
+ "The Correct answer is Wireless Fidelity. Wireless Fidelity is a family of wireless network protocols, based on the IEEE 802.11 set of standards, which are commonly used for local area networking of devices and Internet access, allowing nearby digital devices to exchange data by radio waves.",
+  "examTip": "Wifi is radio waves for data exhange"
+},
+{
+  "id": 48,
+ "question":"What is 'cloud storage'?",
+ "options":[
+     "Storing data on your own computer.",
+     "Storing data on remote servers accessed over the internet.",
+     "Storing data on a USB drive.",
+     "Storing data on a CD-ROM."
+ ],
+ "correctAnswerIndex": 1,
+ "explanation":
+  "Cloud storage is *not* storing on your own computer, a USB drive, or a CD-ROM. Cloud storage means storing your data on servers managed by a third-party provider (like Google Drive, Dropbox, or OneDrive) and accessed over the internet.",
+ "examTip":"Cloud storage allows you to access your data from anywhere with an internet connection."
+},
+{
+ "id": 49,
+ "question": "What is an 'attachment' in an email?",
+  "options":[
+    "A link to a website.",
+    "A file that is sent along with an email message.",
+    "The subject of the email.",
+    "The sender of the email."
+  ],
+ "correctAnswerIndex": 1,
+  "explanation":"An attachment is not a weblink, the email subject or the sender. An email attachment is a file (document, image, video, etc.) that is included with an email message. It's like attaching a paper document to a letter.",
+  "examTip":"Be cautious about opening attachments from unknown senders."
+},
+{
+  "id": 50,
+ "question": "Is it generally safe to use public WiFi without a VPN?",
+  "options":[
+    "Yes",
+    "No",
+    "Only if the website uses HTTPS",
+    "Only if you have a strong password"
+
+  ],
+  "correctAnswerIndex": 1,
+  "explanation":"Public WiFi networks are often unsecured, meaning your data could be intercepted by others. Even with HTTPS or a strong password, a VPN adds a critical layer of encryption for *all* your traffic.",
+   "examTip": "Use a VPN on public WiFi to protect your data."
+},
+{
+  "id": 51,
+    "question": "What is 'phishing'?",
+    "options":[
+        "A type of fishing sport.",
+        "A secure way to access your bank account online.",
+        "A fraudulent attempt to obtain sensitive information by disguising as a trustworthy entity.",
+        "A program for organizing files."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":"Phishing is a type of cyber attack; not fishing, and does not organize files. Phishing is a cyber attack in which hackers try to get you to give personal infromation pretending to be a source you can trust.",
+    "examTip":"Be suspicious of emails, messages, and websites asking for personal information."
+},
+{
+    "id": 52,
+    "question": "Which is generally the strongest password: 'password123', 'FluffyKitten', or 'P@$$wOrd!2023'?",
+     "options":[
+        "password123",
+        "FluffyKitten",
+        "P@$$wOrd!2023"
+     ],
+    "correctAnswerIndex": 2,
+    "explanation":"'password123' is very weak and common. 'FluffyKitten' is better but still easily guessed. 'P@$$wOrd!2023' is the strongest because it includes uppercase and lowercase letters, numbers, and a symbol, making it harder to crack.",
+     "examTip":"Strong passwords are long, complex, and unique."
+},
+{
+    "id":53,
+    "question": "What is 'malware'?",
+    "options":[
+        "A type of computer hardware",
+        "Software designed to harm or disrupt a computer system.",
+        "A program that makes your computer run faster.",
+        "A type of keyboard."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+     "Malware is not hardware, performance-enhancing software, or keyboard. Malware is a broad term for any software designed to cause damage or gain unauthorized access to a computer system. This includes viruses, worms, Trojans, ransomware, and spyware.",
+    "examTip":"Protect your devices from malware with antivirus software and safe browsing habits."
+
+},
+{
+  "id": 54,
+  "question":"What does 'CIA' stand for in cybersecurity?",
+  "options":[
+    "Central Intelligence Agency",
+    "Confidentiality, Integrity, Availability",
+    "Computer Information Access",
+    "Cybersecurity Intelligence Agency"
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "While the Central Intelligence Agency is a real agency, in *cybersecurity*, CIA refers to the three core principles: Confidentiality (keeping data secret), Integrity (ensuring data accuracy and preventing unauthorized modification), and Availability (ensuring authorized users have timely access to resources).",
+  "examTip": "The CIA triad represents the fundamental goals of information security."
+},
+{
+    "id": 55,
+    "question": "What is a 'hacker'?",
+    "options":[
+      "Someone who repairs computers.",
+      "Someone who tries to gain unauthorized access to computer systems.",
+      "Someone who sells computers online.",
+      "Someone who designs websites."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Hacking is not about repair, sales, or design. A hacker is someone who uses their technical skills to try to bypass security measures and gain unauthorized access to computer systems or networks. Their motives can vary (malicious, ethical, etc.).",
+    "examTip": "Hackers can pose a significant threat to cybersecurity."
+},
+{
+  "id": 56,
+  "question": "What is 'encryption'?",
+  "options": [
+    "A way to delete files permanently.",
+    "The process of converting data into a code to prevent unauthorized access.",
+    "A type of computer virus.",
+    "A way to organize files on your computer."
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "Encryption is not file deletion, a virus, or file organization. Encryption scrambles data into an unreadable format (ciphertext). Only authorized users with the correct decryption key can unscramble it back to its original form (plaintext).",
+  "examTip": "Encryption protects the confidentiality of data."
+},
+{
+    "id": 57,
+    "question":"Which of the following is an example of PII?",
+    "options":[
+       "The type of computer you use.",
+       "Your home address.",
+       "The speed of your internet connection.",
+       "Your favorite color."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+        "Computer type, internet speed, and favorite color are not PII. PII (Personally Identifiable Information) is any data that can be used to *identify* a specific individual. Your home address is a clear example of PII.",
+    "examTip": "Protect your PII carefully to prevent identity theft."
+},
+{
+    "id": 58,
+    "question": "What is the purpose of a 'software update'?",
+    "options":[
+     "To make your computer look different.",
+     "To fix bugs, improve performance, and patch security vulnerabilities.",
+     "To delete files from your computer.",
+     "To install new games."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Updates are not about aesthetics, deleting files, or just installing games. Software updates are essential for maintaining security and stability. They often include patches that fix security vulnerabilities, as well as bug fixes and performance improvements.",
+    "examTip": "Install software updates promptly to keep your devices secure and running smoothly."
+},
+{
+    "id": 59,
+    "question": "What is a 'strong password'?",
+    "options":[
+       "Your pet's name.",
+       "A short, common word.",
+       "A mix of uppercase and lowercase letters, numbers, and symbols.",
+       "Your birthday."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":"Pet names, short words, and birthdays are easy to guess and therefore make weak passwords. Strong passwords use a combination of different characters to make them hard to crack.",
+    "examTip":"Use a password manager to generate and store strong, unique passwords."
+},
+{
+    "id": 60,
+     "question": "What is 'antivirus software' designed to do?",
+     "options":[
+        "Make your computer run faster.",
+        "Detect, prevent, and remove malware.",
+        "Help you create documents.",
+        "Allow you to play games online."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation":
+     "Antivirus is not a performance booster, document creator, or gaming platform. Antivirus software is specifically designed to protect your computer from malware, such as viruses, worms, and Trojans. It scans your system, detects threats, and helps remove them.",
+     "examTip": "Keep your antivirus software up to date and run regular scans."
+},
+{
+    "id": 61,
+    "question": "What is a firewall?",
+    "options":[
+        "A type of computer virus.",
+        "A program that helps you draw pictures.",
+        "A security system that controls network traffic.",
+        "A type of internet connection."
+    ],
+     "correctAnswerIndex": 2,
+    "explanation":
+     "A firewall is a security tool and is not a type of virus, art program, or internet. A firewall is like a security guard for your network. It monitors incoming and outgoing network traffic and blocks unauthorized access based on predefined rules.",
+    "examTip": "Firewalls are a fundamental part of network security."
+},
+{
+    "id":62,
+    "question": "Is it safe to share your passwords with anyone?",
+     "options":[
+        "Yes",
+        "No",
+        "Only with close friends",
+        "Only with family"
+     ],
+     "correctAnswerIndex": 1,
+     "explanation":"Sharing passwords, even with trusted individuals, is a major security risk. It compromises the confidentiality of your accounts and makes them vulnerable to unauthorized access. *Never* share your passwords.",
+     "examTip": "Keep your passwords secret and known only to you."
+},
+{
+    "id": 63,
+    "question":"What is the purpose of backing up your data?",
+    "options":[
+       "To delete your files.",
+       "To protect your data in case of loss, damage, or theft.",
+       "To make your computer run faster.",
+       "To organize your files."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+       "Backups are not about deleting, speeding up, or simply organizing files. Backing up your data means creating a copy of your important files and storing it separately. This allows you to restore your data if the original is lost, corrupted, or stolen.",
+    "examTip":"Regular backups are essential for data protection."
+
+},
+{
+ "id": 64,
+ "question":"What does 'HTTPS' indicate when it appears at the beginning of a website address?",
+ "options":[
+    "The website is slow.",
+    "The website is secure and uses encryption.",
+    "The website is about sports.",
+    "The website is under construction."
+ ],
+ "correctAnswerIndex": 1,
+ "explanation":
+  "HTTPS does not imply slowness, a sports theme, or construction status. The 'S' in HTTPS stands for 'Secure'. It means the communication between your browser and the website is encrypted, protecting your data from eavesdropping. Look for the padlock icon in the address bar.",
+ "examTip":"HTTPS websites are more secure than HTTP websites."
+},
+{
+ "id": 65,
+  "question": "What is a 'computer virus'?",
+  "options":[
+    "A type of computer hardware.",
+    "A program that makes your computer run faster.",
+    "A type of malware that can replicate itself and spread.",
+    "A tool for creating documents."
+  ],
+  "correctAnswerIndex": 2,
+  "explanation":
+  "A computer virus is not a type of computer hardware, a way to make your computer run faster, or a type of document maker. Computer viruses replicate and spread infecting your computer and possibly others.",
+  "examTip": "Always have a good anti-virus."
+},
+{
+    "id": 66,
+    "question":"Which of the following actions helps protect your online privacy?",
+    "options":[
+      "Sharing your passwords with everyone.",
+      "Using the same password for all accounts.",
+      "Being cautious about the information you share online.",
+      "Posting your home address on social media."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+    "Sharing passwords, reusing passwords, and posting your address are all *bad* privacy practices. Being mindful of what you share online (personal information, photos, location, etc.) is crucial for protecting your privacy.",
+     "examTip": "Think before you post or share anything online."
+},
+{
+ "id": 67,
+    "question":"What should you do before clicking on a link in an email?",
+     "options":[
+        "Click it immediately.",
+        "Hover your mouse over the link to see the actual URL.",
+        "Forward the email to all your contacts.",
+        "Reply to the email and ask if the link is safe."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation": "Clicking immediately, forwarding, or replying are risky. *Hovering* your mouse over the link (without clicking) will usually show you the *actual* URL it leads to. This helps you identify if it's a legitimate website or a phishing attempt.",
+     "examTip":"Always check the actual URL before clicking on a link in an email."
+},
+{
+    "id": 68,
+    "question":"What is a good way to protect your computer from malware?",
+    "options":[
+      "Downloading software from any website.",
+      "Opening all email attachments.",
+      "Installing and updating antivirus software.",
+      "Turning off your firewall."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+     "Downloading from untrusted sources, opening all attachments, and turning off your firewall are all *dangerous*. Installing reputable antivirus software and keeping it updated is a crucial step in protecting your computer from malware.",
+     "examTip": "Antivirus software is a key defense against malware."
+},
+{
+    "id": 69,
+    "question": "Is it a good practice to use public WiFi for online banking?",
+    "options":[
+        "Yes, it's convenient.",
+        "No, it's generally not secure.",
+        "Yes, if the WiFi network has a password.",
+        "Yes, if you have a strong password for your bank account."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Convenience doesn't equal security. Public WiFi, even with a password, is often not secure. Your data can be intercepted. Even a strong bank password doesn't protect the *connection* itself. It's best to avoid sensitive activities like online banking on public WiFi.",
+    "examTip": "Use a secure, private network for online banking and other sensitive transactions."
+
+},
+{
+ "id": 70,
+    "question":"What is 'ransomware'?",
+    "options":[
+      "A program that helps you organize your files.",
+      "Malware that encrypts your files and demands payment to decrypt them.",
+      "A type of computer game.",
+      "A tool for creating backups."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation":
+        "Ransomware is not a file organizer, game, or backup tool. Ransomware is a type of malware that encrypts your files, making them inaccessible.  The attackers then demand a ransom (payment) to provide the decryption key.",
+     "examTip": "Regular backups are your best defense against ransomware."
+},
+{
+    "id": 71,
+        "question":"What does 'two-factor authentication' add to your online accounts?",
+        "options":[
+           "A longer password.",
+           "An extra layer of security.",
+           "More storage space.",
+           "Faster internet speed."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+           "2FA isn't about password length, storage, or internet speed. Two-factor authentication (2FA) adds an *additional* security step beyond just your password. This makes it much harder for someone to access your account, even if they know your password.",
+        "examTip":"Enable 2FA whenever possible for important accounts."
+},
+{
+  "id": 72,
+  "question":"What does 'DDoS' attack stand for?",
+  "options":[
+    "Distributed Denial of Service",
+    "Digital Disk Operating System",
+    "Data Display Output System",
+    "Direct Drive Operating System"
+  ],
+  "correctAnswerIndex": 0,
+  "explanation":"The correct answer is Distributed Denial of Service. A Distributed Denial of Service (DDoS) attack is a malicious attempt to disrupt the normal traffic of a targeted server, service or network by overwhelming the target or its surrounding infrastructure with a flood of Internet traffic.",
+  "examTip":"DDoS is an attack on a system to make resources unavailble"
+},
+{
+    "id": 73,
+        "question":"What's a good practice after using a public computer (like at a library or internet cafe)?",
+        "options":[
+           "Leave your accounts logged in.",
+           "Log out of all your accounts and clear the browsing history.",
+           "Save your passwords on the computer.",
+           "Share the computer with someone else without logging out."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+          "Leaving accounts logged in, saving passwords, or sharing without logging out are all *major* security risks. Always log out of *all* accounts (email, social media, banking, etc.) and clear the browser history and cookies after using a public computer. This prevents the next user from accessing your information.",
+        "examTip": "Always log out and clear your browsing data on public computers."
+},
+{
+ "id": 74,
+ "question":"What is a 'VPN' used for?",
+ "options":[
+  "To make your computer run faster.",
+  "To create a secure, encrypted connection over the internet.",
+  "To play online games.",
+  "To draw pictures."
+ ],
+ "correctAnswerIndex": 1,
+ "explanation":
+    "A VPN is not for speeding up your computer, gaming, or drawing. A VPN (Virtual Private Network) creates a secure, encrypted 'tunnel' for your internet traffic.  This protects your data from eavesdropping, especially on public WiFi, and can also help bypass censorship or geographic restrictions.",
+    "examTip": "Use a VPN to enhance your online privacy and security."
+},
+{
+    "id": 75,
+    "question": "Which is the most secure way to connect to the Internet when handling sensitive data?",
+    "options":[
+      "Public Wi-Fi at a coffee shop",
+      "A friend's unsecured home Wi-Fi",
+      "A secure, password-protected home or office network",
+      "Any available open Wi-Fi network"
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":"Public and unsecured networks are risky. A secure, password-protected network that *you* control (your home or office network, ideally with WPA2 or WPA3 encryption) is the most secure option for handling sensitive data.",
+    "examTip": "Avoid using public Wi-Fi for sensitive transactions."
+
+},
+{
+        "id":76,
+        "question":"What should you do if you receive an email from your bank asking for your password?",
+         "options":[
+            "Reply with your password immediately.",
+            "Call the bank using the phone number on their official website to verify the request.",
+            "Click on the link in the email and enter your password.",
+            "Forward the email to your friends and ask for their advice."
+         ],
+         "correctAnswerIndex": 1,
+         "explanation":
+            "Replying with your password, clicking links, or forwarding are all dangerous. Banks will *never* ask for your password via email. If you receive such a request, it's almost certainly a phishing attempt.  Contact the bank directly using a known, trusted phone number (from their website or a bank statement, *not* from the email) to verify.",
+          "examTip": "Be extremely suspicious of any email asking for your password or other sensitive information."
+},
+{
+    "id": 77,
+     "question": "What is a 'CAPTCHA'?",
+      "options":[
+        "A type of computer virus.",
+        "A test to determine if a user is a human or a bot.",
+        "A type of password.",
+        "A program that helps organize files."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation":
+         "CAPTCHA is not a virus, password, or file organization tool. A CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) is a challenge-response test used on websites to determine if the user is a human or an automated bot. This helps prevent spam and automated attacks.",
+       "examTip":"CAPTCHAs help prevent automated bots from abusing online services."
+},
+{
+    "id": 78,
+    "question": "What's a good way to protect your personal information online?",
+     "options":[
+        "Share your passwords with friends and family.",
+        "Use the same password for all your accounts.",
+        "Be careful about what you share online and review your privacy settings.",
+        "Post your full name, address, and phone number on social media."
+     ],
+     "correctAnswerIndex": 2,
+     "explanation":
+        "Sharing passwords, reusing passwords, and posting excessive personal information are all bad practices. Protecting your privacy requires being mindful of what you share online, using strong and unique passwords, and regularly reviewing and adjusting your privacy settings on social media and other platforms.",
+        "examTip": "Think before you share personal information online."
+},
+{
+    "id": 79,
+     "question": "What does it mean to 'update' your software?",
+      "options":[
+        "To delete the software.",
+        "To install the latest version of the software, often including bug fixes and security patches.",
+        "To make the software look different.",
+        "To buy a new computer."
+      ],
+      "correctAnswerIndex": 1,
+       "explanation": "Updating is not deletion, cosmetic changes or a computer purchase. Updating software means installing the newest version. This often includes important security patches that fix vulnerabilities, as well as bug fixes and new features.",
+       "examTip": "Regular software updates are essential for security and performance."
+},
+{
+ "id": 80,
+ "question": "What is 'cyberbullying'?",
+ "options":[
+  "Using a computer to play games.",
+  "Using electronic communication to bully a person, typically by sending messages of an intimidating or threatening nature.",
+  "A type of computer hardware.",
+  "A way to organize files."
+ ],
+ "correctAnswerIndex": 1,
+ "explanation": "Cyberbullying is not related to games, hardware or file organization. Cyberbullying is the use of electronic communication (social media, text messages, email, etc.) to harass, threaten, or intimidate someone. It's a serious issue with significant consequences.",
+  "examTip": "If you or someone you know is being cyberbullied, report it and seek help."
+},
+{
+        "id": 81,
+        "question":"Which of the following is a good example of a strong password?",
+         "options":[
+            "123456",
+            "password",
+            "MyD0gSp0t!",
+            "MyName123"
+         ],
+        "correctAnswerIndex": 2,
+        "explanation":"'123456' and 'password' are extremely common and weak. 'MyName123' is also easily guessed. 'MyD0gSp0t!' is the strongest because it includes uppercase and lowercase letters, a number, and a symbol.",
+         "examTip": "Use a combination of uppercase and lowercase letters, numbers, and symbols for strong passwords."
+},
+{
+ "id": 82,
+ "question": "Is it okay to leave your computer unlocked and unattended in a public place?",
+  "options":[
+    "Yes",
+    "No",
+    "Only if you have a strong password",
+    "Only if you trust the people around you"
+  ],
+  "correctAnswerIndex": 1,
+  "explanation": "Leaving your computer unlocked in public is a major security risk.  Anyone could access your files, install malware, or steal your information.  Even a strong password won't help if the computer is already unlocked.",
+  "examTip": "Always lock your computer when you step away, especially in public places."
+},
+{
+  "id": 83,
+  "question": "What is 'social media'?",
+   "options":[
+    "A type of computer.",
+    "Websites and applications that enable users to create and share content or participate in social networking.",
+    "A program for writing documents.",
+    "A type of email."
+   ],
+   "correctAnswerIndex": 1,
+   "explanation":
+    "Social media is not a type of computer, document program, or email itself. Social media platforms (like Facebook, Twitter, Instagram, etc.) allow users to connect with each other, share content, and participate in online communities.",
+    "examTip": "Be mindful of your privacy settings and what you share on social media."
+},
+{
+ "id": 84,
+  "question": "What is the purpose of a 'privacy policy' on a website?",
+   "options":[
+    "To tell you the website owner's favorite color.",
+    "To explain how the website collects, uses, and protects your personal information.",
+    "To list all the website's visitors.",
+    "To show you advertisements."
+   ],
+   "correctAnswerIndex": 1,
+   "explanation":"Privacy policies are not about favorite colors, visitor lists, or (directly) advertisements. A privacy policy explains how a website handles your personal data.  It's important to read these policies to understand your rights and how your information is being used.",
+    "examTip": "Read privacy policies to understand how websites handle your data."
+},
+{
+ "id": 85,
+  "question":"What is 'identity theft'?",
+  "options":[
+    "A type of computer game.",
+    "When someone steals your personal information and uses it without your permission.",
+    "A way to organize your files.",
+    "A type of internet connection."
+  ],
+  "correctAnswerIndex": 1,
+  "explanation":
+  "Identity theft is a crime, not a game, file organization, or connection type. Identity theft occurs when someone steals your personal information (name, Social Security number, credit card details, etc.) and uses it fraudulently, often for financial gain.",
+   "examTip": "Protect your personal information to prevent identity theft."
+
+},
+{
+        "id": 86,
+        "question": "What is the 'cloud'?",
+        "options":[
+            "A fluffy white thing in the sky.",
+            "A network of remote servers hosted on the internet and used to store, manage, and process data.",
+            "A type of computer monitor.",
+            "A program for drawing pictures."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation":
+            "While the analogy comes from the fluffy white thing, in computing, the 'cloud' refers to services (storage, computing power, etc.) provided over the internet by remote servers, rather than on your local computer.",
+        "examTip": "Cloud services allow you to access data and applications from anywhere with an internet connection."
+},
+{
+ "id": 87,
+ "question": "What does it mean to have a 'secure website'?",
+  "options":[
+    "The website has lots of pictures.",
+    "The website uses encryption (HTTPS) to protect your data.",
+    "The website is easy to remember.",
+    "The website loads quickly."
+  ],
+   "correctAnswerIndex": 1,
+  "explanation":
+    "Having pictures, being memorable, or loading fast doesn't define security. A secure website uses HTTPS (indicated by a padlock icon in the browser's address bar).  This encrypts the communication between your browser and the website, protecting your data from eavesdropping.",
+  "examTip": "Look for HTTPS and the padlock icon when entering sensitive information online."
+},
+{
+    "id": 88,
+    "question": "What is a good practice for creating online accounts?",
+    "options":[
+        "Use the same password for all accounts.",
+        "Use a weak password that's easy to remember.",
+        "Use a strong, unique password for each account.",
+        "Share your passwords with trusted friends."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+    "Using the same password, weak passwords, or sharing are all very insecure. The best practice is to create a *different*, *complex* password for *each* online account.  This limits the damage if one account is compromised.",
+    "examTip": "Use a password manager to help you manage unique passwords for all your accounts."
+},
+{
+ "id": 89,
+ "question":"What should you do if you get a suspicious email asking you to click a link?",
+ "options":[
+    "Click the link immediately.",
+    "Forward the email to all your friends.",
+    "Delete the email without clicking the link.",
+    "Reply to the email and ask if it's safe."
+ ],
+ "correctAnswerIndex": 2,
+ "explanation":
+    "Clicking, forwarding, or replying are all potentially dangerous. The safest action is to *delete* the email without interacting with it.  Suspicious links often lead to phishing websites or malware downloads.",
+  "examTip":"If you're unsure about an email, don't click any links."
+},
+{
+    "id": 90,
+    "question":"What does 'offline' mean?",
+     "options":[
+        "Connected to the internet.",
+        "Not connected to the internet.",
+        "Using a computer.",
+        "Playing a game online."
+     ],
+     "correctAnswerIndex": 1,
+     "explanation": "Offline is the *opposite* of being connected to the internet. Offline means your device is not actively connected to the internet or a network.",
+    "examTip": "You can often work on documents or access some files offline."
+},
+{
+        "id": 91,
+        "question": "What is a 'hacker'?",
+        "options": [
+            "Someone who fixes computers.",
+            "Someone who tries to gain unauthorized access to computers or networks.",
+            "Someone who sells computers.",
+            "Someone who writes computer programs."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation": "Computer repair, sales, and programming are legitimate activities. A hacker is someone who tries to break into computer systems, often with malicious intent, but sometimes to test security (ethical hacking).",
+         "examTip": "Hackers can be a threat to cybersecurity."
+},
+{
+    "id": 92,
+    "question":"What is a good way to protect your privacy on social media?",
+    "options":[
+     "Post your home address and phone number.",
+     "Accept friend requests from everyone.",
+     "Adjust your privacy settings to control who can see your posts and information.",
+     "Share your passwords with your friends."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation":
+        "Posting personal information publicly, accepting all friend requests, and sharing passwords are all *bad* privacy practices. Reviewing and adjusting your privacy settings on social media platforms allows you to control who can see your posts, photos, and personal information.",
+    "examTip": "Regularly review your privacy settings on social media."
+
+},
+{
+ "id": 93,
+ "question": "What is 'cybersecurity'?",
+ "options":[
+  "Building bridges.",
+  "Protecting computer systems and networks from digital attacks.",
+  "Studying insects.",
+  "Cooking food."
+ ],
+ "correctAnswerIndex": 1,
+ "explanation":"It is not construction, entomology, or cooking. Cybersecurity is the practice of protecting computers, networks, data, and digital information from unauthorized access, use, disclosure, disruption, modification, or destruction.",
+  "examTip": "Cybersecurity is important for everyone in the digital age."
+},
+{
+    "id": 94,
+        "question": "What is 'malware'?",
+        "options": [
+            "A type of keyboard.",
+            "Software designed to harm or disrupt a computer system.",
+            "A program that makes your computer faster.",
+            "A type of computer monitor."
+        ],
+        "correctAnswerIndex": 1,
+        "explanation": "Malware is not hardware, performance software or a monitor. Malware is a broad term covering any software intentionally designed to cause damage to a computer, server, client, or computer network.  This includes viruses, worms, Trojans, ransomware, etc.",
+        "examTip": "Protect your devices from malware with antivirus software and safe browsing habits."
+},
+{
+ "id": 95,
+  "question": "What is a 'computer'?",
+   "options":[
+    "A mechanical device for washing clothes.",
+    "An electronic device that can store, retrieve, and process data.",
+    "A tool for digging in the garden.",
+    "A type of food."
+   ],
+    "correctAnswerIndex": 1,
+   "explanation": "It's not a washing machine, gardening tool, or food. A computer is an electronic device that can be programmed to carry out sequences of arithmetic or logical operations (computation) automatically. Modern computers can perform generic sets of operations known as programs. These programs enable computers to perform a wide range of tasks.",
+    "examTip": "Computers are powerful tools for processing information."
+},
+{
+ "id": 96,
+ "question":"What is the Internet?",
+  "options":[
+    "A type of food",
+    "A place to go shopping",
+    "A global system of interconnected computer networks",
+    "A game"
+  ],
+  "correctAnswerIndex": 2,
+  "explanation":"The Internet is a global system of interconnected computer networks that uses the Internet protocol suite (TCP/IP) to communicate between networks and devices. It is a network of networks that consists of private, public, academic, business, and government networks of local to global scope, linked by a broad array of electronic, wireless, and optical networking technologies. The Internet carries a vast range of information resources and services, such as the interlinked hypertext documents and applications of the World Wide Web (WWW), electronic mail, telephony, and file sharing.",
+  "examTip": "The Internet is a global system"
+},
+{
+  "id": 97,
+ "question":"What does it mean when a website starts with HTTPS",
+  "options":[
+    "The website is safe and secure",
+    "The website is dangerous",
+    "The website is about sports",
+    "The website is very fast"
+  ],
+  "correctAnswerIndex": 0,
+  "explanation":"The Hypertext Transfer Protocol Secure (HTTPS) is an extension of the Hypertext Transfer Protocol (HTTP). It is used for secure communication over a computer network, and is widely used on the Internet. In HTTPS, the communication protocol is encrypted using Transport Layer Security (TLS) or, formerly, Secure Sockets Layer (SSL).",
+   "examTip": "HTTPS websites encrypt the data"
+},
+{
+  "id": 98,
+ "question":"Should you open email atachments from senders you dont know?",
+  "options":[
+    "Yes",
+    "No",
+    "Only if the email looks important",
+    "Only on Tuesdays"
+  ],
+   "correctAnswerIndex": 1,
+  "explanation":"Opening file attachments from unknown senders is a major security risk. These attachments could easily contain malware (viruses, ransomware, etc.) that could infect your computer. Never open attachments unless you are absolutely certain of the sender's identity and the legitimacy of the file.",
+  "examTip":"Unknown attachments can infect your computer with malware."
+},
+{
+  "id": 99,
+ "question":"Should you use a different password for every website you visit?",
+ "options":[
+    "Yes",
+    "No",
+    "Only if its a bank account",
+    "only for social media"
+ ],
+ "correctAnswerIndex": 0,
+ "explanation":"Using the same password everywhere creates a single point of failure. If a hacker gets your password from *one* website, they can try it on *all* your other accounts. Using unique passwords for each site isolates the damage if one account is compromised.",
+  "examTip": "Unique passwords protect you."
+},
+{
+ "id": 100,
+ "question":"Should you share your passwords with anyone?",
+  "options":[
+    "Yes",
+    "No",
+    "Yes, with my best friend",
+    "Only with people I trust"
+  ],
+  "correctAnswerIndex": 1,
+   "explanation":"Sharing passwords, even with trusted people, is a major security risk. It increases the chance of your accounts being compromised. Your passwords should be known only to you.",
+  "examTip":"Keep your passwords private."
 }
 
   ]
