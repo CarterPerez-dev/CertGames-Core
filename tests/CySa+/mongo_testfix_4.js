@@ -1,3 +1,7 @@
+
+fix 51-100
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 4,
@@ -696,6 +700,54 @@ db.tests.insertOne({
       "Salting isn't encryption itself, or about making passwords easier to remember or automatically generating them. Salting involves adding a unique, random string (the salt) to each password *before* it's hashed. This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because even if two users have the *same* password, their *salted hashes* will be different.",
      "examTip": "Salting significantly strengthens password security by making rainbow table attacks ineffective."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fix
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 {
   "id": 51,
   "question": "Which of the following is the BEST description of a 'botnet'?",
