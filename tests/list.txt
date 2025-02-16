@@ -1,3 +1,9 @@
+Tests:
+1.) create the test (aiforumla)
+2.) fix the test (fixtest)
+3.) verify test (verifytest)
+
+
 A+ core 2
 --needs to be verified
 
@@ -16,6 +22,7 @@ A+ core 2
 
 
   CySa+
+  --- test 9 & test 10 need to be fixed
   ----needs to be verified
 
 
