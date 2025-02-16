@@ -1,7 +1,3 @@
-
-fix 51-100
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 4,
@@ -727,18 +723,6 @@ db.tests.insertOne({
 
 
 
-fix
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -748,698 +732,661 @@ fix
 
 
     
-{
-  "id": 51,
-  "question": "Which of the following is the BEST description of a 'botnet'?",
-  "options":[
-     "A type of firewall used to protect networks.",
-    "A network of compromised computers controlled remotely by an attacker.",
-    "A program used for creating and managing databases.",
-    "A type of network cable used for high-speed data transfer."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation":
-    "A botnet is not a firewall, database program, or cable. A botnet is a network of computers (often thousands or even millions) that have been infected with malware (bots) and are controlled *remotely* by an attacker (the "bot herder"). Botnets are often used for malicious activities like DDoS attacks, sending spam, and distributing malware.",
-   "examTip": "Botnets are large networks of compromised computers used for malicious purposes."
-},
-{
-   "id": 52,
-    "question": "Which of the following is MOST characteristic of 'spyware'?",
-     "options":[
-      "It makes your computer run faster.",
+db.tests.insertOne({
+  "category": "cysa",
+  "testId": 4,
+  "testName": " CySa Practice Test #4 (Moderate)",
+  "xpPerCorrect": 10,
+  "questions": [
+    {
+      "id": 51,
+      "question": "Which of the following is the BEST description of a 'botnet'?",
+      "options": [
+        "A type of firewall used to protect networks.",
+        "A network of compromised computers controlled remotely by an attacker.",
+        "A program used for creating and managing databases.",
+        "A type of network cable used for high-speed data transfer."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A botnet is not a firewall, database program, or cable. A botnet is a network of computers (often thousands or even millions) that have been infected with malware (bots) and are controlled *remotely* by an attacker (the \"bot herder\"). Botnets are often used for malicious activities like DDoS attacks, sending spam, and distributing malware.",
+      "examTip": "Botnets are large networks of compromised computers used for malicious purposes."
+    },
+    {
+      "id": 52,
+      "question": "Which of the following is MOST characteristic of 'spyware'?",
+      "options": [
+        "It makes your computer run faster.",
         "It secretly monitors user activity and gathers information without consent.",
-       "It displays numerous pop-up advertisements.",
+        "It displays numerous pop-up advertisements.",
         "It encrypts files and demands a ransom for decryption."
-     ],
-    "correctAnswerIndex": 1,
-    "explanation":
-    "Spyware does *not* speed up computers. Pop-up ads are more characteristic of *adware*. Encrypting files is *ransomware*. Spyware is designed to *stealthily* monitor user activity and collect information (keystrokes, browsing history, passwords, etc.) *without* the user's knowledge or consent. This information is then sent to a third party.",
- "examTip": "Spyware is a serious threat to privacy and data security."
-},
-{
-   "id": 53,
-  "question": "What is the primary purpose of 'access control lists (ACLs)'?",
- "options":[
-  "To encrypt data on a network.",
-   "To define permissions that specify which users or systems are granted or denied access to resources.",
-    "To automatically patch software vulnerabilities.",
-  "To conduct penetration testing exercises."
- ],
-  "correctAnswerIndex": 1,
- "explanation":
- "ACLs are not primarily for encryption, patching or penetration testing. ACLs (Access Control Lists) are sets of rules that define *permissions*. They specify which users, groups, or systems are *allowed* or *denied* access to specific resources (files, folders, network devices, etc.) and what actions they are permitted to perform (read, write, execute).",
-  "examTip": "ACLs control access to resources based on defined permissions."
-},
-{
-  "id": 54,
-  "question":"What is 'Nmap' primarily used for in a security context?",
-   "options":[
-   "Encrypting files and folders.",
-    "Network discovery and security auditing.",
-    "Analyzing malware samples.",
-   "Managing user accounts and passwords."
-   ],
-   "correctAnswerIndex": 1,
-    "explanation": "Nmap is not primarily for encryption, malware analysis (though it can *aid* in that), or user management. Nmap is a powerful and versatile *network scanning* tool. It's used to discover hosts and services on a network, identify open ports, determine operating systems and versions, and detect some vulnerabilities. It's a fundamental tool for network reconnaissance and security assessments.",
- "examTip": "Nmap is a powerful tool for network mapping and port scanning."
-},
-{
-    "id": 55,
-  "question": "Which of the following actions would be considered part of a 'vulnerability assessment'?",
-    "options":[
-      "Exploiting identified vulnerabilities to gain access to a system.",
-      "Identifying, classifying, and prioritizing vulnerabilities in a system or network.",
-      "Developing a new security policy for an organization.",
-      "Responding to a security incident after it has occurred."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-      "Exploiting vulnerabilities is *penetration testing*, not vulnerability assessment. Policy development and incident response are separate processes. A vulnerability assessment focuses on *identifying* potential security weaknesses (vulnerabilities) in a system, network, or application, *classifying* them based on their type, and *prioritizing* them based on their severity and potential impact. It does *not* involve exploiting them.",
-  "examTip": "Vulnerability assessment identifies and prioritizes weaknesses, but doesn't exploit them."
-},
-    {
-        "id": 56,
-        "question": "You are a security analyst investigating a compromised web server. Which of the following log files would be MOST likely to contain information about the attack?",
-        "options": [
-           "System boot logs.",
-            "Web server access and error logs.",
-            "Database transaction logs.",
-            "DHCP server logs."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":
-           "System boot logs show startup information. Database logs would be relevant *if* the database was directly attacked, but the question specifies a *web server* compromise. DHCP logs relate to IP address assignment. *Web server access logs* record all requests made to the web server, and *error logs* record any errors encountered. These are the *most likely* to contain evidence of the attack, such as malicious requests, exploit attempts, or unusual activity.",
-        "examTip": "Analyze relevant logs for clues during incident investigations."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Spyware does *not* speed up computers. Pop-up ads are more characteristic of *adware*. Encrypting files is *ransomware*. Spyware is designed to *stealthily* monitor user activity and collect information (keystrokes, browsing history, passwords, etc.) *without* the user's knowledge or consent. This information is then sent to a third party.",
+      "examTip": "Spyware is a serious threat to privacy and data security."
     },
     {
-        "id": 57,
-        "question":"What is the primary goal of a 'denial-of-service (DoS)' attack?",
-         "options":[
-            "To steal sensitive data from a server.",
-            "To make a network or service unavailable to legitimate users.",
-            "To gain unauthorized access to a user account.",
-            "To install malware on a target system."
-         ],
-          "correctAnswerIndex": 1,
-        "explanation":
-           "Data theft, account access, and malware installation are not the *primary* goal (though they *could* be secondary effects). A DoS attack aims to disrupt service availability. It overwhelms the target system (server, network, etc.) with traffic or requests, making it unable to respond to legitimate users.",
-        "examTip": "DoS attacks aim to disrupt service availability, not necessarily steal data."
+      "id": 53,
+      "question": "What is the primary purpose of 'access control lists (ACLs)'?",
+      "options": [
+        "To encrypt data on a network.",
+        "To define permissions that specify which users or systems are granted or denied access to resources.",
+        "To automatically patch software vulnerabilities.",
+        "To conduct penetration testing exercises."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "ACLs are not primarily for encryption, patching or penetration testing. ACLs (Access Control Lists) are sets of rules that define *permissions*. They specify which users, groups, or systems are *allowed* or *denied* access to specific resources (files, folders, network devices, etc.) and what actions they are permitted to perform (read, write, execute).",
+      "examTip": "ACLs control access to resources based on defined permissions."
     },
     {
-        "id": 58,
-        "question": "Which of the following is the BEST description of 'threat intelligence'?",
-        "options": [
-           "The process of encrypting data to protect it from unauthorized access.",
-           "Information about known and emerging threats, threat actors, their tactics, techniques, and procedures (TTPs).",
-           "A type of firewall rule that blocks all incoming network traffic.",
-            "A method for creating strong, unique passwords for online accounts."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":
-            "Threat intelligence isn't encryption, firewall rules, or password creation. Threat intelligence is *actionable information* about threats. This includes details about specific malware families, attacker groups, vulnerabilities being exploited, indicators of compromise (IoCs), and attacker TTPs.  It helps organizations understand the threat landscape and make informed security decisions.",
-         "examTip": "Threat intelligence provides context and knowledge about current and potential threats."
+      "id": 54,
+      "question": "What is 'Nmap' primarily used for in a security context?",
+      "options": [
+        "Encrypting files and folders.",
+        "Network discovery and security auditing.",
+        "Analyzing malware samples.",
+        "Managing user accounts and passwords."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Nmap is not primarily for encryption, malware analysis (though it can *aid* in that), or user management. Nmap is a powerful and versatile *network scanning* tool. It's used to discover hosts and services on a network, identify open ports, determine operating systems and versions, and detect some vulnerabilities. It's a fundamental tool for network reconnaissance and security assessments.",
+      "examTip": "Nmap is a powerful tool for network mapping and port scanning."
     },
-{
-  "id": 59,
-    "question":"What is 'tcpdump' primarily used for?",
-    "options":[
-     "To encrypt files on a Linux system.",
-     "To capture and analyze network traffic on a Linux system.",
-    "To manage user accounts and permissions.",
-    "To create and edit text files."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-    "tcpdump is not for encryption, user management, or text editing. tcpdump is a powerful *command-line packet analyzer* for Linux and other Unix-like systems.  It allows you to capture and analyze network traffic (packets) in real-time or from a saved capture file.  It's essential for network troubleshooting, security analysis, and protocol analysis.",
-  "examTip": "tcpdump is a command-line tool for network traffic analysis."
-
-},
-{
-    "id": 60,
-   "question":"Which of the following is the MOST effective way to protect against ransomware attacks?",
-   "options":[
-      "Paying the ransom immediately upon infection.",
-       "Maintaining regular, offline backups of critical data.",
-       "Using a strong antivirus program and never updating it.",
-       "Opening all email attachments without caution."
-   ],
-  "correctAnswerIndex": 1,
-    "explanation":
-  "Paying the ransom doesn't guarantee data recovery and encourages further attacks.  An antivirus is important, but it *must* be kept updated.  Opening all attachments is extremely risky. *Regular, offline backups* are the single *most effective* defense. If your data is encrypted by ransomware, you can restore from backups *without* paying the attackers.  The backups *must* be offline or otherwise isolated to prevent the ransomware from encrypting them as well.",
-  "examTip": "Reliable, offline backups are the best defense against ransomware."
-},
-{
-    "id": 61,
-    "question": "What is the main purpose of 'input validation' in secure coding practices?",
-    "options": [
+    {
+      "id": 55,
+      "question": "Which of the following actions would be considered part of a 'vulnerability assessment'?",
+      "options": [
+        "Exploiting identified vulnerabilities to gain access to a system.",
+        "Identifying, classifying, and prioritizing vulnerabilities in a system or network.",
+        "Developing a new security policy for an organization.",
+        "Responding to a security incident after it has occurred."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Exploiting vulnerabilities is *penetration testing*, not vulnerability assessment. Policy development and incident response are separate processes. A vulnerability assessment focuses on *identifying* potential security weaknesses (vulnerabilities) in a system, network, or application, *classifying* them based on their type, and *prioritizing* them based on their severity and potential impact. It does *not* involve exploiting them.",
+      "examTip": "Vulnerability assessment identifies and prioritizes weaknesses, but doesn't exploit them."
+    },
+    {
+      "id": 56,
+      "question": "You are a security analyst investigating a compromised web server. Which of the following log files would be MOST likely to contain information about the attack?",
+      "options": [
+        "System boot logs.",
+        "Web server access and error logs.",
+        "Database transaction logs.",
+        "DHCP server logs."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "System boot logs show startup information. Database logs would be relevant *if* the database was directly attacked, but the question specifies a *web server* compromise. DHCP logs relate to IP address assignment. *Web server access logs* record all requests made to the web server, and *error logs* record any errors encountered. These are the *most likely* to contain evidence of the attack, such as malicious requests, exploit attempts, or unusual activity.",
+      "examTip": "Analyze relevant logs for clues during incident investigations."
+    },
+    {
+      "id": 57,
+      "question": "What is the primary goal of a 'denial-of-service (DoS)' attack?",
+      "options": [
+        "To steal sensitive data from a server.",
+        "To make a network or service unavailable to legitimate users.",
+        "To gain unauthorized access to a user account.",
+        "To install malware on a target system."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Data theft, account access, and malware installation are not the *primary* goal (though they *could* be secondary effects). A DoS attack aims to disrupt service availability. It overwhelms the target system (server, network, etc.) with traffic or requests, making it unable to respond to legitimate users.",
+      "examTip": "DoS attacks aim to disrupt service availability, not necessarily steal data."
+    },
+    {
+      "id": 58,
+      "question": "Which of the following is the BEST description of 'threat intelligence'?",
+      "options": [
+        "The process of encrypting data to protect it from unauthorized access.",
+        "Information about known and emerging threats, threat actors, their tactics, techniques, and procedures (TTPs).",
+        "A type of firewall rule that blocks all incoming network traffic.",
+        "A method for creating strong, unique passwords for online accounts."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Threat intelligence isn't encryption, firewall rules, or password creation. Threat intelligence is *actionable information* about threats. This includes details about specific malware families, attacker groups, vulnerabilities being exploited, indicators of compromise (IoCs), and attacker TTPs.  It helps organizations understand the threat landscape and make informed security decisions.",
+      "examTip": "Threat intelligence provides context and knowledge about current and potential threats."
+    },
+    {
+      "id": 59,
+      "question": "What is 'tcpdump' primarily used for?",
+      "options": [
+        "To encrypt files on a Linux system.",
+        "To capture and analyze network traffic on a Linux system.",
+        "To manage user accounts and permissions.",
+        "To create and edit text files."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "tcpdump is not for encryption, user management, or text editing. tcpdump is a powerful *command-line packet analyzer* for Linux and other Unix-like systems.  It allows you to capture and analyze network traffic (packets) in real-time or from a saved capture file.  It's essential for network troubleshooting, security analysis, and protocol analysis.",
+      "examTip": "tcpdump is a command-line tool for network traffic analysis."
+    },
+    {
+      "id": 60,
+      "question": "Which of the following is the MOST effective way to protect against ransomware attacks?",
+      "options": [
+        "Paying the ransom immediately upon infection.",
+        "Maintaining regular, offline backups of critical data.",
+        "Using a strong antivirus program and never updating it.",
+        "Opening all email attachments without caution."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Paying the ransom doesn't guarantee data recovery and encourages further attacks.  An antivirus is important, but it *must* be kept updated.  Opening all attachments is extremely risky. *Regular, offline backups* are the single *most effective* defense. If your data is encrypted by ransomware, you can restore from backups *without* paying the attackers.  The backups *must* be offline or otherwise isolated to prevent the ransomware from encrypting them as well.",
+      "examTip": "Reliable, offline backups are the best defense against ransomware."
+    },
+    {
+      "id": 61,
+      "question": "What is the main purpose of 'input validation' in secure coding practices?",
+      "options": [
         "To encrypt user input before it is stored in a database.",
         "To prevent attackers from injecting malicious code by checking and sanitizing user-provided data.",
         "To automatically log users out after a period of inactivity.",
         "To ensure that users create strong, unique passwords."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-     "Input validation isn't primarily about encryption, automatic logouts, or password strength (though those are important). Input validation is a *critical* security practice. It involves thoroughly checking *all* user-supplied data (from web forms, API calls, etc.) to ensure it conforms to expected formats, lengths, and character types, and *sanitizing* it (removing or escaping potentially harmful characters) to prevent attackers from injecting malicious code (like SQL injection, XSS).",
-    "examTip": "Input validation is a fundamental defense against many web application attacks."
-},
-{
-  "id": 62,
-   "question": "Which of the following is a key component of a well-defined 'incident response plan'?",
-    "options":[
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Input validation isn't primarily about encryption, automatic logouts, or password strength (though those are important). Input validation is a *critical* security practice. It involves thoroughly checking *all* user-supplied data (from web forms, API calls, etc.) to ensure it conforms to expected formats, lengths, and character types, and *sanitizing* it (removing or escaping potentially harmful characters) to prevent attackers from injecting malicious code (like SQL injection, XSS).",
+      "examTip": "Input validation is a fundamental defense against many web application attacks."
+    },
+    {
+      "id": 62,
+      "question": "Which of the following is a key component of a well-defined 'incident response plan'?",
+      "options": [
         "A list of all known software vulnerabilities on the network.",
-      "Clearly defined roles, responsibilities, and procedures for handling security incidents.",
-      "A detailed inventory of all hardware assets in the organization.",
-      "A guarantee of complete protection against all future cyberattacks."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "Vulnerability lists and hardware inventories are *helpful*, but not the *core* of the plan. No plan can *guarantee* complete protection. An incident response plan must define *who* does *what* during a security incident. It includes clear roles, responsibilities, communication protocols, and step-by-step procedures for detection, analysis, containment, eradication, recovery, and post-incident activities. This ensures a coordinated and efficient response.",
-     "examTip": "A well-defined incident response plan is essential for minimizing the impact of security breaches."
-},
-{
-    "id": 63,
-    "question": "What is the primary purpose of 'file integrity monitoring (FIM)' software?",
-    "options":[
-    "To encrypt files stored on a server.",
-      "To detect unauthorized changes to critical system files and configurations.",
-       "To automatically back up all files to a remote location.",
-       "To scan files for viruses and other malware."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "FIM is not primarily for encryption, backup, or virus scanning (though it might integrate with such tools). FIM software monitors important files (system files, configuration files, critical application files) and alerts administrators to any *unexpected changes*. This can be an early indicator of a compromise, such as malware modifying system files or an attacker tampering with configurations.",
-    "examTip": "FIM helps detect unauthorized modifications to critical files."
-},
-{
- "id": 64,
-    "question": "Which of the following network protocols is commonly used for secure remote command-line access to a server?",
-     "options":[
-      "FTP",
-       "Telnet",
-      "SSH",
-      "HTTP"
-     ],
-    "correctAnswerIndex": 2,
-    "explanation":
-    "FTP and Telnet transmit data in plain text, making them insecure. HTTP is for web traffic, not command-line access. SSH (Secure Shell) provides *encrypted* communication, making it the standard protocol for secure remote command-line access and file transfer. It protects against eavesdropping and man-in-the-middle attacks.",
- "examTip": "Always use SSH for secure remote command-line access."
-},
-{
- "id": 65,
- "question": "What is a 'rainbow table' used for in the context of password cracking?",
- "options":[
-  "To generate strong, random passwords.",
-   "To store pre-computed hashes of passwords, allowing for faster cracking.",
-   "To encrypt passwords before storing them in a database.",
- "To organize and manage user accounts and permissions."
- ],
-  "correctAnswerIndex": 1,
-"explanation": "Rainbow tables are not for password generation, encryption, or user management. A rainbow table is a pre-calculated table of password hashes. Attackers use these tables to *quickly* look up the plain text password corresponding to a given hash, *without* having to perform the computationally expensive hashing process for each password guess. This significantly speeds up password cracking, especially for weaker passwords.",
-  "examTip": "Salting passwords makes rainbow table attacks much less effective."
-},
-    {
-        "id": 66,
-        "question": "Which type of attack targets vulnerabilities in web applications by injecting malicious SQL code?",
-        "options": [
-           "Cross-Site Scripting (XSS)",
-            "SQL Injection",
-            "Brute-Force",
-            "Denial-of-Service (DoS)"
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":
-            "XSS injects client-side scripts. Brute-force attacks try many passwords. DoS attacks disrupt service. SQL Injection specifically targets databases by injecting malicious SQL commands into input fields (like web forms). This can allow attackers to read, modify, or delete data, or even execute commands on the database server.",
-        "examTip": "SQL Injection is a serious threat to web applications that interact with databases."
+        "Clearly defined roles, responsibilities, and procedures for handling security incidents.",
+        "A detailed inventory of all hardware assets in the organization.",
+        "A guarantee of complete protection against all future cyberattacks."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Vulnerability lists and hardware inventories are *helpful*, but not the *core* of the plan. No plan can *guarantee* complete protection. An incident response plan must define *who* does *what* during a security incident. It includes clear roles, responsibilities, communication protocols, and step-by-step procedures for detection, analysis, containment, eradication, recovery, and post-incident activities. This ensures a coordinated and efficient response.",
+      "examTip": "A well-defined incident response plan is essential for minimizing the impact of security breaches."
     },
     {
-        "id": 67,
-        "question":"What is the primary purpose of a 'web application firewall (WAF)'?",
-         "options":[
-            "To encrypt all network traffic.",
-            "To filter and block malicious traffic targeting web applications.",
-            "To provide secure remote access to internal systems.",
-            "To manage user accounts and passwords."
-         ],
-         "correctAnswerIndex": 1,
-        "explanation": "WAFs don't encrypt *all* network traffic, provide general remote access, or manage user accounts. A WAF sits in front of web servers and inspects incoming HTTP traffic. It uses rules and signatures to detect and block malicious requests, such as SQL injection, cross-site scripting (XSS), and other web-based attacks, protecting the web application from exploitation.",
-         "examTip": "A WAF is a specialized firewall designed to protect web applications."
+      "id": 63,
+      "question": "What is the primary purpose of 'file integrity monitoring (FIM)' software?",
+      "options": [
+        "To encrypt files stored on a server.",
+        "To detect unauthorized changes to critical system files and configurations.",
+        "To automatically back up all files to a remote location.",
+        "To scan files for viruses and other malware."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "FIM is not primarily for encryption, backup, or virus scanning (though it might integrate with such tools). FIM software monitors important files (system files, configuration files, critical application files) and alerts administrators to any *unexpected changes*. This can be an early indicator of a compromise, such as malware modifying system files or an attacker tampering with configurations.",
+      "examTip": "FIM helps detect unauthorized modifications to critical files."
     },
     {
-        "id": 68,
-        "question":"What is 'Wireshark' primarily used for?",
-        "options":[
-          "Intrusion prevention.",
-            "Network packet analysis and troubleshooting.",
-           "Firewall rule management.",
-           "Vulnerability scanning."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":
-            "Wireshark is not an intrusion *prevention* system, firewall manager, or vulnerability scanner (though it can *aid* in those areas). Wireshark is a powerful and widely used *packet capture* and analysis tool. It allows you to capture network traffic in real-time or load a capture file, and then inspect individual packets to analyze protocols, troubleshoot network problems, and detect suspicious activity.",
-        "examTip": "Wireshark is an essential tool for network traffic analysis."
+      "id": 64,
+      "question": "Which of the following network protocols is commonly used for secure remote command-line access to a server?",
+      "options": [
+        "FTP",
+        "Telnet",
+        "SSH",
+        "HTTP"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "FTP and Telnet transmit data in plain text, making them insecure. HTTP is for web traffic, not command-line access. SSH (Secure Shell) provides *encrypted* communication, making it the standard protocol for secure remote command-line access and file transfer. It protects against eavesdropping and man-in-the-middle attacks.",
+      "examTip": "Always use SSH for secure remote command-line access."
+    },
+    {
+      "id": 65,
+      "question": "What is a 'rainbow table' used for in the context of password cracking?",
+      "options": [
+        "To generate strong, random passwords.",
+        "To store pre-computed hashes of passwords, allowing for faster cracking.",
+        "To encrypt passwords before storing them in a database.",
+        "To organize and manage user accounts and permissions."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Rainbow tables are not for password generation, encryption, or user management. A rainbow table is a pre-calculated table of password hashes. Attackers use these tables to *quickly* look up the plain text password corresponding to a given hash, *without* having to perform the computationally expensive hashing process for each password guess. This significantly speeds up password cracking, especially for weaker passwords.",
+      "examTip": "Salting passwords makes rainbow table attacks much less effective."
+    },
+    {
+      "id": 66,
+      "question": "Which type of attack targets vulnerabilities in web applications by injecting malicious SQL code?",
+      "options": [
+        "Cross-Site Scripting (XSS)",
+        "SQL Injection",
+        "Brute-Force",
+        "Denial-of-Service (DoS)"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "XSS injects client-side scripts. Brute-force attacks try many passwords. DoS attacks disrupt service. SQL Injection specifically targets databases by injecting malicious SQL commands into input fields (like web forms). This can allow attackers to read, modify, or delete data, or even execute commands on the database server.",
+      "examTip": "SQL Injection is a serious threat to web applications that interact with databases."
+    },
+    {
+      "id": 67,
+      "question": "What is the primary purpose of a 'web application firewall (WAF)'?",
+      "options": [
+        "To encrypt all network traffic.",
+        "To filter and block malicious traffic targeting web applications.",
+        "To provide secure remote access to internal systems.",
+        "To manage user accounts and passwords."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "WAFs don't encrypt *all* network traffic, provide general remote access, or manage user accounts. A WAF sits in front of web servers and inspects incoming HTTP traffic. It uses rules and signatures to detect and block malicious requests, such as SQL injection, cross-site scripting (XSS), and other web-based attacks, protecting the web application from exploitation.",
+      "examTip": "A WAF is a specialized firewall designed to protect web applications."
+    },
+    {
+      "id": 68,
+      "question": "What is 'Wireshark' primarily used for?",
+      "options": [
+        "Intrusion prevention.",
+        "Network packet analysis and troubleshooting.",
+        "Firewall rule management.",
+        "Vulnerability scanning."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Wireshark is not an intrusion *prevention* system, firewall manager, or vulnerability scanner (though it can *aid* in those areas). Wireshark is a powerful and widely used *packet capture* and analysis tool. It allows you to capture network traffic in real-time or load a capture file, and then inspect individual packets to analyze protocols, troubleshoot network problems, and detect suspicious activity.",
+      "examTip": "Wireshark is an essential tool for network traffic analysis."
     },
     {
       "id": 69,
-     "question": "What is the FIRST step an organization should take when creating a data backup and recovery plan?",
-      "options":[
+      "question": "What is the FIRST step an organization should take when creating a data backup and recovery plan?",
+      "options": [
         "Purchase backup software.",
         "Identify critical data and systems that require protection.",
-       "Configure automated backups to a cloud provider.",
+        "Configure automated backups to a cloud provider.",
         "Test the restoration process."
       ],
       "correctAnswerIndex": 1,
-     "explanation":
-       "While purchasing software, configuring backups, and testing are all *important*, they come *later*. The *very first* step is to identify *what* needs to be protected. This involves determining which data and systems are *critical* to business operations and would cause the most significant impact if lost or unavailable. This prioritization guides the entire backup and recovery strategy.",
-     "examTip": "Before backing up anything, determine what data is most critical to your organization."
-
+      "explanation": "While purchasing software, configuring backups, and testing are all *important*, they come *later*. The *very first* step is to identify *what* needs to be protected. This involves determining which data and systems are *critical* to business operations and would cause the most significant impact if lost or unavailable. This prioritization guides the entire backup and recovery strategy.",
+      "examTip": "Before backing up anything, determine what data is most critical to your organization."
     },
-{
-    "id": 70,
-    "question": "Which of the following is a common technique used to make malware analysis MORE difficult?",
-     "options":[
-       "Using clear and descriptive variable names in the code.",
-       "Adding comments to the code to explain its functionality.",
+    {
+      "id": 70,
+      "question": "Which of the following is a common technique used to make malware analysis MORE difficult?",
+      "options": [
+        "Using clear and descriptive variable names in the code.",
+        "Adding comments to the code to explain its functionality.",
         "Obfuscation, such as packing or encrypting the code.",
         "Writing the malware in a high-level programming language."
-     ],
+      ],
       "correctAnswerIndex": 2,
-     "explanation": "Clear variable names, comments, and high-level languages *aid* understanding, not hinder it. Malware authors often use *obfuscation* techniques to make their code harder to analyze. This can involve packing (compressing and often encrypting the code), using encryption to hide the code's true purpose, or using complex code structures to confuse analysts.",
+      "explanation": "Clear variable names, comments, and high-level languages *aid* understanding, not hinder it. Malware authors often use *obfuscation* techniques to make their code harder to analyze. This can involve packing (compressing and often encrypting the code), using encryption to hide the code's true purpose, or using complex code structures to confuse analysts.",
       "examTip": "Obfuscation is used to hinder reverse engineering and malware analysis."
-},
-{
-  "id": 71,
- "question": "What is the purpose of 'red teaming' in cybersecurity?",
- "options":[
- "To defend an organization's systems against cyberattacks.",
- "To simulate realistic attacks to identify vulnerabilities and test defenses.",
- "To develop security policies and procedures.",
-    "To manage an organization's security budget and resources."
- ],
- "correctAnswerIndex": 1,
- "explanation": "Defending is the *blue team's* role. Policy development and budget management are separate functions. Red teaming is ethical hacking. A red team simulates real-world attacks, acting like adversaries, to test an organization's defenses and find weaknesses *before* malicious actors do. This helps improve the organization's security posture.",
- "examTip": "Red teaming provides a realistic assessment of an organization's security defenses."
-},
-{
-  "id": 72,
-  "question": "Which type of attack involves flooding a target system with traffic to make it unavailable to legitimate users?",
-    "options":[
-    "Cross-Site Scripting (XSS)",
-    "SQL Injection",
-      "Distributed Denial-of-Service (DDoS)",
-     "Man-in-the-Middle (MitM)"
-    ],
-  "correctAnswerIndex": 2,
-   "explanation": "XSS injects scripts into websites. SQL Injection targets databases. MitM intercepts communications. A *Distributed* Denial-of-Service (DDoS) attack uses *multiple* compromised systems (often a botnet) to flood a target (website, server, network) with traffic, overwhelming its resources and making it unavailable to legitimate users.",
-   "examTip": "DDoS attacks aim to disrupt service availability by overwhelming a target."
-},
-{
- "id": 73,
- "question":"What does 'mean time to detect (MTTD)' measure?",
- "options":[
-   "The average time it takes to recover from a security incident.",
-  "The average time it takes to identify a security incident or breach.",
-    "The average time it takes to fix a security vulnerability.",
-     "The average time it takes to respond to a security alert."
- ],
- "correctAnswerIndex": 1,
- "explanation":
- "MTTD is not about recovery, fixing vulnerabilities, or responding (after detection). MTTD (Mean Time To Detect) is a key metric that measures *detection* speed. It represents the average time it takes for an organization to *discover* that a security incident has occurred.  A lower MTTD is desirable.",
-  "examTip":"A lower MTTD indicates a more effective and responsive security posture."
-
-},
-{
- "id": 74,
- "question": "What is the main purpose of using a 'demilitarized zone (DMZ)' in a network architecture?",
- "options":[
- "To store highly sensitive internal data.",
-  "To provide a buffer zone between the public internet and the internal network, hosting publicly accessible servers.",
- "To create a secure virtual private network (VPN) connection.",
- "To connect directly to the internet without any firewalls or security measures."
- ],
- "correctAnswerIndex": 1,
-  "explanation":
- "A DMZ is *not* for storing sensitive data, creating VPNs, or bypassing security. A DMZ is a separate network segment that sits *between* the internal network and the public internet. It hosts servers that need to be accessible from the outside (web servers, email servers, etc.) but provides a layer of isolation. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
-   "examTip": "A DMZ protects the internal network by isolating publicly accessible servers."
-},
-{
-  "id": 75,
-  "question": "Which of the following is the BEST description of 'data loss prevention (DLP)'?",
-   "options":[
-  "A system that prevents data from being backed up.",
-   "A set of tools and processes used to identify, monitor, and protect sensitive data from unauthorized access or exfiltration.",
-   "A firewall rule that blocks all outbound network traffic.",
-   "A type of encryption used to secure data at rest."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation":
-  "DLP is not about preventing backups, blocking *all* traffic, or solely encryption. DLP systems are designed to detect and *prevent* sensitive data (PII, financial data, intellectual property) from leaving the organization's control, whether through email, web uploads, removable media, or other channels.  They enforce data security policies.",
-   "examTip":"DLP is focused on preventing data leakage."
-},
-{
-    "id": 76,
-    "question":"What is the primary purpose of a 'Security Operations Center (SOC)'?",
-    "options":[
-      "To develop new security software and hardware.",
-     "To monitor, detect, analyze, respond to, and often prevent cybersecurity incidents.",
-      "To conduct only penetration testing exercises.",
-     "To manage the organization's overall IT infrastructure."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-        "While SOCs may use software developed in-house, their primary function isn't development.  Penetration testing is a *part* of security assessments, but not the sole focus of a SOC.  IT infrastructure management is a broader function. The SOC is the central team responsible for an organization's *ongoing* security monitoring, threat detection, incident analysis, response, and often preventative measures.",
-    "examTip": "The SOC is the central hub for an organization's cybersecurity defense."
-},
-{
-    "id": 77,
-    "question":"What is 'whitelisting' in the context of application control?",
-    "options":[
-      "Blocking all applications from running on a system.",
-      "Allowing only specific, pre-approved applications to run on a system.",
-       "Allowing all applications to run on a system.",
+    },
+    {
+      "id": 71,
+      "question": "What is the purpose of 'red teaming' in cybersecurity?",
+      "options": [
+        "To defend an organization's systems against cyberattacks.",
+        "To simulate realistic attacks to identify vulnerabilities and test defenses.",
+        "To develop security policies and procedures.",
+        "To manage an organization's security budget and resources."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Defending is the *blue team's* role. Policy development and budget management are separate functions. Red teaming is ethical hacking. A red team simulates real-world attacks, acting like adversaries, to test an organization's defenses and find weaknesses *before* malicious actors do. This helps improve the organization's security posture.",
+      "examTip": "Red teaming provides a realistic assessment of an organization's security defenses."
+    },
+    {
+      "id": 72,
+      "question": "Which type of attack involves flooding a target system with traffic to make it unavailable to legitimate users?",
+      "options": [
+        "Cross-Site Scripting (XSS)",
+        "SQL Injection",
+        "Distributed Denial-of-Service (DDoS)",
+        "Man-in-the-Middle (MitM)"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "XSS injects scripts into websites. SQL Injection targets databases. MitM intercepts communications. A *Distributed* Denial-of-Service (DDoS) attack uses *multiple* compromised systems (often a botnet) to flood a target (website, server, network) with traffic, overwhelming its resources and making it unavailable to legitimate users.",
+      "examTip": "DDoS attacks aim to disrupt service availability by overwhelming a target."
+    },
+    {
+      "id": 73,
+      "question": "What does 'mean time to detect (MTTD)' measure?",
+      "options": [
+        "The average time it takes to recover from a security incident.",
+        "The average time it takes to identify a security incident or breach.",
+        "The average time it takes to fix a security vulnerability.",
+        "The average time it takes to respond to a security alert."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "MTTD is not about recovery, fixing vulnerabilities, or responding (after detection). MTTD (Mean Time To Detect) is a key metric that measures *detection* speed. It represents the average time it takes for an organization to *discover* that a security incident has occurred.  A lower MTTD is desirable.",
+      "examTip": "A lower MTTD indicates a more effective and responsive security posture."
+    },
+    {
+      "id": 74,
+      "question": "What is the main purpose of using a 'demilitarized zone (DMZ)' in a network architecture?",
+      "options": [
+        "To store highly sensitive internal data.",
+        "To provide a buffer zone between the public internet and the internal network, hosting publicly accessible servers.",
+        "To create a secure virtual private network (VPN) connection.",
+        "To connect directly to the internet without any firewalls or security measures."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A DMZ is *not* for storing sensitive data, creating VPNs, or bypassing security. A DMZ is a separate network segment that sits *between* the internal network and the public internet. It hosts servers that need to be accessible from the outside (web servers, email servers, etc.) but provides a layer of isolation. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
+      "examTip": "A DMZ protects the internal network by isolating publicly accessible servers."
+    },
+    {
+      "id": 75,
+      "question": "Which of the following is the BEST description of 'data loss prevention (DLP)'?",
+      "options": [
+        "A system that prevents data from being backed up.",
+        "A set of tools and processes used to identify, monitor, and protect sensitive data from unauthorized access or exfiltration.",
+        "A firewall rule that blocks all outbound network traffic.",
+        "A type of encryption used to secure data at rest."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "DLP is not about preventing backups, blocking *all* traffic, or solely encryption. DLP systems are designed to detect and *prevent* sensitive data (PII, financial data, intellectual property) from leaving the organization's control, whether through email, web uploads, removable media, or other channels.  They enforce data security policies.",
+      "examTip": "DLP is focused on preventing data leakage."
+    },
+    {
+      "id": 76,
+      "question": "What is the primary purpose of a 'Security Operations Center (SOC)'?",
+      "options": [
+        "To develop new security software and hardware.",
+        "To monitor, detect, analyze, respond to, and often prevent cybersecurity incidents.",
+        "To conduct only penetration testing exercises.",
+        "To manage the organization's overall IT infrastructure."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "While SOCs may use software developed in-house, their primary function isn't development.  Penetration testing is a *part* of security assessments, but not the sole focus of a SOC.  IT infrastructure management is a broader function. The SOC is the central team responsible for an organization's *ongoing* security monitoring, threat detection, incident analysis, response, and often preventative measures.",
+      "examTip": "The SOC is the central hub for an organization's cybersecurity defense."
+    },
+    {
+      "id": 77,
+      "question": "What is 'whitelisting' in the context of application control?",
+      "options": [
+        "Blocking all applications from running on a system.",
+        "Allowing only specific, pre-approved applications to run on a system.",
+        "Allowing all applications to run on a system.",
         "Automatically updating all applications on a system."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-      "Whitelisting isn't blocking *all* applications or allowing *all*. Automatic updates are a separate process. Application whitelisting is a security approach where *only* applications that are explicitly *listed as allowed* can be executed on a system. All other applications are blocked by default. This is a very restrictive but effective security measure.",
-    "examTip": "Application whitelisting provides a high level of security by only allowing known-good applications."
-},
-{
- "id": 78,
-    "question":"What is 'sandboxing' primarily used for in cybersecurity?",
-  "options":[
-    "To store sensitive data in a highly secure environment.",
-   "To isolate and execute potentially malicious code or files in a controlled environment.",
-    "To encrypt data transmitted across a network.",
-    "To back up critical system files and configurations."
-  ],
-    "correctAnswerIndex": 1,
-   "explanation":
-    "Sandboxes are not for long-term data storage, network encryption, or backups. A sandbox is a *virtualized*, *isolated* environment. It's used to run suspicious files or code *without* risking harm to the host system or network. This allows security analysts to safely observe the code's behavior and determine if it's malicious.",
-   "examTip": "Sandboxing allows for the safe analysis of potentially harmful code."
-},
-{
-  "id": 79,
- "question": "Which of the following is a common tactic used in 'social engineering' attacks?",
-  "options":[
-    "Exploiting software vulnerabilities in a web server.",
-    "Impersonating a trusted individual or organization to manipulate victims.",
-    "Flooding a network with excessive traffic.",
-     "Scanning a network for open ports and services."
-  ],
- "correctAnswerIndex": 1,
-  "explanation":
-   "Exploiting vulnerabilities is a *technical* attack. Flooding is DoS. Port scanning is reconnaissance. Social engineering relies on *psychological manipulation*, not technical exploits. Attackers often *impersonate* trusted entities (IT support, a bank, a colleague) to trick victims into revealing information, clicking links, or opening attachments.",
- "examTip":"Social engineering attacks prey on human trust and psychology."
-},
-{
- "id": 80,
- "question": "What is 'business continuity planning (BCP)' primarily concerned with?",
- "options":[
-    "Encrypting all sensitive data on a company's servers.",
-    "Ensuring that critical business functions can continue during and after a disruption.",
-   "Developing a strong password policy for all employees.",
-    "Conducting regular penetration testing exercises."
- ],
- "correctAnswerIndex": 1,
-  "explanation":
- "Encryption, password policies, and penetration testing are important security *measures*, but not the *core* of BCP. Business continuity planning (BCP) is a comprehensive process that aims to ensure an organization can continue operating (or quickly resume operations) in the event of a disruption (natural disaster, cyberattack, power outage, etc.). It involves  identifying critical functions, developing recovery strategies, and testing those strategies.",
-  "examTip": "BCP focuses on maintaining essential business operations during and after disruptions."
-},
-{
-  "id": 81,
-    "question": "Which of the following is the MOST accurate description of 'disaster recovery (DR)'?",
-    "options": [
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Whitelisting isn't blocking *all* applications or allowing *all*. Automatic updates are a separate process. Application whitelisting is a security approach where *only* applications that are explicitly *listed as allowed* can be executed on a system. All other applications are blocked by default. This is a very restrictive but effective security measure.",
+      "examTip": "Application whitelisting provides a high level of security by only allowing known-good applications."
+    },
+    {
+      "id": 78,
+      "question": "What is 'sandboxing' primarily used for in cybersecurity?",
+      "options": [
+        "To store sensitive data in a highly secure environment.",
+        "To isolate and execute potentially malicious code or files in a controlled environment.",
+        "To encrypt data transmitted across a network.",
+        "To back up critical system files and configurations."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Sandboxes are not for long-term data storage, network encryption, or backups. A sandbox is a *virtualized*, *isolated* environment. It's used to run suspicious files or code *without* risking harm to the host system or network. This allows security analysts to safely observe the code's behavior and determine if it's malicious.",
+      "examTip": "Sandboxing allows for the safe analysis of potentially harmful code."
+    },
+    {
+      "id": 79,
+      "question": "Which of the following is a common tactic used in 'social engineering' attacks?",
+      "options": [
+        "Exploiting software vulnerabilities in a web server.",
+        "Impersonating a trusted individual or organization to manipulate victims.",
+        "Flooding a network with excessive traffic.",
+        "Scanning a network for open ports and services."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Exploiting vulnerabilities is a *technical* attack. Flooding is DoS. Port scanning is reconnaissance. Social engineering relies on *psychological manipulation*, not technical exploits. Attackers often *impersonate* trusted entities (IT support, a bank, a colleague) to trick victims into revealing information, clicking links, or opening attachments.",
+      "examTip": "Social engineering attacks prey on human trust and psychology."
+    },
+    {
+      "id": 80,
+      "question": "What is 'business continuity planning (BCP)' primarily concerned with?",
+      "options": [
+        "Encrypting all sensitive data on a company's servers.",
+        "Ensuring that critical business functions can continue during and after a disruption.",
+        "Developing a strong password policy for all employees.",
+        "Conducting regular penetration testing exercises."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Encryption, password policies, and penetration testing are important security *measures*, but not the *core* of BCP. Business continuity planning (BCP) is a comprehensive process that aims to ensure an organization can continue operating (or quickly resume operations) in the event of a disruption (natural disaster, cyberattack, power outage, etc.). It involves  identifying critical functions, developing recovery strategies, and testing those strategies.",
+      "examTip": "BCP focuses on maintaining essential business operations during and after disruptions."
+    },
+    {
+      "id": 81,
+      "question": "Which of the following is the MOST accurate description of 'disaster recovery (DR)'?",
+      "options": [
         "The process of preventing all disasters from occurring.",
         "A subset of business continuity planning focused on restoring IT systems and data after a disruption.",
         "The process of creating strong, unique passwords for all user accounts.",
         "The implementation of a comprehensive data encryption strategy."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "DR cannot prevent *all* disasters. Passwords and encryption are important, but not the *definition* of DR. Disaster recovery (DR) is a *part* of the broader business continuity planning (BCP) process. DR specifically focuses on the *IT aspects* of recovery – restoring data, systems, applications, and IT infrastructure after a disruptive event.",
-    "examTip": "DR focuses on the IT aspects of recovering from a disaster."
-},
-{
-    "id": 82,
-    "question": "You are analyzing a compromised Linux system. Which command would you use to view a list of currently running processes?",
-    "options": [
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "DR cannot prevent *all* disasters. Passwords and encryption are important, but not the *definition* of DR. Disaster recovery (DR) is a *part* of the broader business continuity planning (BCP) process. DR specifically focuses on the *IT aspects* of recovery – restoring data, systems, applications, and IT infrastructure after a disruptive event.",
+      "examTip": "DR focuses on the IT aspects of recovering from a disaster."
+    },
+    {
+      "id": 82,
+      "question": "You are analyzing a compromised Linux system. Which command would you use to view a list of currently running processes?",
+      "options": [
         "ls",
         "ps",
         "cd",
         "mkdir"
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "`ls` lists files. `cd` changes directories. `mkdir` creates directories. The `ps` command (process status) is used to display information about currently running processes on a Linux/Unix system.  Different options (e.g., `ps aux`) provide varying levels of detail.",
-    "examTip": "Use the `ps` command to view running processes on Linux."
-},
-{
-   "id": 83,
-    "question":"What is the primary purpose of a 'firewall' in network security?",
-    "options":[
-     "To encrypt all data transmitted across a network.",
-       "To filter network traffic based on predefined rules, blocking unauthorized access.",
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`ls` lists files. `cd` changes directories. `mkdir` creates directories. The `ps` command (process status) is used to display information about currently running processes on a Linux/Unix system.  Different options (e.g., `ps aux`) provide varying levels of detail.",
+      "examTip": "Use the `ps` command to view running processes on Linux."
+    },
+    {
+      "id": 83,
+      "question": "What is the primary purpose of a 'firewall' in network security?",
+      "options": [
+        "To encrypt all data transmitted across a network.",
+        "To filter network traffic based on predefined rules, blocking unauthorized access.",
         "To provide remote access to internal systems.",
         "To automatically update software on connected devices."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-      "Firewalls are not primarily for encryption, remote access (VPNs do that), or software updates. A firewall acts as a barrier between networks (e.g., your internal network and the internet). It examines network traffic (packets) and *blocks* or *allows* it based on a set of configured rules. This helps prevent unauthorized access to your network and systems.",
-    "examTip": "A firewall acts as a gatekeeper, controlling network traffic based on rules."
-},
-{
-  "id": 84,
-  "question": "Which of the following is a common technique used to bypass traditional signature-based antivirus detection?",
- "options":[
-  "Using clear and descriptive variable names in malware code.",
-    "Polymorphism or metamorphism, where the malware changes its code to avoid signature matching.",
-    "Adding comments to the malware code to explain its functionality.",
-   "Using a well-known and easily detectable file name."
- ],
-  "correctAnswerIndex": 1,
- "explanation":
- "Clear variable names, comments, and well-known filenames would make detection *easier*. *Polymorphism* and *metamorphism* are techniques used by malware authors to evade signature-based detection. Polymorphic malware changes its code slightly with each infection, while metamorphic malware rewrites its code entirely, making it difficult for antivirus to identify it based on a static signature.",
- "examTip": "Polymorphism and metamorphism are used to evade signature-based detection."
-},
-{
-  "id": 85,
-   "question": "What is the primary goal of 'risk mitigation' in cybersecurity?",
-   "options":[
-     "To eliminate all security risks.",
-      "To reduce the likelihood or impact of identified risks.",
-      "To ignore all security risks.",
-     "To transfer all risks to a third-party insurance company."
-    ],
-   "correctAnswerIndex": 1,
-    "explanation":
-     "It's impossible to *eliminate* all risk, and ignoring them is irresponsible. Transferring risk (e.g., through insurance) is *one* mitigation strategy, but not the overall *goal*. Risk mitigation involves taking *actions* to *reduce* either the *likelihood* of a risk occurring (e.g., patching vulnerabilities) or the *impact* if it does occur (e.g., having backups).",
-    "examTip": "Risk mitigation aims to reduce, not necessarily eliminate, security risks."
-},
-{
-    "id": 86,
-   "question": "What is the purpose of a 'security information and event management (SIEM)' system?",
-    "options": [
-      "To conduct penetration testing exercises.",
-     "To provide centralized log collection, real-time monitoring, correlation, and alerting for security events.",
-      "To manage user accounts and access permissions.",
-     "To encrypt sensitive data both at rest and in transit."
-    ],
-   "correctAnswerIndex": 1,
-   "explanation": "SIEM systems are not primarily penetration testing tools, user management systems, or encryption solutions.  A SIEM is a core component of a security operations center (SOC).  It collects security-relevant logs from various sources (servers, network devices, applications), analyzes them in real-time, *correlates* events across different systems, and generates *alerts* for potential security incidents. This provides a comprehensive view of security posture.",
- "examTip":"SIEM systems are essential for centralized security monitoring and incident response."
-},
-{
- "id": 87,
- "question": "Which type of attack involves an attacker attempting to gain unauthorized access by systematically trying different usernames and passwords?",
-  "options":[
-    "Phishing",
-     "Brute-force attack",
-     "Man-in-the-middle (MitM) attack",
-    "Cross-site scripting (XSS)"
-  ],
- "correctAnswerIndex": 1,
-  "explanation": "Phishing uses deception. MitM intercepts communications. XSS injects scripts into websites. A brute-force attack involves systematically trying many possible username and password combinations until the correct one is found. This is usually automated, using tools that try common passwords, dictionary words, and variations.",
-  "examTip": "Strong, unique passwords are the best defense against brute-force attacks."
-},
-{
- "id": 88,
-  "question":"What is 'data exfiltration'?",
-  "options":[
-    "The process of backing up data to a secure location.",
-   "The unauthorized transfer of data from a system or network to an external location controlled by an attacker.",
-    "The process of encrypting sensitive data to protect it from unauthorized access.",
-    "The process of deleting data securely so that it cannot be recovered."
-  ],
-   "correctAnswerIndex": 1,
-  "explanation": "Data exfiltration is not backup, encryption, or secure deletion. Data exfiltration is the *theft* of data. It's when an attacker copies data from a compromised system (server, computer, network) and transfers it to a location they control.  This is a primary goal of many cyberattacks.",
- "examTip": "Preventing data exfiltration is a critical security objective."
-},
-{
-    "id": 89,
-    "question": "Which of the following would be considered an 'indicator of compromise (IoC)'?",
-     "options":[
-      "A user successfully logging in to their account with the correct password.",
-       "A system file with an unexpected hash value compared to a known good baseline.",
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Firewalls are not primarily for encryption, remote access (VPNs do that), or software updates. A firewall acts as a barrier between networks (e.g., your internal network and the internet). It examines network traffic (packets) and *blocks* or *allows* it based on a set of configured rules. This helps prevent unauthorized access to your network and systems.",
+      "examTip": "A firewall acts as a gatekeeper, controlling network traffic based on rules."
+    },
+    {
+      "id": 84,
+      "question": "Which of the following is a common technique used to bypass traditional signature-based antivirus detection?",
+      "options": [
+        "Using clear and descriptive variable names in malware code.",
+        "Polymorphism or metamorphism, where the malware changes its code to avoid signature matching.",
+        "Adding comments to the malware code to explain its functionality.",
+        "Using a well-known and easily detectable file name."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Clear variable names, comments, and well-known filenames would make detection *easier*. *Polymorphism* and *metamorphism* are techniques used by malware authors to evade signature-based detection. Polymorphic malware changes its code slightly with each infection, while metamorphic malware rewrites its code entirely, making it difficult for antivirus to identify it based on a static signature.",
+      "examTip": "Polymorphism and metamorphism are used to evade signature-based detection."
+    },
+    {
+      "id": 85,
+      "question": "What is the primary goal of 'risk mitigation' in cybersecurity?",
+      "options": [
+        "To eliminate all security risks.",
+        "To reduce the likelihood or impact of identified risks.",
+        "To ignore all security risks.",
+        "To transfer all risks to a third-party insurance company."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "It's impossible to *eliminate* all risk, and ignoring them is irresponsible. Transferring risk (e.g., through insurance) is *one* mitigation strategy, but not the overall *goal*. Risk mitigation involves taking *actions* to *reduce* either the *likelihood* of a risk occurring (e.g., patching vulnerabilities) or the *impact* if it does occur (e.g., having backups).",
+      "examTip": "Risk mitigation aims to reduce, not necessarily eliminate, security risks."
+    },
+    {
+      "id": 86,
+      "question": "What is the purpose of a 'security information and event management (SIEM)' system?",
+      "options": [
+        "To conduct penetration testing exercises.",
+        "To provide centralized log collection, real-time monitoring, correlation, and alerting for security events.",
+        "To manage user accounts and access permissions.",
+        "To encrypt sensitive data both at rest and in transit."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "SIEM systems are not primarily penetration testing tools, user management systems, or encryption solutions.  A SIEM is a core component of a security operations center (SOC).  It collects security-relevant logs from various sources (servers, network devices, applications), analyzes them in real-time, *correlates* events across different systems, and generates *alerts* for potential security incidents. This provides a comprehensive view of security posture.",
+      "examTip": "SIEM systems are essential for centralized security monitoring and incident response."
+    },
+    {
+      "id": 87,
+      "question": "Which type of attack involves an attacker attempting to gain unauthorized access by systematically trying different usernames and passwords?",
+      "options": [
+        "Phishing",
+        "Brute-force attack",
+        "Man-in-the-middle (MitM) attack",
+        "Cross-site scripting (XSS)"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Phishing uses deception. MitM intercepts communications. XSS injects scripts into websites. A brute-force attack involves systematically trying many possible username and password combinations until the correct one is found. This is usually automated, using tools that try common passwords, dictionary words, and variations.",
+      "examTip": "Strong, unique passwords are the best defense against brute-force attacks."
+    },
+    {
+      "id": 88,
+      "question": "What is 'data exfiltration'?",
+      "options": [
+        "The process of backing up data to a secure location.",
+        "The unauthorized transfer of data from a system or network to an external location controlled by an attacker.",
+        "The process of encrypting sensitive data to protect it from unauthorized access.",
+        "The process of deleting data securely so that it cannot be recovered."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Data exfiltration is not backup, encryption, or secure deletion. Data exfiltration is the *theft* of data. It's when an attacker copies data from a compromised system (server, computer, network) and transfers it to a location they control.  This is a primary goal of many cyberattacks.",
+      "examTip": "Preventing data exfiltration is a critical security objective."
+    },
+    {
+      "id": 89,
+      "question": "Which of the following would be considered an 'indicator of compromise (IoC)'?",
+      "options": [
+        "A user successfully logging in to their account with the correct password.",
+        "A system file with an unexpected hash value compared to a known good baseline.",
         "A server operating within its normal CPU and memory usage parameters.",
-       "Regularly scheduled security patches being applied to a system."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation": "Successful logins, normal resource usage, and scheduled patching are *not* IoCs. An *unexpected change in a system file's hash value* is a strong indicator of compromise.  Hash values are unique fingerprints of files.  If a file's hash changes, it means the file has been modified, potentially by malware.",
-  "examTip": "IoCs are clues that suggest a system or network may have been compromised."
-},
-{
-  "id": 90,
-   "question": "What is the primary purpose of 'network segmentation'?",
-  "options":[
-    "To connect all devices in an organization to a single, flat network.",
-    "To improve network security and performance by dividing a network into smaller, isolated subnetworks.",
-    "To encrypt all network traffic using a virtual private network (VPN).",
-     "To block all incoming and outgoing network traffic."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation": "Network segmentation is not about connecting everything to one network, simply encrypting, or blocking all traffic. Network segmentation involves dividing a network into smaller, isolated subnetworks (segments or zones). This limits the impact of a security breach – if one segment is compromised, the attacker's access to other segments is restricted. It can also improve network performance by reducing congestion.",
-   "examTip": "Network segmentation contains breaches and improves network performance."
-},
-{
-    "id": 91,
-    "question": "A security analyst is investigating a potential malware infection. They find a suspicious executable file. What is the MOST appropriate NEXT step?",
-     "options":[
+        "Regularly scheduled security patches being applied to a system."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Successful logins, normal resource usage, and scheduled patching are *not* IoCs. An *unexpected change in a system file's hash value* is a strong indicator of compromise.  Hash values are unique fingerprints of files.  If a file's hash changes, it means the file has been modified, potentially by malware.",
+      "examTip": "IoCs are clues that suggest a system or network may have been compromised."
+    },
+    {
+      "id": 90,
+      "question": "What is the primary purpose of 'network segmentation'?",
+      "options": [
+        "To connect all devices in an organization to a single, flat network.",
+        "To improve network security and performance by dividing a network into smaller, isolated subnetworks.",
+        "To encrypt all network traffic using a virtual private network (VPN).",
+        "To block all incoming and outgoing network traffic."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Network segmentation is not about connecting everything to one network, simply encrypting, or blocking all traffic. Network segmentation involves dividing a network into smaller, isolated subnetworks (segments or zones). This limits the impact of a security breach – if one segment is compromised, the attacker's access to other segments is restricted. It can also improve network performance by reducing congestion.",
+      "examTip": "Network segmentation contains breaches and improves network performance."
+    },
+    {
+      "id": 91,
+      "question": "A security analyst is investigating a potential malware infection. They find a suspicious executable file. What is the MOST appropriate NEXT step?",
+      "options": [
         "Immediately delete the file.",
         "Execute the file on a production server to see what it does.",
         "Analyze the file in a sandbox environment.",
         "Rename the file and move it to a different folder."
-    ],
-     "correctAnswerIndex": 2,
-    "explanation":
-    "Deleting the file removes evidence. Executing it on a *production* server is extremely risky. Renaming/moving doesn't address the potential threat. The *safest and most informative* next step is to analyze the file in a *sandbox*.  A sandbox is an isolated environment where you can execute suspicious code without risking harm to your main system. This allows you to observe its behavior and determine if it's malicious.",
-   "examTip": "Use sandboxing to safely analyze suspicious files."
-
-},
-{
-    "id": 92,
-     "question":"Which of the following BEST describes the concept of 'zero trust' in network security?",
-     "options":[
-      "Trusting all users and devices within the corporate network by default.",
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Deleting the file removes evidence. Executing it on a *production* server is extremely risky. Renaming/moving doesn't address the potential threat. The *safest and most informative* next step is to analyze the file in a *sandbox*.  A sandbox is an isolated environment where you can execute suspicious code without risking harm to your main system. This allows you to observe its behavior and determine if it's malicious.",
+      "examTip": "Use sandboxing to safely analyze suspicious files."
+    },
+    {
+      "id": 92,
+      "question": "Which of the following BEST describes the concept of 'zero trust' in network security?",
+      "options": [
+        "Trusting all users and devices within the corporate network by default.",
         "Verifying the identity and security posture of every user and device, regardless of location, before granting access to resources.",
         "Relying solely on perimeter security controls like firewalls.",
         "Implementing strong password policies for all user accounts."
-     ],
+      ],
       "correctAnswerIndex": 1,
-    "explanation":
-        "Zero trust explicitly *does not* trust anything by default, inside or outside the network. It goes beyond perimeter security and passwords. Zero trust assumes *no implicit trust*.  It requires *continuous verification* of identity *and* device security posture *before* granting access to *any* resource, regardless of location (inside or outside the traditional network perimeter).",
-     "examTip": "Zero trust: 'Never trust, always verify'."
-},
-{
-  "id": 93,
-    "question": "Which of the following is a common method used to spread malware?",
-     "options":[
-      "Using strong, unique passwords for all online accounts.",
-       "Through malicious email attachments, infected websites, or compromised software downloads.",
-       "Keeping your operating system and software updated.",
+      "explanation": "Zero trust explicitly *does not* trust anything by default, inside or outside the network. It goes beyond perimeter security and passwords. Zero trust assumes *no implicit trust*.  It requires *continuous verification* of identity *and* device security posture *before* granting access to *any* resource, regardless of location (inside or outside the traditional network perimeter).",
+      "examTip": "Zero trust: 'Never trust, always verify'."
+    },
+    {
+      "id": 93,
+      "question": "Which of the following is a common method used to spread malware?",
+      "options": [
+        "Using strong, unique passwords for all online accounts.",
+        "Through malicious email attachments, infected websites, or compromised software downloads.",
+        "Keeping your operating system and software updated.",
         "Using a firewall to block unauthorized network traffic."
-    ],
-     "correctAnswerIndex": 1,
-    "explanation":
-       "Strong passwords, software updates, and firewalls are *defenses* against malware. Malware commonly spreads through *social engineering* (tricking users into opening malicious attachments or clicking links) and by exploiting *vulnerabilities* in software or operating systems (hence the importance of updates).",
-   "examTip": "Be extremely cautious about opening email attachments and downloading software from untrusted sources."
-},
-{
-    "id": 94,
-    "question": "What is the primary goal of a 'phishing' attack?",
-    "options":[
-    "To overwhelm a server with traffic, making it unavailable.",
-      "To trick individuals into revealing sensitive information, such as usernames, passwords, or credit card details.",
-      "To encrypt data on a system and demand a ransom for decryption.",
-       "To gain unauthorized access to a network by exploiting software vulnerabilities."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-        "Overwhelming a server is a DoS attack. Encrypting data for ransom is ransomware. Exploiting vulnerabilities is a technical attack, but not *phishing*. Phishing relies on *deception*. Attackers impersonate legitimate organizations or individuals (via email, text messages, or fake websites) to trick victims into revealing sensitive information.",
-    "examTip": "Phishing attacks rely on social engineering and deception."
-},
-{
-  "id": 95,
-  "question":"What is the main purpose of using a 'virtual private network (VPN)'?",
-   "options":[
-    "To block all incoming network traffic to a system.",
-   "To create a secure, encrypted connection over a public network, such as the internet.",
-    "To automatically patch software vulnerabilities on a system.",
-   "To manage user accounts and access permissions on a network."
-   ],
-    "correctAnswerIndex": 1,
-    "explanation":
-      "VPNs don't block *all* traffic, patch vulnerabilities, or manage user accounts. A VPN creates an encrypted *tunnel* for your internet traffic, protecting your data from eavesdropping, especially on public Wi-Fi. It can also mask your IP address and allow you to bypass geographic restrictions.",
-   "examTip": "VPNs enhance privacy and security, especially on public networks."
-},
-{
- "id": 96,
-  "question":"What is 'cross-site request forgery (CSRF)'?",
-  "options":[
-  "A type of firewall used to protect web applications.",
-   "An attack that forces an authenticated user to execute unwanted actions on a web application.",
-    "A method for encrypting data transmitted across a network.",
-    "A technique for creating strong, unique passwords."
- ],
-  "correctAnswerIndex": 1,
-  "explanation":
-  "CSRF is not a firewall, encryption method, or password technique. In a CSRF attack, an attacker tricks a user's browser into making a request to a web application where the user is already authenticated, *without the user's knowledge or consent*. This could lead to actions like changing the user's email address, transferring funds, or making unauthorized purchases.",
-  "examTip": "CSRF exploits the trust a web application has in a user's browser."
-},
-{
-  "id": 97,
-   "question": "What is 'threat modeling'?",
-   "options":[
-    "Creating a physical diagram of a network's layout.",
-    "Identifying, analyzing, and prioritizing potential threats and vulnerabilities to a system or application during the design phase.",
-     "Simulating real-world attacks against a live production system.",
-     "Developing new security software and tools."
-   ],
-    "correctAnswerIndex": 1,
-   "explanation":
-     "Threat modeling isn't physical diagramming, live attack simulation (red teaming), or software development. Threat modeling is a *proactive*, *structured process* used during system design to identify potential threats, vulnerabilities, and attack vectors, *before* they can be exploited. This helps developers build more secure systems.",
- "examTip": "Threat modeling helps build security into systems from the start."
-},
-{
-  "id": 98,
-   "question":"What is the primary purpose of 'data loss prevention (DLP)' software?",
-    "options":[
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Strong passwords, software updates, and firewalls are *defenses* against malware. Malware commonly spreads through *social engineering* (tricking users into opening malicious attachments or clicking links) and by exploiting *vulnerabilities* in software or operating systems (hence the importance of updates).",
+      "examTip": "Be extremely cautious about opening email attachments and downloading software from untrusted sources."
+    },
+    {
+      "id": 94,
+      "question": "What is the primary goal of a 'phishing' attack?",
+      "options": [
+        "To overwhelm a server with traffic, making it unavailable.",
+        "To trick individuals into revealing sensitive information, such as usernames, passwords, or credit card details.",
+        "To encrypt data on a system and demand a ransom for decryption.",
+        "To gain unauthorized access to a network by exploiting software vulnerabilities."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Overwhelming a server is a DoS attack. Encrypting data for ransom is ransomware. Exploiting vulnerabilities is a technical attack, but not *phishing*. Phishing relies on *deception*. Attackers impersonate legitimate organizations or individuals (via email, text messages, or fake websites) to trick victims into revealing sensitive information.",
+      "examTip": "Phishing attacks rely on social engineering and deception."
+    },
+    {
+      "id": 95,
+      "question": "What is the main purpose of using a 'virtual private network (VPN)'?",
+      "options": [
+        "To block all incoming network traffic to a system.",
+        "To create a secure, encrypted connection over a public network, such as the internet.",
+        "To automatically patch software vulnerabilities on a system.",
+        "To manage user accounts and access permissions on a network."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "VPNs don't block *all* traffic, patch vulnerabilities, or manage user accounts. A VPN creates an encrypted *tunnel* for your internet traffic, protecting your data from eavesdropping, especially on public Wi-Fi. It can also mask your IP address and allow you to bypass geographic restrictions.",
+      "examTip": "VPNs enhance privacy and security, especially on public networks."
+    },
+    {
+      "id": 96,
+      "question": "What is 'cross-site request forgery (CSRF)'?",
+      "options": [
+        "A type of firewall used to protect web applications.",
+        "An attack that forces an authenticated user to execute unwanted actions on a web application.",
+        "A method for encrypting data transmitted across a network.",
+        "A technique for creating strong, unique passwords."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "CSRF is not a firewall, encryption method, or password technique. In a CSRF attack, an attacker tricks a user's browser into making a request to a web application where the user is already authenticated, *without the user's knowledge or consent*. This could lead to actions like changing the user's email address, transferring funds, or making unauthorized purchases.",
+      "examTip": "CSRF exploits the trust a web application has in a user's browser."
+    },
+    {
+      "id": 97,
+      "question": "What is 'threat modeling'?",
+      "options": [
+        "Creating a physical diagram of a network's layout.",
+        "Identifying, analyzing, and prioritizing potential threats and vulnerabilities to a system or application during the design phase.",
+        "Simulating real-world attacks against a live production system.",
+        "Developing new security software and tools."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Threat modeling isn't physical diagramming, live attack simulation (red teaming), or software development. Threat modeling is a *proactive*, *structured process* used during system design to identify potential threats, vulnerabilities, and attack vectors, *before* they can be exploited. This helps developers build more secure systems.",
+      "examTip": "Threat modeling helps build security into systems from the start."
+    },
+    {
+      "id": 98,
+      "question": "What is the primary purpose of 'data loss prevention (DLP)' software?",
+      "options": [
         "To encrypt data stored on hard drives.",
-     "To prevent sensitive data from leaving an organization's control without authorization.",
+        "To prevent sensitive data from leaving an organization's control without authorization.",
         "To back up data to a remote server in case of a disaster.",
         "To automatically detect and remove malware from a system."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "DLP may use encryption, but that's not its primary goal. It's not primarily for backup or malware removal. DLP systems are designed to *detect* and *prevent* sensitive data (PII, financial information, intellectual property) from being leaked or exfiltrated from an organization's control, whether intentionally or accidentally. This includes monitoring emails, web traffic, removable storage, and other channels.",
-  "examTip": "DLP prevents sensitive data from leaving the organization's control."
-},
-{
-    "id": 99,
-    "question": "Which of the following is a key benefit of using 'security information and event management (SIEM)' systems?",
-     "options":[
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "DLP may use encryption, but that's not its primary goal. It's not primarily for backup or malware removal. DLP systems are designed to *detect* and *prevent* sensitive data (PII, financial information, intellectual property) from being leaked or exfiltrated from an organization's control, whether intentionally or accidentally. This includes monitoring emails, web traffic, removable storage, and other channels.",
+      "examTip": "DLP prevents sensitive data from leaving the organization's control."
+    },
+    {
+      "id": 99,
+      "question": "Which of the following is a key benefit of using 'security information and event management (SIEM)' systems?",
+      "options": [
         "SIEMs eliminate the need for firewalls and intrusion detection systems.",
-       "SIEMs provide centralized log management, real-time monitoring, correlation of events, and alerting.",
+        "SIEMs provide centralized log management, real-time monitoring, correlation of events, and alerting.",
         "SIEMs guarantee complete protection against all cyberattacks.",
         "SIEMs are only useful for large enterprises with dedicated security teams."
-    ],
-    "correctAnswerIndex": 1,
-     "explanation":
-       "SIEMs *complement* other security tools, not replace them. They don't guarantee *complete* protection. They are valuable for organizations of *various* sizes. SIEM systems are the cornerstone of security operations. They collect logs from diverse sources, analyze them in real-time, *correlate* events across different systems, and generate *alerts* for potential security incidents, providing a holistic view of an organization's security posture.",
-   "examTip": "SIEM systems provide centralized visibility and enable faster incident response."
-},
-{
-  "id": 100,
-    "question":"What is the main function of an 'intrusion detection system (IDS)'?",
-     "options":[
-      "To prevent all network intrusions from occurring.",
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "SIEMs *complement* other security tools, not replace them. They don't guarantee *complete* protection. They are valuable for organizations of *various* sizes. SIEM systems are the cornerstone of security operations. They collect logs from diverse sources, analyze them in real-time, *correlate* events across different systems, and generate *alerts* for potential security incidents, providing a holistic view of an organization's security posture.",
+      "examTip": "SIEM systems provide centralized visibility and enable faster incident response."
+    },
+    {
+      "id": 100,
+      "question": "What is the main function of an 'intrusion detection system (IDS)'?",
+      "options": [
+        "To prevent all network intrusions from occurring.",
         "To monitor network traffic or system activities for malicious activity and generate alerts.",
-      "To automatically patch software vulnerabilities on a system.",
-      "To encrypt data transmitted across a network."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "An IDS *detects*, but doesn't necessarily *prevent* (that's an IPS). It's not for patching or encryption. An IDS monitors network traffic and/or system activities for suspicious patterns, known attack signatures, or policy violations. When it detects something, it generates an *alert* for security personnel to investigate.",
-   "examTip": "An IDS detects and alerts; an IPS detects and prevents."
-}
+        "To automatically patch software vulnerabilities on a system.",
+        "To encrypt data transmitted across a network."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "An IDS *detects*, but doesn't necessarily *prevent* (that's an IPS). It's not for patching or encryption. An IDS monitors network traffic and/or system activities for suspicious patterns, known attack signatures, or policy violations. When it detects something, it generates an *alert* for security personnel to investigate.",
+      "examTip": "An IDS detects and alerts; an IPS detects and prevents."
+    }
   ]
 });
