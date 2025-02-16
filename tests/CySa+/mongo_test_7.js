@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "cysa",
   "testId": 7,
   "testName": "CySa Practice Test #7 (Challenging)",
@@ -697,7 +697,7 @@
 
 
 
-{
+db.tests.insertOne({
   "category": "cysa",
   "testId": 7,
   "testName": "CySa Practice Test #7 (Challenging)",
