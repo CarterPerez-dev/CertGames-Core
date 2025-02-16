@@ -341,8 +341,12 @@ db.tests.insertOne({
 
 
 
-    {
-  "questions": [
+db.tests.insertOne({
+  "category": "nplus",
+  "testId": 10,
+  "testName": "Network+ Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
+  "questions" [
     {
       "id": 26,
       "question": "What is 'BGP route reflection', and in what type of BGP deployment is it typically used to simplify configuration and reduce the number of iBGP sessions?",
@@ -667,14 +671,18 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "The `ntp server [ip-address]` command on a Cisco router configures the router to synchronize its clock with the specified NTP server.  The correct command is simply `ntp server 192.0.2.1`. `clock timezone` sets the *time zone*, but not the time *source*. `ntp update-calendar` updates the router's *hardware* clock from the software clock (not relevant to synchronizing with an external server). `ntp master` configures the router to *act as* an NTP *server* for other devices, not to synchronize with an external server.",
       "examTip": "Use the `ntp server [ip-address]` command on a Cisco router to configure it to synchronize its clock with an external NTP server."
-    }
+     }
   ]
-}
+});
 
 
 
 
-{
+db.tests.insertOne({
+  "category": "nplus",
+  "testId": 10,
+  "testName": "Network+ Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 51,
@@ -1002,13 +1010,16 @@ db.tests.insertOne({
       "examTip": "WPA3-Enterprise, which builds on 802.1X + improved encryption and authentication, is currently the strongest wireless security mode."
     }
   ]
-}
+});
 
 
 
 
-
-   {
+  db.tests.insertOne({
+  "category": "nplus",
+  "testId": 10,
+  "testName": "Network+ Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 76,
@@ -1336,7 +1347,7 @@ db.tests.insertOne({
       "examTip": "Apply ACLs at Layer 3 (on SVIs or router interfaces) to restrict/permit traffic between VLANs in a Layer 3-switched environment."
     }
   ]
-}
+});
 
 
 
