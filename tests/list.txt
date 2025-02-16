@@ -1,0 +1,24 @@
+A+ core 2
+--needs to be verified
+
+
+  Security+
+  ---needs question 57
+ --- delete question 101
+ --- write question for question 51
+ --- needs to be verified
+
+
+  Network+
+  ---needs question 97 for test 3
+  ---needs questions 51 for test 2
+ ------ needs to be verified
+
+
+  CySa+
+  ----needs to be verified
+
+
+  Pentest+
+  ---all needs fixed
+  ---then verified
