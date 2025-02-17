@@ -559,7 +559,7 @@ db.tests.insertOne({
 
 
     
-    db.tests.insertOne({
+db.tests.insertOne({
   "category": "secplus",
   "testId": 10,
   "testName": "Security Practice Test #10 (Ultra Level)",
@@ -1121,7 +1121,7 @@ db.tests.insertOne({
 
 
     
-     db.tests.insertOne({
+db.tests.insertOne({
   "category": "secplus",
   "testId": 10,
   "testName": "Security Practice Test #10 (Ultra Level)",
