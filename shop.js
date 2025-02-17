@@ -199,7 +199,6 @@ db.shopItems.insertMany([
     unlockLevel: 60,
     effectValue: null
   },
-  // Next set of documents
   {
     _id: ObjectId("67a5a208e33c3cfa4b544cba"),
     type: "avatar",
@@ -220,8 +219,10 @@ db.shopItems.insertMany([
     unlockLevel: 50,
     effectValue: null
   },
+
+  
+db.shopItems.insertMany([
   {
-    _id: ObjectId("67a5a219e33c3cfa4b544cbe"),
     type: "xpBoost",
     title: "XP Boost 25",
     description: "Increase your XP gain by 25%.",
@@ -230,7 +231,6 @@ db.shopItems.insertMany([
     effectValue: 1.25
   },
   {
-    _id: ObjectId("67a5a219e33c3cfa4b544cc0"),
     type: "xpBoost",
     title: "XP Boost 100",
     description: "Increase your XP gain by 100%.",
@@ -239,16 +239,14 @@ db.shopItems.insertMany([
     effectValue: 2
   },
   {
-    _id: ObjectId("67a5a219e33c3cfa4b544cc1"),
     type: "xpBoost",
     title: "XP Boost 200",
     description: "Increase your XP gain by 200%.",
-    cost: 5,
+    cost: 200000,
     imageUrl: "/xp/xp200.png",
     effectValue: 3
   },
   {
-    _id: ObjectId("67a5a219e33c3cfa4b544cbd"),
     type: "xpBoost",
     title: "XP Boost 10",
     description: "Increase your XP gain by 10%.",
@@ -257,7 +255,6 @@ db.shopItems.insertMany([
     effectValue: 1.1
   },
   {
-    _id: ObjectId("67a5a219e33c3cfa4b544cbf"),
     type: "xpBoost",
     title: "XP Boost 50",
     description: "Increase your XP gain by 50%.",
