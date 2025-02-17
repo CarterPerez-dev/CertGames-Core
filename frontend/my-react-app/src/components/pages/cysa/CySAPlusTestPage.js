@@ -877,7 +877,7 @@ const TestView = ({ testId }) => {
     currentTest.questions.length === 0 ? (
     <div style={{ color: "#fff" }}>Loading test...</div>
   ) : (
-    <div className="cysa-test-container">
+    <div className="aplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
 
       {renderRestartPopup()}

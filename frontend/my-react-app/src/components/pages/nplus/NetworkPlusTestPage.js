@@ -890,7 +890,7 @@ const TestView = ({ testId }) => {
     currentTest.questions.length === 0 ? (
     <div style={{ color: "#fff" }}>Loading test...</div>
   ) : (
-    <div className="nplus-test-container">
+    <div className="aplus-test-container">
       {/* CHANGED: Container class name is just for style separation, if you want */}
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
 
