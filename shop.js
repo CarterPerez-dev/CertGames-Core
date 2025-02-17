@@ -36,7 +36,7 @@ db.shopItems.insertMany([
     description: "A dragon fell, yet its shadow remained",
     cost: 40000,
     imageUrl: "/avatars/avatar135.png",
-    unlockLevel: 75000,
+    unlockLevel: 75,
     effectValue: null
   },
   {
@@ -86,7 +86,7 @@ db.shopItems.insertMany([
     description: "A soul consumed by flames",
     cost: 45000,
     imageUrl: "/avatars/avatar70.png",
-    unlockLevel: 45000,
+    unlockLevel: 45,
     effectValue: null
   },
   {
