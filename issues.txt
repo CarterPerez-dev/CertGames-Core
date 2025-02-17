@@ -1,0 +1,1 @@
+When a user logs out-- all userrs log out!
