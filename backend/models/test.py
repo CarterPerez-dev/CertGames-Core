@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from collections import defaultdict
 import math
 import re
+import unicodedata
 
 # Import the new collections from database
 from mongodb.database import (
@@ -17,29 +18,243 @@ from mongodb.database import (
 )
 
 ##############################################
-# Input Sanitization Helpers
+# very complex Input Sanitization Helpers
 ##############################################
 
-def sanitize_username(username):
-    if not (3 <= len(username) <= 30):
-        return False
-    if ' ' in username:
-        return False
-    if '<' in username or '>' in username:
-        return False
-    pattern = r'^[A-Za-z0-9_]+$'
-    if not re.match(pattern, username):
-        return False
-    return True
+import re
+import unicodedata
 
-def sanitize_password(pw):
-    if not (6 <= len(pw) <= 100):
-        return False
-    if ' ' in pw:
-        return False
-    if '<' in pw or '>' in pw:
-        return False
-    return True
+# Example small dictionary of very common passwords
+COMMON_PASSWORDS = {
+    "password", "123456", "12345678", "qwerty", "letmein", "welcome"
+}
+
+def has_forbidden_unicode_scripts(s):
+    """
+    Disallow characters from certain Unicode blocks 
+    (private use areas, surrogates, etc.).
+    """
+    private_use_ranges = [
+        (0xE000, 0xF8FF),
+        (0xF0000, 0xFFFFD),
+        (0x100000, 0x10FFFD)
+    ]
+    surrogates_range = (0xD800, 0xDFFF)
+
+    for ch in s:
+        code_point = ord(ch)
+        # Surrogates
+        if surrogates_range[0] <= code_point <= surrogates_range[1]:
+            return True
+        # Private use ranges
+        for start, end in private_use_ranges:
+            if start <= code_point <= end:
+                return True
+    return False
+
+
+def disallow_mixed_scripts(s):
+    """
+    Example check for mixing major scripts (Latin + Cyrillic, etc.).
+    Returns True if it detects more than one script in the string.
+    """
+    script_sets = set()
+
+    for ch in s:
+        cp = ord(ch)
+        # Basic Latin and extended ranges:
+        if 0x0041 <= cp <= 0x024F:
+            script_sets.add("Latin")
+        # Greek
+        elif 0x0370 <= cp <= 0x03FF:
+            script_sets.add("Greek")
+        # Cyrillic
+        elif 0x0400 <= cp <= 0x04FF:
+            script_sets.add("Cyrillic")
+
+        # If more than one distinct script is found
+        if len(script_sets) > 1:
+            return True
+
+    return False
+
+
+def validate_username(username):
+    """
+    Validates a username with very strict rules:
+      1. Normalize (NFC).
+      2. Length 3..30.
+      3. No control chars, no private-use/surrogates, no mixing scripts.
+      4. Only [A-Za-z0-9._-], no triple repeats, no leading/trailing punctuation.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    username_nfc = unicodedata.normalize("NFC", username)
+
+    # 1) Check length
+    if not (3 <= len(username_nfc) <= 30):
+        errors.append("Username must be between 3 and 30 characters long.")
+
+    # 2) Forbidden Unicode script checks
+    if has_forbidden_unicode_scripts(username_nfc):
+        errors.append("Username contains forbidden Unicode blocks (private use or surrogates).")
+
+    # 3) Disallow mixing multiple major scripts
+    if disallow_mixed_scripts(username_nfc):
+        errors.append("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).")
+
+    # 4) Forbid control chars [0..31, 127] + suspicious punctuation
+    forbidden_ranges = [(0, 31), (127, 127)]
+    forbidden_chars = set(['<', '>', '\\', '/', '"', "'", ';', '`',
+                           ' ', '\t', '\r', '\n'])
+    for ch in username_nfc:
+        cp = ord(ch)
+        if any(start <= cp <= end for (start, end) in forbidden_ranges):
+            errors.append("Username contains forbidden control characters (ASCII 0-31 or 127).")
+            break
+        if ch in forbidden_chars:
+            errors.append("Username contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 5) Strict allowlist pattern
+    pattern = r'^[A-Za-z0-9._-]+$'
+    if not re.match(pattern, username_nfc):
+        errors.append("Username can only contain letters, digits, underscores, dashes, or dots.")
+
+    # 6) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', username_nfc):
+        errors.append("Username cannot contain three identical consecutive characters.")
+
+    # 7) Disallow leading or trailing punctuation
+    if re.match(r'^[._-]|[._-]$', username_nfc):
+        errors.append("Username cannot start or end with . - or _.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+
+def validate_password(password, username=None, email=None):
+    """
+    Validates a password with very strict rules:
+      1. 12..128 length.
+      2. Disallow whitespace, <, >.
+      3. Require uppercase, lowercase, digit, special char.
+      4. Disallow triple repeats.
+      5. Check common/breached password list.
+      6. Disallow 'password', 'qwerty', etc.
+      7. Disallow if username or email local part is in the password.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    length = len(password)
+
+    # 1) Length
+    if not (12 <= length <= 128):
+        errors.append("Password must be between 12 and 128 characters long.")
+
+    # 2) Disallowed whitespace or < >
+    if any(ch in password for ch in [' ', '<', '>', '\t', '\r', '\n']):
+        errors.append("Password cannot contain whitespace or < or > characters.")
+
+    # 3) Complexity checks
+    if not re.search(r'[A-Z]', password):
+        errors.append("Password must contain at least one uppercase letter.")
+    if not re.search(r'[a-z]', password):
+        errors.append("Password must contain at least one lowercase letter.")
+    if not re.search(r'\d', password):
+        errors.append("Password must contain at least one digit.")
+
+    # We define a broad set of allowed special chars
+    special_pattern = r'[!@#$%^&*()\-_=+\[\]{}|;:\'",<.>/?`~\\]'
+    if not re.search(special_pattern, password):
+        errors.append("Password must contain at least one special character.")
+
+    # 4) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', password):
+        errors.append("Password must not contain three identical consecutive characters.")
+
+    # 5) Convert to lowercase for simplified checks
+    password_lower = password.lower()
+
+    # Check against common password list
+    if password_lower in COMMON_PASSWORDS:
+        errors.append("Password is too common. Please choose a stronger password.")
+
+    # 6) Disallow certain dictionary words
+    dictionary_patterns = ['password', 'qwerty', 'abcdef', 'letmein', 'welcome', 'admin']
+    for pat in dictionary_patterns:
+        if pat in password_lower:
+            errors.append(f"Password must not contain the word '{pat}'.")
+
+    # 7) Disallow if password contains username or email local-part
+    if username:
+        if username.lower() in password_lower:
+            errors.append("Password must not contain your username.")
+
+    if email:
+        email_local_part = email.split('@')[0].lower()
+        if email_local_part in password_lower:
+            errors.append("Password must not contain the local part of your email address.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+
+def validate_email(email):
+    """
+    Validates an email with strict rules:
+      1. Normalize (NFC), strip whitespace.
+      2. 6..254 length.
+      3. No control chars, <, >, etc.
+      4. Exactly one @.
+      5. Stricter regex disallowing consecutive dots, requiring valid domain, TLD 2..20
+      6. Possibly disallow punycode (xn--).
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    email_nfc = unicodedata.normalize("NFC", email.strip())
+
+    # 1) Length check
+    if not (6 <= len(email_nfc) <= 254):
+        errors.append("Email length must be between 6 and 254 characters.")
+
+    # 2) Check forbidden Unicode blocks
+    if has_forbidden_unicode_scripts(email_nfc):
+        errors.append("Email contains forbidden Unicode blocks (private use or surrogates).")
+
+    # 3) Forbid suspicious ASCII
+    forbidden_ascii = set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\'])
+    for ch in email_nfc:
+        if ch in forbidden_ascii:
+            errors.append("Email contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 4) Must have exactly one @
+    if email_nfc.count('@') != 1:
+        errors.append("Email must contain exactly one '@' symbol.")
+
+    # 5) Regex for local part, domain subparts, no consecutive dots, TLD 2..20
+    pattern = (
+        r'^(?!.*\.\.)'
+        r'([A-Za-z0-9._%+\-]{1,64})'
+        r'@'
+        r'([A-Za-z0-9\-]{1,63}(\.[A-Za-z0-9\-]{1,63})+)'
+        r'\.[A-Za-z]{2,20}$'
+    )
+    if not re.match(pattern, email_nfc):
+        errors.append("Email format is invalid (check local part, domain, consecutive dots, or TLD length).")
+
+    # 6) Disallow IDN punycode if desired
+    if '@' in email_nfc:
+        domain_part = email_nfc.split('@')[-1]
+        if domain_part.lower().startswith("xn--"):
+            errors.append("Email domain uses punycode (xn--), which is not allowed in this system.")
+
+    if errors:
+        return False, errors
+    return True, []
 
 ##############################################
 # User Retrieval Helpers
