@@ -1,12 +1,3 @@
-needs a new question 97
-
-
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "nplus",
   "testId": 3,
