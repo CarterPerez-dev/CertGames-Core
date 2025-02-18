@@ -1,8 +1,18 @@
 ## Approach 1: On your backend routes, you check subscriptionActive for the user’s ID. If False, you return 403 Forbidden or redirect.
 ## Approach 2: On the frontend (React, Redux), you store user’s subscriptionActive in state. If false, do not let them see protected pages.
 # Typically, both approaches are used for security. The frontend gating is for user convenience, the backend gating is for actual security.
+--------------------------------------
+------------------------------------
+# Stripe:
 
+## Eventually, you’ll add a route (e.g., /create-checkout-session) that calls stripe.checkout.Session.create(), then redirect the user to the returned URL.
+## On success, set subscriptionActive=True (via webhook or direct API call).
 
+# Production Security:
+
+## For a real site, use hashed passwords. Right now, your code is storing plain text. Also consider more robust validation ## libraries (e.g., email_validator for emails, or bcrypt for passwords).
+-------------------------------------------------------------
+-------------------------------------------------------------
 
 1) High-Level Explanation (Dumbed Down)
 User signs up (or logs in, if returning).
