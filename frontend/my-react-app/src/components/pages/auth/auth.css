@@ -33,6 +33,11 @@
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
   transition: background 0.2s, color 0.2s;
+
+  /* NEW: Positioning at the top-right corner and slight responsiveness */
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
 }
 
 .back-to-info:hover {
@@ -40,3 +45,17 @@
   color: #fff;
 }
 
+/* Media Queries for smaller screens */
+@media (max-width: 768px) {
+  .back-to-info {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-info {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
