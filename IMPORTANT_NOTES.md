@@ -23,7 +23,6 @@ Example (Manual Mongo Data Insert)
 For example, to simulate a perfect test for a user with _id of user123, you might insert a document like:
 
 ```javascript
-Copy
 db.testAttempts.insertOne({
   userId: ObjectId("user123"),
   testId: "1",
@@ -34,6 +33,7 @@ db.testAttempts.insertOne({
   category: "aplus",
   // other fields (e.g., answers, etc.) as needed
 });
+```
 Repeat with different testIds and values to simulate consecutive perfect scores or tests with a score below/above certain thresholds.
 
 Summary
@@ -41,7 +41,7 @@ Manually modify/inject test attempt data to mimic conditions required by each ac
 Use a test script or temporary endpoint to run the achievements function against simulated data.
 Once verified, you can remove any extra debugging endpoints or test code from production.
 This way, you can ensure your achievements logic (and popups via your frontend) work as expected without the need to manually complete every test.
-```
+
 
 ----------------------------------------------------------------------------------------------------------------------------
 For a production‑grade, cross‐device solution that remains fast and scalable, storing progress on the server (Option B) is the better choice.
