@@ -1,5 +1,5 @@
-# Approach 1: On your backend routes, you check subscriptionActive for the user’s ID. If False, you return 403 Forbidden or redirect.
-# Approach 2: On the frontend (React, Redux), you store user’s subscriptionActive in state. If false, do not let them see protected pages.
+## Approach 1: On your backend routes, you check subscriptionActive for the user’s ID. If False, you return 403 Forbidden or redirect.
+## Approach 2: On the frontend (React, Redux), you store user’s subscriptionActive in state. If false, do not let them see protected pages.
 # Typically, both approaches are used for security. The frontend gating is for user convenience, the backend gating is for actual security.
 
 
