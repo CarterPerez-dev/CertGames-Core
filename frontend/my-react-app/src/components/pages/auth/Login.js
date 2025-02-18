@@ -1,26 +1,26 @@
+// src/components/pages/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+
 import './Login.css';
 import './auth.css';
-import './AuthToast.css';
+import './AuthToast.css'; // Optional custom Toastify styling
 
-import PasswordRequirements from './PasswordRequirements';
-import ErrorDisplay from './ErrorDisplay';
-// ==================================================
-// FRONT-END VALIDATION HELPERS
-// (Mirroring your Python logic, same as Register)
-// ==================================================
+/***************************************************************
+ * FRONT-END VALIDATION HELPERS
+ * (Mirroring your Python logic)
+ ***************************************************************/
 
 // Example dictionary of common passwords
 const COMMON_PASSWORDS = new Set([
-  "password", "123456", "12345678", "qwerty", "letmein", "welcome"
+  'password', '123456', '12345678', 'qwerty', 'letmein', 'welcome'
 ]);
 
-// Private Use / Surrogates (approx in JS)
+// Private Use / Surrogates
 const PRIVATE_USE_RANGES = [
   [0xE000, 0xF8FF],
   [0xF0000, 0xFFFFD],
@@ -28,8 +28,7 @@ const PRIVATE_USE_RANGES = [
 ];
 const SURROGATES_RANGE = [0xD800, 0xDFFF];
 
-// Check for private-use or surrogate blocks
-function hasForbiddenUnicodeScripts(str) {
+function hasForbiddenUnicode(str) {
   for (let i = 0; i < str.length; i++) {
     const cp = str.codePointAt(i);
     // Surrogates
@@ -46,195 +45,58 @@ function hasForbiddenUnicodeScripts(str) {
   return false;
 }
 
-// Disallow mixing major scripts (Latin, Greek, Cyrillic)
-function disallowMixedScripts(str) {
-  const scriptSets = new Set();
-  for (let i = 0; i < str.length; i++) {
-    const cp = str.codePointAt(i);
-    if (cp >= 0x0041 && cp <= 0x024F) {
-      scriptSets.add("Latin");
-    } else if (cp >= 0x0370 && cp <= 0x03FF) {
-      scriptSets.add("Greek");
-    } else if (cp >= 0x0400 && cp <= 0x04FF) {
-      scriptSets.add("Cyrillic");
-    }
-    if (scriptSets.size > 1) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Validate Username (front-end)
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function frontValidateUsername(username) {
+// Basic check to differentiate "username" vs "email"
+function validateLoginIdentifier(value) {
   const errors = [];
-  const name = username.normalize("NFC");
-
-  // 1) Length 3..30
-  if (name.length < 3 || name.length > 30) {
-    errors.push("Username must be between 3 and 30 characters long.");
+  const val = value.trim();
+  if (!val) {
+    errors.push("Username/Email cannot be empty.");
+    return errors;
   }
 
-  // 2) Forbidden Unicode
-  if (hasForbiddenUnicodeScripts(name)) {
-    errors.push("Username contains forbidden Unicode blocks (private use or surrogates).");
-  }
-
-  // 3) Disallow mixed scripts
-  if (disallowMixedScripts(name)) {
-    errors.push("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).");
-  }
-
-  // 4) Control chars + suspicious punctuation
-  const forbiddenRanges = [[0, 31], [127, 127]];
-  const forbiddenChars = new Set(['<', '>', '\\', '/', '"', "'", ';', '`', ' ', '\t', '\r', '\n']);
-  for (let i = 0; i < name.length; i++) {
-    const cp = name.charCodeAt(i);
-    if (forbiddenRanges.some(([start, end]) => cp >= start && cp <= end)) {
-      errors.push("Username contains forbidden control characters (ASCII 0-31 or 127).");
-      break;
+  // If it has '@', treat as email (simplified logic)
+  if (val.includes('@')) {
+    // minimal checks
+    if (!val.includes('.')) {
+      errors.push("Email must contain '.' for domain part.");
     }
-    if (forbiddenChars.has(name[i])) {
-      errors.push("Username contains forbidden characters like <, >, or whitespace.");
-      break;
+    if (val.length < 6 || val.length > 254) {
+      errors.push("Email length must be 6–254 characters.");
+    }
+    if (hasForbiddenUnicode(val)) {
+      errors.push("Email contains forbidden Unicode blocks.");
+    }
+  } else {
+    // treat as username
+    if (val.length < 3 || val.length > 30) {
+      errors.push("Username must be 3–30 characters.");
+    }
+    if (hasForbiddenUnicode(val)) {
+      errors.push("Username contains forbidden Unicode blocks.");
     }
   }
-
-  // 5) Strict allowlist
-  if (!/^[A-Za-z0-9._-]+$/.test(name)) {
-    errors.push("Username can only contain letters, digits, underscores, dashes, or dots.");
-  }
-
-  // 6) Triple consecutive identical chars
-  if (/(.)\1{2,}/.test(name)) {
-    errors.push("Username cannot contain three identical consecutive characters.");
-  }
-
-  // 7) Leading/trailing punctuation
-  if (/^[._-]|[._-]$/.test(name)) {
-    errors.push("Username cannot start or end with . - or _.");
-  }
-
   return errors;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Validate Email (front-end)
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function frontValidateEmail(email) {
+function validatePassword(pwd) {
   const errors = [];
-  const e = email.normalize("NFC").trim();
-
-  // 1) 6..254
-  if (e.length < 6 || e.length > 254) {
-    errors.push("Email length must be between 6 and 254 characters.");
+  if (!pwd) {
+    errors.push("Password cannot be empty.");
+    return errors;
   }
-
-  // 2) Forbidden Unicode
-  if (hasForbiddenUnicodeScripts(e)) {
-    errors.push("Email contains forbidden Unicode blocks (private use or surrogates).");
+  if (pwd.length < 12) {
+    errors.push("Password must be at least 12 characters.");
   }
-
-  // 3) Forbid suspicious ASCII
-  const forbiddenAscii = new Set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\']);
-  for (let i = 0; i < e.length; i++) {
-    if (forbiddenAscii.has(e[i])) {
-      errors.push("Email contains forbidden characters like <, >, or whitespace.");
-      break;
-    }
+  // Checking if too common
+  if (COMMON_PASSWORDS.has(pwd.toLowerCase())) {
+    errors.push("Password is too common. Please choose a stronger one.");
   }
-
-  // 4) Exactly one @
-  if ((e.match(/@/g) || []).length !== 1) {
-    errors.push("Email must contain exactly one '@' symbol.");
-  }
-
-  // 5) No consecutive dots, domain subparts, TLD 2..20
-  const emailPattern = new RegExp(
-    '^(?!.*\\.\\.)' +
-    '([A-Za-z0-9._%+\\-]{1,64})' +
-    '@' +
-    '([A-Za-z0-9\\-]{1,63}(\\.[A-Za-z0-9\\-]{1,63})+)' +
-    '\\.[A-Za-z]{2,20}$'
-  );
-  if (!emailPattern.test(e)) {
-    errors.push("Email format is invalid (check local part, domain, consecutive dots, or TLD length).");
-  }
-
-  // 6) Disallow punycode domain
-  if (e.includes('@')) {
-    const domainPart = e.split('@')[1].toLowerCase();
-    if (domainPart.startsWith("xn--")) {
-      errors.push("Email domain uses punycode (xn--), which is not allowed in this system.");
-    }
-  }
-
   return errors;
 }
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Validate Password (front-end)
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-function frontValidatePassword(password) {
-  const errors = [];
-  const pwd = password;
-
-  // 1) 12..128
-  if (pwd.length < 12 || pwd.length > 128) {
-    errors.push("Password must be between 12 and 128 characters long.");
-  }
-
-  // 2) Disallow whitespace or < >
-  if (/[ \t\r\n<>]/.test(pwd)) {
-    errors.push("Password cannot contain whitespace or < or > characters.");
-  }
-
-  // 3) Complexity
-  if (!/[A-Z]/.test(pwd)) {
-    errors.push("Password must contain at least one uppercase letter.");
-  }
-  if (!/[a-z]/.test(pwd)) {
-    errors.push("Password must contain at least one lowercase letter.");
-  }
-  if (!/\d/.test(pwd)) {
-    errors.push("Password must contain at least one digit.");
-  }
-  const specialPattern = /[!@#$%^&*()\-_=+\[\]{}|;:'",<.>\/?`~\\]/;
-  if (!specialPattern.test(pwd)) {
-    errors.push("Password must contain at least one special character.");
-  }
-
-  // 4) Triple consecutive identical
-  if (/(.)\1{2,}/.test(pwd)) {
-    errors.push("Password must not contain three identical consecutive characters.");
-  }
-
-  // 5) Common password check
-  const lowerPwd = pwd.toLowerCase();
-  if (COMMON_PASSWORDS.has(lowerPwd)) {
-    errors.push("Password is too common. Please choose a stronger password.");
-  }
-
-  // 6) Disallow certain dictionary words
-  const dictionaryPatterns = ['password', 'qwerty', 'abcdef', 'letmein', 'welcome', 'admin'];
-  for (const pat of dictionaryPatterns) {
-    if (lowerPwd.includes(pat)) {
-      errors.push(`Password must not contain the word '${pat}'.`);
-    }
-  }
-
-  // For login, we typically don’t block if the password has the username or email local part, 
-  // but you can add that check if you prefer.  
-  // (frontValidatePassword could accept a username/email param, just like in Register.)
-
-  return errors;
-}
-
-// ===================================
-// LOGIN COMPONENT (Updated)
-// ===================================
+/***************************************************************
+ * LOGIN COMPONENT
+ ***************************************************************/
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -244,6 +106,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  // If user is already logged in, redirect
   useEffect(() => {
     if (userId) {
       localStorage.setItem('userId', userId);
@@ -253,21 +116,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // 1) Client-side validations
+
+    // 1) Client-side checks
     const errors = [];
     errors.push(...validateLoginIdentifier(usernameOrEmail));
     errors.push(...validatePassword(password));
 
     if (errors.length > 0) {
-      // Show each error in a toast
-      errors.forEach((errMsg) => {
-        toast.error(errMsg, { className: 'auth-error-toast' });
+      errors.forEach((err) => {
+        toast.error(err, { className: 'auth-error-toast' });
       });
       return;
     }
 
-    // 2) If local checks pass, attempt login
+    // 2) If passes, attempt login
     dispatch(loginUser({ usernameOrEmail, password }))
       .unwrap()
       .then(() => {
@@ -285,7 +147,7 @@ const Login = () => {
       <div className="login-card">
         <h2 className="login-title">Welcome Back</h2>
 
-        {/* If Redux error, you can show it inline or as toast */}
+        {/* If Redux error, optional inline */}
         {error && <p className="error-msg">{error}</p>}
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -300,7 +162,7 @@ const Login = () => {
 
           <label htmlFor="password">Password</label>
           <div className="input-with-icon">
-            <input
+            <input 
               id="password"
               type={showPassword ? 'text' : 'password'}
               value={password}
@@ -317,7 +179,7 @@ const Login = () => {
 
           <button 
             type="submit" 
-            className="login-btn" 
+            className="login-btn"
             disabled={loading}
           >
             {loading ? 'Logging in...' : 'Login'}
