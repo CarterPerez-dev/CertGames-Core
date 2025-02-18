@@ -653,81 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "A rootkit is not a firewall, spreadsheet program, or cable type. A rootkit is a type of *malware* designed to provide *hidden*, privileged access to a computer. Rootkits often mask their presence and the presence of other malware, making them very difficult to detect. They can give an attacker full control over the system.",
       "examTip": "Rootkits are stealthy and provide attackers with deep system access."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-db.tests.insertOne({
-  "category": "cysa",
-  "testId": 3,
-  "testName": " CySa Practice Test #3 (Easy)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "Which of the following is a good practice for securing your home Wi-Fi network?",
@@ -1380,5 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-
