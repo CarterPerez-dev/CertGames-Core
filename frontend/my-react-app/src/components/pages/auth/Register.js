@@ -5,6 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Register.css';
 import './auth.css';
+import './AuthToast.css';
+
 import PasswordRequirements from './PasswordRequirements';
 import ErrorDisplay from './ErrorDisplay';
 // ===============================
