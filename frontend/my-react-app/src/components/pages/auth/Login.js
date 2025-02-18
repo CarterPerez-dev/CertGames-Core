@@ -6,6 +6,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './Login.css';
 import './auth.css';
+import './AuthToast.css';
+
 import PasswordRequirements from './PasswordRequirements';
 import ErrorDisplay from './ErrorDisplay';
 // ==================================================
