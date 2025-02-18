@@ -653,15 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Code injection attacks exploit vulnerabilities in how applications handle user input, allowing attackers to execute arbitrary code. SQL injection and cross-site scripting (XSS) are common examples.",
       "examTip": "Proper input validation and output encoding are crucial for preventing code injection attacks."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "secplus",
-  "testId": 6,
-  "testName": "Security Practice Test #6 (Formidable)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "Which of the following is the MOST important first step in responding to a suspected data breach?",
