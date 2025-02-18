@@ -1,4 +1,3 @@
-// src/components/pages/auth/Register.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser, loginUser } from '../store/userSlice';
