@@ -653,20 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "Side-channel attacks are *indirect* and exploit physical characteristics of a system, *not* logical flaws in code or social vulnerabilities. They can bypass traditional security measures and be very difficult to defend against.",
       "examTip": "Side-channel attacks highlight the importance of considering the physical security of systems, not just software vulnerabilities."
-    }
-  ]
-});
-
-
-
-
-    
-    db.tests.insertOne({
-  "category": "secplus",
-  "testId": 9,
-  "testName": "Security Practice Test #9 (Challenging Part 2)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A company's website allows users to submit comments and feedback. What is the MOST important security measure to implement to prevent Cross-Site Scripting (XSS) attacks?",
