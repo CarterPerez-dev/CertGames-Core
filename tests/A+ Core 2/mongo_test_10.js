@@ -656,34 +656,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 3,
       "explanation": "No display and no POST beeps typically indicate a fundamental hardware issue occurring before the OS loads—commonly a motherboard, CPU, or RAM failure. Although PSU issues are possible, the fans spinning make a complete PSU failure less likely.",
       "examTip": "A lack of POST beeps and no display usually point to severe hardware issues (motherboard, CPU, or RAM); systematically test or swap components to isolate the cause."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 10,
-  "testName": "Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A user reports that their Windows computer is displaying a message stating, 'Operating System Not Found' when they try to boot the system.  You've verified that the hard drive is detected in the BIOS/UEFI settings, and the boot order is correct. What are some potential causes, and what troubleshooting steps would you take?",
