@@ -5,7 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './Register.css';
 import './auth.css';
-
+import PasswordRequirements from './PasswordRequirements';
+import ErrorDisplay from './ErrorDisplay';
 // ===============================
 // FRONT-END VALIDATION HELPERS
 // (Mirroring your Python logic)
@@ -252,10 +253,11 @@ const Register = () => {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // We’ll collect error messages in an array
+  // We'll store local client-side errors in an array
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
@@ -267,36 +269,28 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors([]); // reset errors
+    setErrors([]); // Clear previous errors
 
-    // 1) Client-side validations for username, email, password
+    // 1) Client-side validations
     let allErrors = [];
 
-    // Validate username
     const usernameErrors = frontValidateUsername(username);
-    if (usernameErrors.length > 0) {
-      allErrors = allErrors.concat(usernameErrors);
-    }
+    if (usernameErrors.length > 0) allErrors = allErrors.concat(usernameErrors);
 
-    // Validate email
     const emailErrors = frontValidateEmail(email);
-    if (emailErrors.length > 0) {
-      allErrors = allErrors.concat(emailErrors);
-    }
+    if (emailErrors.length > 0) allErrors = allErrors.concat(emailErrors);
 
-    // Validate password (pass in username/email so we can block them in the password)
-    const passwordErrors = frontValidatePassword(password, username, email);
-    if (passwordErrors.length > 0) {
-      allErrors = allErrors.concat(passwordErrors);
-    }
+    const pwdErrors = frontValidatePassword(password, username, email);
+    if (pwdErrors.length > 0) allErrors = allErrors.concat(pwdErrors);
 
-    // Check confirm password
     if (password !== confirmPassword) {
       allErrors.push("Passwords do not match.");
     }
 
     if (allErrors.length > 0) {
       setErrors(allErrors);
+      // Optionally show a toast for major error:
+      toast.error("Please fix the highlighted errors before proceeding.");
       return;
     }
 
@@ -308,19 +302,28 @@ const Register = () => {
         password,
         confirmPassword
       }));
-      // If the registerUser thunk returns success
+
       if (registerUser.fulfilled.match(resultAction)) {
+        toast.success("Registration successful! Logging you in...");
+
         // Optionally auto-login
-        await dispatch(loginUser({ usernameOrEmail: username, password }));
-      } else {
-        // If an error happened in the thunk, put it in local errors
-        if (resultAction.payload?.error) {
-          setErrors([resultAction.payload.error]);
+        const loginAction = await dispatch(loginUser({ usernameOrEmail: username, password }));
+        if (loginUser.fulfilled.match(loginAction)) {
+          toast.success("Login successful!");
+        } else {
+          toast.error("Could not auto-login. Please try logging in manually.");
         }
+      } else if (resultAction.payload?.error) {
+        // If the server responded with a specific error
+        toast.error(resultAction.payload.error);
+      } else if (resultAction.error) {
+        // Some other error
+        toast.error("Server error occurred. Please try again later.");
       }
+
     } catch (err) {
       console.error('Registration error:', err);
-      setErrors(["An unexpected error occurred during registration."]);
+      toast.error("An unexpected error occurred during registration.");
     }
   };
 
@@ -330,15 +333,15 @@ const Register = () => {
       <div className="register-card">
         <h2 className="register-title">Create Your Account</h2>
 
-        {/* Display any validation errors from front-end or Redux */}
-        {errors.length > 0 && (
-          <div className="error-container">
-            {errors.map((errMsg, idx) => (
-              <p key={idx} className="error-msg">{errMsg}</p>
-            ))}
+        {/* Inline list of current client-side errors */}
+        <ErrorDisplay errors={errors} />
+
+        {/* Potential Redux error from server */}
+        {reduxError && (
+          <div className="redux-error-container">
+            <p className="error-msg">{reduxError}</p>
           </div>
         )}
-        {reduxError && <p className="error-msg">{reduxError}</p>}
 
         <form className="register-form" onSubmit={handleSubmit}>
           <label htmlFor="username">Username</label>
@@ -376,6 +379,9 @@ const Register = () => {
             </span>
           </div>
 
+          {/* Live password guidelines */}
+          <PasswordRequirements password={password} />
+
           <label htmlFor="confirmPassword">Confirm Password</label>
           <div className="input-with-icon">
             <input 
@@ -393,10 +399,11 @@ const Register = () => {
             </span>
           </div>
 
-          {/* If there's a global Redux error, show it (but we already do above) */}
-          {/* <p className="error-msg">{error}</p> */}
-
-          <button type="submit" disabled={loading} className="register-btn">
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="register-btn"
+          >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
