@@ -1,10 +1,9 @@
-// src/components/pages/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // import icons
-import './Login.css'; // Ensure Auth.css is imported here or merge styles
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import './Login.css';
 import './auth.css';
 
 function hasSpacesOrInvalidChars(str) {
