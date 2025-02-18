@@ -1266,7 +1266,7 @@ db.tests.insertOne({
     },
     {
       "id": 98,
-      "question": "Should you open email atachments from senders you dont know?",
+      "question": "Should you open email attachments from senders you dont know?",
       "options": [
         "Yes",
         "No",
