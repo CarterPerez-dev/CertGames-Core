@@ -1,0 +1,16 @@
+.error-display {
+  background: #ffe5e5;
+  border: 1px solid #ff8888;
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.error-item {
+  display: flex;
+  align-items: center;
+  color: #d8000c;
+  margin: 0.25rem 0;
+}
+.error-icon {
+  margin-right: 0.5rem;
+}
