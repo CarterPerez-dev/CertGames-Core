@@ -22,7 +22,7 @@ You could add a temporary admin route (for testing only) that accepts simulated 
 Example (Manual Mongo Data Insert)
 For example, to simulate a perfect test for a user with _id of user123, you might insert a document like:
 
-javascript
+```javascript
 Copy
 db.testAttempts.insertOne({
   userId: ObjectId("user123"),
@@ -41,30 +41,9 @@ Manually modify/inject test attempt data to mimic conditions required by each ac
 Use a test script or temporary endpoint to run the achievements function against simulated data.
 Once verified, you can remove any extra debugging endpoints or test code from production.
 This way, you can ensure your achievements logic (and popups via your frontend) work as expected without the need to manually complete every test.
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+----------------------------------------------------------------------------------------------------------------------------
 For a production‑grade, cross‐device solution that remains fast and scalable, storing progress on the server (Option B) is the better choice.
 
 Here’s why:
