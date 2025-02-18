@@ -1,0 +1,21 @@
+/* AuthToast.css */
+
+/* Overall toast style for your custom class */
+.auth-error-toast {
+  background-color: #fff1f1 !important; /* a subtle light-red background */
+  color: #a4282b !important;           /* dark-red text for contrast */
+  border-left: 6px solid #c62828 !important;  /* a left border to highlight error */
+  border-radius: 6px !important;
+  font-family: 'Roboto', sans-serif;          /* or your preferred font */
+  padding: 1rem !important;
+}
+
+/* If you want a distinct icon or text style: */
+.auth-error-toast .Toastify__toast-icon svg {
+  fill: #d32f2f !important;  /* change the icon color to a red shade */
+}
+
+/* You can also customize the close button if you like: */
+.auth-error-toast .Toastify__close-button {
+  color: #ff6f60 !important;
+}
