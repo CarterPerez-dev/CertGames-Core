@@ -246,17 +246,16 @@ function frontValidatePassword(password, username, email) {
 // ======================================
 // REGISTER COMPONENT (Updated)
 // ======================================
-onst Register = () => {
+const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, userId } = useSelector((state) => state.user);
 
-  // Local state
   const [username, setUsername] = useState('');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -269,66 +268,52 @@ onst Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Clear previous errors
-    let allErrors = [];
 
     // 1) Client-side validation
-    const uErrors = validateUsername(username);
-    const eErrors = validateEmail(email);
-    const pErrors = validatePassword(password);
-
-    if (uErrors.length > 0) allErrors.push(...uErrors);
-    if (eErrors.length > 0) allErrors.push(...eErrors);
-    if (pErrors.length > 0) allErrors.push(...pErrors);
-
+    let errors = [];
+    errors.push(...validateUsername(username));
+    errors.push(...validateEmail(email));
+    errors.push(...validatePassword(password, username, email));
     if (password !== confirmPassword) {
-      allErrors.push("Passwords do not match.");
+      errors.push("Passwords do not match.");
     }
 
-    if (allErrors.length > 0) {
+    if (errors.length > 0) {
       // Show each error as a toast
-      allErrors.forEach(err =>
-        toast.error(err, { className: 'auth-error-toast' })
-      );
+      errors.forEach((errMsg) => {
+        toast.error(errMsg, { className: 'auth-error-toast' });
+      });
       return;
     }
 
-    // 2) If passes, dispatch registerUser
+    // 2) Attempt registration
     try {
-      const result = await dispatch(registerUser({
+      const result = await dispatch(registerUser({ 
         username, 
         email, 
-        password,
+        password, 
         confirmPassword
       }));
 
       if (registerUser.fulfilled.match(result)) {
-        // If success, show a success toast
-        toast.success("Registration successful!", {
-          className: 'auth-success-toast'
-        });
+        // Registration success
+        toast.success("Registration successful!", { className: 'auth-success-toast' });
 
         // Optionally auto-login
         const loginRes = await dispatch(loginUser({ usernameOrEmail: username, password }));
         if (loginUser.fulfilled.match(loginRes)) {
-          toast.success("Auto-login successful!", {
-            className: 'auth-success-toast'
-          });
+          toast.success("Auto-login successful!", { className: 'auth-success-toast' });
         } else {
-          toast.error("Could not auto-login. Please login manually.", {
-            className: 'auth-error-toast'
-          });
+          toast.error("Auto-login failed. Please log in manually.", { className: 'auth-error-toast' });
         }
-
       } else {
         // If server responded with an error
-        toast.error(result.payload, { className: 'auth-error-toast' });
+        const payload = result.payload || "Server error occurred.";
+        toast.error(payload, { className: 'auth-error-toast' });
       }
     } catch (err) {
       console.error('Registration error:', err);
-      toast.error("An unexpected error occurred.", {
-        className: 'auth-error-toast'
-      });
+      toast.error("An unexpected error occurred.", { className: 'auth-error-toast' });
     }
   };
 
@@ -338,10 +323,8 @@ onst Register = () => {
       <div className="register-card">
         <h2 className="register-title">Create Your Account</h2>
 
-        {/* If Redux error, show it, but also as a toast if you prefer */}
-        {error && (
-          <p className="error-msg">{error}</p>
-        )}
+        {/* If there's a redux error, show it inline or as a toast */}
+        {error && <p className="error-msg">{error}</p>}
 
         <form className="register-form" onSubmit={handleSubmit}>
           <label htmlFor="username">Username</label>
@@ -397,8 +380,8 @@ onst Register = () => {
           </div>
 
           <button 
-            type="submit" 
-            disabled={loading} 
+            type="submit"
+            disabled={loading}
             className="register-btn"
           >
             {loading ? 'Registering...' : 'Register'}
