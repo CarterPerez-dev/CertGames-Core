@@ -25,7 +25,7 @@ from models.test import (
     purchase_item,
     get_achievements,
     get_test_by_id_and_category,
-    check_and_unlock_achievements
+    check_and_unlock_achievements,
     validate_username,
     validate_email,
     validate_password,
