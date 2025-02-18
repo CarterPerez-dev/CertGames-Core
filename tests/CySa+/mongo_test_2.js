@@ -653,63 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Public WiFi networks are often unsecured, meaning your data could be intercepted by others. Even with HTTPS or a strong password, a VPN adds a critical layer of encryption for *all* your traffic.",
       "examTip": "Use a VPN on public WiFi to protect your data."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-db.tests.insertOne({
-  "category": "cysa",
-  "testId": 2,
-  "testName": " CySa Practice Test #2 (Very Easy)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "What is 'phishing'?",
