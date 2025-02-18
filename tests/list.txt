@@ -1,0 +1,31 @@
+Tests:
+1.) create the test (aiforumla)
+2.) fix the test (fixtest)
+3.) verify test (verifytest)
+
+
+A+ core 2
+--needs to be verified
+
+
+  Security+
+  ---needs question 57
+ --- delete question 101
+ --- write question for question 51
+ --- needs to be verified
+
+
+  Network+
+  ---needs question 97 for test 3
+  ---needs questions 51 for test 2
+ ------ needs to be verified
+
+
+  CySa+
+  --- test 9 & test 10 need to be fixed
+  ----needs to be verified
+
+
+  Pentest+
+  ---all needs fixed
+  ---then verified
