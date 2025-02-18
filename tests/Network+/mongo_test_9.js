@@ -432,27 +432,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "To diagnose fragmentation, you need to test for MTU limitations by using ping with increasing packet sizes and the Don't Fragment (DF) bit set. If a packet is too large for a link along the path and the DF bit is set, the router will send back an ICMP \"Fragmentation Needed and DF bit set\" message indicating the MTU of that link. Additionally, a protocol analyzer like Wireshark can capture traffic and show the IP header fields that indicate fragmentation. A cable tester checks physical cables, nslookup is for DNS, and ipconfig /all shows local configuration.",
       "examTip": "Use ping with the DF bit and varying packet sizes, combined with a protocol analyzer, to diagnose packet fragmentation issues."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "nplus",
-  "testId": 9,
-  "testName": "Network+ Practice Test #9 (Ruthless) - Part 2",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 34,
       "question": "What is a 'zero-day' vulnerability, and why is it considered a particularly serious security threat?",
@@ -881,37 +861,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Monitoring DNS requests is particularly effective for detecting botnet activity. Botnets often use DNS to contact command-and-control servers or resolve malicious domains. Unusual DNS query patterns—such as a high volume of queries or queries to known malicious domains—can indicate that a computer is part of a botnet.",
       "examTip": "Monitor DNS requests for unusual patterns to detect potential botnet activity and malware infections."
-    }
-  ]
-});
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-db.tests.insertOne({
-  "category": "nplus",
-  "testId": 9,
-  "testName": "Network+ Practice Test #9 (Ruthless) - Part 3",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 67,
       "question": "A network administrator is troubleshooting an OSPF routing issue. They want to verify that OSPF is enabled on a specific interface, check the OSPF area the interface belongs to, and examine the OSPF hello and dead intervals. Which command on a Cisco router would provide this information?",
