@@ -1,9 +1,10 @@
-# test_routes.py
+# src/routes/test_routes.py
 
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime
 
+# Mongo collections
 from mongodb.database import (
     mainusers_collection,
     shop_collection,
@@ -12,6 +13,7 @@ from mongodb.database import (
     testAttempts_collection,
     correctAnswers_collection
 )
+# Models
 from models.test import (
     get_user_by_identifier,
     create_user,
@@ -22,14 +24,14 @@ from models.test import (
     get_shop_items,
     purchase_item,
     get_achievements,
-    get_test_by_id,
+    get_test_by_id_and_category,
     check_and_unlock_achievements
 )
 
 api_bp = Blueprint('test', __name__)
 
 def serialize_user(user):
-    """Helper function to convert _id and other fields to strings if needed."""
+    """Helper to convert _id, etc. to strings if needed."""
     if not user:
         return None
     user['_id'] = str(user['_id'])
@@ -38,6 +40,7 @@ def serialize_user(user):
     if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
         user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
     return user
+
 
 # -----------------------------
 # USER ROUTES
@@ -51,9 +54,15 @@ def get_user(user_id):
     user = serialize_user(user)
     return jsonify(user), 200
 
+
 @api_bp.route('/user', methods=['POST'])
 def register_user():
-    user_data = request.json
+    """
+    Registration: /api/user
+    Expects {username, email, password, confirmPassword} in JSON
+    Calls create_user, returns {message, user_id} or error.
+    """
+    user_data = request.json or {}
     try:
         user_id = create_user(user_data)
         return jsonify({"message": "User created", "user_id": str(user_id)}), 201
@@ -62,8 +71,14 @@ def register_user():
     except Exception as e:
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
 
+
 @api_bp.route('/login', methods=['POST'])
 def login():
+    """
+    Login: /api/login
+    Expects { usernameOrEmail, password } in JSON
+    If success => return user doc in JSON (serialized)
+    """
     data = request.json
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
@@ -81,6 +96,7 @@ def login():
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
+        "email": user.get("email", ""),
         "coins": user.get("coins", 0),
         "xp": user.get("xp", 0),
         "level": user.get("level", 1),
@@ -88,8 +104,10 @@ def login():
         "xpBoost": user.get("xpBoost", 1.0),
         "currentAvatar": user.get("currentAvatar"),
         "nameColor": user.get("nameColor"),
-        "purchasedItems": user.get("purchasedItems", [])
+        "purchasedItems": user.get("purchasedItems", []),
+        "subscriptionActive": user.get("subscriptionActive", False)
     }), 200
+
 
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
 def daily_bonus(user_id):
@@ -98,9 +116,10 @@ def daily_bonus(user_id):
         return jsonify({"error": "User not found"}), 404
     return jsonify(result), 200
 
+
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
-    data = request.json
+    data = request.json or {}
     xp_to_add = data.get("xp", 0)
     updated = update_user_xp(user_id, xp_to_add)
     if not updated:
@@ -109,12 +128,14 @@ def add_xp_route(user_id):
     updated["newAchievements"] = new_achievements
     return jsonify(updated), 200
 
+
 @api_bp.route('/user/<user_id>/add-coins', methods=['POST'])
 def add_coins_route(user_id):
-    data = request.json
+    data = request.json or {}
     coins_to_add = data.get("coins", 0)
     update_user_coins(user_id, coins_to_add)
     return jsonify({"message": "Coins updated"}), 200
+
 
 # -----------------------------
 # SHOP ROUTES
@@ -126,6 +147,7 @@ def fetch_shop():
     for item in items:
         item["_id"] = str(item["_id"])
     return jsonify(items), 200
+
 
 @api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
 def purchase_item_route(item_id):
@@ -139,6 +161,7 @@ def purchase_item_route(item_id):
         return jsonify(result), 200
     else:
         return jsonify(result), 400
+
 
 @api_bp.route('/shop/equip', methods=['POST'])
 def equip_item_route():
@@ -174,6 +197,7 @@ def equip_item_route():
     )
     return jsonify({"success": True, "message": "Avatar equipped"}), 200
 
+
 # -----------------------------
 # TESTS ROUTES
 # -----------------------------
@@ -186,6 +210,25 @@ def fetch_test_by_id_route(test_id):
     test_doc["_id"] = str(test_doc["_id"])
     return jsonify(test_doc), 200
 
+
+
+@api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
+def fetch_test_by_category_and_id(category, test_id):
+    try:
+        test_id_int = int(test_id)
+    except Exception:
+        return jsonify({"error": "Invalid test ID"}), 400
+    test_doc = tests_collection.find_one({
+        "testId": test_id_int,
+        "category": category
+    })
+    if not test_doc:
+        return jsonify({"error": "Test not found"}), 404
+    test_doc["_id"] = str(test_doc["_id"])
+    return jsonify(test_doc), 200
+
+
+
 # -----------------------------
 # PROGRESS / ATTEMPTS ROUTES
 # -----------------------------
@@ -197,12 +240,18 @@ def get_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    attempt = testAttempts_collection.find_one({"userId": user_oid, "testId": test_id, "finished": False})
+    attempt = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "testId": test_id,
+        "finished": False
+    })
     if not attempt:
         return jsonify({"attempt": None}), 200
-    
+
     attempt["_id"] = str(attempt["_id"])
+    attempt["userId"] = str(attempt["userId"])
     return jsonify({"attempt": attempt}), 200
+
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
@@ -221,18 +270,17 @@ def update_test_attempt(user_id, test_id):
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
             "totalQuestions": data.get("totalQuestions", 0),
+            "currentQuestionIndex": data.get("currentQuestionIndex", 0),
+            "shuffleOrder": data.get("shuffleOrder", []),
             "finished": data.get("finished", False)
         }
     }
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
     return jsonify({"message": "Progress updated"}), 200
 
+
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
-    """
-    Mark the attempt as finished, set finishedAt, trigger achievements, etc.
-    Returns newly unlocked achievements so the frontend can show popups.
-    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
@@ -255,6 +303,7 @@ def finish_test_attempt(user_id, test_id):
         "message": "Test attempt finished",
         "newlyUnlocked": newly_unlocked
     }), 200
+
 
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
@@ -283,6 +332,7 @@ def list_test_attempts(user_id):
         "attempts": attempts
     }), 200
 
+
 # -----------------------------
 # FIRST-TIME-CORRECT ANSWERS
 # -----------------------------
@@ -301,7 +351,6 @@ def submit_answer(user_id):
         return jsonify({"error": "User not found"}), 404
 
     is_correct = (selected_index == correct_index)
-
     already_correct = correctAnswers_collection.find_one({
         "userId": user["_id"],
         "testId": test_id,
@@ -310,7 +359,6 @@ def submit_answer(user_id):
 
     awarded_xp = 0
     awarded_coins = 0
-
     if is_correct and not already_correct:
         correctAnswers_collection.insert_one({
             "userId": user["_id"],
@@ -335,6 +383,7 @@ def submit_answer(user_id):
         "newCoins": new_coins
     }), 200
 
+
 # -----------------------------
 # ACHIEVEMENTS
 # -----------------------------
@@ -345,16 +394,12 @@ def fetch_achievements_route():
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
 
+
 # ---------------------------------------------------------------
-# NEW! Leaderboard Route
+# Leaderboard Route
 # ---------------------------------------------------------------
 @api_bp.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    """
-    Returns the top 100 users by level (descending).
-    Embeds avatarUrl from shop_collection if the user
-    has a currentAvatar set.
-    """
     top_users_cursor = mainusers_collection.find(
         {},
         {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
@@ -363,7 +408,6 @@ def get_leaderboard():
     results = []
     rank = 1
     for user in top_users_cursor:
-        # Basic fields
         user_data = {
             "username": user.get("username", "unknown"),
             "level": user.get("level", 1),
@@ -371,8 +415,6 @@ def get_leaderboard():
             "rank": rank,
             "avatarUrl": None
         }
-
-        # Lookup avatar image if exists
         if user.get("currentAvatar"):
             avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
             if avatar_item and "imageUrl" in avatar_item:
@@ -382,3 +424,94 @@ def get_leaderboard():
         rank += 1
 
     return jsonify(results), 200
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# USERNAME/EMAIL/PASSWORD CHANGES
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@api_bp.route('/user/change-username', methods=['POST'])
+def change_username():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_username = data.get("newUsername")
+    if not user_id or not new_username:
+        return jsonify({"error": "Missing userId or newUsername"}), 400
+
+    # Basic sanitization
+    from models.test import sanitize_username
+    if not sanitize_username(new_username):
+        return jsonify({"error": "Invalid new username"}), 400
+
+    # Check if already taken
+    if mainusers_collection.find_one({"username": new_username}):
+        return jsonify({"error": "Username already taken"}), 400
+
+    doc = get_user_by_id(user_id)
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    from models.test import update_user_fields
+    update_user_fields(user_id, {"username": new_username})
+    return jsonify({"message": "Username updated"}), 200
+
+
+@api_bp.route('/user/change-email', methods=['POST'])
+def change_email():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_email = data.get("newEmail")
+    if not user_id or not new_email:
+        return jsonify({"error": "Missing userId or newEmail"}), 400
+
+    if "@" not in new_email or "." not in new_email:
+        return jsonify({"error": "Invalid email"}), 400
+
+    if mainusers_collection.find_one({"email": new_email}):
+        return jsonify({"error": "Email already in use"}), 400
+
+    doc = get_user_by_id(user_id)
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    from models.test import update_user_fields
+    update_user_fields(user_id, {"email": new_email})
+    return jsonify({"message": "Email updated"}), 200
+
+
+@api_bp.route('/user/change-password', methods=['POST'])
+def change_password():
+    data = request.json or {}
+    user_id = data.get("userId")
+    old_password = data.get("oldPassword")
+    new_password = data.get("newPassword")
+    confirm = data.get("confirmPassword")
+
+    if not user_id or not old_password or not new_password or not confirm:
+        return jsonify({"error": "All fields are required"}), 400
+    if new_password != confirm:
+        return jsonify({"error": "New passwords do not match"}), 400
+
+    from models.test import sanitize_password
+    if not sanitize_password(new_password):
+        return jsonify({"error": "Invalid new password"}), 400
+
+    user_doc = get_user_by_id(user_id)
+    if not user_doc:
+        return jsonify({"error": "User not found"}), 404
+
+    if user_doc.get("password") != old_password:
+        return jsonify({"error": "Old password is incorrect"}), 401
+
+    from models.test import update_user_fields
+    update_user_fields(user_id, {"password": new_password})
+    return jsonify({"message": "Password updated"}), 200
+
+
+@api_bp.route('/subscription/cancel', methods=['POST'])
+def cancel_subscription():
+    """
+    Placeholder. Possibly set subscriptionActive=False
+    """
+    return jsonify({"message": "Cancel subscription placeholder"}), 200
+
+

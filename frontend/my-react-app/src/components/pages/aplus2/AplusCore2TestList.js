@@ -2,7 +2,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// Reuse APlusStyles if you want
+import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
 const APlusCore2TestList = () => {
