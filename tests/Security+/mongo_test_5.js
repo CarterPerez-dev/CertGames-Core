@@ -651,15 +651,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Change management provides a structured process for implementing changes, including approvals, testing, and documentation, to avoid unintended consequences.",
       "examTip": "Proper change management is crucial for maintaining system stability and security."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "secplus",
-  "testId": 5,
-  "testName": "Security Practice Test #5 (Intermediate)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "Which of the following is a characteristic of a 'worm'?",
