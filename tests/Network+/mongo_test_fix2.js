@@ -765,16 +765,16 @@ db.tests.insertOne({
     },
     {
       "id": 59,
-      "question": "MISSING QUESTION TEXT",
+      "question": "How many layers are in the OSI model",
       "options": [
-        "MISSING OPTION 1",
-        "MISSING OPTION 2",
-        "MISSING OPTION 3",
-        "MISSING OPTION 4"
+        "5",
+        "6",
+        "7",
+        "8"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Always start troubleshooting by checking the physical layer: are cables plugged in correctly? Is there power?  These are often the simplest and quickest fixes.",
-      "examTip": "Don't overlook the obvious! Check physical connections first."
+      "explanation": "The OSI model consists of 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, and Application. These layers help standardize network communications and troubleshooting.",
+      "examTip": "Remember the mnemonic 'Please Do Not Throw Sausage Pizza Away' to recall the 7 OSI layers."
     },
     {
       "id": 60,
