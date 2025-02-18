@@ -14,8 +14,7 @@ db.tests.insertOne({
         "System logs stored on a remote server."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Hard drive contents, network configuration, and remote logs are less volatile.  The system's RAM (Random Access Memory) contains the *most* volatile data, including running processes, network connections, and encryption keys. This data is lost when the system is powered down, so it must be collected *first* to preserve evidence.",
+      "explanation": "Hard drive contents, network configuration, and remote logs are less volatile.  The system's RAM (Random Access Memory) contains the *most* volatile data, including running processes, network connections, and encryption keys. This data is lost when the system is powered down, so it must be collected *first* to preserve evidence.",
       "examTip": "Always prioritize collecting the most volatile data first in incident response."
     },
     {
@@ -28,8 +27,7 @@ db.tests.insertOne({
         "To remotely access a compromised system."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-          "Chain of custody isn't encryption, automated analysis, or remote access. The chain of custody meticulously documents *who* had control of the evidence, *when*, *where*, and *why*, proving that it hasn't been tampered with. This is absolutely crucial for legal admissibility in court.",
+      "explanation": "Chain of custody isn't encryption, automated analysis, or remote access. The chain of custody meticulously documents *who* had control of the evidence, *when*, *where*, and *why*, proving that it hasn't been tampered with. This is absolutely crucial for legal admissibility in court.",
       "examTip": "Proper chain of custody is essential for maintaining the integrity and legal admissibility of evidence."
     },
     {
@@ -42,8 +40,7 @@ db.tests.insertOne({
         "Conducting regular penetration testing."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Strong passwords help, but don't *directly* prevent SQL injection. Encryption protects data in transit, not the injection itself. Penetration testing *identifies* the vulnerability. *Parameterized queries* (also known as prepared statements) treat user input as *data*, not executable code, preventing attackers from injecting malicious SQL commands.  *Input validation* further ensures data conforms to expected formats.",
+      "explanation": "Strong passwords help, but don't *directly* prevent SQL injection. Encryption protects data in transit, not the injection itself. Penetration testing *identifies* the vulnerability. *Parameterized queries* (also known as prepared statements) treat user input as *data*, not executable code, preventing attackers from injecting malicious SQL commands.  *Input validation* further ensures data conforms to expected formats.",
       "examTip": "Parameterized queries and input validation are the primary defenses against SQL injection."
     },
     {
@@ -56,8 +53,7 @@ db.tests.insertOne({
         "A user mistyping domain names frequently."
       ],
       "correctAnswerIndex": 2,
-      "explanation":
-         "While misconfigurations or typos are *possible*, a *large number* of unusual, random-looking requests is highly suspicious. Normal browsing wouldn't generate this pattern. DGAs are a common malware technique. Malware uses algorithms to generate many domain names, making it harder to block C2 communication by simply blocking a single domain.",
+      "explanation": "While misconfigurations or typos are *possible*, a *large number* of unusual, random-looking requests is highly suspicious. Normal browsing wouldn't generate this pattern. DGAs are a common malware technique. Malware uses algorithms to generate many domain names, making it harder to block C2 communication by simply blocking a single domain.",
       "examTip": "Unusual DNS request patterns can be a sign of malware using DGAs."
     },
     {
@@ -70,8 +66,7 @@ db.tests.insertOne({
         "There is no significant difference between the two."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Both can involve manual and automated components. Both can be internal or external. The key difference is in the *action*. Vulnerability scanning *identifies* potential vulnerabilities. Penetration testing goes further and *actively attempts to exploit* those vulnerabilities to demonstrate the real-world impact of a successful attack.",
+      "explanation": "Both can involve manual and automated components. Both can be internal or external. The key difference is in the *action*. Vulnerability scanning *identifies* potential vulnerabilities. Penetration testing goes further and *actively attempts to exploit* those vulnerabilities to demonstrate the real-world impact of a successful attack.",
       "examTip": "Vulnerability scanning finds potential problems; penetration testing proves they can be exploited."
     },
     {
@@ -84,8 +79,7 @@ db.tests.insertOne({
         "Using the same password for multiple accounts."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-       "A long password is *single-factor*. Fingerprint alone is also single-factor. Reusing passwords is insecure. MFA requires *two or more* distinct authentication factors: something you *know* (password), something you *have* (phone, token), or something you *are* (biometric). The combination of username/password and a one-time code is a classic example.",
+      "explanation": "A long password is *single-factor*. Fingerprint alone is also single-factor. Reusing passwords is insecure. MFA requires *two or more* distinct authentication factors: something you *know* (password), something you *have* (phone, token), or something you *are* (biometric). The combination of username/password and a one-time code is a classic example.",
       "examTip": "MFA combines different types of authentication factors for stronger security."
     },
     {
@@ -98,8 +92,7 @@ db.tests.insertOne({
         "Using strong passwords for all user accounts."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "A single firewall is a single point of failure. Encryption and strong passwords are *parts* of defense in depth, but not the whole concept. Defense in depth means using *multiple* security controls (firewalls, intrusion detection, access controls, encryption, etc.) so that if one layer fails, others are in place to mitigate the risk.",
+      "explanation": "A single firewall is a single point of failure. Encryption and strong passwords are *parts* of defense in depth, but not the whole concept. Defense in depth means using *multiple* security controls (firewalls, intrusion detection, access controls, encryption, etc.) so that if one layer fails, others are in place to mitigate the risk.",
       "examTip": "Defense in depth uses layered security to protect assets."
     },
     {
@@ -112,8 +105,7 @@ db.tests.insertOne({
         "SOAR is only useful for very large enterprises."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-       "SOAR *augments* human analysts, not replaces them. It cannot guarantee *complete* protection.  SOAR benefits organizations of various sizes. SOAR platforms automate routine tasks, orchestrate security tools, and streamline incident response workflows, leading to faster and more efficient responses.",
+      "explanation": "SOAR *augments* human analysts, not replaces them. It cannot guarantee *complete* protection.  SOAR benefits organizations of various sizes. SOAR platforms automate routine tasks, orchestrate security tools, and streamline incident response workflows, leading to faster and more efficient responses.",
       "examTip": "SOAR helps security teams work smarter by automating and orchestrating tasks."
     },
     {
@@ -126,40 +118,37 @@ db.tests.insertOne({
         "SQL injection"
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Phishing uses deception. DoS disrupts service. SQL injection targets databases. Session hijacking occurs when an attacker steals a user's *active session ID* (often through XSS or network sniffing) and uses it to impersonate the user, gaining access to their account and data *without* needing the password.",
+      "explanation": "Phishing uses deception. DoS disrupts service. SQL injection targets databases. Session hijacking occurs when an attacker steals a user's *active session ID* (often through XSS or network sniffing) and uses it to impersonate the user, gaining access to their account and data *without* needing the password.",
       "examTip": "Session hijacking allows attackers to bypass authentication by stealing active sessions."
     },
     {
-        "id": 10,
-        "question": "What is the primary purpose of a 'honeypot'?",
-          "options": [
-            "To store sensitive data in a highly secure location.",
-            "To act as a decoy system to attract and study attackers.",
-            "To provide a backup network connection in case of failure.",
-            "To encrypt network traffic for secure communication."
-          ],
-        "correctAnswerIndex": 1,
-        "explanation":
-            "Honeypots are not for storing data, providing backup, or encryption. A honeypot is a deliberately vulnerable system or network designed to *lure* attackers. This allows security professionals to study their methods, gather threat intelligence, and potentially divert them from real targets.",
-        "examTip": "Honeypots are traps used to detect, deflect, or study hacking attempts."
+      "id": 10,
+      "question": "What is the primary purpose of a 'honeypot'?",
+      "options": [
+        "To store sensitive data in a highly secure location.",
+        "To act as a decoy system to attract and study attackers.",
+        "To provide a backup network connection in case of failure.",
+        "To encrypt network traffic for secure communication."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Honeypots are not for storing data, providing backup, or encryption. A honeypot is a deliberately vulnerable system or network designed to *lure* attackers. This allows security professionals to study their methods, gather threat intelligence, and potentially divert them from real targets.",
+      "examTip": "Honeypots are traps used to detect, deflect, or study hacking attempts."
     },
     {
-     "id": 11,
+      "id": 11,
       "question": "Which of the following is MOST likely to be considered an indicator of compromise (IoC)?",
-       "options": [
+      "options": [
         "A user logging in from their usual location during work hours.",
         "A sudden, large increase in outbound network traffic to an unfamiliar foreign IP address.",
         "A system operating within normal CPU and memory usage parameters.",
         "Regularly scheduled software updates being applied."
-       ],
-       "correctAnswerIndex": 1,
-       "explanation":
-       "Normal login activity, typical resource usage, and scheduled updates are *not* IoCs. Unusual, significant *outbound* traffic to an *unfamiliar foreign IP* is highly suspicious. This could indicate data exfiltration, communication with a command-and-control server, or other malicious activity.",
-        "examTip": "IoCs are clues that suggest a system may have been compromised."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Normal login activity, typical resource usage, and scheduled updates are *not* IoCs. Unusual, significant *outbound* traffic to an *unfamiliar foreign IP* is highly suspicious. This could indicate data exfiltration, communication with a command-and-control server, or other malicious activity.",
+      "examTip": "IoCs are clues that suggest a system may have been compromised."
     },
     {
-     "id": 12,
+      "id": 12,
       "question": "Which of the following is the BEST description of the 'eradication' phase in the incident response process?",
       "options": [
         "Containing the spread of an incident.",
@@ -167,408 +156,385 @@ db.tests.insertOne({
         "Restoring systems to normal operation.",
         "Identifying the initial point of compromise."
       ],
-       "correctAnswerIndex": 1,
-       "explanation":
-         "Containment *limits* the spread. Restoration is *recovery*. Identifying the cause is part of *analysis*. Eradication is about *complete removal*. This involves eliminating the malware, attacker access, or vulnerability that caused the incident. It might involve deleting files, patching systems, resetting passwords, and rebuilding systems.",
-       "examTip": "The eradication phase focuses on completely removing the threat."
+      "correctAnswerIndex": 1,
+      "explanation": "Containment *limits* the spread. Restoration is *recovery*. Identifying the cause is part of *analysis*. Eradication is about *complete removal*. This involves eliminating the malware, attacker access, or vulnerability that caused the incident. It might involve deleting files, patching systems, resetting passwords, and rebuilding systems.",
+      "examTip": "The eradication phase focuses on completely removing the threat."
     },
     {
-    "id": 13,
-     "question": "Which of the following would be considered a 'compensating control'?",
-        "options":[
-            "Implementing a firewall to block unauthorized network access.",
-            "Applying a critical security patch to a vulnerable system.",
-            "Implementing multi-factor authentication (MFA) when a required patch cannot be immediately applied.",
-            "Encrypting sensitive data at rest."
-        ],
-         "correctAnswerIndex": 2,
-        "explanation":
-          "Firewalls, patching, and encryption are standard security controls. A compensating control is implemented when a *primary* control is *not feasible* or *fully effective*. If a critical patch is unavailable or cannot be immediately deployed, MFA provides an *alternative* security measure to *compensate* for the unpatched vulnerability.",
+      "id": 13,
+      "question": "Which of the following would be considered a 'compensating control'?",
+      "options": [
+        "Implementing a firewall to block unauthorized network access.",
+        "Applying a critical security patch to a vulnerable system.",
+        "Implementing multi-factor authentication (MFA) when a required patch cannot be immediately applied.",
+        "Encrypting sensitive data at rest."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Firewalls, patching, and encryption are standard security controls. A compensating control is implemented when a *primary* control is *not feasible* or *fully effective*. If a critical patch is unavailable or cannot be immediately deployed, MFA provides an *alternative* security measure to *compensate* for the unpatched vulnerability.",
       "examTip": "Compensating controls provide alternative security when primary controls are insufficient."
     },
     {
-        "id": 14,
-        "question": "Which of the following is the PRIMARY purpose of data loss prevention (DLP) software?",
-         "options":[
-            "To back up data to a remote server.",
-            "To prevent sensitive data from leaving the organization's control without authorization.",
-            "To encrypt data in transit across a network.",
-            "To detect and remove malware from a system."
-         ],
-        "correctAnswerIndex": 1,
-        "explanation":
-         "DLP is not primarily for backup, encryption (though it can use it), or malware removal. DLP systems are designed to *detect* and *prevent* sensitive data (PII, financial data, intellectual property) from leaving the organization's control, whether intentionally or accidentally. This includes monitoring email, web traffic, removable storage, and other channels.",
-         "examTip": "DLP focuses on preventing data leakage."
-    },
-    {
-     "id": 15,
-    "question":"What is 'lateral movement' in a cyberattack?",
-    "options":[
-      "The initial compromise of a system.",
-      "An attacker moving from one compromised system to other systems within the same network.",
-      "The exfiltration of stolen data.",
-      "The encryption of data by ransomware."
-     ],
+      "id": 14,
+      "question": "Which of the following is the PRIMARY purpose of data loss prevention (DLP) software?",
+      "options": [
+        "To back up data to a remote server.",
+        "To prevent sensitive data from leaving the organization's control without authorization.",
+        "To encrypt data in transit across a network.",
+        "To detect and remove malware from a system."
+      ],
       "correctAnswerIndex": 1,
-    "explanation": "Initial compromise is the *entry point*. Data exfiltration is the *theft*. Encryption is often the *payload* of ransomware. Lateral movement is the process of an attacker *expanding their access* *within* a network *after* gaining initial entry. They might compromise one system, then use that access to pivot to other, more valuable systems.",
-    "examTip":"Lateral movement is how attackers expand their control within a compromised network."
+      "explanation": "DLP is not primarily for backup, encryption (though it can use it), or malware removal. DLP systems are designed to *detect* and *prevent* sensitive data (PII, financial data, intellectual property) from leaving the organization's control, whether intentionally or accidentally. This includes monitoring email, web traffic, removable storage, and other channels.",
+      "examTip": "DLP focuses on preventing data leakage."
     },
     {
-        "id": 16,
-        "question": "You receive an alert from your SIEM system indicating a large number of failed login attempts on a critical server from a single external IP address.  What is the MOST appropriate FIRST step?",
-        "options": [
-            "Immediately shut down the server.",
-            "Isolate the server from the network.",
-            "Investigate the alert to determine its validity and scope.",
-            "Block the offending IP address at the firewall."
-        ],
-        "correctAnswerIndex": 2,
-        "explanation":
-            "Shutting down or isolating the server are *drastic* steps that could disrupt services unnecessarily *before* understanding the situation. Blocking the IP *might* be necessary, but *after* investigation. The *first* step is to *investigate* the alert: check logs, determine if the attempts are legitimate (e.g., a user with a forgotten password), and assess the potential impact *before* taking more disruptive actions.",
-        "examTip": "Always investigate security alerts thoroughly before taking significant action."
-    },
-     {
-        "id": 17,
-        "question":"What is the main purpose of using regular expressions (regex) in security analysis?",
-         "options":[
-            "To encrypt data.",
-            "To define patterns for searching and matching text within logs or other data.",
-            "To create strong passwords.",
-            "To establish secure VPN connections."
-         ],
-          "correctAnswerIndex": 1,
-         "explanation":
-           "Regex is not for encryption, password creation, or VPNs. Regular expressions are powerful tools for *pattern matching*. They allow analysts to define complex search patterns to find specific strings of text within large datasets like logs, identifying specific events, IP addresses, error messages, or other indicators of interest.",
-         "examTip": "Regex is a valuable skill for efficiently searching and filtering security data."
+      "id": 15,
+      "question": "What is 'lateral movement' in a cyberattack?",
+      "options": [
+        "The initial compromise of a system.",
+        "An attacker moving from one compromised system to other systems within the same network.",
+        "The exfiltration of stolen data.",
+        "The encryption of data by ransomware."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Initial compromise is the *entry point*. Data exfiltration is the *theft*. Encryption is often the *payload* of ransomware. Lateral movement is the process of an attacker *expanding their access* *within* a network *after* gaining initial entry. They might compromise one system, then use that access to pivot to other, more valuable systems.",
+      "examTip": "Lateral movement is how attackers expand their control within a compromised network."
     },
     {
-    "id": 18,
-    "question": "Which of the following BEST describes a 'false negative' in security monitoring?",
-     "options":[
+      "id": 16,
+      "question": "You receive an alert from your SIEM system indicating a large number of failed login attempts on a critical server from a single external IP address.  What is the MOST appropriate FIRST step?",
+      "options": [
+        "Immediately shut down the server.",
+        "Isolate the server from the network.",
+        "Investigate the alert to determine its validity and scope.",
+        "Block the offending IP address at the firewall."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Shutting down or isolating the server are *drastic* steps that could disrupt services unnecessarily *before* understanding the situation. Blocking the IP *might* be necessary, but *after* investigation. The *first* step is to *investigate* the alert: check logs, determine if the attempts are legitimate (e.g., a user with a forgotten password), and assess the potential impact *before* taking more disruptive actions.",
+      "examTip": "Always investigate security alerts thoroughly before taking significant action."
+    },
+    {
+      "id": 17,
+      "question": "What is the main purpose of using regular expressions (regex) in security analysis?",
+      "options": [
+        "To encrypt data.",
+        "To define patterns for searching and matching text within logs or other data.",
+        "To create strong passwords.",
+        "To establish secure VPN connections."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Regex is not for encryption, password creation, or VPNs. Regular expressions are powerful tools for *pattern matching*. They allow analysts to define complex search patterns to find specific strings of text within large datasets like logs, identifying specific events, IP addresses, error messages, or other indicators of interest.",
+      "examTip": "Regex is a valuable skill for efficiently searching and filtering security data."
+    },
+    {
+      "id": 18,
+      "question": "Which of the following BEST describes a 'false negative' in security monitoring?",
+      "options": [
         "A security system correctly identifies a threat.",
         "A security system incorrectly flags a legitimate activity as malicious.",
         "A security system fails to detect an actual security incident.",
         "A security system generates an alert for a non-existent event."
-     ],
+      ],
       "correctAnswerIndex": 2,
-    "explanation":
-    "Correct identification is a *true positive*. Incorrect flagging is a *false positive*. There's no alert for a non-existent event. A false negative is a *missed* detection. The security system *should* have generated an alert (because a real threat occurred), but it *didn't*. This is a serious problem, as it means an attack went unnoticed.",
-     "examTip": "False negatives represent undetected security incidents."
+      "explanation": "Correct identification is a *true positive*. Incorrect flagging is a *false positive*. There's no alert for a non-existent event. A false negative is a *missed* detection. The security system *should* have generated an alert (because a real threat occurred), but it *didn't*. This is a serious problem, as it means an attack went unnoticed.",
+      "examTip": "False negatives represent undetected security incidents."
     },
     {
-    "id": 19,
-     "question": "Which of the following is a key principle of the 'zero trust' security model?",
-      "options":[
+      "id": 19,
+      "question": "Which of the following is a key principle of the 'zero trust' security model?",
+      "options": [
         "Trusting all users and devices within the corporate network.",
         "Verifying the identity and security posture of every user and device, regardless of location, before granting access.",
         "Relying solely on perimeter security controls like firewalls.",
         "Using strong passwords as the only security measure."
       ],
-       "correctAnswerIndex": 1,
-      "explanation":
-      "Zero trust does *not* trust anything by default, inside or outside. It goes beyond perimeter security and passwords alone. Zero trust assumes *no implicit trust*. It requires continuous verification of identity *and* device security posture *before* granting access to *any* resource, regardless of whether the user or device is inside or outside the traditional network perimeter.",
+      "correctAnswerIndex": 1,
+      "explanation": "Zero trust does *not* trust anything by default, inside or outside. It goes beyond perimeter security and passwords alone. Zero trust assumes *no implicit trust*. It requires continuous verification of identity *and* device security posture *before* granting access to *any* resource, regardless of whether the user or device is inside or outside the traditional network perimeter.",
       "examTip": "Zero trust operates on the principle of 'never trust, always verify'."
     },
     {
       "id": 20,
-     "question": "What is the purpose of 'threat modeling'?",
-      "options":[
+      "question": "What is the purpose of 'threat modeling'?",
+      "options": [
         "To create a physical model of a network's infrastructure.",
         "To identify, analyze, and prioritize potential threats and vulnerabilities to a system or application.",
         "To simulate real-world attacks against a network.",
         "To develop new security software and tools."
       ],
-       "correctAnswerIndex": 1,
-      "explanation":
-        "Threat modeling is not physical modeling, attack simulation (red teaming), or software development. Threat modeling is a *proactive* process used during system design. It involves identifying potential threats, vulnerabilities, and attack vectors, analyzing their likelihood and impact, and prioritizing them to guide security decisions and risk mitigation.",
+      "correctAnswerIndex": 1,
+      "explanation": "Threat modeling is not physical modeling, attack simulation (red teaming), or software development. Threat modeling is a *proactive* process used during system design. It involves identifying potential threats, vulnerabilities, and attack vectors, analyzing their likelihood and impact, and prioritizing them to guide security decisions and risk mitigation.",
       "examTip": "Threat modeling helps design more secure systems by anticipating potential attacks."
     },
-{
- "id": 21,
-  "question":"What is the main function of the 'strings' command in Linux?",
-  "options":[
-    "To encrypt files.",
-    "To extract printable character sequences from a file.",
-    "To display network connections.",
-    "To list running processes."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation":
-     "`strings` doesn't encrypt, show network connections, or list processes. The `strings` command searches a file (often a binary executable) for sequences of *printable* characters. This can reveal embedded text, URLs, commands, or other clues about the file's purpose, which is extremely useful in malware analysis and reverse engineering.",
-  "examTip": "`strings` is a simple but powerful tool for quickly examining file contents."
-},
-{
-  "id": 22,
-  "question": "Which CVSS metric would be used to assess the impact of a vulnerability on the availability of a system?",
-   "options":[
-    "Attack Vector (AV)",
-    "Confidentiality (C)",
-    "Integrity (I)",
-    "Availability (A)"
-   ],
-  "correctAnswerIndex": 3,
-   "explanation": "Attack Vector describes *how* the vulnerability is accessed. Confidentiality describes the impact on data secrecy. Integrity measures the impact on data modification. The Availability (A) metric specifically assesses the impact on the *availability* of the affected system or service if the vulnerability is exploited (e.g., denial of service).",
-  "examTip": "The CIA triad (Confidentiality, Integrity, Availability) are key components of the CVSS impact metrics."
-},
-{
-  "id": 23,
-  "question": "What is the primary purpose of a 'security audit'?",
-   "options":[
-     "To install security software on a system.",
-     "To systematically evaluate an organization's security posture against a set of standards or best practices.",
-     "To encrypt data stored on a server.",
-     "To conduct a penetration test."
-   ],
-  "correctAnswerIndex": 1,
-  "explanation":
-    "Security audits are not about installing software, encrypting data (though they might *review* those), or conducting pen tests (though audits *can* use pen test results). A security audit is a formal, in-depth *assessment* of an organization's security controls, policies, and procedures. It aims to identify weaknesses, verify compliance, and improve overall security.",
-  "examTip":"Security audits provide an independent assessment of an organization's security posture."
-},
-{
- "id": 24,
-  "question": "What does 'non-repudiation' provide in a security context?",
-  "options":[
-     "The ability to deny performing an action.",
-    "Assurance that an action cannot be denied by the party who performed it.",
-    "The ability to encrypt data in transit.",
-    "The ability to automatically patch vulnerabilities."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation": "Non-repudiation is the *opposite* of denying an action; it is not encryption or patching. Non-repudiation provides *proof* that a specific user performed a specific action, and that they *cannot* later deny having done so. This is often achieved through digital signatures and audit logging.",
- "examTip": "Non-repudiation provides evidence that an action occurred and who performed it."
-},
-{
- "id": 25,
- "question": "Which type of attack relies on tricking a user into performing an action, such as clicking a malicious link or opening an infected attachment?",
-  "options":[
-  "Denial-of-Service (DoS)",
-    "SQL Injection",
-    "Phishing",
-    "Brute-force"
-  ],
-   "correctAnswerIndex": 2,
-  "explanation":
-    "DoS disrupts service. SQL injection targets databases. Brute-force attacks try many passwords. Phishing relies on *deception*. Attackers use email, messages, or websites that appear legitimate to trick users into revealing sensitive information (credentials, financial data) or performing actions that compromise their security.",
-   "examTip":"Phishing attacks exploit human trust and psychology."
-},
     {
-        "id": 26,
-        "question": "What is the main purpose of 'user and entity behavior analytics (UEBA)'?",
-        "options": [
-           "To encrypt user data at rest.",
-            "To detect anomalous behavior by users and systems that may indicate a threat.",
-            "To manage user accounts and passwords.",
-            "To automatically apply software patches."
-        ],
-        "correctAnswerIndex": 1,
-        "explanation":
-          "UEBA is not primarily encryption, user management, or patching. UEBA uses machine learning and statistical analysis to create a baseline of 'normal' behavior for users and systems. It then detects *deviations* from this baseline, which could indicate insider threats, compromised accounts, or other malicious activity. It focuses on *behavioral anomalies*.",
-        "examTip": "UEBA detects unusual activity that might indicate a security threat."
+      "id": 21,
+      "question": "What is the main function of the 'strings' command in Linux?",
+      "options": [
+        "To encrypt files.",
+        "To extract printable character sequences from a file.",
+        "To display network connections.",
+        "To list running processes."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`strings` doesn't encrypt, show network connections, or list processes. The `strings` command searches a file (often a binary executable) for sequences of *printable* characters. This can reveal embedded text, URLs, commands, or other clues about the file's purpose, which is extremely useful in malware analysis and reverse engineering.",
+      "examTip": "`strings` is a simple but powerful tool for quickly examining file contents."
     },
-{
- "id": 27,
- "question": "Which of the following is a key benefit of using a 'centralized logging' system?",
- "options":[
-  "It eliminates the need for firewalls.",
-   "It makes it easier to correlate events across multiple systems and detect security incidents.",
-   "It guarantees complete protection against all cyberattacks.",
-    "It automatically fixes all security vulnerabilities."
- ],
-  "correctAnswerIndex": 1,
-  "explanation": "Centralized logging does not replace firewalls, provide complete protection, or fix vulnerabilities. Centralized logging aggregates logs from various sources (servers, network devices, applications) into a single location. This makes it *much easier* to analyze events, correlate activity across different systems, and detect security incidents that might otherwise go unnoticed.",
- "examTip": "Centralized logging is crucial for effective security monitoring and incident response."
-},
-{
- "id": 28,
-  "question":"What is the main function of an 'intrusion prevention system (IPS)'?",
-  "options":[
-   "To only detect network intrusions.",
-    "To detect and actively block or prevent network intrusions.",
-    "To encrypt network traffic.",
-    "To back up network data."
-  ],
-   "correctAnswerIndex": 1,
-   "explanation": "An IDS *detects* only. An IPS is not primarily for encryption or backup. An IPS (Intrusion *Prevention* System) goes beyond detection. It monitors network traffic for malicious activity *and* can take *action* to block or prevent those intrusions, such as dropping malicious packets, blocking IP addresses, or resetting connections.",
-  "examTip": "An IPS detects and actively prevents intrusions."
-},
-{
-    "id": 29,
- "question": "Which of the following is a common technique used by attackers to escalate privileges on a compromised system?",
-  "options":[
-  "Installing a firewall.",
-    "Exploiting software vulnerabilities or misconfigurations.",
-    "Applying security patches.",
-    "Encrypting data."
-  ],
-  "correctAnswerIndex": 1,
-  "explanation":
- "Installing firewalls and patching are *defensive* actions. Encryption could be used, but it's not the primary method. Privilege escalation involves an attacker gaining *higher-level access* (e.g., administrator or root privileges) than they initially had.  This is often done by exploiting vulnerabilities in software or misconfigured system settings.",
- "examTip": "Privilege escalation allows attackers to gain greater control over a system."
-},
-{
-  "id": 30,
-  "question":"What is a 'security information and event management (SIEM)' system primarily used for?",
- "options":[
-   "To conduct penetration testing.",
-  "To provide real-time security monitoring, log aggregation, and alerting.",
-   "To manage user accounts and passwords.",
-   "To encrypt data at rest and in transit."
- ],
- "correctAnswerIndex": 1,
-  "explanation": "SIEMs are not penetration testing tools, user management systems, or primarily encryption systems. SIEM systems are central to security operations. They collect logs from many sources, analyze them in real-time, correlate events, and generate alerts when suspicious activity is detected. This provides a comprehensive view of an organization's security posture.",
- "examTip": "SIEM systems are essential for centralized security monitoring and incident detection."
-},
-{
-     "id": 31,
-     "question": "Which of the following is the BEST example of a 'technical' security control?",
-    "options":[
-       "Security awareness training for employees.",
+    {
+      "id": 22,
+      "question": "Which CVSS metric would be used to assess the impact of a vulnerability on the availability of a system?",
+      "options": [
+        "Attack Vector (AV)",
+        "Confidentiality (C)",
+        "Integrity (I)",
+        "Availability (A)"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Attack Vector describes *how* the vulnerability is accessed. Confidentiality describes the impact on data secrecy. Integrity measures the impact on data modification. The Availability (A) metric specifically assesses the impact on the *availability* of the affected system or service if the vulnerability is exploited (e.g., denial of service).",
+      "examTip": "The CIA triad (Confidentiality, Integrity, Availability) are key components of the CVSS impact metrics."
+    },
+    {
+      "id": 23,
+      "question": "What is the primary purpose of a 'security audit'?",
+      "options": [
+        "To install security software on a system.",
+        "To systematically evaluate an organization's security posture against a set of standards or best practices.",
+        "To encrypt data stored on a server.",
+        "To conduct a penetration test."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Security audits are not about installing software, encrypting data (though they might *review* those), or conducting pen tests (though audits *can* use pen test results). A security audit is a formal, in-depth *assessment* of an organization's security controls, policies, and procedures. It aims to identify weaknesses, verify compliance, and improve overall security.",
+      "examTip": "Security audits provide an independent assessment of an organization's security posture."
+    },
+    {
+      "id": 24,
+      "question": "What does 'non-repudiation' provide in a security context?",
+      "options": [
+        "The ability to deny performing an action.",
+        "Assurance that an action cannot be denied by the party who performed it.",
+        "The ability to encrypt data in transit.",
+        "The ability to automatically patch vulnerabilities."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Non-repudiation is the *opposite* of denying an action; it is not encryption or patching. Non-repudiation provides *proof* that a specific user performed a specific action, and that they *cannot* later deny having done so. This is often achieved through digital signatures and audit logging.",
+      "examTip": "Non-repudiation provides evidence that an action occurred and who performed it."
+    },
+    {
+      "id": 25,
+      "question": "Which type of attack relies on tricking a user into performing an action, such as clicking a malicious link or opening an infected attachment?",
+      "options": [
+        "Denial-of-Service (DoS)",
+        "SQL Injection",
+        "Phishing",
+        "Brute-force"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "DoS disrupts service. SQL injection targets databases. Brute-force attacks try many passwords. Phishing relies on *deception*. Attackers use email, messages, or websites that appear legitimate to trick users into revealing sensitive information (credentials, financial data) or performing actions that compromise their security.",
+      "examTip": "Phishing attacks exploit human trust and psychology."
+    },
+    {
+      "id": 26,
+      "question": "What is the main purpose of 'user and entity behavior analytics (UEBA)'?",
+      "options": [
+        "To encrypt user data at rest.",
+        "To detect anomalous behavior by users and systems that may indicate a threat.",
+        "To manage user accounts and passwords.",
+        "To automatically apply software patches."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "UEBA is not primarily encryption, user management, or patching. UEBA uses machine learning and statistical analysis to create a baseline of 'normal' behavior for users and systems. It then detects *deviations* from this baseline, which could indicate insider threats, compromised accounts, or other malicious activity. It focuses on *behavioral anomalies*.",
+      "examTip": "UEBA detects unusual activity that might indicate a security threat."
+    },
+    {
+      "id": 27,
+      "question": "Which of the following is a key benefit of using a 'centralized logging' system?",
+      "options": [
+        "It eliminates the need for firewalls.",
+        "It makes it easier to correlate events across multiple systems and detect security incidents.",
+        "It guarantees complete protection against all cyberattacks.",
+        "It automatically fixes all security vulnerabilities."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Centralized logging does not replace firewalls, provide complete protection, or fix vulnerabilities. Centralized logging aggregates logs from various sources (servers, network devices, applications) into a single location. This makes it *much easier* to analyze events, correlate activity across different systems, and detect security incidents that might otherwise go unnoticed.",
+      "examTip": "Centralized logging is crucial for effective security monitoring and incident response."
+    },
+    {
+      "id": 28,
+      "question": "What is the main function of an 'intrusion prevention system (IPS)'?",
+      "options": [
+        "To only detect network intrusions.",
+        "To detect and actively block or prevent network intrusions.",
+        "To encrypt network traffic.",
+        "To back up network data."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "An IDS *detects* only. An IPS is not primarily for encryption or backup. An IPS (Intrusion *Prevention* System) goes beyond detection. It monitors network traffic for malicious activity *and* can take *action* to block or prevent those intrusions, such as dropping malicious packets, blocking IP addresses, or resetting connections.",
+      "examTip": "An IPS detects and actively prevents intrusions."
+    },
+    {
+      "id": 29,
+      "question": "Which of the following is a common technique used by attackers to escalate privileges on a compromised system?",
+      "options": [
+        "Installing a firewall.",
+        "Exploiting software vulnerabilities or misconfigurations.",
+        "Applying security patches.",
+        "Encrypting data."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Installing firewalls and patching are *defensive* actions. Encryption could be used, but it's not the primary method. Privilege escalation involves an attacker gaining *higher-level access* (e.g., administrator or root privileges) than they initially had.  This is often done by exploiting vulnerabilities in software or misconfigured system settings.",
+      "examTip": "Privilege escalation allows attackers to gain greater control over a system."
+    },
+    {
+      "id": 30,
+      "question": "What is a 'security information and event management (SIEM)' system primarily used for?",
+      "options": [
+        "To conduct penetration testing.",
+        "To provide real-time security monitoring, log aggregation, and alerting.",
+        "To manage user accounts and passwords.",
+        "To encrypt data at rest and in transit."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "SIEMs are not penetration testing tools, user management systems, or primarily encryption systems. SIEM systems are central to security operations. They collect logs from many sources, analyze them in real-time, correlate events, and generate alerts when suspicious activity is detected. This provides a comprehensive view of an organization's security posture.",
+      "examTip": "SIEM systems are essential for centralized security monitoring and incident detection."
+    },
+    {
+      "id": 31,
+      "question": "Which of the following is the BEST example of a 'technical' security control?",
+      "options": [
+        "Security awareness training for employees.",
         "A firewall blocking unauthorized network traffic.",
         "A company policy prohibiting password sharing.",
         "Background checks for new hires."
-    ],
+      ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Awareness training, policies, and background checks are *administrative* or *procedural* controls. A *technical* control uses *technology* to enforce security.  A firewall, blocking traffic based on rules, is a clear example of a technical control.",
+      "explanation": "Awareness training, policies, and background checks are *administrative* or *procedural* controls. A *technical* control uses *technology* to enforce security.  A firewall, blocking traffic based on rules, is a clear example of a technical control.",
       "examTip": "Technical controls use technology to enforce security."
-},
-{
-  "id": 32,
- "question": "What is the primary purpose of 'vulnerability management'?",
- "options":[
-  "To prevent all cyberattacks.",
-   "To identify, assess, prioritize, and remediate security vulnerabilities.",
-    "To encrypt all data on a system.",
-   "To conduct penetration testing only."
- ],
-  "correctAnswerIndex": 1,
- "explanation":
- "No process can prevent *all* attacks. Encryption is a *control*, not the overall *goal*. Penetration testing is a *part* of vulnerability management, but not the whole process. Vulnerability management is a continuous cycle of identifying weaknesses, assessing their risk, prioritizing them, and then taking steps to fix them (patching, configuration changes, workarounds).",
- "examTip": "Vulnerability management is a proactive and ongoing process."
-},
-{
- "id": 33,
- "question":"What is 'sandboxing' used for in security analysis?",
- "options":[
-    "To store sensitive data securely.",
-  "To isolate and execute potentially malicious code in a controlled environment.",
-  "To encrypt network traffic.",
-  "To create backups of important files."
- ],
- "correctAnswerIndex": 1,
- "explanation":
- "Sandboxes are not long-term storage, encryption tools, or backup mechanisms. A sandbox is a *virtualized*, *isolated* environment.  It allows security analysts to run suspicious files or code *without* risking harm to the host system or network.  This allows observation of the code's behavior.",
-  "examTip":"Sandboxing allows safe analysis of potentially malicious code."
-},
-{
- "id": 34,
- "question": "What is the main purpose of 'network segmentation'?",
-  "options":[
-  "To connect all devices to the internet.",
-   "To improve network security and performance by dividing a network into smaller, isolated subnetworks.",
-   "To encrypt all network traffic.",
-  "To block all incoming connections to a network."
- ],
- "correctAnswerIndex": 1,
- "explanation":
-    "Network segmentation is not about connecting *everything* to the internet, simply encrypting traffic or blocking *all* connections. Network segmentation involves dividing a network into smaller, isolated subnetworks (segments).  This limits the impact of a security breach – if one segment is compromised, the attacker's access to other segments is restricted. It also improves performance by reducing network congestion.",
-  "examTip":"Network segmentation limits the lateral spread of attacks."
-},
-{
-    "id": 35,
-  "question":"What is the difference between 'authentication' and 'authorization'?",
-  "options":[
-  "Authentication grants access to resources, while authorization verifies identity.",
-  "Authentication verifies identity, while authorization determines access privileges.",
-  "There is no difference between authentication and authorization.",
-  "Authentication is used for encryption, while authorization is used for decryption."
-  ],
-   "correctAnswerIndex": 1,
-   "explanation": "The options are reversed in the first choice, and there is a significant difference. They aren't directly related to encryption. *Authentication* is the process of verifying that someone or something is *who or what they claim to be* (e.g., username/password). *Authorization* determines *what* an authenticated user or process is *allowed to do* (e.g., access files, run programs, modify data).",
- "examTip": "Authentication: Who are you? Authorization: What are you allowed to do?"
-},
-{
-  "id": 36,
-  "question":"What is a 'digital certificate' primarily used for?",
-    "options":[
-     "To encrypt data at rest.",
-    "To verify the identity of a website or server and establish a secure connection.",
-    "To manage user accounts and passwords.",
-    "To conduct penetration testing."
-   ],
-    "correctAnswerIndex": 1,
-    "explanation":
-  "Digital certificates are not for data-at-rest encryption, user management, or pen testing. A digital certificate is like an online ID card for a website or server. It's issued by a trusted Certificate Authority (CA) and contains information about the website's owner and its public key. This allows browsers to verify the website's identity and establish a secure, encrypted connection (HTTPS).",
-  "examTip": "Digital certificates are essential for secure web browsing (HTTPS)."
-
-},
-{
-    "id": 37,
-  "question":"Which of the following is a characteristic of an 'Advanced Persistent Threat (APT)'?",
-   "options":[
-   "They are typically short-lived attacks that exploit well-known vulnerabilities.",
-    "They are often sophisticated, long-term attacks carried out by well-resourced groups, targeting specific organizations.",
-    "They are easily detected by basic security measures.",
-    "They primarily aim to disrupt network services rather than steal data."
-   ],
-    "correctAnswerIndex": 1,
-  "explanation":
-  "APTs are *not* short-lived or easily detected. While disruption *can* be a goal, it's not the *primary* focus. APTs are characterized by their sophistication, persistence (long-term access and stealth), and the resources of the attackers (often nation-states or organized crime). They target specific organizations for espionage, data theft, or strategic advantage.",
- "examTip": "APTs are stealthy, persistent, and highly sophisticated threats."
-},
-{
-    "id": 38,
-   "question": "What is the primary purpose of a 'DMZ' in a network?",
-   "options":[
-    "To store highly sensitive internal data.",
-    "To host publicly accessible servers while isolating them from the internal network.",
-    "To create a virtual private network (VPN) connection.",
-    "To connect directly to the internet without any security."
-   ],
-    "correctAnswerIndex": 1,
-  "explanation": "A DMZ is not for storing sensitive internal data and it's not a VPN. Connecting directly to the internet without security is extremely dangerous. A DMZ (Demilitarized Zone) is a network segment that sits *between* the internal network and the public internet. It hosts services that need to be publicly accessible (web servers, email servers, etc.) but provides a buffer zone. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
-   "examTip": "A DMZ provides a buffer zone between the internet and the internal network."
-},
-{
- "id": 39,
-  "question": "What is 'cryptography' primarily used for?",
- "options":[
-  "To physically secure computer hardware.",
-   "To ensure secure communication and protect data confidentiality, integrity, and authenticity.",
-   "To manage user accounts and passwords.",
-  "To conduct penetration testing exercises."
- ],
-  "correctAnswerIndex": 1,
-  "explanation":
-  "Cryptography is not physical security, user account management, or penetration testing. Cryptography is the science and art of secure communication. It provides methods for encrypting data (making it unreadable to unauthorized parties), decrypting it, verifying data integrity (ensuring it hasn't been tampered with), and authenticating the sender/receiver. It's the foundation of secure online communication.",
- "examTip": "Cryptography is the foundation of secure communication and data protection."
-},
-{
-  "id": 40,
-  "question":"What does 'least privilege' mean in a security context?",
- "options":[
- "Giving all users administrator access to systems.",
-   "Granting users only the minimum necessary access rights required to perform their job duties.",
-  "Using strong passwords for all user accounts.",
-  "Encrypting all data stored on a system."
- ],
-   "correctAnswerIndex": 1,
-  "explanation":
-   "Granting administrator access to all is a major security risk. Strong passwords and encryption are important *controls*, but not the *definition* of least privilege. The principle of least privilege means users (and processes) should *only* have the *minimum* necessary permissions to perform their assigned tasks. This limits the potential damage from compromised accounts or insider threats.",
-   "examTip":"Least privilege minimizes the potential impact of security breaches."
-},
-{
-    "id": 41,
-   "question": "What is a 'cross-site scripting (XSS)' attack?",
-    "options":[
-      "An attack that targets databases using malicious SQL code.",
+    },
+    {
+      "id": 32,
+      "question": "What is the primary purpose of 'vulnerability management'?",
+      "options": [
+        "To prevent all cyberattacks.",
+        "To identify, assess, prioritize, and remediate security vulnerabilities.",
+        "To encrypt all data on a system.",
+        "To conduct penetration testing only."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "No process can prevent *all* attacks. Encryption is a *control*, not the overall *goal*. Penetration testing is a *part* of vulnerability management, but not the whole process. Vulnerability management is a continuous cycle of identifying weaknesses, assessing their risk, prioritizing them, and then taking steps to fix them (patching, configuration changes, workarounds).",
+      "examTip": "Vulnerability management is a proactive and ongoing process."
+    },
+    {
+      "id": 33,
+      "question": "What is 'sandboxing' used for in security analysis?",
+      "options": [
+        "To store sensitive data securely.",
+        "To isolate and execute potentially malicious code in a controlled environment.",
+        "To encrypt network traffic.",
+        "To create backups of important files."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Sandboxes are not long-term storage, encryption tools, or backup mechanisms. A sandbox is a *virtualized*, *isolated* environment.  It allows security analysts to run suspicious files or code *without* risking harm to the host system or network.  This allows observation of the code's behavior.",
+      "examTip": "Sandboxing allows safe analysis of potentially malicious code."
+    },
+    {
+      "id": 34,
+      "question": "What is the main purpose of 'network segmentation'?",
+      "options": [
+        "To connect all devices to the internet.",
+        "To improve network security and performance by dividing a network into smaller, isolated subnetworks.",
+        "To encrypt all network traffic.",
+        "To block all incoming connections to a network."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Network segmentation is not about connecting *everything* to the internet, simply encrypting traffic or blocking *all* connections. Network segmentation involves dividing a network into smaller, isolated subnetworks (segments).  This limits the impact of a security breach – if one segment is compromised, the attacker's access to other segments is restricted. It also improves performance by reducing network congestion.",
+      "examTip": "Network segmentation limits the lateral spread of attacks."
+    },
+    {
+      "id": 35,
+      "question": "What is the difference between 'authentication' and 'authorization'?",
+      "options": [
+        "Authentication grants access to resources, while authorization verifies identity.",
+        "Authentication verifies identity, while authorization determines access privileges.",
+        "There is no difference between authentication and authorization.",
+        "Authentication is used for encryption, while authorization is used for decryption."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The options are reversed in the first choice, and there is a significant difference. They aren't directly related to encryption. *Authentication* is the process of verifying that someone or something is *who or what they claim to be* (e.g., username/password). *Authorization* determines *what* an authenticated user or process is *allowed to do* (e.g., access files, run programs, modify data).",
+      "examTip": "Authentication: Who are you? Authorization: What are you allowed to do?"
+    },
+    {
+      "id": 36,
+      "question": "What is a 'digital certificate' primarily used for?",
+      "options": [
+        "To encrypt data at rest.",
+        "To verify the identity of a website or server and establish a secure connection.",
+        "To manage user accounts and passwords.",
+        "To conduct penetration testing."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Digital certificates are not for data-at-rest encryption, user management, or pen testing. A digital certificate is like an online ID card for a website or server. It's issued by a trusted Certificate Authority (CA) and contains information about the website's owner and its public key. This allows browsers to verify the website's identity and establish a secure, encrypted connection (HTTPS).",
+      "examTip": "Digital certificates are essential for secure web browsing (HTTPS)."
+    },
+    {
+      "id": 37,
+      "question": "Which of the following is a characteristic of an 'Advanced Persistent Threat (APT)'?",
+      "options": [
+        "They are typically short-lived attacks that exploit well-known vulnerabilities.",
+        "They are often sophisticated, long-term attacks carried out by well-resourced groups, targeting specific organizations.",
+        "They are easily detected by basic security measures.",
+        "They primarily aim to disrupt network services rather than steal data."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "APTs are *not* short-lived or easily detected. While disruption *can* be a goal, it's not the *primary* focus. APTs are characterized by their sophistication, persistence (long-term access and stealth), and the resources of the attackers (often nation-states or organized crime). They target specific organizations for espionage, data theft, or strategic advantage.",
+      "examTip": "APTs are stealthy, persistent, and highly sophisticated threats."
+    },
+    {
+      "id": 38,
+      "question": "What is the primary purpose of a 'DMZ' in a network?",
+      "options": [
+        "To store highly sensitive internal data.",
+        "To host publicly accessible servers while isolating them from the internal network.",
+        "To create a virtual private network (VPN) connection.",
+        "To connect directly to the internet without any security."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A DMZ is not for storing sensitive internal data and it's not a VPN. Connecting directly to the internet without security is extremely dangerous. A DMZ (Demilitarized Zone) is a network segment that sits *between* the internal network and the public internet. It hosts services that need to be publicly accessible (web servers, email servers, etc.) but provides a buffer zone. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
+      "examTip": "A DMZ provides a buffer zone between the internet and the internal network."
+    },
+    {
+      "id": 39,
+      "question": "What is 'cryptography' primarily used for?",
+      "options": [
+        "To physically secure computer hardware.",
+        "To ensure secure communication and protect data confidentiality, integrity, and authenticity.",
+        "To manage user accounts and passwords.",
+        "To conduct penetration testing exercises."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Cryptography is not physical security, user account management, or penetration testing. Cryptography is the science and art of secure communication. It provides methods for encrypting data (making it unreadable to unauthorized parties), decrypting it, verifying data integrity (ensuring it hasn't been tampered with), and authenticating the sender/receiver. It's the foundation of secure online communication.",
+      "examTip": "Cryptography is the foundation of secure communication and data protection."
+    },
+    {
+      "id": 40,
+      "question": "What does 'least privilege' mean in a security context?",
+      "options": [
+        "Giving all users administrator access to systems.",
+        "Granting users only the minimum necessary access rights required to perform their job duties.",
+        "Using strong passwords for all user accounts.",
+        "Encrypting all data stored on a system."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Granting administrator access to all is a major security risk. Strong passwords and encryption are important *controls*, but not the *definition* of least privilege. The principle of least privilege means users (and processes) should *only* have the *minimum* necessary permissions to perform their assigned tasks. This limits the potential damage from compromised accounts or insider threats.",
+      "examTip": "Least privilege minimizes the potential impact of security breaches."
+    },
+    {
+      "id": 41,
+      "question": "What is a 'cross-site scripting (XSS)' attack?",
+      "options": [
+        "An attack that targets databases using malicious SQL code.",
         "An attack that injects malicious scripts into trusted websites, which are then executed by victims' browsers.",
         "An attack that overwhelms a server with traffic, making it unavailable.",
         "An attack that intercepts communication between two parties."
-    ],
-     "correctAnswerIndex": 1,
-    "explanation":
-   "SQL injection targets databases. DoS overwhelms servers. MitM intercepts communication. XSS involves injecting malicious scripts into websites that are then executed by unsuspecting users' browsers. This can allow the attacker to steal cookies, session tokens, or redirect users to malicious sites.",
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "SQL injection targets databases. DoS overwhelms servers. MitM intercepts communication. XSS involves injecting malicious scripts into websites that are then executed by unsuspecting users' browsers. This can allow the attacker to steal cookies, session tokens, or redirect users to malicious sites.",
       "examTip": "XSS attacks exploit the trust users have in legitimate websites to deliver malicious code."
     },
     {
@@ -581,163 +547,113 @@ db.tests.insertOne({
         "To comply with all relevant cybersecurity regulations."
       ],
       "correctAnswerIndex": 1,
-      "explanation":
-        "Security awareness training is not about creating ethical hackers, eliminating technical controls (it complements them), or solely about compliance (though it helps). The *primary* goal is to educate employees about security threats (phishing, malware, social engineering) and best practices, making them a stronger 'human firewall' and reducing the likelihood of successful attacks due to human error.",
+      "explanation": "Security awareness training is not about creating ethical hackers, eliminating technical controls (it complements them), or solely about compliance (though it helps). The *primary* goal is to educate employees about security threats (phishing, malware, social engineering) and best practices, making them a stronger 'human firewall' and reducing the likelihood of successful attacks due to human error.",
       "examTip": "Security awareness training empowers employees to be part of the security solution."
     },
     {
-        "id": 43,
-        "question": "A security analyst is reviewing network logs and notices a large number of connections originating from a single internal IP address to multiple external IP addresses on unusual ports.  What type of activity does this MOST likely suggest?",
-         "options":[
-           "Normal web browsing activity.",
-            "A user downloading a large file.",
-            "A compromised system potentially involved in a botnet or scanning activity.",
-            "A misconfigured network device."
-         ],
-         "correctAnswerIndex": 2,
-         "explanation":
-            "Normal web browsing usually involves a few connections to known websites.  A large file download would typically involve a *single* connection.  A misconfiguration is less likely to cause *outbound* connections to *multiple* IPs.  This pattern – many connections from one internal IP to many external IPs, especially on *unusual* ports – strongly suggests malicious activity, such as a compromised system participating in a botnet, scanning other systems, or exfiltrating data.",
-          "examTip": "Unusual network connection patterns are often indicators of compromise."
+      "id": 43,
+      "question": "A security analyst is reviewing network logs and notices a large number of connections originating from a single internal IP address to multiple external IP addresses on unusual ports.  What type of activity does this MOST likely suggest?",
+      "options": [
+        "Normal web browsing activity.",
+        "A user downloading a large file.",
+        "A compromised system potentially involved in a botnet or scanning activity.",
+        "A misconfigured network device."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Normal web browsing usually involves a few connections to known websites.  A large file download would typically involve a *single* connection.  A misconfiguration is less likely to cause *outbound* connections to *multiple* IPs.  This pattern – many connections from one internal IP to many external IPs, especially on *unusual* ports – strongly suggests malicious activity, such as a compromised system participating in a botnet, scanning other systems, or exfiltrating data.",
+      "examTip": "Unusual network connection patterns are often indicators of compromise."
     },
     {
       "id": 44,
-     "question": "What is the FIRST step you should take after discovering a potential data breach?",
-      "options":[
-       "Immediately notify all customers.",
-       "Attempt to fix the vulnerability that caused the breach.",
-       "Follow your organization's incident response plan.",
-       "Shut down all affected systems."
+      "question": "What is the FIRST step you should take after discovering a potential data breach?",
+      "options": [
+        "Immediately notify all customers.",
+        "Attempt to fix the vulnerability that caused the breach.",
+        "Follow your organization's incident response plan.",
+        "Shut down all affected systems."
       ],
-       "correctAnswerIndex": 2,
-       "explanation":
-      "Premature notification can cause panic and legal issues. Fixing the vulnerability is important, but *not* the *first* step. Shutting down systems could disrupt services unnecessarily. The *very first* step after discovering a potential breach is to follow your organization's pre-defined *incident response plan*. This plan outlines the steps to take, roles and responsibilities, and communication protocols, ensuring a coordinated and effective response.",
-       "examTip": "Always follow your organization's incident response plan in case of a security incident."
+      "correctAnswerIndex": 2,
+      "explanation": "Premature notification can cause panic and legal issues. Fixing the vulnerability is important, but *not* the *first* step. Shutting down systems could disrupt services unnecessarily. The *very first* step after discovering a potential breach is to follow your organization's pre-defined *incident response plan*. This plan outlines the steps to take, roles and responsibilities, and communication protocols, ensuring a coordinated and effective response.",
+      "examTip": "Always follow your organization's incident response plan in case of a security incident."
     },
     {
-     "id": 45,
-     "question": "What is the primary difference between symmetric and asymmetric encryption?",
-       "options":[
+      "id": 45,
+      "question": "What is the primary difference between symmetric and asymmetric encryption?",
+      "options": [
         "Symmetric encryption is faster, while asymmetric encryption is more secure.",
         "Symmetric encryption uses the same key for encryption and decryption, while asymmetric uses different keys.",
         "Symmetric encryption is used for data at rest; asymmetric is for data in transit.",
-       "Asymmetric encryption is used for hashing, symmetric is not."
-       ],
-       "correctAnswerIndex": 1,
-        "explanation":
-        "While speed differences exist, they're not the *defining* characteristic. The location of use (rest/transit) isn't the core distinction. Asymmetric isn't used for hashing. The *key* difference is in the *keys*. *Symmetric* encryption uses the *same secret key* for both encryption and decryption. *Asymmetric* encryption uses a *pair* of keys: a public key for encryption and a private key for decryption.",
+        "Asymmetric encryption is used for hashing, symmetric is not."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "While speed differences exist, they're not the *defining* characteristic. The location of use (rest/transit) isn't the core distinction. Asymmetric isn't used for hashing. The *key* difference is in the *keys*. *Symmetric* encryption uses the *same secret key* for both encryption and decryption. *Asymmetric* encryption uses a *pair* of keys: a public key for encryption and a private key for decryption.",
       "examTip": "Symmetric encryption: one key. Asymmetric encryption: two keys (public and private)."
     },
     {
-    "id": 46,
-    "question": "Which type of malware is specifically designed to disguise itself as legitimate software?",
-     "options":[
-      "Virus",
-      "Worm",
-      "Trojan Horse",
-      "Spyware"
-     ],
+      "id": 46,
+      "question": "Which type of malware is specifically designed to disguise itself as legitimate software?",
+      "options": [
+        "Virus",
+        "Worm",
+        "Trojan Horse",
+        "Spyware"
+      ],
       "correctAnswerIndex": 2,
-     "explanation": "Viruses attach to existing files. Worms self-replicate across networks. Spyware secretly gathers information. A *Trojan Horse* (or simply 'Trojan') is named after the mythical Trojan Horse. It *pretends* to be a useful or harmless program (a game, a utility, etc.) but contains malicious code that executes when the user runs it.",
-     "examTip": "Trojans rely on deception to trick users into installing them."
+      "explanation": "Viruses attach to existing files. Worms self-replicate across networks. Spyware secretly gathers information. A *Trojan Horse* (or simply 'Trojan') is named after the mythical Trojan Horse. It *pretends* to be a useful or harmless program (a game, a utility, etc.) but contains malicious code that executes when the user runs it.",
+      "examTip": "Trojans rely on deception to trick users into installing them."
     },
     {
-    "id": 47,
-   "question": "What is the main purpose of a 'digital signature'?",
-     "options":[
-      "To encrypt data at rest.",
-       "To verify the authenticity and integrity of a digital document or message.",
+      "id": 47,
+      "question": "What is the main purpose of a 'digital signature'?",
+      "options": [
+        "To encrypt data at rest.",
+        "To verify the authenticity and integrity of a digital document or message.",
         "To speed up network communication.",
         "To automatically patch software vulnerabilities."
-    ],
-    "correctAnswerIndex": 1,
-    "explanation":
-        "Digital signatures are not primarily for data-at-rest encryption, speeding up networks, or patching. A digital signature is like an electronic fingerprint for a document or message. It uses cryptography (specifically, asymmetric encryption) to provide assurance that the message is authentic (it came from the claimed sender) and has not been tampered with (integrity).",
-    "examTip": "Digital signatures provide non-repudiation, authenticity, and integrity for digital documents."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Digital signatures are not primarily for data-at-rest encryption, speeding up networks, or patching. A digital signature is like an electronic fingerprint for a document or message. It uses cryptography (specifically, asymmetric encryption) to provide assurance that the message is authentic (it came from the claimed sender) and has not been tampered with (integrity).",
+      "examTip": "Digital signatures provide non-repudiation, authenticity, and integrity for digital documents."
     },
     {
-    "id": 48,
-   "question": "What is the role of a 'Certificate Authority (CA)' in public key infrastructure (PKI)?",
-    "options":[
+      "id": 48,
+      "question": "What is the role of a 'Certificate Authority (CA)' in public key infrastructure (PKI)?",
+      "options": [
         "To act as a firewall and block unauthorized network traffic.",
-       "To issue and manage digital certificates, verifying the identity of entities.",
-       "To encrypt data stored on hard drives.",
+        "To issue and manage digital certificates, verifying the identity of entities.",
+        "To encrypt data stored on hard drives.",
         "To conduct penetration testing exercises."
-   ],
-    "correctAnswerIndex": 1,
-    "explanation":
-       "CAs are not firewalls, data-at-rest encryption tools, or penetration testers. A Certificate Authority (CA) is a *trusted third party* that issues and manages digital certificates. These certificates bind a public key to an entity (website, individual, organization), verifying their identity and enabling secure communication (e.g., HTTPS).",
-    "examTip": "CAs are trusted entities that issue digital certificates, establishing trust online."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "CAs are not firewalls, data-at-rest encryption tools, or penetration testers. A Certificate Authority (CA) is a *trusted third party* that issues and manages digital certificates. These certificates bind a public key to an entity (website, individual, organization), verifying their identity and enabling secure communication (e.g., HTTPS).",
+      "examTip": "CAs are trusted entities that issue digital certificates, establishing trust online."
     },
     {
-   "id": 49,
-     "question": "Which of the following is the MOST accurate description of 'steganography'?",
-    "options":[
-    "The study of ancient writing systems.",
-      "The practice of concealing a message, file, image, or video within another message, file, image, or video.",
-     "A type of encryption algorithm.",
-     "A method for creating strong passwords."
-    ],
-     "correctAnswerIndex": 1,
-     "explanation":
-        "Steganography isn't ancient writing, an encryption algorithm, or password creation. Steganography is the art and science of *hiding* information. It conceals the *existence* of a message (unlike encryption, which conceals the *content*). For example, hiding a text message within the data of an image file.",
-    "examTip": "Steganography hides the existence of a message, while cryptography hides its meaning."
+      "id": 49,
+      "question": "Which of the following is the MOST accurate description of 'steganography'?",
+      "options": [
+        "The study of ancient writing systems.",
+        "The practice of concealing a message, file, image, or video within another message, file, image, or video.",
+        "A type of encryption algorithm.",
+        "A method for creating strong passwords."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Steganography isn't ancient writing, an encryption algorithm, or password creation. Steganography is the art and science of *hiding* information. It conceals the *existence* of a message (unlike encryption, which conceals the *content*). For example, hiding a text message within the data of an image file.",
+      "examTip": "Steganography hides the existence of a message, while cryptography hides its meaning."
     },
     {
-    "id": 50,
-     "question":"What is 'salting' used for in password security?",
-      "options":[
+      "id": 50,
+      "question": "What is 'salting' used for in password security?",
+      "options": [
         "To encrypt passwords before storing them.",
         "To add a random string to a password before hashing, making it more resistant to attacks.",
         "To make passwords easier to remember.",
-       "To automatically generate strong passwords."
-     ],
+        "To automatically generate strong passwords."
+      ],
       "correctAnswerIndex": 1,
-    "explanation":
-      "Salting isn't encryption itself, or about making passwords easier to remember or automatically generating them. Salting involves adding a unique, random string (the salt) to each password *before* it's hashed. This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because even if two users have the *same* password, their *salted hashes* will be different.",
-     "examTip": "Salting significantly strengthens password security by making rainbow table attacks ineffective."
+      "explanation": "Salting isn't encryption itself, or about making passwords easier to remember or automatically generating them. Salting involves adding a unique, random string (the salt) to each password *before* it's hashed. This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because even if two users have the *same* password, their *salted hashes* will be different.",
+      "examTip": "Salting significantly strengthens password security by making rainbow table attacks ineffective."
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-db.tests.insertOne({
-  "category": "cysa",
-  "testId": 4,
-  "testName": " CySa Practice Test #4 (Moderate)",
-  "xpPerCorrect": 10,
-  "questions": [
     {
       "id": 51,
       "question": "Which of the following is the BEST description of a 'botnet'?",
@@ -1047,7 +963,7 @@ db.tests.insertOne({
         "To connect directly to the internet without any firewalls or security measures."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DMZ is *not* for storing sensitive data, creating VPNs, or bypassing security. A DMZ is a separate network segment that sits *between* the internal network and the public internet. It hosts servers that need to be accessible from the outside (web servers, email servers, etc.) but provides a layer of isolation. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
+      "explanation": "A DMZ is *not* for storing sensitive data, creating VPNs, or bypassing security. A DMZ (Demilitarized Zone) is a separate network segment that sits *between* the internal network and the public internet. It hosts servers that need to be accessible from the outside (web servers, email servers, etc.) but provides a layer of isolation. If a server in the DMZ is compromised, the attacker's access to the internal network is limited.",
       "examTip": "A DMZ protects the internal network by isolating publicly accessible servers."
     },
     {
@@ -1099,7 +1015,7 @@ db.tests.insertOne({
         "To back up critical system files and configurations."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Sandboxes are not for long-term data storage, network encryption, or backups. A sandbox is a *virtualized*, *isolated* environment. It's used to run suspicious files or code *without* risking harm to the host system or network. This allows security analysts to safely observe the code's behavior and determine if it's malicious.",
+      "explanation": "Sandboxes are not for long-term data storage, network encryption, or backups. A sandbox is a *virtualized*, *isolated* environment. It's used to run suspicious files or code *without* risking harm to the main system or network. This allows security analysts to safely observe the code's behavior and determine if it's malicious.",
       "examTip": "Sandboxing allows for the safe analysis of potentially harmful code."
     },
     {
