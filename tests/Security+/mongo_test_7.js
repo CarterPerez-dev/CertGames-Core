@@ -653,24 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "A WAF is specifically designed to protect *web applications* by inspecting HTTP traffic and blocking malicious requests based on predefined rules and signatures. It's *not* a general-purpose firewall, encryption tool, or user management system.",
       "examTip": "A WAF is a crucial component of web application security, providing a layer of defense against common web attacks."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "secplus",
-  "testId": 7,
-  "testName": "Security Practice Test #7 (Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A company suspects that an attacker is attempting to gain access to a user account by systematically trying different passwords.  Which security control is MOST likely to detect and prevent this type of attack?",
