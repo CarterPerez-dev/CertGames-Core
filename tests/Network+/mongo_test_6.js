@@ -653,54 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "IaC allows you to define and manage your infrastructure (networks, servers, virtual machines, etc.) using code (often in a declarative format). This code can be version-controlled, tested, and reused, making infrastructure deployments more consistent, reliable, and automated. It's *not* manual configuration, it's applicable to *all* sizes of networks, and it *doesn't* eliminate the need for skilled engineers (it changes their role).",
       "examTip": "IaC is a key practice for DevOps and cloud computing, enabling automation and consistency in infrastructure management."
-    }
-  ]
-});
-
-       
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    db.tests.insertOne({
-  "category": "nplus",
-  "testId": 6,
-  "testName": "Network+ Practice Test #6 (Formidable) - Part 2",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A network administrator is troubleshooting a slow website. Using `traceroute`, they observe high latency at a specific hop *before* the final destination.  What does this indicate?",
