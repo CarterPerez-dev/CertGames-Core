@@ -20,3 +20,43 @@ For a site where users might answer thousands of questions—and where progress 
 To implement this, you’d modify your progress-saving logic to send minimal progress data (such as IDs, answer indices, and shuffle order) to your backend, where it’s stored in MongoDB (or your chosen database). Then, when a user returns, you load their progress from the server rather than from localStorage.
 
 This solution pairs well with your existing backend structure (user data, achievements, shop items, etc.) and future improvements for a consistent, cross‑device user experience.
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+Explanation of Key Changes
+shuffleOrder and currentQuestionIndex are now stored and updated in the update_test_attempt endpoint:
+
+```python
+Copy
+Edit
+update_doc = {
+    "$set": {
+        ...
+        "currentQuestionIndex": data.get("currentQuestionIndex", 0),
+        "shuffleOrder": data.get("shuffleOrder", []),
+        "finished": data.get("finished", False)
+    }
+}
+This ensures we’re saving minimal data about the user’s test flow (rather than the entire text of each question).
+
+get_test_attempt returns the entire attempt doc (including currentQuestionIndex and shuffleOrder) so the frontend can restore progress from the server for that user and test.
+
+We did not remove local achievements logic, daily bonus, final scoring logic, or any other existing routes. We only enhanced the partial‐progress storage to allow you to offload big data from localStorage to your server’s DB.
+
+With this approach, you no longer need to store big question arrays in localStorage. Instead, the frontend can:
+
+Fetch the test from the server to get the question text each time.
+Retrieve the attempt doc from the server (GET /attempts/<userId>/<testId>) to see currentQuestionIndex, shuffleOrder, answers, etc.
+Render accordingly, allowing truly cross‐device/cross‐browser continuity.
+Next Steps (Frontend Adjustments)
+Stop storing large question arrays in localStorage. Instead, fetch from /api/test/tests/<testId> each time you load the test page.
+Use the updated GET /attempts/<userId>/<testId> to retrieve partial progress (like shuffleOrder, currentQuestionIndex, answers).
+Use POST /attempts/<userId>/<testId> to update partial progress as the user answers each question (or moves to the next one).
+Remove references to saving the entire shuffledQuestions array in localStorage. Only keep enough data to show user feedback if you want local ephemeral storage. But all crucial progress data should be in the DB (Mongo) now, removing the 5MB localStorage limit problem.
+Once you’ve made the corresponding frontend changes, you’ll have a robust, server‐side storage approach for progress that automatically syncs across devices and solves the “Quota Exceeded” error.
+```
+------------------------------------------------------------------------------------------------------------------------------
+  Tip: You can adjust how often you call updateServerProgress(...) (e.g., after each question or every few questions) to balance performance vs. real-time saving. But storing large text in localStorage is gone, solving the quota issue while preserving all features.
+---------------------------------------------------------------------------------------------------------------------------------
