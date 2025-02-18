@@ -523,48 +523,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "HSMs are specialized hardware devices designed for secure cryptographic operations. They provide a higher level of security than software-based key management because they are tamper-resistant and designed to protect keys even if the host system is compromised. They are used for key generation, storage, and cryptographic processing (encryption, decryption, digital signing). They are not password managers, firewalls, or general encryption tools.",
       "examTip": "HSMs are commonly used in environments where the security of cryptographic keys is paramount, such as for PKI, database encryption, and financial transactions."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-db.tests.insertOne({
-  "category": "secplus",
-  "testId": 10,
-  "testName": "Security Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 41,
       "question": "A web application allows users to upload files. Without proper security measures, what is the MOST significant risk?",
@@ -1084,49 +1043,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "A DRP is specifically focused on *IT recovery*. It outlines the steps to restore IT systems, applications, and data after a major disruption (natural disaster, cyberattack, hardware failure, etc.). A BCP is a broader plan that addresses how to maintain all essential business functions (not just IT) during and after a disruption. The DRP is typically a part of the overall BCP. The BCP covers things like communication plans, alternative work locations, manual workarounds, and other strategies to keep the business running.",
       "examTip": "A DRP is focused on IT recovery; a BCP is focused on overall business resilience."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-db.tests.insertOne({
-  "category": "secplus",
-  "testId": 10,
-  "testName": "Security Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 81,
       "question": "A user receives an email that appears to be from their bank, warning them about suspicious activity on their account and urging them to click a link to verify their details. The email contains several grammatical errors, a generic greeting (\"Dear Customer\"), and the link points to a URL that is slightly different from the bank's official website. What type of attack is this MOST likely, and what is the BEST course of action for the user?",
