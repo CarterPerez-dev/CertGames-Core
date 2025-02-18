@@ -657,7 +657,12 @@ db.tests.insertOne({
     {
       "id": 51,
       "question": "",
-      "options": [],
+      "options": [
+        "Deleting the files and emptying the recycle bin.",
+        "Formatting the hard drive.",
+        "Performing a single-pass overwrite of the hard drive.",
+        "Physically destroying the hard drive."
+      ],
       "correctAnswerIndex": 3,
       "explanation": "Physically destroying the hard drive is the most secure method, ensuring data is unrecoverable. Deleting and formatting don't fully erase data, and even a single overwrite *might* be recoverable with advanced techniques.  Multiple overwrites are *good*, but destruction is *best* for highly sensitive data.",
       "examTip": "For maximum security when disposing of storage media, physical destruction is the recommended approach."
@@ -990,9 +995,14 @@ db.tests.insertOne({
     {
       "id": 77,
       "question": "",
-      "options": [],
-      "correctAnswerIndex": null,
-      "explanation": "",
+      "options": [
+        "To act as a network firewall.",
+        "To provide a secure environment for cryptographic key generation, storage, and management.",
+        "To store user passwords securely.", 
+        "To monitor network traffic for intrusions.",
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "HSMs are specialized, tamper-resistant hardware devices designed to securely manage cryptographic keys and perform cryptographic operations. They provide a much higher level of security than software-based key management.",
       "examTip": "HSMs provide a higher level of security for cryptographic keys than software-based solutions."
     },
     {
