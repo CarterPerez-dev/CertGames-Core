@@ -653,40 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "RADIUS is a networking protocol specifically designed for centralized AAA. It allows a central server to authenticate users, authorize their access to specific network resources, and track their network usage (accounting). This is commonly used for network access control (VPNs, dial-up, wireless). It's *not* encryption, DNS, or DHCP.",
       "examTip": "RADIUS is the industry-standard protocol for centralized AAA in network access control."
-    }
-  ]
-});
-
-      
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    db.tests.insertOne({
-  "category": "nplus",
-  "testId": 7,
-  "testName": "Network+ Practice Test #7 (Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
