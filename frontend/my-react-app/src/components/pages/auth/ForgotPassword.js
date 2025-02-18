@@ -1,4 +1,3 @@
-// src/components/pages/auth/ForgotPassword.js
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './ForgotPassword.css';
@@ -55,4 +54,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
