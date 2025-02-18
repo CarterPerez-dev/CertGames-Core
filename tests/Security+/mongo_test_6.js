@@ -1306,5 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-
