@@ -1,88 +1,3 @@
-
-
-
-Test 2:
-
-Question Order (1-100): All questions are numbered correctly from 1 to 100. There are no duplicates, missing numbers, or out-of-order questions initially. However, there is a significant problem: the test content is duplicated. Questions 1-76 are a complete, distinct set. Questions 77-100 repeat content from earlier in the test, but with different question IDs. This is a major issue. Specifically:
-
-Question 77 is identical to Question 71.
-
-Question 78 is identical to Question 72.
-
-Question 79 is identical to Question 73.
-
-Question 80 is idnetical to Question 63.
-
-Question 81 is identical to Question 47.
-
-Question 82 is identical to Question 48
-
-Question 83 is identical to Question 49 and 57.
-
-Question 84 is identical to Question 50 and 58.
-
-Question 85 is identical to Question 45, 51, and 59.
-
-Question 86 is identical to Question 46, 52, and 60.
-
-Question 87 is identical to Question 53.
-
-Question 88 is identical to question 54.
-
-Question 89 is identical to Question 55 and 69
-
-Question 90 is identical to Question 70
-
-Question 91 is identical to Question 71 and 77
-*Question 92 is identical to Question 72 and 78
-*Question 93 is identical to Question 73 and 79
-*Question 94 is identical to Question 63 and 80.
-*Question 95 is identical to Question 47 and 81.
-*Question 96 is identical to Question 48 and 82.
-
-Question 97 is identical to Question 49, 57 and 83.
-
-Question 98 is identical to Question 50, 58 and 84
-*Question 99 is identical to Question 45, 51, 59, and 85.
-*Question 100 is identical to question 56.
-
-Completeness of Each Question: Every question, including the duplicates, includes all required fields (question, options, explanation, exam tip).
-
-Exactly Four Options: Every question has exactly four answer options.
-
-Missing or Truncated Text: No questions, options, explanations, or exam tips appear to be cut off, unfinished, or have obviously missing words.
-
-Potential Spelling Errors: I did not find any obvious spelling errors. The explanations and exam tips are generally well-written, though repetitive due to the duplication.
-
-Syntax Issues: The JSON structure is valid.
-
-Out-of-Place Words: No obviously out-of-place words were found.
-
-Summary:
-
-The MAJOR problem with Test 2 is the extensive duplication of questions from question #77 onwards. While questions 1-76 are unique and well-formed, the last 24 questions are exact copies of earlier questions, just with different IDs. This renders a significant portion of the test invalid and unusable. Everything else (formatting, completeness of individual questions) is correct, but the duplication is a critical flaw.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "aplus2",
   "testId": 2,
@@ -1076,18 +991,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Windows 10 Home is correct because it does not have the option to join a domain. Windows 10 Pro, Enterprise, and Education all include domain join functionality. If the domain join option is absent, it strongly indicates the Home edition.",
       "examTip": "Windows domain features require Pro, Enterprise, or Education editions. Home editions lack domain join capability unless upgraded."
-    }
-  ]
-});
-
-
-
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 2,
-  "testName": "A+ Practice Test #2 (Very Easy)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 77,
       "question": "A user downloads a productivity program from an unknown website and sees a 'publisher cannot be verified' warning. Which of the following is the BEST action to ensure safety before installing?",
