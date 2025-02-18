@@ -1298,7 +1298,7 @@ db.tests.insertOne({
         "Wearing an ESD strap.",
         "Disconnecting the power cord from the power supply.",
         "Avoiding touching any metal components.",
-        "All"
+        "All of the above"
       ],
       "correctAnswerIndex": 0,
       "explanation": "Wearing an ESD strap is the recommended precaution because it grounds any static electricity on your body, preventing damage to sensitive electronic components inside the computer. While disconnecting the power cord and being cautious about touching metal parts are also important safety measures, the ESD strap specifically protects against electrostatic discharge.",
