@@ -655,42 +655,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "If *all* pings by IP and `nslookup` are successful, basic connectivity and DNS resolution are working.  A *less common*, but still possible, cause of selective website access problems is an MTU issue.  If the MTU is set too high for a particular network path, larger packets might be fragmented or dropped, causing some websites (that rely on larger packets) to fail while others (using smaller packets) work. A faulty cable or corrupted browser would likely cause more general problems. DNS is already ruled out.",
       "examTip": "MTU mismatches can cause subtle and selective network connectivity problems; use `ping` with the `-l` (Windows) or `-s` (Linux) option and the Don't Fragment bit set to test different MTU sizes and troubleshoot MTU-related issues."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "You are using `tcpdump` on a Linux server to capture network traffic for analysis.  You want to capture all traffic *to or from* a specific IP address (e.g., 192.168.1.100) and save the captured packets to a file named `capture.pcap`. Which command would you use?",
