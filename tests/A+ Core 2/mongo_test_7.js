@@ -653,44 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Administrator accounts have full privileges and control over the system, whereas Standard User accounts have limited rights to prevent unauthorized system changes, following the principle of least privilege.",
       "examTip": "Always use Standard User accounts for everyday tasks and reserve Administrator accounts for system management."
-    }
-  ]
-});
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },    
     {
       "id": 51,
       "question": "A user reports that their computer is running slowly. You open Task Manager and notice that a process called `explorer.exe` is consuming an unusually high amount of CPU resources. What is `explorer.exe` normally responsible for, and what might be causing the high CPU usage in this case?",
