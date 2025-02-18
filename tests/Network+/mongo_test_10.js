@@ -329,24 +329,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 3,
       "explanation": "OSPF hello packets are *multicast* packets used for: *Neighbor discovery:* Routers send hellos to discover other OSPF routers on the same network segment. *Adjacency establishment:*  Once neighbors are discovered, they exchange information to form adjacencies. *Maintaining neighbor relationships:*  Hellos are sent *periodically* to ensure that neighbors are still alive. Hello packets *do* contain important information like: *Router ID* *Area ID* *Hello Interval* *Dead Interval* *Network Mask* *List of Neighbors* (seen by the router) *Authentication data* (if configured) However, OSPF hello packets are *not encrypted by default*.  OSPF *can* be configured to use authentication (e.g., MD5), which provides integrity checks and prevents unauthorized routers from joining the OSPF domain, but this is *not enabled by default*.  Plaintext hellos are the norm unless authentication is explicitly configured.",
       "examTip": "OSPF hello packets are used for neighbor discovery and maintenance, but they are not encrypted by default; OSPF authentication must be explicitly configured."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "nplus",
-  "testId": 10,
-  "testName": "Network+ Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions" [
+    },
     {
       "id": 26,
       "question": "What is 'BGP route reflection', and in what type of BGP deployment is it typically used to simplify configuration and reduce the number of iBGP sessions?",
@@ -671,19 +654,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "The `ntp server [ip-address]` command on a Cisco router configures the router to synchronize its clock with the specified NTP server.  The correct command is simply `ntp server 192.0.2.1`. `clock timezone` sets the *time zone*, but not the time *source*. `ntp update-calendar` updates the router's *hardware* clock from the software clock (not relevant to synchronizing with an external server). `ntp master` configures the router to *act as* an NTP *server* for other devices, not to synchronize with an external server.",
       "examTip": "Use the `ntp server [ip-address]` command on a Cisco router to configure it to synchronize its clock with an external NTP server."
-     }
-  ]
-});
-
-
-
-
-db.tests.insertOne({
-  "category": "nplus",
-  "testId": 10,
-  "testName": "Network+ Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "You are troubleshooting a network where some computers can access the internet, while others on the same VLAN and subnet cannot. All computers are configured to obtain IP addresses via DHCP.  You suspect a problem with the default gateway configuration. What is the BEST way to quickly confirm the default gateway IP address being used by a *working* computer and a *non-working* computer on a Windows system, and compare them?",
@@ -1008,19 +979,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "WPA2-Personal relies on a single PSK, which is easier to implement but not great for large-scale. WPA2-Enterprise uses 802.1X with a RADIUS server for per-user credentials, stronger overall. WPA3-Enterprise improves upon WPA2-Enterprise with stronger encryption (e.g., 192-bit or 256-bit, GCMP) and more secure key exchange (SAE), making it the strongest option. The other statements are incorrect or incomplete.",
       "examTip": "WPA3-Enterprise, which builds on 802.1X + improved encryption and authentication, is currently the strongest wireless security mode."
-    }
-  ]
-});
-
-
-
-
-  db.tests.insertOne({
-  "category": "nplus",
-  "testId": 10,
-  "testName": "Network+ Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 76,
       "question": "A network administrator is troubleshooting a slow network. Using a protocol analyzer, they see many TCP packets with the PSH flag set, even for relatively small data transfers. What does the PSH flag indicate, and is frequent use of the PSH flag generally considered normal or a potential sign of a problem?",
@@ -1348,8 +1307,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-
-
-
-          
