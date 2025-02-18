@@ -1,10 +1,3 @@
-delete question 101
-
-write question for test 51
-  
-
-
-
 db.tests.insertOne({
   "category": "secplus",
   "testId": 4,
@@ -661,28 +654,19 @@ db.tests.insertOne({
       "explanation": "Default passwords are often well-known and are a major security risk.  They should *always* be changed immediately upon setup.",
       "examTip": "Always change default passwords on any new device or system."
     },
-
-    /*
-      --------------------------------------------------
-      EXTRA SNIPPET that does NOT contain its own "question" line.
-      We must preserve these words, so we convert it into
-      an entire question object with a placeholder question text.
-      --------------------------------------------------
-    */
     {
-      "id": 51,
-      "question": "[No explicit question text was provided here, but these lines must remain. Placeholder used.]",
+      "id": 101,
+      "question": "Which of the following is a common type of malware?",
       "options": [
-        "Trojan Horse",
-        "Phishing",
-        "Denial-of-Service",
-        "Man-in-the-Middle"
+        "A keyboard.",
+        "A virus.",
+        "A monitor.",
+        "A printer."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing attacks use deceptive emails or websites to trick users into revealing sensitive information. The other options are different types of attacks.",
-      "examTip": "Be suspicious of unsolicited emails asking for personal information or creating a sense of urgency."
+      "explanation": "A virus is a type of malicious software that can harm your computer and spread to others.",
+      "examTip": "Use antivirus software to protect your computer from malware."
     },
-
     {
       "id": 52,
       "question": "What is the PRIMARY purpose of a web application firewall (WAF)?",
@@ -1319,24 +1303,6 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Least privilege minimizes the potential damage from compromised accounts or insider threats. It's about granting *only* what is required, *not* about arbitrarily restricting access.",
       "examTip": "Always apply the principle of least privilege when assigning user permissions and access rights."
-    },
-    /*
-      Because of the extra snippet with no question text,
-      we now have 101 actual question objects, preserving
-      all provided words without removal.
-    */
-    {
-      "id": 101,
-      "question": "Which of the following is a common type of malware?",
-      "options": [
-        "A keyboard.",
-        "A virus.",
-        "A monitor.",
-        "A printer."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "A virus is a type of malicious software that can harm your computer and spread to others.",
-      "examTip": "Use antivirus software to protect your computer from malware."
     }
   ]
 });
