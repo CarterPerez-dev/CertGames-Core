@@ -253,27 +253,29 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // 1) Client-side checks
+    
+    // 1) Client-side validations
     const errors = [];
     errors.push(...validateLoginIdentifier(usernameOrEmail));
     errors.push(...validatePassword(password));
 
     if (errors.length > 0) {
-      // Show them in a Toast (or you can do an inline display)
-      errors.forEach((err) => toast.error(err));
+      // Show each error in a toast
+      errors.forEach((errMsg) => {
+        toast.error(errMsg, { className: 'auth-error-toast' });
+      });
       return;
     }
 
-    // 2) If passes, dispatch login
+    // 2) If local checks pass, attempt login
     dispatch(loginUser({ usernameOrEmail, password }))
-      .unwrap() // to handle the promise result
+      .unwrap()
       .then(() => {
-        toast.success("Login successful!");
+        toast.success("Login successful!", { className: 'auth-success-toast' });
       })
       .catch((errMsg) => {
-        // If server rejects, errMsg is from the backend or userSlice
-        toast.error(errMsg);
+        // If server rejects, errMsg is from userSlice or backend
+        toast.error(errMsg, { className: 'auth-error-toast' });
       });
   };
 
@@ -283,7 +285,7 @@ const Login = () => {
       <div className="login-card">
         <h2 className="login-title">Welcome Back</h2>
 
-        {/* Show any server-side error inline if you prefer */}
+        {/* If Redux error, you can show it inline or as toast */}
         {error && <p className="error-msg">{error}</p>}
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -313,7 +315,11 @@ const Login = () => {
             </span>
           </div>
 
-          <button type="submit" className="login-btn" disabled={loading}>
+          <button 
+            type="submit" 
+            className="login-btn" 
+            disabled={loading}
+          >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
