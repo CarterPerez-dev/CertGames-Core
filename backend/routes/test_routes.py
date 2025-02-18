@@ -26,6 +26,11 @@ from models.test import (
     get_achievements,
     get_test_by_id_and_category,
     check_and_unlock_achievements
+    validate_username,
+    validate_email,
+    validate_password,
+    update_user_fields,
+    get_user_by_id,
 )
 
 api_bp = Blueprint('test', __name__)
@@ -437,12 +442,12 @@ def change_username():
     if not user_id or not new_username:
         return jsonify({"error": "Missing userId or newUsername"}), 400
 
-    # Basic sanitization
-    from models.test import sanitize_username
-    if not sanitize_username(new_username):
-        return jsonify({"error": "Invalid new username"}), 400
+    # Validate new username using the new rules.
+    valid, errors = validate_username(new_username)
+    if not valid:
+        return jsonify({"error": "Invalid new username", "details": errors}), 400
 
-    # Check if already taken
+    # Check if username is already taken.
     if mainusers_collection.find_one({"username": new_username}):
         return jsonify({"error": "Username already taken"}), 400
 
@@ -450,7 +455,6 @@ def change_username():
     if not doc:
         return jsonify({"error": "User not found"}), 404
 
-    from models.test import update_user_fields
     update_user_fields(user_id, {"username": new_username})
     return jsonify({"message": "Username updated"}), 200
 
@@ -463,8 +467,10 @@ def change_email():
     if not user_id or not new_email:
         return jsonify({"error": "Missing userId or newEmail"}), 400
 
-    if "@" not in new_email or "." not in new_email:
-        return jsonify({"error": "Invalid email"}), 400
+    # Validate new email using the new rules.
+    valid, errors = validate_email(new_email)
+    if not valid:
+        return jsonify({"error": "Invalid email", "details": errors}), 400
 
     if mainusers_collection.find_one({"email": new_email}):
         return jsonify({"error": "Email already in use"}), 400
@@ -473,7 +479,6 @@ def change_email():
     if not doc:
         return jsonify({"error": "User not found"}), 404
 
-    from models.test import update_user_fields
     update_user_fields(user_id, {"email": new_email})
     return jsonify({"message": "Email updated"}), 200
 
@@ -491,18 +496,20 @@ def change_password():
     if new_password != confirm:
         return jsonify({"error": "New passwords do not match"}), 400
 
-    from models.test import sanitize_password
-    if not sanitize_password(new_password):
-        return jsonify({"error": "Invalid new password"}), 400
+    # Validate the new password using the new rules.
+    valid, errors = validate_password(new_password)
+    if not valid:
+        return jsonify({"error": "Invalid new password", "details": errors}), 400
 
     user_doc = get_user_by_id(user_id)
     if not user_doc:
         return jsonify({"error": "User not found"}), 404
 
+    # NOTE: This example compares plain-text passwords.
+    # In production, ensure you hash passwords and use a proper verification method.
     if user_doc.get("password") != old_password:
         return jsonify({"error": "Old password is incorrect"}), 401
 
-    from models.test import update_user_fields
     update_user_fields(user_id, {"password": new_password})
     return jsonify({"message": "Password updated"}), 200
 
