@@ -656,38 +656,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "Process Explorer and Process Monitor are Sysinternals tools that provide significantly more detailed information about running processes than Task Manager or Resource Monitor. Process Explorer shows processes, their DLLs, and more. Process Monitor will show you in real time registry and file changes. These will both help indicate code injection.",
       "examTip": "Use the Sysinternals tools to find injected code."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 9,
-  "testName": "Practice Test #9 (Ruthless)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A user reports that their computer is exhibiting slow performance, and they are experiencing frequent 'out of memory' errors, even though the system has a reasonable amount of RAM installed. You suspect a memory leak. What is a memory leak, and which tool would you use to identify the process responsible?",
