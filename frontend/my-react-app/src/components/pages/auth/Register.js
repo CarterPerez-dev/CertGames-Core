@@ -246,11 +246,12 @@ function frontValidatePassword(password, username, email) {
 // ======================================
 // REGISTER COMPONENT (Updated)
 // ======================================
-const Register = () => {
+onst Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error: reduxError, userId } = useSelector((state) => state.user);
+  const { loading, error, userId } = useSelector((state) => state.user);
 
+  // Local state
   const [username, setUsername] = useState('');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
@@ -258,9 +259,6 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // We'll store local client-side errors in an array
-  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (userId) {
@@ -271,61 +269,66 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors([]); // Clear previous errors
-
-    // 1) Client-side validations
+    // Clear previous errors
     let allErrors = [];
 
-    const usernameErrors = frontValidateUsername(username);
-    if (usernameErrors.length > 0) allErrors = allErrors.concat(usernameErrors);
+    // 1) Client-side validation
+    const uErrors = validateUsername(username);
+    const eErrors = validateEmail(email);
+    const pErrors = validatePassword(password);
 
-    const emailErrors = frontValidateEmail(email);
-    if (emailErrors.length > 0) allErrors = allErrors.concat(emailErrors);
-
-    const pwdErrors = frontValidatePassword(password, username, email);
-    if (pwdErrors.length > 0) allErrors = allErrors.concat(pwdErrors);
+    if (uErrors.length > 0) allErrors.push(...uErrors);
+    if (eErrors.length > 0) allErrors.push(...eErrors);
+    if (pErrors.length > 0) allErrors.push(...pErrors);
 
     if (password !== confirmPassword) {
       allErrors.push("Passwords do not match.");
     }
 
     if (allErrors.length > 0) {
-      setErrors(allErrors);
-      // Optionally show a toast for major error:
-      toast.error("Please fix the highlighted errors before proceeding.");
+      // Show each error as a toast
+      allErrors.forEach(err =>
+        toast.error(err, { className: 'auth-error-toast' })
+      );
       return;
     }
 
-    // 2) If local checks pass, attempt actual registration
+    // 2) If passes, dispatch registerUser
     try {
-      const resultAction = await dispatch(registerUser({ 
+      const result = await dispatch(registerUser({
         username, 
         email, 
         password,
         confirmPassword
       }));
 
-      if (registerUser.fulfilled.match(resultAction)) {
-        toast.success("Registration successful! Logging you in...");
+      if (registerUser.fulfilled.match(result)) {
+        // If success, show a success toast
+        toast.success("Registration successful!", {
+          className: 'auth-success-toast'
+        });
 
         // Optionally auto-login
-        const loginAction = await dispatch(loginUser({ usernameOrEmail: username, password }));
-        if (loginUser.fulfilled.match(loginAction)) {
-          toast.success("Login successful!");
+        const loginRes = await dispatch(loginUser({ usernameOrEmail: username, password }));
+        if (loginUser.fulfilled.match(loginRes)) {
+          toast.success("Auto-login successful!", {
+            className: 'auth-success-toast'
+          });
         } else {
-          toast.error("Could not auto-login. Please try logging in manually.");
+          toast.error("Could not auto-login. Please login manually.", {
+            className: 'auth-error-toast'
+          });
         }
-      } else if (resultAction.payload?.error) {
-        // If the server responded with a specific error
-        toast.error(resultAction.payload.error);
-      } else if (resultAction.error) {
-        // Some other error
-        toast.error("Server error occurred. Please try again later.");
-      }
 
+      } else {
+        // If server responded with an error
+        toast.error(result.payload, { className: 'auth-error-toast' });
+      }
     } catch (err) {
       console.error('Registration error:', err);
-      toast.error("An unexpected error occurred during registration.");
+      toast.error("An unexpected error occurred.", {
+        className: 'auth-error-toast'
+      });
     }
   };
 
@@ -335,14 +338,9 @@ const Register = () => {
       <div className="register-card">
         <h2 className="register-title">Create Your Account</h2>
 
-        {/* Inline list of current client-side errors */}
-        <ErrorDisplay errors={errors} />
-
-        {/* Potential Redux error from server */}
-        {reduxError && (
-          <div className="redux-error-container">
-            <p className="error-msg">{reduxError}</p>
-          </div>
+        {/* If Redux error, show it, but also as a toast if you prefer */}
+        {error && (
+          <p className="error-msg">{error}</p>
         )}
 
         <form className="register-form" onSubmit={handleSubmit}>
@@ -381,9 +379,6 @@ const Register = () => {
             </span>
           </div>
 
-          {/* Live password guidelines */}
-          <PasswordRequirements password={password} />
-
           <label htmlFor="confirmPassword">Confirm Password</label>
           <div className="input-with-icon">
             <input 
@@ -409,6 +404,7 @@ const Register = () => {
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
+
         <p className="register-switch">
           Already have an account? <Link to="/login">Login</Link>
         </p>
