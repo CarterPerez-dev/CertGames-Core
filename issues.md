@@ -1,4 +1,4 @@
-
+# email validator is wrong
 
 for the test component i want to add in a drop down along with all my otehr buttons and fucntions to choose the test questis 1-100. so essentially if your on queston 1, you would be able to click the dropdown and scroll or whatver to question 100 or whatver it may be. mayeb your on question 100 and want to go back to question 1 you dont need to click previous 99 times but instead can click teh drop downa click questuon 1. also since you can skip and flagh the uwstion, i want it to have the flag and or the skip button nesxt to teh qwuestions on the drop down if they did skip and or flag it. so liek lets say you take the etst andd answer all 100 questions and skipped or flagged them, you can bascially go back and answer them or double check them efficiently using the drop down.
 
