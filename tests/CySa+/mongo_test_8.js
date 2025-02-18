@@ -653,19 +653,7 @@
       "correctAnswerIndex": 1,
       "explanation": "A legitimate notification is unlikely to come with a suspicious URL. This is not DoS or XSS. This is a phishing email attempting to harvest the user's credentials by redirecting them to a fake login page. The user should not click the link, should report it as phishing, and navigate directly to the real site's login page if they are concerned about their account.",
       "examTip": "Be extremely cautious of emails requesting password resets or account verification, especially if the URL is suspicious."
-    }
-  ]
-}
-
-
-
-
-{
-  "category": "cysa",
-  "testId": 8,
-  "testName": "CySa Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "You are analyzing network traffic using Wireshark and observe a connection between a workstation on your internal network and an external IP address. You suspect this connection might be malicious. Which of the following Wireshark display filters would be MOST useful for isolating and examining only the traffic associated with this specific connection?",
@@ -1318,5 +1306,3 @@
     }
   ]
 }
-
-
