@@ -653,56 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "The Server header is not required and is often a security risk. It doesn't matter if it's sent over HTTP or HTTPS. While the hostname can be included, the version number is the problem. Revealing the specific web server software and version (e.g., Apache 2.4.29) provides attackers with valuable information. They can use this information to search for known vulnerabilities that affect that specific version and then target those vulnerabilities in an attack. The Server header should be removed or obfuscated (e.g., changed to a generic value like \"Web Server\") to reduce the information disclosed to potential attackers.",
       "examTip": "Remove or obfuscate the Server HTTP header to reduce information leakage."
-    }
-  ]
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "cysa",
-  "testId": 7,
-  "testName": "CySa Practice Test #7 (Challenging)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "What is the primary function of 'Security Orchestration, Automation, and Response (SOAR)' platforms in a Security Operations Center?",
