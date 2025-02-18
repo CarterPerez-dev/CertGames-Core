@@ -978,23 +978,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Local Security Policy (secpol.msc) is the tool used to configure security settings, including account lockout policies and password requirements, on a local machine.",
       "examTip": "Access Local Security Policy through secpol.msc to fine-tune security settings for compliance with organizational policies."
-    }
-  ]
-});
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "aplus2",
-  "testId": 3,
-  "testName": "A+ Practice Test #3 (Easy) - New Questions",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 76,
       "question": "A user complains that their laptop battery drains unusually fast even when not running resource-intensive applications. What is the MOST likely cause?",
