@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import './Login.css';
 import './auth.css';
-
+import PasswordRequirements from './PasswordRequirements';
+import ErrorDisplay from './ErrorDisplay';
 // ==================================================
 // FRONT-END VALIDATION HELPERS
 // (Mirroring your Python logic, same as Register)
@@ -240,9 +242,6 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  // We'll store local client-side errors here
-  const [clientErrors, setClientErrors] = useState([]);
-
   useEffect(() => {
     if (userId) {
       localStorage.setItem('userId', userId);
@@ -252,32 +251,28 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setClientErrors([]);
 
-    // 1) Decide if user typed an email or username
-    // If it has an @, we treat it as an email
+    // 1) Client-side checks
     const errors = [];
-    if (usernameOrEmail.includes('@')) {
-      // Validate as email
-      errors.push(...frontValidateEmail(usernameOrEmail));
-    } else {
-      // Validate as username
-      errors.push(...frontValidateUsername(usernameOrEmail));
-    }
+    errors.push(...validateLoginIdentifier(usernameOrEmail));
+    errors.push(...validatePassword(password));
 
-    // 2) Validate password
-    // For login, you might prefer minimal checks, 
-    // but we'll do the advanced checks to match your backend rules.
-    errors.push(...frontValidatePassword(password));
-
-    // If any client-side errors found, show them & stop
     if (errors.length > 0) {
-      setClientErrors(errors);
+      // Show them in a Toast (or you can do an inline display)
+      errors.forEach((err) => toast.error(err));
       return;
     }
 
-    // 3) If passes, dispatch loginUser
-    dispatch(loginUser({ usernameOrEmail, password }));
+    // 2) If passes, dispatch login
+    dispatch(loginUser({ usernameOrEmail, password }))
+      .unwrap() // to handle the promise result
+      .then(() => {
+        toast.success("Login successful!");
+      })
+      .catch((errMsg) => {
+        // If server rejects, errMsg is from the backend or userSlice
+        toast.error(errMsg);
+      });
   };
 
   return (
@@ -286,16 +281,7 @@ const Login = () => {
       <div className="login-card">
         <h2 className="login-title">Welcome Back</h2>
 
-        {/* Show any client-side errors */}
-        {clientErrors.length > 0 && (
-          <div className="error-container">
-            {clientErrors.map((err, idx) => (
-              <p key={idx} className="error-msg">{err}</p>
-            ))}
-          </div>
-        )}
-
-        {/* Show any server-side (Redux) error */}
+        {/* Show any server-side error inline if you prefer */}
         {error && <p className="error-msg">{error}</p>}
 
         <form className="login-form" onSubmit={handleSubmit}>
@@ -310,7 +296,7 @@ const Login = () => {
 
           <label htmlFor="password">Password</label>
           <div className="input-with-icon">
-            <input 
+            <input
               id="password"
               type={showPassword ? 'text' : 'password'}
               value={password}
@@ -325,7 +311,7 @@ const Login = () => {
             </span>
           </div>
 
-          <button type="submit" disabled={loading} className="login-btn">
+          <button type="submit" className="login-btn" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
