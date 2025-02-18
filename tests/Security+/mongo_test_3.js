@@ -1,7 +1,3 @@
-needs questions 57
-
-
-
 db.tests.insertOne({
   "category": "secplus",
   "testId": 3,
@@ -739,16 +735,16 @@ db.tests.insertOne({
 
     {
       "id": 57,
-      "question": "[No question text was provided in the snippet for #57 — placeholder used]",
+      "question": "What is 'tailgating' in physical security?",
       "options": [
-        "[Placeholder option 1 — no text provided]",
-        "[Placeholder option 2 — no text provided]",
-        "[Placeholder option 3 — no text provided]",
-        "[Placeholder option 4 — no text provided]"
+        "Following someone closely to steal their belongings.",
+        "Watching someone enter their PIN from behind.",
+        "Gaining unauthorized access to a restricted area by following an authorized person without proper credentials.",
+        "Creating a fake ID badge to access a building."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "MFA adds an extra layer of security by requiring something you *know* (password), something you *have* (phone/token), or something you *are* (biometric).",
-      "examTip": "Enable MFA on all accounts that offer it, especially important ones like email and banking."
+      "correctAnswerIndex": 2,
+      "explanation": "Tailgating is when an unauthorized person gains access to a secure area by following someone else who is authorized, often by simply walking in behind them.",
+      "examTip": "Always ensure doors close behind you and don't let strangers enter behind you without proper authorization."
     },
 
     {
