@@ -1,7 +1,7 @@
 // src/components/pages/store/UserProfile.js
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../store/userSlice';
+import { logout, fetchUserData } from '../store/userSlice'; // fetchUserData
 import { useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
@@ -15,10 +15,19 @@ import {
   FaBrain,
   FaCheckCircle,
   FaRegSmile,
-  FaMagic
+  FaMagic,
+  FaEye,
+  FaEyeSlash
 } from 'react-icons/fa';
 
-// Map achievementId -> icon
+// Basic client check
+function hasInvalidChars(str) {
+  if (!str) return false;
+  if (/\s/.test(str)) return true;   // no spaces
+  if (/[<>]/.test(str)) return true; // no < or >
+  return false;
+}
+
 const iconMapping = {
   test_rookie: FaTrophy,
   accuracy_king: FaMedal,
@@ -54,42 +63,162 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Pull everything from user slice
   const {
     userId,
     username,
+    email,
     xp,
     level,
     coins,
-    achievements: userAchievements = [],
+    achievements = [],
     currentAvatar,
-    purchasedItems
+    purchasedItems,
+    subscriptionActive
   } = useSelector((state) => state.user);
 
-  // Pull all achievements from store, to find title/desc
-  const allAchievements = useSelector((state) => state.achievements.all);
+  const [showChangeUsername, setShowChangeUsername] = useState(false);
+  const [newUsername, setNewUsername] = useState('');
 
-  // Shop items for listing purchased items & avatar
-  const { items: shopItems } = useSelector((state) => state.shop);
+  const [showChangeEmail, setShowChangeEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
 
-  // Determine default/fallback avatar
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [statusMessage, setStatusMessage] = useState('');
+
   let profilePicUrl = '/avatars/avatar1.png'; 
-  if (currentAvatar && shopItems && shopItems.length > 0) {
-    const avatarItem = shopItems.find(item => item._id === currentAvatar);
-    if (avatarItem && avatarItem.imageUrl) {
-      profilePicUrl = avatarItem.imageUrl;
-    }
-  }
-
-  // Filter purchased items (excluding avatars)
-  const purchasedItemsDetail = (shopItems || []).filter(
-    (shopItem) => purchasedItems.includes(shopItem._id) && shopItem.type !== 'avatar'
-  );
+  // or logic for currentAvatar
 
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem('userId');
     navigate('/login');
+  };
+
+  const refetchUser = () => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  };
+
+  // CHANGE USERNAME
+  const handleChangeUsername = async () => {
+    if (!newUsername) {
+      setStatusMessage('Please enter a new username');
+      return;
+    }
+    if (hasInvalidChars(newUsername)) {
+      setStatusMessage('New username has invalid chars');
+      return;
+    }
+    try {
+      const res = await fetch('/api/test/user/change-username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, newUsername })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to change username');
+      }
+      setStatusMessage('Username updated successfully!');
+      setShowChangeUsername(false);
+      setNewUsername('');
+      refetchUser();
+    } catch (err) {
+      setStatusMessage('Error changing username: ' + err.message);
+    }
+  };
+
+  // CHANGE EMAIL
+  const handleChangeEmail = async () => {
+    if (!newEmail) {
+      setStatusMessage('Please enter a new email');
+      return;
+    }
+    if (!newEmail.includes('@')) {
+      setStatusMessage('Invalid email');
+      return;
+    }
+    try {
+      const res = await fetch('/api/test/user/change-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, newEmail })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to change email');
+      }
+      setStatusMessage('Email updated successfully!');
+      setShowChangeEmail(false);
+      setNewEmail('');
+      refetchUser();
+    } catch (err) {
+      setStatusMessage('Error changing email: ' + err.message);
+    }
+  };
+
+  // CHANGE PASSWORD
+  const handleChangePassword = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      setStatusMessage('All password fields are required');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setStatusMessage('New passwords do not match');
+      return;
+    }
+    if (hasInvalidChars(newPassword)) {
+      setStatusMessage('New password has invalid chars');
+      return;
+    }
+    try {
+      const res = await fetch('/api/test/user/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          oldPassword,
+          newPassword,
+          confirmPassword
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to change password');
+      }
+      setStatusMessage('Password changed successfully!');
+      setShowChangePassword(false);
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setStatusMessage('Error changing password: ' + err.message);
+    }
+  };
+
+  // CANCEL SUBSCRIPTION
+  const handleCancelSubscription = async () => {
+    try {
+      const res = await fetch('/api/test/subscription/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to cancel subscription');
+      }
+      setStatusMessage('Subscription cancelled (placeholder)');
+      refetchUser();
+    } catch (err) {
+      setStatusMessage('Error cancelling subscription: ' + err.message);
+    }
   };
 
   return (
@@ -103,7 +232,7 @@ const UserProfile = () => {
           Logout
         </button>
       </div>
-      
+
       <div className="profile-overview">
         <div className="profile-card">
           <h2>Overview</h2>
@@ -112,45 +241,136 @@ const UserProfile = () => {
             <p><span className="detail-label">Level:</span> {level}</p>
             <p><span className="detail-label">XP:</span> {xp}</p>
             <p><span className="detail-label">Coins:</span> {coins}</p>
+            <p><span className="detail-label">Email:</span> {email}</p>
+            <p><span className="detail-label">Subscription Active:</span> {subscriptionActive ? 'Yes' : 'No'}</p>
           </div>
         </div>
       </div>
-      
+
       <div className="profile-actions">
         <div className="action-card">
           <h2>Account Settings</h2>
           <div className="action-buttons">
-            <button className="profile-btn">Change Username</button>
-            <button className="profile-btn">Change Email</button>
-            <button className="profile-btn">Change Password</button>
-            <button className="profile-btn">Cancel Subscription</button>
+            {/* Change username */}
+            {!showChangeUsername ? (
+              <button className="profile-btn" onClick={() => setShowChangeUsername(true)}>
+                Change Username
+              </button>
+            ) : (
+              <div className="change-section">
+                <input 
+                  type="text"
+                  placeholder="New username"
+                  value={newUsername}
+                  onChange={(e) => setNewUsername(e.target.value)}
+                />
+                <div className="change-section-buttons">
+                  <button onClick={handleChangeUsername}>Submit</button>
+                  <button onClick={() => {
+                    setShowChangeUsername(false);
+                    setNewUsername('');
+                  }}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            {/* Change email */}
+            {!showChangeEmail ? (
+              <button className="profile-btn" onClick={() => setShowChangeEmail(true)}>
+                Change Email
+              </button>
+            ) : (
+              <div className="change-section">
+                <input 
+                  type="email"
+                  placeholder="New email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                />
+                <div className="change-section-buttons">
+                  <button onClick={handleChangeEmail}>Submit</button>
+                  <button onClick={() => {
+                    setShowChangeEmail(false);
+                    setNewEmail('');
+                  }}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            {/* Change password */}
+            {!showChangePassword ? (
+              <button className="profile-btn" onClick={() => setShowChangePassword(true)}>
+                Change Password
+              </button>
+            ) : (
+              <div className="change-section change-password-section">
+                <input 
+                  type="password"
+                  placeholder="Old password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                />
+
+                <div className="password-row">
+                  <input 
+                    type={showNewPassword ? 'text' : 'password'}
+                    placeholder="New password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                  >
+                    {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+
+                <div className="password-row">
+                  <input 
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    placeholder="Confirm new password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
+
+                <div className="change-section-buttons">
+                  <button onClick={handleChangePassword}>Submit</button>
+                  <button onClick={() => {
+                    setShowChangePassword(false);
+                    setOldPassword('');
+                    setNewPassword('');
+                    setConfirmPassword('');
+                  }}>Cancel</button>
+                </div>
+              </div>
+            )}
+
+            {/* Cancel Subscription Placeholder */}
+            <button className="profile-btn" onClick={handleCancelSubscription}>
+              Cancel Subscription (placeholder)
+            </button>
           </div>
         </div>
       </div>
-      
+
       <div className="profile-extra">
         <div className="extra-card">
           <h2>Your Achievements</h2>
           <div className="achievements-list">
-            {userAchievements.length > 0 ? (
-              userAchievements.map((achId) => {
-                // Find the full achievement doc in allAchievements
-                const achievementDoc = allAchievements.find(
-                  (ach) => ach.achievementId === achId
-                );
-
-                // Fallback if not found
-                const displayTitle = achievementDoc ? achievementDoc.title : achId;
-                const IconComp = iconMapping[achId] || FaTrophy;
-
+            {achievements.length > 0 ? (
+              achievements.map((achId) => {
+                // find achievement doc if needed...
                 return (
                   <div key={achId} className="achievement-display">
-                    <span className="achievement-icon">
-                      <IconComp />
-                    </span>
-                    <span className="achievement-title">
-                      {displayTitle}
-                    </span>
+                    {achId}
                   </div>
                 );
               })
@@ -159,15 +379,13 @@ const UserProfile = () => {
             )}
           </div>
         </div>
-
         <div className="extra-card">
           <h2>Purchased Items</h2>
           <div className="purchased-items-list">
-            {purchasedItemsDetail.length > 0 ? (
-              purchasedItemsDetail.map((item) => (
-                <div key={item._id} className="purchased-item-display">
-                  <div className="purchased-item-title">{item.title}</div>
-                  <div className="purchased-item-type">Type: {item.type}</div>
+            {purchasedItems && purchasedItems.length > 0 ? (
+              purchasedItems.map((itemId) => (
+                <div key={itemId} className="purchased-item-display">
+                  <div>Item ID: {itemId}</div>
                 </div>
               ))
             ) : (
@@ -176,6 +394,12 @@ const UserProfile = () => {
           </div>
         </div>
       </div>
+
+      {statusMessage && (
+        <div className="status-message">
+          {statusMessage}
+        </div>
+      )}
     </div>
   );
 };

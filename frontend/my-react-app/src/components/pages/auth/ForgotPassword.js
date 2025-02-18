@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './ForgotPassword.css';
+import './auth.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -11,14 +12,12 @@ const ForgotPassword = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Placeholder: simulate sending reset email.
     if (email) {
       setSent(true);
       setError('');
-      // Simulate delay then navigate to login.
       setTimeout(() => {
         navigate('/login');
-      }, 6000);
+      }, 3000);
     } else {
       setError('Please enter your email.');
     }
@@ -26,6 +25,7 @@ const ForgotPassword = () => {
 
   return (
     <div className="forgot-container">
+      <Link to="/" className="back-to-info">Back to Info Page</Link>
       <div className="forgot-card">
         <h2 className="forgot-title">Reset Your Password</h2>
         {sent ? (

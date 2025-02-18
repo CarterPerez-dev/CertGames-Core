@@ -1,8 +1,9 @@
-// src/components/pages/testpage/APlusCore2TestList.js
+
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// Reuse APlusStyles if you want
+import GlobalTestPage from "../../GlobalTestPage";
+
 import "../../test.css";
 
 const APlusTestList = () => {
@@ -10,7 +11,7 @@ const APlusTestList = () => {
   const totalQuestions = 100; 
   const { userId } = useSelector((state) => state.user);
 
-  // We'll call this category "aplus2"
+
   const category = "aplus";
 
   // Retrieve saved progress from localStorage
@@ -63,7 +64,7 @@ const APlusTestList = () => {
 
   return (
     <div className="tests-list-container">
-      <h1 className="tests-list-title">CompTIA A+ Core 2 Practice Tests</h1>
+      <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
@@ -88,7 +89,6 @@ const APlusTestList = () => {
                     <>
                       <button
                         className="resume-button"
-                        // Go to /practice-tests/aplus-core2/<testNumber>
                         onClick={() =>
                           navigate(`/practice-tests/a-plus/${testNumber}`)
                         }

@@ -1,20 +1,27 @@
 // src/components/pages/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../store/userSlice'; // Adjust path if needed
+import { loginUser } from '../store/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
-import './Login.css';
+import { FaEye, FaEyeSlash } from 'react-icons/fa'; // import icons
+import './Login.css'; // Ensure Auth.css is imported here or merge styles
+import './auth.css';
+
+function hasSpacesOrInvalidChars(str) {
+  if (/\s/.test(str)) return true;
+  if (/[<>]/.test(str)) return true;
+  return false;
+}
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, userId } = useSelector((state) => state.user);
 
-  // Single field for username or email
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  // When user logs in successfully, store the userId and redirect to Profile.
   useEffect(() => {
     if (userId) {
       localStorage.setItem('userId', userId);
@@ -24,12 +31,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dispatch login action with usernameOrEmail and password.
+    if (hasSpacesOrInvalidChars(usernameOrEmail)) {
+      alert('Username/Email cannot contain spaces or < >');
+      return;
+    }
+    if (hasSpacesOrInvalidChars(password)) {
+      alert('Password cannot contain spaces or < >');
+      return;
+    }
     dispatch(loginUser({ usernameOrEmail, password }));
   };
 
   return (
     <div className="login-container">
+      <Link to="/" className="back-to-info">Back to Info Page</Link>
       <div className="login-card">
         <h2 className="login-title">Welcome Back</h2>
         <form className="login-form" onSubmit={handleSubmit}>
@@ -41,15 +56,26 @@ const Login = () => {
             onChange={(e) => setUsernameOrEmail(e.target.value)}
             required
           />
+
           <label htmlFor="password">Password</label>
-          <input 
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-with-icon">
+            <input 
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <span
+              className="eye-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </span>
+          </div>
+
           {error && <p className="error-msg">{error}</p>}
+
           <button type="submit" disabled={loading} className="login-btn">
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -66,4 +92,3 @@ const Login = () => {
 };
 
 export default Login;
-

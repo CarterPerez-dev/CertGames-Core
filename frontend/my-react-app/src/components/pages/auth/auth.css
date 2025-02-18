@@ -1,0 +1,42 @@
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
+}
+
+.eye-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.eye-icon:hover {
+  color: #000;
+}
+
+.back-to-info {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #007bff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.back-to-info:hover {
+  background: #007bff;
+  color: #fff;
+}
+

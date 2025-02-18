@@ -46,7 +46,7 @@ import DataPlusTestPage from './components/pages/dataplus/DataPlusTestPage';
 import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage';
 import CisspTestPage from './components/pages/cissp/CisspTestPage';
 import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
-
+import GlobalTestPage from './components/GlobalTestPage';
 
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
