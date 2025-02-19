@@ -1305,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "Non-system user accounts with passwords in /etc/passwd (or, more accurately, in /etc/shadow) are potential targets for attackers."
     }
   ]
-}
+};
