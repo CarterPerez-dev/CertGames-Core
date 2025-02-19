@@ -162,20 +162,18 @@ body:has(.profile-container) {
   margin-top: 0.75rem;
 }
 
-.change-password-section .password-row {
-  position: relative;
+.password-row {
+  display: flex;
+  align-items: center;
   margin-bottom: 0.5rem;
 }
 
+
 /* Eye icon inside the input (absolute on the right) */
 .eye-icon {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-left: -30px;
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #555;
+  color: #666;
 }
 
 .eye-icon:hover {
@@ -185,8 +183,28 @@ body:has(.profile-container) {
 /* group the buttons horizontally for submit/cancel */
 .change-section-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-top: 0.5rem;
+}
+
+.change-section-buttons button {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.change-section-buttons button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.change-section-buttons button:active {
+  transform: scale(0.98);
 }
 
 /* status message styling */
@@ -197,6 +215,18 @@ body:has(.profile-container) {
   border: 1px solid #8f8;
   border-radius: 6px;
   color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 /*******************************************/
