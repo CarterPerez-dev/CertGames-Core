@@ -92,7 +92,7 @@ Each test (from testId: 1 to testId: 10) is inserted as follows. Below is an exa
 db.tests.insertOne({
   "category": "penplus",                             
   "testId": 1,                    //this will go from 1-10                
-  "testName": " Pentest Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on test 2-10
+  "testName": " Practice Test #1 (Normal)",    //after "normal" test 2 starts with very easy, then it gets harder based on test 2-10
   "xpPerCorrect": 10,                             
   "questions": [ //these questions are purely examples, do not replciate theese examples
     {
