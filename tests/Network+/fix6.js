@@ -1,3 +1,6 @@
+needs question 50
+
+
 db.tests.insertOne({
   "category": "nplus",
   "testId": 6,
@@ -641,6 +644,13 @@ db.tests.insertOne({
       "explanation": "An IPS goes beyond the *detection* capabilities of an IDS (Intrusion Detection System).  An IPS *actively* intervenes to stop threats, dropping malicious packets, resetting connections, blocking traffic from specific sources, or even quarantining infected systems.  It's *not* about IP assignment, encryption, or DNS.",
       "examTip": "An IPS provides proactive, real-time protection against network attacks."
     },
+
+
+
+
+
+
+    
     {
       "id": 51,
       "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
