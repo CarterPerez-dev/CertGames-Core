@@ -4,10 +4,11 @@ import { FaCheckCircle, FaTimesCircle, FaInfoCircle } from 'react-icons/fa';
 import './PasswordRequirements.css';
 
 const PasswordRequirements = ({ password }) => {
+  // Each requirement is a test function that returns true/false
   const requirements = [
     {
-      text: "12–128 characters long",
-      test: (pwd) => pwd.length >= 12 && pwd.length <= 128
+      text: "6–69 characters long",
+      test: (pwd) => pwd.length >= 6 && pwd.length <= 69
     },
     {
       text: "At least one uppercase letter",
@@ -26,6 +27,14 @@ const PasswordRequirements = ({ password }) => {
       test: (pwd) => /[!@#$%^&*()\-_=+\[\]{}|;:'",.<>/?`~\\]/.test(pwd)
     },
   ];
+
+  // Check if all requirements are met
+  const allMet = requirements.every(req => req.test(password));
+
+  // If the user currently meets all requirements, hide the box
+  if (allMet && password.length > 0) {
+    return null;
+  }
 
   return (
     <div className="password-requirements">
