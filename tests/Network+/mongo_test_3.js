@@ -8,10 +8,10 @@ db.tests.insertOne({
       "id": 1,
       "question": "Which layer of the OSI model deals with physical cabling?",
       "options": [
-        "Layer 7 - Application",
-        "Layer 4 - Transport",
-        "Layer 1 - Physical",
-        "Layer 3 - Network"
+        "Layer 7",
+        "Layer 4",
+        "Layer 1",
+        "Layer 3"
       ],
       "correctAnswerIndex": 2,
       "explanation": "The Physical layer (Layer 1) defines the physical characteristics of the network, including cabling, voltage levels, and data rates.",
