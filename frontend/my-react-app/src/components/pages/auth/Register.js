@@ -5,6 +5,7 @@ import { registerUser, loginUser } from '../store/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import PasswordRequirements from './PasswordRequirements';
 
 import './Register.css';
 import './auth.css';
@@ -93,8 +94,8 @@ function validateEmail(email) {
   const errors = [];
   const e = email.normalize("NFC").trim();
 
-  if (e.length < 6 || e.length > 254) {
-    errors.push("Email length must be 6–254 characters.");
+  if (e.length < 5 || e.length > 128) {
+    errors.push("Email length must be 5–128 characters.");
   }
   if (hasForbiddenUnicodeScripts(e)) {
     errors.push("Email contains forbidden Unicode blocks.");
@@ -103,25 +104,15 @@ function validateEmail(email) {
   if ((e.match(/@/g) || []).length !== 1) {
     errors.push("Email must contain exactly one '@' symbol.");
   }
-  // Basic pattern: no consecutive dots, domain subparts, TLD 2..20
-  const emailPattern = new RegExp(
-    '^(?!.*\\.\\.)' +
-    '([A-Za-z0-9._%+\\-]{1,64})' +
-    '@' +
-    '([A-Za-z0-9\\-]{1,63}(\\.[A-Za-z0-9\\-]{1,63})+)' +
-    '\\.[A-Za-z]{2,20}$'
-  );
-  if (!emailPattern.test(e)) {
-    errors.push("Email format is invalid (consecutive dots, domain, TLD, etc.).");
-  }
+  
   return errors;
 }
 
 // Validate password
 function validatePassword(password, username, email) {
   const errors = [];
-  if (password.length < 12 || password.length > 128) {
-    errors.push("Password must be between 12 and 128 characters long.");
+  if (password.length < 6 || password.length > 64) {
+    errors.push("Password must be between 6 and 64 characters long.");
   }
   if (/[ \t\r\n<>]/.test(password)) {
     errors.push("Password cannot contain whitespace or < or > characters.");
@@ -188,6 +179,9 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Add local state to conditionally display PasswordRequirements
+  const [showRequirements, setShowRequirements] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -274,6 +268,13 @@ const Register = () => {
               id="password"
               type={showPassword ? 'text' : 'password'}
               value={password}
+              onFocus={() => setShowRequirements(true)}
+              onBlur={() => {
+                // If user leaves password field & hasn't typed anything, hide
+                if (!password) {
+                  setShowRequirements(false);
+                }
+              }}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -284,6 +285,11 @@ const Register = () => {
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
+
+          {/* Conditionally show the PasswordRequirements only if user focuses or typed something */}
+          {showRequirements && (
+            <PasswordRequirements password={password} />
+          )}
 
           <label htmlFor="confirmPassword">Confirm Password</label>
           <div className="input-with-icon">
