@@ -4,7 +4,7 @@ needs question 50
 db.tests.insertOne({
   "category": "nplus",
   "testId": 6,
-  "testName": "Network+ Practice Test #6 (Formidable) - Part 1",
+  "testName": "Network+ Practice Test #6 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
