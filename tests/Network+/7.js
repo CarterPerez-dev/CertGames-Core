@@ -671,19 +671,6 @@ db.tests.insertOne({
       "id": 51,
       "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
       "options": [
-        "Use DHCP Snooping, which validates DHCP messages from trusted ports.",
-        "Enable Port Security on each switch port, binding a limited set of pre-approved MAC addresses.",
-        "Implement 802.1X port-based authentication, requiring client credentials before access.",
-        "Divide the network into separate VLANs to isolate devices."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port security restricts a switch port to a limited number of pre-approved MAC addresses, preventing unauthorized devices from connecting.",
-      "examTip": "Port security is an effective Layer 2 measure to limit access based on MAC addresses."
-    },
-    {
-      "id": 51,
-      "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
-      "options": [
         "DHCP Snooping, which validates DHCP server messages to prevent rogue servers.",
         "Port Security, which limits a port to a predetermined set of MAC addresses.",
         "802.1X authentication, which requires credentials for network access.",
