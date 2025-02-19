@@ -1,4 +1,4 @@
-db.tests.insertOne({
+{
   "category": "secplus",
   "testId": 3,
   "testName": "Security Practice Test #3 (Easy)",
@@ -8,10 +8,10 @@ db.tests.insertOne({
       "id": 1,
       "question": "What is the main purpose of a VPN (Virtual Private Network)?",
       "options": [
-        "To speed up your internet connection.",
-        "To create a secure, encrypted connection over a public network.",
-        "To block access to certain websites.",
-        "To scan your computer for viruses."
+        "To increase internet speed by optimizing data flow.",
+        "To create a secure, encrypted connection over public networks.",
+        "To restrict access to some websites by blocking traffic.",
+        "To scan network traffic for potential virus signatures."
       ],
       "correctAnswerIndex": 1,
       "explanation": "VPNs encrypt your internet traffic, creating a secure tunnel, especially useful on public Wi-Fi. While *some* VPNs *might* affect speed or block *some* sites, that's not their *primary* function. Antivirus scans for viruses.",
@@ -21,10 +21,10 @@ db.tests.insertOne({
       "id": 2,
       "question": "Which of the following is a good example of multi-factor authentication (MFA)?",
       "options": [
-        "Using a long and complex password.",
-        "Using a password and a security question.",
-        "Using a password and a fingerprint scan.",
-        "Using the same password for multiple accounts."
+        "Relying solely on a long, complex password.",
+        "Pairing a password with a security question for extra verification.",
+        "Using a password and a fingerprint scan for a second factor.",
+        "Reusing a single password across all accounts."
       ],
       "correctAnswerIndex": 2,
       "explanation": "MFA requires two or more *different* factors: something you *know* (password), something you *have* (phone, token), or something you *are* (biometric). A password and fingerprint scan are two different factors. A password and security question are both 'something you know'.",
@@ -35,7 +35,7 @@ db.tests.insertOne({
       "question": "What is the primary goal of a phishing attack?",
       "options": [
         "To damage your computer hardware.",
-        "To steal your personal information.",
+        "To trick you into revealing sensitive personal information.",
         "To speed up your internet connection.",
         "To help you organize your files."
       ],
@@ -47,10 +47,10 @@ db.tests.insertOne({
       "id": 4,
       "question": "Why is it important to keep your software updated?",
       "options": [
-        "To make the software look different.",
-        "To make the software run slower.",
-        "To fix security vulnerabilities and bugs.",
-        "To delete old files."
+        "To change the visual appearance of the software.",
+        "To reduce the program's speed, which is not its intended purpose.",
+        "To address bugs and patch security vulnerabilities in the software.",
+        "To remove outdated files from the system."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Software updates often contain crucial security patches that protect against known vulnerabilities.",
@@ -101,8 +101,8 @@ db.tests.insertOne({
       "options": [
         "A physical wall that prevents fires.",
         "A program that helps you write emails.",
-        "A security system that controls network traffic, blocking unauthorized access.",
-        "A type of video game."
+        "A security solution that monitors and controls network traffic to block unauthorized access.",
+        "An online interactive game for entertainment."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A firewall acts as a barrier between your computer or network and the outside world.",
@@ -138,9 +138,9 @@ db.tests.insertOne({
       "id": 11,
       "question": "What should you do if you suspect your computer is infected with malware?",
       "options": [
-        "Ignore it and hope it goes away.",
-        "Disconnect from the network and run a full scan with antivirus software.",
-        "Share your computer with others.",
+        "Ignore the issue and hope it resolves itself.",
+        "Disconnect from the network and run a full antivirus scan.",
+        "Share your computer with others to see if the problem persists.",
         "Continue using the computer as usual."
       ],
       "correctAnswerIndex": 1,
@@ -151,10 +151,10 @@ db.tests.insertOne({
       "id": 12,
       "question": "What is a good practice when using public Wi-Fi?",
       "options": [
-        "Conduct online banking transactions.",
-        "Share sensitive personal information.",
-        "Use a VPN to encrypt your traffic.",
-        "Disable your computer's firewall."
+        "Conduct sensitive financial transactions without protection.",
+        "Share sensitive personal information freely.",
+        "Use a VPN to encrypt your connection on public networks.",
+        "Disable your computer's firewall to improve speed."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A VPN creates a secure, encrypted connection, protecting your data on unsecured public Wi-Fi.",
@@ -164,10 +164,10 @@ db.tests.insertOne({
       "id": 13,
       "question": "What does 'HTTPS' in a website address indicate?",
       "options": [
-        "The website is not secure.",
-        "The website uses encryption to protect data transmitted between your browser and the website.",
-        "The website is only for shopping.",
-        "The website is very fast."
+        "That the site lacks security features.",
+        "That the website uses encryption to protect data exchanged with your browser.",
+        "That the website is solely for shopping purposes.",
+        "That the website is designed for rapid loading speeds."
       ],
       "correctAnswerIndex": 1,
       "explanation": "HTTPS (Hypertext Transfer Protocol Secure) indicates a secure, encrypted connection.",
@@ -177,13 +177,13 @@ db.tests.insertOne({
       "id": 14,
       "question": "What is 'social engineering'?",
       "options": [
-        "A type of computer programming.",
-        "Building bridges and roads.",
+        "A type of computer programming technique.",
+        "Building physical infrastructure, which is unrelated.",
         "Tricking people into giving up confidential information or performing actions they shouldn't.",
-        "Making friends online."
+        "A method for creating online communities."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Social engineering attacks rely on human psychology rather than technical vulnerabilities.",
+      "explanation": "Social engineering attacks rely on human psychology rather than technical vulnerabilities to gain access or information.",
       "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information or performing risky actions."
     },
     {
@@ -191,9 +191,9 @@ db.tests.insertOne({
       "question": "Why is it important to log out of accounts when you're finished using them?",
       "options": [
         "To make your computer run faster.",
-        "To save electricity.",
-        "To prevent unauthorized access to your accounts.",
-        "To free up space on your hard drive."
+        "To save electrical power.",
+        "To prevent unauthorized access to your accounts by ending your session.",
+        "To clear up space on your hard drive."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Logging out ends your session, preventing others from accessing your account if they gain access to your computer or device.",
@@ -203,10 +203,10 @@ db.tests.insertOne({
       "id": 16,
       "question": "What is a 'Trojan horse' (or Trojan)?",
       "options": [
-        "A type of computer hardware.",
+        "A type of computer hardware component.",
         "A program that helps you manage your files.",
-        "Malware disguised as legitimate software.",
-        "A type of online game."
+        "Malware that disguises itself as legitimate software to trick you into installing it.",
+        "An online video game."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Trojans trick users into installing them by appearing harmless.",
@@ -216,10 +216,10 @@ db.tests.insertOne({
       "id": 17,
       "question": "What is 'two-factor authentication' (2FA)?",
       "options": [
-        "Using two different passwords for the same account.",
+        "Using two different passwords for one account.",
         "An extra layer of security that requires a second verification method, like a code from your phone.",
-        "Using a very long password.",
-        "Having two separate user accounts."
+        "Using a very long password alone.",
+        "Having two separate user accounts for the same service."
       ],
       "correctAnswerIndex": 1,
       "explanation": "2FA adds significant security by requiring something you *know* (password) and something you *have* (phone) or *are* (fingerprint).",
@@ -229,10 +229,10 @@ db.tests.insertOne({
       "id": 18,
       "question": "What is a good practice after using a public computer?",
       "options": [
-        "Leave your accounts logged in.",
+        "Leave your accounts logged in to save time.",
         "Log out of all accounts and clear your browsing history.",
-        "Turn off the monitor.",
-        "Leave the computer on for the next person."
+        "Simply close the browser window without further action.",
+        "Leave the computer on for the next user."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Logging out and clearing browsing data protects your privacy on shared computers.",
@@ -242,23 +242,23 @@ db.tests.insertOne({
       "id": 19,
       "question": "What is a 'worm' in computer security?",
       "options": [
-        "A type of animal.",
-        "A program that helps your computer run faster.",
-        "Self-replicating malware that spreads across networks.",
-        "A piece of computer hardware."
+        "A type of animal found in nature.",
+        "A program that helps improve computer performance.",
+        "Self-replicating malware that spreads automatically across networks.",
+        "A physical computer component."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Unlike viruses, worms can spread without user interaction, often exploiting network vulnerabilities.",
+      "explanation": "A computer worm is a type of malware that self-replicates and spreads across networks without user intervention.",
       "examTip": "Keep your operating system and security software up to date to protect against worms."
     },
     {
       "id": 20,
       "question": "What is the purpose of a CAPTCHA?",
       "options": [
-        "To encrypt data.",
-        "To test if a user is human or a bot.",
-        "To speed up website loading times.",
-        "To store user passwords securely."
+        "To encrypt data on a website.",
+        "To determine whether the user is human or a bot by presenting a challenge.",
+        "To speed up the website's loading time.",
+        "To store user preferences for future visits."
       ],
       "correctAnswerIndex": 1,
       "explanation": "CAPTCHAs are challenges designed to be easy for humans to solve but difficult for automated programs (bots).",
@@ -268,10 +268,10 @@ db.tests.insertOne({
       "id": 21,
       "question": "What does 'confidentiality' mean in information security?",
       "options": [
-        "Making sure data is accurate.",
-        "Ensuring data is available when needed.",
-        "Preventing unauthorized disclosure of information.",
-        "A type of computer virus."
+        "Ensuring that data is free from errors.",
+        "Ensuring that data is available to those who need it.",
+        "Preventing unauthorized access and disclosure of information.",
+        "A method for encrypting data to speed up processing."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Confidentiality focuses on keeping data secret and accessible only to authorized individuals.",
@@ -279,12 +279,12 @@ db.tests.insertOne({
     },
     {
       "id": 22,
-      "question": "What is a 'password manager'?",
+      "question": "What is a password manager?",
       "options": [
-        "A person who manages passwords.",
+        "A person responsible for managing passwords manually.",
         "A notebook where you write down your passwords.",
-        "A software application that securely stores and manages your passwords.",
-        "A type of computer hardware."
+        "A software application that securely stores and organizes your passwords.",
+        "A type of hardware device used to generate passwords."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Password managers help create, store, and manage strong, unique passwords, improving security and convenience.",
@@ -292,12 +292,12 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "What does 'integrity' refer to in the CIA triad?",
+      "question": "What does integrity mean in the CIA triad?",
       "options": [
-        "Keeping data secret.",
-        "Ensuring data is accurate and complete, and hasn't been tampered with.",
-        "Making sure data is available when needed.",
-        "A type of encryption."
+        "Keeping data secret from unauthorized users.",
+        "Ensuring data is accurate, complete, and unaltered.",
+        "Making sure data is accessible when needed.",
+        "A method for increasing data storage capacity."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Data integrity means that the data is trustworthy and hasn't been altered in an unauthorized way.",
@@ -307,26 +307,26 @@ db.tests.insertOne({
       "id": 24,
       "question": "What is the 'Internet of Things' (IoT)?",
       "options": [
-        "A type of social media.",
-        "A network of interconnected devices that can collect and exchange data.",
-        "A new type of computer virus.",
-        "A program for creating websites."
+        "A type of social media platform.",
+        "A network of interconnected devices that communicate and exchange data.",
+        "A new operating system for computers.",
+        "A type of computer virus."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "IoT devices include smart appliances, wearables, and other connected objects.",
+      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables that collect and exchange data.",
       "examTip": "IoT devices can introduce security risks if not properly configured and secured."
     },
     {
       "id": 25,
       "question": "What is 'ransomware'?",
       "options": [
-        "A program that helps you manage your finances.",
+        "A program that helps manage your finances.",
         "A type of computer hardware.",
-        "Malware that encrypts your files and demands a ransom to decrypt them.",
-        "A type of video game."
+        "Malware that encrypts your files and demands a ransom for decryption.",
+        "A type of online video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Ransomware is a type of malware that holds your data hostage, often demanding payment in cryptocurrency.",
+      "explanation": "Ransomware is a type of malware that holds your data hostage until a ransom is paid.",
       "examTip": "Regular backups are your best defense against ransomware attacks."
     },
     {
@@ -335,12 +335,12 @@ db.tests.insertOne({
       "options": [
         "A type of computer hardware.",
         "A program that helps you organize files.",
-        "Malware that secretly collects information about your activities.",
+        "Malware that secretly monitors your computer activity.",
         "A type of video game."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Spyware monitors your computer usage and sends data to a third party without your consent.",
-      "examTip": "Use anti-spyware software and be careful about what you download and install."
+      "examTip": "Use anti-spyware software and be cautious about what you download and install."
     },
     {
       "id": 27,
@@ -359,10 +359,10 @@ db.tests.insertOne({
       "id": 28,
       "question": "What is a good practice for securing your home Wi-Fi network?",
       "options": [
-        "Using the default network name and password.",
-        "Leaving the network open for anyone to connect.",
-        "Using a strong, unique password and WPA2 or WPA3 encryption.",
-        "Disabling the firewall on your router."
+        "Using the default network name and password, which is insecure.",
+        "Leaving the network open so anyone can connect, which is not safe.",
+        "Using a strong, unique password and enabling WPA2 or WPA3 encryption.",
+        "Disabling the router's firewall to improve speed, which is unsafe."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Strong passwords and modern encryption (WPA2/WPA3) are essential for securing Wi-Fi networks.",
@@ -370,7 +370,7 @@ db.tests.insertOne({
     },
     {
       "id": 29,
-      "question": "What is a 'digital footprint'?",
+      "question": "What is a digital footprint?",
       "options": [
         "A drawing of your foot on a computer.",
         "The trail of data you leave behind when using the internet.",
@@ -378,17 +378,17 @@ db.tests.insertOne({
         "A special kind of computer mouse."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Your digital footprint includes your online activity, posts, photos, and any other information about you available online.",
-      "examTip": "Be mindful of your digital footprint and what it reveals about you."
+      "explanation": "Your digital footprint includes your online activity, posts, photos, browsing history, and any other information about you available online.",
+      "examTip": "Be mindful of your digital footprint and what it might reveal about you."
     },
     {
       "id": 30,
-      "question": "What is 'authentication' in computer security?",
+      "question": "What is authentication in computer security?",
       "options": [
-        "Writing a book.",
-        "The process of verifying the identity of a user, device, or other entity.",
-        "Encrypting data.",
-        "Deleting files."
+        "The process of writing a book.",
+        "The process of verifying the identity of a user, device, or system.",
+        "Encrypting data to protect it.",
+        "Deleting files from a system."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Authentication confirms that someone or something is who or what they claim to be.",
@@ -396,25 +396,25 @@ db.tests.insertOne({
     },
     {
       "id": 31,
-      "question": "What is a common characteristic of a 'strong' password?",
+      "question": "What is a common characteristic of a strong password?",
       "options": [
         "It's short and easy to remember.",
         "It's a word found in the dictionary.",
         "It's a mix of uppercase and lowercase letters, numbers, and symbols.",
-        "It's your birthday or pet's name."
+        "It's based on your birthday."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong passwords are complex and difficult to guess or crack.",
-      "examTip": "Use a password manager to help you create and manage strong, unique passwords."
+      "explanation": "Strong passwords are complex and difficult to guess or crack using automated tools.",
+      "examTip": "Use a password manager to help generate and store strong, unique passwords."
     },
     {
       "id": 32,
       "question": "Why is it important to be careful about what you post on social media?",
       "options": [
-        "Because everything you post disappears immediately.",
-        "Because your posts can be seen by others and may affect your privacy or reputation.",
-        "Because social media companies delete your posts after a week.",
-        "Because nobody sees what you post online."
+        "Because everything you post is immediately deleted, which is false.",
+        "Because your posts can be seen by many and may affect your privacy and reputation.",
+        "Because social media companies automatically remove your posts after a while.",
+        "Because posting online improves your computer's performance, which is not true."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Information shared on social media can be widely viewed and may have long-lasting consequences.",
@@ -424,10 +424,10 @@ db.tests.insertOne({
       "id": 33,
       "question": "What is a good practice when creating online accounts?",
       "options": [
-        "Use the same password for all accounts.",
-        "Use a weak password that's easy to remember.",
-        "Use a unique, strong password for each account.",
-        "Share your passwords with friends."
+        "Using the same password for all accounts, which is insecure.",
+        "Choosing a weak password that is easy to remember, which is not advisable.",
+        "Using a unique, strong password for each account.",
+        "Sharing your password with trusted friends, which is unsafe."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Using unique, strong passwords prevents a single breach from compromising multiple accounts.",
@@ -435,12 +435,12 @@ db.tests.insertOne({
     },
     {
       "id": 34,
-      "question": "What is 'data loss prevention' (DLP)?",
+      "question": "What is data loss prevention (DLP)?",
       "options": [
-        "A method of encrypting data at rest.",
+        "A method of encrypting data at rest, which is different.",
         "Software or processes that prevent sensitive data from leaving an organization's control.",
-        "A way to back up data.",
-        "A type of antivirus."
+        "A way to back up your data, which is not the focus of DLP.",
+        "A type of antivirus software, which is unrelated."
       ],
       "correctAnswerIndex": 1,
       "explanation": "DLP focuses on preventing data breaches and exfiltration, whether intentional or accidental.",
@@ -448,14 +448,14 @@ db.tests.insertOne({
     },
     {
       "id": 35,
-      "question": "What is the purpose of a 'security audit'?",
+      "question": "What is the purpose of a security audit?",
       "options": [
-        "To make your computer run faster.",
-        "To check if security policies and procedures are being followed and are effective.",
-        "To encrypt all your data.",
-        "To install new software."
+        "To review and assess the effectiveness of security controls and practices.",
+        "To boost your computer's speed, which is not its purpose.",
+        "To encrypt all your data, which is not an audit function.",
+        "To install new software, which is unrelated."
       ],
-      "correctAnswerIndex": 1,
+      "correctAnswerIndex": 0,
       "explanation": "Security audits assess the effectiveness of security controls and identify areas for improvement.",
       "examTip": "Regular security audits are an important part of a comprehensive security program."
     },
@@ -463,62 +463,62 @@ db.tests.insertOne({
       "id": 36,
       "question": "What is a common sign of a phishing email?",
       "options": [
-        "It's from someone you know well and trust.",
-        "It has perfect grammar and spelling.",
-        "It asks for personal information with a sense of urgency or threat.",
-        "It contains information you were expecting."
+        "It comes from a known contact with no errors.",
+        "It often contains urgent language and grammatical mistakes, pressuring you to act quickly.",
+        "It includes detailed personal account information that you recognize.",
+        "It always uses professional language with no typos."
       ],
-      "correctAnswerIndex": 2,
+      "correctAnswerIndex": 1,
       "explanation": "Phishing emails often use pressure tactics, poor grammar, and suspicious requests to trick recipients.",
       "examTip": "Be skeptical of emails that ask for personal information or create a sense of urgency."
     },
     {
       "id": 37,
-      "question": "What is a 'zero-day' vulnerability?",
+      "question": "What is a zero-day vulnerability?",
       "options": [
-        "A vulnerability that is easy to fix.",
-        "A vulnerability that is known to the public.",
-        "A vulnerability that is unknown to the software vendor and has no patch.",
-        "A vulnerability that only affects old software."
+        "A vulnerability that can be easily fixed, which is not zero-day.",
+        "A vulnerability unknown to the vendor with no patch available at the time of discovery.",
+        "A vulnerability that is widely known and already patched, which is not zero-day.",
+        "A vulnerability that only affects outdated software, which is not necessarily true."
       ],
-      "correctAnswerIndex": 2,
+      "correctAnswerIndex": 1,
       "explanation": "Zero-day vulnerabilities are particularly dangerous because there is no defense available when they are first exploited.",
       "examTip": "Keeping software up to date helps protect against known vulnerabilities, but zero-days are a constant threat."
     },
     {
       "id": 38,
-      "question": "What is 'availability' in the context of the CIA triad?",
+      "question": "What is availability in the context of the CIA triad?",
       "options": [
-        "Keeping data secret.",
-        "Ensuring data is accurate.",
-        "Making sure authorized users can access data and systems when needed.",
-        "A type of encryption."
+        "Keeping information secret, which is confidentiality.",
+        "Ensuring that data is accurate and unaltered, which is integrity.",
+        "Ensuring authorized users have access to systems and data when needed.",
+        "A method for encrypting data, which is not availability."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Availability means that systems and data are operational and accessible to authorized users.",
-      "examTip": "Denial-of-service attacks are a common threat to availability."
+      "examTip": "Denial-of-service attacks target availability."
     },
     {
       "id": 39,
-      "question": "What does 'non-repudiation' mean in security?",
+      "question": "What does non-repudiation mean in security?",
       "options": [
-        "Encrypting data.",
-        "Making backup copies of data.",
-        "Ensuring that someone cannot deny performing an action.",
-        "Deleting files securely."
+        "Encrypting data, which is not non-repudiation.",
+        "Making secure backups of data, which is not non-repudiation.",
+        "Ensuring that someone cannot deny having performed an action.",
+        "Deleting files permanently, which is not non-repudiation."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Non-repudiation provides proof of origin or action, preventing someone from falsely claiming they didn't do something.",
+      "explanation": "Non-repudiation provides proof of origin or action, preventing someone from denying they did something.",
       "examTip": "Digital signatures are a common way to achieve non-repudiation."
     },
     {
       "id": 40,
       "question": "What is a good practice for protecting your personal information online?",
       "options": [
-        "Share your full birthdate and address on social media.",
-        "Use the same password for all your accounts.",
-        "Be cautious about what information you share and review your privacy settings.",
-        "Accept friend requests from everyone."
+        "Share your full birthdate and address on all your social media profiles.",
+        "Use the same password for every account to simplify management.",
+        "Be cautious about what you share and regularly review your privacy settings.",
+        "Accept all friend requests to increase your network."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Being mindful of your online activity and privacy settings is key to protecting your personal information.",
@@ -526,25 +526,25 @@ db.tests.insertOne({
     },
     {
       "id": 41,
-      "question": "What is 'shoulder surfing'?",
+      "question": "What is shoulder surfing?",
       "options": [
-        "A type of water sport.",
-        "A method of encrypting data.",
-        "Secretly observing someone entering their password or other sensitive information.",
-        "A type of computer virus."
+        "A type of water sport involving surfing on waves.",
+        "A method of encrypting sensitive data, which is not correct.",
+        "Secretly observing someone as they enter their password or sensitive information.",
+        "A computer virus that spreads through physical contact."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Shoulder surfing is a low-tech way to steal information by looking over someone's shoulder.",
+      "explanation": "Shoulder surfing is a low-tech way to steal information by watching someone enter data.",
       "examTip": "Be aware of your surroundings when entering passwords or other sensitive information."
     },
     {
       "id": 42,
-      "question": "What is a 'keylogger'?",
+      "question": "What is a keylogger?",
       "options": [
-        "A device that helps you type faster.",
-        "A program that records every keystroke you make.",
-        "A tool for managing passwords.",
-        "A type of encryption."
+        "A device that increases typing speed, which is not correct.",
+        "A program or device that records every keystroke you make.",
+        "A tool for generating strong passwords, which is not a keylogger.",
+        "A utility for monitoring network traffic, which is not its purpose."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Keyloggers can be hardware or software and are used to steal passwords and other sensitive information.",
@@ -552,25 +552,25 @@ db.tests.insertOne({
     },
     {
       "id": 43,
-      "question": "What is 'biometrics'?",
+      "question": "What is biometrics?",
       "options": [
-        "A type of computer virus.",
-        "The study of living organisms.",
-        "Using unique biological traits, like fingerprints or facial recognition, for identification.",
-        "A method of encrypting data."
+        "A type of computer virus, which is not biometrics.",
+        "The use of unique biological traits, such as fingerprints or facial recognition, for authentication.",
+        "A method for organizing digital files, which is not correct.",
+        "A program that creates digital art, which is unrelated."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Biometrics uses physical characteristics for authentication.",
-      "examTip": "Biometric authentication can be more secure and convenient than passwords."
+      "correctAnswerIndex": 1,
+      "explanation": "Biometrics uses physical characteristics for identification and authentication.",
+      "examTip": "Biometric authentication can be more secure and convenient than traditional passwords."
     },
     {
       "id": 44,
-      "question": "What is 'access control' in information security?",
+      "question": "What is access control in information security?",
       "options": [
-        "A type of computer game.",
-        "The process of controlling who has access to resources, like files or systems.",
-        "A way to make your computer run faster.",
-        "A type of keyboard."
+        "A method for organizing files, which is not access control.",
+        "The process of managing who has access to resources like files or systems.",
+        "A technique to speed up your computer, which is unrelated.",
+        "A type of computer hardware used for data storage."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Access control restricts access to authorized users and prevents unauthorized access.",
@@ -578,14 +578,14 @@ db.tests.insertOne({
     },
     {
       "id": 45,
-      "question": "What is the purpose of a 'security awareness training' program?",
+      "question": "What is the purpose of security awareness training?",
       "options": [
-        "To teach employees how to hack computers.",
         "To educate employees about security risks and best practices.",
-        "To install security software on employee computers.",
-        "To monitor employee internet usage."
+        "To teach employees advanced hacking techniques, which is not the goal.",
+        "To install security software on employee devices, which is not training.",
+        "To monitor employee internet usage, which is not the purpose."
       ],
-      "correctAnswerIndex": 1,
+      "correctAnswerIndex": 0,
       "explanation": "Security awareness training helps employees understand and avoid common security threats, like phishing and social engineering.",
       "examTip": "A security-aware workforce is a crucial part of any organization's defense."
     },
@@ -604,12 +604,12 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "What is a 'DDoS' attack?",
+      "question": "What is a DDoS attack?",
       "options": [
-        "A type of computer virus.",
-        "A distributed denial-of-service attack that overwhelms a system with traffic from multiple sources.",
-        "A method of encrypting data.",
-        "A type of social engineering attack."
+        "A type of computer virus, which is not DDoS.",
+        "A distributed denial-of-service attack that overwhelms a system with traffic from many sources.",
+        "A method for encrypting data, which is not DDoS.",
+        "A social engineering technique to steal information, which is not DDoS."
       ],
       "correctAnswerIndex": 1,
       "explanation": "DDoS attacks aim to make a website or online service unavailable by flooding it with traffic.",
@@ -617,11 +617,11 @@ db.tests.insertOne({
     },
     {
       "id": 48,
-      "question": "What is a 'security policy'?",
+      "question": "What is a security policy?",
       "options": [
-        "A type of insurance.",
-        "A set of rules and guidelines that define how an organization manages and protects its information assets.",
-        "A type of computer hardware.",
+        "A type of insurance for cybersecurity incidents.",
+        "A documented set of rules and guidelines that define how an organization protects its information assets.",
+        "A hardware device that encrypts data.",
         "A program that helps you create documents."
       ],
       "correctAnswerIndex": 1,
@@ -632,10 +632,10 @@ db.tests.insertOne({
       "id": 49,
       "question": "What is a benefit of using cloud storage?",
       "options": [
-        "It's always more secure than local storage.",
+        "It is always more secure than local storage, which is not necessarily true.",
         "It can provide easier access to your data from multiple devices and locations.",
-        "It makes your computer run faster.",
-        "It automatically encrypts all your data (always)."
+        "It makes your computer run faster, which is not its primary function.",
+        "It automatically encrypts all your data without any configuration."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Cloud storage offers convenience and accessibility, allowing you to access your data from anywhere with an internet connection. While *some* cloud providers offer encryption, it's *not* guaranteed, and security depends on the provider and your settings. It doesn't inherently make your computer faster.",
@@ -643,15 +643,15 @@ db.tests.insertOne({
     },
     {
       "id": 50,
-      "question": "What is 'physical security'?",
+      "question": "What is physical security?",
       "options": [
         "Measures to protect computer systems from viruses.",
         "Measures to protect physical assets like buildings, equipment, and people from unauthorized access or harm.",
-        "A type of encryption.",
-        "A way to manage passwords."
+        "A type of encryption algorithm used in cyber defense.",
+        "A method for managing digital passwords."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Physical security includes things like locks, security guards, surveillance cameras, and access control systems.",
+      "explanation": "Physical security includes measures like locks, security guards, surveillance cameras, and access control systems.",
       "examTip": "Physical security is an important part of overall security, complementing cybersecurity measures."
     },
     {
@@ -669,12 +669,12 @@ db.tests.insertOne({
     },
     {
       "id": 52,
-      "question": "What does 'https' stand for in a website address?",
+      "question": "What does HTTPS stand for in a website address?",
       "options": [
-        "Hypertext Transfer Protocol Secure",
-        "Hypertext Text Protocol Site",
-        "High Transfer Protocol System",
-        "Hypertext Transfer Program Standard"
+        "Hypertext Transfer Protocol Secure.",
+        "Hypertext Text Protocol Site.",
+        "High Transfer Protocol System.",
+        "Hypertext Transfer Program Standard."
       ],
       "correctAnswerIndex": 0,
       "explanation": "HTTPS indicates that the communication between your browser and the website is encrypted.",
@@ -682,38 +682,38 @@ db.tests.insertOne({
     },
     {
       "id": 53,
-      "question": "Which of the following is the *least* secure way to store passwords?",
+      "question": "Which of these is the least secure way to store passwords?",
       "options": [
         "In a password manager.",
-        "Written down on a piece of paper kept in a locked safe.",
-        "In a plain text file on your computer.",
-        "Memorized."
+        "Written down on paper kept in a locked safe.",
+        "In an unencrypted plain text file on your computer.",
+        "Memorized by you."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Storing passwords in a plain text file is extremely vulnerable, as anyone with access to your computer can read them. A password manager is *most* secure, memorization is good *if* the passwords are strong and unique, and a locked safe is better than plain text, but still less secure than a password manager.",
+      "explanation": "Storing passwords in a plain text file is extremely vulnerable, as anyone with access to your computer can read them. A password manager is *most* secure, and memorization is safe if the passwords are strong.",
       "examTip": "Never store passwords in plain text files."
     },
     {
       "id": 54,
       "question": "What is a good way to identify a phishing email?",
       "options": [
-        "It is perfectly written with no spelling or grammar errors.",
-        "It asks you for personal information, often with a sense of urgency.",
-        "It comes from a known and trusted sender.",
-        "It contains information you were expecting."
+        "It is always perfectly written with no errors.",
+        "It often contains urgent language, grammatical mistakes, and requests personal information.",
+        "It comes from a trusted sender with no signs of irregularity.",
+        "It never contains any links or attachments."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing emails often have poor grammar, create a sense of urgency, and ask for personal information.  Emails from trusted senders *with expected content* are less likely to be phishing.",
-      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency or threat."
+      "explanation": "Phishing emails often request you to click a link and reveal personal information, using urgency and errors as red flags.",
+      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
     },
     {
       "id": 55,
-      "question": "What is the purpose of a 'software patch'?",
+      "question": "What is the purpose of a software patch?",
       "options": [
-        "To make the software look different.",
+        "To change the software's appearance.",
         "To add new features to the software.",
-        "To fix bugs and security vulnerabilities.",
-        "To make the software run slower."
+        "To fix bugs and patch security vulnerabilities in the software.",
+        "To slow down the software deliberately."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Patches are updates that address security flaws and other issues in software.",
@@ -721,40 +721,38 @@ db.tests.insertOne({
     },
     {
       "id": 56,
-      "question": "Which of the following is the *most* effective way to protect your data from loss?",
+      "question": "Which of the following is the most effective way to protect your data from loss?",
       "options": [
-        "Using a strong password.",
-        "Installing antivirus software.",
-        "Regularly backing up your data to a separate location.",
-        "Encrypting your hard drive."
+        "Using a strong password, which secures access but doesn't recover data.",
+        "Installing antivirus software, which protects against malware but doesn't recover lost data.",
+        "Regularly backing up your data to an external drive or cloud storage.",
+        "Never turning off your computer to avoid losing data."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Regular backups are the most reliable way to recover from data loss due to hardware failure, malware, accidental deletion, or other disasters. While the other options are good security practices, they don't *recover* lost data.",
+      "explanation": "Regular backups are the most reliable way to recover from data loss due to hardware failure, malware, accidental deletion, or other disasters.",
       "examTip": "Follow the 3-2-1 backup rule: 3 copies of your data, on 2 different media, with 1 copy offsite."
     },
-
     {
       "id": 57,
-      "question": "What is 'tailgating' in physical security?",
+      "question": "What is tailgating in physical security?",
       "options": [
         "Following someone closely to steal their belongings.",
-        "Watching someone enter their PIN from behind.",
+        "Observing someone to capture their PIN from a distance.",
         "Gaining unauthorized access to a restricted area by following an authorized person without proper credentials.",
-        "Creating a fake ID badge to access a building."
+        "Creating a fake ID badge to enter a secure area."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Tailgating is when an unauthorized person gains access to a secure area by following someone else who is authorized, often by simply walking in behind them.",
-      "examTip": "Always ensure doors close behind you and don't let strangers enter behind you without proper authorization."
+      "explanation": "Tailgating is when an unauthorized person gains access to a secure area by following someone else who is authorized.",
+      "examTip": "Always ensure doors close behind you and don't let strangers enter without proper authorization."
     },
-
     {
       "id": 58,
-      "question": "What is the purpose of a 'privacy policy' on a website?",
+      "question": "What is the purpose of a privacy policy on a website?",
       "options": [
-        "To make the website look more professional.",
+        "To enhance the website's visual appeal.",
         "To explain how the website collects, uses, and protects your personal information.",
         "To advertise products and services.",
-        "To provide instructions on how to use the website."
+        "To provide technical support instructions."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Privacy policies inform users about a website's data handling practices.",
@@ -762,12 +760,12 @@ db.tests.insertOne({
     },
     {
       "id": 59,
-      "question": "What is 'biometric' authentication?",
+      "question": "What is biometric authentication?",
       "options": [
-        "Using a strong password.",
-        "Using a security token.",
-        "Using unique biological traits like fingerprints or facial scans.",
-        "Using a username and password."
+        "Using a strong password, which is not biometric.",
+        "Using a security token, which is not biometric.",
+        "Using unique biological traits, like fingerprints or facial recognition, for identification.",
+        "Using a username and password, which is not biometric."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Biometrics uses physical characteristics for identification and authentication.",
@@ -775,12 +773,12 @@ db.tests.insertOne({
     },
     {
       "id": 60,
-      "question": "What is a 'software vulnerability'?",
+      "question": "What is a software vulnerability?",
       "options": [
-        "A strong password.",
-        "A weakness in software that can be exploited by attackers.",
-        "A type of firewall.",
-        "A program that protects your computer."
+        "A strong password, which is not a vulnerability.",
+        "A flaw or weakness in software that can be exploited by attackers.",
+        "A type of firewall, which is not a vulnerability.",
+        "A program that protects your computer, which is not a vulnerability."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Vulnerabilities are flaws or weaknesses in software code that can be exploited to compromise security.",
@@ -788,11 +786,11 @@ db.tests.insertOne({
     },
     {
       "id": 61,
-      "question": "Which of these is the *least* effective method for protecting your online accounts?",
+      "question": "Which of these is the least effective method for protecting your online accounts?",
       "options": [
         "Using multi-factor authentication.",
-        "Using strong, unique passwords.",
-        "Using the same password for all your accounts.",
+        "Using strong, unique passwords for each account.",
+        "Reusing the same password for multiple accounts.",
         "Using a password manager."
       ],
       "correctAnswerIndex": 2,
@@ -801,7 +799,7 @@ db.tests.insertOne({
     },
     {
       "id": 62,
-      "question": "What is a 'cookie' in web browsing?",
+      "question": "What is a cookie in web browsing?",
       "options": [
         "A type of dessert.",
         "A small text file stored on your computer by a website to remember information about you.",
@@ -809,30 +807,30 @@ db.tests.insertOne({
         "A program that helps you browse the internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cookies track preferences, login status, and other data. While not inherently malicious, they can raise privacy concerns.",
-      "examTip": "You can manage your browser's cookie settings to control which websites can store cookies."
+      "explanation": "Cookies are small text files used by websites to track preferences, login status, and other information. They are not inherently malicious, but can raise privacy concerns.",
+      "examTip": "You can manage your browser's cookie settings to control which websites can store cookies on your computer."
     },
     {
       "id": 63,
-      "question": "What is the 'principle of least privilege'?",
+      "question": "What is the principle of least privilege?",
       "options": [
-        "Giving all users full administrative access.",
-        "Giving users only the minimum necessary access rights to perform their job duties.",
-        "Giving users access to everything on the network.",
-        "Giving users no access to anything."
+        "Giving all users full access to every resource.",
+        "Granting users only the minimum access necessary to perform their job functions.",
+        "Providing every user with complete control over the system.",
+        "Restricting access so much that users cannot perform any tasks."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Least privilege limits potential damage from compromised accounts or insider threats.",
+      "explanation": "Least privilege limits potential damage from compromised accounts or insider threats by giving users only the access they need.",
       "examTip": "Always apply the principle of least privilege when assigning user permissions."
     },
     {
       "id": 64,
-      "question": "What is 'integrity' in the CIA triad?",
+      "question": "What is integrity in the CIA triad?",
       "options": [
-        "Keeping information secret.",
-        "Ensuring information is accurate and complete, and hasn't been tampered with.",
-        "Making sure information is available when needed.",
-        "A type of password."
+        "Keeping data secret from unauthorized users.",
+        "Ensuring data remains accurate and unaltered.",
+        "Making sure data is accessible when needed.",
+        "A method for encrypting data."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Integrity refers to the trustworthiness and accuracy of data.",
@@ -840,16 +838,16 @@ db.tests.insertOne({
     },
     {
       "id": 65,
-      "question": "What should you do if you receive an email from an unknown sender asking you to click a link?",
+      "question": "What should you do if you receive a suspicious email asking for personal information?",
       "options": [
-        "Click the link immediately.",
-        "Reply to the email and ask who they are.",
-        "Delete the email without clicking the link.",
+        "Reply to the email and provide your information.",
+        "Click on any links in the email to verify its authenticity.",
+        "Delete the email and report it as spam or phishing.",
         "Forward the email to all your contacts."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Clicking links in unsolicited emails is a major security risk, potentially leading to malware or phishing sites.",
-      "examTip": "Be very cautious about clicking links in emails, especially from unknown senders."
+      "explanation": "Never provide personal information in response to unsolicited emails. Delete and report suspicious messages.",
+      "examTip": "If you're unsure about an email's legitimacy, contact the supposed sender through a known, official channel to verify."
     },
     {
       "id": 66,
@@ -862,94 +860,94 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "The 'S' in HTTPS stands for Secure, indicating that the connection between your browser and the website is encrypted.",
-      "examTip": "Look for 'HTTPS' and the padlock icon when entering sensitive information online."
+      "examTip": "Look for 'HTTPS' and the padlock icon in your browser's address bar when entering sensitive information online."
     },
     {
       "id": 67,
-      "question": "What is 'social engineering'?",
+      "question": "What is social engineering?",
       "options": [
-        "Building bridges and roads.",
-        "A way to make friends online.",
-        "Manipulating people into divulging confidential information.",
-        "A type of computer programming."
+        "Building physical infrastructure.",
+        "Forming online friendships without deception.",
+        "Using deceptive techniques to manipulate individuals into revealing confidential information.",
+        "Developing computer software."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Social engineering attacks exploit human psychology, rather than technical vulnerabilities, to gain access or information.",
-      "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information or performing risky actions."
+      "explanation": "Social engineering attacks exploit human psychology rather than technical vulnerabilities to gain access or information.",
+      "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information."
     },
     {
       "id": 68,
-      "question": "What is the purpose of a 'firewall'?",
+      "question": "What is the purpose of a firewall?",
       "options": [
         "To warm up your computer.",
-        "To prevent unauthorized access to or from a private network.",
-        "To cool down your computer.",
-        "To speed up your internet connection."
+        "To prevent unauthorized access by filtering network traffic based on rules.",
+        "To store backups of your data.",
+        "To monitor your computer for viruses."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a barrier, controlling network traffic based on predefined rules.",
+      "explanation": "A firewall acts as a barrier between your network and the outside world, controlling incoming and outgoing traffic based on predefined rules.",
       "examTip": "Enable your computer's built-in firewall and consider a hardware firewall for your network."
     },
     {
       "id": 69,
       "question": "What is a common characteristic of a phishing email?",
       "options": [
-        "It is well-written with perfect grammar.",
-        "It is from someone you know and trust.",
-        "It often contains misspellings, grammatical errors, and a sense of urgency.",
-        "It contains information you were expecting."
+        "It is always free of errors.",
+        "It is sent from a trusted source without any urgency.",
+        "It often contains urgent language and grammatical errors that prompt immediate action.",
+        "It never asks for personal information."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Phishing emails often try to create a sense of urgency or fear to trick you into acting quickly without thinking.",
-      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency or threat."
+      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
     },
     {
       "id": 70,
-      "question": "What is 'ransomware'?",
+      "question": "What is ransomware?",
       "options": [
-        "A program that helps you manage your money.",
+        "A program that helps manage your finances.",
         "A type of computer hardware.",
         "Malware that encrypts your files and demands payment for the decryption key.",
-        "A fun computer game."
+        "An online video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Ransomware is a type of malware that holds your data hostage.",
-      "examTip": "Regular backups are your best defense against ransomware."
+      "explanation": "Ransomware is a type of malware that holds your data hostage until a ransom is paid.",
+      "examTip": "Regular backups are your best defense against ransomware attacks."
     },
     {
       "id": 71,
       "question": "What is a good practice for using public Wi-Fi?",
       "options": [
-        "Conducting online banking transactions.",
-        "Sharing sensitive personal information.",
-        "Using a VPN to encrypt your traffic.",
-        "Disabling your computer's firewall."
+        "Conduct sensitive transactions like online banking without protection.",
+        "Share sensitive personal information on public networks.",
+        "Use a VPN to encrypt your connection when on public Wi-Fi.",
+        "Disable your firewall to speed up your connection."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A VPN creates a secure tunnel for your data, especially important on unsecured public Wi-Fi.",
+      "explanation": "A VPN encrypts your internet traffic, protecting your data on unsecured public Wi-Fi networks.",
       "examTip": "Avoid accessing sensitive information on public Wi-Fi without a VPN."
     },
     {
       "id": 72,
-      "question": "What does 'two-factor authentication' add to your account security?",
+      "question": "What does two-factor authentication add to your account security?",
       "options": [
         "It makes your password longer.",
-        "It adds an extra layer of security beyond just your password.",
-        "It makes your computer run faster.",
-        "It deletes unnecessary files."
+        "It adds an extra layer of security by requiring a second verification method.",
+        "It speeds up the login process.",
+        "It automatically creates backups of your account data."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "2FA requires a second verification method (like a code from your phone) in addition to your password.",
-      "examTip": "Enable 2FA on all accounts that support it."
+      "explanation": "2FA requires an additional verification method (like a code from your phone) along with your password.",
+      "examTip": "Enable 2FA on all accounts that support it, especially for important accounts."
     },
     {
       "id": 73,
-      "question": "What does 'availability' mean in the CIA triad?",
+      "question": "What does availability mean in the CIA triad?",
       "options": [
         "Keeping information secret.",
-        "Making sure information is accurate.",
-        "Ensuring authorized users can access information and systems when needed.",
-        "A type of password."
+        "Ensuring information is accurate.",
+        "Ensuring authorized users can access data and systems when needed.",
+        "A method for encrypting data."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Availability is about ensuring uptime and accessibility for authorized users.",
@@ -959,23 +957,23 @@ db.tests.insertOne({
       "id": 74,
       "question": "What should you do before disposing of an old computer or hard drive?",
       "options": [
-        "Throw it directly in the trash.",
-        "Sell it online without doing anything.",
-        "Securely erase the data to prevent it from being recovered.",
-        "Give it to a friend without wiping it."
+        "Throw it away without any data removal.",
+        "Sell it online without wiping the data.",
+        "Securely erase or destroy the data to prevent recovery.",
+        "Give it to a friend without any data sanitization."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Use data wiping software or physically destroy the drive to ensure data is unrecoverable. Simply deleting files is not sufficient.",
+      "explanation": "Simply deleting files or formatting the drive is not enough. Use data wiping software or physically destroy the drive to ensure data is unrecoverable.",
       "examTip": "Protect your personal information by securely erasing data from old devices before disposal."
     },
     {
       "id": 75,
       "question": "What is a good way to protect your passwords?",
       "options": [
-        "Write them down on a sticky note on your monitor.",
+        "Write them on a sticky note on your monitor.",
         "Use the same password for all your accounts.",
-        "Use a password manager to create and store strong, unique passwords.",
-        "Share your passwords with trusted friends."
+        "Store them in a secure password manager that encrypts them.",
+        "Share your passwords only with close friends."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Password managers securely store and help generate strong, unique passwords, making management much easier and safer.",
@@ -983,11 +981,11 @@ db.tests.insertOne({
     },
     {
       "id": 76,
-      "question": "What is 'spyware'?",
+      "question": "What is spyware?",
       "options": [
         "A type of computer hardware.",
-        "A program that helps you organize files.",
-        "Malware that secretly collects information about your activities.",
+        "A program that helps you organize your files.",
+        "Malicious software that secretly collects information about your activities.",
         "A type of video game."
       ],
       "correctAnswerIndex": 2,
@@ -996,90 +994,90 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "What is a 'computer virus'?",
+      "question": "What is a computer virus?",
       "options": [
-        "A biological virus that affects humans.",
-        "A program that helps your computer run faster.",
-        "A type of malware that can replicate itself and spread to other computers.",
-        "A piece of computer hardware."
+        "A biological virus that affects living organisms.",
+        "A utility that speeds up your computer.",
+        "Malware that can replicate itself and infect other systems.",
+        "A physical component of a computer."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A computer virus is a type of malware that infects files and can spread, often requiring user interaction to activate.",
+      "explanation": "A computer virus is a type of malware that infects files and can spread to other systems.",
       "examTip": "Use antivirus software and practice safe computing habits to protect against viruses."
     },
     {
       "id": 78,
       "question": "What is the primary purpose of data backups?",
       "options": [
-        "To speed up your computer.",
-        "To protect your computer from viruses.",
-        "To have a copy of your data in case of data loss, hardware failure, or other disasters.",
-        "To organize your files."
+        "To improve your computer's performance.",
+        "To protect against viruses by storing duplicates of files.",
+        "To have a copy of your data in case the original is lost or damaged.",
+        "To organize your files more effectively."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Backups are crucial for data recovery.",
+      "explanation": "Backups are crucial for data recovery if your files are lost, corrupted, or compromised.",
       "examTip": "Regularly back up your important data to an external drive or cloud storage."
     },
     {
       "id": 79,
       "question": "What is a good security practice when using email?",
       "options": [
-        "Opening all attachments, even from unknown senders.",
-        "Clicking on all links in emails.",
-        "Being cautious about opening attachments and clicking links, especially from unknown senders.",
-        "Sharing your email password with others."
+        "Open all attachments without verification.",
+        "Click on every link to see what they lead to.",
+        "Verify sender identities and avoid opening suspicious attachments or links.",
+        "Share your email password with trusted contacts."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Email is a common vector for malware and phishing attacks, so caution is essential.",
-      "examTip": "If an email seems suspicious, don't open attachments or click links. Contact the supposed sender through a different, known-good method to verify."
+      "examTip": "If an email seems suspicious, don't open attachments or click links. Verify through another channel."
     },
     {
       "id": 80,
-      "question": "What does 'encryption' do to data?",
+      "question": "What does encryption do to data?",
       "options": [
-        "Deletes the data.",
-        "Makes the data unreadable without the correct decryption key.",
-        "Copies the data to another location.",
-        "Makes the data larger in size."
+        "It deletes the data permanently.",
+        "It transforms data into an unreadable format without the correct key.",
+        "It creates a duplicate copy of the data.",
+        "It increases the data's file size significantly."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Encryption transforms data into an unreadable format, protecting its confidentiality.",
-      "examTip": "Use encryption to protect sensitive data, both at rest (stored data) and in transit (data being transmitted)."
+      "examTip": "Use encryption to protect sensitive data, both at rest and in transit."
     },
     {
       "id": 81,
-      "question": "What is the 'Internet of Things' (IoT)?",
+      "question": "What is the Internet of Things (IoT)?",
       "options": [
         "A type of social media platform.",
-        "A network of interconnected physical devices that can collect and exchange data.",
+        "A network of interconnected physical devices that collect and exchange data.",
         "A new operating system for computers.",
         "A type of computer virus."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearable fitness trackers.",
-      "examTip": "IoT devices can introduce security risks if not properly secured."
+      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables that are connected to the internet.",
+      "examTip": "IoT devices can introduce new security risks if not properly secured."
     },
     {
       "id": 82,
-      "question": "Which of the following actions is the *most* likely to compromise your online security?",
+      "question": "Which of the following actions is the most likely to compromise your online security?",
       "options": [
-        "Using a strong, unique password for each of your accounts.",
-        "Enabling multi-factor authentication.",
+        "Using a strong, unique password for each account.",
+        "Enabling multi-factor authentication on your accounts.",
         "Reusing the same password for multiple accounts.",
         "Keeping your software up to date."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Password reuse is a major vulnerability. If one account is breached, all others using the same password are also at risk.",
+      "explanation": "Reusing passwords is a major security risk. If one account is breached, all accounts using the same password are vulnerable.",
       "examTip": "Never reuse passwords across different online accounts."
     },
     {
       "id": 83,
-      "question": "What is a 'firewall' primarily designed to do?",
+      "question": "What is a firewall primarily designed to do?",
       "options": [
-        "Detect and remove viruses.",
+        "Detect and remove viruses from your system.",
         "Control network traffic and block unauthorized access.",
         "Encrypt data on your hard drive.",
-        "Back up your files."
+        "Automatically back up your files."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A firewall acts as a barrier between your network and the outside world, controlling incoming and outgoing traffic based on predefined rules.",
@@ -1089,10 +1087,10 @@ db.tests.insertOne({
       "id": 84,
       "question": "What is a good practice when using social media?",
       "options": [
-        "Accepting friend requests from everyone.",
-        "Sharing your full birthdate and address publicly.",
-        "Being mindful of what you post and who can see it, and reviewing privacy settings.",
-        "Using the same password for all your online accounts."
+        "Accept friend requests from everyone you encounter online.",
+        "Share your full birthdate and home address publicly.",
+        "Be cautious about what you post and review your privacy settings regularly.",
+        "Use the same login credentials for all social media platforms."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Protecting your privacy on social media requires careful consideration of what you share and with whom.",
@@ -1102,9 +1100,9 @@ db.tests.insertOne({
       "id": 85,
       "question": "What is the main function of antivirus software?",
       "options": [
-        "To speed up your computer.",
-        "To organize your files.",
-        "To detect, prevent, and remove malware.",
+        "To speed up your computer's performance.",
+        "To help organize your files.",
+        "To detect, prevent, and remove malware from your computer.",
         "To create documents and spreadsheets."
       ],
       "correctAnswerIndex": 2,
@@ -1113,25 +1111,25 @@ db.tests.insertOne({
     },
     {
       "id": 86,
-      "question": "What is 'phishing'?",
+      "question": "What is phishing?",
       "options": [
-        "A type of fishing sport.",
-        "A method for catching computer viruses.",
-        "An attempt to trick you into giving up personal information through deceptive emails or websites.",
-        "A program that organizes your files."
+        "A type of water sport involving catching fish.",
+        "A method for detecting viruses by 'fishing' for malware.",
+        "An attempt by attackers to trick you into providing personal information through deceptive emails or websites.",
+        "A software program used to organize your files."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Phishing attacks impersonate legitimate entities to steal sensitive information.",
+      "explanation": "Phishing attacks use deception to steal sensitive information like usernames, passwords, and credit card details.",
       "examTip": "Be suspicious of unsolicited emails or messages asking for personal information."
     },
     {
       "id": 87,
-      "question": "What is a 'strong' password?",
+      "question": "What is a strong password?",
       "options": [
-        "Your pet's name.",
-        "123456",
-        "A mix of uppercase and lowercase letters, numbers, and symbols.",
-        "Your birthday."
+        "Your pet's name, which is easily guessed.",
+        "123456, a simple numeric sequence.",
+        "A mix of uppercase and lowercase letters, numbers, and symbols that is hard to crack.",
+        "Your birthday, which is predictable."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Strong passwords are complex and difficult to guess or crack using automated tools.",
@@ -1141,10 +1139,10 @@ db.tests.insertOne({
       "id": 88,
       "question": "Why should you log out of accounts after using a public computer?",
       "options": [
-        "To save electricity.",
-        "To make the computer run faster.",
-        "To prevent others from accessing your accounts.",
-        "To free up space on the hard drive."
+        "To reduce power consumption, which is not the main concern.",
+        "To make your computer run faster, which is irrelevant.",
+        "To prevent unauthorized access to your accounts by ending your session.",
+        "To free up hard drive space, which is not the purpose."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Logging out ends your session and protects your accounts from unauthorized access.",
@@ -1152,25 +1150,25 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "What does it mean to 'update your software'?",
+      "question": "What does updating your software do?",
       "options": [
-        "To change the color of the icons.",
-        "To install the latest version, which often includes security fixes.",
-        "To make the software run slower.",
-        "To delete old files you don't need."
+        "It changes the software's appearance without affecting functionality.",
+        "It installs the latest patches and fixes for bugs and security vulnerabilities.",
+        "It removes all your old files automatically.",
+        "It slows down your system intentionally."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Software updates, or patches, often fix security vulnerabilities that could be exploited by attackers.",
-      "examTip": "Enable automatic updates whenever possible, or make it a habit to check for updates regularly."
+      "examTip": "Enable automatic updates whenever possible, or check regularly for updates."
     },
     {
       "id": 90,
       "question": "What is a good practice to help prevent becoming a victim of social engineering?",
       "options": [
-        "Trust everyone you meet online.",
-        "Be skeptical of unsolicited requests for information and verify identities.",
-        "Share your passwords with anyone who asks.",
-        "Click on all links in emails and messages."
+        "Trust every message you receive online.",
+        "Be skeptical of unsolicited requests and verify the sender's identity before responding.",
+        "Share your personal details immediately to appear cooperative.",
+        "Click on every link to see what it leads to."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Social engineering relies on tricking people, so skepticism and verification are crucial defenses.",
@@ -1178,12 +1176,12 @@ db.tests.insertOne({
     },
     {
       "id": 91,
-      "question": "What is the purpose of a 'CAPTCHA' test on a website?",
+      "question": "What is the purpose of a CAPTCHA test on a website?",
       "options": [
-        "To make the website look more modern.",
-        "To prove you are a human and not a bot.",
-        "To encrypt data transmitted to the website.",
-        "To test your typing speed."
+        "To modernize the website's design.",
+        "To verify that the user is human and not an automated bot.",
+        "To encrypt data sent to the website.",
+        "To measure your typing speed."
       ],
       "correctAnswerIndex": 1,
       "explanation": "CAPTCHAs (Completely Automated Public Turing test to tell Computers and Humans Apart) are designed to be easy for humans to solve but difficult for automated programs.",
@@ -1204,20 +1202,20 @@ db.tests.insertOne({
     },
     {
       "id": 93,
-      "question": "What is a 'digital footprint'?",
+      "question": "What is a digital footprint?",
       "options": [
         "A drawing of your foot made on a computer.",
         "The trail of data you leave behind when using the internet.",
         "A type of computer virus.",
-        "A special kind of mouse."
+        "A special kind of computer mouse."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Your digital footprint includes your online activity, posts, photos, browsing history, and any other information about you available online.",
+      "explanation": "Your digital footprint includes all your online activity, posts, and data traces.",
       "examTip": "Be mindful of your digital footprint and what it might reveal about you."
     },
     {
       "id": 94,
-      "question": "What is 'malware' short for?",
+      "question": "What is malware short for?",
       "options": [
         "Malicious hardware",
         "Malicious software",
@@ -1226,29 +1224,29 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Malware is any software designed to harm or gain unauthorized access to a computer system.",
-      "examTip": "Malware includes viruses, worms, Trojans, ransomware, spyware, and other types of harmful programs."
+      "examTip": "Malware includes viruses, worms, Trojans, ransomware, spyware, and more."
     },
     {
       "id": 95,
-      "question": "Which of these is the *best* way to protect your data from loss?",
+      "question": "Which of these is the best way to protect your data from loss?",
       "options": [
-        "Using a very strong password on your computer.",
-        "Installing antivirus software.",
-        "Making regular backups to a separate location (like an external drive or the cloud).",
-        "Never turning off your computer."
+        "Using a very strong password, which secures access but doesn’t recover lost data.",
+        "Installing antivirus software, which helps prevent attacks but doesn’t recover data.",
+        "Regularly backing up your data to a separate location, ensuring recovery if data is lost.",
+        "Never turning off your computer, which is not a data protection strategy."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Backups are your safety net. While passwords and antivirus are important, they don't *recover* lost data. Regular, *separate* backups are crucial.",
-      "examTip": "Follow the 3-2-1 rule: 3 copies, 2 different media, 1 offsite."
+      "explanation": "Regular backups are the most reliable way to recover from data loss due to hardware failure, malware, or accidental deletion.",
+      "examTip": "Follow the 3-2-1 backup rule: 3 copies, 2 different media, 1 offsite."
     },
     {
       "id": 96,
       "question": "What is a good practice for creating a secure password?",
       "options": [
-        "Using your pet's name.",
-        "Using a short, simple word.",
-        "Using a long, complex combination of letters, numbers, and symbols, and not reusing it elsewhere.",
-        "Using your birthday."
+        "Using your pet's name, which is easily guessed.",
+        "Using a short, simple word, which is not secure.",
+        "Using a long, complex combination of letters, numbers, and symbols that is unique.",
+        "Using your birthday, which is predictable."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Strong, unique passwords are essential for protecting your accounts.",
@@ -1258,23 +1256,23 @@ db.tests.insertOne({
       "id": 97,
       "question": "What should you do if you receive a suspicious email asking for your personal information?",
       "options": [
-        "Reply to the email and provide the information.",
-        "Click on any links in the email.",
+        "Reply to the email and provide the requested information.",
+        "Click on any links in the email to check its legitimacy.",
         "Delete the email and report it as spam or phishing.",
-        "Forward the email to all your friends."
+        "Forward the email to all your contacts to warn them."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Never provide personal information in response to unsolicited emails. Delete and report suspicious messages.",
-      "examTip": "If you're unsure about an email's legitimacy, contact the supposed sender through a known, official channel (like their website or phone number) to verify."
+      "examTip": "If you're unsure about an email's legitimacy, contact the sender through a known, official channel."
     },
     {
       "id": 98,
-      "question": "What is a 'VPN' primarily used for?",
+      "question": "What is a VPN primarily used for?",
       "options": [
-        "To speed up your internet connection.",
-        "To create a secure, encrypted connection, especially on public Wi-Fi.",
-        "To block access to specific websites.",
-        "To scan your computer for viruses."
+        "To speed up your internet connection, which is not its primary function.",
+        "To create a secure, encrypted connection for protecting data on public networks.",
+        "To block access to specific websites, which is not its main role.",
+        "To scan your computer for viruses, which is not what a VPN does."
       ],
       "correctAnswerIndex": 1,
       "explanation": "VPNs encrypt your internet traffic, creating a secure tunnel and protecting your data, particularly on unsecured networks.",
@@ -1282,20 +1280,20 @@ db.tests.insertOne({
     },
     {
       "id": 99,
-      "question": "What is 'two-factor authentication' (2FA)?",
+      "question": "What is two-factor authentication (2FA)?",
       "options": [
-        "Using two different passwords for the same account.",
-        "Adding an extra layer of security, requiring a second verification method like a code from your phone.",
-        "Using a very long and complex password.",
-        "Having two user accounts on one computer."
+        "Using two different passwords for a single account.",
+        "Adding an extra verification step, like a code from your phone, in addition to your password.",
+        "Using an exceptionally long password by itself.",
+        "Having two separate user accounts for a single service."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "2FA requires something you *know* (password) and something you *have* (phone/token) or *are* (biometric), significantly increasing security.",
-      "examTip": "Enable 2FA whenever possible, especially for important accounts."
+      "explanation": "2FA requires multiple, different types of authentication factors (something you know, have, or are) to verify your identity.",
+      "examTip": "Enable 2FA whenever possible, especially for important accounts like email and banking."
     },
     {
       "id": 100,
-      "question": "What does the 'I' in 'CIA triad' stand for?",
+      "question": "What does the 'I' in the CIA triad stand for?",
       "options": [
         "Internet",
         "Integrity",
@@ -1307,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "Data integrity is crucial for making reliable decisions based on that data."
     }
   ]
-});
+}
