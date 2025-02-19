@@ -108,6 +108,70 @@ const colorMapping = {
 /* ------------------------------------------------------------------
    3) The Global Test Page (Server-Side Progress Storage)
 ------------------------------------------------------------------ */
+const QuestionDropdown = ({ 
+  totalQuestions, 
+  currentQuestionIndex, 
+  onQuestionSelect, 
+  answers, 
+  flaggedQuestions, 
+  testData, 
+  shuffleOrder 
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const getQuestionStatus = (index) => {
+    const realIndex = shuffleOrder[index];
+    const question = testData.questions[realIndex];
+    const answer = answers.find(a => a.questionId === question.id);
+    const isFlagged = flaggedQuestions.includes(question.id);
+    
+    return {
+      isAnswered: answer?.userAnswerIndex !== undefined,
+      isSkipped: answer?.userAnswerIndex === null,
+      isCorrect: answer?.userAnswerIndex === question.correctAnswerIndex,
+      isFlagged
+    };
+  };
+
+  return (
+    <div className="question-dropdown">
+      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
+        Question {currentQuestionIndex + 1}
+      </button>
+
+      {isOpen && (
+        <div className="dropdown-content">
+          {Array.from({ length: totalQuestions }, (_, i) => {
+            const status = getQuestionStatus(i);
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  onQuestionSelect(i);
+                  setIsOpen(false);
+                }}
+                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''}`}
+              >
+                <span>Question {i + 1}</span>
+                <div className="status-indicators">
+                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
+                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
+                  {status.isAnswered && !status.isSkipped && (
+                    <span className={`answer-indicator ${status.isCorrect ? 'correct' : 'incorrect'}`}>
+                      {status.isCorrect ? '✓' : '✗'}
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
 const GlobalTestPage = ({
   testId,           // e.g. "1"
   category,         // e.g. "secplus"
@@ -884,13 +948,27 @@ const GlobalTestPage = ({
       {renderScoreOverlay()}
       {renderReviewMode()}
 
-      {/* Top Controls */}
+
+
+
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {questionObject && flaggedQuestions.includes(questionObject.id)
             ? "Unflag"
             : "Flag"}
         </button>
+        <QuestionDropdown
+          totalQuestions={totalQuestions}
+          currentQuestionIndex={currentQuestionIndex}
+          onQuestionSelect={(index) => {
+            setCurrentQuestionIndex(index);
+            updateServerProgress(answers, score, false);
+          }}
+          answers={answers}
+          flaggedQuestions={flaggedQuestions}
+          testData={testData}
+          shuffleOrder={shuffleOrder}
+        />
         <button
           className="finish-test-btn"
           onClick={() => setShowFinishPopup(true)}
@@ -898,7 +976,6 @@ const GlobalTestPage = ({
           Finish Test
         </button>
       </div>
-
       <div className="upper-control-bar">
         <button
           className="restart-test-btn"
