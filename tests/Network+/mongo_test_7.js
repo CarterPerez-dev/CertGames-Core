@@ -48,7 +48,7 @@ db.tests.insertOne({
       "question": "A company is implementing a BYOD (Bring Your Own Device) policy.  They want to ensure that only authorized and compliant devices can connect to the corporate network. Which of the following technologies, used in combination, would BEST address this requirement?",
       "options": [
         "MAC address filtering and WEP encryption.",
-        "Network Access Control (NAC) with 802.1X authentication and device posture assessment.",
+        "Network Access Control (NAC) with 802.1X authentication.",
         "A strong firewall and a VPN.",
         "DHCP reservations and static IP addressing."
       ],
@@ -61,7 +61,7 @@ db.tests.insertOne({
       "question": "You are troubleshooting a network where users are reporting intermittent connectivity issues.  You suspect a problem with duplicate IP addresses. Which of the following methods would be MOST effective in identifying devices with duplicate IPs?",
       "options": [
         "Pinging each IP address on the network sequentially.",
-        "Using a protocol analyzer (like Wireshark) to capture and analyze ARP traffic, looking for multiple MAC addresses responding to the same IP address.",
+        "Using a protocol analyzer to capture and analyze ARP traffic.",
         "Checking the DHCP server's lease table.",
         "Rebooting all network devices."
       ],
@@ -74,7 +74,7 @@ db.tests.insertOne({
       "question": "A company's network uses a distance-vector routing protocol. They are experiencing slow convergence after a network link fails. Which of the following techniques could help improve convergence time?",
       "options": [
         "Enabling split horizon and poison reverse.",
-        "Switching to a link-state routing protocol like OSPF or IS-IS.",
+        "Switching to a link-state routing protocol.",
         "Increasing the routing protocol's timers.",
         "Disabling route summarization."
       ],
@@ -87,7 +87,7 @@ db.tests.insertOne({
       "question": "What is the primary purpose of using a 'demilitarized zone' (DMZ) in a network architecture?",
       "options": [
         "To create a secure zone for internal workstations and servers.",
-        "To provide a buffer zone between a trusted internal network and an untrusted external network (like the internet), hosting publicly accessible servers (like web servers) while isolating them from the internal network.",
+        "To provide a buffer zone between a trusted internal network and an untrusted external network.",
         "To create a separate network for wireless devices.",
         "To act as a backup power supply for network devices."
       ],
@@ -100,7 +100,7 @@ db.tests.insertOne({
       "question": "Which of the following is a key difference between 'symmetric' and 'asymmetric' encryption algorithms?",
       "options": [
         "Symmetric encryption is faster; asymmetric encryption is more secure.",
-        "Symmetric encryption uses the same secret key for both encryption and decryption; asymmetric encryption uses a pair of mathematically related keys: a public key for encryption and a private key for decryption.",
+        "Symmetric encryption uses the same secret key for both encryption and decryption.",
         "Symmetric encryption is used only for wireless networks; asymmetric encryption is used only for wired networks.",
         "Symmetric encryption is used for data at rest; asymmetric encryption is used for data in transit."
       ],
@@ -138,10 +138,10 @@ db.tests.insertOne({
       "id": 11,
       "question": "Which of the following security protocols is used to provide secure, encrypted communication for web browsing?",
       "options": [
-        "FTP (File Transfer Protocol)",
+        "FTP",
         "Telnet",
-        "HTTPS (Hypertext Transfer Protocol Secure)",
-        "SMTP (Simple Mail Transfer Protocol)"
+        "HTTPS ",
+        "SMTP "
       ],
       "correctAnswerIndex": 2,
       "explanation": "HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP. It uses SSL/TLS encryption to protect the communication between a web browser and a web server, ensuring confidentiality and integrity of the data. FTP, Telnet, and SMTP are *not* inherently secure for web browsing (though secure versions like FTPS and SMTPS exist).",
@@ -152,7 +152,7 @@ db.tests.insertOne({
       "question": "What is a 'zero-day' vulnerability?",
       "options": [
         "A vulnerability that has been known for a long time and has many available patches.",
-        "A software vulnerability that is unknown to, or unaddressed by, the software vendor, meaning there is no patch available and attackers can exploit it before a fix is released.",
+        "A software vulnerability that is unknown to, or unaddressed by, the software vendor.",
         "A vulnerability that only affects outdated operating systems.",
         "A vulnerability that is easily detected and prevented by firewalls."
       ],
@@ -165,7 +165,7 @@ db.tests.insertOne({
       "question": "What is 'MAC flooding' in the context of network security?",
       "options": [
         "A type of denial-of-service attack.",
-        "An attack where the attacker overwhelms a switch's CAM table (Content Addressable Memory) with fake MAC addresses, causing the switch to act like a hub and broadcast traffic to all ports, potentially allowing the attacker to eavesdrop on network traffic.",
+        "An attack where the attacker overwhelms a switch's CAM table with fake MAC addresses.",
         "A technique for encrypting network traffic.",
         "A method for assigning IP addresses dynamically."
       ],
@@ -178,9 +178,9 @@ db.tests.insertOne({
       "question": "A network administrator is configuring a new router. They want to ensure that only specific, authorized devices can access the router's command-line interface (CLI) via SSH. Which of the following configurations would be MOST effective in achieving this?",
       "options": [
         "Enable Telnet access and disable SSH.",
-        "Configure an access control list (ACL) that permits SSH traffic (TCP port 22) only from specific, authorized IP addresses or subnets, and apply it to the VTY lines.",
+        "Configure an (ACL) that permits SSH traffic only from specific IP addresses.",
         "Change the default SSH port number.",
-        "Use a weak password for the router's administrator account."
+        "Use a stronger password for the router's administrator account and diable ssh."
       ],
       "correctAnswerIndex": 1,
       "explanation": "An ACL allows you to define rules that permit or deny traffic based on source/destination IP addresses, port numbers, and protocols.  By creating an ACL that *only* allows SSH traffic (TCP port 22) from *specific, authorized IP addresses* and applying it to the router's VTY lines (virtual terminal lines, used for remote access), you restrict CLI access to only those authorized devices.  Enabling *Telnet* is extremely insecure. Changing the SSH port provides *obscurity*, not strong security. A weak password is a major vulnerability.",
@@ -190,9 +190,9 @@ db.tests.insertOne({
       "id": 15,
       "question": "Which of the following statements BEST describes the concept of 'defense in depth' in network security?",
       "options": [
-        "Relying solely on a strong firewall for network security.",
-        "Implementing *multiple* layers of security controls (physical, technical, administrative) so that if one layer fails or is bypassed, other layers are in place to prevent a breach.",
-        "Using only strong passwords for authentication.",
+        "Relying  on a strong firewall for network security.",
+        "Implementing multiple layers of security controls.",
+        "Using  strong passwords for authentication.",
         "Encrypting all network traffic."
       ],
       "correctAnswerIndex": 1,
@@ -204,7 +204,7 @@ db.tests.insertOne({
       "question": "What is the primary purpose of 'network segmentation'?",
       "options": [
         "To increase the total number of available IP addresses.",
-        "To divide a network into smaller, isolated subnetworks (using VLANs, subnets, or other techniques) to improve security by limiting the impact of breaches, improve performance by reducing congestion, and enhance manageability.",
+        "To divide a network into smaller, isolated subnetworks.",
         "To make the network physically easier to cable.",
         "To encrypt all network traffic."
       ],
@@ -217,7 +217,7 @@ db.tests.insertOne({
       "question": "What is the purpose of a 'reverse DNS lookup'?",
       "options": [
         "To find the IP address associated with a given domain name.",
-        "To find the domain name (or hostname) associated with a given IP address.",
+        "To find the domain name associated with a given IP address.",
         "To encrypt network traffic.",
         "To dynamically assign IP addresses to devices."
       ],
@@ -230,7 +230,7 @@ db.tests.insertOne({
       "question": "What is '802.1X' and how does it enhance network security?",
       "options": [
         "802.1X is a wireless security protocol similar to WEP",
-        "802.1X is a port-based network access control (PNAC) protocol; It provides an authentication mechanism, requiring users or devices to authenticate before being granted access to the network.",
+        "802.1X is a port-based network access control (PNAC) protocol.",
         "802.1X is a routing protocol.",
         "802.1X is a protocol that dynamically assigns IP addresses"
       ],
@@ -256,7 +256,7 @@ db.tests.insertOne({
       "question": "What is the primary function of a 'load balancer' in a network?",
       "options": [
         "To encrypt network traffic.",
-        "To distribute network traffic across multiple servers, improving application responsiveness, preventing server overload, and providing high availability.",
+        "To distribute network traffic across multiple server.",
         "To assign IP addresses to devices dynamically.",
         "To translate domain names into IP addresses."
       ],
@@ -266,11 +266,11 @@ db.tests.insertOne({
     },
     {
       "id": 21,
-      "question": "What is 'jitter' in network performance, and why is it particularly important for real-time applications?",
+      "question": "What is 'jitter' ?",
       "options": [
         "The total amount of data that can be transmitted over a network connection.",
         "The time delay in data transmission across a network.",
-        "The variation in latency (delay) over time. High jitter can cause choppy audio, video artifacts, and dropped connections in real-time applications like VoIP and video conferencing.",
+        "The variation in latency (delay) over time.",
         "The number of devices connected to a network."
       ],
       "correctAnswerIndex": 2,
@@ -282,7 +282,7 @@ db.tests.insertOne({
       "question": "A network administrator configures a router with the following command: `ip route 192.168.10.0 255.255.255.0 10.0.0.1`. What is the effect of this command?",
       "options": [
         "It configures a default route.",
-        "It configures a static route, directing traffic destined for the 192.168.10.0/24 network to the next-hop IP address 10.0.0.1.",
+        "It configures a static route.",
         "It configures a dynamic route using a routing protocol.",
         "It blocks all traffic to the 192.168.10.0 network."
       ],
@@ -295,7 +295,7 @@ db.tests.insertOne({
       "question": "What is 'DHCP snooping', and how does it enhance network security?",
       "options": [
         "A method for encrypting DHCP traffic.",
-        "A security feature on switches that prevents rogue DHCP servers from operating on the network by inspecting DHCP messages and only allowing traffic from trusted DHCP server ports.",
+        "A security feature on switches that prevents rogue DHCP servers.",
         "A technique for speeding up the DHCP address assignment process.",
         "A protocol for monitoring user web browsing activity."
       ],
@@ -335,7 +335,7 @@ db.tests.insertOne({
       "options": [
         "To make the network more secure by encrypting all traffic.",
         "To allow direct communication with devices on the public internet without any translation.",
-        "To conserve public IPv4 addresses and allow multiple devices to share a single public IP address using Network Address Translation (NAT) when connecting to the internet.",
+        "To conserve public IPv4 addresses and allow multiple devices to share a single public IP.",
         "To increase network speed and performance."
       ],
       "correctAnswerIndex": 2,
@@ -346,10 +346,10 @@ db.tests.insertOne({
       "id": 27,
       "question": "What is a 'deauthentication attack' in wireless networking?",
       "options": [
-        "An attempt to steal wireless network passwords.",
+        "A type of denial-of-service attack where the attacker sends forged deauthentication frames to to steal wireless network passwords.",
         "A type of denial-of-service attack where the attacker sends forged deauthentication frames to disconnect legitimate users from a wireless access point.",
-        "An attempt to trick users into revealing their personal information.",
-        "A method for encrypting wireless traffic."
+        "A type of denial-of-service attack where the attacker sends forged deauthentication frames to trick users into revealing their personal information.",
+        "A type of denial-of-service attack where the attacker sends forged deauthentication frames to spoof their IP address."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A deauthentication attack targets the management frames of a Wi-Fi network. The attacker sends forged deauthentication frames, which tell a client (or the AP) to disconnect. This disrupts network connectivity and can be used as a precursor to other attacks (like setting up an 'evil twin' access point). It's not directly about stealing passwords, phishing, or encryption.",
@@ -360,7 +360,7 @@ db.tests.insertOne({
       "question": "Which of the following is a key advantage of using a 'client-server' network model compared to a 'peer-to-peer' network model?",
       "options": [
         "Easier to set up and manage for very small networks.",
-        "Centralized management of resources, security, and user accounts, providing better control, scalability, and security for larger networks.",
+        "Centralized management of resources, security, and user accounts.",
         "All computers have equal roles and responsibilities.",
         "Lower initial cost."
       ],
@@ -373,7 +373,7 @@ db.tests.insertOne({
       "question": "What is the purpose of 'Quality of Service' (QoS) in a network?",
       "options": [
         "To encrypt network traffic.",
-        "To prioritize certain types of network traffic (like voice, video, or critical applications) over others, ensuring that they receive adequate bandwidth and low latency, even during periods of network congestion.",
+        "To prioritize certain types of network traffic.",
         "To automatically assign IP addresses to devices.",
         "To translate domain names into IP addresses."
       ],
@@ -387,7 +387,7 @@ db.tests.insertOne({
       "options": [
         "A faulty network cable.",
         "A problem with the user's web browser.",
-        "A DNS resolution problem; the computer cannot translate domain names to IP addresses.",
+        "A DNS resolution problem.",
         "The user's IP address is blocked by a firewall."
       ],
       "correctAnswerIndex": 2,
@@ -399,7 +399,7 @@ db.tests.insertOne({
       "question": "Which command-line tool is used to trace the route that packets take to reach a destination host, showing each hop (router) along the way?",
       "options": [
         "ping",
-        "tracert (or traceroute)",
+        "tracert.",
         "ipconfig",
         "nslookup"
       ],
@@ -409,11 +409,11 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "What is 'MAC flooding' in the context of network security, and what is its potential impact?",
+      "question": "What is 'MAC flooding' in the context of network security?",
       "options": [
-        "A technique for encrypting network traffic.",
-        "A method for dynamically assigning IP addresses.",
-        "An attack that overwhelms a switch's CAM table (Content Addressable Memory) with fake MAC addresses, causing the switch to act like a hub and broadcast traffic to all ports, potentially allowing an attacker to eavesdrop on network traffic.",
+        "A technique for encrypting MAC addresses.",
+        "A method for dynamically assigning MAC addresses.",
+        "An attack that overwhelms a switch's CAM table with fake MAC addresses.",
         "A way to prioritize certain types of network traffic."
       ],
       "correctAnswerIndex": 2,
@@ -438,7 +438,7 @@ db.tests.insertOne({
       "question": "What is 'split horizon' in the context of distance-vector routing protocols, and why is it important?",
       "options": [
         "A technique for encrypting routing updates.",
-        "A method for preventing routing loops by preventing a router from advertising a route back out the same interface on which it was learned.",
+        "A method for preventing routing loops.",
         "A way to prioritize certain routes over others.",
         "A technique for load balancing traffic across multiple links."
       ],
@@ -451,7 +451,7 @@ db.tests.insertOne({
       "question": "You are designing a network for a company that requires high availability and fault tolerance for its critical applications. Which of the following strategies would be MOST effective?",
       "options": [
         "Using a single, powerful server with a fast processor and a large amount of RAM.",
-        "Implementing redundant network components (routers, switches, links), redundant servers with automatic failover capabilities, and a robust backup and disaster recovery plan.",
+        "Implementing redundant network components.",
         "Using a strong firewall to protect the network from external attacks.",
         "Using strong passwords for all user accounts."
       ],
@@ -461,10 +461,10 @@ db.tests.insertOne({
     },
     {
       "id": 36,
-      "question": "A network is experiencing intermittent connectivity problems.  You suspect a problem with duplex mismatch.  How would you verify this, and what would be the correct configuration for modern switched networks?",
+      "question": "A network is experiencing intermittent connectivity problems.  You suspect a problem with duplex mismatch.  How would you verify this?",
       "options": [
         "Ping various devices on the network and check for packet loss.",
-        "Examine the interface configurations on the connected devices (e.g., switch and workstation) and ensure they are both set to the same duplex mode; in modern switched networks, this should be auto-negotiation or, if explicitly set, full-duplex on both ends.",
+        "Examine the interface configurations on the connected devices.",
         "Use a cable tester to check for physical cable problems.",
         "Check the DNS server settings."
       ],
@@ -477,7 +477,7 @@ db.tests.insertOne({
       "question": "What is '802.1Q' in the context of networking?",
       "options": [
         "A wireless security protocol.",
-        "A standard for VLAN tagging, which allows multiple VLANs to be carried over a single physical link (a trunk).",
+        "A standard for VLAN tagging.",
         "A routing protocol.",
         "A protocol for assigning IP addresses dynamically."
       ],
@@ -491,7 +491,7 @@ db.tests.insertOne({
       "options": [
         "To encrypt network traffic.",
         "To restrict access to a switch port based on MAC address.",
-        "To copy network traffic from one or more source ports to a designated destination port, allowing for monitoring and analysis of the traffic (often used with intrusion detection systems or protocol analyzers).",
+        "To copy network traffic from one or more source ports to a designated destination port.",
         "To assign IP addresses dynamically."
       ],
       "correctAnswerIndex": 2,
@@ -502,10 +502,10 @@ db.tests.insertOne({
       "id": 39,
       "question": "You are configuring a wireless access point (AP) and need to choose an encryption method.  Which of the following provides the STRONGEST security?",
       "options": [
-        "WEP (Wired Equivalent Privacy)",
-        "WPA (Wi-Fi Protected Access)",
+        "WEP (Wired Equivalent Privacy) with TKIP",
+        "WPA (Wi-Fi Protected Access) with TKIP",
         "WPA2 (Wi-Fi Protected Access 2) with TKIP",
-        "WPA3 (Wi-Fi Protected Access 3)"
+        "WPA3 (Wi-Fi Protected Access 3) with TKIP"
       ],
       "correctAnswerIndex": 3,
       "explanation": "WPA3 is the *latest* and *most secure* wireless security protocol. It provides stronger encryption and better protection against various attacks compared to its predecessors. WEP is *extremely* outdated and easily cracked. WPA is also vulnerable. WPA2 is *better* than WEP and WPA, but WPA3 is *significantly* more secure. When using WPA2, AES is preferred over TKIP.",
@@ -515,10 +515,10 @@ db.tests.insertOne({
       "id": 40,
       "question": "Which of the following is a potential security risk associated with enabling WPS (Wi-Fi Protected Setup) on a wireless router?",
       "options": [
-        "It makes the wireless network more secure.",
-        "It simplifies the process of connecting devices to the network.",
-        "The PIN-based WPS authentication method is vulnerable to brute-force attacks, allowing attackers to potentially guess the PIN and gain access to the network.",
-        "It increases wireless network speed."
+        "There isnt many risks since it makes the wireless network more secure.",
+        "It simplifies the process of connecting devices to the network which allows atatckers to easily connect to the network..",
+        "The PIN-based WPS authentication method is vulnerable to brute-force attacks.",
+        "It increases wireless network speed which allows attackers to quickly export data from the network."
       ],
       "correctAnswerIndex": 2,
       "explanation": "While WPS is designed to *simplify* connecting devices, the PIN-based authentication method has known vulnerabilities. Attackers can use brute-force techniques to guess the WPS PIN relatively quickly, compromising the network's security.  It *doesn't* make the network more secure or increase speed. The convenience of WPS is outweighed by its security risks.",
@@ -530,7 +530,7 @@ db.tests.insertOne({
       "options": [
         "A problem with the DNS server.",
         "A problem with the user's web browser.",
-        "A problem with the physical network connection (cable, NIC), or an incorrect IP address/subnet mask/default gateway configuration on the user's computer.",
+        "A problem with the physical network connection.",
         "The website they are trying to access is down."
       ],
       "correctAnswerIndex": 2,
@@ -556,7 +556,7 @@ db.tests.insertOne({
       "options": [
         "A method for encrypting network traffic.",
         "A technique used to map IP addresses to MAC addresses.",
-        "An attack where a malicious actor sends forged ARP messages to associate their MAC address with the IP address of another device (often the default gateway), allowing them to intercept, modify, or block network traffic.",
+        "An attack where a malicious actor sends forged ARP messages to associate their MAC address with the IP address of another device.",
         "A protocol for assigning IP addresses dynamically."
       ],
       "correctAnswerIndex": 2,
@@ -565,12 +565,12 @@ db.tests.insertOne({
     },
     {
       "id": 44,
-      "question": "What is the purpose of a 'unified threat management' (UTM) appliance?",
+      "question": "What is the purpose of 'unified threat management' (UTM)?",
       "options": [
-        "To provide wireless access to a network.",
-        "To manage user accounts and passwords.",
-        "To combine multiple security functions (firewall, intrusion prevention, antivirus, web filtering, VPN, etc.) into a single device, simplifying security management and providing comprehensive protection.",
-        "To store and share files across a network."
+        "To unify the wireless access to a network to manage threats.",
+        "To manage user accounts and passwords to manage threats.",
+        "To combine multiple security functions into a single device.",
+        "To store and share files across a network in one unfified network.."
       ],
       "correctAnswerIndex": 2,
       "explanation": "UTM appliances integrate various security features into a single, centrally managed device. This simplifies security administration and provides a layered approach to protecting the network. They are *not* primarily for wireless access, user account management (though they *might* integrate with directory services), or file storage.",
@@ -582,7 +582,7 @@ db.tests.insertOne({
       "options": [
         "It increases the number of available public IP addresses.",
         "It makes the network more vulnerable to external attacks.",
-        "It can complicate troubleshooting and application compatibility, particularly for protocols that embed IP addresses within the application data, requiring Application Layer Gateways (ALGs) or other workarounds.",
+        "It can complicate troubleshooting and application compatibility.",
         "It significantly slows down network performance."
       ],
       "correctAnswerIndex": 2,
@@ -606,10 +606,10 @@ db.tests.insertOne({
       "id": 47,
       "question": "What does 'BGP' (Border Gateway Protocol) do, and where is it used?",
       "options": [
-        "It's a protocol for assigning IP addresses dynamically.",
-        "It's the routing protocol used to exchange routing information between *autonomous systems* (ASes) on the internet, enabling global internet routing.",
-        "It's a protocol for encrypting network traffic.",
-        "It's a protocol for managing wireless networks."
+        "It's a routing protocol for assigning IP addresses dynamically between autonomous systems (ASes) on the internet.",
+        "It's the routing protocol used to exchange routing information between autonomous systems (ASes) on the internet.",
+        "It's a protocol for routing encrypted network traffic between autonomous systems (ASes) on the internet.",
+        "It's a routing protocol for managing wireless networks between autonomous systems (ASes) on the internet."
       ],
       "correctAnswerIndex": 1,
       "explanation": "BGP is the *exterior gateway protocol* that makes the internet work. It's used by routers in different *autonomous systems* (ASes) – networks under a single administrative control, like ISPs – to exchange routing information and determine the best paths for traffic to reach different destinations across the internet. It's *not* DHCP, encryption, or wireless management.",
@@ -620,7 +620,7 @@ db.tests.insertOne({
       "question": "Which of the following statements accurately describes the difference between 'stateful' and 'stateless' firewalls?",
       "options": [
         "Stateful firewalls are less secure than stateless firewalls.",
-        "Stateful firewalls only examine individual packets in isolation, while stateless firewalls track the state of network connections and make filtering decisions based on both packet headers and connection context.",
+        "Stateful firewalls only examine individual packets in isolation, while stateless firewalls track the state of network connections.",
         "Stateless firewalls are less secure than stateful firewalls",
         "Stateful firewalls are only used for wireless networks, while stateless firewalls are used for wired networks."
       ],
@@ -634,7 +634,7 @@ db.tests.insertOne({
       "options": [
         "Replace the user's network cable.",
         "Check the user's web browser settings and try a different browser.",
-        "Check DNS resolution by using `nslookup` (or `dig`) to query DNS servers for the website's domain name.",
+        "Check DNS resolution for the website's domain name.",
         "Reboot the user's computer."
       ],
       "correctAnswerIndex": 2,
@@ -645,15 +645,19 @@ db.tests.insertOne({
       "id": 50,
       "question": "What is 'RADIUS' (Remote Authentication Dial-In User Service) primarily used for?",
       "options": [
-        "To encrypt network traffic.",
-        "To translate domain names into IP addresses.",
-        "To provide centralized Authentication, Authorization, and Accounting (AAA) management for users and devices connecting to a network, often used with VPNs, dial-up, and wireless access.",
-        "To assign IP addresses dynamically."
+        "To encrypt network traffic with centralized Authentication.",
+        "To translate domain names into IP addresses using authorization, and accounting management .",
+        "To provide centralized Authentication, Authorization, and Accounting management for users and devices connecting to a network.",
+        "To provide centralized Authentication and Authorization, for users and devices connecting to a network."
       ],
       "correctAnswerIndex": 2,
       "explanation": "RADIUS is a networking protocol specifically designed for centralized AAA. It allows a central server to authenticate users, authorize their access to specific network resources, and track their network usage (accounting). This is commonly used for network access control (VPNs, dial-up, wireless). It's *not* encryption, DNS, or DHCP.",
       "examTip": "RADIUS is the industry-standard protocol for centralized AAA in network access control."
     },
+
+
+
+    
     {
       "id": 51,
       "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
