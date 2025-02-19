@@ -642,667 +642,654 @@ db.tests.insertOne({
       "examTip": "An IPS provides proactive, real-time protection against network attacks."
     },
     {
-      "id": 50,
-      "question": "Which of the following is a characteristic of 'infrastructure as code' (IaC)?",
+      "id": 51,
+      "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
       "options": [
-        "It involves manually configuring network devices using a command-line interface.",
-        "It treats infrastructure (networks, servers, configurations) as software, managing and provisioning it through code, enabling automation, version control, repeatability, and faster deployments.",
-        "It is only suitable for small and simple networks.",
-        "It eliminates the need for skilled network engineers."
+        "Use DHCP Snooping, which filters unauthorized DHCP servers by validating DHCP messages from trusted ports only, preventing rogue IP assignments.",
+        "Enable Port Security on each switch port, binding a limited set of pre-approved MAC addresses and rejecting all others that connect.",
+        "Implement 802.1X port-based authentication, which forces clients to log in using credentials before granting network access.",
+        "Divide the network into separate VLANs, ensuring that devices in different VLANs cannot communicate directly without routing."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "IaC allows you to define and manage your infrastructure (networks, servers, virtual machines, etc.) using code (often in a declarative format). This code can be version-controlled, tested, and reused, making infrastructure deployments more consistent, reliable, and automated. It's *not* manual configuration, it's applicable to *all* sizes of networks, and it *doesn't* eliminate the need for skilled engineers (it changes their role).",
-      "examTip": "IaC is a key practice for DevOps and cloud computing, enabling automation and consistency in infrastructure management."
-    },
-    {
-      "id": 51,
-      "question": "A network administrator is troubleshooting a slow website. Using `traceroute`, they observe high latency at a specific hop *before* the final destination.  What does this indicate?",
-      "options": [
-        "The problem is with the user's local computer.",
-        "The problem is with the website's DNS server.",
-        "The problem is likely with the network infrastructure at or near the hop with high latency.",
-        "The problem is with the user's web browser."
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "`traceroute` shows the path that packets take to reach a destination, including the delay at each hop (router). High latency at a *specific* hop indicates a problem *at that point* in the network, *not* the user's local computer, DNS, or web browser.  It could be congestion, a faulty router, or a misconfigured link at that hop.",
-      "examTip": "Use `traceroute` to identify points of high latency along a network path."
+      "explanation": "Port security allows you to restrict access to a switch port based on MAC address. You can either limit the *number* of MAC addresses allowed on a port or specify *exactly which* MAC addresses are permitted. This is a Layer 2 security feature that helps prevent unauthorized devices from connecting to the network. DHCP snooping prevents rogue DHCP servers, 802.1X provides port-based *authentication* (often *using* RADIUS), and VLANs segment the network *logically*.",
+      "examTip": "Port security enhances network security by controlling access at the switch port level based on MAC address."
     },
     {
       "id": 52,
-      "question": "What is a 'denial-of-service' (DoS) attack?",
+      "question": "Which of the following is a potential security risk associated with using an outdated or unpatched web browser?",
       "options": [
-        "An attempt to steal user passwords.",
-        "An attempt to overwhelm a network or server with traffic from a *single* source, making it unavailable to legitimate users.",
-        "An attempt to trick users into revealing personal information.",
-        "An attempt to gain unauthorized access to a system by guessing passwords."
+        "Potentially faster page loads because the browser does not include newer security checks, though this is usually not a safe practice.",
+        "Better compatibility with older sites, but limited support for modern features and standards as time goes on.",
+        "Being exposed to documented security flaws that attackers can exploit to gain unauthorized access or implant malicious software.",
+        "Having a built-in mechanism that automatically replicates or archives the user’s browsing data for backups."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DoS attack aims to disrupt a service by flooding it with traffic *from a single attacking machine*, making it inaccessible to legitimate users. Password stealing is credential theft, tricking users is phishing, and password guessing is a brute-force attack. A *distributed* DoS (DDoS) uses *multiple* sources.",
-      "examTip": "DoS attacks can cause significant downtime and disruption to online services."
+      "correctAnswerIndex": 2,
+      "explanation": "Web browsers, like any software, can have security vulnerabilities. Browser updates often include patches for these vulnerabilities. Using an outdated browser leaves you exposed to known exploits that attackers can use to compromise your system, steal data, or install malware. It *doesn't* increase speed, improve compatibility (in the long run), or back up data.",
+      "examTip": "Always keep your web browser (and all software) up-to-date to protect against security vulnerabilities."
     },
     {
       "id": 53,
-      "question": "What is the function of the Address Resolution Protocol (ARP)?",
+      "question": "What is 'link aggregation' (also known as 'port channeling' or 'EtherChannel') used for in networking?",
       "options": [
-        "To translate domain names (like google.com) into IP addresses.",
-        "To dynamically assign IP addresses to devices.",
-        "To map IP addresses to MAC addresses on a local network, allowing devices to communicate at the data link layer.",
-        "To encrypt network traffic."
+        "Encrypting traffic at Layer 2 so data remains confidential between switches within the local LAN.",
+        "Configuring a single switch port to host multiple VLANs for better segmentation on a single cable.",
+        "Consolidating several physical Ethernet cables into one logical interface, boosting total throughput and providing failover if one link fails.",
+        "Applying MAC-based filtering rules to permit or deny traffic based on a device’s hardware address."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "ARP is crucial for *local* network communication. Before a device can send data to another device on the *same* subnet, it needs to know the recipient's MAC address. ARP resolves the IP address to the corresponding MAC address. It's *not* DNS, DHCP, or encryption.",
-      "examTip": "ARP is essential for communication within an Ethernet LAN."
+      "explanation": "Link aggregation allows you to bundle multiple physical Ethernet links together, treating them as a single, higher-bandwidth link. This also provides redundancy – if one physical link fails, the others continue to carry traffic. It's *not* about encryption, VLAN creation, or MAC address filtering (though link aggregation can be *used* on trunk ports carrying multiple VLANs).",
+      "examTip": "Link aggregation increases bandwidth and provides fault tolerance for network connections."
     },
     {
       "id": 54,
-      "question": "You are configuring a wireless network and want to use the 5 GHz band. Which of the following 802.11 standards operate in the 5 GHz band (either exclusively or optionally)?",
+      "question": "What is a 'default route' in a routing table?",
       "options": [
-        "802.11b only",
-        "802.11g only",
-        "802.11a, 802.11n, 802.11ac, and 802.11ax",
-        "802.11b and 802.11g"
+        "A special entry that tells routers how to forward packets destined for subnets on the same local segment or VLAN.",
+        "An all-purpose route used only if there is no more specific match in the routing table, often represented as 0.0.0.0/0 for external connectivity.",
+        "A defined path for directing traffic strictly within the internal LAN or private organizational subnets.",
+        "A routing choice automatically picked based on having the highest administrative distance among available routes."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "802.11a operates *exclusively* in the 5 GHz band. 802.11n, 802.11ac, and 802.11ax can operate in *both* the 2.4 GHz and 5 GHz bands. 802.11b and 802.11g operate *only* in the 2.4 GHz band.",
-      "examTip": "Know the frequency bands used by different 802.11 standards."
+      "correctAnswerIndex": 1,
+      "explanation": "The default route is the route a router uses when it doesn't have a *more specific* route in its routing table for a particular destination IP address. It's often configured to point to the next-hop router that connects to the internet or a larger network. It's *not* for local traffic, specifically *internal* traffic, or defined by administrative distance (which is about *choosing* between routes, not *what* a default route *is*).",
+      "examTip": "The default route (often represented as 0.0.0.0/0) is essential for connecting to networks outside the locally configured ones."
     },
     {
       "id": 55,
-      "question": "What is a 'virtual LAN' (VLAN)?",
+      "question": "What is the purpose of 'network documentation'?",
       "options": [
-        "A network that uses only virtual machines.",
-        "A logical grouping of network devices that are on the same broadcast domain, regardless of their physical location within a switched network.",
-        "A type of network cable.",
-        "A program for creating virtual reality environments."
+        "To improve throughput by automatically optimizing switch and router performance with no manual intervention.",
+        "To serve as a comprehensive source of critical details about the network’s structure, configurations, IP allocations, and procedures, aiding in future planning and troubleshooting.",
+        "To remove the need for firewalls and antivirus software by providing a visual overview of the environment.",
+        "To block certain users from accessing the internet based on a written policy alone."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VLANs allow you to segment a *physical* network into multiple, *logically* separate networks. This improves security, performance (by reducing broadcast traffic), and manageability. Devices on different VLANs cannot communicate directly without a router (or Layer 3 switch). They are *not* limited to virtual machines, a cable type, or VR software.",
-      "examTip": "VLANs are a fundamental tool for network segmentation in switched networks."
+      "explanation": "Network documentation is *critical* for understanding, managing, and troubleshooting a network. It should include network diagrams (physical and logical), IP address schemes, device configurations (including passwords, stored *securely*), standard operating procedures, and contact information for vendors and support personnel. It *doesn't* make the network run faster, replace security, or prevent internet access.",
+      "examTip": "Good network documentation is an investment that saves time and trouble in the long run; keep it accurate and up-to-date."
     },
     {
       "id": 56,
-      "question": "Which of the following statements BEST describes 'network segmentation'?",
+      "question": "A network administrator is troubleshooting a connectivity problem where users on VLAN 10 cannot communicate with users on VLAN 20. Inter-VLAN routing is configured on a Layer 3 switch. The administrator checks the switch configuration and finds that IP routing is enabled globally. What is the NEXT step the administrator should take to diagnose the problem?",
       "options": [
-        "Physically separating network cables.",
-        "Dividing a network into smaller, isolated subnetworks (using VLANs, subnets, or other techniques) to improve security, performance, and manageability.",
-        "Connecting multiple networks together using routers.",
-        "Encrypting all network traffic."
+        "Examine all physical connections between the core and access switches to confirm there are no loose or damaged cables.",
+        "Verify that Spanning Tree Protocol (STP) is running to prevent loops, ensuring packets are not lost in redundant paths.",
+        "Look at the configuration of each Switched Virtual Interface (SVI), ensuring correct IP addresses, subnet masks, administrative status, and any ACLs that may be filtering inter-VLAN traffic.",
+        "Perform a full system reboot of the Layer 3 switch to reset all routing configurations."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network segmentation is about creating logical boundaries within a network to isolate traffic and limit the impact of security breaches. It's *not* just about *physical* separation, connecting networks (that's routing), or encryption. Segmentation improves both security and performance by reducing broadcast domains and containing potential problems.",
-      "examTip": "Segmentation is a critical security best practice for any network."
+      "correctAnswerIndex": 2,
+      "explanation": "Since IP routing is enabled globally, the next logical step is to check the *specific configuration* of the SVIs, which act as the router interfaces for the VLANs. Ensure the SVIs have correct IP addresses and subnet masks within their respective VLANs, and that they are *administratively up* (`no shutdown`). Also, check for any *access control lists (ACLs)* applied to the SVIs that might be blocking traffic between the VLANs. Cabling is less likely if *intra*-VLAN communication works. STP prevents loops, not routing. Rebooting is a last resort.",
+      "examTip": "When troubleshooting inter-VLAN routing, verify SVI configuration (IP address, subnet mask, status) and any applied ACLs."
     },
     {
       "id": 57,
-      "question": "What is 'social engineering' in the context of cybersecurity?",
+      "question": "Which of the following is a key benefit of using 'virtualization' in a network environment?",
       "options": [
-        "Building and managing a social media presence.",
-        "Manipulating people into divulging confidential information or performing actions that compromise security, often through deception, impersonation, or psychological tricks.",
-        "Using social media for marketing.",
-        "Networking with colleagues at a conference."
+        "It completely removes the need for any hardware in the data center, including network switches.",
+        "It allows multiple operating systems and applications to share one physical server, enhancing resource usage, reducing hardware costs, and increasing deployment flexibility.",
+        "It guarantees that no malware can infect any of the VMs, providing absolute security against viruses.",
+        "It automatically replicates all VMs offsite without any additional configuration or backup strategy."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Social engineering attacks exploit *human* vulnerabilities, not technical ones. Attackers use various techniques to trick people into revealing sensitive information (like passwords or credit card numbers) or granting them access to systems. It's about *manipulation*, not social media platforms, marketing, or professional networking (in the traditional sense).",
-      "examTip": "Be skeptical of unsolicited requests for information, and always verify the identity of anyone asking for sensitive data."
+      "explanation": "Virtualization allows you to create virtual machines (VMs), which are software-based representations of computers. Multiple VMs can run on a single physical server, sharing its resources (CPU, memory, storage). This improves resource utilization, reduces the need for physical hardware (and associated costs), and provides flexibility (easily create, move, and clone VMs). It doesn't eliminate *all* physical servers (you still need a host), guarantee *complete* security, or automatically back up *all* data (though it can *facilitate* backups).",
+      "examTip": "Virtualization is a core technology for cloud computing and modern data centers."
     },
     {
       "id": 58,
-      "question": "A network administrator configures a router with an access control list (ACL) that includes the statement `deny ip any any`.  What is the effect of this ACL, assuming it's applied to an interface?",
+      "question": "What is 'packet fragmentation', and why can it negatively impact network performance?",
       "options": [
-        "It allows all IP traffic.",
-        "It blocks all IP traffic.",
-        "It allows only TCP traffic.",
-        "It allows only UDP traffic."
+        "A cryptographic process that breaks large plaintext blocks into smaller pieces for safer transmission.",
+        "A method of merging several smaller packets into one giant frame to minimize overhead on the wire.",
+        "Splitting a packet into smaller fragments when it exceeds the MTU of a link, increasing overhead and lowering overall throughput if done excessively.",
+        "Deploying content-based filtering that inspects each fragment of data for malicious patterns."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`deny ip any any` blocks *all* IP traffic.  `ip` refers to the IP protocol (covering both TCP and UDP), `any` for the source means *any* source IP address, and `any` for the destination means *any* destination IP address. ACLs are processed sequentially, and there's an implicit `deny any` at the end of every ACL, so this single statement effectively blocks everything.",
-      "examTip": "Understand the structure and logic of ACL statements to determine their impact on network traffic."
+      "correctAnswerIndex": 2,
+      "explanation": "When a data packet is larger than the MTU (Maximum Transmission Unit) of a network link, it must be *fragmented* into smaller pieces for transmission. These fragments are then reassembled at the destination. *Excessive* fragmentation adds overhead (extra headers for each fragment) and increases the processing burden on devices, potentially reducing network performance. It's *not* encryption, combining packets, or filtering.",
+      "examTip": "Ensure that the MTU is set appropriately across all devices on a network to minimize fragmentation."
     },
     {
       "id": 59,
-      "question": "You are troubleshooting a network where users are experiencing intermittent connectivity and slow performance.  Using a protocol analyzer, you observe a large number of ARP requests and replies.  What does this MOST likely indicate?",
+      "question": "Which of the following statements BEST describes a 'distributed denial-of-service' (DDoS) attack?",
       "options": [
-        "The network is functioning normally.",
-        "The DNS server is not responding.",
-        "There may be an ARP spoofing attack, a misconfigured device, or a large number of devices constantly joining and leaving the network, causing excessive ARP traffic.",
-        "The DHCP server is not assigning IP addresses."
+        "Stealing user credentials by systematically attempting every possible password combination on a service.",
+        "Flooding a target from multiple compromised hosts, typically part of a botnet, to consume resources and make the service unavailable to legitimate users.",
+        "Sending deceptive phishing emails to trick users into revealing sensitive information for monetary gain.",
+        "Intercepting communications between two parties by positioning oneself in the middle of the connection."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "While *some* ARP traffic is normal, an *excessive* amount suggests a problem.  Possibilities include ARP spoofing (a malicious attack), a misconfigured device (e.g., constantly requesting an IP), or a very unstable network environment. It's *not* normal operation, and it's not directly related to DNS or DHCP (though DHCP *issues* could indirectly lead to *more* ARP requests if devices are constantly trying to get an IP).",
-      "examTip": "Excessive ARP traffic can indicate network problems or security threats."
+      "correctAnswerIndex": 1,
+      "explanation": "A DDoS attack is a *more powerful* form of DoS attack. Instead of originating from a single source, the attack traffic comes from *many* compromised computers, often forming a *botnet* (a network of infected machines controlled by the attacker). This makes it very difficult to block or mitigate the attack simply by blocking a single IP address. It's *not* password guessing, phishing, or a man-in-the-middle attack (though those techniques *could* be used in other stages of an attack).",
+      "examTip": "DDoS attacks are a significant threat to online services and require sophisticated mitigation techniques."
     },
     {
       "id": 60,
-      "question": "What is the primary purpose of using 'Quality of Service' (QoS) mechanisms in a network?",
+      "question": "A network administrator configures a router with the following access control list (ACL): `access-list 110 deny tcp any host 192.168.1.50 eq 23` `access-list 110 permit ip any any` The ACL is then applied to the router's inbound interface.  What traffic will be permitted to reach the host at 192.168.1.50?",
       "options": [
-        "To encrypt all network traffic.",
-        "To prioritize certain types of network traffic (like voice or video) over others, ensuring that critical or time-sensitive applications receive adequate bandwidth and low latency.",
-        "To automatically assign IP addresses to devices.",
-        "To translate domain names into IP addresses."
+        "All inbound traffic, including Telnet, since the router is ignoring the deny statement.",
+        "Everything except Telnet (TCP port 23) will be allowed through, blocking only Telnet to the host.",
+        "Only Telnet sessions, but blocking all other protocols like HTTP or SSH.",
+        "Absolutely no traffic is allowed due to the implicit deny at the end of every ACL."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "QoS allows network administrators to manage network resources and give preferential treatment to specific types of traffic. This is crucial for real-time applications (like VoIP and video conferencing) that require low latency and consistent bandwidth. It's *not* about encryption, IP assignment (DHCP), or DNS.",
-      "examTip": "QoS is essential for ensuring a good user experience for real-time applications on congested networks."
+      "explanation": "The first line of the ACL *explicitly denies* TCP traffic from *any* source (`any`) to the host 192.168.1.50 *specifically on port 23* (Telnet). The second line *permits all other IP traffic* (including other TCP ports, UDP, ICMP, etc.). Because ACLs are processed sequentially, and there's an implicit `deny any` at the end (which is overridden here by the `permit ip any any`), *only* Telnet traffic to 192.168.1.50 will be blocked; all other traffic to that host will be *allowed*.",
+      "examTip": "Carefully analyze each line of an ACL, remembering the order of processing and the implicit deny at the end."
     },
     {
       "id": 61,
-      "question": "Which of the following is a key characteristic of a 'zero-trust' security model?",
+      "question": "What is 'two-factor authentication' (2FA), and why is it a crucial security measure?",
       "options": [
-        "Trusting all users and devices inside the network perimeter by default.",
-        "Assuming that no user or device, whether inside or outside the network perimeter, should be trusted by default, and verifying every access request based on multiple factors.",
-        "Relying solely on firewalls for network security.",
-        "Using only strong passwords for authentication."
+        "Having two easy-to-remember passphrases for the same account, ensuring the user never forgets them.",
+        "A process requiring two independent checks to confirm a user’s identity (e.g., password plus phone token), greatly reducing unauthorized access if one factor is compromised.",
+        "Deploying a single, very long passcode that no attacker could ever guess.",
+        "Using the same credential on multiple accounts to streamline login procedures across different services."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Zero trust is a security framework that shifts away from the traditional 'perimeter-based' security model. It assumes that *no* user or device, regardless of location, should be automatically trusted.  Every access request must be verified based on identity, device security posture, context, and other factors.  It's *not* about trusting everything inside, relying solely on firewalls, or *only* using strong passwords (though those are *part* of it).",
-      "examTip": "Zero trust is a modern security approach that emphasizes 'never trust, always verify'."
+      "explanation": "2FA adds a critical layer of security by requiring *more than just a password*. It typically combines something you *know* (password), something you *have* (phone, security token, smart card), and/or something you *are* (biometric data like a fingerprint). Even if an attacker steals your password, they would *also* need the second factor to gain access. It's *not* using two passwords for the *same* account, just a *long* password (though that's good), or (very insecurely) reusing passwords.",
+      "examTip": "Enable 2FA whenever possible, especially for critical accounts like email, banking, and cloud services."
     },
     {
       "id": 62,
-      "question": "What is 'split horizon' used for in distance-vector routing protocols?",
+      "question": "You are troubleshooting a network where users are experiencing slow file transfers from a server. Using a protocol analyzer, you notice a significant number of TCP window size zero messages being sent *from* the server. What does this MOST likely indicate?",
       "options": [
-        "To encrypt routing updates.",
-        "To prevent routing loops by preventing a router from advertising a route back out the same interface from which it was learned.",
-        "To prioritize certain routes over others.",
-        "To load balance traffic across multiple links."
+        "An excessive amount of jitter in the network, causing unpredictable latency variations.",
+        "That the clients receiving data cannot process incoming packets quickly enough, causing the server to pause transmission.",
+        "A bottleneck or resource constraint on the server side (e.g., overburdened CPU or disk I/O), resulting in the server’s receive buffer becoming full.",
+        "Frequent collisions on the network, typical of older half-duplex hub setups."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Split horizon is a loop-prevention technique. A router will *not* advertise a route back to the neighbor from which it *learned* that route. This helps prevent situations where routers bounce routing information back and forth, creating a loop. It's *not* about encryption, prioritization, or load balancing.",
-      "examTip": "Split horizon is a key mechanism for preventing routing loops in distance-vector routing protocols like RIP."
+      "correctAnswerIndex": 2,
+      "explanation": "A TCP window size of zero sent *from the server* indicates that the *server's* receive buffer is full and it cannot accept any more data *from the client*. This tells the *client* to stop sending. This usually points to a *server-side* bottleneck: the server's CPU might be overloaded, it might be running out of memory, or its disk I/O might be slow. It's *not* about client-side processing, jitter, or collisions (though network issues *could* contribute *indirectly*).",
+      "examTip": "TCP window size zero messages, especially *from* a server, often indicate a server-side resource bottleneck."
     },
     {
       "id": 63,
-      "question": "A network administrator wants to implement a solution that provides centralized authentication, authorization, and accounting (AAA) for network access. Which protocol is MOST appropriate?",
+      "question": "What is 'ARP spoofing' (or 'ARP poisoning'), and what is a potential consequence?",
       "options": [
-        "SNMP (Simple Network Management Protocol)",
-        "RADIUS (Remote Authentication Dial-In User Service)",
-        "SMTP (Simple Mail Transfer Protocol)",
-        "HTTP (Hypertext Transfer Protocol)"
+        "A legitimate process for assigning IP addresses automatically to ensure devices can join the network seamlessly.",
+        "A routine mechanism for mapping an IP to a MAC address via broadcast requests and replies in a local Ethernet segment.",
+        "Injecting fake ARP messages so that the attacker’s MAC address appears to map to the default gateway’s IP, letting the attacker intercept or modify network traffic at will.",
+        "A cipher-based technique for ensuring every packet is encrypted before it leaves the host."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "RADIUS is a networking protocol specifically designed to provide centralized AAA services. It's commonly used for network access control, including dial-up, VPN, and wireless authentication. SNMP is for network *management*, SMTP is for *email*, and HTTP is for *web browsing*.",
-      "examTip": "RADIUS is the standard protocol for centralized AAA in network access control."
+      "correctAnswerIndex": 2,
+      "explanation": "ARP spoofing is a man-in-the-middle attack that exploits the Address Resolution Protocol (ARP). The attacker sends *fake* ARP messages to associate *their* MAC address with the IP address of a legitimate device (often the default gateway, allowing them to intercept *all* traffic leaving the local network). This allows the attacker to intercept, modify, or block traffic intended for the legitimate device. It's *not* DHCP, the normal ARP process, or encryption.",
+      "examTip": "ARP spoofing is a serious security threat that can allow attackers to intercept and manipulate network traffic."
     },
     {
       "id": 64,
-      "question": "What is 'port mirroring' (also known as 'SPAN') used for on a network switch?",
+      "question": "A network uses a /22 subnet mask. How many usable host addresses are available within each subnet?",
       "options": [
-        "To encrypt network traffic.",
-        "To restrict access to a switch port based on MAC address.",
-        "To copy network traffic from one or more source ports to a destination port for monitoring and analysis, often used with intrusion detection systems or protocol analyzers.",
-        "To assign IP addresses dynamically."
+        "254 usable IP addresses per subnet, offering smaller broadcast domains.",
+        "510 usable IP addresses per subnet, suitable for medium-sized networks requiring around 500 devices.",
+        "1022 usable IP addresses per subnet, enough to accommodate a larger segment with over a thousand potential hosts.",
+        "2046 usable IP addresses per subnet, providing extremely large broadcast domains."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Port mirroring allows you to duplicate network traffic from one or more switch ports to another port. This is typically used to connect a network monitoring device (like an IDS or a protocol analyzer) to capture and analyze traffic without disrupting the normal flow of data. It's *not* encryption, port security, or IP assignment.",
-      "examTip": "Port mirroring is a valuable tool for network monitoring and troubleshooting."
+      "explanation": "A /22 subnet mask means 22 bits are used for the network portion of the IP address, leaving 32 - 22 = 10 bits for the host portion. The number of *possible* host addresses is 2^10 = 1024. However, you must subtract 2 from this number (the network address and the broadcast address), leaving 1022 *usable* host addresses.",
+      "examTip": "The number of usable host addresses in a subnet is calculated as 2^(32 - prefix length) - 2."
     },
     {
       "id": 65,
-      "question": "Which of the following is a potential disadvantage of using a 'star' network topology?",
+      "question": "What is a 'rogue DHCP server', and why is it a security risk?",
       "options": [
-        "It is difficult to add or remove devices.",
-        "If one cable fails, the entire network goes down.",
-        "The central hub or switch represents a single point of failure; if it fails, all devices connected to it lose network access.",
-        "It requires more cabling than other topologies."
+        "A legitimate DHCP server that’s properly configured and fully trusted by the organization’s network policy.",
+        "An unauthorized DHCP service on the network, whether maliciously or accidentally installed, which can hand out incorrect IP settings or direct clients to harmful gateways, causing disruptions or enabling attacks.",
+        "A test DHCP server used exclusively for lab environments, never connected to production VLANs.",
+        "A DHCP service that advertises extremely short lease times, forcing frequent IP reassignments for all devices."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "While the star topology is easy to manage and troubleshoot (a single cable failure only affects *one* device), the *central* device (hub or switch) is a *single point of failure*. If that central device fails, all devices connected to it lose network connectivity. It's *not* difficult to add/remove devices, and a *single* cable failure doesn't take down the *entire* network. Star does typically require more cabling than bus, but that is not an inherent disadvantage compared to the single point of failure.",
-      "examTip": "The central device in a star topology is a critical point of failure; consider redundancy for high-availability networks."
+      "correctAnswerIndex": 1,
+      "explanation": "A rogue DHCP server is a security threat because it can disrupt network operations by assigning incorrect IP addresses, subnet masks, default gateways, or DNS server information. This can cause connectivity problems, prevent devices from accessing the network, or even allow an attacker to redirect traffic to a malicious server (a man-in-the-middle attack). It's *not* an authorized, test, or fast DHCP server.",
+      "examTip": "DHCP snooping on switches is a key security measure to prevent rogue DHCP servers."
     },
     {
       "id": 66,
-      "question": "What is a 'distributed denial-of-service' (DDoS) attack?",
+      "question": "Which of the following network topologies provides the HIGHEST level of redundancy and fault tolerance?",
       "options": [
-        "An attempt to steal user passwords.",
-        "An attempt to overwhelm a network or server with traffic originating from *multiple*, compromised computers (often a botnet), making the service unavailable to legitimate users.",
-        "A type of phishing attack.",
-        "A type of brute-force attack."
+        "A star design, where a central device connects all endpoints through individual links but introduces a single point of failure at the hub or switch.",
+        "A bus layout, where all devices share one communication medium, so a single cable fault may disrupt the entire segment.",
+        "A ring model, in which packets travel in one direction around a loop, with potential single points of failure if no redundancy is built in.",
+        "A full mesh architecture, where every node is connected directly to every other node, offering maximal redundancy at the cost of complexity and expense."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DDoS attack is a more sophisticated and powerful form of DoS attack. Instead of originating from a single source, the attack traffic comes from many compromised computers (often part of a botnet – a network of infected machines controlled by an attacker). This makes it much harder to block or mitigate. It's *not* password stealing, phishing, or brute-force (though those might be used to build a botnet in the first place).",
-      "examTip": "DDoS attacks are a major threat to online services and require specialized mitigation techniques."
+      "correctAnswerIndex": 3,
+      "explanation": "A *full mesh* topology connects *every* device to *every other* device. This provides the maximum possible redundancy: if any single link or device fails, there are always multiple alternative paths for communication. Star has a single point of failure (the central device), bus has a single point of failure (the cable), and ring has a single point of failure (any break in the ring). While *partial mesh* topologies exist, *full mesh* is the most redundant.",
+      "examTip": "Full mesh topology offers the highest redundancy but is also the most expensive and complex to implement."
     },
     {
       "id": 67,
-      "question": "Which type of DNS record is used to map a domain name to an IPv4 address?",
+      "question": "A network administrator configures a switch port with the command `switchport mode access` and `switchport access vlan 10`. What is the effect of these commands?",
       "options": [
-        "AAAA",
-        "A",
-        "CNAME",
-        "MX"
+        "The port is set to trunk mode, allowing multiple VLANs to traverse the link untagged for all VLAN IDs.",
+        "The port operates as a standard access interface, associating any connected device with VLAN 10, and ignoring traffic for other VLANs.",
+        "The port is immediately placed into an administratively down state and cannot pass traffic until re-enabled.",
+        "The port dynamically negotiates its VLAN membership by listening for tags from connected devices."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An 'A' record in DNS maps a hostname (like www.example.com) to an IPv4 address. AAAA records map to IPv6 addresses, CNAME records create aliases, and MX records specify mail servers.",
-      "examTip": "Remember 'A' records for IPv4 and 'AAAA' records for IPv6 in DNS."
+      "explanation": "`switchport mode access` configures the port as an *access port*, meaning it will carry traffic for *only one* VLAN. `switchport access vlan 10` assigns that port to VLAN 10. Therefore, the port will only carry untagged traffic belonging to VLAN 10. It's *not* a trunk port (which carries multiple VLANs), disabled, or dynamically assigned.",
+      "examTip": "Access ports carry traffic for a single VLAN; trunk ports carry traffic for multiple VLANs."
     },
     {
       "id": 68,
-      "question": "What does 'MTU' stand for, and why is it important in networking?",
+      "question": "You are troubleshooting a network connectivity issue. A user cannot access any websites by name, and `nslookup` commands fail to resolve domain names. However, the user *can* ping external IP addresses successfully. What is the MOST likely cause?",
       "options": [
-        "Maximum Transfer Unit; it's the minimum packet size allowed on a network.",
-        "Maximum Transmission Unit; it's the largest packet size that can be transmitted on a network link without fragmentation.",
-        "Minimum Transmission Unit; it's the smallest packet size that can be transmitted on a network.",
-        "Media Transfer Unit; it's the type of cable used on the network."
+        "A damaged or unplugged Ethernet cable is preventing all forms of traffic from leaving the local subnet.",
+        "The user’s specific web browser is corrupt, causing website lookup failures, even though other protocols function.",
+        "An incorrect or unreachable DNS server configuration, leading to an inability to resolve hostnames into IP addresses while raw IP connectivity remains intact.",
+        "A virus infection that completely prohibits any type of domain-based communication but permits IP-based pings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "MTU (Maximum Transmission Unit) defines the largest data packet (in bytes) that can be transmitted over a network link *without* being fragmented. If a packet exceeds the MTU, it must be broken into smaller fragments, which can degrade performance. It's *not* about the minimum packet size or cable type.",
-      "examTip": "Ensure that the MTU is set correctly across all devices on a network to avoid fragmentation and performance issues."
+      "correctAnswerIndex": 2,
+      "explanation": "The ability to *ping external IP addresses* rules out a basic network connectivity problem (like a cable) or a *complete* firewall block. The failure of *both* website access by name *and* `nslookup` commands *strongly* points to a DNS resolution issue. The configured DNS servers might be unreachable, not responding, or returning incorrect information. While a browser issue *could* cause problems, it wouldn't affect `nslookup`. A virus *could* interfere with DNS, but it's less likely than a direct DNS server problem.",
+      "examTip": "If you can ping by IP but not by name, and `nslookup` fails, focus on DNS server configuration and availability."
     },
     {
       "id": 69,
-      "question": "A network administrator configures a router with the following access control list (ACL): `access-list 100 deny tcp any host 192.168.1.50 eq 22` and `access-list 100 permit ip any any`. What is the effect of this ACL, assuming it is applied to an interface in the inbound direction?",
+      "question": "Which of the following is a characteristic of a 'stateful firewall' compared to a stateless packet filter?",
       "options": [
-        "It allows all traffic to the host 192.168.1.50.",
-        "It blocks all traffic to the host 192.168.1.50.",
-        "It blocks SSH (port 22) traffic from any source to the host 192.168.1.50, but allows all other IP traffic.",
-        "It allows only SSH traffic to the host 192.168.1.50."
+        "A stateful firewall offers reduced intelligence by treating every packet as unrelated to others, solely examining header fields.",
+        "A stateful firewall maintains context by tracking ongoing conversations (like TCP sessions), enabling more refined and secure traffic decisions.",
+        "A stateful firewall is only relevant in wireless deployments, where packet collisions are more prevalent.",
+        "A stateful firewall is less secure than stateless filtering because it relies on ephemeral data structures that can be easily manipulated."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The first line explicitly denies TCP traffic from any source to host 192.168.1.50 *on port 22* (SSH). The second line permits all other IP traffic. That means SSH traffic to 192.168.1.50 is blocked, but everything else is allowed. There's an implicit `deny any` at the end of the ACL, but `permit ip any any` overrides it for all other traffic.",
-      "examTip": "Read ACLs line by line and remember the implicit `deny any` at the end."
+      "correctAnswerIndex": 1,
+      "explanation": "Stateful firewalls go beyond simple packet filtering by maintaining a table of active network connections. They can distinguish between legitimate return traffic for an established connection and unsolicited incoming traffic, providing a higher level of security. Stateless packet filters, on the other hand, examine each packet *independently* without considering the connection context. Stateful are *more* secure, not less, and are used in *all* types of networks.",
+      "examTip": "Stateful firewalls provide more robust security by considering the context of network connections."
     },
     {
       "id": 70,
-      "question": "You are troubleshooting a network connectivity problem.  A user can ping their own computer's IP address and the loopback address (127.0.0.1), but they cannot ping any other devices on their local subnet.  What is the LEAST likely cause?",
+      "question": "A company wants to implement a network security solution that can detect and prevent intrusions, filter web content, provide antivirus protection, and act as a VPN gateway. Which type of device BEST meets these requirements?",
       "options": [
-        "A faulty network cable.",
-        "A misconfigured IP address or subnet mask on the user's computer.",
-        "A problem with the network interface card (NIC) on the user's computer.",
-        "A problem with the DNS server."
+        "An NAS (Network-Attached Storage) server that stores files and can also run some scripts or applications.",
+        "A unified threat management (UTM) appliance designed to consolidate multiple security features into one platform, including IPS, content filtering, and VPN services.",
+        "A wireless LAN controller (WLC) that centralizes access point management and could handle encryption.",
+        "A domain controller that manages user credentials and group policies for authentication."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Because the user can ping their own IP and loopback, the local TCP/IP stack is fine. Not being able to ping devices on the local subnet points to either a physical issue (cable, NIC), or incorrect IP/subnet mask. DNS only comes into play when translating names to IP addresses, but here they can’t even ping by IP. Therefore, DNS is the least likely cause.",
-      "examTip": "First verify physical/connectivity issues. DNS won’t matter if you can’t ping IPs on the same subnet."
+      "correctAnswerIndex": 1,
+      "explanation": "A Unified Threat Management (UTM) appliance combines multiple security functions (firewall, IPS, antivirus, web filtering, VPN) into a single device. This simplifies security management and provides a comprehensive, layered approach to protection. A NAS is for *storage*, a WLC manages *wireless access points*, and a domain controller handles *user authentication* (primarily in Windows networks).",
+      "examTip": "UTM appliances provide a consolidated approach to network security."
     },
     {
       "id": 71,
-      "question": "What is 'CSMA/CD', and in what type of network is it used?",
+      "question": "Which of the following is a common use for a 'proxy server' in a network?",
       "options": [
-        "Carrier Sense Multiple Access with Collision Detection; it's used in modern switched Ethernet networks.",
-        "Carrier Sense Multiple Access with Collision Detection; it's used in older, hub-based Ethernet networks to manage collisions.",
-        "Carrier Sense Multiple Access with Collision Avoidance; it's used in wireless networks.",
-        "Code Division Multiple Access; it's used in cellular networks."
+        "Automatically providing IP addresses to end devices via DHCP, ensuring each host has a unique lease.",
+        "Acting as an intermediary for client requests to external servers, handling tasks like caching for performance, content filtering for compliance, and masking internal IP addresses for security.",
+        "Translating user-friendly domain names into their corresponding IP addresses within a LAN environment.",
+        "Encrypting all TCP streams passing between internal clients and the public internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "CSMA/CD was the method Ethernet used to handle collisions when multiple devices shared a collision domain (as with hubs). Devices listen for network traffic (carrier sense) and, if a collision is detected, back off and retry. Modern switched Ethernet uses full-duplex on each port, eliminating collisions. Wireless uses CSMA/CA, and CDMA is for cellular networks.",
-      "examTip": "CSMA/CD is legacy; full-duplex switched Ethernet no longer requires it."
+      "explanation": "A proxy server sits between clients and other servers (usually the internet). It can improve performance by caching frequently accessed content, enhance security by filtering traffic and hiding the client's IP address, and control access to specific websites or content. It's *not* primarily for IP assignment (DHCP), DNS, or *general* encryption (though proxies *can* be involved in SSL/TLS termination/inspection).",
+      "examTip": "Proxy servers provide an additional layer of control, security, and performance optimization for network traffic."
     },
     {
       "id": 72,
-      "question": "A company wants to implement a network security solution that provides centralized authentication, authorization, and accounting (AAA) for users accessing network resources via VPN, dial-up, and wireless connections. Which protocol is MOST appropriate?",
+      "question": "What is 'split horizon' and how does it prevent routing loops in distance-vector routing protocols?",
       "options": [
-        "SNMP (Simple Network Management Protocol)",
-        "RADIUS (Remote Authentication Dial-In User Service)",
-        "SMTP (Simple Mail Transfer Protocol)",
-        "HTTP (Hypertext Transfer Protocol)"
+        "A method for encrypting routing updates to secure them from eavesdropping on untrusted links.",
+        "A technique preventing a router from advertising the route back onto the interface it learned it from, thereby stopping repetitive back-and-forth route propagation.",
+        "A prioritization approach that designates certain routes as higher or lower cost to maintain path preferences.",
+        "A method for balancing network load by distributing traffic evenly across multiple next hops."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "RADIUS is specifically designed for centralized AAA. It allows a central server to authenticate users, authorize their access to specific resources, and log their sessions (accounting). SNMP is for network management, SMTP is email, HTTP is web browsing.",
-      "examTip": "RADIUS is the de facto standard for AAA in many enterprise networks."
+      "explanation": "Split horizon is a loop-prevention mechanism used in distance-vector routing protocols (like RIP). The rule is simple: a router should *not* advertise a route back to the neighbor from which it *learned* that route. This prevents routing information from being sent back and forth between routers, which could create a routing loop. It's *not* about encryption, prioritization, or load balancing.",
+      "examTip": "Split horizon is a key technique for preventing routing loops in distance-vector protocols."
     },
     {
       "id": 73,
-      "question": "What is a 'deauthentication attack' in the context of wireless networks?",
+      "question": "What is the purpose of using 'Quality of Service' (QoS) in a network?",
       "options": [
-        "An attempt to steal wireless network passwords.",
-        "A type of denial-of-service attack where the attacker sends forged deauthentication frames to disconnect legitimate users from a wireless access point.",
-        "An attempt to trick users into revealing their personal information.",
-        "An attempt to guess wireless network passwords using a brute-force attack."
+        "Encrypting every packet at Layer 3 to maintain privacy in both the LAN and WAN segments.",
+        "Allocating network resources so that vital or latency-sensitive traffic, such as voice or video, receives priority during high utilization, avoiding disruption to critical applications.",
+        "Automatically assigning IP addresses to each device without requiring manual configuration.",
+        "Associating hostnames with corresponding IP addresses for user-friendly access to network services."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A deauthentication attack involves sending fake deauth frames, which are part of 802.11 management traffic, to the AP or clients. This forces legitimate clients off the network. Attackers often use it as a precursor to an Evil Twin or man-in-the-middle attack. It’s not simply password theft, phishing, or brute forcing the Wi-Fi key (though that can also happen).",
-      "examTip": "Deauth attacks exploit the unprotected nature of 802.11 management frames."
+      "explanation": "QoS allows network administrators to manage network resources and give preferential treatment to specific types of traffic. This is essential for real-time applications (like VoIP and video conferencing) that require low latency and consistent bandwidth. It's not about encryption, IP assignment (DHCP), or DNS.",
+      "examTip": "QoS is crucial for ensuring a good user experience for real-time applications on busy networks."
     },
     {
       "id": 74,
-      "question": "You are designing a network with multiple VLANs. You want to ensure that traffic between VLANs is controlled and inspected by a firewall. Which design is MOST appropriate?",
+      "question": "You are troubleshooting a network where users are reporting slow performance when accessing a particular web application. Using a protocol analyzer, you notice a large number of TCP retransmissions, duplicate ACKs, and 'TCP Window Full' messages. What is the MOST likely underlying cause?",
       "options": [
-        "Configure all VLANs on the same switch with no router or firewall in between.",
-        "Configure inter-VLAN routing on a Layer 2 switch only.",
-        "Use a Layer 3 device (router or L3 switch) for inter-VLAN routing, and ensure all inter-VLAN traffic passes through a firewall interface for inspection.",
-        "Put all devices in a single subnet; no need for VLANs."
+        "DNS misconfiguration preventing the web application’s hostname from resolving to the correct IP address.",
+        "Improperly configured web browsers on user machines that are limiting HTTP connections or caching data incorrectly.",
+        "Some form of packet loss, congestion, or suboptimal link quality between the users and the server, leading to frequent retransmissions and flow-control issues.",
+        "An unresponsive DHCP server that fails to issue proper IP addresses, causing repeated lease renewals."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "To inspect traffic between VLANs, you must route it through a firewall. A Layer 2 switch cannot do routing. A single subnet defeats the purpose. The typical solution is: VLAN trunk into a Layer 3 device (or sub-interfaces), then pass traffic to the firewall for policy enforcement.",
-      "examTip": "For VLAN-to-VLAN inspection, you need routing plus a firewall in the traffic path."
+      "explanation": "TCP retransmissions, duplicate ACKs, and 'TCP Window Full' messages are all strong indicators of *packet loss* on the network. Retransmissions occur when the sender doesn't receive an acknowledgment for a transmitted packet. Duplicate ACKs indicate out-of-order packets (often due to drops). 'TCP Window Full' means the receiver's buffer is full and it can't accept more data (often due to congestion or slow processing). These symptoms point to a problem with the *network itself* or the *server's connection*, not DNS, browser configuration, or DHCP.",
+      "examTip": "TCP retransmissions, duplicate ACKs, and window size issues are key indicators of packet loss and network congestion."
     },
     {
       "id": 75,
-      "question": "Which of the following statements BEST describes 'network convergence'?",
+      "question": "What is '802.1X', and how does it contribute to network security?",
       "options": [
-        "Separate networks for voice, data, and video.",
-        "Using only wireless for everything.",
-        "Combining multiple services (voice, data, video, etc.) onto a single shared network infrastructure.",
-        "A method for encrypting all traffic on a network."
+        "A legacy wireless encryption standard akin to WEP, using static keys to protect traffic.",
+        "A port-based network access control mechanism mandating authentication credentials before devices can access LAN or WLAN resources, often integrated with a RADIUS server.",
+        "A routing protocol exchanging link-state information across multiple autonomous systems on the internet.",
+        "An automated IP assignment service ensuring hosts acquire IP addresses and DNS server details without manual intervention."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Network convergence is the trend of putting all communications (phone calls/VoIP, data, video conferencing, etc.) on one IP-based network. It simplifies management and can reduce costs. It’s not about separating them or only wireless, nor purely encryption.",
-      "examTip": "Converged networks carry voice, data, and video together."
+      "correctAnswerIndex": 1,
+      "explanation": "802.1X is a standard for *port-based Network Access Control (PNAC)*. It requires users or devices to *authenticate* before being granted access to the network. This is often used in conjunction with a RADIUS server for centralized authentication. It's *not* just a wireless protocol (it can be used on wired networks too), a routing protocol, or DHCP. It *enhances* security by preventing unauthorized devices from connecting.",
+      "examTip": "802.1X provides authenticated network access control, verifying identity before granting network access."
     },
     {
       "id": 76,
-      "question": "A network administrator configures a switch port with `spanning-tree portfast`. What does this do?",
+      "question": "Which of the following statements accurately describes the difference between a 'vulnerability', an 'exploit', and a 'threat' in cybersecurity?",
       "options": [
-        "Disables STP on that port entirely.",
-        "Enables immediate forwarding state on that port, bypassing listening/learning, and should only be used for end-user ports (no other switches).",
-        "Sets the switch as the root bridge.",
-        "Enables link aggregation on that port."
+        "They all mean essentially the same thing, referring to potential attacks against a computer system.",
+        "A vulnerability is an already successful hack, an exploit is a theoretical weakness, and a threat is the overall level of risk.",
+        "A vulnerability refers to a flaw or weakness that can be targeted, an exploit is a technique that leverages that flaw, and a threat is the existence of something (or someone) capable of taking advantage of it.",
+        "A vulnerability is a piece of malicious software, an exploit is a standard security device, and a threat is hardware used for network cabling."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`portfast` means the port transitions instantly to a forwarding state instead of going through listening and learning states. This is safe only if the port is connected to a single end device, not another switch. It doesn’t disable STP, set the root bridge, or do link aggregation.",
-      "examTip": "Use `portfast` for end-user ports to speed up connectivity after link-up."
+      "correctAnswerIndex": 2,
+      "explanation": "It's crucial to distinguish these terms: *Vulnerability:* A flaw or weakness in a system (software, hardware, configuration) that *could* be exploited. *Exploit:* The *actual method or code* used to take advantage of a vulnerability. *Threat:* The *potential* for someone or something to exploit a vulnerability and cause harm. They are *not* the same, nor are they malware, firewalls, or cables.",
+      "examTip": "Vulnerability (weakness) + Threat (potential attacker) = Risk. An Exploit is how a Threat takes advantage of a Vulnerability."
     },
     {
       "id": 77,
-      "question": "What is '802.1X' in network security?",
+      "question": "What is the primary purpose of a 'honeypot' in network security?",
       "options": [
-        "A wireless encryption standard.",
-        "A port-based network access control (PNAC) protocol requiring authentication before permitting LAN or WLAN access.",
-        "A layer-3 routing protocol.",
-        "A technology for link aggregation."
+        "Providing a place for secure, offsite backups of critical data, thus avoiding data loss in disasters.",
+        "Creating a decoy system that appears vulnerable, luring attackers to investigate it while defenders gather intelligence on their methods or distract them from real resources.",
+        "Guaranteeing full encryption of all traffic transiting through the network perimeter, thereby preventing eavesdropping.",
+        "Assigning IP addresses via DHCP, directing legitimate clients to the correct gateway."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "802.1X is a standard for authenticating devices on a port (wired or wireless) before granting network access. Often used with RADIUS. Not just wireless encryption, not a routing protocol, and not link aggregation.",
-      "examTip": "802.1X controls access at the port level; often used with RADIUS for AAA."
+      "explanation": "A honeypot is a *deception* technique. It's a deliberately vulnerable system or network resource that mimics a legitimate target. It's designed to lure attackers, allowing security researchers to observe their techniques, gather information about threats, and potentially distract them from real systems. It's *not* a secure storage location, encryption tool, or DHCP server.",
+      "examTip": "Honeypots are used for cybersecurity research and threat intelligence by trapping and studying attackers."
     },
     {
       "id": 78,
-      "question": "You are troubleshooting a network. A user can browse some websites but not others; pings by IP to the ‘problem’ sites succeed, but pings by hostname fail. What is the MOST likely issue?",
+      "question": "Which of the following network topologies offers the highest degree of redundancy, but also has the highest cost and complexity to implement?",
       "options": [
-        "A faulty Ethernet cable.",
-        "A problem with the user’s browser configuration.",
-        "An intermittent or incorrect DNS configuration or DNS server issue.",
-        "A firewall blocking all traffic to those sites."
+        "A star layout centered on a switch that connects individual devices, with a single point of failure at the center.",
+        "A bus topology where all systems are chained along a single backbone cable, risking total outage if that cable breaks.",
+        "A ring structure where each device has just two neighbors in a circular loop, reducing cabling but risking disconnection from a single break unless ring redundancy is added.",
+        "A full mesh design in which every node is directly linked to every other node, maximizing fault tolerance at the expense of significant cabling and administrative complexity."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "If ping-by-IP works, then network connectivity is fine. If ping-by-name fails, that strongly suggests DNS resolution problems. It’s not the cable or a firewall blocking (since IP-based pings go through). A browser config might affect HTTP, but not ICMP name resolution.",
-      "examTip": "Always separate DNS issues from basic IP connectivity issues in troubleshooting."
+      "correctAnswerIndex": 3,
+      "explanation": "In a *full mesh* topology, *every* device has a direct connection to *every other* device. This provides the maximum possible redundancy: if any single link or device fails, there are always multiple alternative paths for communication. However, this also requires the *most* cabling and the *most* complex configuration, making it the most expensive and difficult to manage. Star has a single point of failure, bus has a single point of failure, and ring has a single point of failure.",
+      "examTip": "Full mesh topology offers maximum redundancy but at the highest cost and complexity."
     },
     {
       "id": 79,
-      "question": "What is the purpose of a subnet mask in IP networking?",
+      "question": "You are configuring a wireless network in an area with multiple existing wireless networks. Which tool would be MOST useful in identifying potential sources of interference and selecting the optimal channels for your access points?",
       "options": [
-        "It encrypts IP packets.",
-        "It identifies which portion of the IP address is the network part vs. the host part.",
-        "It assigns IP addresses automatically.",
-        "It filters packets based on MAC addresses."
+        "A cable tester that checks for continuity and proper pinouts on Ethernet cables.",
+        "A protocol analyzer (like Wireshark) to capture and inspect network-layer traffic on wired links.",
+        "A spectrum analyzer for viewing the RF environment, detecting other wireless signals or noise sources that might conflict with your APs.",
+        "A toner and probe kit for tracing cable paths through walls or ceilings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A subnet mask, combined with the IP address, determines which bits represent the network and which bits represent the host. It’s not encryption, DHCP, or MAC filtering.",
-      "examTip": "Subnet masks are crucial for defining network boundaries."
+      "correctAnswerIndex": 2,
+      "explanation": "A *spectrum analyzer* is specifically designed to measure and display the radio frequency (RF) spectrum. This allows you to see which frequencies are in use by other wireless networks (and other RF sources like microwaves), identify sources of interference, and choose the *least congested* channels for your access points. A cable tester checks *physical* cables, a protocol analyzer captures *network traffic*, and a toner/probe *locates* cables.",
+      "examTip": "Use a spectrum analyzer to identify RF interference and optimize wireless channel selection."
     },
     {
       "id": 80,
-      "question": "What is a potential security risk of using a public, unsecured Wi-Fi hotspot?",
+      "question": "What is the primary purpose of using 'Network Address Translation' (NAT) in a network?",
       "options": [
-        "Faster speeds than your home network.",
-        "Better encryption than WPA2 at home.",
-        "Susceptibility to man-in-the-middle attacks and eavesdropping, since traffic may be unencrypted.",
-        "Guaranteed QoS for your applications."
+        "Providing complete encryption for all traffic transiting through the router’s WAN interface, ensuring absolute privacy.",
+        "Enabling multiple internal hosts with private IP addresses to share one or a few public IP addresses, conserving public IPv4 space and adding a layer of obscurity to the internal network.",
+        "Automatically assigning IP addresses to devices using dynamic pools instead of manual configuration.",
+        "Applying a loop prevention mechanism at Layer 2 to keep broadcast storms from forming."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Open hotspots often have no encryption, enabling attackers to intercept or modify traffic. They are not necessarily faster, definitely not more secure than WPA2, and there’s no guaranteed QoS.",
-      "examTip": "Use a VPN on public Wi-Fi; unencrypted traffic can be snooped."
+      "correctAnswerIndex": 1,
+      "explanation": "NAT allows many devices on a private network (using private IP addresses like 192.168.x.x) to share a single (or a few) public IP address(es) when accessing the internet. This is crucial because of the limited number of available IPv4 addresses. It also provides a basic level of security by hiding the internal network structure. It's *not* primarily about encryption, dynamic IP assignment (DHCP), or loop prevention (STP).",
+      "examTip": "NAT is fundamental for connecting private networks to the internet and conserving IPv4 addresses."
     },
     {
       "id": 81,
-      "question": "What is a ‘reverse DNS lookup’?",
+      "question": "A network administrator configures a router with the following command: `ip route 172.16.0.0 255.255.0.0 10.0.0.2`. What is the effect of this command?",
       "options": [
-        "Converting a domain name into an IP address.",
-        "Converting an IP address into a domain name.",
-        "Encrypting DNS traffic.",
-        "A way to block malicious domains."
+        "Establishing a default route that matches any destination address 0.0.0.0/0 and points traffic to 10.0.0.2.",
+        "Configuring a dynamic protocol such as OSPF or EIGRP to learn routes from 10.0.0.2 automatically.",
+        "Manually specifying that any traffic intended for the 172.16.0.0/16 network should go to next-hop 10.0.0.2, creating a static route.",
+        "Preventing all packets from ever reaching the 172.16.0.0 network by blocking them at 10.0.0.2."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Reverse DNS means you start with an IP address and look up the associated domain name (if any). The forward lookup is domain-to-IP. Reverse is IP-to-domain. It’s not encryption or blocking.",
-      "examTip": "Reverse DNS can be useful for verifying mail senders, logging, etc."
+      "correctAnswerIndex": 2,
+      "explanation": "This command configures a *static route*. It tells the router that to reach any IP address within the 172.16.0.0 network (with a subnet mask of 255.255.0.0, which is a /16), it should send the traffic to the next-hop IP address 10.0.0.2. It's *not* a default route (which uses 0.0.0.0/0), a *dynamic* route (learned from a routing protocol), or a *block*.",
+      "examTip": "Static routes are manually configured routes that specify the next hop for reaching a particular network."
     },
     {
       "id": 82,
-      "question": "A network admin enters `ip route 0.0.0.0 0.0.0.0 192.168.1.1` on a router. What does this do?",
+      "question": "Which of the following is a key advantage of using a 'client-server' network model compared to a 'peer-to-peer' network model?",
       "options": [
-        "Creates a route only for the 192.168.1.0 network.",
-        "Creates a default route that sends all traffic with no more specific match to 192.168.1.1.",
-        "Creates a dynamic route using RIP.",
-        "Blocks all traffic to 192.168.1.1."
+        "It is the most cost-effective and easiest approach for very small home networks with only a handful of devices.",
+        "It enables centralized management of user accounts, shared resources, and security policies, making it more scalable and secure for medium to large environments.",
+        "It ensures every device has identical responsibilities, distributing load evenly without the need for dedicated servers.",
+        "It requires no specialized hardware or software beyond basic consumer-level equipment."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Using `0.0.0.0 0.0.0.0` sets a default route (the ‘gateway of last resort’). Any traffic not matching a more specific route goes to 192.168.1.1. Not a dynamic route, not a block.",
-      "examTip": "The ‘all-zeroes’ address with all-zeroes mask means default route."
+      "explanation": "Client-server networks offer centralized administration, making it much easier to manage users, security policies, data backups, and shared resources (like files and printers). While peer-to-peer might be *simpler* for *very small* home networks, client-server scales much better and provides more robust security and control for larger organizations. The initial cost of client-server can be *higher* (due to server hardware/software), but the long-term benefits often outweigh this. Client-server does *not* mean all computers have equal roles.",
+      "examTip": "Client-server networks are the standard for most business and enterprise environments."
     },
     {
       "id": 83,
-      "question": "What is ‘DHCP snooping’ on a switch?",
+      "question": "What is 'DHCP snooping', and how does it enhance network security?",
       "options": [
-        "Encrypting DHCP requests.",
-        "Preventing rogue DHCP servers by allowing DHCP responses only from trusted ports.",
-        "Speeding up IP lease times.",
-        "Capturing user browsing data."
+        "A means of scrambling DHCP messages so that only authorized clients can decrypt and understand them.",
+        "A switch-based feature that filters and validates DHCP traffic, ensuring that only trusted DHCP server ports hand out addresses, thereby blocking rogue DHCP servers.",
+        "A performance enhancement that assigns IP addresses more quickly to clients, accelerating boot times and reducing wait intervals.",
+        "A logging capability that allows administrators to see every user’s browsing history in real time."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DHCP snooping inspects DHCP traffic, ensuring only the official DHCP server (on a trusted port) can hand out addresses. It’s not encryption or data capture. It helps block rogue DHCP servers.",
-      "examTip": "DHCP snooping is an important layer-2 security feature to prevent unauthorized IP assignments."
+      "explanation": "DHCP snooping is a security feature implemented on network switches. It prevents unauthorized (rogue) DHCP servers from assigning IP addresses and potentially disrupting network operations or launching attacks. The switch inspects DHCP messages and only forwards those from trusted sources (typically, ports connected to authorized DHCP servers). It's *not* encryption, speeding up DHCP, or web monitoring.",
+      "examTip": "DHCP snooping is an important security measure to prevent rogue DHCP servers from disrupting your network."
     },
     {
       "id": 84,
-      "question": "Which is a drawback of using a hub (instead of a switch) in a modern network?",
+      "question": "What is a 'man-in-the-middle' (MitM) attack, and what is a common way to mitigate it?",
       "options": [
-        "They are very expensive.",
-        "They create a single collision domain, reducing performance as collisions increase with more devices.",
-        "They require special cables.",
-        "They can’t connect to the internet."
+        "Overwhelming a server with so many connection requests that legitimate traffic is unable to get through, typically referred to as a DoS or DDoS attack.",
+        "Presenting fake login pages or emails to trick users into surrendering personal details (a phishing attack).",
+        "Secretly intercepting and possibly altering communications between two endpoints, believing they’re communicating directly. Using strong encryption protocols like HTTPS or VPN tunnels can help prevent this.",
+        "Systematically guessing passwords for an online service until a correct credential is found."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Hubs simply replicate signals on all ports, causing a single collision domain. Switches intelligently forward traffic and separate collision domains. Hubs are actually cheaper, can use standard cables, and can connect to the internet (if attached to a router) — but they’re inefficient.",
-      "examTip": "Hubs are legacy devices. Switches replaced them for better performance."
+      "correctAnswerIndex": 2,
+      "explanation": "In a MitM attack, the attacker inserts themselves between two communicating parties, allowing them to eavesdrop on the conversation, steal data, or even modify the communication. This can happen on unsecured Wi-Fi networks or through other network vulnerabilities. *Strong encryption* (like HTTPS for web browsing) and *VPNs* (which create encrypted tunnels) are crucial for mitigating MitM attacks. It's *not* overwhelming traffic (DoS), tricking users (phishing), or password guessing (brute-force).",
+      "examTip": "Use HTTPS and VPNs to protect against man-in-the-middle attacks, especially on public Wi-Fi."
     },
     {
       "id": 85,
-      "question": "A company wants a single security appliance that acts as a firewall, IPS, antivirus scanner, web filter, and VPN gateway. Which solution fits?",
+      "question": "You are troubleshooting a network where some devices can communicate with each other, but others cannot, even though they are all connected to the same switch. You suspect a VLAN misconfiguration. Which command on a Cisco switch would you use to verify the VLAN assignments of the switch ports?",
       "options": [
-        "A domain controller",
-        "A network-attached storage (NAS) server",
-        "A wireless controller",
-        "A unified threat management (UTM) device"
+        "show ip interface brief, which displays interface IPs and statuses for routing purposes but not VLAN details.",
+        "show spanning-tree, which provides information about the active STP topology, designated ports, and blocked ports for loop prevention.",
+        "show vlan brief, offering a quick overview of configured VLANs along with the ports assigned to each VLAN on the switch.",
+        "show mac address-table, listing MAC addresses learned on each port but not explicitly showing VLAN-port assignments."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "UTM devices consolidate multiple security features (firewall, IPS, antivirus, web filtering, VPN, etc.) into one box. Domain controllers are for user authentication in Windows. NAS is for storage. WLC is for managing Wi-Fi APs.",
-      "examTip": "UTM = all-in-one security solution."
+      "correctAnswerIndex": 2,
+      "explanation": "The `show vlan brief` command on a Cisco switch displays a concise summary of VLAN information, including the VLAN ID, name, status, and *ports assigned to each VLAN*. This is the *fastest* and *most direct* way to verify if switch ports are assigned to the correct VLANs. `show ip interface brief` shows interface status and IP addresses (Layer 3), `show spanning-tree` shows Spanning Tree Protocol information, and `show mac address-table` shows learned MAC addresses (but not VLAN assignments *directly*).",
+      "examTip": "Use `show vlan brief` to quickly check VLAN assignments on Cisco switches."
     },
     {
       "id": 86,
-      "question": "What does ‘BGP’ stand for, and what does it do?",
+      "question": "What is 'port mirroring' (also known as 'SPAN') on a network switch used for?",
       "options": [
-        "Basic Gateway Protocol; it assigns private IPs to clients.",
-        "Border Gateway Protocol; it’s the routing protocol that exchanges routes between autonomous systems on the internet.",
-        "Broadband Gateway Protocol; it’s used for connecting DSL modems.",
-        "Backup Gateway Protocol; it’s used only for secondary routers."
+        "Applying encryption to specific ports, ensuring that traffic remains confidential between endpoints at Layer 2.",
+        "Controlling which MAC addresses may access a particular port, preventing unauthorized devices from connecting.",
+        "Duplicating packets from one or more source interfaces onto a designated monitoring interface so that network analyzers or IDS/IPS devices can inspect the traffic without disrupting normal flow.",
+        "Issuing IP address configurations dynamically to connected hosts, eliminating the need for static addressing."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "BGP is the Border Gateway Protocol. It’s the main exterior routing protocol that allows separate autonomous systems (ISPs, large organizations) to exchange routing info on the internet. Not for assigning IPs or backups or broadband specifically.",
-      "examTip": "BGP essentially makes the internet possible by interconnecting ASes."
+      "correctAnswerIndex": 2,
+      "explanation": "Port mirroring allows you to *duplicate* network traffic from one or more switch ports to another port. This is *specifically* for monitoring and analysis. You connect a network analyzer (like Wireshark) or an IDS/IPS to the *destination* port to capture and inspect the traffic *without* disrupting the normal flow of data on the source ports. It's *not* encryption, port security, or IP assignment.",
+      "examTip": "Port mirroring is a powerful tool for network monitoring, troubleshooting, and security analysis."
     },
     {
       "id": 87,
-      "question": "Which is a fundamental difference between symmetric and asymmetric encryption?",
+      "question": "What is a 'default route' in a routing table, and why is it important?",
       "options": [
-        "Symmetric uses one shared key; asymmetric uses a public/private key pair.",
-        "Asymmetric is faster than symmetric.",
-        "Symmetric can only be used for data at rest; asymmetric is only for data in motion.",
-        "They are the same; just different names."
+        "An entry specifying the direct path to devices on the local subnet, ensuring hosts communicate internally with minimal delay.",
+        "A fallback route used when no specific match for a destination is found, often guiding traffic toward the internet or a larger upstream network, represented by 0.0.0.0/0.",
+        "The main route for all internal subnets inside an autonomous system, overriding any dynamically learned routes.",
+        "A configuration automatically chosen by the router due to its highest administrative distance metric."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Symmetric encryption uses the same key to encrypt and decrypt. Asymmetric uses a public key for encryption and a private key for decryption. Asymmetric is typically slower. They can be used for data at rest or in motion.",
-      "examTip": "Symmetric is fast but needs secure key exchange. Asymmetric solves key exchange but is slower."
+      "correctAnswerIndex": 1,
+      "explanation": "The default route is used when a router doesn't have a *more specific* route in its routing table for a particular destination IP address. It's typically configured to point to the next-hop router that connects to the internet or a larger network. It's *not* for local traffic, specifically *internal* traffic, or determined solely by administrative distance (which is about *choosing* between routes).",
+      "examTip": "The default route (often represented as 0.0.0.0/0) is crucial for connecting to external networks."
     },
     {
       "id": 88,
-      "question": "A network administrator notices sluggish performance. They suspect a particular application is hogging bandwidth. Which tool is best to confirm and see how much traffic that app uses?",
+      "question": "What is the purpose of using 'Quality of Service' (QoS) mechanisms in a network?",
       "options": [
-        "A cable tester.",
-        "A toner/probe kit.",
-        "A protocol analyzer (like Wireshark) or a network monitoring solution that supports application-layer visibility.",
-        "The ping command."
+        "Ensuring that all traffic is encrypted end-to-end, regardless of application or protocol.",
+        "Allowing the network to distinguish and prioritize time-sensitive or mission-critical packets (e.g., VoIP, video) over less urgent data, maintaining performance under congestion.",
+        "Assigning IP addresses on a first-come, first-served basis to manage device connectivity systematically.",
+        "Resolving domain names to IP addresses so that users can access services by URL instead of numeric addresses."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A protocol analyzer can capture and identify traffic flows per application/protocol. A cable tester checks wiring, toner/probe locates cables, and ping only tests basic connectivity/latency, not app bandwidth usage.",
-      "examTip": "Use a packet capture or monitoring tool to see exactly what’s eating bandwidth."
+      "correctAnswerIndex": 1,
+      "explanation": "QoS allows network administrators to manage network resources and ensure that important or time-sensitive applications receive the performance they need, even when the network is busy. It's about prioritizing traffic, *not* encryption, IP assignment (DHCP), or DNS.",
+      "examTip": "QoS is essential for delivering a good user experience for real-time applications on congested networks."
     },
     {
       "id": 89,
-      "question": "Which is a known security risk when enabling WPS (Wi-Fi Protected Setup)?",
+      "question": "A network administrator wants to prevent unauthorized wireless access points from being connected to the wired network. Which of the following security measures would be MOST effective in achieving this?",
       "options": [
-        "It forces WPA3 encryption, which some older devices don’t support.",
-        "It eliminates the need for a passphrase entirely.",
-        "The PIN can be brute-forced, allowing attackers to gain network access.",
-        "It disables encryption on the network."
+        "Enforcing complex login credentials for all employee user accounts in Active Directory or LDAP.",
+        "Turning on MAC address filtering at each switch interface so that only listed addresses can pass traffic.",
+        "Using 802.1X port-based network access control, obligating devices to authenticate before gaining LAN access, thus blocking rogue devices or APs by default.",
+        "Configuring outdated WEP encryption on all legitimate wireless networks to reduce the chance of interference."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "WPS PIN mode can be brute-forced easily. This is a major vulnerability. WPS doesn’t disable encryption or force WPA3. Nor does it remove the passphrase entirely in normal mode. But the brute-force vulnerability is well-known.",
-      "examTip": "Disable WPS to avoid the PIN brute-force attack vector."
+      "explanation": "802.1X is a port-based Network Access Control (PNAC) standard. It requires devices to *authenticate* before being granted access to the network. This prevents unauthorized devices, including rogue access points, from connecting to the *wired* network. Strong passwords are important, but don't prevent *device* connection. MAC filtering is easily bypassed. WEP is an *insecure wireless* protocol; this question is about securing the *wired* network against rogue *wireless* devices.",
+      "examTip": "802.1X on the *wired* network can prevent rogue access points from connecting, even if they bypass wireless security."
     },
     {
       "id": 90,
-      "question": "What is ‘latency’ in network communications?",
+      "question": "Which of the following statements accurately describes the difference between a 'vulnerability', an 'exploit', and a 'threat'?",
       "options": [
-        "A measure of available bandwidth.",
-        "A measure of data security.",
-        "The time delay for data to travel from source to destination, often measured in milliseconds.",
-        "The number of connected devices on a subnet."
+        "They are identical terms used to describe any possible attack scenario on a network, with no nuanced distinctions.",
+        "A vulnerability is malicious software, an exploit is a type of firewall rule, and a threat is specialized network cabling.",
+        "A vulnerability is some system weakness or bug, an exploit is the technique used to leverage it, and a threat is the potential agent or event that might use the exploit.",
+        "A vulnerability describes a successfully breached system, an exploit is purely hypothetical, and a threat is any device plugged into the network."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Latency is the delay between sending data and the receiver getting it. High latency can hurt real-time apps like voice or gaming. Bandwidth is capacity, not the same as latency.",
-      "examTip": "Latency is often referred to as ‘ping time’ in casual terms."
+      "explanation": "These terms have distinct meanings: *Vulnerability:* A flaw or weakness in software, hardware, configuration, or procedure that *could* be exploited. *Exploit:* The *actual technique or code* used to take advantage of a vulnerability. *Threat:* The *potential* for someone or something (a threat actor) to exploit a vulnerability and cause harm. They are *not* synonyms, malware/firewall/cable, or a successful attack.",
+      "examTip": "Vulnerability + Threat = Risk. An Exploit is *how* a Threat takes advantage of a Vulnerability."
     },
     {
       "id": 91,
-      "question": "What is a virtual machine (VM)?",
+      "question": "You are troubleshooting a slow network connection. Using a protocol analyzer, you observe a large number of TCP retransmissions, duplicate ACKs, and 'TCP ZeroWindow' messages. Which of the following is the MOST likely cause?",
       "options": [
-        "A physical server with multiple CPUs.",
-        "A software-based emulation of a computer system that runs on a host’s hardware, enabling multiple OSes/applications to share a single physical machine.",
-        "A new type of network cable standard.",
-        "An advanced firewall."
+        "A DNS server outage preventing hostnames from resolving, but not affecting raw IP connectivity.",
+        "A DHCP problem that leaves clients without proper IP leases, forcing them to request addresses repeatedly.",
+        "Some combination of packet loss, bandwidth congestion, or a sending/receiving host resource issue causing frequent retransmissions and windowing problems.",
+        "An incorrectly configured web browser that cannot properly parse SSL certificates or handle cookies."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A VM is a software simulation of a computer. It runs on a hypervisor or host OS, and each VM sees a ‘virtual’ hardware environment. It’s not a cable or firewall.",
-      "examTip": "Virtualization is key for efficient resource utilization and cloud deployments."
+      "correctAnswerIndex": 2,
+      "explanation": "TCP retransmissions, duplicate ACKs, and ZeroWindow messages all point to problems with reliable data delivery. Retransmissions happen when a packet is lost. Duplicate ACKs suggest out-of-order packets (often due to loss). ZeroWindow means the receiver's buffer is full and it can't accept more data (often due to congestion or slow processing). These strongly indicate *network-level* problems (congestion, faulty hardware) or a resource bottleneck on one of the hosts. It's *not* primarily DNS, DHCP, or a browser issue.",
+      "examTip": "TCP retransmissions, duplicate ACKs, and ZeroWindow messages are critical indicators of network problems like packet loss and congestion."
     },
     {
       "id": 92,
-      "question": "Which is a major benefit of ‘infrastructure as code’ (IaC)?",
+      "question": "Which of the following BEST describes 'defense in depth' as a network security strategy?",
       "options": [
-        "It removes the need for any human oversight or network engineers.",
-        "It allows you to define servers, networks, and configurations in code, which you can version-control, test, and automate for consistency and repeatability.",
-        "It’s only suitable for very small environments.",
-        "It inherently encrypts all network traffic."
+        "Rely on a single, very robust firewall placed at the perimeter to handle all threats before they reach internal systems.",
+        "Layer multiple protective controls—physical, technical, and procedural—so if one mechanism fails, others still safeguard the environment.",
+        "Demand that all user passwords be at least 20 characters long, with complex symbols to stop brute-force attacks.",
+        "Encrypt 100% of data at rest and in transit, solving every possible security concern automatically."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "IaC uses code-like definitions for infrastructure. This means you can track changes in version control, quickly deploy or roll back, and keep everything consistent. It doesn’t replace humans; it’s not only for small setups and doesn’t automatically encrypt traffic.",
-      "examTip": "IaC is central to DevOps, enabling fully automated provisioning."
+      "explanation": "Defense in depth recognizes that no single security measure is foolproof. It involves implementing a layered approach, with multiple security controls at different levels (physical access controls, network firewalls, intrusion prevention systems, strong authentication, endpoint security, security awareness training, etc.). If one control is bypassed or fails, other controls are in place to mitigate the risk. It's *not* about relying on just *one* thing (firewall, passwords, encryption).",
+      "examTip": "Defense in depth is a fundamental security principle: don't rely on a single security measure."
     },
     {
       "id": 93,
-      "question": "What does a cable tester do?",
+      "question": "A network administrator is configuring a new switch. They want to group devices into logically separate broadcast domains, regardless of their physical location on the switch. Which technology should they use?",
       "options": [
-        "Measures bandwidth usage.",
-        "Identifies the physical path of a cable through walls (toning).",
-        "Tests the continuity, pin-out, and general integrity of a cable, detecting opens, shorts, or miswires.",
-        "Captures and analyzes traffic at the packet level."
+        "Activating the Spanning Tree Protocol (STP) to prevent switching loops across redundant links.",
+        "Creating Virtual LANs (VLANs) to isolate different sets of ports into unique Layer 2 broadcast domains.",
+        "Implementing link aggregation to combine multiple ports for more bandwidth rather than segmentation.",
+        "Enabling port security so only specific MAC addresses are allowed on each physical interface."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Cable testers send signals along each wire in the cable, checking for correct wiring (pin-out), breaks, or shorts. They don’t measure bandwidth or capture traffic, and a toner/probe is for tracing cables in walls.",
-      "examTip": "Use a cable tester to confirm physical-layer health of network cabling."
+      "correctAnswerIndex": 1,
+      "explanation": "VLANs (Virtual LANs) allow you to segment a physical network into multiple, logically isolated broadcast domains. Devices on different VLANs cannot communicate directly with each other without a router (or Layer 3 switch). This improves security, performance (by reducing broadcast traffic), and manageability. STP prevents loops, link aggregation combines physical links, and port security controls access based on MAC address.",
+      "examTip": "VLANs are essential for network segmentation and security in switched networks."
     },
     {
       "id": 94,
-      "question": "Why is using outdated or unpatched operating systems a security risk?",
+      "question": "You are troubleshooting a website access problem. Users report they cannot access `www.example.com`. You can successfully ping the IP address associated with `example.com`, but you cannot ping `www.example.com`. What is the MOST likely cause?",
       "options": [
-        "They run faster and thus attract hackers.",
-        "They are more stable.",
-        "They contain known vulnerabilities that attackers can exploit, since no patches are applied.",
-        "They automatically backup data to the cloud, bypassing encryption."
+        "The user’s computer has a physically defective network cable or NIC preventing any form of outgoing traffic.",
+        "The primary web server hosting the `www` subdomain has crashed, while the main domain server remains operational.",
+        "A DNS or record configuration issue specifically affecting the subdomain `www.example.com`, so name resolution for that subdomain is failing.",
+        "A firewall rule that completely blocks traffic to anything under `example.com`, including the main domain."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Outdated OSes have unpatched security holes. Attackers know about these vulnerabilities. They are not necessarily faster or more stable and do not automatically do cloud backups.",
-      "examTip": "Always patch and update to protect against known exploits."
+      "explanation": "The ability to ping the *IP address* of `example.com` rules out a basic network connectivity problem (cable) or a *complete* firewall block of the main domain. The inability to ping or access `www.example.com` (the specific *subdomain*) strongly suggests a DNS issue *specific to that subdomain*. The DNS record for `www.example.com` might be missing, incorrect, or not propagating correctly. It's less likely to be a web server issue if the main domain's IP *is* reachable.",
+      "examTip": "When troubleshooting website access, differentiate between problems with the main domain and specific subdomains; DNS issues can affect them differently."
     },
     {
       "id": 95,
-      "question": "Which best describes two-factor authentication (2FA)?",
+      "question": "What is 'ARP spoofing' (also known as 'ARP poisoning'), and what is a potential consequence of a successful attack?",
       "options": [
-        "Using two passwords on the same account.",
-        "Reusing the same password for multiple accounts.",
-        "Requiring two distinct forms of identification (like something you know + something you have) to log in.",
-        "Encryption of passwords in transit."
+        "A harmless configuration step where devices accept IP addresses from recognized DHCP servers in the local subnet.",
+        "A normal part of ARP’s learning process for mapping IPs to MAC addresses across an Ethernet LAN.",
+        "Tampering with ARP caches by sending falsified ARP replies, mapping the attacker’s MAC to a legitimate device’s IP (like the default gateway), potentially enabling eavesdropping or data manipulation.",
+        "Encrypting all ARP requests and responses to secure address resolutions from any malicious tampering."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "2FA means a user must supply two different factors, e.g. password + phone token, password + biometric, etc. Not just two passwords or reusing the same password. Encryption is separate.",
-      "examTip": "2FA significantly increases account security."
+      "explanation": "ARP spoofing is a man-in-the-middle attack that exploits the Address Resolution Protocol (ARP). The attacker sends *fake* ARP messages to associate *their* MAC address with the IP address of a legitimate device (often the default gateway, allowing them to intercept *all* traffic leaving the local network). This allows the attacker to eavesdrop on communications, steal data, modify traffic, or launch other attacks. It's *not* DHCP, the normal ARP process, or encryption.",
+      "examTip": "ARP spoofing is a serious security threat that can allow attackers to intercept and manipulate network traffic; use techniques like Dynamic ARP Inspection (DAI) to mitigate it."
     },
     {
       "id": 96,
-      "question": "Which of the following describes the Domain Name System (DNS)?",
+      "question": "Which of the following is a key difference between 'symmetric' and 'asymmetric' encryption algorithms?",
       "options": [
-        "It dynamically assigns IP addresses to devices (DHCP).",
-        "It maps user-friendly domain names (e.g., example.com) to IP addresses, and can also perform reverse lookups.",
-        "It encrypts all network traffic end-to-end.",
-        "It manages bridging loops on switches (STP)."
+        "Symmetric encryption relies on two separate keys, while asymmetric encryption uses a single shared key for simplicity.",
+        "Symmetric encryption requires extensive processing, making it slower, whereas asymmetric encryption is extremely fast for large data sets.",
+        "Symmetric encryption employs one secret key for both encrypting and decrypting, needing a secure key exchange, while asymmetric encryption uses a public/private key pair, solving key exchange at the cost of slower performance.",
+        "Symmetric encryption is entirely obsolete, replaced by the more modern and universally adopted asymmetric approach."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DNS resolves domain names into IPs and vice versa (reverse DNS). DHCP assigns IPs, encryption is done by protocols like TLS, and STP prevents loops. DNS is basically the ‘internet phone book.’",
-      "examTip": "DNS is critical for easy navigation of the internet by hostnames."
+      "correctAnswerIndex": 2,
+      "explanation": "The fundamental difference is in the keys. *Symmetric* encryption uses a *single, shared secret key* for both encryption and decryption. This is *fast*, but requires a secure way to share the key between parties. *Asymmetric* encryption uses a *key pair*: a *public* key (which can be widely distributed) for encryption, and a *private* key (which must be kept secret) for decryption. This *solves the key exchange problem* of symmetric encryption but is *slower*. Both types can be used in various scenarios (wired/wireless, at rest/in transit).",
+      "examTip": "Symmetric encryption is fast but requires secure key exchange; asymmetric encryption solves key exchange but is slower. They are often used *together* in practice (e.g., SSL/TLS)."
     },
     {
       "id": 97,
-      "question": "What is the primary function of a firewall?",
+      "question": "What is a 'DMZ' in a network, and why is it used?",
       "options": [
-        "To assign IP addresses to devices.",
-        "To store user credentials and manage authentication (like an LDAP server).",
-        "To monitor and control inbound/outbound traffic based on security rules, acting as a barrier between trusted and untrusted networks.",
-        "To physically secure a data center."
+        "A dedicated region on the LAN where absolutely no hosts or servers may reside, thus keeping them safe.",
+        "An isolated area for test or sandbox machines that are never exposed to external traffic or the internet.",
+        "A demilitarized zone that separates publicly accessible services (e.g., web or mail servers) from the internal LAN, limiting potential damage if these outward-facing hosts are compromised.",
+        "A type of physical cable standard for high-speed data transmission between core routers."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Firewalls examine network traffic and apply rules to permit or deny traffic. They don’t assign IPs (DHCP does), store user credentials (directory servers do), or handle physical security.",
-      "examTip": "Firewalls enforce the security policy on network traffic flows."
+      "explanation": "A DMZ (demilitarized zone) is a buffer zone between the trusted internal network and the untrusted external network (the internet). It allows external users to access specific services (like web servers, email servers) hosted in the DMZ *without* having direct access to the internal network. This improves security by isolating publicly accessible servers and limiting the potential damage from a compromise. It's *not* a no-computer zone, a cable type, or an attack type.",
+      "examTip": "A DMZ isolates publicly accessible servers from the internal network, enhancing security."
     },
     {
       "id": 98,
-      "question": "What can happen during a broadcast storm on a network?",
+      "question": "What does 'BGP' stand for, and what is its primary role in internet routing?",
       "options": [
-        "Network performance degrades severely or the entire network can crash due to excessive broadcast traffic.",
-        "All traffic is encrypted automatically.",
-        "It speeds up certain data transfers.",
-        "Nothing; broadcast storms are harmless."
+        "Basic Gateway Protocol, which performs IP address allocations for private subnets.",
+        "Border Gateway Protocol, the exterior gateway protocol enabling different autonomous systems (e.g., ISPs) to exchange routing information, thus underpinning global internet routing.",
+        "Broadband Gateway Protocol, specifically used to configure consumer DSL and cable modems for home internet connections.",
+        "Backup Gateway Protocol, exclusively responsible for failover paths when the primary default route is unavailable."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Broadcast storms overwhelm the network, consuming bandwidth and device resources, sometimes causing total failure. They definitely do not encrypt traffic or improve speed, and they’re far from harmless.",
-      "examTip": "Prevent broadcast storms with proper switch configuration and STP."
+      "correctAnswerIndex": 1,
+      "explanation": "BGP (Border Gateway Protocol) is the protocol that makes the internet work. It's used by routers in different *autonomous systems* (ASes) – networks under a single administrative control, like ISPs – to exchange routing information and determine the best paths for traffic to reach destinations across the internet. It's *not* for IP assignment (DHCP), connecting to broadband (that's a modem/router function), or creating *local* backup routes (interior gateway protocols handle that within an AS).",
+      "examTip": "BGP is the routing protocol that connects the internet's different networks (autonomous systems) together."
     },
     {
       "id": 99,
-      "question": "What is the purpose of ‘port forwarding’ on a router?",
+      "question": "You are troubleshooting a network where some devices can communicate with each other, and some cannot. You suspect a problem with VLAN configuration. Which command on a Cisco switch would allow you to quickly verify which VLAN each switch port is assigned to?",
       "options": [
-        "To hide all internal devices from the internet.",
-        "To allow devices on the LAN to connect to external websites via a proxy.",
-        "To map an external port to an internal host and port, so services on the LAN can be accessed from the internet.",
-        "To dynamically assign IP addresses to internal hosts."
+        "show ip interface brief, revealing interface IP addresses but lacking details about VLAN memberships.",
+        "show spanning-tree, listing the STP roles and states of interfaces to detect loops but not VLAN assignments.",
+        "show vlan brief, presenting a concise listing of VLANs, their status, and precisely which ports belong to each VLAN.",
+        "show mac address-table, which shows MAC addresses learned on ports but does not explicitly confirm VLAN associations for each interface."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Port forwarding (a.k.a. NAT port mapping) allows external requests on a specific port to reach an internal server on that port (or a different one). It doesn’t hide everything or assign IPs. It’s not a simple proxy either.",
-      "examTip": "Use port forwarding to host internal services on the public internet."
+      "explanation": "The `show vlan brief` command on a Cisco switch provides a concise summary of VLAN information, including the VLAN ID, name, status, and *most importantly for this scenario, the ports assigned to each VLAN*. This is the *fastest* and *most direct* way to check port VLAN assignments. `show ip interface brief` shows interface status and IP addresses (Layer 3), `show spanning-tree` shows Spanning Tree Protocol information, and `show mac address-table` shows learned MAC addresses (but not VLAN assignments *directly*).",
+      "examTip": "Use `show vlan brief` to quickly check VLAN assignments on Cisco switches."
     },
     {
       "id": 100,
-      "question": "Given an ACL with `access-list 105 permit tcp any any eq 22` and `access-list 105 deny ip any any`, applied inbound on a router interface, which traffic is permitted?",
+      "question": "A network administrator wants to implement a solution that provides centralized authentication, authorization, and accounting (AAA) for users accessing network resources via VPN, dial-up, and wireless connections. Which protocol is BEST suited for this purpose?",
       "options": [
-        "All IP traffic is allowed.",
-        "Only TCP traffic on port 22 (SSH) from any source to any destination.",
-        "No traffic is allowed at all.",
-        "All traffic except SSH."
+        "SNMP (Simple Network Management Protocol), used mainly for monitoring and managing network devices’ status and performance.",
+        "RADIUS (Remote Authentication Dial-In User Service), specifically designed for centralized AAA across various remote access methods.",
+        "SMTP (Simple Mail Transfer Protocol), which is a protocol for sending and relaying email messages among mail servers.",
+        "HTTP (Hypertext Transfer Protocol), commonly used for web traffic but not for user authentication or accounting tasks."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "This ACL explicitly permits TCP traffic on port 22 (SSH). All other IP traffic is denied by the second statement. Hence, only SSH is allowed.",
-      "examTip": "Always consider the implicit or explicit denies at the end of an ACL."
+      "explanation": "RADIUS (Remote Authentication Dial-In User Service) is a networking protocol *specifically designed* for centralized AAA. It allows a central server to authenticate users, authorize their access to specific network resources, and track their network usage (accounting). This is commonly used for network access control, including VPNs, dial-up, and wireless authentication. SNMP is for network *management*, SMTP is for *email*, and HTTP is for *web browsing*.",
+      "examTip": "RADIUS is the industry-standard protocol for centralized AAA in network access control."
     }
   ]
 });
