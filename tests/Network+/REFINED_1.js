@@ -8,10 +8,10 @@ db.tests.insertOne({
       "id": 1,
       "question": "Which layer of the OSI model is responsible for logical addressing and routing?",
       "options": [
-        "Layer 2 - Data Link",
-        "Layer 3 - Network",
-        "Layer 4 - Transport",
-        "Layer 7 - Application"
+        "Layer 2 (Data Link): Handles frame transmission and MAC addressing.",
+        "Layer 3 (Network): Handles IP-based addressing and routing decisions.",
+        "Layer 4 (Transport): Manages end-to-end data delivery and flow control.",
+        "Layer 7 (Application): Manages high-level protocols for user applications."
       ],
       "correctAnswerIndex": 1,
       "explanation": "The Network layer (Layer 3) handles logical addressing (like IP addresses) and determines the best path for data to travel (routing). Layer 2 uses physical addresses (MAC addresses). Layer 4 manages reliable data transfer. Layer 7 provides network services to applications.",
@@ -21,10 +21,10 @@ db.tests.insertOne({
       "id": 2,
       "question": "What is the purpose of a firewall in a network?",
       "options": [
-        "To provide wireless connectivity to devices.",
-        "To manage IP address allocation.",
-        "To filter network traffic based on predefined rules.",
-        "To boost the speed of network connections."
+        "Offers Wi-Fi access for client devices on the network.",
+        "Oversees dynamic or static IP address assignments to hosts.",
+        "Monitors and blocks data flows using specific security criteria.",
+        "Accelerates data transfer rates for all connected systems."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Firewalls act as security barriers, controlling network traffic by allowing or blocking it based on configured rules.  They don't provide wireless access, manage IPs (that's DHCP), or directly boost speed.",
@@ -34,10 +34,10 @@ db.tests.insertOne({
       "id": 3,
       "question": "Which of the following is a characteristic of a Storage Area Network (SAN)?",
       "options": [
-        "Provides block-level access to storage devices.",
-        "Uses the same cabling as the main network.",
-        "Is primarily used for file sharing within a small office.",
-        "Offers lower performance compared to NAS."
+        "Presents storage at the block level as though locally attached.",
+        "Utilizes the same cabling as standard LAN connections.",
+        "Serves small office file sharing without special hardware.",
+        "Delivers lower performance than typical NAS solutions."
       ],
       "correctAnswerIndex": 0,
       "explanation": "SANs offer block-level access, making them appear as locally attached drives to servers. They typically use dedicated, high-speed connections (like Fibre Channel), not the main network cabling.  They are designed for high performance, unlike NAS, which is file-level.",
@@ -47,10 +47,10 @@ db.tests.insertOne({
       "id": 4,
       "question": "You are setting up a new wireless network.  Which standard provides the BEST combination of speed and security for most modern devices?",
       "options": [
-        "802.11b",
-        "802.11g",
-        "802.11ac",
-        "802.11ax (Wi-Fi 6/6E)"
+        "802.11b: Offers slower speeds in the 2.4 GHz band only.",
+        "802.11g: Provides moderate speeds at 2.4 GHz frequency.",
+        "802.11ac: Delivers high throughput but is older than Wi-Fi 6.",
+        "802.11ax (Wi-Fi 6/6E): Delivers top speeds and improved security."
       ],
       "correctAnswerIndex": 3,
       "explanation": "802.11ax (Wi-Fi 6/6E) is the most current standard, offering the best speed, efficiency, and security features. The others are older and less performant/secure.",
@@ -60,10 +60,10 @@ db.tests.insertOne({
       "id": 5,
       "question": "What is the FIRST step you should take when troubleshooting a network connectivity issue?",
       "options": [
-        "Replace the network cable.",
-        "Reboot the router.",
-        "Gather information about the problem.",
-        "Contact your internet service provider (ISP)."
+        "Swap the Ethernet cable to rule out physical damage.",
+        "Restart the router to clear out possible conflicts.",
+        "Collect details about the symptoms and environment.",
+        "Call your ISP to confirm any service interruptions."
       ],
       "correctAnswerIndex": 2,
       "explanation": "The first step in troubleshooting is always to gather information: identify symptoms, talk to users, and determine what, if anything, has changed.  Jumping to solutions without understanding the problem is inefficient.",
@@ -73,10 +73,10 @@ db.tests.insertOne({
       "id": 6,
       "question": "Which port is commonly used for unencrypted web traffic?",
       "options": [
-        "21",
-        "22",
-        "80",
-        "443"
+        "Port 21, primarily used for FTP file transfers.",
+        "Port 22, used for secure remote logins via SSH.",
+        "Port 80, the default for HTTP connections.",
+        "Port 443, reserved for HTTPS sessions."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Port 80 is the standard port for HTTP (Hypertext Transfer Protocol), which is unencrypted web traffic. Port 443 is for HTTPS (secure). 21 is FTP, and 22 is SSH.",
@@ -86,10 +86,10 @@ db.tests.insertOne({
       "id": 7,
       "question": "A user reports they cannot access a specific website.  You can ping the website's IP address successfully.  What is the MOST likely cause?",
       "options": [
-        "A faulty network cable on the user's computer.",
-        "A DNS resolution problem.",
-        "The website's server is down.",
-        "The user's IP address is blocked."
+        "Damaged Ethernet cable preventing full network access.",
+        "DNS lookup failure preventing domain name resolution.",
+        "Server outage making the site fully inaccessible.",
+        "User's IP address is blacklisted by the site."
       ],
       "correctAnswerIndex": 1,
       "explanation": "If you can ping the IP address but not access the website by name, the issue is likely with DNS resolution (translating the website name to an IP address). A faulty cable would prevent pinging.  If the server was down, you likely couldn't ping it.",
@@ -99,10 +99,10 @@ db.tests.insertOne({
       "id": 8,
       "question": "What type of cable is MOST resistant to electromagnetic interference (EMI)?",
       "options": [
-        "UTP (Unshielded Twisted Pair)",
-        "STP (Shielded Twisted Pair)",
-        "Coaxial Cable",
-        "Fiber Optic Cable"
+        "UTP cable with no additional shielding.",
+        "STP cable providing some protective foil.",
+        "Coaxial cable using a single copper conductor.",
+        "Fiber optic cable immune to electrical noise."
       ],
       "correctAnswerIndex": 3,
       "explanation": "Fiber optic cable uses light instead of electricity, making it immune to EMI. STP offers more protection than UTP, and coaxial cable has some shielding but is less resistant than fiber.",
@@ -112,10 +112,10 @@ db.tests.insertOne({
       "id": 9,
       "question": "Which command is used to display the routing table on a Windows computer?",
       "options": [
-        "ipconfig /all",
-        "route print",
-        "netstat -r",
-        "tracert"
+        "ipconfig /all: Shows interface configurations.",
+        "route print: Lists all current routing entries.",
+        "netstat -r: Displays routes in a less direct format.",
+        "tracert: Traces the path to a remote host."
       ],
       "correctAnswerIndex": 1,
       "explanation": "`route print` displays the routing table. `ipconfig /all` shows network interface configuration, `netstat -r` shows routing information (but not as clearly), and `tracert` traces the route to a destination.",
@@ -125,10 +125,10 @@ db.tests.insertOne({
       "id": 10,
       "question": "What is a subnet mask used for?",
       "options": [
-        "To encrypt network traffic.",
-        "To identify the network and host portions of an IP address.",
-        "To assign IP addresses dynamically.",
-        "To filter network traffic based on MAC addresses."
+        "Protecting data through encryption algorithms.",
+        "Defining which part of an IP address is network vs. host.",
+        "Assigning IP addresses automatically to devices.",
+        "Filtering packets based on hardware (MAC) addresses."
       ],
       "correctAnswerIndex": 1,
       "explanation": "The subnet mask defines which bits of an IP address represent the network and which represent the host.  This is crucial for routing and network segmentation.  It doesn't encrypt, assign addresses (DHCP does that), or filter by MAC address (switches do that).",
@@ -138,10 +138,10 @@ db.tests.insertOne({
       "id": 11,
       "question": "Which of the following is an example of a Class C IP address?",
       "options": [
-        "10.0.0.5",
-        "172.16.1.10",
-        "192.168.1.100",
-        "224.0.0.1"
+        "10.0.0.5, belonging to the Class A range.",
+        "172.16.1.10, which falls under Class B.",
+        "192.168.1.100, typical of Class C space.",
+        "224.0.0.1, used for multicast (Class D)."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Class C IP addresses range from 192.0.0.0 to 223.255.255.255.  10.x.x.x is Class A, 172.16.x.x - 172.31.x.x is Class B, and 224.x.x.x is Class D (multicast).",
@@ -151,10 +151,10 @@ db.tests.insertOne({
       "id": 12,
       "question": "What is the purpose of the `traceroute` (or `tracert`) command?",
       "options": [
-        "To test the speed of a network connection.",
-        "To display the IP address of a website.",
-        "To show the path that packets take to reach a destination.",
-        "To configure a network interface."
+        "Gauges a link’s upload and download throughput.",
+        "Retrieves the numerical IP address for a given domain.",
+        "Shows each hop a packet takes to reach a destination.",
+        "Adjusts a NIC’s configuration to match the network."
       ],
       "correctAnswerIndex": 2,
       "explanation": "`traceroute` shows the hops (routers) that packets traverse to reach a target host, helping diagnose routing problems. It doesn't directly measure speed, display IP addresses (that's `nslookup` or `dig`), or configure interfaces.",
@@ -164,10 +164,10 @@ db.tests.insertOne({
       "id": 13,
       "question": "Which wireless security protocol is considered the MOST secure?",
       "options": [
-        "WEP",
-        "WPA",
-        "WPA2",
-        "WPA3"
+        "WEP: Obsolete and easily cracked.",
+        "WPA: Better than WEP but still vulnerable.",
+        "WPA2: Very common, though older than WPA3.",
+        "WPA3: Latest standard with stronger protections."
       ],
       "correctAnswerIndex": 3,
       "explanation": "WPA3 is the latest and most secure wireless security protocol, offering stronger encryption and protection against attacks. WEP is extremely vulnerable, and WPA and WPA2 have known weaknesses.",
@@ -177,10 +177,10 @@ db.tests.insertOne({
       "id": 14,
       "question": "You are configuring a DHCP server.  What is the purpose of a DHCP reservation?",
       "options": [
-        "To exclude a range of IP addresses from being assigned.",
-        "To assign a specific IP address to a particular MAC address.",
-        "To limit the lease time for IP addresses.",
-        "To create a backup of the DHCP server configuration."
+        "Carving out IP ranges that will never be assigned.",
+        "Forcing a specific MAC to always receive the same IP.",
+        "Shortening the time that clients hold an address.",
+        "Maintaining a backup of the DHCP configurations."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A DHCP reservation ensures that a specific device (identified by its MAC address) always receives the same IP address from the DHCP server.  Exclusions prevent addresses from being assigned, lease time controls how long an address is valid, and backups are separate configurations.",
@@ -190,10 +190,10 @@ db.tests.insertOne({
       "id": 15,
       "question": "What is the default subnet mask for a Class B network?",
       "options": [
-        "255.0.0.0",
-        "255.255.0.0",
-        "255.255.255.0",
-        "255.255.255.255"
+        "255.0.0.0 for Class A subnets.",
+        "255.255.0.0 for Class B addresses.",
+        "255.255.255.0 for Class C ranges.",
+        "255.255.255.255 for single-host coverage."
       ],
       "correctAnswerIndex": 1,
       "explanation": "The default subnet mask for a Class B network is 255.255.0.0. Class A is 255.0.0.0, Class C is 255.255.255.0, and 255.255.255.255 is typically used for a single host or a broadcast address.",
@@ -203,10 +203,10 @@ db.tests.insertOne({
       "id": 16,
       "question": "Which technology allows multiple VLANs to be transmitted over a single physical link?",
       "options": [
-        "STP (Spanning Tree Protocol)",
-        "VTP (VLAN Trunking Protocol)",
-        "802.1Q Trunking",
-        "Link Aggregation"
+        "STP: Manages loop prevention in Layer 2 networks.",
+        "VTP: Helps synchronize VLAN databases across switches.",
+        "802.1Q trunking: Tags traffic to identify VLAN membership.",
+        "Link Aggregation: Combines multiple physical ports into one."
       ],
       "correctAnswerIndex": 2,
       "explanation": "802.1Q trunking (also just called trunking) adds tags to Ethernet frames to identify the VLAN they belong to, allowing multiple VLANs to share a single link. STP prevents loops, VTP manages VLAN databases, and link aggregation combines multiple links into one logical link.",
@@ -216,10 +216,10 @@ db.tests.insertOne({
       "id": 17,
       "question": "A network administrator needs to connect two buildings that are 500 meters apart. Which cabling type is MOST appropriate?",
       "options": [
-        "UTP Cat 6",
-        "STP Cat 6a",
-        "Multimode Fiber",
-        "Single-mode Fiber"
+        "UTP Cat 6: Limited to around 100 meters for Ethernet.",
+        "STP Cat 6a: Also best under 100 meters for stable throughput.",
+        "Multimode Fiber: Good for a few hundred meters at lower cost.",
+        "Single-mode Fiber: Typically used for much greater distances."
       ],
       "correctAnswerIndex": 3,
       "explanation": "Multimode fiber is suitable for distances up to a few hundred meters and is generally less expensive than single-mode fiber. UTP and STP Cat 6/6a are limited to 100 meters. Single-mode fiber is for much longer distances (kilometers).",
@@ -229,10 +229,10 @@ db.tests.insertOne({
       "id": 18,
       "question": "What is the function of a DNS server?",
       "options": [
-        "To assign IP addresses to devices.",
-        "To translate domain names to IP addresses.",
-        "To route traffic between networks.",
-        "To provide secure remote access to a network."
+        "Assigns IP configurations like addresses or gateways.",
+        "Transforms domain names into their numeric IP addresses.",
+        "Directs traffic between different subnets or networks.",
+        "Grants encrypted VPN access for remote connections."
       ],
       "correctAnswerIndex": 1,
       "explanation": "DNS servers translate human-readable domain names (like google.com) into IP addresses that computers use to communicate. DHCP assigns IP addresses, routers route traffic, and VPNs provide secure remote access.",
@@ -242,10 +242,10 @@ db.tests.insertOne({
       "id": 19,
       "question": "Which protocol operates at the Transport layer of the OSI model and provides reliable, connection-oriented communication?",
       "options": [
-        "UDP",
-        "TCP",
-        "IP",
-        "ICMP"
+        "UDP: A connectionless, best-effort protocol.",
+        "TCP: Connection-oriented with reliable delivery.",
+        "IP: Works at Layer 3 handling logical addresses.",
+        "ICMP: Used for error messages and diagnostics."
       ],
       "correctAnswerIndex": 1,
       "explanation": "TCP (Transmission Control Protocol) is a connection-oriented protocol that provides reliable data delivery with error checking and retransmission. UDP is connectionless and unreliable. IP is at the Network layer, and ICMP is used for diagnostics (like ping).",
@@ -255,10 +255,10 @@ db.tests.insertOne({
       "id": 20,
       "question": "You need to configure a network device to allow SSH access only from a specific management workstation. What is the BEST way to achieve this?",
       "options": [
-        "Configure an access control list (ACL).",
-        "Enable MAC filtering.",
-        "Change the default SSH port.",
-        "Disable all other services on the device."
+        "Set up an ACL to permit SSH for certain IP addresses.",
+        "Use MAC filtering to block all unknown MACs.",
+        "Change the default port number for SSH sessions.",
+        "Disable every other service running on the device."
       ],
       "correctAnswerIndex": 0,
       "explanation": "An ACL allows you to specify which IP addresses or networks are permitted to access specific services (like SSH). MAC filtering is less secure (easily spoofed). Changing the SSH port provides obscurity, not strong security. Disabling other services is unnecessary and might impact functionality.",
@@ -268,10 +268,10 @@ db.tests.insertOne({
       "id": 21,
       "question": "What does 'PoE' stand for in networking?",
       "options": [
-        "Power over Ethernet",
-        "Point of Entry",
-        "Packet over Ethernet",
-        "Port over Ethernet"
+        "Power over Ethernet for carrying electricity on data lines.",
+        "Point of Entry for inbound traffic filtering.",
+        "Packet over Ethernet for WAN data encapsulation.",
+        "Port over Ethernet for extended switch port capacity."
       ],
       "correctAnswerIndex": 0,
       "explanation": "PoE stands for Power over Ethernet, a technology that allows network cables to carry electrical power.",
@@ -281,10 +281,10 @@ db.tests.insertOne({
       "id": 22,
       "question": "Which of the following is a valid IPv6 address?",
       "options": [
-        "192.168.1.1",
-        "2001:db8::1",
-        "172.32.1.256",
-        "255.255.255.0"
+        "192.168.1.1, which is an IPv4 address format.",
+        "2001:db8::1, a proper compressed IPv6 notation.",
+        "172.32.1.256, an invalid IPv4 with out-of-range octet.",
+        "255.255.255.0, a typical IPv4 subnet mask."
       ],
       "correctAnswerIndex": 1,
       "explanation": "2001:db8::1 is a valid IPv6 address. IPv6 addresses are 128 bits long and written in hexadecimal. The other options are IPv4 addresses or a subnet mask.",
@@ -294,10 +294,10 @@ db.tests.insertOne({
       "id": 23,
       "question": "What is the main purpose of an Intrusion Detection System (IDS)?",
       "options": [
-        "To prevent unauthorized access to a network.",
-        "To monitor network traffic for malicious activity and generate alerts.",
-        "To encrypt network traffic.",
-        "To assign IP addresses dynamically."
+        "Blocks any unauthorized attempt to join the network.",
+        "Scans and records suspicious traffic patterns, generating alerts.",
+        "Encrypts data packets passing through the network perimeter.",
+        "Assigns IP configurations to clients on secure segments."
       ],
       "correctAnswerIndex": 1,
       "explanation": "An IDS passively monitors network traffic and alerts administrators to potential security breaches. Firewalls prevent access, encryption protects data, and DHCP assigns IPs.",
@@ -307,10 +307,10 @@ db.tests.insertOne({
       "id": 24,
       "question": "Which type of network topology connects all devices to a central hub or switch?",
       "options": [
-        "Bus",
-        "Ring",
-        "Star",
-        "Mesh"
+        "Bus: Single backbone cable shared by multiple nodes.",
+        "Ring: Each node forms a closed loop connection.",
+        "Star: All nodes link to a central point.",
+        "Mesh: Nodes interconnect with multiple redundant paths."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A star topology uses a central device (hub or switch) to connect all other nodes. Bus uses a single cable, ring connects devices in a loop, and mesh has multiple connections between devices.",
@@ -320,10 +320,10 @@ db.tests.insertOne({
       "id": 25,
       "question": "You observe high latency when accessing a cloud-based application. Which tool would be MOST helpful in identifying the source of the delay?",
       "options": [
-        "ping",
-        "tracert/traceroute",
-        "ipconfig",
-        "nslookup"
+        "ping: Checks basic connectivity and round-trip time.",
+        "tracert/traceroute: Reveals each hop and associated latency.",
+        "ipconfig: Shows local IP settings but not path latency.",
+        "nslookup: Tests DNS resolution but not hop-by-hop delays."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Tracert/traceroute shows the path and delay at each hop, helping pinpoint where latency is occurring. Ping only tests basic connectivity, ipconfig shows local interface configuration, and nslookup resolves domain names.",
@@ -333,10 +333,10 @@ db.tests.insertOne({
       "id": 26,
       "question": "What is the primary advantage of using fiber optic cable over copper cable?",
       "options": [
-        "Lower cost",
-        "Easier installation",
-        "Greater bandwidth and longer distances",
-        "Better resistance to physical damage"
+        "Costs less than standard twisted-pair cabling.",
+        "Easier to install and terminate than copper.",
+        "Supports higher bandwidth and longer distances.",
+        "Resists physical damage better than copper wires."
       ],
       "correctAnswerIndex": 2,
       "explanation": "Fiber optic cables offer significantly higher bandwidth and can transmit data over much longer distances than copper cables. They are generally more expensive and can be more complex to install.",
@@ -346,10 +346,10 @@ db.tests.insertOne({
       "id": 27,
       "question": "Which command is used to release and renew a DHCP lease on a Windows computer?",
       "options": [
-        "ipconfig /release then ipconfig /renew",
-        "ipconfig /flushdns",
-        "netsh winsock reset",
-        "route add"
+        "ipconfig /release and ipconfig /renew",
+        "ipconfig /flushdns for clearing DNS caches",
+        "netsh winsock reset for fixing socket issues",
+        "route add for configuring static routes"
       ],
       "correctAnswerIndex": 0,
       "explanation": "ipconfig /release releases the current DHCP lease, and ipconfig /renew requests a new one. ipconfig /flushdns clears the DNS resolver cache, netsh winsock reset resets the Winsock catalog, and route add adds a static route.",
@@ -359,10 +359,10 @@ db.tests.insertOne({
       "id": 28,
       "question": "What is a MAC address?",
       "options": [
-        "A unique physical address assigned to a network interface.",
-        "A logical address used for routing.",
-        "An address assigned by a DHCP server.",
-        "A type of network cable."
+        "A unique hardware identifier on a network interface.",
+        "A dynamic logical address for routing traffic.",
+        "An IP automatically handed out via DHCP.",
+        "A reference to specialized network cabling."
       ],
       "correctAnswerIndex": 0,
       "explanation": "A MAC address is a unique hardware address burned into a network interface card (NIC). IP addresses are logical and assigned by DHCP or static configuration.",
@@ -372,10 +372,10 @@ db.tests.insertOne({
       "id": 29,
       "question": "You are setting up a small office network.  Which device is MOST likely to provide both routing and switching functionality?",
       "options": [
-        "A dedicated router",
-        "A dedicated switch",
-        "A modem",
-        "A SOHO (Small Office/Home Office) router"
+        "Dedicated router with only routing features",
+        "Standalone switch for local device connections",
+        "Modem converting signals from ISP to digital",
+        "SOHO router combining multiple network services"
       ],
       "correctAnswerIndex": 3,
       "explanation": "SOHO routers typically combine routing, switching, and often wireless access point functionality into a single device.  Dedicated routers and switches perform only their specific function, and a modem connects to the internet but doesn't route or switch.",
@@ -385,12 +385,12 @@ db.tests.insertOne({
       "id": 30,
       "question": "What is the purpose of a default gateway?",
       "options": [
-        "To provide a path for traffic to leave the local network.",
-        "To assign IP addresses to devices on the network.",
-        "To filter network traffic based on MAC addresses.",
-        "To translate domain names to IP addresses."
+        "Serves as the DNS resolver for the network.",
+        "Provides internal IP addresses via DHCP service.",
+        "Acts as the router IP for traffic leaving the local subnet.",
+        "Filters broadcast traffic within the local segment."
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 2,
       "explanation": "The default gateway is the IP address of the router that a device uses to send traffic to destinations outside the local network.  DHCP assigns IP addresses, switches filter by MAC address, and DNS servers translate domain names.",
       "examTip": "Without a default gateway, devices can only communicate within their local subnet."
     },
@@ -398,10 +398,10 @@ db.tests.insertOne({
       "id": 31,
       "question": "Which of the following network services uses UDP port 53?",
       "options": [
-        "SMTP",
-        "DNS",
-        "DHCP",
-        "HTTP"
+        "SMTP sending mail on TCP port 25",
+        "DNS resolving queries over UDP 53",
+        "DHCP operating on UDP ports 67/68",
+        "HTTP running on TCP port 80"
       ],
       "correctAnswerIndex": 1,
       "explanation": "DNS primarily uses UDP port 53 for name resolution queries.  SMTP uses TCP port 25, DHCP uses UDP ports 67 and 68, and HTTP uses TCP port 80.",
@@ -411,10 +411,10 @@ db.tests.insertOne({
       "id": 32,
       "question": "What is the maximum data transfer rate of standard 802.11g wireless networks?",
       "options": [
-        "11 Mbps",
-        "54 Mbps",
-        "150 Mbps",
-        "300 Mbps"
+        "11 Mbps at the 2.4 GHz frequency band",
+        "54 Mbps over 2.4 GHz channels",
+        "150 Mbps using multiple data streams",
+        "300 Mbps using an 802.11n setup"
       ],
       "correctAnswerIndex": 1,
       "explanation": "802.11g has a maximum data rate of 54 Mbps. 802.11b is 11 Mbps, and 802.11n can reach higher speeds.",
@@ -424,10 +424,10 @@ db.tests.insertOne({
       "id": 33,
       "question": "What command would you use to view the Address Resolution Protocol (ARP) cache on a Windows machine?",
       "options": [
-        "arp -a",
-        "ipconfig /displaydns",
-        "netstat -an",
-        "show arp"
+        "arp -a: Lists current IP-to-MAC mappings",
+        "ipconfig /displaydns: Shows DNS cache entries",
+        "netstat -an: Displays active connections",
+        "show arp: A common command on Cisco devices"
       ],
       "correctAnswerIndex": 0,
       "explanation": "The `arp -a` command displays the ARP cache, which maps IP addresses to MAC addresses. ipconfig /displaydns shows DNS cache, netstat -an shows network connections, and show arp is a common Cisco command.",
@@ -437,10 +437,10 @@ db.tests.insertOne({
       "id": 34,
       "question": "A network is experiencing intermittent connectivity issues.  You suspect a faulty patch cable. Which tool would be MOST useful for testing the cable?",
       "options": [
-        "Protocol analyzer",
-        "Cable tester",
-        "Toner probe",
-        "Wi-Fi analyzer"
+        "Protocol analyzer to capture packet details",
+        "Cable tester to check continuity and pinouts",
+        "Toner probe to locate a specific cable end",
+        "Wi-Fi analyzer to scan wireless interference"
       ],
       "correctAnswerIndex": 1,
       "explanation": "A cable tester checks for continuity, shorts, and other physical cable problems. A protocol analyzer captures network traffic, a toner probe helps locate cables, and a Wi-Fi analyzer is for wireless networks.",
@@ -450,10 +450,10 @@ db.tests.insertOne({
       "id": 35,
       "question": "What is the purpose of Network Address Translation (NAT)?",
       "options": [
-        "To encrypt network traffic.",
-        "To translate public IP addresses to private IP addresses, and vice versa.",
-        "To assign IP addresses dynamically.",
-        "To filter network traffic based on content."
+        "Encrypts transmitted data for secure communications",
+        "Maps private IPs to a public IP for external access",
+        "Dynamically provides IP addresses to clients",
+        "Filters traffic based on predefined URL rules"
       ],
       "correctAnswerIndex": 1,
       "explanation": "NAT allows multiple devices on a private network to share a single public IP address, conserving public IP addresses and providing a layer of security. Encryption protects data, DHCP assigns IPs, and content filters control access to specific websites or content.",
@@ -463,10 +463,10 @@ db.tests.insertOne({
       "id": 36,
       "question": "Which type of VPN creates a secure, encrypted tunnel between two networks over the internet?",
       "options": [
-        "Client-to-site VPN",
-        "Site-to-site VPN",
-        "Remote access VPN",
-        "Clientless VPN"
+        "Client-to-site VPN for individual user connections",
+        "Site-to-site VPN for linking entire local networks",
+        "Remote access VPN for single-device connectivity",
+        "Clientless VPN requiring only a web browser"
       ],
       "correctAnswerIndex": 1,
       "explanation": "A site-to-site VPN connects two entire networks (e.g., two branch offices). Client-to-site (or remote access) connects a single device to a network. Clientless VPNs provide access to specific applications without a full network tunnel.",
@@ -476,25 +476,25 @@ db.tests.insertOne({
       "id": 37,
       "question": "What is the function of a router in a network?",
       "options": [
-        "To connect devices within the same local area network (LAN).",
-        "To forward data packets between different networks.",
-        "To convert digital signals to analog signals.",
-        "To filter network traffic based on MAC addresses."
+        "Joins devices in the same LAN using MAC addresses",
+        "Examines IP-based traffic to forward data between networks",
+        "Modulates and demodulates signals for ISP connections",
+        "Filters or blocks packets based on security rules"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Routers operate at Layer 3 (Network) and forward packets based on IP addresses, connecting different networks. Switches connect devices within the same LAN, modems convert signals, and switches(not routers) can filter based on mac addreses.",
+      "explanation": "Routers operate at Layer 3 (Network) and forward packets based on IP addresses, connecting different networks. Switches connect devices within the same LAN, modems convert signals, and switches (not routers) can filter based on MAC addresses.",
       "examTip": "Routers are the 'traffic cops' of the internet, directing data between networks."
     },
     {
       "id": 38,
       "question": "Which of the following is an advantage of using a cloud-based service model like IaaS?",
       "options": [
-        "Reduced capital expenditure on hardware.",
-        "Automatic software updates and patching.",
-        "Simplified application development.",
-        "Guaranteed data security."
+        "Complete protection against cyber threats",
+        "Lower overhead by renting virtualized hardware",
+        "Turnkey software maintenance and patching",
+        "Easier code development with built-in libraries"
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 1,
       "explanation": "IaaS (Infrastructure as a Service) allows you to rent virtualized computing resources, reducing the need to purchase and maintain physical hardware. SaaS provides automatic updates, PaaS simplifies development, and security is a shared responsibility in the cloud, not a guarantee.",
       "examTip": "Understand the different cloud service models (IaaS, PaaS, SaaS) and their respective benefits."
     },
@@ -502,10 +502,10 @@ db.tests.insertOne({
       "id": 39,
       "question": "What is the purpose of a 'DMZ' in a network?",
       "options": [
-        "To provide a secure zone for internal servers.",
-        "To create a separate network for wireless devices.",
-        "To host publicly accessible servers while protecting the internal network.",
-        "To act as a backup power source for network devices."
+        "Separates critical internal servers behind multiple routers",
+        "Enables a private Wi-Fi network for local office users",
+        "Houses publicly accessible servers safely outside the main LAN",
+        "Offers an emergency power backup zone for network hardware"
       ],
       "correctAnswerIndex": 2,
       "explanation": "A DMZ (Demilitarized Zone) is a network segment that sits between the internal network and the internet, providing a buffer zone for servers that need to be accessible from the outside (like web servers). It doesn't secure internal servers directly, separate wireless devices, or provide backup power.",
@@ -515,10 +515,10 @@ db.tests.insertOne({
       "id": 40,
       "question": "Which protocol is used to securely manage and monitor network devices?",
       "options": [
-        "SNMP (Simple Network Management Protocol)",
-        "Telnet",
-        "FTP (File Transfer Protocol)",
-        "HTTP (Hypertext Transfer Protocol)"
+        "SNMP: Collects information, with v3 offering security",
+        "Telnet: Sends commands in plain text across networks",
+        "FTP: Transfers files unencrypted between hosts",
+        "HTTP: Unsecured protocol for web-based interactions"
       ],
       "correctAnswerIndex": 0,
       "explanation": "SNMP is used to monitor and manage network devices. While SNMPv3 offers security features, the earlier versions (v1 and v2c) are not secure. Telnet, FTP, and HTTP are not designed for secure device management.",
@@ -528,10 +528,10 @@ db.tests.insertOne({
       "id": 41,
       "question": "What is the purpose of using VLANs?",
       "options": [
-        "To increase network bandwidth.",
-        "To segment a physical network into multiple logical networks.",
-        "To encrypt network traffic.",
-        "To assign IP addresses to devices."
+        "Boosting bandwidth beyond physical switch limits",
+        "Separating one physical network into logical segments",
+        "Encrypting data flowing within the local subnet",
+        "Handing out IP addresses to host devices"
       ],
       "correctAnswerIndex": 1,
       "explanation": "VLANs logically separate a physical network into multiple broadcast domains, improving security and manageability. They don't directly increase bandwidth, encrypt traffic, or assign IPs (DHCP does that).",
@@ -541,10 +541,10 @@ db.tests.insertOne({
       "id": 42,
       "question": "When configuring a wireless access point, what does the SSID represent?",
       "options": [
-        "The encryption key for the network.",
-        "The name of the wireless network.",
-        "The MAC address of the access point.",
-        "The IP address of the access point."
+        "A shared encryption key for wireless security",
+        "The broadcast name of the Wi-Fi network",
+        "The unique MAC hardware address of the AP",
+        "The IP address used to manage the AP"
       ],
       "correctAnswerIndex": 1,
       "explanation": "The SSID (Service Set Identifier) is the name that identifies a wireless network to users. The encryption key secures the network, the MAC address is the physical address of the AP, and the IP address is its logical address.",
@@ -554,10 +554,10 @@ db.tests.insertOne({
       "id": 43,
       "question": "What is the role of an authoritative DNS server?",
       "options": [
-        "To cache DNS records from other servers.",
-        "To hold the master copy of DNS records for a specific domain.",
-        "To forward DNS requests to other servers.",
-        "To provide DNS services to home users."
+        "Caches DNS records for faster lookups",
+        "Holds the official records for a given domain",
+        "Relays requests to other DNS servers",
+        "Offers internet DNS to home routers"
       ],
       "correctAnswerIndex": 1,
       "explanation": "An authoritative DNS server holds the original, master records for a domain. Caching servers store copies of records, forwarding servers relay requests, and home users typically use recursive DNS servers provided by their ISP.",
@@ -567,12 +567,12 @@ db.tests.insertOne({
       "id": 44,
       "question": "You are troubleshooting a network where users are experiencing slow file transfers. You suspect a duplex mismatch. What does this mean?",
       "options": [
-        "One device is operating in half-duplex mode, and the other is in full-duplex mode.",
-        "The network cable is too long.",
-        "The devices are using different IP addresses.",
-        "The network switch is overloaded."
+        "Both devices set to half-duplex, causing collisions",
+        "One device at half-duplex, the other at full-duplex",
+        "Devices with mismatched IPs, blocking all traffic",
+        "Switch port overload from too many connections"
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 1,
       "explanation": "A duplex mismatch occurs when two connected devices are configured for different duplex settings (half-duplex allows communication in only one direction at a time, full-duplex allows simultaneous bidirectional communication). This causes collisions and performance issues.",
       "examTip": "Ensure that both ends of a network connection have matching speed and duplex settings."
     },
@@ -580,10 +580,10 @@ db.tests.insertOne({
       "id": 45,
       "question": "Which of the following is a characteristic of a mesh network topology?",
       "options": [
-        "All devices are connected to a central hub.",
-        "Devices are connected in a circular loop.",
-        "Each device has multiple paths to other devices.",
-        "Devices are connected along a single cable."
+        "Connects every node to a central bridging device",
+        "Chains each device in a single loop arrangement",
+        "Offers multiple paths between any two nodes",
+        "Relies on a shared backbone bus for all traffic"
       ],
       "correctAnswerIndex": 2,
       "explanation": "Mesh networks provide high redundancy because each node has multiple connections to other nodes. Star uses a central hub, ring uses a loop, and bus uses a single cable.",
@@ -593,12 +593,12 @@ db.tests.insertOne({
       "id": 46,
       "question": "What information can be found on the Main Distribution Frame (MDF) of a network?",
       "options": [
-        "Connections from IDFs and external lines",
-        "End-user workstations",
-        "Wireless access points",
-        "Individual patch cables"
+        "All internal endpoints and workstations",
+        "Core switch ports connected to wireless APs",
+        "Terminations for IDFs and external provider links",
+        "Individual user devices and patch cables"
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 2,
       "explanation": "The MDF is the central point where connections from IDFs (Intermediate Distribution Frames) and incoming lines from service providers terminate.  Workstations and access points are connected at IDFs, not the MDF.  Patch cables connect within a rack, but the overall termination is at the MDF or IDF.",
       "examTip": "Think of the MDF as the 'core' of the structured cabling system, connecting to the outside world and the IDFs."
     },
@@ -606,10 +606,10 @@ db.tests.insertOne({
       "id": 47,
       "question": "What is the function of a hypervisor in virtualization?",
       "options": [
-        "It creates and runs virtual machines by abstracting the underlying hardware.",
-        "It provides network connectivity for virtual machines.",
-        "It manages storage for virtual machines.",
-        "It handles backup and recovery for virtual machines."
+        "Abstracts hardware to let multiple virtual machines run",
+        "Acts as a dedicated switch for virtual networks",
+        "Stores and organizes virtual disk images",
+        "Handles daily data backups for all virtual machines"
       ],
       "correctAnswerIndex": 0,
       "explanation": "A hypervisor (or Virtual Machine Monitor - VMM) is software that creates and runs virtual machines, abstracting the underlying hardware. It doesn't directly provide network connectivity (that's handled by virtual switches), store files (that's the storage system), or perform backups (although it can facilitate them).",
@@ -619,10 +619,10 @@ db.tests.insertOne({
       "id": 48,
       "question": "What does 'MTU' stand for in networking?",
       "options": [
-        "Maximum Transmission Unit",
-        "Media Transfer Unit",
-        "Minimum Transmission Unit",
-        "Main Transfer Utility"
+        "Maximum Transmission Unit, a packet size limit",
+        "Media Transfer Unit, for converting analog signals",
+        "Minimum Transmission Unit, the smallest allowed frame",
+        "Main Transfer Utility, a file-sync protocol"
       ],
       "correctAnswerIndex": 0,
       "explanation": "MTU stands for Maximum Transmission Unit, which defines the largest packet size that can be transmitted over a network without fragmentation.",
@@ -632,10 +632,10 @@ db.tests.insertOne({
       "id": 49,
       "question": "What is the primary difference between a Layer 2 switch and a Layer 3 switch?",
       "options": [
-        "Layer 2 switches forward traffic based on MAC addresses; Layer 3 switches forward traffic based on IP addresses.",
-        "Layer 2 switches are faster than Layer 3 switches.",
-        "Layer 2 switches support VLANs; Layer 3 switches do not.",
-        "Layer 2 switches are used in small networks; Layer 3 switches are used in large networks."
+        "Layer 2 uses MAC addressing, Layer 3 routes by IP",
+        "Layer 2 switches always faster than Layer 3 devices",
+        "Layer 2 switches allow VLANs, Layer 3 do not",
+        "Layer 2 for small networks, Layer 3 for large ones"
       ],
       "correctAnswerIndex": 0,
       "explanation": "Layer 2 switches operate at the data link layer and make forwarding decisions based on MAC addresses (within a single network). Layer 3 switches operate at the network layer and can route traffic between different networks based on IP addresses. Both can support VLANs; speed depends on the specific model; and both can be used in various network sizes.",
@@ -645,23 +645,23 @@ db.tests.insertOne({
       "id": 50,
       "question": "Which security protocol is used to authenticate users and devices on a network using a centralized database, often used with 802.1X?",
       "options": [
-        "RADIUS",
-        "SSH",
-        "SSL/TLS",
-        "IPsec"
+        "RADIUS for centralized authentication and accounting",
+        "SSH for secure command-line connections",
+        "SSL/TLS for encrypted web sessions",
+        "IPsec for VPN-based data security"
       ],
       "correctAnswerIndex": 0,
       "explanation": "RADIUS (Remote Authentication Dial-In User Service) is a networking protocol that provides centralized authentication, authorization, and accounting (AAA) management. SSH is for secure remote access, SSL/TLS encrypts web traffic, and IPsec is used for VPNs.",
       "examTip": "RADIUS is commonly used for network access control, especially with 802.1X port-based authentication."
-    },
+    }
     {
       "id": 51,
       "question": "What is the purpose of Spanning Tree Protocol (STP)?",
       "options": [
-        "To increase network bandwidth.",
-        "To prevent loops in switched networks.",
-        "To encrypt network traffic.",
-        "To assign IP addresses to devices."
+        "Expands link capacity to reduce congestion.",
+        "Prevents bridging loops by managing redundant paths.",
+        "Applies secure encryption to all LAN traffic.",
+        "Dispenses IP configurations to connected nodes."
       ],
       "correctAnswerIndex": 1,
       "explanation": "STP prevents broadcast storms and network outages caused by loops in a switched network by blocking redundant paths. It doesn't increase bandwidth, encrypt traffic, or assign IPs.",
@@ -671,10 +671,10 @@ db.tests.insertOne({
       "id": 52,
       "question": "What is a 'broadcast domain'?",
       "options": [
-        "The area covered by a wireless access point.",
-        "The set of all devices that receive broadcast frames originating from any device within the set.",
-        "The range of IP addresses assigned by a DHCP server.",
-        "The physical cabling infrastructure of a network."
+        "Coverage zone for a single wireless AP.",
+        "All hosts that see each other's broadcast traffic.",
+        "An IP range managed by DHCP scope settings.",
+        "The complete wiring system of a location."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A broadcast domain is a logical division of a network where all nodes can reach each other by broadcast at the data link layer. VLANs are used to segment broadcast domains.",
@@ -684,10 +684,10 @@ db.tests.insertOne({
       "id": 53,
       "question": "Which command would you use to test basic network connectivity to a remote host, measuring round-trip time?",
       "options": [
-        "tracert",
-        "ping",
-        "nslookup",
-        "ipconfig"
+        "tracert: Traces the path through multiple hops.",
+        "ping: Sends ICMP echoes to measure reachability.",
+        "nslookup: Queries DNS for hostname records.",
+        "ipconfig: Reviews local IP configuration details."
       ],
       "correctAnswerIndex": 1,
       "explanation": "The `ping` command sends ICMP echo requests to a host and measures the time it takes to receive a reply. `tracert` shows the route, `nslookup` resolves domain names, and `ipconfig` displays local network configuration.",
@@ -697,10 +697,10 @@ db.tests.insertOne({
       "id": 54,
       "question": "A network administrator wants to ensure that only authorized devices can connect to specific switch ports. Which technology BEST achieves this?",
       "options": [
-        "VLANs",
-        "Port Security",
-        "DHCP Snooping",
-        "STP"
+        "VLANs: Segment the network logically by grouping ports.",
+        "Port Security: Restricts switch port access by MAC address.",
+        "DHCP Snooping: Validates DHCP offers and requests.",
+        "STP: Eliminates loops in a switched environment."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Port security allows you to restrict access to a switch port based on MAC address, limiting which devices can connect. VLANs segment networks logically, DHCP snooping prevents rogue DHCP servers, and STP prevents loops.",
@@ -710,36 +710,36 @@ db.tests.insertOne({
       "id": 55,
       "question": "What is 'jitter' in the context of network performance?",
       "options": [
-        "The variation in delay between packets.",
-        "The total time it takes for a packet to travel from source to destination.",
-        "The amount of data lost during transmission.",
-        "The maximum bandwidth of a network connection."
+        "Fluctuations in the delay of transmitted data packets.",
+        "The total one-way latency from sender to receiver.",
+        "The number of packets dropped during transit.",
+        "The top throughput a link can handle consistently."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Jitter is the variability in latency (delay) over time.  It's particularly important for real-time applications like VoIP and video conferencing. Latency is the overall delay, packet loss is data loss, and bandwidth is capacity.",
+      "explanation": "Jitter is the variability in latency (delay) over time. It's particularly important for real-time applications like VoIP and video conferencing. Latency is the overall delay, packet loss is data loss, and bandwidth is capacity.",
       "examTip": "High jitter can cause choppy audio and video in real-time communications."
     },
     {
       "id": 56,
       "question": "Which of the following is a benefit of network segmentation?",
       "options": [
-        "Increased broadcast traffic.",
-        "Improved security and reduced congestion.",
-        "Simplified network management.",
-        "Lower network costs."
+        "Generates more frequent broadcast communication overall.",
+        "Enhances security boundaries and cuts down on broadcast storms.",
+        "Makes all administrative tasks straightforward by default.",
+        "Reduces expenses by eliminating additional hardware."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Network segmentation, often achieved with VLANs, isolates network traffic, improving security by limiting the impact of breaches and reducing congestion by limiting broadcast domains. It can *increase* management complexity initially, and costs depend on implementation.",
+      "explanation": "Network segmentation, often achieved with VLANs, isolates network traffic, improving security by limiting the impact of breaches and reducing congestion by limiting broadcast domains. It can increase management complexity initially, and costs depend on implementation.",
       "examTip": "Segmentation is a crucial security best practice, especially for isolating sensitive systems."
     },
     {
       "id": 57,
       "question": "What is the purpose of the `nslookup` command?",
       "options": [
-        "To display the routing table.",
-        "To query DNS servers for information about domain names and IP addresses.",
-        "To test network connectivity to a remote host.",
-        "To configure a network interface."
+        "Displays the system’s active routing entries.",
+        "Queries DNS records for IP or domain info.",
+        "Checks connectivity with remote hosts via ICMP.",
+        "Modifies a host’s NIC parameters."
       ],
       "correctAnswerIndex": 1,
       "explanation": "`nslookup` is used to troubleshoot DNS resolution issues by querying DNS servers. `route print` displays routing tables, `ping` tests connectivity, and `ipconfig` configures interfaces.",
@@ -749,10 +749,10 @@ db.tests.insertOne({
       "id": 58,
       "question": "Which of the following is the MOST secure method for remote access to a network device's command-line interface?",
       "options": [
-        "Telnet",
-        "SSH",
-        "HTTP",
-        "FTP"
+        "Telnet: Sends all data unencrypted across the network.",
+        "SSH: Establishes an encrypted command-line session.",
+        "HTTP: Unsecured protocol for exchanging web data.",
+        "FTP: Transfers files without secure encryption."
       ],
       "correctAnswerIndex": 1,
       "explanation": "SSH (Secure Shell) encrypts the communication session, protecting usernames, passwords, and commands. Telnet, HTTP, and FTP transmit data in plain text, making them vulnerable to eavesdropping.",
@@ -762,23 +762,23 @@ db.tests.insertOne({
       "id": 59,
       "question": "What is a 'collision domain'?",
       "options": [
-        "The area covered by a wireless access point.",
-        "The set of devices on a network where their transmissions can collide with each other.",
-        "The range of IP addresses assigned by a DHCP server.",
-        "The physical cabling infrastructure of a network."
+        "The wireless zone covered by a single access point.",
+        "All devices sharing the same medium where collisions can occur.",
+        "All assigned addresses in a DHCP scope.",
+        "All structured cabling for a particular building."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A collision domain is a network segment where devices share the same bandwidth and their transmissions can interfere with each other.  Hubs create large collision domains; switches segment collision domains (each port is its own collision domain).",
+      "explanation": "A collision domain is a network segment where devices share the same bandwidth and their transmissions can interfere with each other. Hubs create large collision domains; switches segment collision domains (each port is its own collision domain).",
       "examTip": "Switches eliminate collisions in modern Ethernet networks, unlike hubs."
     },
     {
       "id": 60,
       "question": "Which of the following is an example of a network monitoring tool?",
       "options": [
-        "Wireshark",
-        "Microsoft Word",
-        "Adobe Photoshop",
-        "AutoCAD"
+        "Wireshark: Captures and analyzes packet traffic.",
+        "Microsoft Word: Creates text documents.",
+        "Adobe Photoshop: Edits and manipulates images.",
+        "AutoCAD: Designs 2D/3D engineering drafts."
       ],
       "correctAnswerIndex": 0,
       "explanation": "Wireshark is a popular protocol analyzer used for network monitoring and troubleshooting. The other options are applications for different purposes.",
@@ -788,10 +788,10 @@ db.tests.insertOne({
       "id": 61,
       "question": "You need to implement Quality of Service (QoS) on your network.  What is the PRIMARY purpose of QoS?",
       "options": [
-        "To encrypt network traffic.",
-        "To prioritize certain types of network traffic over others.",
-        "To assign IP addresses to devices.",
-        "To filter network traffic based on MAC addresses."
+        "Scrambles data with strong encryption methods.",
+        "Ranks and manages traffic flows to ensure critical data runs smoothly.",
+        "Assigns IP addresses dynamically to various hosts.",
+        "Filters packets based on their destination MAC addresses."
       ],
       "correctAnswerIndex": 1,
       "explanation": "QoS allows you to give preferential treatment to specific applications or types of traffic (like voice or video) to ensure their performance.  It doesn't encrypt, assign IPs, or filter by MAC address.",
@@ -801,10 +801,10 @@ db.tests.insertOne({
       "id": 62,
       "question": "Which type of IP address is automatically assigned to a device when it fails to obtain an address from a DHCP server?",
       "options": [
-        "Static IP address",
-        "Dynamic IP address",
-        "APIPA (Automatic Private IP Addressing) address",
-        "Public IP address"
+        "A manually entered static IP address for local use.",
+        "A standard dynamic IP lease from the DHCP pool.",
+        "A self-configured link-local address (169.254.x.x).",
+        "An externally routable public IP address from the ISP."
       ],
       "correctAnswerIndex": 2,
       "explanation": "APIPA addresses (in the range 169.254.x.x) are self-assigned by devices when a DHCP server is unavailable. Static IPs are manually configured, dynamic IPs are assigned by DHCP, and public IPs are used on the internet.",
@@ -814,10 +814,10 @@ db.tests.insertOne({
       "id": 63,
       "question": "What is the purpose of the `ipconfig /all` command on a Windows system?",
       "options": [
-        "To display the routing table.",
-        "To release and renew a DHCP lease.",
-        "To display detailed network interface configuration information.",
-        "To test network connectivity to a remote host."
+        "Shows only default gateway details for each interface.",
+        "Releases and renews the system’s DHCP lease settings.",
+        "Presents complete adapter data, including DNS and MAC addresses.",
+        "Checks reachability to a remote endpoint."
       ],
       "correctAnswerIndex": 2,
       "explanation": "`ipconfig /all` shows comprehensive information about network adapters, including IP address, subnet mask, default gateway, DNS servers, MAC address, and DHCP status. `route print` shows the routing table, `ipconfig /release` and `/renew` manage DHCP leases, and `ping` tests connectivity.",
@@ -827,10 +827,10 @@ db.tests.insertOne({
       "id": 64,
       "question": "Which of the following best describes a 'virtual private network' (VPN)?",
       "options": [
-        "A network that uses physical cables to connect devices.",
-        "A network that is only accessible within a specific geographic location.",
-        "A secure, encrypted connection over a public network, such as the internet.",
-        "A network that is used exclusively for video conferencing."
+        "A fully wired LAN that uses physical cabling for all nodes.",
+        "A local network only available in a specific region.",
+        "An encrypted tunnel over the internet for private access.",
+        "A specialized link solely dedicated to live video feeds."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A VPN creates a secure tunnel over a public network, allowing users to access private resources remotely as if they were directly connected. It's not limited to a specific location or purpose.",
@@ -840,23 +840,23 @@ db.tests.insertOne({
       "id": 65,
       "question": "What is the function of an access point (AP) in a wireless network?",
       "options": [
-        "To connect wireless devices to a wired network.",
-        "To assign IP addresses to wireless devices.",
-        "To filter wireless traffic based on MAC addresses.",
-        "To encrypt wireless traffic."
+        "Bridges wireless clients to the wired infrastructure.",
+        "Allocates IP addresses for all LAN devices automatically.",
+        "Screens and discards wireless packets by MAC address.",
+        "Implements end-to-end encryption for all traffic flows."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "An AP acts as a bridge between wireless devices and a wired network. While an AP *can* be part of a system that assigns IP addresses (like a router with a built in AP), assigns IP addresses through DHCP, and encrypts traffic (using protocols like WPA2/WPA3), its *primary* function is bridging the wireless and wired networks.",
+      "explanation": "An AP acts as a bridge between wireless devices and a wired network. While an AP can be part of a router or system that assigns IP addresses or encrypts data, its primary role is to connect wireless and wired segments.",
       "examTip": "Think of an AP as a 'wireless switch' that connects Wi-Fi devices to the wired network."
     },
     {
       "id": 66,
       "question": "Which network device operates primarily at Layer 1 (Physical) of the OSI model?",
       "options": [
-        "Router",
-        "Switch",
-        "Hub",
-        "Firewall"
+        "Router: Analyzes Layer 3 IP addresses for packet forwarding.",
+        "Switch: Relies on MAC addresses at Layer 2 to switch frames.",
+        "Hub: Repeats signals at the Physical layer without filtering.",
+        "Firewall: Inspects traffic across multiple OSI layers."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A hub is a simple device that repeats signals received on one port to all other ports. It operates at the physical layer and doesn't examine MAC addresses or IP addresses. Routers are Layer 3, switches are primarily Layer 2 (though some are Layer 3), and firewalls can operate at multiple layers.",
@@ -866,10 +866,10 @@ db.tests.insertOne({
       "id": 67,
       "question": "What is a common symptom of a network loop caused by a Spanning Tree Protocol (STP) failure?",
       "options": [
-        "Slow internet speeds",
-        "Broadcast storms",
-        "Inability to obtain an IP address",
-        "Frequent disconnections from wireless networks"
+        "Slight drop in overall internet speed for some users.",
+        "Intense broadcast storms overwhelming the LAN.",
+        "Client devices failing to obtain IP addresses entirely.",
+        "Repeated wireless deauthentications for mobile clients."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Network loops can cause broadcast storms, where broadcast frames are endlessly circulated, consuming bandwidth and potentially crashing the network.  Slow speeds, IP address issues, and wireless disconnections are usually caused by other problems.",
@@ -879,23 +879,23 @@ db.tests.insertOne({
       "id": 68,
       "question": "What is the purpose of a subnet?",
       "options": [
-        "To increase the number of available IP addresses.",
-        "To divide a network into smaller, more manageable segments.",
-        "To encrypt network traffic.",
-        "To filter network traffic based on content."
+        "Expanding the available IP address pool beyond its limit.",
+        "Carving out smaller logical networks for manageability.",
+        "Encrypting all traffic crossing network boundaries.",
+        "Filtering packet content based on application data."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Subnetting divides a larger network into smaller logical networks, improving security, performance, and manageability.  It doesn't increase the *total* number of addresses, encrypt traffic, or filter content (firewalls do that).",
+      "explanation": "Subnetting divides a larger network into smaller logical networks, improving security, performance, and manageability. It doesn't increase the total number of addresses, encrypt traffic, or filter content (firewalls do that).",
       "examTip": "Subnetting is fundamental to IP addressing and network design."
     },
     {
       "id": 69,
       "question": "Which of the following is an example of a network documentation best practice?",
       "options": [
-        "Keeping all network diagrams on a single administrator's computer.",
-        "Regularly updating network diagrams and documentation to reflect changes.",
-        "Using only physical network diagrams, not logical diagrams.",
-        "Sharing network passwords with all IT staff."
+        "Keep diagrams stored only on a single administrator’s machine.",
+        "Update documentation promptly whenever network changes occur.",
+        "Rely exclusively on physical diagrams without logical topologies.",
+        "Share master passwords with the entire technical department."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Network documentation should be kept up-to-date to accurately reflect the current state of the network.  It should be centrally stored and accessible (with appropriate security), include both physical and logical diagrams, and passwords should be managed securely, not widely shared.",
@@ -905,10 +905,10 @@ db.tests.insertOne({
       "id": 70,
       "question": "What is 'latency' in a network context?",
       "options": [
-        "The amount of data that can be transmitted over a network connection.",
-        "The time it takes for data to travel from the source to the destination.",
-        "The number of devices connected to a network.",
-        "The physical distance between two network devices."
+        "The capacity limit for data throughput on a link.",
+        "The round-trip or one-way delay experienced by traffic.",
+        "The total number of user devices on the same subnet.",
+        "The direct physical distance separating network endpoints."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Latency is the delay experienced by data as it travels across a network. Bandwidth is the amount of data, the number of devices is network size, and distance is just physical separation.",
@@ -918,10 +918,10 @@ db.tests.insertOne({
       "id": 71,
       "question": "Which type of network attack involves flooding a target with excessive traffic, overwhelming its resources?",
       "options": [
-        "Man-in-the-middle attack",
-        "Denial-of-service (DoS) attack",
-        "Phishing attack",
-        "SQL injection attack"
+        "Man-in-the-middle: Eavesdrops and alters traffic flows.",
+        "DoS: Sends excessive traffic to knock a service offline.",
+        "Phishing: Tricks users into revealing sensitive data.",
+        "SQL injection: Manipulates databases via crafted queries."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A DoS attack aims to make a network or service unavailable by overwhelming it with traffic. Man-in-the-middle intercepts communication, phishing uses deceptive emails, and SQL injection targets databases.",
@@ -931,10 +931,10 @@ db.tests.insertOne({
       "id": 72,
       "question": "Which technology is used to create a logical grouping of devices on a network, regardless of their physical location?",
       "options": [
-        "Subnetting",
-        "VLANs (Virtual LANs)",
-        "NAT (Network Address Translation)",
-        "DHCP (Dynamic Host Configuration Protocol)"
+        "Subnetting: Separates networks by IP addressing boundaries.",
+        "VLANs: Form logical segments across a physical LAN layout.",
+        "NAT: Translates private addresses to public addresses.",
+        "DHCP: Dynamically allocates IP configuration to clients."
       ],
       "correctAnswerIndex": 1,
       "explanation": "VLANs group devices logically, even if they are connected to different physical switches. Subnetting divides networks based on IP address ranges, NAT translates addresses, and DHCP assigns them.",
@@ -944,12 +944,12 @@ db.tests.insertOne({
       "id": 73,
       "question": "What is the purpose of a firewall's 'stateful inspection' feature?",
       "options": [
-        "To track the state of network connections and allow only legitimate traffic.",
-        "To block all incoming traffic by default.",
-        "To encrypt network traffic.",
-        "To assign IP addresses to devices."
+        "Blocks all inbound packets by default, ignoring session state.",
+        "Keeps track of active sessions to permit valid returning traffic.",
+        "Encrypts every packet that passes through the firewall.",
+        "Assigns IP addresses to new hosts automatically."
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 1,
       "explanation": "Stateful inspection monitors the state of active connections and uses this information to make filtering decisions, allowing return traffic for established sessions. Blocking all incoming traffic is a default deny approach, encryption protects data, and DHCP assigns IPs.",
       "examTip": "Stateful inspection enhances firewall security by considering the context of network connections."
     },
@@ -957,10 +957,10 @@ db.tests.insertOne({
       "id": 74,
       "question": "Which of the following is a benefit of using cloud-based services?",
       "options": [
-        "Elimination of all security risks.",
-        "Scalability and flexibility.",
-        "Complete control over the physical infrastructure.",
-        "Guaranteed 100% uptime."
+        "Complete immunity to security breaches of any kind.",
+        "Easy expansion of resources on demand to meet needs.",
+        "Direct physical access to servers and networking gear.",
+        "An absolute guarantee of no service outages."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Cloud services offer scalability (easily adjust resources) and flexibility (choose different services as needed). Security is a shared responsibility, you don't control the physical infrastructure, and 100% uptime is rarely guaranteed (though SLAs provide high availability).",
@@ -970,10 +970,10 @@ db.tests.insertOne({
       "id": 75,
       "question": "What is the function of a DHCP server?",
       "options": [
-        "Translates domain names to IP addresses.",
-        "Automatically assigns IP addresses and other network configuration parameters to devices.",
-        "Routes traffic between different networks.",
-        "Filters network traffic based on content."
+        "Resolves domain names into IP addresses for hosts.",
+        "Dynamically distributes addresses and network settings.",
+        "Routes incoming data to separate subnets or VLANs.",
+        "Filters requests based on specific keyword content."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A DHCP server automates the process of IP address assignment, making network management easier. DNS translates domain names, routers route traffic, and content filters control website access.",
@@ -983,10 +983,10 @@ db.tests.insertOne({
       "id": 76,
       "question": "What does the acronym 'UTP' stand for in the context of network cabling?",
       "options": [
-        "Universal Twisted Pair",
-        "Unshielded Twisted Pair",
-        "Underground Twisted Pair",
-        "Unified Threat Protection"
+        "Universal Twisted Pair for universal cabling standards.",
+        "Unshielded Twisted Pair commonly used in Ethernet.",
+        "Underground Twisted Pair for long-distance outdoor runs.",
+        "Unified Threat Protection for layered security solutions."
       ],
       "correctAnswerIndex": 1,
       "explanation": "UTP stands for Unshielded Twisted Pair, a common type of copper cabling used in Ethernet networks. It lacks the shielding found in STP (Shielded Twisted Pair) cable.",
@@ -996,10 +996,10 @@ db.tests.insertOne({
       "id": 77,
       "question": "Which of the following is a characteristic of single-mode fiber optic cable?",
       "options": [
-        "Used for short distances.",
-        "Larger core size than multimode fiber.",
-        "Uses LEDs as the light source.",
-        "Allows only one mode of light to propagate, enabling long distances."
+        "Ideal only for short runs like in-building cabling.",
+        "Features a larger core diameter than multimode fiber.",
+        "Relies on LEDs as light sources for transmission.",
+        "Transmits a single light wave, supporting very long links."
       ],
       "correctAnswerIndex": 3,
       "explanation": "Single-mode fiber has a very small core that allows only one light path (mode), minimizing signal loss and enabling very long transmission distances (often using lasers). Multimode fiber has a larger core, uses LEDs, and is for shorter distances.",
@@ -1009,23 +1009,23 @@ db.tests.insertOne({
       "id": 78,
       "question": "Which of the following is an advantage of using a star topology in a wired network?",
       "options": [
-        "Requires less cabling than other topologies.",
-        "If one cable fails, the entire network goes down.",
-        "Easy to troubleshoot and isolate cable problems.",
-        "Provides the highest level of redundancy."
+        "Requires the least cabling among typical topologies.",
+        "A single cable fault takes the entire network down.",
+        "Simplifies troubleshooting because each node is connected centrally.",
+        "Offers the highest redundancy via multiple direct links."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "In a star topology, each device connects to a central hub or switch. This makes it easy to identify and fix cable issues affecting only one device. It uses *more* cabling than a bus, a single cable failure only affects *one* device, and mesh topology provides higher redundancy.",
+      "explanation": "In a star topology, each device connects to a central hub or switch. This makes it easy to identify and fix cable issues affecting only one device. It uses more cabling than a bus, a single cable failure only affects one device, and mesh topology provides higher redundancy.",
       "examTip": "Star topology's centralized design simplifies management and troubleshooting."
     },
     {
       "id": 79,
       "question": "What is the purpose of the Address Resolution Protocol (ARP)?",
       "options": [
-        "To resolve domain names to IP addresses.",
-        "To dynamically assign IP addresses.",
-        "To map IP addresses to MAC addresses.",
-        "To encrypt network communication."
+        "Look up domain names to locate IP addresses.",
+        "Hand out network configurations to DHCP clients.",
+        "Translate IP addresses into corresponding physical addresses.",
+        "Encrypt packets for secure end-to-end transmission."
       ],
       "correctAnswerIndex": 2,
       "explanation": "ARP is used on local networks to find the MAC address associated with a known IP address, enabling devices to communicate at the data link layer. DNS resolves domain names, DHCP assigns IPs, and encryption is handled by other protocols.",
@@ -1035,10 +1035,10 @@ db.tests.insertOne({
       "id": 80,
       "question": "What is a 'full-duplex' network connection?",
       "options": [
-        "A connection that can only transmit data in one direction at a time.",
-        "A connection that can transmit and receive data simultaneously.",
-        "A connection that uses two separate cables for transmission and reception.",
-        "A connection that is limited to 10 Mbps speed."
+        "Allows data flow strictly in one direction at a time.",
+        "Permits both sending and receiving at once without collisions.",
+        "Uses two separate cables for inbound and outbound data.",
+        "Restricts throughput to a maximum of 10 Mbps."
       ],
       "correctAnswerIndex": 1,
       "explanation": "Full-duplex allows simultaneous bidirectional communication, increasing efficiency. Half-duplex allows communication in only one direction at a time. The number of cables and speed are separate characteristics.",
@@ -1048,10 +1048,10 @@ db.tests.insertOne({
       "id": 81,
       "question": "Which tool is MOST useful for identifying the location of a specific cable within a bundle of cables?",
       "options": [
-        "Cable tester",
-        "Toner probe",
-        "Protocol analyzer",
-        "Crimping tool"
+        "Cable tester: Checks pinouts and continuity issues.",
+        "Toner probe: Emits a tone so you can trace cable ends.",
+        "Protocol analyzer: Captures and inspects network packets.",
+        "Crimping tool: Attaches RJ-45 connectors to cable ends."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A toner probe (also called a tone generator and probe) generates a tone on one end of a cable, and the probe is used to detect that tone at the other end, even within a bundle. A cable tester checks for continuity, a protocol analyzer captures traffic, and a crimping tool attaches connectors.",
@@ -1061,36 +1061,36 @@ db.tests.insertOne({
       "id": 82,
       "question": "What is the purpose of the 'show ip interface brief' command on a Cisco router or switch?",
       "options": [
-        "To display detailed routing table information.",
-        "To show a summary of interface status and IP addresses.",
-        "To configure interface settings.",
-        "To display the ARP cache."
+        "Displays the complete IP routing table for the device.",
+        "Lists each interface along with its IP and up/down status.",
+        "Initiates a configuration mode for editing interface settings.",
+        "Reveals cached mappings of IP addresses to MAC addresses."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The `show ip interface brief` command provides a concise overview of interface status (up/down), IP addresses, and other basic information. It's a quick way to check interface configurations.  `show ip route` displays the routing table, specific `interface` commands are used for configuration, and `show arp` shows the ARP cache.",
+      "explanation": "The `show ip interface brief` command provides a concise overview of interface status (up/down), IP addresses, and other basic information. It's a quick way to check interface configurations. `show ip route` displays the routing table, specific `interface` commands are used for configuration, and `show arp` shows the ARP cache.",
       "examTip": "`show ip interface brief` is one of the most frequently used Cisco commands for troubleshooting."
     },
     {
       "id": 83,
       "question": "What is the function of a network interface card (NIC)?",
       "options": [
-        "To provide wireless connectivity.",
-        "To connect a computer or device to a network.",
-        "To route traffic between networks.",
-        "To assign IP addresses dynamically."
+        "Enables Wi-Fi access point capabilities for a LAN.",
+        "Provides the hardware interface to join a network.",
+        "Routes traffic between different subnets or VLANs.",
+        "Supplies IP addresses automatically to client devices."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A NIC provides the physical interface for a device to connect to a network, either wired or wireless (if it's a wireless NIC).  It doesn't route traffic (routers do that) or assign IP addresses (DHCP servers do that).",
+      "explanation": "A NIC provides the physical interface for a device to connect to a network, either wired or wireless (if it's a wireless NIC). It doesn't route traffic (routers do that) or assign IP addresses (DHCP servers do that).",
       "examTip": "Every device connected to a network needs a NIC."
     },
     {
       "id": 84,
       "question": "Which type of network documentation shows the physical connections between devices, including cable types and port numbers?",
       "options": [
-        "Logical diagram",
-        "Physical diagram",
-        "IP address schema",
-        "Security policy"
+        "Logical diagram: Shows VLANs and IP addressing schemes.",
+        "Physical diagram: Depicts actual cables and interface details.",
+        "IP address schema: Lists IP assignments for each device.",
+        "Security policy: Describes rules for user access controls."
       ],
       "correctAnswerIndex": 1,
       "explanation": "A physical diagram depicts the actual cabling and connections between devices. A logical diagram shows the network topology and IP addressing, an IP address schema documents IP address assignments, and a security policy outlines security rules.",
@@ -1100,10 +1100,10 @@ db.tests.insertOne({
       "id": 85,
       "question": "Which wireless standard operates in the 5 GHz frequency band *exclusively*?",
       "options": [
-        "802.11g",
-        "802.11b",
-        "802.11a",
-        "802.11n"
+        "802.11g: Functions on 2.4 GHz only for moderate speeds.",
+        "802.11b: Uses 2.4 GHz with up to 11 Mbps rate.",
+        "802.11a: Transmits solely in the 5 GHz frequency range.",
+        "802.11n: Can use both 2.4 GHz and 5 GHz bands."
       ],
       "correctAnswerIndex": 2,
       "explanation": "802.11a operates *only* in the 5 GHz band. 802.11g and 802.11b operate in the 2.4 GHz band. 802.11n can operate in both 2.4 GHz and 5 GHz.",
@@ -1113,12 +1113,12 @@ db.tests.insertOne({
       "id": 86,
       "question": "What is the purpose of a 'loopback address'?",
       "options": [
-        "To test the network stack on a local machine.",
-        "To access a remote server.",
-        "To connect to the internet.",
-        "To assign a static IP address."
+        "Allows external hosts to remotely access the device.",
+        "Redirects data to the internet through a separate gateway.",
+        "Tests local TCP/IP functionality without leaving the host.",
+        "Forces a static IP configuration on a network interface."
       ],
-      "correctAnswerIndex": 0,
+      "correctAnswerIndex": 2,
       "explanation": "The loopback address (127.0.0.1 in IPv4, ::1 in IPv6) is used to test network software on a device without sending traffic over the network. It's a self-referential address.",
       "examTip": "Pinging the loopback address is a quick way to verify that the TCP/IP stack is functioning correctly on a device."
     },
@@ -1126,23 +1126,23 @@ db.tests.insertOne({
       "id": 87,
       "question": "Which of the following is MOST likely to cause signal degradation in a UTP cable?",
       "options": [
-        "Excessive length",
-        "Proper grounding",
-        "Using the correct connectors",
-        "Low humidity"
+        "Poor termination or incorrect RJ-45 connector use.",
+        "Extending the cable beyond the recommended 100-meter limit.",
+        "Prolonged cable storage in low-humidity environments.",
+        "Ensuring good grounding and shielded jacketing."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Exceeding the maximum length of a UTP cable (typically 100 meters) causes signal attenuation and degradation. Proper grounding and correct connectors are *good* practices. Humidity has minimal impact on UTP.",
+      "correctAnswerIndex": 1,
+      "explanation": "Exceeding the maximum length of a UTP cable (typically 100 meters) causes signal attenuation and degradation. Proper grounding and correct connectors are good practices. Humidity has minimal impact on UTP.",
       "examTip": "Adhere to cable length limitations to avoid signal degradation."
     },
     {
       "id": 88,
       "question": "Which command is used to display the DNS server settings on a Windows computer?",
       "options": [
-        "ipconfig /renew",
-        "ipconfig /all",
-        "ipconfig /release",
-        "ipconfig /flushdns"
+        "ipconfig /renew: Requests a new IP from the DHCP server.",
+        "ipconfig /all: Shows full adapter details including DNS info.",
+        "ipconfig /release: Drops the current DHCP lease.",
+        "ipconfig /flushdns: Clears the DNS resolver cache."
       ],
       "correctAnswerIndex": 1,
       "explanation": "`ipconfig /all` displays detailed network configuration, including the DNS servers being used. `/renew` requests a new DHCP lease, `/release` releases the current lease, and `/flushdns` clears the DNS cache.",
@@ -1152,10 +1152,10 @@ db.tests.insertOne({
       "id": 89,
       "question": "You are troubleshooting a computer that cannot connect to the network. You discover that it has an IP address of 169.254.10.5. What does this indicate?",
       "options": [
-        "The computer has a static IP address.",
-        "The computer has successfully obtained an IP address from a DHCP server.",
-        "The computer failed to obtain an IP address from a DHCP server and has self-assigned an APIPA address.",
-        "The computer is connected to the internet."
+        "User manually configured a private static address.",
+        "A valid address was successfully assigned via DHCP.",
+        "The device assigned itself a link-local IP (APIPA).",
+        "Indicates a direct connection to the public internet."
       ],
       "correctAnswerIndex": 2,
       "explanation": "An IP address in the 169.254.x.x range indicates an APIPA address, meaning the computer couldn't get an address from a DHCP server. It's not a static address, and it doesn't guarantee internet connectivity.",
@@ -1165,23 +1165,23 @@ db.tests.insertOne({
       "id": 90,
       "question": "What is a common security best practice for configuring a wireless access point?",
       "options": [
-        "Using the default SSID and password.",
-        "Disabling encryption.",
-        "Changing the default SSID and password, and enabling strong encryption (WPA3).",
-        "Broadcasting the SSID publicly."
+        "Keep factory SSID and default login credentials as is.",
+        "Disable all wireless encryption for ease of access.",
+        "Use custom SSID/password and enable WPA2/WPA3 encryption.",
+        "Make the SSID hidden so no device can detect it."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Always change default credentials and use the strongest available encryption (WPA3 if supported, otherwise WPA2).  Default settings are easily exploited, disabling encryption leaves the network open, and broadcasting the SSID is a minor security concern but less critical than the others.",
+      "explanation": "Always change default credentials and use the strongest available encryption (WPA3 if supported, otherwise WPA2).  Default settings are easily exploited, disabling encryption leaves the network open, and hiding the SSID is only a mild deterrent.",
       "examTip": "Securing a wireless network starts with changing defaults and enabling strong encryption."
     },
     {
       "id": 91,
       "question": "What is the role of a gateway in a TCP/IP network?",
       "options": [
-        "To translate data between different network protocols.",
-        "To connect networks with different IP addressing schemes.",
-        "To manage network security.",
-        "To act as the entry point for all external traffic, typically provided by a router."
+        "Translates data between unrelated network protocols.",
+        "Bridges networks using distinct IP addressing schemes.",
+        "Controls firewall rules for inbound and outbound traffic.",
+        "Serves as the router interface for external communications."
       ],
       "correctAnswerIndex": 3,
       "explanation": "The gateway, usually a router, acts as the point where traffic enters and exits your local network to reach external networks, including the internet.",
@@ -1191,10 +1191,10 @@ db.tests.insertOne({
       "id": 92,
       "question": "Which layer of the OSI model handles reliable data transmission and flow control?",
       "options": [
-        "Layer 2 - Data Link",
-        "Layer 3 - Network",
-        "Layer 4 - Transport",
-        "Layer 7 - Application"
+        "Layer 2 (Data Link): Deals with MAC-based frames.",
+        "Layer 3 (Network): Manages IP addresses and routing.",
+        "Layer 4 (Transport): Ensures reliable delivery and flow control.",
+        "Layer 7 (Application): Interfaces with software applications."
       ],
       "correctAnswerIndex": 2,
       "explanation": "The Transport layer (Layer 4) provides reliable data delivery using protocols like TCP, including mechanisms for flow control, error checking, and retransmission. Layer 2 deals with physical addressing, Layer 3 with logical addressing, and Layer 7 provides application services.",
@@ -1204,10 +1204,10 @@ db.tests.insertOne({
       "id": 93,
       "question": "Which type of network device is designed to prevent unauthorized access to or from a private network?",
       "options": [
-        "Switch",
-        "Router",
-        "Firewall",
-        "Hub"
+        "Switch: Directs traffic using MAC addresses on a LAN.",
+        "Router: Forwards packets at Layer 3 between networks.",
+        "Firewall: Blocks or allows traffic based on security policies.",
+        "Hub: Broadcasts incoming signals to every connected port."
       ],
       "correctAnswerIndex": 2,
       "explanation": "A firewall's primary purpose is to control network traffic based on security rules, blocking unauthorized access attempts. Switches connect devices within a network, routers forward traffic between networks, and hubs are simple repeaters.",
@@ -1217,10 +1217,10 @@ db.tests.insertOne({
       "id": 94,
       "question": "What is the maximum cable length for 1000BASE-T (Gigabit Ethernet) over UTP cable?",
       "options": [
-        "50 meters",
-        "100 meters",
-        "150 meters",
-        "200 meters"
+        "50 meters is recommended for all Gigabit Ethernet links.",
+        "100 meters is the typical maximum for Cat5e or Cat6.",
+        "150 meters, supported when STP cables are used.",
+        "200 meters, assuming high-grade cable and connectors."
       ],
       "correctAnswerIndex": 1,
       "explanation": "1000BASE-T, like other common Ethernet standards over UTP, has a maximum length of 100 meters (328 feet).",
@@ -1230,10 +1230,10 @@ db.tests.insertOne({
       "id": 95,
       "question": "What is a common cause of crosstalk in network cabling?",
       "options": [
-        "The use of incorrect connectors.",
-        "Excessive bending of the cable.",
-        "Signal loss due to long cable length.",
-        "Poor shielding of the cable."
+        "Using improper connector terminations, which can disrupt twisting.",
+        "Excessive cable bending that physically damages the conductors.",
+        "Long cable runs causing attenuation and signal weakening.",
+        "Poor or absent cable shielding that amplifies interference."
       ],
       "correctAnswerIndex": 0,
       "explanation": "Crosstalk is the unwanted transfer of signals between adjacent wires within a cable, causing interference and data corruption. Bending is physical damage, signal loss is attenuation, and incorrect connectors are termination issues.",
@@ -1243,36 +1243,36 @@ db.tests.insertOne({
       "id": 96,
       "question": "Which of the following is a characteristic of a virtual LAN (VLAN)?",
       "options": [
-        "It requires separate physical switches for each VLAN.",
-        "It logically segments a network, even if devices are on the same physical switch.",
-        "It increases the size of the broadcast domain.",
-        "It is only used in wireless networks."
+        "Demands a separate switch for each VLAN deployment.",
+        "Lets you split a single switch into multiple logical networks.",
+        "Expands the broadcast domain beyond standard size.",
+        "Operates solely in wireless environments."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VLANs create logical groupings of devices regardless of their physical location, allowing for better network segmentation and security.  They *reduce* broadcast domain size, can be used on the *same* physical switch, and are used in *wired* networks (primarily).",
+      "explanation": "VLANs create logical groupings of devices regardless of their physical location, allowing for better network segmentation and security. They reduce broadcast domain size, can be on the same physical switch, and are used primarily in wired networks.",
       "examTip": "VLANs are a crucial tool for network segmentation and security, allowing administrators to group devices based on function or security needs."
     },
     {
       "id": 97,
       "question": "You are setting up a network and need to ensure that a specific server always receives the same IP address. What DHCP feature should you use?",
       "options": [
-        "DHCP scope",
-        "DHCP reservation",
-        "DHCP exclusion",
-        "DHCP lease time"
+        "DHCP scope: Defines the general IP address range.",
+        "DHCP reservation: Associates a specific IP with a device’s MAC.",
+        "DHCP exclusion: Keeps certain IPs out of the dynamic pool.",
+        "DHCP lease time: Sets how long an address is valid."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DHCP reservation maps a specific MAC address to a specific IP address, ensuring the device always gets the same IP.  A scope defines the *range* of addresses, an exclusion prevents certain addresses from being assigned, and lease time controls how long an address is valid.",
+      "explanation": "A DHCP reservation maps a specific MAC address to a specific IP address, ensuring the device always gets the same IP.  A scope defines the range of addresses, an exclusion prevents certain addresses from being assigned, and lease time controls how long an address is valid.",
       "examTip": "Use DHCP reservations for servers, printers, and other devices that require consistent IP addresses."
     },
     {
       "id": 98,
       "question": "What is the purpose of the Domain Name System (DNS)?",
       "options": [
-        "To assign IP addresses to devices dynamically.",
-        "To translate human-readable domain names (like example.com) into IP addresses.",
-        "To encrypt network traffic.",
-        "To filter network traffic based on content."
+        "Automatically assigns IP addresses to network clients.",
+        "Maps human-friendly names to IP addresses for connectivity.",
+        "Implements encryption for data in transit across WAN links.",
+        "Blocks web traffic based on keywords or URL patterns."
       ],
       "correctAnswerIndex": 1,
       "explanation": "DNS acts like the internet's phone book, converting domain names into the IP addresses that computers use to communicate. DHCP assigns IPs, encryption is handled by other protocols, and content filtering is done by firewalls or specialized software.",
@@ -1282,27 +1282,30 @@ db.tests.insertOne({
       "id": 99,
       "question": "Which of the following is a security risk associated with using a public Wi-Fi network?",
       "options": [
-        "Increased network speed.",
-        "Stronger encryption.",
-        "Potential for eavesdropping and data interception.",
-        "Automatic access to all network resources."
+        "Achieving faster upload and download speeds automatically.",
+        "Utilizing stronger encryption methods than private networks.",
+        "Allowing attackers to intercept or snoop on user traffic.",
+        "Gaining unrestricted entry to all corporate resources."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Public Wi-Fi networks often lack strong security, making it easier for attackers to intercept data transmitted over the network.  They don't inherently offer faster speeds or stronger encryption, and access to resources is usually restricted.",
+      "explanation": "Public Wi-Fi networks often lack strong security, making it easier for attackers to intercept data transmitted over the network. They don't inherently offer faster speeds or stronger encryption, and access to resources is usually restricted.",
       "examTip": "Use a VPN when connecting to public Wi-Fi to protect your data."
     },
     {
       "id": 100,
       "question": "What is a 'default route' in a routing table?",
       "options": [
-        "The route used to reach the local network.",
-        "The route used when no other specific route matches the destination IP address.",
-        "The route used for all internal traffic.",
-        "The route with the highest administrative distance."
+        "Used only for traffic remaining on the local subnet.",
+        "A fallback path if the destination is not in any other routes.",
+        "Applies exclusively to internal network communications.",
+        "The route selected based on the highest priority metric."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The default route is the 'route of last resort'.  If a router doesn't have a more specific route in its table for a destination IP address, it sends the packet to the default gateway specified by the default route. It's not for local or internal traffic specifically, and administrative distance determines route preference, not what a default route *is*.",
+      "explanation": "The default route is the 'route of last resort'. If a router doesn't have a more specific route in its table for a destination IP address, it sends the packet to the default gateway specified by the default route. It's not for local or internal traffic specifically, and administrative distance determines route preference, not what a default route is.",
       "examTip": "The default route is essential for connecting to networks outside the locally configured ones (like the internet)."
     }
   ]
 });
+
+
+
