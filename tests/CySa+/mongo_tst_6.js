@@ -1305,6 +1305,4 @@ db.tests.insertOne({
       "examTip": "Be extremely cautious of PowerShell commands that use -Enc (EncodedCommand) and download/execute remote files."
     }
   ]
-}
-
-
+};
