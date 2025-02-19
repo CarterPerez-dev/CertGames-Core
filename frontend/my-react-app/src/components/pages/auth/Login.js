@@ -84,8 +84,8 @@ function validatePassword(pwd) {
     errors.push("Password cannot be empty.");
     return errors;
   }
-  if (pwd.length < 12) {
-    errors.push("Password must be at least 12 characters.");
+  if (pwd.length < 6) {
+    errors.push("Password must be at least 6 characters.");
   }
   // Checking if too common
   if (COMMON_PASSWORDS.has(pwd.toLowerCase())) {
