@@ -190,10 +190,10 @@ db.tests.insertOne({
       "id": 15,
       "question": "You are configuring a Cisco router and need to control which networks are advertised by the OSPF routing protocol. Which command, and with what parameters, is used within the OSPF configuration to specify the networks that will participate in OSPF?",
       "options": [
-        "router ospf 1 \n  network 192.168.1.0 255.255.255.0 area 0  // uses a normal subnet mask instead of wildcard",
-        "router ospf 1 \n  passive-interface GigabitEthernet0/0  // ensures no OSPF hello packets are sent on that interface",
-        "router ospf 1 \n  network 192.168.1.0 0.0.0.255 area 0  // uses a wildcard mask to define exactly which interfaces match and places them in area 0",
-        "router ospf 1 \n  redistribute static // brings static routes into OSPF but doesn’t define local networks"
+        "router ospf 1 \n  network 192.168.1.0 255.255.255.0 area 0  
+        "router ospf 1 \n  passive-interface GigabitEthernet0/0  
+        "router ospf 1 \n  network 192.168.1.0 0.0.0.255 area 0  
+        "router ospf 1 \n  redistribute static 
       ],
       "correctAnswerIndex": 2,
       "explanation": "Within the OSPF configuration (`router ospf [process-id]`), the `network` command is used to define which interfaces will participate in OSPF and in which OSPF area. Critically, the `network` command uses a *wildcard mask*, not a standard subnet mask. The syntax is: `network [network-address] [wildcard-mask] area [area-id]`. So, to include the 192.168.1.0/24 network in area 0, you would use `network 192.168.1.0 0.0.0.255 area 0`. Passive-interface prevents sending OSPF hellos, and redistributing static routes is different from defining local networks to advertise via OSPF.",
@@ -567,10 +567,10 @@ db.tests.insertOne({
       "id": 44,
       "question": "A network administrator wants to configure a Cisco router to obtain its WAN interface IP address automatically from an ISP using DHCP. Which of the following command sequences is correct?",
       "options": [
-        "interface GigabitEthernet0/0 \n ip address dhcp // instructs the interface to acquire an IP via DHCP",
-        "interface GigabitEthernet0/0 \n ip address 192.168.1.1 255.255.255.0 \n ip dhcp client // partial config but sets a static IP first",
-        "ip dhcp pool WAN \n network dhcp // configures the router as a DHCP server, not a client",
-        "interface GigabitEthernet0/0 \n ip helper-address dhcp // used to forward DHCP requests from clients, not obtain an IP for itself"
+        "interface GigabitEthernet0/0 \n ip address dhcp 
+        "interface GigabitEthernet0/0 \n ip address 192.168.1.1 255.255.255.0 \n ip dhcp client 
+        "ip dhcp pool WAN \n network dhcp 
+        "interface GigabitEthernet0/0 \n ip helper-address dhcp 
       ],
       "correctAnswerIndex": 0,
       "explanation": "To configure a Cisco router interface to obtain an IP address via DHCP, use the `ip address dhcp` command on the interface. Assuming the WAN interface is GigabitEthernet0/0, the correct sequence is to enter interface configuration mode and then use `ip address dhcp`. Option B sets a static IP and incorrectly references ip dhcp client. Option C configures the router as a DHCP server, and Option D is used to relay DHCP requests on different subnets. So only Option A is correct.",
