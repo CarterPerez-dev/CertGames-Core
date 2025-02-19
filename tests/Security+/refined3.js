@@ -14,7 +14,7 @@
         "To scan network traffic for potential virus signatures."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VPNs encrypt your internet traffic, creating a secure tunnel, especially useful on public Wi-Fi. While *some* VPNs *might* affect speed or block *some* sites, that's not their *primary* function. Antivirus scans for viruses.",
+      "explanation": "A VPN encrypts your internet traffic, providing a secure tunnel that is especially useful on public Wi-Fi.",
       "examTip": "Think of a VPN as a secure 'tunnel' for your internet traffic."
     },
     {
@@ -27,7 +27,7 @@
         "Reusing a single password across all accounts."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "MFA requires two or more *different* factors: something you *know* (password), something you *have* (phone, token), or something you *are* (biometric). A password and fingerprint scan are two different factors. A password and security question are both 'something you know'.",
+      "explanation": "MFA uses two or more distinct factors, such as something you know (password) and something you are (biometrics).",
       "examTip": "MFA significantly improves security by requiring multiple forms of verification."
     },
     {
@@ -40,7 +40,7 @@
         "To help you organize your files."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing attacks aim to trick you into revealing sensitive information like usernames, passwords, and credit card details.",
+      "explanation": "Phishing aims to obtain usernames, passwords, credit card details, or other private information by deceptive means.",
       "examTip": "Be skeptical of emails and messages asking for personal information."
     },
     {
@@ -53,7 +53,7 @@
         "To remove outdated files from the system."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Software updates often contain crucial security patches that protect against known vulnerabilities.",
+      "explanation": "Updates often contain security patches that protect against known vulnerabilities or exploits.",
       "examTip": "Enable automatic software updates whenever possible."
     },
     {
@@ -66,7 +66,7 @@
         "Using the word 'password'."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong passwords are complex and difficult to guess, using a variety of character types.",
+      "explanation": "A strong password is more difficult to guess because it includes different character types.",
       "examTip": "Use a password manager to help you create and store strong passwords."
     },
     {
@@ -79,7 +79,7 @@
         "A type of computer game."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Malware (malicious software) includes viruses, worms, Trojans, ransomware, and other harmful programs.",
+      "explanation": "Malware includes viruses, worms, Trojans, ransomware, and other harmful programs.",
       "examTip": "Use antivirus software and practice safe computing habits to protect against malware."
     },
     {
@@ -92,7 +92,7 @@
         "To make the data larger."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Encryption scrambles data, protecting its confidentiality.",
+      "explanation": "Encryption secures data by converting it into a form unreadable without the key.",
       "examTip": "Encryption is essential for protecting sensitive data, both at rest and in transit."
     },
     {
@@ -118,7 +118,7 @@
         "To speed up your internet connection."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Digital signatures provide authentication and integrity verification for digital documents.",
+      "explanation": "A digital signature confirms authenticity and checks the integrity of a digital document or message.",
       "examTip": "Digital signatures are like electronic fingerprints for documents and messages."
     },
     {
@@ -131,7 +131,7 @@
         "To organize your files."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Backups are essential for data recovery in case of hardware failure, data loss, or malware infection.",
+      "explanation": "Backups allow data restoration if files are lost, corrupted, or compromised.",
       "examTip": "Make regular backups of your important data and store them in a separate location."
     },
     {
@@ -144,7 +144,7 @@
         "Continue using the computer as usual."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Disconnecting from the network prevents further spread or communication with command-and-control servers. Running an antivirus scan helps detect and remove the malware.",
+      "explanation": "Disconnecting prevents the spread of malware, and scanning helps detect and remove it.",
       "examTip": "Isolate the infected computer and then take steps to remove the malware."
     },
     {
@@ -157,7 +157,7 @@
         "Disable your computer's firewall to improve speed."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A VPN creates a secure, encrypted connection, protecting your data on unsecured public Wi-Fi.",
+      "explanation": "A VPN protects your data by encrypting your traffic on unsecured public Wi-Fi.",
       "examTip": "Avoid accessing sensitive information on public Wi-Fi without a VPN."
     },
     {
@@ -170,7 +170,7 @@
         "That the website is designed for rapid loading speeds."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "HTTPS (Hypertext Transfer Protocol Secure) indicates a secure, encrypted connection.",
+      "explanation": "HTTPS ensures data exchanged with the site is encrypted.",
       "examTip": "Look for 'HTTPS' and the padlock icon in your browser's address bar when entering sensitive information."
     },
     {
@@ -183,7 +183,7 @@
         "A method for creating online communities."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Social engineering attacks rely on human psychology rather than technical vulnerabilities to gain access or information.",
+      "explanation": "Social engineering uses deception to exploit human behavior rather than technical flaws.",
       "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information or performing risky actions."
     },
     {
@@ -196,7 +196,7 @@
         "To clear up space on your hard drive."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Logging out ends your session, preventing others from accessing your account if they gain access to your computer or device.",
+      "explanation": "Logging out closes your active session so others cannot access your account.",
       "examTip": "Always log out of accounts, especially on shared or public computers."
     },
     {
@@ -209,7 +209,7 @@
         "An online video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Trojans trick users into installing them by appearing harmless.",
+      "explanation": "Trojans pretend to be safe but carry harmful code once installed.",
       "examTip": "Be cautious about downloading and installing software from untrusted sources."
     },
     {
@@ -222,7 +222,7 @@
         "Having two separate user accounts for the same service."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "2FA adds significant security by requiring something you *know* (password) and something you *have* (phone) or *are* (fingerprint).",
+      "explanation": "2FA requires a password plus another factor, such as a code or biometric scan, improving security.",
       "examTip": "Enable 2FA on all accounts that support it, especially for important accounts."
     },
     {
@@ -235,7 +235,7 @@
         "Leave the computer on for the next user."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Logging out and clearing browsing data protects your privacy on shared computers.",
+      "explanation": "Logging out and clearing your history helps protect your privacy on shared computers.",
       "examTip": "Assume that anything you do on a public computer could be seen by others."
     },
     {
@@ -248,7 +248,7 @@
         "A physical computer component."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A computer worm is a type of malware that self-replicates and spreads across networks without user intervention.",
+      "explanation": "Worms can spread without user interaction, exploiting network vulnerabilities.",
       "examTip": "Keep your operating system and security software up to date to protect against worms."
     },
     {
@@ -261,7 +261,7 @@
         "To store user preferences for future visits."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "CAPTCHAs are challenges designed to be easy for humans to solve but difficult for automated programs (bots).",
+      "explanation": "CAPTCHAs differentiate real users from automated programs.",
       "examTip": "CAPTCHAs help prevent automated attacks and spam on websites."
     },
     {
@@ -274,7 +274,7 @@
         "A method for encrypting data to speed up processing."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Confidentiality focuses on keeping data secret and accessible only to authorized individuals.",
+      "explanation": "Confidentiality ensures data is only accessible to those with proper authorization.",
       "examTip": "Encryption is a common way to ensure confidentiality."
     },
     {
@@ -287,7 +287,7 @@
         "A type of hardware device used to generate passwords."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Password managers help create, store, and manage strong, unique passwords, improving security and convenience.",
+      "explanation": "Password managers help you store and generate strong, unique passwords in one secure place.",
       "examTip": "Using a password manager is highly recommended for good password hygiene."
     },
     {
@@ -300,7 +300,7 @@
         "A method for increasing data storage capacity."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Data integrity means that the data is trustworthy and hasn't been altered in an unauthorized way.",
+      "explanation": "Integrity means the data has not been altered or tampered with.",
       "examTip": "Hashing and digital signatures are used to verify data integrity."
     },
     {
@@ -313,7 +313,7 @@
         "A type of computer virus."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables that collect and exchange data.",
+      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables.",
       "examTip": "IoT devices can introduce security risks if not properly configured and secured."
     },
     {
@@ -326,7 +326,7 @@
         "A type of online video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Ransomware is a type of malware that holds your data hostage until a ransom is paid.",
+      "explanation": "Ransomware locks or encrypts your data until a ransom is paid.",
       "examTip": "Regular backups are your best defense against ransomware attacks."
     },
     {
@@ -339,7 +339,7 @@
         "A type of video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Spyware monitors your computer usage and sends data to a third party without your consent.",
+      "explanation": "Spyware gathers information about your activities and sends it to a third party.",
       "examTip": "Use anti-spyware software and be cautious about what you download and install."
     },
     {
@@ -352,7 +352,7 @@
         "The weather outside."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Your Social Security number is a key piece of PII that can be used to identify you and potentially steal your identity.",
+      "explanation": "Social Security numbers can be used to identify someone and potentially steal their identity.",
       "examTip": "Protect your PII carefully to prevent identity theft."
     },
     {
@@ -365,7 +365,7 @@
         "Disabling the router's firewall to improve speed, which is unsafe."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong passwords and modern encryption (WPA2/WPA3) are essential for securing Wi-Fi networks.",
+      "explanation": "Strong passwords and modern encryption help keep your Wi-Fi network secure.",
       "examTip": "Change the default password on your router and enable encryption."
     },
     {
@@ -404,7 +404,7 @@
         "It's based on your birthday."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong passwords are complex and difficult to guess or crack using automated tools.",
+      "explanation": "Strong passwords are complex, making them harder to crack with brute-force methods.",
       "examTip": "Use a password manager to help generate and store strong, unique passwords."
     },
     {
@@ -417,7 +417,7 @@
         "Because posting online improves your computer's performance, which is not true."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Information shared on social media can be widely viewed and may have long-lasting consequences.",
+      "explanation": "Information on social media can be widely viewed and have long-lasting consequences.",
       "examTip": "Think before you post and review your privacy settings on social media."
     },
     {
@@ -430,7 +430,7 @@
         "Sharing your password with trusted friends, which is unsafe."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Using unique, strong passwords prevents a single breach from compromising multiple accounts.",
+      "explanation": "Unique, strong passwords mean one compromised account won't lead to others being compromised.",
       "examTip": "A password manager can help you manage unique passwords for all your accounts."
     },
     {
@@ -443,7 +443,7 @@
         "A type of antivirus software, which is unrelated."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DLP focuses on preventing data breaches and exfiltration, whether intentional or accidental.",
+      "explanation": "DLP helps stop sensitive data from leaving an organization, whether accidental or intentional.",
       "examTip": "DLP systems can monitor and block data transfers based on predefined rules."
     },
     {
@@ -456,7 +456,7 @@
         "To install new software, which is unrelated."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Security audits assess the effectiveness of security controls and identify areas for improvement.",
+      "explanation": "Security audits check whether security policies and controls are effective and uncover areas to improve.",
       "examTip": "Regular security audits are an important part of a comprehensive security program."
     },
     {
@@ -469,7 +469,7 @@
         "It always uses professional language with no typos."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing emails often use pressure tactics, poor grammar, and suspicious requests to trick recipients.",
+      "explanation": "Phishing messages frequently push urgency or fear and may contain obvious errors.",
       "examTip": "Be skeptical of emails that ask for personal information or create a sense of urgency."
     },
     {
@@ -482,8 +482,8 @@
         "A vulnerability that only affects outdated software, which is not necessarily true."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Zero-day vulnerabilities are particularly dangerous because there is no defense available when they are first exploited.",
-      "examTip": "Keeping software up to date helps protect against known vulnerabilities, but zero-days are a constant threat."
+      "explanation": "Zero-day flaws have no immediate fix and are especially dangerous until patched.",
+      "examTip": "Keeping software up to date helps protect against known vulnerabilities, but zero-days remain a threat."
     },
     {
       "id": 38,
@@ -495,7 +495,7 @@
         "A method for encrypting data, which is not availability."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Availability means that systems and data are operational and accessible to authorized users.",
+      "explanation": "Availability ensures that legitimate users can access resources as needed.",
       "examTip": "Denial-of-service attacks target availability."
     },
     {
@@ -508,7 +508,7 @@
         "Deleting files permanently, which is not non-repudiation."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Non-repudiation provides proof of origin or action, preventing someone from denying they did something.",
+      "explanation": "Non-repudiation means there is proof of an action or message origin, preventing denial.",
       "examTip": "Digital signatures are a common way to achieve non-repudiation."
     },
     {
@@ -521,7 +521,7 @@
         "Accept all friend requests to increase your network."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Being mindful of your online activity and privacy settings is key to protecting your personal information.",
+      "explanation": "Controlling what you share and reviewing privacy options helps keep personal data secure.",
       "examTip": "Think before you post or share anything online."
     },
     {
@@ -534,7 +534,7 @@
         "A computer virus that spreads through physical contact."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Shoulder surfing is a low-tech way to steal information by watching someone enter data.",
+      "explanation": "Shoulder surfing is a low-tech way to capture details by watching someone input data.",
       "examTip": "Be aware of your surroundings when entering passwords or other sensitive information."
     },
     {
@@ -547,7 +547,7 @@
         "A utility for monitoring network traffic, which is not its purpose."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Keyloggers can be hardware or software and are used to steal passwords and other sensitive information.",
+      "explanation": "Keyloggers capture keystrokes to steal information like passwords and usernames.",
       "examTip": "Be cautious about using public computers, as they may have keyloggers installed."
     },
     {
@@ -560,7 +560,7 @@
         "A program that creates digital art, which is unrelated."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Biometrics uses physical characteristics for identification and authentication.",
+      "explanation": "Biometric authentication relies on physical characteristics to verify identity.",
       "examTip": "Biometric authentication can be more secure and convenient than traditional passwords."
     },
     {
@@ -573,8 +573,8 @@
         "A type of computer hardware used for data storage."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Access control restricts access to authorized users and prevents unauthorized access.",
-      "examTip": "Access control is a fundamental security principle, often implemented through usernames, passwords, and permissions."
+      "explanation": "Access control limits resource access to authorized users only.",
+      "examTip": "Access control is a fundamental security principle, often managed through usernames, passwords, and permissions."
     },
     {
       "id": 45,
@@ -586,7 +586,7 @@
         "To monitor employee internet usage, which is not the purpose."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Security awareness training helps employees understand and avoid common security threats, like phishing and social engineering.",
+      "explanation": "Security awareness programs inform employees about threats like phishing and social engineering.",
       "examTip": "A security-aware workforce is a crucial part of any organization's defense."
     },
     {
@@ -599,8 +599,8 @@
         "Sharing your passwords with colleagues."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Locking your computer prevents unauthorized access while you're away.",
-      "examTip": "Make it a habit to lock your computer (Windows key + L on Windows, Ctrl + Shift + Power on Mac) whenever you leave it unattended."
+      "explanation": "Locking your computer stops others from accessing it without permission.",
+      "examTip": "Make it a habit to lock your computer whenever you leave it unattended."
     },
     {
       "id": 47,
@@ -612,7 +612,7 @@
         "A social engineering technique to steal information, which is not DDoS."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DDoS attacks aim to make a website or online service unavailable by flooding it with traffic.",
+      "explanation": "DDoS attacks flood a site or service with excessive traffic, causing it to become unavailable.",
       "examTip": "DDoS attacks can be difficult to prevent, but mitigation techniques exist."
     },
     {
@@ -625,7 +625,7 @@
         "A program that helps you create documents."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Security policies provide a framework for security practices within an organization.",
+      "explanation": "Security policies outline an organization's approach to safeguarding its systems and data.",
       "examTip": "Security policies should be clearly documented, communicated, and enforced."
     },
     {
@@ -638,8 +638,8 @@
         "It automatically encrypts all your data without any configuration."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cloud storage offers convenience and accessibility, allowing you to access your data from anywhere with an internet connection. While *some* cloud providers offer encryption, it's *not* guaranteed, and security depends on the provider and your settings. It doesn't inherently make your computer faster.",
-      "examTip": "Choose a reputable cloud storage provider and understand their security practices."
+      "explanation": "Cloud storage allows data access from anywhere with an internet connection, offering convenience and scalability.",
+      "examTip": "Choose a reputable cloud provider and understand its security options."
     },
     {
       "id": 50,
@@ -651,8 +651,8 @@
         "A method for managing digital passwords."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Physical security includes measures like locks, security guards, surveillance cameras, and access control systems.",
-      "examTip": "Physical security is an important part of overall security, complementing cybersecurity measures."
+      "explanation": "Physical security includes locks, surveillance, and access control to protect tangible assets.",
+      "examTip": "Physical security complements cybersecurity measures."
     },
     {
       "id": 51,
@@ -664,7 +664,7 @@
         "A printer."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A virus is a type of malicious software that can harm your computer and spread to others.",
+      "explanation": "A virus is malicious software capable of spreading and causing damage.",
       "examTip": "Use antivirus software to protect your computer from malware."
     },
     {
@@ -677,8 +677,8 @@
         "Hypertext Transfer Program Standard."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "HTTPS indicates that the communication between your browser and the website is encrypted.",
-      "examTip": "Look for the 'https' and padlock icon in your browser's address bar when entering sensitive data."
+      "explanation": "HTTPS ensures encryption of the data transferred between your browser and the site.",
+      "examTip": "Look for 'https' and a padlock icon in your browser's address bar when entering sensitive data."
     },
     {
       "id": 53,
@@ -690,7 +690,7 @@
         "Memorized by you."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Storing passwords in a plain text file is extremely vulnerable, as anyone with access to your computer can read them. A password manager is *most* secure, and memorization is safe if the passwords are strong.",
+      "explanation": "A plain text file is easily accessed if someone gains control of your computer.",
       "examTip": "Never store passwords in plain text files."
     },
     {
@@ -703,7 +703,7 @@
         "It never contains any links or attachments."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing emails often request you to click a link and reveal personal information, using urgency and errors as red flags.",
+      "explanation": "Phishing emails typically push urgency and ask for sensitive details.",
       "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
     },
     {
@@ -716,8 +716,8 @@
         "To slow down the software deliberately."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Patches are updates that address security flaws and other issues in software.",
-      "examTip": "Apply software patches promptly to protect your system from known vulnerabilities."
+      "explanation": "Patches address security flaws and other issues that could be exploited.",
+      "examTip": "Apply patches promptly to keep systems safe."
     },
     {
       "id": 56,
@@ -729,8 +729,8 @@
         "Never turning off your computer to avoid losing data."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Regular backups are the most reliable way to recover from data loss due to hardware failure, malware, accidental deletion, or other disasters.",
-      "examTip": "Follow the 3-2-1 backup rule: 3 copies of your data, on 2 different media, with 1 copy offsite."
+      "explanation": "Backups are the most reliable method to recover data after incidents like hardware failure or malware.",
+      "examTip": "Follow the 3-2-1 backup rule: 3 copies, 2 media types, 1 offsite."
     },
     {
       "id": 57,
@@ -742,8 +742,8 @@
         "Creating a fake ID badge to enter a secure area."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Tailgating is when an unauthorized person gains access to a secure area by following someone else who is authorized.",
-      "examTip": "Always ensure doors close behind you and don't let strangers enter without proper authorization."
+      "explanation": "Tailgating happens when an unauthorized person follows an authorized individual into a secure area.",
+      "examTip": "Always ensure doors close behind you and don’t let strangers enter without proper authorization."
     },
     {
       "id": 58,
@@ -755,7 +755,7 @@
         "To provide technical support instructions."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Privacy policies inform users about a website's data handling practices.",
+      "explanation": "Privacy policies detail how your data is handled when you use the website.",
       "examTip": "Read privacy policies to understand how websites handle your data."
     },
     {
@@ -768,7 +768,7 @@
         "Using a username and password, which is not biometric."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Biometrics uses physical characteristics for identification and authentication.",
+      "explanation": "Biometrics rely on physical or behavioral characteristics to confirm identity.",
       "examTip": "Biometric authentication can be more secure and convenient than traditional passwords."
     },
     {
@@ -781,7 +781,7 @@
         "A program that protects your computer, which is not a vulnerability."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Vulnerabilities are flaws or weaknesses in software code that can be exploited to compromise security.",
+      "explanation": "Vulnerabilities are weaknesses that attackers can exploit to compromise a system.",
       "examTip": "Keep your software updated to patch known vulnerabilities."
     },
     {
@@ -794,7 +794,7 @@
         "Using a password manager."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Reusing passwords is a major security risk, as a breach on one site compromises all accounts using that password.",
+      "explanation": "Reusing passwords is risky, since one breach can compromise multiple accounts.",
       "examTip": "Never reuse passwords across multiple accounts."
     },
     {
@@ -807,7 +807,7 @@
         "A program that helps you browse the internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cookies are small text files used by websites to track preferences, login status, and other information. They are not inherently malicious, but can raise privacy concerns.",
+      "explanation": "Cookies track login status, preferences, and browsing data. They can raise privacy concerns but are not inherently malicious.",
       "examTip": "You can manage your browser's cookie settings to control which websites can store cookies on your computer."
     },
     {
@@ -820,7 +820,7 @@
         "Restricting access so much that users cannot perform any tasks."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Least privilege limits potential damage from compromised accounts or insider threats by giving users only the access they need.",
+      "explanation": "Least privilege reduces risk by giving each user only the permissions they need.",
       "examTip": "Always apply the principle of least privilege when assigning user permissions."
     },
     {
@@ -833,7 +833,7 @@
         "A method for encrypting data."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Integrity refers to the trustworthiness and accuracy of data.",
+      "explanation": "Integrity ensures data has not been modified or tampered with.",
       "examTip": "Hashing and digital signatures are used to verify data integrity."
     },
     {
@@ -846,8 +846,8 @@
         "Forward the email to all your contacts."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Never provide personal information in response to unsolicited emails. Delete and report suspicious messages.",
-      "examTip": "If you're unsure about an email's legitimacy, contact the supposed sender through a known, official channel to verify."
+      "explanation": "Suspicious emails should be deleted and flagged. Never share personal information through unverified messages.",
+      "examTip": "If you’re unsure about an email, contact the sender through an official channel."
     },
     {
       "id": 66,
@@ -859,7 +859,7 @@
         "Standard"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The 'S' in HTTPS stands for Secure, indicating that the connection between your browser and the website is encrypted.",
+      "explanation": "HTTPS indicates that data exchanged with the site is encrypted.",
       "examTip": "Look for 'HTTPS' and the padlock icon in your browser's address bar when entering sensitive information online."
     },
     {
@@ -872,8 +872,8 @@
         "Developing computer software."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Social engineering attacks exploit human psychology rather than technical vulnerabilities to gain access or information.",
-      "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information."
+      "explanation": "Social engineering exploits human trust or curiosity instead of technical weaknesses.",
+      "examTip": "Be skeptical and don’t let others pressure you into revealing sensitive information."
     },
     {
       "id": 68,
@@ -885,7 +885,7 @@
         "To monitor your computer for viruses."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a barrier between your network and the outside world, controlling incoming and outgoing traffic based on predefined rules.",
+      "explanation": "A firewall checks inbound and outbound traffic, permitting or blocking connections according to set rules.",
       "examTip": "Enable your computer's built-in firewall and consider a hardware firewall for your network."
     },
     {
@@ -898,7 +898,7 @@
         "It never asks for personal information."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Phishing emails often try to create a sense of urgency or fear to trick you into acting quickly without thinking.",
+      "explanation": "Phishing emails frequently use urgency or fear to push users into revealing info without caution.",
       "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
     },
     {
@@ -911,7 +911,7 @@
         "An online video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Ransomware is a type of malware that holds your data hostage until a ransom is paid.",
+      "explanation": "Ransomware locks your data by encrypting it, demanding payment for release.",
       "examTip": "Regular backups are your best defense against ransomware attacks."
     },
     {
@@ -924,7 +924,7 @@
         "Disable your firewall to speed up your connection."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A VPN encrypts your internet traffic, protecting your data on unsecured public Wi-Fi networks.",
+      "explanation": "A VPN creates an encrypted tunnel for your data, vital on unsecured public Wi-Fi.",
       "examTip": "Avoid accessing sensitive information on public Wi-Fi without a VPN."
     },
     {
@@ -937,7 +937,7 @@
         "It automatically creates backups of your account data."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "2FA requires an additional verification method (like a code from your phone) along with your password.",
+      "explanation": "2FA combines something you know (password) with something you have or are, boosting protection.",
       "examTip": "Enable 2FA on all accounts that support it, especially for important accounts."
     },
     {
@@ -950,7 +950,7 @@
         "A method for encrypting data."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Availability is about ensuring uptime and accessibility for authorized users.",
+      "explanation": "Availability ensures legitimate users can reach the data or service whenever required.",
       "examTip": "Denial-of-service attacks target availability."
     },
     {
@@ -963,7 +963,7 @@
         "Give it to a friend without any data sanitization."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Simply deleting files or formatting the drive is not enough. Use data wiping software or physically destroy the drive to ensure data is unrecoverable.",
+      "explanation": "Removing data securely helps prevent unauthorized recovery of personal or sensitive information.",
       "examTip": "Protect your personal information by securely erasing data from old devices before disposal."
     },
     {
@@ -976,7 +976,7 @@
         "Share your passwords only with close friends."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Password managers securely store and help generate strong, unique passwords, making management much easier and safer.",
+      "explanation": "Password managers securely store and generate strong credentials, simplifying management.",
       "examTip": "Using a password manager is a highly recommended security practice."
     },
     {
@@ -989,7 +989,7 @@
         "A type of video game."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Spyware monitors your computer usage and sends data to a third party without your consent.",
+      "explanation": "Spyware stealthily collects data from your computer and sends it to a third party.",
       "examTip": "Use anti-spyware software and be cautious about what you download and install."
     },
     {
@@ -1002,7 +1002,7 @@
         "A physical component of a computer."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A computer virus is a type of malware that infects files and can spread to other systems.",
+      "explanation": "A virus is a type of malware that infects files and can spread to other machines.",
       "examTip": "Use antivirus software and practice safe computing habits to protect against viruses."
     },
     {
@@ -1015,7 +1015,7 @@
         "To organize your files more effectively."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Backups are crucial for data recovery if your files are lost, corrupted, or compromised.",
+      "explanation": "Backups allow you to recover data if files are lost or corrupted.",
       "examTip": "Regularly back up your important data to an external drive or cloud storage."
     },
     {
@@ -1028,7 +1028,7 @@
         "Share your email password with trusted contacts."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Email is a common vector for malware and phishing attacks, so caution is essential.",
+      "explanation": "Being cautious with links and attachments helps avoid malware and phishing.",
       "examTip": "If an email seems suspicious, don't open attachments or click links. Verify through another channel."
     },
     {
@@ -1041,7 +1041,7 @@
         "It increases the data's file size significantly."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Encryption transforms data into an unreadable format, protecting its confidentiality.",
+      "explanation": "Encryption ensures data privacy by making it unreadable to unauthorized parties.",
       "examTip": "Use encryption to protect sensitive data, both at rest and in transit."
     },
     {
@@ -1054,7 +1054,7 @@
         "A type of computer virus."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables that are connected to the internet.",
+      "explanation": "IoT devices include smart thermostats, cameras, and wearables connected to the internet.",
       "examTip": "IoT devices can introduce new security risks if not properly secured."
     },
     {
@@ -1067,7 +1067,7 @@
         "Keeping your software up to date."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Reusing passwords is a major security risk. If one account is breached, all accounts using the same password are vulnerable.",
+      "explanation": "Using one password on multiple sites means a single breach can compromise multiple accounts.",
       "examTip": "Never reuse passwords across different online accounts."
     },
     {
@@ -1080,7 +1080,7 @@
         "Automatically back up your files."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a barrier between your network and the outside world, controlling incoming and outgoing traffic based on predefined rules.",
+      "explanation": "A firewall filters traffic in and out of a network, blocking unauthorized connections.",
       "examTip": "Think of a firewall as a gatekeeper for your network."
     },
     {
@@ -1093,8 +1093,8 @@
         "Use the same login credentials for all social media platforms."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Protecting your privacy on social media requires careful consideration of what you share and with whom.",
-      "examTip": "Regularly review your privacy settings on social media platforms."
+      "explanation": "Reviewing privacy options and limiting what you post helps safeguard personal information.",
+      "examTip": "Regularly check your privacy settings on social media platforms."
     },
     {
       "id": 85,
@@ -1106,7 +1106,7 @@
         "To create documents and spreadsheets."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Antivirus software is designed to protect your computer from viruses, worms, Trojans, and other types of malware.",
+      "explanation": "Antivirus software guards against threats like viruses, worms, and other malware.",
       "examTip": "Keep your antivirus software up to date and run regular scans."
     },
     {
@@ -1119,7 +1119,7 @@
         "A software program used to organize your files."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Phishing attacks use deception to steal sensitive information like usernames, passwords, and credit card details.",
+      "explanation": "Phishing relies on deception to gather sensitive details like passwords or financial data.",
       "examTip": "Be suspicious of unsolicited emails or messages asking for personal information."
     },
     {
@@ -1132,7 +1132,7 @@
         "Your birthday, which is predictable."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong passwords are complex and difficult to guess or crack using automated tools.",
+      "explanation": "Passwords with multiple character types are more resistant to brute-force attacks.",
       "examTip": "Use a password manager to help generate and store strong, unique passwords."
     },
     {
@@ -1145,7 +1145,7 @@
         "To free up hard drive space, which is not the purpose."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Logging out ends your session and protects your accounts from unauthorized access.",
+      "explanation": "Logging out ensures your account can’t be accessed after you leave.",
       "examTip": "Always log out of accounts and clear your browsing history after using a public computer."
     },
     {
@@ -1158,7 +1158,7 @@
         "It slows down your system intentionally."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Software updates, or patches, often fix security vulnerabilities that could be exploited by attackers.",
+      "explanation": "Software updates address potential exploits and enhance stability and security.",
       "examTip": "Enable automatic updates whenever possible, or check regularly for updates."
     },
     {
@@ -1171,8 +1171,8 @@
         "Click on every link to see what it leads to."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Social engineering relies on tricking people, so skepticism and verification are crucial defenses.",
-      "examTip": "Don't let others pressure you into revealing sensitive information or performing actions you're not comfortable with."
+      "explanation": "Social engineering relies on deception, so always verify unexpected requests for information.",
+      "examTip": "Don’t let others pressure you into revealing sensitive information or performing actions without verification."
     },
     {
       "id": 91,
@@ -1184,7 +1184,7 @@
         "To measure your typing speed."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "CAPTCHAs (Completely Automated Public Turing test to tell Computers and Humans Apart) are designed to be easy for humans to solve but difficult for automated programs.",
+      "explanation": "CAPTCHAs differentiate real users from bots by presenting tasks hard for automated scripts.",
       "examTip": "CAPTCHAs help prevent automated attacks and spam on websites."
     },
     {
@@ -1197,7 +1197,7 @@
         "Cybersecurity"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Confidentiality means keeping data secret and accessible only to authorized individuals.",
+      "explanation": "Confidentiality keeps data private and accessible only to authorized parties.",
       "examTip": "Encryption is a common way to ensure confidentiality."
     },
     {
@@ -1210,7 +1210,7 @@
         "A special kind of computer mouse."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Your digital footprint includes all your online activity, posts, and data traces.",
+      "explanation": "A digital footprint includes all online activity and data traces linked to you.",
       "examTip": "Be mindful of your digital footprint and what it might reveal about you."
     },
     {
@@ -1223,7 +1223,7 @@
         "Main software"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Malware is any software designed to harm or gain unauthorized access to a computer system.",
+      "explanation": "Malware refers to any software designed to harm or gain unauthorized access to systems.",
       "examTip": "Malware includes viruses, worms, Trojans, ransomware, spyware, and more."
     },
     {
@@ -1236,7 +1236,7 @@
         "Never turning off your computer, which is not a data protection strategy."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Regular backups are the most reliable way to recover from data loss due to hardware failure, malware, or accidental deletion.",
+      "explanation": "Backups safeguard against data loss from hardware failure or other incidents.",
       "examTip": "Follow the 3-2-1 backup rule: 3 copies, 2 different media, 1 offsite."
     },
     {
@@ -1249,7 +1249,7 @@
         "Using your birthday, which is predictable."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Strong, unique passwords are essential for protecting your accounts.",
+      "explanation": "Complex, unique passwords are vital for account security.",
       "examTip": "Use a password manager to help you create and manage strong, unique passwords."
     },
     {
@@ -1259,7 +1259,7 @@
         "Reply to the email and provide the requested information.",
         "Click on any links in the email to check its legitimacy.",
         "Delete the email and report it as spam or phishing.",
-        "Forward the email to all your contacts to warn them."
+        "Forward the email
       ],
       "correctAnswerIndex": 2,
       "explanation": "Never provide personal information in response to unsolicited emails. Delete and report suspicious messages.",
