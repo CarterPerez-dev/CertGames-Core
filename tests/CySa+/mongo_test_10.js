@@ -186,7 +186,7 @@ Alias /uploads/ "/var/www/uploads/"
 Options +ExecCGI
 AddHandler cgi-script .php .pl .py .sh
 </Directory>
-\`\`\`
+\\\`\\\`\\\`
 
 What is the attacker attempting to achieve with this configuration change?`,
       "options": [
@@ -478,6 +478,7 @@ Fuzzing is particularly effective at finding vulnerabilities that might be misse
     }
   ]
 });
+
 
 
 
