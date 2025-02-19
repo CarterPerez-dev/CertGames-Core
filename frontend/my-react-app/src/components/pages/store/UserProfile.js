@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchUserData } from '../store/userSlice'; // fetchUserData
 import { useNavigate } from 'react-router-dom';
-import './UserProfile.css';
+import './UserProfile.css'; // We'll add some input styling improvements here
+
+import '../auth/auth.css';
+import '../auth/AuthToast.css'; 
+import PasswordRequirements from '../auth/PasswordRequirements';
 
 import {
   FaTrophy,
@@ -145,13 +149,8 @@ function frontValidateEmail(email) {
   const e = email.normalize("NFC").trim();
 
   // 1) Length
-  if (e.length < 6 || e.length > 254) {
-    errors.push("Email length must be between 6 and 254 characters.");
-  }
-
-  // 2) Check forbidden Unicode blocks
-  if (hasForbiddenUnicodeScripts(e)) {
-    errors.push("Email contains forbidden Unicode blocks (private use or surrogates).");
+  if (e.length < 5 || e.length > 128) {
+    errors.push("Email length must be between 5 and 128 characters.");
   }
 
   // 3) Forbid suspicious ASCII
@@ -169,27 +168,6 @@ function frontValidateEmail(email) {
     errors.push("Email must contain exactly one '@' symbol.");
   }
 
-  // 5) Regex for local part, domain subparts, no consecutive dots, TLD 2..20
-  //    e.g. ^(?!.*\.\.)  -> disallow consecutive dots
-  const emailPattern = new RegExp(
-    '^(?!.*\\.\\.)' +
-    '([A-Za-z0-9._%+\\-]{1,64})' +
-    '@' +
-    '([A-Za-z0-9\\-]{1,63}(\\.[A-Za-z0-9\\-]{1,63})+)' +
-    '\\.[A-Za-z]{2,20}$'
-  );
-  if (!emailPattern.test(e)) {
-    errors.push("Email format is invalid (check local part, domain, consecutive dots, or TLD length).");
-  }
-
-  // 6) Disallow punycode domain (xn--)
-  if (e.includes('@')) {
-    const domainPart = e.split('@')[1].toLowerCase();
-    if (domainPart.startsWith("xn--")) {
-      errors.push("Email domain uses punycode (xn--), which is not allowed in this system.");
-    }
-  }
-
   return errors;
 }
 
@@ -198,11 +176,11 @@ function frontValidateEmail(email) {
 // ========================
 function frontValidatePassword(password, username, email) {
   const errors = [];
-  const pwd = password;  // no need to normalize, but we could if you want .normalize("NFC")
+  const pwd = password;
 
   // 1) Length
-  if (pwd.length < 12 || pwd.length > 128) {
-    errors.push("Password must be between 12 and 128 characters long.");
+  if (pwd.length < 6 || pwd.length > 64) {
+    errors.push("Password must be between 6 and 64 characters long.");
   }
 
   // 2) Disallow whitespace or < >
@@ -220,7 +198,6 @@ function frontValidatePassword(password, username, email) {
   if (!/\d/.test(pwd)) {
     errors.push("Password must contain at least one digit.");
   }
-  // Broad set of allowed special chars:
   const specialPattern = /[!@#$%^&*()\-_=+\[\]{}|;:'",<.>\/?`~\\]/;
   if (!specialPattern.test(pwd)) {
     errors.push("Password must contain at least one special character.");
@@ -246,10 +223,8 @@ function frontValidatePassword(password, username, email) {
   }
 
   // 7) Disallow if password contains username or local part of email
-  if (username) {
-    if (lowerPwd.includes(username.toLowerCase())) {
-      errors.push("Password must not contain your username.");
-    }
+  if (username && lowerPwd.includes(username.toLowerCase())) {
+    errors.push("Password must not contain your username.");
   }
   if (email) {
     const emailLocalPart = email.split('@')[0].toLowerCase();
@@ -262,7 +237,7 @@ function frontValidatePassword(password, username, email) {
 }
 
 // ====================================
-// Existing Code
+// Icon mapping
 // ====================================
 const iconMapping = {
   test_rookie: FaTrophy,
@@ -319,11 +294,20 @@ const UserProfile = () => {
   const [newEmail, setNewEmail] = useState('');
 
   const [showChangePassword, setShowChangePassword] = useState(false);
+
+  // Add show/hide toggle for Old Password
+  const [showOldPassword, setShowOldPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
+
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+  // Toggles for new/confirm password
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Add a local state to show/hide PasswordRequirements
+  const [showRequirements, setShowRequirements] = useState(false);
 
   const [statusMessage, setStatusMessage] = useState('');
 
@@ -347,14 +331,12 @@ const UserProfile = () => {
   // =======================
   const handleChangeUsername = async () => {
     setStatusMessage('');
-    // 1) Client-side validation
     const errors = frontValidateUsername(newUsername);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
       return;
     }
 
-    // 2) Proceed with server call
     try {
       const res = await fetch('/api/test/user/change-username', {
         method: 'POST',
@@ -364,7 +346,6 @@ const UserProfile = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        // Possibly show server-side details
         let errorMsg = data.error || 'Failed to change username';
         if (data.details && data.details.length > 0) {
           errorMsg += ': ' + data.details.join(', ');
@@ -385,14 +366,12 @@ const UserProfile = () => {
   // =======================
   const handleChangeEmail = async () => {
     setStatusMessage('');
-    // 1) Client-side validation
     const errors = frontValidateEmail(newEmail);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
       return;
     }
 
-    // 2) Server call
     try {
       const res = await fetch('/api/test/user/change-email', {
         method: 'POST',
@@ -422,26 +401,22 @@ const UserProfile = () => {
   // =======================
   const handleChangePassword = async () => {
     setStatusMessage('');
-    // Basic required fields check
+
     if (!oldPassword || !newPassword || !confirmPassword) {
       setStatusMessage('All password fields are required');
       return;
     }
-    // Check confirm match
     if (newPassword !== confirmPassword) {
       setStatusMessage('New passwords do not match');
       return;
     }
 
-    // 1) Client-side validation
-    // We pass current username/email to mimic server logic if we want to forbid them in password
     const errors = frontValidatePassword(newPassword, username, email);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
       return;
     }
 
-    // 2) Server call
     try {
       const res = await fetch('/api/test/user/change-password', {
         method: 'POST',
@@ -468,14 +443,13 @@ const UserProfile = () => {
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
+      setShowRequirements(false); // Hide the checklist again
     } catch (err) {
       setStatusMessage('Error changing password: ' + err.message);
     }
   };
 
-  // ================================
-  // CANCEL SUBSCRIPTION (PLACEHOLDER)
-  // ================================
+  // CANCEL SUBSCRIPTION
   const handleCancelSubscription = async () => {
     try {
       const res = await fetch('/api/test/subscription/cancel', {
@@ -576,19 +550,35 @@ const UserProfile = () => {
               </button>
             ) : (
               <div className="change-section change-password-section">
-                <input 
-                  type="password"
-                  placeholder="Old password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
+                {/* Add show/hide toggle for Old Password */}
+                <div className="password-row">
+                  <input 
+                    type={showOldPassword ? 'text' : 'password'}
+                    placeholder="Old password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                  />
+                  <span
+                    className="eye-icon"
+                    onClick={() => setShowOldPassword(!showOldPassword)}
+                  >
+                    {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                  </span>
+                </div>
 
                 <div className="password-row">
                   <input 
                     type={showNewPassword ? 'text' : 'password'}
                     placeholder="New password"
                     value={newPassword}
+                    onFocus={() => setShowRequirements(true)} 
                     onChange={(e) => setNewPassword(e.target.value)}
+                    onBlur={() => {
+                      // If user leaves the input and newPassword is empty, hide
+                      if (!newPassword) {
+                        setShowRequirements(false);
+                      }
+                    }}
                   />
                   <span
                     className="eye-icon"
@@ -597,6 +587,11 @@ const UserProfile = () => {
                     {showNewPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
+
+                {/* Conditionally show the PasswordRequirements only if user focuses or typed something */}
+                {showRequirements && (
+                  <PasswordRequirements password={newPassword} />
+                )}
 
                 <div className="password-row">
                   <input 
@@ -620,6 +615,7 @@ const UserProfile = () => {
                     setOldPassword('');
                     setNewPassword('');
                     setConfirmPassword('');
+                    setShowRequirements(false);
                   }}>Cancel</button>
                 </div>
               </div>
@@ -638,14 +634,11 @@ const UserProfile = () => {
           <h2>Your Achievements</h2>
           <div className="achievements-list">
             {achievements.length > 0 ? (
-              achievements.map((achId) => {
-                // find achievement doc if needed...
-                return (
-                  <div key={achId} className="achievement-display">
-                    {achId}
-                  </div>
-                );
-              })
+              achievements.map((achId) => (
+                <div key={achId} className="achievement-display">
+                  {achId}
+                </div>
+              ))
             ) : (
               <p>You haven't unlocked any achievements yet.</p>
             )}
