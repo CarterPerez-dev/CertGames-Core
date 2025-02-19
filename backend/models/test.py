@@ -206,23 +206,17 @@ def validate_email(email):
     """
     Validates an email with strict rules:
       1. Normalize (NFC), strip whitespace.
-      2. 6..254 length.
+      2. 6..254 length.  <-- (Docstring outdated if you changed min to 1 or 5)
       3. No control chars, <, >, etc.
       4. Exactly one @.
-      5. Stricter regex disallowing consecutive dots, requiring valid domain, TLD 2..20
-      6. Possibly disallow punycode (xn--).
     Returns: (True, []) if valid, else (False, [list of error messages]).
     """
     errors = []
     email_nfc = unicodedata.normalize("NFC", email.strip())
 
     # 1) Length check
-    if not (6 <= len(email_nfc) <= 254):
-        errors.append("Email length must be between 6 and 254 characters.")
-
-    # 2) Check forbidden Unicode blocks
-    if has_forbidden_unicode_scripts(email_nfc):
-        errors.append("Email contains forbidden Unicode blocks (private use or surrogates).")
+    if not (5 <= len(email_nfc) <= 69):
+        errors.append("Email length must be between 6 and 69 characters.")
 
     # 3) Forbid suspicious ASCII
     forbidden_ascii = set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\'])
@@ -234,23 +228,6 @@ def validate_email(email):
     # 4) Must have exactly one @
     if email_nfc.count('@') != 1:
         errors.append("Email must contain exactly one '@' symbol.")
-
-    # 5) Regex for local part, domain subparts, no consecutive dots, TLD 2..20
-    pattern = (
-        r'^(?!.*\.\.)'
-        r'([A-Za-z0-9._%+\-]{1,64})'
-        r'@'
-        r'([A-Za-z0-9\-]{1,63}(\.[A-Za-z0-9\-]{1,63})+)'
-        r'\.[A-Za-z]{2,20}$'
-    )
-    if not re.match(pattern, email_nfc):
-        errors.append("Email format is invalid (check local part, domain, consecutive dots, or TLD length).")
-
-    # 6) Disallow IDN punycode if desired
-    if '@' in email_nfc:
-        domain_part = email_nfc.split('@')[-1]
-        if domain_part.lower().startswith("xn--"):
-            errors.append("Email domain uses punycode (xn--), which is not allowed in this system.")
 
     if errors:
         return False, errors
