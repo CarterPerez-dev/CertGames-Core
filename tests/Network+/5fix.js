@@ -393,59 +393,7 @@ db.tests.insertOne({
   "correctAnswerIndex": 1,
   "explanation": "DNS (Domain Name System) is like the internet's phone book. It translates the website names we use (e.g., google.com) into the IP addresses that computers use to communicate. It's not about dynamic IP assignment (DHCP), security, or providing internet access.",
   "examTip": "Without DNS, we'd have to remember IP addresses instead of website names."
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  db.tests.insertOne({
-  "category": "nplus",
-  "testId": 6,
-  "testName": "Network+ Practice Test #6 (Formidable) - Part 1",
-  "xpPerCorrect": 10,
-  "questions": [
+},
     {
       "id": 31,
       "question": "A user reports they cannot access any websites. You check their computer and find they have a valid IP address, subnet mask, and default gateway. What is the NEXT troubleshooting step you should take?",
