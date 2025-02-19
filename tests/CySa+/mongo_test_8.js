@@ -1305,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "File upload vulnerabilities that allow execution of server-side code (like PHP) lead to Remote Code Execution (RCE)."
     }
   ]
-}
+};
