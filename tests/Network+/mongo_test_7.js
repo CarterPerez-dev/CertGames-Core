@@ -9,7 +9,7 @@ db.tests.insertOne({
       "question": "A network administrator is troubleshooting a complex routing issue between two sites connected via a VPN tunnel. They suspect a problem with the routing protocol.  Packets are intermittently reaching the destination, but with high latency and some packet loss.  Which of the following tools, used in combination, would be MOST effective in diagnosing the specific routing path and identifying potential problems within the VPN tunnel?",
       "options": [
         "ping and ipconfig /all",
-        "traceroute (or tracert) and a protocol analyzer (like Wireshark) capturing traffic *inside* the VPN tunnel.",
+        "traceroute (or tracert) and a protocol analyzer",
         "nslookup and arp -a",
         "netstat -r and route print"
       ],
