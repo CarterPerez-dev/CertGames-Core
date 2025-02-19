@@ -40,7 +40,7 @@ db.tests.insertOne({
         "To replace the need for firewalls and intrusion detection systems. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "SIEMs don't prevent *all* intrusions; they aid in detection. SIEMs can *assist* in remediation, but don't automate it completely. Firewalls and IDS are still necessary alongside a SIEM. The core function of a SIEM is to centralize log data, correlate events, and provide analysts with a comprehensive view of security-relevant activity.",
+      "explanation": "SIEMs don't prevent all intrusions; they aid in detection. SIEMs can assist in remediation, but don't automate it completely. Firewalls and IDS are still necessary alongside a SIEM. The core function of a SIEM is to centralize log data, correlate events, and provide analysts with a comprehensive view of security-relevant activity.",
       "examTip": "Think of a SIEM as a central hub for security log analysis and event correlation."
     },
     {
@@ -66,7 +66,7 @@ db.tests.insertOne({
         "A confidential report from a cybersecurity consulting firm. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Paid subscriptions and confidential reports are closed-source. Internal logs are not *external* threat intelligence. AlienVault OTX is a community-driven platform where users share and collaborate on threat information, making it a prime example of an open-source resource.",
+      "explanation": "Paid subscriptions and confidential reports are closed-source. Internal logs are not external threat intelligence. AlienVault OTX is a community-driven platform where users share and collaborate on threat information, making it a prime example of an open-source resource.",
       "examTip": "Open-source intelligence (OSINT) is publicly available information, often shared within security communities."
     },
     {
@@ -79,7 +79,7 @@ db.tests.insertOne({
         "Scheduled backup activity. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Software updates and backups are typically scheduled, but *unusually high* traffic *outside business hours* is suspicious. Normal web browsing wouldn't typically generate such high volumes consistently. This pattern strongly suggests data is being sent out of the network without authorization.",
+      "explanation": "Software updates and backups are typically scheduled, but unusually high traffic outside business hours is suspicious. Normal web browsing wouldn't typically generate such high volumes consistently. This pattern strongly suggests data is being sent out of the network without authorization.",
       "examTip": "Unusual network traffic patterns, especially outside of normal working hours, are red flags for potential malicious activity."
     },
     {
@@ -131,7 +131,7 @@ db.tests.insertOne({
         "APT attacks are easily detected by basic security measures. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "APTs are *not* short-lived; they aim for long-term access. While financial gain *can* be a motive, APTs are often state-sponsored or driven by espionage. Basic security measures are often insufficient against APTs. APTs are characterized by their sophistication, persistence, and use of advanced techniques to maintain access and evade detection.",
+      "explanation": "APTs are not short-lived; they aim for long-term access. While financial gain can be a motive, APTs are often state-sponsored or driven by espionage. Basic security measures are often insufficient against APTs. APTs are characterized by their sophistication, persistence, and use of advanced techniques to maintain access and evade detection.",
       "examTip": "APTs are stealthy, persistent, and highly sophisticated threats that require advanced detection and response capabilities."
     },
     {
@@ -157,7 +157,7 @@ db.tests.insertOne({
         "SOAR is only useful for large enterprises with extensive security budgets."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SOAR *augments* human analysts, not replaces them. SOAR cannot guarantee complete protection. SOAR can benefit organizations of various sizes. SOAR platforms automate routine tasks, orchestrate security tools, and streamline incident response workflows, leading to faster and more efficient responses.",
+      "explanation": "SOAR augments human analysts, not replaces them. SOAR cannot guarantee complete protection. SOAR can benefit organizations of various sizes. SOAR platforms automate routine tasks, orchestrate security tools, and streamline incident response workflows, leading to faster and more efficient responses.",
       "examTip": "SOAR helps security teams work smarter, not harder, by automating and orchestrating security operations."
     },
     {
@@ -235,7 +235,7 @@ db.tests.insertOne({
         "User Interaction (UI). "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Attack Vector describes *how* the vulnerability is accessed (network, local, etc.). Attack Complexity describes the *difficulty* of exploiting the vulnerability. User Interaction describes whether user action is needed. Privileges Required specifically indicates the level of privileges (None, Low, High) an attacker needs to exploit the vulnerability.",
+      "explanation": "Attack Vector describes how the vulnerability is accessed (network, local, etc.). Attack Complexity describes the difficulty of exploiting the vulnerability. User Interaction describes whether user action is needed. Privileges Required specifically indicates the level of privileges (None, Low, High) an attacker needs to exploit the vulnerability.",
       "examTip": "The 'Privileges Required' metric in CVSS is crucial for understanding the potential impact of a vulnerability."
     },
     {
@@ -248,7 +248,7 @@ db.tests.insertOne({
         "Ignore the alert if no other systems are affected. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Re-imaging is a drastic step that should only be taken after investigation and containment.  Isolating might be necessary, but *after* initial investigation. Ignoring alerts is never recommended. The first step is to investigate the alert's details, gather information about the process, and determine if it's truly malicious before taking further action.  This helps prevent unnecessary disruption and ensures an appropriate response.",
+      "explanation": "Re-imaging is a drastic step that should only be taken after investigation and containment.  Isolating might be necessary, but after initial investigation. Ignoring alerts is never recommended. The first step is to investigate the alert's details, gather information about the process, and determine if it's truly malicious before taking further action.  This helps prevent unnecessary disruption and ensures an appropriate response.",
       "examTip": "Always investigate security alerts thoroughly before taking drastic actions like re-imaging a system."
     },
     {
@@ -339,7 +339,7 @@ db.tests.insertOne({
         "Access controls are unnecessary if strong passwords are used. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The principle of least privilege *restricts* access, not maximizes it. Administrator privileges for all is a major security risk. Strong passwords are important, but they don't replace access controls. The core idea is to grant users only the *minimum* necessary permissions to do their jobs, limiting the potential damage from compromised accounts or insider threats.",
+      "explanation": "The principle of least privilege restricts access, not maximizes it. Administrator privileges for all is a major security risk. Strong passwords are important, but they don't replace access controls. The core idea is to grant users only the minimum necessary permissions to do their jobs, limiting the potential damage from compromised accounts or insider threats.",
       "examTip": "Always apply the principle of least privilege to minimize the potential impact of security breaches."
     },
     {
@@ -417,7 +417,7 @@ db.tests.insertOne({
         "Detection and Analysis. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Containment, eradication, and detection/analysis are all later stages. The *first* step is Preparation, which involves establishing policies, procedures, tools, and training to be ready to handle incidents effectively *before* they occur.",
+      "explanation": "Containment, eradication, and detection/analysis are all later stages. The first step is Preparation, which involves establishing policies, procedures, tools, and training to be ready to handle incidents effectively before they occur.",
       "examTip": "Proper preparation is crucial for a successful incident response.  You can't respond effectively if you're not prepared."
     },
     {
@@ -456,7 +456,7 @@ db.tests.insertOne({
         "Writing the code in a high-level programming language. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Clear variable names, comments, and high-level languages *aid* understanding, not obfuscation. Obfuscation aims to make code *harder* to analyze. Techniques include encryption (hiding the code entirely), encoding (transforming the code), and packing (compressing and often encrypting the code).",
+      "explanation": "Clear variable names, comments, and high-level languages aid understanding, not obfuscation. Obfuscation aims to make code harder to analyze. Techniques include encryption (hiding the code entirely), encoding (transforming the code), and packing (compressing and often encrypting the code).",
       "examTip": "Obfuscation is used to make malware analysis more difficult."
     },
     {
@@ -495,7 +495,7 @@ db.tests.insertOne({
         "Using strong passwords as the primary security measure. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Zero trust doesn't *trust* anything by default, inside or outside the network. It goes beyond perimeter security and passwords. Zero trust assumes no implicit trust and requires continuous verification of identity and device security posture before granting access to any resource, regardless of whether the user or device is inside or outside the traditional network perimeter.",
+      "explanation": "Zero trust doesn't trust anything by default, inside or outside the network. It goes beyond perimeter security and passwords. Zero trust assumes no implicit trust and requires continuous verification of identity and device security posture before granting access to any resource, regardless of whether the user or device is inside or outside the traditional network perimeter.",
       "examTip": "Zero trust operates on the principle of 'never trust, always verify.'"
     },
     {
@@ -534,7 +534,7 @@ db.tests.insertOne({
         "A misconfigured server. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "While a user *might* forget their password, *many* attempts from one IP quickly suggests an automated attack.  DoS aims to disrupt service, not crack passwords. Server misconfiguration is unlikely to cause this. A brute-force attack involves systematically trying many passwords (or usernames and passwords) in an attempt to gain unauthorized access.",
+      "explanation": "While a user might forget their password, many attempts from one IP quickly suggests an automated attack.  DoS aims to disrupt service, not crack passwords. Server misconfiguration is unlikely to cause this. A brute-force attack involves systematically trying many passwords (or usernames and passwords) in an attempt to gain unauthorized access.",
       "examTip": "A high number of failed login attempts from a single source is a strong indicator of a brute-force attack."
     },
     {
@@ -560,7 +560,7 @@ db.tests.insertOne({
         "An alert that is generated for a non-existent event. "
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A true positive is *correct* detection. A benign activity flagged as malicious is a *false positive*.  Failing to identify malicious activity is a *false negative*. A non-existent event wouldn't generate an alert. A true positive means the security system correctly identified an actual threat or malicious activity.",
+      "explanation": "A true positive is correct detection. A benign activity flagged as malicious is a false positive.  Failing to identify malicious activity is a false negative. A non-existent event wouldn't generate an alert. A true positive means the security system correctly identified an actual threat or malicious activity.",
       "examTip": "A true positive means the alert was accurate and identified a real security issue."
     },
     {
@@ -573,7 +573,7 @@ db.tests.insertOne({
         "An attacker encrypting data on a compromised system. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Initial access is not lateral movement. Exfiltration is data theft. Encryption is often part of ransomware. Lateral movement is the process of an attacker moving *within* a network after gaining initial access. They might compromise one system, then use that access to pivot to other, more valuable systems.",
+      "explanation": "Initial access is not lateral movement. Exfiltration is data theft. Encryption is often part of ransomware. Lateral movement is the process of an attacker moving within a network after gaining initial access. They might compromise one system, then use that access to pivot to other, more valuable systems.",
       "examTip": "Lateral movement is a key tactic used by attackers to expand their control within a compromised network."
     },
     {
@@ -586,7 +586,7 @@ db.tests.insertOne({
         "Cross-Site Request Forgery (CSRF). "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Phishing is social engineering. MitM intercepts communication. CSRF forces actions on a user's behalf. DoS attacks aim to disrupt services. This *can* involve flooding with traffic, but it can *also* involve sending malformed packets that exploit vulnerabilities to crash a system or service.",
+      "explanation": "Phishing is social engineering. MitM intercepts communication. CSRF forces actions on a user's behalf. DoS attacks aim to disrupt services. This can involve flooding with traffic, but it can also involve sending malformed packets that exploit vulnerabilities to crash a system or service.",
       "examTip": "DoS attacks can use various methods, including exploiting vulnerabilities, to disrupt service availability."
     },
     {
@@ -599,7 +599,7 @@ db.tests.insertOne({
         "To develop security policies and procedures. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Defending against attacks is the *blue team's* role. Vulnerability management is a separate process. Policy development is a governance function. Red teaming involves ethical hacking.  A red team simulates attacks, acting like real-world adversaries, to test an organization's defenses and find weaknesses *before* malicious actors do.",
+      "explanation": "Defending against attacks is the blue team's role. Vulnerability management is a separate process. Policy development is a governance function. Red teaming involves ethical hacking.  A red team simulates attacks, acting like real-world adversaries, to test an organization's defenses and find weaknesses before malicious actors do.",
       "examTip": "Red teaming is a proactive security exercise that simulates real-world attacks."
     },
     {
@@ -625,7 +625,7 @@ db.tests.insertOne({
         "Injecting malicious code into a website. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Exploiting vulnerabilities is a technical attack. Flooding is DoS. Injecting code is XSS. Social engineering relies on *psychological manipulation*, not technical exploits. Attackers might pretend to be IT support, a colleague, or a trusted authority to trick victims.",
+      "explanation": "Exploiting vulnerabilities is a technical attack. Flooding is DoS. Injecting code is XSS. Social engineering relies on psychological manipulation, not technical exploits. Attackers might pretend to be IT support, a colleague, or a trusted authority to trick victims.",
       "examTip": "Social engineering attacks exploit human trust and psychology rather than technical vulnerabilities."
     },
     {
@@ -638,7 +638,7 @@ db.tests.insertOne({
         "The average time it takes to respond to a security alert. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "MTTD isn't about fixing, recovering, or responding. MTTD is a key metric that measures the *detection* speed. It's the average time between when a security incident *occurs* and when it's *detected* by the security team.  A lower MTTD is desirable.",
+      "explanation": "MTTD isn't about fixing, recovering, or responding. MTTD is a key metric that measures the detection speed. It's the average time between when a security incident occurs and when it's detected by the security team.  A lower MTTD is desirable.",
       "examTip": "A lower MTTD indicates a more effective and responsive security posture."
     },
     {
@@ -690,7 +690,7 @@ db.tests.insertOne({
         "A guarantee of complete protection against all cyber threats. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Vulnerability lists and device inventories are helpful, but not the core of a plan. No plan can *guarantee* complete protection. An incident response plan must define *who* does *what* during an incident, with clear steps and communication protocols. This ensures a coordinated and efficient response.",
+      "explanation": "Vulnerability lists and device inventories are helpful, but not the core of a plan. No plan can guarantee complete protection. An incident response plan must define who does what during an incident, with clear steps and communication protocols. This ensures a coordinated and efficient response.",
       "examTip": "A well-defined incident response plan is essential for minimizing the impact of security incidents."
     },
     {
@@ -703,7 +703,7 @@ db.tests.insertOne({
         "To back up sensitive data to a secure location. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Data masking isn't encryption, deletion, or backup. Data masking (or obfuscation) replaces real sensitive data (like credit card numbers or PII) with realistic but *fake* data. This allows developers or testers to work with data that *looks* real, without exposing the actual sensitive information.",
+      "explanation": "Data masking isn't encryption, deletion, or backup. Data masking (or obfuscation) replaces real sensitive data (like credit card numbers or PII) with realistic but fake data. This allows developers or testers to work with data that looks real, without exposing the actual sensitive information.",
       "examTip": "Data masking protects sensitive data while preserving its utility for non-production purposes."
     },
     {
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "A user mistyping domain names. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "While misconfigurations or typos are *possible*, a *large number* of unusual requests is suspicious. Normal activity wouldn't involve many non-existent domains. DGAs are a common malware technique. Malware uses algorithms to generate many domain names, making it harder to block C2 communication by simply blocking a single domain.",
+      "explanation": "While misconfigurations or typos are possible, a large number of unusual requests is suspicious. Normal activity wouldn't involve many non-existent domains. DGAs are a common malware technique. Malware uses algorithms to generate many domain names, making it harder to block C2 communication by simply blocking a single domain.",
       "examTip": "Unusual DNS request patterns can be a sign of malware using DGAs."
     },
     {
@@ -729,7 +729,7 @@ db.tests.insertOne({
         "A security system generates an alert for a non-existent event. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Correct identification is a *true positive*. Incorrect flagging is a *false positive*. There's no alert for a non-existent event. A false negative is a *missed* detection. The security system should have generated an alert, but it didn't, meaning a real threat went unnoticed.",
+      "explanation": "Correct identification is a true positive. Incorrect flagging is a false positive. There's no alert for a non-existent event. A false negative is a missed detection. The security system should have generated an alert, but it didn't, meaning a real threat went unnoticed.",
       "examTip": "False negatives are dangerous because they represent undetected security incidents."
     },
     {
@@ -742,7 +742,7 @@ db.tests.insertOne({
         "Encrypting sensitive data at rest. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Firewalls, patching, and encryption are standard controls, not compensating ones. A compensating control is used when a *primary* control *cannot* be implemented (or is not fully effective).  If a critical patch isn't available, MFA adds an extra layer of security to *compensate* for the unpatched vulnerability.",
+      "explanation": "Firewalls, patching, and encryption are standard controls, not compensating ones. A compensating control is used when a primary control cannot be implemented (or is not fully effective).  If a critical patch isn't available, MFA adds an extra layer of security to compensate for the unpatched vulnerability.",
       "examTip": "Compensating controls provide alternative security measures when primary controls are not feasible or fully effective."
     },
     {
@@ -755,7 +755,7 @@ db.tests.insertOne({
         "To identify the initial point of compromise. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Containment limits the spread. Restoration is recovery. Identifying the initial point is part of analysis. Eradication is about *removal*. It involves completely eliminating the malware, attacker access, or vulnerability that caused the incident. This might involve deleting files, patching systems, or resetting passwords.",
+      "explanation": "Containment limits the spread. Restoration is recovery. Identifying the initial point is part of analysis. Eradication is about removal. It involves completely eliminating the malware, attacker access, or vulnerability that caused the incident. This might involve deleting files, patching systems, or resetting passwords.",
       "examTip": "The eradication phase focuses on completely removing the threat from the environment."
     },
     {
@@ -768,7 +768,7 @@ db.tests.insertOne({
         "To list running processes. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`strings` doesn't encrypt, show network connections, or list processes. The `strings` command looks for sequences of *printable* characters within a file (often a binary executable).  This can reveal embedded text, URLs, or other clues about the file's purpose, which is very helpful in malware analysis.",
+      "explanation": "`strings` doesn't encrypt, show network connections, or list processes. The `strings` command looks for sequences of printable characters within a file (often a binary executable).  This can reveal embedded text, URLs, or other clues about the file's purpose, which is very helpful in malware analysis.",
       "examTip": "The `strings` command is a simple but powerful tool for quickly examining the contents of files, especially executables."
     },
     {
@@ -794,7 +794,7 @@ db.tests.insertOne({
         "A type of firewall rule. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "It is not just a vulnerability list, risk assessment, or a firewall rule. A security baseline defines the *expected* secure configuration. It's a set of settings, hardening guidelines, and best practices that, when implemented, create a known-good, secure state for a system.  Deviations from the baseline can indicate a security issue.",
+      "explanation": "It is not just a vulnerability list, risk assessment, or a firewall rule. A security baseline defines the expected secure configuration. It's a set of settings, hardening guidelines, and best practices that, when implemented, create a known-good, secure state for a system.  Deviations from the baseline can indicate a security issue.",
       "examTip": "Security baselines provide a benchmark for measuring the security posture of systems."
     },
     {
@@ -807,7 +807,7 @@ db.tests.insertOne({
         "To conduct penetration testing. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "No process can prevent *all* attacks. Encryption is a security *control*, not the *goal* of vulnerability management. Penetration testing is a related activity, but it's not the overall management process. Vulnerability management is a continuous cycle of identifying weaknesses, assessing their risk, prioritizing them based on severity and exploitability, and then taking steps to fix them (patching, configuration changes, etc.).",
+      "explanation": "No process can prevent all attacks. Encryption is a security control, not the goal of vulnerability management. Penetration testing is a related activity, but it's not the overall management process. Vulnerability management is a continuous cycle of identifying weaknesses, assessing their risk, prioritizing them based on severity and exploitability, and then taking steps to fix them (patching, configuration changes, etc.).",
       "examTip": "Vulnerability management is a continuous process for reducing an organization's attack surface."
     },
     {
@@ -846,7 +846,7 @@ db.tests.insertOne({
         "Scanning the file with a single antivirus engine. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "File size and creation date can be easily manipulated. A *single* antivirus might miss a new or sophisticated threat. Comparing the file's *hash* (a unique fingerprint) to a database of known *malicious* hashes (like VirusTotal) is the most reliable. If the hash matches a known bad file, it's almost certainly malicious.",
+      "explanation": "File size and creation date can be easily manipulated. A single antivirus might miss a new or sophisticated threat. Comparing the file's hash (a unique fingerprint) to a database of known malicious hashes (like VirusTotal) is the most reliable. If the hash matches a known bad file, it's almost certainly malicious.",
       "examTip": "Hash comparison is a powerful and reliable method for identifying known malware."
     },
     {
@@ -859,7 +859,7 @@ db.tests.insertOne({
         "The process of creating secure passwords. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Threat intelligence is information, not encryption, a firewall, or passwords. Threat intelligence is *knowledge* about threats. This can include information about specific malware families, attacker groups, vulnerabilities being exploited, and indicators of compromise. It helps organizations understand the threat landscape and make informed security decisions.",
+      "explanation": "Threat intelligence is information, not encryption, a firewall, or passwords. Threat intelligence is knowledge about threats. This can include information about specific malware families, attacker groups, vulnerabilities being exploited, and indicators of compromise. It helps organizations understand the threat landscape and make informed security decisions.",
       "examTip": "Threat intelligence helps organizations proactively defend against known and emerging threats."
     },
     {
@@ -898,7 +898,7 @@ db.tests.insertOne({
         "The process of deleting data. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Data exfiltration is not a backup, encryption, or deletion. Data exfiltration is the *theft* of data. It's when an attacker copies data from a compromised system and sends it to a location they control. This is a major goal of many cyberattacks.",
+      "explanation": "Data exfiltration is not a backup, encryption, or deletion. Data exfiltration is the theft of data. It's when an attacker copies data from a compromised system and sends it to a location they control. This is a major goal of many cyberattacks.",
       "examTip": "Preventing data exfiltration is a critical security objective."
     },
     {
@@ -911,7 +911,7 @@ db.tests.insertOne({
         "To manage user accounts and passwords. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Patch management is not about encrypting data, penetration testing or managing user accounts. Patch management is the process of *applying* updates. Software vendors release patches to fix security vulnerabilities and bugs.  A robust patch management process ensures these patches are applied promptly and consistently, reducing the risk of exploitation.",
+      "explanation": "Patch management is not about encrypting data, penetration testing or managing user accounts. Patch management is the process of applying updates. Software vendors release patches to fix security vulnerabilities and bugs.  A robust patch management process ensures these patches are applied promptly and consistently, reducing the risk of exploitation.",
       "examTip": "Regular and timely patching is crucial for maintaining system security."
     },
     {
@@ -924,7 +924,7 @@ db.tests.insertOne({
         "A denial-of-service (DoS) attack. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "External attackers, malware, and DoS attacks are *external* threats. An insider threat comes from *within* the organization. This could be a current or former employee, contractor, or anyone with authorized access who misuses that access (intentionally or unintentionally) to harm the organization.",
+      "explanation": "External attackers, malware, and DoS attacks are external threats. An insider threat comes from within the organization. This could be a current or former employee, contractor, or anyone with authorized access who misuses that access (intentionally or unintentionally) to harm the organization.",
       "examTip": "Insider threats can be difficult to detect and can cause significant damage."
     },
     {
@@ -937,7 +937,7 @@ db.tests.insertOne({
         "Conducting regular vulnerability scans. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Strong passwords and encryption don't directly prevent XSS. Vulnerability scans *identify* the vulnerability, but don't *prevent* the attack. Input validation (checking user input for malicious code) and output encoding (converting special characters into a safe format) are the *core* defenses against XSS. They prevent injected scripts from being executed by the browser.",
+      "explanation": "Strong passwords and encryption don't directly prevent XSS. Vulnerability scans identify the vulnerability, but don't prevent the attack. Input validation (checking user input for malicious code) and output encoding (converting special characters into a safe format) are the core defenses against XSS. They prevent injected scripts from being executed by the browser.",
       "examTip": "Input validation and output encoding are essential for preventing XSS attacks."
     },
     {
@@ -976,7 +976,7 @@ db.tests.insertOne({
         "Attempt to replicate the SQL injection attack to confirm it. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Shutting down the server disrupts service unnecessarily *before* containment. Reviewing code and replicating are important *later* steps. The *first* priority is to *contain* the incident. Isolating the web server prevents the attacker from potentially causing further damage or accessing other systems on the network.",
+      "explanation": "Shutting down the server disrupts service unnecessarily before containment. Reviewing code and replicating are important later steps. The first priority is to contain the incident. Isolating the web server prevents the attacker from potentially causing further damage or accessing other systems on the network.",
       "examTip": "Containment is a crucial first step in incident response to limit the impact of a breach."
     },
     {
@@ -989,7 +989,7 @@ db.tests.insertOne({
         "Phishing. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "XSS targets web applications.  SQL injection targets databases. Phishing is social engineering. A buffer overflow occurs when a program tries to write data *beyond* the allocated memory buffer. This can overwrite adjacent memory areas, potentially allowing an attacker to inject and execute malicious code.",
+      "explanation": "XSS targets web applications.  SQL injection targets databases. Phishing is social engineering. A buffer overflow occurs when a program tries to write data beyond the allocated memory buffer. This can overwrite adjacent memory areas, potentially allowing an attacker to inject and execute malicious code.",
       "examTip": "Buffer overflows are a classic type of software vulnerability that can lead to code execution."
     },
     {
@@ -1002,7 +1002,7 @@ db.tests.insertOne({
         "The operating system version of a server. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "IP addresses, URLs, and OS versions are not *directly* identifying an individual. PII (Personally Identifiable Information) is any data that can be used to *identify* a specific person.  A social security number is a prime example of PII.",
+      "explanation": "IP addresses, URLs, and OS versions are not directly identifying an individual. PII (Personally Identifiable Information) is any data that can be used to identify a specific person.  A social security number is a prime example of PII.",
       "examTip": "Protecting PII is crucial for privacy and compliance with regulations like GDPR and CCPA."
     },
     {
@@ -1028,7 +1028,7 @@ db.tests.insertOne({
         "Removing the root cause of the incident. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Identifying the compromise point is part of analysis. Containment limits the spread.  Removing the root cause is eradication. Recovery is about *restoration*. This involves bringing systems back online, restoring data from backups, and verifying that everything is working correctly after an incident.",
+      "explanation": "Identifying the compromise point is part of analysis. Containment limits the spread.  Removing the root cause is eradication. Recovery is about restoration. This involves bringing systems back online, restoring data from backups, and verifying that everything is working correctly after an incident.",
       "examTip": "The recovery phase focuses on returning to normal operations after an incident."
     },
     {
@@ -1041,7 +1041,7 @@ db.tests.insertOne({
         "Deleting the evidence after the investigation is complete. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "You *never* modify original evidence. Sharing it widely compromises integrity. Deletion destroys evidence. Maintaining a meticulous chain of custody (documenting who had access, when, and why) is absolutely crucial to ensure the evidence is admissible in court and hasn't been tampered with.",
+      "explanation": "You never modify original evidence. Sharing it widely compromises integrity. Deletion destroys evidence. Maintaining a meticulous chain of custody (documenting who had access, when, and why) is absolutely crucial to ensure the evidence is admissible in court and hasn't been tampered with.",
       "examTip": "Proper handling of digital evidence is essential for legal and investigative purposes."
     },
     {
@@ -1054,7 +1054,7 @@ db.tests.insertOne({
         "A vulnerability that is not exploitable. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "It is not known, and has no available patch. A zero-day vulnerability is a *newly discovered* flaw. It's called 'zero-day' because the vendor has had *zero days* to develop a fix. These are highly valuable to attackers because there's no defense against them until a patch is released.",
+      "explanation": "It is not known, and has no available patch. A zero-day vulnerability is a newly discovered flaw. It's called 'zero-day' because the vendor has had zero days to develop a fix. These are highly valuable to attackers because there's no defense against them until a patch is released.",
       "examTip": "Zero-day vulnerabilities are extremely dangerous because they are unknown and unpatched."
     },
     {
@@ -1080,7 +1080,7 @@ db.tests.insertOne({
         "Encrypting all data at rest. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "It does not give all users admin access, while passwords and encryption are very important to security they do not represent the definition. The principle of least privilege is a fundamental security concept. It means users (and processes) should only have the *minimum* necessary permissions to do their work. This limits the potential damage from compromised accounts or insider threats.",
+      "explanation": "It does not give all users admin access, while passwords and encryption are very important to security they do not represent the definition. The principle of least privilege is a fundamental security concept. It means users (and processes) should only have the minimum necessary permissions to do their work. This limits the potential damage from compromised accounts or insider threats.",
       "examTip": "Always apply the principle of least privilege to minimize the potential impact of security breaches."
     },
     {
@@ -1093,7 +1093,7 @@ db.tests.insertOne({
         "Vulnerability scanning. "
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Wireshark does more than detect intrusions, manage firewalls, or scan for vulnerabilities. Wireshark is a widely-used *packet capture* and analysis tool. It allows you to capture network traffic and examine it in detail, inspecting individual packets to troubleshoot network problems, analyze protocols, and detect malicious activity.",
+      "explanation": "Wireshark does more than detect intrusions, manage firewalls, or scan for vulnerabilities. Wireshark is a widely-used packet capture and analysis tool. It allows you to capture network traffic and examine it in detail, inspecting individual packets to troubleshoot network problems, analyze protocols, and detect malicious activity.",
       "examTip": "Wireshark is an essential tool for network troubleshooting and security analysis."
     },
     {
@@ -1106,7 +1106,7 @@ db.tests.insertOne({
         "Opening all email attachments without caution. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Paying the ransom doesn't guarantee data recovery and encourages further attacks. Disabling security software is extremely risky. Opening attachments carelessly is a major infection vector. Regular, *offline* backups are crucial. If ransomware encrypts your data, you can restore from backups *without* paying the ransom. The backups must be offline or isolated to prevent the ransomware from encrypting them too.",
+      "explanation": "Paying the ransom doesn't guarantee data recovery and encourages further attacks. Disabling security software is extremely risky. Opening attachments carelessly is a major infection vector. Regular, offline backups are crucial. If ransomware encrypts your data, you can restore from backups without paying the ransom. The backups must be offline or isolated to prevent the ransomware from encrypting them too.",
       "examTip": "Reliable backups are the best defense against ransomware."
     },
     {
@@ -1132,7 +1132,7 @@ db.tests.insertOne({
         "Spyware. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Viruses need a host file. Worms self-replicate. Spyware operates secretly. A Trojan Horse (or simply 'Trojan') is named after the mythical Trojan Horse. It *pretends* to be a useful program (a game, a utility, etc.) but contains malicious code that executes when the user runs it.",
+      "explanation": "Viruses need a host file. Worms self-replicate. Spyware operates secretly. A Trojan Horse (or simply 'Trojan') is named after the mythical Trojan Horse. It pretends to be a useful program (a game, a utility, etc.) but contains malicious code that executes when the user runs it.",
       "examTip": "Be cautious about downloading and installing software from untrusted sources to avoid Trojan Horses."
     },
     {
@@ -1145,7 +1145,7 @@ db.tests.insertOne({
         "Using facial recognition only. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A strong password is *single-factor*. Fingerprint or facial recognition alone are also single factors. MFA requires *two or more* different types of authentication factors: something you *know* (password), something you *have* (phone, security token), or something you *are* (biometric). The combination of username/password and a one-time code is a classic example of MFA.",
+      "explanation": "A strong password is single-factor. Fingerprint or facial recognition alone are also single factors. MFA requires two or more different types of authentication factors: something you know (password), something you have (phone, security token), or something you are (biometric). The combination of username/password and a one-time code is a classic example of MFA.",
       "examTip": "MFA significantly improves security by requiring multiple forms of authentication."
     },
     {
@@ -1158,7 +1158,7 @@ db.tests.insertOne({
         "To encrypt data at rest and in transit. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Vulnerability scanning *identifies* weaknesses; penetration testing *exploits* them. It doesn't automatically fix vulnerabilities or encrypt data. Penetration testing (or 'pen testing') is ethical hacking. Authorized security professionals simulate attacks to find and exploit vulnerabilities, demonstrating the *real-world impact* of those weaknesses and helping organizations improve their defenses.",
+      "explanation": "Vulnerability scanning identifies weaknesses; penetration testing exploits them. It doesn't automatically fix vulnerabilities or encrypt data. Penetration testing (or 'pen testing') is ethical hacking. Authorized security professionals simulate attacks to find and exploit vulnerabilities, demonstrating the real-world impact of those weaknesses and helping organizations improve their defenses.",
       "examTip": "Penetration testing goes beyond vulnerability scanning by actively attempting to exploit weaknesses."
     },
     {
@@ -1171,7 +1171,7 @@ db.tests.insertOne({
         "Using the same password for multiple accounts. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Salting is not encrypting, storing in plain text, or using same password. Salting adds a unique, random string to each password *before* it's hashed.  This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because the salt changes the hash even for the same password.",
+      "explanation": "Salting is not encrypting, storing in plain text, or using same password. Salting adds a unique, random string to each password before it's hashed.  This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because the salt changes the hash even for the same password.",
       "examTip": "Salting is a crucial technique for protecting stored passwords."
     },
     {
@@ -1179,12 +1179,12 @@ db.tests.insertOne({
       "question": "What is the primary difference between an IDS and an IPS?",
       "options": [
         "An IDS is hardware-based, while an IPS is software-based. ",
-        "An IDS detects malicious activity, while an IPS detects and *prevents* it.",
+        "An IDS detects malicious activity, while an IPS detects and prevents it.",
         "An IDS is used for network traffic analysis, while an IPS is used for vulnerability scanning. ",
         "There is no significant difference. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Both can be hardware or software.  IPS does more than vulnerability scanning. The core difference is *prevention*. An IDS (Intrusion *Detection* System) *detects* suspicious activity and generates alerts. An IPS (Intrusion *Prevention* System) goes further: it can *block* or *prevent* malicious traffic based on its ruleset.",
+      "explanation": "Both can be hardware or software.  IPS does more than vulnerability scanning. The core difference is prevention. An IDS (Intrusion Detection System) detects suspicious activity and generates alerts. An IPS (Intrusion Prevention System) goes further: it can block or prevent malicious traffic based on its ruleset.",
       "examTip": "An IDS detects, while an IPS detects and prevents."
     },
     {
@@ -1223,7 +1223,7 @@ db.tests.insertOne({
         "To compress data. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Hashing is *not* encryption (which is reversible).  It's not decryption or compression. Hashing takes data and produces a fixed-size, unique 'fingerprint' (the hash).  It's *one-way*: you can't get the original data back from the hash. This is used for storing passwords securely (you store the hash, not the password) and for verifying data integrity (if the hash changes, the data has been altered).",
+      "explanation": "Hashing is not encryption (which is reversible).  It's not decryption or compression. Hashing takes data and produces a fixed-size, unique 'fingerprint' (the hash).  It's one-way: you can't get the original data back from the hash. This is used for storing passwords securely (you store the hash, not the password) and for verifying data integrity (if the hash changes, the data has been altered).",
       "examTip": "Hashing is used for data integrity and secure password storage, not for encryption."
     },
     {
@@ -1249,7 +1249,7 @@ db.tests.insertOne({
         "The process of designing a software application. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Reverse engineering is not writing code, general testing, or design. Reverse engineering involves taking a *compiled* program (the executable) and analyzing it to figure out *how* it works.  This can be done to understand malware, find vulnerabilities, or even to improve software interoperability.",
+      "explanation": "Reverse engineering is not writing code, general testing, or design. Reverse engineering involves taking a compiled program (the executable) and analyzing it to figure out how it works.  This can be done to understand malware, find vulnerabilities, or even to improve software interoperability.",
       "examTip": "Reverse engineering is used to understand the inner workings of software, often for security purposes."
     },
     {
@@ -1262,7 +1262,7 @@ db.tests.insertOne({
         "They are employed by nation-states to conduct cyber espionage. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Script kiddies are *not* highly skilled; they often lack deep understanding. Hacktivists are politically motivated. Nation-state actors are highly sophisticated. Script kiddies are often less experienced individuals who use *pre-made* hacking tools and scripts found online. They may not fully understand the underlying principles or consequences of their actions.",
+      "explanation": "Script kiddies are not highly skilled; they often lack deep understanding. Hacktivists are politically motivated. Nation-state actors are highly sophisticated. Script kiddies are often less experienced individuals who use pre-made hacking tools and scripts found online. They may not fully understand the underlying principles or consequences of their actions.",
       "examTip": "Script kiddies are often opportunistic attackers who use readily available tools."
     },
     {
@@ -1275,7 +1275,7 @@ db.tests.insertOne({
         "A method for securing network traffic. "
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A logic bomb isn't a security device or method. A logic bomb is malicious code embedded within a program. It remains dormant *until* a specific condition is met (a date, a file being deleted, a user logging in, etc.). When triggered, it executes its malicious payload (deleting files, disrupting systems, etc.).",
+      "explanation": "A logic bomb isn't a security device or method. A logic bomb is malicious code embedded within a program. It remains dormant until a specific condition is met (a date, a file being deleted, a user logging in, etc.). When triggered, it executes its malicious payload (deleting files, disrupting systems, etc.).",
       "examTip": "Logic bombs are triggered by specific events or conditions."
     },
     {
@@ -1301,7 +1301,7 @@ db.tests.insertOne({
         "Transferring the risk to a third party. "
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Risk mitigation is not ignoring, accepting without action, or transferring. Risk mitigation involves taking *action* to reduce the risk. This could involve implementing security controls (like firewalls, patching, access controls) to reduce the *likelihood* of a successful attack or to lessen the *impact* if an attack occurs.",
+      "explanation": "Risk mitigation is not ignoring, accepting without action, or transferring. Risk mitigation involves taking action to reduce the risk. This could involve implementing security controls (like firewalls, patching, access controls) to reduce the likelihood of a successful attack or to lessen the impact if an attack occurs.",
       "examTip": "Risk mitigation involves actively reducing the likelihood or impact of identified risks."
     }
   ]
