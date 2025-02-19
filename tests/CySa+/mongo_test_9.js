@@ -394,7 +394,7 @@ db.tests.updateOne(
           },
           {
             "id": 30,
-            "question": "A web application accepts user input and uses it to construct an SQL query. An attacker provides the following input:\n\n    ```\n    ' OR 1=1; --\nUse code with caution.\nJavaScript\nWhat type of attack is being attempted, and what is the attacker's likely goal?",
+            "question": "A web application accepts user input and uses it to construct an SQL query. An attacker provides the following input:\n\n    \\\`\\\`\\\`\n    ' OR 1=1; --\nUse code with caution.\nJavaScript\nWhat type of attack is being attempted, and what is the attacker's likely goal?",
             "options": [
               "Cross-site scripting (XSS); to inject malicious scripts into the website.",
               "SQL injection; to bypass authentication or retrieve all data from a database table.",
@@ -671,6 +671,7 @@ db.tests.updateOne(
   }
 );
 
+
                                                                                                                                                  
                                                                                                                                                  
                                                                                                                                                  
@@ -747,7 +748,7 @@ db.tests.updateOne(
           },
           {
             "id": 56,
-            "question": "A web application allows users to search for products by entering keywords. An attacker enters the following search term:\n\n```\n' OR '1'='1\n```\n\nWhat type of attack is MOST likely being attempted, and how could it be successful?",
+            "question": "A web application allows users to search for products by entering keywords. An attacker enters the following search term:\n\n\\\`\\\`\\\`\n' OR '1'='1\n\\\`\\\`\\\`\n\nWhat type of attack is MOST likely being attempted, and how could it be successful?",
             "options": [
               "Cross-site scripting (XSS); the attacker is attempting to inject malicious scripts into the website.",
               "SQL injection; the attacker is attempting to modify the SQL query to bypass authentication or retrieve all data.",
@@ -755,7 +756,7 @@ db.tests.updateOne(
               "Directory traversal; the attacker is attempting to access files outside the webroot directory."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "The input contains SQL code, not JavaScript (XSS). DoS aims to disrupt service, not inject code. Directory traversal uses `../` sequences. This is a classic example of a *SQL injection* attack. The attacker is attempting to inject malicious SQL code into the web application's search functionality. The specific payload (`' OR '1'='1`) is designed to manipulate the WHERE clause of the SQL query. Here's how it likely works:\n\n   1.  **Original Query (Likely):** The web application likely constructs an SQL query similar to this: `SELECT * FROM products WHERE product_name LIKE '%<user_input>%'`\n  2.  **Attacker's Input:** The attacker provides the input: `' OR '1'='1`\n  3.  **Resulting Query (If Vulnerable):** The application, without proper input validation or sanitization, directly inserts the attacker's input into the query, resulting in: `SELECT * FROM products WHERE product_name LIKE '%' OR '1'='1' -- '%'`\n\n    Let's break down the injected code:\n    *  `'`:  This closes the original string literal that likely encloses the search term.\n     *    `OR '1'='1'`: This injects a condition that is *always true*. Since 1 always equals 1, the entire WHERE clause becomes true.\n   *   `--`: This is an SQL comment. It comments out any remaining part of the original SQL query to prevent syntax errors.\n\n  4.  **Effect:** Because the WHERE clause is now always true, the query will likely return *all rows* from the `products` table, potentially exposing all product information, even if it's not relevant to the (empty) search term. In a different context (e.g., a login form), this same technique could be used to bypass authentication entirely.",
+            "explanation": "The input contains SQL code, not JavaScript (XSS). DoS aims to disrupt service, not inject code. Directory traversal uses `../` sequences. This is a classic example of a *SQL injection* attack. The attacker is attempting to inject malicious SQL code into the web application's search functionality. The specific payload (`' OR '1'='1`) is designed to manipulate the WHERE clause of the SQL query. Here's how it likely works:\n\n   1.  **Original Query (Likely):** The web application likely constructs an SQL query similar to this: `SELECT * FROM products WHERE product_name LIKE '%<user_input>%'`\n  2.  **Attacker's Input:** The attacker provides the input: `' OR '1'='1`\n  3.  **Resulting Query (If Vulnerable):** The application, without proper input validation or sanitization, directly inserts the attacker's input into the query, resulting in: `SELECT * FROM products WHERE product_name LIKE '%' OR '1'='1' -- '%'`\n\n    Let's break down the injected code:\n    *  `'`:  This closes the original string literal that likely encloses the search term.\n     *    `OR '1'='1'`: This injects a condition that is *always true*. Since 1 always equals 1, the WHERE clause becomes true.\n   *   `--`: This is an SQL comment. It comments out any remaining part of the original SQL query to prevent syntax errors.\n\n  4.  **Effect:** Because the WHERE clause is now always true, the query will likely return *all rows* from the `products` table, potentially exposing all product information, even if it's not relevant to the (empty) search term. In a different context (e.g., a login form), this same technique could be used to bypass authentication entirely.",
             "examTip": "SQL injection attacks often use `' OR '1'='1'` to create a universally true condition and bypass query logic."
           },
           {
@@ -885,7 +886,7 @@ db.tests.updateOne(
               "A text editor."
             ],
             "correctAnswerIndex": 1,
-            "explanation": "`strings` extracts printable strings from a file, which is useful for initial reconnaissance, but provides limited information about the file's structure and functionality. A hex editor shows the raw bytes of the file, but doesn't interpret the code. A text editor is not suitable for analyzing binary executables. The most detailed information about a Windows executable (PE file - Portable Executable) without running it comes from *static analysis* using specialized tools:\n  *    **Disassembler (e.g., IDA Pro, Ghidra, Hopper):** A disassembler converts the machine code (binary instructions) of the executable into assembly language, which is a human-readable representation of the instructions. This allows you to examine the program's logic, identify functions, and understand how it works.\n  *   **PE File Header Parser:** A PE file header parser (e.g., PEview, CFF Explorer) allows you to examine the structure of the PE file, including:\n    *  Imported functions (functions the program calls from external libraries, which can reveal its capabilities).\n     *   Exported functions (functions the program provides to other programs).\n  *   Sections (code, data, resources).\n    *  Compilation timestamps.\n    *  Digital signature information (if present).\n\n  By combining disassembly and PE header analysis, you can gain a deep understanding of the executable's potential functionality and identify suspicious characteristics *without the risk of executing it*.",
+            "explanation": "`strings` extracts printable strings from a file, which is useful for initial reconnaissance, but provides limited information about the file's structure and functionality. A hex editor shows the raw bytes of the file, but doesn't interpret the code. A text editor is not suitable for analyzing binary executables. The most detailed information about a Windows executable (PE file - Portable Executable) without running it comes from *static analysis* using specialized tools:\n  *    **Disassembler (e.g., IDA Pro, Ghidra, Hopper):** A disassembler converts the machine code (binary instructions) of the executable into assembly language, which is a human-readable representation of the instructions. This allows you to examine the program's logic, identify functions, and understand how it works.\n  *   **PE File Header Parser:** A PE file header parser (e.g., PEview, CFF Explorer) allows you to examine the structure of the PE file, including:\n    *  Imported functions (functions the program calls from external libraries, which can reveal its capabilities).\n     *   Exported functions (functions the program provides to other programs).\n  *   Sections (code, data, resources).\n    *  Compilation timestamps.\n    * Digital signature information (if present).\n\n  By combining disassembly and PE header analysis, you can gain a deep understanding of the executable's potential functionality and identify suspicious characteristics *without the risk of executing it*.",
             "examTip": "Static analysis with a disassembler and PE header parser provides detailed information about an executable without running it."
           },
           {
@@ -1359,5 +1360,3 @@ db.tests.updateOne(
     }
   }
 );
-
-
