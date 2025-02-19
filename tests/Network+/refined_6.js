@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "nplus",
   "testId": 6,
-  "testName": "Network+ Practice Test #6 (Formidable)",
+  "testName": "Network+ Practice Test #6 (Formidable) - Part 1",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -846,7 +846,7 @@ db.tests.insertOne({
         "It requires more cabling than other topologies."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "While the star topology is easy to manage and troubleshoot (a single cable failure only affects *one* device), the *central* device (hub or switch) is a *single point of failure*. If that central device fails, all devices connected to it lose network connectivity. It's *not* difficult to add/remove devices, and a *single* cable failure doesn't take down the *entire* network (only the device on that cable). It generally requires *more* cabling than a *bus* topology, but *less* than a *full mesh*.",
+      "explanation": "While the star topology is easy to manage and troubleshoot (a single cable failure only affects *one* device), the *central* device (hub or switch) is a *single point of failure*. If that central device fails, all devices connected to it lose network connectivity. It's *not* difficult to add/remove devices, and a *single* cable failure doesn't take down the *entire* network. Star does typically require more cabling than bus, but that is not an inherent disadvantage compared to the single point of failure.",
       "examTip": "The central device in a star topology is a critical point of failure; consider redundancy for high-availability networks."
     },
     {
@@ -859,7 +859,7 @@ db.tests.insertOne({
         "A type of brute-force attack."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DDoS attack is a more sophisticated and powerful form of DoS attack. Instead of originating from a single source, the attack traffic comes from many compromised computers (often part of a botnet – a network of infected machines controlled by an attacker). This makes it much harder to block or mitigate the attack. It's *not* password stealing, phishing, or a brute-force attack (though those could be used to *build* a botnet).",
+      "explanation": "A DDoS attack is a more sophisticated and powerful form of DoS attack. Instead of originating from a single source, the attack traffic comes from many compromised computers (often part of a botnet – a network of infected machines controlled by an attacker). This makes it much harder to block or mitigate. It's *not* password stealing, phishing, or brute-force (though those might be used to build a botnet in the first place).",
       "examTip": "DDoS attacks are a major threat to online services and require specialized mitigation techniques."
     },
     {
@@ -872,7 +872,7 @@ db.tests.insertOne({
         "MX"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An 'A' record in DNS maps a hostname (like www.example.com) to an IPv4 address. AAAA records map to IPv6 addresses, CNAME records create aliases for hostnames, and MX records specify mail servers.",
+      "explanation": "An 'A' record in DNS maps a hostname (like www.example.com) to an IPv4 address. AAAA records map to IPv6 addresses, CNAME records create aliases, and MX records specify mail servers.",
       "examTip": "Remember 'A' records for IPv4 and 'AAAA' records for IPv6 in DNS."
     },
     {
@@ -885,7 +885,7 @@ db.tests.insertOne({
         "Media Transfer Unit; it's the type of cable used on the network."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "MTU (Maximum Transmission Unit) defines the largest data packet (in bytes) that can be transmitted over a network link *without* being fragmented. If a packet exceeds the MTU, it must be broken down into smaller fragments, which can decrease network performance. It's *not* the *minimum* packet size or the cable type.",
+      "explanation": "MTU (Maximum Transmission Unit) defines the largest data packet (in bytes) that can be transmitted over a network link *without* being fragmented. If a packet exceeds the MTU, it must be broken into smaller fragments, which can degrade performance. It's *not* about the minimum packet size or cable type.",
       "examTip": "Ensure that the MTU is set correctly across all devices on a network to avoid fragmentation and performance issues."
     },
     {
@@ -898,8 +898,8 @@ db.tests.insertOne({
         "It allows only SSH traffic to the host 192.168.1.50."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The first line of the ACL *explicitly denies* TCP traffic from *any* source (`any`) to the host 192.168.1.50 *specifically on port 22* (which is the standard port for SSH). The second line *permits all other IP traffic* (including other TCP ports, UDP, ICMP, etc.). ACLs are processed sequentially, and there's an implicit `deny any` at the end, but the explicit `permit ip any any` overrides that for all traffic *except* the specifically denied SSH.",
-      "examTip": "Carefully analyze each line of an ACL and remember the implicit deny at the end."
+      "explanation": "The first line explicitly denies TCP traffic from any source to host 192.168.1.50 *on port 22* (SSH). The second line permits all other IP traffic. That means SSH traffic to 192.168.1.50 is blocked, but everything else is allowed. There's an implicit `deny any` at the end of the ACL, but `permit ip any any` overrides it for all other traffic.",
+      "examTip": "Read ACLs line by line and remember the implicit `deny any` at the end."
     },
     {
       "id": 70,
@@ -911,8 +911,8 @@ db.tests.insertOne({
         "A problem with the DNS server."
       ],
       "correctAnswerIndex": 3,
-      "explanation": "The ability to ping the loopback address and the computer's own IP address confirms that the TCP/IP stack is working correctly *locally*.  The inability to ping *any other device on the local subnet* strongly suggests a problem with the *physical connection* (cable, NIC) or a *misconfiguration of the local IP address or subnet mask* (making the computer think it's on a different network). DNS is for *name resolution*, not basic IP connectivity within the *same* subnet; it wouldn't be involved at this stage.",
-      "examTip": "Systematically isolate the problem: start with the physical layer and local IP configuration before considering higher-level issues."
+      "explanation": "Because the user can ping their own IP and loopback, the local TCP/IP stack is fine. Not being able to ping devices on the local subnet points to either a physical issue (cable, NIC), or incorrect IP/subnet mask. DNS only comes into play when translating names to IP addresses, but here they can’t even ping by IP. Therefore, DNS is the least likely cause.",
+      "examTip": "First verify physical/connectivity issues. DNS won’t matter if you can’t ping IPs on the same subnet."
     },
     {
       "id": 71,
@@ -924,8 +924,8 @@ db.tests.insertOne({
         "Code Division Multiple Access; it's used in cellular networks."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "CSMA/CD (Carrier Sense Multiple Access with Collision Detection) is a media access control method used in *older, hub-based* Ethernet networks. Devices listen for a carrier signal (sense if the network is in use) before transmitting. If two devices transmit simultaneously, a collision occurs, and they both back off and retransmit after a random delay.  *Modern* switched networks use *full-duplex* communication and do *not* have collisions, so CSMA/CD is *not* used. CSMA/CA is used in *wireless*, and CDMA is used in *cellular*.",
-      "examTip": "CSMA/CD is a legacy technology associated with hub-based Ethernet networks."
+      "explanation": "CSMA/CD was the method Ethernet used to handle collisions when multiple devices shared a collision domain (as with hubs). Devices listen for network traffic (carrier sense) and, if a collision is detected, back off and retry. Modern switched Ethernet uses full-duplex on each port, eliminating collisions. Wireless uses CSMA/CA, and CDMA is for cellular networks.",
+      "examTip": "CSMA/CD is legacy; full-duplex switched Ethernet no longer requires it."
     },
     {
       "id": 72,
@@ -937,8 +937,8 @@ db.tests.insertOne({
         "HTTP (Hypertext Transfer Protocol)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "RADIUS is specifically designed for centralized AAA. It allows a central server to authenticate users, authorize their access to specific resources, and track their network usage (accounting).  SNMP is for network *management*, SMTP is for *email*, and HTTP is for *web browsing*.",
-      "examTip": "RADIUS is the industry-standard protocol for AAA in network access control."
+      "explanation": "RADIUS is specifically designed for centralized AAA. It allows a central server to authenticate users, authorize their access to specific resources, and log their sessions (accounting). SNMP is for network management, SMTP is email, HTTP is web browsing.",
+      "examTip": "RADIUS is the de facto standard for AAA in many enterprise networks."
     },
     {
       "id": 73,
@@ -950,359 +950,359 @@ db.tests.insertOne({
         "An attempt to guess wireless network passwords using a brute-force attack."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A deauthentication attack is a type of denial-of-service attack that targets wireless networks. The attacker sends forged deauthentication frames (management frames used to disconnect clients) to the access point and/or the client, forcing the client to disconnect from the network. This disrupts connectivity and can be used as a precursor to other attacks. It's *not* password stealing, phishing, or brute-force (though it *could* be used to *facilitate* a 'evil twin' attack, where the attacker then sets up a fake AP).",
-      "examTip": "Deauthentication attacks are a common way to disrupt wireless network connectivity."
+      "explanation": "A deauthentication attack involves sending fake deauth frames, which are part of 802.11 management traffic, to the AP or clients. This forces legitimate clients off the network. Attackers often use it as a precursor to an Evil Twin or man-in-the-middle attack. It’s not simply password theft, phishing, or brute forcing the Wi-Fi key (though that can also happen).",
+      "examTip": "Deauth attacks exploit the unprotected nature of 802.11 management frames."
     },
     {
       "id": 74,
-      "question": "You are designing a network with multiple VLANs.  You want to ensure that traffic between VLANs is controlled and inspected by a firewall.  Which of the following network designs is MOST appropriate?",
+      "question": "You are designing a network with multiple VLANs. You want to ensure that traffic between VLANs is controlled and inspected by a firewall. Which design is MOST appropriate?",
       "options": [
-        "Configure all VLANs on the same physical switch without any routing.",
-        "Configure inter-VLAN routing on a Layer 2 switch.",
-        "Configure inter-VLAN routing on a Layer 3 switch or router, and connect the firewall to the router/switch, using the firewall to control traffic between VLANs.",
-        "Configure all devices to use the same IP subnet."
+        "Configure all VLANs on the same switch with no router or firewall in between.",
+        "Configure inter-VLAN routing on a Layer 2 switch only.",
+        "Use a Layer 3 device (router or L3 switch) for inter-VLAN routing, and ensure all inter-VLAN traffic passes through a firewall interface for inspection.",
+        "Put all devices in a single subnet; no need for VLANs."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "To control traffic between VLANs with a firewall, you need a Layer 3 device (router or Layer 3 switch) to perform inter-VLAN routing. The firewall is then connected to this routing device, and traffic between VLANs is routed *through* the firewall, allowing it to enforce security policies.  Option A prevents inter-VLAN communication. Option B is insufficient; Layer 2 switches don't route. Option D defeats the purpose of VLANs (segmentation).",
-      "examTip": "Inter-VLAN routing with a firewall requires a Layer 3 device to route traffic between VLANs and the firewall to inspect and control that traffic."
+      "explanation": "To inspect traffic between VLANs, you must route it through a firewall. A Layer 2 switch cannot do routing. A single subnet defeats the purpose. The typical solution is: VLAN trunk into a Layer 3 device (or sub-interfaces), then pass traffic to the firewall for policy enforcement.",
+      "examTip": "For VLAN-to-VLAN inspection, you need routing plus a firewall in the traffic path."
     },
     {
       "id": 75,
-      "question": "Which of the following statements BEST describes the concept of 'network convergence'?",
+      "question": "Which of the following statements BEST describes 'network convergence'?",
       "options": [
-        "Using separate networks for voice, data, and video.",
-        "The combination of multiple communication services (voice, data, video) onto a single, shared network infrastructure.",
-        "Using only wired connections for all network devices.",
-        "Using only wireless connections for all network devices."
+        "Separate networks for voice, data, and video.",
+        "Using only wireless for everything.",
+        "Combining multiple services (voice, data, video, etc.) onto a single shared network infrastructure.",
+        "A method for encrypting all traffic on a network."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network convergence refers to the trend of combining different types of communication (voice, data, video, etc.) onto a single, unified network infrastructure. This simplifies management, reduces costs, and enables new applications. It's *not* about using separate networks, or only wired/wireless.",
-      "examTip": "Network convergence allows multiple services to share the same network infrastructure."
+      "correctAnswerIndex": 2,
+      "explanation": "Network convergence is the trend of putting all communications (phone calls/VoIP, data, video conferencing, etc.) on one IP-based network. It simplifies management and can reduce costs. It’s not about separating them or only wireless, nor purely encryption.",
+      "examTip": "Converged networks carry voice, data, and video together."
     },
     {
       "id": 76,
-      "question": "A network administrator configures a switch with the command `spanning-tree portfast`. What is the effect of this command?",
+      "question": "A network administrator configures a switch port with `spanning-tree portfast`. What does this do?",
       "options": [
-        "It disables Spanning Tree Protocol (STP) on the switch.",
-        "It enables faster convergence of STP by immediately placing the port in the forwarding state, bypassing the listening and learning states.  It should ONLY be used on ports connected to end devices (like workstations or servers), NOT on ports connected to other switches.",
-        "It increases the priority of the switch in STP elections.",
-        "It enables link aggregation on the port."
+        "Disables STP on that port entirely.",
+        "Enables immediate forwarding state on that port, bypassing listening/learning, and should only be used for end-user ports (no other switches).",
+        "Sets the switch as the root bridge.",
+        "Enables link aggregation on that port."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`spanning-tree portfast` is used to speed up network convergence on ports connected to *end devices* (computers, printers, etc.). It bypasses the normal STP listening and learning states and immediately puts the port into the forwarding state.  It should *never* be used on ports connected to other *switches*, as this can create network loops.  It does *not* disable STP *globally*, change switch priority, or enable link aggregation.",
-      "examTip": "Use `portfast` only on access ports connected to end devices to speed up network connectivity after a link comes up."
+      "explanation": "`portfast` means the port transitions instantly to a forwarding state instead of going through listening and learning states. This is safe only if the port is connected to a single end device, not another switch. It doesn’t disable STP, set the root bridge, or do link aggregation.",
+      "examTip": "Use `portfast` for end-user ports to speed up connectivity after link-up."
     },
     {
       "id": 77,
-      "question": "What is '802.1X' in the context of network security?",
+      "question": "What is '802.1X' in network security?",
       "options": [
-        "A wireless security protocol that encrypts network traffic.",
-        "A port-based network access control (PNAC) protocol that provides an authentication mechanism for devices wishing to attach to a LAN or WLAN.",
-        "A type of network cable.",
-        "A protocol for assigning IP addresses dynamically."
+        "A wireless encryption standard.",
+        "A port-based network access control (PNAC) protocol requiring authentication before permitting LAN or WLAN access.",
+        "A layer-3 routing protocol.",
+        "A technology for link aggregation."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "802.1X is a standard for port-based Network Access Control (PNAC). It provides an authentication mechanism to verify the identity of a device or user *before* granting access to the network. It's often used with RADIUS servers for centralized authentication. It's *not* just a wireless protocol (it can be used on wired networks too), a cable type, or DHCP.",
-      "examTip": "802.1X provides authenticated network access control."
+      "explanation": "802.1X is a standard for authenticating devices on a port (wired or wireless) before granting network access. Often used with RADIUS. Not just wireless encryption, not a routing protocol, and not link aggregation.",
+      "examTip": "802.1X controls access at the port level; often used with RADIUS for AAA."
     },
     {
       "id": 78,
-      "question": "You are troubleshooting a network connectivity issue. A user can access some websites but not others.  `ping` tests to the affected websites' IP addresses are successful, but `ping` tests to their domain names fail.  What is the MOST likely cause?",
+      "question": "You are troubleshooting a network. A user can browse some websites but not others; pings by IP to the ‘problem’ sites succeed, but pings by hostname fail. What is the MOST likely issue?",
       "options": [
-        "A faulty network cable.",
-        "A problem with the user's web browser.",
-        "An intermittent DNS resolution problem, possibly affecting specific DNS servers or records.",
-        "A firewall blocking access to specific websites."
+        "A faulty Ethernet cable.",
+        "A problem with the user’s browser configuration.",
+        "An intermittent or incorrect DNS configuration or DNS server issue.",
+        "A firewall blocking all traffic to those sites."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Successful pings to the IP addresses rule out basic network connectivity problems (cable) and firewall blocks (which would usually block *all* traffic to the IP). The ability to access *some* websites rules out a *complete* DNS failure or a *general* browser issue. The most likely cause is an intermittent or partial DNS problem, perhaps affecting specific DNS servers or records for the affected domain names. The problem might be with a *specific* DNS server the user is configured to use, or with the *authoritative* DNS servers for those domains.",
-      "examTip": "When troubleshooting website access, differentiate between network connectivity (ping by IP), DNS resolution (ping by name), and application-level issues."
+      "explanation": "If ping-by-IP works, then network connectivity is fine. If ping-by-name fails, that strongly suggests DNS resolution problems. It’s not the cable or a firewall blocking (since IP-based pings go through). A browser config might affect HTTP, but not ICMP name resolution.",
+      "examTip": "Always separate DNS issues from basic IP connectivity issues in troubleshooting."
     },
     {
       "id": 79,
-      "question": "What is a 'subnet mask' used for in IP networking?",
+      "question": "What is the purpose of a subnet mask in IP networking?",
       "options": [
-        "To encrypt network traffic.",
-        "To identify the network portion and the host portion of an IP address, enabling routing and subnetting.",
-        "To assign IP addresses dynamically.",
-        "To filter network traffic based on MAC addresses."
+        "It encrypts IP packets.",
+        "It identifies which portion of the IP address is the network part vs. the host part.",
+        "It assigns IP addresses automatically.",
+        "It filters packets based on MAC addresses."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The subnet mask, used in conjunction with an IP address, defines which bits of the address represent the network and which bits represent the host. This is essential for determining whether two devices are on the same subnet and for routing traffic between networks. It's not for encryption, dynamic IP assignment (DHCP), or MAC address filtering.",
-      "examTip": "Subnet masks are crucial for understanding IP addressing and network segmentation."
+      "explanation": "A subnet mask, combined with the IP address, determines which bits represent the network and which bits represent the host. It’s not encryption, DHCP, or MAC filtering.",
+      "examTip": "Subnet masks are crucial for defining network boundaries."
     },
     {
       "id": 80,
-      "question": "Which of the following is a potential security risk associated with using a public, unsecured Wi-Fi hotspot?",
+      "question": "What is a potential security risk of using a public, unsecured Wi-Fi hotspot?",
       "options": [
-        "Increased network speed compared to home networks.",
-        "Stronger encryption than home networks.",
-        "Man-in-the-middle (MitM) attacks, eavesdropping on unencrypted traffic, and potential exposure to malware.",
-        "Automatic access to all network resources."
+        "Faster speeds than your home network.",
+        "Better encryption than WPA2 at home.",
+        "Susceptibility to man-in-the-middle attacks and eavesdropping, since traffic may be unencrypted.",
+        "Guaranteed QoS for your applications."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Public, unsecured Wi-Fi networks often lack encryption, making it easy for attackers to intercept data transmitted over the network (MitM attacks). They also might be set up *by* attackers to lure in unsuspecting users. They are typically *not* faster or more secure than home networks, and you certainly don't get automatic access to all network resources.",
-      "examTip": "Always use a VPN when connecting to public Wi-Fi to protect your data."
+      "explanation": "Open hotspots often have no encryption, enabling attackers to intercept or modify traffic. They are not necessarily faster, definitely not more secure than WPA2, and there’s no guaranteed QoS.",
+      "examTip": "Use a VPN on public Wi-Fi; unencrypted traffic can be snooped."
     },
     {
       "id": 81,
-      "question": "What is the purpose of a 'reverse DNS lookup'?",
+      "question": "What is a ‘reverse DNS lookup’?",
       "options": [
-        "To find the IP address associated with a given domain name.",
-        "To find the domain name associated with a given IP address.",
-        "To encrypt network traffic.",
-        "To assign IP addresses dynamically."
+        "Converting a domain name into an IP address.",
+        "Converting an IP address into a domain name.",
+        "Encrypting DNS traffic.",
+        "A way to block malicious domains."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A reverse DNS lookup does the *opposite* of a standard (forward) DNS lookup. It starts with an IP address and attempts to find the associated hostname or domain name. This is often used for security purposes (e.g., verifying the sender of an email) and troubleshooting. It is *not* a forward lookup, encryption, or dynamic IP assignment.",
-      "examTip": "Reverse DNS lookups map IP addresses to domain names."
+      "explanation": "Reverse DNS means you start with an IP address and look up the associated domain name (if any). The forward lookup is domain-to-IP. Reverse is IP-to-domain. It’s not encryption or blocking.",
+      "examTip": "Reverse DNS can be useful for verifying mail senders, logging, etc."
     },
     {
       "id": 82,
-      "question": "A network administrator configures a router with the following command: `ip route 0.0.0.0 0.0.0.0 192.168.1.1`.  What is the effect of this command?",
+      "question": "A network admin enters `ip route 0.0.0.0 0.0.0.0 192.168.1.1` on a router. What does this do?",
       "options": [
-        "It configures a static route for the 192.168.1.0 network.",
-        "It configures a default route, sending all traffic that doesn't match a more specific route to the gateway at 192.168.1.1.",
-        "It configures a dynamic route using a routing protocol.",
-        "It blocks all traffic to the 192.168.1.1 address."
+        "Creates a route only for the 192.168.1.0 network.",
+        "Creates a default route that sends all traffic with no more specific match to 192.168.1.1.",
+        "Creates a dynamic route using RIP.",
+        "Blocks all traffic to 192.168.1.1."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`ip route 0.0.0.0 0.0.0.0` configures a *default route*.  `0.0.0.0 0.0.0.0` represents *any* destination network and *any* subnet mask. This means that if the router doesn't have a *more specific* route in its routing table for a particular destination IP address, it will send the traffic to the next-hop IP address specified (in this case, 192.168.1.1). It is *not* a route for a *specific* network, a *dynamic* route, or a *block*.",
-      "examTip": "The `0.0.0.0 0.0.0.0` route is the default route, the route of last resort."
+      "explanation": "Using `0.0.0.0 0.0.0.0` sets a default route (the ‘gateway of last resort’). Any traffic not matching a more specific route goes to 192.168.1.1. Not a dynamic route, not a block.",
+      "examTip": "The ‘all-zeroes’ address with all-zeroes mask means default route."
     },
     {
       "id": 83,
-      "question": "What is 'DHCP snooping' used for on a network switch?",
+      "question": "What is ‘DHCP snooping’ on a switch?",
       "options": [
-        "To encrypt DHCP traffic.",
-        "To prevent rogue DHCP servers from assigning IP addresses to devices on the network.",
-        "To speed up the DHCP address assignment process.",
-        "To monitor user web browsing activity."
+        "Encrypting DHCP requests.",
+        "Preventing rogue DHCP servers by allowing DHCP responses only from trusted ports.",
+        "Speeding up IP lease times.",
+        "Capturing user browsing data."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DHCP snooping is a security feature on switches that prevents unauthorized (rogue) DHCP servers from operating on the network. It inspects DHCP messages and only allows DHCP traffic from trusted sources (typically, designated DHCP server ports). It's *not* encryption, speeding up DHCP, or monitoring web browsing.",
-      "examTip": "DHCP snooping helps prevent rogue DHCP servers from disrupting network operations."
+      "explanation": "DHCP snooping inspects DHCP traffic, ensuring only the official DHCP server (on a trusted port) can hand out addresses. It’s not encryption or data capture. It helps block rogue DHCP servers.",
+      "examTip": "DHCP snooping is an important layer-2 security feature to prevent unauthorized IP assignments."
     },
     {
       "id": 84,
-      "question": "Which of the following is a potential disadvantage of using a 'hub' in a modern network?",
+      "question": "Which is a drawback of using a hub (instead of a switch) in a modern network?",
       "options": [
-        "Hubs are more secure than switches.",
-        "Hubs create a single collision domain, leading to reduced network performance and increased collisions as the number of connected devices increases.",
-        "Hubs are more expensive than switches.",
-        "Hubs cannot be used with modern network cables."
+        "They are very expensive.",
+        "They create a single collision domain, reducing performance as collisions increase with more devices.",
+        "They require special cables.",
+        "They can’t connect to the internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Hubs are simple Layer 1 devices that repeat all incoming signals to all other ports. This creates a *single collision domain*, meaning that if two devices transmit at the same time, their signals collide, and they have to retransmit.  This significantly degrades network performance, especially as more devices are added. Switches, which operate at Layer 2 and forward traffic only to the intended recipient, *avoid* collisions. Hubs are generally *cheaper* than switches, and they *can* use the same cables (e.g., Ethernet).",
-      "examTip": "Hubs are obsolete in modern networks due to their performance limitations; switches are preferred."
+      "explanation": "Hubs simply replicate signals on all ports, causing a single collision domain. Switches intelligently forward traffic and separate collision domains. Hubs are actually cheaper, can use standard cables, and can connect to the internet (if attached to a router) — but they’re inefficient.",
+      "examTip": "Hubs are legacy devices. Switches replaced them for better performance."
     },
     {
       "id": 85,
-      "question": "A company wants to implement a network security solution that combines the functionality of a firewall, intrusion prevention system (IPS), antivirus, web filtering, and VPN gateway into a single appliance. What type of solution BEST fits this description?",
+      "question": "A company wants a single security appliance that acts as a firewall, IPS, antivirus scanner, web filter, and VPN gateway. Which solution fits?",
       "options": [
-        "A network-attached storage (NAS) device",
-        "A unified threat management (UTM) appliance",
-        "A wireless LAN controller (WLC)",
-        "A domain controller"
+        "A domain controller",
+        "A network-attached storage (NAS) server",
+        "A wireless controller",
+        "A unified threat management (UTM) device"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A Unified Threat Management (UTM) appliance integrates multiple security functions into a single device, simplifying security management and providing comprehensive protection. A NAS is for *storage*, a WLC manages *wireless access points*, and a domain controller manages *user accounts and authentication* (primarily in Windows networks).",
-      "examTip": "UTM appliances provide a comprehensive, integrated approach to network security."
+      "correctAnswerIndex": 3,
+      "explanation": "UTM devices consolidate multiple security features (firewall, IPS, antivirus, web filtering, VPN, etc.) into one box. Domain controllers are for user authentication in Windows. NAS is for storage. WLC is for managing Wi-Fi APs.",
+      "examTip": "UTM = all-in-one security solution."
     },
     {
       "id": 86,
-      "question": "What does 'BGP' stand for, and what is its primary purpose in networking?",
+      "question": "What does ‘BGP’ stand for, and what does it do?",
       "options": [
-        "Basic Gateway Protocol; it's used for assigning IP addresses to devices.",
-        "Border Gateway Protocol; it's the routing protocol used to exchange routing information between autonomous systems on the internet.",
-        "Broadband Gateway Protocol; it's used for connecting to broadband internet services.",
-        "Backup Gateway Protocol; it's used for creating backup routes in case of network failure."
+        "Basic Gateway Protocol; it assigns private IPs to clients.",
+        "Border Gateway Protocol; it’s the routing protocol that exchanges routes between autonomous systems on the internet.",
+        "Broadband Gateway Protocol; it’s used for connecting DSL modems.",
+        "Backup Gateway Protocol; it’s used only for secondary routers."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "BGP (Border Gateway Protocol) is the *exterior gateway protocol* used to route traffic *between* different autonomous systems (ASes) on the internet.  An AS is a network or group of networks under a single administrative control (e.g., an ISP).  BGP is *not* for IP assignment, connecting to broadband (that's a modem/router function), or creating *local* backup routes (interior gateway protocols handle that).",
-      "examTip": "BGP is the routing protocol that makes the internet work by connecting different networks together."
+      "explanation": "BGP is the Border Gateway Protocol. It’s the main exterior routing protocol that allows separate autonomous systems (ISPs, large organizations) to exchange routing info on the internet. Not for assigning IPs or backups or broadband specifically.",
+      "examTip": "BGP essentially makes the internet possible by interconnecting ASes."
     },
     {
       "id": 87,
-      "question": "Which of the following is a key difference between 'symmetric' and 'asymmetric' encryption?",
+      "question": "Which is a fundamental difference between symmetric and asymmetric encryption?",
       "options": [
-        "Symmetric encryption is faster; asymmetric encryption is more secure.",
-        "Symmetric encryption uses the same key for encryption and decryption; asymmetric encryption uses a pair of keys (a public key and a private key).",
-        "Symmetric encryption is used for wireless networks; asymmetric encryption is used for wired networks.",
-        "Symmetric encryption is only used for data at rest; asymmetric encryption is only used for data in transit."
+        "Symmetric uses one shared key; asymmetric uses a public/private key pair.",
+        "Asymmetric is faster than symmetric.",
+        "Symmetric can only be used for data at rest; asymmetric is only for data in motion.",
+        "They are the same; just different names."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Symmetric encryption uses the *same* secret key for both encrypting and decrypting data. It's *faster* but requires a secure way to share the key. Asymmetric encryption uses a *pair* of keys: a *public* key for encryption and a *private* key for decryption. The public key can be shared widely, while the private key must be kept secret. This solves the key exchange problem but is *slower* than symmetric encryption. Both can be used in various scenarios (not limited to wired/wireless or at rest/in transit).",
-      "examTip": "Symmetric encryption is faster but requires secure key exchange; asymmetric encryption solves key exchange but is slower."
+      "correctAnswerIndex": 0,
+      "explanation": "Symmetric encryption uses the same key to encrypt and decrypt. Asymmetric uses a public key for encryption and a private key for decryption. Asymmetric is typically slower. They can be used for data at rest or in motion.",
+      "examTip": "Symmetric is fast but needs secure key exchange. Asymmetric solves key exchange but is slower."
     },
     {
       "id": 88,
-      "question": "A network administrator is troubleshooting a slow network.  They suspect that a particular application is consuming excessive bandwidth.  Which tool would be MOST useful for identifying the specific application and the amount of bandwidth it's using?",
+      "question": "A network administrator notices sluggish performance. They suspect a particular application is hogging bandwidth. Which tool is best to confirm and see how much traffic that app uses?",
       "options": [
         "A cable tester.",
-        "A toner and probe.",
-        "A protocol analyzer (like Wireshark) with application-layer analysis capabilities, or a network monitoring tool with application-level visibility.",
-        "A ping utility."
+        "A toner/probe kit.",
+        "A protocol analyzer (like Wireshark) or a network monitoring solution that supports application-layer visibility.",
+        "The ping command."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A protocol analyzer (like Wireshark) can capture and decode network traffic, allowing you to identify the specific applications generating the traffic and the amount of data they're transmitting.  Some network monitoring tools also provide application-level visibility. A cable tester checks *physical* cables, a toner and probe *locates* cables, and `ping` tests basic *connectivity*, not bandwidth usage by application.",
-      "examTip": "Use a protocol analyzer or network monitoring tool with application-level visibility to identify bandwidth-hogging applications."
+      "explanation": "A protocol analyzer can capture and identify traffic flows per application/protocol. A cable tester checks wiring, toner/probe locates cables, and ping only tests basic connectivity/latency, not app bandwidth usage.",
+      "examTip": "Use a packet capture or monitoring tool to see exactly what’s eating bandwidth."
     },
     {
       "id": 89,
-      "question": "Which of the following is a potential security risk associated with enabling WPS (Wi-Fi Protected Setup) on a wireless router?",
+      "question": "Which is a known security risk when enabling WPS (Wi-Fi Protected Setup)?",
       "options": [
-        "It makes the network more secure.",
-        "It simplifies the process of connecting devices to the network.",
-        "It is vulnerable to brute-force attacks that can allow attackers to guess the WPS PIN and gain access to the network.",
-        "It increases network speed."
+        "It forces WPA3 encryption, which some older devices don’t support.",
+        "It eliminates the need for a passphrase entirely.",
+        "The PIN can be brute-forced, allowing attackers to gain network access.",
+        "It disables encryption on the network."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "While WPS is designed to simplify connecting devices to a Wi-Fi network, it has known security vulnerabilities, particularly the PIN-based authentication method. Attackers can use brute-force techniques to guess the WPS PIN relatively quickly, gaining access to the network and compromising its security.  It *doesn't* make the network more secure or increase speed. While it *does* simplify the connection process, the security risk outweighs the convenience.",
-      "examTip": "Disable WPS on your wireless router to mitigate the risk of brute-force attacks."
+      "explanation": "WPS PIN mode can be brute-forced easily. This is a major vulnerability. WPS doesn’t disable encryption or force WPA3. Nor does it remove the passphrase entirely in normal mode. But the brute-force vulnerability is well-known.",
+      "examTip": "Disable WPS to avoid the PIN brute-force attack vector."
     },
     {
       "id": 90,
-      "question": "What is 'latency' in network terms?",
+      "question": "What is ‘latency’ in network communications?",
       "options": [
-        "The amount of data that can be transmitted over a network connection in a given time.",
-        "The time delay in data transmission across a network, typically measured in milliseconds.",
-        "The number of devices connected to a network.",
-        "The physical distance between two network devices."
+        "A measure of available bandwidth.",
+        "A measure of data security.",
+        "The time delay for data to travel from source to destination, often measured in milliseconds.",
+        "The number of connected devices on a subnet."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Latency is the time it takes for a data packet to travel from its source to its destination. High latency can cause slow response times and negatively impact the user experience, especially for real-time applications like online gaming or video conferencing. It's *not* bandwidth (capacity), the number of devices, or the physical distance (though distance *contributes* to latency).",
-      "examTip": "Low latency is crucial for responsive network applications."
+      "correctAnswerIndex": 2,
+      "explanation": "Latency is the delay between sending data and the receiver getting it. High latency can hurt real-time apps like voice or gaming. Bandwidth is capacity, not the same as latency.",
+      "examTip": "Latency is often referred to as ‘ping time’ in casual terms."
     },
     {
       "id": 91,
-      "question": "What is a 'virtual machine' (VM)?",
+      "question": "What is a virtual machine (VM)?",
       "options": [
-        "A physical computer server.",
-        "A software-based emulation of a computer system that runs on top of a physical host, allowing multiple operating systems and applications to run on a single physical machine.",
-        "A type of network cable",
-        "A program to enhance physical security"
+        "A physical server with multiple CPUs.",
+        "A software-based emulation of a computer system that runs on a host’s hardware, enabling multiple OSes/applications to share a single physical machine.",
+        "A new type of network cable standard.",
+        "An advanced firewall."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A VM is a software implementation of a computer. It allows you to run multiple operating systems and applications (guests) on a single physical computer (host), sharing the host's resources (CPU, memory, storage). This improves resource utilization and flexibility. It's *not* a physical server, cable type, or physical security program.",
-      "examTip": "Virtualization is a key technology for cloud computing and efficient resource utilization."
+      "explanation": "A VM is a software simulation of a computer. It runs on a hypervisor or host OS, and each VM sees a ‘virtual’ hardware environment. It’s not a cable or firewall.",
+      "examTip": "Virtualization is key for efficient resource utilization and cloud deployments."
     },
     {
       "id": 92,
-      "question": "Which of the following is a key benefit of using 'infrastructure as code' (IaC)?",
+      "question": "Which is a major benefit of ‘infrastructure as code’ (IaC)?",
       "options": [
-        "It eliminates the need for network administrators.",
-        "It allows you to manage and provision infrastructure (networks, servers, configurations) through code, enabling automation, version control, repeatability, and faster deployments.",
-        "It makes the network more vulnerable to attacks.",
-        "It is only suitable for small and simple networks."
+        "It removes the need for any human oversight or network engineers.",
+        "It allows you to define servers, networks, and configurations in code, which you can version-control, test, and automate for consistency and repeatability.",
+        "It’s only suitable for very small environments.",
+        "It inherently encrypts all network traffic."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "IaC treats infrastructure as software, allowing you to define your infrastructure (networks, servers, etc.) in code. This code can be version-controlled, tested, and reused, making infrastructure deployments more consistent, automated, and less prone to errors. It doesn't eliminate administrators (it changes their role), it *increases* security (through consistency and repeatability), and it's suitable for *all* sizes of networks (especially beneficial for large, complex ones).",
-      "examTip": "IaC is a key practice for DevOps and cloud computing."
+      "explanation": "IaC uses code-like definitions for infrastructure. This means you can track changes in version control, quickly deploy or roll back, and keep everything consistent. It doesn’t replace humans; it’s not only for small setups and doesn’t automatically encrypt traffic.",
+      "examTip": "IaC is central to DevOps, enabling fully automated provisioning."
     },
     {
       "id": 93,
-      "question": "What is the purpose of a 'cable tester'?",
+      "question": "What does a cable tester do?",
       "options": [
-        "To measure the speed of a network connection.",
-        "To identify and trace wires or cables.",
-        "To test the physical integrity of network cables, checking for continuity, shorts, miswires, and often cable length.",
-        "To capture and analyze network traffic."
+        "Measures bandwidth usage.",
+        "Identifies the physical path of a cable through walls (toning).",
+        "Tests the continuity, pin-out, and general integrity of a cable, detecting opens, shorts, or miswires.",
+        "Captures and analyzes traffic at the packet level."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A cable tester verifies the physical condition of network cables. It checks for common problems like opens (broken wires), shorts (wires touching where they shouldn't), miswires (wires connected in the wrong order), and often measures cable length. It's *not* for speed testing, cable tracing (toner/probe), or traffic analysis (protocol analyzer).",
-      "examTip": "A cable tester is essential for troubleshooting physical layer network problems."
+      "explanation": "Cable testers send signals along each wire in the cable, checking for correct wiring (pin-out), breaks, or shorts. They don’t measure bandwidth or capture traffic, and a toner/probe is for tracing cables in walls.",
+      "examTip": "Use a cable tester to confirm physical-layer health of network cabling."
     },
     {
       "id": 94,
-      "question": "Which of the following is a potential security risk associated with using an outdated or unpatched operating system or software?",
+      "question": "Why is using outdated or unpatched operating systems a security risk?",
       "options": [
-        "Increased computer speed.",
-        "Improved network security.",
-        "Vulnerability to known security exploits and malware, as security patches are not applied.",
-        "Automatic data backups."
+        "They run faster and thus attract hackers.",
+        "They are more stable.",
+        "They contain known vulnerabilities that attackers can exploit, since no patches are applied.",
+        "They automatically backup data to the cloud, bypassing encryption."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Outdated software often contains known security vulnerabilities that attackers can exploit. Software updates and patches frequently include fixes for these vulnerabilities. Failing to update leaves your system exposed to known threats. It does *not* increase speed, improve security (the *opposite* is true), or automatically back up data.",
-      "examTip": "Keep your operating system and software up-to-date to protect against known vulnerabilities."
+      "explanation": "Outdated OSes have unpatched security holes. Attackers know about these vulnerabilities. They are not necessarily faster or more stable and do not automatically do cloud backups.",
+      "examTip": "Always patch and update to protect against known exploits."
     },
     {
       "id": 95,
-      "question": "What is 'two-factor authentication' (2FA), and why is it important for security?",
+      "question": "Which best describes two-factor authentication (2FA)?",
       "options": [
-        "Using two different passwords for the same account.",
-        "A security measure that requires two *different* forms of identification to verify a user's identity (e.g., something you know like a password, and something you have like a phone), significantly increasing account security.",
-        "Using a very long and complex password.",
-        "Using the same password for two different accounts."
+        "Using two passwords on the same account.",
+        "Reusing the same password for multiple accounts.",
+        "Requiring two distinct forms of identification (like something you know + something you have) to log in.",
+        "Encryption of passwords in transit."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2FA adds an extra layer of security beyond just a password. It requires something you *know* (password), something you *have* (phone, security token), and/or something you *are* (biometric).  This makes it *much* harder for attackers to gain unauthorized access, even if they know your password. It's not about two passwords for the *same* account, just a long password, or reusing passwords (which is a *bad* practice).",
-      "examTip": "Enable 2FA whenever possible, especially for important accounts like email, banking, and cloud services."
+      "correctAnswerIndex": 2,
+      "explanation": "2FA means a user must supply two different factors, e.g. password + phone token, password + biometric, etc. Not just two passwords or reusing the same password. Encryption is separate.",
+      "examTip": "2FA significantly increases account security."
     },
     {
       "id": 96,
-      "question": "Which of the following is a function of the Domain Name System (DNS)?",
+      "question": "Which of the following describes the Domain Name System (DNS)?",
       "options": [
-        "To dynamically assign IP addresses to devices.",
-        "To translate human-readable domain names (like google.com) into the numerical IP addresses that computers use to communicate, and vice-versa.",
-        "To encrypt network traffic.",
-        "To prevent network loops."
+        "It dynamically assigns IP addresses to devices (DHCP).",
+        "It maps user-friendly domain names (e.g., example.com) to IP addresses, and can also perform reverse lookups.",
+        "It encrypts all network traffic end-to-end.",
+        "It manages bridging loops on switches (STP)."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DNS acts like the internet's phone book. It translates the website names we use (e.g., google.com) into the IP addresses that computers need to locate and communicate with those websites. It also performs reverse lookups (IP to name). It's *not* about dynamic IP assignment (DHCP), encryption, or loop prevention.",
-      "examTip": "DNS is essential for navigating the internet using easy-to-remember domain names."
+      "explanation": "DNS resolves domain names into IPs and vice versa (reverse DNS). DHCP assigns IPs, encryption is done by protocols like TLS, and STP prevents loops. DNS is basically the ‘internet phone book.’",
+      "examTip": "DNS is critical for easy navigation of the internet by hostnames."
     },
     {
       "id": 97,
-      "question": "What is the primary purpose of a 'firewall' in network security?",
+      "question": "What is the primary function of a firewall?",
       "options": [
-        "To increase internet connection speeds.",
-        "To control network traffic by allowing or blocking connections based on predefined security rules, acting as a barrier between a trusted network and untrusted networks.",
-        "To automatically assign IP addresses to devices.",
-        "To manage user accounts and passwords."
+        "To assign IP addresses to devices.",
+        "To store user credentials and manage authentication (like an LDAP server).",
+        "To monitor and control inbound/outbound traffic based on security rules, acting as a barrier between trusted and untrusted networks.",
+        "To physically secure a data center."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A firewall is a security device (hardware or software) that acts as a gatekeeper, enforcing access control policies and preventing unauthorized access to or from a private network.  It examines network traffic and blocks or allows it based on configured rules. It's *not* primarily about speed, IP assignment, or user account management.",
-      "examTip": "Firewalls are a fundamental component of any network security strategy."
+      "correctAnswerIndex": 2,
+      "explanation": "Firewalls examine network traffic and apply rules to permit or deny traffic. They don’t assign IPs (DHCP does), store user credentials (directory servers do), or handle physical security.",
+      "examTip": "Firewalls enforce the security policy on network traffic flows."
     },
     {
       "id": 98,
-      "question": "Which of the following is a potential consequence of a 'broadcast storm' on a network?",
+      "question": "What can happen during a broadcast storm on a network?",
       "options": [
-        "Improved network security.",
-        "Increased network bandwidth.",
-        "Severe network performance degradation or complete network outage due to excessive broadcast traffic overwhelming the network.",
-        "Faster data transfer rates."
+        "Network performance degrades severely or the entire network can crash due to excessive broadcast traffic.",
+        "All traffic is encrypted automatically.",
+        "It speeds up certain data transfers.",
+        "Nothing; broadcast storms are harmless."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A broadcast storm occurs when broadcast packets (sent to all devices on a network segment) flood the network, consuming excessive bandwidth and processing resources. This can bring the network to a standstill. It's often caused by network loops. It does *not* improve security or bandwidth, or increase transfer rates; it has the *opposite* effect.",
-      "examTip": "Broadcast storms are often caused by network loops; Spanning Tree Protocol (STP) is crucial for preventing them."
+      "correctAnswerIndex": 0,
+      "explanation": "Broadcast storms overwhelm the network, consuming bandwidth and device resources, sometimes causing total failure. They definitely do not encrypt traffic or improve speed, and they’re far from harmless.",
+      "examTip": "Prevent broadcast storms with proper switch configuration and STP."
     },
     {
       "id": 99,
-      "question": "What is the purpose of 'port forwarding' on a router?",
+      "question": "What is the purpose of ‘port forwarding’ on a router?",
       "options": [
-        "To block all incoming traffic to a specific port.",
-        "To allow external devices (on the internet) to access a specific service running on a device within your private network by mapping an external port on the router to an internal IP address and port.",
-        "To encrypt network traffic.",
-        "To speed up your internet connection."
+        "To hide all internal devices from the internet.",
+        "To allow devices on the LAN to connect to external websites via a proxy.",
+        "To map an external port to an internal host and port, so services on the LAN can be accessed from the internet.",
+        "To dynamically assign IP addresses to internal hosts."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port forwarding creates a 'hole' in your firewall (usually part of your router), allowing specific incoming traffic from the internet to reach a designated device on your internal network. This is commonly used for hosting game servers, web servers, or other services that need to be accessible from outside your local network. It's *not* about blocking *all* traffic on a port, encryption, or speeding up connections.",
-      "examTip": "Use port forwarding to make internal services accessible from the internet."
+      "correctAnswerIndex": 2,
+      "explanation": "Port forwarding (a.k.a. NAT port mapping) allows external requests on a specific port to reach an internal server on that port (or a different one). It doesn’t hide everything or assign IPs. It’s not a simple proxy either.",
+      "examTip": "Use port forwarding to host internal services on the public internet."
     },
     {
       "id": 100,
-      "question": "A network administrator configures a router with the following access control list (ACL):  `access-list 105 permit tcp any any eq 22`  `access-list 105 deny ip any any`  Assuming this ACL is applied to an interface in the inbound direction, what traffic will be allowed through?",
+      "question": "Given an ACL with `access-list 105 permit tcp any any eq 22` and `access-list 105 deny ip any any`, applied inbound on a router interface, which traffic is permitted?",
       "options": [
-        "All IP traffic.",
+        "All IP traffic is allowed.",
         "Only TCP traffic on port 22 (SSH) from any source to any destination.",
-        "No traffic will be allowed.",
-        "All traffic except TCP traffic on port 22."
+        "No traffic is allowed at all.",
+        "All traffic except SSH."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The first line *permits* TCP traffic from *any* source (`any`) to *any* destination (`any`), but *only on port 22* (SSH). The second line *denies all other IP traffic*. Therefore, *only* SSH traffic (TCP port 22) will be allowed; all other traffic will be blocked by the second line (and the implicit deny at the end of every ACL).",
-      "examTip": "Carefully analyze the order and logic of ACL statements to understand their combined effect. Remember the implicit `deny any` at the end."
+      "explanation": "This ACL explicitly permits TCP traffic on port 22 (SSH). All other IP traffic is denied by the second statement. Hence, only SSH is allowed.",
+      "examTip": "Always consider the implicit or explicit denies at the end of an ACL."
     }
   ]
 });
