@@ -166,7 +166,7 @@ db.tests.insertOne({
       "options": [
         "Allowing users to reuse passwords across multiple accounts.",
         "Requiring passwords to be changed infrequently (e.g., once a year).",
-        "Enforcing minimum password length, complexity (uppercase, lowercase, numbers, symbols), and regular changes.",
+        "Enforcing minimum password length, complexity.",
         "Allowing users to choose simple, easy-to-remember passwords."
       ],
       "correctAnswerIndex": 2,
