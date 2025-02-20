@@ -654,6 +654,26 @@ db.tests.insertOne({
       "explanation": "Defense in depth is a *fundamental security principle*. It recognizes that no single security control is perfect or foolproof. By implementing multiple, independent controls, you create a more resilient and robust security posture. If one layer is breached, others are in place to prevent or limit the damage. It's like having multiple locks on a door, or a castle with multiple walls and defenses.",
       "examTip": "Think of defense in depth like an onion – multiple layers of security protecting the core. Or like a medieval castle with multiple walls, moats, and defensive positions."
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     {
       "id": 51,
       "question": "A company experiences a security breach where customer data is stolen. What is the MOST important immediate action to take after containing the breach?",
