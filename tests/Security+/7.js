@@ -10,7 +10,7 @@
       "options": [
         "Using a complex DBA password, ensuring that unauthorized outsiders cannot guess it easily",
         "Relying on a web application firewall (WAF) to filter suspicious traffic at the network perimeter",
-        "Implementing parameterized queries (prepared statements) and strict input validation on both the client-side and server-side",
+        "Implementing parameterized queries and strict input validation.",
         "Encrypting the entire database to ensure attackers cannot view its contents"
       ],
       "correctAnswerIndex": 2,
