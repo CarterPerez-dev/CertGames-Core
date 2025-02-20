@@ -9,7 +9,7 @@
       "question": "A company's web application is vulnerable to SQL injection. Which of the following is the MOST effective and comprehensive mitigation strategy?",
       "options": [
         "Using a complex DBA password, ensuring that unauthorized outsiders cannot guess it easily",
-        "Relying on a web application firewall (WAF) to filter suspicious traffic at the network perimeter",
+        "Relying on a WAF to filter suspicious traffic at the network perimeter",
         "Implementing parameterized queries and strict input validation.",
         "Encrypting the entire database to ensure attackers cannot view its contents"
       ],
@@ -74,8 +74,8 @@
       "question": "A company wants to protect its sensitive data from being leaked through USB drives. Which technology is MOST appropriate?",
       "options": [
         "Upgrading all antimalware software on user endpoints",
-        "Installing advanced intrusion detection systems (IDS) at the network perimeter",
-        "Implementing Data Loss Prevention (DLP) controls on endpoints and servers",
+        "Installing an IDS at the network perimeter",
+        "Implementing DLP controls on endpoints and servers",
         "Configuring a site-to-site VPN for all remote traffic"
       ],
       "correctAnswerIndex": 2,
@@ -84,7 +84,7 @@
     },
     {
       "id": 7,
-      "question": "What is the purpose of a 'Security Information and Event Management' (SIEM) system?",
+      "question": "What is the purpose of a SIEM?",
       "options": [
         "To apply encryption to data both at rest and in transit",
         "To aggregate, correlate, and analyze security event data from various sources in real time, centralizing alerts and assisting incident response",
@@ -105,7 +105,7 @@
         "Providing security awareness education to end users"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Threat hunting is proactive: rather than waiting for alerts, security professionals look for subtle Indicators of Compromise (IOCs) or anomalies that hint at an ongoing attack. Reactive measures alone might not catch advanced threats.",
+      "explanation": "Threat hunting is proactive: rather than waiting for alerts, security professionals look for subtle IOC's or anomalies that hint at an ongoing attack. Reactive measures alone might not catch advanced threats.",
       "examTip": "Threat hunting can uncover persistent threats that blend into normal activities, requiring skilled analysts and solid threat intelligence."
     },
     {
@@ -162,16 +162,16 @@
     },
     {
       "id": 13,
-      "question": "What is 'return-oriented programming' (ROP)?",
+      "question": "Which segmentation technique is MOST appropriate to isolate workloads within a data center to minimize lateral movement during a breach?",
       "options": [
-        "A social engineering method used to trick users into revealing confidential data",
-        "An advanced exploitation tactic chaining small code segments (gadgets) already in memory to circumvent protections like DEP or ASLR",
-        "A mandatory coding practice in secure software development lifecycles",
-        "A symmetric encryption strategy using rotating keys"
+        "VLAN segmentation",
+        "Microsegmentation",
+        "Air-gapped networks",
+        "Screened subnets"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "ROP is a sophisticated method allowing attackers to reuse existing executable code snippets in memory to achieve arbitrary code execution, bypassing many buffer overflow defenses. It is neither a social nor encryption-related exploit.",
-      "examTip": "ROP highlights the continuous arms race in exploit development, demonstrating why layered security controls are essential."
+      "explanation": "Microsegmentation enables granular control of network traffic within the data center, minimizing lateral movement by isolating workloads at a fine-grained level.",
+      "examTip": "Microsegmentation is commonly used in modern data centers for internal threat containment."
     },
     {
       "id": 14,
@@ -201,7 +201,7 @@
     },
     {
       "id": 16,
-      "question": "Which of the following is the MOST effective way to prevent cross-site scripting (XSS) attacks?",
+      "question": "Which of the following is the MOST effective way to prevent XSS attacks?",
       "options": [
         "Selecting an ultra-strong database admin password",
         "Applying comprehensive input validation and output encoding throughout the client-side and server-side code",
@@ -240,7 +240,7 @@
     },
     {
       "id": 19,
-      "question": "What is the PRIMARY goal of a 'business impact analysis' (BIA)?",
+      "question": "What is the PRIMARY goal of a BIA?",
       "options": [
         "Creating a brand marketing campaign to restore public trust after a breach",
         "Quantifying how disruptions affect critical organizational processes, prioritizing recovery steps for minimal overall impact",
@@ -266,7 +266,7 @@
     },
     {
       "id": 21,
-      "question": "What is 'security orchestration, automation, and response' (SOAR)?",
+      "question": "What is a SOAR?",
       "options": [
         "A technique for physically securing server racks with advanced locks and biometrics",
         "A suite of solutions enabling automated playbooks, integrated threat intelligence, and streamlined incident response processes",
@@ -321,7 +321,7 @@
       "question": "A company wants to ensure that sensitive data stored on laptops is protected even if the laptops are lost or stolen. Which of the following is the MOST effective solution?",
       "options": [
         "Enforcing more frequent password changes",
-        "Implementing full disk encryption (FDE) coupled with a robust pre-boot authentication mechanism",
+        "Implementing FDE coupled with a robust pre-boot authentication mechanism",
         "Installing a local firewall that blocks inbound traffic from untrusted IPs",
         "Backing up user profiles to a secure cloud storage service"
       ],
@@ -344,7 +344,7 @@
     },
     {
       "id": 27,
-      "question": "What is the purpose of a 'Certificate Revocation List' (CRL)?",
+      "question": "What is the purpose of a CRL?",
       "options": [
         "Maintaining a directory of all valid SSL certificates recognized by major browsers",
         "Listing certificates that have been revoked before expiration by the issuing CA, indicating they must no longer be trusted",
@@ -422,10 +422,10 @@
     },
     {
       "id": 33,
-      "question": "What is a common characteristic of 'Advanced Persistent Threats' (APTs)?",
+      "question": "What is a common characteristic of APT's?",
       "options": [
         "Short-lived attacks executed by hobbyist hackers with minimal funding",
-        "State-sponsored or well-resourced criminal operations applying stealthy, long-term infiltration to maintain footholds in target networks",
+        "State-sponsored or well-resourced",
         "Attacks focusing solely on home users rather than enterprises or government entities",
         "Automated scans that can be easily blocked by basic antivirus tools"
       ],
@@ -448,12 +448,12 @@
     },
     {
       "id": 35,
-      "question": "What is 'cross-site request forgery' (CSRF or XSRF)?",
+      "question": "What is CSRF or XSRF?",
       "options": [
-        "Injecting malicious client-side scripts into a web page (XSS)",
-        "Exploiting database queries by inserting unauthorized commands (SQL injection)",
+        "Injecting malicious client-side scripts into a web page",
+        "Exploiting database queries by inserting unauthorized commands",
         "Abusing a user’s authenticated browser session to trigger unwanted actions on a web app unbeknownst to the user",
-        "Eavesdropping on data in transit between two endpoints (Man-in-the-Middle)"
+        "Eavesdropping on data in transit between two endpoints"
       ],
       "correctAnswerIndex": 2,
       "explanation": "CSRF forces an authenticated user to execute actions they did not intend. While XSS and SQL injection are also injection attacks, they differ in target and mechanism; MitM intercepts communication.",
@@ -464,7 +464,7 @@
       "question": "What is 'data masking' primarily used for?",
       "options": [
         "Encrypting data at rest with AES-256",
-        "Replacing sensitive fields with fictional or non-sensitive placeholders in test/development environments to protect real data",
+        "Replacing sensitive fields with fictional or non-sensitive placeholders",
         "Backing up data to multiple offsite datacenters for resilience",
         "Preventing data exfiltration via external network connections"
       ],
@@ -487,7 +487,7 @@
     },
     {
       "id": 38,
-      "question": "What is the purpose of a 'Security Operations Center' (SOC)?",
+      "question": "What is the purpose of a SOC?",
       "options": [
         "Programming new antivirus engines",
         "Acting as a centralized hub for continuously monitoring and responding to security events and incidents",
@@ -513,11 +513,11 @@
     },
     {
       "id": 40,
-      "question": "What is the main goal of a 'denial-of-service' (DoS) attack?",
+      "question": "What is the main goal of a DoS attack?",
       "options": [
         "Stealing customer data from a target database",
         "Acquiring unauthorized root-level privileges on a server",
-        "Overwhelming a service or network so it’s inaccessible to legitimate users, disrupting operations",
+        "Overwhelming a service or network so it’s inaccessible to legitimate users",
         "Delivering malware to user endpoints for remote control"
       ],
       "correctAnswerIndex": 2,
@@ -555,7 +555,7 @@
       "question": "Which of the following BEST describes 'data exfiltration'?",
       "options": [
         "Nightly backups stored offsite",
-        "Unauthorized transfer of sensitive data outside the network or organization’s control",
+        "Unauthorized transfer of sensitive data",
         "Encrypting data for transport",
         "Deleting large volumes of legacy data for compliance"
       ],
@@ -568,7 +568,7 @@
       "question": "What is a 'rootkit'?",
       "options": [
         "A brand of network cables used to daisy-chain multiple routers",
-        "A suite of tools granting stealthy administrative privileges on a system, often hiding processes or malware from detection",
+        "A suite of tools granting stealthy administrative privileges on a system",
         "A benign application that organizes system directories by function",
         "A detachable hardware module for storing encryption keys offline"
       ],
@@ -582,7 +582,7 @@
       "options": [
         "They vary solely by the types of exploits allowed during the test",
         "They are chosen based on whether the environment is on-premises, cloud, or hybrid",
-        "They differ in how much prior knowledge about the target the tester has: none (black), full (white), or partial (gray)",
+        "They differ in how much prior knowledge about the target the tester has",
         "They require specific hardware configurations to simulate internal vs. external threats"
       ],
       "correctAnswerIndex": 2,
@@ -595,7 +595,7 @@
       "options": [
         "Basing your network defense on recognized encryption standards like AES and RSA",
         "Configuring multi-factor authentication to strengthen user account protection",
-        "Relying on secret designs or hidden mechanisms as the main security method, hoping attackers won’t discover or guess them",
+        "Relying on secret designs or hidden mechanisms as the main security method",
         "Implementing an enterprise firewall solution with deep packet inspection"
       ],
       "correctAnswerIndex": 2,
@@ -604,11 +604,11 @@
     },
     {
       "id": 47,
-      "question": "What is a common technique used to mitigate 'cross-site request forgery' (CSRF) attacks?",
+      "question": "What is a common technique used to mitigate CSRF attacks?",
       "options": [
         "Applying two-factor authentication for user logins",
         "Placing a web application firewall in front of your servers",
-        "Including unique anti-CSRF tokens in forms or authenticated requests and verifying them on the server",
+        "Including unique anti-CSRF tokens",
         "Encrypting all web traffic to and from the server with TLS"
       ],
       "correctAnswerIndex": 2,
@@ -620,7 +620,7 @@
       "question": "What is 'input validation' and why is it important for web application security?",
       "options": [
         "It’s used to achieve faster load times and improved user experience",
-        "Ensuring user inputs meet expected formats or constraints and don’t include malicious code, reducing injection attacks like SQL injection or XSS",
+        "Ensuring user inputs meet expected formats",
         "Encrypting data in transit to safeguard user credentials",
         "A scheduled backup procedure for safeguarding web application logs"
       ],
@@ -634,7 +634,7 @@
       "options": [
         "Encrypting sensitive data stored on a database server",
         "Filtering inbound and outbound malicious traffic at network boundaries",
-        "Serving as a decoy system to lure, observe, and analyze attacker behavior while keeping actual resources safer",
+        "Serving as a decoy system to lure attackers",
         "Providing secure tunneling for offsite employees accessing internal resources"
       ],
       "correctAnswerIndex": 2,
@@ -643,10 +643,10 @@
     },
     {
       "id": 50,
-      "question": "What is the PRIMARY purpose of a web application firewall (WAF)?",
+      "question": "What is the PRIMARY purpose of a WAF?",
       "options": [
         "Encrypting browser-to-server connections using SSL/TLS",
-        "Filtering and inspecting HTTP(S) traffic to shield web apps from exploits like XSS, SQL injection, and other malicious requests",
+        "Filtering and inspecting HTTP(S) traffic to shield web apps from exploits",
         "Managing all user identities for web-based logins across the enterprise",
         "Offering secure VPN connections for remote employees"
       ],
@@ -674,10 +674,10 @@
       "id": 51,
       "question": "A company suspects that an attacker is attempting to gain access to a user account by systematically trying different passwords. Which security control is MOST likely to detect and prevent this type of attack?",
       "options": [
-        "Intrusion Prevention System (IPS)",
+        "IPS",
         "Account lockout policy",
-        "Web Application Firewall (WAF)",
-        "Data Loss Prevention (DLP)"
+        "WAF",
+        "DLP"
       ],
       "correctAnswerIndex": 1,
       "explanation": "An account lockout policy, which automatically locks an account after a certain number of failed login attempts, directly addresses brute-force and password-guessing attacks. An IPS might detect the attempts, but the lockout policy prevents success. A WAF is more for web application attacks, and DLP is for preventing data leakage.",
@@ -688,7 +688,7 @@
       "question": "What is 'spear phishing'?",
       "options": [
         "A phishing attack that targets a large, random group of users.",
-        "A highly targeted phishing attack directed at specific individuals or organizations, often using personalized information to increase the likelihood of success.",
+        "A highly targeted phishing attack directed at specific individuals.",
         "A phishing attack that uses voice calls instead of emails.",
         "A type of malware that infects mobile devices."
       ],
@@ -702,7 +702,7 @@
       "options": [
         "Paying the ransom if your files are encrypted.",
         "Relying solely on antivirus software to detect and block ransomware.",
-        "Implementing a comprehensive data backup and recovery plan, including regular offline backups, and testing the restoration process.",
+        "Implementing a comprehensive data backup and recovery plan.",
         "Never opening email attachments or clicking on links from unknown senders."
       ],
       "correctAnswerIndex": 2,
@@ -710,24 +710,24 @@
       "examTip": "A strong backup and recovery plan, including offline backups, is your best defense against ransomware. Test your backups regularly!"
     },
     {
-      "id": 54,
-      "question": "What is 'business continuity planning' (BCP)?",
+      "id": 10,
+      "question": "Which of the following BEST explains the purpose of a jump box in network security?",
       "options": [
-        "A plan for marketing a new product.",
-        "A plan for hiring new employees.",
-        "A comprehensive plan that outlines how an organization will continue operating during and after a major disruption or disaster, ensuring the availability of critical business functions.",
-        "A plan for improving customer service."
+        "To act as a secure intermediary device that administrators use to access and manage critical systems in a segmented network.",
+        "To provide redundancy in the network path for high availability and fault tolerance.",
+        "To filter and control traffic entering and leaving the network's perimeter.",
+        "To establish secure VPN connections for remote access to internal systems."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "BCP focuses on maintaining essential business operations during and after significant disruptions, minimizing downtime and financial losses. It's broader than just disaster recovery, which typically focuses on restoring IT systems. BCP ensures the continuity of all critical business processes.",
-      "examTip": "A BCP should be regularly tested and updated to ensure its effectiveness in a real-world scenario."
+      "correctAnswerIndex": 0,
+      "explanation": "A jump box is a hardened server that administrators use as a secure entry point into more sensitive parts of the network, reducing the attack surface.",
+      "examTip": "Jump boxes provide controlled, monitored access to secure network segments."
     },
     {
       "id": 55,
       "question": "What is the purpose of a 'digital forensic' investigation?",
       "options": [
         "To prevent cyberattacks from happening in the first place.",
-        "To collect, preserve, analyze, and document digital evidence in a forensically sound manner for use in legal proceedings or internal investigations.",
+        "To collect, preserve, analyze, and document digital evidence.",
         "To develop new security software and tools.",
         "To train employees on security awareness and best practices."
       ],
@@ -735,590 +735,590 @@
       "explanation": "Digital forensics focuses on investigating digital crimes and security breaches, ensuring that evidence is handled in a way that is admissible in court if necessary. It doesn't prevent attacks; it investigates them after they occur.",
       "examTip": "Proper procedures and chain of custody are critical in digital forensics to ensure the integrity and admissibility of evidence."
     },
-    {
-      "id": 56,
-      "question": "What is the 'principle of least privilege'?",
-      "options": [
-        "Giving all users administrative access to simplify management.",
-        "Granting users only the minimum necessary access rights and permissions required to perform their legitimate job duties.",
-        "Allowing users to access everything on the network regardless of role or need.",
-        "Restricting user access so severely that it hinders their ability to do their job."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Least privilege ensures each user or process has only the access needed to fulfill their tasks, reducing the risk of insider threats or compromised accounts. It doesn’t mean over-restricting or granting total access—it’s about a balanced minimal approach.",
-      "examTip": "Always apply the principle of least privilege when assigning user permissions and access rights to systems and data."
-    },
-    {
-      "id": 57,
-      "question": "What is 'threat modeling'?",
-      "options": [
-        "Creating 3D models of computer viruses.",
-        "A structured process for identifying, analyzing, and prioritizing potential security threats and vulnerabilities in a system or application during the design and development phases.",
-        "Training employees on how to recognize and respond to phishing attacks.",
-        "Responding to security incidents after they have occurred."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Threat modeling is proactive—focusing on anticipating where threats might arise and addressing them early in the lifecycle, rather than reacting post-incident. It aids in secure design and coding.",
-      "examTip": "Incorporate threat modeling in the software development lifecycle to identify and prioritize potential attack vectors."
-    },
-    {
-      "id": 58,
-      "question": "Which of the following is a key benefit of using a Security Information and Event Management (SIEM) system?",
-      "options": [
-        "Automated patching of software vulnerabilities.",
-        "Centralized log collection, real-time security event correlation, analysis, and alerting, enabling faster detection and response to security incidents.",
-        "Encryption of data at rest and in transit.",
-        "Automated provisioning and de-provisioning of user accounts."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "SIEM solutions aggregate logs from various sources, correlate them to detect suspicious patterns, and provide real-time alerts. They don’t focus on automated patching, encryption, or identity provisioning, though they may integrate with tools that handle these tasks.",
-      "examTip": "SIEM systems are essential for effective security monitoring and incident response in larger, more complex environments."
-    },
-    {
-      "id": 59,
-      "question": "A company's web server is experiencing intermittent performance issues and slow response times. Upon investigation, you find a large number of incomplete HTTP requests originating from many different IP addresses. What type of attack is MOST likely occurring?",
-      "options": [
-        "SQL Injection",
-        "Cross-Site Scripting (XSS)",
-        "Slowloris (or another low-and-slow DoS attack)",
-        "Man-in-the-Middle (MitM)"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Slowloris-style attacks aim to keep many HTTP connections open by sending partial or incomplete requests, draining server resources. SQL injection targets databases, XSS attacks users’ browsers, MitM intercepts traffic in transit.",
-      "examTip": "Low-and-slow DoS attacks can be especially hard to detect as individual requests appear legitimate, but collectively they sap server capacity."
-    },
-    {
-      "id": 60,
-      "question": "What is a 'false negative' in the context of security monitoring and intrusion detection?",
-      "options": [
-        "An alert triggered by legitimate activity (false alarm).",
-        "An alert that correctly identifies a security threat.",
-        "A failure of a security system to detect an actual security threat or incident.",
-        "A type of encryption algorithm."
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "A false negative indicates a missed threat—far more dangerous than a false positive (an incorrect alarm), since real attacks remain undetected. Configuring systems to reduce false negatives is critical for robust security.",
-      "examTip": "Balancing false positives and false negatives is a key challenge in tuning security tools—missed attacks can wreak havoc."
-    },
-    {
-      "id": 61,
-      "question": "What is the PRIMARY purpose of data backups?",
-      "options": [
-        "To improve computer performance.",
-        "To protect against malware infections.",
-        "To create a recoverable copy of data, used to restore systems and information after data loss events, such as hardware failures or disasters.",
-        "To encrypt data at rest."
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "While backups can also help mitigate malware effects or other failures, their main purpose is ensuring recoverability—restoring critical data if the original is lost or corrupted.",
-      "examTip": "A well-tested backup strategy is vital for resilience against ransomware, hardware failures, accidental deletions, and other disasters."
-    },
-    {
-      "id": 62,
-      "question": "What is 'vishing'?",
-      "options": [
-        "A type of malware that infects mobile devices.",
-        "A phishing attack delivered via voice calls (phone or VoIP), tricking victims into revealing personal or financial data.",
-        "A method for securing voice communications end to end.",
-        "A network-based exploit that captures routing updates."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Vishing—voice phishing—convinces victims to disclose sensitive info using phone calls. Attackers might impersonate banks, tech support, etc.",
-      "examTip": "Caution employees about disclosing data over unsolicited calls—use official, trusted contact methods to verify authenticity."
-    },
-    {
-      "id": 63,
-      "question": "Which of the following is the MOST effective way to prevent SQL injection attacks?",
-      "options": [
-        "Using strong passwords for database accounts.",
-        "Implementing a web application firewall (WAF).",
-        "Using parameterized queries (prepared statements) and strict input validation on both the client-side and server-side.",
-        "Encrypting the database."
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Parameterized queries, also known as prepared statements, treat user input purely as data, preventing injection. Input validation further guards against harmful input. While a WAF, strong DB passwords, and encryption help overall security, they don’t directly eliminate injection points.",
-      "examTip": "Use parameterized queries and proper validation as the gold standard for thwarting SQL injection."
-    },
-    {
-      "id": 64,
-      "question": "What is a 'security baseline'?",
-      "options": [
-        "A list of all known security vulnerabilities for a system or application",
-        "A defined set of minimal security controls and configurations ensuring consistent protection across systems",
-        "A process for responding to security incidents with standardized escalation",
-        "A type of twisted-pair cable designed to reduce electromagnetic interference"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Security baselines provide mandatory security settings for systems to adhere to, ensuring every build meets at least a minimal, vetted security threshold. They’re not exhaustive vulnerability lists or incident processes.",
-      "examTip": "Baselines should be regularly updated to reflect changing threats and best practices."
-    },
-    {
-      "id": 65,
-      "question": "What is 'separation of duties'?",
-      "options": [
-        "Assigning full administrative privileges to all employees to promote transparency",
-        "Splitting critical tasks among multiple individuals to prevent fraud, conflict of interest, or inadvertent errors",
-        "Encrypting data so only one person can decrypt it",
-        "Sending backups to offsite data centers, separating them from operational data"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Separation of duties ensures no single person controls an entire sensitive process (e.g., approvals, financial transactions). This approach reduces fraud and errors. It’s unrelated to encryption or backup distribution.",
-      "examTip": "Separation of duties is a key control in preventing insider threats or collusion by requiring multiple approvals."
-    },
-    {
-      "id": 66,
-      "question": "You are configuring a new server. Which of the following actions will have the GREATEST positive impact on its security?",
-      "options": [
-        "Installing every optional software package, covering all functionality",
-        "Leaving all ports open for maximum flexibility",
-        "Changing default passwords, disabling unnecessary services, applying patches, and configuring a host-based firewall",
-        "Choosing a memorable but weak admin password to simplify logins"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "These hardening measures—removing defaults, reducing services, patching, firewalling—form a robust baseline. Other options undermine security by expanding attack surfaces or maintaining defaults.",
-      "examTip": "Aim for minimal attack surface, timely patching, and strong credentials for each new system deployment."
-    },
-    {
-      "id": 67,
-      "question": "What is a 'man-in-the-middle' (MitM) attack?",
-      "options": [
-        "A denial-of-service flood directed at the main company server",
-        "Inserting malicious scripts into a backend database table",
-        "Secretly intercepting and possibly altering traffic between two parties who believe they’re communicating directly",
-        "Tricking users into giving away their passwords by email"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "MitM requires intercepting traffic unbeknownst to both ends, allowing attackers to eavesdrop or alter the content. Unlike DoS, database injections, or phishing, MitM manipulates or observes real-time communications.",
-      "examTip": "Use strong encryption (HTTPS, VPN) and certificate validation to reduce MitM risks on insecure networks."
-    },
-    {
-      "id": 68,
-      "question": "What is the primary function of a 'honeypot'?",
-      "options": [
-        "Encrypting sensitive data at rest",
-        "Filtering malicious traffic from legitimate user connections",
-        "Acting as a decoy system to attract attackers, study their tactics, and divert them from real targets",
-        "Providing secure remote access tunnels"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Honeypots act as bait—vulnerable systems inviting attackers so security teams can collect intelligence without jeopardizing production environments. Encryption or traffic filtering aren’t the main goals.",
-      "examTip": "Use honeypots carefully—attackers could attempt to pivot from a honeypot if not properly isolated."
-    },
-    {
-      "id": 69,
-      "question": "What is the purpose of a 'digital forensic' investigation?",
-      "options": [
-        "To guarantee that all cyberattacks are blocked pre-emptively",
-        "To collect, preserve, analyze, and document digital evidence for legal or internal investigative purposes in a forensically sound manner",
-        "To write new antivirus programs for zero-day threats",
-        "To train employees on incident handling procedures"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Digital forensics is about meticulously analyzing systems post-incident and securing evidence for potential legal use, not about prevention or training. Proper chain of custody and expert methodologies are key.",
-      "examTip": "Prompt evidence preservation and standard forensic procedures ensure integrity and admissibility in court."
-    },
-    {
-      "id": 70,
-      "question": "Which of the following is a characteristic of a 'worm'?",
-      "options": [
-        "It needs user interaction to spread, like opening an infected file",
-        "Worms rarely cause actual harm and are less severe than standard viruses",
-        "It self-replicates and propagates across networks without user intervention, often exploiting system vulnerabilities",
-        "It can only infect machines running a specific operating system version"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Worms differ from viruses by not requiring user actions to replicate, instead exploiting network or system flaws for rapid spread. Viruses typically need a user to execute an infected file or attachment.",
-      "examTip": "Worms can cause quick, large-scale damage across connected networks."
-    },
-    {
-      "id": 71,
-      "question": "What is the PRIMARY difference between 'vulnerability scanning' and 'penetration testing'?",
-      "options": [
-        "Vulnerability scanning must be automated, while penetration testing is always manual",
-        "Vulnerability scanning finds potential weaknesses; penetration testing tries exploiting them to demonstrate real impact and test controls",
-        "Vulnerability scanning is only done by internal IT staff; penetration testing requires third-party specialists",
-        "Vulnerability scanning is universally more expensive than penetration testing"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Scanning highlights possible flaws. Pen testing goes beyond that, using exploits to confirm vulnerabilities and measure the consequences. Either approach can be internal/external and automated/manual.",
-      "examTip": "Think of a scan as spotting locked or unlocked doors; a pen test involves attempting to pick those locks."
-    },
-    {
-      "id": 72,
-      "question": "What is the main advantage of using a password manager?",
-      "options": [
-        "It eliminates passwords entirely, relying on biometrics only",
-        "Enabling simple, universal passwords for convenience",
-        "Storing and generating strong, unique passwords securely for each account, often autofilling them",
-        "Providing CPU speed enhancements for better system performance"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "A password manager addresses password fatigue and reuse by enabling secure storage and generation of unique credentials per service, drastically boosting account security. It doesn’t remove the need for passwords, nor speed up the machine.",
-      "examTip": "Encourage users to employ reputable password managers—weak or reused passwords remain a major threat vector."
-    },
-    {
-      "id": 73,
-      "question": "What is 'social engineering'?",
-      "options": [
-        "A method of building trust among coworkers",
-        "Tricking individuals into revealing sensitive information or performing actions that compromise security by leveraging human psychology",
-        "Coding specialized web applications with security best practices",
-        "An academic discipline studying societal trends and demographics"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Social engineering manipulates people’s trust or fear, bypassing technical barriers. Examples include phishing, pretexting, and impersonation. It’s not about coding or broad demographic research.",
-      "examTip": "Training and awareness are crucial defenses, as no software patch can fix human vulnerabilities."
-    },
-    {
-      "id": 74,
-      "question": "What is a 'botnet'?",
-      "options": [
-        "A group of robots used in manufacturing",
-        "A network of compromised computers under a single attacker’s control, utilized for malicious purposes like DDoS, spam, or malware distribution",
-        "A government-managed secure network limited to authorized agencies",
-        "A software suite used to optimize network traffic among global data centers"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Botnets are infected ‘zombie’ machines collectively commanded by threat actors, often launching distributed attacks. They’re not official secure networks nor manufacturing robots.",
-      "examTip": "Keeping endpoints secure (patched, anti-malware) helps prevent them from joining a botnet."
-    },
-    {
-      "id": 75,
-      "question": "What is the purpose of 'data masking'?",
-      "options": [
-        "Encrypting data so it cannot be read without a key",
-        "Replacing sensitive fields with realistic but non-sensitive data (tokens) in non-production environments, preserving format and functionality",
-        "Backing up data to remote data centers",
-        "Preventing data from being downloaded or copied"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data masking (or obfuscation) means substituting sensitive content with fictitious placeholders, maintaining structure yet removing confidentiality risks in dev/test/training. Encryption alone doesn’t serve the same use case.",
-      "examTip": "Data masking significantly reduces exposure risks while allowing useful environment testing."
-    },
-    {
-      "id": 76,
-      "question": "What is a 'zero-day' vulnerability?",
-      "options": [
-        "A bug that’s easy for anyone to exploit",
-        "A flaw that’s already public and patched by the vendor",
-        "An undiscovered/undisclosed vulnerability with no patch yet available, giving attackers an advantage",
-        "An exploit restricted to outdated software"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Zero-days are unknown or unpatched weaknesses that attackers may exploit before a vendor fix is developed or deployed. They represent a high risk since defenders have 'zero days' to act.",
-      "examTip": "Maintain layered security defenses and rapid patch processes to minimize zero-day exposures."
-    },
-    {
-      "id": 77,
-      "question": "You are designing the network for a new office. Which of the following is the BEST way to isolate a server containing highly confidential data from the rest of the network?",
-      "options": [
-        "Placing the server on the same VLAN as general workstations",
-        "Using a separate VLAN for the server with tight firewall rules controlling inbound/outbound traffic",
-        "Changing the default gateway of the server to a random address",
-        "Securing Wi-Fi with a strong password"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Creating a dedicated VLAN plus strict firewall policies ensures minimal exposure. Same VLAN with workstations or simply changing the gateway doesn’t isolate. Strong Wi-Fi only affects wireless access, not internal segmentation.",
-      "examTip": "Network segmentation is a fundamental security principle—limit east-west movement among sensitive data."
-    },
-    {
-      "id": 78,
-      "question": "What is 'cross-site request forgery' (CSRF or XSRF)?",
-      "options": [
-        "An attack injecting malicious scripts in web pages (XSS)",
-        "Exploiting database vulnerabilities with unauthorized SQL commands (SQL injection)",
-        "Forcing an authenticated user’s browser to execute unwanted actions on a web app without their knowledge",
-        "Eavesdropping on data crossing a network (MitM)"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "CSRF deceives a user’s browser into sending unauthorized actions when they’re already authenticated. Unlike XSS or SQL injection, CSRF specifically leverages user trust with a site and triggers behind-the-scenes requests.",
-      "examTip": "Mitigate CSRF using unique tokens per session and verifying those tokens server-side."
-    },
-    {
-      "id": 79,
-      "question": "What is the PRIMARY purpose of a web application firewall (WAF)?",
-      "options": [
-        "Encrypting web traffic using SSL/TLS",
-        "Filtering malicious HTTP(S) traffic and blocking attacks like XSS, SQL injection, and other common web exploits",
-        "Managing user accounts and passwords for web applications",
-        "Serving as a VPN gateway for secure remote logins"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "A WAF sits in front of a web server, inspecting HTTP traffic for malicious patterns. It focuses on application-level attacks, not basic encryption or user management.",
-      "examTip": "A WAF is a specialized control that complements secure coding, adding an extra shield against known exploit vectors."
-    },
-    {
-      "id": 80,
-      "question": "Which of the following is the MOST effective way to prevent SQL injection attacks?",
-      "options": [
-        "Strong passwords for database accounts",
-        "Implementing a web application firewall (WAF)",
-        "Utilizing prepared statements (parameterized queries) with strict input validation",
-        "Encrypting all data in the database"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Parameterized queries treat user input as data rather than part of the SQL command. Input validation further lessens risk. A WAF might help but isn’t foolproof, nor do strong DB passwords or encryption address the injection vector itself.",
-      "examTip": "Stopping injection at the code level is essential—failing that, all else is just layering partial solutions."
-    },
-    {
-      "id": 81,
-      "question": "A user receives an email that appears to be from their bank, but the sender's address and embedded link both differ slightly from the official ones. What is the SAFEST course of action?",
-      "options": [
-        "Click the link and provide account details promptly, trusting the bank’s brand name",
-        "Reply seeking confirmation of the request’s legitimacy",
-        "Forward the email to friends as a cautionary example",
-        "Avoid clicking the link or replying; instead, contact the bank through a known, trusted phone number or official website typed manually"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "The scenario strongly indicates a phishing attempt. Users should verify authenticity with an official channel. Clicking unknown links or replying might compromise credentials. Forwarding the suspicious email only risks spreading it further.",
-      "examTip": "Never trust unsolicited messages demanding personal details. Confirm directly via recognized contact points."
-    },
-    {
-      "id": 82,
-      "question": "What is 'security through obscurity'?",
-      "options": [
-        "Applying robust cryptographic protocols for data protection",
-        "Implementing multi-factor authentication for user accounts",
-        "Relying primarily on hiding system details or secrets for security, assuming attackers won't discover them",
-        "Installing a firewall to inspect inbound/outbound data flows"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Security through obscurity is generally weak, as it doesn’t address underlying vulnerabilities. Attackers often uncover hidden details, invalidating the approach. True security requires well-vetted, layered defenses.",
-      "examTip": "Use proven methods over secrecy-based illusions of safety. Obscurity alone is not real protection."
-    },
-    {
-      "id": 83,
-      "question": "What is the PRIMARY goal of a 'denial-of-service' (DoS) attack?",
-      "options": [
-        "Stealing customer data",
-        "Acquiring unauthorized system privileges",
-        "Disrupting the service/network so it’s unavailable to legitimate users",
-        "Installing backdoor malware on endpoints"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "DoS aims to degrade or halt availability. While some attacks might also exfiltrate data or install malware, DoS specifically targets accessibility—flooding or overburdening resources.",
-      "examTip": "Implementing adequate resources, load balancing, and DDoS mitigation helps defend against such attacks."
-    },
-    {
-      "id": 84,
-      "question": "A company's security policy mandates strong, unique passwords, but many employees reuse simple credentials. Which approach MOST improves compliance?",
-      "options": [
-        "Ignoring non-compliance due to inconvenience of enforcement",
-        "Combining technical enforcements like complexity rules and account lockouts with regular security awareness training",
-        "Publicly shaming employees who disregard policy to discourage violations",
-        "Firing all staff who continue using weak passwords after one warning"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Users must understand risks (training) and face policy-based technical controls (enforced complexity, lockouts). Shaming is unethical and unproductive; ignoring or firing are extremes that don’t solve the underlying issue.",
-      "examTip": "Maintain user education and real consequences (e.g., lockouts, password history checks). Education fosters internalized secure practices."
-    },
-    {
-      "id": 85,
-      "question": "What is the purpose of 'threat modeling'?",
-      "options": [
-        "Designing 3D malware samples for demonstration",
-        "Structured identification, analysis, and prioritization of threats to a system or app during design, anticipating adversarial TTPs",
-        "Phishing awareness education for employees",
-        "Incident response after a confirmed breach occurs"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Threat modeling identifies potential attack vectors early, allowing developers to address them preemptively. It is proactive, not reactive training or incident response.",
-      "examTip": "Integrate threat modeling into the secure SDLC for best results."
-    },
-    {
-      "id": 86,
-      "question": "What is 'fuzzing' used for in software testing?",
-      "options": [
-        "Making source code more readable and consistent",
-        "Feeding erroneous or random input to uncover bugs",
-        "Encrypting programs to deter reverse engineering",
-        "A method of social engineering through spam messages"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Fuzzing systematically bombards software with odd, malformed inputs, revealing hidden bugs or crash conditions unaddressed by normal testing. It’s especially potent for discovering input-parsing weaknesses.",
-      "examTip": "Combine fuzz testing with other QA measures to catch vulnerabilities that typical functional testing might miss."
-    },
-    {
-      "id": 87,
-      "question": "Which of the following is the BEST description of 'data loss prevention' (DLP)?",
-      "options": [
-        "A method for encrypting data at rest and data in transit",
-        "Technologies and processes detecting/preventing unauthorized data transfers",
-        "Performing nightly backups to offsite locations to preserve data loss",
-        "A specialized antivirus solution scanning for trojans"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "DLP systems focus on safeguarding sensitive data from exfiltration, whether maliciously or accidentally. Encryption alone, backups, or AV tools do not address controlling data movement in real time.",
-      "examTip": "DLP solutions can operate at endpoints, network gateways, or cloud services to monitor content for policy violations."
-    },
-    {
-      "id": 88,
-      "question": "What is 'return-oriented programming' (ROP)?",
-      "options": [
-        "An advanced encryption algorithm for secure data transmission",
-        "A social engineering trick to impersonate executives (whaling)",
-        "A sophisticated method chaining existing in-memory code fragments to bypass defenses",
-        "An approach to writing safer, more maintainable code"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "ROP reuses legitimate code segments (gadgets) at runtime to execute malicious logic without injecting new code. It’s not encryption or social engineering, nor is it a coding best practice method.",
-      "examTip": "ROP attacks highlight the need for robust compile-time mitigations, code signing, and memory protections."
-    },
-    {
-      "id": 89,
-      "question": "What is a 'side-channel attack'?",
-      "options": [
-        "A bug in software code exploited by standard injection exploits",
-        "A physical security breach of locked server rooms",
-        "An exploitation vector leveraging unintended signals",
-        "A phishing approach that uses disguised phone numbers"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Side-channel attacks glean hidden data from subtle hardware or operational leaks—power usage, electromagnetic radiation, etc.—not from direct code flaws or social manipulation.",
-      "examTip": "Proper hardware design and operational controls help mitigate side-channel attacks, which standard software defenses may overlook."
-    },
-    {
-      "id": 90,
-      "question": "What is 'cryptographic agility'?",
-      "options": [
-        "Quickly compromising known encryption algorithms",
-        "Allowing systems to seamlessly change cryptographic components",
-        "Using infinite-length keys for top-tier secrecy",
-        "Backing up private keys to multiple secure data centers"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cryptographic agility means not being locked into a single algorithm or key length. If an algorithm is cracked, the system can pivot to stronger alternatives without major overhauls.",
-      "examTip": "As cryptographic methods evolve or break, agile designs ensure quick adaptation, crucial for future-proof security (e.g., post-quantum cryptography)."
-    },
-    {
-      "id": 91,
-      "question": "Which of the following is the MOST effective long-term strategy for mitigating the risk of phishing attacks?",
-      "options": [
-        "Placing a robust firewall at the network perimeter",
-        "Mandating complex passwords organization-wide",
-        "Ongoing employee awareness training, supplemented by technical controls like email filtering and MFA",
-        "Encrypting all sensitive data at rest and in transit"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Phishing directly targets human factors. While technology helps (spam filters, MFA), consistent education and simulated exercises build user vigilance, addressing the root cause. Firewalls, encryption, or strong passwords alone aren’t enough.",
-      "examTip": "A well-informed workforce is crucial to defeating phishing or social engineering attempts, as no single tech solution suffices."
-    },
-    {
-      "id": 92,
-      "question": "What is a 'false negative' in the context of security monitoring?",
-      "options": [
-        "An alert triggered by normal activity (a false alarm)",
-        "An alert accurately identifying a threat in real time",
-        "Failing to detect an actual malicious event or breach, allowing it to proceed undetected",
-        "A brand-new cryptographic cipher found to have weaknesses"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "A false negative is a missed threat. This is far riskier than a false positive (false alarm), as actual attacks remain unnoticed, giving adversaries uninterrupted time to cause harm.",
-      "examTip": "Balance detection thresholds to reduce false negatives while avoiding alert fatigue from false positives."
-    },
-    {
-      "id": 93,
-      "question": "What is the PRIMARY purpose of a Security Orchestration, Automation, and Response (SOAR) platform?",
-      "options": [
-        "Encrypting all enterprise data at rest",
-        "Automating and coordinating security tasks—like threat intelligence gathering and incident response—to boost efficiency and speed",
-        "Managing user identity and access rights across an organization",
-        "Performing penetration tests on critical infrastructure"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "SOAR leverages automation to handle repetitive tasks, orchestrates workflows among various security tools, and structures incident responses for consistency and rapid action. It’s not for encryption, identity management, or pen testing specifically.",
-      "examTip": "SOAR improves operational capacity by alleviating the load of manual tasks, enabling faster threat containment."
-    },
-    {
-      "id": 94,
-      "question": "What is the main advantage of using a password manager?",
-      "options": [
-        "It removes the need for passwords, opting for auto login",
-        "Permitting one universal password for all accounts",
-        "Generating and securely storing strong, unique passwords for each site, often autofilling to reduce user burden",
-        "Enhancing CPU speeds for better overall system performance"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "Password managers enable unique, complex passwords for every service without overload. They neither remove passwords entirely nor improve CPU performance. Relying on a single password is the opposite of best practice.",
-      "examTip": "Encourage safe usage of a trusted manager to drastically reduce reuse risk and password fatigue."
-    },
-    {
-      "id": 95,
-      "question": "What is 'business continuity planning' (BCP)?",
-      "options": [
-        "A campaign for marketing a new brand initiative",
-        "A structured hiring and onboarding roadmap",
-        "A plan ensuring critical business functions continue during/after disruptions or disasters, minimizing downtime",
-        "An approach to enhance customer feedback processes"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "BCP ensures operational resilience, not just IT restoration. From supply chains to staffing, it’s broader than typical disaster recovery, covering all essential areas to keep the business running.",
-      "examTip": "Regular testing is crucial. A well-rehearsed BCP mitigates chaos when real disruptions strike."
-    },
-    {
-      "id": 96,
-      "question": "Which of the following is a key component of a robust incident response plan?",
-      "options": [
-        "Ignoring security incidents to avert panicking employees",
-        "Clearly mapping out phases: preparation, detection, containment, eradication, recovery, and lessons learned",
-        "Blaming staff individually for each breach to force accountability",
-        "Relying solely on law enforcement to manage digital intrusions"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "A well-crafted plan outlines how to identify and respond to incidents thoroughly. Ignoring events, scapegoating, or offloading all responsibility to external authorities are not recommended. Internal structure is key.",
-      "examTip": "Test the plan with tabletop or functional exercises to ensure readiness and swift engagement in real crises."
-    },
-    {
-      "id": 97,
-      "question": "What is 'data minimization' in the context of data privacy?",
-      "options": [
-        "Gathering as much user data as possible for better analytics",
-        "Collecting and retaining only the minimal personal data needed for defined, legitimate purposes, then discarding it when no longer relevant",
-        "Encrypting all user data for indefinite retention",
-        "Backing up user records to multiple cloud regions"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data minimization means not hoarding unneeded data—maintaining only what’s truly necessary to reduce breach impact and comply with privacy mandates. It’s not indefinite encryption or indefinite storage for analytics.",
-      "examTip": "Regulations like GDPR highlight minimization as a pillar, limiting harm in case of leaks."
-    },
-    {
-      "id": 98,
-      "question": "A company's website allows users to submit comments and feedback. Without proper security measures, what type of attack is the website MOST vulnerable to?",
-      "options": [
-        "Denial-of-Service (DoS)",
-        "Cross-Site Scripting (XSS)",
-        "Man-in-the-Middle (MitM)",
-        "Brute-Force"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "User-submitted text boxes are classic XSS targets if input isn’t sanitized. DoS saturates resources, MitM intercepts data in transit, and brute force attempts password guesses. None specifically exploit comment sections like XSS does.",
-      "examTip": "Sanitize inputs, encode outputs, and ensure comment data can’t embed malicious scripts in returned pages."
-    },
-    {
-      "id": 99,
-      "question": "What is 'cross-site request forgery' (CSRF or XSRF)?",
-      "options": [
-        "Injecting malicious scripts into web pages (XSS)",
-        "Entering unauthorized database commands (SQL injection)",
-        "Forcing logged-in users to perform unwanted actions on a site without their knowledge",
-        "Intercepting data flows between two legitimate parties (MitM)"
-      ],
-      "correctAnswerIndex": 2,
-      "explanation": "CSRF coerces an authenticated user’s browser into sending forged requests that exploit their valid session. XSS, SQL injection, and MitM differ in approach and vectors.",
-      "examTip": "Include CSRF tokens in forms and verify them server-side to thwart such attacks."
-    },
-    {
-      "id": 100,
-      "question": "Which of the following is the BEST approach for securing a wireless network?",
-      "options": [
-        "Rely on WEP encryption for simplicity",
-        "Use WPA2 or WPA3 with a strong, unique passphrase, change default router credentials, and optionally enable MAC filtering",
-        "Disable SSID broadcast to hide the network from casual discovery",
-        "Leave the network open to improve convenience"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "WPA2/WPA3 with robust passphrases is the current secure standard. Changing default admin passwords and optionally using MAC filtering further strengthens security. WEP is outdated. Hiding SSID or leaving it open is insecure.",
-      "examTip": "Always configure strong, modern encryption (WPA2/WPA3) and replace default device credentials for best wireless protection."
-    }
-  ]
-}
+    [
+  {
+    "id": 56,
+    "question": "What is the 'principle of least privilege'?",
+    "options": [
+      "Permitting every individual throughout the organization to utilize full administrative privileges on all company systems as a way to streamline permission management, thereby reducing complexities associated with differentiated user rights.",
+      "Giving each user only the minimal set of permissions and access levels absolutely required for legitimate job functions.",
+      "Enabling unrestricted access to every system, folder, and network resource for all employees, irrespective of their specific roles or responsibilities, to avoid operational bottlenecks.",
+      "Applying such excessive and rigid restrictions on user permissions that daily tasks become difficult to complete, thus frequently impeding overall productivity."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Least privilege ensures each user or process has only the access needed to fulfill their tasks, reducing the risk of insider threats or compromised accounts. It doesn’t mean over-restricting or granting total access—it’s about a balanced minimal approach.",
+    "examTip": "Always apply the principle of least privilege when assigning user permissions and access rights to systems and data."
+  },
+  {
+    "id": 57,
+    "question": "What is 'threat modeling'?",
+    "options": [
+      "Developing high-fidelity, three-dimensional representations of malicious software or virus structures so that security professionals can visually simulate how they propagate and cause harm within a controlled test environment.",
+      "Systematically identifying, evaluating, and prioritizing potential threats within a system or application during its design and development phases.",
+      "Conducting thorough, organization-wide training sessions designed to help employees spot deceptive emails, suspicious links, and other social engineering attempts in order to reduce successful phishing attacks.",
+      "Implementing purely reactive measures and containment steps to manage security incidents after they have already compromised systems, rather than addressing issues proactively."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Threat modeling is proactive—focusing on anticipating where threats might arise and addressing them early in the lifecycle, rather than reacting post-incident. It aids in secure design and coding.",
+    "examTip": "Incorporate threat modeling in the software development lifecycle to identify and prioritize potential attack vectors."
+  },
+  {
+    "id": 58,
+    "question": "Which of the following is a key benefit of using a SIEM?",
+    "options": [
+      "Automatically deploying patches to all connected endpoints for any software-related weaknesses as soon as they are discovered.",
+      "Collecting logs in one place, correlating security events in real time, and generating alerts to enable faster detection and response to incidents.",
+      "Ensuring that both stored data and transmitted information are encrypted at all times, preventing unauthorized access regardless of network security measures.",
+      "Carrying out user account lifecycle tasks, including the automated creation and removal of user accounts based on onboarding or departure events."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "SIEM solutions aggregate logs from various sources, correlate them to detect suspicious patterns, and provide real-time alerts. They don’t focus on automated patching, encryption, or identity provisioning, though they may integrate with tools that handle these tasks.",
+    "examTip": "SIEM systems are essential for effective security monitoring and incident response in larger, more complex environments."
+  },
+  {
+    "id": 59,
+    "question": "A company's web server is experiencing intermittent performance issues and slow response times. Upon investigation, you find a large number of incomplete HTTP requests originating from many different IP addresses. What type of attack is MOST likely occurring?",
+    "options": [
+      "Exploiting the application's database through maliciously crafted input to manipulate or access data beyond authorization constraints.",
+      "Embedding harmful scripts into the web application that execute in users’ browsers, often leveraged to steal cookies or session tokens.",
+      "A Slowloris (or similar low-and-slow DoS) attack, which consumes server resources by holding numerous open connections with partially sent requests.",
+      "Intercepting and altering communication between two parties who believe they are exchanging data directly with each other."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Slowloris-style attacks aim to keep many HTTP connections open by sending partial or incomplete requests, draining server resources. SQL injection targets databases, XSS attacks users’ browsers, MitM intercepts traffic in transit.",
+    "examTip": "Low-and-slow DoS attacks can be especially hard to detect as individual requests appear legitimate, but collectively they sap server capacity."
+  },
+  {
+    "id": 60,
+    "question": "What is a 'false negative' in the context of security monitoring and intrusion detection?",
+    "options": [
+      "Raising an alarm due to normal, benign activity that has been misjudged as malicious, commonly leading to wasted investigation efforts.",
+      "Generating an alert that accurately pinpoints a genuine security concern or breach in progress, enabling timely response.",
+      "Failing to recognize a real attack or compromise, thereby allowing the malicious activity to continue undetected within the environment.",
+      "Referring to a specific cryptographic approach used for encrypting data transmissions between systems."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "A false negative indicates a missed threat—far more dangerous than a false positive (an incorrect alarm), since real attacks remain undetected. Configuring systems to reduce false negatives is critical for robust security.",
+    "examTip": "Balancing false positives and false negatives is a key challenge in tuning security tools—missed attacks can wreak havoc."
+  },
+  {
+    "id": 61,
+    "question": "What is the PRIMARY purpose of data backups?",
+    "options": [
+      "Boosting the overall speed and responsiveness of computer systems by offloading older files to external drives or servers.",
+      "Preventing the infiltration of malicious software by maintaining a secure repository of clean system images.",
+      "Creating a copy of data that can be restored in the event of hardware failures, disasters, or other incidents leading to data loss.",
+      "Using sophisticated encryption methods to ensure that no one can read stored information without proper authorization."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "While backups can also help mitigate malware effects or other failures, their main purpose is ensuring recoverability—restoring critical data if the original is lost or corrupted.",
+    "examTip": "A well-tested backup strategy is vital for resilience against ransomware, hardware failures, accidental deletions, and other disasters."
+  },
+  {
+    "id": 62,
+    "question": "What is 'vishing'?",
+    "options": [
+      "Deploying a specialized malicious program that specifically targets smartphones or tablets, compromising data and functionality.",
+      "Using phone calls or VoIP-based communications to deceive victims into revealing personal or sensitive information under false pretenses.",
+      "Establishing an end-to-end secure voice channel that protects calls against eavesdropping and interception attempts.",
+      "Leveraging network-layer exploits to manipulate and intercept routing protocols, thereby redirecting data flows."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Vishing—voice phishing—convinces victims to disclose sensitive info using phone calls. Attackers might impersonate banks, tech support, etc.",
+    "examTip": "Caution employees about disclosing data over unsolicited calls—use official, trusted contact methods to verify authenticity."
+  },
+  {
+    "id": 63,
+    "question": "Which of the following is the MOST effective way to prevent SQL injection attacks?",
+    "options": [
+      "Ensuring that database administrator and service accounts use extremely complex passwords to deter unauthorized logins.",
+      "Placing a web application firewall (WAF) in front of the server so that it can filter out malicious traffic and requests before they reach the database.",
+      "Relying on parameterized queries (prepared statements) and strict input validation at both client and server levels.",
+      "Encrypting all records stored in the database so that even if an injection occurs, attackers cannot read the compromised data."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Parameterized queries, also known as prepared statements, treat user input purely as data, preventing injection. Input validation further guards against harmful input. While a WAF, strong DB passwords, and encryption help overall security, they don’t directly eliminate injection points.",
+    "examTip": "Use parameterized queries and proper validation as the gold standard for thwarting SQL injection."
+  },
+  {
+    "id": 64,
+    "question": "What is a 'security baseline'?",
+    "options": [
+      "An all-inclusive reference catalog listing every known weakness or exploit that applies to a specific system or application version.",
+      "A documented set of minimum required security controls and configurations meant to ensure consistent protection across all relevant systems.",
+      "A highly structured approach dedicated to rapidly detecting security incidents and escalating them appropriately based on predetermined rules.",
+      "A specially designed type of cabling that mitigates signal interference by twisting wires at measured intervals."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Security baselines provide mandatory security settings for systems to adhere to, ensuring every build meets at least a minimal, vetted security threshold. They’re not exhaustive vulnerability lists or incident processes.",
+    "examTip": "Baselines should be regularly updated to reflect changing threats and best practices."
+  },
+  {
+    "id": 65,
+    "question": "What is 'separation of duties'?",
+    "options": [
+      "Authorizing every employee, irrespective of position, to hold full administrative rights on crucial systems in order to maintain open collaboration.",
+      "Distributing critical responsibilities among multiple personnel, mitigating the likelihood of fraud, conflicts of interest, or unintentional mistakes.",
+      "Employing specialized encryption techniques so that only a single designated individual can access decrypted information at any time.",
+      "Moving critical backup data to geographically isolated facilities, ensuring it is kept away from main production servers."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Separation of duties ensures no single person controls an entire sensitive process (e.g., approvals, financial transactions). This approach reduces fraud and errors. It’s unrelated to encryption or backup distribution.",
+    "examTip": "Separation of duties is a key control in preventing insider threats or collusion by requiring multiple approvals."
+  },
+  {
+    "id": 66,
+    "question": "You are configuring a new server. Which of the following actions will have the GREATEST positive impact on its security?",
+    "options": [
+      "Installing every optional and additional software module to ensure maximum versatility of the server’s capabilities.",
+      "Leaving all network ports wide open, providing universal accessibility to services and facilitating remote troubleshooting.",
+      "Modifying default credentials, removing unneeded services, keeping the system fully patched, and setting up a host-based firewall.",
+      "Choosing a basic, easy-to-remember administrator password so that support staff can log in quickly when necessary."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "These hardening measures—removing defaults, reducing services, patching, firewalling—form a robust baseline. Other options undermine security by expanding attack surfaces or maintaining defaults.",
+    "examTip": "Aim for minimal attack surface, timely patching, and strong credentials for each new system deployment."
+  },
+  {
+    "id": 67,
+    "question": "What is a MitM attack?",
+    "options": [
+      "Bombarding a target system with so much inbound traffic that legitimate requests cannot be serviced, rendering it inaccessible.",
+      "Injecting unauthorized commands into a backend database through unvalidated form fields and user inputs, typically to retrieve or manipulate data.",
+      "Intercepting and potentially altering communications between two parties in real time, deceiving each side into thinking they are communicating directly and securely.",
+      "Disguising official-looking emails to trick recipients into revealing personal information, such as login credentials or financial details."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "MitM requires intercepting traffic unbeknownst to both ends, allowing attackers to eavesdrop or alter the content. Unlike DoS, database injections, or phishing, MitM manipulates or observes real-time communications.",
+    "examTip": "Use strong encryption (HTTPS, VPN) and certificate validation to reduce MitM risks on insecure networks."
+  },
+  {
+    "id": 68,
+    "question": "What is the primary function of a 'honeypot'?",
+    "options": [
+      "Encoding sensitive data with cryptographic algorithms to keep it confidential even if stolen.",
+      "Screening incoming and outgoing network packets to differentiate genuine traffic from malicious connections.",
+      "Serving as a deliberately vulnerable or enticing system designed to lure attackers, gather intel on their techniques, and divert them from real assets.",
+      "Establishing a secure virtual private network (VPN) to protect remote connections and tunnel data securely."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Honeypots act as bait—vulnerable systems inviting attackers so security teams can collect intelligence without jeopardizing production environments. Encryption or traffic filtering aren’t the main goals.",
+    "examTip": "Use honeypots carefully—attackers could attempt to pivot from a honeypot if not properly isolated."
+  },
+  {
+    "id": 69,
+    "question": "What is the purpose of a 'digital forensic' investigation?",
+    "options": [
+      "Ensuring comprehensive preventative measures that block cyberattacks before they ever begin, leaving no room for any attacker to gain entry.",
+      "Gathering, preserving, examining, and documenting digital evidence in a legally admissible manner for post-incident analysis or court proceedings.",
+      "Developing entirely new antivirus or anti-malware solutions capable of handling zero-day exploits as they surface.",
+      "Training internal staff on best practices for dealing with security incidents and maintaining system logs."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Digital forensics is about meticulously analyzing systems post-incident and securing evidence for potential legal use, not about prevention or training. Proper chain of custody and expert methodologies are key.",
+    "examTip": "Prompt evidence preservation and standard forensic procedures ensure integrity and admissibility in court."
+  },
+  {
+    "id": 70,
+    "question": "Which of the following is a characteristic of a 'worm'?",
+    "options": [
+      "It always depends on a user-initiated action (like clicking on an infected file) to proliferate to other machines or networks.",
+      "It typically causes minor disruptions and is considered less damaging than standard computer viruses, rarely posing a significant threat.",
+      "It self-propagates across networks by exploiting vulnerabilities without needing user interaction, allowing it to spread rapidly and sometimes indiscriminately.",
+      "It functions exclusively on a narrow range of operating systems and cannot spread to devices outside its targeted platform."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Worms differ from viruses by not requiring user actions to replicate, instead exploiting network or system flaws for rapid spread. Viruses typically need a user to execute an infected file or attachment.",
+    "examTip": "Worms can cause quick, large-scale damage across connected networks."
+  },
+  {
+    "id": 71,
+    "question": "What is the PRIMARY difference between 'vulnerability scanning' and 'penetration testing'?",
+    "options": [
+      "Vulnerability scanning relies exclusively on automated tools, whereas penetration testing can only be performed manually by skilled ethical hackers.",
+      "Vulnerability scanning identifies potential system weaknesses; penetration testing attempts actual exploits to confirm and illustrate the severity of those vulnerabilities.",
+      "Vulnerability scanning is handled internally by the organization’s security team, whereas penetration testing must be outsourced to an approved vendor.",
+      "Vulnerability scanning is consistently more costly and time-intensive than any form of penetration testing, making it less practical in many cases."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Scanning highlights possible flaws. Pen testing goes beyond that, using exploits to confirm vulnerabilities and measure the consequences. Either approach can be internal/external and automated/manual.",
+    "examTip": "Think of a scan as spotting locked or unlocked doors; a pen test involves attempting to pick those locks."
+  },
+  {
+    "id": 72,
+    "question": "What is the main advantage of using a password manager?",
+    "options": [
+      "Completely eliminating the need for any password entry by substituting biometric methods for all authentication processes.",
+      "Allowing users to adopt extremely simple, universal passwords since the manager handles all security considerations on their behalf.",
+      "Securely storing and generating strong, unique passwords for multiple services, often autofilling login forms to mitigate password fatigue.",
+      "Substantially improving system and network performance metrics by freeing up processing resources that would otherwise be spent on authentication."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "A password manager addresses password fatigue and reuse by enabling secure storage and generation of unique credentials per service, drastically boosting account security. It doesn’t remove the need for passwords, nor speed up the machine.",
+    "examTip": "Encourage users to employ reputable password managers—weak or reused passwords remain a major threat vector."
+  },
+  {
+    "id": 73,
+    "question": "What is 'social engineering'?",
+    "options": [
+      "A cultivated practice aimed at promoting friendly and effective communication among coworkers to strengthen team bonds and morale.",
+      "Manipulating individuals psychologically, often by instilling urgency or trust, to trick them into disclosing confidential information or granting unauthorized access.",
+      "Writing well-structured code and following security standards in programming to minimize application-level vulnerabilities.",
+      "Pursuing a specialized academic field that analyzes social trends, population statistics, and societal impacts on technology usage."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Social engineering manipulates people’s trust or fear, bypassing technical barriers. Examples include phishing, pretexting, and impersonation. It’s not about coding or broad demographic research.",
+    "examTip": "Training and awareness are crucial defenses, as no software patch can fix human vulnerabilities."
+  },
+  {
+    "id": 74,
+    "question": "What is a 'botnet'?",
+    "options": [
+      "A network of industrial robots used primarily within manufacturing processes to perform repetitive tasks efficiently.",
+      "A worldwide collection of compromised devices under the control of a single adversary, typically used for DDoS attacks, spam campaigns, and malware distribution.",
+      "An ultra-secure communication platform maintained by government agencies for sensitive data exchanges and official state matters.",
+      "A proprietary software suite designed to optimize data routing across various global data centers, minimizing latency for end users."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Botnets are infected ‘zombie’ machines collectively commanded by threat actors, often launching distributed attacks. They’re not official secure networks nor manufacturing robots.",
+    "examTip": "Keeping endpoints secure (patched, anti-malware) helps prevent them from joining a botnet."
+  },
+  {
+    "id": 75,
+    "question": "What is the purpose of 'data masking'?",
+    "options": [
+      "Encrypting stored data so that it remains inaccessible without the correct cryptographic key, even if systems are compromised.",
+      "Replacing actual sensitive fields with realistic but fictitious values in non-production or testing environments, maintaining the structure of the data without exposing real information.",
+      "Performing frequent backups of critical data to cloud-based or offsite storage facilities for disaster recovery purposes.",
+      "Blocking attempts to copy or download sensitive records from a production database to an external or unauthorized location."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Data masking (or obfuscation) means substituting sensitive content with fictitious placeholders, maintaining structure yet removing confidentiality risks in dev/test/training. Encryption alone doesn’t serve the same use case.",
+    "examTip": "Data masking significantly reduces exposure risks while allowing useful environment testing."
+  },
+  {
+    "id": 76,
+    "question": "What is a 'zero-day' vulnerability?",
+    "options": [
+      "A security gap that is so trivially exploitable that almost anyone with basic computer skills can compromise it with minimal effort.",
+      "A known software flaw that has already been publicly disclosed and comprehensively addressed with a vendor-supplied patch or workaround.",
+      "A newly discovered or undisclosed security weakness for which no official fix or patch exists yet, giving attackers a distinct advantage.",
+      "A legacy exploit that only works on obsolete operating systems and remains ineffective against current software versions."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Zero-days are unknown or unpatched weaknesses that attackers may exploit before a vendor fix is developed or deployed. They represent a high risk since defenders have 'zero days' to act.",
+    "examTip": "Maintain layered security defenses and rapid patch processes to minimize zero-day exposures."
+  },
+  {
+    "id": 77,
+    "question": "You are designing the network for a new office. Which of the following is the BEST way to isolate a server containing highly confidential data from the rest of the network?",
+    "options": [
+      "Placing the server in the same VLAN as all regular employee workstations to ensure easy connectivity while still relying on default security measures.",
+      "Creating a dedicated VLAN for the sensitive server and enforcing strict firewall policies on incoming and outgoing traffic, limiting exposure to only necessary services.",
+      "Assigning an unconventional IP address or gateway to the server in the hope that potential attackers will be unable to locate it easily.",
+      "Protecting your office’s wireless network with a strong passphrase, ensuring that unauthorized personnel cannot gain access to the internal infrastructure."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Creating a dedicated VLAN plus strict firewall policies ensures minimal exposure. Same VLAN with workstations or simply changing the gateway doesn’t isolate. Strong Wi-Fi only affects wireless access, not internal segmentation.",
+    "examTip": "Network segmentation is a fundamental security principle—limit east-west movement among sensitive data."
+  },
+  {
+    "id": 78,
+    "question": "What is 'cross-site request forgery' (CSRF or XSRF)?",
+    "options": [
+      "Injecting hostile JavaScript into web pages, making the victim’s browser run unauthorized code (commonly known as XSS).",
+      "Sending malicious SQL commands to the database through unvalidated input fields, aiming to manipulate or steal data from backend systems.",
+      "Tricking a logged-in user’s browser into sending unwanted or unauthorized requests to a legitimate site, exploiting the user’s existing session credentials.",
+      "Intercepting data streams between two endpoints and optionally modifying or capturing the transmitted information while remaining undetected."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "CSRF deceives a user’s browser into sending unauthorized actions when they’re already authenticated. Unlike XSS or SQL injection, CSRF specifically leverages user trust with a site and triggers behind-the-scenes requests.",
+    "examTip": "Mitigate CSRF using unique tokens per session and verifying those tokens server-side."
+  },
+  {
+    "id": 79,
+    "question": "What is the PRIMARY purpose of a WAF application firewall ?",
+    "options": [
+      "Providing secure end-to-end encryption for HTTP traffic through protocols like SSL or TLS.",
+      "Filtering and analyzing HTTP(S) traffic in order to detect and block malicious payloads.",
+      "Serving as the central repository for managing user identities, login details, and password policies for all web-based services.",
+      "Facilitating VPN connectivity by creating a secure tunnel for remote users to access internal resources."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "A WAF sits in front of a web server, inspecting HTTP traffic for malicious patterns. It focuses on application-level attacks, not basic encryption or user management.",
+    "examTip": "A WAF is a specialized control that complements secure coding, adding an extra shield against known exploit vectors."
+  },
+  {
+    "id": 80,
+    "question": "Which of the following is the MOST effective way to prevent SQL injection attacks?",
+    "options": [
+      "Creating and enforcing highly complex passwords for each database account, drastically reducing brute force risks.",
+      "Placing a specialized web application firewall in front of the site to detect and filter suspicious query patterns.",
+      "Using properly parameterized queries (prepared statements) combined with rigorous input validation to ensure user data is never treated as code.",
+      "Encrypting all database content so that even if injections occur, the attacker cannot interpret the underlying information."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Parameterized queries treat user input as data rather than part of the SQL command. Input validation further lessens risk. A WAF might help but isn’t foolproof, nor do strong DB passwords or encryption address the injection vector itself.",
+    "examTip": "Stopping injection at the code level is essential—failing that, all else is just layering partial solutions."
+  },
+  {
+    "id": 81,
+    "question": "A user receives an email that appears to be from their bank, but the sender's address and embedded link both differ slightly from the official ones. What is the SAFEST course of action?",
+    "options": [
+      "Immediately click the provided link, follow the instructions, and supply the requested financial details before the account becomes compromised.",
+      "Reply to the email asking for further confirmation or additional identification to verify the request’s legitimacy.",
+      "Forward the suspicious email to a wide distribution list, including colleagues and friends, warning them to avoid the link.",
+      "Refrain from clicking or replying, and instead contact the bank through a verified phone number or by typing the bank’s official website URL directly."
+    ],
+    "correctAnswerIndex": 3,
+    "explanation": "The scenario strongly indicates a phishing attempt. Users should verify authenticity with an official channel. Clicking unknown links or replying might compromise credentials. Forwarding the suspicious email only risks spreading it further.",
+    "examTip": "Never trust unsolicited messages demanding personal details. Confirm directly via recognized contact points."
+  },
+  {
+    "id": 82,
+    "question": "What is 'security through obscurity'?",
+    "options": [
+      "Employing thoroughly vetted cryptographic standards to protect data both at rest and in transit from unauthorized access.",
+      "Adopting multi-factor authentication measures to strengthen user identity verification, preventing unauthorized logins.",
+      "Relying heavily on concealing system details or implementation secrets to deter attacks, hoping adversaries won’t uncover the hidden aspects.",
+      "Configuring a well-designed perimeter firewall solution that filters inbound and outbound traffic for potential threats."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Security through obscurity is generally weak, as it doesn’t address underlying vulnerabilities. Attackers often uncover hidden details, invalidating the approach. True security requires well-vetted, layered defenses.",
+    "examTip": "Use proven methods over secrecy-based illusions of safety. Obscurity alone is not real protection."
+  },
+  {
+    "id": 83,
+    "question": "What is the PRIMARY goal of a DoS attack?",
+    "options": [
+      "Acquiring confidential customer information such as financial records or personal identification data.",
+      "Escalating the attacker's privileges on the targeted system or network to gain administrative control.",
+      "Overwhelming or incapacitating the targeted resource so that legitimate users are unable to access the service or network.",
+      "Embedding persistent backdoor services on compromised machines for long-term unauthorized access."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "DoS aims to degrade or halt availability. While some attacks might also exfiltrate data or install malware, DoS specifically targets accessibility—flooding or overburdening resources.",
+    "examTip": "Implementing adequate resources, load balancing, and DDoS mitigation helps defend against such attacks."
+  },
+  {
+    "id": 84,
+    "question": "A company's security policy mandates strong, unique passwords, but many employees reuse simple credentials. Which approach MOST improves compliance?",
+    "options": [
+      "Deliberately overlooking or not enforcing the password policy to avoid the hassle of dealing with employee complaints.",
+      "Introducing effective technical controls such as complexity checks and account lockouts alongside comprehensive security training programs.",
+      "Publicly singling out and ridiculing employees who refuse to comply, creating social pressure to adhere to the password rules.",
+      "Terminating the contracts of any employees found to be using weak or repeated passwords after one official warning is issued."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Users must understand risks (training) and face policy-based technical controls (enforced complexity, lockouts). Shaming is unethical and unproductive; ignoring or firing are extremes that don’t solve the underlying issue.",
+    "examTip": "Maintain user education and real consequences (e.g., lockouts, password history checks). Education fosters internalized secure practices."
+  },
+  {
+    "id": 85,
+    "question": "What is the purpose of 'threat modeling'?",
+    "options": [
+      "Creating elaborate holographic or 3D representations of malicious software for demonstration and educational purposes.",
+      "Employing a formalized approach to identify, analyze, and rank potential security threats early in the development lifecycle, considering adversarial techniques and objectives.",
+      "Instructing end users on how to handle suspicious emails and websites as part of a broader phishing awareness initiative.",
+      "Using predetermined processes to deal with security breaches, recover from attacks, and document findings post-incident."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Threat modeling identifies potential attack vectors early, allowing developers to address them preemptively. It is proactive, not reactive training or incident response.",
+    "examTip": "Integrate threat modeling into the secure SDLC for best results."
+  },
+  {
+    "id": 86,
+    "question": "What is 'fuzzing' used for in software testing?",
+    "options": [
+      "Reformatting the source code to be cleaner and more maintainable, commonly known as 'beautification' or 'linting'.",
+      "Sending random, malformed, or unexpected input to a program to detect crashes and vulnerabilities that standard testing might miss.",
+      "Encoding the application’s logic to obscure its functionality, protecting against reverse engineering by malicious entities.",
+      "Deploying social engineering campaigns in bulk emails to trick users into divulging sensitive information."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Fuzzing systematically bombards software with odd, malformed inputs, revealing hidden bugs or crash conditions unaddressed by normal testing. It’s especially potent for discovering input-parsing weaknesses.",
+    "examTip": "Combine fuzz testing with other QA measures to catch vulnerabilities that typical functional testing might miss."
+  },
+  {
+    "id": 87,
+    "question": "Which of the following is the BEST description of DLP?",
+    "options": [
+      "Applying strong encryption to information both at rest and in transit to block unauthorized access or viewing.",
+      "Utilizing software, systems, and processes designed to detect and prevent sensitive data from leaving the organization without proper authorization or safeguards.",
+      "Setting up nightly backups to a remote facility, ensuring that any lost data can be restored in case of accidental deletion or a ransomware attack.",
+      "Installing specialized antivirus tools dedicated to scanning incoming files for trojans or other malware that might exfiltrate data."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "DLP systems focus on safeguarding sensitive data from exfiltration, whether maliciously or accidentally. Encryption alone, backups, or AV tools do not address controlling data movement in real time.",
+    "examTip": "DLP solutions can operate at endpoints, network gateways, or cloud services to monitor content for policy violations."
+  },
+  {
+    "id": 88,
+    "question": "What is ROP?",
+    "options": [
+      "An advanced cryptographic protocol designed to secure data channels in real-time communications.",
+      "A social engineering tactic that targets high-profile executives, often referred to as 'whaling', to fraudulently gather confidential information.",
+      "A sophisticated exploitation technique that reuses existing snippets of legitimate code (gadgets) in memory, bypassing conventional defenses.",
+      "A coding methodology focused on producing readable and secure software by systematically structuring program logic."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "ROP reuses legitimate code segments (gadgets) at runtime to execute malicious logic without injecting new code. It’s not encryption or social engineering, nor is it a coding best practice method.",
+    "examTip": "ROP attacks highlight the need for robust compile-time mitigations, code signing, and memory protections."
+  },
+  {
+    "id": 89,
+    "question": "What is a 'side-channel attack'?",
+    "options": [
+      "Locating and exploiting straightforward vulnerabilities in software code through commonly known injection methods and techniques.",
+      "Gaining unauthorized physical entry to highly secured data centers or server rooms by bypassing locks or access controls.",
+      "Using indirect clues such as power consumption, electromagnetic emissions, or timing variations to extract sensitive information from a system.",
+      "Employing phishing calls under deceptive pretenses, using voice-based methods to coerce confidential data from unsuspecting individuals."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Side-channel attacks glean hidden data from subtle hardware or operational leaks—power usage, electromagnetic radiation, etc.—not from direct code flaws or social manipulation.",
+    "examTip": "Proper hardware design and operational controls help mitigate side-channel attacks, which standard software defenses may overlook."
+  },
+  {
+    "id": 90,
+    "question": "What is 'cryptographic agility'?",
+    "options": [
+      "Successfully breaking established ciphers in a timely manner, allowing security researchers to test resilience against cryptanalysis.",
+      "Designing systems so they can seamlessly switch between different cryptographic algorithms or key lengths as vulnerabilities are discovered.",
+      "Employing infinitely large key sizes to guarantee that no entity could ever decrypt the data through brute-force methods.",
+      "Maintaining redundant copies of private keys in geographically distributed data centers to ensure persistence in case of disaster."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Cryptographic agility means not being locked into a single algorithm or key length. If an algorithm is cracked, the system can pivot to stronger alternatives without major overhauls.",
+    "examTip": "As cryptographic methods evolve or break, agile designs ensure quick adaptation, crucial for future-proof security (e.g., post-quantum cryptography)."
+  },
+  {
+    "id": 91,
+    "question": "Which of the following is the MOST effective long-term strategy for mitigating the risk of phishing attacks?",
+    "options": [
+      "Investing in a sophisticated firewall appliance that sits at the network perimeter and inspects all inbound and outbound traffic.",
+      "Mandating that every user in the organization selects a complex, hard-to-guess password that is changed periodically.",
+      "Establishing continuous employee awareness programs, using techniques like simulated phishing tests, coupled with robust email filtering and multi-factor authentication.",
+      "Encrypting all company data, both stored on servers and transmitted through the network, to minimize any potential leak or breach."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Phishing directly targets human factors. While technology helps (spam filters, MFA), consistent education and simulated exercises build user vigilance, addressing the root cause. Firewalls, encryption, or strong passwords alone aren’t enough.",
+    "examTip": "A well-informed workforce is crucial to defeating phishing or social engineering attempts, as no single tech solution suffices."
+  },
+  {
+    "id": 92,
+    "question": "What is a 'false negative' in the context of security monitoring?",
+    "options": [
+      "Generating an alert in response to legitimate user activity, mistakenly flagging it as malicious and causing unnecessary alarm.",
+      "Correctly detecting a malicious attempt in real time, enabling an immediate and effective defensive response.",
+      "Failing to identify a genuine threat or incident, allowing malicious actions to proceed unimpeded and remain unnoticed by the system.",
+      "Identifying a newly discovered cryptographic method or cipher that contains significant vulnerabilities upon closer inspection."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "A false negative is a missed threat. This is far riskier than a false positive (false alarm), as actual attacks remain unnoticed, giving adversaries uninterrupted time to cause harm.",
+    "examTip": "Balance detection thresholds to reduce false negatives while avoiding alert fatigue from false positives."
+  },
+  {
+    "id": 93,
+    "question": "What is the PRIMARY purpose of a Security Orchestration, Automation, and Response (SOAR) platform?",
+    "options": [
+      "Encrypting all of an organization’s data backups so that they cannot be read by unauthorized individuals or services.",
+      "Coordinating and automating repetitive security operations—like gathering threat intel and handling incident response—to speed up and streamline workflows.",
+      "Serving as a unified identity and access management solution, helping administrators provision, modify, and revoke user credentials.",
+      "Performing simulated hacking attempts on critical infrastructure to pinpoint vulnerabilities and verify defensive measures."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "SOAR leverages automation to handle repetitive tasks, orchestrates workflows among various security tools, and structures incident responses for consistency and rapid action. It’s not for encryption, identity management, or pen testing specifically.",
+    "examTip": "SOAR improves operational capacity by alleviating the load of manual tasks, enabling faster threat containment."
+  },
+  {
+    "id": 94,
+    "question": "What is the main advantage of using a password manager?",
+    "options": [
+      "Completely bypassing traditional password-based sign-ins and opting for near-instant auto login whenever you visit a known site.",
+      "Allowing you to create one weak password that is reused across all platforms, since the manager automates the login procedure.",
+      "Generating unique, complex passwords for each account, storing them securely, and minimizing user effort by autofilling login credentials.",
+      "Boosting overall CPU performance by offloading password verification tasks to an external service that handles cryptographic operations."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "Password managers enable unique, complex passwords for every service without overload. They neither remove passwords entirely nor improve CPU performance. Relying on a single password is the opposite of best practice.",
+    "examTip": "Encourage safe usage of a trusted manager to drastically reduce reuse risk and password fatigue."
+  },
+  {
+    "id": 95,
+    "question": "What is BCP?",
+    "options": [
+      "Rolling out a comprehensive marketing strategy to enhance and promote brand awareness in new demographic regions.",
+      "Establishing structured procedures for recruiting, onboarding, and training new hires to maintain workflow consistency.",
+      "Creating a plan to ensure that core business operations remain available and functional during and after significant disruptions, minimizing downtime and losses.",
+      "Implementing advanced methods to obtain direct and frequent customer feedback, tailoring products to consumer needs."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "BCP ensures operational resilience, not just IT restoration. From supply chains to staffing, it’s broader than typical disaster recovery, covering all essential areas to keep the business running.",
+    "examTip": "Regular testing is crucial. A well-rehearsed BCP mitigates chaos when real disruptions strike."
+  },
+  {
+    "id": 96,
+    "question": "Which of the following is a key component of a robust incident response plan?",
+    "options": [
+      "Refusing to acknowledge or address security alerts in order to prevent unnecessary alarm among employees.",
+      "Clearly outlining the stages of preparation, detection, containment, eradication, recovery, and post-incident lessons learned.",
+      "Identifying and publicly blaming individuals for each breach event to reinforce a culture of strict accountability.",
+      "Handing over all digital intrusion investigations to law enforcement agencies at the first sign of compromise."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "A well-crafted plan outlines how to identify and respond to incidents thoroughly. Ignoring events, scapegoating, or offloading all responsibility to external authorities are not recommended. Internal structure is key.",
+    "examTip": "Test the plan with tabletop or functional exercises to ensure readiness and swift engagement in real crises."
+  },
+  {
+    "id": 97,
+    "question": "What is 'data minimization' in the context of data privacy?",
+    "options": [
+      "Collecting as much personal data as possible to enhance analytical insights and optimize business decision-making.",
+      "Maintaining only the essential personal information needed for legitimate purposes, and discarding it when it is no longer necessary.",
+      "Applying encryption to all user data and retaining it indefinitely, ensuring maximum security for the lifetime of the organization.",
+      "Duplicating and archiving user records to multiple third-party providers to guarantee that no information is ever lost."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "Data minimization means not hoarding unneeded data—maintaining only what’s truly necessary to reduce breach impact and comply with privacy mandates. It’s not indefinite encryption or indefinite storage for analytics.",
+    "examTip": "Regulations like GDPR highlight minimization as a pillar, limiting harm in case of leaks."
+  },
+  {
+    "id": 98,
+    "question": "A company's website allows users to submit comments and feedback. Without proper security measures, what type of attack is the website MOST vulnerable to?",
+    "options": [
+      "A sustained flood of bogus requests and excessive traffic meant to overload and bring down the website’s infrastructure.",
+      "An XSS (Cross-Site Scripting) attack where malicious scripts can be embedded into comment sections, potentially compromising visitors’ sessions or data.",
+      "Intercepting the communication channels of users interacting with the website, allowing the attacker to tamper with data in transit.",
+      "A brute-force assault systematically trying different credentials until unauthorized access is eventually gained."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "User-submitted text boxes are classic XSS targets if input isn’t sanitized. DoS saturates resources, MitM intercepts data in transit, and brute force attempts password guesses. None specifically exploit comment sections like XSS does.",
+    "examTip": "Sanitize inputs, encode outputs, and ensure comment data can’t embed malicious scripts in returned pages."
+  },
+  {
+    "id": 99,
+    "question": "What is CSRF or XSRF?",
+    "options": [
+      "Executing embedded malicious scripts within the browser context of visiting users, thereby exploiting the trust a site has in a user’s session.",
+      "Injecting unauthorized SQL commands into the backend database to manipulate stored data or exfiltrate sensitive records.",
+      "Coercing an authenticated user to carry out actions on a site (such as transferring funds or changing settings) without their explicit knowledge or consent.",
+      "Stealthily capturing information as it passes between two legitimate parties, possibly altering or redirecting the content along the way."
+    ],
+    "correctAnswerIndex": 2,
+    "explanation": "CSRF coerces an authenticated user’s browser into sending forged requests that exploit their valid session. XSS, SQL injection, and MitM differ in approach and vectors.",
+    "examTip": "Include CSRF tokens in forms and verify them server-side to thwart such attacks."
+  },
+  {
+    "id": 100,
+    "question": "Which of the following is the BEST approach for securing a wireless network?",
+    "options": [
+      "Utilizing WEP encryption for ease of configuration and backwards compatibility with older devices.",
+      "Implementing WPA2 or WPA3 with a strong passphrase, changing default router credentials, and optionally using MAC filtering for additional protection.",
+      "Hiding the network by disabling SSID broadcast to make it less visible to potential attackers searching for networks.",
+      "Leaving the wireless network unencrypted to enable straightforward access and accommodate visitors without complications."
+    ],
+    "correctAnswerIndex": 1,
+    "explanation": "WPA2/WPA3 with robust passphrases is the current secure standard. Changing default admin passwords and optionally using MAC filtering further strengthens security. WEP is outdated. Hiding SSID or leaving it open is insecure.",
+    "examTip": "Always configure strong, modern encryption (WPA2/WPA3) and replace default device credentials for best wireless protection."
+  }
+]
