@@ -13,6 +13,7 @@ from mongodb.database import (
     testAttempts_collection,
     correctAnswers_collection
 )
+
 # Models
 from models.test import (
     get_user_by_identifier,
@@ -30,7 +31,7 @@ from models.test import (
     validate_email,
     validate_password,
     update_user_fields,
-    get_user_by_id,
+    get_user_by_id
 )
 
 api_bp = Blueprint('test', __name__)
@@ -46,10 +47,9 @@ def serialize_user(user):
         user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
     return user
 
-
-# -----------------------------
+# -------------------------------------------------------------------
 # USER ROUTES
-# -----------------------------
+# -------------------------------------------------------------------
 
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
@@ -57,6 +57,9 @@ def get_user(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
     user = serialize_user(user)
+    # Make sure password is included in the response, if that's desired
+    if "password" not in user:
+        user["password"] = user.get("password")
     return jsonify(user), 200
 
 
@@ -110,7 +113,8 @@ def login():
         "currentAvatar": user.get("currentAvatar"),
         "nameColor": user.get("nameColor"),
         "purchasedItems": user.get("purchasedItems", []),
-        "subscriptionActive": user.get("subscriptionActive", False)
+        "subscriptionActive": user.get("subscriptionActive", False),
+        "password": user.get("password")
     }), 200
 
 
@@ -142,9 +146,9 @@ def add_coins_route(user_id):
     return jsonify({"message": "Coins updated"}), 200
 
 
-# -----------------------------
+# -------------------------------------------------------------------
 # SHOP ROUTES
-# -----------------------------
+# -------------------------------------------------------------------
 
 @api_bp.route('/shop', methods=['GET'])
 def fetch_shop():
@@ -203,53 +207,80 @@ def equip_item_route():
     return jsonify({"success": True, "message": "Avatar equipped"}), 200
 
 
-# -----------------------------
+# -------------------------------------------------------------------
 # TESTS ROUTES
-# -----------------------------
+# -------------------------------------------------------------------
 
 @api_bp.route('/tests/<test_id>', methods=['GET'])
 def fetch_test_by_id_route(test_id):
-    test_doc = get_test_by_id(test_id)
+    # This is your original single-parameter route
+    test_doc = get_test_by_id_and_category(test_id, None)  # or your old get_test_by_id
     if not test_doc:
         return jsonify({"error": "Test not found"}), 404
     test_doc["_id"] = str(test_doc["_id"])
     return jsonify(test_doc), 200
 
 
-
 @api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
 def fetch_test_by_category_and_id(category, test_id):
+    """
+    NEW route that fetches a test doc by both category and testId
+    e.g. /tests/aplus/1
+    """
     try:
         test_id_int = int(test_id)
     except Exception:
         return jsonify({"error": "Invalid test ID"}), 400
+
     test_doc = tests_collection.find_one({
         "testId": test_id_int,
         "category": category
     })
     if not test_doc:
         return jsonify({"error": "Test not found"}), 404
+
     test_doc["_id"] = str(test_doc["_id"])
     return jsonify(test_doc), 200
 
 
-
-# -----------------------------
+# -------------------------------------------------------------------
 # PROGRESS / ATTEMPTS ROUTES
-# -----------------------------
+# -------------------------------------------------------------------
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
 def get_test_attempt(user_id, test_id):
+    """
+    Returns either an unfinished attempt if it exists;
+    otherwise returns the most recently finished attempt for that user/test.
+    This version searches for testId as either an integer or a string.
+    """
     try:
         user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = None
     except:
-        return jsonify({"error": "Invalid user ID"}), 400
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    attempt = testAttempts_collection.find_one({
-        "userId": user_oid,
-        "testId": test_id,
-        "finished": False
-    })
+    # Build query with $or for testId
+    query = {"userId": user_oid, "finished": False}
+    if test_id_int is not None:
+        query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+    else:
+        query["testId"] = test_id
+
+    attempt = testAttempts_collection.find_one(query)
+
+    # If no unfinished attempt, check the most recent finished one
+    if not attempt:
+        query_finished = {"userId": user_oid, "finished": True}
+        if test_id_int is not None:
+            query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+        else:
+            query_finished["testId"] = test_id
+        attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
+
     if not attempt:
         return jsonify({"attempt": None}), 200
 
@@ -263,14 +294,18 @@ def update_test_attempt(user_id, test_id):
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
     except:
-        return jsonify({"error": "Invalid user ID"}), 400
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
+    filter_ = {"userId": user_oid, "finished": False, "$or": [{"testId": test_id_int}, {"testId": test_id}]}
     update_doc = {
         "$set": {
             "userId": user_oid,
-            "testId": test_id,
+            "testId": test_id_int if isinstance(test_id_int, int) else test_id,
             "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
@@ -289,10 +324,14 @@ def finish_test_attempt(user_id, test_id):
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
     except:
-        return jsonify({"error": "Invalid user ID"}), 400
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    filter_ = {"userId": user_oid, "testId": test_id, "finished": False}
+    filter_ = {"userId": user_oid, "finished": False, "$or": [{"testId": test_id_int}, {"testId": test_id}]}
     update_doc = {
         "$set": {
             "finished": True,
@@ -338,9 +377,9 @@ def list_test_attempts(user_id):
     }), 200
 
 
-# -----------------------------
+# -------------------------------------------------------------------
 # FIRST-TIME-CORRECT ANSWERS
-# -----------------------------
+# -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
     data = request.json or {}
@@ -389,9 +428,9 @@ def submit_answer(user_id):
     }), 200
 
 
-# -----------------------------
+# -------------------------------------------------------------------
 # ACHIEVEMENTS
-# -----------------------------
+# -------------------------------------------------------------------
 @api_bp.route('/achievements', methods=['GET'])
 def fetch_achievements_route():
     ach_list = get_achievements()
@@ -400,9 +439,9 @@ def fetch_achievements_route():
     return jsonify(ach_list), 200
 
 
-# ---------------------------------------------------------------
+# -------------------------------------------------------------------
 # Leaderboard Route
-# ---------------------------------------------------------------
+# -------------------------------------------------------------------
 @api_bp.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
     top_users_cursor = mainusers_collection.find(
@@ -431,9 +470,9 @@ def get_leaderboard():
     return jsonify(results), 200
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # USERNAME/EMAIL/PASSWORD CHANGES
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 @api_bp.route('/user/change-username', methods=['POST'])
 def change_username():
     data = request.json or {}
@@ -520,5 +559,4 @@ def cancel_subscription():
     Placeholder. Possibly set subscriptionActive=False
     """
     return jsonify({"message": "Cancel subscription placeholder"}), 200
-
 

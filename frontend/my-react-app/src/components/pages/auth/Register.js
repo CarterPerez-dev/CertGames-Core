@@ -111,8 +111,8 @@ function validateEmail(email) {
 // Validate password
 function validatePassword(password, username, email) {
   const errors = [];
-  if (password.length < 6 || password.length > 64) {
-    errors.push("Password must be between 6 and 64 characters long.");
+  if (password.length < 6 || password.length > 69) {
+    errors.push("Password must be between 6 and 69 characters long.");
   }
   if (/[ \t\r\n<>]/.test(password)) {
     errors.push("Password cannot contain whitespace or < or > characters.");
