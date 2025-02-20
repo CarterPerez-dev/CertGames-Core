@@ -1305,5 +1305,4 @@
       "examTip": "DNS resolution problems can be caused by corrupted caches, poisoned DNS, or HOSTS file modifications; flushing the DNS cache and checking the HOSTS file are common troubleshooting steps."
     },
   ]
-});
-    
+});   
