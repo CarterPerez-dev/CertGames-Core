@@ -1,3 +1,5 @@
+/* src/components/pages/store/UserProfile.css */
+
 /* FULL-SCREEN BACKGROUND (only if .profile-container is in DOM) */
 body:has(.profile-container) {
   margin: 0;
@@ -18,7 +20,7 @@ body:has(.profile-container) {
 }
 
 /*******************************************/
-/* Base styles (as provided)               */
+/* Base styles                             */
 /*******************************************/
 
 .profile-container {
@@ -155,32 +157,21 @@ body:has(.profile-container) {
   color: #ffcccc;
 }
 
-/* UserProfile.css (add these rules or merge them with existing) */
+/*******************************************/
+/* Additional styling for the change fields */
+/*******************************************/
 
-/* For the toggles in the profile actions card */
 .change-section {
-  margin-top: 0.75rem;
+  position: relative;
+  margin-top: 1rem;
 }
 
-.password-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.5rem;
+.change-section input {
+  width: 100%;
+  padding-right: 40px; /* Make room for an icon if needed */
+  box-sizing: border-box;
 }
 
-
-/* Eye icon inside the input (absolute on the right) */
-.eye-icon {
-  margin-left: -30px;
-  cursor: pointer;
-  color: #666;
-}
-
-.eye-icon:hover {
-  color: #000;
-}
-
-/* group the buttons horizontally for submit/cancel */
 .change-section-buttons {
   display: flex;
   gap: 1rem;
@@ -217,6 +208,10 @@ body:has(.profile-container) {
   color: #333;
 }
 
+/*******************************************/
+/* Inputs and unique eye icon classes      */
+/*******************************************/
+
 input[type="text"],
 input[type="password"],
 input[type="email"] {
@@ -229,14 +224,96 @@ input[type="email"] {
   font-size: 1rem;
 }
 
+/* Overview password row */
+.password-display-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.password-value-container {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  padding-right: 35px; /* space for the eye icon */
+}
+
+.password-value-container span {
+  padding: 8px;
+  font-size: 0.95rem;
+}
+
 /*******************************************/
-/* 1) Extra-Small Devices: max-width 320px */
+/* Change Password Section                 */
 /*******************************************/
+
+.change-password-section {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.password-row {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 8px 35px 8px 12px; /* room for eye icon on right */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+/*******************************************/
+/* The unique "profile-eye-icon" class     */
+/*******************************************/
+
+.profile-eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  z-index: 2;
+}
+
+.profile-eye-icon:hover {
+  color: #333;
+}
+
+.profile-eye-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/*******************************************/
+/* Responsive breakpoints                  */
+/*******************************************/
+
+/* 1) Extra-Small: max-width 320px */
 @media (max-width: 320px) {
   .profile-container {
     padding: 10px;
     max-width: 100%;
-    white-space: normal;
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
@@ -295,9 +372,7 @@ input[type="email"] {
   }
 }
 
-/*******************************************/
-/* 2) Small Devices: max-width 480px       */
-/*******************************************/
+/* 2) Small Devices: max-width 480px */
 @media (max-width: 480px) {
   .profile-container {
     padding: 15px;
@@ -357,9 +432,7 @@ input[type="email"] {
   }
 }
 
-/*******************************************/
 /* 3) Medium-Small Devices: max-width 600px*/
-/*******************************************/
 @media (max-width: 600px) {
   .profile-container {
     padding: 15px;
@@ -412,9 +485,7 @@ input[type="email"] {
   }
 }
 
-/*******************************************/
 /* 4) Tablets / Larger Mobiles: max-width 768px */
-/*******************************************/
 @media (max-width: 768px) {
   .profile-container {
     padding: 20px;

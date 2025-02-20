@@ -1,5 +1,3 @@
-# models.py
-
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -52,7 +50,6 @@ def has_forbidden_unicode_scripts(s):
                 return True
     return False
 
-
 def disallow_mixed_scripts(s):
     """
     Example check for mixing major scripts (Latin + Cyrillic, etc.).
@@ -77,7 +74,6 @@ def disallow_mixed_scripts(s):
             return True
 
     return False
-
 
 def validate_username(username):
     """
@@ -133,7 +129,6 @@ def validate_username(username):
         return False, errors
     return True, []
 
-
 def validate_password(password, username=None, email=None):
     """
     Validates a password with very strict rules:
@@ -150,8 +145,8 @@ def validate_password(password, username=None, email=None):
     length = len(password)
 
     # 1) Length
-    if not (12 <= length <= 128):
-        errors.append("Password must be between 12 and 128 characters long.")
+    if not (6 <= length <= 69):
+        errors.append("Password must be between 6 and 69 characters long.")
 
     # 2) Disallowed whitespace or < >
     if any(ch in password for ch in [' ', '<', '>', '\t', '\r', '\n']):
@@ -201,12 +196,11 @@ def validate_password(password, username=None, email=None):
         return False, errors
     return True, []
 
-
 def validate_email(email):
     """
     Validates an email with strict rules:
       1. Normalize (NFC), strip whitespace.
-      2. 6..254 length.  <-- (Docstring outdated if you changed min to 1 or 5)
+      2. 5..69 length.
       3. No control chars, <, >, etc.
       4. Exactly one @.
     Returns: (True, []) if valid, else (False, [list of error messages]).
@@ -412,8 +406,6 @@ def get_shop_items():
     in ascending order by title (or another field),
     to ensure stable ordering.
     """
-    # If you want them returned in a particular order,
-    # you can do .sort("title", 1) or another field:
     return list(shop_collection.find({}).sort("title", 1))
 
 def purchase_item(user_id, item_id):
@@ -447,18 +439,15 @@ def purchase_item(user_id, item_id):
     if oid in purchased:
         return {"success": False, "message": "Item already purchased"}
 
-    # Deduct cost
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$inc": {"coins": -cost}}
     )
-    # Add to purchased
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$addToSet": {"purchasedItems": oid}}
     )
 
-    # Handle item type
     item_type = item.get("type")
     if item_type == "xpBoost":
         new_boost = item.get("effectValue", 1.0)
@@ -467,7 +456,6 @@ def purchase_item(user_id, item_id):
             {"$set": {"xpBoost": new_boost}}
         )
     elif item_type == "avatar":
-        # Optionally auto-equip
         pass
     elif item_type == "nameColor":
         new_color = item.get("effectValue", None)
@@ -486,6 +474,9 @@ def get_achievements():
     return list(achievements_collection.find({}))
 
 def get_test_by_id_and_category(test_id, category):
+    """
+    Fetch a single test doc by integer testId field and category field.
+    """
     try:
         test_id_int = int(test_id)
     except:
@@ -526,7 +517,7 @@ def check_and_unlock_achievements(user_id):
         "$expr": {"$eq": ["$score", "$totalQuestions"]}
     })
 
-    # 3) Fetch all finished attempts in full, so we can compute percentages, categories, etc.
+    # 3) Fetch all finished attempts
     finished_cursor = testAttempts_collection.find(
         {"userId": user_oid, "finished": True}
     )
@@ -536,7 +527,7 @@ def check_and_unlock_achievements(user_id):
         sc = doc.get("score", 0)
         pct = (sc / tq) * 100 if tq else 0
         cat = doc.get("category", "global")
-        finished_at = doc.get("finishedAt", None)  # for chronological consecutive perfects
+        finished_at = doc.get("finishedAt", None)
         finished_tests.append({
             "test_id": doc.get("testId", "0"),
             "score": sc,
@@ -546,8 +537,6 @@ def check_and_unlock_achievements(user_id):
             "finishedAt": finished_at
         })
 
-    # 4) For "consecutivePerfects", do it chronologically by finishedAt
-    #    So we sort by finishedAt ascending. If finishedAt is missing, fallback to some default.
     from datetime import datetime
     finished_tests.sort(
         key=lambda x: x["finishedAt"] if x["finishedAt"] else datetime(1970,1,1)
@@ -563,31 +552,22 @@ def check_and_unlock_achievements(user_id):
         else:
             current_streak = 0
 
-    # 5) Group tests by category
     from collections import defaultdict
     category_groups = defaultdict(list)
     for ft in finished_tests:
         category_groups[ft["category"]].append(ft)
 
-    # 6) Sum of total questions answered across all finished attempts
-    #    (This is for achievements like "answer_machine_1000")
     sum_of_questions = sum(ft["totalQuestions"] for ft in finished_tests)
 
-    # 7) Possibly define total test & question thresholds
-    #    If your entire platform has 130 tests total:
     TOTAL_TESTS = 130
-    # If you claim to have 10,000 total questions, you can define:
-    TOTAL_QUESTIONS = 10000  # or whatever you prefer
+    TOTAL_QUESTIONS = 10000
 
-    # 8) Gather user data we might check (coins, level, etc.)
     user_coins = user.get("coins", 0)
     user_level = user.get("level", 1)
 
-    # 9) achievements user already has
     unlocked = user.get("achievements", [])
     newly_unlocked = []
 
-    # 10) fetch definitions from DB
     all_ach = get_achievements()
 
     for ach in all_ach:
@@ -595,105 +575,93 @@ def check_and_unlock_achievements(user_id):
         criteria = ach.get("criteria", {})
 
         if aid in unlocked:
-            continue  # already got it
+            continue
 
-        # 1) testCount => e.g. if total_finished >= criteria["testCount"]
+        # testCount
         if "testCount" in criteria:
             if total_finished >= criteria["testCount"]:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 2) coins => e.g. if user_coins >= X
+        # coins
         if "coins" in criteria:
             if user_coins >= criteria["coins"]:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 3) level => e.g. if user_level >= X
+        # level
         if "level" in criteria:
             if user_level >= criteria["level"]:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 4) perfectTests => e.g. if user has >= N perfect tests total
+        # perfectTests
         if "perfectTests" in criteria:
             needed = criteria["perfectTests"]
             if perfect_tests >= needed:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 5) consecutivePerfects => e.g. memory_master
+        # consecutivePerfects
         if "consecutivePerfects" in criteria:
             needed = criteria["consecutivePerfects"]
             if max_consecutive >= needed:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 6) allTestsCompleted => e.g. test_finisher
-        #    If your platform has 130 tests, check if user finished >= 130 distinct tests
+        # allTestsCompleted
         if "allTestsCompleted" in criteria and criteria["allTestsCompleted"] is True:
             if total_finished >= TOTAL_TESTS:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 7) testsCompletedInCategory => e.g. "subject_finisher" needs 10 tests in one category
+        # testsCompletedInCategory
         if "testsCompletedInCategory" in criteria:
             needed = criteria["testsCompletedInCategory"]
-            # Check if there's any category ccat that has >= needed tests
             for ccat, attempts in category_groups.items():
                 if len(attempts) >= needed:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
                     break
 
-        # 8) redemption_arc => minScoreBefore & minScoreAfter
+        # redemption_arc => minScoreBefore & minScoreAfter
         if ("minScoreBefore" in criteria and "minScoreAfter" in criteria
                 and aid not in unlocked):
             min_before = criteria["minScoreBefore"]
             min_after = criteria["minScoreAfter"]
-            # if user has any test <= min_before% AND any test >= min_after%
             low_test = any(ft["percentage"] <= min_before for ft in finished_tests)
             high_test = any(ft["percentage"] >= min_after for ft in finished_tests)
             if low_test and high_test:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 9) minScore => e.g. "accuracy_king" => user must have >= X% on at least 1 test
+        # minScore => e.g. "accuracy_king"
         if "minScore" in criteria:
             needed = criteria["minScore"]
-            # check if user has at least one test with >= needed
             if any(ft["percentage"] >= needed for ft in finished_tests):
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-        # 10) minScoreGlobal => e.g. "exam_conqueror" => user must have 80%+ on EVERY test
+        # minScoreGlobal => e.g. "exam_conqueror"
         if "minScoreGlobal" in criteria:
             min_g = criteria["minScoreGlobal"]
-            # Must finish all tests in the platform => total_finished >= TOTAL_TESTS
-            # Then check all have >= min_g
             if total_finished >= TOTAL_TESTS:
-                # confirm user indeed has attempts for each test? 
-                # or assume if total_finished >= 130 => they covered them all
-                # check if all attempts have >= min_g
-                # slight logic detail: you might need to ensure user actually finished *every* test, i.e. no missing testId
                 all_above = all(ft["percentage"] >= min_g for ft in finished_tests)
                 if all_above:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
 
-        # 11) minScoreInCategory => e.g. "subject_specialist" => 80%+ on all 10 tests in one category
+        # minScoreInCategory => e.g. "subject_specialist"
         if "minScoreInCategory" in criteria:
             min_cat = criteria["minScoreInCategory"]
-            # check each category group. If user has 10 tests in that category & all >= min_cat => unlock
             for ccat, attempts in category_groups.items():
                 if len(attempts) == 10:
-                    # verify all attempts in that ccat are >= min_cat
                     if all(ft["percentage"] >= min_cat for ft in attempts):
                         unlocked.append(aid)
                         newly_unlocked.append(aid)
                         break
 
-        # 12) perfectTestsInCategory => e.g. "category_perfectionist" => 10 perfect tests in 1 category
+        # perfectTestsInCategory => "category_perfectionist"
         if "perfectTestsInCategory" in criteria:
             needed = criteria["perfectTestsInCategory"]
             for ccat, attempts in category_groups.items():
@@ -703,25 +671,21 @@ def check_and_unlock_achievements(user_id):
                     newly_unlocked.append(aid)
                     break
 
-        # 13) perfectTestsGlobal => e.g. "absolute_perfectionist" => 100% on ALL tests in platform
+        # perfectTestsGlobal => "absolute_perfectionist"
         if "perfectTestsGlobal" in criteria and criteria["perfectTestsGlobal"] is True:
-            # user must have finished all tests & each is perfect
             if total_finished >= TOTAL_TESTS:
-                # check if all are 100%
                 all_perfect = all(ft["percentage"] == 100 for ft in finished_tests)
                 if all_perfect:
                     unlocked.append(aid)
                     newly_unlocked.append(aid)
 
-        # 14) totalQuestions => e.g. "answer_machine_1000", "knowledge_beast_5000", etc.
-        #    means user must have answered >= X questions across all attempts
+        # totalQuestions => e.g. "answer_machine_1000"
         if "totalQuestions" in criteria:
             needed_q = criteria["totalQuestions"]
             if sum_of_questions >= needed_q:
                 unlocked.append(aid)
                 newly_unlocked.append(aid)
 
-    # If we unlocked new ones, save them to the user doc
     if newly_unlocked:
         mainusers_collection.update_one(
             {"_id": user_oid},

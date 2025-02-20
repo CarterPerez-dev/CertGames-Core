@@ -1,9 +1,9 @@
 // src/components/pages/store/UserProfile.js
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, fetchUserData } from '../store/userSlice'; // fetchUserData
+import { logout, fetchUserData } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
-import './UserProfile.css'; // We'll add some input styling improvements here
+import './UserProfile.css'; // Our updated CSS with the unique eye icon
 
 import '../auth/auth.css';
 import '../auth/AuthToast.css'; 
@@ -237,7 +237,7 @@ function frontValidatePassword(password, username, email) {
 }
 
 // ====================================
-// Icon mapping
+// (Optional) Achievement Icons
 // ====================================
 const iconMapping = {
   test_rookie: FaTrophy,
@@ -284,9 +284,11 @@ const UserProfile = () => {
     achievements = [],
     currentAvatar,
     purchasedItems,
-    subscriptionActive
+    subscriptionActive,
+    password
   } = useSelector((state) => state.user);
 
+  // Toggles for showing/hiding different forms
   const [showChangeUsername, setShowChangeUsername] = useState(false);
   const [newUsername, setNewUsername] = useState('');
 
@@ -295,24 +297,26 @@ const UserProfile = () => {
 
   const [showChangePassword, setShowChangePassword] = useState(false);
 
-  // Add show/hide toggle for Old Password
+  // Toggles for showing/hiding password text
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
 
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Toggles for new/confirm password
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Add a local state to show/hide PasswordRequirements
   const [showRequirements, setShowRequirements] = useState(false);
 
+  // The "current password" in the overview
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+
+  // For success/error messages
   const [statusMessage, setStatusMessage] = useState('');
 
   let profilePicUrl = '/avatars/avatar1.png'; 
-  // or logic for currentAvatar
+  // or logic if you have stored 'currentAvatar'
 
   const handleLogout = () => {
     dispatch(logout());
@@ -443,13 +447,13 @@ const UserProfile = () => {
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      setShowRequirements(false); // Hide the checklist again
+      setShowRequirements(false);
     } catch (err) {
       setStatusMessage('Error changing password: ' + err.message);
     }
   };
 
-  // CANCEL SUBSCRIPTION
+  // CANCEL SUBSCRIPTION (placeholder)
   const handleCancelSubscription = async () => {
     try {
       const res = await fetch('/api/test/subscription/cancel', {
@@ -489,6 +493,19 @@ const UserProfile = () => {
             <p><span className="detail-label">Coins:</span> {coins}</p>
             <p><span className="detail-label">Email:</span> {email}</p>
             <p><span className="detail-label">Subscription Active:</span> {subscriptionActive ? 'Yes' : 'No'}</p>
+
+            <div className="password-display-row">
+              <span className="detail-label">Password:</span>
+              <div className="password-value-container">
+                <span>{showCurrentPassword ? password : '••••••••'}</span>
+                <button 
+                  className="profile-eye-icon"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                >
+                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -550,62 +567,69 @@ const UserProfile = () => {
               </button>
             ) : (
               <div className="change-section change-password-section">
-                {/* Add show/hide toggle for Old Password */}
+                <h3>Change Password</h3>
                 <div className="password-row">
-                  <input 
-                    type={showOldPassword ? 'text' : 'password'}
-                    placeholder="Old password"
-                    value={oldPassword}
-                    onChange={(e) => setOldPassword(e.target.value)}
-                  />
-                  <span
-                    className="eye-icon"
-                    onClick={() => setShowOldPassword(!showOldPassword)}
-                  >
-                    {showOldPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                  <div className="password-input-container">
+                    <input 
+                      type={showOldPassword ? 'text' : 'password'}
+                      placeholder="Old password"
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="profile-eye-icon"
+                      onClick={() => setShowOldPassword(!showOldPassword)}
+                    >
+                      {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="password-row">
+                  <div className="password-input-container">
+                    <input 
+                      type={showNewPassword ? 'text' : 'password'}
+                      placeholder="New password"
+                      value={newPassword}
+                      onFocus={() => setShowRequirements(true)} 
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      onBlur={() => {
+                        if (!newPassword) {
+                          setShowRequirements(false);
+                        }
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className="profile-eye-icon"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="password-row">
-                  <input 
-                    type={showNewPassword ? 'text' : 'password'}
-                    placeholder="New password"
-                    value={newPassword}
-                    onFocus={() => setShowRequirements(true)} 
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    onBlur={() => {
-                      // If user leaves the input and newPassword is empty, hide
-                      if (!newPassword) {
-                        setShowRequirements(false);
-                      }
-                    }}
-                  />
-                  <span
-                    className="eye-icon"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                  >
-                    {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                </div>
-
-                {/* Conditionally show the PasswordRequirements only if user focuses or typed something */}
                 {showRequirements && (
                   <PasswordRequirements password={newPassword} />
                 )}
 
                 <div className="password-row">
-                  <input 
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm new password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                  <span
-                    className="eye-icon"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
+                  <div className="password-input-container">
+                    <input 
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirm new password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="profile-eye-icon"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
 
                 <div className="change-section-buttons">
@@ -670,3 +694,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
