@@ -2,8 +2,7 @@
 
 i need to add a daily bonus hwere you get 1000 coins. it will have a page on the sdiabr called like daily bonus and says "laim bonus" and if you click the button it give syou 1000 coins, and it resets every 24 hours so everyday yiou can go to the page and claim 1000 coins, obvisolsy it has to be unqiue to the user.
 
-so the test progress saves in the bakcned databse so it can be baically across all broswers and such and i liek it liek that, howveer like when i go back to the test list it doesnt actually show the prgress frontned eise but if you click teh test then you load back to where you left off, also when you finish a test it doesnt show your score and have buttons to restart or view the review. so esetially the partial progress and finish tests dont appear on the actual test list, how do i fi xtht without doing local storgae/browser storgae but actually keep it all backedn wise and yet still have it show partial porgress and finished tests in the frotnend across different browsers/devices/operating systems/ ip address etc etc- for the user on the test lit test boxes specifically?
-
+Review button
 
 so if you forgot about my testlist pages here they are but i woudl rathe redit it gloablly through teh gloabl test page if possible that edit all my testlist pages unles thats teh issue on why it doesnt show the progress or finished tests/score with buttons to do the review or restart it. becaus ei really like how it keepsd the users progress and stuff exactly how it is now across all broswers and stuff but only issue is it wont show it for the testlist test boxes- so heres teh testlist if thats absolutly the issue (keep in mind i have 13 testlists but im showing you one as an aexample becasue tehy are all pretty similkar)
 
