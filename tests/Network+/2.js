@@ -152,7 +152,7 @@ db.tests.insertOne({
       "question": "What is a website's domain name?",
       "options": [
         "The IP address of the website's server.",
-        "The name you type into a browser to access the website (e.g., google.com).",
+        "The name you type into a browser to access the website.",
         "The physical location of the website's server.",
         "The type of software used to build the website."
       ],
@@ -244,7 +244,7 @@ db.tests.insertOne({
       "options": [
         "A printer",
         "A monitor",
-        "A network interface card (NIC)",
+        "A NIC",
         "A keyboard"
       ],
       "correctAnswerIndex": 2,
@@ -269,7 +269,7 @@ db.tests.insertOne({
       "question": "Which device helps prevent network loops?",
       "options": [
         "Hub",
-        "Switch with STP",
+        "Switch",
         "Router",
         "Modem"
       ],
@@ -296,7 +296,7 @@ db.tests.insertOne({
       "options": [
         "A type of network cable.",
         "A set of rules for how devices communicate on a network.",
-        "A type of computer virus.",
+        "A set of rules on how to defend agaisnt a computer virus.",
         "A program for creating documents."
       ],
       "correctAnswerIndex": 1,
@@ -309,7 +309,7 @@ db.tests.insertOne({
       "options": [
         "Fiber Optic",
         "Coaxial Cable",
-        "Twisted Pair (UTP/STP)",
+        "Twisted Pair",
         "Serial Cable"
       ],
       "correctAnswerIndex": 2,
@@ -321,7 +321,7 @@ db.tests.insertOne({
       "question": "What is 'ping' used for?",
       "options": [
         "To send emails.",
-        "To test network connectivity to another device.",
+        "To test network connectivity.",
         "To browse the internet.",
         "To create documents."
       ],
