@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "CASP+",
   "testId": 7,
   "testName": "SecurityX Practice Test #7 (Challenging)",
