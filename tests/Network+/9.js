@@ -97,7 +97,7 @@ db.tests.insertOne({
     },
     {
       "id": 8,
-      "question": "A user obtains an IP from a rogue DHCP server. Which direct feature can stop unauthorized servers from handing out addresses on the corporate LAN?",
+      "question": "A user obtains an IP from a rogue DHCP server. Which feature can stop unauthorized servers from handing out addresses on the corporate LAN?",
       "options": [
         "DHCP snooping, designating only specific ports as trusted for DHCP offers",
         "Storm control limiting broadcast frames",
@@ -136,7 +136,7 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "A distribution switch CPU spikes from frequent STP recalculations. Logs show TCN (Topology Change Notification) events triggered by one user port. Which direct action is recommended FIRST?",
+      "question": "A distribution switch CPU spikes from frequent STP recalculations. Logs show TCN (Topology Change Notification) events triggered by one user port. Which action is recommended FIRST?",
       "options": [
         "Disable that port or check for a flapping link/device",
         "Enable DTP dynamic trunking on that port",
@@ -162,7 +162,7 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "Which direct measure helps prevent double-tagging VLAN hopping attacks on an 802.1Q trunk?",
+      "question": "Which measure helps prevent double-tagging VLAN hopping attacks on an 802.1Q trunk?",
       "options": [
         "Use VLAN 1 as the native VLAN consistently",
         "Manually set the trunk native VLAN to a non-default VLAN and disable DTP auto-negotiation",
@@ -287,7 +287,7 @@ db.tests.insertOne({
         "Extend the DHCP lease for internal hosts"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Permitting SSH from internal or known IP addresses is standard. Setting default allow is insecure, half-duplex is irrelevant, and DHCP lease time is about IP assignment. A firewall or ACL is the direct measure to restrict SSH.",
+      "explanation": "Permitting SSH from internal or known IP addresses is standard. Setting default allow is insecure, half-duplex is irrelevant, and DHCP lease time is about IP assignment. A firewall or ACL is the measure to restrict SSH.",
       "examTip": "Restrict management protocols to known IP ranges or a dedicated management VPN. Don’t expose SSH globally."
     },
     {
@@ -357,12 +357,12 @@ db.tests.insertOne({
     },
     {
       "id": 28,
-      "question": "Which scenario-based question is BEST solved by deploying MST (Multiple Spanning Tree)?",
+      "question": "Which is BEST solved by deploying MST (Multiple Spanning Tree)?",
       "options": [
-        "How to unify all VLANs into a single STP instance for security",
-        "How to map sets of VLANs into fewer STP instances, reducing CPU overhead vs. per-VLAN spanning tree",
-        "How to prevent trunk ports from allowing multiple VLANs",
-        "How to block DHCP offers from rogue servers"
+        "unify all VLANs into a single STP instance for security",
+        "map sets of VLANs into fewer STP instances, reducing CPU overhead vs. per-VLAN spanning tree",
+        "prevent trunk ports from allowing multiple VLANs",
+        "block DHCP offers from rogue servers"
       ],
       "correctAnswerIndex": 1,
       "explanation": "MST (correct) groups VLANs into a limited number of STP instances, lowering overhead. Single STP instance for all VLANs is less flexible, trunk blocking is a separate configuration, DHCP offers are addressed by snooping, not MST.",
@@ -409,7 +409,7 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "Which direct measure can isolate IoT devices in a separate network, limiting possible lateral movement if they're compromised?",
+      "question": "Which measure can isolate IoT devices in a separate network, limiting possible lateral movement if they're compromised?",
       "options": [
         "Assign them all to VLAN 1 for better bandwidth",
         "Map each device MAC to half-duplex ports",
@@ -461,7 +461,7 @@ db.tests.insertOne({
     },
     {
       "id": 36,
-      "question": "Which direct measure stops traffic from an IP phone bridging another unauthorized device on the same switch port, beyond the legitimate phone and PC connection?",
+      "question": "Which measure stops traffic from an IP phone bridging another unauthorized device on the same switch port, beyond the legitimate phone and PC connection?",
       "options": [
         "LLDP-MED classification",
         "Wireless band steering",
@@ -526,12 +526,12 @@ db.tests.insertOne({
     },
     {
       "id": 41,
-      "question": "Which scenario-based question is BEST resolved by implementing a clientless SSL VPN solution?",
+      "question": "Which is BEST resolved by implementing a clientless SSL VPN solution?",
       "options": [
-        "How to passively monitor traffic with a SPAN port",
-        "How to let traveling employees securely connect via a browser without installing a VPN client",
-        "How to unify all VLANs under MST",
-        "How to half-duplex the WAN link to reduce collisions"
+        "passively monitor traffic with a SPAN port",
+        "let traveling employees securely connect via a browser without installing a VPN client",
+        "unify all VLANs under MST",
+        "half-duplex the WAN link to reduce collisions"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is packet capture, Option B (correct) is the hallmark of clientless SSL VPN, Option C is STP design, Option D is link mismatch. A clientless SSL VPN only requires an HTTPS browser to connect securely to internal resources.",
@@ -539,7 +539,7 @@ db.tests.insertOne({
     },
     {
       "id": 42,
-      "question": "Which direct measure can block inbound HTTPS attempts from unknown external IPs while allowing known partners?",
+      "question": "Which measure can block inbound HTTPS attempts from unknown external IPs while allowing known partners?",
       "options": [
         "Use a DNS record for the known IPs",
         "Enable DHCP snooping on the DMZ",
@@ -630,7 +630,7 @@ db.tests.insertOne({
     },
     {
       "id": 49,
-      "question": "Which direct measure can hamper VLAN hopping by automatically turning user ports into access mode with no trunk negotiation?",
+      "question": "Which measure can hamper VLAN hopping by automatically turning user ports into access mode with no trunk negotiation?",
       "options": [
         "Disabling NAT overload on user ports",
         "Using DHCP reservations for all devices",
@@ -721,7 +721,7 @@ db.tests.insertOne({
     },
     {
       "id": 56,
-      "question": "Which direct measure helps mitigate bridging loops introduced by user-connected dumb switches or accidental cable loops on access ports?",
+      "question": "Which measure helps mitigate bridging loops introduced by user-connected dumb switches or accidental cable loops on access ports?",
       "options": [
         "802.1X EAP chaining",
         "BPDU guard placing the port in err-disable if a BPDU is received",
@@ -747,7 +747,7 @@ db.tests.insertOne({
     },
     {
       "id": 58,
-      "question": "Which direct measure addresses a single user bridging two VLANs with a small switch on an access port, creating a loop?",
+      "question": "Which measure addresses a single user bridging two VLANs with a small switch on an access port, creating a loop?",
       "options": [
         "BPDU guard on that port to err-disable if bridging BPDUs appear",
         "DHCP snooping relay",
@@ -864,7 +864,7 @@ db.tests.insertOne({
     },
     {
       "id": 67,
-      "question": "Which direct measure stops bridging loops caused by a user connecting a personal switch that sends BPDUs on an access port?",
+      "question": "Which measure stops bridging loops caused by a user connecting a personal switch that sends BPDUs on an access port?",
       "options": [
         "BPDU guard shutting down the port when it sees BPDUs",
         "DHCP snooping limiting IP addresses",
@@ -890,12 +890,12 @@ db.tests.insertOne({
     },
     {
       "id": 69,
-      "question": "Which scenario-based question is BEST addressed by configuring MST with multiple instances, each mapping a set of VLANs?",
+      "question": "Which is BEST addressed by configuring MST with multiple instances, each mapping a set of VLANs?",
       "options": [
-        "How to unify IP addresses across all core routers",
-        "How to reduce the overhead of a separate STP instance for each VLAN",
-        "How to filter DHCP offers from rogue servers",
-        "How to short-circuit EIGRP queries in large networks"
+        "unify IP addresses across all core routers",
+        "reduce the overhead of a separate STP instance for each VLAN",
+        "filter DHCP offers from rogue servers",
+        "short-circuit EIGRP queries in large networks"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is routing design, Option B (correct) MST reduces multiple STP processes, Option C is DHCP snooping, Option D is EIGRP stub. MST is specifically for scaling STP in VLAN-rich networks.",
@@ -903,7 +903,7 @@ db.tests.insertOne({
     },
     {
       "id": 70,
-      "question": "Which direct measure can a switch use to confine unknown devices to a restricted VLAN if 802.1X posture checks fail?",
+      "question": "Which measure can a switch use to confine unknown devices to a restricted VLAN if 802.1X posture checks fail?",
       "options": [
         "BPDU guard enabling half-duplex",
         "Dynamic VLAN assignment or dACL from the NAC server",
@@ -942,7 +942,7 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "Which direct measure ensures a trunk port cannot form automatically with a user device that might support trunk negotiation?",
+      "question": "Which measure ensures a trunk port cannot form automatically with a user device that might support trunk negotiation?",
       "options": [
         "Enable DTP dynamic desirable",
         "Disable DTP by forcing switchport mode access or static trunk with nonegotiate",
@@ -968,7 +968,7 @@ db.tests.insertOne({
     },
     {
       "id": 75,
-      "question": "Which direct measure specifically addresses large volumes of half-open TCP connections used in SYN flood attacks?",
+      "question": "Which measure specifically addresses large volumes of half-open TCP connections used in SYN flood attacks?",
       "options": [
         "Enabling jumbo frames on the WAN",
         "TCP SYN cookies, dropping incomplete connections from the backlog",
@@ -1020,12 +1020,12 @@ db.tests.insertOne({
     },
     {
       "id": 79,
-      "question": "Which NAC scenario-based question is BEST solved by implementing posture checks that verify OS patch levels and antivirus definitions at each new connection?",
+      "question": "Which NAC is BEST solved by implementing posture checks that verify OS patch levels and antivirus definitions at each new connection?",
       "options": [
-        "How to unify VLAN trunking across multiple switches",
-        "How to ensure only fully compliant devices get normal access, quarantining risky endpoints",
-        "How to reduce the spanning tree diameter",
-        "How to forcibly use half-duplex for older clients"
+        "unify VLAN trunking across multiple switches",
+        "ensure only fully compliant devices get normal access, quarantining risky endpoints",
+        "reduce the spanning tree diameter",
+        "forcibly use half-duplex for older clients"
       ],
       "correctAnswerIndex": 1,
       "explanation": "VLAN trunk unification is a separate config, spanning tree diameter is a design, half-duplex is link mismatch. NAC posture ensures devices meet security requirements. Option B (correct) is precisely what posture checks accomplish.",
@@ -1046,12 +1046,12 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "Which scenario-based question is BEST resolved by using an SIEM platform that aggregates logs from multiple security devices, correlating them in real time?",
+      "question": "Which is BEST resolved by using an SIEM platform that aggregates logs from multiple security devices, correlating them in real time?",
       "options": [
-        "How to unify DHCP scopes across subnets",
-        "How to physically test cable length behind walls",
-        "How to detect advanced or distributed attacks that might not appear suspicious in individual device logs alone",
-        "How to run half-duplex on trunk ports for better performance"
+        "unify DHCP scopes across subnets",
+        "physically test cable length behind walls",
+        "detect advanced or distributed attacks that might not appear suspicious in individual device logs alone",
+        "run half-duplex on trunk ports for better performance"
       ],
       "correctAnswerIndex": 2,
       "explanation": "SIEM is not about DHCP, cable testing, or half-duplex. A SIEM (correct) collects logs from multiple sources, analyzing them collectively to reveal potential threats that aren’t obvious from a single device’s perspective.",
@@ -1085,7 +1085,7 @@ db.tests.insertOne({
     },
     {
       "id": 84,
-      "question": "Which direct measure can block inbound telnet from the internet but allow internal telnet connections to a router?",
+      "question": "Which measure can block inbound telnet from the internet but allow internal telnet connections to a router?",
       "options": [
         "ACL: Deny telnet (TCP 23) on the router’s external interface, permit from internal subnets",
         "Enable half-duplex on the outside interface",
@@ -1111,12 +1111,12 @@ db.tests.insertOne({
     },
     {
       "id": 86,
-      "question": "Which NAC scenario-based question is BEST solved by deploying 802.1X with a RADIUS server that checks OS patch compliance?",
+      "question": "Which NAC is BEST solved by deploying 802.1X with a RADIUS server that checks OS patch compliance?",
       "options": [
-        "How to unify multiple VLAN trunk links",
-        "How to physically label switch cables",
-        "How to ensure only fully patched endpoints get normal LAN access",
-        "How to half-duplex all ports"
+        "unify multiple VLAN trunk links",
+        "physically label switch cables",
+        "ensure only fully patched endpoints get normal LAN access",
+        "half-duplex all ports"
       ],
       "correctAnswerIndex": 2,
       "explanation": "VLAN trunk links or cable labeling are separate issues. Half-duplex is irrelevant. NAC posture with 802.1X (correct) checks OS compliance and restricts unpatched devices. That’s the primary scenario NAC addresses.",
@@ -1124,7 +1124,7 @@ db.tests.insertOne({
     },
     {
       "id": 87,
-      "question": "Which direct approach on a trunk helps mitigate a double-tagging VLAN hopping exploit?",
+      "question": "Which approach on a trunk helps mitigate a double-tagging VLAN hopping exploit?",
       "options": [
         "Enable half-duplex for all trunk ports",
         "Switchport trunk native vlan 1 for default consistency",
@@ -1176,7 +1176,7 @@ db.tests.insertOne({
     },
     {
       "id": 91,
-      "question": "Which direct measure on a switch can limit the effect of microbursts for real-time voice traffic?",
+      "question": "Which measure on a switch can limit the effect of microbursts for real-time voice traffic?",
       "options": [
         "BPDU guard on user ports",
         "DHCP option 82 insertion",
@@ -1254,7 +1254,7 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "Which BGP attribute is specifically used to suggest an ingress path to neighbors by letting you set a numerical value that your neighbors compare when choosing how to enter your AS?",
+      "question": "Which BGP attribute is specifically used to suggest an ingress path to neighbors by letting you set a numerical value that your neighbors compare when choosing enter your AS?",
       "options": [
         "Community local-AS",
         "MED (Multi-Exit Discriminator)",
