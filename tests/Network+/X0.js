@@ -58,7 +58,7 @@ db.tests.insertOne({
     },
     {
       "id": 5,
-      "question": "Which direct measure can reduce overhead on an EIGRP router that regularly sees 'Stuck in Active' queries flooding across the topology?",
+      "question": "Which measure can reduce overhead on an EIGRP router that regularly sees 'Stuck in Active' queries flooding across the topology?",
       "options": [
         "Enable spanning tree root guard on distribution switches",
         "Designate remote routers as EIGRP stubs to limit query propagation",
@@ -149,12 +149,12 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "Which scenario-based question is BEST resolved by using LACP EtherChannel between two switches?",
+      "question": "Which is BEST resolved by using LACP EtherChannel between two switches?",
       "options": [
-        "How to unify DHCP scopes across different subnets",
-        "How to combine multiple physical links for higher bandwidth and redundancy in one logical channel",
-        "How to block bridging loops on access ports",
-        "How to authenticate endpoints with posture checks"
+        "unify DHCP scopes across different subnets",
+        "combine multiple physical links for higher bandwidth and redundancy in one logical channel",
+        "block bridging loops on access ports",
+        "authenticate endpoints with posture checks"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is IP address management, Option B (correct) is link aggregation, Option C is STP-based security, Option D is NAC. LACP aggregates multiple Ethernet links into a single logical link for throughput and failover.",
@@ -175,7 +175,7 @@ db.tests.insertOne({
     },
     {
       "id": 14,
-      "question": "Which direct measure can block a malicious user from forming a trunk on an access port and performing VLAN hopping attacks?",
+      "question": "Which measure can block a malicious user from forming a trunk on an access port and performing VLAN hopping attacks?",
       "options": [
         "Enable trunk dynamic auto negotiation on all ports",
         "Use ‘switchport mode access’ and disable DTP on end-user ports",
@@ -201,12 +201,12 @@ db.tests.insertOne({
     },
     {
       "id": 16,
-      "question": "Which NAC scenario-based question is BEST addressed by implementing 802.1X with dynamic VLAN assignment from a posture-checking RADIUS server?",
+      "question": "Which NAC is BEST addressed by implementing 802.1X with dynamic VLAN assignment from a posture-checking RADIUS server?",
       "options": [
-        "How to unify all switchports into trunk mode",
-        "How to ensure unpatched devices are automatically placed in a remediation VLAN",
-        "How to half-duplex the WAN for less overhead",
-        "How to disable DHCP across all VLANs"
+        "unify all switchports into trunk mode",
+        "ensure unpatched devices are automatically placed in a remediation VLAN",
+        "half-duplex the WAN for less overhead",
+        "disable DHCP across all VLANs"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Trunking, half-duplex, and disabling DHCP are irrelevant. NAC posture solutions typically push a quarantine VLAN if the endpoint fails compliance. That’s exactly what 802.1X dynamic VLAN assignment does.",
@@ -253,7 +253,7 @@ db.tests.insertOne({
     },
     {
       "id": 20,
-      "question": "Which direct measure helps block inbound SSH attempts from arbitrary external IPs while permitting known management networks?",
+      "question": "Which measure helps block inbound SSH attempts from arbitrary external IPs while permitting known management networks?",
       "options": [
         "Set half-duplex on the WAN interface",
         "Enable trunk auto negotiation on the firewall",
@@ -318,7 +318,7 @@ db.tests.insertOne({
     },
     {
       "id": 25,
-      "question": "Which direct measure can hamper VLAN hopping by preventing dynamic trunk formation on user ports?",
+      "question": "Which measure can hamper VLAN hopping by preventing dynamic trunk formation on user ports?",
       "options": [
         "Enable trunk dynamic desirable",
         "switchport mode access + switchport nonegotiate to disable DTP",
@@ -340,16 +340,16 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Local Preference influences egress, MED shapes inbound, Origin is a tiebreaker. Communities (correct) are tags that can be matched by route-maps for custom policies, but alone they do not alter path selection. They’re used in a more flexible policy context.",
-      "examTip": "BGP communities let you group routes for advanced manipulations or to signal your neighbors on how to treat them (e.g., no-export)."
+      "examTip": "BGP communities let you group routes for advanced manipulations or to signal your neighbors on treat them (e.g., no-export)."
     },
     {
       "id": 27,
-      "question": "Which NAC scenario-based question is BEST resolved by implementing dACLs (downloadable ACLs) from the RADIUS server upon user authentication?",
+      "question": "Which NAC is BEST resolved by implementing dACLs (downloadable ACLs) from the RADIUS server upon user authentication?",
       "options": [
-        "How to unify STP root settings for multiple VLANs",
-        "How to forcibly half-duplex all user devices",
-        "How to tailor network permissions per user after 802.1X login without reconfiguring the switch ACLs manually",
-        "How to distribute DHCP offers from multiple servers"
+        "unify STP root settings for multiple VLANs",
+        "forcibly half-duplex all user devices",
+        "tailor network permissions per user after 802.1X login without reconfiguring the switch ACLs manually",
+        "distribute DHCP offers from multiple servers"
       ],
       "correctAnswerIndex": 2,
       "explanation": "STP, half-duplex, and DHCP distribution are unrelated. dACL (correct) is a NAC approach letting the RADIUS server push unique ACL rules per session. This yields dynamic, user-specific network policies.",
@@ -422,7 +422,7 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "Which direct measure helps mitigate a rogue DHCP server on the LAN, handing out bogus IP info?",
+      "question": "Which measure helps mitigate a rogue DHCP server on the LAN, handing out bogus IP info?",
       "options": [
         "DHCP snooping designating trusted ports for valid DHCP offers",
         "Root guard for bridging loops",
@@ -552,12 +552,12 @@ db.tests.insertOne({
     },
     {
       "id": 43,
-      "question": "Which scenario-based question is BEST resolved by implementing MST in a multi-VLAN environment?",
+      "question": "Which is BEST resolved by implementing MST in a multi-VLAN environment?",
       "options": [
-        "How to unify IP addressing across the WAN",
-        "How to run half-duplex on all VLANs",
-        "How to cut down on separate STP instances by grouping VLANs into fewer MST instances",
-        "How to block rogue DHCP servers"
+        "unify IP addressing across the WAN",
+        "run half-duplex on all VLANs",
+        "cut down on separate STP instances by grouping VLANs into fewer MST instances",
+        "block rogue DHCP servers"
       ],
       "correctAnswerIndex": 2,
       "explanation": "MST (correct) merges VLANs into fewer STP instances, reducing overhead. WAN IP, half-duplex, and DHCP security are separate. MST is specifically a scalable spanning tree solution for numerous VLANs.",
@@ -591,7 +591,7 @@ db.tests.insertOne({
     },
     {
       "id": 46,
-      "question": "Which direct measure can block inbound telnet from unknown external IPs, ensuring only a management subnet can telnet to the router?",
+      "question": "Which measure can block inbound telnet from unknown external IPs, ensuring only a management subnet can telnet to the router?",
       "options": [
         "ACL permitting TCP 23 only from internal or management subnets",
         "Enable half-duplex on the outside interface",
@@ -617,12 +617,12 @@ db.tests.insertOne({
     },
     {
       "id": 48,
-      "question": "Which scenario-based question is BEST solved by IPsec tunnel mode between two branch routers?",
+      "question": "Which is BEST solved by IPsec tunnel mode between two branch routers?",
       "options": [
-        "How to forcibly half-duplex the WAN link",
-        "How to secure site-to-site traffic over an untrusted network by encrypting entire IP packets",
-        "How to unify VLAN trunking across the WAN",
-        "How to block inbound TCP port 23"
+        "forcibly half-duplex the WAN link",
+        "secure site-to-site traffic over an untrusted network by encrypting entire IP packets",
+        "unify VLAN trunking across the WAN",
+        "block inbound TCP port 23"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Tunnel mode IPsec encrypts entire IP packets between sites, providing site-to-site VPN security. The other options are unrelated or partial. IPsec tunnel mode is standard for WAN encryption over public links.",
@@ -643,7 +643,7 @@ db.tests.insertOne({
     },
     {
       "id": 50,
-      "question": "Which direct measure does NAC posture commonly impose for a device that fails OS patch checks, restricting it from normal LAN?",
+      "question": "Which measure does NAC posture commonly impose for a device that fails OS patch checks, restricting it from normal LAN?",
       "options": [
         "Putting the port in half-duplex loopback",
         "Assigning it to a quarantine VLAN or applying a restricted dACL",
@@ -721,7 +721,7 @@ db.tests.insertOne({
     },
     {
       "id": 56,
-      "question": "A trunk link experiences double-tagging VLAN hopping attempts. Which direct measure addresses that attack vector?",
+      "question": "A trunk link experiences double-tagging VLAN hopping attempts. Which measure addresses that attack vector?",
       "options": [
         "Keep VLAN 1 as native VLAN everywhere",
         "Disable trunk negotiation (DTP) and set a non-default native VLAN explicitly",
@@ -799,15 +799,15 @@ db.tests.insertOne({
     },
     {
       "id": 62,
-      "question": "Which scenario-based question is BEST solved by enabling a SIEM solution that aggregates logs from multiple firewalls, servers, and IDS sensors?",
+      "question": "Which is BEST solved by enabling a SIEM solution that aggregates logs from multiple firewalls, servers, and IDS sensors?",
       "options": [
-        "How to unify VLAN trunking across the campus",
-        "How to detect subtle or distributed attacks by correlating events in real time",
-        "How to enforce half-duplex on user ports",
-        "How to assign a static default gateway to each host"
+        "unify VLAN trunking across the campus",
+        "detect subtle or distributed attacks by correlating events in real time",
+        "enforce half-duplex on user ports",
+        "assign a static default gateway to each host"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VLAN trunking, half-duplex, and default gateway assignment are separate. SIEM (correct) is about log correlation from various sources to reveal complex threats. That’s the scenario-based question it addresses.",
+      "explanation": "VLAN trunking, half-duplex, and default gateway assignment are separate. SIEM (correct) is about log correlation from various sources to reveal complex threats. That’s the it addresses.",
       "examTip": "SIEM platforms unify logs, enabling analytics or correlation to spot distributed attacks otherwise missed if logs stayed siloed."
     },
     {
@@ -864,12 +864,12 @@ db.tests.insertOne({
     },
     {
       "id": 67,
-      "question": "Which scenario-based question is BEST solved by implementing EIGRP stub routing on branch routers?",
+      "question": "Which is BEST solved by implementing EIGRP stub routing on branch routers?",
       "options": [
-        "How to reduce EIGRP query scope in hub-and-spoke designs, avoiding SIA storms",
-        "How to unify half-duplex links across the WAN",
-        "How to block rogue DHCP servers",
-        "How to implement 802.1X posture checks"
+        "reduce EIGRP query scope in hub-and-spoke designs, avoiding SIA storms",
+        "unify half-duplex links across the WAN",
+        "block rogue DHCP servers",
+        "implement 802.1X posture checks"
       ],
       "correctAnswerIndex": 0,
       "explanation": "EIGRP stubs do not help half-duplex or DHCP. NAC posture is unrelated. EIGRP stub (correct) is specifically for limiting query propagation in large or hub-and-spoke designs, preventing extensive SIA episodes.",
@@ -924,17 +924,17 @@ db.tests.insertOne({
         "LLDP neighbor discovery"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BPDU guard (correct) is the direct measure. DHCP snooping secures IP addresses, half-duplex is link mismatch, LLDP is device info. If the switch sees STP frames from an access port, it disables that port to prevent loops.",
+      "explanation": "BPDU guard (correct) is the measure. DHCP snooping secures IP addresses, half-duplex is link mismatch, LLDP is device info. If the switch sees STP frames from an access port, it disables that port to prevent loops.",
       "examTip": "BPDU guard is a critical security step on edge ports, quickly shutting them if bridging devices appear."
     },
     {
       "id": 72,
-      "question": "Which scenario-based question is BEST solved by an IPsec tunnel mode between data center routers?",
+      "question": "Which is BEST solved by an IPsec tunnel mode between data center routers?",
       "options": [
-        "How to unify VLAN trunking across the WAN",
-        "How to encrypt entire IP packets for secure site-to-site data center replication over public networks",
-        "How to forcibly half-duplex for old devices",
-        "How to push a DHCP reservation to each node"
+        "unify VLAN trunking across the WAN",
+        "encrypt entire IP packets for secure site-to-site data center replication over public networks",
+        "forcibly half-duplex for old devices",
+        "push a DHCP reservation to each node"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Trunking and half-duplex are unrelated, DHCP reservation is IP assignment. IPsec tunnel mode (correct) is standard for site-to-site encryption, encapsulating entire IP packets over untrusted transit links.",
@@ -994,7 +994,7 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "A distribution switch sees bridging loops after a user daisychains a small switch. Which direct feature disables that port upon receiving STP frames from the user device?",
+      "question": "A distribution switch sees bridging loops after a user daisychains a small switch. Which feature disables that port upon receiving STP frames from the user device?",
       "options": [
         "BPDU guard",
         "DHCP snooping binding",
@@ -1007,12 +1007,12 @@ db.tests.insertOne({
     },
     {
       "id": 78,
-      "question": "Which NAC scenario-based question is BEST resolved by 802.1X posture checks that validate OS patches and AV, quarantining non-compliant endpoints?",
+      "question": "Which NAC is BEST resolved by 802.1X posture checks that validate OS patches and AV, quarantining non-compliant endpoints?",
       "options": [
-        "How to unify trunking across the WAN",
-        "How to physically label cables in the MDF",
-        "How to ensure only secure devices gain full network access while others remain restricted",
-        "How to block inbound DNS requests"
+        "unify trunking across the WAN",
+        "physically label cables in the MDF",
+        "ensure only secure devices gain full network access while others remain restricted",
+        "block inbound DNS requests"
       ],
       "correctAnswerIndex": 2,
       "explanation": "Trunking, labeling, or inbound DNS blocks are separate. NAC posture with 802.1X (correct) is specifically about verifying device compliance. If it fails, the device is restricted or denied.",
@@ -1059,7 +1059,7 @@ db.tests.insertOne({
     },
     {
       "id": 82,
-      "question": "Which direct measure can hamper MAC flooding attempts that try to overload a switch’s CAM table?",
+      "question": "Which measure can hamper MAC flooding attempts that try to overload a switch’s CAM table?",
       "options": [
         "Port security limiting MAC addresses per interface",
         "BPDU guard blocking bridging loops",
@@ -1072,12 +1072,12 @@ db.tests.insertOne({
     },
     {
       "id": 83,
-      "question": "Which NAC scenario-based question is BEST resolved by using a RADIUS-driven downloadable ACL upon 802.1X authentication?",
+      "question": "Which NAC is BEST resolved by using a RADIUS-driven downloadable ACL upon 802.1X authentication?",
       "options": [
-        "How to unify all VLAN trunk ports for guest traffic",
-        "How to apply user-specific or dynamic ACLs for fine-grained network access without statically coding each switch",
-        "How to run half-duplex on distribution links",
-        "How to block bridging loops via root guard"
+        "unify all VLAN trunk ports for guest traffic",
+        "apply user-specific or dynamic ACLs for fine-grained network access without statically coding each switch",
+        "run half-duplex on distribution links",
+        "block bridging loops via root guard"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Trunking for guests, half-duplex, or STP root guard are separate. Downloadable ACL (correct) from RADIUS is a NAC approach for dynamic, user-specific security policies. This addresses per-user or per-session restrictions.",
@@ -1254,7 +1254,7 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "Which direct measure can mitigate bridging loops formed by a user plugging in a rogue switch on an access port?",
+      "question": "Which measure can mitigate bridging loops formed by a user plugging in a rogue switch on an access port?",
       "options": [
         "Enable DHCP snooping binding",
         "Use an ACL on the user VLAN",
@@ -1295,10 +1295,10 @@ db.tests.insertOne({
       "id": 100,
       "question": "Which NAC posture scenario is BEST solved by 802.1X plus a RADIUS server checking if endpoints meet AV or OS patch policies, then quarantining them if they do not?",
       "options": [
-        "How to unify half-duplex for older NICs",
-        "How to ensure no unpatched or insecure devices gain full network access by automatically isolating them in a restricted VLAN",
-        "How to forcibly trunk all VLANs to each user port",
-        "How to set the STP root in each VLAN instance"
+        "unify half-duplex for older NICs",
+        "ensure no unpatched or insecure devices gain full network access by automatically isolating them in a restricted VLAN",
+        "forcibly trunk all VLANs to each user port",
+        "set the STP root in each VLAN instance"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Half-duplex NICs, trunk ports, or STP root are separate. NAC posture with 802.1X (correct) automatically checks device security, placing non-compliant endpoints in a quarantine. That is exactly how NAC addresses compromised or unpatched devices.",
