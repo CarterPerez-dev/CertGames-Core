@@ -79,7 +79,7 @@
         "SLAAC"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Dual stack runs v4 and v6 simultaneously, NAT64 translates v6 to v4, Tunneling (6to4, ISATAP, etc.) (correct) encapsulates v6 traffic, SLAAC is auto-config but does not solve IPv4 core limitations. Tunnels allow IPv6 to traverse IPv4 networks without direct translation.",
+      "explanation": "Dual stack runs v4 and v6 simultaneously, NAT64 translates v6 to v4, Tunneling (6to4, ISATAP, etc.) (correct) encapsulates v6 traffic, SLAAC is auto-config but does not solve IPv4 core limitations. Tunnels allow IPv6 to traverse IPv4 networks without  translation.",
       "examTip": "When an IPv4 backbone can’t be upgraded, tunneling solutions (6to4, ISATAP, GRE, etc.) carry IPv6 over IPv4."
     },
     {
@@ -97,7 +97,7 @@
     },
     {
       "id": 8,
-      "question": "Which direct measure prevents ARP poisoning by verifying each ARP request/reply against known IP-MAC pairs gleaned from DHCP snooping?",
+      "question": "Which  measure prevents ARP poisoning by verifying each ARP request/reply against known IP-MAC pairs gleaned from DHCP snooping?",
       "options": [
         "DTP guard",
         "ARP flood control",
@@ -136,15 +136,15 @@
     },
     {
       "id": 11,
-      "question": "Which scenario-based question is BEST solved by implementing an out-of-band management (OOB) network with a console server?",
+      "question": "Which  is BEST solved by implementing an out-of-band management (OOB) network with a console server?",
       "options": [
-        "How to reduce broadcast storms on the core LAN",
-        "How to manage switches if the production network is down",
-        "How to load balance inbound HTTP requests to multiple servers",
-        "How to secure RDP sessions with IPsec"
+        "reduce broadcast storms on the core LAN",
+        "manage switches if the production network is down",
+        "load balance inbound HTTP requests to multiple servers",
+        "secure RDP sessions with IPsec"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to reduce broadcast storms on the core LAN is an STP or VLAN design, How to manage switches if the production network is down (correct) OOB is crucial for device access if main connections fail. How to load balance inbound HTTP requests to multiple servers is load balancing, How to secure RDP sessions with IPsec is encryption for remote desktop. OOB ensures a separate path for management outside production traffic.",
+      "explanation": "reduce broadcast storms on the core LAN is an STP or VLAN design, manage switches if the production network is down (correct) OOB is crucial for device access if main connections fail. load balance inbound HTTP requests to multiple servers is load balancing, secure RDP sessions with IPsec is encryption for remote desktop. OOB ensures a separate path for management outside production traffic.",
       "examTip": "An OOB network or console server helps maintain device access during outages or main network issues."
     },
     {
@@ -266,7 +266,7 @@
     },
     {
       "id": 21,
-      "question": "Which direct measure helps prevent evil twin attacks in a corporate WLAN environment?",
+      "question": "Which  measure helps prevent evil twin attacks in a corporate WLAN environment?",
       "options": [
         "Configure each client with static IP",
         "Enable 802.1w RSTP on the core switches",
@@ -409,15 +409,15 @@
     },
     {
       "id": 32,
-      "question": "Which scenario-based question is BEST resolved by implementing VRRP on the default gateway for VLAN subnets?",
+      "question": "Which  is BEST resolved by implementing VRRP on the default gateway for VLAN subnets?",
       "options": [
-        "How to reduce DHCP lease conflicts",
-        "How to ensure a backup virtual router IP if the primary gateway fails",
-        "How to share a single VLAN across multiple buildings",
-        "How to encrypt DNS queries end-to-end"
+        "reduce DHCP lease conflicts",
+        "ensure a backup virtual router IP if the primary gateway fails",
+        "share a single VLAN across multiple buildings",
+        "encrypt DNS queries end-to-end"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to reduce DHCP lease conflicts is DHCP scope management, How to ensure a backup virtual router IP if the primary gateway fails (correct) VRRP provides a virtual IP shared by multiple routers, How to share a single VLAN across multiple buildings is trunk design, How to encrypt DNS queries end-to-end is DNS security. VRRP ensures gateway redundancy for subnets.",
+      "explanation": "reduce DHCP lease conflicts is DHCP scope management, ensure a backup virtual router IP if the primary gateway fails (correct) VRRP provides a virtual IP shared by multiple routers, share a single VLAN across multiple buildings is trunk design, encrypt DNS queries end-to-end is DNS security. VRRP ensures gateway redundancy for subnets.",
       "examTip": "VRRP (or HSRP, GLBP) is used for first-hop redundancy, providing an always-available default gateway IP."
     },
     {
@@ -461,7 +461,7 @@
     },
     {
       "id": 36,
-      "question": "Which direct step is recommended if a trunk port is inadvertently formed with a user device that supports DTP?",
+      "question": "Which  step is recommended if a trunk port is inadvertently formed with a user device that supports DTP?",
       "options": [
         "Use EtherChannel on that port",
         "Assign a static IP to the end device",
@@ -513,15 +513,15 @@
     },
     {
       "id": 40,
-      "question": "Which scenario-based question is BEST resolved by configuring LACP EtherChannel on adjacent switches?",
+      "question": "Which  is BEST resolved by configuring LACP EtherChannel on adjacent switches?",
       "options": [
-        "How to block a rogue AP from associating to the LAN",
-        "How to provide greater bandwidth and redundancy across multiple physical links",
-        "How to reduce multicast traffic in a VLAN",
-        "How to authenticate user devices at the switch port"
+        "block a rogue AP from associating to the LAN",
+        "provide greater bandwidth and redundancy across multiple physical links",
+        "reduce multicast traffic in a VLAN",
+        "authenticate user devices at the switch port"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to block a rogue AP from associating to the LAN references wireless security, How to provide greater bandwidth and redundancy across multiple physical links (correct) link aggregation bundles parallel cables into one logical interface, How to reduce multicast traffic in a VLAN is IGMP snooping, How to authenticate user devices at the switch port is NAC. LACP merges links for higher throughput and failover.",
+      "explanation": "block a rogue AP from associating to the LAN references wireless security, provide greater bandwidth and redundancy across multiple physical links (correct) link aggregation bundles parallel cables into one logical interface, reduce multicast traffic in a VLAN is IGMP snooping, authenticate user devices at the switch port is NAC. LACP merges links for higher throughput and failover.",
       "examTip": "EtherChannel (LACP) is typically used to combine multiple Ethernet links between switches or switch-server for speed and redundancy."
     },
     {
@@ -578,7 +578,7 @@
     },
     {
       "id": 45,
-      "question": "Which direct measure can isolate IoT devices in a dedicated network, preventing lateral movement to corporate PCs?",
+      "question": "Which  measure can isolate IoT devices in a dedicated network, preventing lateral movement to corporate PCs?",
       "options": [
         "Use port mirroring for all IoT switch ports",
         "Assign IoT devices to a separate VLAN and apply ACL restrictions",
@@ -604,7 +604,7 @@
     },
     {
       "id": 47,
-      "question": "Which direct measure can hamper VLAN hopping by manipulating the native VLAN to insert double tags?",
+      "question": "Which  measure can hamper VLAN hopping by manipulating the native VLAN to insert double tags?",
       "options": [
         "Use ACLs to filter IP addresses",
         "Forbid VLAN 1 as native on trunk ports and disable auto trunking",
@@ -651,7 +651,7 @@
         "Set static DNS servers on the user machine"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Disable Telnet on the core router is a management security step, not a direct fix. Capture packets (port mirroring) to see the HTTP handshake (correct) analyzing the handshake clarifies if the server is responding or if requests fail. Convert the user VLAN to half-duplex cripples performance, Set static DNS servers on the user machine is a guess. Packet capture quickly shows if SYNs get replies or if DNS is failing, etc.",
+      "explanation": "Disable Telnet on the core router is a management security step, not a  fix. Capture packets (port mirroring) to see the HTTP handshake (correct) analyzing the handshake clarifies if the server is responding or if requests fail. Convert the user VLAN to half-duplex cripples performance, Set static DNS servers on the user machine is a guess. Packet capture quickly shows if SYNs get replies or if DNS is failing, etc.",
       "examTip": "When IP pings are okay but an app fails, a packet capture can reveal handshake or layer 7 issues (reset, timeouts)."
     },
     {
@@ -669,7 +669,7 @@
     },
     {
       "id": 52,
-      "question": "During a trunk configuration, an engineer sees 'Native VLAN mismatch' warnings. Which direct step resolves this?",
+      "question": "During a trunk configuration, an engineer sees 'Native VLAN mismatch' warnings. Which  step resolves this?",
       "options": [
         "Ensure both sides of the trunk use the same native VLAN ID",
         "Disable CDP globally",
@@ -695,7 +695,7 @@
     },
     {
       "id": 54,
-      "question": "Which direct measure can block unknown devices on the wired LAN by requiring 802.1X authentication at each port?",
+      "question": "Which  measure can block unknown devices on the wired LAN by requiring 802.1X authentication at each port?",
       "options": [
         "Configure a single SSID for guests",
         "Implement NAC with 802.1X authentication on all access switches",
@@ -890,7 +890,7 @@
     },
     {
       "id": 69,
-      "question": "Which direct measure can stop a newly connected switch from claiming STP root on an edge port?",
+      "question": "Which  measure can stop a newly connected switch from claiming STP root on an edge port?",
       "options": [
         "Enable IP helper address on that port",
         "Configure root guard so superior BPDUs put the port in root-inconsistent state",
@@ -968,7 +968,7 @@
     },
     {
       "id": 75,
-      "question": "Which direct measure ensures all connected endpoints have mandatory software patches before gaining network access on a wired 802.1X deployment?",
+      "question": "Which  measure ensures all connected endpoints have mandatory software patches before gaining network access on a wired 802.1X deployment?",
       "options": [
         "Captive portal on the LAN",
         "Spanning tree in root guard mode",
@@ -994,15 +994,15 @@
     },
     {
       "id": 77,
-      "question": "Which scenario-based question is BEST solved by using an IDS in tap mode rather than inline IPS?",
+      "question": "Which  is BEST solved by using an IDS in tap mode rather than inline IPS?",
       "options": [
-        "How to block malicious traffic in real time",
-        "How to passively monitor traffic without risking network downtime if the sensor fails",
-        "How to apply NAC posture checks at layer 2",
-        "How to unify logs for a SIEM correlation"
+        "block malicious traffic in real time",
+        "passively monitor traffic without risking network downtime if the sensor fails",
+        "apply NAC posture checks at layer 2",
+        "unify logs for a SIEM correlation"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to block malicious traffic in real time is inline IPS. How to passively monitor traffic without risking network downtime if the sensor fails (correct) a tap-based IDS passively observes, no single point of failure. How to apply NAC posture checks at layer 2 is port-based auth. How to unify logs for a SIEM correlation is log correlation. IDS in tap mode sees all traffic but can’t drop malicious packets actively.",
+      "explanation": "block malicious traffic in real time is inline IPS. passively monitor traffic without risking network downtime if the sensor fails (correct) a tap-based IDS passively observes, no single point of failure. apply NAC posture checks at layer 2 is port-based auth. unify logs for a SIEM correlation is log correlation. IDS in tap mode sees all traffic but can’t drop malicious packets actively.",
       "examTip": "Tap-based or SPAN-based IDS is passive. IPS is inline, able to block or modify traffic but can introduce a single failure point."
     },
     {
@@ -1163,7 +1163,7 @@
     },
     {
       "id": 90,
-      "question": "Which direct measure can hamper VLAN trunk negotiation attacks by turning off automatic trunk formation on user-facing switch ports?",
+      "question": "Which  measure can hamper VLAN trunk negotiation attacks by turning off automatic trunk formation on user-facing switch ports?",
       "options": [
         "Disable DTP (dynamic trunking protocol) and set mode access",
         "Use half-duplex for all access ports",
@@ -1176,15 +1176,15 @@
     },
     {
       "id": 91,
-      "question": "Which scenario-based question is BEST solved by using SDN with a central controller managing multiple switches via an API like OpenFlow?",
+      "question": "Which  is BEST solved by using SDN with a central controller managing multiple switches via an API like OpenFlow?",
       "options": [
-        "How to manually assign IP addresses to each endpoint",
-        "How to automatically apply consistent ACL changes across many switches from one interface",
-        "How to apply half-duplex on trunk ports for error reduction",
-        "How to block DHCP offers from rogue servers"
+        "manually assign IP addresses to each endpoint",
+        "automatically apply consistent ACL changes across many switches from one interface",
+        "apply half-duplex on trunk ports for error reduction",
+        "block DHCP offers from rogue servers"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to manually assign IP addresses to each endpoint is a static IP approach, How to automatically apply consistent ACL changes across many switches from one interface (correct) central orchestration is a prime SDN use case, How to apply half-duplex on trunk ports for error reduction is a link mismatch, How to block DHCP offers from rogue servers is DHCP snooping. SDN centralizes configuration, letting an admin push ACL or policy changes to all devices simultaneously.",
+      "explanation": "manually assign IP addresses to each endpoint is a static IP approach, automatically apply consistent ACL changes across many switches from one interface (correct) central orchestration is a prime SDN use case, apply half-duplex on trunk ports for error reduction is a link mismatch, block DHCP offers from rogue servers is DHCP snooping. SDN centralizes configuration, letting an admin push ACL or policy changes to all devices simultaneously.",
       "examTip": "SDN separates the control plane, letting a controller program network devices via standardized APIs, ideal for large-scale, consistent deployments."
     },
     {
@@ -1215,20 +1215,20 @@
     },
     {
       "id": 94,
-      "question": "Which scenario-based question is BEST solved by implementing IPsec in tunnel mode between two branch routers?",
+      "question": "Which  is BEST solved by implementing IPsec in tunnel mode between two branch routers?",
       "options": [
-        "How to passively monitor traffic for analysis",
-        "How to ensure site-to-site encrypted communication over an untrusted WAN",
-        "How to detect rogue DHCP servers on each LAN",
-        "How to unify VLAN trunking across multiple ISPs"
+        "passively monitor traffic for analysis",
+        "ensure site-to-site encrypted communication over an untrusted WAN",
+        "detect rogue DHCP servers on each LAN",
+        "unify VLAN trunking across multiple ISPs"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to passively monitor traffic for analysis is a passive sniff, How to ensure site-to-site encrypted communication over an untrusted WAN (correct) site-to-site IPsec tunnel secures traffic, How to detect rogue DHCP servers on each LAN is DHCP security, How to unify VLAN trunking across multiple ISPs is VLAN extension. IPsec tunnel mode is standard for site-to-site encryption over public networks.",
+      "explanation": "passively monitor traffic for analysis is a passive sniff, ensure site-to-site encrypted communication over an untrusted WAN (correct) site-to-site IPsec tunnel secures traffic, detect rogue DHCP servers on each LAN is DHCP security, unify VLAN trunking across multiple ISPs is VLAN extension. IPsec tunnel mode is standard for site-to-site encryption over public networks.",
       "examTip": "IPsec tunnel mode encapsulates entire IP packets, typically used for secure site-to-site VPNs between branch routers."
     },
     {
       "id": 95,
-      "question": "Which direct advantage does 802.1X multi-domain authentication offer for an IP phone with an attached PC?",
+      "question": "Which  advantage does 802.1X multi-domain authentication offer for an IP phone with an attached PC?",
       "options": [
         "It encrypts voice packets at the application layer",
         "It allows the phone and PC to authenticate separately on the same switch port",
@@ -1254,7 +1254,7 @@
     },
     {
       "id": 97,
-      "question": "Which direct measure can help mitigate ARP spoofing attempts on a switch port?",
+      "question": "Which  measure can help mitigate ARP spoofing attempts on a switch port?",
       "options": [
         "Enable DTP negotiation",
         "Disable half-duplex mode",
@@ -1280,7 +1280,7 @@
     },
     {
       "id": 99,
-      "question": "Which direct approach can reduce the effect of half-open TCP connections from a SYN flood?",
+      "question": "Which  approach can reduce the effect of half-open TCP connections from a SYN flood?",
       "options": [
         "ARP spoofing detection",
         "DHCP Option 82 insertion",
@@ -1293,7 +1293,7 @@
     },
     {
       "id": 100,
-      "question": "A router connected to a WAN occasionally sees partial adjacency issues with OSPF neighbors when CPU spikes. Which direct measure might fix this?",
+      "question": "A router connected to a WAN occasionally sees partial adjacency issues with OSPF neighbors when CPU spikes. Which  measure might fix this?",
       "options": [
         "Increasing the OSPF hello/dead timers so the router has more time to respond",
         "Using half-duplex on the WAN link to reduce collisions",
