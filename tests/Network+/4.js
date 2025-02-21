@@ -149,7 +149,7 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "An administrator notices an unknown device handing out IP addresses on the corporate network. Which direct action is BEST to stop this rogue DHCP server?",
+      "question": "An administrator notices an unknown device handing out IP addresses on the corporate network. Which action is BEST to stop this rogue DHCP server?",
       "options": [
         "Enable DHCP snooping on all VLANs",
         "Switch to static IP configuration across the network",
@@ -370,7 +370,7 @@ db.tests.insertOne({
     },
     {
       "id": 29,
-      "question": "Which direct measure can help mitigate ARP spoofing in a switched network?",
+      "question": "Which measure can help mitigate ARP spoofing in a switched network?",
       "options": [
         "Use proxy servers for web traffic",
         "Implement port security with sticky MAC addresses",
@@ -526,7 +526,7 @@ db.tests.insertOne({
     },
     {
       "id": 41,
-      "question": "A server blade's NIC shows many CRC errors when connecting at 10 Gbps. Which direct step is BEST to isolate the cause?",
+      "question": "A server blade's NIC shows many CRC errors when connecting at 10 Gbps. Which step is BEST to isolate the cause?",
       "options": [
         "Reduce link speed to 1 Gbps on the server side",
         "Replace or reseat the fiber module if applicable",
@@ -565,7 +565,7 @@ db.tests.insertOne({
     },
     {
       "id": 44,
-      "question": "A technician wants to measure which sites employees visit and block certain categories. Which solution provides the MOST direct approach?",
+      "question": "A technician wants to measure which sites employees visit and block certain categories. Which solution provides the MOST approach?",
       "options": [
         "SNMPv3 counters on switch interfaces",
         "A web content filtering proxy",
@@ -660,11 +660,11 @@ db.tests.insertOne({
       "options": [
         "Multiple APIPA ranges assigned to each device group",
         "VLAN segmentation with ACLs restricting cross-traffic",
-        "DNS load balancing to direct servers to the correct storage IP",
+        "DNS load balancing to servers to the correct storage IP",
         "DHCP reservations based on device MAC addresses"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Multiple APIPA ranges assigned to each device group is a fallback IP assignment, not segmentation. VLAN segmentation with ACLs restricting cross-traffic (correct) logically isolates traffic. DNS load balancing to direct servers to the correct storage IP is for load distribution, not security. DHCP reservations based on device MAC addresses ensures consistent IP but doesn’t segment traffic.",
+      "explanation": "Multiple APIPA ranges assigned to each device group is a fallback IP assignment, not segmentation. VLAN segmentation with ACLs restricting cross-traffic (correct) logically isolates traffic. DNS load balancing to servers to the correct storage IP is for load distribution, not security. DHCP reservations based on device MAC addresses ensures consistent IP but doesn’t segment traffic.",
       "examTip": "VLAN segmentation plus ACLs or firewalls can isolate sensitive traffic on shared hardware."
     },
     {
@@ -695,7 +695,7 @@ db.tests.insertOne({
     },
     {
       "id": 54,
-      "question": "Which direct approach helps reduce the overhead of frequently generating new ephemeral keys in IPSec?",
+      "question": "Which approach helps reduce the overhead of frequently generating new ephemeral keys in IPSec?",
       "options": [
         "Using a longer IKE Phase 1 lifetime",
         "Disabling encryption entirely",
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "Cable runs exceeding 100 meters"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Excessive heat in the telecom closet (correct) can cause thermal shutdown. Too many VLANs assigned to the switch is a logical limit, not physical meltdown. STP misconfiguration creating loops causes a broadcast storm, not direct overheating. Cable runs exceeding 100 meters is cable standard violation, not necessarily thermal.",
+      "explanation": "Excessive heat in the telecom closet (correct) can cause thermal shutdown. Too many VLANs assigned to the switch is a logical limit, not physical meltdown. STP misconfiguration creating loops causes a broadcast storm, not overheating. Cable runs exceeding 100 meters is cable standard violation, not necessarily thermal.",
       "examTip": "Proper ventilation or cooling is vital in closets handling high PoE loads to prevent overheating."
     },
     {
@@ -851,7 +851,7 @@ db.tests.insertOne({
     },
     {
       "id": 66,
-      "question": "A new VLAN was created, but hosts in that VLAN cannot communicate with other subnets. Which direct setting on the router is often the culprit?",
+      "question": "A new VLAN was created, but hosts in that VLAN cannot communicate with other subnets. Which setting on the router is often the culprit?",
       "options": [
         "No default route on the core router",
         "The subinterface for that VLAN is administratively down",
@@ -929,7 +929,7 @@ db.tests.insertOne({
     },
     {
       "id": 72,
-      "question": "Which direct action helps mitigate VLAN hopping attacks?",
+      "question": "Which action helps mitigate VLAN hopping attacks?",
       "options": [
         "Configuring trunk ports to negotiate dynamically on every port",
         "Disabling DTP and explicitly specifying access or trunk mode",
@@ -1007,7 +1007,7 @@ db.tests.insertOne({
     },
     {
       "id": 78,
-      "question": "A network engineer sees consistent ICMP echo requests from a single IP, saturating the WAN link. Which is the MOST direct measure to mitigate this DoS?",
+      "question": "A network engineer sees consistent ICMP echo requests from a single IP, saturating the WAN link. Which is the MOST measure to mitigate this DoS?",
       "options": [
         "Block inbound ICMP from that IP at the edge",
         "Replace the router with a higher throughput model",
@@ -1111,7 +1111,7 @@ db.tests.insertOne({
     },
     {
       "id": 86,
-      "question": "A DHCP server is configured with an IP pool of 200 addresses, but after several days, new clients fail to get addresses. Which direct factor is MOST likely?",
+      "question": "A DHCP server is configured with an IP pool of 200 addresses, but after several days, new clients fail to get addresses. Which factor is MOST likely?",
       "options": [
         "Wrong VLAN assigned to the server interface",
         "Lease time is too long, causing IP exhaustion",
@@ -1124,7 +1124,7 @@ db.tests.insertOne({
     },
     {
       "id": 87,
-      "question": "Which direct action can a security engineer take to protect routers from on-path (man-in-the-middle) attacks targeting routing updates?",
+      "question": "Which action can a security engineer take to protect routers from on-path (man-in-the-middle) attacks targeting routing updates?",
       "options": [
         "Configure STP with root guard",
         "Implement encryption or authentication on routing protocols",
@@ -1150,7 +1150,7 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "A consultant recommends LACP for trunk links between core switches. What is the MOST direct benefit of implementing this?",
+      "question": "A consultant recommends LACP for trunk links between core switches. What is the MOST benefit of implementing this?",
       "options": [
         "Encryption of data between core devices",
         "Combining multiple ports into a single logical interface for higher throughput",
@@ -1241,7 +1241,7 @@ db.tests.insertOne({
     },
     {
       "id": 96,
-      "question": "A core router frequently runs out of memory when handling large routing tables. Which direct action is MOST appropriate FIRST?",
+      "question": "A core router frequently runs out of memory when handling large routing tables. Which action is MOST appropriate FIRST?",
       "options": [
         "Replace static routing with dynamic routing protocols",
         "Implement route summarization or aggregation where possible",
