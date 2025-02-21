@@ -79,7 +79,7 @@ db.tests.insertOne({
         "SLAAC"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A runs v4 and v6 simultaneously, Option B translates v6 to v4, Option C (correct) encapsulates v6 traffic, Option D is auto-config but does not solve IPv4 core limitations. Tunnels allow IPv6 to traverse IPv4 networks without direct translation.",
+      "explanation": "Option A runs v4 and v6 simultaneously, Option B translates v6 to v4, Option C (correct) encapsulates v6 traffic, Option D is auto-config but does not solve IPv4 core limitations. Tunnels allow IPv6 to traverse IPv4 networks without  translation.",
       "examTip": "When an IPv4 backbone can’t be upgraded, tunneling solutions (6to4, ISATAP, GRE, etc.) carry IPv6 over IPv4."
     },
     {
@@ -97,7 +97,7 @@ db.tests.insertOne({
     },
     {
       "id": 8,
-      "question": "Which direct measure prevents ARP poisoning by verifying each ARP request/reply against known IP-MAC pairs gleaned from DHCP snooping?",
+      "question": "Which  measure prevents ARP poisoning by verifying each ARP request/reply against known IP-MAC pairs gleaned from DHCP snooping?",
       "options": [
         "DTP guard",
         "ARP flood control",
@@ -136,12 +136,12 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "Which scenario-based question is BEST solved by implementing an out-of-band management (OOB) network with a console server?",
+      "question": "Which  is BEST solved by implementing an out-of-band management (OOB) network with a console server?",
       "options": [
-        "How to reduce broadcast storms on the core LAN",
-        "How to manage switches if the production network is down",
-        "How to load balance inbound HTTP requests to multiple servers",
-        "How to secure RDP sessions with IPsec"
+        " reduce broadcast storms on the core LAN",
+        " manage switches if the production network is down",
+        " load balance inbound HTTP requests to multiple servers",
+        " secure RDP sessions with IPsec"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is an STP or VLAN design, Option B (correct) OOB is crucial for device access if main connections fail. Option C is load balancing, Option D is encryption for remote desktop. OOB ensures a separate path for management outside production traffic.",
@@ -266,7 +266,7 @@ db.tests.insertOne({
     },
     {
       "id": 21,
-      "question": "Which direct measure helps prevent evil twin attacks in a corporate WLAN environment?",
+      "question": "Which  measure helps prevent evil twin attacks in a corporate WLAN environment?",
       "options": [
         "Configure each client with static IP",
         "Enable 802.1w RSTP on the core switches",
@@ -396,7 +396,7 @@ db.tests.insertOne({
     },
     {
       "id": 31,
-      "question": "A user’s machine obtains an APIPA address (169.254.x.x). Which direct conclusion can be drawn?",
+      "question": "A user’s machine obtains an APIPA address (169.254.x.x). Which  conclusion can be drawn?",
       "options": [
         "The DNS server is set to 8.8.8.8",
         "DHCP server was not reachable or no lease was offered",
@@ -404,17 +404,17 @@ db.tests.insertOne({
         "The user must set a static IP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a public DNS, not a direct cause. Option B (correct) APIPA is a fallback for no DHCP. Option C is a different scenario, Option D is a workaround but not the direct conclusion. If DHCP fails, Windows auto-assigns 169.254.x.x.",
+      "explanation": "Option A is a public DNS, not a  cause. Option B (correct) APIPA is a fallback for no DHCP. Option C is a different scenario, Option D is a workaround but not the  conclusion. If DHCP fails, Windows auto-assigns 169.254.x.x.",
       "examTip": "An APIPA address indicates the client tried DHCP but got no valid response."
     },
     {
       "id": 32,
-      "question": "Which scenario-based question is BEST addressed by implementing VRRP on the default gateway for VLAN subnets?",
+      "question": "Which  is BEST addressed by implementing VRRP on the default gateway for VLAN subnets?",
       "options": [
-        "How to reduce DHCP lease conflicts",
-        "How to ensure a backup virtual router IP if the primary gateway fails",
-        "How to share a single VLAN across multiple buildings",
-        "How to encrypt DNS queries end-to-end"
+        " reduce DHCP lease conflicts",
+        " ensure a backup virtual router IP if the primary gateway fails",
+        " share a single VLAN across multiple buildings",
+        " encrypt DNS queries end-to-end"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is DHCP scope management, Option B (correct) VRRP provides a virtual IP shared by multiple routers, Option C is trunk design, Option D is DNS security. VRRP ensures gateway redundancy for subnets.",
@@ -461,7 +461,7 @@ db.tests.insertOne({
     },
     {
       "id": 36,
-      "question": "Which direct step is recommended if a trunk port is inadvertently formed with a user device that supports DTP?",
+      "question": "Which  step is recommended if a trunk port is inadvertently formed with a user device that supports DTP?",
       "options": [
         "Use EtherChannel on that port",
         "Assign a static IP to the end device",
@@ -513,12 +513,12 @@ db.tests.insertOne({
     },
     {
       "id": 40,
-      "question": "Which scenario-based question is BEST resolved by configuring LACP EtherChannel on adjacent switches?",
+      "question": "Which  is BEST resolved by configuring LACP EtherChannel on adjacent switches?",
       "options": [
-        "How to block a rogue AP from associating to the LAN",
-        "How to provide greater bandwidth and redundancy across multiple physical links",
-        "How to reduce multicast traffic in a VLAN",
-        "How to authenticate user devices at the switch port"
+        " block a rogue AP from associating to the LAN",
+        " provide greater bandwidth and redundancy across multiple physical links",
+        " reduce multicast traffic in a VLAN",
+        " authenticate user devices at the switch port"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A references wireless security, Option B (correct) link aggregation bundles parallel cables into one logical interface, Option C is IGMP snooping, Option D is NAC. LACP merges links for higher throughput and failover.",
@@ -578,7 +578,7 @@ db.tests.insertOne({
     },
     {
       "id": 45,
-      "question": "Which direct measure can isolate IoT devices in a dedicated network, preventing lateral movement to corporate PCs?",
+      "question": "Which  measure can isolate IoT devices in a dedicated network, preventing lateral movement to corporate PCs?",
       "options": [
         "Use port mirroring for all IoT switch ports",
         "Assign IoT devices to a separate VLAN and apply ACL restrictions",
@@ -604,7 +604,7 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "Which direct measure mitigates VLAN hopping by manipulating the native VLAN to insert double tags?",
+      "question": "Which  measure mitigates VLAN hopping by manipulating the native VLAN to insert double tags?",
       "options": [
         "Use ACLs to filter IP addresses",
         "Forbid VLAN 1 as native on trunk ports and disable auto-trunk negotiation",
@@ -651,7 +651,7 @@ db.tests.insertOne({
         "Set static DNS servers on the user machine"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a management security step, not a direct fix. Option B (correct) analyzing the handshake clarifies if the server is responding or if requests fail. Option C cripples performance, Option D is a guess. Packet capture quickly shows if SYNs get replies or if DNS is failing, etc.",
+      "explanation": "Option A is a management security step, not a  fix. Option B (correct) analyzing the handshake clarifies if the server is responding or if requests fail. Option C cripples performance, Option D is a guess. Packet capture quickly shows if SYNs get replies or if DNS is failing, etc.",
       "examTip": "When IP pings are okay but an app fails, a packet capture can reveal handshake or layer 7 issues (reset, timeouts)."
     },
     {
@@ -669,7 +669,7 @@ db.tests.insertOne({
     },
     {
       "id": 52,
-      "question": "During a trunk configuration, an engineer sees 'Native VLAN mismatch' warnings. Which direct step resolves this?",
+      "question": "During a trunk configuration, an engineer sees 'Native VLAN mismatch' warnings. Which  step resolves this?",
       "options": [
         "Ensure both sides of the trunk use the same native VLAN ID",
         "Disable CDP globally",
@@ -695,7 +695,7 @@ db.tests.insertOne({
     },
     {
       "id": 54,
-      "question": "Which direct measure can block unknown devices on the wired LAN by requiring 802.1X authentication at each port?",
+      "question": "Which  measure can block unknown devices on the wired LAN by requiring 802.1X authentication at each port?",
       "options": [
         "Configure a single SSID for guests",
         "Implement NAC with EAP on all access switches",
@@ -890,7 +890,7 @@ db.tests.insertOne({
     },
     {
       "id": 69,
-      "question": "Which direct measure stops a newly connected switch from claiming STP root on an edge port?",
+      "question": "Which  measure stops a newly connected switch from claiming STP root on an edge port?",
       "options": [
         "Enable IP helper address on that port",
         "Configure root guard so superior BPDUs put the port in root-inconsistent state",
@@ -968,7 +968,7 @@ db.tests.insertOne({
     },
     {
       "id": 75,
-      "question": "Which direct measure ensures all connected endpoints have mandatory software patches before gaining network access on a wired 802.1X deployment?",
+      "question": "Which  measure ensures all connected endpoints have mandatory software patches before gaining network access on a wired 802.1X deployment?",
       "options": [
         "Captive portal on the LAN",
         "Spanning tree in root guard mode",
@@ -994,12 +994,12 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "Which scenario-based question is BEST solved by using an IDS in tap mode rather than inline IPS?",
+      "question": "Which  is BEST solved by using an IDS in tap mode rather than inline IPS?",
       "options": [
-        "How to block malicious traffic in real time",
-        "How to passively monitor traffic without risking network downtime if the sensor fails",
-        "How to apply NAC posture checks at layer 2",
-        "How to unify logs for a SIEM correlation"
+        " block malicious traffic in real time",
+        " passively monitor traffic without risking network downtime if the sensor fails",
+        " apply NAC posture checks at layer 2",
+        " unify logs for a SIEM correlation"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is inline IPS. Option B (correct) a tap-based IDS passively observes, no single point of failure. Option C is port-based auth. Option D is log correlation. IDS in tap mode sees all traffic but can’t drop malicious packets actively.",
@@ -1163,7 +1163,7 @@ db.tests.insertOne({
     },
     {
       "id": 90,
-      "question": "Which direct measure can hamper VLAN trunk negotiation attacks by turning off automatic trunk formation on user-facing switch ports?",
+      "question": "Which  measure can hamper VLAN trunk negotiation attacks by turning off automatic trunk formation on user-facing switch ports?",
       "options": [
         "Disable DTP (dynamic trunking protocol) and set mode access",
         "Use half-duplex for all access ports",
@@ -1176,12 +1176,12 @@ db.tests.insertOne({
     },
     {
       "id": 91,
-      "question": "Which scenario-based question is BEST solved by using SDN with a central controller managing multiple switches via an API like OpenFlow?",
+      "question": "Which  is BEST solved by using SDN with a central controller managing multiple switches via an API like OpenFlow?",
       "options": [
-        "How to manually assign IP addresses to each endpoint",
-        "How to automatically apply consistent ACL changes across many switches from one interface",
-        "How to apply half-duplex on trunk ports for error reduction",
-        "How to block DHCP offers from rogue servers"
+        " manually assign IP addresses to each endpoint",
+        " automatically apply consistent ACL changes across many switches from one interface",
+        " apply half-duplex on trunk ports for error reduction",
+        " block DHCP offers from rogue servers"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is a static IP approach, Option B (correct) central orchestration is a prime SDN use case, Option C is a link mismatch, Option D is DHCP snooping. SDN centralizes configuration, letting an admin push ACL or policy changes to all devices simultaneously.",
@@ -1215,12 +1215,12 @@ db.tests.insertOne({
     },
     {
       "id": 94,
-      "question": "Which scenario-based question is BEST solved by implementing IPsec in tunnel mode between two branch routers?",
+      "question": "Which  is BEST solved by implementing IPsec in tunnel mode between two branch routers?",
       "options": [
-        "How to passively monitor traffic for analysis",
-        "How to ensure site-to-site encrypted communication over an untrusted WAN",
-        "How to detect rogue DHCP servers on each LAN",
-        "How to unify VLAN trunking across multiple ISPs"
+        " passively monitor traffic for analysis",
+        " ensure site-to-site encrypted communication over an untrusted WAN",
+        " detect rogue DHCP servers on each LAN",
+        " unify VLAN trunking across multiple ISPs"
       ],
       "correctAnswerIndex": 1,
       "explanation": "Option A is a passive sniff, Option B (correct) site-to-site IPsec tunnel secures traffic, Option C is DHCP security, Option D is VLAN extension. IPsec tunnel mode is standard for site-to-site encryption over public networks.",
@@ -1228,7 +1228,7 @@ db.tests.insertOne({
     },
     {
       "id": 95,
-      "question": "Which direct advantage does 802.1X multi-domain authentication offer for an IP phone with an attached PC?",
+      "question": "Which  advantage does 802.1X multi-domain authentication offer for an IP phone with an attached PC?",
       "options": [
         "It encrypts voice packets at the application layer",
         "It allows the phone and PC to authenticate separately on the same switch port",
@@ -1254,7 +1254,7 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "Which direct measure can help mitigate ARP spoofing attempts on a switch port?",
+      "question": "Which  measure can help mitigate ARP spoofing attempts on a switch port?",
       "options": [
         "Enable DTP negotiation",
         "Disable half-duplex mode",
@@ -1280,7 +1280,7 @@ db.tests.insertOne({
     },
     {
       "id": 99,
-      "question": "Which direct approach can reduce the effect of half-open TCP connections from a SYN flood?",
+      "question": "Which  approach can reduce the effect of half-open TCP connections from a SYN flood?",
       "options": [
         "ARP spoofing detection",
         "DHCP Option 82 insertion",
@@ -1293,7 +1293,7 @@ db.tests.insertOne({
     },
     {
       "id": 100,
-      "question": "A router connected to a WAN occasionally sees partial adjacency issues with OSPF neighbors when CPU spikes. Which direct measure might fix this?",
+      "question": "A router connected to a WAN occasionally sees partial adjacency issues with OSPF neighbors when CPU spikes. Which  measure might fix this?",
       "options": [
         "Increasing the OSPF hello/dead timers so the router has more time to respond",
         "Using half-duplex on the WAN link to reduce collisions",
