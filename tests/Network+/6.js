@@ -58,7 +58,7 @@ db.tests.insertOne({
     },
     {
       "id": 5,
-      "question": "Which direct feature can isolate a compromised device by automatically placing its switch port into a quarantine VLAN upon a failed NAC posture check?",
+      "question": "Which feature can isolate a compromised device by automatically placing its switch port into a quarantine VLAN upon a failed NAC posture check?",
       "options": [
         "BPDU filter",
         "DHCP relay agent",
@@ -162,7 +162,7 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "A network sees multiple VLANs inadvertently trunked to an unauthorized device. Which direct setting is MOST effective at preventing this scenario?",
+      "question": "A network sees multiple VLANs inadvertently trunked to an unauthorized device. Which setting is MOST effective at preventing this scenario?",
       "options": [
         "Set trunk ports to dynamic desirable",
         "Disable DTP and configure trunk/access mode statically",
@@ -190,13 +190,13 @@ db.tests.insertOne({
       "id": 15,
       "question": "Which question does SD-WAN primarily solve for distributed branch offices?",
       "options": [
-        "How to unify cable labeling across racks",
-        "How to transport traffic over multiple links with centralized policy control",
-        "How to block Layer 2 loops on core switches",
-        "How to share SNMP community strings securely"
+        "unify cable labeling across racks",
+        "transport traffic over multiple links with centralized policy control",
+        "block Layer 2 loops on core switches",
+        "share SNMP community strings securely"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to unify cable labeling across racks is a physical org question, How to transport traffic over multiple links with centralized policy control (correct) is precisely SD-WAN’s function. How to block Layer 2 loops on core switches references spanning tree, How to share SNMP community strings securely is management config. SD-WAN orchestrates traffic across various WAN connections, applying central policies.",
+      "explanation": "unify cable labeling across racks is a physical org question, transport traffic over multiple links with centralized policy control (correct) is precisely SD-WAN’s function. block Layer 2 loops on core switches references spanning tree, share SNMP community strings securely is management config. SD-WAN orchestrates traffic across various WAN connections, applying central policies.",
       "examTip": "SD-WAN provides intelligent path selection and orchestration for remote branches, often mixing MPLS, broadband, LTE, etc."
     },
     {
@@ -235,7 +235,7 @@ db.tests.insertOne({
         "Disable WPA3 to reduce encryption overhead"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Enable 40–80 MHz channel bonding on all APs can worsen overlap, Increase transmit power to overpower adjacent APs can lead to more interference, Reduce channel width to 20 MHz on congested APs (correct) less channel bonding means more distinct channels, Disable WPA3 to reduce encryption overhead reduces security with no direct effect on interference. Narrower channels help avoid co-channel overlap in dense deployments.",
+      "explanation": "Enable 40–80 MHz channel bonding on all APs can worsen overlap, Increase transmit power to overpower adjacent APs can lead to more interference, Reduce channel width to 20 MHz on congested APs (correct) less channel bonding means more distinct channels, Disable WPA3 to reduce encryption overhead reduces security with no effect on interference. Narrower channels help avoid co-channel overlap in dense deployments.",
       "examTip": "In crowded 5 GHz spaces, smaller channel widths can alleviate co-channel interference by maximizing non-overlapping channels."
     },
     {
@@ -279,15 +279,15 @@ db.tests.insertOne({
     },
     {
       "id": 22,
-      "question": "Which scenario-based question is BEST addressed by using a VLAN ACL to block production traffic from a lab VLAN?",
+      "question": "Which is BEST addressed by using a VLAN ACL to block production traffic from a lab VLAN?",
       "options": [
-        "How to reduce IP addresses used in DHCP",
-        "How to restrict lab users from accessing sensitive production servers",
-        "How to enforce jumbo frames on trunk links",
-        "How to configure spanning tree root guard"
+        "reduce IP addresses used in DHCP",
+        "restrict lab users from accessing sensitive production servers",
+        "enforce jumbo frames on trunk links",
+        "configure spanning tree root guard"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to reduce IP addresses used in DHCP is IP management, not ACL security. How to restrict lab users from accessing sensitive production servers (correct) is a typical reason for a VLAN access control list. How to enforce jumbo frames on trunk links is performance, How to configure spanning tree root guard is loop prevention. VLAN ACLs can isolate or restrict traffic between subnets or VLANs.",
+      "explanation": "reduce IP addresses used in DHCP is IP management, not ACL security. restrict lab users from accessing sensitive production servers (correct) is a typical reason for a VLAN access control list. enforce jumbo frames on trunk links is performance, configure spanning tree root guard is loop prevention. VLAN ACLs can isolate or restrict traffic between subnets or VLANs.",
       "examTip": "ACLs at the VLAN or interface level can block specific traffic flows, preventing unauthorized cross-VLAN access."
     },
     {
@@ -422,7 +422,7 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "A distribution switch CPU is maxed out due to broadcast traffic in a single flat network. Which direct remedy can reduce this broadcast domain?",
+      "question": "A distribution switch CPU is maxed out due to broadcast traffic in a single flat network. Which remedy can reduce this broadcast domain?",
       "options": [
         "Implement multiple VLANs and inter-VLAN routing",
         "Enable jumbo frames for layer 2 traffic",
@@ -487,7 +487,7 @@ db.tests.insertOne({
     },
     {
       "id": 38,
-      "question": "A new RADIUS server certificate was not renewed, causing wireless clients to fail 802.1X authentication. Which direct symptom indicates this problem?",
+      "question": "A new RADIUS server certificate was not renewed, causing wireless clients to fail 802.1X authentication. Which symptom indicates this problem?",
       "options": [
         "WPA2-PSK passphrase mismatch message",
         "Clients see a warning about the server certificate or cannot connect at all",
@@ -526,15 +526,15 @@ db.tests.insertOne({
     },
     {
       "id": 41,
-      "question": "Which scenario-based question is BEST resolved by implementing a honeynet in the DMZ?",
+      "question": "Which is BEST resolved by implementing a honeynet in the DMZ?",
       "options": [
-        "How to centralize logs from multiple syslog sources",
-        "How to collect threat intelligence by luring attackers to fake hosts",
-        "How to reduce broadcast traffic in a large subnet",
-        "How to block all inbound telnet attempts"
+        "centralize logs from multiple syslog sources",
+        "collect threat intelligence by luring attackers to fake hosts",
+        "reduce broadcast traffic in a large subnet",
+        "block all inbound telnet attempts"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to centralize logs from multiple syslog sources is log aggregation, How to collect threat intelligence by luring attackers to fake hosts (correct) describes a honeynet’s purpose, How to reduce broadcast traffic in a large subnet is broadcast domain design, How to block all inbound telnet attempts is a firewall ACL. A honeynet or honeypot is a decoy environment for studying attacker methods.",
+      "explanation": "centralize logs from multiple syslog sources is log aggregation, collect threat intelligence by luring attackers to fake hosts (correct) describes a honeynet’s purpose, reduce broadcast traffic in a large subnet is broadcast domain design, block all inbound telnet attempts is a firewall ACL. A honeynet or honeypot is a decoy environment for studying attacker methods.",
       "examTip": "Honeynets attract malicious activity, letting defenders observe or capture attackers’ techniques safely."
     },
     {
@@ -552,7 +552,7 @@ db.tests.insertOne({
     },
     {
       "id": 43,
-      "question": "Which direct measure stops devices from getting IP addresses from an unauthorized DHCP server on the LAN?",
+      "question": "Which measure stops devices from getting IP addresses from an unauthorized DHCP server on the LAN?",
       "options": [
         "Enable DHCP snooping on relevant VLANs",
         "Use default gateway 0.0.0.0 for all clients",
@@ -645,13 +645,13 @@ db.tests.insertOne({
       "id": 50,
       "question": "Which question is BEST addressed by implementing SASE (Secure Access Service Edge)?",
       "options": [
-        "How to unify WAN optimization, security, and cloud-based access for remote users",
-        "How to reduce the cost of on-prem layer 2 switches",
-        "How to store only static ARP tables on the router",
-        "How to physically protect the MDF in a campus building"
+        "unify WAN optimization, security, and cloud-based access for remote users",
+        "reduce the cost of on-prem layer 2 switches",
+        "store only static ARP tables on the router",
+        "physically protect the MDF in a campus building"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "How to unify WAN optimization, security, and cloud-based access for remote users (correct) SASE merges SD-WAN and security into a cloud-based service for distributed workforces. How to reduce the cost of on-prem layer 2 switches references hardware cost, How to store only static ARP tables on the router is an ARP approach, How to physically protect the MDF in a campus building is physical security. SASE addresses secure, scalable edge services for remote and branch users.",
+      "explanation": "unify WAN optimization, security, and cloud-based access for remote users (correct) SASE merges SD-WAN and security into a cloud-based service for distributed workforces. reduce the cost of on-prem layer 2 switches references hardware cost, store only static ARP tables on the router is an ARP approach, physically protect the MDF in a campus building is physical security. SASE addresses secure, scalable edge services for remote and branch users.",
       "examTip": "SASE converges network and security functions at the cloud edge for consistent, secure access from anywhere."
     },
     {
@@ -747,7 +747,7 @@ db.tests.insertOne({
     },
     {
       "id": 58,
-      "question": "Which approach is essential for preventing direct bridging loops introduced by user-connected hubs or switches on access ports?",
+      "question": "Which approach is essential for preventing bridging loops introduced by user-connected hubs or switches on access ports?",
       "options": [
         "Enable spanning tree portfast and BPDU guard on edge ports",
         "Configure a separate VLAN for each user device",
@@ -786,15 +786,15 @@ db.tests.insertOne({
     },
     {
       "id": 61,
-      "question": "Which scenario-based question is BEST addressed by deploying HIDS/HIPS on critical servers?",
+      "question": "Which is BEST addressed by deploying HIDS/HIPS on critical servers?",
       "options": [
-        "How to physically secure the MDF",
-        "How to detect suspicious activity directly on a host and possibly block it",
-        "How to route VLAN 10 and VLAN 20",
-        "How to reduce broadcast storms at layer 2"
+        "physically secure the MDF",
+        "detect suspicious activity directly on a host and possibly block it",
+        "route VLAN 10 and VLAN 20",
+        "reduce broadcast storms at layer 2"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to physically secure the MDF is physical security, How to detect suspicious activity directly on a host and possibly block it (correct) host-based IDS/IPS checks local processes, How to route VLAN 10 and VLAN 20 is layer 3 routing, How to reduce broadcast storms at layer 2 is STP or VLAN design. HIDS/HIPS provide real-time monitoring and potential blocking of malicious actions on the host itself.",
+      "explanation": "physically secure the MDF is physical security, detect suspicious activity directly on a host and possibly block it (correct) host-based IDS/IPS checks local processes, route VLAN 10 and VLAN 20 is layer 3 routing, reduce broadcast storms at layer 2 is STP or VLAN design. HIDS/HIPS provide real-time monitoring and potential blocking of malicious actions on the host itself.",
       "examTip": "HIDS/HIPS inspects system-level activity, offering immediate response if it detects malicious behavior."
     },
     {
@@ -942,15 +942,15 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "Which scenario-based question is BEST addressed by implementing dual-stack IPv4/IPv6 on endpoints?",
+      "question": "Which is BEST addressed by implementing dual-stack IPv4/IPv6 on endpoints?",
       "options": [
-        "How to create a NAT64 translation for legacy devices",
-        "How to support both IPv4 and IPv6 services without fully migrating at once",
-        "How to unify DHCP and DNS servers across subnets",
-        "How to encrypt all traffic at layer 2"
+        "create a NAT64 translation for legacy devices",
+        "support both IPv4 and IPv6 services without fully migrating at once",
+        "unify DHCP and DNS servers across subnets",
+        "encrypt all traffic at layer 2"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to create a NAT64 translation for legacy devices is NAT64 approach, How to support both IPv4 and IPv6 services without fully migrating at once (correct) dual-stack transitions smoothly, How to unify DHCP and DNS servers across subnets addresses IP management, How to encrypt all traffic at layer 2 is layer 2 encryption. Dual-stack devices can run both IPv4 and IPv6 until the network is fully IPv6 capable.",
+      "explanation": "create a NAT64 translation for legacy devices is NAT64 approach, support both IPv4 and IPv6 services without fully migrating at once (correct) dual-stack transitions smoothly, unify DHCP and DNS servers across subnets addresses IP management, encrypt all traffic at layer 2 is layer 2 encryption. Dual-stack devices can run both IPv4 and IPv6 until the network is fully IPv6 capable.",
       "examTip": "Running dual-stack is a common method to introduce IPv6 gradually while keeping IPv4 intact for compatibility."
     },
     {
@@ -994,7 +994,7 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "A network admin sees thousands of 'ICMP echo requests' from a single source saturating the WAN link. Which direct measure can mitigate this DoS?",
+      "question": "A network admin sees thousands of 'ICMP echo requests' from a single source saturating the WAN link. Which measure can mitigate this DoS?",
       "options": [
         "Shut down STP root ports",
         "Enforce jumbo frames across the WAN",
@@ -1007,7 +1007,7 @@ db.tests.insertOne({
     },
     {
       "id": 78,
-      "question": "Which scenario-based question is BEST solved by deploying IPSec in transport mode rather than tunnel mode?",
+      "question": "Which is BEST solved by deploying IPSec in transport mode rather than tunnel mode?",
       "options": [
         "Encrypting site-to-site communications between different networks",
         "Protecting end-to-end communications between two hosts on the same LAN",
@@ -1059,7 +1059,7 @@ db.tests.insertOne({
     },
     {
       "id": 82,
-      "question": "Which direct measure addresses VLAN double-tagging attacks?",
+      "question": "Which measure addresses VLAN double-tagging attacks?",
       "options": [
         "Use DHCP Option 82 on the server",
         "Prohibit VLAN 1 from being the native VLAN on trunks",
@@ -1072,7 +1072,7 @@ db.tests.insertOne({
     },
     {
       "id": 83,
-      "question": "A user complains their VoIP calls break up whenever large file transfers occur. Which solution is the MOST direct fix?",
+      "question": "A user complains their VoIP calls break up whenever large file transfers occur. Which solution is the MOST fix?",
       "options": [
         "Configure QoS prioritization for voice traffic on the network",
         "Implement half-duplex on the user NIC",
@@ -1189,7 +1189,7 @@ db.tests.insertOne({
     },
     {
       "id": 92,
-      "question": "Which direct approach can help contain damage if an attacker compromises a host in one department's subnet?",
+      "question": "Which approach can help contain damage if an attacker compromises a host in one department's subnet?",
       "options": [
         "Use a single VLAN for all departments",
         "Implement NAC posture checks only on wireless users",
@@ -1254,7 +1254,7 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "Which direct measure can protect the control plane on Cisco devices by splitting route processing from data forwarding via software abstractions?",
+      "question": "Which measure can protect the control plane on Cisco devices by splitting route processing from data forwarding via software abstractions?",
       "options": [
         "Activate SDN-based control plane separation like OpenFlow",
         "Enable jumbo frames globally",
@@ -1280,15 +1280,15 @@ db.tests.insertOne({
     },
     {
       "id": 99,
-      "question": "Which scenario-based question is BEST addressed by implementing a captive portal on a guest Wi-Fi network?",
+      "question": "Which is BEST addressed by implementing a captive portal on a guest Wi-Fi network?",
       "options": [
-        "How to provide an open SSID with no disclaimers",
-        "How to ensure LAN printers are accessible by guests",
-        "How to force guests to accept terms or authenticate before granting internet access",
-        "How to reduce DHCP usage on the main VLAN"
+        "provide an open SSID with no disclaimers",
+        "ensure LAN printers are accessible by guests",
+        "force guests to accept terms or authenticate before granting internet access",
+        "reduce DHCP usage on the main VLAN"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "How to provide an open SSID with no disclaimers is entirely open, How to ensure LAN printers are accessible by guests is typically restricted, How to force guests to accept terms or authenticate before granting internet access (correct) is the main captive portal function, How to reduce DHCP usage on the main VLAN is IP management. Captive portals intercept traffic, presenting a login or terms page to guests.",
+      "explanation": "provide an open SSID with no disclaimers is entirely open, ensure LAN printers are accessible by guests is typically restricted, force guests to accept terms or authenticate before granting internet access (correct) is the main captive portal function, reduce DHCP usage on the main VLAN is IP management. Captive portals intercept traffic, presenting a login or terms page to guests.",
       "examTip": "Captive portals display usage terms or require credentials from guest users before allowing broader network access."
     },
     {
