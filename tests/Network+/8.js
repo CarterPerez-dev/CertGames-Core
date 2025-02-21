@@ -1,17 +1,17 @@
 db.tests.insertOne({
-  "category": "netplus",
+  "category": "nplus",
   "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
+  "testName": "Network Practice Test #8 (Very Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
       "question": "In a large OSPF network with multiple areas, which LSA type is used by ABRs to advertise summary routes into other areas?",
       "options": [
-        "Type 1 (Router LSA)",
-        "Type 2 (Network LSA)",
-        "Type 3 (Summary LSA)",
-        "Type 5 (External LSA)"
+        "Type 1 ",
+        "Type 2 ",
+        "Type 3 ",
+        "Type 5 "
       ],
       "correctAnswerIndex": 2,
       "explanation": "Option A represents the local router’s links. Option B is used by DRs to describe multi-access networks. Option C (correct) is a summary LSA used by ABRs to distribute inter-area routes. Option D advertises external networks from the ASBR.",
@@ -86,10 +86,10 @@ db.tests.insertOne({
       "id": 7,
       "question": "Which advanced QoS mechanism allows distinct traffic classes, each with guaranteed bandwidth, while also permitting a strict priority queue for real-time data?",
       "options": [
-        "WRED (Weighted Random Early Detection)",
-        "WFQ (Weighted Fair Queueing)",
-        "LLQ (Low Latency Queueing)",
-        "RED (Random Early Detection)"
+        "WRED ",
+        "WFQ ",
+        "LLQ ",
+        "RED "
       ],
       "correctAnswerIndex": 2,
       "explanation": "Option A and D are congestion avoidance strategies. Option B is older queueing with no strict priority. Option C (correct) LLQ is WFQ plus a strict priority queue. This suits real-time traffic like VoIP.",
@@ -112,10 +112,10 @@ db.tests.insertOne({
       "id": 9,
       "question": "Which trunking protocol was proprietary to Cisco and has largely been superseded by IEEE 802.1Q?",
       "options": [
-        "ISL (Inter-Switch Link)",
-        "CDP (Cisco Discovery Protocol)",
-        "VTP (VLAN Trunking Protocol)",
-        "LACP (Link Aggregation Control Protocol)"
+        "ISL ",
+        "CDP ",
+        "VTP ",
+        "LACP "
       ],
       "correctAnswerIndex": 0,
       "explanation": "Option A (correct) is Cisco’s older VLAN encapsulation. Option B is device discovery, Option C automates VLAN info distribution, Option D aggregates ports. ISL is mostly replaced by the open standard 802.1Q.",
@@ -175,11 +175,11 @@ db.tests.insertOne({
     },
     {
       "id": 14,
-      "question": "Which device or feature is used to unify threat prevention (firewall, intrusion prevention, content filtering, etc.) in a single on-prem appliance?",
+      "question": "Which device or feature is used to unify threat prevention  in a single on-prem appliance?",
       "options": [
         "CDP neighbor switch",
         "RADIUS server",
-        "UTM (Unified Threat Management) box",
+        "UTM  box",
         "DHCP relay router"
       ],
       "correctAnswerIndex": 2,
@@ -188,7 +188,7 @@ db.tests.insertOne({
     },
     {
       "id": 15,
-      "question": "Which EAP type requires only a server-side certificate, creating a TLS tunnel for user authentication (e.g., via MSCHAPv2) inside that tunnel?",
+      "question": "Which EAP type requires only a server-side certificate, creating a TLS tunnel for user authentication  inside that tunnel?",
       "options": [
         "EAP-TLS",
         "EAP-FAST",
@@ -227,7 +227,7 @@ db.tests.insertOne({
     },
     {
       "id": 18,
-      "question": "Which event triggers an STP TCN (Topology Change Notification)?",
+      "question": "Which event triggers an STP TCN ?",
       "options": [
         "A user logs into the switch via SSH",
         "A port transitions between blocking and forwarding states",
@@ -240,7 +240,7 @@ db.tests.insertOne({
     },
     {
       "id": 19,
-      "question": "Which concept ensures SD-WAN can use multiple link types (MPLS, broadband, LTE) under a unified policy engine?",
+      "question": "Which concept ensures SD-WAN can use multiple link types  under a unified policy engine?",
       "options": [
         "Link aggregation via LACP",
         "Zero trust NAC posture checks",
@@ -305,7 +305,7 @@ db.tests.insertOne({
     },
     {
       "id": 24,
-      "question": "Which key step is required when configuring a layer 3 EtherChannel (port channel) between two switches for inter-VLAN routing?",
+      "question": "Which key step is required when configuring a layer 3 EtherChannel  between two switches for inter-VLAN routing?",
       "options": [
         "Set the channel-group as ‘mode dynamic auto’ on each port",
         "Assign an IP address to the port-channel interface instead of subinterfaces",
@@ -360,7 +360,7 @@ db.tests.insertOne({
       "question": "In an MPLS-based service provider network, which label distribution protocol might be used to assign and distribute labels between LSRs?",
       "options": [
         "OSPF for MPLS TE",
-        "LDP (Label Distribution Protocol)",
+        "LDP ",
         "BGP communities only",
         "CDP for label negotiation"
       ],
@@ -854,7 +854,7 @@ db.tests.insertOne({
       "question": "Which advanced STP variant maps multiple VLANs into a single spanning tree instance, reducing CPU usage compared to one instance per VLAN?",
       "options": [
         "Rapid PVST+",
-        "MST (Multiple Spanning Tree)",
+        "MST ",
         "RIP STP mode",
         "VTP Pruning"
       ],
@@ -929,7 +929,7 @@ db.tests.insertOne({
     },
     {
       "id": 72,
-      "question": "Which AAA protocol uses UDP, encrypts only the password portion of the packet, and is primarily used for network access (802.1X, Wi-Fi, VPN)?",
+      "question": "Which AAA protocol uses UDP, encrypts only the password portion of the packet, and is primarily used for network access ?",
       "options": [
         "TACACS+",
         "Kerberos",
