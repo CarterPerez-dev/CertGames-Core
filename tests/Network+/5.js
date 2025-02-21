@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "nplus",
   "testId": 5,
   "testName": " Network+ Practice Test #5 (Intermediate)",
