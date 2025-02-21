@@ -1,8 +1,8 @@
 {
   "category": "CASP+",
   "testId": 5,
-  "testName": "Practice Test #5 (Intermediate)",
-  "xpPerCorrect": 20,
+  "testName": "SecurityX Practice Test #5 (Intermediate)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
