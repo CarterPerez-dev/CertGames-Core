@@ -1,8 +1,8 @@
 {
   "category": "CASP+",
   "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 30,
+  "testName": "SecurityX Practice Test #7 (Challenging)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
