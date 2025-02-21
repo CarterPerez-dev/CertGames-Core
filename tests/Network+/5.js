@@ -37,10 +37,10 @@
         "It physically hosts all devices, serving as the wiring closet layer",
         "It provides fault isolation and aggregates access layer connections",
         "It interconnects multiple data centers through WAN links",
-        "It offers direct VLAN tagging for end-user devices"
+        "It offers VLAN tagging for end-user devices"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "It physically hosts all devices, serving as the wiring closet layer is the access layer function, hosting end-user connections. It provides fault isolation and aggregates access layer connections (correct) aggregates access layer switches and often applies routing policies. It interconnects multiple data centers through WAN links relates more to core routing or WAN edge. It offers direct VLAN tagging for end-user devices references trunking to end devices, typically an access-layer function.",
+      "explanation": "It physically hosts all devices, serving as the wiring closet layer is the access layer function, hosting end-user connections. It provides fault isolation and aggregates access layer connections (correct) aggregates access layer switches and often applies routing policies. It interconnects multiple data centers through WAN links relates more to core routing or WAN edge. It offers VLAN tagging for end-user devices references trunking to end devices, typically an access-layer function.",
       "examTip": "In the three-tier model, the distribution layer sits between core and access, handling routing and policy enforcement."
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "id": 7,
-      "question": "Which of the following is the MOST direct advantage of PoE+ (802.3at) over standard PoE (802.3af)?",
+      "question": "Which of the following is the MOST advantage of PoE+ (802.3at) over standard PoE (802.3af)?",
       "options": [
         "PoE+ encrypts data packets at layer 2",
         "PoE+ delivers up to about 30W of power, supporting higher-demand devices",
@@ -110,7 +110,7 @@
     },
     {
       "id": 9,
-      "question": "Which direct factor distinguishes an SFTP connection from FTP?",
+      "question": "Which factor distinguishes an SFTP connection from FTP?",
       "options": [
         "SFTP uses TCP port 21 by default",
         "SFTP includes encryption over SSH on port 22",
@@ -214,7 +214,7 @@
     },
     {
       "id": 17,
-      "question": "Which direct approach helps detect an intruder capturing network packets on a compromised switch port?",
+      "question": "Which approach helps detect an intruder capturing network packets on a compromised switch port?",
       "options": [
         "Configure SNMP traps for high CPU usage",
         "Implement 802.1x EAP-TLS for the switch port",
@@ -262,7 +262,7 @@
       ],
       "correctAnswerIndex": 1,
       "explanation": "QoS marking is traffic prioritization. Tunneling (e.g., 6to4) (correct) is IPv6 tunneling. SNMP community strings is for management access. DHCP option 43 is a DHCP vendor extension. Tunneling solutions like 6to4 or ISATAP wrap IPv6 in IPv4.",
-      "examTip": "When migrating to IPv6 over an IPv4 network, tunnels can carry v6 traffic if direct support is absent."
+      "examTip": "When migrating to IPv6 over an IPv4 network, tunnels can carry v6 traffic if support is absent."
     },
     {
       "id": 21,
@@ -279,15 +279,15 @@
     },
     {
       "id": 22,
-      "question": "Which scenario-based question is BEST addressed by implementing a warm site for disaster recovery?",
+      "question": "Which is BEST addressed by implementing a warm site for disaster recovery?",
       "options": [
-        "How to ensure zero downtime with fully active systems in multiple data centers",
-        "How to bring systems online within hours if the primary site fails",
-        "How to store daily tape backups in a secure offsite locker",
-        "How to keep routers updated with the latest firmware automatically"
+        "ensure zero downtime with fully active systems in multiple data centers",
+        "bring systems online within hours if the primary site fails",
+        "store daily tape backups in a secure offsite locker",
+        "keep routers updated with the latest firmware automatically"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to ensure zero downtime with fully active systems in multiple data centers is an active-active or hot site. How to bring systems online within hours if the primary site fails (correct) describes a warm site with partial readiness. How to store daily tape backups in a secure offsite locker is more like cold site or standard backup practice. How to keep routers updated with the latest firmware automatically is routine maintenance, not DR site strategy.",
+      "explanation": "ensure zero downtime with fully active systems in multiple data centers is an active-active or hot site. bring systems online within hours if the primary site fails (correct) describes a warm site with partial readiness. store daily tape backups in a secure offsite locker is more like cold site or standard backup practice. keep routers updated with the latest firmware automatically is routine maintenance, not DR site strategy.",
       "examTip": "A warm site has pre-installed hardware and some data; it can be made operational more quickly than a cold site."
     },
     {
@@ -318,7 +318,7 @@
     },
     {
       "id": 25,
-      "question": "Which WAN topology uses a single central router or hub with multiple branch routers as spokes, minimizing direct site-to-site links?",
+      "question": "Which WAN topology uses a single central router or hub with multiple branch routers as spokes, minimizing site-to-site links?",
       "options": [
         "Full mesh",
         "Point-to-point dedicated lines",
@@ -586,7 +586,7 @@
         "Reduce the DHCP lease to 30 minutes"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Flush the DNS cache and retry might help if name resolution is suspect, but not a direct measure of latency. Replace the Ethernet cable immediately is possible, but you should confirm connectivity first. Run a continuous ping (ping -t) to the file server and observe latency (correct) quickly gauges if there’s packet loss or delay. Reduce the DHCP lease to 30 minutes is IP address management, not performance debugging.",
+      "explanation": "Flush the DNS cache and retry might help if name resolution is suspect, but not a measure of latency. Replace the Ethernet cable immediately is possible, but you should confirm connectivity first. Run a continuous ping (ping -t) to the file server and observe latency (correct) quickly gauges if there’s packet loss or delay. Reduce the DHCP lease to 30 minutes is IP address management, not performance debugging.",
       "examTip": "A sustained ping test can reveal patterns of packet drops or spikes in response time."
     },
     {
@@ -812,15 +812,15 @@
     },
     {
       "id": 63,
-      "question": "Which scenario-based question is BEST resolved by deploying an IPS instead of an IDS?",
+      "question": "Which is BEST resolved by deploying an IPS instead of an IDS?",
       "options": [
-        "How to passively monitor traffic without disruptions",
-        "How to disable encryption on all inbound connections",
-        "How to immediately block detected malicious traffic in real time",
-        "How to gather flow data for capacity planning"
+        "passively monitor traffic without disruptions",
+        "disable encryption on all inbound connections",
+        "immediately block detected malicious traffic in real time",
+        "gather flow data for capacity planning"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "How to passively monitor traffic without disruptions is an IDS scenario. How to disable encryption on all inbound connections is unrelated to intrusion detection. How to immediately block detected malicious traffic in real time (correct) is the advantage of inline IPS. How to gather flow data for capacity planning is flow analysis, not intrusion detection. IPS blocks suspicious traffic inline.",
+      "explanation": "passively monitor traffic without disruptions is an IDS scenario. disable encryption on all inbound connections is unrelated to intrusion detection. immediately block detected malicious traffic in real time (correct) is the advantage of inline IPS. gather flow data for capacity planning is flow analysis, not intrusion detection. IPS blocks suspicious traffic inline.",
       "examTip": "IDS detects, IPS detects and actively prevents malicious activity."
     },
     {
@@ -851,7 +851,7 @@
     },
     {
       "id": 66,
-      "question": "Which direct factor can cause WPA2 Enterprise authentication to fail if a RADIUS server certificate has expired?",
+      "question": "Which factor can cause WPA2 Enterprise authentication to fail if a RADIUS server certificate has expired?",
       "options": [
         "Clients cannot validate the server’s identity and drop the connection",
         "The switch will block all VLAN tagging",
@@ -1176,15 +1176,15 @@
     },
     {
       "id": 91,
-      "question": "Which scenario-based question is MOST directly addressed by implementing a honeypot in the DMZ?",
+      "question": "Which is MOST directly addressed by implementing a honeypot in the DMZ?",
       "options": [
-        "How to safely observe attacker behavior without compromising production systems",
-        "How to ensure VLAN trunking for guest traffic",
-        "How to block all inbound ICMP requests",
-        "How to store backups in an offsite location"
+        "safely observe attacker behavior without compromising production systems",
+        "ensure VLAN trunking for guest traffic",
+        "block all inbound ICMP requests",
+        "store backups in an offsite location"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "How to safely observe attacker behavior without compromising production systems (correct) is the hallmark advantage of honeypots. How to ensure VLAN trunking for guest traffic is about VLAN design. How to block all inbound ICMP requests is a firewall rule. How to store backups in an offsite location is backup policy. Honeypots decoy attackers, letting admins observe threats safely.",
+      "explanation": "safely observe attacker behavior without compromising production systems (correct) is the hallmark advantage of honeypots. ensure VLAN trunking for guest traffic is about VLAN design. block all inbound ICMP requests is a firewall rule. store backups in an offsite location is backup policy. Honeypots decoy attackers, letting admins observe threats safely.",
       "examTip": "Honeypots intentionally attract malicious activity to study attackers and keep them away from real systems."
     },
     {
@@ -1202,7 +1202,7 @@
     },
     {
       "id": 93,
-      "question": "Which direct measure could stop devices from receiving IP addresses from an unauthorized DHCP server on the LAN?",
+      "question": "Which measure could stop devices from receiving IP addresses from an unauthorized DHCP server on the LAN?",
       "options": [
         "Configure VRRP on the core router",
         "Use DHCP snooping to filter DHCP offers from untrusted ports",
