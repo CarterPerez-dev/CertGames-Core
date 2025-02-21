@@ -1,7 +1,4 @@
-db.tests.insertOne({
-  "category": "nplus",
-  "testId": 2,
-  "testName": "Network+ Practice Test #2 (Very Easy)",
+db.tests.insertOne",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -131,7 +128,7 @@ db.tests.insertOne({
         "A type of computer monitor."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A server is a computer that provides resources and services (like files, websites, or email) to other computers on a network (called clients).",
+      "explanation": "A server is a computer that provides resources and services  to other computers on a network .",
       "examTip": "Servers provide services; clients use those services."
     },
     {
@@ -144,7 +141,7 @@ db.tests.insertOne({
         "Data Network Server"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DNS stands for Domain Name System. It translates website names (like google.com) into IP addresses.",
+      "explanation": "DNS stands for Domain Name System. It translates website names  into IP addresses.",
       "examTip": "DNS is like the internet's phone book."
     },
     {
@@ -157,7 +154,7 @@ db.tests.insertOne({
         "The type of software used to build the website."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The domain name is the human-friendly address of a website (like example.com), which DNS translates into an IP address.",
+      "explanation": "The domain name is the human-friendly address of a website , which DNS translates into an IP address.",
       "examTip": "The domain name is what you type into your browser to visit a website."
     },
     {
@@ -209,7 +206,7 @@ db.tests.insertOne({
         "To edit photos."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A VPN (Virtual Private Network) creates a secure, encrypted connection over the internet, protecting your data and privacy, especially on public Wi-Fi.",
+      "explanation": "A VPN  creates a secure, encrypted connection over the internet, protecting your data and privacy, especially on public Wi-Fi.",
       "examTip": "Use a VPN to stay safe on public Wi-Fi."
     },
     {
@@ -235,7 +232,7 @@ db.tests.insertOne({
         "443"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Port 80 is the standard port for unencrypted HTTP web traffic. 21 is for FTP, 22 is for SSH, and 443 is for HTTPS (secure web traffic).",
+      "explanation": "Port 80 is the standard port for unencrypted HTTP web traffic. 21 is for FTP, 22 is for SSH, and 443 is for HTTPS .",
       "examTip": "Remember port 80 for regular websites and port 443 for secure websites."
     },
     {
@@ -248,7 +245,7 @@ db.tests.insertOne({
         "A keyboard"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A NIC (Network Interface Card) provides the physical connection to a network, either wired (Ethernet) or wireless.",
+      "explanation": "A NIC  provides the physical connection to a network, either wired (Ethernet) or wireless.",
       "examTip": "Every device connected to a network needs a NIC."
     },
     {
@@ -262,7 +259,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "HTTPS stands for Hypertext Transfer Protocol Secure. It's the secure version of HTTP, used for encrypted web traffic.",
-      "examTip": "Always look for HTTPS (and the padlock icon) in your browser's address bar for secure websites."
+      "examTip": "Always look for HTTPS  in your browser's address bar for secure websites."
     },
     {
       "id": 21,
@@ -287,7 +284,7 @@ db.tests.insertOne({
         "To print documents wirelessly."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Switches connect devices within a local network (like computers, printers, and servers), allowing them to communicate efficiently.",
+      "explanation": "Switches connect devices within a local network , allowing them to communicate efficiently.",
       "examTip": "Switches are like the building blocks of a local network."
     },
     {
@@ -313,7 +310,7 @@ db.tests.insertOne({
         "Serial Cable"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Twisted pair cabling (UTP or STP) is the most common type of copper cabling used for Ethernet networks due to its cost-effectiveness and ease of installation.",
+      "explanation": "Twisted pair cabling  is the most common type of copper cabling used for Ethernet networks due to its cost-effectiveness and ease of installation.",
       "examTip": "You'll likely see twisted pair cables connecting computers to switches in most offices."
     },
     {
@@ -387,7 +384,7 @@ db.tests.insertOne({
       "options": [
         "Using the default network name (SSID) and password.",
         "Disabling wireless encryption.",
-        "Changing the default password and enabling encryption (like WPA2 or WPA3).",
+        "Changing the default password and enabling encryption .",
         "Leaving your network open for anyone to use."
       ],
       "correctAnswerIndex": 2,
@@ -443,7 +440,7 @@ db.tests.insertOne({
         "ABC.DEF.GHI.JKL"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "192.168.1.1 is a valid IPv4 address. IPv4 addresses have four numbers (0-255) separated by dots. 256.1.1.1 is invalid (numbers must be 0-255). google.com is a domain name. ABC.DEF.GHI.JKL is not a valid format.",
+      "explanation": "192.168.1.1 is a valid IPv4 address. IPv4 addresses have four numbers (0-255) separated by dots. 256.1.1.1 is invalid . google.com is a domain name. ABC.DEF.GHI.JKL is not a valid format.",
       "examTip": "Learn to recognize the format of a valid IP address."
     },
     {
@@ -469,8 +466,8 @@ db.tests.insertOne({
         "Universal Record Locator"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "URL stands for Uniform Resource Locator. It's the address of a specific resource on the web (like a webpage).",
-      "examTip": "A URL is what you type into your browser's address bar (e.g., https://www.example.com)."
+      "explanation": "URL stands for Uniform Resource Locator. It's the address of a specific resource on the web .",
+      "examTip": "A URL is what you type into your browser's address bar ."
     },
     {
       "id": 37,
@@ -482,7 +479,7 @@ db.tests.insertOne({
         "To prevent users from accessing the internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Network documentation (diagrams, IP address lists, configurations) helps understand, troubleshoot, and manage the network.",
+      "explanation": "Network documentation  helps understand, troubleshoot, and manage the network.",
       "examTip": "Good documentation is like a map of your network."
     },
     {
@@ -495,7 +492,7 @@ db.tests.insertOne({
         "It depends on the cable."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Gigabit Ethernet (1000 Mbps) is significantly faster than Fast Ethernet (100 Mbps).",
+      "explanation": "Gigabit Ethernet  is significantly faster than Fast Ethernet .",
       "examTip": "Gigabit Ethernet is the standard for most modern wired networks."
     },
     {
@@ -521,7 +518,7 @@ db.tests.insertOne({
         "A program for creating spreadsheets."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cloud computing refers to accessing services (like storage, servers, and applications) over the internet, rather than running them on your local computer.",
+      "explanation": "Cloud computing refers to accessing services  over the internet, rather than running them on your local computer.",
       "examTip": "The cloud allows you to access resources and services on demand."
     },
     {
@@ -534,8 +531,8 @@ db.tests.insertOne({
         "443"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Port 443 is the standard port for HTTPS (secure web traffic). Port 80 is for unencrypted HTTP, 21 is for FTP, and 25 is for SMTP (email).",
-      "examTip": "Remember port 443 for secure websites (those with a padlock icon in the browser)."
+      "explanation": "Port 443 is the standard port for HTTPS . Port 80 is for unencrypted HTTP, 21 is for FTP, and 25 is for SMTP (email).",
+      "examTip": "Remember port 443 for secure websites ."
     },
     {
       "id": 42,
@@ -573,7 +570,7 @@ db.tests.insertOne({
         "Turning off your computer."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Downloading is the process of receiving data (like files, images, or videos) from a server on the internet or another network to your device.",
+      "explanation": "Downloading is the process of receiving data  from a server on the internet or another network to your device.",
       "examTip": "Downloading brings data to your computer; uploading sends data from your computer."
     },
     {
@@ -599,7 +596,7 @@ db.tests.insertOne({
         "A program for creating presentations."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A computer virus is a type of malware (malicious software) that can replicate itself and spread to other computers, often causing damage or stealing data.",
+      "explanation": "A computer virus is a type of malware  that can replicate itself and spread to other computers, often causing damage or stealing data.",
       "examTip": "Protect your computer with antivirus software."
     },
     {
@@ -619,13 +616,13 @@ db.tests.insertOne({
       "id": 48,
       "question": "Which type of network covers the largest geographic area?",
       "options": [
-        "PAN (Personal Area Network)",
-        "LAN (Local Area Network)",
-        "MAN (Metropolitan Area Network)",
-        "WAN (Wide Area Network)"
+        "PAN ",
+        "LAN ",
+        "MAN ",
+        "WAN "
       ],
       "correctAnswerIndex": 3,
-      "explanation": "WANs (Wide Area Networks) cover the largest areas, connecting networks across cities, countries, or even continents. The internet is the largest WAN.",
+      "explanation": "WANs  cover the largest areas, connecting networks across cities, countries, or even continents. The internet is the largest WAN.",
       "examTip": "WANs connect LANs together over long distances."
     },
     {
@@ -651,7 +648,7 @@ db.tests.insertOne({
         "To play video games."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The OS (like Windows, macOS, or Linux) is the fundamental software that manages all other software and hardware on a computer.",
+      "explanation": "The OS  is the fundamental software that manages all other software and hardware on a computer.",
       "examTip": "The OS is the foundation of your computer's software."
     },
     {
@@ -716,7 +713,7 @@ db.tests.insertOne({
         "A program for drawing pictures."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Email (electronic mail) is a system for sending and receiving messages digitally over a network, typically the internet.",
+      "explanation": "Email  is a system for sending and receiving messages digitally over a network, typically the internet.",
       "examTip": "Email is a fundamental communication tool for both personal and professional use."
     },
     {
@@ -730,7 +727,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Star, bus, ring, and mesh are common network topologies. Triangle is not a standard network topology.",
-      "examTip": "Learn the common network topologies (star, bus, ring, mesh)."
+      "examTip": "Learn the common network topologies ."
     },
     {
       "id": 57,
@@ -742,7 +739,7 @@ db.tests.insertOne({
         "The brand name of a network device."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Network topology refers to the arrangement of network elements, either physically (how cables are run) or logically (how data flows).",
+      "explanation": "Network topology refers to the arrangement of network elements, either physically  or logically .",
       "examTip": "The topology affects how a network functions and how easily it can be managed."
     },
     {
@@ -807,7 +804,7 @@ db.tests.insertOne({
         "It makes computers slower."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Networks enable sharing of resources (files, printers, internet), communication (email, messaging), and collaboration.",
+      "explanation": "Networks enable sharing of resources , communication , and collaboration.",
       "examTip": "Networks are essential for connecting computers and sharing resources."
     },
     {
@@ -885,7 +882,7 @@ db.tests.insertOne({
         "A type of network cable."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Malware (malicious software) is a general term for any software designed to harm or disrupt a computer system, including viruses, worms, Trojans, and ransomware.",
+      "explanation": "Malware  is a general term for any software designed to harm or disrupt a computer system, including viruses, worms, Trojans, and ransomware.",
       "examTip": "Protect your computer with antivirus and anti-malware software."
     },
     {
@@ -898,7 +895,7 @@ db.tests.insertOne({
         "HDMI"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "802.11 (with variations like a, b, g, n, ac, ax) is the family of standards for Wi-Fi wireless networking. Ethernet is for wired networks, USB connects peripherals, and HDMI transmits audio/video.",
+      "explanation": "802.11  is the family of standards for Wi-Fi wireless networking. Ethernet is for wired networks, USB connects peripherals, and HDMI transmits audio/video.",
       "examTip": "802.11 is the standard for Wi-Fi."
     },
     {
@@ -911,7 +908,7 @@ db.tests.insertOne({
         "To edit photos."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Web browsers (like Chrome, Firefox, Safari) are software applications used to retrieve, present, and traverse information resources on the World Wide Web.",
+      "explanation": "Web browsers  are software applications used to retrieve, present, and traverse information resources on the World Wide Web.",
       "examTip": "Your web browser is your gateway to the internet."
     },
     {
@@ -924,7 +921,7 @@ db.tests.insertOne({
         "It's less secure than storing files locally."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cloud storage services (like Google Drive, Dropbox, OneDrive) allow you to store your files on remote servers, making them accessible from any device with an internet connection.  Security depends on the provider and your security practices.",
+      "explanation": "Cloud storage services  allow you to store your files on remote servers, making them accessible from any device with an internet connection.  Security depends on the provider and your security practices.",
       "examTip": "Cloud storage provides accessibility and backup for your files."
     },
     {
@@ -932,7 +929,7 @@ db.tests.insertOne({
       "question": "What is two-factor authentication (2FA)?",
       "options": [
         "Using two different passwords for the same account.",
-        "An extra layer of security that requires two different ways to verify your identity (e.g., password and a code from your phone).",
+        "An extra layer of security that requires two different ways to verify your identity .",
         "Using a very long password.",
         "Using the same password for two different accounts."
       ],
@@ -989,7 +986,7 @@ db.tests.insertOne({
         "Modem"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Routers operate at the network layer (Layer 3) and make forwarding decisions based on IP addresses, connecting different networks together.",
+      "explanation": "Routers operate at the network layer  and make forwarding decisions based on IP addresses, connecting different networks together.",
       "examTip": "Routers are the 'traffic directors' of the internet."
     },
     {
@@ -1002,7 +999,7 @@ db.tests.insertOne({
         "Output System"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "OS stands for Operating System, the fundamental software that manages all hardware and software on a computer (e.g., Windows, macOS, Linux).",
+      "explanation": "OS stands for Operating System, the fundamental software that manages all hardware and software on a computer .",
       "examTip": "The OS is the foundation of your computer's software."
     },
     {
@@ -1023,12 +1020,12 @@ db.tests.insertOne({
       "question": "Which of the following is a type of computer memory?",
       "options": [
         "Hard Drive",
-        "RAM (Random Access Memory)",
+        "RAM ",
         "Monitor",
         "Keyboard"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "RAM (Random Access Memory) is a type of volatile memory used by the computer to store data that is currently being used. Hard drives are for long-term storage; monitors and keyboards are peripherals.",
+      "explanation": "RAM  is a type of volatile memory used by the computer to store data that is currently being used. Hard drives are for long-term storage; monitors and keyboards are peripherals.",
       "examTip": "RAM is temporary storage; the hard drive is permanent storage."
     },
     {
@@ -1041,7 +1038,7 @@ db.tests.insertOne({
         "To connect to the internet."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The hard drive (or SSD - Solid State Drive) is the primary storage device for a computer, storing the operating system, applications, and user files even when the computer is turned off.",
+      "explanation": "The hard drive  is the primary storage device for a computer, storing the operating system, applications, and user files even when the computer is turned off.",
       "examTip": "The hard drive is your computer's long-term memory."
     },
     {
@@ -1101,7 +1098,7 @@ db.tests.insertOne({
       "question": "What is the function of a modem?",
       "options": [
         "To connect multiple computers on a local network.",
-        "To connect a computer or network to the internet (usually through an ISP).",
+        "To connect a computer or network to the internet .",
         "To print documents.",
         "To store files."
       ],
@@ -1127,7 +1124,7 @@ db.tests.insertOne({
       "question": "What is a peripheral device?",
       "options": [
         "A core component inside a computer.",
-        "A device that connects to a computer to add functionality (e.g., printer, keyboard, mouse).",
+        "A device that connects to a computer to add functionality .",
         "A type of network cable.",
         "A type of software."
       ],
@@ -1145,7 +1142,7 @@ db.tests.insertOne({
         "To change your password."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Restarting (or rebooting) shuts down the computer and then immediately starts it up again, often resolving minor software glitches.",
+      "explanation": "Restarting  shuts down the computer and then immediately starts it up again, often resolving minor software glitches.",
       "examTip": "Restarting is a common troubleshooting step."
     },
     {
@@ -1218,7 +1215,7 @@ db.tests.insertOne({
       "question": "What is 'the Internet of Things' (IoT)?",
       "options": [
         "A type of computer virus.",
-        "The network of physical devices (like smart appliances and wearables) connected to the internet.",
+        "The network of physical devices  connected to the internet.",
         "A program for creating spreadsheets.",
         "A type of network cable."
       ],
@@ -1236,7 +1233,7 @@ db.tests.insertOne({
         "The brand of your computer."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A username (or user ID) is your unique identifier for an account, often used in combination with a password.",
+      "explanation": "A username  is your unique identifier for an account, often used in combination with a password.",
       "examTip": "Choose usernames that are easy to remember but difficult for others to guess."
     },
     {
@@ -1262,7 +1259,7 @@ db.tests.insertOne({
         "A way to turn off your computer."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Copy and paste is a fundamental computer operation that allows you to duplicate and move data (text, images, files) between different locations.",
+      "explanation": "Copy and paste is a fundamental computer operation that allows you to duplicate and move data  between different locations.",
       "examTip": "Copy and paste is a huge time-saver."
     },
     {
@@ -1275,7 +1272,7 @@ db.tests.insertOne({
         "A type of network cable."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Search engines (like Google, Bing, DuckDuckGo) use algorithms to index and search the vast amount of information on the internet, helping you find what you're looking for.",
+      "explanation": "Search engines  use algorithms to index and search the vast amount of information on the internet, helping you find what you're looking for.",
       "examTip": "Search engines are powerful tools for finding information online."
     },
     {
