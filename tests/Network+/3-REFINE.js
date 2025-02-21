@@ -1,1309 +1,1308 @@
-
 db.tests.insertOne({
-  "category": "nplus",
-  "testId": 3,
-  "testName": "Network+ Practice Test #3 (Easy)",
-  "xpPerCorrect": 10,
+  "category": "netplus",
+  "testId": 3,                 
+  "testName": "Practice Test #3 (Easy)",
+  "xpPerCorrect": 10,                     
   "questions": [
     {
       "id": 1,
-      "question": "Which layer of the OSI model deals with physical cabling?",
+      "question": "A network administrator must secure all traffic between a remote branch and headquarters. Which solution is the MOST effective way to protect data in transit?",
       "options": [
-        "Layer 7",
-        "Layer 4",
-        "Layer 1",
-        "Layer 3"
+        "Utilize GRE tunnels without any encryption",
+        "Configure a site-to-site VPN with IPSec",
+        "Enable Telnet for remote device management",
+        "Implement unencrypted HTTP sessions only"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The Physical layer (Layer 1) defines the physical characteristics of the network, including cabling, voltage levels, and data rates.",
-      "examTip": "Remember 'Physical' layer means the actual wires and signals."
+      "correctAnswerIndex": 1, 
+      "explanation": "Option A lacks native encryption, leaving data exposed. Option B (correct) creates an encrypted IPSec tunnel, ensuring confidentiality and integrity. Option C uses a plaintext protocol, unsafe for sensitive traffic. Option D fails to secure any data with encryption.",
+      "examTip": "Always prioritize encrypted VPN tunneling for secure site-to-site connections."
     },
     {
       "id": 2,
-      "question": "What is a common use for a network switch?",
+      "question": "You notice repeated TCP retransmissions between two routers. What is the FIRST action you should take to identify the problem?",
       "options": [
-        "To connect to a different network, like the Internet.",
-        "To connect multiple devices within the same local network.",
-        "To provide wireless access to the network.",
-        "To translate domain names into IP addresses."
+        "Replace all network cables immediately",
+        "Check interface statistics and error counters",
+        "Restart both routers to clear sessions",
+        "Reduce the MTU size on both ends"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Switches create a local network by connecting devices like computers, printers, and servers, allowing them to communicate efficiently.",
-      "examTip": "Switches forward traffic based on MAC addresses within a local network."
+      "explanation": "Option A is premature without confirming physical issues. Option B (correct) helps pinpoint issues like CRC errors or drops. Option C can resolve some issues temporarily but doesn't diagnose root causes. Option D is only relevant if MTU mismatch is proven.",
+      "examTip": "Always gather interface statistics first to narrow down possible physical or configuration errors."
     },
     {
       "id": 3,
-      "question": "What does 'HTTP' stand for?",
+      "question": "Which of the following BEST ensures an organization’s wireless network requires unique credentials for each user?",
       "options": [
-        "Hypertext Transfer Program",
-        "Hypertext Transfer Protocol",
-        "High Transfer Text Protocol",
-        "Home Text Transfer Protocol"
+        "Enable WPA3-Personal with a shared passphrase",
+        "Implement MAC filtering on all access points",
+        "Use WPA2-Enterprise with 802.1X authentication",
+        "Disable SSID broadcast to conceal the network"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HTTP stands for Hypertext Transfer Protocol, the foundation of data communication on the World Wide Web (for non-secure websites).",
-      "examTip": "HTTP is used for accessing most websites (HTTPS is for secure websites)."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A uses a single shared password, not unique per user. Option B is weak because MAC addresses can be spoofed. Option C (correct) forces individual user authentication via RADIUS/802.1X. Option D only obscures the SSID but doesn't strengthen credentials.",
+      "examTip": "When securing WLANs in a corporate environment, 802.1X-based authentication is preferred for user-level accountability."
     },
     {
       "id": 4,
-      "question": "What is an advantage of using a client-server network model?",
+      "question": "A user reports being unable to reach the internet after a network change. Which is the FIRST step to troubleshoot this problem?",
       "options": [
-        "It's easier to set up than a peer-to-peer network.",
-        "Centralized management of resources and security.",
-        "All computers have equal roles and responsibilities.",
-        "It's less expensive than a peer-to-peer network."
+        "Review the default gateway settings",
+        "Assign a static IP address to the user",
+        "Disable all firewall rules",
+        "Change the DNS server to 8.8.8.8"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Client-server networks offer centralized control over data, security, and user access, making them suitable for larger organizations.  While potentially more expensive to set up, they can offer long-term cost savings through better management.",
-      "examTip": "Client-server networks provide better control and scalability than peer-to-peer."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) quickly verifies if traffic is properly routed out of the local subnet. Option B is arbitrary and ignores underlying routing or DHCP issues. Option C could expose the network to threats and isn’t a diagnostic approach. Option D might solve DNS issues but not general connectivity if gateway is wrong.",
+      "examTip": "Always confirm IP configuration details (IP, subnet, gateway) before making broader changes."
     },
     {
       "id": 5,
-      "question": "Which protocol is used to send email?",
+      "question": "A technician must create a network design for multiple VLANs. Which device is BEST suited to route between VLANs for optimal performance?",
       "options": [
-        "HTTP",
-        "FTP",
-        "SMTP",
-        "DNS"
+        "A layer 2 switch with trunk ports",
+        "A layer 3 switch with SVIs",
+        "A basic consumer-grade router",
+        "A wireless access point using WPA2"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "SMTP (Simple Mail Transfer Protocol) is the standard protocol for sending email across the internet. HTTP is for web browsing, FTP is for file transfer, and DNS translates domain names.",
-      "examTip": "Remember SMTP for sending email."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A only switches traffic at layer 2; it can’t route VLANs without external routing. Option B (correct) provides inter-VLAN routing via Switch Virtual Interfaces efficiently. Option C can route, but typically less performant for large VLAN deployments. Option D is unrelated to VLAN routing needs.",
+      "examTip": "Use layer 3 switches for high-speed, inter-VLAN routing in enterprise environments."
     },
     {
       "id": 6,
-      "question": "What type of address is 192.168.1.1?",
+      "question": "Your organization wants to separate guest traffic from internal traffic. Which approach is the BEST to achieve this using a single managed switch?",
       "options": [
-        "MAC address",
-        "IPv4 address",
-        "IPv6 address",
-        "URL"
+        "Implement VLANs on the switch ports",
+        "Use static IP addresses on guest devices",
+        "Disable DHCP on all internal VLANs",
+        "Set MAC filtering on each internal port"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "192.168.1.1 is a commonly used private IPv4 address. IPv4 addresses are 32-bit numbers, often written in dotted-decimal notation. MAC addresses are hardware addresses, IPv6 addresses are 128-bit, and URLs are web addresses.",
-      "examTip": "Recognize the format of IPv4 addresses (four numbers separated by dots)."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) logically segments traffic with VLANs, a standard method for separation. Option B alone won’t separate traffic at layer 2 or layer 3. Option C is not directly related to segmentation and complicates network management. Option D does not truly segregate guest from internal traffic, only restricts devices by MAC.",
+      "examTip": "VLANs are the primary method to segment traffic and enhance security within a single switch infrastructure."
     },
     {
       "id": 7,
-      "question": "What does a subnet mask do?",
+      "question": "Which of the following MOST helps to mitigate broadcast storms in a large switched network?",
       "options": [
-        "Encrypts network traffic",
-        "Identifies the network and host portions of an IP address.",
-        "Assigns IP addresses automatically.",
-        "Filters network traffic."
+        "Configure DNS with multiple record types",
+        "Enable spanning tree protocol",
+        "Increase router NAT table size",
+        "Disable syslog on all devices"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The subnet mask works with the IP address to determine which part of the address identifies the network and which part identifies the specific host on that network.",
-      "examTip": "Subnet masks are essential for IP addressing and routing."
+      "explanation": "Option A is unrelated to broadcast domains. Option B (correct) uses STP to block redundant paths and prevent loops. Option C has no effect on layer 2 broadcast storms. Option D does not influence broadcast traffic control.",
+      "examTip": "Redundant links can cause loops; STP blocks loops, preventing broadcast storms."
     },
     {
       "id": 8,
-      "question": "Which command is used to test connectivity to a remote host and measure round-trip time?",
+      "question": "A router is discarding packets due to TTL expiration. Which layer of the OSI model is primarily involved in this process?",
       "options": [
-        "tracert",
-        "ping",
-        "ipconfig",
-        "nslookup"
+        "Session layer (Layer 5)",
+        "Network layer (Layer 3)",
+        "Transport layer (Layer 4)",
+        "Data link layer (Layer 2)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The `ping` command sends ICMP Echo Request packets to a target host and listens for Echo Reply packets, measuring the time it takes for the round trip.",
-      "examTip": "`ping` is a fundamental tool for network troubleshooting."
+      "explanation": "Option A deals with interhost communication sessions. Option B (correct) is where IP addresses and TTL fields exist, so TTL expiration is handled there. Option C involves ports and reliable data transport, not IP TTL. Option D handles physical addressing, not TTL.",
+      "examTip": "Time to Live (TTL) is an IP-level mechanism, which is Layer 3 of the OSI model."
     },
     {
       "id": 9,
-      "question": "What is the purpose of a default gateway?",
+      "question": "Which port is typically used by LDAP over SSL (LDAPS) for secure directory queries?",
       "options": [
-        "To block unwanted network traffic.",
-        "To provide a path for traffic to leave the local network.",
-        "To assign IP addresses to devices.",
-        "To translate domain names to IP addresses."
+        "Port 389",
+        "Port 636",
+        "Port 443",
+        "Port 161"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The default gateway is the IP address of the router that a device uses to send traffic destined for networks outside its own local subnet.",
-      "examTip": "Without a default gateway, devices can only communicate within their local network."
+      "explanation": "Option A is LDAP (plain text). Option B (correct) is the standard LDAPS port. Option C is HTTPS, unrelated to LDAP. Option D is SNMP, not LDAP.",
+      "examTip": "LDAPS commonly runs on TCP port 636 to provide encryption for directory services."
     },
     {
       "id": 10,
-      "question": "What is the main advantage of using fiber optic cable over copper cable?",
+      "question": "During a wireless site survey, you discover overlapping channels on the 2.4 GHz band. What is the FIRST measure you should take to minimize interference?",
       "options": [
-        "It's cheaper.",
-        "It's easier to install.",
-        "It can transmit data over longer distances with less signal loss.",
-        "It's more resistant to physical damage."
+        "Switch to 802.11a-only for all clients",
+        "Use channels 1, 6, and 11 for APs",
+        "Increase transmit power to overpower interference",
+        "Enable MAC filtering on the AP"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Fiber optic cables use light to transmit data, allowing for much higher bandwidths and longer distances compared to copper cables, with minimal signal degradation.",
-      "examTip": "Fiber is the preferred choice for high-speed, long-distance network connections."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A forces older standard usage and won’t fix channel overlap. Option B (correct) uses non-overlapping channels in 2.4 GHz. Option C typically worsens adjacent channel interference. Option D doesn’t affect channel overlap.",
+      "examTip": "In 2.4 GHz networks, stick to non-overlapping channels (1, 6, 11) to reduce co-channel interference."
     },
     {
       "id": 11,
-      "question": "Which of the following is a security feature of a firewall?",
+      "question": "You suspect a bad patch cable is causing intermittent connectivity. Which tool is MOST appropriate to confirm cable integrity?",
       "options": [
-        "Assigning IP addresses to devices.",
-        "Filtering network traffic based on rules.",
-        "Providing wireless network access.",
-        "Translating domain names to IP addresses."
+        "Wireless analyzer",
+        "Protocol analyzer",
+        "Cable tester",
+        "Port mirroring session"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Firewalls control network access by examining incoming and outgoing traffic and blocking or allowing it based on predefined security rules.",
-      "examTip": "Firewalls are essential for protecting networks from unauthorized access."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is for Wi-Fi signals, not copper cable integrity. Option B captures traffic, not physical cable faults. Option C (correct) verifies continuity and wire mapping. Option D only duplicates traffic to another port for analysis, not confirming cable status.",
+      "examTip": "A basic cable tester is key to diagnosing physical-layer issues before investigating higher layers."
     },
     {
       "id": 12,
-      "question": "What is the role of a DNS server?",
+      "question": "A technician needs to encrypt in-flight traffic while tunneling through an untrusted network. Which technology is BEST for ensuring confidentiality and integrity?",
       "options": [
-        "To assign IP addresses automatically.",
-        "To translate domain names (like google.com) into IP addresses.",
-        "To encrypt network traffic.",
-        "To connect to the internet."
+        "GRE encapsulation alone",
+        "IPSec VPN using ESP",
+        "Clear-text HTTP sessions",
+        "SNMPv1 traps"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DNS servers act like the internet's phone book, converting human-readable domain names into the numerical IP addresses that computers use to communicate.",
-      "examTip": "DNS is crucial for navigating the internet using website names."
+      "explanation": "Option A lacks encryption by default. Option B (correct) uses Encapsulating Security Payload (ESP) for both encryption and integrity. Option C is not encrypted. Option D is outdated and does not protect data in transit.",
+      "examTip": "ESP within IPSec encrypts and authenticates IP packets, ensuring secure tunnels over untrusted links."
     },
     {
       "id": 13,
-      "question": "What is the purpose of a DHCP server?",
+      "question": "Users are unable to connect to a new VLAN. You discover their ports are set to VLAN 10 but the switch trunk port for the uplink is missing VLAN 10. What is the BEST fix?",
       "options": [
-        "To translate domain names to IP addresses.",
-        "To automatically assign IP addresses and other network configuration to devices.",
-        "To route traffic between different networks.",
-        "To provide secure remote access to a network."
+        "Change native VLAN to 10 on the trunk",
+        "Add VLAN 10 to the trunk allowed list",
+        "Reboot the users’ PCs to renew leases",
+        "Disable STP on the trunk interface"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DHCP (Dynamic Host Configuration Protocol) servers automate the process of assigning IP addresses, subnet masks, default gateways, and DNS server information to devices on a network.",
-      "examTip": "DHCP simplifies network administration and prevents IP address conflicts."
+      "explanation": "Option A only sets VLAN 10 as native, which may not help if VLAN 10 isn’t allowed on the trunk. Option B (correct) ensures the trunk passes VLAN 10 traffic. Option C won’t resolve a trunk misconfiguration. Option D is dangerous and unrelated.",
+      "examTip": "Verify that your trunk ports allow all the required VLANs in their allowed VLAN list."
     },
     {
       "id": 14,
-      "question": "Which type of network spans a large geographical area, often connecting multiple cities or countries?",
+      "question": "A server repeatedly fails to obtain an IP address. After confirming the DHCP server is online, which is the FIRST step to isolate the issue?",
       "options": [
-        "LAN (Local Area Network)",
-        "WAN (Wide Area Network)",
-        "MAN (Metropolitan Area Network)",
-        "PAN (Personal Area Network)"
+        "Assign a static IP and hope it resolves",
+        "Check DHCP scope options and available leases",
+        "Manually flush DNS cache on the server",
+        "Disable RSTP on the switches"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "WANs (Wide Area Networks) cover large distances, connecting smaller networks (like LANs and MANs) together. The internet is the largest example of a WAN.",
-      "examTip": "WANs connect geographically dispersed networks."
+      "explanation": "Option A is a workaround, not a diagnosis. Option B (correct) checks if the scope is exhausted or misconfigured. Option C deals with name resolution, not address leasing. Option D is unrelated to DHCP address allocation.",
+      "examTip": "Always verify the DHCP scope settings (range, reservations, and remaining addresses) to pinpoint allocation issues."
     },
     {
       "id": 15,
-      "question": "What is a benefit of using a VPN?",
+      "question": "Which of the following IPv6 transition methods allows an IPv6 packet to be encapsulated inside IPv4 traffic?",
       "options": [
-        "It makes your internet connection faster.",
-        "It encrypts your internet traffic, providing security and privacy, especially on public Wi-Fi.",
-        "It allows you to access blocked websites.",
-        "It prevents viruses from infecting your computer."
+        "Dual stack",
+        "Tunneling",
+        "NAT64",
+        "APIPA"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A VPN (Virtual Private Network) creates a secure, encrypted tunnel for your internet traffic, protecting your data from eavesdropping and enhancing your privacy, especially on untrusted networks like public Wi-Fi. While it can sometimes be used to bypass geographical restrictions, that's not its core purpose. It does not guarantee virus protection.",
-      "examTip": "Use a VPN to secure your connection on public Wi-Fi."
+      "explanation": "Option A uses both IPv4 and IPv6 stacks simultaneously but does not encapsulate traffic. Option B (correct) encapsulates IPv6 in IPv4 for transition. Option C translates IPv6 addresses to IPv4 addresses, not strictly encapsulation. Option D is a fallback for IPv4 addresses, not an IPv6 transition mechanism.",
+      "examTip": "Tunneling is a common method for integrating IPv6 traffic into existing IPv4 networks without direct translation."
     },
     {
       "id": 16,
-      "question": "Which of the following is a characteristic of a star network topology?",
+      "question": "You need to ensure high availability for your default gateway in a subnet. Which protocol BEST provides an automatic failover if the primary gateway goes down?",
       "options": [
-        "All devices are connected to a single, central cable.",
-        "All devices are connected to a central hub or switch.",
-        "Devices are connected in a circular loop.",
-        "Each device has multiple connections to other devices."
+        "ARP",
+        "DNSSEC",
+        "HTTP",
+        "VRRP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "In a star topology, each network device has a dedicated connection to a central point, usually a switch or hub. This makes it easy to manage and isolate problems.",
-      "examTip": "Star topology is the most common topology in modern Ethernet networks."
+      "correctAnswerIndex": 3,
+      "explanation": "Option A resolves MAC addresses, not gateway redundancy. Option B secures DNS records, not gateways. Option C is a web protocol, irrelevant to default gateway HA. Option D (correct) is a First Hop Redundancy Protocol ensuring an alternate default gateway.",
+      "examTip": "VRRP (or HSRP/GLBP) is used to provide gateway redundancy in enterprise networks."
     },
     {
       "id": 17,
-      "question": "What is 'bandwidth' in networking terms?",
+      "question": "A router chooses a path with the shortest metric even though a different path has fewer hops. Which routing protocol characteristic explains this?",
       "options": [
-        "The physical length of a network cable.",
-        "The amount of data that can be transmitted over a network connection in a given period.",
-        "The number of devices connected to a switch.",
-        "The speed of a computer's processor."
+        "Administrative distance",
+        "Horizontal scaling",
+        "Cost-based selection",
+        "Prefix length priority"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Bandwidth is the capacity of a network connection to carry data, usually measured in bits per second (bps), kilobits per second (Kbps), megabits per second (Mbps), or gigabits per second (Gbps).",
-      "examTip": "Higher bandwidth generally means faster data transfer rates."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A determines trust in a route source, not how the metric is calculated. Option B is not a routing metric concept. Option C (correct) indicates the protocol uses metrics beyond hop count (e.g., OSPF uses cost). Option D is about route specificity, not cost calculations.",
+      "examTip": "Some routing protocols consider bandwidth or delay over hop count, leading to a cost-based selection."
     },
     {
       "id": 18,
-      "question": "Which protocol is used for secure web browsing?",
+      "question": "Which type of DNS record is used to identify the mail server responsible for accepting email on behalf of a domain?",
       "options": [
-        "HTTP",
-        "HTTPS",
-        "FTP",
-        "SMTP"
+        "A record",
+        "CNAME record",
+        "MX record",
+        "TXT record"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP. It encrypts communication between your browser and the website, protecting sensitive information.",
-      "examTip": "Always look for HTTPS (and the padlock icon) in your browser's address bar when entering personal information or financial details."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A maps a hostname to an IPv4 address. Option B is an alias for another domain name. Option C (correct) designates mail server responsibility. Option D often holds verification or arbitrary text data.",
+      "examTip": "Always verify MX records for proper email routing to your domain’s mail server."
     },
     {
       "id": 19,
-      "question": "What does 'NIC' stand for in networking?",
+      "question": "You are tasked with capturing traffic to troubleshoot random disconnections. Which tool is MOST appropriate for deep packet inspection on a wired Ethernet segment?",
       "options": [
-        "Network Interface Card",
-        "Network Internet Connection",
-        "Network Instruction Code",
-        "New Internet Card"
+        "Wi-Fi analyzer",
+        "Protocol analyzer",
+        "Cable toner probe",
+        "SNMP polling utility"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "NIC stands for Network Interface Card. It's the hardware component that allows a computer or other device to connect to a network.",
-      "examTip": "Every device connected to a network needs a NIC, either wired or wireless."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A only inspects wireless signals. Option B (correct) can capture packets for detailed analysis. Option C traces cable paths, not packet-level analysis. Option D queries devices for performance data but doesn’t do packet inspection.",
+      "examTip": "Use a protocol analyzer (like Wireshark) when you need to see exact packet contents and conversation flows."
     },
     {
       "id": 20,
-      "question": "What is a common security practice for wireless networks?",
+      "question": "A consultant is designing a WAN solution that automatically selects the best path based on latency and cost across multiple transport links. Which emerging technology is BEST suited?",
       "options": [
-        "Using an open network with no password.",
-        "Using WPA2 or WPA3 encryption with a strong password.",
-        "Using the default SSID and password.",
-        "Disabling the firewall."
+        "SD-WAN",
+        "NAT64",
+        "Static routing",
+        "Simple QoS tagging"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Enabling strong encryption (WPA2 or WPA3) and using a complex, unique password protects your wireless network from unauthorized access. Changing the default SSID is also a good practice, but less critical than encryption.",
-      "examTip": "Always secure your Wi-Fi network with strong encryption and a strong password."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) dynamically balances multiple WAN links for performance and cost. Option B translates IPv6 addresses to IPv4, unrelated to WAN path optimization. Option C requires manual configuration and no automatic path selection. Option D just marks traffic but doesn’t pick paths automatically.",
+      "examTip": "SD-WAN solutions are transport-agnostic and use policies to choose the optimal path in real time."
     },
     {
       "id": 21,
-      "question": "What is 'latency' in network terms?",
+      "question": "A network engineer notices that traffic within the same data center is routing out to the internet gateway first. Which topology or design approach can help keep east-west traffic local?",
       "options": [
-        "The amount of data that can be transmitted.",
-        "The time it takes for data to travel from its source to its destination.",
-        "The number of devices connected to a network.",
-        "The physical distance between two network devices."
+        "Collapsed core",
+        "Three-tier model with core routing",
+        "North-south approach only",
+        "Hub-and-spoke architecture"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Latency refers to the delay experienced by data as it travels across a network. High latency can cause slow response times, especially noticeable in real-time applications like online gaming or video conferencing.",
-      "examTip": "Low latency is desirable for good network performance."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) aggregates distribution and core layers, often keeping local traffic inside the data center. Option B might route traffic to a separate core. Option C describes external traffic flows, not local data center paths. Option D is more typical in WAN designs than local data center traffic.",
+      "examTip": "A collapsed core can minimize unnecessary routing hops for east-west (intra-data-center) traffic."
     },
     {
       "id": 22,
-      "question": "What is the function of a router in a network?",
+      "question": "Which of the following is the MOST effective strategy to prevent switch port flooding attacks (MAC flooding)?",
       "options": [
-        "To connect multiple devices within the same local network.",
-        "To forward data packets between different networks.",
-        "To provide wireless access to a network.",
-        "To translate domain names into IP addresses."
+        "Disable CDP globally",
+        "Set port security limits on MAC addresses",
+        "Use an unmanaged switch without STP",
+        "Enable DNSSEC to secure name resolution"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Routers operate at the network layer (Layer 3) of the OSI model and are responsible for forwarding data packets between different networks based on IP addresses. Switches connect devices within the same network; access points provide wireless connectivity; and DNS servers translate domain names.",
-      "examTip": "Routers connect networks together; switches connect devices within a network."
+      "explanation": "Option A prevents device discovery but doesn’t prevent MAC floods. Option B (correct) restricts the number of MACs per port, mitigating floods. Option C offers no security or loop protection. Option D only secures DNS queries, not MAC learning behavior.",
+      "examTip": "Port security can limit MAC addresses learned per interface and shut down ports exceeding that limit."
     },
     {
       "id": 23,
-      "question": "What is a good first step when troubleshooting a network connectivity problem?",
+      "question": "When configuring an IPv4 address of 10.10.5.10/29, what is the maximum number of usable host addresses in this subnet?",
       "options": [
-        "Reinstall the operating system.",
-        "Check physical connections (cables, power) and Wi-Fi settings.",
-        "Replace the network interface card.",
-        "Contact the device manufacturer."
+        "2",
+        "6",
+        "14",
+        "30"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Before taking more drastic measures, always verify the basics: ensure cables are securely connected, power is on, and Wi-Fi is enabled and connected (if applicable).",
-      "examTip": "Start troubleshooting with the simplest and most common causes."
+      "explanation": "Option A is /30. Option B (correct) a /29 has 8 total IPs, 1 network address, 1 broadcast, leaving 6 usable. Options C and D correspond to masks /28 or /27, providing more hosts.",
+      "examTip": "Remember that a /29 gives you 8 total IPs, 6 of which can be assigned to devices."
     },
     {
       "id": 24,
-      "question": "What is the purpose of a subnet mask?",
+      "question": "You need to identify the root cause of intermittent network outages by correlating logs from multiple devices in real time. Which solution is BEST?",
       "options": [
-        "To encrypt network traffic.",
-        "To divide an IP address into a network portion and a host portion.",
-        "To assign IP addresses dynamically.",
-        "To filter network traffic."
+        "Manually reviewing each device’s local log",
+        "Setting up a syslog collector and SIEM",
+        "Using Wi-Fi analyzer on all network segments",
+        "Enabling DHCP snooping on edge switches"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A subnet mask is used in conjunction with an IP address to identify the network to which the device belongs and the specific host ID on that network. This is essential for routing.",
-      "examTip": "Subnet masks and IP addresses work together to define network addressing."
+      "explanation": "Option A is time-consuming and prone to missing cross-device patterns. Option B (correct) centralizes logs for correlation and real-time alerts. Option C is for wireless analysis only, ignoring other logs. Option D helps track DHCP traffic but not a complete log correlation approach.",
+      "examTip": "A SIEM aggregates logs and provides automated analysis, crucial for detecting multi-device anomalies."
     },
     {
       "id": 25,
-      "question": "What is the purpose of the `ipconfig /all` command in Windows?",
+      "question": "Your router references a route from an internal protocol and a route from an external protocol for the same subnet. Which concept determines which route is installed in the routing table?",
       "options": [
-        "To display the routing table.",
-        "To release and renew a DHCP lease.",
-        "To display detailed network configuration information for all network adapters.",
-        "To test network connectivity to a remote host."
+        "Hop count mismatch",
+        "Administrative distance",
+        "CIDR block usage",
+        "Default gateway priority"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`ipconfig /all` provides comprehensive information about network interfaces, including IP address, subnet mask, default gateway, DNS servers, MAC address, and DHCP status. `route print` shows the routing table, `ipconfig /release` and `/renew` manage DHCP leases, and `ping` tests connectivity.",
-      "examTip": "`ipconfig /all` is a powerful command for gathering network information on Windows systems."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a metric detail, but different protocols might not use the same metric. Option B (correct) decides which source of routing information is preferred. Option C is about subnetting, not preference. Option D is a local IP setting, not route selection logic.",
+      "examTip": "When multiple protocols offer a route, the one with the lowest administrative distance is chosen."
     },
     {
       "id": 26,
-      "question": "Which of the following is a characteristic of a mesh network topology?",
+      "question": "In a virtualized data center, which technology encapsulates Layer 2 frames within UDP for easier network extension across Layer 3 boundaries?",
       "options": [
-        "All devices are connected to a central hub or switch.",
-        "Devices are connected in a circular loop.",
-        "Each device has multiple paths to other devices, providing redundancy.",
-        "All devices are connected to a single cable."
+        "VXLAN",
+        "PPP",
+        "802.1Q trunking",
+        "Syslog"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Mesh networks offer high redundancy and fault tolerance because each node is connected to multiple other nodes. If one link fails, there are alternative paths for data to travel.",
-      "examTip": "Mesh networks are highly reliable but can be more complex to manage."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) encapsulates Ethernet frames in UDP for large-scale virtualization. Option B is a WAN protocol for serial links. Option C is VLAN tagging, not an encapsulation across L3. Option D is a logging protocol, unrelated to virtualization tunnels.",
+      "examTip": "VXLAN is commonly used in modern data centers to extend VLANs at scale."
     },
     {
       "id": 27,
-      "question": "What does 'MAC' address stand for?",
+      "question": "You need to ensure each port on a switch only allows one device at a time. What is the FIRST feature to consider enabling?",
       "options": [
-        "Main Access Control",
-        "Media Access Control",
-        "Multiple Address Code",
-        "Modem Access Code"
+        "Port mirroring",
+        "MAC address sticky port security",
+        "SNMP polling",
+        "Trunking"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "MAC stands for Media Access Control. It is the unique physical address assigned to a network interface card (NIC).",
-      "examTip": "The MAC address is like a device's hardware serial number on the network."
+      "explanation": "Option A replicates traffic for analysis, not controlling device count. Option B (correct) lets the switch learn one MAC and disable the port if additional MACs appear. Option C only monitors device data, not limiting devices. Option D aggregates multiple VLANs but doesn’t restrict device count.",
+      "examTip": "Port security with sticky MAC helps ensure only one legitimate host can connect on a given interface."
     },
     {
       "id": 28,
-      "question": "Which of the following is a valid IPv6 address?",
+      "question": "Which command is used on Linux to display network interface configuration details, such as IP and MAC addresses?",
       "options": [
-        "192.168.1.1",
-        "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
-        "256.1.1.1",
-        "ABC.DEF.GHI.JKL"
+        "dig",
+        "ipconfig",
+        "tcpdump",
+        "ip addr show"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2001:0db8:85a3:0000:0000:8a2e:0370:7334 is a valid IPv6 address.  IPv6 addresses are 128-bit, written in hexadecimal, and separated by colons.  The other options are either invalid IPv4 addresses or not IP addresses at all.",
-      "examTip": "Learn to recognize the format of IPv6 addresses (hexadecimal and colons)."
+      "correctAnswerIndex": 3,
+      "explanation": "Option A queries DNS name servers. Option B is a Windows command, not Linux. Option C captures packets but doesn’t show interface config. Option D (correct) displays IP/MAC addresses on Linux.",
+      "examTip": "On modern Linux systems, 'ip addr show' or 'ip link show' replaces older ifconfig usage."
     },
     {
       "id": 29,
-      "question": "What is the function of an access point (AP) in a wireless network?",
+      "question": "Which protocol is a distance-vector routing protocol used primarily in smaller networks and uses hop count as its metric?",
       "options": [
-        "To connect wired devices to a network.",
-        "To connect wireless devices to a wired network.",
-        "To route traffic between different networks.",
-        "To assign IP addresses dynamically."
+        "OSPF",
+        "BGP",
+        "RIP",
+        "EIGRP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An access point (AP) acts as a bridge between wireless devices (like laptops and smartphones) and a wired network (usually Ethernet).  It allows wireless devices to communicate with wired devices and access network resources.",
-      "examTip": "Think of an AP as a 'wireless switch'."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is link-state. Option B is path-vector used for internet routing. Option C (correct) is distance-vector using hop count. Option D is an advanced distance-vector but uses a composite metric, not just hop count.",
+      "examTip": "RIP is a classic distance-vector protocol limited by a max hop count of 15."
     },
     {
       "id": 30,
-      "question": "What is a common symptom of a network loop?",
+      "question": "You are setting up a mesh wireless network. Which statement BEST describes a characteristic of a mesh topology?",
       "options": [
-        "Slow internet speeds.",
-        "Broadcast storms that can significantly degrade network performance.",
-        "Inability to obtain an IP address.",
-        "Frequent disconnections from wireless networks."
+        "Each AP must be directly wired to the core",
+        "All traffic relies on a single root bridge",
+        "APs dynamically route traffic through neighboring APs",
+        "SSID broadcast must be disabled for bridging"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network loops, often caused by STP (Spanning Tree Protocol) failures, create broadcast storms where broadcast traffic circulates endlessly, consuming bandwidth and potentially crashing the network.  The other options are more likely caused by other issues.",
-      "examTip": "STP is crucial for preventing network loops in switched networks."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is typical for standard infrastructure but not mesh. Option B references spanning tree for switches, not mesh Wi-Fi. Option C (correct) is the core advantage of mesh, distributing load among nodes. Option D doesn’t reflect mesh operation.",
+      "examTip": "In a wireless mesh, each node can forward traffic to others, expanding coverage organically."
     },
     {
       "id": 31,
-      "question": "What is the purpose of using VLANs?",
+      "question": "Which record type ensures that a certain domain name points to another canonical (true) domain name, effectively creating an alias?",
       "options": [
-        "To increase network bandwidth.",
-        "To logically segment a physical network into multiple, separate broadcast domains.",
-        "To encrypt network traffic.",
-        "To assign IP addresses to devices automatically."
+        "MX",
+        "A",
+        "CNAME",
+        "TXT"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "VLANs (Virtual LANs) divide a physical network into multiple logical networks, improving security, manageability, and performance by isolating traffic and reducing broadcast domains. They don't directly increase bandwidth, encrypt traffic, or assign IP addresses (DHCP does that).",
-      "examTip": "VLANs are a fundamental tool for network segmentation."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A directs mail exchange. Option B provides an IPv4 address. Option C (correct) defines a canonical name alias. Option D is free-form text data.",
+      "examTip": "CNAME records allow one domain to act as an alias, avoiding multiple A records for the same resource."
     },
     {
       "id": 32,
-      "question": "Which command is used to release and renew a DHCP lease on a Windows computer?",
+      "question": "A network engineer wants to ensure devices from two different subnets in the same VLAN can be quickly discovered and enumerated. Which protocol can help identify attached devices via Layer 2 frames?",
       "options": [
-        "ipconfig /all",
-        "ipconfig /release then ipconfig /renew",
-        "ipconfig /flushdns",
-        "netstat -r"
+        "DNS",
+        "LLDP",
+        "NTP",
+        "FTP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`ipconfig /release` releases the current IP address assigned by DHCP, and `ipconfig /renew` requests a new IP address from the DHCP server.  `ipconfig /all` displays configuration, `ipconfig /flushdns` clears the DNS cache, and `netstat -r` shows routing information.",
-      "examTip": "Use `ipconfig /release` and `ipconfig /renew` to troubleshoot DHCP-related connectivity issues."
+      "explanation": "Option A resolves domain names, not device discovery on the link layer. Option B (correct) helps discover neighbors over Layer 2. Option C synchronizes clocks, unrelated to device discovery. Option D is file transfer protocol.",
+      "examTip": "LLDP (or CDP on Cisco devices) is commonly used to discover directly connected network devices."
     },
     {
       "id": 33,
-      "question": "What does 'FTP' stand for?",
+      "question": "Which of the following is the FIRST step to mitigate a suspected VLAN hopping attack?",
       "options": [
-        "File Transfer Protocol",
-        "Fast Transfer Protocol",
-        "File Transmission Program",
-        "Full Transfer Program"
+        "Delete all VLANs except the native VLAN",
+        "Use SSH instead of Telnet on the switch",
+        "Manually specify the trunk native VLAN and disallow auto trunking",
+        "Enable jumbo frames to reduce overhead"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "FTP stands for File Transfer Protocol, a standard network protocol used to transfer files between a client and a server on a computer network.",
-      "examTip": "FTP is commonly used for uploading and downloading files to/from web servers."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is drastic and disrupts normal VLAN segmentation. Option B secures management but not VLAN hopping. Option C (correct) sets a static native VLAN and disables DTP auto trunking, preventing double tagging. Option D does nothing to mitigate VLAN hopping.",
+      "examTip": "To prevent VLAN hopping, disable DTP and assign a specific native VLAN on trunk ports."
     },
     {
       "id": 34,
-      "question": "Which of the following is a characteristic of single-mode fiber optic cable compared to multimode?",
+      "question": "A user complains they can’t connect to the network. You notice the switch port is in an “err-disabled” state. What is the MOST likely cause?",
       "options": [
-        "It's used for shorter distances.",
-        "It has a larger core diameter.",
-        "It supports longer distances and higher bandwidths.",
-        "It uses LEDs as a light source."
+        "Excessive PoE draw from the device",
+        "DNS server misconfiguration",
+        "Incorrect subnet mask on user PC",
+        "DHCP address pool exhaustion"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Single-mode fiber has a smaller core that allows only one mode of light to propagate, reducing signal loss and enabling much longer transmission distances and higher bandwidths compared to multimode fiber. Multimode uses LEDs and is for shorter distances.",
-      "examTip": "Single-mode fiber is used for long-haul, high-bandwidth applications; multimode is for shorter distances within buildings or campuses."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) can trigger err-disabled if the port detects an over-limit PoE usage or a fault. Option B wouldn’t disable the port at layer 2. Option C wouldn’t typically cause the port to go err-disable. Option D also wouldn’t force the port into err-disable.",
+      "examTip": "When a port goes err-disabled, investigate port security, PoE load, or other physical triggers that cause the switch to shut it down."
     },
     {
       "id": 35,
-      "question": "What is the role of an authoritative DNS server?",
+      "question": "You want to capture all traffic passing through a specific port on a switch to analyze it. Which configuration is BEST for this task?",
       "options": [
-        "To cache DNS records from other servers.",
-        "To hold the master copy of DNS records for a specific domain.",
-        "To forward DNS requests to other servers.",
-        "To provide DNS services to home users."
+        "Enable port mirroring (SPAN) to a monitor port",
+        "Assign a dynamic IP address to the port",
+        "Disable CDP on the interface",
+        "Implement ACLs to block inbound traffic"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An authoritative DNS server holds the original, definitive records for a particular domain. It's the ultimate source of truth for that domain's DNS information. Caching servers store copies of records temporarily, and forwarding servers relay requests.",
-      "examTip": "Authoritative DNS servers are the primary source of information for a domain's DNS records."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) copies traffic to a monitoring port for analysis. Option B is for IP configuration, irrelevant to packet capturing. Option C hides device info but doesn’t mirror traffic. Option D blocks traffic instead of capturing it.",
+      "examTip": "Use port mirroring (a SPAN session) when you need to send copies of traffic to a packet analyzer."
     },
     {
       "id": 36,
-      "question": "Which of the following is a security risk associated with using public Wi-Fi?",
+      "question": "A network administrator sees that an interface has incrementing CRC errors. Which layer of the OSI model is MOST likely affected?",
       "options": [
-        "Increased network speed.",
-        "Stronger encryption.",
-        "Potential for eavesdropping and data interception due to lack of security.",
-        "Automatic access to all network resources."
+        "Presentation layer",
+        "Network layer",
+        "Physical layer",
+        "Application layer"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Public Wi-Fi networks often lack strong security measures, making it easier for attackers to intercept data transmitted over the network. Always be cautious when using public Wi-Fi.",
-      "examTip": "Use a VPN when connecting to public Wi-Fi to encrypt your traffic and protect your data."
+      "explanation": "Option A relates to data formatting, not bit-level errors. Option B deals with IP addressing. Option C (correct) indicates physical or data link hardware issues. Option D is user-facing data exchange, not frames or bits.",
+      "examTip": "CRC errors typically point to cabling, connectors, or physical interface issues at Layer 1."
     },
     {
       "id": 37,
-      "question": "What is a 'denial-of-service' (DoS) attack?",
+      "question": "Which of the following is the MOST secure method for a remote user to access internal network resources without installing a local VPN client?",
       "options": [
-        "An attempt to steal user passwords.",
-        "An attempt to overwhelm a network or server with traffic, making it unavailable to legitimate users.",
-        "An attempt to trick users into revealing personal information.",
-        "An attempt to gain unauthorized access to a computer system."
+        "Client-based IPSec tunnel",
+        "Clientless SSL VPN via web portal",
+        "Telnet session over WAN",
+        "FTP file transfers to DMZ"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DoS attack aims to disrupt a network service by flooding it with excessive traffic, preventing legitimate users from accessing it. Password stealing is credential theft, tricking users is phishing, and gaining unauthorized access is a general hacking attempt.",
-      "examTip": "DoS attacks can cause significant downtime and disruption."
+      "explanation": "Option A requires a local client installed. Option B (correct) uses a browser-based portal for secure remote access. Option C is unencrypted. Option D only handles file transfers and is usually not secure by default.",
+      "examTip": "A clientless SSL VPN allows users to securely connect from a web browser without specialized client software."
     },
     {
       "id": 38,
-      "question": "Which technology is used to create a secure tunnel over the internet, allowing remote access to a private network?",
+      "question": "Which layer of the OSI model is responsible for maintaining sessions between hosts, such as establishing, controlling, and ending the sessions?",
       "options": [
-        "DNS",
-        "DHCP",
-        "VPN",
-        "FTP"
+        "Layer 5",
+        "Layer 2",
+        "Layer 4",
+        "Layer 7"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A VPN (Virtual Private Network) creates an encrypted connection over a public network (like the internet), providing secure access to a private network as if the user were directly connected.",
-      "examTip": "VPNs are essential for secure remote access and protecting data privacy."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the Session layer that manages interhost communication sessions. Option B is Data Link, Option C is Transport, and Option D is Application. None of those specifically focus on session management.",
+      "examTip": "Layer 5 is often overlooked but it’s crucial for starting and ending persistent communication sessions."
     },
     {
       "id": 39,
-      "question": "Which command is used to display the routing table on a Windows computer?",
+      "question": "Which would be the FIRST step in investigating a suspected on-path attack (previously known as man-in-the-middle)?",
       "options": [
-        "ipconfig /all",
-        "route print",
-        "netstat -r",
-        "tracert"
+        "Check for an invalid default gateway MAC",
+        "Format the hard drive of the affected workstation",
+        "Disable SNMP on all network devices",
+        "Delete old VLAN configurations on the switches"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The `route print` command displays the current routing table, showing how the computer will forward traffic to different networks. `ipconfig /all` shows interface details, `netstat -r` shows routing information (but less clearly than `route print`), and `tracert` traces the route to a destination.",
-      "examTip": "Use `route print` to see how your computer routes traffic to different networks."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) helps detect ARP poisoning or spoofing that can indicate an on-path scenario. Option B is extreme and unrelated. Option C is about management protocol, not ARP-based attacks. Option D is not specifically relevant to a man-in-the-middle.",
+      "examTip": "Check the ARP table and gateway MAC to spot suspicious mappings that might indicate ARP spoofing."
     },
     {
       "id": 40,
-      "question": "What is a benefit of using network address translation (NAT)?",
+      "question": "A user complains about slow network speeds. You confirm no general WAN issues exist. Which parameter is MOST likely to cause local performance bottlenecks?",
       "options": [
-        "It encrypts network traffic.",
-        "It allows multiple devices on a private network to share a single public IP address.",
-        "It assigns IP addresses dynamically.",
-        "It filters network traffic based on content."
+        "Mismatched duplex on the switch port",
+        "Improper DNS record delegation",
+        "High CPU usage on the domain controller",
+        "Overlapping channels in the 5GHz band only"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "NAT translates private IP addresses used within a local network to a single public IP address used on the internet, conserving public IP addresses and providing a layer of security. Encryption is done by other protocols, DHCP assigns IPs, and content filtering is done by firewalls/proxies.",
-      "examTip": "NAT is essential for connecting private networks to the internet using a limited number of public IP addresses."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) can drastically reduce speeds if half-duplex conflicts with full-duplex. Option B would cause name resolution issues, not raw speed drops. Option C might affect authentication but not typically cause slow throughput on a single link. Option D is less common for 5GHz, which has more channels.",
+      "examTip": "Always verify speed/duplex settings when troubleshooting localized throughput problems."
     },
     {
       "id": 41,
-      "question": "Which of the following is the MOST secure wireless encryption protocol?",
+      "question": "Which of the following protocols uses a three-way handshake to establish a reliable connection between hosts?",
       "options": [
-        "WEP",
-        "WPA",
-        "WPA2",
-        "WPA3"
+        "UDP",
+        "TCP",
+        "ICMP",
+        "GRE"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "WPA3 is the latest and most secure wireless security protocol, offering improved encryption and protection against attacks. WEP is extremely vulnerable, and WPA and WPA2 have known weaknesses.",
-      "examTip": "Always use WPA3 if your devices and access point support it. Avoid WEP entirely."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is connectionless. Option B (correct) initiates connections with SYN, SYN-ACK, and ACK. Option C is used for diagnostics and control messages, not reliable sessions. Option D is a tunneling protocol without built-in reliability.",
+      "examTip": "TCP uses a handshake to ensure reliable, ordered data delivery."
     },
     {
       "id": 42,
-      "question": "Which of the following is a function of an Intrusion Detection System (IDS)?",
+      "question": "Which scenario-based approach is MOST appropriate for verifying whether an unauthorized DHCP server is active on the network?",
       "options": [
-        "To automatically assign IP addresses.",
-        "To prevent all network attacks.",
-        "To monitor network traffic for suspicious activity and generate alerts.",
-        "To encrypt network traffic."
+        "Analyze ARP tables to see unexpected MACs",
+        "Use a packet sniffer to filter DHCP offer messages",
+        "Disable spanning tree on the core switch",
+        "Implement DNSSEC to validate DNS requests"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "An IDS passively monitors network traffic and alerts administrators to potential security breaches or policy violations. While some IDSes can take limited preventative action, their primary function is detection and alerting. Firewalls offer more robust prevention. DHCP assigns IPs, and encryption is a separate process.",
-      "examTip": "Think of an IDS as a security alarm system for your network."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A might find suspicious devices but is less direct. Option B (correct) directly catches rogue DHCP offers. Option C is risky and unrelated to DHCP. Option D is about DNS record security, not DHCP servers.",
+      "examTip": "Capturing DHCP traffic is the surest way to spot rogue servers responding to client broadcasts."
     },
     {
       "id": 43,
-      "question": "What is a common use for a toner probe?",
+      "question": "Which command can be used on a Windows machine to view the current IP configuration, including subnet mask and default gateway?",
       "options": [
-        "To test the speed of a network connection.",
-        "To identify and trace wires or cables within a bundle or wall.",
-        "To measure the strength of a wireless signal.",
-        "To crimp connectors onto network cables."
+        "ip addr show",
+        "netstat -an",
+        "ipconfig",
+        "arp -a"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A toner probe consists of a tone generator (which sends a signal down the cable) and a probe (which detects the signal), allowing you to trace cables, even when they are hidden within walls or bundles.",
-      "examTip": "Toner probes are essential tools for cable management and troubleshooting."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is for Linux systems. Option B displays active connections/ports. Option C (correct) shows IP configuration details on Windows. Option D only shows MAC-to-IP mappings in the ARP cache.",
+      "examTip": "Use 'ipconfig' (Windows) or 'ifconfig'/'ip' (Linux) to check IP address, gateway, and DNS settings quickly."
     },
     {
       "id": 44,
-      "question": "What does 'PoE' stand for?",
+      "question": "Which protocol is commonly used for time synchronization across network devices?",
       "options": [
-        "Power over Ethernet",
-        "Port over Ethernet",
-        "Protocol over Ethernet",
-        "Packet over Ethernet"
+        "SNMP",
+        "NTP",
+        "HTTP",
+        "FTP"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "PoE (Power over Ethernet) technology allows network cables to carry electrical power, simplifying the deployment of devices like IP phones, wireless access points, and security cameras.",
-      "examTip": "PoE eliminates the need for separate power outlets for network devices."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A collects management information, not time sync. Option B (correct) synchronizes clocks. Option C is web traffic, and Option D is file transfers.",
+      "examTip": "Accurate time is vital for logs and authentication; NTP is the standard for synchronization."
     },
     {
       "id": 45,
-      "question": "Which command is used to display a network interface's MAC address on a Windows system?",
+      "question": "A wired link between two switches sometimes goes down. The cable length is near maximum for Cat5e. Which approach is BEST to maintain a stable connection?",
       "options": [
-        "ipconfig /release",
-        "ipconfig /all",
-        "ipconfig /renew",
-        "arp -a"
+        "Disable 802.1Q trunking",
+        "Use a single-mode fiber cable instead",
+        "Change the IP addressing scheme",
+        "Upgrade to Cat3 cables"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`ipconfig /all` displays detailed configuration information for all network adapters, including the physical address (MAC address). `ipconfig /release` and `/renew` manage DHCP leases, and `arp -a` shows the ARP cache.",
-      "examTip": "`ipconfig /all` is your go-to command for finding a device's MAC address on Windows."
+      "explanation": "Option A trunking removal doesn't fix signal integrity. Option B (correct) ensures better distance support and fewer interference issues. Option C won't affect physical layer reliability. Option D is a downgrade from Cat5e.",
+      "examTip": "For long distances or questionable copper runs, fiber often provides a more reliable physical medium."
     },
     {
       "id": 46,
-      "question": "What is the primary difference between TCP and UDP?",
+      "question": "Which AAA protocol uses TCP and encrypts the entire authentication payload, making it more secure for device administration access?",
       "options": [
-        "TCP is faster than UDP.",
-        "TCP is connection-oriented and provides reliable data transfer, while UDP is connectionless and does not guarantee delivery.",
-        "UDP is used for web browsing, while TCP is used for file transfer.",
-        "TCP is used for wireless networks, while UDP is used for wired networks."
+        "RADIUS",
+        "TACACS+",
+        "LDAP",
+        "LDAPS"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "TCP (Transmission Control Protocol) establishes a connection, provides error checking, and guarantees delivery and order of data packets. UDP (User Datagram Protocol) is faster but does not guarantee delivery or order, making it suitable for applications where some data loss is acceptable (like streaming video).",
-      "examTip": "TCP is reliable but has more overhead; UDP is faster but less reliable."
+      "explanation": "Option A uses UDP and only partially encrypts packets. Option B (correct) uses TCP and fully encrypts. Option C is a directory service protocol, not specifically AAA. Option D is LDAP over SSL but still not the typical AAA method for network devices.",
+      "examTip": "TACACS+ is often preferred for device administration because it encrypts the entire session."
     },
     {
       "id": 47,
-      "question": "What is a key difference between a router and a switch?",
+      "question": "A technician wants to confirm whether a specific IP is reachable and measure the path to that destination. Which command is MOST useful?",
       "options": [
-        "A router connects devices within the same network; a switch connects different networks.",
-        "A router connects different networks; a switch connects devices within the same network.",
-        "A router is used for wireless networks; a switch is used for wired networks.",
-        "A router assigns IP addresses; a switch assigns MAC addresses."
+        "ping",
+        "traceroute/tracert",
+        "arp -a",
+        "nslookup"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Routers operate at Layer 3 (Network) and forward traffic between different networks based on IP addresses. Switches operate primarily at Layer 2 (Data Link) and forward traffic within the same network based on MAC addresses.",
-      "examTip": "Routers connect networks; switches connect devices within a network."
+      "explanation": "Option A checks reachability but not each hop. Option B (correct) identifies the path hop-by-hop. Option C shows ARP cache, not path. Option D resolves DNS queries, unrelated to path determination.",
+      "examTip": "Use traceroute (Linux) or tracert (Windows) to map the route packets take to a destination."
     },
     {
       "id": 48,
-      "question": "What is the purpose of a firewall?",
+      "question": "A company's public web server must handle heavy traffic loads. Which device is BEST suited for distributing incoming requests across multiple back-end servers?",
       "options": [
-        "To speed up your internet connection.",
-        "To control network traffic and block unauthorized access to or from a private network.",
-        "To assign IP addresses to devices.",
-        "To translate domain names into IP addresses."
+        "Layer 2 switch",
+        "Load balancer",
+        "Content filter",
+        "Proxy server"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a security guard for your network, examining incoming and outgoing traffic and blocking or allowing it based on predefined security rules. This helps prevent unauthorized access and protect against malware.",
-      "examTip": "Firewalls are a fundamental component of network security."
+      "explanation": "Option A simply switches packets at layer 2. Option B (correct) distributes requests to multiple servers, ensuring better performance. Option C typically inspects or restricts content. Option D caches or modifies requests, not necessarily balancing load among servers.",
+      "examTip": "Load balancers help optimize traffic distribution, crucial for large-scale web services."
     },
     {
       "id": 49,
-      "question": "Which of the following is a benefit of using network documentation?",
+      "question": "Which of the following is a benefit of VLAN trunking using 802.1Q?",
       "options": [
-        "Keeping all network information in your head.",
-        "Regularly updating network diagrams and documentation to reflect changes.",
-        "Using only physical network diagrams, not logical diagrams.",
-        "Sharing network passwords with everyone."
+        "Eliminates broadcast traffic on the network",
+        "Carries multiple VLAN traffic over a single link",
+        "Merges DHCP and DNS services into one VLAN",
+        "Enables encryption of all VLAN data in transit"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Accurate and up-to-date network documentation (including diagrams, IP address assignments, configurations, and procedures) is crucial for troubleshooting, planning, and security. Information should be stored securely, not just memorized, and both physical and logical diagrams are important. Passwords should be strictly controlled.",
-      "examTip": "Good network documentation is an investment that saves time and trouble in the long run."
+      "explanation": "Option A can’t fully eliminate broadcasts. Option B (correct) encapsulates VLAN tags so multiple VLANs can share one physical link. Option C is unrelated to trunking. Option D standard 802.1Q does not encrypt traffic.",
+      "examTip": "802.1Q tagging is the standard for carrying multiple VLANs across a single trunk link."
     },
     {
       "id": 50,
-      "question": "What type of network attack involves an attacker inserting themselves between two communicating parties to intercept or modify data?",
+      "question": "Which layer of the OSI model handles data encryption and decryption, as well as format changes (like compression) before passing data to the application?",
       "options": [
-        "Denial-of-service (DoS) attack",
-        "Man-in-the-middle (MitM) attack",
-        "Phishing attack",
-        "Brute-force attack"
+        "Layer 6",
+        "Layer 2",
+        "Layer 4",
+        "Layer 7"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "In a man-in-the-middle (MitM) attack, the attacker secretly intercepts and potentially alters communication between two parties who believe they are directly communicating with each other. DoS attacks flood a target, phishing uses deception, and brute-force attacks try to guess passwords.",
-      "examTip": "MitM attacks can be mitigated with strong encryption and secure protocols."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the Presentation layer, which deals with data formatting, encryption, and compression. Option B is Data Link. Option C is Transport. Option D is Application, which interacts with end-user software.",
+      "examTip": "Layer 6 is often overlooked but crucial for encryption and data format transformations."
     },
     {
       "id": 51,
-      "question": "Which of the following is an example of a logical network diagram?",
+      "question": "In a high-availability design, which approach uses active-active node pairs, ensuring both nodes are processing traffic simultaneously?",
       "options": [
-        "A diagram showing the physical layout of network cables.",
-        "A diagram showing IP addresses, subnets, and routing protocols.",
-        "A photograph of a network rack.",
-        "A list of network hardware serial numbers."
+        "VRRP with a single master",
+        "Hot standby with a passive secondary",
+        "Active-active clustering",
+        "Backup tapes stored offsite"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A logical network diagram shows the network's logical structure, including IP addressing, subnets, VLANs, routing protocols, and other logical elements. Physical diagrams show cabling, rack diagrams show equipment in racks, and serial numbers are part of asset inventory.",
-      "examTip": "Logical diagrams help understand how data flows through the network, regardless of the physical layout."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A typically has one active node. Option B describes active-passive, not active-active. Option C (correct) both devices share load. Option D is offline backups, unrelated to real-time traffic sharing.",
+      "examTip": "Active-active configurations maximize resource usage, but require careful synchronization between nodes."
     },
     {
       "id": 52,
-      "question": "Which of the following is a benefit of using cloud computing services?",
+      "question": "Which scenario-based question is BEST for mitigating a DNS poisoning attack on your network?",
       "options": [
-        "You have complete control over the physical hardware.",
-        "You can easily scale resources up or down as needed.",
-        "It eliminates all security risks.",
-        "It guarantees 100% uptime."
+        "Implement DNSSEC to validate DNS responses",
+        "Use Telnet for internal DNS queries",
+        "Configure jumbo frames on all DNS servers",
+        "Force an SSL VPN for all DNS traffic"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cloud services offer scalability (easily adjust resources), flexibility, and often cost savings compared to managing your own infrastructure. You don't have control over the physical hardware, security is a shared responsibility, and 100% uptime is rarely guaranteed.",
-      "examTip": "Cloud computing provides agility and scalability for businesses."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) ensures DNS data authenticity via signatures. Option B is insecure for DNS server management. Option C doesn’t protect DNS query integrity. Option D is not standard for DNS queries and doesn’t specifically mitigate poisoning.",
+      "examTip": "DNSSEC helps prevent spoofed DNS responses by verifying cryptographic signatures."
     },
     {
       "id": 53,
-      "question": "What is a 'broadcast storm'?",
+      "question": "Which of these is the FIRST thing to verify when your device fails to obtain an IPv4 address via DHCP?",
       "options": [
-        "A period of heavy rainfall.",
-        "A situation where excessive broadcast traffic floods a network, degrading performance and potentially causing a network outage.",
-        "A type of network attack.",
-        "A misconfigured DHCP server."
+        "Check if STP is configured in Rapid mode",
+        "Confirm the DHCP server scope and lease availability",
+        "Enable domain controller role on the server",
+        "Use NAT on the client interface"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A broadcast storm occurs when a network is overwhelmed by broadcast traffic, often caused by network loops or malfunctioning devices. This can consume all available bandwidth and bring the network to a standstill. It's an effect, not a specific attack type.",
-      "examTip": "Broadcast storms are often caused by network loops; Spanning Tree Protocol (STP) helps prevent them."
+      "explanation": "Option A covers loop protection, not IP address assignment. Option B (correct) ensures the server can still hand out addresses. Option C is unrelated to DHCP. Option D is for translating private IPs to public, not address assignment.",
+      "examTip": "Always verify the DHCP scope has addresses left and is properly configured before checking more complex issues."
     },
     {
       "id": 54,
-      "question": "Which technology allows multiple VLANs to be transmitted over a single physical link?",
+      "question": "Which of the following methods is BEST for preventing unauthorized users from simply plugging into an open office Ethernet jack and accessing your internal LAN?",
       "options": [
-        "STP (Spanning Tree Protocol)",
-        "VTP (VLAN Trunking Protocol)",
-        "802.1Q trunking",
-        "Link Aggregation"
+        "Disable SSL on the local router",
+        "Implement NAC with 802.1X authentication",
+        "Enable DNS caching on every switch port",
+        "Adopt a static routing protocol"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "802.1Q trunking (often just called 'trunking') adds tags to Ethernet frames to identify the VLAN they belong to, allowing multiple VLANs to share a single physical link between switches. STP prevents loops, VTP manages VLAN databases (not the transmission itself), and link aggregation combines multiple physical links into one logical link.",
-      "examTip": "Remember that 802.1Q is the standard for VLAN tagging on trunk links."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is irrelevant to LAN port security. Option B (correct) requires users to authenticate before gaining network access. Option C doesn’t control access. Option D is about routing, not controlling port access.",
+      "examTip": "NAC (with 802.1X) ensures only authenticated, compliant endpoints can communicate on your network."
     },
     {
       "id": 55,
-      "question": "What is the purpose of the Address Resolution Protocol (ARP)?",
+      "question": "A user calls in complaining that while on Wi-Fi, they randomly lose connectivity but can reconnect after moving. Which factor is MOST likely the cause?",
       "options": [
-        "To resolve domain names to IP addresses.",
-        "To dynamically assign IP addresses.",
-        "To map IP addresses to MAC addresses on a local network.",
-        "To encrypt network communication."
+        "802.1Q trunk error",
+        "Mismatched VLAN ID on trunk port",
+        "Co-channel or adjacent channel interference",
+        "DHCP lease is too long"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "ARP is used on local networks (specifically, Ethernet networks) to find the MAC address associated with a known IP address. This allows devices to communicate at the data link layer. DNS resolves domain names, DHCP assigns IPs, and various protocols handle encryption.",
-      "examTip": "ARP is essential for communication within a local Ethernet network."
+      "explanation": "Option A is a wired trunking issue. Option B also pertains to a wired VLAN misconfiguration. Option C (correct) describes a common Wi-Fi coverage or channel overlap problem. Option D does not usually cause random disconnects.",
+      "examTip": "Wireless interference from overlapping channels often causes dropped connections, especially if AP coverage is not well planned."
     },
     {
       "id": 56,
-      "question": "Which of the following is a characteristic of a full-duplex Ethernet connection?",
+      "question": "A user cannot browse internal resources, but can ping IP addresses internally. Which is the FIRST item to check?",
       "options": [
-        "It can only transmit data in one direction at a time.",
-        "It can transmit and receive data simultaneously.",
-        "It is limited to a maximum speed of 10 Mbps.",
-        "It is more susceptible to collisions."
+        "DNS server configuration on the user’s device",
+        "Spanning tree root bridge ID",
+        "Subnet mask on the DHCP pool",
+        "Switch’s VLAN trunking protocol"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Full-duplex allows devices to send and receive data at the same time, eliminating collisions and improving network efficiency. Half-duplex allows communication in only one direction at a time.",
-      "examTip": "Modern switched networks almost always use full-duplex connections."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is critical if name resolution fails while IP connectivity works. Option B deals with loop prevention, less likely the cause. Option C can cause broader connectivity issues, but user pings are successful so it’s not the mask. Option D is unrelated if pings already succeed across subnets.",
+      "examTip": "When IP pings succeed but domain-based browsing fails, DNS is the prime suspect."
     },
     {
       "id": 57,
-      "question": "What is the purpose of the `nslookup` command?",
+      "question": "During a DoS attack, you see excessive half-open TCP connections. Which concept does this specifically reference?",
       "options": [
-        "To display the routing table.",
-        "To query DNS servers for information about domain names and IP addresses.",
-        "To test network connectivity to a remote host.",
-        "To configure a network interface."
+        "SYN flood",
+        "ARP spoofing",
+        "Fraggle attack",
+        "Ping of death"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`nslookup` is a command-line tool used to troubleshoot DNS resolution problems. It allows you to query DNS servers to find the IP address associated with a domain name, or vice versa. `route print` displays routing tables, `ping` tests connectivity, and `ipconfig` configures interfaces.",
-      "examTip": "Use `nslookup` to verify that DNS resolution is working correctly."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is a classic half-open connection flood. Option B modifies ARP caches. Option C uses UDP echo traffic. Option D involves oversized ICMP packets, not half-open states.",
+      "examTip": "A SYN flood sends repeated SYNs without completing the handshake, overwhelming a server’s half-open connections."
     },
     {
       "id": 58,
-      "question": "What does it mean if a device has an APIPA address?",
+      "question": "Which of these is a direct benefit of using SNMPv3 over SNMPv1?",
       "options": [
-        "It has a static IP address.",
-        "It has successfully obtained an IP address from a DHCP server.",
-        "It failed to obtain an IP address from a DHCP server and has self-assigned an address in the 169.254.x.x range.",
-        "It is connected to the internet."
+        "Simplified community strings",
+        "Shorter MIB definitions",
+        "Encrypted authentication and data",
+        "Real-time packet capturing"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "APIPA (Automatic Private IP Addressing) allows devices to self-configure an IP address in the 169.254.x.x range when a DHCP server is unavailable. This provides limited local network communication but not internet access.",
-      "examTip": "An APIPA address usually indicates a DHCP problem."
+      "explanation": "Option A is a legacy concept for SNMPv1/v2c. Option B is not a version difference. Option C (correct) is a key enhancement: authentication and encryption. Option D is a separate function not provided by SNMP.",
+      "examTip": "SNMPv3 adds security by encrypting data and requiring authentication, unlike v1/v2c’s clear-text approach."
     },
     {
       "id": 59,
-      "question": "Which of the following is a security best practice for network devices?",
+      "question": "You’re troubleshooting a slow file transfer across the WAN. A packet capture shows significant TCP retransmissions. Which is the MOST likely cause?",
       "options": [
-        "Using default usernames and passwords.",
-        "Leaving all ports open.",
-        "Changing default credentials and disabling unnecessary services.",
-        "Sharing administrative passwords with all users."
+        "Link is set to half-duplex at both ends",
+        "Network cable is physically broken",
+        "Excessive packet loss on the WAN link",
+        "DNS is misconfigured"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Always change default usernames and passwords, disable unused services and ports, and restrict administrative access to authorized personnel. These are fundamental security hardening practices.",
-      "examTip": "Securing network devices is crucial for protecting the entire network."
+      "explanation": "Option A might cause collisions but typically you’d see runts/errors. Option B is total link failure. Option C (correct) triggers frequent retransmits due to lost segments. Option D would not cause retransmissions, just name resolution issues.",
+      "examTip": "High retransmissions usually indicate packet loss or congestion on the link."
     },
     {
       "id": 60,
-      "question": "What is 'Quality of Service' (QoS) used for in networking?",
+      "question": "Which device aggregates LAN traffic and operates primarily at Layer 2, forwarding frames based on MAC addresses?",
       "options": [
-        "To encrypt network traffic.",
-        "To prioritize certain types of network traffic over others.",
-        "To assign IP addresses to devices automatically.",
-        "To filter network traffic based on content."
+        "Router",
+        "Hub",
+        "Switch",
+        "Firewall"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "QoS allows network administrators to prioritize different types of traffic (e.g., voice, video, data) to ensure that critical applications receive the necessary bandwidth and low latency, even during periods of network congestion.",
-      "examTip": "QoS is important for real-time applications like VoIP and video conferencing."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A operates at Layer 3. Option B is a basic repeater with no MAC table. Option C (correct) is a typical Layer 2 forwarding device. Option D typically inspects or filters traffic at various layers, not strictly based on MAC addresses.",
+      "examTip": "Switches learn MACs to forward traffic at Layer 2, improving efficiency over hubs."
     },
     {
       "id": 61,
-      "question": "What is a 'virtual machine' (VM)?",
+      "question": "A company wants to hide internal addressing and allow multiple clients to share a single public IP for outbound internet traffic. Which technology BEST meets this goal?",
       "options": [
-        "A physical computer.",
-        "A software-based emulation of a computer system.",
-        "A type of network cable.",
-        "A program for creating documents."
+        "DHCP reservations",
+        "Port address translation (PAT)",
+        "Spanning tree protocol",
+        "IPSec encryption"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A virtual machine (VM) is a software implementation of a computer that executes programs like a physical machine. It allows you to run multiple operating systems and applications on a single physical host.",
-      "examTip": "Virtualization is a key technology for cloud computing and efficient resource utilization."
+      "explanation": "Option A ensures static IP mapping from DHCP, not address sharing. Option B (correct) translates many private IPs to one public IP using different ports. Option C is a loop-prevention protocol. Option D encrypts data but doesn't handle address sharing.",
+      "examTip": "PAT is a common variant of NAT that allows multiple internal devices to share a single external IP."
     },
     {
       "id": 62,
-      "question": "What is the function of a hypervisor?",
+      "question": "Which immediate action is the BEST FIRST step to secure a newly purchased switch before deployment?",
       "options": [
-        "To connect to the internet.",
-        "To create and manage virtual machines.",
-        "To encrypt network traffic.",
-        "To print documents."
+        "Enable port mirroring",
+        "Update firmware to the latest supported version",
+        "Activate jumbo frames for all ports",
+        "Configure jumbo VLANs"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A hypervisor (also called a virtual machine monitor or VMM) is software that creates and runs virtual machines, providing an abstraction layer between the physical hardware and the virtualized operating systems.",
-      "examTip": "The hypervisor is the foundation of virtualization."
+      "explanation": "Option A only provides monitoring. Option B (correct) addresses known vulnerabilities and ensures current security patches. Option C is not primarily a security measure. Option D is not a standard term or security approach.",
+      "examTip": "Always patch and update network equipment firmware before production deployment to address security fixes."
     },
     {
       "id": 63,
-      "question": "What is 'packet sniffing'?",
+      "question": "A user receives an IP in the 169.254.x.x range. Which conclusion is MOST accurate?",
       "options": [
-        "A way to organize files on your computer.",
-        "The process of capturing and analyzing network traffic.",
-        "A type of computer virus.",
-        "A program for creating spreadsheets."
+        "DHCP provided an extended lease",
+        "APIPA assigned an address due to DHCP failure",
+        "DNS is incorrectly set to a public server",
+        "The interface is operating in promiscuous mode"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Packet sniffing (or packet analysis) involves capturing data packets traveling across a network and examining their contents. This can be used for troubleshooting, security analysis, or (illegally) for eavesdropping.",
-      "examTip": "Packet sniffers can be powerful tools, but they can also be used for malicious purposes."
+      "explanation": "Option A is incorrect; 169.254.x.x is not a typical DHCP range. Option B (correct) indicates Automatic Private IP Addressing. Option C is about domain name resolution, not address assignment. Option D is about capturing traffic, not IP assignment.",
+      "examTip": "169.254.x.x addresses typically mean a device couldn’t contact the DHCP server and self-assigned an APIPA address."
     },
     {
       "id": 64,
-      "question": "Which tool is commonly used for packet sniffing?",
+      "question": "Which type of record in DNS allows reverse lookup from an IP address to a domain name?",
       "options": [
-        "Microsoft Word",
-        "Wireshark",
-        "Adobe Photoshop",
-        "AutoCAD"
+        "NS record",
+        "PTR record",
+        "A record",
+        "CNAME record"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Wireshark is a popular, open-source packet analyzer used for network troubleshooting, analysis, software and protocol development, and education.",
-      "examTip": "Wireshark is a powerful tool for understanding network traffic."
+      "explanation": "Option A identifies a DNS nameserver. Option B (correct) is used for reverse DNS lookups. Option C is forward lookup from domain to IP. Option D is an alias record, not reverse lookup.",
+      "examTip": "PTR records link IP addresses back to hostnames, enabling reverse DNS queries."
     },
     {
       "id": 65,
-      "question": "What is the purpose of network documentation?",
+      "question": "While reviewing switch logs, you find a port that repeatedly transitions from up to down. Which is the FIRST step to isolate the cause?",
       "options": [
-        "To make the network run faster.",
-        "To provide a record of network configuration, topology, and other important information.",
-        "To replace the need for network security.",
-        "To prevent users from accessing the internet."
+        "Assign a static IP to the interface",
+        "Move the cable to a different port and retest",
+        "Disable the native VLAN on the trunk",
+        "Reboot the entire switch"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Good network documentation (including diagrams, IP address assignments, device configurations, and procedures) is essential for troubleshooting, planning, maintenance, and security. It helps network administrators understand the network's structure and how it operates.",
-      "examTip": "Keep your network documentation up-to-date to reflect any changes."
+      "explanation": "Option A addresses IP but not physical flapping. Option B (correct) tests if the port or cable is faulty. Option C is unrelated to link status flaps. Option D is too disruptive for a first step.",
+      "examTip": "Always try swapping cables or ports to determine if the issue follows the cable/device or remains on the port."
     },
     {
       "id": 66,
-      "question": "What is the purpose of an access control list (ACL)?",
+      "question": "Which protocol uses port 23 and is considered insecure for remote management tasks?",
       "options": [
-        "To assign IP addresses to devices.",
-        "To control access to network resources by permitting or denying traffic based on rules.",
-        "To encrypt network traffic.",
-        "To translate domain names to IP addresses."
+        "SSH",
+        "Telnet",
+        "HTTP",
+        "RDP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "ACLs are sets of rules that define which network traffic is allowed or blocked based on criteria like source/destination IP address, port numbers, and protocols. They are commonly used on routers and firewalls to enhance security.",
-      "examTip": "ACLs are a fundamental tool for network security and access control."
+      "explanation": "Option A (port 22) is secure shell, not port 23. Option B (correct) uses port 23 and is unencrypted. Option C is port 80 for web traffic. Option D is port 3389 for remote desktop.",
+      "examTip": "Telnet sends data in clear text; modern networks typically use SSH instead."
     },
     {
       "id": 67,
-      "question": "What is a 'demilitarized zone' (DMZ) in networking?",
+      "question": "After running a network cable near heavy machinery, you see constant CRC errors. Which cable type would MOST likely mitigate this issue?",
       "options": [
-        "A zone where no computers are allowed.",
-        "A network segment that sits between a private network and the public internet, hosting publicly accessible servers (like web servers) while providing an extra layer of security for the internal network.",
-        "A type of network cable.",
-        "A program for creating presentations."
+        "UTP Cat5e",
+        "STP Cat6 or better",
+        "Thin coaxial cable",
+        "Plenum-rated Cat5"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DMZ provides a buffer zone between the trusted internal network and the untrusted external network (internet). It allows external users to access specific services (like web servers) without having direct access to the internal network, improving security.",
-      "examTip": "A DMZ is used to protect internal networks while still allowing access to public-facing servers."
+      "explanation": "Option A offers no shielding. Option B (correct) has shielding to reduce EMI. Option C is rarely used in modern LANs. Option D is for fire code compliance, not necessarily EMI reduction.",
+      "examTip": "Shielded twisted pair helps protect signals from external electromagnetic interference, especially around industrial equipment."
     },
     {
       "id": 68,
-      "question": "What is the function of Network Address Translation (NAT)?",
+      "question": "Which scenario-based question is BEST addressed by implementing Quality of Service (QoS)?",
       "options": [
-        "To encrypt network traffic.",
-        "To translate private IP addresses used within a local network to a public IP address used on the internet (and vice versa).",
-        "To assign IP addresses dynamically.",
-        "To filter network traffic based on content."
+        "How to restrict employees from visiting social media sites",
+        "How to ensure voice traffic has priority over regular data",
+        "How to physically secure the IDF racks from theft",
+        "How to encrypt all web-based application sessions"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "NAT allows multiple devices on a private network to share a single public IP address, conserving public IPv4 addresses and providing a layer of security by hiding the internal network structure from the outside world.",
-      "examTip": "NAT is essential for connecting private networks to the internet."
+      "explanation": "Option A is a content filtering issue. Option B (correct) is a classic use case for QoS. Option C is a physical security matter. Option D is encryption, not traffic prioritization.",
+      "examTip": "QoS ensures mission-critical or latency-sensitive traffic (e.g., VoIP) receives higher priority on the network."
     },
     {
       "id": 69,
-      "question": "Which of the following is a benefit of using a star topology?",
+      "question": "Which of the following is the FIRST step in the standard troubleshooting methodology?",
       "options": [
-        "It requires less cabling than a bus topology.",
-        "If one cable fails, the entire network goes down.",
-        "It's easy to troubleshoot and isolate cable problems because each device has a dedicated connection to a central point.",
-        "It provides the highest level of redundancy."
+        "Establish a plan of action",
+        "Test the theory to determine cause",
+        "Identify the problem",
+        "Establish a theory of probable cause"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "In a star topology, each device connects to a central hub or (more commonly) a switch. This makes it easy to add or remove devices and to isolate problems to a specific cable or device. It uses more cabling than a bus, a single cable failure only affects one device, and mesh offers higher redundancy.",
-      "examTip": "The star topology's centralized design simplifies management and troubleshooting."
+      "explanation": "Option A occurs after determining the cause. Option B happens after forming a theory. Option C (correct) is the initial step in any troubleshooting process. Option D is the next step after identifying the problem.",
+      "examTip": "Always start by clearly identifying or defining the issue: gather symptoms, question users, replicate if possible."
     },
     {
       "id": 70,
-      "question": "Which layer of the OSI model is responsible for routing data packets between networks?",
+      "question": "A newly installed switch needs to connect to a router for inter-VLAN routing. Which interface configuration on the router is commonly used for multiple VLANs over a single link?",
       "options": [
-        "Layer 1 - Physical",
-        "Layer 2 - Data Link",
-        "Layer 3 - Network",
-        "Layer 4 - Transport"
+        "Subinterfaces on a router-on-a-stick",
+        "Separate physical interfaces for each VLAN",
+        "A trunk port on the router in half-duplex",
+        "Assign NAT to each VLAN interface"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The Network layer (Layer 3) handles logical addressing (like IP addresses) and routing, determining the best path for data to travel between different networks. Layer 1 is the physical cabling, Layer 2 handles MAC addresses within a single network, and Layer 4 manages reliable data transfer.",
-      "examTip": "Remember that routers operate at Layer 3 (the Network layer)."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the classic router-on-a-stick approach for inter-VLAN routing. Option B is feasible but not common if physical interfaces are limited. Option C is typically full-duplex trunking, but routers seldom do trunking the same way as switches. Option D is for address translation, not VLAN routing.",
+      "examTip": "Router-on-a-stick uses subinterfaces with 802.1Q tagging to route multiple VLANs over one physical interface."
     },
     {
       "id": 71,
-      "question": "What is 'port forwarding'?",
+      "question": "A device must always receive the same IP from DHCP. Which approach is BEST?",
       "options": [
-        "A way to block all incoming network traffic.",
-        "A technique used to allow external devices to access services on a private network by mapping an external port to an internal IP address and port.",
-        "A way to encrypt network traffic.",
-        "A way to assign IP addresses dynamically."
+        "Configure a DHCP reservation for its MAC address",
+        "Use APIPA for guaranteed consistent addressing",
+        "Flush the DNS records daily",
+        "Force DHCP relay from a different subnet"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port forwarding allows you to make a service running on a device on your private network (like a game server or web server) accessible from the internet. It directs incoming traffic on a specific external port to the correct internal IP address and port.",
-      "examTip": "Port forwarding is often used for hosting game servers or web servers from home networks."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) associates a device’s MAC with a specific IP in DHCP. Option B only occurs when DHCP fails. Option C is about name resolution, not IP assignment. Option D simply forwards DHCP, not guaranteeing a specific IP.",
+      "examTip": "DHCP reservations tie a MAC address to a specific IP, ensuring consistent address assignment."
     },
     {
       "id": 72,
-      "question": "Which protocol is used for secure file transfer?",
+      "question": "Which statement is TRUE about an evil twin attack in a Wi-Fi environment?",
       "options": [
-        "HTTP",
-        "FTP",
-        "SFTP",
-        "SMTP"
+        "It floods the switch port with bogus MAC addresses",
+        "It uses ARP poisoning to intercept packets on the LAN",
+        "It sets up a rogue AP mimicking a legitimate SSID",
+        "It physically disables the real AP’s antennas"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "SFTP (Secure File Transfer Protocol) provides secure file transfer by encrypting both the commands and the data being transferred. FTP is not secure, as it transmits data in plain text. HTTP is for web browsing, and SMTP is for email.",
-      "examTip": "Always use SFTP (or FTPS) for secure file transfers; avoid using plain FTP."
+      "explanation": "Option A is a switch-based MAC flooding. Option B is ARP spoofing. Option C (correct) duplicates a legitimate SSID to trick users. Option D is unlikely and not typical of an evil twin approach.",
+      "examTip": "Evil twin attacks create a malicious AP with the same SSID so users mistakenly connect and divulge data."
     },
     {
       "id": 73,
-      "question": "What is 'jitter' in network performance?",
+      "question": "Which command-line tool would you use on a Linux system to capture and analyze traffic in real time for troubleshooting?",
       "options": [
-        "The total time it takes for a packet to travel from source to destination.",
-        "The variation in delay (latency) between data packets.",
-        "The amount of data lost during transmission.",
-        "The maximum bandwidth of a network connection."
+        "tcpdump",
+        "ipconfig",
+        "dig",
+        "ifconfig"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Jitter is the inconsistency in latency over time. It's particularly important for real-time applications like VoIP and video conferencing, where uneven delays can cause choppy audio or video.",
-      "examTip": "High jitter can negatively impact the quality of real-time communication."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) captures live network traffic at the command line. Option B is a Windows utility. Option C queries DNS. Option D shows interface settings but doesn’t capture traffic.",
+      "examTip": "tcpdump is a powerful CLI packet capture tool for Linux/Unix systems."
     },
     {
       "id": 74,
-      "question": "Which of the following is a valid MAC address?",
+      "question": "Management wants to ensure all new devices connecting to the network meet certain security criteria before accessing resources. Which technology is BEST suited?",
       "options": [
-        "192.168.1.1",
-        "00:1A:2B:3C:4D:5E",
-        "google.com",
-        "256.1.1.1"
+        "Network Access Control (NAC)",
+        "Trivial File Transfer Protocol (TFTP)",
+        "IPSec site-to-site tunnel",
+        "802.3af PoE injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "00:1A:2B:3C:4D:5E is a valid MAC address format. MAC addresses are 48-bit hexadecimal numbers, typically written in six groups of two hexadecimal digits separated by colons or hyphens. 192.168.1.1 is an IPv4 address, google.com is a domain name, and 256.1.1.1 is an invalid IP address.",
-      "examTip": "Learn to recognize the format of MAC addresses (hexadecimal, colons or hyphens)."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) enforces posture checks and authentication before granting full access. Option B is a basic file transfer protocol, not security posture. Option C secures traffic between sites, not local endpoints. Option D is power over Ethernet, unrelated to security checks.",
+      "examTip": "NAC solutions often use 802.1X or agent-based posture checks to ensure compliance before allowing network access."
     },
     {
       "id": 75,
-      "question": "What is a common use for a network-attached storage (NAS) device?",
+      "question": "A user is downloading large files from the internal file server, causing network congestion. Which technique can you implement to ensure critical VoIP traffic is not disrupted?",
       "options": [
-        "To provide wireless internet access.",
-        "To store and share files across a network.",
-        "To connect to the internet directly.",
-        "To print documents wirelessly."
+        "Configure port mirroring",
+        "Apply QoS prioritization for voice packets",
+        "Split tunnel the VPN",
+        "Assign a static IP to the file server"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A NAS device is a specialized file storage server that provides centralized access to files for multiple users and devices on a network. It's not a wireless access point, a modem, or a printer.",
-      "examTip": "NAS devices are commonly used for home and small business file sharing."
+      "explanation": "Option A only monitors traffic. Option B (correct) ensures voice is prioritized over bulk data. Option C is a VPN design choice, not local traffic prioritization. Option D does not address congestion management.",
+      "examTip": "Quality of Service helps preserve real-time application performance when network resources are constrained."
     },
     {
       "id": 76,
-      "question": "What is a 'subnet'?",
+      "question": "Which of these is a security advantage of using a proxy server for outbound web traffic?",
       "options": [
-        "A smaller network within a larger network, created by dividing an IP address range.",
-        "A type of network cable.",
-        "A device that connects to the internet.",
-        "A program for creating web pages."
+        "Redirects DNS queries to local servers",
+        "Masks internal client IP addresses from external hosts",
+        "Provides layer 2 loop prevention features",
+        "Enforces jumbo frames for all traffic"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Subnetting is the process of dividing a network into smaller, logical subnetworks. This improves network performance, security, and manageability.",
-      "examTip": "Subnets help organize and manage IP addresses efficiently."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is more about DNS settings. Option B (correct) proxies requests so external servers see the proxy IP, not the actual client. Option C is done by spanning tree, not a proxy. Option D is a performance setting, not a security benefit.",
+      "examTip": "A proxy can hide internal host identities and enforce content filtering or logging for security purposes."
     },
     {
       "id": 77,
-      "question": "Which of the following is a characteristic of a peer-to-peer network?",
+      "question": "A router is configured for PAT. Which statement BEST describes how outbound connections from multiple internal hosts share a single public IP?",
       "options": [
-        "A central server manages all resources.",
-        "Each computer has equal responsibility and can share resources directly with others.",
-        "It's more secure than a client-server network.",
-        "It's better suited for large organizations."
+        "Each host uses the same public IP but different external ports",
+        "Hosts share the same port number but different NAT pools",
+        "A default route is not needed in this scenario",
+        "All traffic is broadcast to the external interface"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "In a peer-to-peer network, there's no central server. Each computer acts as both a client (requesting resources) and a server (providing resources). This is simpler to set up but less manageable and less secure for larger networks than client-server.",
-      "examTip": "Peer-to-peer networks are common in small home networks."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is exactly how PAT works: unique source port assignments for each internal host. Option B is reversed. Option C is false; a default route is typically still required. Option D is incorrect, as NAT does not broadcast traffic.",
+      "examTip": "Port Address Translation modifies the source port for each internal host to uniquely map to one public IP."
     },
     {
       "id": 78,
-      "question": "What does it mean to 'troubleshoot' a network problem?",
+      "question": "You’re setting up an IPSec VPN tunnel. Which component of IPSec provides both authentication and encryption for the data payload?",
       "options": [
-        "To create network problems.",
-        "To ignore network problems.",
-        "To systematically identify the cause of a problem and find a solution.",
-        "To make network problems worse."
+        "AH (Authentication Header)",
+        "ESP (Encapsulating Security Payload)",
+        "GRE (Generic Routing Encapsulation)",
+        "IKE (Internet Key Exchange)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Troubleshooting involves a logical process of gathering information, identifying symptoms, testing hypotheses, and implementing solutions to resolve network issues.",
-      "examTip": "Always follow a systematic approach when troubleshooting."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A only authenticates headers, not encrypting data. Option B (correct) encrypts and authenticates data. Option C is a tunneling protocol without native security. Option D negotiates keys, but does not carry the data encryption itself.",
+      "examTip": "ESP is crucial for confidentiality and integrity in IPSec VPN tunnels."
     },
     {
       "id": 79,
-      "question": "Which of the following is an example of network documentation?",
+      "question": "Which command shows the MAC address table on a Cisco switch for verifying learned addresses?",
       "options": [
-        "A list of your favorite websites.",
-        "A diagram showing the network topology, IP address assignments, and device configurations.",
-        "A collection of your personal photos.",
-        "A list of your computer passwords (which you should never write down!)."
+        "show mac-address-table",
+        "show arp",
+        "show interface trunk",
+        "show spanning-tree"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network documentation provides a comprehensive record of the network's design, implementation, and configuration. This is essential for troubleshooting, planning, and maintaining the network.",
-      "examTip": "Network diagrams are essential tools for network administrators."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) displays the table mapping MACs to ports. Option B shows IP-to-MAC mappings, typically from an ARP cache. Option C shows trunking info. Option D shows STP status and port roles.",
+      "examTip": "Use 'show mac-address-table' to confirm which MACs are learned on which switch ports."
     },
     {
       "id": 80,
-      "question": "Which type of network cable is MOST resistant to electromagnetic interference (EMI)?",
+      "question": "Which action is MOST appropriate FIRST when noticing a series of MAC addresses flooding a switch port, potentially indicating an attack?",
       "options": [
-        "UTP (Unshielded Twisted Pair)",
-        "STP (Shielded Twisted Pair)",
-        "Coaxial cable",
-        "Fiber optic cable"
+        "Shut down the port and investigate",
+        "Reload the switch’s configuration file",
+        "Reboot all connected endpoints",
+        "Increase the VLAN pool to accommodate more MACs"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Fiber optic cable uses light signals instead of electrical signals, making it completely immune to EMI. STP offers some protection, UTP offers minimal protection, and coaxial offers moderate protection, but all are susceptible to EMI to varying degrees.",
-      "examTip": "Fiber optic cable is the best choice for environments with high levels of EMI."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) immediately isolates the threat and prevents further flooding. Option B may reapply config but doesn’t stop the live attack. Option C disrupts legitimate endpoints unnecessarily. Option D is the opposite of security best practice, allowing more addresses.",
+      "examTip": "When detecting a malicious flood, isolating the affected port is crucial to prevent further impact."
     },
     {
       "id": 81,
-      "question": "Which layer of the OSI model handles data representation, encryption, and decryption?",
+      "question": "A company's regulations demand that all data center switch configurations be archived daily for quick recovery. Which practice BEST accomplishes this?",
       "options": [
-        "Layer 7 - Application",
-        "Layer 6 - Presentation",
-        "Layer 5 - Session",
-        "Layer 4 - Transport"
+        "Periodic port mirroring sessions",
+        "Automated configuration backups to a central repository",
+        "Implement DHCP for all switch IP addressing",
+        "Enable IPv6 dual-stack on each switch"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The Presentation layer (Layer 6) is responsible for ensuring that data is presented in a format that both communicating applications can understand. This includes data conversion, encryption, and compression. Layer 7 provides application services, Layer 5 manages sessions, and Layer 4 handles reliable transport.",
-      "examTip": "Remember the Presentation layer for data formatting and encryption."
+      "explanation": "Option A captures traffic, not switch config. Option B (correct) ensures config files are saved and recoverable. Option C is an IP assignment practice, not config backup. Option D is a protocol approach, not a backup strategy.",
+      "examTip": "Regular automatic backups of device configs are a key part of robust change management processes."
     },
     {
       "id": 82,
-      "question": "What is a 'private IP address'?",
+      "question": "Which of the following best describes a rogue DHCP server?",
       "options": [
-        "An IP address that is publicly accessible on the internet.",
-        "An IP address that is used within a private network and is not routable on the public internet.",
-        "An IP address that is assigned dynamically by a DHCP server.",
-        "An IP address that is used for secure communication."
+        "A DHCP server that uses DNSSEC for secure updates",
+        "A malicious or unauthorized server handing out IP addresses",
+        "A server that runs out of IP addresses for clients",
+        "A DHCP server only accessible via IPv6"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Private IP addresses (like those in the 192.168.x.x, 10.x.x.x, and 172.16.x.x - 172.31.x.x ranges) are used within private networks (homes, offices) and are not directly accessible from the internet. NAT is used to translate these private addresses to a public IP address for internet communication.",
-      "examTip": "Private IP addresses are used within local networks and are not visible on the public internet."
+      "explanation": "Option A is legitimate secure DNS updates. Option B (correct) is an unauthorized device providing incorrect IP settings. Option C is a capacity issue, not necessarily rogue. Option D doesn’t define rogue behavior, just IPv6 usage.",
+      "examTip": "A rogue DHCP server can disrupt the network by assigning invalid or malicious configurations to clients."
     },
     {
       "id": 83,
-      "question": "What is the purpose of a firewall?",
+      "question": "A technician investigating a connectivity issue sees the gateway has an IP of 192.168.0.1/24 while the user's PC is configured as 192.168.1.10/24. What is the problem?",
       "options": [
-        "To speed up your internet connection.",
-        "To control network traffic and block unauthorized access to or from a private network.",
-        "To assign IP addresses to devices.",
-        "To translate domain names into IP addresses."
+        "Duplicate IP addresses detected",
+        "Incorrect subnet assignment blocks local gateway reachability",
+        "Gateway IP is in the broadcast domain",
+        "DHCP scope mismatch on the router"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall acts as a security guard for your network, examining incoming and outgoing traffic and blocking or allowing it based on predefined security rules. This helps prevent unauthorized access and protect against malware.",
-      "examTip": "Firewalls are a fundamental component of network security."
+      "explanation": "Option A is not indicated. Option B (correct) the user is on 192.168.1.x/24 and gateway is on 192.168.0.x/24, so no local route. Option C is not specifically an error. Option D might be possible but the direct issue is the mismatch between subnets.",
+      "examTip": "For a /24 mask, the network portion must match for the PC to see its default gateway."
     },
     {
       "id": 84,
-      "question": "Which of the following is a benefit of network segmentation?",
+      "question": "Which approach ensures that a newly deployed AP is broadcasting at appropriate power levels and channels?",
       "options": [
-        "It simplifies network management.",
-        "It improves security by isolating network traffic and limiting the impact of security breaches.",
-        "It increases the size of the broadcast domain.",
-        "It reduces the need for firewalls."
+        "Using a Wi-Fi analyzer to perform a site survey",
+        "Enabling RSTP on the AP",
+        "Forcing 802.11b compatibility mode",
+        "Ignoring local regulations and using maximum power"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network segmentation (often achieved using VLANs) divides a network into smaller, isolated segments. This improves security by containing breaches and reducing congestion by limiting broadcast traffic. While it can increase initial management complexity, it simplifies overall security management.",
-      "examTip": "Segmentation is a crucial security best practice, especially for isolating sensitive systems."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) identifies coverage and interference. Option B is a spanning tree protocol for switches. Option C reverts to an older standard, potentially reducing speed. Option D risks regulatory noncompliance and interference.",
+      "examTip": "Site surveys help optimize channel selection and power settings for new wireless deployments."
     },
     {
       "id": 85,
-      "question": "What is 'dynamic IP addressing'?",
+      "question": "Which scenario-based question is BEST resolved by implementing a captive portal?",
       "options": [
-        "Manually assigning IP addresses to each device on a network.",
-        "Automatically assigning IP addresses to devices using a DHCP server.",
-        "Using the same IP address for all devices on a network.",
-        "Using public IP addresses on a private network."
+        "How to provide guests with temporary Wi-Fi access without giving them domain credentials",
+        "How to route traffic between VLANs more efficiently",
+        "How to diagnose cable continuity issues",
+        "How to encrypt back-end server traffic using SSL"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Dynamic IP addressing uses a DHCP server to automatically assign IP addresses, subnet masks, default gateways, and other network configuration parameters to devices. This simplifies network administration and prevents IP address conflicts.",
-      "examTip": "DHCP is the standard way to assign IP addresses in most networks."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) captive portals allow guests to authenticate on a splash page. Option B involves routing or switching, not a captive portal. Option C is a physical-layer test. Option D is encryption best practices, not a portal solution.",
+      "examTip": "Captive portals are common for guest Wi-Fi access, requiring acceptance of terms or credentials via a web page."
     },
     {
       "id": 86,
-      "question": "What is a common symptom of a duplex mismatch between two network devices?",
+      "question": "A technician is setting a static route on a router. Which parameter must be specified along with the destination network and subnet mask?",
       "options": [
-        "No network connectivity at all.",
-        "Slow network performance and increased collisions.",
-        "Inability to obtain an IP address.",
-        "Frequent disconnections from wireless networks."
+        "Administrative distance",
+        "Next-hop IP address or exit interface",
+        "Local VLAN ID",
+        "Default DNS server"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A duplex mismatch occurs when two connected devices are configured for different duplex settings (half-duplex or full-duplex). This causes collisions and significantly degrades network performance.",
-      "examTip": "Always ensure that both ends of a network connection have matching speed and duplex settings."
+      "explanation": "Option A is optional and can be assumed. Option B (correct) is needed so the router knows where to send traffic. Option C is a switching concept, not relevant to routing. Option D is for name resolution, not routing.",
+      "examTip": "A static route requires the destination network, subnet mask, and the next hop (or outgoing interface)."
     },
     {
       "id": 87,
-      "question": "What is the purpose of the `arp -a` command?",
+      "question": "Which of the following is TRUE regarding DNS over HTTPS (DoH)?",
       "options": [
-        "To display the routing table.",
-        "To display the ARP cache, which maps IP addresses to MAC addresses.",
-        "To display detailed network interface configuration.",
-        "To test network connectivity."
+        "It resolves addresses using MAC-based filtering",
+        "It encrypts DNS queries within HTTPS, enhancing privacy",
+        "It only applies to IPv6 networks",
+        "It automatically sets up a VPN tunnel for DNS"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The `arp -a` command (on Windows and many other systems) shows the Address Resolution Protocol (ARP) cache. The ARP cache is a table that stores mappings between IP addresses and MAC addresses on the local network. `route print` displays routing, `ipconfig /all` shows interface configuration, and `ping` tests connectivity.",
-      "examTip": "The ARP cache is essential for local network communication."
+      "explanation": "Option A is unrelated. Option B (correct) DoH secures DNS queries through HTTPS. Option C works with both IPv4 and IPv6. Option D is not how DoH operates; it doesn’t create a VPN.",
+      "examTip": "DNS over HTTPS helps prevent eavesdropping or manipulation of DNS traffic by encrypting it."
     },
     {
       "id": 88,
-      "question": "What is a 'rogue DHCP server'?",
+      "question": "Which feature can dynamically combine multiple physical switch ports into a single logical channel for increased throughput and redundancy?",
       "options": [
-        "A DHCP server that is properly configured.",
-        "An unauthorized DHCP server on a network that can cause IP address conflicts and network disruptions.",
-        "A DHCP server that is used for testing purposes.",
-        "A DHCP server that is located on a different subnet."
+        "Port mirroring",
+        "Link aggregation (LACP)",
+        "SNMPv3 traps",
+        "DHCP scope options"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A rogue DHCP server is an unauthorized server that is providing incorrect or conflicting IP address information to devices on the network. This can cause network connectivity problems and security vulnerabilities.",
-      "examTip": "Use DHCP snooping on switches to prevent rogue DHCP servers from operating on your network."
+      "explanation": "Option A copies traffic, not bandwidth. Option B (correct) bundles links for higher aggregate bandwidth. Option C is for management notifications. Option D sets IP parameters for clients, not channel bonding.",
+      "examTip": "Link aggregation groups multiple ports to act as one, boosting bandwidth and fault tolerance."
     },
     {
       "id": 89,
-      "question": "Which of the following describes a zero-trust security model?",
+      "question": "A user with a mission-critical role must have priority traffic for IP telephony. Which is the MOST direct method to ensure their VoIP packets are prioritized?",
       "options": [
-        "Trusting all users and devices within the network perimeter.",
-        "Assuming that no user or device, whether inside or outside the network, can be trusted by default, and verifying every access request.",
-        "Relying solely on firewalls for network security.",
-        "Using only strong passwords for authentication."
+        "Implement port security on their switch port",
+        "Configure DSCP markings and apply QoS",
+        "Use a separate unmanaged switch",
+        "Block all non-VoIP traffic at the firewall"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Zero trust is a security framework that assumes no implicit trust, regardless of whether a user or device is inside or outside the traditional network perimeter. Every access request must be verified based on identity, context, and device posture.",
-      "examTip": "Zero trust is a modern security approach that emphasizes 'never trust, always verify'."
+      "explanation": "Option A controls device MAC addresses, not QoS. Option B (correct) sets QoS policies using DSCP to prioritize voice. Option C removes management, not helpful. Option D is too restrictive and can break other needed services.",
+      "examTip": "Differentiated Services Code Point (DSCP) is widely used to classify and prioritize traffic for QoS policies."
     },
     {
       "id": 90,
-      "question": "What is 'infrastructure as code' (IaC)?",
+      "question": "Which direct question addresses implementing IPv6 to reduce address exhaustion while allowing some IPv4 to remain active?",
       "options": [
-        "A type of network cable.",
-        "Managing and provisioning infrastructure (networks, virtual machines, etc.) through code instead of manual processes.",
-        "A program for creating documents.",
-        "A type of computer virus."
+        "Can we run dual stack on devices supporting both IPv4 and IPv6?",
+        "Should we remove all NAT configuration from the router?",
+        "Will 802.1Q trunking reduce IPv4 usage?",
+        "Should we disable TCP in favor of UDP for all traffic?"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "IaC allows you to define your infrastructure (networks, servers, configurations) in code, which can be version-controlled, automated, and easily replicated. This improves consistency, reduces errors, and speeds up deployments.",
-      "examTip": "IaC is a key practice for DevOps and cloud computing."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the essence of dual stack. Option B can still be needed for internet access. Option C only relates to VLAN tagging. Option D does not solve IP addressing constraints.",
+      "examTip": "Dual stack is often the easiest transition method, letting IPv4 and IPv6 coexist on the same devices."
     },
     {
       "id": 91,
-      "question": "What does 'SSID' stand for in wireless networking?",
+      "question": "Which type of firewall is placed between the internal network and a DMZ, forwarding traffic to the public-facing servers while monitoring for threats?",
       "options": [
-        "Secure System Identifier",
-        "Service Set Identifier",
-        "System Security ID",
-        "Simple Service ID"
+        "Next-generation firewall",
+        "Stateful packet filter on the core switch",
+        "Transparent bridging device",
+        "Content filter proxy"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SSID (Service Set Identifier) is the name of a wireless network (Wi-Fi). It's what you see when you search for available Wi-Fi networks.",
-      "examTip": "The SSID is the name of your Wi-Fi network."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) typically has advanced inspection (Layer 7, IPS, etc.) for DMZ traffic. Option B is a simpler solution, might not provide full NGFW features. Option C is a bridging approach, not a typical DMZ firewall. Option D focuses on web content, not the entire DMZ security.",
+      "examTip": "A next-generation firewall often sits at the network edge/DMZ to inspect traffic deeply and provide advanced threat protection."
     },
     {
       "id": 92,
-      "question": "Which of the following is a characteristic of a client-server network?",
+      "question": "Which tool can confirm the presence of a continuous cable path and pinpoint breaks by sending a tone down the cable and tracing it?",
       "options": [
-        "All computers have equal roles and responsibilities.",
-        "Resources and security are typically managed centrally by one or more servers.",
-        "It is easier to set up than a peer-to-peer network.",
-        "It is less expensive than a peer-to-peer network."
+        "Protocol analyzer",
+        "Toner probe",
+        "Wi-Fi analyzer",
+        "Nmap"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "In a client-server network, dedicated servers provide resources (like files, printers, email) and manage security, while clients request those resources. This is more scalable and manageable than peer-to-peer, especially for larger organizations.",
-      "examTip": "Client-server networks are common in business environments for their centralized control."
+      "explanation": "Option A inspects packet data, not physical cable runs. Option B (correct) helps locate cables and breaks with audible tone. Option C checks wireless signals. Option D scans network hosts and ports.",
+      "examTip": "A toner probe kit is essential for tracing cables hidden in walls or cable bundles."
     },
     {
       "id": 93,
-      "question": "What is a key difference between a router and a switch?",
+      "question": "A network administrator needs to create an IPsec tunnel. Which phase establishes the secure channel for key exchange and negotiation before data encryption begins?",
       "options": [
-        "A router connects devices within the same network; a switch connects different networks.",
-        "A router connects different networks; a switch connects devices within the same network.",
-        "A router is used for wireless networks; a switch is used for wired networks.",
-        "A router assigns IP addresses; a switch assigns MAC addresses."
+        "IKE Phase 1",
+        "DNS resolution",
+        "ESP key distribution phase",
+        "DHCP lease acquisition"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Routers operate at Layer 3 (Network) and forward traffic between different networks based on IP addresses. Switches operate primarily at Layer 2 (Data Link) and forward traffic within the same network based on MAC addresses.",
-      "examTip": "Routers connect networks; switches connect devices within a network."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the phase where secure negotiation is set (ISAKMP/IKE). Option B is name resolution, unrelated. Option C is part of IPsec data encryption but not the negotiation handshake. Option D is for IP address assignment, not IPsec negotiation.",
+      "examTip": "IKE Phase 1 sets up a secure channel (ISAKMP SA); then Phase 2 negotiates actual IPsec SAs for data traffic."
     },
     {
       "id": 94,
-      "question": "What is 'throughput' in networking?",
+      "question": "Which of the following is the BEST approach to handle a router interface that frequently crashes due to unknown software bugs?",
       "options": [
-        "The theoretical maximum data transfer rate of a network connection.",
-        "The actual amount of data successfully transmitted over a network connection in a given period.",
-        "The total amount of data that can be stored on a network.",
-        "The number of devices connected to a network."
+        "Swap the Ethernet cable",
+        "Disable port security on that interface",
+        "Update the router’s firmware to the latest version",
+        "Increase the DHCP lease time"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Throughput is the actual data transfer rate achieved in real-world conditions, considering factors like overhead, latency, and errors. Bandwidth is the theoretical maximum. Storage capacity and number of devices are different concepts.",
-      "examTip": "Throughput is a measure of real-world network performance."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A might fix physical issues but not software bugs. Option B is security, not a bug fix. Option C (correct) addresses known software or firmware issues. Option D affects IP address renewal intervals, not router crashes.",
+      "examTip": "Keeping firmware up to date often resolves stability issues and security vulnerabilities."
     },
     {
       "id": 95,
-      "question": "What is a common security measure used to protect against unauthorized access to a network?",
+      "question": "A data center migration requires that in case of failure, services can spin up quickly at a second site. Which concept ensures the secondary site is up but only partially configured, requiring some final steps?",
       "options": [
-        "Using a weak password.",
-        "Leaving all ports open.",
-        "Implementing a firewall and using strong authentication methods.",
-        "Sharing your password with colleagues."
+        "Active-active high availability",
+        "Warm site",
+        "Hot site",
+        "Cold site"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A combination of a firewall (to control network traffic) and strong authentication (like strong passwords and multi-factor authentication) is crucial for network security. Weak passwords, open ports, and sharing credentials are all security risks.",
-      "examTip": "Network security requires a multi-layered approach."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is fully operational at both locations. Option B (correct) is partially ready, requiring moderate setup. Option C is fully ready to go. Option D has minimal resources and requires the most setup.",
+      "examTip": "A warm site has hardware and some data, but requires additional steps to become fully operational after a disaster."
     },
     {
       "id": 96,
-      "question": "What is the function of the Domain Name System (DNS)?",
+      "question": "Which is the FIRST step to take when a user's interface counters show a high number of runts and giants?",
       "options": [
-        "To assign IP addresses automatically.",
-        "To translate domain names into IP addresses.",
-        "To encrypt network traffic.",
-        "To connect to the internet."
+        "Implement a full network redesign",
+        "Check for speed/duplex mismatch",
+        "Change DNS servers",
+        "Re-enable spanning tree on core switches"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The Domain Name System (DNS) is like the internet's phone book, translating human-friendly domain names into the numerical IP addresses that computers use to communicate. DHCP assigns IP addresses, encryption is handled by other protocols, and modems/routers connect to the internet.",
-      "examTip": "DNS makes it easier to navigate the internet by using names instead of numbers."
+      "explanation": "Option A is extreme. Option B (correct) often causes frame size mismatches. Option C is unrelated to frame errors. Option D is for loop prevention, not frame anomalies.",
+      "examTip": "Runts and giants often point to layer 1 or 2 configuration mismatches, like incorrect speed/duplex or MTU settings."
     },
     {
       "id": 97,
-      "question": "What is a 'gateway' in networking terms?",
+      "question": "A core router’s routing table shows two entries for 192.168.10.0/24: one via OSPF (AD 110) and one via RIP (AD 120). Which route will the router prefer and why?",
       "options": [
-        "A device that connects to the internet.",
-        "A device that acts as an entry/exit point for network traffic going to or from another network.",
-        "A type of network cable.",
-        "A program for creating web pages."
+        "RIP, because it is simpler to configure",
+        "OSPF, because it has a lower administrative distance",
+        "RIP, because it has a lower hop count metric",
+        "OSPF, because it uses a link-state database"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The gateway (usually a router) is the device that forwards traffic from your local network to other networks, including the internet. While a modem connects to the ISP, the gateway handles the routing between networks.",
-      "examTip": "The default gateway is usually the IP address of your router's internal interface."
+      "explanation": "Option A is irrelevant to route choice. Option B (correct) OSPF’s AD of 110 is preferred over RIP’s 120. Option C doesn’t matter if the route from RIP has a lower hop count, AD still decides. Option D is partial reasoning but the key is administrative distance priority.",
+      "examTip": "When multiple routing protocols advertise the same network, the router installs the route with the lowest AD."
     },
     {
       "id": 98,
-      "question": "What information can you typically find in a network diagram?",
+      "question": "Which scenario-based question is BEST solved by implementing HIDS/HIPS on critical servers?",
       "options": [
-        "A list of your favorite websites.",
-        "The physical and/or logical layout of network devices, connections, and IP addressing.",
-        "A collection of your personal photos.",
-        "Your computer's password (which should never be written down!)."
+        "How to route VLAN traffic faster in the core",
+        "How to detect malicious activities directly on a host in real time",
+        "How to ensure DNS queries are resolved quickly",
+        "How to reduce cable clutter in the server rack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Network diagrams provide a visual representation of the network's structure, helping with troubleshooting, planning, and understanding the network's design. They show how devices are connected, their IP addresses, and other relevant information.",
-      "examTip": "Network diagrams are essential tools for network administrators."
+      "explanation": "Option A is a switching or routing design. Option B (correct) host intrusion detection/prevention detects system-level threats. Option C is performance or DNS caching. Option D is a physical organization issue, not security.",
+      "examTip": "HIDS/HIPS solutions inspect host-level activity and can block or alert on abnormal behavior in real time."
     },
     {
       "id": 99,
-      "question": "Which of the following is a good practice for securing a wireless network?",
+      "question": "You discover that a broadcast storm is affecting the network. Which feature is designed to block redundant links and prevent loops at Layer 2?",
       "options": [
-        "Using an open network (no password).",
-        "Using WEP encryption.",
-        "Using WPA2 or WPA3 encryption with a strong, unique password.",
-        "Using the default SSID and password."
+        "STP (Spanning Tree Protocol)",
+        "ICMP redirect",
+        "DHCP snooping",
+        "Reverse Proxy"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Always use the strongest available encryption (WPA3 if supported, otherwise WPA2) and a complex, unique password to protect your Wi-Fi network from unauthorized access. WEP is outdated and easily cracked. Default settings are a major security risk.",
-      "examTip": "Secure your Wi-Fi with strong encryption and a strong password."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) blocks loops by electing a root bridge and disabling certain ports. Option B is used by routers to direct traffic. Option C monitors DHCP traffic for rogue servers, not loops. Option D is an application-layer service, not for loop prevention.",
+      "examTip": "STP is essential in switched networks to avoid bridging loops that can cause broadcast storms."
     },
     {
       "id": 100,
-      "question": "Which of the following is a type of network attack?",
+      "question": "Which single action can MOST reduce the blast radius of an internal network breach?",
       "options": [
-        "Sending a friendly email.",
-        "Phishing, where someone tries to trick you into revealing personal information.",
-        "Updating your computer's software.",
-        "Backing up your files."
+        "Use VLANs to segment critical systems from other hosts",
+        "Disable QoS to reduce overhead",
+        "Configure jumbo frames for all traffic",
+        "Reserve an IP for each device using DHCP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing attacks use deceptive emails, websites, or messages to trick users into giving away sensitive information (like passwords, credit card numbers, or personal details). Sending a friendly email, updating software, and backing up files are all good practices.",
-      "examTip": "Be suspicious of unsolicited emails or messages asking for personal information."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) network segmentation limits movement within the environment if a breach occurs. Option B is about traffic prioritization, not security segmentation. Option C is for performance, not security. Option D ensures consistent IP assignment but doesn’t prevent lateral movement.",
+      "examTip": "Segmentation—via VLANs or subnets—helps contain a compromised device to a smaller portion of the network."
     }
   ]
 });
