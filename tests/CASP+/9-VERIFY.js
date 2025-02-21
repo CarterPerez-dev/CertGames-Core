@@ -783,6 +783,526 @@
       "correctAnswerIndex": 0,
       "explanation": "Properly configured cookies prevent client-side access to session data and mitigate cross-site attacks that could lead to session hijacking.",
       "examTip": "Combine secure cookie attributes with strict session timeout policies for robust session management."
+    },
+    {
+      "id": 61,
+      "question": "An organization detects cross-tenant data leakage in a multi-tenant cloud environment due to a hypervisor vulnerability. Which security mechanism MOST effectively ensures strong tenant isolation?",
+      "options": [
+        "Hardware-assisted virtualization with Trusted Execution Environments (TEEs)",
+        "Client-side encryption with Bring Your Own Key (BYOK) strategy",
+        "Hypervisor patching with live migration of virtual machines",
+        "Network segmentation with tenant-specific firewall rules"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "TEEs provide hardware-based isolation that prevents data leakage between tenants, even in the event of hypervisor compromise.",
+      "examTip": "Combine TEEs with regular hypervisor patching to maintain robust isolation in multi-tenant environments."
+    },
+    {
+      "id": 62,
+      "question": "A cybersecurity team observes unusual activity that matches known threat actor TTPs. Which framework is BEST suited to map these tactics and enhance threat detection?",
+      "options": [
+        "MITRE ATT&CK framework",
+        "NIST Cybersecurity Framework (CSF)",
+        "Cyber Kill Chain by Lockheed Martin",
+        "Diamond Model of Intrusion Analysis"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The MITRE ATT&CK framework provides detailed mappings of adversary tactics, techniques, and procedures (TTPs) essential for advanced threat detection.",
+      "examTip": "Integrate MITRE ATT&CK mappings into SIEM platforms for automated correlation and detection."
+    },
+    {
+      "id": 63,
+      "question": "A malicious insider attempts to exploit a race condition during database transactions, potentially causing unauthorized data access. Which control MOST effectively mitigates this threat?",
+      "options": [
+        "Implement atomic transaction controls with concurrency safeguards",
+        "Enforce encryption of data at rest and in transit",
+        "Apply time-based access control policies",
+        "Use containerization for database environment segmentation"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Atomic transactions ensure that operations execute completely or not at all, preventing race conditions from causing data integrity issues.",
+      "examTip": "Conduct regular code reviews to identify concurrency vulnerabilities, especially in high-transaction environments."
+    },
+    {
+      "id": 64,
+      "question": "An organization processes sensitive data on third-party cloud infrastructure but must ensure data confidentiality even during computation. Which solution BEST satisfies this requirement?",
+      "options": [
+        "Confidential computing using hardware-based Trusted Execution Environments (TEEs)",
+        "Full disk encryption combined with cloud provider-managed keys",
+        "Client-side AES-256 encryption with key rotation policies",
+        "Tokenization with reversible obfuscation techniques"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Confidential computing with TEEs ensures data remains encrypted during processing, maintaining confidentiality even from the cloud provider.",
+      "examTip": "Evaluate the performance impact of TEEs when implementing confidential computing for large-scale data processing."
+    },
+    {
+      "id": 65,
+      "question": "A forensic team investigates advanced malware suspected of using anti-VM techniques to evade detection. Which method MOST effectively reveals the malware’s behavior?",
+      "options": [
+        "Bare-metal dynamic analysis in a controlled environment",
+        "Static binary analysis using disassemblers",
+        "Signature-based scanning using updated AV definitions",
+        "Memory dump analysis with the Volatility framework"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Bare-metal analysis bypasses VM detection techniques, allowing observation of malware behavior in a real hardware environment.",
+      "examTip": "Isolate bare-metal environments physically and logically to prevent accidental malware propagation."
+    },
+    {
+      "id": 66,
+      "question": "An attacker compromises a server using a Server-Side Template Injection (SSTI) vulnerability. Which secure coding practice BEST prevents SSTI attacks?",
+      "options": [
+        "Whitelisting safe template engines and performing strict input validation",
+        "Implementing Content Security Policy (CSP) headers",
+        "Encrypting all server communications using TLS 1.3",
+        "Applying strong authentication for all server-side API endpoints"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Whitelisting trusted template engines and validating inputs ensure that only safe templates are processed, preventing SSTI vulnerabilities.",
+      "examTip": "Regularly update template engines and avoid user-controlled template rendering whenever possible."
+    },
+    {
+      "id": 67,
+      "question": "A zero-day vulnerability is disclosed in a critical application with no available patches. Which IMMEDIATE action minimizes exploitation risk?",
+      "options": [
+        "Implementing virtual patching using Web Application Firewalls (WAF)",
+        "Isolating the affected application from external networks",
+        "Conducting dynamic application security testing (DAST)",
+        "Performing static code analysis to locate vulnerable components"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Virtual patching through WAFs provides temporary protection by filtering malicious traffic targeting the vulnerability until an official patch is available.",
+      "examTip": "Keep WAF signatures updated and monitor vendor advisories for official patches."
+    },
+    {
+      "id": 68,
+      "question": "An attacker exploits a misconfigured S3 bucket, exposing sensitive data. Which proactive security measure MOST effectively prevents such misconfigurations in the future?",
+      "options": [
+        "Implementing Cloud Security Posture Management (CSPM) tools",
+        "Encrypting data using server-side encryption with provider-managed keys",
+        "Applying TLS encryption for all data transmissions",
+        "Configuring access logs for all S3 buckets"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "CSPM tools continuously monitor cloud environments for misconfigurations, ensuring compliance with security policies and preventing data exposure.",
+      "examTip": "Combine CSPM with automated remediation workflows for rapid correction of detected misconfigurations."
+    },
+    {
+      "id": 69,
+      "question": "A cybersecurity analyst observes DNS requests to uncommon domains at unusual intervals. Which technique MOST likely indicates data exfiltration?",
+      "options": [
+        "DNS tunneling",
+        "Domain Generation Algorithm (DGA) usage",
+        "DNS cache poisoning",
+        "Fast-flux DNS hosting"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "DNS tunneling leverages DNS queries to exfiltrate data covertly by encoding payloads in DNS requests and responses.",
+      "examTip": "Implement DNS traffic analysis and establish baselines to detect deviations indicating tunneling activities."
+    },
+    {
+      "id": 70,
+      "question": "An attacker exploits an OAuth 2.0 implementation flaw, obtaining unauthorized access tokens. Which configuration BEST mitigates this risk?",
+      "options": [
+        "Enforcing Proof Key for Code Exchange (PKCE) in OAuth flows",
+        "Using long-lived refresh tokens with revocation endpoints",
+        "Enabling implicit grant flows for trusted clients",
+        "Reducing token lifespans with frequent re-authentication requirements"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "PKCE adds a layer of security to OAuth flows by ensuring that authorization codes cannot be intercepted and reused by attackers.",
+      "examTip": "Avoid implicit flows in favor of PKCE-secured authorization code flows, especially for public clients."
+    },
+    {
+      "id": 71,
+      "question": "A DevOps team must ensure that secrets used in CI/CD pipelines are securely stored and accessed. Which practice MOST effectively secures these secrets?",
+      "options": [
+        "Utilizing a dedicated secrets management solution with dynamic secret generation",
+        "Embedding encrypted secrets within application configuration files",
+        "Storing secrets in environment variables with restricted access",
+        "Encrypting secrets using provider-managed KMS solutions"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Dedicated secrets management solutions provide secure, dynamic secrets that minimize exposure and prevent hard-coded credentials in pipelines.",
+      "examTip": "Rotate secrets regularly and audit access logs for unusual activities in CI/CD environments."
+    },
+    {
+      "id": 72,
+      "question": "An attacker performs a homograph attack by registering a visually similar domain to the target organization. Which control BEST detects and mitigates this threat?",
+      "options": [
+        "Implementing Domain-based Message Authentication, Reporting, and Conformance (DMARC) policies",
+        "Conducting regular domain monitoring and takedown procedures",
+        "Deploying DNSSEC for all authoritative DNS zones",
+        "Using TLS certificates with Extended Validation (EV) for all services"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Domain monitoring detects homograph domains early, allowing for rapid takedown and minimizing the impact of phishing or impersonation attacks.",
+      "examTip": "Use automated domain monitoring tools and establish partnerships with takedown services for rapid mitigation."
+    },
+    {
+      "id": 73,
+      "question": "A forensic analyst needs to preserve the integrity of digital evidence collected from a live network environment. Which method ensures admissibility in court?",
+      "options": [
+        "Applying cryptographic hash functions (e.g., SHA-256) before and after acquisition",
+        "Documenting manual timestamps during evidence collection",
+        "Encrypting evidence files using AES-256 encryption",
+        "Capturing screenshots of critical log entries during investigation"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Cryptographic hashes ensure that the integrity of digital evidence remains verifiable, supporting admissibility in legal proceedings.",
+      "examTip": "Maintain detailed chain-of-custody documentation alongside hash values for each piece of evidence."
+    },
+    {
+      "id": 74,
+      "question": "A machine learning model for fraud detection faces membership inference attacks, risking data privacy. Which defense BEST mitigates this risk?",
+      "options": [
+        "Implementing differential privacy techniques during training",
+        "Applying federated learning models",
+        "Using adversarial training with synthetic data samples",
+        "Encrypting model parameters using homomorphic encryption"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Differential privacy adds noise to training data, preventing attackers from inferring whether specific records were part of the dataset.",
+      "examTip": "Balance privacy budgets to maintain model performance while achieving desired privacy guarantees."
+    },
+    {
+      "id": 75,
+      "question": "Which cryptographic mechanism ensures that encrypted communications cannot be retroactively decrypted, even if long-term private keys are compromised in the future?",
+      "options": [
+        "Perfect Forward Secrecy (PFS) with ephemeral key exchanges",
+        "AES-GCM encryption for all communications",
+        "RSA-4096 encryption with key pinning",
+        "ChaCha20-Poly1305 encryption for real-time applications"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "PFS uses ephemeral session keys, ensuring that previous communications cannot be decrypted if long-term keys are compromised later.",
+      "examTip": "Enable ECDHE cipher suites in TLS configurations to achieve forward secrecy in secure communications."
+    },
+    {
+      "id": 76,
+      "question": "A security engineer identifies that a system is vulnerable to buffer overflow exploits. Which mitigation MOST effectively prevents exploitation at the operating system level?",
+      "options": [
+        "Enabling Address Space Layout Randomization (ASLR)",
+        "Applying input validation checks at the application layer",
+        "Deploying Web Application Firewalls (WAF) for external services",
+        "Using anti-malware solutions with real-time scanning"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "ASLR randomizes memory address spaces, making it difficult for attackers to predict target locations for buffer overflow attacks.",
+      "examTip": "Combine ASLR with stack canaries and DEP (Data Execution Prevention) for robust defense against memory-based exploits."
+    },
+    {
+      "id": 77,
+      "question": "An attacker exploits Cross-Site Request Forgery (CSRF) vulnerabilities in a critical web application. Which control MOST effectively prevents CSRF attacks?",
+      "options": [
+        "Implementing anti-CSRF tokens validated on every state-changing request",
+        "Using secure, HttpOnly cookies for all session identifiers",
+        "Applying Content Security Policy (CSP) headers",
+        "Requiring multi-factor authentication (MFA) for all user actions"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Anti-CSRF tokens ensure that requests originate from trusted sources, preventing attackers from forging unauthorized requests.",
+      "examTip": "Use same-site cookie attributes alongside CSRF tokens for an additional layer of protection."
+    },
+    {
+      "id": 78,
+      "question": "A DevSecOps team wants to ensure that container images used in production are free from known vulnerabilities. Which practice BEST achieves this objective?",
+      "options": [
+        "Integrating container image scanning into CI/CD pipelines",
+        "Using only public container images from trusted registries",
+        "Deploying runtime security monitoring for all container workloads",
+        "Applying strict network segmentation between container clusters"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Automated scanning within CI/CD pipelines detects vulnerabilities early, preventing deployment of compromised containers.",
+      "examTip": "Adopt 'shift-left' security principles to catch issues before they reach production environments."
+    },
+    {
+      "id": 79,
+      "question": "An organization requires secure data sharing across multiple untrusted parties without exposing underlying data. Which cryptographic approach BEST meets this requirement?",
+      "options": [
+        "Secure Multi-Party Computation (SMPC)",
+        "Homomorphic encryption for distributed processing",
+        "Elliptic Curve Diffie-Hellman (ECDH) key exchanges",
+        "Tokenization with format-preserving encryption"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SMPC enables collaborative computation without revealing individual data inputs, preserving privacy across untrusted parties.",
+      "examTip": "Use SMPC in scenarios like joint analytics across competitive organizations requiring strict data confidentiality."
+    },
+    {
+      "id": 80,
+      "question": "Which forensic analysis technique MOST effectively detects advanced fileless malware persisting in system memory?",
+      "options": [
+        "Memory analysis using the Volatility framework",
+        "Static code analysis of system binaries",
+        "Network traffic inspection for anomalous C2 patterns",
+        "Disk imaging with signature-based malware scanning"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Fileless malware operates in volatile memory; hence, memory analysis tools like Volatility are critical for detection.",
+      "examTip": "Always capture memory images before shutting down affected systems to preserve volatile forensic evidence."
+    },
+    {
+      "id": 81,
+      "question": "A sophisticated attacker exploits speculative execution vulnerabilities in CPUs (e.g., Spectre and Meltdown) to access sensitive data. Which mitigation strategy MOST effectively protects against such attacks without significant performance degradation?",
+      "options": [
+        "Applying microcode updates and kernel patches addressing speculative execution flaws",
+        "Disabling hyper-threading in multi-tenant environments",
+        "Implementing hardware-assisted Trusted Execution Environments (TEEs)",
+        "Migrating critical workloads to ARM-based processors"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Microcode updates and kernel patches directly address speculative execution vulnerabilities, balancing security with performance.",
+      "examTip": "Continuously monitor vendor advisories for updates on hardware vulnerabilities affecting CPUs."
+    },
+    {
+      "id": 82,
+      "question": "An advanced persistent threat (APT) group uses living-off-the-land (LotL) techniques by abusing legitimate tools like PowerShell. Which endpoint security control BEST detects and mitigates such activity?",
+      "options": [
+        "Endpoint Detection and Response (EDR) with behavior-based analytics",
+        "Whitelisting approved scripts through application control policies",
+        "Disabling all scripting engines in the enterprise environment",
+        "Using antivirus solutions with updated signature databases"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "EDR solutions detect LotL techniques by analyzing behaviors rather than relying solely on signatures, making them effective against such threats.",
+      "examTip": "Combine EDR solutions with strict PowerShell logging and constrained language modes."
+    },
+    {
+      "id": 83,
+      "question": "A cloud application must maintain confidentiality when processing encrypted data using third-party AI services. Which cryptographic method BEST ensures privacy during computation?",
+      "options": [
+        "Fully homomorphic encryption (FHE)",
+        "Elliptic Curve Cryptography (ECC) with end-to-end encryption",
+        "AES-256 encryption with key management policies",
+        "Tokenization with irreversible data masking"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "FHE allows data to be processed without decryption, ensuring that even third-party services cannot access plaintext data.",
+      "examTip": "Assess computational overhead associated with FHE before large-scale adoption."
+    },
+    {
+      "id": 84,
+      "question": "A zero-day vulnerability in a critical IoT device could allow remote code execution. The vendor has not released a patch. What is the MOST effective immediate mitigation strategy?",
+      "options": [
+        "Implement network segmentation and restrict device access to trusted zones",
+        "Disable all device communication until a patch is released",
+        "Conduct binary analysis to develop an internal patch",
+        "Replace the affected IoT devices with alternate models"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Network segmentation prevents exploitation by isolating vulnerable IoT devices from untrusted networks while awaiting vendor patches.",
+      "examTip": "Adopt a 'zero-trust' approach for IoT by minimizing exposure through segmentation and access controls."
+    },
+    {
+      "id": 85,
+      "question": "An attacker leverages subresource integrity (SRI) flaws in third-party JavaScript libraries to inject malicious code. Which security practice MOST effectively mitigates this risk?",
+      "options": [
+        "Implementing proper SRI checks with hash validation for all third-party scripts",
+        "Serving all scripts locally with strict Content Security Policies (CSP)",
+        "Conducting regular code audits on all imported JavaScript libraries",
+        "Using code signing certificates for all web application components"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SRI ensures that browsers verify the integrity of third-party scripts through hash validation, preventing tampering.",
+      "examTip": "Combine SRI with CSPs that only allow trusted domains for script loading."
+    },
+    {
+      "id": 86,
+      "question": "A financial institution wants to protect cryptographic keys from quantum computing threats. Which cryptographic approach should be implemented to ensure post-quantum security?",
+      "options": [
+        "Lattice-based cryptography for key exchanges and digital signatures",
+        "RSA-4096 with OAEP padding for enhanced encryption strength",
+        "AES-256 encryption combined with Perfect Forward Secrecy (PFS)",
+        "Elliptic Curve Cryptography (ECC) with P-521 curves"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Lattice-based cryptography is considered quantum-resistant and suitable for securing keys and signatures against quantum attacks.",
+      "examTip": "Stay updated on NIST's post-quantum cryptography standardization efforts for future adoption."
+    },
+    {
+      "id": 87,
+      "question": "A red team discovers that a production database is vulnerable to SQL injection, allowing unauthorized data extraction. Which remediation step should be prioritized FIRST?",
+      "options": [
+        "Implement parameterized queries and stored procedures in the application code",
+        "Apply web application firewall (WAF) rules to block suspicious SQL patterns",
+        "Encrypt sensitive data at rest using AES-256 encryption",
+        "Limit database user privileges based on the principle of least privilege"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Parameterized queries ensure that SQL code and user inputs are treated separately, eliminating the injection vector at its source.",
+      "examTip": "Complement secure coding practices with WAF protections for a layered defense against SQL injection."
+    },
+    {
+      "id": 88,
+      "question": "A security engineer needs to ensure non-repudiation of financial transactions in a blockchain network. Which feature provides this assurance?",
+      "options": [
+        "Digital signatures using asymmetric cryptography",
+        "Hashing with SHA-256 for transaction integrity",
+        "Proof of Work (PoW) consensus mechanism",
+        "Multisignature wallets for transaction approvals"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Digital signatures guarantee non-repudiation by verifying the origin of transactions, preventing signers from denying their actions.",
+      "examTip": "Use secure key management systems to protect private keys associated with digital signatures."
+    },
+    {
+      "id": 89,
+      "question": "An insider threat actor attempts to exfiltrate data using covert timing channels in network traffic. Which security control BEST detects such advanced exfiltration techniques?",
+      "options": [
+        "Network traffic analytics with machine learning for anomaly detection",
+        "Deep Packet Inspection (DPI) across all outbound traffic",
+        "Data Loss Prevention (DLP) solutions with context-aware policies",
+        "SIEM correlation rules focused on high-volume data transfers"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Machine learning-based network analytics detect subtle anomalies in traffic patterns, including timing-based covert channels.",
+      "examTip": "Combine anomaly detection with strict egress filtering to prevent data exfiltration through covert methods."
+    },
+    {
+      "id": 90,
+      "question": "Which advanced cryptographic protocol ensures secure communication between parties with Perfect Forward Secrecy (PFS) while also supporting fast, low-latency connections for real-time applications?",
+      "options": [
+        "TLS 1.3 with Ephemeral Elliptic Curve Diffie-Hellman (ECDHE)",
+        "IPSec in transport mode using AES-GCM",
+        "SSH with RSA-4096 keys and AES-256 encryption",
+        "DTLS 1.2 for secure real-time data transfer"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "TLS 1.3 with ECDHE provides forward secrecy and low-latency performance, making it ideal for real-time secure communications.",
+      "examTip": "Enable TLS 1.3 in web applications to benefit from faster handshakes and enhanced security features by default."
+    },
+    {
+      "id": 91,
+      "question": "A security analyst detects unauthorized Kerberos ticket generation, indicating a potential Golden Ticket attack. What is the FIRST action to contain this threat?",
+      "options": [
+        "Reset the Kerberos Key Distribution Center (KDC) service account passwords",
+        "Isolate affected domain controllers from the network",
+        "Perform memory analysis on domain controllers for persistence mechanisms",
+        "Rotate all Active Directory (AD) service account credentials"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Resetting KDC account passwords invalidates forged Kerberos tickets, stopping the attacker's unauthorized access immediately.",
+      "examTip": "Monitor domain controller logs for abnormal Kerberos ticket-granting operations to detect similar attacks early."
+    },
+    {
+      "id": 92,
+      "question": "An enterprise must share encrypted datasets with multiple external partners while ensuring no single party can access the full dataset. Which cryptographic solution BEST achieves this?",
+      "options": [
+        "Shamir's Secret Sharing Scheme (SSSS)",
+        "Elliptic Curve Diffie-Hellman (ECDH) for key exchanges",
+        "Fully homomorphic encryption for secure processing",
+        "Symmetric encryption with multiple encryption keys"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SSSS divides a secret into parts, requiring a predefined number of pieces to reconstruct it, ensuring no single partner can access the entire dataset alone.",
+      "examTip": "Configure the threshold number of shares carefully to balance accessibility and security."
+    },
+    {
+      "id": 93,
+      "question": "A blockchain network aims to prevent Sybil attacks, where a single adversary controls multiple nodes. Which consensus algorithm MOST effectively mitigates this risk?",
+      "options": [
+        "Proof of Stake (PoS) with randomized validator selection",
+        "Proof of Work (PoW) with high computational difficulty",
+        "Delegated Proof of Stake (DPoS) with limited validator nodes",
+        "Proof of Authority (PoA) with identity-based validators"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "PoS with randomized selection makes it economically challenging for attackers to control multiple nodes, reducing Sybil attack risks.",
+      "examTip": "Diversify validators geographically and economically to strengthen PoS-based blockchain resilience."
+    },
+    {
+      "id": 94,
+      "question": "An attacker exploits insecure OAuth 2.0 configurations, gaining unauthorized API access. Which improvement MOST effectively mitigates this vulnerability?",
+      "options": [
+        "Enforcing Proof Key for Code Exchange (PKCE) for public clients",
+        "Implementing long-lived refresh tokens with strict scopes",
+        "Using the implicit grant flow for web applications",
+        "Reducing token expiration times to limit access duration"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "PKCE secures OAuth 2.0 flows for public clients, preventing interception and misuse of authorization codes.",
+      "examTip": "Always use the authorization code flow with PKCE instead of implicit flows for enhanced security."
+    },
+    {
+      "id": 95,
+      "question": "A DevSecOps pipeline must detect vulnerabilities in third-party dependencies before deployment. Which solution MOST effectively ensures secure software releases?",
+      "options": [
+        "Software Composition Analysis (SCA) integrated into CI/CD pipelines",
+        "Dynamic Application Security Testing (DAST) post-deployment",
+        "Penetration testing of deployed applications on a quarterly basis",
+        "Manual code reviews focusing on open-source components"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SCA tools analyze dependencies for known vulnerabilities early in the development lifecycle, ensuring secure releases.",
+      "examTip": "Continuously update SCA vulnerability databases for accurate and current results in CI/CD workflows."
+    },
+    {
+      "id": 96,
+      "question": "A threat actor exploits insecure deserialization in a web API, achieving remote code execution. Which remediation step MOST effectively prevents such attacks?",
+      "options": [
+        "Perform strict type validation and object whitelisting before deserialization",
+        "Encrypt serialized data using AES-256 encryption",
+        "Implement JWT with short expiration times for API authentication",
+        "Use Content Security Policies (CSP) to block malicious scripts"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Strict validation and object whitelisting ensure that only safe data structures are deserialized, preventing code execution exploits.",
+      "examTip": "Avoid deserializing data from untrusted sources unless absolutely necessary and secured."
+    },
+    {
+      "id": 97,
+      "question": "An advanced adversary exploits Border Gateway Protocol (BGP) vulnerabilities to reroute traffic. Which solution MOST effectively ensures secure BGP route validation in real time?",
+      "options": [
+        "Resource Public Key Infrastructure (RPKI) for BGP validation",
+        "DNS Security Extensions (DNSSEC) for DNS integrity",
+        "TLS 1.3 with Perfect Forward Secrecy (PFS) for traffic encryption",
+        "IPSec tunnels for secure communications between ASNs"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "RPKI validates BGP route announcements, preventing unauthorized or malicious route advertisements in real time.",
+      "examTip": "Coordinate with ISPs to adopt RPKI universally for robust BGP security."
+    },
+    {
+      "id": 98,
+      "question": "A critical SCADA system controlling industrial processes is targeted by malware designed to manipulate operational logic. Which FIRST response action BEST ensures operational continuity and security?",
+      "options": [
+        "Isolate affected SCADA networks and switch to manual operational controls",
+        "Deploy protocol-aware IDS solutions tailored for SCADA environments",
+        "Perform memory forensics on SCADA controllers for malware traces",
+        "Initiate a full shutdown of SCADA systems to prevent further compromise"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Immediate isolation and manual operation prevent malware from disrupting industrial processes while ensuring system security.",
+      "examTip": "Regularly test manual failover procedures in critical infrastructure environments."
+    },
+    {
+      "id": 99,
+      "question": "Which blockchain architecture enhancement ensures data confidentiality for transactions while preserving decentralized validation?",
+      "options": [
+        "Zero-Knowledge Proofs (ZKPs) for confidential transactions",
+        "Proof of Work (PoW) with multi-signature validations",
+        "Federated blockchain models with private validator sets",
+        "Public blockchains combined with off-chain storage"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "ZKPs allow transaction validation without revealing sensitive data, ensuring confidentiality while maintaining decentralized trust.",
+      "examTip": "Evaluate the performance overhead of ZKPs when integrating them into existing blockchain systems."
+    },
+    {
+      "id": 100,
+      "question": "A security engineer identifies that an AI model is vulnerable to adversarial input manipulation. Which defense MOST effectively protects AI inference systems from such attacks?",
+      "options": [
+        "Adversarial training using perturbed datasets during model development",
+        "Homomorphic encryption of model parameters",
+        "Federated learning to decentralize model training",
+        "Differential privacy applied to input data during inference"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Adversarial training exposes AI models to manipulated inputs during development, enhancing their resilience to real-world adversarial attacks.",
+      "examTip": "Regularly retrain AI models with new adversarial examples to adapt to evolving attack techniques."
     }
   ]
-}
+});
