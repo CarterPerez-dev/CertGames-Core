@@ -669,7 +669,7 @@
     },
     {
       "id": 52,
-      "question": "Which scenario-based question is BEST for mitigating a DNS poisoning attack on your network?",
+      "question": "Which  is BEST for mitigating a DNS poisoning attack on your network?",
       "options": [
         "Implement DNSSEC to validate DNS responses",
         "Use Telnet for internal DNS queries",
@@ -877,15 +877,15 @@
     },
     {
       "id": 68,
-      "question": "Which scenario-based question is BEST addressed by implementing Quality of Service (QoS)?",
+      "question": "Which  is BEST addressed by implementing Quality of Service (QoS)?",
       "options": [
-        "How to restrict employees from visiting social media sites",
-        "How to ensure voice traffic has priority over regular data",
-        "How to physically secure the IDF racks from theft",
-        "How to encrypt all web-based application sessions"
+        "restrict employees from visiting social media sites",
+        "ensure voice traffic has priority over regular data",
+        "physically secure the IDF racks from theft",
+        "encrypt all web-based application sessions"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to restrict employees from visiting social media sites is a content filtering issue. How to ensure voice traffic has priority over regular data (correct) is a classic use case for QoS. How to physically secure the IDF racks from theft is a physical security matter. How to encrypt all web-based application sessions is encryption, not traffic prioritization.",
+      "explanation": "restrict employees from visiting social media sites is a content filtering issue. ensure voice traffic has priority over regular data (correct) is a classic use case for QoS. physically secure the IDF racks from theft is a physical security matter. encrypt all web-based application sessions is encryption, not traffic prioritization.",
       "examTip": "QoS ensures mission-critical or latency-sensitive traffic (e.g., VoIP) receives higher priority on the network."
     },
     {
@@ -1098,15 +1098,15 @@
     },
     {
       "id": 85,
-      "question": "Which scenario-based question is BEST resolved by implementing a captive portal?",
+      "question": "Which  is BEST resolved by implementing a captive portal?",
       "options": [
-        "How to provide guests with temporary Wi-Fi access without giving them domain credentials",
-        "How to route traffic between VLANs more efficiently",
-        "How to diagnose cable continuity issues",
-        "How to encrypt back-end server traffic using SSL"
+        "provide guests with temporary Wi-Fi access without giving them domain credentials",
+        "route traffic between VLANs more efficiently",
+        "diagnose cable continuity issues",
+        "encrypt back-end server traffic using SSL"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "How to provide guests with temporary Wi-Fi access without giving them domain credentials (correct) captive portals allow guests to authenticate on a splash page. How to route traffic between VLANs more efficiently involves routing or switching, not a captive portal. How to diagnose cable continuity issues is a physical-layer test. How to encrypt back-end server traffic using SSL is encryption best practices, not a portal solution.",
+      "explanation": "provide guests with temporary Wi-Fi access without giving them domain credentials (correct) captive portals allow guests to authenticate on a splash page. route traffic between VLANs more efficiently involves routing or switching, not a captive portal. diagnose cable continuity issues is a physical-layer test. encrypt back-end server traffic using SSL is encryption best practices, not a portal solution.",
       "examTip": "Captive portals are common for guest Wi-Fi access, requiring acceptance of terms or credentials via a web page."
     },
     {
@@ -1267,15 +1267,15 @@
     },
     {
       "id": 98,
-      "question": "Which scenario-based question is BEST solved by implementing HIDS/HIPS on critical servers?",
+      "question": "Which  is BEST solved by implementing HIDS/HIPS on critical servers?",
       "options": [
-        "How to route VLAN traffic faster in the core",
-        "How to detect malicious activities directly on a host in real time",
-        "How to ensure DNS queries are resolved quickly",
-        "How to reduce cable clutter in the server rack"
+        "route VLAN traffic faster in the core",
+        "detect malicious activities directly on a host in real time",
+        "ensure DNS queries are resolved quickly",
+        "reduce cable clutter in the server rack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to route VLAN traffic faster in the core is a switching or routing design. How to detect malicious activities directly on a host in real time (correct) host intrusion detection/prevention detects system-level threats. How to ensure DNS queries are resolved quickly is performance or DNS caching. How to reduce cable clutter in the server rack is a physical organization issue, not security.",
+      "explanation": "route VLAN traffic faster in the core is a switching or routing design. detect malicious activities directly on a host in real time (correct) host intrusion detection/prevention detects system-level threats. ensure DNS queries are resolved quickly is performance or DNS caching. reduce cable clutter in the server rack is a physical organization issue, not security.",
       "examTip": "HIDS/HIPS solutions inspect host-level activity and can block or alert on abnormal behavior in real time."
     },
     {
