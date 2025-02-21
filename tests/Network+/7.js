@@ -1,7 +1,7 @@
-{
-  "category": "netplus",
+db.tests.insertOne({
+  "category": "nplus",
   "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
+  "testName": "Betwork+ Practice Test #7 (Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
