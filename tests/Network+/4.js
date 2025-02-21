@@ -1100,13 +1100,13 @@ db.tests.insertOne({
       "id": 85,
       "question": "Which question is BEST addressed by implementing 802.1X authentication on access switches?",
       "options": [
-        "How to provide separate SSIDs for guests",
-        "How to ensure only authorized devices gain network access at the switch port",
-        "How to lower the cost of broadcast traffic in a subnet",
-        "How to reduce the network’s default gateway utilization"
+        "provide separate SSIDs for guests",
+        "ensure only authorized devices gain network access at the switch port",
+        "lower the cost of broadcast traffic in a subnet",
+        "reduce the network’s default gateway utilization"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "How to provide separate SSIDs for guests is a wireless segmentation question. How to ensure only authorized devices gain network access at the switch port (correct) is the primary purpose of port-based authentication. How to lower the cost of broadcast traffic in a subnet is a broadcast domain topic, not 802.1X. How to reduce the network’s default gateway utilization is about routing, not NAC.",
+      "explanation": "provide separate SSIDs for guests is a wireless segmentation question. ensure only authorized devices gain network access at the switch port (correct) is the primary purpose of port-based authentication. lower the cost of broadcast traffic in a subnet is a broadcast domain topic, not 802.1X. reduce the network’s default gateway utilization is about routing, not NAC.",
       "examTip": "802.1X ensures endpoints authenticate before being granted LAN access, enhancing security."
     },
     {
