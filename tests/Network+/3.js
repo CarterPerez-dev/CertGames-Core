@@ -197,7 +197,7 @@
       ],
       "correctAnswerIndex": 1,
       "explanation": "Dual stack uses both IPv4 and IPv6 stacks simultaneously but does not encapsulate traffic. Tunneling (correct) encapsulates IPv6 in IPv4 for transition. NAT64 translates IPv6 addresses to IPv4 addresses, not strictly encapsulation. APIPA is a fallback for IPv4 addresses, not an IPv6 transition mechanism.",
-      "examTip": "Tunneling is a common method for integrating IPv6 traffic into existing IPv4 networks without direct translation."
+      "examTip": "Tunneling is a common method for integrating IPv6 traffic into existing IPv4 networks without translation."
     },
     {
       "id": 16,
@@ -747,7 +747,7 @@
     },
     {
       "id": 58,
-      "question": "Which of these is a direct benefit of using SNMPv3 over SNMPv1?",
+      "question": "Which of these is a benefit of using SNMPv3 over SNMPv1?",
       "options": [
         "Simplified community strings",
         "Shorter MIB definitions",
@@ -1080,7 +1080,7 @@
         "DHCP scope mismatch on the router"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Duplicate IP addresses detected is not indicated. Incorrect subnet assignment blocks local gateway reachability (correct) the user is on 192.168.1.x/24 and gateway is on 192.168.0.x/24, so no local route. Gateway IP is in the broadcast domain is not specifically an error. DHCP scope mismatch on the router might be possible but the direct issue is the mismatch between subnets.",
+      "explanation": "Duplicate IP addresses detected is not indicated. Incorrect subnet assignment blocks local gateway reachability (correct) the user is on 192.168.1.x/24 and gateway is on 192.168.0.x/24, so no local route. Gateway IP is in the broadcast domain is not specifically an error. DHCP scope mismatch on the router might be possible but the issue is the mismatch between subnets.",
       "examTip": "For a /24 mask, the network portion must match for the PC to see its default gateway."
     },
     {
@@ -1150,7 +1150,7 @@
     },
     {
       "id": 89,
-      "question": "A user with a mission-critical role must have priority traffic for IP telephony. Which is the MOST direct method to ensure their VoIP packets are prioritized?",
+      "question": "A user with a mission-critical role must have priority traffic for IP telephony. Which is the MOST method to ensure their VoIP packets are prioritized?",
       "options": [
         "Implement port security on their switch port",
         "Configure DSCP markings and apply QoS",
@@ -1163,7 +1163,7 @@
     },
     {
       "id": 90,
-      "question": "Which direct question addresses implementing IPv6 to reduce address exhaustion while allowing some IPv4 to remain active?",
+      "question": "Which question addresses implementing IPv6 to reduce address exhaustion while allowing some IPv4 to remain active?",
       "options": [
         "Can we run dual stack on devices supporting both IPv4 and IPv6?",
         "Should we remove all NAT configuration from the router?",
@@ -1288,7 +1288,7 @@
         "Reverse Proxy"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "STP (Spanning Tree Protocol) (correct) blocks loops by electing a root bridge and disabling certain ports. ICMP redirect is used by routers to direct traffic. DHCP snooping monitors DHCP traffic for rogue servers, not loops. Reverse Proxy is an application-layer service, not for loop prevention.",
+      "explanation": "STP (Spanning Tree Protocol) (correct) blocks loops by electing a root bridge and disabling certain ports. ICMP redirect is used by routers to traffic. DHCP snooping monitors DHCP traffic for rogue servers, not loops. Reverse Proxy is an application-layer service, not for loop prevention.",
       "examTip": "STP is essential in switched networks to avoid bridging loops that can cause broadcast storms."
     },
     {
