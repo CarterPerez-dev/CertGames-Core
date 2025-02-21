@@ -1,7 +1,7 @@
-db.tests.insertOne({
-  "category": "netplus",
+{
+  "category": "nplus",
   "testId": 5,
-  "testName": "Practice Test #5 (Intermediate)",
+  "testName": " Network+ Practice Test #5 (Intermediate)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -14,7 +14,7 @@ db.tests.insertOne({
         "802.1X port-based authentication"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A addresses loop prevention, not address translation. Option B replicates DNS data between servers, unrelated to NAT. Option C (correct) enables many internal clients to share one public IP by mapping source ports. Option D controls network port authentication, not IP address translation.",
+      "explanation": "Spanning Tree Protocol on a core switch addresses loop prevention, not address translation. DNS zone transfers for local domains replicates DNS data between servers, unrelated to NAT. PAT on a NAT-enabled router (correct) enables many internal clients to share one public IP by mapping source ports. 802.1X port-based authentication controls network port authentication, not IP address translation.",
       "examTip": "Port Address Translation (PAT) is the typical solution for letting multiple private IPs share a single public IP."
     },
     {
@@ -27,7 +27,7 @@ db.tests.insertOne({
         "Run traceroute on the local subnet"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A can reveal rogue DHCP but not ARP issues. Option B (correct) captures packets to see repeated unsolicited ARP replies. Option C is beneficial but not the quickest first step. Option D shows route paths, not local ARP manipulations.",
+      "explanation": "Check the DHCP server logs for scope exhaustion can reveal rogue DHCP but not ARP issues. Use a protocol analyzer to inspect ARP replies (correct) captures packets to see repeated unsolicited ARP replies. Deploy an SIEM to correlate multiple log sources is beneficial but not the quickest first step. Run traceroute on the local subnet shows route paths, not local ARP manipulations.",
       "examTip": "Perform a packet capture on your local segment to spot suspicious ARP announcements or duplications."
     },
     {
@@ -40,7 +40,7 @@ db.tests.insertOne({
         "It offers direct VLAN tagging for end-user devices"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is the access layer function, hosting end-user connections. Option B (correct) aggregates access layer switches and often applies routing policies. Option C relates more to core routing or WAN edge. Option D references trunking to end devices, typically an access-layer function.",
+      "explanation": "It physically hosts all devices, serving as the wiring closet layer is the access layer function, hosting end-user connections. It provides fault isolation and aggregates access layer connections (correct) aggregates access layer switches and often applies routing policies. It interconnects multiple data centers through WAN links relates more to core routing or WAN edge. It offers direct VLAN tagging for end-user devices references trunking to end devices, typically an access-layer function.",
       "examTip": "In the three-tier model, the distribution layer sits between core and access, handling routing and policy enforcement."
     },
     {
@@ -53,7 +53,7 @@ db.tests.insertOne({
         "To force STP root election on VLAN 1"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is impossible; VLAN 1 by default can carry management traffic. Option B (correct) reassigning native VLAN to a non-1 ID helps prevent certain double-tag attacks. Option C is a link-layer setting, not a VLAN assignment. Option D focuses on STP, not the native VLAN risk.",
+      "explanation": "To block broadcast traffic entirely on VLAN 1 is impossible; VLAN 1 by default can carry management traffic. To minimize potential VLAN-hopping attacks exploiting VLAN 1 (correct) reassigning native VLAN to a non-1 ID helps prevent certain double-tag attacks. To enable half-duplex operation on VLAN 1 only is a link-layer setting, not a VLAN assignment. To force STP root election on VLAN 1 focuses on STP, not the native VLAN risk.",
       "examTip": "Best practice is to avoid using VLAN 1 for native VLAN to reduce vulnerability to VLAN hopping."
     },
     {
@@ -66,7 +66,7 @@ db.tests.insertOne({
         "Hide the SSID broadcast on all corporate APs"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A only presents a splash page but doesn’t strongly authenticate. Option B uses a common passphrase, easy to share or leak. Option C (correct) provides individual credentials via RADIUS. Option D only obscures the network, not securing it.",
+      "explanation": "Implement a captive portal without requiring passwords only presents a splash page but doesn’t strongly authenticate. Use WPA2-PSK with a shared passphrase for all users uses a common passphrase, easy to share or leak. Use WPA3-Enterprise with 802.1X authentication (correct) provides individual credentials via RADIUS. Hide the SSID broadcast on all corporate APs only obscures the network, not securing it.",
       "examTip": "Enterprise-level Wi-Fi typically uses 802.1X with unique credentials to ensure strong authentication and traceability."
     },
     {
@@ -79,7 +79,7 @@ db.tests.insertOne({
         "A missing DNS entry for the default gateway"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A references collisions but doesn't explain cross-VLAN DHCP. Option B (correct) likely means the trunk is passing VLANs it shouldn't, enabling DHCP leakage. Option C is an unrelated ARP issue. Option D is about DNS, not DHCP scope crossing.",
+      "explanation": "Excessive broadcast domain collisions references collisions but doesn't explain cross-VLAN DHCP. Improper trunk configuration allowing DHCP offers to traverse VLANs (correct) likely means the trunk is passing VLANs it shouldn't, enabling DHCP leakage. Expired ARP entries causing IP conflicts is an unrelated ARP issue. A missing DNS entry for the default gateway is about DNS, not DHCP scope crossing.",
       "examTip": "Carefully define trunked VLANs on switch ports so DHCP offers remain confined to their intended VLAN."
     },
     {
@@ -92,7 +92,7 @@ db.tests.insertOne({
         "PoE+ requires half-duplex to supply stable current"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is incorrect because PoE does not handle encryption. Option B (correct) is the key improvement, doubling the available power for devices like PTZ cameras. Option C is unrelated to PoE, that’s a switching feature. Option D is false; PoE does not mandate half-duplex.",
+      "explanation": "PoE+ encrypts data packets at layer 2 is incorrect because PoE does not handle encryption. PoE+ delivers up to about 30W of power, supporting higher-demand devices (correct) is the key improvement, doubling the available power for devices like PTZ cameras. PoE+ allows VLAN trunking across all powered devices is unrelated to PoE, that’s a switching feature. PoE+ requires half-duplex to supply stable current is false; PoE does not mandate half-duplex.",
       "examTip": "802.3at (PoE+) can provide roughly 30W per port, powering devices that require more than the ~15W of 802.3af."
     },
     {
@@ -105,7 +105,7 @@ db.tests.insertOne({
         "Half-duplex vs. full-duplex setting"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Option A can cause other errors, but late collisions typically point to half vs. full duplex conflicts. Option B is more of a VLAN trunk issue. Option C can cause fragmentation, not collisions. Option D (correct) is a classic source of collisions on switched networks.",
+      "explanation": "Port speed mismatch (10 vs. 100 vs. 1000) can cause other errors, but late collisions typically point to half vs. full duplex conflicts. Incorrect VLAN ID on the trunk interface is more of a VLAN trunk issue. Mismatched MTU between endpoints can cause fragmentation, not collisions. Half-duplex vs. full-duplex setting (correct) is a classic source of collisions on switched networks.",
       "examTip": "Late collisions often arise when one side is full-duplex and the other is half-duplex."
     },
     {
@@ -118,7 +118,7 @@ db.tests.insertOne({
         "SFTP is limited to local subnet transfers only"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is FTP’s control channel. Option B (correct) SFTP is essentially FTP over SSH, typically on port 22. Option C is false; SFTP supports two-way file operations. Option D is false, you can connect globally if allowed by firewall rules.",
+      "explanation": "SFTP uses TCP port 21 by default is FTP’s control channel. SFTP includes encryption over SSH on port 22 (correct) SFTP is essentially FTP over SSH, typically on port 22. SFTP does not allow file uploads, only downloads is false; SFTP supports two-way file operations. SFTP is limited to local subnet transfers only is false, you can connect globally if allowed by firewall rules.",
       "examTip": "SFTP is an encrypted file transfer protocol layered over SSH, usually using TCP 22."
     },
     {
@@ -131,7 +131,7 @@ db.tests.insertOne({
         "Manual configuration of each VM via SSH"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is about network access control. Option B (correct) uses scripts or playbooks to automate server builds. Option C is about DHCP security. Option D is time-consuming and prone to human error.",
+      "explanation": "802.1X NAC on each vSwitch is about network access control. Infrastructure as Code (IaC) with playbooks (correct) uses scripts or playbooks to automate server builds. DHCP snooping for all server ports is about DHCP security. Manual configuration of each VM via SSH is time-consuming and prone to human error.",
       "examTip": "IaC with tools like Ansible, Chef, or Puppet helps create consistent, versioned server and network configurations."
     },
     {
@@ -144,7 +144,7 @@ db.tests.insertOne({
         "The entire 128 bits"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A typically refers to the interface identifier. Option B might refer to a site prefix but is not standard default. Option C (correct) is the standard IPv6 subnet boundary for global unicast addresses (64/64). Option D is not correct, as part is host ID.",
+      "explanation": "The last 64 bits typically refers to the interface identifier. The first 48 bits might refer to a site prefix but is not standard default. The first 64 bits (correct) is the standard IPv6 subnet boundary for global unicast addresses (64/64). The entire 128 bits is not correct, as part is host ID.",
       "examTip": "In IPv6, the common practice is a /64 prefix for the network portion, leaving the remaining 64 bits for host IDs."
     },
     {
@@ -157,7 +157,7 @@ db.tests.insertOne({
         "SMTP open relay scanning"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is TCP 22, unrelated. Option B is DNS, which is port 53. Option C (correct) SNMP uses UDP 161, so external sources may be probing or attacking. Option D is mail relay scanning on port 25 or 587, not 161.",
+      "explanation": "A brute-force SSH attack is TCP 22, unrelated. DNS amplification reflecting on port 53 is DNS, which is port 53. SNMP probing or attack attempts (correct) SNMP uses UDP 161, so external sources may be probing or attacking. SMTP open relay scanning is mail relay scanning on port 25 or 587, not 161.",
       "examTip": "SNMP runs by default on UDP 161, so suspicious inbound queries could indicate a malicious scan or reflection attempt."
     },
     {
@@ -170,7 +170,7 @@ db.tests.insertOne({
         "Disable PoE across all unused ports"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is VLAN tagging, not credential security. Option B (correct) is the immediate step to eliminate easy unauthorized access. Option C uses an unsecure protocol. Option D is unrelated to login credentials.",
+      "explanation": "Implement 802.1Q trunking on all distribution switches is VLAN tagging, not credential security. Change switch passwords to unique, strong credentials (correct) is the immediate step to eliminate easy unauthorized access. Enable Telnet on each switch for remote admin uses an unsecure protocol. Disable PoE across all unused ports is unrelated to login credentials.",
       "examTip": "Default logins on network devices are a major vulnerability; secure them with unique, complex credentials immediately."
     },
     {
@@ -183,7 +183,7 @@ db.tests.insertOne({
         "LC"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) SFP+ is a standard for 10 Gigabit optical or copper modules. Option B is a twisted-pair connector. Option C and D are connector types, not transceiver form factors themselves.",
+      "explanation": "SFP+ (correct) SFP+ is a standard for 10 Gigabit optical or copper modules. RJ45 is a twisted-pair connector. SC and LC are connector types, not transceiver form factors themselves.",
       "examTip": "SFP+ is a popular hot-swappable form factor for 10 Gbps transceivers, building on the older SFP standard."
     },
     {
@@ -196,7 +196,7 @@ db.tests.insertOne({
         "Reboot the DNS server to clear cached records"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) helps identify at which hop the packet is dropped. Option B is rarely needed and not typically recommended. Option C is drastic and disrupts many users. Option D is extreme if DNS is proven correct.",
+      "explanation": "Tracert to a well-known external IP to see where traffic stops (correct) helps identify at which hop the packet is dropped. Set a static ARP entry on the user’s machine is rarely needed and not typically recommended. Disable DHCP across the core switch is drastic and disrupts many users. Reboot the DNS server to clear cached records is extreme if DNS is proven correct.",
       "examTip": "Use traceroute (tracert) to check each hop’s responsiveness, quickly isolating a network path failure."
     },
     {
@@ -209,7 +209,7 @@ db.tests.insertOne({
         "802.1X authentication"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A only prunes VLANs, not loops. Option B restricts MAC addresses, not loops. Option C (correct) ensures only one active path in redundancy. Option D is for endpoint authentication. STP is standard for loop prevention.",
+      "explanation": "VTP pruning only prunes VLANs, not loops. Port security sticky MAC restricts MAC addresses, not loops. Spanning Tree Protocol (correct) ensures only one active path in redundancy. 802.1X authentication is for endpoint authentication. STP is standard for loop prevention.",
       "examTip": "STP or RSTP ensures a loop-free topology in networks with redundant switch interconnections."
     },
     {
@@ -222,7 +222,7 @@ db.tests.insertOne({
         "Check for a port set to monitor mode or unusual MAC addresses learned"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Option A is not necessarily triggered by packet sniffing. Option B is about authentication, not continuous monitoring. Option C duplicates traffic and is typically a tool for legitimate analysis. Option D (correct) an intruder might have changed the port to SPAN or introduced odd MAC addresses for sniffing.",
+      "explanation": "Configure SNMP traps for high CPU usage is not necessarily triggered by packet sniffing. Implement 802.1x EAP-TLS for the switch port is about authentication, not continuous monitoring. Enable port mirroring on all access ports by default duplicates traffic and is typically a tool for legitimate analysis. Check for a port set to monitor mode or unusual MAC addresses learned (correct) an intruder might have changed the port to SPAN or introduced odd MAC addresses for sniffing.",
       "examTip": "Regularly verify switch port configurations to spot any suspicious ports in monitor/SPAN mode or unexpected MAC activity."
     },
     {
@@ -235,7 +235,7 @@ db.tests.insertOne({
         "Port security limiting MAC addresses"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A forwards DHCP requests, not domain-based filtering. Option B (correct) reputation or content filtering might block certain domains. Option C aggregates links, irrelevant to domain blocking. Option D restricts MAC addresses, not URLs or domains.",
+      "explanation": "DHCP relay with IP helper addresses forwards DHCP requests, not domain-based filtering. Content filtering or reputation-based firewall rules (correct) reputation or content filtering might block certain domains. LACP trunk with multiple VLANs aggregates links, irrelevant to domain blocking. Port security limiting MAC addresses restricts MAC addresses, not URLs or domains.",
       "examTip": "Web filtering or reputation services can mistakenly block legitimate sites if misconfigured or outdated."
     },
     {
@@ -248,7 +248,7 @@ db.tests.insertOne({
         "802.11b"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A can operate on 2.4 or 5 GHz and can be backward compatible. Option B (correct) is 5 GHz only, no b/g fallback. Option C is 2.4 GHz only. Option D is also 2.4 GHz only. 802.11ac solely uses 5 GHz.",
+      "explanation": "802.11n can operate on 2.4 or 5 GHz and can be backward compatible. 802.11ac (correct) is 5 GHz only, no b/g fallback. 802.11g is 2.4 GHz only. 802.11b is also 2.4 GHz only. 802.11ac solely uses 5 GHz.",
       "examTip": "802.11ac (and 802.11ax for 5 GHz) do not support older b/g devices which operate in 2.4 GHz."
     },
     {
@@ -261,7 +261,7 @@ db.tests.insertOne({
         "DHCP option 43"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is traffic prioritization. Option B (correct) is IPv6 tunneling. Option C is for management access. Option D is a DHCP vendor extension. Tunneling solutions like 6to4 or ISATAP wrap IPv6 in IPv4.",
+      "explanation": "QoS marking is traffic prioritization. Tunneling (e.g., 6to4) (correct) is IPv6 tunneling. SNMP community strings is for management access. DHCP option 43 is a DHCP vendor extension. Tunneling solutions like 6to4 or ISATAP wrap IPv6 in IPv4.",
       "examTip": "When migrating to IPv6 over an IPv4 network, tunnels can carry v6 traffic if direct support is absent."
     },
     {
@@ -274,7 +274,7 @@ db.tests.insertOne({
         "Enable half-duplex on each port to slow traffic"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) segments broadcast domains, reducing ARP overhead. Option B is a performance tweak, not broadcast management. Option C can create trunks automatically, not reduce ARP. Option D is detrimental to performance and doesn't specifically reduce ARP.",
+      "explanation": "Implement smaller VLANs with router gateways for each segment (correct) segments broadcast domains, reducing ARP overhead. Use jumbo frames to carry more data per packet is a performance tweak, not broadcast management. Allow trunk ports to dynamically negotiate using DTP can create trunks automatically, not reduce ARP. Enable half-duplex on each port to slow traffic is detrimental to performance and doesn't specifically reduce ARP.",
       "examTip": "Reducing broadcast domain size (via VLANs and routing) often lowers ARP storms in large flat networks."
     },
     {
@@ -287,7 +287,7 @@ db.tests.insertOne({
         "How to keep routers updated with the latest firmware automatically"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is an active-active or hot site. Option B (correct) describes a warm site with partial readiness. Option C is more like cold site or standard backup practice. Option D is routine maintenance, not DR site strategy.",
+      "explanation": "How to ensure zero downtime with fully active systems in multiple data centers is an active-active or hot site. How to bring systems online within hours if the primary site fails (correct) describes a warm site with partial readiness. How to store daily tape backups in a secure offsite locker is more like cold site or standard backup practice. How to keep routers updated with the latest firmware automatically is routine maintenance, not DR site strategy.",
       "examTip": "A warm site has pre-installed hardware and some data; it can be made operational more quickly than a cold site."
     },
     {
@@ -300,7 +300,7 @@ db.tests.insertOne({
         "arp -a"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A queries DNS. Option B scans hosts and ports. Option C (correct) tests bandwidth and throughput between two endpoints. Option D shows ARP cache, not performance.",
+      "explanation": "nslookup queries DNS. nmap scans hosts and ports. iperf (correct) tests bandwidth and throughput between two endpoints. arp -a shows ARP cache, not performance.",
       "examTip": "iperf can generate traffic and measure network throughput, identifying bottlenecks on a link."
     },
     {
@@ -313,7 +313,7 @@ db.tests.insertOne({
         "SNMP over SSL v1"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A and B do not support encryption. Option C (correct) introduces encryption and user-based security model. Option D is not a standard designation. SNMPv3 is recommended for secure management.",
+      "explanation": "SNMPv1 and SNMPv2c do not support encryption. SNMPv3 (correct) introduces encryption and user-based security model. SNMP over SSL v1 is not a standard designation. SNMPv3 is recommended for secure management.",
       "examTip": "Use SNMPv3 to avoid sending community strings and data in clear text over the network."
     },
     {
@@ -326,7 +326,7 @@ db.tests.insertOne({
         "Spine-leaf"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is every site connected to every other site, more expensive. Option B is one dedicated line per pair. Option C (correct) features a central hub with spokes. Option D is typical in data center switching, not WAN.",
+      "explanation": "Full mesh is every site connected to every other site, more expensive. Point-to-point dedicated lines is one dedicated line per pair. Hub-and-spoke (correct) features a central hub with spokes. Spine-leaf is typical in data center switching, not WAN.",
       "examTip": "A hub-and-spoke design uses a central location for routing all site connections, simpler but can create bottlenecks."
     },
     {
@@ -339,7 +339,7 @@ db.tests.insertOne({
         "It automatically blocks inbound TCP port 80"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is separate from NAT. Option B (correct) ensures external hosts only see the NAT IP, not private IPs. Option C is performance, not typical NAT function. Option D is a policy choice, not inherent to NAT.",
+      "explanation": "It encrypts all data in transit using IPSec is separate from NAT. It hides internal IP addresses from external networks (correct) ensures external hosts only see the NAT IP, not private IPs. It compresses data packets for faster routing is performance, not typical NAT function. It automatically blocks inbound TCP port 80 is a policy choice, not inherent to NAT.",
       "examTip": "NAT effectively masks internal IPs, raising the difficulty for unsolicited inbound connections."
     },
     {
@@ -352,7 +352,7 @@ db.tests.insertOne({
         "A PoE injector"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A inspects traffic, not balancing loads. Option B (correct) distributes requests among multiple servers. Option C is bridging only. Option D delivers power to devices, not load distribution.",
+      "explanation": "A next-generation firewall inspects traffic, not balancing loads. A load balancer (correct) distributes requests among multiple servers. A transparent switch in Layer 2 mode is bridging only. A PoE injector delivers power to devices, not load distribution.",
       "examTip": "Load balancers optimize performance and redundancy by routing requests among multiple backend servers."
     },
     {
@@ -365,7 +365,7 @@ db.tests.insertOne({
         "Change the default gateway address"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a frame-size tweak, unrelated. Option B (correct) ensures no overlapping static assignment or exhausted range. Option C invites loops. Option D breaks the router setup. DHCP misconfiguration is a common source of conflicts.",
+      "explanation": "Enable jumbo frames on all devices is a frame-size tweak, unrelated. Check the DHCP server’s scope and reservations (correct) ensures no overlapping static assignment or exhausted range. Disable STP on the core switch invites loops. Change the default gateway address breaks the router setup. DHCP misconfiguration is a common source of conflicts.",
       "examTip": "Examine DHCP scopes, reservations, and any static IP overlaps when conflicts appear."
     },
     {
@@ -378,7 +378,7 @@ db.tests.insertOne({
         "No legacy device restrictions"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is incorrect; 5 GHz generally yields higher data rates. Option B is false; 2.4 GHz often faces more interference. Option C (correct) 2.4 GHz signals travel farther and better penetrate walls. Option D is incorrect; older 802.11b/g are 2.4 GHz, not 5 GHz.",
+      "explanation": "Higher maximum throughput for each channel is incorrect; 5 GHz generally yields higher data rates. Less interference from microwave ovens and phones is false; 2.4 GHz often faces more interference. Greater range and wall penetration due to lower frequency (correct) 2.4 GHz signals travel farther and better penetrate walls. No legacy device restrictions is incorrect; older 802.11b/g are 2.4 GHz, not 5 GHz.",
       "examTip": "2.4 GHz typically covers more distance, though it has fewer non-overlapping channels and can have more interference."
     },
     {
@@ -391,7 +391,7 @@ db.tests.insertOne({
         "The virtualization plane in the hypervisor"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) in SDN, the controller handles routing logic. Option B is the local forwarding engine. Option C is device administration. Option D is server virtualization, not network control.",
+      "explanation": "The control plane in a centralized SDN controller (correct) in SDN, the controller handles routing logic. The data plane on each router interface is the local forwarding engine. The management plane on every end-user device is device administration. The virtualization plane in the hypervisor is server virtualization, not network control.",
       "examTip": "In SDN, the control plane is centralized. Devices simply forward packets under the controller’s instructions."
     },
     {
@@ -404,7 +404,7 @@ db.tests.insertOne({
         "OSPF is proprietary while RIP is open standard"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is a RIP characteristic. Option B is inaccurate; OSPF is IP protocol 89, not standard TCP/UDP. Option C (correct) is the fundamental advantage. Option D is reversed: OSPF is open standard, EIGRP is proprietary (historically).",
+      "explanation": "OSPF uses a hop count limit of 15 is a RIP characteristic. OSPF operates over UDP instead of TCP is inaccurate; OSPF is IP protocol 89, not standard TCP/UDP. OSPF converges faster and handles bigger networks efficiently (correct) is the fundamental advantage. OSPF is proprietary while RIP is open standard is reversed: OSPF is open standard, EIGRP is proprietary (historically).",
       "examTip": "OSPF is a link-state protocol designed for larger, more complex topologies, converging faster than RIP’s distance-vector approach."
     },
     {
@@ -417,7 +417,7 @@ db.tests.insertOne({
         "ipconfig /renew"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A traces route hops. Option B (correct) shows ports, addresses, state, and process IDs. Option C manually sets ARP entries. Option D renews DHCP lease, not listing connections.",
+      "explanation": "tracert traces route hops. netstat -ano (correct) shows ports, addresses, state, and process IDs. arp -s manually sets ARP entries. ipconfig /renew renews DHCP lease, not listing connections.",
       "examTip": "Use 'netstat -ano' on Windows to check active TCP endpoints, states, and matching PID for processes."
     },
     {
@@ -430,7 +430,7 @@ db.tests.insertOne({
         "Configure a static MAC address on the port"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) quickly isolates if the cable or connected device is the problem. Option B addresses traffic prioritization, not physical flapping. Option C is security risk and not relevant. Option D is port security but not the best immediate diagnostic.",
+      "explanation": "Shut down the port and swap the cable or device (correct) quickly isolates if the cable or connected device is the problem. Increase the QoS priority for that port addresses traffic prioritization, not physical flapping. Move the port to VLAN 1 to stabilize traffic is security risk and not relevant. Configure a static MAC address on the port is port security but not the best immediate diagnostic.",
       "examTip": "Disable the problematic port, test with a different cable or device to rule out hardware issues causing link flaps."
     },
     {
@@ -443,7 +443,7 @@ db.tests.insertOne({
         "Enable trunking on all uplink interfaces"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) ensures addresses recycle faster, preventing exhaustion. Option B is only traffic monitoring. Option C is an automatic fallback, not a real solution. Option D is about VLAN trunking, not addressing capacity.",
+      "explanation": "Shorten the DHCP lease time to free addresses sooner (correct) ensures addresses recycle faster, preventing exhaustion. Implement port mirroring to watch DHCP traffic is only traffic monitoring. Use APIPA addresses for devices without leases is an automatic fallback, not a real solution. Enable trunking on all uplink interfaces is about VLAN trunking, not addressing capacity.",
       "examTip": "Leases that are too long can exhaust scope addresses in dynamic environments. Adjust lease time or expand the scope."
     },
     {
@@ -456,7 +456,7 @@ db.tests.insertOne({
         "Route injection via DHCP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is irrelevant. Option B (correct) the router picks the route with the most specific (longest) prefix. Option C is typically used when comparing different protocols, but a more specific route beats a broader route if both come from the same protocol. Option D is not how routes are chosen.",
+      "explanation": "Fewer administrative hops is irrelevant. Longest prefix match (correct) the router picks the route with the most specific (longest) prefix. Lower administrative distance is typically used when comparing different protocols, but a more specific route beats a broader route if both come from the same protocol. Route injection via DHCP is not how routes are chosen.",
       "examTip": "Routers prefer the route with the longest prefix match (highest subnet mask) when multiple routes exist."
     },
     {
@@ -469,7 +469,7 @@ db.tests.insertOne({
         "Client devices are set to half-duplex"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) 2.4 GHz significantly limits Wi-Fi 6 performance. Option B WPA3 overhead is negligible compared to overall speed. Option C VLAN 1 is a separate matter. Option D half-duplex is not typical for Wi-Fi clients. Running Wi-Fi 6 in 5 GHz or 6 GHz is essential for high speeds.",
+      "explanation": "Access point is in 2.4 GHz mode only (correct) 2.4 GHz significantly limits Wi-Fi 6 performance. Using WPA3 encryption lowers data rates dramatically WPA3 overhead is negligible compared to overall speed. Switch trunk ports do not allow VLAN 1 VLAN 1 is a separate matter. Client devices are set to half-duplex half-duplex is not typical for Wi-Fi clients. Running Wi-Fi 6 in 5 GHz or 6 GHz is essential for high speeds.",
       "examTip": "Wi-Fi 6 can operate in 2.4 GHz but top speeds are typically realized in 5 or 6 GHz bands."
     },
     {
@@ -482,7 +482,7 @@ db.tests.insertOne({
         "To disable WPA3 encryption on 2.4 GHz"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) band steering tries to move clients to 5 GHz. Option B is the opposite of normal. Option C is not feasible. Option D is a separate security choice, not related to band steering.",
+      "explanation": "To push capable clients onto the 5 GHz band for better throughput (correct) band steering tries to move clients to 5 GHz. To prevent users from roaming between APs is the opposite of normal. To force older devices to upgrade firmware is not feasible. To disable WPA3 encryption on 2.4 GHz is a separate security choice, not related to band steering.",
       "examTip": "Band steering encourages dual-band clients to use the higher-performance 5 GHz spectrum, leaving 2.4 GHz for legacy devices."
     },
     {
@@ -495,7 +495,7 @@ db.tests.insertOne({
         "The server’s NAT table is full"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a name conflict, not a typical DHCP reject scenario. Option B (correct) if the MAC is not allowed, the server will refuse. Option C is a local setting, not a DHCP server filter. Option D is about IP translation, unrelated to DHCP filtering.",
+      "explanation": "The client’s hostname is already taken by another device is a name conflict, not a typical DHCP reject scenario. The client’s MAC address is not in the allowed list (correct) if the MAC is not allowed, the server will refuse. The client’s default gateway is misconfigured is a local setting, not a DHCP server filter. The server’s NAT table is full is about IP translation, unrelated to DHCP filtering.",
       "examTip": "If DHCP is configured with MAC-based allowlists or blocklists, a mismatch blocks the client from receiving a lease."
     },
     {
@@ -508,7 +508,7 @@ db.tests.insertOne({
         "TFTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) uses port 22 for secure, encrypted sessions. Option B sends data in plain text. Option C is unencrypted for v1. Option D is a trivial file transfer, no interactive shell.",
+      "explanation": "SSH (correct) uses port 22 for secure, encrypted sessions. Telnet sends data in plain text. SNMPv1 is unencrypted for v1. TFTP is a trivial file transfer, no interactive shell.",
       "examTip": "SSH is the standard for secure remote management, replacing Telnet’s clear-text approach."
     },
     {
@@ -521,7 +521,7 @@ db.tests.insertOne({
         "Port security"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Option A enforces endpoint compliance, not MAC limitations. Option B protects STP from rogue devices. Option C sends notifications, not enforce. Option D (correct) can lock or disable a port that sees excessive MAC addresses (e.g., MAC flooding).",
+      "explanation": "NAC posture check enforces endpoint compliance, not MAC limitations. BPDU Guard protects STP from rogue devices. SNMP traps sends notifications, not enforce. Port security (correct) can lock or disable a port that sees excessive MAC addresses (e.g., MAC flooding).",
       "examTip": "Port security can set a max MAC count, placing the port in error if exceeded, thwarting flooding attacks."
     },
     {
@@ -534,7 +534,7 @@ db.tests.insertOne({
         "It forces users to set static IP addresses"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is not typical of captive portals. Option B is a QoS setting. Option C (correct) is the core purpose of captive portals. Option D is not a standard requirement for captive portals.",
+      "explanation": "It encrypts all traffic using IPSec tunnels is not typical of captive portals. It restricts user speed by applying rate limits at layer 2 is a QoS setting. It provides a branded login page to authenticate or accept usage terms (correct) is the core purpose of captive portals. It forces users to set static IP addresses is not a standard requirement for captive portals.",
       "examTip": "Captive portals greet guest users with disclaimers or authentication steps before granting network access."
     },
     {
@@ -547,7 +547,7 @@ db.tests.insertOne({
         "Disable SNMP on the host"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is ARP cache listing. Option B (correct) NetFlow or sFlow helps track traffic flows for analysis. Option C ensures DNS record integrity but not traffic analysis. Option D turns off monitoring, not detection.",
+      "explanation": "arp -a is ARP cache listing. Configure netflow or sflow on the gateway (correct) NetFlow or sFlow helps track traffic flows for analysis. Enable DNSSEC for name resolution ensures DNS record integrity but not traffic analysis. Disable SNMP on the host turns off monitoring, not detection.",
       "examTip": "Flow technologies (NetFlow, sFlow) record metadata about who is talking to whom, revealing suspicious outbound connections."
     },
     {
@@ -560,7 +560,7 @@ db.tests.insertOne({
         "An AP that does not broadcast its SSID"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is just outdated software, not necessarily rogue. Option B (correct) is an unauthorized device, a security concern. Option C might be part of a high-availability design, not rogue. Option D is hiding SSID, not necessarily unauthorized.",
+      "explanation": "A legitimate AP that has outdated firmware is just outdated software, not necessarily rogue. An unauthorized AP connected to the wired network, potentially bypassing security (correct) is an unauthorized device, a security concern. A backup AP used for load balancing in the DMZ might be part of a high-availability design, not rogue. An AP that does not broadcast its SSID is hiding SSID, not necessarily unauthorized.",
       "examTip": "A rogue AP is typically installed without permission, exposing the network to attackers if unsecured."
     },
     {
@@ -573,7 +573,7 @@ db.tests.insertOne({
         "NX bit / Data Execution Prevention"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Option A inspects network traffic, not CPU memory. Option B authenticates devices, not memory protection. Option C is NAT-based. Option D (correct) prevents certain memory sections from being executed, reducing exploits.",
+      "explanation": "Stateful firewall rules inspects network traffic, not CPU memory. 802.1X NAC protocols authenticates devices, not memory protection. Port Address Translation is NAT-based. NX bit / Data Execution Prevention (correct) prevents certain memory sections from being executed, reducing exploits.",
       "examTip": "Data Execution Prevention (DEP) or NX bit is an OS/CPU feature that blocks code execution in non-executable memory regions."
     },
     {
@@ -586,7 +586,7 @@ db.tests.insertOne({
         "Reduce the DHCP lease to 30 minutes"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A might help if name resolution is suspect, but not a direct measure of latency. Option B is possible, but you should confirm connectivity first. Option C (correct) quickly gauges if there’s packet loss or delay. Option D is IP address management, not performance debugging.",
+      "explanation": "Flush the DNS cache and retry might help if name resolution is suspect, but not a direct measure of latency. Replace the Ethernet cable immediately is possible, but you should confirm connectivity first. Run a continuous ping (ping -t) to the file server and observe latency (correct) quickly gauges if there’s packet loss or delay. Reduce the DHCP lease to 30 minutes is IP address management, not performance debugging.",
       "examTip": "A sustained ping test can reveal patterns of packet drops or spikes in response time."
     },
     {
@@ -599,7 +599,7 @@ db.tests.insertOne({
         "Use half-duplex connections to limit throughput"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A lumps devices with others, risking lateral movement. Option B (correct) isolates these devices from critical network resources. Option C only ensures consistent addresses, not security. Option D does not address security segmentation.",
+      "explanation": "Place them all on a flat layer 2 subnet lumps devices with others, risking lateral movement. Assign them to an isolated VLAN with restrictive ACLs (correct) isolates these devices from critical network resources. Provide static IP addresses from the core router only ensures consistent addresses, not security. Use half-duplex connections to limit throughput does not address security segmentation.",
       "examTip": "Creating dedicated VLANs with ACLs or firewall rules for IoT devices can drastically reduce the blast radius if they’re compromised."
     },
     {
@@ -612,7 +612,7 @@ db.tests.insertOne({
         "Use of static routing for internal traffic"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is the opposite of zero trust. Option B (correct) reauthenticates and checks device posture each time. Option C is physical topology, not ZTA. Option D is a routing choice, not a security principle.",
+      "explanation": "Automatic acceptance if source IP is on the corporate LAN is the opposite of zero trust. Repeatable, context-based verification of identity and posture before granting access (correct) reauthenticates and checks device posture each time. Full mesh physical connections to all servers is physical topology, not ZTA. Use of static routing for internal traffic is a routing choice, not a security principle.",
       "examTip": "Zero trust means ‘never trust, always verify,’ requiring continuous authentication and authorization checks."
     },
     {
@@ -625,7 +625,7 @@ db.tests.insertOne({
         "A 1 Gbps link over standard Cat5e"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is within copper limits. Option B can use shorter copper or fiber. Option C (correct) is where single-mode fiber is needed for extended range. Option D is standard copper use. LX is typically for longer fiber runs.",
+      "explanation": "Connecting a user’s PC that is 90 meters away is within copper limits. A short 10-meter run to a server rack can use shorter copper or fiber. A 5 km fiber run between buildings (correct) is where single-mode fiber is needed for extended range. A 1 Gbps link over standard Cat5e is standard copper use. LX is typically for longer fiber runs.",
       "examTip": "1000BASE-LX supports longer single-mode fiber distances, often up to 5 km or more."
     },
     {
@@ -638,7 +638,7 @@ db.tests.insertOne({
         "Change the DHCP scope to a larger range"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is about address assignment, not signal issues. Option B (correct) helps visualize channel usage and identify interference. Option C addresses packet size, not signal. Option D addresses IP availability, unrelated to signal drop.",
+      "explanation": "Enable static IP addressing is about address assignment, not signal issues. Use a Wi-Fi analyzer to check channel utilization and signal levels (correct) helps visualize channel usage and identify interference. Lower the MTU setting on the wireless adapter addresses packet size, not signal. Change the DHCP scope to a larger range addresses IP availability, unrelated to signal drop.",
       "examTip": "A Wi-Fi analyzer is the primary tool for diagnosing RF coverage gaps, overlapping channels, or interference."
     },
     {
@@ -651,7 +651,7 @@ db.tests.insertOne({
         "UDP is only used for DNS requests"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is the fundamental difference for reliability. Option B is false; encryption is not default in UDP. Option C is TFTP’s port, not TCP. Option D is incorrect; UDP is also used for other protocols.",
+      "explanation": "TCP uses a three-way handshake for reliable delivery (correct) is the fundamental difference for reliability. UDP encrypts data by default is false; encryption is not default in UDP. TCP always uses port 69 is TFTP’s port, not TCP. UDP is only used for DNS requests is incorrect; UDP is also used for other protocols.",
       "examTip": "TCP is connection-oriented with reliable delivery, while UDP is connectionless without guaranteed reliability."
     },
     {
@@ -664,7 +664,7 @@ db.tests.insertOne({
         "TCP 3389"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is FTP. Option B (correct) is HTTPS. Option C is TFTP, Option D is RDP. Port 443 is standard for encrypted web traffic.",
+      "explanation": "TCP 21 is FTP. TCP 443 (correct) is HTTPS. UDP 69 is TFTP, TCP 3389 is RDP. Port 443 is standard for encrypted web traffic.",
       "examTip": "HTTPS typically runs on TCP 443 for secure connections."
     },
     {
@@ -677,7 +677,7 @@ db.tests.insertOne({
         "Switch to RIPv2 for simpler metric calculations"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is drastic. Option B (correct) ensures OSPF adjacency is correct. Mismatch in area or timers can cause loops or neighbor issues. Option C is insecure remote admin, not a fix. Option D is a different protocol with limitations.",
+      "explanation": "Disable OSPF entirely and rely on static routes is drastic. Verify both routers have a matching area ID and hello/dead timers (correct) ensures OSPF adjacency is correct. Mismatch in area or timers can cause loops or neighbor issues. Enable Telnet on each router interface is insecure remote admin, not a fix. Switch to RIPv2 for simpler metric calculations is a different protocol with limitations.",
       "examTip": "When OSPF adjacency is off, routing issues or loops can occur. Confirm matching parameters first."
     },
     {
@@ -690,7 +690,7 @@ db.tests.insertOne({
         "LACP negotiations for all access ports"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A can ignore BPDUs but doesn't shut the port. Option B (correct) port security sees a second device's MAC and can disable. Option C is for preventing rogue DHCP, not devices. Option D is for link aggregation, not unauthorized devices.",
+      "explanation": "BPDU filter disabled on trunk ports can ignore BPDUs but doesn't shut the port. Port security with limited MAC count (correct) port security sees a second device's MAC and can disable. DHCP snooping disabled on that VLAN is for preventing rogue DHCP, not devices. LACP negotiations for all access ports is for link aggregation, not unauthorized devices.",
       "examTip": "Port security can restrict the number of MACs learned, disabling the port if a rogue router is connected."
     },
     {
@@ -703,7 +703,7 @@ db.tests.insertOne({
         "Protocol analyzer"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is for email spam. Option B is basic log collection without advanced correlation. Option C (correct) centralizes, correlates, and alerts on data from multiple devices. Option D captures packets but doesn’t unify logs from different sources.",
+      "explanation": "SPAM filter is for email spam. Syslog server with no analytics is basic log collection without advanced correlation. SIEM (correct) centralizes, correlates, and alerts on data from multiple devices. Protocol analyzer captures packets but doesn’t unify logs from different sources.",
       "examTip": "A SIEM aggregates logs and applies real-time correlation to detect patterns indicating threats."
     },
     {
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "Disable all trunk ports except on the root bridge"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A yields no definite backup root. Option B (correct) ensures a second switch has a lower priority than all others, becoming the next root. Option C is for DHCP security, not STP. Option D is not practical and restricts redundancy.",
+      "explanation": "Set the same priority on all switches yields no definite backup root. Manually adjust STP priority values to designate a backup root (correct) ensures a second switch has a lower priority than all others, becoming the next root. Enable DHCP snooping on the root switch is for DHCP security, not STP. Disable all trunk ports except on the root bridge is not practical and restricts redundancy.",
       "examTip": "Explicitly setting STP priority for a designated backup root switch ensures an orderly failover if the primary goes down."
     },
     {
@@ -729,7 +729,7 @@ db.tests.insertOne({
         "A default gateway mismatch on the router"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is incorrect server info, not using up addresses. Option B (correct) might never reuse addresses, depleting the pool. Option C is a wireless security risk but not necessarily address exhaustion. Option D is a routing issue, not scope usage.",
+      "explanation": "Incorrect DNS server IP in DHCP options is incorrect server info, not using up addresses. Lease time set to 9999 days with no reclamation (correct) might never reuse addresses, depleting the pool. Rogue WAP using the same SSID is a wireless security risk but not necessarily address exhaustion. A default gateway mismatch on the router is a routing issue, not scope usage.",
       "examTip": "Excessively long leases cause addresses to remain assigned even if devices leave the network."
     },
     {
@@ -742,7 +742,7 @@ db.tests.insertOne({
         "CNAME"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Option A is mail exchange, Option B is IPv4, Option C is reverse lookup, Option D (correct) is the alias to a canonical name.",
+      "explanation": "MX is mail exchange, A is IPv4, PTR is reverse lookup, CNAME (correct) is the alias to a canonical name.",
       "examTip": "CNAME records allow multiple domain aliases to resolve to the same actual (canonical) domain."
     },
     {
@@ -755,7 +755,7 @@ db.tests.insertOne({
         "Protocol analyzer"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A locates cables, not measuring exact length. Option B confirms port connectivity but not length. Option C (correct) TDR pinpoints distance to a cable fault. Option D examines packet data, not physical cable faults.",
+      "explanation": "Toner probe kit locates cables, not measuring exact length. Loopback plug confirms port connectivity but not length. Time domain reflectometer (TDR) (correct) TDR pinpoints distance to a cable fault. Protocol analyzer examines packet data, not physical cable faults.",
       "examTip": "A TDR sends signals and measures reflections to gauge cable length and find breaks or crimps."
     },
     {
@@ -768,7 +768,7 @@ db.tests.insertOne({
         "Encoding all VLAN data in an encrypted tunnel"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a single device approach, not NAC posture checks across endpoints. Option B (correct) is the essence of NAC posture. Option C is a separate AAA configuration. Option D is encryption, not NAC posture.",
+      "explanation": "Verifying a router has the latest firmware is a single device approach, not NAC posture checks across endpoints. Checking endpoints meet security requirements before granting network access (correct) is the essence of NAC posture. Managing RADIUS server certificates is a separate AAA configuration. Encoding all VLAN data in an encrypted tunnel is encryption, not NAC posture.",
       "examTip": "NAC posture ensures endpoints have required patches, AV, etc., before allowing them on the network."
     },
     {
@@ -781,7 +781,7 @@ db.tests.insertOne({
         "Swap out the AP for a new one"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is extreme. Option B is about VLAN assignment, not credentials. Option C (correct) is the minimal step: confirm correct username/password. Option D is drastic hardware replacement. Typically incorrect or expired passwords cause this error.",
+      "explanation": "Re-image the entire operating system is extreme. Change the user’s VLAN to the native VLAN is about VLAN assignment, not credentials. Verify the user’s password or re-enter their credentials (correct) is the minimal step: confirm correct username/password. Swap out the AP for a new one is drastic hardware replacement. Typically incorrect or expired passwords cause this error.",
       "examTip": "Check the simplest explanation first, especially for 'invalid credentials'—the user may be typing the wrong password."
     },
     {
@@ -794,7 +794,7 @@ db.tests.insertOne({
         "Force the port speed to 10 Mbps"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) locks learned MAC addresses. Option B is unrelated to MAC changes. Option C could cause loops. Option D is a performance setting. Sticky MAC with a limit prevents multi-device usage on one port.",
+      "explanation": "Enable MAC address sticky with a limited MAC count (correct) locks learned MAC addresses. Increase the DHCP lease time is unrelated to MAC changes. Disable spanning tree on that port could cause loops. Force the port speed to 10 Mbps is a performance setting. Sticky MAC with a limit prevents multi-device usage on one port.",
       "examTip": "Port security sticky MAC can detect unauthorized devices behind a hub or rogue switch, shutting the port if multiple MACs appear."
     },
     {
@@ -807,7 +807,7 @@ db.tests.insertOne({
         "Layer 5"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is MAC addresses. Option B (correct) IP header includes TTL. Option C is TCP/UDP. Option D is session management.",
+      "explanation": "Layer 2 is MAC addresses. Layer 3 (correct) IP header includes TTL. Layer 4 is TCP/UDP. Layer 5 is session management.",
       "examTip": "TTL is an IP-level field, so it belongs to Layer 3 of the OSI model."
     },
     {
@@ -820,7 +820,7 @@ db.tests.insertOne({
         "How to gather flow data for capacity planning"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is an IDS scenario. Option B is unrelated to intrusion detection. Option C (correct) is the advantage of inline IPS. Option D is flow analysis, not intrusion detection. IPS blocks suspicious traffic inline.",
+      "explanation": "How to passively monitor traffic without disruptions is an IDS scenario. How to disable encryption on all inbound connections is unrelated to intrusion detection. How to immediately block detected malicious traffic in real time (correct) is the advantage of inline IPS. How to gather flow data for capacity planning is flow analysis, not intrusion detection. IPS blocks suspicious traffic inline.",
       "examTip": "IDS detects, IPS detects and actively prevents malicious activity."
     },
     {
@@ -833,7 +833,7 @@ db.tests.insertOne({
         "SNMP community string"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) if the router has no correct gateway, it cannot route beyond its subnet. Option B resolves names, but ping by IP should still work. Option C is a VLAN trunk setting, less relevant. Option D is for monitoring, not routing.",
+      "explanation": "Default gateway on the router interface (correct) if the router has no correct gateway, it cannot route beyond its subnet. DNS server IP address resolves names, but ping by IP should still work. 802.1Q trunk native VLAN assignment is a VLAN trunk setting, less relevant. SNMP community string is for monitoring, not routing.",
       "examTip": "Always ensure the router’s default route or gateway is valid for outbound traffic to remote networks."
     },
     {
@@ -846,7 +846,7 @@ db.tests.insertOne({
         "DRaaS"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is raw infrastructure. Option B (correct) is a platform environment for custom apps. Option C is fully hosted software. Option D is disaster recovery. PaaS abstracts the OS and hardware layers.",
+      "explanation": "IaaS is raw infrastructure. PaaS (correct) is a platform environment for custom apps. SaaS is fully hosted software. DRaaS is disaster recovery. PaaS abstracts the OS and hardware layers.",
       "examTip": "Platform as a Service provides an environment to develop, run, and manage applications without dealing with infrastructure details."
     },
     {
@@ -859,7 +859,7 @@ db.tests.insertOne({
         "DHCP requests will not reach the server"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) a valid certificate is needed for EAP-based authentication. Option B is unrelated. Option C is loop prevention, not Wi-Fi auth. Option D is about address assignment. Expired certificates break client trust.",
+      "explanation": "Clients cannot validate the server’s identity and drop the connection (correct) a valid certificate is needed for EAP-based authentication. The switch will block all VLAN tagging is unrelated. 802.1D spanning tree protocol is disabled globally is loop prevention, not Wi-Fi auth. DHCP requests will not reach the server is about address assignment. Expired certificates break client trust.",
       "examTip": "802.1X or WPA2-Enterprise relies on valid RADIUS/EAP certificates for mutual authentication."
     },
     {
@@ -872,7 +872,7 @@ db.tests.insertOne({
         "It requires ST connectors to reach 10 Gbps speed"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is single-mode distances, not 62.5 micron. Option B (correct) older OM1 fiber is not recommended for stable 10 Gbps beyond very short distances. Option C half-duplex is irrelevant in fiber context. Option D is a connector form factor, not the limiting factor. OM1 is generally insufficient for 10 Gbps over typical data center distances.",
+      "explanation": "It supports 10 Gbps up to 5 km without issues is single-mode distances, not 62.5 micron. It will not reliably achieve 10 Gbps unless replaced with higher-grade fiber (correct) older OM1 fiber is not recommended for stable 10 Gbps beyond very short distances. It can only run 10 Gbps if half-duplex is used half-duplex is irrelevant in fiber context. It requires ST connectors to reach 10 Gbps speed is a connector form factor, not the limiting factor. OM1 is generally insufficient for 10 Gbps over typical data center distances.",
       "examTip": "OM1 fiber is often too limited for 10 Gbps beyond short runs; consider OM3/OM4 (50 micron) or single-mode for stable 10 Gbps links."
     },
     {
@@ -885,7 +885,7 @@ db.tests.insertOne({
         "Shorten DHCP lease times in the server"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A does the opposite. Option B (correct) physically restricts console access. Option C is a duplex setting, not security. Option D addresses IP addresses, not console security.",
+      "explanation": "Relocate the main distribution frame to an open area does the opposite. Use a locked rack or cabinet for the core switch (correct) physically restricts console access. Enable half-duplex on the console port is a duplex setting, not security. Shorten DHCP lease times in the server addresses IP addresses, not console security.",
       "examTip": "Physical security (locked cabinets) is essential to protect console ports from unauthorized local access."
     },
     {
@@ -898,7 +898,7 @@ db.tests.insertOne({
         "Randomly flooding the ARP table with unrelated MACs"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A might be a rogue DHCP, not necessarily MITM. Option B (correct) an on-path attacker can present fake certs to intercept encrypted traffic. Option C is loop creation. Option D is MAC flooding, a different type of attack. True MITM can intercept and decrypt traffic (if certificate forging is possible).",
+      "explanation": "Broadcasting DHCP offers to multiple VLANs might be a rogue DHCP, not necessarily MITM. Decrypting SSL traffic without the client’s knowledge by spoofing certificates (correct) an on-path attacker can present fake certs to intercept encrypted traffic. Disabling spanning tree to cause a loop is loop creation. Randomly flooding the ARP table with unrelated MACs is MAC flooding, a different type of attack. True MITM can intercept and decrypt traffic (if certificate forging is possible).",
       "examTip": "An on-path attacker intercepts traffic stealthily, often using spoofed certs to decrypt TLS sessions."
     },
     {
@@ -911,7 +911,7 @@ db.tests.insertOne({
         "The switchport is in half-duplex mode"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is correct for no off-subnet access, but the user can ping external IP addresses, so gateway works. Option B (correct) explains why domain names fail while IP pings succeed. Option C is improbable if IP-level traffic works. Option D might cause collisions but not name resolution failures specifically.",
+      "explanation": "Default gateway IP is missing is correct for no off-subnet access, but the user can ping external IP addresses, so gateway works. DNS server address is invalid (correct) explains why domain names fail while IP pings succeed. MAC address on the NIC is corrupted is improbable if IP-level traffic works. The switchport is in half-duplex mode might cause collisions but not name resolution failures specifically.",
       "examTip": "If external IP pings work but website names do not, check DNS settings on the client."
     },
     {
@@ -924,12 +924,12 @@ db.tests.insertOne({
         "Init"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is partial adjacency. Option B is negotiation of master/slave roles. Option C (correct) is the final adjacency state with full LSDB exchange. Option D is the initial contact. 'Full' indicates fully synchronized LSDBs.",
+      "explanation": "2-Way is partial adjacency. ExStart is negotiation of master/slave roles. Full (correct) is the final adjacency state with full LSDB exchange. Init is the initial contact. 'Full' indicates fully synchronized LSDBs.",
       "examTip": "OSPF adjacency goes through states: Down, Init, 2-Way, ExStart, Exchange, Loading, Full. 'Full' is complete adjacency."
     },
     {
       "id": 72,
-      "question": "A manager wants a single device at remote offices to handle firewall, VPN, content filtering, and intrusion detection. Which solution meets this requirement?",
+      "question": "A manager wants a single device at remote offices to handle firewall, VPN, content filtering, and intrusion detection. Which solution is MOST relevant?",
       "options": [
         "802.1X switch with trunking",
         "UTM (Unified Threat Management) appliance",
@@ -937,7 +937,7 @@ db.tests.insertOne({
         "Spanning Tree-enabled layer 2 switch"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A handles NAC, not all security roles. Option B (correct) merges multiple security features. Option C is address assignment only. Option D is loop prevention, not comprehensive security. UTMs combine firewall, IDS/IPS, AV filtering, etc.",
+      "explanation": "802.1X switch with trunking handles NAC, not all security roles. UTM (Unified Threat Management) appliance (correct) merges multiple security features. DHCP server with IP reservations is address assignment only. Spanning Tree-enabled layer 2 switch is loop prevention, not comprehensive security. UTMs combine firewall, IDS/IPS, AV filtering, etc.",
       "examTip": "A UTM device consolidates various security services into one box, handy for remote or small offices."
     },
     {
@@ -950,7 +950,7 @@ db.tests.insertOne({
         "They require secure VLAN trunking between core switches"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is the classic reason for a DMZ: exposing services externally while protecting the internal network. Option B is a separate remote access method. Option C is internal storage, typically behind the internal firewall. Option D is VLAN architecture, not a DMZ scenario.",
+      "explanation": "They need to host a publicly accessible web server without exposing internal LAN (correct) is the classic reason for a DMZ: exposing services externally while protecting the internal network. They want to tunnel all traffic via SSH to the main site is a separate remote access method. They intend to store all user home directories behind the firewall is internal storage, typically behind the internal firewall. They require secure VLAN trunking between core switches is VLAN architecture, not a DMZ scenario.",
       "examTip": "DMZ is a perimeter network segment for external-facing servers, isolating them from the internal LAN."
     },
     {
@@ -963,7 +963,7 @@ db.tests.insertOne({
         "Implement NAT on each VLAN"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is port authentication. Option B (correct) a subinterface per VLAN is the classic single-interface routing. Option C is an addressing method, not a routing solution. Option D is address translation, not layer 3 routing for VLANs.",
+      "explanation": "Enable 802.1X on the router interface is port authentication. Assign a subinterface for each VLAN with 802.1Q encapsulation (router-on-a-stick) (correct) a subinterface per VLAN is the classic single-interface routing. Use static IP addresses on all VLAN members is an addressing method, not a routing solution. Implement NAT on each VLAN is address translation, not layer 3 routing for VLANs.",
       "examTip": "Router-on-a-stick uses subinterfaces with VLAN tagging over a single trunk link for multiple VLANs."
     },
     {
@@ -976,7 +976,7 @@ db.tests.insertOne({
         "Enable jumbo frames on the switch VLAN"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is in-band and requires a working network. Option B (correct) a dial-up or console server is typical OOB. Option C is a DHCP function, not OOB. Option D is performance, not OOB management.",
+      "explanation": "Use Telnet through the default gateway is in-band and requires a working network. Access via a separate dial-up modem or console server link (correct) a dial-up or console server is typical OOB. Configure DHCP relay on the core router is a DHCP function, not OOB. Enable jumbo frames on the switch VLAN is performance, not OOB management.",
       "examTip": "Out-of-band methods like a console server or modem line let you manage devices even if the primary network is down."
     },
     {
@@ -989,7 +989,7 @@ db.tests.insertOne({
         "Cable crimper"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is for wireless. Option B measures length and faults. Option C (correct) locates cables with a tone generator and probe. Option D physically terminates cable ends.",
+      "explanation": "Wi-Fi analyzer is for wireless. TDR measures length and faults. Toner probe (correct) locates cables with a tone generator and probe. Cable crimper physically terminates cable ends.",
       "examTip": "A toner probe kit helps trace cables behind walls or in patch panels to find the exact port termination."
     },
     {
@@ -1002,7 +1002,7 @@ db.tests.insertOne({
         "Reducing the scope of spanning tree domains"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is not specifically security-oriented. Option B (correct) segmentation restricts unauthorized scanning or lateral movement. Option C is a performance detriment. Option D is a side effect but not the main driver. Security is key.",
+      "explanation": "Achieving higher throughput for VLAN trunking is not specifically security-oriented. Preventing broad host scanning across sensitive subnets (correct) segmentation restricts unauthorized scanning or lateral movement. Enforcing half-duplex on mission-critical ports is a performance detriment. Reducing the scope of spanning tree domains is a side effect but not the main driver. Security is key.",
       "examTip": "Segmenting sensitive departments (e.g., HR) helps ensure only authorized traffic can reach those systems."
     },
     {
@@ -1015,7 +1015,7 @@ db.tests.insertOne({
         "802.11ac restricts legacy 802.11b devices from connecting"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) 802.11ac is a 5 GHz-only standard. 2.4 GHz users only get fallback speeds from older protocols (like 802.11n or g). Option B is incorrect. Option C is false; it supports WPA2. Option D is partially true but not the main factor in poor speeds.",
+      "explanation": "802.11ac only operates on 5 GHz (correct) 802.11ac is a 5 GHz-only standard. 2.4 GHz users only get fallback speeds from older protocols (like 802.11n or g). 802.11ac forces channel bonding at 2.4 GHz is incorrect. 802.11ac does not support WPA2 encryption is false; it supports WPA2. 802.11ac restricts legacy 802.11b devices from connecting is partially true but not the main factor in poor speeds.",
       "examTip": "If 2.4 GHz devices connect to an 802.11ac AP, they use older standards with slower throughput."
     },
     {
@@ -1028,7 +1028,7 @@ db.tests.insertOne({
         "A dial-up PPP link requiring local client software"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) site-to-site VPNs connect entire networks. Option B is clientless SSL VPN. Option C is a Wi-Fi ad hoc link. Option D is legacy dial-up, not a permanent site tunnel.",
+      "explanation": "An always-on encrypted tunnel between two network gateways (correct) site-to-site VPNs connect entire networks. A browser-based SSL portal for teleworkers is clientless SSL VPN. A wireless bridge connecting two laptops directly is a Wi-Fi ad hoc link. A dial-up PPP link requiring local client software is legacy dial-up, not a permanent site tunnel.",
       "examTip": "Site-to-site VPN typically connects two LANs through their gateways, providing persistent secure communication."
     },
     {
@@ -1041,7 +1041,7 @@ db.tests.insertOne({
         "show ip nat translations"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A shows interface config. Option B is a layer 2 MAC table. Option C (correct) lists IP routing table entries. Option D is NAT mappings. 'show ip route' confirms if the route is installed.",
+      "explanation": "show running-config interface shows interface config. show mac-address-table is a layer 2 MAC table. show ip route (correct) lists IP routing table entries. show ip nat translations is NAT mappings. 'show ip route' confirms if the route is installed.",
       "examTip": "On Cisco devices, 'show ip route' is the go-to command for verifying routing table entries."
     },
     {
@@ -1054,7 +1054,7 @@ db.tests.insertOne({
         "Eliminate the need for STP across the aggregated interfaces"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is gateway redundancy, not EtherChannel. Option B is a security approach, not link bundling. Option C (correct) is the main function of EtherChannel. Option D is false; STP still runs but sees the bundle as one interface.",
+      "explanation": "Provide redundant management IP addresses is gateway redundancy, not EtherChannel. Increase port security features for VLAN trunking is a security approach, not link bundling. Combine multiple physical links into one logical channel for bandwidth and redundancy (correct) is the main function of EtherChannel. Eliminate the need for STP across the aggregated interfaces is false; STP still runs but sees the bundle as one interface.",
       "examTip": "EtherChannel (LACP or PAgP) merges multiple Ethernet links for higher throughput and failover."
     },
     {
@@ -1067,7 +1067,7 @@ db.tests.insertOne({
         "DNS record for an A type host"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is the Windows auto-configuration address range. Option B is private to public address translation. Option C is a different standard for IPv6 link-local. Option D is an IPv4 forward record, not an APIPA assignment.",
+      "explanation": "APIPA due to no DHCP response (correct) is the Windows auto-configuration address range. NAT overload IP for internet access is private to public address translation. IPv6 address for local link usage is a different standard for IPv6 link-local. DNS record for an A type host is an IPv4 forward record, not an APIPA assignment.",
       "examTip": "169.254.x.x indicates the host didn’t receive a DHCP lease and self-assigned an APIPA address for local segment only."
     },
     {
@@ -1080,7 +1080,7 @@ db.tests.insertOne({
         "When you want to create a hub-and-spoke VLAN design"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is not typically relevant to adjusting timers. Option B (correct) modifies how quickly routers detect neighbor down events. Option C is unrelated to dynamic routing. Option D is a WAN topology, not about OSPF timers.",
+      "explanation": "When you need to reduce CPU usage on the router is not typically relevant to adjusting timers. When you want faster convergence or have unreliable links and must adjust keepalive intervals (correct) modifies how quickly routers detect neighbor down events. When you must disable NAT for all subnets is unrelated to dynamic routing. When you want to create a hub-and-spoke VLAN design is a WAN topology, not about OSPF timers.",
       "examTip": "Changing OSPF hello/dead timers can speed up or slow down adjacency checks, impacting convergence times."
     },
     {
@@ -1093,7 +1093,7 @@ db.tests.insertOne({
         "netstat -r"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A releases the IP but doesn’t reacquire. Option B clears ARP cache, not renewing DHCP. Option C (correct) requests a fresh lease. Option D shows routing table, no lease action.",
+      "explanation": "ipconfig /release releases the IP but doesn’t reacquire. arp -d clears ARP cache, not renewing DHCP. ipconfig /renew (correct) requests a fresh lease. netstat -r shows routing table, no lease action.",
       "examTip": "Use 'ipconfig /renew' to request a new DHCP lease after releasing or to force DHCP negotiation."
     },
     {
@@ -1106,7 +1106,7 @@ db.tests.insertOne({
         "Multiple DHCP scopes"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A forwards requests across subnets. Option B network boots a machine. Option C (correct) ties a MAC to a specific IP. Option D defines multiple ranges, not static assignment. Reservation is the DHCP method for permanent IP assignment.",
+      "explanation": "DHCP relay agent forwards requests across subnets. PXE boot network boots a machine. Reservations based on MAC address (correct) ties a MAC to a specific IP. Multiple DHCP scopes defines multiple ranges, not static assignment. Reservation is the DHCP method for permanent IP assignment.",
       "examTip": "DHCP reservations link a device’s MAC to a consistent IP without requiring static configuration on the host."
     },
     {
@@ -1119,7 +1119,7 @@ db.tests.insertOne({
         "DNSSEC validation on record queries"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is the definition of zero-day. Option B is a Wi-Fi weakness, not necessarily zero-day. Option C is a config management issue. Option D is a DNS security measure. Zero-days exploit undisclosed or unpatched flaws.",
+      "explanation": "Unpatched software flaws unknown to the vendor or public (correct) is the definition of zero-day. Weak SSID passwords on public hotspots is a Wi-Fi weakness, not necessarily zero-day. Configuration drift caused by missing NAT rules is a config management issue. DNSSEC validation on record queries is a DNS security measure. Zero-days exploit undisclosed or unpatched flaws.",
       "examTip": "Zero-day vulnerabilities are unknown or newly discovered without a vendor patch available, making them particularly dangerous."
     },
     {
@@ -1132,21 +1132,21 @@ db.tests.insertOne({
         "VLAN hopping"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is restricting each user’s access rights. Option B is a rogue AP scenario. Option C duplicates traffic. Option D is an attack vector. Principle of least privilege means finance staff only gets finance resources.",
+      "explanation": "Least privilege (correct) is restricting each user’s access rights. Evil twin filtering is a rogue AP scenario. Port mirroring duplicates traffic. VLAN hopping is an attack vector. Principle of least privilege means finance staff only gets finance resources.",
       "examTip": "Least privilege is fundamental to restricting access—only the minimum necessary permissions for a user’s role."
     },
     {
       "id": 88,
-      "question": "A technician wants to test connectivity specifically at layer 3. Which command is primarily used for sending ICMP echo requests to verify reachability?",
+      "question": "Which command-line tool would you use on a Linux system to capture and analyze traffic in real time for troubleshooting?",
       "options": [
-        "ping",
-        "ftp",
-        "ssh",
-        "nmap"
+        "tcpdump",
+        "Wi-Fi analyzer",
+        "ipconfig",
+        "netstat -rn"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) sends ICMP ECHO requests. Option B is file transfer. Option C is secure shell. Option D scans hosts/ports but not a simple echo request. Ping checks basic IP-level connectivity.",
-      "examTip": "ping is the go-to tool for verifying layer 3 connectivity with ICMP echo requests."
+      "explanation": "tcpdump (correct) is a CLI packet capture. Wi-Fi analyzer is for wireless signal analysis. ipconfig is Windows IP config. netstat -rn shows kernel routing table, not packet details. tcpdump is standard for capturing in Linux.",
+      "examTip": "tcpdump is a powerful CLI utility for capturing and analyzing packets on Unix/Linux systems."
     },
     {
       "id": 89,
@@ -1158,7 +1158,7 @@ db.tests.insertOne({
         "Port-based firewall"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A only checks IP headers. Option B tracks state but not deep application inspection. Option C (correct) performs deep packet inspection at higher layers. Option D is a basic approach focusing on ports. NGFW covers application-level intelligence.",
+      "explanation": "Packet filter firewall only checks IP headers. Stateful firewall with access lists only tracks state but not deep application inspection. Next-generation firewall (correct) performs deep packet inspection at higher layers. Port-based firewall is a basic approach focusing on ports. NGFW covers application-level intelligence.",
       "examTip": "Next-generation firewalls provide content inspection and application-level controls beyond simple port filtering."
     },
     {
@@ -1171,7 +1171,7 @@ db.tests.insertOne({
         "Switchport NAC with 802.1X only"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is for network access, not app-level SSO. Option B (correct) unifies authentication tokens across multiple services. Option C is for guest Wi-Fi, not centralized auth. Option D secures port access, not multiple application logins. SSO addresses multiple internal apps under one login.",
+      "explanation": "Radius with single SSID for all is for network access, not app-level SSO. Single sign-on (SSO) system (correct) unifies authentication tokens across multiple services. Disabling Captive Portal to reduce overhead is for guest Wi-Fi, not centralized auth. Switchport NAC with 802.1X only secures port access, not multiple application logins. SSO addresses multiple internal apps under one login.",
       "examTip": "Single sign-on streamlines user credentials across multiple apps to improve convenience and reduce repeated logins."
     },
     {
@@ -1184,7 +1184,7 @@ db.tests.insertOne({
         "How to store backups in an offsite location"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is the hallmark advantage of honeypots. Option B is about VLAN design. Option C is a firewall rule. Option D is backup policy. Honeypots decoy attackers, letting admins observe threats safely.",
+      "explanation": "How to safely observe attacker behavior without compromising production systems (correct) is the hallmark advantage of honeypots. How to ensure VLAN trunking for guest traffic is about VLAN design. How to block all inbound ICMP requests is a firewall rule. How to store backups in an offsite location is backup policy. Honeypots decoy attackers, letting admins observe threats safely.",
       "examTip": "Honeypots intentionally attract malicious activity to study attackers and keep them away from real systems."
     },
     {
@@ -1197,7 +1197,7 @@ db.tests.insertOne({
         "netstat -rn"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) is a CLI packet capture. Option B is for wireless signal analysis. Option C is Windows IP config. Option D shows kernel routing table, not packet details. tcpdump is standard for capturing in Linux.",
+      "explanation": "tcpdump (correct) is a CLI packet capture. Wi-Fi analyzer is for wireless signal analysis. ipconfig is Windows IP config. netstat -rn shows kernel routing table, not packet details. tcpdump is standard for capturing in Linux.",
       "examTip": "tcpdump is a powerful CLI utility for capturing and analyzing packets on Unix/Linux systems."
     },
     {
@@ -1210,7 +1210,7 @@ db.tests.insertOne({
         "Enable jumbo frame support"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is a gateway redundancy protocol, not DHCP security. Option B (correct) blocks DHCP offers from unknown devices. Option C is a link-level setting. Option D is for frame size, not DHCP control.",
+      "explanation": "Configure VRRP on the core router is a gateway redundancy protocol, not DHCP security. Use DHCP snooping to filter DHCP offers from untrusted ports (correct) blocks DHCP offers from unknown devices. Set the switch port to half-duplex is a link-level setting. Enable jumbo frame support is for frame size, not DHCP control.",
       "examTip": "DHCP snooping is the recommended approach to prevent rogue DHCP servers on your network."
     },
     {
@@ -1223,7 +1223,7 @@ db.tests.insertOne({
         "Community strings"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A references SNMP object identifiers but not the data structure. Option B is for log data. Option C (correct) is the database of managed objects. Option D is a shared password approach, not the data itself.",
+      "explanation": "OID aggregator references SNMP object identifiers but not the data structure. Syslog messages is for log data. MIB (Management Information Base) (correct) is the database of managed objects. Community strings is a shared password approach, not the data itself.",
       "examTip": "The MIB organizes variables managed via SNMP, each identified by an OID, storing device-specific stats."
     },
     {
@@ -1236,7 +1236,7 @@ db.tests.insertOne({
         "Set every port to half-duplex for collision avoidance"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is insecure. Option B (correct) prevents unauthorized access via idle ports. Option C exposes management to the internet. Option D is suboptimal performance, not security. Disabling or isolating unused ports is crucial on older gear.",
+      "explanation": "Enable Telnet on all VLAN interfaces is insecure. Disable unused ports or place them in an isolated VLAN (correct) prevents unauthorized access via idle ports. Assign a public IP to the management interface for easy remote access exposes management to the internet. Set every port to half-duplex for collision avoidance is suboptimal performance, not security. Disabling or isolating unused ports is crucial on older gear.",
       "examTip": "Shutting down or isolating unused switch ports helps reduce the attack surface, especially on older hardware."
     },
     {
@@ -1249,7 +1249,7 @@ db.tests.insertOne({
         "Use MAC filtering on elevator control circuits"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is not realistic. Option B (correct) 5 GHz is less prone to interference from such systems. Option C is detrimental to throughput. Option D is unrelated. Elevators or motors can cause 2.4 GHz interference; 5 GHz typically avoids it.",
+      "explanation": "Stop the elevator's operation during business hours is not realistic. Switch affected APs to 5 GHz channels where possible (correct) 5 GHz is less prone to interference from such systems. Enable half-duplex mode on APs is detrimental to throughput. Use MAC filtering on elevator control circuits is unrelated. Elevators or motors can cause 2.4 GHz interference; 5 GHz typically avoids it.",
       "examTip": "If 2.4 GHz is noisy, shift dual-band clients to 5 GHz for better performance and less interference."
     },
     {
@@ -1262,7 +1262,7 @@ db.tests.insertOne({
         "Wi-Fi band steering"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Option A is for guest onboarding. Option B is basic monitoring, not prioritization. Option C (correct) classifies and prioritizes important traffic. Option D influences Wi-Fi band usage, not traffic priority. QoS with DSCP ensures mission-critical traffic gets preferential handling.",
+      "explanation": "Captive portal for critical users is for guest onboarding. SNMPv1 to monitor usage is basic monitoring, not prioritization. Quality of Service (QoS) with DSCP marking (correct) classifies and prioritizes important traffic. Wi-Fi band steering influences Wi-Fi band usage, not traffic priority. QoS with DSCP ensures mission-critical traffic gets preferential handling.",
       "examTip": "QoS prioritizes time-sensitive or vital data, usually configured using DSCP or similar markings."
     },
     {
@@ -1275,7 +1275,7 @@ db.tests.insertOne({
         "IS-IS multi-level"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Option A is used within the same AS. Option B (correct) is between different AS. Option C references OSPF boundaries, not BGP. Option D is a separate link-state protocol. eBGP is used for internet routing with your provider.",
+      "explanation": "iBGP (internal BGP) is used within the same AS. eBGP (external BGP) (correct) is between different AS. OSPF area border references OSPF boundaries, not BGP. IS-IS multi-level is a separate link-state protocol. eBGP is used for internet routing with your provider.",
       "examTip": "External BGP peers with a different autonomous system, commonly used for internet connectivity to an ISP."
     },
     {
@@ -1288,7 +1288,7 @@ db.tests.insertOne({
         "Assign a static route to the server’s IP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) if SSL fails but ping works, it could be a certificate or browser issue. Option B is loop prevention, unrelated. Option C addresses IP capacity, not SSL. Option D is routing, but ping is successful, so routing is fine. TLS/SSL errors often involve certificate or browser misconfigurations.",
+      "explanation": "Check the user’s browser or SSL certificate trust settings (correct) if SSL fails but ping works, it could be a certificate or browser issue. Disable STP on the user’s switch port is loop prevention, unrelated. Increase DHCP scope for the VLAN addresses IP capacity, not SSL. Assign a static route to the server’s IP is routing, but ping is successful, so routing is fine. TLS/SSL errors often involve certificate or browser misconfigurations.",
       "examTip": "SSL-specific issues typically require verifying browser or certificate trust settings if basic IP connectivity is confirmed."
     },
     {
@@ -1301,7 +1301,7 @@ db.tests.insertOne({
         "Assign static DNS server addresses on each user’s PC"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Option A (correct) blocks unauthorized inbound connections at the host, limiting spread. Option B broadens the broadcast domain, making it easier for malware to spread. Option C breaks address allocation. Option D is name resolution config, not an infection containment strategy.",
+      "explanation": "Implement host-based firewalls on all endpoints (correct) blocks unauthorized inbound connections at the host, limiting spread. Combine all VLANs into one large subnet broadens the broadcast domain, making it easier for malware to spread. Disable DHCP on core routers breaks address allocation. Assign static DNS server addresses on each user’s PC is name resolution config, not an infection containment strategy.",
       "examTip": "Host-based firewalls can isolate an infected machine from scanning or infecting peers, adding another security layer."
     }
   ]
