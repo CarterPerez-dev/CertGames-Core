@@ -1,7 +1,7 @@
 db.tests.insertOne({
-  "category": "netplus",
+  "category": "nplus",
   "testId": 6,
-  "testName": "Practice Test #6 (Formidable)",
+  "testName": " Network+ Practice Test #6 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -188,7 +188,7 @@ db.tests.insertOne({
     },
     {
       "id": 15,
-      "question": "Which question does SD-WAN primarily solve for distributed branch offices?",
+      "question": "Why does SD-WAN primarily solve for distributed branch offices?",
       "options": [
         "unify cable labeling across racks",
         "transport traffic over multiple links with centralized policy control",
@@ -643,7 +643,7 @@ db.tests.insertOne({
     },
     {
       "id": 50,
-      "question": "Which question is BEST addressed by implementing SASE (Secure Access Service Edge)?",
+      "question": "Which is BEST addressed by implementing SASE (Secure Access Service Edge)?",
       "options": [
         "unify WAN optimization, security, and cloud-based access for remote users",
         "reduce the cost of on-prem layer 2 switches",
