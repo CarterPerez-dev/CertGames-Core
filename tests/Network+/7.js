@@ -1,1321 +1,1308 @@
 db.tests.insertOne({
-  "category": "nplus",
-  "testId": 6,
-  "testName": "Network+ Practice Test #6 (Formidable) - Part 1",
+  "category": "netplus",
+  "testId": 7,
+  "testName": "Practice Test #7 (Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "A network administrator is troubleshooting intermittent connectivity issues affecting multiple users on different subnets. They observe high CPU utilization on the core router. Packet captures show a large number of small packets with varying destination IP addresses, many of which are unknown or invalid. What is the MOST likely cause?",
+      "question": "In an OSPF multi-area deployment, which router type contains a full LSDB for the backbone area plus one or more non-backbone areas?",
       "options": [
-        "An issue with a misconfigured DHCP server affecting only address assignment.",
-        "A widespread DNS outage causing name resolution failures across the network.",
-        "A distributed denial-of-service (DDoS) attack targeting the network.",
-        "A single faulty network cable affecting one workstation."
+        "Autonomous System Boundary Router (ASBR)",
+        "Area Border Router (ABR)",
+        "Internal Router",
+        "NSSA Router"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "High CPU utilization on the core router combined with a flood of small packets with varying, often invalid, destination IPs strongly suggests a DDoS attack. A DHCP issue would primarily affect IP assignment, a DNS outage would affect name resolution (but not cause high router CPU), and a single cable fault would impact only one device. The widespread nature and packet characteristics point to a DDoS.",
-      "examTip": "Recognize the symptoms of a DDoS attack: high resource utilization and a flood of traffic from many sources."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A redistributes external routes into OSPF. Option B (correct) sits between multiple areas, holding LSDBs for each. Option C is entirely within one area. Option D is an area variant but not necessarily bridging multiple areas.",
+      "examTip": "ABRs connect the backbone (Area 0) to other OSPF areas, maintaining separate LSDBs for each."
     },
     {
       "id": 2,
-      "question": "You are configuring a new switch in a network that uses VLANs. To allow inter-VLAN routing, you configure a Switched Virtual Interface (SVI) for each VLAN. However, devices on different VLANs still cannot communicate. What is the MOST likely reason?",
+      "question": "A firewall logs show a burst of TCP SYN packets to port 3389 from random IPs. Which service is being probed for possible exploitation?",
       "options": [
-        "Spanning Tree Protocol (STP) is not enabled, which affects loop prevention, not routing.",
-        "Switch ports are mis-assigned to the wrong VLANs, affecting only intra-VLAN communication.",
-        "Clients lack a proper default gateway configuration.",
-        "IP routing is not enabled on the switch or there is a routing misconfiguration."
+        "Telnet",
+        "RDP",
+        "FTP",
+        "SNMP"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "If devices within the same VLAN communicate but those on different VLANs cannot, the issue is at Layer 3. Either IP routing isn’t enabled globally on the switch or the routing configuration is incorrect. STP prevents loops and the default gateway on clients is important but won’t help if the SVIs aren’t routing.",
-      "examTip": "Remember that SVIs provide Layer 3 routing functionality; IP routing must be explicitly enabled on the switch."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is port 23, Option B (correct) is Remote Desktop Protocol, Option C is 21 (control) or 20 (data), Option D is 161/162. Port 3389 scanning suggests RDP brute force attempts.",
+      "examTip": "RDP commonly listens on TCP 3389, so unexpected inbound scans may indicate malicious probing."
     },
     {
       "id": 3,
-      "question": "A company wants to implement a wireless network that provides seamless roaming between multiple access points. They also need centralized management and control of the wireless infrastructure. Which wireless architecture BEST meets these requirements?",
+      "question": "Which IPv6 address type is valid for one subnet but not routable externally, starting with ‘FD’ or ‘FC’ hex prefix?",
       "options": [
-        "An ad-hoc network where each device connects peer-to-peer without central management.",
-        "A collection of independent autonomous access points with no centralized control.",
-        "A wireless LAN controller (WLC) with lightweight access points.",
-        "A mesh network of independent APs with decentralized management."
+        "Global unicast",
+        "Unique local",
+        "Link-local",
+        "Anycast"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A Wireless LAN Controller (WLC) provides centralized management, configuration, and control of multiple lightweight access points (LAPs). This simplifies deployment, enables seamless roaming, and provides advanced features like centralized security policies. Autonomous APs lack centralized management and ad-hoc networks are not suitable for enterprise deployments.",
-      "examTip": "Wireless LAN Controllers are essential for managing large-scale, enterprise wireless networks."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is publicly routable (2xxx, 3xxx). Option B (correct) uses FC00::/7 or FD00::/8 ranges. Option C is FE80:: used on a single link. Option D is a routing method but not an address scope by itself.",
+      "examTip": "Unique local IPv6 addresses (fc00::/7) are for internal use, not globally routed."
     },
     {
       "id": 4,
-      "question": "You are designing a network that requires extremely high bandwidth and low latency for data center interconnectivity. The distance between the data centers is approximately 5 kilometers. Which cabling solution is MOST appropriate?",
+      "question": "Which advanced QoS approach allows strict priority queuing for voice but also supports weighted fair scheduling among other traffic classes?",
       "options": [
-        "Unshielded Twisted Pair (UTP) Cat 6a, which is limited to 100 meters.",
-        "Shielded Twisted Pair (STP) Cat 7, also limited to short distances.",
-        "Multimode Fiber Optic Cable, suitable for shorter distances than required.",
-        "Single-mode Fiber Optic Cable."
+        "Policing with single-rate three-color marker",
+        "Strict round-robin queueing",
+        "LLQ (Low Latency Queueing)",
+        "SPAN session"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Single-mode fiber is the best choice for long-distance, high-bandwidth, and low-latency applications. Five kilometers far exceeds the distance limitations of copper cabling and even multimode fiber, making single-mode the standard for data center interconnects over such distances.",
-      "examTip": "Single-mode fiber is the preferred choice for long-haul, high-bandwidth data center connections."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is a policing concept, not scheduling. Option B is basic round-robin. Option C (correct) gives priority to voice but also ensures fair sharing for other classes. Option D is a mirroring setup. LLQ is commonly used in WAN QoS designs.",
+      "examTip": "LLQ offers a strict priority queue for voice and real-time traffic plus weighted scheduling for other classes."
     },
     {
       "id": 5,
-      "question": "A network administrator is troubleshooting a slow network. Using a protocol analyzer, they observe a high number of TCP window size zero messages. What does this indicate?",
+      "question": "In a dual-homed BGP design to two ISPs, which attribute is commonly used to influence inbound traffic from the internet?",
       "options": [
-        "The network is experiencing high levels of jitter affecting latency consistency.",
-        "The receiving device is overwhelmed and cannot process incoming data fast enough.",
-        "The DNS server is not responding, causing delays in name resolution.",
-        "The network is experiencing frequent collisions on the shared medium."
+        "Weight",
+        "Local Preference",
+        "MED (Multi-Exit Discriminator)",
+        "AS-Path Prepending"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A TCP window size of zero indicates that the receiving device's buffer is full and it cannot accept additional data, prompting the sender to pause transmission. This typically signals a bottleneck on the receiving end.",
-      "examTip": "TCP window size zero messages indicate receiver-side buffering issues."
+      "correctAnswerIndex": 3,
+      "explanation": "Option A is local to one router, Option B is for outbound traffic, Option C influences inbound but only if the neighboring AS honors MED. Option D (correct) extends the AS path artificially, making one path less preferred to inbound traffic. AS-Path Prepending is widely used for inbound route manipulation.",
+      "examTip": "To manipulate inbound traffic, you often adjust how your routes appear externally, e.g., by AS-path prepending."
     },
     {
       "id": 6,
-      "question": "You are configuring a router to connect your local network (192.168.1.0/24) to the internet. Your ISP has provided you with the following information: Public IP: 203.0.113.5, Subnet Mask: 255.255.255.252, Gateway: 203.0.113.6. Which of the following configurations on the router's WAN interface is CORRECT?",
+      "question": "Which IPv6 migration strategy encapsulates IPv6 inside IPv4 packets, enabling transit over an IPv4-only core?",
       "options": [
-        "IP: 192.168.1.1 with a 255.255.255.0 mask and gateway 203.0.113.6.",
-        "IP: 203.0.113.5 with a 255.255.255.0 mask and gateway 203.0.113.6.",
-        "IP: 203.0.113.5 with a 255.255.255.252 mask and gateway 203.0.113.6.",
-        "IP: 203.0.113.6 with a 255.255.255.252 mask and gateway 203.0.113.5."
+        "Dual stack",
+        "NAT64",
+        "Tunneling (6to4, ISATAP, etc.)",
+        "SLAAC"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The router's WAN interface must use the public IP address and the exact subnet mask provided by the ISP, with the gateway set to the ISP’s designated next-hop address. Option C is the only configuration that meets these criteria.",
-      "examTip": "Carefully configure the router’s WAN interface using the information provided by your ISP."
+      "explanation": "Option A runs v4 and v6 simultaneously, Option B translates v6 to v4, Option C (correct) encapsulates v6 traffic, Option D is auto-config but does not solve IPv4 core limitations. Tunnels allow IPv6 to traverse IPv4 networks without direct translation.",
+      "examTip": "When an IPv4 backbone can’t be upgraded, tunneling solutions (6to4, ISATAP, GRE, etc.) carry IPv6 over IPv4."
     },
     {
       "id": 7,
-      "question": "You are troubleshooting a connectivity issue where a workstation cannot access network resources. `ipconfig /all` shows a valid IP address, subnet mask, and default gateway. `ping` to the default gateway is successful, but `ping` to external websites by name fails. `ping` to external websites by IP address also fails. What is the MOST likely cause?",
+      "question": "A router discards packets to an outside network due to ‘overlapping subnets’ error. Which FIRST step do you take?",
       "options": [
-        "A DNS resolution problem affecting name lookups.",
-        "A misconfigured web browser blocking access to websites.",
-        "A routing issue beyond the default gateway or a firewall blocking outbound traffic.",
-        "A physically faulty network cable on the workstation."
+        "Disable spanning tree on the LAN interface",
+        "Check the local route table for duplicate network statements",
+        "Reboot the router to clear ARP cache",
+        "Enable jumbo frames"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since the workstation can ping the default gateway but cannot reach external IPs, the problem is most likely due to a routing issue beyond the local network or a firewall blocking outbound traffic. DNS issues would typically affect only name resolution.",
-      "examTip": "Systematically eliminate possibilities: local connectivity, then DNS, then routing/firewall issues."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is unrelated, Option B (correct) typically indicates conflicting or overlapping prefixes in the router config. Option C is a short-term fix but not guaranteed. Option D is a frame-size tweak, irrelevant. Removing overlapping subnets or adjusting mask resolves the error.",
+      "examTip": "Overlapping subnets in routing cause confusion about which interface handles certain IP ranges, leading to dropped packets."
     },
     {
       "id": 8,
-      "question": "What is the function of the 'TTL' (Time to Live) field in an IP packet header?",
+      "question": "Which direct measure prevents ARP poisoning by verifying each ARP request/reply against known IP-MAC pairs gleaned from DHCP snooping?",
       "options": [
-        "To specify the encryption method used for the packet.",
-        "To indicate the packet's priority in the network.",
-        "To limit the number of hops a packet can take before being discarded, preventing endless loops.",
-        "To specify the source and destination port numbers."
+        "DTP guard",
+        "ARP flood control",
+        "Dynamic ARP Inspection",
+        "BPDU guard"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The TTL field is decremented by each router that forwards the packet. When the TTL reaches zero, the packet is discarded to prevent it from circulating indefinitely in a routing loop.",
-      "examTip": "The TTL field prevents packets from looping endlessly in a network."
+      "explanation": "Option A is about trunking, Option B is a general broadcast mitigation, Option C (correct) checks ARP traffic for integrity, Option D is STP. DAI intercepts ARP packets and validates them with DHCP snooping or static bindings.",
+      "examTip": "Dynamic ARP Inspection uses DHCP snooping or static ARP tables to verify IP-to-MAC mappings, blocking spoofs."
     },
     {
       "id": 9,
-      "question": "A company wants to implement a network security solution that can detect and automatically respond to malicious network activity, blocking attacks in real-time. Which technology BEST meets this requirement?",
+      "question": "In an 802.11ac Wave 2 deployment, which technology allows multiple downstream transmissions to distinct clients simultaneously using different spatial streams?",
       "options": [
-        "An intrusion detection system (IDS) that passively monitors and alerts on suspicious activity.",
-        "An intrusion prevention system (IPS).",
-        "A firewall that filters traffic based on static rules without real-time analysis.",
-        "A virtual private network (VPN) that secures remote communications but does not inspect traffic."
+        "OFDMA random access",
+        "MU-MIMO",
+        "CSMA/CA",
+        "FHSS hopping"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An Intrusion Prevention System (IPS) actively monitors network traffic and takes action to block or prevent malicious activity in real time. An IDS merely detects and alerts, and a firewall or VPN does not provide the same level of dynamic threat response.",
-      "examTip": "An IPS provides proactive, real-time protection against network attacks."
+      "explanation": "Option A is more 802.11ax (OFDMA). Option B (correct) MU-MIMO introduced in 11ac Wave 2 for multiple simultaneous transmissions. Option C is a collision avoidance method, Option D is old frequency-hopping. MU-MIMO boosts overall throughput in multi-user scenarios.",
+      "examTip": "MU-MIMO in 802.11ac Wave 2 allows an AP to send data to multiple clients at once, rather than sequentially."
     },
     {
       "id": 10,
-      "question": "You are configuring a wireless network and need to choose a channel for the 2.4 GHz band. To minimize interference from neighboring wireless networks, which channels are generally recommended?",
+      "question": "Which BGP attribute is considered first in route selection (on Cisco devices), but only relevant to iBGP and not carried across eBGP?",
       "options": [
-        "1, 6, and 11",
-        "2, 7, and 12",
-        "3, 8, and 13",
-        "Any random channel since interference is minimal"
+        "Weight",
+        "Local Preference",
+        "AS Path length",
+        "Origin type"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "In the 2.4 GHz band, channels 1, 6, and 11 are the only non-overlapping channels. Using these minimizes interference between adjacent access points.",
-      "examTip": "Use non-overlapping channels (1, 6, 11) to minimize wireless interference."
+      "explanation": "Option A (correct) is Cisco-proprietary and local to the router. Option B is second used throughout the AS, Option C is for external route selection. Option D is a lesser priority attribute. Weight is the top priority in Cisco’s BGP selection, but not propagated outside.",
+      "examTip": "BGP decision process on Cisco: Weight > Local Preference > Origination (local) > AS-Path length > etc."
     },
     {
       "id": 11,
-      "question": "Which of the following statements BEST describes the purpose of Network Address Translation (NAT)?",
+      "question": "Which scenario-based question is BEST solved by implementing an out-of-band management (OOB) network with a console server?",
       "options": [
-        "To encrypt traffic between private and public networks.",
-        "To dynamically assign IP addresses to hosts within a network.",
-        "To translate private IP addresses to public IP addresses (and vice versa) when accessing the internet, conserving public IPv4 addresses.",
-        "To prevent network loops by controlling routing paths."
+        "How to reduce broadcast storms on the core LAN",
+        "How to manage switches if the production network is down",
+        "How to load balance inbound HTTP requests to multiple servers",
+        "How to secure RDP sessions with IPsec"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "NAT allows multiple devices on a private network to share a limited number of public IP addresses when accessing the internet. This conserves public IPv4 space and adds a layer of obscurity to the internal network.",
-      "examTip": "NAT is essential for connecting private networks to the internet while conserving IPv4 addresses."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is an STP or VLAN design, Option B (correct) OOB is crucial for device access if main connections fail. Option C is load balancing, Option D is encryption for remote desktop. OOB ensures a separate path for management outside production traffic.",
+      "examTip": "An OOB network or console server helps maintain device access during outages or main network issues."
     },
     {
       "id": 12,
-      "question": "A user reports they cannot access a network printer. Other users on the same subnet can access the printer. The user can ping the printer's IP address. What is the MOST likely cause?",
+      "question": "A NAT device must handle thousands of concurrent connections from inside clients. Which NAT variant uses different source port mappings to differentiate many private IP flows behind one public IP?",
       "options": [
-        "The printer is powered off.",
-        "The network cable is unplugged from the user’s computer.",
-        "A permissions issue or local printer configuration problem on the user’s computer.",
-        "The printer’s IP address has changed."
+        "Static one-to-one NAT",
+        "Port Address Translation (PAT)",
+        "Transparent proxy",
+        "Dynamic NAT with limited pool"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since the user can ping the printer and others can print, the problem is most likely local to the user's computer—perhaps a permissions or driver/configuration issue.",
-      "examTip": "After verifying connectivity, check user-specific configurations and permissions for shared resources."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is for a single mapping, Option B (correct) uses unique source port combos, Option C is an application-layer solution, Option D could run out of addresses. PAT is the standard for large outbound concurrency.",
+      "examTip": "PAT translates multiple private IPs to one public IP by altering source ports to keep connections distinct."
     },
     {
       "id": 13,
-      "question": "What is 'split horizon' in the context of distance-vector routing protocols?",
+      "question": "Which Cisco command reveals a switch's dynamic ARP Inspection configuration and statistics to confirm if ARP traffic is being dropped?",
       "options": [
-        "A technique for encrypting routing updates to secure them.",
-        "A method for preventing routing loops by not advertising a route back to the neighbor from which it was learned.",
-        "A method to prioritize certain routes over others based on metrics.",
-        "A technique for balancing load across multiple equal-cost paths."
+        "show ip arp inspection",
+        "show dhcp snooping binding",
+        "show mac address-table",
+        "show interface trunk"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Split horizon is a loop-prevention technique that stops a router from advertising a route back to the interface from which it was learned, thereby preventing routing loops.",
-      "examTip": "Split horizon helps prevent routing loops in distance-vector protocols by stopping the echoing of routing information."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) focuses on DAI status. Option B is DHCP snooping but not ARP inspection details, Option C is MAC layer, Option D is trunk status. 'show ip arp inspection' displays DAI config and drop counters.",
+      "examTip": "Dynamic ARP Inspection has its own show commands to check ACL matches, drop counts, and trust settings."
     },
     {
       "id": 14,
-      "question": "You are configuring a wireless access point. Which of the following settings would provide the WEAKEST security for your wireless network?",
+      "question": "Which event triggers a VTP (VLAN Trunking Protocol) revision number to increment in server mode?",
       "options": [
-        "WPA2 with AES encryption, which is robust and secure.",
-        "WPA with TKIP encryption, offering moderate security improvements over older standards.",
-        "WEP (Wired Equivalent Privacy), known to be extremely vulnerable.",
-        "WPA3 with SAE encryption, the most secure current standard."
+        "A switch receiving a CDP packet from a new neighbor",
+        "Any change to the VLAN database (add, delete, modify)",
+        "A user logging in via SSH",
+        "Configuring half-duplex on a trunk interface"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WEP is an outdated wireless security protocol that has well-documented vulnerabilities and can be easily cracked with available tools.",
-      "examTip": "Never use WEP; always choose WPA2 (with AES) or WPA3 if available."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is Cisco Discovery Protocol, not VTP. Option B (correct) VLAN changes increment the revision. Option C is user login, not VLAN change. Option D is a link-layer setting. VTP revision increments whenever the VLAN database is altered on a VTP server.",
+      "examTip": "Be cautious with VTP revision numbers; a higher revision can overwrite the VLAN config across the domain."
     },
     {
       "id": 15,
-      "question": "What is 'packet sniffing'?",
+      "question": "Which layer of the OSI model is responsible for data translation and encryption, ensuring that the application receives data in a usable format?",
       "options": [
-        "A method for organizing files on a computer system.",
-        "The process of capturing and analyzing network traffic to diagnose issues or detect security threats.",
-        "A type of computer virus that intercepts data packets.",
-        "A technique for increasing network throughput by caching packets."
+        "Session layer (Layer 5)",
+        "Presentation layer (Layer 6)",
+        "Transport layer (Layer 4)",
+        "Network layer (Layer 3)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Packet sniffing involves capturing the raw data packets traveling over a network and analyzing them to troubleshoot problems or identify potential security issues.",
-      "examTip": "Packet sniffers like Wireshark are essential tools for network analysis and troubleshooting."
+      "explanation": "Option A manages sessions, Option B (correct) handles data representation, compression, encryption, Option C deals with end-to-end transport, Option D routes packets. The Presentation layer ensures data is syntactically correct for the application layer.",
+      "examTip": "Layer 6 is often overlooked, but it’s key for data formatting, encryption, and compression."
     },
     {
       "id": 16,
-      "question": "A network administrator configures a switch port with `switchport port-security maximum 2`. What is the effect of this configuration?",
+      "question": "A router redistributes routes from EIGRP into OSPF. Which router type is it considered within OSPF domain?",
       "options": [
-        "The port will shut down if more than two devices connect simultaneously.",
-        "Only two specific MAC addresses (if preconfigured) will be permitted on the port.",
-        "The port will learn up to two MAC addresses dynamically; if a third is detected, a security violation occurs.",
-        "The port speed is limited to 2 Mbps regardless of connected devices."
+        "ABR (Area Border Router)",
+        "IR (Internal Router)",
+        "ASBR (Autonomous System Boundary Router)",
+        "DR (Designated Router)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "This command limits the number of MAC addresses that can be learned dynamically on the port to two. If a third device attempts to connect, a security violation occurs (the exact reaction depends on the violation mode).",
-      "examTip": "Port security helps prevent unauthorized access by limiting the number of MAC addresses allowed on a switch port."
+      "explanation": "Option A connects OSPF areas, Option B is inside one area, Option C (correct) injects external routes from another protocol, Option D is an elected role on multi-access networks, not protocol redistribution. ASBR is any OSPF router performing route injection from outside sources.",
+      "examTip": "When an OSPF router imports routes from a non-OSPF domain, it’s an ASBR."
     },
     {
       "id": 17,
-      "question": "What is a 'zero-day' vulnerability?",
+      "question": "Which statement accurately describes Quality of Service marking at layer 3?",
       "options": [
-        "A vulnerability that has been known for many years and is well-patched.",
-        "A vulnerability that is publicly known with available patches.",
-        "A software vulnerability that is unknown to the vendor or has no patch available, making it dangerous.",
-        "A vulnerability that only affects outdated operating systems."
+        "DSCP bits in the IP header to classify traffic",
+        "802.1Q VLAN tags for trunking",
+        "MAC addresses set to high priority",
+        "DHCP Option 43 for device identification"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A zero-day vulnerability is one that the vendor is not yet aware of or has not yet patched. Attackers can exploit it before a fix is released, making it extremely dangerous.",
-      "examTip": "Zero-day vulnerabilities are highly dangerous because defenders have no patch available when they are first discovered."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) DSCP uses 6 bits in the IPv4/IPv6 header for QoS. Option B is VLAN trunk tagging, Option C is a layer 2 address, Option D is DHCP vendor info. DSCP is the standard for layer 3 QoS marking.",
+      "examTip": "DiffServ uses the DS field in the IP header to classify and prioritize packets."
     },
     {
       "id": 18,
-      "question": "What is 'defense in depth' in the context of network security?",
+      "question": "A sysadmin sees logs of a switch port repeatedly transitioning from 'blocking' to 'forwarding' in STP. Which is the MOST probable cause?",
       "options": [
-        "Relying solely on a strong firewall for overall network protection.",
-        "Implementing multiple layers of security controls (physical, technical, administrative) so that if one fails, others still protect the network.",
-        "Using only strong passwords for all devices.",
-        "Encrypting all network traffic without additional controls."
+        "BPDU guard is disabled",
+        "A flapping link or physical instability on that port",
+        "DHCP scope depletion",
+        "Insufficient VLAN trunk allowed list"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Defense in depth is a strategy that employs several layers of security so that if one measure fails, additional ones continue to protect the network.",
-      "examTip": "A layered security approach ensures that the failure of one security control does not compromise the entire network."
+      "explanation": "Option A might disable the port if BPDUs are received. Option B (correct) a link going up/down triggers STP recalculation. Option C is IP addressing, Option D is VLAN trunk config. Physical flapping or connection issues cause STP to re-converge repeatedly.",
+      "examTip": "Unstable physical connections can cause STP state changes, generating TCNs and re-convergence events."
     },
     {
       "id": 19,
-      "question": "Which of the following is a potential disadvantage of using Network Address Translation (NAT)?",
+      "question": "A switch’s CPU is high due to excessive broadcasts. The network is flat with ~200 hosts in one VLAN. Which FIRST step reduces broadcast storms?",
       "options": [
-        "It increases the number of available public IP addresses, which is not desirable.",
-        "It can complicate troubleshooting and application compatibility, especially for protocols that embed IP addresses within their data.",
-        "It makes the network more vulnerable to external attacks.",
-        "It significantly slows down network performance under normal conditions."
+        "Split the VLAN into smaller subnets, using a layer 3 interface between them",
+        "Set all ports to half-duplex",
+        "Enable jumbo frames on trunk ports",
+        "Use a default gateway of 0.0.0.0 for all hosts"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "While NAT helps conserve public IP addresses and hides internal network structure, it can complicate troubleshooting and cause issues with applications that embed IP addresses within their payloads.",
-      "examTip": "Be aware that NAT may require additional configuration (e.g., ALGs) for some applications to work correctly."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) smaller broadcast domains drastically reduce overhead. Option B degrades performance, Option C is a frame-size tweak, Option D breaks routing. Subdividing large L2 segments is standard for mitigating broadcast storms.",
+      "examTip": "VLAN and subnet segmentation is key to controlling broadcast traffic in large networks."
     },
     {
       "id": 20,
-      "question": "A network administrator configures a router with the following access control list (ACL): `access-list 101 permit tcp any host 192.168.1.100 eq 80`. What is the effect of this ACL?",
+      "question": "A distribution switch shows a large number of runts. Which mismatch is MOST likely responsible?",
       "options": [
-        "It permits all inbound traffic to the host, including Telnet.",
-        "It allows all TCP traffic from any source to the host 192.168.1.100 on port 80 (HTTP).",
-        "It permits all traffic originating from 192.168.1.100 regardless of destination.",
-        "It blocks all TCP traffic to port 80 on all hosts."
+        "Auto-MDIX mismatch",
+        "Access vs trunk confusion",
+        "Speed/duplex mismatch causing collisions",
+        "Incorrect DNS server IP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "This ACL permits TCP traffic from any source to the specific host 192.168.1.100 on port 80. All other traffic is implicitly denied.",
-      "examTip": "Review each ACL entry carefully to understand its exact impact on traffic flow."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is auto-cable detection, Option B is VLAN config, Option C (correct) collisions due to half/full duplex can lead to runts, Option D is name resolution. Runt frames often point to physical-layer issues including speed/duplex mismatch.",
+      "examTip": "Runts or collisions frequently result from one side half-duplex, the other full-duplex or speed mismatch."
     },
     {
       "id": 21,
-      "question": "Which type of DNS record is used to map a domain name to an IPv6 address?",
+      "question": "Which direct measure helps prevent evil twin attacks in a corporate WLAN environment?",
       "options": [
-        "A – for IPv4 addresses.",
-        "AAAA",
-        "CNAME – for aliases.",
-        "MX – for mail exchange."
+        "Configure each client with static IP",
+        "Enable 802.1w RSTP on the core switches",
+        "Use EAP-TLS with certificate-based authentication to verify the AP’s identity",
+        "Assign half-duplex on all APs"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An AAAA record maps a domain name to an IPv6 address.",
-      "examTip": "Remember: A for IPv4, AAAA for IPv6."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A only sets IP addresses, Option B is spanning tree, Option C (correct) ensures mutual authentication, so clients trust the legitimate AP certificate, Option D is performance-limiting. Evil twins mimic SSIDs; certificate-based EAP helps clients verify the real AP.",
+      "examTip": "WPA2/WPA3-Enterprise with certificate-based EAP can prevent clients from connecting to rogue APs that lack valid certs."
     },
     {
       "id": 22,
-      "question": "You are troubleshooting a network connectivity problem. You can ping the loopback address (127.0.0.1) successfully, but you cannot ping your default gateway or any other devices on the local network. Which of the following is the LEAST likely cause?",
+      "question": "Which advanced concept is used in data centers to stretch Layer 2 networks across Layer 3 boundaries using MAC-in-UDP encapsulation?",
       "options": [
-        "A faulty network cable preventing physical connectivity.",
-        "A misconfigured IP address or subnet mask on your computer.",
-        "A problem with the network interface card (NIC) on your computer.",
-        "A problem with the DNS server."
+        "MPLS TE",
+        "PPTP tunneling",
+        "VXLAN",
+        "ISDN PRI"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Since pinging the loopback address works and the issue is with local connectivity, a DNS server problem is the least likely cause because DNS is used for name resolution, not basic IP connectivity.",
-      "examTip": "When troubleshooting connectivity, start at the physical and IP configuration layers before considering DNS."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is label-based traffic engineering, Option B is a legacy VPN method, Option C (correct) encapsulates Ethernet frames in UDP, Option D is older telephony. VXLAN is commonly used for large-scale virtualized data centers, enabling extended Layer 2 domains.",
+      "examTip": "VXLAN is a popular overlay protocol that encapsulates L2 frames in UDP, scalable in cloud/DC environments."
     },
     {
       "id": 23,
-      "question": "Which of the following statements BEST describes the difference between a 'vulnerability' and an 'exploit'?",
+      "question": "A BGP router sees multiple routes for the same subnet from different neighbors. After Weight and Local Pref, which attribute is next for route selection?",
       "options": [
-        "A vulnerability is a successful attack; an exploit is merely theoretical.",
-        "A vulnerability is a weakness in a system that could be exploited; an exploit is the actual method used to take advantage of that weakness.",
-        "A vulnerability is a type of malware; an exploit is a security device.",
-        "Vulnerabilities and exploits are essentially the same and used interchangeably."
+        "AS-Path length",
+        "MED",
+        "Community string",
+        "Hop count"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A vulnerability is a flaw or weakness that could be taken advantage of, whereas an exploit is the method or code used to leverage that weakness.",
-      "examTip": "Think of a vulnerability as an open door and an exploit as the act of walking through it."
+      "correctAnswerIndex": 0,
+      "explanation": "Typical Cisco BGP selection is Weight > Local Pref > Origination (Network or Aggregate) > AS-Path length > MED, etc. Option A (correct) is next. Option B is considered after path length. Option C is a tagging mechanism. Option D is RIP's metric, not BGP’s.",
+      "examTip": "If Weight and Local Preference are tied, BGP chooses the shorter AS-Path next in the decision process."
     },
     {
       "id": 24,
-      "question": "What is the purpose of using 'private' IP address ranges (like 192.168.x.x, 10.x.x.x, and 172.16.x.x - 172.31.x.x) within a local network?",
+      "question": "Which statement is TRUE about a 'collapsed core' network design?",
       "options": [
-        "To make the network inherently more secure by itself.",
-        "To allow direct communication with the internet without any translation.",
-        "To conserve public IP addresses by enabling multiple devices to share a single public IP via NAT.",
-        "To boost network speed by segmenting traffic into smaller blocks."
+        "Layer 2 loops are impossible",
+        "Core and distribution layers are combined into a single layer for smaller networks",
+        "Each access switch must be fully meshed with every other access switch",
+        "It mandates half-duplex to reduce complexity"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Private IP addresses are used within local networks and are not routable on the public internet. NAT then translates these private addresses to a public address when needed, conserving public IPv4 addresses.",
-      "examTip": "Private IP addressing combined with NAT helps conserve public IP space while isolating internal networks."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is not guaranteed, Option B (correct) merges two tiers in smaller networks, Option C is a full mesh approach but not typical collapsed design, Option D is incorrect. Collapsing the core means distribution and core functions run on the same hardware.",
+      "examTip": "A collapsed core merges the core and distribution layers, often suitable for medium or smaller campuses to simplify topology."
     },
     {
       "id": 25,
-      "question": "You are configuring a wireless access point. Which of the following settings would provide the WEAKEST security for your wireless network?",
+      "question": "A switch repeatedly places a port in err-disabled mode whenever a second MAC is detected. Which feature triggers this?",
       "options": [
-        "WPA2 with AES encryption, which is strong and current.",
-        "WPA with TKIP encryption, which offers moderate protection.",
-        "WEP (Wired Equivalent Privacy), which is outdated and insecure.",
-        "WPA3 with SAE encryption, the latest and most secure standard."
+        "DHCP snooping",
+        "Port security MAC limit",
+        "RSTP edge port",
+        "Storm control"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WEP is known to be extremely vulnerable and can be easily cracked using widely available tools.",
-      "examTip": "Avoid WEP at all costs; use WPA2 or WPA3 for proper wireless security."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is DHCP server validation, Option B (correct) locks a port if multiple MACs appear, Option C is STP config, Option D limits broadcast storms. Port security can shut down a port upon exceeding MAC constraints.",
+      "examTip": "Port security with a low MAC limit is useful for preventing hubs or unauthorized devices on an access port."
     },
     {
       "id": 26,
-      "question": "What is 'packet sniffing'?",
+      "question": "A user complains their IPv6-only device cannot reach an IPv4-only website. Which method is BEST to solve this without changing the user’s IPv6 stack?",
       "options": [
-        "A method to organize files on a computer.",
-        "The process of capturing and analyzing network traffic to diagnose issues or detect security threats.",
-        "A type of computer virus that intercepts data packets.",
-        "A technique for speeding up data transmission by caching packets."
+        "Migrate the website to IPv6",
+        "Implement NAT64 at the network edge",
+        "Change the user’s device to dual stack",
+        "Use static IPv4 addresses on the device"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Packet sniffing involves capturing raw network traffic and analyzing the packets for troubleshooting or security analysis.",
-      "examTip": "Tools like Wireshark are used for packet sniffing to help diagnose network issues."
+      "explanation": "Option A requires website changes. Option B (correct) translates IPv6 to IPv4. Option C is feasible but modifies the user device. Option D eliminates IPv6. NAT64 is a common approach for IPv6-only clients to access IPv4 services.",
+      "examTip": "NAT64 is specifically designed to connect IPv6-only clients to IPv4 resources by translating traffic at the border."
     },
     {
       "id": 27,
-      "question": "Which of the following is a characteristic of a 'stateful firewall' compared to a stateless packet filter?",
+      "question": "Which aspect of a next-generation firewall inspects layer 7 to identify the actual application behind a flow, even if it uses a common port like 80?",
       "options": [
-        "It examines each packet independently without retaining any context.",
-        "It tracks the state of network connections and uses that context to make more informed filtering decisions.",
-        "It is less secure because it relies solely on static rule sets.",
-        "It is only used in wireless networks where connection tracking is not required."
+        "Port-based ACL",
+        "Application awareness (DPI)",
+        "DHCP relay service",
+        "LLDP neighbor detection"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A stateful firewall maintains a table of active connections and makes decisions based on the context of these connections, providing more robust security than a stateless filter.",
-      "examTip": "Stateful firewalls are standard because they offer more granular control by tracking connection state."
+      "explanation": "Option A is standard. Option B (correct) deep packet inspection at layer 7 reveals the true application. Option C is IP-forwarding for DHCP, Option D is device discovery. NGFW with DPI can see beyond port usage to identify apps like Skype or BitTorrent on port 80.",
+      "examTip": "Application-aware firewalls can examine payloads and signatures, detecting apps that may circumvent basic port-based filtering."
     },
     {
       "id": 28,
-      "question": "You are configuring a new server and want to ensure it always receives the same IP address from the DHCP server. What is the BEST way to achieve this?",
+      "question": "A spanning tree domain has many TCN (Topology Change Notification) events. Which root guard feature helps ensure an unauthorized switch cannot dethrone the chosen root?",
       "options": [
-        "Increase the DHCP lease duration so the IP rarely changes.",
-        "Configure a DHCP reservation (or static mapping) that ties the server’s MAC address to a specific IP address.",
-        "Manually configure the server with a static IP outside the DHCP scope.",
-        "Exclude the desired IP address from the DHCP pool so it remains free."
+        "DHCP snooping on root ports",
+        "BPDU guard on trunk links",
+        "Setting a low priority value on the designated root and root guard on other core ports",
+        "Configuring half-duplex for all VLANs"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DHCP reservation ensures that the DHCP server always assigns the same IP address to the server based on its MAC address, maintaining consistency while still centralizing management.",
-      "examTip": "DHCP reservations are ideal for devices that need a consistent IP address without manual configuration on the device."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is for DHCP. Option B is for access ports receiving BPDUs. Option C (correct) ensures a designated root with the lowest priority, while root guard on other ports stops superior BPDUs. Option D is irrelevant. Setting root priority plus root guard cements the chosen root.",
+      "examTip": "Root guard is typically enabled on ports facing other potential STP switches, preventing them from sending superior BPDUs."
     },
     {
       "id": 29,
-      "question": "What is the primary purpose of an 'intrusion prevention system' (IPS)?",
+      "question": "Which solution is BEST to ensure a remote site’s VPN traffic always takes the route with the least latency among multiple available WAN links?",
       "options": [
-        "To assign IP addresses to devices on the network.",
-        "To actively monitor network traffic and block or prevent malicious activity in real-time.",
-        "To encrypt network traffic to maintain data confidentiality.",
-        "To translate domain names into IP addresses for easier connectivity."
+        "Static default route to one link",
+        "SD-WAN with dynamic path selection",
+        "802.1X NAC on the WAN edge",
+        "Half-duplex on all remote routers"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An IPS actively examines network traffic and takes immediate steps to block or mitigate potential threats, rather than merely detecting them.",
-      "examTip": "IPS solutions provide proactive defense by stopping attacks in real time."
-    },
-    {
-      "id": 29,
-      "question": "What is the primary purpose of an 'intrusion prevention system' (IPS)?",
-      "options": [
-        "To assign IP addresses to devices on the network.",
-        "To actively monitor network traffic and block or prevent malicious activity in real-time.",
-        "To encrypt network traffic to protect data confidentiality.",
-        "To translate domain names into IP addresses."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "An IPS actively examines network traffic and takes immediate steps to block or mitigate potential threats, rather than merely detecting them.",
-      "examTip": "IPS solutions provide proactive defense by stopping attacks in real time."
+      "explanation": "Option A is static, ignoring real-time conditions. Option B (correct) monitors link performance, automatically steering traffic. Option C is for device auth, Option D is a link mismatch. SD-WAN dynamically chooses the best path based on policy metrics like latency or loss.",
+      "examTip": "SD-WAN provides real-time link monitoring and policy-based path selection, optimizing performance over multiple transports."
     },
     {
       "id": 30,
-      "question": "You are configuring a wireless network and need to choose a channel for the 2.4 GHz band. To minimize interference from neighboring wireless networks, which channels are generally recommended?",
+      "question": "On a Cisco switch, which command can show the trunking encapsulation (ISL or 802.1Q) and allowed VLANs on each trunk port?",
       "options": [
-        "1, 6, and 11",
-        "2, 7, and 12",
-        "3, 8, and 13",
-        "Any random channel since interference is minimal"
+        "show mac address-table",
+        "show trunk encapsulation",
+        "show interface trunk",
+        "show vlan brief"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "In the 2.4 GHz band, channels 1, 6, and 11 are the only non-overlapping channels. Using these minimizes interference between adjacent access points.",
-      "examTip": "Use non-overlapping channels (1, 6, 11) to minimize wireless interference."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is MAC table, Option B is not a standard command, Option C (correct) reveals trunking details including encapsulation and VLANs, Option D is VLAN membership summary. 'show interface trunk' is typical for verifying trunk mode/config.",
+      "examTip": "Use 'show interface trunk' to confirm trunk status, encapsulation, native VLAN, and allowed VLAN range."
     },
     {
       "id": 31,
-      "question": "Which of the following statements BEST describes the purpose of Network Address Translation (NAT)?",
+      "question": "A user’s machine obtains an APIPA address (169.254.x.x). Which direct conclusion can be drawn?",
       "options": [
-        "To encrypt traffic between private and public networks.",
-        "To dynamically assign IP addresses to hosts within a network.",
-        "To translate private IP addresses to public IP addresses (and vice versa) when accessing the internet, conserving public IPv4 addresses.",
-        "To prevent network loops by controlling routing paths."
+        "The DNS server is set to 8.8.8.8",
+        "DHCP server was not reachable or no lease was offered",
+        "Port security shut down the interface",
+        "The user must set a static IP"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "NAT allows multiple devices on a private network to share a limited number of public IP addresses when accessing the internet. This conserves public IPv4 space and adds a layer of obscurity to the internal network.",
-      "examTip": "NAT is essential for connecting private networks to the internet while conserving IPv4 addresses."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a public DNS, not a direct cause. Option B (correct) APIPA is a fallback for no DHCP. Option C is a different scenario, Option D is a workaround but not the direct conclusion. If DHCP fails, Windows auto-assigns 169.254.x.x.",
+      "examTip": "An APIPA address indicates the client tried DHCP but got no valid response."
     },
     {
       "id": 32,
-      "question": "A user reports they cannot access a network printer. Other users on the same subnet can access the printer. The user can ping the printer's IP address. What is the MOST likely cause?",
+      "question": "Which scenario-based question is BEST addressed by implementing VRRP on the default gateway for VLAN subnets?",
       "options": [
-        "The printer is powered off.",
-        "The network cable is unplugged from the user’s computer.",
-        "A permissions issue or local printer configuration problem on the user’s computer.",
-        "The printer’s IP address has changed."
+        "How to reduce DHCP lease conflicts",
+        "How to ensure a backup virtual router IP if the primary gateway fails",
+        "How to share a single VLAN across multiple buildings",
+        "How to encrypt DNS queries end-to-end"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since the user can ping the printer and other users can print, the problem is most likely local to the user's computer—perhaps a permissions or driver/configuration issue.",
-      "examTip": "After verifying connectivity, check user-specific configurations and permissions for shared resources."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is DHCP scope management, Option B (correct) VRRP provides a virtual IP shared by multiple routers, Option C is trunk design, Option D is DNS security. VRRP ensures gateway redundancy for subnets.",
+      "examTip": "VRRP (or HSRP, GLBP) is used for first-hop redundancy, providing an always-available default gateway IP."
     },
     {
       "id": 33,
-      "question": "What is 'split horizon' in the context of distance-vector routing protocols?",
+      "question": "Which method is used to verify that a public key truly belongs to a domain owner, preventing forged certificates?",
       "options": [
-        "A technique for encrypting routing updates to secure them.",
-        "A method for preventing routing loops by not advertising a route back to the neighbor from which it was learned.",
-        "A method to prioritize certain routes over others based on metrics.",
-        "A technique for balancing load across multiple equal-cost paths."
+        "802.1X EAP",
+        "Public Key Infrastructure with certificates signed by a trusted CA",
+        "WPA2 Enterprise passphrase",
+        "SNMPv2c community string"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Split horizon is a loop-prevention technique that stops a router from advertising a route back to the interface from which it was learned, thereby preventing routing loops.",
-      "examTip": "Split horizon helps prevent routing loops in distance-vector protocols by stopping the echoing of routing information."
+      "explanation": "Option A is port-based NAC, Option B (correct) PKI uses CA-signed certificates, Option C is a wireless passphrase, Option D is old SNMP auth. Trusted CAs sign domain certificates to prove authenticity.",
+      "examTip": "A PKI with recognized CAs ensures a domain’s public key is validated, preventing impersonation or man-in-the-middle."
     },
     {
       "id": 34,
-      "question": "You are configuring a wireless access point. Which of the following settings would provide the WEAKEST security for your wireless network?",
+      "question": "Which VLAN assignment approach automatically places a VoIP phone’s traffic on a tagged VLAN, while untagged traffic from the phone’s PC port is on a different VLAN?",
       "options": [
-        "WPA2 with AES encryption, which is strong and current.",
-        "WPA with TKIP encryption, which offers moderate protection.",
-        "WEP (Wired Equivalent Privacy), which is outdated and insecure.",
-        "WPA3 with SAE encryption, the latest and most secure standard."
+        "ARP inspection",
+        "Voice VLAN (auxiliary VLAN) configuration",
+        "Trunk negotiation with dynamic auto",
+        "DHCP snooping on the voice interface"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WEP is an outdated wireless security protocol that has well-documented vulnerabilities and can be easily cracked with available tools.",
-      "examTip": "Avoid WEP at all costs; use WPA2 or WPA3 for proper wireless security."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is layer 2 security, Option B (correct) sets a special voice VLAN for IP phone traffic, Option C is trunk negotiation, Option D is DHCP security. The voice VLAN feature ensures phone traffic is tagged while the PC’s traffic remains untagged on the data VLAN.",
+      "examTip": "Many switches support a dedicated 'voice VLAN' to separate phone traffic from data, simplifying QoS and security."
     },
     {
       "id": 35,
-      "question": "What is 'packet sniffing'?",
+      "question": "A company wants a secure alternative to Telnet for router management. Which protocol is BEST suited?",
       "options": [
-        "A method to organize files on a computer system.",
-        "The process of capturing and analyzing network traffic to diagnose issues or detect security threats.",
-        "A type of computer virus that intercepts data packets.",
-        "A technique for speeding up data transmission by caching packets."
+        "RDP",
+        "SSH",
+        "FTP",
+        "SNMPv1"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Packet sniffing involves capturing raw network traffic and analyzing the packets for troubleshooting or security analysis.",
-      "examTip": "Tools like Wireshark are used for packet sniffing to help diagnose network issues."
+      "explanation": "Option A is a graphical remote desktop, Option B (correct) is an encrypted CLI method, Option C is file transfer, Option D is unencrypted management. SSH is the secure replacement for Telnet.",
+      "examTip": "Always use SSH for secure device management at layer 7, rather than Telnet’s plaintext transmissions."
     },
     {
       "id": 36,
-      "question": "A network administrator configures a switch port with `switchport port-security maximum 2`. What is the effect of this configuration?",
+      "question": "Which direct step is recommended if a trunk port is inadvertently formed with a user device that supports DTP?",
       "options": [
-        "The port will shut down if more than two devices connect simultaneously.",
-        "Only two specific MAC addresses (if preconfigured) will be permitted on the port.",
-        "The port will learn up to two MAC addresses dynamically; if a third is detected, a security violation occurs.",
-        "The port speed is limited to 2 Mbps regardless of connected devices."
+        "Use EtherChannel on that port",
+        "Assign a static IP to the end device",
+        "Disable DTP by setting the port mode to access or trunk non-negotiable",
+        "Implement half-duplex to block trunk formation"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "This command limits the number of MAC addresses that can be learned dynamically on the port to two. If a third device attempts to connect, a security violation occurs (the exact reaction depends on the violation mode).",
-      "examTip": "Port security helps prevent unauthorized access by limiting the number of MAC addresses allowed on a switch port."
+      "explanation": "Option A aggregates multiple physical links, not relevant. Option B is addressing, Option C (correct) prevents automatic trunking, Option D is a link mismatch, not stopping trunk formation. Hard-coding trunk or access mode and disabling DTP stops unintended trunk negotiation.",
+      "examTip": "Disable or limit DTP to avoid unauthorized trunk formation, which can lead to VLAN hopping or other security issues."
     },
     {
       "id": 37,
-      "question": "What is a 'zero-day' vulnerability?",
+      "question": "Which EAP method requires both server and client certificates for mutual authentication in a wireless 802.1X environment?",
       "options": [
-        "A vulnerability that has been known for many years and is well-patched.",
-        "A vulnerability that is publicly known with available patches.",
-        "A software vulnerability that is unknown to the vendor or has no patch available, making it dangerous.",
-        "A vulnerability that only affects outdated operating systems."
+        "PEAP",
+        "EAP-TTLS",
+        "EAP-TLS",
+        "LEAP"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A zero-day vulnerability is one that the vendor is not yet aware of or has not yet patched. Attackers can exploit it before a fix is released, making it extremely dangerous.",
-      "examTip": "Zero-day vulnerabilities are highly dangerous because defenders have no patch available when they are first discovered."
+      "explanation": "Option A uses a server cert but not necessarily client cert, Option B also typically only needs server cert, Option C (correct) requires certificates on both ends, Option D is old Cisco approach with known weaknesses. EAP-TLS is mutual certificate-based authentication.",
+      "examTip": "EAP-TLS is robust but requires a PKI for both server and client certificates, ensuring highest security."
     },
     {
       "id": 38,
-      "question": "What is 'defense in depth' in the context of network security?",
+      "question": "A router sees large packets being dropped unless fragmentation is allowed. Which concept ensures the source adjusts packet size upon receiving ICMP ‘Fragmentation Needed’ messages?",
       "options": [
-        "Relying solely on a strong firewall for overall network protection.",
-        "Implementing multiple layers of security controls (physical, technical, administrative) so that if one fails, others still protect the network.",
-        "Using only strong passwords for all devices.",
-        "Encrypting all network traffic without additional controls."
+        "Inverse ARP",
+        "Session Initiation Protocol",
+        "Path MTU Discovery",
+        "802.1w Rapid STP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Defense in depth is a strategy that employs multiple layers of security so that if one measure fails, additional measures still protect the network.",
-      "examTip": "A layered security approach ensures that the failure of one control does not compromise the entire network."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is a Frame Relay technique, Option B is for VoIP session control, Option C (correct) dynamically detects the smallest MTU along a path, Option D is STP variant. PMTUD avoids fragmentation by discovering the bottleneck MTU and adjusting packet sizes.",
+      "examTip": "Path MTU Discovery attempts to send large packets and reacts to 'Frag Needed' ICMP messages, preventing fragmentation."
     },
     {
       "id": 39,
-      "question": "Which of the following is a potential disadvantage of using Network Address Translation (NAT)?",
+      "question": "Which design principle is used in a spine-leaf data center topology?",
       "options": [
-        "It increases the number of available public IP addresses, which is not desirable.",
-        "It can complicate troubleshooting and application compatibility, especially for protocols that embed IP addresses within their data.",
-        "It makes the network more vulnerable to external attacks.",
-        "It significantly slows down network performance under normal conditions."
+        "All leaf switches connect to every spine switch for consistent east-west performance",
+        "Half-duplex is enforced on spine links",
+        "A single switch acts as root for all VLANs",
+        "Spines handle only layer 2 bridging"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "While NAT helps conserve public IP addresses and hides internal network structure, it can complicate troubleshooting and cause issues with applications that embed IP addresses within their payloads.",
-      "examTip": "Be aware that NAT may require additional configuration (e.g., ALGs) for some applications to work correctly."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) is the hallmark of spine-leaf. Option B is a performance degrade, Option C is STP root concept, Option D spines often do layer 3 or bridging but the key is full connectivity. Spine-leaf ensures minimal hop east-west traffic in large data centers.",
+      "examTip": "Spine-leaf topologies reduce latency by having each leaf connect to all spines, ensuring uniform path lengths."
     },
     {
       "id": 40,
-      "question": "A network administrator configures a router with the following access control list (ACL): `access-list 101 permit tcp any host 192.168.1.100 eq 80`. What is the effect of this ACL?",
+      "question": "Which scenario-based question is BEST resolved by configuring LACP EtherChannel on adjacent switches?",
       "options": [
-        "It permits all inbound traffic to the host, including Telnet.",
-        "It allows all TCP traffic from any source to the host 192.168.1.100 on port 80 (HTTP).",
-        "It permits all traffic originating from 192.168.1.100 regardless of destination.",
-        "It blocks all TCP traffic to port 80 on all hosts."
+        "How to block a rogue AP from associating to the LAN",
+        "How to provide greater bandwidth and redundancy across multiple physical links",
+        "How to reduce multicast traffic in a VLAN",
+        "How to authenticate user devices at the switch port"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "This ACL permits TCP traffic from any source to the specific host 192.168.1.100 on port 80. All other traffic is implicitly denied.",
-      "examTip": "Review each ACL entry carefully to understand its exact impact on traffic flow."
+      "explanation": "Option A references wireless security, Option B (correct) link aggregation bundles parallel cables into one logical interface, Option C is IGMP snooping, Option D is NAC. LACP merges links for higher throughput and failover.",
+      "examTip": "EtherChannel (LACP) is typically used to combine multiple Ethernet links between switches or switch-server for speed and redundancy."
     },
     {
       "id": 41,
-      "question": "Which type of DNS record is used to map a domain name to an IPv6 address?",
+      "question": "A high-availability design uses HSRP. Which statement about the virtual IP is correct?",
       "options": [
-        "A – for IPv4 addresses.",
-        "AAAA",
-        "CNAME – for aliases.",
-        "MX – for mail exchange."
+        "It must be assigned to the active router’s interface as a secondary IP",
+        "It is negotiated dynamically via DHCP",
+        "It is shared by all HSRP routers, providing a default gateway address",
+        "It changes MAC addresses randomly"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An AAAA record maps a domain name to an IPv6 address.",
-      "examTip": "Remember: A for IPv4, AAAA for IPv6."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is not how HSRP handles IP assignment, Option B is manual config, Option C (correct) multiple routers present the same virtual IP. Option D is not typical. HSRP ensures hosts keep the same gateway IP even if the active router changes.",
+      "examTip": "HSRP/VRRP present a single virtual IP, letting LAN devices use one gateway IP while multiple routers back each other up."
     },
     {
       "id": 42,
-      "question": "You are troubleshooting a network connectivity problem. You can ping the loopback address (127.0.0.1) successfully, but you cannot ping your default gateway or any other devices on the local network. Which of the following is the LEAST likely cause?",
+      "question": "Which phenomenon describes forging or overriding entries in a switch’s CAM table by sending many bogus MAC addresses until legitimate entries are lost?",
       "options": [
-        "A faulty network cable.",
-        "A misconfigured IP address or subnet mask on your computer.",
-        "A problem with the network interface card (NIC) on your computer.",
-        "A problem with the DNS server."
+        "ARP poisoning",
+        "MAC flooding",
+        "Double-tagging VLAN hopping",
+        "Spanning tree root bridging"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Since pinging the loopback works and the issue is with local connectivity, a DNS server problem is the least likely cause because DNS is used for name resolution, not basic IP connectivity.",
-      "examTip": "When troubleshooting connectivity, start at the physical and IP configuration layers before considering DNS."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A manipulates IP-to-MAC mapping at hosts, Option B (correct) overloads the switch’s MAC table, Option C is a VLAN hopping trick, Option D references STP. MAC flooding can degrade a switch into hub-like behavior.",
+      "examTip": "MAC flooding is mitigated by port security, limiting the number of MAC addresses learned on a port."
     },
     {
       "id": 43,
-      "question": "Which of the following statements BEST describes the difference between a 'vulnerability' and an 'exploit'?",
+      "question": "A user behind an enterprise firewall attempts to host a game server on port 50000. Which inbound firewall setting is typically needed for external clients to reach it?",
       "options": [
-        "A vulnerability is a successful attack; an exploit is merely theoretical.",
-        "A vulnerability is a weakness in a system that could be exploited; an exploit is the actual method used to take advantage of that weakness.",
-        "A vulnerability is a type of malware; an exploit is a security device.",
-        "Vulnerabilities and exploits are essentially the same and used interchangeably."
+        "NAT port forwarding to that user’s private IP and port",
+        "802.1X EAP bridging on the user’s VLAN",
+        "Spanning tree root guard on user ports",
+        "DHCP reservation for the user’s MAC"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A vulnerability is a flaw or weakness that could be taken advantage of, whereas an exploit is the method or code used to leverage that weakness.",
-      "examTip": "Think of a vulnerability as an open door and an exploit as the act of walking through it."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) external requests must be forwarded to the internal host, Option B is NAC, Option C is STP security, Option D ensures consistent IP but doesn’t open inbound traffic. Port forwarding (NAT) is needed for inbound connections to a private host.",
+      "examTip": "When hosting internal servers accessible externally, configure NAT or port mapping so requests on a public port map to the private IP."
     },
     {
       "id": 44,
-      "question": "What is the purpose of using 'private' IP address ranges (like 192.168.x.x, 10.x.x.x, and 172.16.x.x - 172.31.x.x) within a local network?",
+      "question": "Which solution can provide real-time analytics and anomaly detection by gathering logs from multiple firewalls and servers in one place?",
       "options": [
-        "To make the network inherently more secure by itself.",
-        "To allow direct communication with the internet without any translation.",
-        "To conserve public IP addresses by enabling multiple devices to share a single public IP via NAT.",
-        "To boost network speed by segmenting traffic into smaller blocks."
+        "TDR (Time Domain Reflectometer)",
+        "SIEM platform",
+        "Speed test server",
+        "ARP inspection table"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Private IP addresses are used within local networks and are not routable on the public internet. NAT then translates these private addresses to a public address when needed, conserving IPv4 space.",
-      "examTip": "Private IP addressing combined with NAT helps conserve public IP space while isolating internal networks."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a cable testing tool, Option B (correct) collects/correlates logs, Option C measures throughput, Option D is a security measure for ARP. A SIEM aggregates logs from various devices to detect suspicious patterns in real time.",
+      "examTip": "Security Information and Event Management (SIEM) unifies logs and uses correlation engines to spot threats quickly."
     },
     {
       "id": 45,
-      "question": "You are configuring a wireless access point. Which of the following settings would provide the WEAKEST security for your wireless network?",
+      "question": "Which direct measure can isolate IoT devices in a dedicated network, preventing lateral movement to corporate PCs?",
       "options": [
-        "WPA2 with AES encryption, which is strong and current.",
-        "WPA with TKIP encryption, which offers moderate protection.",
-        "WEP (Wired Equivalent Privacy), which is outdated and insecure.",
-        "WPA3 with SAE encryption, the latest and most secure standard."
+        "Use port mirroring for all IoT switch ports",
+        "Assign IoT devices to a separate VLAN and apply ACL restrictions",
+        "Reduce the DHCP lease time to 2 hours",
+        "Disable spanning tree on IoT ports"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WEP is known to be extremely vulnerable and can be easily cracked using widely available tools.",
-      "examTip": "Avoid WEP at all costs; use WPA2 or WPA3 for proper wireless security."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is monitoring, Option B (correct) is typical segmentation. Option C is IP lease management, Option D is loop prevention. Placing IoT devices on an isolated VLAN plus ACLs ensures minimal lateral movement if compromised.",
+      "examTip": "Segment IoT or untrusted devices away from sensitive networks. VLAN separation + ACLs is a standard approach."
     },
     {
       "id": 46,
-      "question": "What is 'packet sniffing'?",
+      "question": "A site complains about frequent reconvergence in EIGRP. Logs show repeated SIA (Stuck in Active) queries. What is the FIRST step to investigate?",
       "options": [
-        "A method to organize files on a computer system.",
-        "The process of capturing and analyzing network traffic to diagnose issues or detect security threats.",
-        "A type of computer virus that intercepts data packets.",
-        "A technique for speeding up data transmission by caching packets."
+        "Ensure all routes have a default gateway of 0.0.0.0",
+        "Check for high latency or broken neighbor adjacencies preventing query replies",
+        "Turn off RSTP across the core switches",
+        "Change the DHCP server to a different subnet"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Packet sniffing involves capturing raw network traffic and analyzing the packets for troubleshooting or security analysis.",
-      "examTip": "Tools like Wireshark are used for packet sniffing to help diagnose network issues."
+      "explanation": "Option A is a default route approach, Option B (correct) SIA often indicates neighbor timeouts or slow links, Option C is loop prevention, Option D is IP management. EIGRP SIA queries happen when queries aren’t answered in time, often due to a neighbor or path issue.",
+      "examTip": "When EIGRP routers get stuck in active, it’s often a neighbor that fails to reply, possibly due to a link or CPU resource problem."
     },
     {
       "id": 47,
-      "question": "Which of the following is a characteristic of a 'stateful firewall' compared to a stateless packet filter?",
+      "question": "Which direct measure mitigates VLAN hopping by manipulating the native VLAN to insert double tags?",
       "options": [
-        "It treats every packet as an isolated event without context.",
-        "It tracks connection states and uses that context to make more informed filtering decisions.",
-        "It is inherently less secure because it relies solely on static rule sets.",
-        "It is used exclusively in wireless networks where connection tracking is not required."
+        "Use ACLs to filter IP addresses",
+        "Forbid VLAN 1 as native on trunk ports and disable auto-trunk negotiation",
+        "Change the DHCP scope to /25",
+        "Assign public IP addresses to all trunk links"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A stateful firewall maintains information about active connections and uses that context to allow or block traffic, providing more robust security than a stateless filter.",
-      "examTip": "Stateful firewalls are preferred for their ability to track connection context and improve security."
+      "explanation": "Option A is higher-layer filtering, Option B (correct) setting a distinct native VLAN and static trunk mode blocks double-tag exploit, Option C is subnet size, Option D is addressing, not relevant. Using a non-default native VLAN is a best practice to hinder double-tagging attacks.",
+      "examTip": "Double-tag VLAN hopping relies on VLAN 1 as native. Always define a separate native VLAN and disable DTP."
     },
     {
       "id": 48,
-      "question": "You are configuring a new server and want to ensure it always receives the same IP address from the DHCP server. What is the BEST way to achieve this?",
+      "question": "A large enterprise wants to implement zero trust. Which principle is core to that architecture?",
       "options": [
-        "Increase the DHCP lease duration so the IP rarely changes.",
-        "Configure a DHCP reservation (or static mapping) that ties the server’s MAC address to a specific IP address.",
-        "Manually configure the server with a static IP outside the DHCP scope.",
-        "Exclude the desired IP address from the DHCP pool so it remains free."
+        "Automatic trust for internal IP addresses",
+        "Segment everything and require continuous verification of user and device identity",
+        "Simplify NAC by disabling posture checks",
+        "Use broadcast-based authentication for faster logins"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A DHCP reservation ensures that the DHCP server always assigns the same IP address to the server based on its MAC address, maintaining consistency while still centralizing management.",
-      "examTip": "DHCP reservations are ideal for devices that need a consistent IP address without manual configuration on the device."
+      "explanation": "Option A is the opposite, Option B (correct) zero trust micro-segmentation, continuous re-auth, Option C is reducing security, Option D is not a standard. Zero trust demands minimal inherent trust, verifying each access attempt with strong controls.",
+      "examTip": "'Never trust, always verify'—zero trust emphasizes segmentation, strong identity, and real-time posture checks."
     },
     {
       "id": 49,
-      "question": "What is the primary purpose of an 'intrusion prevention system' (IPS)?",
+      "question": "Which solution is MOST appropriate for ephemeral data transport if you need to measure actual available throughput end to end?",
       "options": [
-        "To assign IP addresses to devices on the network.",
-        "To actively monitor network traffic and block or prevent malicious activity in real-time.",
-        "To encrypt network traffic to protect data confidentiality.",
-        "To translate domain names into IP addresses for easier connectivity."
+        "Nmap scanning for open ports",
+        "iperf throughput testing",
+        "Syslog server correlation",
+        "DHCP snooping counters"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An IPS actively examines network traffic and takes immediate steps to block or mitigate potential threats, rather than merely detecting them.",
-      "examTip": "IPS solutions provide proactive defense by stopping attacks in real time."
+      "explanation": "Option A is a port scanner, Option B (correct) actively tests network bandwidth, Option C aggregates logs, Option D is DHCP security. iperf or similar tools generate and measure traffic to gauge throughput between endpoints.",
+      "examTip": "iperf creates test streams to measure bandwidth, latency, and jitter between two endpoints."
     },
     {
       "id": 50,
-      "question": "You are configuring a wireless network and need to choose a channel for the 2.4 GHz band. To minimize interference from neighboring wireless networks, which channels are generally recommended?",
+      "question": "A user sees slow response from an internal web app. Pinging by IP works fine, but HTTP requests stall. Which FIRST step is logical?",
       "options": [
-        "1, 6, and 11",
-        "2, 7, and 12",
-        "3, 8, and 13",
-        "Any random channel since interference is minimal"
+        "Disable Telnet on the core router",
+        "Capture packets (port mirroring) to see the HTTP handshake",
+        "Convert the user VLAN to half-duplex",
+        "Set static DNS servers on the user machine"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "In the 2.4 GHz band, channels 1, 6, and 11 are the only non-overlapping channels. Using these minimizes interference between adjacent access points.",
-      "examTip": "Use non-overlapping channels (1, 6, 11) to minimize wireless interference."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a management security step, not a direct fix. Option B (correct) analyzing the handshake clarifies if the server is responding or if requests fail. Option C cripples performance, Option D is a guess. Packet capture quickly shows if SYNs get replies or if DNS is failing, etc.",
+      "examTip": "When IP pings are okay but an app fails, a packet capture can reveal handshake or layer 7 issues (reset, timeouts)."
     },
     {
       "id": 51,
-      "question": "A network administrator wants to prevent unauthorized devices from connecting to specific switch ports. They configure the switch to only allow devices with specific, pre-approved MAC addresses to connect to those ports. What security feature is being used?",
+      "question": "A router is set to redistribute EIGRP routes into OSPF with a specific metric. Which OSPF LSA type typically represents these external networks in the OSPF domain?",
       "options": [
-        "DHCP Snooping, which validates DHCP server messages to prevent rogue servers.",
-        "Port Security, which limits a port to a predetermined set of MAC addresses.",
-        "802.1X authentication, which requires credentials for network access.",
-        "VLAN segmentation, which isolates traffic but does not restrict port-level connections."
+        "Type 1 LSA",
+        "Type 2 LSA",
+        "Type 5 LSA",
+        "Type 7 LSA"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port security restricts a switch port to a limited number of pre-approved MAC addresses, thereby preventing unauthorized devices from connecting.",
-      "examTip": "Port security is an effective Layer 2 measure to limit access based on hardware addresses."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A describes router LSAs, Option B describes network LSAs for multi-access, Option C (correct) external LSAs, Option D is for NSSA external routes. Normal areas use Type 5 LSAs for external routes from an ASBR.",
+      "examTip": "External routes in standard OSPF areas are advertised as Type 5 LSAs from the ASBR."
     },
     {
       "id": 52,
-      "question": "Which of the following is a potential security risk associated with using an outdated or unpatched web browser?",
+      "question": "During a trunk configuration, an engineer sees 'Native VLAN mismatch' warnings. Which direct step resolves this?",
       "options": [
-        "Faster page loads due to fewer security checks, though this is a trade-off rarely worth it.",
-        "Better compatibility with older web technologies at the cost of modern functionality.",
-        "Exposure to known security vulnerabilities that can be exploited by attackers.",
-        "Automatic replication of browsing data for backup purposes, which can be intercepted."
+        "Ensure both sides of the trunk use the same native VLAN ID",
+        "Disable CDP globally",
+        "Enable half-duplex on both ends",
+        "Assign all traffic to VLAN 1 exclusively"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Outdated browsers are known to have security vulnerabilities that attackers can exploit to compromise systems or steal data.",
-      "examTip": "Keeping web browsers up-to-date is essential for protecting against known exploits."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) matching native VLAN across both trunk sides avoids mismatch errors, Option B is discovery protocol, not trunk config, Option C is a link setting, Option D lumps all traffic into VLAN 1, not recommended. The native VLAN must match or traffic can be mis-tagged.",
+      "examTip": "To avoid trunk mismatch errors, set the same native VLAN ID on each end or use a dedicated VLAN other than 1."
     },
     {
       "id": 53,
-      "question": "What is 'link aggregation' (also known as 'port channeling' or 'EtherChannel') used for in networking?",
+      "question": "A site uses an MPLS WAN for voice and data. How does MPLS help QoS for voice calls?",
       "options": [
-        "Encrypting data at the link layer to secure traffic between switches.",
-        "Configuring one port to carry multiple VLANs simultaneously.",
-        "Combining multiple physical Ethernet links into one logical link to increase bandwidth and provide redundancy.",
-        "Filtering network traffic based on MAC addresses to restrict access."
+        "By encrypting voice traffic at layer 2",
+        "By establishing label-switched paths with priority handling",
+        "By forcing half-duplex on the phone ports",
+        "By performing DNS resolution for each call"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Link aggregation bundles several physical links into one logical link, boosting overall throughput and offering redundancy in case one link fails.",
-      "examTip": "Use link aggregation to improve both performance and fault tolerance on network connections."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is not inherent in MPLS, Option B (correct) labels can tag traffic for expedited forwarding, Option C is link setting, Option D is name resolution. MPLS can implement traffic engineering for guaranteed voice QoS.",
+      "examTip": "MPLS TE can honor QoS policies, ensuring voice gets priority along a label-switched path with guaranteed bandwidth."
     },
     {
       "id": 54,
-      "question": "What is a 'default route' in a routing table?",
+      "question": "Which direct measure can block unknown devices on the wired LAN by requiring 802.1X authentication at each port?",
       "options": [
-        "A route used solely for traffic within the local subnet.",
-        "A fallback route used when no specific route matches the destination, often represented as 0.0.0.0/0.",
-        "A route that directs all internal traffic exclusively within the LAN.",
-        "A route automatically chosen based on the highest administrative distance."
+        "Configure a single SSID for guests",
+        "Implement NAC with EAP on all access switches",
+        "Use half-duplex on user ports",
+        "Map each device MAC in DNS"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A default route is used when a router does not have a more specific route for a destination. It generally directs traffic toward the internet or an upstream network and is often represented as 0.0.0.0/0.",
-      "examTip": "The default route is critical for directing packets to external networks when no better match exists."
+      "explanation": "Option A references wireless guest, Option B (correct) 802.1X NAC ensures only authenticated devices pass traffic, Option C is a layer mismatch, Option D is name resolution. NAC with 802.1X is the standard for port-based access control.",
+      "examTip": "802.1X forces each endpoint to authenticate (often via RADIUS) before granting network access."
     },
     {
       "id": 55,
-      "question": "What is the purpose of 'network documentation'?",
+      "question": "A trunk link is dropping some VLAN traffic. Which FIRST command is recommended on Cisco to confirm which VLANs are allowed on that trunk?",
       "options": [
-        "To automatically optimize network device performance without manual adjustments.",
-        "To provide a comprehensive record of the network’s design, configurations, IP assignments, and procedures for troubleshooting and future planning.",
-        "To eliminate the need for additional security software by offering a visual map of the network.",
-        "To restrict internet access solely through written policies."
+        "show vlan brief",
+        "show mac address-table",
+        "show interface trunk",
+        "show running-config trunk"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network documentation is vital for understanding, managing, and troubleshooting a network. It includes diagrams, configuration details, IP schemes, and procedures, serving as a reference for maintenance and future upgrades.",
-      "examTip": "Accurate and up-to-date documentation is essential for effective network management and troubleshooting."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A shows VLAN membership but not trunk allow-lists, Option B is MAC table, Option C (correct) displays trunk details including allowed VLANs, Option D might vary. 'show interface trunk' is the canonical command to see trunk configuration on each interface.",
+      "examTip": "If VLAN traffic is missing across a trunk, verify if the VLAN is included in the trunk’s allowed VLAN list."
     },
     {
       "id": 56,
-      "question": "A network administrator is troubleshooting a connectivity problem where users on VLAN 10 cannot communicate with users on VLAN 20. Inter-VLAN routing is configured on a Layer 3 switch. The administrator checks the switch configuration and finds that IP routing is enabled globally. What is the NEXT step the administrator should take to diagnose the problem?",
+      "question": "Which DNS record type is used to identify an email server for a given domain?",
       "options": [
-        "Examine all physical cables between the core and access switches for defects.",
-        "Verify that Spanning Tree Protocol (STP) is properly running to avoid loops.",
-        "Review the configuration of each Switched Virtual Interface (SVI) for correct IP settings and any ACLs that might be blocking inter-VLAN traffic.",
-        "Reboot the Layer 3 switch to clear any transient routing issues."
+        "TXT",
+        "MX",
+        "CNAME",
+        "NS"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since IP routing is enabled, the next step is to check the SVIs on the Layer 3 switch. Ensure each SVI has the correct IP address, subnet mask, is administratively up, and that no ACLs are inadvertently blocking traffic between VLANs.",
-      "examTip": "When inter-VLAN routing fails, verify the SVI configurations and any access control lists applied."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is free-form text, Option B (correct) mail exchange record, Option C is an alias, Option D indicates a nameserver. MX records designate mail servers responsible for a domain.",
+      "examTip": "Mail Exchange (MX) records route email to the correct server. Ensure priority values are correct if multiple MXs exist."
     },
     {
       "id": 57,
-      "question": "Which of the following is a key benefit of using 'virtualization' in a network environment?",
+      "question": "A network admin must regularly track changes in router configuration for auditing. Which method ensures every config edit is tied to a specific user?",
       "options": [
-        "It eliminates the need for any physical hardware in the data center.",
-        "It allows multiple operating systems and applications to share a single physical server, improving resource utilization and reducing hardware costs.",
-        "It guarantees that virtual machines are immune to malware.",
-        "It automatically replicates all virtual machines to offsite locations without additional configuration."
+        "Use local user 'admin' with the same password for all staff",
+        "Enable RADIUS or TACACS+ AAA command accounting",
+        "Disable logging to reduce overhead",
+        "Assign a static IP to each router interface"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Virtualization lets you run several virtual machines on a single physical server, thereby improving resource utilization and reducing hardware expenditures. It increases flexibility and eases management but does not eliminate the need for physical servers.",
-      "examTip": "Virtualization is key in modern data centers for improving efficiency and reducing costs."
+      "explanation": "Option A cannot differentiate individuals, Option B (correct) logs each command with the authenticated username, Option C removes auditing, Option D addresses IP but not user accountability. AAA command accounting is the standard for tracking changes.",
+      "examTip": "Centralized AAA solutions like TACACS+ can record each CLI command with the executing user, crucial for audits."
     },
     {
       "id": 58,
-      "question": "What is 'packet fragmentation', and why can it negatively impact network performance?",
+      "question": "Which advanced feature is commonly used in BGP to attach metadata (like route origin or traffic policies) that can be matched or filtered downstream?",
       "options": [
-        "A cryptographic process that divides data for secure transmission.",
-        "A method of merging several small packets into one to reduce overhead.",
-        "The process of splitting a packet into smaller fragments when it exceeds the MTU of a link, which increases overhead and reduces throughput if excessive.",
-        "A content-based filtering method that inspects each fragment for threats."
+        "EIGRP K-values",
+        "RIP route tags",
+        "BGP communities",
+        "NAT overload"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "When a packet exceeds the Maximum Transmission Unit (MTU) of a link, it is fragmented into smaller pieces. Excessive fragmentation leads to increased overhead and can degrade network performance.",
-      "examTip": "Maintain a consistent MTU across the network to minimize fragmentation and its performance impact."
+      "explanation": "Option A is EIGRP metric components, Option B is a different protocol approach, Option C (correct) BGP communities let operators group routes for policy. Option D is NAT. BGP communities are labels appended to routes for flexible policy application.",
+      "examTip": "BGP communities let you apply attributes or filtering rules to grouped routes, e.g., 'no-export', 'local-AS', etc."
     },
     {
       "id": 59,
-      "question": "Which of the following statements BEST describes a 'distributed denial-of-service' (DDoS) attack?",
+      "question": "Which approach drastically limits the spread of a virus from one user subnet to another if the perimeter firewall is not aware of internal subnets?",
       "options": [
-        "An attack where an adversary systematically guesses passwords until access is gained.",
-        "An attack that floods a target from multiple compromised hosts (often a botnet), overwhelming resources and denying service to legitimate users.",
-        "A social engineering tactic using deceptive emails to steal personal information.",
-        "A man-in-the-middle attack that intercepts communications between two parties."
+        "Implement NAC posture checks on the internet router",
+        "Use 802.1Q trunking for all PCs",
+        "Enforce VLAN-based segmentation with inter-VLAN ACL rules",
+        "Configure half-duplex on each user port"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DDoS attack involves a large number of compromised hosts (botnet) sending overwhelming traffic to a target, causing resource exhaustion and making the service unavailable to legitimate users.",
-      "examTip": "DDoS attacks use multiple sources to flood a target, making them hard to mitigate with simple IP blocking."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is external NAC, not inside. Option B lumps them on a single broadcast domain if no ACL. Option C (correct) blocks cross-subnet traffic at layer 3. Option D is performance degrade. Internal segmentation is crucial so a virus in one subnet cannot easily jump to others.",
+      "examTip": "Use internal firewalls or ACLs on layer 3 boundaries to limit lateral threat movement among subnets."
     },
     {
       "id": 60,
-      "question": "A network administrator configures a router with the following access control list (ACL): `access-list 110 deny tcp any host 192.168.1.50 eq 23` `access-list 110 permit ip any any` The ACL is then applied to the router's inbound interface. What traffic will be permitted to reach the host at 192.168.1.50?",
+      "question": "Which configuration ensures a router uses OSPF to share route info with neighbors, but does not forward OSPF updates out to the internet interface?",
       "options": [
-        "All inbound traffic will be permitted, including Telnet, because the deny is ignored.",
-        "All traffic except Telnet (TCP port 23) will be allowed to reach the host.",
-        "Only Telnet traffic will be permitted, with all other protocols blocked.",
-        "No traffic will be allowed due to an implicit deny at the end of the ACL."
+        "Set OSPF network type to 'passive' on the internet-facing interface",
+        "Disable NAT on the internet interface",
+        "Set half-duplex on the WAN link",
+        "Configure RSTP on the router"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The ACL explicitly denies TCP traffic to port 23 (Telnet) for host 192.168.1.50 while permitting all other IP traffic. Thus, only Telnet is blocked.",
-      "examTip": "Remember that ACLs are processed in order and that the first match is applied; an implicit deny exists only after all explicit rules."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) OSPF passive interfaces do not send hello packets, Option B is unrelated to OSPF adjacency, Option C is a link mismatch, Option D is loop prevention. Passive interface stops advertisement on that interface while still advertising subnets into OSPF.",
+      "examTip": "In OSPF, 'passive-interface' prevents sending updates on an interface but still includes its network in the routing domain."
     },
     {
       "id": 61,
-      "question": "What is 'two-factor authentication' (2FA), and why is it a crucial security measure?",
+      "question": "A user is assigned an IP in 169.254.x.x range. Which statement is TRUE?",
       "options": [
-        "Using two identical passwords for the same account to ensure redundancy.",
-        "A process requiring two independent methods (such as a password plus a token) to verify a user’s identity, greatly reducing the risk of unauthorized access.",
-        "Deploying one extremely complex password that is difficult to guess.",
-        "Reusing the same password across multiple accounts for simplicity."
+        "They have a valid DHCP lease from the server",
+        "APIPA address is used when DHCP fails to provide a lease",
+        "This indicates the user VLAN is trunked incorrectly",
+        "The router is performing NAT overload"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "2FA adds a second layer of security by requiring not only something you know (a password) but also something you have (a token or mobile device) or something you are (biometric data). This means that even if a password is compromised, the attacker still cannot gain access without the second factor.",
-      "examTip": "Enabling 2FA is a simple yet highly effective way to improve account security."
+      "explanation": "Option A is false, Option B (correct) 169.254.x.x is Automatic Private IP Addressing fallback, Option C is trunk config, Option D is NAT. APIPA means the device’s DHCP requests went unanswered.",
+      "examTip": "Windows automatically assigns 169.254.x.x if it cannot contact a DHCP server, offering link-local connectivity only."
     },
     {
       "id": 62,
-      "question": "You are troubleshooting a network where users are experiencing slow file transfers from a server. Using a protocol analyzer, you notice a significant number of TCP window size zero messages being sent from the server. What does this MOST likely indicate?",
+      "question": "Which statement is MOST accurate about SIP (Session Initiation Protocol) in VoIP?",
       "options": [
-        "High network jitter causing variable delays.",
-        "Clients are too slow in processing incoming data.",
-        "A server-side bottleneck (e.g., CPU, memory, or disk I/O) is causing the receive buffer to fill.",
-        "Frequent collisions in a half-duplex environment."
+        "It handles real-time transport of voice data",
+        "It sets up, modifies, and tears down VoIP calls but uses RTP for actual audio",
+        "It encrypts all voice packets by default",
+        "It only runs over TCP port 23"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "TCP ZeroWindow messages from the server indicate that the server’s receive buffer is full and it cannot process incoming data fast enough, which is typically due to a resource bottleneck on the server.",
-      "examTip": "ZeroWindow messages point to performance issues on the receiving end that need to be addressed."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is more about RTP, Option B (correct) SIP is call control, RTP is media transport, Option C requires TLS or SRTP, not by default, Option D is Telnet port. SIP commonly uses TCP/UDP 5060 or TLS 5061 and relies on RTP for audio streams.",
+      "examTip": "SIP is a signaling protocol for VoIP; actual voice data flows via RTP or SRTP after call setup."
     },
     {
       "id": 63,
-      "question": "What is 'ARP spoofing' (or 'ARP poisoning'), and what is a potential consequence of a successful attack?",
+      "question": "Which best practice helps prevent brute-forcing of WPA2-PSK networks from captured 4-way handshakes?",
       "options": [
-        "A legitimate process where devices automatically receive IP addresses from a DHCP server.",
-        "A normal ARP operation used for mapping IP addresses to MAC addresses.",
-        "Injecting falsified ARP messages so the attacker’s MAC address is associated with a legitimate IP (such as the default gateway), allowing interception of traffic.",
-        "Encrypting ARP traffic to secure the address resolution process."
+        "Use a very long, random passphrase",
+        "Disable STP on APs",
+        "Set half-duplex mode for wireless interfaces",
+        "Assign a static IP to each wireless client"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "ARP spoofing involves sending forged ARP messages to associate the attacker’s MAC address with the IP address of a legitimate device, often the default gateway. This can allow the attacker to intercept or modify network traffic.",
-      "examTip": "ARP spoofing is dangerous because it can lead to man-in-the-middle attacks; mitigation techniques include dynamic ARP inspection."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) a strong passphrase is the only real defense. Option B is loop prevention, Option C is a link setting, Option D is IP config. WPA2-PSK relies on passphrase complexity to thwart offline dictionary attacks.",
+      "examTip": "A robust passphrase (long, random) significantly reduces the risk of offline WPA2 cracking from captured handshakes."
     },
     {
       "id": 64,
-      "question": "A network uses a /22 subnet mask. How many usable host addresses are available within each subnet?",
+      "question": "Which next-generation firewall feature identifies a flow as 'Dropbox' or 'Skype' even if it uses TCP port 443?",
       "options": [
-        "254 usable IP addresses, typical of a /24 network.",
-        "510 usable IP addresses, which is too few for larger subnets.",
-        "1022 usable IP addresses, after subtracting the network and broadcast addresses.",
-        "2046 usable IP addresses, which would be for a /21 or larger."
+        "DNS proxy caching",
+        "Application-layer signature inspection (DPI)",
+        "PoE injection",
+        "MAC flooding detection"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A /22 subnet provides 2^(32-22) = 1024 total addresses. After subtracting the network and broadcast addresses, 1022 addresses remain available for hosts.",
-      "examTip": "Remember: usable hosts = 2^(32 - prefix length) - 2."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is domain caching, Option B (correct) deep packet inspection at layer 7, Option C is power over Ethernet, Option D is L2 security. DPI can see beyond common ports to recognize specific applications or protocols.",
+      "examTip": "App-aware firewalls examine payload signatures to identify the true application, circumventing simple port-based classification."
     },
     {
       "id": 65,
-      "question": "What is a 'rogue DHCP server', and why is it a security risk?",
+      "question": "A trunk link is failing to pass VLAN 99. Which is the FIRST command to see if VLAN 99 is active and assigned on the switch?",
       "options": [
-        "A properly configured and authorized DHCP server used by the network.",
-        "An unauthorized DHCP server that can assign incorrect IP settings or redirect clients to malicious gateways.",
-        "A DHCP server used exclusively for testing in a lab environment.",
-        "A DHCP server that operates with very short lease times to force frequent renewals."
+        "show ip interface brief",
+        "show vlan brief",
+        "show interface trunk detail",
+        "show mac address-table vlan 99"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A rogue DHCP server is an unauthorized device on the network that can distribute incorrect network configuration information, leading to connectivity issues or enabling man-in-the-middle attacks.",
-      "examTip": "DHCP snooping is used to block rogue DHCP servers and protect network integrity."
+      "explanation": "Option A shows IP states, Option B (correct) displays VLAN existence and port membership, Option C is trunk-level info, Option D is MAC layer for that VLAN. Checking 'show vlan brief' ensures VLAN 99 is created and not pruned.",
+      "examTip": "Before checking trunk settings, confirm the VLAN actually exists and is active in the VLAN database."
     },
     {
       "id": 66,
-      "question": "Which of the following network topologies provides the HIGHEST level of redundancy and fault tolerance?",
+      "question": "Which approach can unify network functions like firewall, IPS, and VPN into a single on-premises appliance for a smaller branch?",
       "options": [
-        "Star – with a central device that, if it fails, disrupts the network.",
-        "Bus – where a single cable failure can affect all devices.",
-        "Ring – where a break in the ring stops all traffic.",
-        "Full mesh – where every node is directly connected to every other node."
+        "STP in root guard mode",
+        "UTM (Unified Threat Management) device",
+        "EtherChannel trunking",
+        "Split tunneling"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A full mesh topology connects every node to every other node, offering the maximum level of redundancy. If one link fails, alternative paths are always available.",
-      "examTip": "Full mesh provides maximum fault tolerance, though it comes with increased cost and complexity."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is loop prevention, Option B (correct) merges multiple security features, Option C is link aggregation, Option D is VPN design. UTM boxes commonly bundle firewall, AV, IDS/IPS, VPN, etc., for SMB or branch deployments.",
+      "examTip": "Unified Threat Management devices offer an all-in-one security solution, convenient for smaller sites."
     },
     {
       "id": 67,
-      "question": "A network administrator configures a switch port with `switchport mode access` and `switchport access vlan 10`. What is the effect of these commands?",
+      "question": "Which concept indicates storing partial data replicas at the network edge to reduce latency for frequently accessed content?",
       "options": [
-        "The port is set to trunk mode, allowing traffic for multiple VLANs.",
-        "The port becomes an access port assigned exclusively to VLAN 10.",
-        "The port is shut down and does not pass any traffic until re-enabled.",
-        "The port dynamically negotiates its VLAN assignment based on connected devices."
+        "STP extended system ID",
+        "CDN caching",
+        "802.1X EAP chaining",
+        "OSPF stub area"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "These commands configure the port as an access port and assign it to VLAN 10, so it only carries untagged traffic for VLAN 10.",
-      "examTip": "Access ports are dedicated to a single VLAN; trunk ports handle multiple VLANs."
+      "explanation": "Option A is a bridging detail, Option B (correct) content delivery networks push static data closer to end users, Option C is advanced NAC, Option D is an OSPF design. CDNs reduce round-trip times by caching content in edge servers.",
+      "examTip": "CDNs replicate content in geographically distributed nodes, improving performance for users accessing the same data."
     },
     {
       "id": 68,
-      "question": "You are troubleshooting a network connectivity issue. A user cannot access any websites by name, and `nslookup` commands fail to resolve domain names. However, the user can ping external IP addresses successfully. What is the MOST likely cause?",
+      "question": "Which factor is MOST critical in planning a large Wi-Fi 6/6E deployment for a stadium environment?",
       "options": [
-        "A damaged Ethernet cable preventing all traffic from leaving the local network.",
-        "A corrupt web browser causing failures in name resolution, while ICMP pings remain unaffected.",
-        "An incorrect or unreachable DNS server configuration.",
-        "A virus that selectively blocks domain-based communications."
+        "Ensuring each AP uses the same channel for mesh",
+        "Implementing band steering to push capable devices to 5/6 GHz",
+        "Using WEP encryption to maximize speed",
+        "Assigning static IPs to all devices"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since the user can ping external IPs, the network is functioning at a basic level. Failure to resolve domain names using nslookup points directly to a DNS configuration issue.",
-      "examTip": "When IP connectivity is confirmed but DNS fails, focus on DNS server settings and reachability."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A leads to co-channel interference, Option B (correct) channel capacity is better in 5/6 GHz, Option C is insecure, Option D is burdensome. In high-density scenarios, band steering to 5/6 GHz is critical for throughput and reduced interference.",
+      "examTip": "High-density venues often steer clients to higher-frequency bands with more bandwidth and less congestion."
     },
     {
       "id": 69,
-      "question": "Which of the following is a characteristic of a 'stateful firewall' compared to a stateless packet filter?",
+      "question": "Which direct measure stops a newly connected switch from claiming STP root on an edge port?",
       "options": [
-        "It treats every packet as an isolated event without context.",
-        "It tracks connection states and uses that context to make more informed filtering decisions.",
-        "It is inherently less secure because it relies on transient state data.",
-        "It is used exclusively in wireless networks."
+        "Enable IP helper address on that port",
+        "Configure root guard so superior BPDUs put the port in root-inconsistent state",
+        "Set auto-MDIX to off",
+        "Use half-duplex for trunk ports"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A stateful firewall maintains information about active connections and uses that context to allow or block traffic, providing more robust security than a stateless filter.",
-      "examTip": "Stateful firewalls are preferred for their ability to track connection context and improve security."
+      "explanation": "Option A is for DHCP relay, Option B (correct) root guard blocks unexpected root role attempts, Option C is cable detection, Option D is a link mismatch. Root guard ensures the existing root remains authoritative.",
+      "examTip": "Root guard on edge or distribution-facing ports ensures no device can send superior BPDUs to become root."
     },
     {
       "id": 70,
-      "question": "A company wants to implement a network security solution that can detect and prevent intrusions, filter web content, provide antivirus protection, and act as a VPN gateway. Which type of device BEST meets these requirements?",
+      "question": "A site expects sub-second failover if the primary router fails. Which high availability solution meets this goal by enabling both routers to handle traffic simultaneously?",
       "options": [
-        "An NAS (Network-Attached Storage) device focused on file storage and sharing.",
-        "A unified threat management (UTM) appliance that consolidates multiple security features.",
-        "A wireless LAN controller (WLC) designed for managing access points.",
-        "A domain controller that manages user authentication and policies."
+        "VRRP in active-passive mode",
+        "HSRP with one active gateway",
+        "Active-active clustering or GLBP",
+        "STP enabling half-duplex"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A UTM appliance combines multiple security functions into one device, simplifying management and providing layered protection. An NAS, WLC, or domain controller do not offer the comprehensive security functions of a UTM.",
-      "examTip": "UTM devices are popular for integrating several security functions into a single, manageable platform."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A uses one master router, Option B is also an active-standby. Option C (correct) GLBP or active-active clustering can load-balance. Option D is loop prevention, not relevant. GLBP can share the virtual gateway load among multiple routers simultaneously.",
+      "examTip": "GLBP allows multiple routers to actively serve as default gateways, providing redundancy and load-balancing."
     },
     {
       "id": 71,
-      "question": "Which of the following is a common use for a 'proxy server' in a network?",
+      "question": "Which factor can cause a router to ignore an advertised default route in OSPF, preferring a static default route instead?",
       "options": [
-        "Automatically providing IP addresses to end devices using DHCP.",
-        "Acting as an intermediary between clients and external servers to provide caching, content filtering, and IP masking.",
-        "Translating domain names into IP addresses for local clients.",
-        "Encrypting all TCP traffic between internal clients and the internet."
+        "OSPF's default-information originate set to passive",
+        "Administrative distance of the static route being lower than OSPF",
+        "Mismatched BGP local preference",
+        "Using 802.1w for STP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A proxy server serves as an intermediary that can cache content, filter requests, and hide the internal IP addresses of clients when they access external resources.",
-      "examTip": "Proxy servers help improve performance and enhance security by controlling and filtering web traffic."
+      "explanation": "Option A is not standard, Option B (correct) static route typically has AD=1, OSPF=110. Option C is BGP attribute, not OSPF. Option D is bridging, not routing. A lower AD route overrides a learned OSPF default route.",
+      "examTip": "If you have a static default route (AD=1) and OSPF (AD=110), the router picks the static route first."
     },
     {
       "id": 72,
-      "question": "What is 'split horizon' and how does it prevent routing loops in distance-vector routing protocols?",
+      "question": "A remote user must connect to internal resources without installing extra client software. Which approach addresses this scenario?",
       "options": [
-        "A method for encrypting routing updates to keep them secure.",
-        "A technique that prevents a router from advertising a route back on the interface from which it was learned.",
-        "A strategy to set route priorities based on cost metrics.",
-        "A method for distributing traffic evenly across multiple next hops."
+        "Client-based IPSec with preshared key",
+        "Clientless SSL VPN via a web portal",
+        "L2TP over GRE tunnel",
+        "RDP bridging on port 389"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Split horizon stops a router from sending routing information back out the interface from which it was received, thereby preventing routing loops.",
-      "examTip": "Split horizon is a simple yet effective mechanism to avoid routing loops in distance-vector protocols."
+      "explanation": "Option A requires an IPSec client, Option B (correct) only needs a browser and credentials, Option C still typically requires a VPN client, Option D is a separate remote desktop approach. Clientless SSL VPN provides a web-based solution.",
+      "examTip": "Clientless VPN solutions let users securely connect from a browser without specialized software installed."
     },
     {
       "id": 73,
-      "question": "What is the purpose of using 'Quality of Service' (QoS) in a network?",
+      "question": "Which advanced firewall feature can terminate TLS tunnels, inspect the decrypted data, and then re-encrypt traffic outbound?",
       "options": [
-        "Encrypting all packets to ensure complete data privacy.",
-        "Prioritizing time-sensitive or mission-critical traffic (e.g., VoIP, video) over less critical data during congestion.",
-        "Automatically assigning IP addresses to devices in a fair manner.",
-        "Resolving domain names to IP addresses for efficient browsing."
+        "Port address translation",
+        "Transparent bridging mode",
+        "SSL/TLS interception or proxy",
+        "DHCP snooping"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "QoS ensures that essential or latency-sensitive traffic is prioritized over less critical traffic, which helps maintain performance under network congestion.",
-      "examTip": "Implementing QoS is key to ensuring a good quality of service for real-time applications."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is NAT, Option B is L2 bridging, Option C (correct) inspects encrypted flows, Option D is DHCP security. SSL interception proxies can decrypt, scan data, and then re-encrypt to the server, ensuring deep inspection of HTTPS traffic.",
+      "examTip": "SSL interception or 'man-in-the-middle' proxy is controversial but allows a firewall to scan encrypted traffic for threats."
     },
     {
       "id": 74,
-      "question": "You are troubleshooting a network where users are reporting slow performance when accessing a particular web application. Using a protocol analyzer, you notice a large number of TCP retransmissions, duplicate ACKs, and 'TCP Window Full' messages. What is the MOST likely underlying cause?",
+      "question": "Which VLAN tagging method is the IEEE standard widely used on Ethernet trunks?",
       "options": [
-        "A DNS misconfiguration that prevents the application’s hostname from resolving properly.",
-        "Suboptimal network conditions causing packet loss and congestion.",
-        "Improper browser settings limiting HTTP connections.",
-        "An unresponsive DHCP server leading to repeated lease renewals."
+        "ISL (Inter-Switch Link)",
+        "802.1Q",
+        "802.1D",
+        "VTP"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "TCP retransmissions, duplicate ACKs, and zero window messages are indicative of packet loss or congestion, causing flow-control issues. This is a network-level problem rather than one related to DNS, browser configuration, or DHCP.",
-      "examTip": "Focus on network conditions and potential congestion when you see repeated TCP retransmissions and duplicate ACKs."
+      "explanation": "Option A is Cisco proprietary, Option B (correct) is the open standard, Option C is spanning tree, Option D is VLAN trunking protocol for VLAN distribution. 802.1Q is the standard trunking mechanism on modern switches.",
+      "examTip": "Most devices use IEEE 802.1Q trunking, encapsulating frames with a 4-byte VLAN tag."
     },
     {
       "id": 75,
-      "question": "What is '802.1X', and how does it contribute to network security?",
+      "question": "Which direct measure ensures all connected endpoints have mandatory software patches before gaining network access on a wired 802.1X deployment?",
       "options": [
-        "A legacy wireless encryption standard similar to WEP with static keys.",
-        "A port-based network access control mechanism that requires authentication before granting network access.",
-        "A routing protocol that exchanges link-state information among routers.",
-        "An automated IP address assignment service via DHCP."
+        "Captive portal on the LAN",
+        "Spanning tree in root guard mode",
+        "NAC posture assessment integrated with 802.1X",
+        "MAC filtering for every device"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "802.1X is a standard for port-based network access control. It ensures that a device must successfully authenticate before it is granted access to the network, typically using a RADIUS server.",
-      "examTip": "802.1X helps secure network access by verifying device identity before allowing connection."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is typically for guest Wi-Fi, Option B is STP security, Option C (correct) posture checks ensure compliance, Option D is easily bypassed. NAC posture integrated with 802.1X checks endpoint patch level, AV, etc., before allowing full access.",
+      "examTip": "NAC posture checks can quarantine or deny devices that fail security criteria, ensuring compliance before production access."
     },
     {
       "id": 76,
-      "question": "Which of the following statements accurately describes the difference between a 'vulnerability', an 'exploit', and a 'threat' in cybersecurity?",
+      "question": "An admin suspects QoS misconfiguration on a WAN router. Which command on Cisco typically shows if DSCP values or queue stats match traffic flows?",
       "options": [
-        "They are identical terms that can be used interchangeably.",
-        "A vulnerability is malicious software, an exploit is a type of firewall rule, and a threat is specialized hardware.",
-        "A vulnerability is a flaw or weakness; an exploit is the technique used to take advantage of that flaw; and a threat is the potential agent that might use the exploit.",
-        "A vulnerability indicates a successful breach, an exploit is hypothetical, and a threat is any connected device."
+        "show queueing interface",
+        "show policy-map interface",
+        "show mac address-table interface",
+        "show vlan interface"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A vulnerability is a weakness in a system, an exploit is the method used to take advantage of that weakness, and a threat is the potential actor or event that can leverage the exploit to cause harm.",
-      "examTip": "Remember: vulnerability (weakness) + exploit (method) + threat (actor) together define the risk."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is non-standard, Option B (correct) displays policy-map stats, queue counters, DSCP matches, Option C is L2 table, Option D is VLAN membership. 'show policy-map interface' reveals if QoS classification is correct and how many packets match each class.",
+      "examTip": "For Cisco QoS (MQC), 'show policy-map interface <if>' displays real-time stats and classification hits."
     },
     {
       "id": 77,
-      "question": "What is the primary purpose of a 'honeypot' in network security?",
+      "question": "Which scenario-based question is BEST solved by using an IDS in tap mode rather than inline IPS?",
       "options": [
-        "To provide secure, offsite backups of critical data.",
-        "To serve as a decoy system that attracts attackers so defenders can study their methods.",
-        "To ensure complete encryption of all network traffic.",
-        "To automatically assign IP addresses to clients using DHCP."
+        "How to block malicious traffic in real time",
+        "How to passively monitor traffic without risking network downtime if the sensor fails",
+        "How to apply NAC posture checks at layer 2",
+        "How to unify logs for a SIEM correlation"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A honeypot is a decoy system intentionally left vulnerable to attract attackers. This helps security teams study attack methods and potentially distract adversaries from critical systems.",
-      "examTip": "Honeypots are used as a research tool and as a diversion tactic to enhance network security."
+      "explanation": "Option A is inline IPS. Option B (correct) a tap-based IDS passively observes, no single point of failure. Option C is port-based auth. Option D is log correlation. IDS in tap mode sees all traffic but can’t drop malicious packets actively.",
+      "examTip": "Tap-based or SPAN-based IDS is passive. IPS is inline, able to block or modify traffic but can introduce a single failure point."
     },
     {
       "id": 78,
-      "question": "Which of the following network topologies offers the highest degree of redundancy, but also has the highest cost and complexity to implement?",
+      "question": "A new code release is staged on a router. Which practice ensures you can revert quickly if the new firmware introduces critical bugs?",
       "options": [
-        "Star – where a central hub is a single point of failure.",
-        "Bus – which uses a single cable that can bring down the entire network if it fails.",
-        "Ring – where a single break can disrupt the loop.",
-        "Full mesh – where every node is directly connected to every other node."
+        "Test the theory by disabling DHCP",
+        "Save the old firmware image and config in backup, ready to reflash",
+        "Use a single switch for the entire LAN",
+        "Configure half-duplex to reduce overhead"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A full mesh topology offers maximum redundancy since every node is directly connected to every other node. However, it is expensive and complex to implement due to the large number of connections required.",
-      "examTip": "Full mesh is ideal for environments where redundancy is critical, despite its high cost."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is not relevant, Option B (correct) keep a backup image to restore quickly, Option C is a design risk, Option D is performance degrade. Retaining old images and config backups is standard for quick rollback if an upgrade fails.",
+      "examTip": "Always keep a known-good firmware image and config to roll back swiftly if new code is unstable."
     },
     {
       "id": 79,
-      "question": "You are configuring a wireless network in an area with multiple existing wireless networks. Which tool would be MOST useful in identifying potential sources of interference and selecting the optimal channels for your access points?",
+      "question": "Which statement accurately describes LACP in an EtherChannel context?",
       "options": [
-        "A cable tester, which verifies physical cable integrity.",
-        "A protocol analyzer (like Wireshark) to capture data packets on wired networks.",
-        "A spectrum analyzer to view the RF environment and detect interfering signals.",
-        "A toner and probe kit for tracing cable paths."
+        "A Cisco-proprietary protocol requiring same vendor on both sides",
+        "Combines multiple links into one logical interface for bandwidth and redundancy using industry standard",
+        "Requires half-duplex to avoid collisions",
+        "Only supports trunk ports, not access ports"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A spectrum analyzer is designed to measure the radio frequency spectrum, making it ideal for detecting interference from other wireless networks and devices.",
-      "examTip": "Use a spectrum analyzer to determine which channels are least congested in the RF spectrum."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is PAgP. Option B (correct) LACP is IEEE 802.3ad standard for link aggregation, Option C is untrue, Option D is not strictly correct; EtherChannel can be used with access ports in some scenarios. LACP bundles multiple Ethernet links.",
+      "examTip": "LACP (802.3ad) is an open standard link aggregation method, enabling multi-vendor compatibility for port channeling."
     },
     {
       "id": 80,
-      "question": "What is the primary purpose of using 'Network Address Translation' (NAT) in a network?",
+      "question": "Which protocol is widely used for streaming voice packets once a SIP call is established?",
       "options": [
-        "To encrypt all traffic passing through the router’s WAN interface.",
-        "To allow multiple devices with private IP addresses to share one or a few public IP addresses when accessing the internet.",
-        "To automatically assign IP addresses using a dynamic pool.",
-        "To prevent network loops by managing redundant paths at Layer 2."
+        "RTP",
+        "SSH",
+        "LLDP",
+        "SMTP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "NAT translates private IP addresses to public IP addresses (and vice versa) so that many devices can share a single public IP address, conserving IPv4 address space and adding a layer of obscurity.",
-      "examTip": "NAT is a fundamental technology for connecting private networks to the internet while conserving public IP addresses."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) Real-time Transport Protocol, Option B is secure shell, Option C is device discovery, Option D is email. SIP or H.323 sets up calls, while RTP carries the actual voice or video stream.",
+      "examTip": "VoIP typically uses RTP for media after a signaling protocol (SIP, H.323) negotiates session parameters."
     },
     {
       "id": 81,
-      "question": "A network administrator configures a router with the following command: `ip route 172.16.0.0 255.255.0.0 10.0.0.2`. What is the effect of this command?",
+      "question": "Which solution is used to minimize broadcast domains in large LANs while still allowing flexible IP addressing within each domain, effectively segmenting at layer 3?",
       "options": [
-        "It establishes a default route for all destinations using 10.0.0.2.",
-        "It dynamically learns routes via a routing protocol from 10.0.0.2.",
-        "It creates a static route that directs traffic for the 172.16.0.0/16 network to next-hop 10.0.0.2.",
-        "It blocks all traffic destined for the 172.16.0.0 network."
+        "802.1Q trunking with DTP dynamic mode",
+        "EIGRP stub areas",
+        "Routed VLAN interfaces (SVIs) on a Layer 3 switch",
+        "ARP poisoning detection"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "This static route tells the router to forward any traffic destined for the 172.16.0.0/16 network to the next-hop IP address 10.0.0.2.",
-      "examTip": "Static routes are manually configured to direct traffic to specific networks via a designated next hop."
+      "explanation": "Option A is trunking, Option B is an EIGRP concept but not about LAN segmentation, Option C (correct) each VLAN has a routed SVI, controlling broadcasts. Option D is a security measure. L3 SVIs break up broadcast domains while preserving logical VLAN structure.",
+      "examTip": "A layer 3 switch with SVIs routes between VLANs, limiting broadcast domains for better performance and security."
     },
     {
       "id": 82,
-      "question": "Which of the following is a key advantage of using a 'client-server' network model compared to a 'peer-to-peer' network model?",
+      "question": "An engineer wants to ensure any unauthorized DHCP server on an access port is blocked. Which feature is PRIMARILY designed for this purpose?",
       "options": [
-        "It is most cost-effective for very small home networks with just a few devices.",
-        "It enables centralized management of user accounts, resources, and security policies, making it more scalable and secure.",
-        "It ensures that every device shares equal responsibilities without needing a dedicated server.",
-        "It requires only consumer-grade hardware without any specialized equipment."
+        "Port security sticky MAC",
+        "DHCP snooping",
+        "BPDU guard",
+        "QoS shaping"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Client-server networks centralize management, which makes them more scalable and secure for larger environments compared to peer-to-peer setups.",
-      "examTip": "Client-server architecture is standard in enterprise networks due to its centralized management and security benefits."
+      "explanation": "Option A is MAC address limiting, Option B (correct) filters DHCP offers from untrusted ports, Option C is spanning tree protection, Option D is traffic priority. DHCP snooping is the standard tool to block rogue DHCP servers.",
+      "examTip": "DHCP snooping designates ports as trusted or untrusted for DHCP responses, preventing malicious address assignments."
     },
     {
       "id": 83,
-      "question": "What is 'DHCP snooping', and how does it enhance network security?",
+      "question": "Which statement BEST describes the function of a NAC solution integrated with 802.1X?",
       "options": [
-        "A method that scrambles DHCP messages so only authorized devices can decipher them.",
-        "A switch feature that filters DHCP traffic to allow only those from trusted DHCP server ports.",
-        "A technique that accelerates DHCP address assignment to reduce client boot times.",
-        "A logging system that records all web browsing activity for security audits."
+        "Devices must physically connect at half-duplex",
+        "Switch ports are disabled if STP sees a bridging loop",
+        "Endpoints must authenticate and meet security posture before network access",
+        "RIP routes are filtered from the WAN edge"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DHCP snooping inspects DHCP traffic on switches and ensures that only responses from trusted DHCP servers are forwarded, preventing rogue servers from distributing incorrect IP configurations.",
-      "examTip": "DHCP snooping is an effective tool to block unauthorized DHCP servers and protect network integrity."
+      "correctAnswerIndex": 2,
+      "explanation": "Option A is irrelevant, Option B is spanning tree security, Option C (correct) NAC ensures posture compliance and identity. Option D is a routing scenario. NAC with 802.1X controls access at the port level, verifying user credentials and posture.",
+      "examTip": "NAC posture checks combined with 802.1X can ensure endpoints meet security standards before granting LAN access."
     },
     {
       "id": 84,
-      "question": "What is a 'man-in-the-middle' (MitM) attack, and what is a common way to mitigate it?",
+      "question": "A new trunk interface is not passing traffic for VLAN 50. 'show interface trunk' indicates VLAN 50 is missing from the allowed list. Which command typically fixes this on Cisco IOS?",
       "options": [
-        "An attack that overwhelms a server with connection requests (DoS/DDoS).",
-        "A phishing attack that tricks users into revealing personal information.",
-        "An attack where the attacker intercepts and potentially alters communications between two parties; using strong encryption (e.g., HTTPS, VPN) can mitigate it.",
-        "A brute-force attack that systematically guesses passwords."
+        "switchport trunk native vlan 50",
+        "switchport trunk allowed vlan add 50",
+        "vlan database 50",
+        "no switchport mode trunk"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "In a MitM attack, the attacker secretly intercepts the communication between two parties and may alter it. Using encryption like HTTPS or VPNs protects the data from being read or modified by unauthorized parties.",
-      "examTip": "Always use strong encryption protocols to defend against man-in-the-middle attacks."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A changes native VLAN, Option B (correct) appends VLAN 50 to the trunk’s allowed VLAN list, Option C references legacy CLI for creating VLAN, Option D removes trunk mode. The 'switchport trunk allowed vlan add 50' command includes VLAN 50 on that trunk.",
+      "examTip": "If a VLAN is missing across a trunk, add it explicitly with 'switchport trunk allowed vlan add <vlan>' on both ends."
     },
     {
       "id": 85,
-      "question": "You are troubleshooting a network where some devices can communicate with each other, but others cannot, even though they are all connected to the same switch. You suspect a VLAN misconfiguration. Which command on a Cisco switch would you use to verify the VLAN assignments of the switch ports?",
+      "question": "A router in EIGRP holds an entry in the active state for a route and never gets a reply from neighbors. Which condition is likely occurring?",
       "options": [
-        "show ip interface brief – shows IP addresses but not VLAN memberships.",
-        "show spanning-tree – provides STP details, not direct VLAN assignments.",
-        "show vlan brief – displays VLAN IDs, names, statuses, and associated ports.",
-        "show mac address-table – lists MAC addresses without explicit VLAN-port mapping."
+        "A route filter in OSPF is blocking EIGRP updates",
+        "A neighbor fails to respond to query, causing stuck in active (SIA)",
+        "Auto summary is disabled globally",
+        "DHCP snooping prevents ARP replies"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The `show vlan brief` command provides a quick and clear overview of VLAN configurations and the ports assigned to each VLAN on a Cisco switch.",
-      "examTip": "Use 'show vlan brief' to verify VLAN assignments quickly when troubleshooting switch configurations."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A mixes protocols, Option B (correct) SIA indicates queries are unanswered, Option C is an EIGRP config but not directly SIA cause, Option D is layer 2 security for DHCP. SIA arises when queries go unanswered, possibly due to a neighbor resource or link failure.",
+      "examTip": "If EIGRP route goes active, it queries neighbors. If none respond, it’s stuck in active (SIA). Investigate neighbor adjacency or link issues."
     },
     {
       "id": 86,
-      "question": "What is 'port mirroring' (also known as 'SPAN') on a network switch used for?",
+      "question": "A firewall must allow TFTP inbound from the DMZ to a server. Which port is necessary?",
       "options": [
-        "Encrypting traffic on a specific port to secure sensitive data.",
-        "Restricting access to a port by filtering MAC addresses.",
-        "Duplicating traffic from one or more source ports to a designated monitoring port for analysis.",
-        "Dynamically assigning IP addresses to connected devices."
+        "20",
+        "21",
+        "69",
+        "443"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Port mirroring duplicates the traffic from selected ports to a monitoring port, where a network analyzer or IDS/IPS can capture and review the data without impacting normal operations.",
-      "examTip": "Port mirroring is a valuable feature for real-time network troubleshooting and security monitoring."
+      "explanation": "Option A is FTP data, Option B is FTP control, Option C (correct) TFTP default UDP port, Option D is HTTPS. TFTP uses UDP port 69 for file transfers.",
+      "examTip": "Trivial File Transfer Protocol is lightweight, using UDP/69, with no authentication by default."
     },
     {
       "id": 87,
-      "question": "What is a 'default route' in a routing table, and why is it important?",
+      "question": "Which advanced BGP feature can apply route policies to prefixes based on matching community values, letting an ISP or enterprise shape traffic or filter routes?",
       "options": [
-        "A route for traffic destined only for the local subnet.",
-        "A fallback route used when no specific route is available, often represented as 0.0.0.0/0.",
-        "The primary route for all internal organizational traffic.",
-        "A route chosen solely based on having the highest administrative distance."
+        "Proxy ARP",
+        "Community-based route maps",
+        "EIGRP stubs",
+        "DHCP Relay"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A default route acts as a catch-all route for any destination not explicitly listed in the routing table, typically used to forward traffic to the internet.",
-      "examTip": "The default route is essential for directing packets to external networks when no specific route exists."
+      "explanation": "Option A is layer 2 bridging technique, Option B (correct) BGP communities allow route maps to match or set community tags, Option C is EIGRP design, Option D is forwarding DHCP. BGP route-maps referencing communities shape inbound/outbound routing policies.",
+      "examTip": "BGP communities are labels on routes that can be matched by route maps to apply policies—like local-preference or acceptance."
     },
     {
       "id": 88,
-      "question": "What is the purpose of using 'Quality of Service' (QoS) mechanisms in a network?",
+      "question": "Which AAA protocol is used over TCP and encrypts the entire packet, commonly preferred for network device administration command logging?",
       "options": [
-        "To encrypt all data regardless of its application.",
-        "To distinguish and prioritize critical or time-sensitive traffic (such as VoIP or video) over less critical traffic during congestion.",
-        "To assign IP addresses based on a first-come, first-served basis.",
-        "To resolve domain names into IP addresses for better user experience."
+        "RADIUS",
+        "TACACS+",
+        "SSH",
+        "SNMPv3"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "QoS allows network administrators to prioritize certain types of traffic to ensure that critical applications receive the bandwidth and low latency they require, even during periods of high utilization.",
-      "examTip": "Implement QoS to maintain performance for applications like VoIP and video conferencing under heavy load."
+      "explanation": "Option A uses UDP, partial encryption, Option B (correct) uses TCP and encrypts the entire payload, Option C is remote CLI, not AAA, Option D is encrypted management but not for AAA command logs. TACACS+ is favored for device admin logging and full-packet encryption.",
+      "examTip": "RADIUS focuses on user authentication (UDP), TACACS+ (TCP) encrypts entire session, ideal for device command authorization."
     },
     {
       "id": 89,
-      "question": "A network administrator wants to prevent unauthorized wireless access points from being connected to the wired network. Which of the following security measures would be MOST effective in achieving this?",
+      "question": "Which statement accurately describes DHCP Option 82 in large switched environments?",
       "options": [
-        "Enforcing complex login credentials for all user accounts.",
-        "Using MAC address filtering on switch interfaces to allow only authorized MAC addresses.",
-        "Implementing 802.1X port-based network access control to require authentication before granting network access.",
-        "Configuring outdated WEP encryption on authorized wireless networks."
+        "It encrypts DHCP traffic end-to-end",
+        "It appends circuit ID and remote ID info to DHCP requests, aiding IP address assignment based on port location",
+        "It ensures half-duplex for all DHCP client ports",
+        "It prevents static addressing on user PCs"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "802.1X provides port-based authentication, ensuring that only devices that successfully authenticate are allowed network access. This prevents unauthorized devices—including rogue wireless access points—from connecting to the wired network.",
-      "examTip": "802.1X is highly effective at preventing unauthorized devices from joining the network."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is not standard, Option B (correct) helps track or route DHCP requests from specific switch ports, Option C is unrelated, Option D is not how DHCP works. Option 82 can insert location data so the DHCP server can assign addresses or track endpoints.",
+      "examTip": "DHCP Option 82 (relay info) tags requests with switch/port details, enabling advanced address policies and logging."
     },
     {
       "id": 90,
-      "question": "Which of the following statements accurately describes the difference between a 'vulnerability', an 'exploit', and a 'threat'?",
+      "question": "Which direct measure can hamper VLAN trunk negotiation attacks by turning off automatic trunk formation on user-facing switch ports?",
       "options": [
-        "They are identical terms used interchangeably in cybersecurity.",
-        "A vulnerability is malicious software, an exploit is a firewall rule, and a threat is specialized hardware.",
-        "A vulnerability is a weakness in a system; an exploit is the technique used to take advantage of that weakness; and a threat is the potential agent that might carry out the attack.",
-        "A vulnerability is a successful breach, an exploit is theoretical, and a threat is any connected device."
+        "Disable DTP (dynamic trunking protocol) and set mode access",
+        "Use half-duplex for all access ports",
+        "Assign a static ARP entry for each port",
+        "Enable DHCP snooping on trunk interfaces"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A vulnerability is a weakness that can be exploited; an exploit is the method or tool that takes advantage of that weakness; and a threat is the potential for an attacker to use an exploit against a vulnerability.",
-      "examTip": "Understanding the difference is crucial: vulnerability (weakness), exploit (method), and threat (potential attacker)."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) stops undesired trunk creation, Option B is link mismatch, Option C addresses MAC/IP, Option D is DHCP security, not trunk negotiation. Disabling DTP ensures user ports remain in access mode, preventing VLAN trunk attacks.",
+      "examTip": "Best practice: turn off DTP on ports connected to end devices, forcing them as access mode to avoid trunk exploits."
     },
     {
       "id": 91,
-      "question": "You are troubleshooting a slow network connection. Using a protocol analyzer, you observe a large number of TCP retransmissions, duplicate ACKs, and 'TCP ZeroWindow' messages. Which of the following is the MOST likely cause?",
+      "question": "Which scenario-based question is BEST solved by using SDN with a central controller managing multiple switches via an API like OpenFlow?",
       "options": [
-        "A DNS outage causing delayed name resolution but not affecting raw IP connectivity.",
-        "A DHCP issue causing repeated IP lease requests from clients.",
-        "Packet loss due to congestion, faulty hardware, or resource issues on the host.",
-        "A misconfigured web browser failing to handle secure connections properly."
+        "How to manually assign IP addresses to each endpoint",
+        "How to automatically apply consistent ACL changes across many switches from one interface",
+        "How to apply half-duplex on trunk ports for error reduction",
+        "How to block DHCP offers from rogue servers"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The symptoms described—TCP retransmissions, duplicate ACKs, and ZeroWindow messages—are typical signs of packet loss or congestion, possibly combined with host resource limitations.",
-      "examTip": "Such TCP indicators are key signs of network-level problems that need to be addressed."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a static IP approach, Option B (correct) central orchestration is a prime SDN use case, Option C is a link mismatch, Option D is DHCP snooping. SDN centralizes configuration, letting an admin push ACL or policy changes to all devices simultaneously.",
+      "examTip": "SDN separates the control plane, letting a controller program network devices via standardized APIs, ideal for large-scale, consistent deployments."
     },
     {
       "id": 92,
-      "question": "Which of the following BEST describes 'defense in depth' as a network security strategy?",
+      "question": "Which factor is CRITICAL for spanning multiple data centers with layer 2 adjacency, often used for VM mobility?",
       "options": [
-        "Relying on one robust firewall at the network perimeter to handle all threats.",
-        "Layering multiple security controls—physical, technical, and administrative—so that if one fails, others still protect the environment.",
-        "Mandating extremely strong passwords as the sole method of defense.",
-        "Encrypting all network traffic, which alone prevents all security breaches."
+        "Syslog server that aggregates logs",
+        "VXLAN or similar overlay to encapsulate layer 2 over layer 3",
+        "DHCP reservations for each VM",
+        "Setting half-duplex on DCI links"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Defense in depth is a strategy that employs multiple layers of security controls so that if one layer is breached, additional layers still provide protection.",
-      "examTip": "Never rely on a single security measure; layering defenses is essential for a robust security posture."
+      "explanation": "Option A is logging, Option B (correct) overlay solutions (e.g., VXLAN) extend L2 across IP fabrics, Option C is IP assignment, Option D is link mismatch. VXLAN or L2-over-L3 tunnels are standard for cross-site VM mobility or L2 adjacency.",
+      "examTip": "DCI (Data Center Interconnect) often uses VXLAN or other encapsulations to preserve VLAN segments across physically separate DCs."
     },
     {
       "id": 93,
-      "question": "A network administrator is configuring a new switch. They want to group devices into logically separate broadcast domains, regardless of their physical location on the switch. Which technology should they use?",
+      "question": "A next-generation firewall can identify suspicious inbound SSL traffic. To deeply inspect it, which feature is often used?",
       "options": [
-        "Enabling Spanning Tree Protocol (STP) to manage redundant links.",
-        "Creating Virtual LANs (VLANs) to segment the switch into distinct broadcast domains.",
-        "Implementing link aggregation to combine ports for more bandwidth.",
-        "Enabling port security to limit unauthorized device connections."
+        "SSL decryption (man-in-the-middle)",
+        "Port security limit of 1 MAC",
+        "Half-duplex VLAN trunking",
+        "DNSSEC record verification"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "VLANs allow a single switch to be divided into multiple broadcast domains, isolating traffic even if devices are physically connected to the same hardware.",
-      "examTip": "VLANs are fundamental for creating logical network segmentation and improving security and performance."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) the firewall intercepts SSL, decrypts, inspects, re-encrypts. Option B is layer 2 security, Option C is link mismatch, Option D is domain name security. SSL decryption is sometimes called SSL interception or TLS proxy.",
+      "examTip": "To inspect encrypted flows, a firewall must temporarily terminate and re-encrypt SSL traffic, known as a TLS/SSL proxy or interception."
     },
     {
       "id": 94,
-      "question": "You are troubleshooting a website access problem. Users report they cannot access `www.example.com`. You can successfully ping the IP address associated with `example.com`, but you cannot ping `www.example.com`. What is the MOST likely cause?",
+      "question": "Which scenario-based question is BEST solved by implementing IPsec in tunnel mode between two branch routers?",
       "options": [
-        "A defective network cable on the user’s computer preventing all traffic.",
-        "The primary web server for the www subdomain has failed while the main domain remains online.",
-        "A DNS configuration issue affecting the `www` subdomain specifically.",
-        "A firewall blocking all traffic to the entire example.com domain."
+        "How to passively monitor traffic for analysis",
+        "How to ensure site-to-site encrypted communication over an untrusted WAN",
+        "How to detect rogue DHCP servers on each LAN",
+        "How to unify VLAN trunking across multiple ISPs"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Since the IP address for example.com is reachable, the most likely issue is that the DNS record for the www subdomain is missing, misconfigured, or not propagating correctly.",
-      "examTip": "Differentiate between DNS issues affecting a subdomain and broader connectivity problems."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is a passive sniff, Option B (correct) site-to-site IPsec tunnel secures traffic, Option C is DHCP security, Option D is VLAN extension. IPsec tunnel mode is standard for site-to-site encryption over public networks.",
+      "examTip": "IPsec tunnel mode encapsulates entire IP packets, typically used for secure site-to-site VPNs between branch routers."
     },
     {
       "id": 95,
-      "question": "What is 'ARP spoofing' (also known as 'ARP poisoning'), and what is a potential consequence of a successful attack?",
+      "question": "Which direct advantage does 802.1X multi-domain authentication offer for an IP phone with an attached PC?",
       "options": [
-        "A legitimate DHCP process that assigns IP addresses to clients.",
-        "A normal part of ARP used to resolve IP addresses to MAC addresses.",
-        "Injecting false ARP replies to map the attacker’s MAC address to a legitimate IP (often the gateway), enabling traffic interception.",
-        "Encrypting ARP traffic to prevent unauthorized address resolution."
+        "It encrypts voice packets at the application layer",
+        "It allows the phone and PC to authenticate separately on the same switch port",
+        "It sets trunk mode to dynamic auto",
+        "It forces half-duplex for voice data"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "ARP spoofing involves sending falsified ARP messages to associate the attacker’s MAC address with the IP address of a legitimate device, which can allow the attacker to intercept or manipulate traffic.",
-      "examTip": "ARP spoofing is a serious security threat; proper network safeguards such as Dynamic ARP Inspection can help mitigate it."
+      "correctAnswerIndex": 1,
+      "explanation": "Option A is not accurate, Option B (correct) phone uses one domain, PC another, Option C is trunk negotiation, Option D is not required. Multi-domain authentication ensures both phone and PC are validated, each in distinct VLAN or policy scope.",
+      "examTip": "Multi-domain 802.1X can handle a phone (voice VLAN) and PC (data VLAN) on one port, each with separate credentials."
     },
     {
       "id": 96,
-      "question": "Which of the following is a key difference between 'symmetric' and 'asymmetric' encryption algorithms?",
+      "question": "A user device is failing 802.1X posture checks. Which typical NAC action occurs if posture is not met?",
       "options": [
-        "Symmetric encryption relies on two distinct keys while asymmetric uses a single shared key.",
-        "Symmetric encryption is slower due to complex computations, whereas asymmetric is designed for speed.",
-        "Symmetric encryption uses one secret key for both encryption and decryption, whereas asymmetric uses a public/private key pair, solving key exchange issues at the cost of speed.",
-        "Symmetric encryption is obsolete and no longer used in modern networks."
+        "The device is physically disconnected from power",
+        "A triple-tag VLAN hopping occurs",
+        "Traffic from that device is placed in a quarantine VLAN or blocked",
+        "The device obtains a 169.254.x.x APIPA address automatically"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Symmetric encryption uses a single key for both encryption and decryption and is generally fast but requires secure key exchange. Asymmetric encryption uses a key pair (public and private) which addresses key exchange issues but is slower.",
-      "examTip": "In practice, both methods are often combined (e.g., in SSL/TLS) to balance speed and security."
+      "explanation": "Option A is not typical NAC behavior, Option B is a VLAN exploit, Option C (correct) NAC typically quarantines or denies, Option D is a fallback when DHCP fails. NAC solutions often isolate non-compliant devices in a restricted VLAN until remediated.",
+      "examTip": "NAC posture checks can move failing endpoints to a quarantine VLAN with minimal network access."
     },
     {
       "id": 97,
-      "question": "What is a 'DMZ' in a network, and why is it used?",
+      "question": "Which direct measure can help mitigate ARP spoofing attempts on a switch port?",
       "options": [
-        "A section of the LAN where no hosts are allowed to reside.",
-        "An isolated area for test systems that never interact with external traffic.",
-        "A demilitarized zone that separates publicly accessible services from the internal network, limiting potential damage if compromised.",
-        "A type of high-speed cable standard for connecting core routers."
+        "Enable DTP negotiation",
+        "Disable half-duplex mode",
+        "Use static IP addresses for all devices",
+        "Configure Dynamic ARP Inspection on that VLAN"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A DMZ (demilitarized zone) is a separate network segment that hosts public-facing services while isolating them from the internal network, thereby reducing risk in the event of a compromise.",
-      "examTip": "DMZs add an extra layer of protection by keeping public servers separate from the internal network."
+      "correctAnswerIndex": 3,
+      "explanation": "Option A fosters trunk formation, Option B is link setting, Option C is a partial approach but not practical, Option D (correct) DAI checks ARP messages against known IP-MAC pairs. This prevents ARP spoofing on the LAN.",
+      "examTip": "Dynamic ARP Inspection relies on DHCP snooping or static mappings to confirm authenticity of ARP traffic."
     },
     {
       "id": 98,
-      "question": "What does 'BGP' stand for, and what is its primary role in internet routing?",
+      "question": "Which method ensures that OSPF routers in an area only learn a default route for external networks, instead of individual external LSAs?",
       "options": [
-        "Basic Gateway Protocol, used for simple IP assignment within private networks.",
-        "Border Gateway Protocol, the exterior gateway protocol that exchanges routing information between autonomous systems on the internet.",
-        "Broadband Gateway Protocol, which configures consumer broadband connections.",
-        "Backup Gateway Protocol, used exclusively for establishing failover routes."
+        "Area 0 backbone configuration",
+        "Stub or totally stubby area design",
+        "LSA type 1 advertisement",
+        "EIGRP summarization"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "BGP (Border Gateway Protocol) is essential for exchanging routing information between different autonomous systems (such as ISPs) and is the protocol that underpins global internet routing.",
-      "examTip": "BGP connects the internet by allowing different networks to share routing information."
+      "explanation": "Option A is mandatory backbone, Option B (correct) stubs block Type 5 external LSAs, injecting a default route, Option C is router LSA, Option D is an EIGRP concept. Stub or totally stubby areas significantly reduce external route flooding within that area.",
+      "examTip": "OSPF stubby areas contain fewer LSAs, often only a default route to external networks, lowering resource usage."
     },
     {
       "id": 99,
-      "question": "You are troubleshooting a network where some devices can communicate with each other, and some cannot. You suspect a problem with VLAN configuration. Which command on a Cisco switch would allow you to quickly verify which VLAN each switch port is assigned to?",
+      "question": "Which direct approach can reduce the effect of half-open TCP connections from a SYN flood?",
       "options": [
-        "show ip interface brief – displays IP addresses and statuses but not VLAN info.",
-        "show spanning-tree – shows STP details without explicit VLAN assignments.",
-        "show vlan brief – provides a concise summary of VLANs and the ports assigned to each.",
-        "show mac address-table – lists MAC addresses without clear VLAN-port mapping."
+        "ARP spoofing detection",
+        "DHCP Option 82 insertion",
+        "Enabling SYN cookies on the server or firewall",
+        "Setting half-duplex on the server NIC"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The command 'show vlan brief' gives a clear summary of all VLANs configured on the switch and the ports associated with each VLAN, making it the best choice for verifying VLAN assignments.",
-      "examTip": "Use 'show vlan brief' to quickly confirm VLAN configurations on Cisco switches."
+      "explanation": "Option A is ARP-level, Option B is DHCP relay info, Option C (correct) SYN cookies help drop incomplete sessions under load, Option D is a link setting. SYN cookies are a TCP stack feature that mitigate floods by not storing state until the final ACK arrives.",
+      "examTip": "SYN cookies allow a server to handle large numbers of SYN requests without storing session states, preventing backlog exhaustion."
     },
     {
       "id": 100,
-      "question": "A network administrator wants to implement a solution that provides centralized authentication, authorization, and accounting (AAA) for users accessing network resources via VPN, dial-up, and wireless connections. Which protocol is BEST suited for this purpose?",
+      "question": "A router connected to a WAN occasionally sees partial adjacency issues with OSPF neighbors when CPU spikes. Which direct measure might fix this?",
       "options": [
-        "SNMP (Simple Network Management Protocol), primarily used for network monitoring.",
-        "RADIUS (Remote Authentication Dial-In User Service), designed specifically for centralized AAA.",
-        "SMTP (Simple Mail Transfer Protocol), which handles email communication.",
-        "HTTP (Hypertext Transfer Protocol), used for web traffic."
+        "Increasing the OSPF hello/dead timers so the router has more time to respond",
+        "Using half-duplex on the WAN link to reduce collisions",
+        "Disabling DHCP snooping globally",
+        "Setting a default gateway of 0.0.0.0"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "RADIUS is the industry-standard protocol for centralized AAA. It authenticates users, authorizes access to network resources, and accounts for network usage, making it ideal for VPNs, dial-up, and wireless connections.",
-      "examTip": "RADIUS is widely used to provide centralized AAA services across diverse network access methods."
+      "correctAnswerIndex": 0,
+      "explanation": "Option A (correct) relaxing timers can prevent adjacency drops if the router is momentarily busy, Option B might degrade performance, Option C is for DHCP security, Option D is unrelated. Adjusting OSPF timers sometimes helps routers with high CPU remain stable with neighbors.",
+      "examTip": "If a router is intermittently dropping OSPF neighbors under load, increasing hello/dead timers can reduce false adjacency resets."
     }
   ]
 });
