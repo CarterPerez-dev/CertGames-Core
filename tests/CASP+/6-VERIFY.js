@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "CASP+",
   "testId": 6,
   "testName": "SecurityX Practice Test #6 (Formidable)",
@@ -1311,7 +1311,3 @@
     }
   ]
 });
-
-
-
-
