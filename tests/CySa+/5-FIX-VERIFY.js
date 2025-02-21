@@ -1,4 +1,4 @@
-{
+
   "category": "cysa",
   "testId": 5,
   "testName": "CySa Practice Test #5 (Intermediate)",
@@ -653,43 +653,7 @@
       "correctAnswerIndex": 1,
       "explanation": "Strong passwords are important, but don't *directly* prevent phishing (which relies on deception, not password cracking). Encryption protects email *content*, but not the initial trickery. Penetration testing can *identify* phishing vulnerabilities, but not *prevent* them. The most effective approach is a *combination*: *technical controls* (spam filters, email authentication protocols) to reduce the number of phishing emails that reach users, *and* *user awareness training* to educate users on how to recognize and avoid phishing attempts.",
       "examTip": "A combination of technical controls and user education is crucial for combating phishing."
-    }
-  ]
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-{
-  "category": "cysa",
-  "testId": 5,
-  "testName": "CySa Practice Test #5 (Intermediate)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "What is a 'rootkit'?",
@@ -1341,4 +1305,4 @@
       "examTip": "Behavioral analysis and anomaly detection are key to combating unknown threats."
     }
   ]
-}
+});
