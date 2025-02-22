@@ -1,7 +1,9 @@
-db.tests.updateOne(
-  { "testId": 2 },
-  { $set: { "questions": [
-    {
+db.tests.insertOne({
+  "category": "aplus2",
+  "testId": 1,
+  "testName": "A+ Core 2 Practice Test #2 (Very Easy)",
+  "xpPerCorrect": 10,
+  "questions": [
       "id": 1,
       "question": "Which Windows tool can be used to manage startup applications and boot processes for troubleshooting purposes?",
       "options": [
