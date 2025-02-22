@@ -1,1308 +1,1308 @@
 db.tests.insertOne({
   "category": "aplus2",
   "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
+  "testName": "Practice Test #7 (Very Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "A user reports intermittent network connectivity problems. They can sometimes access websites, but the connection frequently drops. `ping` tests to the default gateway are consistently successful, but `ping` tests to external websites are intermittent.  `nslookup` resolves domain names correctly *most* of the time, but occasionally fails. What is the MOST likely cause?",
+      "question": "A technician is troubleshooting a Windows 10 system that fails to boot after enabling BitLocker. The user did not back up the recovery key. What is the BEST option to regain access to the system without data loss?",
       "options": [
-        "A faulty network cable.",
-        "An intermittent problem with the user's configured DNS server, or packet loss/latency issues between the user's computer and the DNS server.",
-        "The user's web browser is corrupted.",
-        "The user's computer has a virus."
+        "Attempt recovery using the BitLocker recovery key from Azure AD if the device is domain-joined.",
+        "Perform a clean installation of Windows 10 and restore data from backup.",
+        "Disable BitLocker from Windows Recovery Environment (WinRE).",
+        "Reset the TPM chip in BIOS/UEFI settings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Intermittent `nslookup` failures, combined with intermittent website access while local connectivity (ping to gateway) is stable, strongly suggests a problem with the *reliability* of the DNS resolution process. This could be due to an issue with the configured DNS server itself (intermittent outages, high load) or network problems (packet loss, high latency) *between* the user's computer and the DNS server. A faulty cable would likely cause more consistent problems. A browser issue or virus is less likely to cause intermittent *DNS resolution* failures.",
-      "examTip": "When troubleshooting intermittent network issues, carefully analyze the consistency of DNS resolution; intermittent `nslookup` failures point to DNS server or network path problems."
+      "correctAnswerIndex": 0,
+      "explanation": "If the system is domain-joined, the BitLocker recovery key may be stored in Azure AD, providing the easiest method to regain access without data loss. A clean installation would result in data loss unless backups exist. Disabling BitLocker from WinRE requires the recovery key, which isn’t available. Resetting the TPM chip would make recovery impossible as it clears encryption keys.",
+      "examTip": "Always ensure BitLocker recovery keys are backed up to a secure location before enabling encryption."
     },
     {
       "id": 2,
-      "question": "You are investigating a suspected malware infection on a Windows workstation. You need to examine the system's registry for unusual or unauthorized autostart entries. Which command-line tool provides the MOST comprehensive and flexible way to search the registry for specific values or keys?",
+      "question": "A Linux administrator needs to diagnose why a user cannot SSH into a server. Network connectivity is confirmed. Which command will BEST provide real-time logs for SSH connection attempts?",
       "options": [
-        "regedit.exe",
-        "reg query",
-        "msconfig.exe",
-        "tasklist"
+        "tail -f /var/log/auth.log",
+        "systemctl status ssh",
+        "netstat -tuln",
+        "journalctl -u ssh"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`reg query` is a powerful command-line tool for searching and retrieving registry data. It allows you to specify search keys, value names, data types, and recursion options. `regedit.exe` is a graphical editor, better for browsing and manual editing, but less efficient for *searching*. `msconfig.exe` manages startup *programs*, but doesn't provide general registry searching. `tasklist` shows running processes.",
-      "examTip": "Learn to use `reg query` for efficient and flexible searching of the Windows registry from the command line."
+      "correctAnswerIndex": 0,
+      "explanation": "The tail -f /var/log/auth.log command shows real-time authentication logs, including SSH connection attempts. systemctl status ssh only shows service status, not detailed logs. netstat -tuln lists open ports but doesn’t provide authentication logs. journalctl -u ssh provides historical logs but not real-time updates.",
+      "examTip": "Monitor /var/log/auth.log for real-time authentication attempts when troubleshooting SSH access issues in Linux."
     },
     {
       "id": 3,
-      "question": "A user reports that their Windows computer is extremely slow to boot. You've already disabled unnecessary startup programs and checked for malware. Using the Windows Performance Recorder (WPR), you identify a specific driver that is taking an unusually long time to load during the boot process. What is the BEST approach to address this?",
+      "question": "A user reports that after a recent Windows update, they receive 'Boot Configuration Data (BCD) missing' errors. What is the FIRST command a technician should run to attempt a repair?",
       "options": [
-        "Reinstall the operating system.",
-        "Roll back the driver to a previous version (if available), and if that doesn't work, try updating to the *latest* driver from the *manufacturer's* website (not just relying on Windows Update). If the problem persists, consider contacting the device manufacturer for support.",
-        "Disable the device in Device Manager.",
-        "Run `chkdsk`."
+        "bootrec /rebuildbcd",
+        "chkdsk /r",
+        "sfc /scannow",
+        "bcdedit /set {current} recoveryenabled Yes"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A methodical approach to driver problems involves trying a rollback (if a previous version worked), then trying the *manufacturer's* latest driver (which might have fixes not yet in Windows Update), and finally, if the issue persists, contacting the manufacturer. Reinstalling the OS is too drastic. Disabling the device might resolve the boot issue but disables the device's functionality. `chkdsk` checks for disk errors, not driver loading times.",
-      "examTip": "When troubleshooting driver-related performance problems, consider rollback, updating (from the manufacturer), and contacting the manufacturer for support."
+      "correctAnswerIndex": 0,
+      "explanation": "The bootrec /rebuildbcd command rebuilds the Boot Configuration Data, resolving missing BCD errors. chkdsk /r repairs disk errors but doesn’t address BCD issues. sfc /scannow repairs system files but not boot configurations. bcdedit modifies BCD settings but won’t recreate missing entries.",
+      "examTip": "Use bootrec /rebuildbcd when encountering BCD-related boot errors after Windows updates."
     },
     {
       "id": 4,
-      "question": "You are troubleshooting a network connectivity issue where users cannot access a specific internal web server. You can ping the server's IP address from the affected computers, but you cannot access the web server in a browser. `nslookup` resolves the server's hostname correctly. What is the NEXT step to investigate?",
+      "question": "A company’s users are experiencing slow authentication when connecting to internal services. The network team suspects DNS resolution issues. Which tool can BEST verify if DNS latency is causing the problem?",
       "options": [
-        "Check the DNS server configuration.",
-        "Check if the web server's service (e.g., IIS, Apache) is running and listening on the correct port (typically 80 or 443). Use `netstat -ano` on the *server* to verify.",
-        "Reinstall the network adapter driver on the affected computers.",
-        "Restart the affected computers."
+        "nslookup with internal hostnames",
+        "ping the internal DNS server",
+        "tracert to the authentication server",
+        "ipconfig /all on user machines"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If you can ping the server by IP *and* DNS resolves correctly, the problem is likely with the *web server service itself* (e.g., IIS, Apache) or a firewall blocking access to the specific port (80 for HTTP, 443 for HTTPS). Checking if the service is running and listening on the correct port *on the server* is the next logical step. DNS is already ruled out. Driver reinstallation or restarting clients are less likely to be helpful at this point.",
-      "examTip": "When troubleshooting web server access issues, verify that the web server service is running and listening on the correct port *on the server itself*."
+      "correctAnswerIndex": 0,
+      "explanation": "Using nslookup with internal hostnames tests DNS resolution directly and can reveal latency issues. ping checks connectivity but not DNS performance. tracert shows network path latency but doesn’t focus on DNS. ipconfig /all provides configuration details without testing DNS performance.",
+      "examTip": "For suspected DNS issues, nslookup provides direct insight into resolution speed and accuracy."
     },
     {
       "id": 5,
-      "question": "You are configuring a Linux server and need to set up a cron job to run a script called `backup.sh` every day at 3:00 AM. Which of the following `crontab` entries would accomplish this?",
+      "question": "A user suspects their Windows 10 machine has been compromised due to slow performance and unauthorized software installations. What should the technician do FIRST to mitigate potential damage?",
       "options": [
-        "`0 3 * * * /path/to/backup.sh`",
-        "`3 0 * * * /path/to/backup.sh`",
-        "`* * * * * /path/to/backup.sh`",
-        "`0 3 * * 0 /path/to/backup.sh`"
+        "Disconnect the device from the network.",
+        "Run a full malware scan using updated definitions.",
+        "Boot the system into Safe Mode for further analysis.",
+        "Review installed applications for suspicious software."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The correct `crontab` entry format is: `minute hour day_of_month month day_of_week command`. `0 3 * * *` means: minute 0, hour 3 (3:00 AM), every day of the month, every month, every day of the week. Option B has the hour and minute reversed. Option C runs every minute. Option D runs only on Sundays.",
-      "examTip": "Understand the `crontab` entry format: minute, hour, day of month, month, day of week, command."
+      "explanation": "Disconnecting the device from the network immediately prevents malware from communicating externally or spreading. Running a malware scan is essential but should follow isolation. Booting into Safe Mode helps analysis but doesn’t prevent external communication. Reviewing installed applications is important but secondary to isolation.",
+      "examTip": "Isolate suspected compromised systems from the network first to contain potential threats."
     },
     {
       "id": 6,
-      "question": "A user reports that they are receiving bounce-back messages (delivery status notifications) for emails they did not send, and their sent items folder shows emails they don't recognize.  What is the MOST likely cause, and what IMMEDIATE actions should you take?",
+      "question": "A Windows 10 user cannot access secure websites but can access standard HTTP sites. The system time and date are correct. What is the MOST likely cause of this issue?",
       "options": [
-        "The user's email client is misconfigured; reconfigure it.",
-        "The user's email account has been compromised; immediately change the password, enable multi-factor authentication (if available), and scan the user's computer for malware.",
-        "The recipient's email server is rejecting the user's emails; contact the recipient's IT support.",
-        "The user's internet connection is unstable; troubleshoot the connection."
+        "Corrupted or outdated root certificates.",
+        "Misconfigured proxy settings.",
+        "Outdated web browser version.",
+        "Faulty network interface driver."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Bounce-backs for unsent emails, and unfamiliar emails in the sent items folder, are strong indicators of account compromise. Immediate action should be taken: change the password, enable MFA (if possible) to prevent further unauthorized access, and scan for malware that might have stolen the credentials. A misconfigured client wouldn't cause *fake* bounce-backs. A recipient server issue wouldn't explain the unfamiliar sent items. An unstable connection wouldn't cause fake bounce-backs.",
-      "examTip": "Treat receiving bounce-backs for unsent emails as a critical security incident; assume account compromise and take immediate action to secure the account."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted or outdated root certificates prevent secure connections by causing SSL/TLS errors. Misconfigured proxies usually block all web traffic, not just HTTPS. Outdated browsers could cause compatibility issues but wouldn’t specifically block HTTPS. Network driver issues would affect all network access, not selectively HTTPS traffic.",
+      "examTip": "SSL issues on specific devices often stem from outdated or missing root certificates—ensure timely updates."
     },
     {
       "id": 7,
-      "question": "A user reports that their Windows computer is exhibiting slow performance. Task Manager shows high CPU utilization, and Resource Monitor indicates that the `svchost.exe` process is consuming a significant amount of CPU. You need to determine which specific *service* hosted within `svchost.exe` is causing the high CPU usage. What is the BEST way to do this?",
+      "question": "A technician needs to secure a small office wireless network against brute-force attacks while maintaining ease of access for employees. Which security method provides the BEST balance of security and usability?",
       "options": [
-        "End the `svchost.exe` process in Task Manager.",
-        "Use Resource Monitor's CPU tab, expand the 'Services' section, and look for the service(s) associated with the specific `svchost.exe` instance that is consuming high CPU. You can also use the command `tasklist /svc` to see which services are hosted by each `svchost.exe` process.",
-        "Run a full system scan with antivirus software.",
-        "Reinstall the operating system."
+        "WPA3-Personal with a strong passphrase.",
+        "WEP with a complex key.",
+        "WPA2-Enterprise with RADIUS authentication.",
+        "Disabling SSID broadcast."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Resource Monitor provides a more granular view of resource usage than Task Manager, allowing you to see the CPU consumption of *individual services* running within `svchost.exe`. Ending the process directly could crash the system. Antivirus is a good general step, but less targeted. Reinstalling the OS is too drastic.",
-      "examTip": "Use Resource Monitor (resmon.exe) or the command `tasklist /svc` to identify which service within `svchost.exe` is consuming excessive resources."
+      "correctAnswerIndex": 0,
+      "explanation": "WPA3-Personal offers the strongest security for SOHO environments while using a single passphrase, balancing security and ease of use. WEP is outdated and insecure. WPA2-Enterprise with RADIUS provides robust security but adds complexity unsuitable for small offices. Disabling SSID broadcast provides minimal security benefits and can complicate legitimate access.",
+      "examTip": "Use WPA3-Personal for SOHO networks to achieve strong encryption with simple user management."
     },
     {
       "id": 8,
-      "question": "You are configuring a SOHO router and need to forward incoming traffic on port 25 (SMTP) to an internal mail server with the private IP address 192.168.1.50. However, you also need to forward incoming traffic on port 80 (HTTP) to a *different* internal web server with the private IP address 192.168.1.60. How would you configure this on the router?",
+      "question": "A Linux administrator needs to terminate a process consuming excessive CPU resources without rebooting the server. Which command should be used?",
       "options": [
-        "Enable DMZ and set the DMZ host to 192.168.1.50.",
-        "Configure port forwarding: forward external port 25 to internal IP 192.168.1.50, port 25, and forward external port 80 to internal IP 192.168.1.60, port 80.",
-        "Configure port forwarding: forward external port 25 to internal IP 192.168.1.50, port 80, and forward external port 80 to internal IP 192.168.1.60, port 25.",
-        "Enable UPnP (Universal Plug and Play)."
+        "kill -9 <PID>",
+        "top",
+        "ps aux",
+        "nice -n 10 <PID>"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "You need to create two separate port forwarding rules: one for port 25 (SMTP) to the mail server (192.168.1.50:25), and another for port 80 (HTTP) to the web server (192.168.1.60:80). DMZ exposes a single host entirely, which is a security risk. Option C has the port mappings incorrect. UPnP can automate this, but it is often a security risk.",
-      "examTip": "Configure individual port forwarding rules for different services to direct traffic appropriately."
+      "correctAnswerIndex": 0,
+      "explanation": "The kill -9 command forcefully terminates processes by PID. top and ps aux provide process details but do not terminate processes. The nice command adjusts process priority but doesn’t stop it.",
+      "examTip": "Use kill -9 cautiously to force-stop unresponsive processes when graceful termination fails."
     },
     {
       "id": 9,
-      "question": "A user reports that their previously working external hard drive is no longer recognized by their Windows computer. The drive does not appear in File Explorer or Disk Management. You've tried different USB ports and cables, with no success. What is the NEXT step to investigate?",
+      "question": "A technician needs to configure file sharing between a Linux server and Windows clients on the same network. Which service must be installed and configured on the Linux server?",
       "options": [
-        "Reinstall the operating system.",
-        "Check if the drive is detected in the BIOS/UEFI settings of the computer. If not, the drive itself (or its enclosure's controller) has likely failed.",
-        "Run `chkdsk`.",
-        "Format the drive."
+        "Samba",
+        "NFS",
+        "Apache",
+        "MySQL"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If the drive isn't detected in the BIOS/UEFI, it indicates a hardware problem with the drive or its enclosure's controller. The operating system cannot see a drive that the BIOS/UEFI doesn't detect. Reinstalling the OS is not relevant, and running chkdsk or formatting requires the drive to be recognized first.",
-      "examTip": "If an external drive is not detected by the BIOS/UEFI, suspect hardware failure and consider replacing the drive or its enclosure."
+      "correctAnswerIndex": 0,
+      "explanation": "Samba enables file and printer sharing between Linux and Windows systems using the SMB protocol. NFS is more suitable for Unix/Linux file sharing. Apache serves web content. MySQL is a database management system.",
+      "examTip": "Samba bridges Linux and Windows file-sharing needs by implementing SMB/CIFS protocols."
     },
     {
       "id": 10,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. You need to view the current routing table to understand how network traffic is being directed. Which command would you use?",
+      "question": "A user’s Windows 10 computer displays 'Access Denied' when attempting to delete a file they created. The file is on an NTFS partition. What is the MOST likely cause?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "route -n (or `ip route show`)",
-        "netstat -i"
+        "Ownership of the file has changed to another user or system process.",
+        "The user lacks write permissions on the file’s directory.",
+        "The file is encrypted using EFS, and the encryption key is missing.",
+        "The disk is mounted as read-only due to file system errors."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`route -n` (or `ip route show`) displays the routing table, showing which networks are reachable via which interfaces and gateways. `ifconfig` and `ip addr show` display interface configuration, while `netstat -i` shows interface statistics.",
-      "examTip": "Use `route -n` or `ip route show` on Linux to view the routing table and diagnose network path issues."
+      "correctAnswerIndex": 0,
+      "explanation": "If file ownership changes, even the creator may lose access rights. Write permission issues typically prevent file creation, not deletion of existing files. EFS encryption issues result in access errors, not just deletion issues. Read-only disk mounts would block all write operations, not selectively deny access.",
+      "examTip": "Check file ownership and permissions when users encounter unexpected 'Access Denied' errors."
     },
     {
       "id": 11,
-      "question": "You have a Windows system with multiple hard drives. You want to combine two of these drives into a single, larger volume without losing any data. Which Windows feature would allow you to do this, assuming the drives are *dynamic* disks?",
+      "question": "A Windows 10 laptop connected to a corporate domain is unable to apply group policies. Which command should be used to force a group policy update and view the results?",
       "options": [
-        "Disk Defragmenter",
-        "Disk Cleanup",
-        "Spanned Volume (in Disk Management)",
-        "RAID 0"
+        "gpupdate /force && gpresult /r",
+        "net user domain",
+        "sfc /scannow",
+        "chkdsk /f"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A spanned volume (created in Disk Management on dynamic disks) allows you to combine space from multiple drives into one logical volume without data loss, though it provides no redundancy.",
-      "examTip": "Use spanned volumes for combining disk space on dynamic disks when data redundancy is not required."
+      "correctAnswerIndex": 0,
+      "explanation": "The gpupdate /force command refreshes group policies, and gpresult /r shows applied policies. net user domain manages user accounts. sfc /scannow checks for system file integrity issues. chkdsk /f fixes file system errors but doesn’t affect group policies.",
+      "examTip": "Combine gpupdate and gpresult for efficient troubleshooting of group policy issues in domain environments."
     },
     {
       "id": 12,
-      "question": "A user's computer is experiencing frequent BSOD (Blue Screen of Death) errors. You've checked for overheating and run Windows Memory Diagnostic (which found no errors). You suspect a driver problem. What is the NEXT BEST step to investigate and potentially isolate the faulty driver?",
+      "question": "A technician suspects DNS issues after users report slow website loading. Which command will provide detailed DNS resolution steps for a given domain?",
       "options": [
-        "Reinstall the operating system.",
-        "Use Driver Verifier (verifier.exe) to stress-test drivers and identify potential issues.",
-        "Run System Restore.",
-        "Run `chkdsk`."
+        "nslookup",
+        "tracert",
+        "ipconfig /flushdns",
+        "netstat -an"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Driver Verifier (verifier.exe) stresses drivers to expose problems that might not be evident during normal operation. This tool is particularly useful in diagnosing driver-related BSODs.",
-      "examTip": "Use Driver Verifier to pinpoint problematic drivers, but remember to disable it if the system becomes unstable."
+      "correctAnswerIndex": 0,
+      "explanation": "nslookup queries DNS servers to show resolution details. tracert identifies network routing paths. ipconfig /flushdns clears local DNS cache but doesn’t analyze resolution. netstat -an shows active connections without DNS resolution details.",
+      "examTip": "Use nslookup for detailed DNS resolution insights when troubleshooting slow web access."
     },
     {
       "id": 13,
-      "question": "A user reports they are unable to access a specific network share. You've verified the user has the correct permissions, the file server is online, other users can access the share, DNS resolves correctly, and the user can ping the server by IP and hostname. What is a *less common*, but still possible, cause you should investigate?",
+      "question": "A user’s Windows 10 system boots to a black screen with a blinking cursor. The technician suspects a missing or corrupted bootloader. Which command is BEST to attempt a repair?",
       "options": [
-        "The user's network cable is faulty.",
-        "SMB (Server Message Block) signing mismatch or incompatibility between the client and server.",
-        "The user's account is locked out.",
-        "The file server is out of disk space."
+        "bootrec /fixboot",
+        "bcdedit /export C:\\bcdbackup",
+        "diskpart",
+        "sfc /scannow"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An SMB signing mismatch between the client and server can prevent access to network shares even when all other factors (permissions, connectivity, DNS) are correct.",
-      "examTip": "Investigate SMB signing and compatibility issues if all basic network checks are successful yet share access fails."
+      "correctAnswerIndex": 0,
+      "explanation": "bootrec /fixboot repairs boot sector issues responsible for missing bootloader errors. bcdedit /export backs up boot configurations but doesn’t repair them. diskpart manages partitions. sfc /scannow checks system files but not the bootloader.",
+      "examTip": "When bootloader issues arise, bootrec /fixboot is the primary tool for restoration."
     },
     {
       "id": 14,
-      "question": "You are analyzing network traffic with Wireshark and notice a large number of TCP packets with the RST (reset) flag set. What does this typically indicate?",
+      "question": "A macOS user needs to enable full-disk encryption to protect sensitive data. Which built-in tool should they use?",
       "options": [
-        "Normal TCP connection establishment.",
-        "An abrupt termination of a TCP connection, often due to an error or a refusal to connect.",
-        "Successful file transfer.",
-        "Encrypted communication."
+        "FileVault",
+        "Disk Utility",
+        "Keychain Access",
+        "Time Machine"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "RST packets indicate that a TCP connection is being abruptly terminated. This can occur when a host refuses a connection or when an error occurs during the TCP handshake.",
-      "examTip": "A high number of RST packets may indicate issues with connectivity or misconfigured services; analyze the context to determine the cause."
+      "correctAnswerIndex": 0,
+      "explanation": "FileVault provides full-disk encryption on macOS, protecting data from unauthorized access. Disk Utility manages storage but doesn’t encrypt the entire disk. Keychain Access stores passwords and certificates. Time Machine handles backups, not encryption.",
+      "examTip": "Enable FileVault on macOS for seamless full-disk encryption without third-party tools."
     },
     {
       "id": 15,
-      "question": "A user reports they are unable to access any websites. They have a valid IP address, can ping their default gateway, and can ping external IP addresses (like 8.8.8.8), but `ping <domain_name>` fails for all websites. `nslookup` also fails to resolve any domain names. What is the MOST likely cause?",
+      "question": "A Linux user needs to identify the IP address assigned to their system’s primary network interface. Which command provides this information?",
       "options": [
-        "The user's web browser is corrupted.",
-        "The user's configured DNS servers are unreachable or malfunctioning.",
-        "The user's network cable is faulty.",
-        "The user's computer has a virus."
+        "ip addr show",
+        "ifconfig -a",
+        "hostname -I",
+        "netstat -r"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If the user can ping external IPs but cannot resolve domain names (as indicated by ping and nslookup failures), the issue is most likely with the configured DNS servers.",
-      "examTip": "When domain name resolution fails but IP connectivity works, focus on diagnosing DNS server issues."
+      "correctAnswerIndex": 0,
+      "explanation": "The ip addr show command displays IP address assignments and is preferred in modern distributions. ifconfig -a provides similar information but is deprecated. hostname -I shows only the IP address without interface details. netstat -r displays routing tables, not interface addresses.",
+      "examTip": "Use ip addr show in modern Linux systems for detailed network interface information."
     },
     {
       "id": 16,
-      "question": "Which of the following is an example of 'defense in depth' in cybersecurity?",
+      "question": "A Windows 10 system fails to install updates and shows error 0x80070002. What is the BEST initial troubleshooting step?",
       "options": [
-        "Using a strong password for your email account.",
-        "Implementing multiple layers of security controls (e.g., firewall, antivirus, intrusion detection system, strong passwords, user training) so that if one layer fails, others are still in place to protect the system.",
-        "Regularly backing up your data.",
-        "Keeping your software up-to-date."
+        "Run the Windows Update Troubleshooter.",
+        "Perform a clean boot of the system.",
+        "Delete the SoftwareDistribution folder.",
+        "Check Windows Event Viewer for update errors."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Defense in depth is a security strategy that employs multiple overlapping layers of security so that if one fails, additional layers continue to protect the system.",
-      "examTip": "Adopt a defense-in-depth strategy by combining various security measures to protect your network and systems."
+      "correctAnswerIndex": 0,
+      "explanation": "The Windows Update Troubleshooter automatically detects and resolves common update errors, including 0x80070002. A clean boot isolates software conflicts but is more advanced. Deleting the SoftwareDistribution folder forces update re-download but should follow less invasive steps. Event Viewer analysis is useful but secondary to automated tools.",
+      "examTip": "Start with built-in troubleshooters for Windows Update errors before attempting manual fixes."
     },
     {
       "id": 17,
-      "question": "You are using the `netstat` command in Windows.  You want to see all active TCP connections, the owning process ID for each connection, *and* the numerical form of addresses and ports (without resolving hostnames).  Which command would you use?",
+      "question": "A user complains that their Android smartphone cannot connect to the corporate Wi-Fi after a recent security upgrade requiring WPA3. Other devices connect fine. What is the MOST likely cause?",
       "options": [
-        "netstat -a",
-        "netstat -b",
-        "netstat -ano",
-        "netstat -o"
+        "The Android device does not support WPA3 encryption.",
+        "The corporate Wi-Fi password is incorrect.",
+        "The access point is out of range for the device.",
+        "MAC filtering is enabled for the network."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`netstat -ano` displays all active connections (`-a`), in numerical form (`-n`), along with the owning process ID (`-o`).",
-      "examTip": "Remember: `-a` shows all connections, `-n` prevents hostname resolution, and `-o` shows process IDs."
+      "correctAnswerIndex": 0,
+      "explanation": "Many older Android devices lack WPA3 support, causing connection failures. An incorrect password would prompt authentication errors. An out-of-range access point would prevent all devices from connecting, not just one. MAC filtering would block the device regardless of encryption protocol.",
+      "examTip": "Always verify device compatibility with the latest Wi-Fi encryption protocols when connectivity issues arise."
     },
     {
       "id": 18,
-      "question": "You are configuring a new Linux server. You want to ensure that the system clock is automatically synchronized with a reliable time source. You decide to use the NTP (Network Time Protocol) service. Which configuration file would you typically edit to specify the NTP servers to use?",
+      "question": "A user reports that their Windows system cannot access internal web applications using hostnames, but IP access works. Which command will MOST LIKELY resolve the issue?",
       "options": [
-        "/etc/hosts",
-        "/etc/ntp.conf (or /etc/chrony.conf on some newer systems)",
-        "/etc/resolv.conf",
-        "/etc/network/interfaces"
+        "ipconfig /flushdns",
+        "netsh winsock reset",
+        "nslookup <hostname>",
+        "tracert <hostname>"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The NTP configuration file (commonly `/etc/ntp.conf` or `/etc/chrony.conf`) specifies the NTP servers for time synchronization.",
-      "examTip": "Edit `/etc/ntp.conf` (or `/etc/chrony.conf`) to configure NTP on Linux servers."
+      "correctAnswerIndex": 0,
+      "explanation": "ipconfig /flushdns clears the local DNS resolver cache, often resolving hostname access issues. netsh winsock reset resets the Winsock catalog but is unrelated to DNS caching. nslookup tests DNS resolution but doesn’t fix issues. tracert maps network routes but doesn’t affect DNS resolution.",
+      "examTip": "Flush the DNS cache first when hostname resolution fails but IP connectivity remains functional."
     },
     {
       "id": 19,
-      "question": "What is the purpose of a 'security baseline' in system configuration?",
+      "question": "A technician needs to prevent a Windows 10 user from installing unauthorized software without affecting system updates. Which tool provides the MOST effective solution?",
       "options": [
-        "To provide a minimum level of security that all systems must meet, ensuring a consistent and secure configuration across the organization.",
-        "To track changes made to a system's configuration.",
-        "To encrypt sensitive data on a system.",
-        "To monitor system performance."
+        "AppLocker via Local Security Policy",
+        "Windows Defender Firewall",
+        "Group Policy Preferences",
+        "Task Scheduler"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A security baseline defines a standard, secure configuration for systems to ensure consistency and reduce vulnerabilities.",
-      "examTip": "Establish and maintain security baselines to ensure systems adhere to minimum security standards."
+      "explanation": "AppLocker provides application control, preventing unauthorized installations while allowing system updates. Windows Defender Firewall manages network traffic, not application permissions. Group Policy Preferences manage user configurations but aren’t focused on software restrictions. Task Scheduler automates tasks but doesn’t control installations.",
+      "examTip": "Use AppLocker for precise control over permitted applications in Windows enterprise environments."
     },
     {
       "id": 20,
-      "question": "You are troubleshooting a network connectivity issue and suspect a problem with a specific router along the path to a destination. You use the `tracert` command, and the output shows a series of asterisks (*) for one particular hop. What does this indicate?",
+      "question": "A Windows 10 user is experiencing sluggish performance. The Task Manager shows high disk usage by the 'Windows Search' process. What is the BEST way to reduce the impact without disabling search functionality?",
       "options": [
-        "The destination server is down.",
-        "Your computer's network adapter is faulty.",
-        "The router at that hop is not responding to the ICMP echo requests (pings) used by `tracert`, or there's a firewall blocking the responses. It doesn't necessarily mean the router is down, just that it's not providing the information `tracert` needs.",
-        "Your DNS server is slow."
+        "Modify indexing options to exclude non-essential locations.",
+        "Disable Windows Search service entirely.",
+        "Upgrade the hard drive to an SSD.",
+        "Perform a system restore to a previous state."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Asterisks (*) in `tracert` output indicate that the router at that hop did not respond to the ICMP echo requests, possibly due to firewall rules or configuration, but it doesn't mean the router is necessarily down.",
-      "examTip": "Asterisks in tracert output often point to filtering or non-responsive routers; further investigation may be needed if connectivity issues persist."
+      "correctAnswerIndex": 0,
+      "explanation": "Modifying indexing options reduces disk usage by limiting search indexing to essential areas. Disabling the service removes search functionality. Upgrading to an SSD improves performance but is a hardware solution. System restore may not resolve indexing performance issues if indexing settings remain unchanged.",
+      "examTip": "Adjust indexing options for optimal balance between search performance and system resource usage."
     },
     {
       "id": 21,
-      "question": "A user reports that every time they restart their Windows computer, a specific unwanted program automatically starts, even though they have removed it from the Startup folder in Task Manager and from the Startup tab in msconfig. Where else should you check for autostart entries?",
+      "question": "A user reports that after enabling Secure Boot on their Windows 10 PC, the system fails to boot. What is the MOST likely cause of this issue?",
       "options": [
-        "The user's Documents folder.",
-        "The Windows Registry (specifically Run, RunOnce keys in HKLM and HKCU), Scheduled Tasks, and Services.",
-        "The Program Files folder.",
-        "The Control Panel."
+        "The operating system does not have a valid digital signature for Secure Boot.",
+        "The TPM module was disabled in the BIOS settings.",
+        "The system partition was formatted as FAT32 instead of NTFS.",
+        "Fast Boot was enabled along with Secure Boot, causing a conflict."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Autostart entries can be set in the Registry, Scheduled Tasks, and as Windows Services. These are common places where malware or unwanted software may persist.",
-      "examTip": "Investigate all potential autostart locations—including Registry Run keys, Scheduled Tasks, and Services—when unwanted programs persist after standard removal methods."
+      "correctAnswerIndex": 0,
+      "explanation": "Secure Boot requires a valid, signed operating system bootloader. If the OS or bootloader lacks a valid digital signature, the system will not boot. The TPM module handles encryption keys for BitLocker, not Secure Boot validation. Partition formatting affects file system compatibility but doesn’t cause Secure Boot failures. Fast Boot reduces boot times but doesn’t interfere with Secure Boot functionality.",
+      "examTip": "Always verify Secure Boot compatibility and digital signatures before enabling the feature in BIOS."
     },
     {
       "id": 22,
-      "question": "You are using Wireshark to analyze network traffic. You want to filter the displayed packets to show only traffic to or from a specific IP address (e.g., 192.168.1.100). Which Wireshark display filter would you use?",
+      "question": "A technician is troubleshooting a Linux server experiencing slow SSH login times. Network latency is ruled out. Which configuration file is MOST likely misconfigured, causing the delay?",
       "options": [
-        "`ip.addr == 192.168.1.100`",
-        "`tcp.port == 80`",
-        "`http`",
-        "`icmp`"
+        "/etc/hosts",
+        "/etc/resolv.conf",
+        "/etc/fstab",
+        "/etc/ssh/sshd_config"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The display filter `ip.addr == 192.168.1.100` will show packets where the source or destination IP matches 192.168.1.100.",
-      "examTip": "Use display filters in Wireshark like `ip.addr == <IP>` to isolate traffic for specific IP addresses."
+      "explanation": "Slow SSH logins can occur when the server attempts DNS resolution of the client’s IP. If /etc/hosts is misconfigured, the server may wait for DNS timeouts. /etc/resolv.conf manages DNS settings but would affect broader connectivity, not just SSH. /etc/fstab handles file system mounting at boot. /etc/ssh/sshd_config manages SSH settings but wouldn’t cause DNS-related delays unless authentication methods are misconfigured.",
+      "examTip": "Ensure accurate hostname resolution settings in /etc/hosts to prevent SSH login delays."
     },
     {
       "id": 23,
-      "question": "You are configuring a Linux server and want to limit the amount of disk space that a particular user can use. Which feature would you use?",
+      "question": "A user’s Windows 10 machine displays frequent BSOD errors after a recent graphics driver update. What is the BEST next step to resolve the issue without data loss?",
       "options": [
-        "File permissions",
-        "Disk quotas",
-        "SELinux",
-        "AppArmor"
+        "Roll back the driver from Device Manager.",
+        "Boot into Safe Mode and perform a system restore.",
+        "Update Windows to the latest version.",
+        "Run the System File Checker (sfc /scannow)."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Disk quotas allow you to restrict the amount of disk space and number of inodes a user or group can consume.",
-      "examTip": "Implement disk quotas on Linux systems to prevent any single user from consuming excessive disk space."
+      "correctAnswerIndex": 0,
+      "explanation": "Rolling back the driver from Device Manager reverses the recent update while preserving data. Booting into Safe Mode and performing a system restore could work but is more intrusive. Updating Windows may help but doesn’t address the specific driver issue. The System File Checker repairs system files but not driver conflicts.",
+      "examTip": "Use the rollback feature in Device Manager to quickly resolve driver-related BSOD issues."
     },
     {
       "id": 24,
-      "question": "You suspect that a user's computer might be part of a botnet. What is a botnet?",
+      "question": "A SOHO user reports intermittent connectivity on their wireless network. Other nearby networks share the same channel. What is the MOST effective solution to improve network stability?",
       "options": [
-        "A network of compromised computers (bots) controlled by a remote attacker, often used for malicious purposes like sending spam, launching DDoS attacks, or stealing data.",
-        "A type of antivirus software.",
-        "A type of firewall.",
-        "A secure way to connect to the internet."
+        "Change the wireless channel to one with less interference.",
+        "Upgrade the router’s firmware to the latest version.",
+        "Reduce the router’s transmission power.",
+        "Disable the router’s 5 GHz frequency band."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A botnet is a network of compromised computers, often used without the owner's knowledge to perform malicious tasks.",
-      "examTip": "Watch for signs of botnet infection such as unexplained outbound traffic and poor system performance."
+      "explanation": "Changing the wireless channel reduces interference from nearby networks using the same frequency. Firmware upgrades improve features and security but may not resolve channel interference. Reducing transmission power would decrease coverage. Disabling the 5 GHz band would limit performance rather than improve stability.",
+      "examTip": "Analyze and adjust wireless channels to minimize interference for optimal network performance."
     },
     {
       "id": 25,
-      "question": "Which of the following is a good practice for securing a Windows computer against malware?",
+      "question": "A user’s macOS system fails to boot after a recent update, showing a prohibitory symbol. Which built-in tool should the technician use FIRST to attempt a repair?",
       "options": [
-        "Disable User Account Control (UAC).",
-        "Keep your operating system, web browser, and other software up-to-date with the latest security patches, use a reputable antivirus and anti-malware solution, and practice safe browsing habits.",
-        "Use the same password for all your accounts.",
-        "Download and install software from any website."
+        "Disk Utility’s First Aid feature in macOS Recovery.",
+        "Terminal in macOS Recovery to reset PRAM.",
+        "Reinstall macOS using macOS Recovery.",
+        "Restore from Time Machine backup."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A layered approach that includes up-to-date software, antivirus, and safe browsing is best for securing a system against malware.",
-      "examTip": "Security is most effective when combining updates, antivirus protection, and user awareness."
+      "correctAnswerIndex": 0,
+      "explanation": "Disk Utility’s First Aid can detect and repair file system issues that cause boot failures. Resetting PRAM rarely resolves bootloader problems. Reinstalling macOS or restoring from Time Machine are more drastic and should be considered after attempting repairs.",
+      "examTip": "Start with Disk Utility’s First Aid for non-destructive recovery attempts on macOS systems."
     },
     {
       "id": 26,
-      "question": "You are troubleshooting a network connectivity issue. You use the `ping` command to test connectivity to a remote host, and you receive the response 'Destination host unreachable.' What does this indicate?",
+      "question": "A Windows 10 user reports that their PC shows 'Limited connectivity' when connecting to the corporate network. Other devices are working fine. Which command should the technician run FIRST to renew the IP configuration?",
       "options": [
-        "The remote host is up and running, but there is a firewall blocking the connection.",
-        "The remote host is down, or there is no route to the destination network from your computer or from an intermediate router.",
-        "Your DNS server is not working.",
-        "Your network adapter is disabled."
+        "ipconfig /release && ipconfig /renew",
+        "ping 127.0.0.1",
+        "netsh int ip reset",
+        "ipconfig /flushdns"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "'Destination host unreachable' indicates that no route to the destination exists from your system or an intermediate router, often a routing issue.",
-      "examTip": "Interpret 'Destination host unreachable' as a routing or network path problem."
+      "correctAnswerIndex": 0,
+      "explanation": "The ipconfig /release and ipconfig /renew commands reset and request new IP addresses, often resolving limited connectivity issues. ping 127.0.0.1 tests the local network stack but not DHCP functionality. netsh int ip reset resets TCP/IP but is more invasive. ipconfig /flushdns clears DNS cache, unrelated to IP lease issues.",
+      "examTip": "Renew IP configurations first when troubleshooting 'Limited connectivity' network errors."
     },
     {
       "id": 27,
-      "question": "You are using the `nslookup` command to troubleshoot DNS resolution. You want to specifically query a particular DNS server (e.g., Google's public DNS server at 8.8.8.8) for the IP address of a domain name (e.g., google.com). Which command would you use?",
+      "question": "A Linux administrator notices high disk usage due to large log files. Which command will empty the contents of a specific log file without deleting it?",
       "options": [
-        "`nslookup google.com`",
-        "`nslookup google.com 8.8.8.8`",
-        "`nslookup 8.8.8.8 google.com`",
-        "`ping google.com`"
+        "> /var/log/syslog",
+        "rm /var/log/syslog",
+        "truncate -s 0 /var/log/syslog",
+        "echo '' > /var/log/syslog"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The correct syntax is `nslookup <domain_name> <dns_server>`, so `nslookup google.com 8.8.8.8` queries Google's DNS server.",
-      "examTip": "Use `nslookup google.com 8.8.8.8` to query a specific DNS server."
+      "correctAnswerIndex": 0,
+      "explanation": "The > operator truncates the file without deleting it, preserving permissions and ownership. rm deletes the file, which could affect running processes. truncate -s 0 is also valid but less commonly used. echo '' > achieves a similar result but is not the standard approach.",
+      "examTip": "Use the redirection operator (>) to safely clear file contents without altering permissions or ownership."
     },
     {
       "id": 28,
-      "question": "What is 'cross-site scripting' (XSS)?",
+      "question": "A user cannot access an internal web application after a recent proxy server configuration change. What is the MOST likely cause?",
       "options": [
-        "A type of denial-of-service attack.",
-        "A type of web application vulnerability that allows attackers to inject malicious client-side scripts into web pages viewed by other users.",
-        "A type of malware that encrypts files.",
-        "A type of social engineering attack."
+        "Incorrect proxy settings in the user’s browser.",
+        "Expired SSL certificate for the internal application.",
+        "The user’s DNS cache contains outdated entries.",
+        "Firewall rules were modified to block internal traffic."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "XSS is a vulnerability that allows attackers to inject malicious scripts into webpages, affecting users who view the pages.",
-      "examTip": "Developers should sanitize user input to prevent XSS vulnerabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "Incorrect proxy settings often prevent access to internal applications dependent on the proxy. Expired SSL certificates would generate security warnings but not block access. Outdated DNS caches would cause resolution issues but not specifically after proxy changes. Firewall modifications would typically affect multiple users, not just one.",
+      "examTip": "Verify browser proxy settings when access to internal web applications is disrupted after proxy changes."
     },
     {
       "id": 29,
-      "question": "You are configuring a firewall and want to implement the principle of least privilege. Which approach is BEST?",
+      "question": "A technician is configuring a Windows 10 workstation to run a critical legacy application that requires Windows 7. What is the BEST way to achieve this without affecting the existing installation?",
       "options": [
-        "Allow all traffic by default.",
-        "Block all traffic by default and then create rules to explicitly allow only the necessary traffic.",
-        "Allow all inbound traffic and block all outbound traffic.",
-        "Allow all outbound traffic and block all inbound traffic."
+        "Set up a virtual machine running Windows 7 using Hyper-V.",
+        "Use compatibility mode for Windows 7 on the application executable.",
+        "Perform a dual-boot installation with Windows 7 and Windows 10.",
+        "Downgrade the workstation to Windows 7."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A 'default deny' strategy—blocking all traffic by default and then allowing only what is necessary—is the essence of the principle of least privilege in network security.",
-      "examTip": "Always use a default deny policy for firewalls and then create specific allow rules."
+      "correctAnswerIndex": 0,
+      "explanation": "A virtual machine using Hyper-V allows Windows 7 to run alongside Windows 10 without affecting the host OS. Compatibility mode may work for some applications but not complex legacy software. Dual-boot setups risk partition changes and are less efficient. Downgrading the system compromises security and support.",
+      "examTip": "Use virtualization for legacy applications to avoid compromising primary system integrity."
     },
     {
       "id": 30,
-      "question": "A user reports that their Windows computer is randomly freezing, and they have to perform a hard reset. You've already checked for overheating, run Windows Memory Diagnostic (which found no errors), and run a full system scan with antivirus software (which found no threats). You suspect a hardware problem. What is the NEXT component you should investigate?",
+      "question": "A user is concerned about unauthorized access to their smartphone. Which security measure provides the STRONGEST protection?",
       "options": [
-        "The keyboard.",
-        "The motherboard (checking for bulging/leaking capacitors, BIOS issues) or a failing hard drive (even if it's an SSD).",
-        "The monitor.",
-        "The network cable."
+        "Biometric authentication combined with a complex PIN.",
+        "Single biometric authentication (fingerprint or face recognition).",
+        "PIN code with a timeout after several failed attempts.",
+        "Pattern lock with a daily password change."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Random freezes after ruling out overheating, RAM, and malware point toward potential motherboard issues (such as failing capacitors) or a failing storage device. The keyboard, monitor, and network cable are less likely culprits.",
-      "examTip": "Inspect the motherboard and storage device when a system freezes unexpectedly."
+      "correctAnswerIndex": 0,
+      "explanation": "Combining biometrics with a complex PIN provides two layers of protection, making unauthorized access significantly harder. Single biometric authentication lacks redundancy. PIN codes alone are vulnerable without additional factors. Pattern locks are easier to guess and provide weaker security.",
+      "examTip": "Combine biometrics with strong PINs or passwords for robust mobile device security."
     },
     {
       "id": 31,
-      "question": "You are troubleshooting a slow website. Using `tracert`, you identify high latency at a specific hop *before* the final destination (the web server). You contact the ISP responsible for that hop, and they report no issues. What is a LIKELY next step to investigate *further*?",
+      "question": "A Windows 10 PC fails to detect a newly installed SSD. The BIOS shows no record of the drive. What is the MOST likely cause?",
       "options": [
-        "Reinstall your web browser.",
-        "Run a virus scan on your computer.",
-        "Use a tool like `mtr` (My Traceroute) or `pathping` (Windows) which combines the functionality of `ping` and `tracert`, providing more detailed statistics about packet loss and latency at each hop over an extended period.",
-        "Change your DNS server."
+        "The SATA port is disabled in BIOS settings.",
+        "The SSD requires a driver not included with Windows 10.",
+        "The SSD must be initialized using Disk Management.",
+        "The SSD uses a file system incompatible with Windows 10."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Tools like `mtr` or `pathping` provide more detailed, time-based statistics than a single run of `tracert`, helping to reveal intermittent issues or congestion.",
-      "examTip": "Use `mtr` or `pathping` for in-depth network path analysis when a single `tracert` doesn't reveal the full picture."
+      "correctAnswerIndex": 0,
+      "explanation": "If BIOS doesn’t detect the SSD, the SATA port may be disabled. Drivers and file systems only become relevant once the OS recognizes the hardware. Disk Management initialization requires BIOS-level detection first.",
+      "examTip": "Check BIOS hardware settings when new drives are not detected during system boot."
     },
     {
       "id": 32,
-      "question": "A user reports that they are unable to access a network share. You've verified their permissions, network connectivity, and DNS resolution. The file server is online, and other users can access the share. You suspect an issue with the SMB (Server Message Block) protocol. What Windows command-line tool can you use on the *client* computer to check the status of SMB connections and potentially diagnose the problem?",
+      "question": "A company requires full-disk encryption for all corporate laptops. Which Windows 10 feature should the IT department use to meet this requirement without additional software?",
       "options": [
-        "`ping`",
-        "`ipconfig`",
-        "`netstat -b` on client, look for connections to the file server.",
-        "`tracert`"
+        "BitLocker",
+        "Encrypting File System (EFS)",
+        "Windows Defender Credential Guard",
+        "Secure Boot"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Using `netstat -b` (with administrator privileges) can show which executables (and by extension, services) are handling SMB connections on the client. This helps diagnose SMB-related issues.",
-      "examTip": "Use `netstat -b` to check the applications associated with SMB connections."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker provides full-disk encryption, ensuring data is protected at rest. EFS only encrypts individual files. Credential Guard protects credentials, not disk data. Secure Boot prevents unauthorized OS loading but doesn’t encrypt storage.",
+      "examTip": "Enable BitLocker for robust, native full-disk encryption on Windows 10 systems."
     },
     {
       "id": 33,
-      "question": "You are using Wireshark to capture and analyze network traffic. You want to filter the displayed packets to show only traffic using the HTTP protocol. Which Wireshark display filter would you use?",
+      "question": "A user is unable to access a shared network printer after a recent IP change. Other users can print without issues. What should the technician do FIRST?",
       "options": [
-        "`tcp.port == 80`",
-        "`http`",
-        "`ip.addr == 192.168.1.1`",
-        "`tcp`"
+        "Update the printer’s IP address in the user’s printer settings.",
+        "Reinstall the printer driver on the user’s computer.",
+        "Restart the print spooler service on the user’s PC.",
+        "Verify the user’s network connectivity to the printer’s subnet."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The display filter `http` directly filters for HTTP protocol traffic. Although `tcp.port == 80` would capture most HTTP traffic, it might miss HTTP on non-standard ports.",
-      "examTip": "Use protocol names (like http) directly as Wireshark filters for simplicity and accuracy."
+      "correctAnswerIndex": 0,
+      "explanation": "If the printer’s IP has changed, updating the connection settings resolves the issue. Reinstalling drivers or restarting services won’t help if the IP address isn’t corrected. Network connectivity issues would prevent all network access, not just printing.",
+      "examTip": "Always verify and update printer network settings after IP address changes."
     },
     {
       "id": 34,
-      "question": "A user reports that their computer is exhibiting unusual behavior, including unexpected pop-ups, slow performance, and changes to their browser's homepage. You suspect a malware infection, but standard antivirus scans are not detecting anything. You decide to use a bootable antivirus rescue disk. Why is this approach often MORE effective than running scans from within the infected operating system?",
+      "question": "An administrator needs to track system performance metrics on a Windows 10 machine over several days. Which tool is BEST suited for this task?",
       "options": [
-        "Bootable rescue disks are faster.",
-        "Bootable rescue disks can scan the system *before* the potentially infected operating system loads, allowing them to detect and remove rootkits and other advanced malware that might be hiding from scans run *within* Windows.",
-        "Bootable rescue disks have more up-to-date virus definitions.",
-        "Bootable rescue disks can repair the operating system."
+        "Performance Monitor with data collector sets",
+        "Task Manager’s Performance tab",
+        "Resource Monitor for real-time analysis",
+        "System Configuration utility"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A bootable rescue disk operates outside of the infected OS, bypassing malware that may hide from in-OS scanners. This can reveal threats that remain undetected by traditional antivirus software.",
-      "examTip": "For persistent malware, especially rootkits, use a bootable rescue disk to scan the system in a clean environment."
+      "correctAnswerIndex": 0,
+      "explanation": "Performance Monitor allows the creation of data collector sets to track performance metrics over time. Task Manager and Resource Monitor provide real-time data without long-term tracking. System Configuration adjusts startup settings and doesn’t monitor performance.",
+      "examTip": "Use Performance Monitor for historical tracking of performance data on Windows systems."
     },
     {
       "id": 35,
-      "question": "What is 'credential harvesting' in the context of cybersecurity?",
+      "question": "A Linux user needs to schedule a script to run every day at 3 AM. Which command allows this configuration?",
       "options": [
-        "A type of denial-of-service attack.",
-        "The process of gathering usernames, passwords, and other authentication credentials, often through phishing, malware, or data breaches.",
-        "A type of encryption.",
-        "A type of network protocol."
+        "crontab -e",
+        "at 3:00",
+        "systemctl enable script.service",
+        "nohup ./script.sh &"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Credential harvesting involves collecting login credentials—often through phishing or malware—to later use for unauthorized access.",
-      "examTip": "Protect your credentials with strong, unique passwords and multi-factor authentication to mitigate credential harvesting risks."
+      "correctAnswerIndex": 0,
+      "explanation": "crontab -e opens the cron table for scheduling recurring tasks like daily scripts. The at command schedules one-time tasks. systemctl enables services, not scheduled scripts. nohup runs processes independently of the terminal but doesn’t schedule them.",
+      "examTip": "Configure recurring Linux tasks using cron with crontab -e for precise scheduling control."
     },
     {
       "id": 36,
-      "question": "You are configuring a Linux server and want to schedule a script to run automatically every day at 2:30 AM. Which utility would you use?",
+      "question": "A user’s web browser frequently redirects to suspicious websites. Antivirus software detects no threats. What is the MOST likely cause?",
       "options": [
-        "at",
-        "cron",
-        "systemd-run",
-        "nohup"
+        "Browser hijacker malware",
+        "DNS cache poisoning",
+        "Corrupted browser installation",
+        "Proxy settings misconfiguration"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cron is the standard utility for scheduling recurring tasks on Linux. The `at` command is for one-time tasks.",
-      "examTip": "Use cron jobs (configured via `crontab -e`) for recurring scheduled tasks on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "Browser hijackers modify browser settings to redirect traffic. DNS cache poisoning affects multiple applications, not just the browser. Corrupted installations cause crashes rather than redirects. Proxy misconfigurations impact all web traffic, not selectively redirecting.",
+      "examTip": "Reset browser settings and check for malicious extensions when facing suspicious redirects."
     },
     {
       "id": 37,
-      "question": "A user is unable to access a website. You can ping the website's IP address successfully, but `ping <domain_name>` fails. `nslookup <domain_name>` *also* fails. What is the MOST likely cause?",
+      "question": "A technician needs to verify if an email server supports encrypted communication. Which protocol and port combination should they test?",
       "options": [
-        "The user's web browser is corrupted.",
-        "A DNS resolution problem; either the user's configured DNS servers are unreachable/malfunctioning, or the domain name is not registered or has expired.",
-        "The website's server is down.",
-        "The user's network cable is faulty."
+        "SMTP over TLS on port 587",
+        "POP3 on port 110",
+        "IMAP on port 143",
+        "SMTP on port 25"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If the IP address is reachable but both ping and nslookup fail for the domain, it is almost certainly a DNS resolution issue.",
-      "examTip": "Focus on DNS server settings and domain registration status when domain name resolution fails despite IP connectivity."
+      "correctAnswerIndex": 0,
+      "explanation": "SMTP over TLS (port 587) provides encrypted outbound email. POP3 (port 110) and IMAP (port 143) are used for inbound mail without encryption by default. SMTP on port 25 is traditionally unencrypted and often blocked by ISPs.",
+      "examTip": "Ensure email servers use port 587 with TLS for secure outbound mail delivery."
     },
     {
       "id": 38,
-      "question": "You are analyzing a system and suspect that a malicious process is hiding itself from standard process listing tools (like Task Manager). Which tool is BEST suited for detecting hidden processes and rootkits?",
+      "question": "A user reports that their laptop’s screen does not auto-rotate despite enabling rotation lock. Other features work normally. What is the MOST likely cause?",
       "options": [
-        "Task Manager",
-        "Resource Monitor",
-        "A specialized rootkit detection tool (e.g., GMER, TDSSKiller) or a tool like Process Explorer (from Sysinternals) that provides more advanced process analysis capabilities.",
-        "System Information (msinfo32.exe)"
+        "Outdated accelerometer driver",
+        "Damaged screen rotation sensor",
+        "Disabled gyroscope hardware in BIOS",
+        "Incorrect display resolution settings"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Specialized rootkit detection tools or advanced process explorers (like Process Explorer) are designed to reveal processes that may be hidden from standard tools.",
-      "examTip": "For detecting hidden processes, use advanced tools such as Process Explorer or dedicated rootkit scanners."
+      "correctAnswerIndex": 0,
+      "explanation": "An outdated accelerometer driver can prevent auto-rotation functionality. Sensor damage would likely affect other features. Gyroscopes are uncommon in laptops for rotation and typically don’t have BIOS settings. Display resolution settings don’t impact rotation.",
+      "examTip": "Update motion sensor drivers when auto-rotation fails while other hardware functions normally."
     },
     {
       "id": 39,
-      "question": "A user reports that their computer is displaying an error message stating 'SMART Failure Predicted on Hard Disk.' What does this indicate, and what is the BEST course of action?",
+      "question": "A user cannot access HTTPS websites but can access HTTP sites. The date and time are correct. What is the MOST likely cause?",
       "options": [
-        "The computer's RAM is failing.",
-        "The hard drive is reporting potential imminent failure based on its internal SMART diagnostics; immediately back up all data and replace the drive as soon as possible.",
-        "The computer's power supply is failing.",
-        "The operating system needs to be reinstalled."
+        "Corrupted root certificates",
+        "Faulty Ethernet cable",
+        "Browser cache corruption",
+        "Outdated network drivers"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A SMART failure warning signals that the hard drive's self-monitoring has detected conditions that may lead to drive failure. Immediate data backup and drive replacement are essential.",
-      "examTip": "Treat SMART warnings as urgent; back up your data immediately and plan for drive replacement."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted or outdated root certificates prevent HTTPS connections due to failed SSL verification. Network or cable issues would affect all connections. Browser cache problems wouldn’t selectively block HTTPS. Outdated drivers typically affect all network functions, not just secure connections.",
+      "examTip": "Check and update root certificates when HTTPS connections fail but HTTP access remains unaffected."
     },
     {
       "id": 40,
-      "question": "You are troubleshooting a network connectivity issue on a Windows workstation. The computer has a valid IP address, can ping its default gateway, but can't access *any* websites. `nslookup` resolves domain names to IP addresses *correctly*. What is the NEXT step to investigate?",
+      "question": "A technician needs to enable file sharing between a Windows 10 PC and a macOS system. Which file sharing protocol should be used for the BEST compatibility?",
       "options": [
-        "Reinstall the network adapter driver.",
-        "Check the web browser's proxy settings, the Windows Firewall settings, and the 'hosts' file for any incorrect entries.",
-        "Restart the computer.",
-        "Run a virus scan."
+        "SMB (Server Message Block)",
+        "AFP (Apple Filing Protocol)",
+        "NFS (Network File System)",
+        "FTP (File Transfer Protocol)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Since IP connectivity and DNS resolution are working, the issue is likely with the browser's configuration (proxy settings, firewall, hosts file) preventing web access.",
-      "examTip": "When basic connectivity is confirmed but web access fails, check browser-specific settings and the hosts file."
+      "correctAnswerIndex": 0,
+      "explanation": "SMB is natively supported by both Windows and macOS, providing the best compatibility for file sharing. AFP is specific to macOS. NFS is commonly used in Unix/Linux environments. FTP is suitable for file transfers but lacks integration for seamless file sharing between these platforms.",
+      "examTip": "Use SMB for cross-platform file sharing between Windows and macOS systems for maximum compatibility."
     },
     {
       "id": 41,
-      "question": "You need to determine the version of the Windows operating system running on a remote computer. You have command-line access to the remote system. Which command would provide this information MOST directly?",
+      "question": "A Windows 10 system shows the error 'Operating System not found' after a failed BIOS update. The hard drive is functional and connected. What is the MOST likely cause?",
       "options": [
-        "systeminfo",
-        "ver",
-        "winver",
-        "hostname"
+        "The boot order in BIOS was reset to prioritize an empty device.",
+        "The system partition was accidentally formatted during the update.",
+        "The MBR (Master Boot Record) was overwritten by the BIOS update.",
+        "A critical Windows system file became corrupted during the update."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`winver` displays a window with the Windows version, build number, and other details. Although `ver` provides a basic version string, `winver` is the dedicated tool for this purpose.",
-      "examTip": "Use `winver` to quickly determine the Windows version on a remote system."
+      "correctAnswerIndex": 0,
+      "explanation": "A BIOS update can reset boot order settings, causing the system to boot from an incorrect device. Formatting the system partition would cause permanent data loss, unlikely during a BIOS update. MBR corruption is possible but less likely linked directly to BIOS flashing. Corrupted system files wouldn’t prevent BIOS from detecting the OS partition entirely.",
+      "examTip": "Always check and correct BIOS boot order after firmware updates if the OS becomes unbootable."
     },
     {
       "id": 42,
-      "question": "What is 'tailgating' in the context of physical security?",
+      "question": "A user reports that their corporate laptop frequently disconnects from the company’s Wi-Fi network after recent driver updates. What is the FIRST step a technician should take?",
       "options": [
-        "A type of phishing attack.",
-        "Following an authorized person into a restricted area without proper authorization.",
-        "A type of malware.",
-        "A type of network attack."
+        "Roll back the wireless network driver to a previous version.",
+        "Reinstall the Wi-Fi driver with the latest OEM version.",
+        "Perform a Windows network reset to restore default settings.",
+        "Disable the power-saving feature for the wireless adapter."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Tailgating involves physically following an authorized person into a secure area without proper credentials.",
-      "examTip": "Ensure strict access controls and vigilance to prevent tailgating in secure areas."
+      "correctAnswerIndex": 0,
+      "explanation": "Rolling back the driver addresses potential incompatibilities introduced by the recent update. Reinstalling the latest version is useful but should be tried after rollback. Resetting network settings is a more intrusive approach. Power-saving settings may impact connectivity but typically cause issues only when on battery power.",
+      "examTip": "Use the rollback driver option first when connectivity issues occur immediately after driver updates."
     },
     {
       "id": 43,
-      "question": "Which command in Linux is used to change the ownership of a file or directory?",
+      "question": "A technician is configuring a Windows 10 system for dual-boot with Linux. Which file system should be selected for the Linux partition to ensure maximum compatibility with Linux utilities and performance?",
       "options": [
-        "chmod",
-        "chown",
-        "chgrp",
-        "sudo"
+        "ext4",
+        "FAT32",
+        "NTFS",
+        "exFAT"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`chown` changes the owner (and optionally the group) of a file or directory.",
-      "examTip": "Use `chown` to change file or directory ownership; remember the syntax: `chown <owner>:<group> <file>`."
+      "correctAnswerIndex": 0,
+      "explanation": "The ext4 file system is optimized for Linux, offering robust performance and compatibility with native tools. FAT32 and exFAT lack journaling and have size limitations. NTFS is designed for Windows and may not provide optimal performance or compatibility for Linux installations.",
+      "examTip": "Choose ext4 for Linux installations to ensure efficient performance and compatibility with Linux applications."
     },
     {
       "id": 44,
-      "question": "You are setting up a wireless network and want to use WPA2 encryption. You have the choice between WPA2-Personal and WPA2-Enterprise. What is the KEY difference between these two modes?",
+      "question": "A Linux administrator suspects that the firewall is blocking SSH traffic. Which command will BEST confirm whether port 22 is open and listening for connections?",
       "options": [
-        "WPA2-Personal is faster than WPA2-Enterprise.",
-        "WPA2-Personal uses a pre-shared key (PSK) for authentication, while WPA2-Enterprise uses 802.1X authentication with a RADIUS server for individual user authentication.",
-        "WPA2-Enterprise is only for large businesses.",
-        "WPA2-Personal is more secure than WPA2-Enterprise."
+        "sudo netstat -tuln | grep 22",
+        "iptables -L -n",
+        "systemctl status sshd",
+        "ps aux | grep ssh"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "WPA2-Personal uses a shared key for authentication, making it suitable for home networks, whereas WPA2-Enterprise uses 802.1X and a RADIUS server for individual authentication, which is more secure for enterprise environments.",
-      "examTip": "For corporate networks, use WPA2-Enterprise with 802.1X/RADIUS for stronger, individualized security."
+      "correctAnswerIndex": 0,
+      "explanation": "The netstat -tuln command shows active ports, allowing confirmation that port 22 is listening for SSH connections. iptables -L -n lists firewall rules but doesn’t confirm active port listening. systemctl status sshd checks the SSH service status but not firewall configurations. ps aux | grep ssh lists SSH processes but doesn’t provide network port details.",
+      "examTip": "Use netstat to verify whether essential ports like 22 are open and listening for connections."
     },
     {
       "id": 45,
-      "question": "You are troubleshooting a computer and suspect a problem with a specific Windows service. You want to stop the service, then restart it to see if that resolves the issue. Which command-line tools can you use to manage Windows services?",
+      "question": "A user reports slow application response times on a Windows 10 machine. Resource Monitor shows high disk activity by the 'Windows Search' process. What is the BEST approach to improve performance without disabling search functionality?",
       "options": [
-        "`net start` and `net stop` (or `sc start` and `sc stop`)",
-        "`tasklist` and `taskkill`",
-        "`ipconfig` and `ping`",
-        "`chkdsk` and `sfc`"
+        "Modify indexing options to limit indexed locations.",
+        "Completely disable the Windows Search service.",
+        "Upgrade the disk from HDD to SSD.",
+        "Perform a clean installation of Windows 10."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`net start` and `net stop` (or the more detailed `sc start` and `sc stop`) are used to control Windows services.",
-      "examTip": "Manage services via the command line using `net start` and `net stop` or `sc` commands, or via the Services console."
+      "explanation": "Limiting the number of indexed locations reduces disk activity while preserving search capabilities. Disabling Windows Search would eliminate useful functionality. Upgrading to an SSD improves overall performance but is a hardware-based solution. A clean installation is extreme and unnecessary for this issue.",
+      "examTip": "Optimize Windows Search indexing locations to balance system performance and search speed."
     },
     {
       "id": 46,
-      "question": "Which type of malware often masquerades as legitimate software but performs malicious actions in the background?",
+      "question": "An administrator needs to deploy an application to multiple Windows 10 workstations in a domain environment without user interaction. Which method is MOST efficient?",
       "options": [
-        "Virus",
-        "Trojan horse",
-        "Worm",
-        "Spyware"
+        "Group Policy Software Installation (GPSI).",
+        "Manual installation on each workstation.",
+        "Provide installation instructions to users.",
+        "Use Remote Desktop to perform installations."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A Trojan horse disguises itself as a legitimate program to trick users into installing it, after which it performs malicious activities in the background.",
-      "examTip": "Be cautious when downloading software from untrusted sources; Trojans often hide within seemingly legitimate applications."
+      "correctAnswerIndex": 0,
+      "explanation": "GPSI automates software deployment across multiple systems within a domain, requiring minimal user intervention. Manual installation is time-consuming. Providing instructions relies on users, risking inconsistency. Remote Desktop installations would still require manual steps on each machine.",
+      "examTip": "Use Group Policy for scalable, automated software deployment in domain environments."
     },
     {
       "id": 47,
-      "question": "A user reports that their computer is displaying unusual error messages and behaving erratically. You suspect a problem with the system files. Which Windows command-line tool can you use to scan for and automatically repair corrupted system files?",
+      "question": "A Windows user reports receiving frequent certificate warnings when visiting internal web applications. The system’s time and date are correct. What is the MOST likely cause?",
       "options": [
-        "chkdsk",
-        "sfc /scannow",
-        "defrag",
-        "diskpart"
+        "Missing or outdated root certificates on the workstation.",
+        "Improper DNS configuration for internal domains.",
+        "The internal web server’s SSL certificate has expired.",
+        "The firewall is blocking HTTPS traffic to internal servers."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`sfc /scannow` scans and repairs protected system files on Windows.",
-      "examTip": "Run `sfc /scannow` to repair corrupted system files if you suspect system instability due to file corruption."
+      "correctAnswerIndex": 0,
+      "explanation": "Outdated or missing root certificates prevent proper SSL certificate validation, leading to warnings. DNS issues would cause resolution failures rather than certificate errors. An expired server certificate would impact all users, not just one. Firewall restrictions typically block access altogether, not just trigger certificate warnings.",
+      "examTip": "Ensure root certificates are regularly updated to prevent SSL validation issues for internal applications."
     },
     {
       "id": 48,
-      "question": "What is the purpose of using a VPN (Virtual Private Network) when connecting to a public Wi-Fi hotspot?",
+      "question": "A technician needs to troubleshoot a user’s inability to connect to internal resources by hostname but can connect via IP. What is the FIRST command they should run?",
       "options": [
-        "To speed up your internet connection.",
-        "To encrypt your internet traffic and protect your data from eavesdropping by others on the same network.",
-        "To block access to certain websites.",
-        "To prevent viruses from infecting your computer."
+        "ipconfig /flushdns",
+        "nslookup internal_hostname",
+        "ping internal_hostname",
+        "tracert internal_hostname"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A VPN encrypts your network traffic, which is especially important on unsecured public Wi-Fi, protecting your data from potential eavesdroppers.",
-      "examTip": "Always use a VPN on public Wi-Fi to safeguard your data from interception."
+      "correctAnswerIndex": 0,
+      "explanation": "Flushing the DNS cache resolves issues with stale or corrupt DNS entries. nslookup tests DNS resolution but doesn’t fix issues. ping and tracert test connectivity but don’t address DNS resolution problems directly.",
+      "examTip": "Flush DNS cache first when hostname resolution issues occur but IP connectivity is functional."
     },
     {
       "id": 49,
-      "question": "You are troubleshooting a network connectivity issue where a computer cannot access any network resources. The computer has an IP address in the 169.254.x.x range. What does this indicate?",
+      "question": "A Linux administrator needs to find all files owned by a specific user in the /var directory. Which command will accomplish this?",
       "options": [
-        "The computer has a static IP address configured.",
-        "The computer is successfully connected to the network.",
-        "The computer is configured to obtain an IP address automatically (DHCP), but it is unable to reach a DHCP server.",
-        "The computer has a virus."
+        "find /var -user username",
+        "grep username /var",
+        "ls -al /var | grep username",
+        "locate /var/username"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "An IP address in the 169.254.x.x range indicates that the computer has assigned itself an APIPA address because it was unable to obtain one from a DHCP server.",
-      "examTip": "An APIPA address (169.254.x.x) almost always points to a DHCP issue."
+      "correctAnswerIndex": 0,
+      "explanation": "The find command with the -user option searches for files based on ownership. grep searches file contents, not ownership. ls -al lists directory contents but doesn’t recursively search. locate searches indexed file names, not ownership.",
+      "examTip": "Use the find command with -user to locate all files owned by a specific user across directories."
     },
     {
       "id": 50,
-      "question": "You are configuring user accounts on a Windows computer. What is the KEY difference between a 'Standard User' account and an 'Administrator' account?",
+      "question": "A user’s Windows 10 PC has multiple failed logins, resulting in a locked account. The technician needs to unlock the account. Which tool should they use in a domain environment?",
       "options": [
-        "Standard User accounts can only access the internet.",
-        "Administrator accounts have full control over the computer and can make system-wide changes (install software, change settings, etc.), while Standard User accounts have limited privileges.",
-        "Standard User accounts are for temporary use only.",
-        "Administrator accounts are only for IT professionals."
+        "Active Directory Users and Computers (ADUC)",
+        "Local Users and Groups (lusrmgr.msc)",
+        "Computer Management console",
+        "net user command in Command Prompt"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Administrator accounts have full privileges and control over the system, whereas Standard User accounts have limited rights to prevent unauthorized system changes, following the principle of least privilege.",
-      "examTip": "Always use Standard User accounts for everyday tasks and reserve Administrator accounts for system management."
-    },    
+      "correctAnswerIndex": 0,
+      "explanation": "In a domain environment, ADUC provides tools to unlock user accounts. Local Users and Groups manage local accounts only. The Computer Management console is limited to local settings. net user commands can manage accounts but aren’t the primary tool for domain environments.",
+      "examTip": "Use ADUC in domain environments to manage user accounts, including unlocking after failed logins."
+    },
     {
       "id": 51,
-      "question": "A user reports that their computer is running slowly. You open Task Manager and notice that a process called `explorer.exe` is consuming an unusually high amount of CPU resources. What is `explorer.exe` normally responsible for, and what might be causing the high CPU usage in this case?",
+      "question": "A user’s web browser on a Windows 10 system is redirecting searches to unknown sites. Antivirus scans show no malware. What is the MOST likely cause?",
       "options": [
-        "`explorer.exe` is a web browser; the user probably has too many tabs open.",
-        "`explorer.exe` is the Windows File Explorer and the Windows shell (desktop, taskbar, etc.); high CPU usage could be caused by a corrupted shell extension, a malfunctioning third-party program that integrates with Explorer, or potentially malware.",
-        "`explorer.exe` is a system process that cannot be safely terminated; high CPU usage is normal.",
-        "`explorer.exe` is a virus; you should immediately delete it."
+        "Malicious browser extension",
+        "Corrupted DNS resolver cache",
+        "Modified hosts file",
+        "Outdated web browser version"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`explorer.exe` is the core process for the Windows File Explorer (browsing files and folders) *and* the Windows shell (the desktop, taskbar, Start menu, etc.). High CPU usage by `explorer.exe` is not normal and can indicate a problem with a shell extension, a corrupted system file, a conflict with another program, or even malware.",
-      "examTip": "Troubleshoot high CPU usage by `explorer.exe` by checking for corrupted shell extensions using tools like ShellExView and investigating potential software conflicts or malware."
+      "correctAnswerIndex": 0,
+      "explanation": "Malicious browser extensions can cause redirection without traditional malware signatures. DNS cache issues would affect multiple applications. Modified hosts files would redirect all traffic to certain domains, not just browser searches. Outdated browsers could have security issues but typically don’t cause redirects.",
+      "examTip": "Check for and remove suspicious browser extensions when facing unexplained redirects."
     },
     {
       "id": 52,
-      "question": "What is the function of the BIOS (Basic Input/Output System) or UEFI (Unified Extensible Firmware Interface) on a computer?",
+      "question": "A technician needs to ensure that backups are stored both locally and offsite for disaster recovery. Which strategy should they implement?",
       "options": [
-        "To store user data.",
-        "To initialize and test the system hardware during startup (POST - Power-On Self-Test) and to load the boot loader (which then loads the operating system).",
-        "To manage network connections.",
-        "To provide a graphical user interface for the operating system."
+        "3-2-1 backup strategy",
+        "Full backup only",
+        "Incremental backup only",
+        "Differential backup combined with full backups"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The BIOS/UEFI is firmware on the motherboard that initializes hardware during startup (POST) and loads the boot loader to start the operating system.",
-      "examTip": "Remember that BIOS/UEFI is the first code that runs at startup, responsible for hardware initialization and booting the OS."
+      "correctAnswerIndex": 0,
+      "explanation": "The 3-2-1 strategy involves three copies of data, on two different media, with one copy offsite—ensuring robust disaster recovery. Full backups alone are storage-intensive. Incremental and differential backups have their benefits but don’t specify offsite storage requirements.",
+      "examTip": "Adopt the 3-2-1 backup strategy for comprehensive protection against data loss and disasters."
     },
     {
       "id": 53,
-      "question": "You are configuring a new hard drive in Windows. You have the choice between using MBR (Master Boot Record) and GPT (GUID Partition Table) partitioning schemes. What is a KEY advantage of GPT over MBR?",
+      "question": "A Linux server shows that the /home partition is 100% full. Which command will help identify the largest files consuming space?",
       "options": [
-        "GPT is compatible with older operating systems.",
-        "GPT supports larger hard drives (above 2TB) and more partitions, and it includes features for data integrity and recovery.",
-        "MBR is more secure than GPT.",
-        "MBR is easier to use than GPT."
+        "du -ah /home | sort -rh | head -n 10",
+        "df -h /home",
+        "ls -lh /home",
+        "find /home -type f -size +100M"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "GPT supports drives larger than 2TB, more partitions, and includes data integrity features such as CRC checksums—advantages that MBR does not offer.",
-      "examTip": "Use GPT for new hard drive installations, especially when dealing with drives larger than 2TB or on systems with UEFI firmware."
+      "correctAnswerIndex": 0,
+      "explanation": "The du command with sorting displays disk usage by file size, showing the largest files. df -h shows partition usage but not file-level details. ls -lh lists files but doesn’t summarize disk usage. find can locate large files but won’t rank them by size.",
+      "examTip": "Use du with sorting options to efficiently locate and manage large files on Linux systems."
     },
     {
       "id": 54,
-      "question": "You are troubleshooting a computer that is not booting. You hear a series of beeps during the POST (Power-On Self-Test). What do these beeps typically indicate?",
+      "question": "A user’s Android device fails to sync corporate emails after a recent password change. What is the MOST likely cause?",
       "options": [
-        "The computer is successfully booting.",
-        "A hardware error has been detected; the specific beep code often corresponds to a particular type of hardware problem (RAM, video card, etc.).",
-        "The operating system is loading.",
-        "The network connection is established."
+        "Outdated email credentials stored in the email client",
+        "Device storage running out of available space",
+        "Disabled background data for the email application",
+        "Corrupted cache of the email application"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Beep codes during POST are diagnostic signals that indicate hardware issues. The specific pattern of beeps can help pinpoint the faulty component.",
-      "examTip": "Consult the motherboard documentation to interpret beep codes; they provide valuable clues about hardware failures."
+      "correctAnswerIndex": 0,
+      "explanation": "Email clients often store credentials, and password changes require updating these details. Storage issues or disabled background data may cause syncing issues but wouldn’t correlate directly with password changes. Cache corruption may cause performance issues but less likely immediate syncing failures after credential updates.",
+      "examTip": "Always verify updated credentials in email applications following password changes."
     },
     {
       "id": 55,
-      "question": "What is the 'principle of least privilege' in the context of user account management?",
+      "question": "A Windows 10 system boots slowly, and the Task Manager shows several high-impact startup applications. What is the MOST efficient step to improve boot performance?",
       "options": [
-        "Standard User accounts can only access the internet.",
-        "Administrator accounts have full control over the computer and can make system-wide changes, while Standard User accounts have limited privileges.",
-        "Standard User accounts are for temporary use only.",
-        "Administrator accounts are only for IT professionals."
+        "Disable unnecessary startup applications in Task Manager.",
+        "Upgrade the system’s RAM.",
+        "Run Disk Cleanup and defragment the hard drive.",
+        "Perform a system restore to a previous state."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The principle of least privilege means granting users only the access necessary to perform their tasks, thereby reducing the risk of accidental or malicious changes.",
-      "examTip": "Always use Standard User accounts for day-to-day tasks and reserve Administrator accounts for system management."
+      "correctAnswerIndex": 0,
+      "explanation": "Disabling non-essential startup applications reduces boot time without hardware upgrades or drastic recovery steps. RAM upgrades enhance multitasking but don’t specifically target slow boots. Disk cleanup and defragmentation help storage performance but less so with startup delays. System restore is too disruptive for a performance issue.",
+      "examTip": "Review and manage startup applications in Task Manager to optimize Windows boot times."
     },
     {
       "id": 56,
-      "question": "You are troubleshooting a network connectivity issue. A computer can ping its default gateway and other local devices, but it cannot access any websites. `nslookup` resolves domain names correctly. What is the NEXT most likely area to investigate?",
+      "question": "A company wants to implement two-factor authentication (2FA) for remote users accessing internal systems. Which method provides the BEST balance of security and user convenience?",
       "options": [
-        "The network cable.",
-        "The computer's firewall settings, proxy server settings, and the 'hosts' file.",
-        "The DNS server configuration.",
-        "The computer's network adapter driver."
+        "Authenticator app-based codes with a strong password",
+        "Email-based verification codes",
+        "Hardware tokens for all users",
+        "Biometric authentication only"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Since basic connectivity and DNS resolution are working, the issue is likely related to the browser or local configuration (such as firewall or proxy settings, or an altered 'hosts' file).",
-      "examTip": "When connectivity and DNS are confirmed, examine browser settings, proxy configurations, and the 'hosts' file."
+      "correctAnswerIndex": 0,
+      "explanation": "Authenticator apps generate time-based codes, providing robust 2FA without additional hardware. Email verification can be less secure if email accounts are compromised. Hardware tokens add security but are costly and cumbersome. Biometrics alone do not qualify as two-factor without another distinct factor.",
+      "examTip": "Combine strong passwords with authenticator apps for scalable, user-friendly 2FA solutions."
     },
     {
       "id": 57,
-      "question": "What is 'data exfiltration' in the context of cybersecurity?",
+      "question": "A Linux administrator wants to ensure a script runs every time the system boots. Which directory should the script be placed in for most modern distributions using systemd?",
       "options": [
-        "The process of backing up data.",
-        "The unauthorized transfer of data from a computer or network to an external location.",
-        "The encryption of data.",
-        "The process of deleting data."
+        "/etc/systemd/system/",
+        "/etc/init.d/",
+        "/usr/local/bin/",
+        "/etc/rc.local"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data exfiltration refers to the unauthorized transfer of data out of a network, often by an attacker aiming to steal sensitive information.",
-      "examTip": "Monitor for unusual outbound traffic and large data transfers as possible signs of data exfiltration."
+      "correctAnswerIndex": 0,
+      "explanation": "Modern Linux distributions using systemd store custom service files in /etc/systemd/system/ for boot-time execution. /etc/init.d/ was used by older init systems. /usr/local/bin/ holds executables but doesn’t ensure execution at boot. /etc/rc.local is deprecated in many modern systems.",
+      "examTip": "For systemd-enabled Linux systems, use /etc/systemd/system/ to manage boot-time scripts and services."
     },
     {
       "id": 58,
-      "question": "You are configuring a new Linux server and want to ensure that only specific users are allowed to log in remotely via SSH. Which configuration file would you edit to control SSH access?",
+      "question": "A user reports that after updating their macOS system, third-party applications display 'App is damaged and can’t be opened' errors. What is the MOST likely cause?",
       "options": [
-        "/etc/hosts",
-        "/etc/passwd",
-        "/etc/ssh/sshd_config",
-        "/etc/group"
+        "Gatekeeper settings blocking non-App Store applications",
+        "Corrupted application binaries after the update",
+        "Expired digital certificates for the applications",
+        "Insufficient disk permissions for application directories"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The SSH server configuration file (`/etc/ssh/sshd_config`) is used to control access settings for SSH, including allowed users and authentication methods.",
-      "examTip": "Edit `/etc/ssh/sshd_config` to configure and secure SSH access on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "macOS Gatekeeper restricts apps from unidentified developers. Updates can reset these settings, causing access errors. Corrupted binaries would cause crashes, not consistent access errors. Expired certificates would generate warning messages but not claim apps are damaged. Disk permissions issues usually generate access-denied errors, not corruption messages.",
+      "examTip": "Adjust Gatekeeper settings via System Preferences to restore access to third-party apps after macOS updates."
     },
     {
       "id": 59,
-      "question": "You are troubleshooting a computer that is exhibiting slow performance. You open Task Manager and observe that the disk utilization is consistently very high (close to 100%), even when the system is idle. What is the BEST tool to use to identify which specific files are being accessed and causing the high disk I/O?",
+      "question": "A technician needs to verify that a web server’s SSL certificate matches its private key. Which Linux command should they use?",
       "options": [
-        "Task Manager",
-        "Resource Monitor (specifically the Disk tab)",
-        "Performance Monitor",
-        "Disk Defragmenter"
+        "openssl x509 -noout -modulus -in certificate.crt && openssl rsa -noout -modulus -in private.key",
+        "openssl verify certificate.crt",
+        "openssl s_client -connect server:443",
+        "cat certificate.crt | grep BEGIN"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Resource Monitor's Disk tab provides detailed information on disk I/O at the file level, which helps pinpoint the source of high disk activity.",
-      "examTip": "Use Resource Monitor to drill down into disk I/O issues and identify the specific files and processes responsible."
+      "correctAnswerIndex": 0,
+      "explanation": "Comparing the modulus output of the certificate and private key confirms they match. The verify command checks certificate validity but not key pairing. s_client tests server SSL connections but doesn’t compare keys. The grep command checks file content headers, not key matches.",
+      "examTip": "Use OpenSSL’s modulus comparison to ensure SSL certificates match their private keys before deployment."
     },
     {
       "id": 60,
-      "question": "What is the purpose of using a 'sandbox' environment in software testing or security analysis?",
+      "question": "A user reports that their mobile device’s battery drains rapidly after a recent app installation. Which step should the technician take FIRST?",
       "options": [
-        "To provide a high-performance environment for running applications.",
-        "To isolate potentially untrusted or malicious code from the main operating system, allowing it to be run and analyzed safely.",
-        "To back up important data.",
-        "To encrypt sensitive data."
+        "Check battery usage statistics for the problematic app.",
+        "Reset the device to factory settings.",
+        "Disable background data usage for all apps.",
+        "Perform a full device OS update."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A sandbox isolates code execution in a controlled environment, preventing potentially malicious software from affecting the main system.",
-      "examTip": "Use sandbox environments to safely test untrusted software or analyze malware without risking your production system."
+      "correctAnswerIndex": 0,
+      "explanation": "Reviewing battery statistics identifies apps consuming excessive power, helping pinpoint the issue. Factory resets are drastic and should follow other troubleshooting. Disabling background data affects usability. OS updates may help but are less likely to directly address app-specific battery drain.",
+      "examTip": "Check app battery usage stats first when diagnosing rapid battery drain issues on mobile devices."
     },
     {
       "id": 61,
-      "question": "You are troubleshooting a Windows computer that is experiencing intermittent problems. You suspect a problem with a device driver. Which Windows utility allows you to enable 'Driver Verifier' to stress-test drivers and identify potential issues?",
+      "question": "A Windows 10 user reports that after installing new software, the system frequently displays 'Kernel Security Check Failure' BSOD errors. What is the BEST next step to resolve the issue without data loss?",
       "options": [
-        "Device Manager",
-        "verifier.exe",
-        "msconfig.exe",
-        "devmgmt.msc"
+        "Uninstall the recently installed software in Safe Mode.",
+        "Perform a full Windows reset, keeping user files.",
+        "Run the sfc /scannow command to repair system files.",
+        "Update all device drivers using Windows Update."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`verifier.exe` is the tool used to enable Driver Verifier, which stresses drivers to reveal problematic ones.",
-      "examTip": "Use Driver Verifier (via `verifier.exe`) to diagnose driver-related issues, but be prepared to disable it if the system becomes unstable."
+      "correctAnswerIndex": 0,
+      "explanation": "Uninstalling the recently added software in Safe Mode addresses compatibility issues that may cause kernel errors without data loss. Running sfc /scannow helps repair system files but may not fix driver conflicts caused by third-party software. Performing a Windows reset is a more drastic step that should follow less invasive troubleshooting. Updating drivers is beneficial but may not resolve software-specific kernel errors.",
+      "examTip": "Always attempt Safe Mode troubleshooting first to remove recently installed software causing kernel-level errors."
     },
     {
       "id": 62,
-      "question": "A user reports that their computer is making a beeping sound during startup, and the system fails to boot. You suspect a hardware problem. What is the FIRST thing you should do?",
+      "question": "A Linux user reports that a backup script fails with a 'Permission denied' error. The user runs the script with sudo but the error persists. What is the MOST likely cause?",
       "options": [
-        "Reinstall the operating system.",
-        "Consult the motherboard manufacturer's documentation to determine the meaning of the specific beep code.",
-        "Replace the hard drive.",
-        "Replace the RAM."
+        "Incorrect file permissions on the script itself.",
+        "Missing execute permissions on the destination folder.",
+        "The sudoers file does not grant the user the necessary privileges.",
+        "The shell interpreter specified in the script is unavailable."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Before taking any hardware replacement action, consult the motherboard documentation to decode the beep code, which will indicate the likely faulty component.",
-      "examTip": "Beep codes during POST provide diagnostic clues; always refer to the motherboard manual for interpretation."
+      "correctAnswerIndex": 0,
+      "explanation": "If the script lacks execute permissions, it will fail even when using sudo. Missing destination folder permissions would cause write errors, not execution failures. The sudoers file would prevent sudo from running at all, not produce a 'Permission denied' message for a specific script. An unavailable shell interpreter would result in a 'command not found' or interpreter-related error.",
+      "examTip": "Always verify script permissions using chmod before troubleshooting deeper privilege issues."
     },
     {
       "id": 63,
-      "question": "You are configuring a web server and want to ensure that all communication between clients and the server is encrypted. Which protocol should you use?",
+      "question": "A user complains that their macOS system is running slowly after a recent update. Activity Monitor shows high CPU usage by 'kernel_task.' What is the MOST likely cause?",
       "options": [
-        "HTTP",
-        "HTTPS",
-        "FTP",
-        "Telnet"
+        "macOS is managing the CPU temperature to prevent overheating.",
+        "A background Time Machine backup is consuming system resources.",
+        "The Spotlight index is being rebuilt after the update.",
+        "A third-party kernel extension is causing a CPU conflict."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HTTPS uses SSL/TLS to encrypt communication between a web server and clients, protecting data from interception.",
-      "examTip": "Always use HTTPS for secure communication on websites, especially when transmitting sensitive data."
+      "correctAnswerIndex": 0,
+      "explanation": "The 'kernel_task' process regulates CPU temperature by occupying resources to prevent overheating. Time Machine backups would show different processes consuming resources. Spotlight indexing impacts storage and CPU but is listed as a separate process. While third-party kernel extensions can cause issues, 'kernel_task' specifically relates to thermal management.",
+      "examTip": "High 'kernel_task' CPU usage often indicates thermal throttling; check for dust buildup or cooling issues."
     },
     {
       "id": 64,
-      "question": "You are troubleshooting a network printer that is not printing. You can ping the printer's IP address successfully, and other users can print to it. The user's computer has a valid IP address and network connectivity. What is the NEXT step to investigate?",
+      "question": "A Windows 10 PC connected to a corporate domain cannot apply new group policies. The network connection is stable. Which command should the technician use to identify applied policies and errors?",
       "options": [
-        "Check the printer's toner level.",
-        "Check the print queue on the user's computer, verify that the correct printer is selected as the default, and check the printer driver on the user's computer.",
-        "Restart the printer.",
-        "Replace the network cable connecting the printer to the network."
+        "gpresult /h report.html",
+        "gpupdate /force",
+        "net user /domain",
+        "rsop.msc"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Since the printer is reachable and working for other users, the issue is likely local to the user's computer (e.g., print queue or driver issues).",
-      "examTip": "When troubleshooting printing issues that appear isolated to one computer, first check the print queue and printer configuration on that system."
+      "correctAnswerIndex": 0,
+      "explanation": "The gpresult /h report.html command generates a comprehensive HTML report showing applied policies and any errors. gpupdate /force refreshes policies but doesn’t provide diagnostic information. net user /domain manages user accounts but doesn’t display policy data. rsop.msc shows Resultant Set of Policy but may not highlight underlying errors as clearly as gpresult.",
+      "examTip": "Use gpresult with the /h switch for detailed group policy troubleshooting reports in Windows domains."
     },
     {
       "id": 65,
-      "question": "You are using the `ipconfig` command in Windows. What is the purpose of the `/release` and `/renew` switches?",
+      "question": "A Linux administrator receives complaints that an internal web server is not responding. Which command should be used FIRST to check if the server is listening on the appropriate port?",
       "options": [
-        "To display detailed network configuration information.",
-        "To release the current DHCP-assigned IP address (/release) and request a new IP address from the DHCP server (/renew).",
-        "To flush the DNS resolver cache.",
-        "To register the computer's hostname with the DNS server."
+        "netstat -tuln | grep 80",
+        "ping server_ip",
+        "systemctl status apache2",
+        "traceroute server_ip"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`ipconfig /release` and `/renew` are used to drop the current DHCP lease and request a new one, which can help resolve IP configuration issues.",
-      "examTip": "Use `ipconfig /release` and `/renew` when troubleshooting DHCP-related connectivity problems."
+      "correctAnswerIndex": 0,
+      "explanation": "Using netstat with the appropriate port checks if the web server is actively listening for HTTP traffic. ping tests connectivity but not service status. systemctl checks service status but doesn’t confirm port bindings. traceroute identifies network path issues, not port-level availability.",
+      "examTip": "Always confirm port availability with netstat or ss when diagnosing web server responsiveness issues."
     },
     {
       "id": 66,
-      "question": "A user reports that they are unable to access files on a network share. You've verified that the file server is online, other users can access the share, and the user has the correct permissions. You suspect a problem with the user's workstation. Which of the following is LEAST likely to be the cause?",
+      "question": "A user reports being redirected to a suspicious website whenever attempting to visit a trusted banking site. Antivirus scans return clean. What is the MOST likely cause?",
       "options": [
-        "The user's computer is not connected to the network.",
-        "The user's workstation has a firewall rule blocking access to the file server or the SMB protocol.",
-        "There is an SMB protocol version incompatibility or signing mismatch between the client and server.",
-        "The user's account is locked out."
+        "The hosts file has been modified to redirect traffic.",
+        "The DNS resolver cache is corrupted.",
+        "A proxy server is intercepting web requests.",
+        "The browser has cached an old DNS entry."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "If the computer were not connected to the network, basic connectivity tests (like ping) would fail. Since other network functions work, the connectivity is likely fine.",
-      "examTip": "If the computer is connected (as verified by pings), then issues like SMB settings or firewall rules are more likely causes than network disconnection."
+      "explanation": "Malicious modifications to the hosts file can redirect traffic at the local system level, bypassing DNS settings. DNS cache corruption would affect multiple sites, not just one. A proxy server would likely affect all browsing activity, not selectively redirect trusted sites. Browser cache issues typically lead to loading errors, not redirects.",
+      "examTip": "Check the hosts file for unauthorized entries when facing suspicious, site-specific redirections."
     },
     {
       "id": 67,
-      "question": "You are analyzing network traffic with Wireshark. You see a large number of packets with the SYN flag set, but relatively few corresponding SYN-ACK or ACK packets. What type of network activity does this MOST likely indicate?",
+      "question": "A Windows 10 system is unable to access shared folders on the local network after a recent update. Which Windows feature should be checked FIRST?",
       "options": [
-        "Normal web browsing.",
-        "A SYN flood attack (a type of denial-of-service attack).",
-        "File transfer using FTP.",
-        "Email communication."
+        "Network Discovery settings",
+        "Windows Firewall inbound rules",
+        "SMB protocol configuration",
+        "File and Printer Sharing settings"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A SYN flood attack involves sending many SYN packets without completing the handshake, overwhelming the target with half-open connections.",
-      "examTip": "A high number of SYN packets compared to SYN-ACK/ACK responses is indicative of a SYN flood attack."
+      "correctAnswerIndex": 0,
+      "explanation": "Network Discovery allows the computer to see and access network resources. Windows Firewall rules and SMB settings affect access but are less likely to change after standard updates. File and Printer Sharing impacts resource availability rather than the ability to detect shared resources.",
+      "examTip": "Re-enable Network Discovery after major Windows updates to restore access to local network shares."
     },
     {
       "id": 68,
-      "question": "You are troubleshooting a Windows computer that is experiencing performance issues. You open Task Manager and notice that a process named `csrss.exe` is consuming a significant amount of CPU resources. What is `csrss.exe` normally responsible for, and is high CPU usage by this process typically a cause for concern?",
+      "question": "A technician needs to encrypt sensitive files on a Windows 10 PC so only the logged-in user can access them. Which built-in feature should be used?",
       "options": [
-        "`csrss.exe` is a web browser; high CPU usage is normal.",
-        "`csrss.exe` (Client Server Runtime Subsystem) is a critical Windows system process involved in console windows, thread management, and aspects of the 16-bit virtual MS-DOS environment; high CPU usage is usually a sign of a serious problem.",
-        "`csrss.exe` is a third-party application; you should uninstall it.",
-        "`csrss.exe` is a virus; you should immediately delete it."
+        "Encrypting File System (EFS)",
+        "BitLocker Drive Encryption",
+        "Windows Defender Credential Guard",
+        "Windows Information Protection (WIP)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`csrss.exe` is a critical Windows system process. Although it should run continuously, abnormally high CPU usage by it can indicate serious issues such as system file corruption or malware interference.",
-      "examTip": "Investigate high CPU usage by `csrss.exe` carefully—it may indicate a deeper system problem requiring further diagnosis."
+      "correctAnswerIndex": 0,
+      "explanation": "EFS encrypts individual files and folders, restricting access to the user who encrypted them. BitLocker encrypts entire drives rather than specific files. Credential Guard protects authentication credentials, not files. WIP controls corporate data usage but isn’t focused on file encryption.",
+      "examTip": "Use EFS for per-user file encryption on NTFS volumes when full-disk encryption isn’t required."
     },
     {
       "id": 69,
-      "question": "What is the purpose of the `chkdsk` command in Windows?",
+      "question": "A user’s Android smartphone displays a message stating 'Device storage almost full.' Which step should be taken FIRST to free up space without affecting user data?",
       "options": [
-        "To defragment the hard drive.",
-        "To check the hard drive for file system errors and bad sectors, and optionally attempt to repair them.",
-        "To display disk usage information.",
-        "To create a new partition."
+        "Clear the cache for installed applications.",
+        "Uninstall infrequently used applications.",
+        "Move media files to cloud storage.",
+        "Perform a factory reset after backup."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`chkdsk` scans the hard drive for file system and physical errors and can repair issues if run with appropriate switches.",
-      "examTip": "Run `chkdsk /f` and `chkdsk /r` to fix file system errors and check for bad sectors, respectively."
+      "correctAnswerIndex": 0,
+      "explanation": "Clearing app caches frees up space without deleting user data or apps. Uninstalling apps removes data and settings. Cloud storage solutions help but require additional configuration. Factory resets should be the last resort due to their disruptive nature.",
+      "examTip": "Start with non-destructive actions like clearing caches when addressing mobile storage limitations."
     },
     {
       "id": 70,
-      "question": "You are configuring a Linux system and want to view the currently mounted file systems, their mount points, and their usage statistics. Which command would you use?",
+      "question": "A technician needs to troubleshoot a Windows 10 system that freezes intermittently. Which built-in utility provides detailed information on hardware errors and system crashes?",
       "options": [
-        "lsblk",
-        "df -h",
-        "du -sh",
-        "mount"
+        "Event Viewer",
+        "Performance Monitor",
+        "Resource Monitor",
+        "Task Manager"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`df -h` provides human-readable disk usage information for all mounted file systems, including mount points and available space.",
-      "examTip": "Use `df -h` on Linux to quickly assess disk usage on all mounted file systems."
+      "correctAnswerIndex": 0,
+      "explanation": "Event Viewer logs critical system events, including hardware errors and crash details. Performance Monitor tracks performance metrics but doesn’t log errors. Resource Monitor shows real-time resource usage. Task Manager assists in real-time troubleshooting but lacks detailed historical error logs.",
+      "examTip": "Use Event Viewer for deep insights into system-level events when diagnosing intermittent system freezes."
     },
     {
       "id": 71,
-      "question": "Which of the following is a characteristic of a 'distributed denial-of-service' (DDoS) attack?",
+      "question": "A company requires remote desktop access for its employees while ensuring data encryption during transmission. Which protocol provides secure remote access with encryption?",
       "options": [
-        "The attacker steals sensitive data from a server.",
-        "The attacker uses multiple compromised computers (a botnet) to flood a target with traffic, making it unavailable to legitimate users.",
-        "The attacker encrypts files on a computer and demands a ransom.",
-        "The attacker tricks users into revealing their passwords."
+        "Remote Desktop Protocol (RDP) over TLS",
+        "Telnet over TCP port 23",
+        "Virtual Network Computing (VNC) without tunneling",
+        "Simple Network Management Protocol (SNMP) v1"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DDoS attack involves a distributed network of compromised devices flooding a target with traffic, thereby overwhelming it and denying service to legitimate users.",
-      "examTip": "Mitigating DDoS attacks often requires specialized network solutions; monitoring for unusual traffic patterns is key."
+      "correctAnswerIndex": 0,
+      "explanation": "RDP over TLS provides encrypted communication for secure remote desktop access. Telnet transmits data in plain text, offering no encryption. VNC without tunneling lacks encryption by default. SNMP v1 is used for network management and transmits data without encryption.",
+      "examTip": "Always ensure RDP connections are secured with TLS for encrypted remote desktop sessions."
     },
     {
       "id": 72,
-      "question": "You are troubleshooting a slow Windows computer. You suspect a problem with the hard drive. You've already run `chkdsk`, which found and fixed some errors, but the system is still slow. What is the NEXT BEST step to investigate potential hard drive issues?",
+      "question": "A Windows 10 system connected to a domain shows the error 'Trust relationship between this workstation and the primary domain failed.' What is the MOST effective way to restore access without rejoining the domain?",
       "options": [
-        "Defragment the hard drive (if it's an HDD).",
-        "Check the SMART status of the hard drive using a third-party utility or the drive manufacturer's tool.",
-        "Run Disk Cleanup.",
-        "Reinstall the operating system."
+        "Reset the computer account in Active Directory and reboot the workstation.",
+        "Remove the workstation from the domain and rejoin it.",
+        "Run gpupdate /force to reapply domain policies.",
+        "Restart the Netlogon service on the workstation."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Checking the SMART status provides insights into the drive's internal health and can signal impending failure even if `chkdsk` fixed some errors.",
-      "examTip": "Regularly monitor SMART data on hard drives to catch early signs of failure."
+      "correctAnswerIndex": 0,
+      "explanation": "Resetting the computer account in Active Directory reestablishes trust without requiring rejoining, preserving configurations. Removing and rejoining the domain works but is more time-consuming. gpupdate re-applies policies but doesn’t fix trust issues. Restarting Netlogon won’t resolve broken trust relationships.",
+      "examTip": "Reset the computer account in AD to fix domain trust issues efficiently without reconfiguration."
     },
     {
       "id": 73,
-      "question": "What is 'multi-factor authentication' (MFA), and why is it important for security?",
+      "question": "A user’s Windows 10 laptop fails to detect any available Wi-Fi networks. Other devices connect normally. What should the technician check FIRST?",
       "options": [
-        "Using a very long password.",
-        "Requiring users to provide two or more independent authentication factors (something they know, something they have, something they are) to verify their identity.",
-        "Encrypting all network traffic.",
-        "Using a firewall."
+        "Ensure the wireless adapter is enabled in Network Connections.",
+        "Update the wireless adapter driver from Device Manager.",
+        "Reset TCP/IP stack using netsh commands.",
+        "Disable and re-enable the wireless adapter in BIOS."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "MFA significantly increases security by requiring multiple forms of verification, making it much harder for attackers to gain access even if one factor is compromised.",
-      "examTip": "Implement MFA for critical accounts to add a robust layer of security against unauthorized access."
+      "correctAnswerIndex": 0,
+      "explanation": "The most immediate step is confirming the wireless adapter is enabled. Driver updates help if detection fails due to compatibility issues. Resetting the TCP/IP stack is more relevant for connectivity issues rather than detection. BIOS settings rarely disable wireless adapters unless specifically configured.",
+      "examTip": "Always verify hardware-level enablement of wireless adapters before deeper network troubleshooting."
     },
     {
       "id": 74,
-      "question": "You are configuring a secure wireless network. Which of the following combinations of settings provides the STRONGEST security?",
+      "question": "A user reports that every time they open their web browser, multiple tabs open with random advertisements. Antivirus scans show no infections. What is the MOST likely cause?",
       "options": [
-        "WEP encryption with a shared password.",
-        "WPA2-Personal with a strong pre-shared key (PSK).",
-        "WPA2-Enterprise with 802.1X authentication using a RADIUS server, and AES encryption.",
-        "Open network (no encryption)."
+        "A browser extension has installed adware.",
+        "The browser’s home page settings have been modified.",
+        "The operating system’s DNS settings have been hijacked.",
+        "The user’s profile in the browser is corrupted."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WPA2-Enterprise with 802.1X and AES encryption provides robust security through individual user authentication and strong encryption.",
-      "examTip": "For corporate environments, choose WPA2-Enterprise (or WPA3-Enterprise) over personal modes for improved security."
+      "correctAnswerIndex": 0,
+      "explanation": "Adware-infected browser extensions often cause unwanted tabs and ads to load automatically. Modified home page settings would lead to specific, not random, pages opening. DNS hijacking affects network-wide browsing, not just one browser. Profile corruption may cause crashes, not ad-based behavior.",
+      "examTip": "Check for and remove suspicious browser extensions when facing persistent unwanted browser behavior."
     },
     {
       "id": 75,
-      "question": "You are troubleshooting a computer that is not booting. The system powers on, but you see no display on the monitor, and you hear no beep codes. You've already checked the monitor and its cable. What is the NEXT step to investigate?",
+      "question": "A Linux server administrator needs to schedule a one-time backup at 3 AM. Which command should be used?",
       "options": [
-        "Reinstall the operating system.",
-        "Check the power supply connections to the motherboard, reseat the RAM modules, reseat the video card (if applicable), and check for any loose connections. If possible, try a different power supply.",
-        "Replace the hard drive.",
-        "Replace the network cable."
+        "at 03:00",
+        "cron -e",
+        "systemctl timer",
+        "nohup backup.sh &"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "With no display and no beep codes, the issue is likely with core hardware components such as the power supply, motherboard, RAM, or video card. Reseating components and checking power connections is the next logical step.",
-      "examTip": "In a no-display scenario, inspect the internal hardware connections—especially the power supply, motherboard, RAM, and video card."
+      "correctAnswerIndex": 0,
+      "explanation": "The at command schedules one-time tasks. cron handles recurring tasks. systemctl timers provide scheduled executions in systemd environments but are more complex for one-time tasks. nohup runs a command in the background but doesn’t schedule execution.",
+      "examTip": "Use the at command for simple, one-time task scheduling in Linux environments."
     },
     {
       "id": 76,
-      "question": "You are configuring a Linux server and need to find all files named 'error.log' that have been modified within the last 7 days. Which command would you use?",
+      "question": "A technician suspects that a Windows 10 machine’s slow boot times are caused by disk errors. Which built-in utility should be used to detect and repair these issues?",
       "options": [
-        "`grep error.log / -mtime -7`",
-        "`find / -name error.log -mtime -7`",
-        "`locate error.log -mtime -7`",
-        "`ls -l / | grep error.log`"
+        "chkdsk /f",
+        "sfc /scannow",
+        "diskpart",
+        "defrag C:"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`find / -name error.log -mtime -7` searches from the root directory for files named 'error.log' modified within the last 7 days.",
-      "examTip": "Use `find` with the `-mtime` flag to locate files modified within a specific timeframe on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "The chkdsk /f command checks for and fixes disk-related file system errors that can slow boot times. sfc /scannow verifies system file integrity but not disk health. diskpart manages partitions but doesn’t diagnose disk errors. Defrag optimizes drive layout but doesn’t fix errors.",
+      "examTip": "Run chkdsk with the /f parameter to resolve disk errors causing slow boots or performance issues."
     },
     {
       "id": 77,
-      "question": "What is 'spear phishing'?",
+      "question": "A user reports that their Linux server is running out of disk space in the /var directory. Which command will identify the largest directories consuming space?",
       "options": [
-        "A type of malware that encrypts files.",
-        "A highly targeted phishing attack that focuses on a specific individual or organization, often using personalized information to make the attack more convincing.",
-        "A type of network attack that floods a server with traffic.",
-        "A type of attack that exploits vulnerabilities in software."
+        "du -sh /var/* | sort -rh | head -n 5",
+        "df -h /var",
+        "ls -lh /var",
+        "find /var -size +100M"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Spear phishing involves crafting highly targeted emails using personalized information to deceive a specific individual or group into divulging sensitive data.",
-      "examTip": "Be vigilant with emails even if they appear personal; spear phishing attacks are designed to look credible."
+      "correctAnswerIndex": 0,
+      "explanation": "The du command with sorting identifies the largest directories, allowing for targeted cleanup. df -h shows disk usage by partition but lacks directory breakdown. ls -lh lists file sizes but doesn’t summarize directory usage. find locates large files but doesn’t group them by directory size.",
+      "examTip": "Use du with sorting options to pinpoint storage hogs in Linux directories efficiently."
     },
     {
       "id": 78,
-      "question": "A user reports that they are unable to access a website that they were able to access yesterday. You can access the website from a different computer on the same network. You've already checked the user's browser settings, cleared the cache and cookies, and verified DNS resolution with `nslookup`. What is the NEXT step to investigate on the user's computer?",
+      "question": "A Windows 10 user reports that USB devices are not being recognized when connected. Other systems detect the same devices without issue. What should the technician check FIRST?",
       "options": [
-        "Reinstall the operating system.",
-        "Check the Windows 'hosts' file for any entries that might be blocking or redirecting the website, and check for any third-party firewall or security software that might be blocking access.",
-        "Replace the network cable.",
-        "Run a virus scan."
+        "Verify that USB controllers are enabled and functioning in Device Manager.",
+        "Check if the USB ports are disabled in BIOS settings.",
+        "Reinstall USB controller drivers from the manufacturer’s website.",
+        "Run Windows Update to download the latest system patches."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If other devices on the same network can access the website, the issue is likely local. The 'hosts' file or third-party security software may be interfering with access.",
-      "examTip": "Examine the 'hosts' file and any local firewall or security software when a single computer cannot access a website."
+      "correctAnswerIndex": 0,
+      "explanation": "Checking Device Manager ensures that USB controllers are properly installed and functional. BIOS settings rarely disable USB ports unless manually configured. Driver reinstallation and Windows Updates are secondary steps if hardware-level issues aren’t detected.",
+      "examTip": "Start USB troubleshooting by confirming the operational status of controllers in Device Manager."
     },
     {
       "id": 79,
-      "question": "You are configuring a new server and want to implement a strong password policy. Which of the following settings would be MOST effective in improving password security?",
+      "question": "A technician is configuring backup strategies for a file server. The business requires the fastest recovery time while minimizing storage use. Which backup approach should be implemented?",
       "options": [
-        "Minimum password length of 6 characters.",
-        "Require passwords to be changed every 365 days.",
-        "Enforce a minimum password length of at least 12 characters, require a mix of uppercase and lowercase letters, numbers, and symbols, disallow common words or patterns, and enforce regular password changes (e.g., every 90 days).",
-        "Allow users to write down their passwords."
+        "Full backup weekly with daily incremental backups.",
+        "Full backup daily.",
+        "Full backup weekly with daily differential backups.",
+        "Incremental backups only."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A strong password policy requires long, complex, and regularly changed passwords to reduce the risk of unauthorized access.",
-      "examTip": "Implement a comprehensive password policy with strict complexity and change requirements to bolster security."
+      "correctAnswerIndex": 0,
+      "explanation": "Weekly full backups combined with daily incremental backups balance storage efficiency and fast recovery times, requiring only the latest full backup plus all subsequent incrementals. Daily full backups consume more storage. Differential backups grow larger over time. Incremental-only strategies complicate recovery due to dependency chains.",
+      "examTip": "Combine full and incremental backups for optimal recovery speed and storage efficiency."
     },
     {
       "id": 80,
-      "question": "What is the purpose of the `traceroute` (or `tracert` in Windows) command?",
+      "question": "A macOS user needs to encrypt their entire disk for data protection. Which built-in macOS tool should be used?",
       "options": [
-        "To display the current IP address configuration.",
-        "To test network connectivity to a remote host.",
-        "To trace the route that packets take to reach a destination, showing each hop and the latency at each hop.",
-        "To display active network connections."
+        "FileVault",
+        "Disk Utility encryption",
+        "Time Machine",
+        "Keychain Access"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`traceroute`/`tracert` maps the path packets take to a destination and measures the time to each hop, helping diagnose network issues.",
-      "examTip": "Use `traceroute`/`tracert` to identify network path issues and pinpoint where latency or packet loss is occurring."
+      "correctAnswerIndex": 0,
+      "explanation": "FileVault provides full-disk encryption on macOS, securing data even if the device is stolen. Disk Utility encryption applies to specific external drives or partitions. Time Machine handles backups, not encryption. Keychain Access manages passwords and certificates but doesn’t encrypt storage volumes.",
+      "examTip": "Enable FileVault for robust, system-wide encryption on macOS devices without third-party tools."
     },
     {
       "id": 81,
-      "question": "You are working on a Linux system and need to find all files that contain the string 'password' within their content. Which command is BEST suited for this task?",
+      "question": "A user reports that their Windows 10 system takes significantly longer to load the desktop after logging in. Task Manager shows high disk usage from the 'Superfetch' (SysMain) process. What is the BEST action to improve performance without disabling essential services?",
       "options": [
-        "`find / -name password`",
-        "`grep -r 'password' /`",
-        "`locate password`",
-        "`ls -l | grep password`"
+        "Upgrade the hard drive to an SSD.",
+        "Adjust SysMain service settings to 'Manual' start.",
+        "Perform a clean boot to disable all non-Microsoft services.",
+        "Increase the system’s RAM capacity."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`grep -r 'password' /` recursively searches through files for the string 'password', making it ideal for this task.",
-      "examTip": "Use `grep -r` to search recursively within files on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "Upgrading to an SSD significantly reduces disk bottlenecks, improving boot times without disabling beneficial services like SysMain. Setting SysMain to manual may speed boot but affects application preloading benefits. A clean boot identifies software issues but doesn't address disk speed. Increasing RAM helps with multitasking but won’t solve disk performance issues linked to Superfetch.",
+      "examTip": "SSD upgrades provide the most noticeable performance boost on systems hindered by disk-intensive processes like Superfetch."
     },
     {
       "id": 82,
-      "question": "You are troubleshooting a Windows computer and suspect that a recently installed program is causing system instability. You want to prevent this program from starting automatically when Windows boots. Which of the following methods is LEAST effective for achieving this?",
+      "question": "A Linux administrator discovers that a service is not starting at boot despite working when started manually. Which command should be used to enable the service at boot on a system using systemd?",
       "options": [
-        "Disabling the program in Task Manager's Startup tab.",
-        "Removing the program's shortcut from the Startup folder in the Start Menu.",
-        "Deleting the program's executable file.",
-        "Using the System Configuration utility (msconfig.exe) to disable the program's startup entry."
+        "systemctl enable servicename",
+        "systemctl start servicename",
+        "chkconfig servicename on",
+        "update-rc.d servicename defaults"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Deleting the program's executable file is a risky and drastic measure that can lead to further issues. Standard methods such as disabling startup entries are preferable.",
-      "examTip": "Manage startup programs using Task Manager, Startup folder, or msconfig rather than deleting executable files."
+      "correctAnswerIndex": 0,
+      "explanation": "The systemctl enable command configures services to start at boot in systemd-based distributions. systemctl start runs the service only for the current session. chkconfig and update-rc.d are used in older init systems, not systemd.",
+      "examTip": "Use 'systemctl enable' on systemd-based Linux systems to ensure services persist across reboots."
     },
     {
       "id": 83,
-      "question": "What is the purpose of enabling 'two-factor authentication' (2FA) or 'multi-factor authentication' (MFA) on an account?",
+      "question": "A Windows 10 user cannot open encrypted files after reinstalling the operating system. The files were encrypted with EFS. What is the MOST likely reason?",
       "options": [
-        "To make it easier to remember your password.",
-        "To add an extra layer of security by requiring two or more independent authentication factors to verify your identity.",
-        "To speed up the login process.",
-        "To encrypt your password."
+        "The encryption certificate was not backed up before reinstallation.",
+        "The file permissions were removed during OS reinstallation.",
+        "The files were stored on a FAT32 partition incompatible with EFS.",
+        "The user’s new profile lacks administrator privileges."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2FA/MFA increases security by requiring multiple forms of verification, significantly reducing the risk of unauthorized access even if one factor (like a password) is compromised.",
-      "examTip": "Enable MFA for critical accounts to add a robust layer of security."
+      "correctAnswerIndex": 0,
+      "explanation": "EFS relies on user-specific encryption certificates. Without backing up and restoring the certificate, the files become inaccessible after OS reinstallation. File permissions or administrator rights don’t affect EFS access. FAT32 partitions don’t support EFS, but existing EFS files indicate the use of NTFS.",
+      "examTip": "Always back up EFS certificates when encrypting files; without them, recovery after OS changes is impossible."
     },
     {
       "id": 84,
-      "question": "A user reports that their computer is displaying a message stating that their files have been encrypted and they need to pay a ransom to get them back. The user does NOT have any recent backups. What is the BEST course of action?",
+      "question": "A technician needs to perform a secure data wipe on a decommissioned SSD before disposal. Which method ensures the BEST balance between security and SSD longevity?",
       "options": [
-        "Pay the ransom immediately.",
-        "Disconnect the computer from the network, contact a cybersecurity professional or law enforcement, and do NOT pay the ransom without expert advice.",
-        "Reinstall the operating system.",
-        "Run a virus scan."
+        "Use the manufacturer's secure erase utility.",
+        "Perform multiple overwrites with random data using dd.",
+        "Encrypt the entire disk and delete the encryption key.",
+        "Format the drive using quick format in Disk Management."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "This scenario indicates a ransomware attack. The recommended action is to disconnect the machine, seek expert guidance, and avoid paying the ransom as it doesn't guarantee file recovery.",
-      "examTip": "Always keep offline backups and consult professionals when faced with ransomware; paying the ransom is not advised."
+      "correctAnswerIndex": 0,
+      "explanation": "Manufacturer-provided secure erase utilities trigger SSD’s internal erase commands optimized for secure deletion without excessive wear. Multiple overwrites strain SSD cells unnecessarily. Encryption plus key deletion is secure but leaves encrypted data physically intact. Quick format only removes file system references, not data.",
+      "examTip": "Use SSD-specific secure erase tools from manufacturers for secure and efficient data removal."
     },
     {
       "id": 85,
-      "question": "You are using the `netstat` command in Windows to analyze network connections. You want to see all listening ports and the associated process IDs in numerical form. Which command would you use?",
+      "question": "A company mandates that all laptops use full-disk encryption. Which Windows 10 feature BEST meets this requirement while integrating with TPM for seamless operation?",
       "options": [
-        "netstat -a",
-        "netstat -an",
-        "netstat -b",
-        "netstat -o"
+        "BitLocker",
+        "Encrypting File System (EFS)",
+        "Windows Hello for Business",
+        "Windows Defender Application Control"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`netstat -an` displays all active connections and listening ports in numerical format, including process IDs.",
-      "examTip": "Use `netstat -an` to view network connections with numerical addresses and process IDs."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker provides full-disk encryption and integrates with TPM for secure key storage and automatic unlocking during boot. EFS encrypts individual files, not entire drives. Windows Hello manages authentication but doesn’t encrypt data. Windows Defender Application Control restricts app execution but doesn’t handle encryption.",
+      "examTip": "Enable BitLocker with TPM for enterprise-grade, seamless full-disk encryption on Windows 10 devices."
     },
     {
       "id": 86,
-      "question": "Which of the following actions would be MOST helpful in preventing social engineering attacks?",
+      "question": "A user is unable to access HTTPS websites on a Windows 10 PC. HTTP sites load correctly. The date and time settings are correct. What is the MOST likely cause?",
       "options": [
-        "Installing antivirus software.",
-        "Educating users about common social engineering tactics and how to recognize and avoid them.",
-        "Using a strong firewall.",
-        "Encrypting all network traffic."
+        "Corrupted or missing root certificates.",
+        "Faulty network adapter driver.",
+        "Incorrect DNS configuration.",
+        "Misconfigured proxy server settings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Social engineering targets human vulnerabilities. Educating users is the most effective way to prevent such attacks.",
-      "examTip": "Regular security training is crucial to defend against social engineering."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted or outdated root certificates prevent SSL/TLS validation required for HTTPS connections. Network driver issues would affect all traffic, not just HTTPS. DNS misconfigurations impact both HTTP and HTTPS. Proxy misconfigurations would typically block all web access or specific domains, not just HTTPS.",
+      "examTip": "If HTTPS sites fail while HTTP works, check and update root certificates for SSL/TLS validation."
     },
     {
       "id": 87,
-      "question": "What is the primary purpose of a 'honeypot' in network security?",
+      "question": "A technician needs to block outbound traffic from a specific application on a Windows 10 workstation. Which tool should be used?",
       "options": [
-        "To encrypt sensitive data.",
-        "To filter network traffic.",
-        "To attract and trap attackers, allowing security professionals to study their methods and gather intelligence.",
-        "To provide a secure connection for remote access."
+        "Windows Defender Firewall with Advanced Security",
+        "Local Security Policy Editor",
+        "User Account Control (UAC) settings",
+        "Task Scheduler"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A honeypot is designed as a decoy system to lure attackers, enabling analysis of their techniques and intentions.",
-      "examTip": "Honeypots can be invaluable for understanding attacker behavior and improving overall security defenses."
+      "correctAnswerIndex": 0,
+      "explanation": "Windows Defender Firewall with Advanced Security allows creation of outbound rules targeting specific applications. The Local Security Policy Editor focuses on account and system policies, not network traffic. UAC manages privilege elevation, not application networking. Task Scheduler automates tasks, not traffic management.",
+      "examTip": "Use Windows Defender Firewall's advanced settings to control application-specific network traffic."
     },
     {
       "id": 88,
-      "question": "A user reports that their computer is running slowly. You open Task Manager and see that the CPU utilization is consistently high, and a process named `svchost.exe` is consuming a large amount of resources. What is the NEXT step to identify the specific service causing the high CPU usage?",
+      "question": "A Linux server experiences intermittent network connectivity. The administrator suspects a faulty NIC. Which command provides real-time network interface statistics to aid diagnosis?",
       "options": [
-        "End the `svchost.exe` process.",
-        "Reinstall the operating system.",
-        "Use Resource Monitor (resmon.exe) to expand the CPU section and the 'Services' subsection, or use `tasklist /svc` to see which services are running within `svchost.exe`.",
-        "Run Disk Cleanup."
+        "ifstat",
+        "ifconfig",
+        "ip addr show",
+        "netstat -i"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Resource Monitor or the `tasklist /svc` command will provide details about which specific service within `svchost.exe` is responsible for high CPU usage.",
-      "examTip": "Drill down into `svchost.exe` using Resource Monitor or `tasklist /svc` to pinpoint the problematic service."
+      "correctAnswerIndex": 0,
+      "explanation": "ifstat displays real-time network interface statistics, ideal for identifying connectivity issues. ifconfig shows configuration details but not live statistics. ip addr show lists interface addresses but doesn’t provide performance data. netstat -i shows interface statistics but lacks real-time updates like ifstat.",
+      "examTip": "Use 'ifstat' on Linux servers to monitor network performance metrics in real time for connectivity diagnostics."
     },
     {
       "id": 89,
-      "question": "You are configuring a firewall and want to allow users on your internal network to access websites on the internet. Which type of firewall rule should you create?",
+      "question": "A user reports that all email messages are being marked as spam in their email client after a recent configuration change. What is the MOST likely cause?",
       "options": [
-        "An inbound rule.",
-        "An outbound rule allowing traffic on ports 80 (HTTP) and 443 (HTTPS).",
-        "A port forwarding rule.",
-        "A DMZ rule."
+        "The spam filter sensitivity settings were set too high.",
+        "The mail server’s DNS records are incorrectly configured.",
+        "The user’s email account has been blacklisted.",
+        "The email client’s synchronization settings were altered."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "To allow internal users to access the internet, create an outbound rule permitting traffic on HTTP and HTTPS ports.",
-      "examTip": "Differentiate between inbound and outbound rules: outbound rules control traffic leaving your network."
+      "correctAnswerIndex": 0,
+      "explanation": "Overly sensitive spam filter settings in the client can misclassify legitimate emails. Incorrect DNS records would affect delivery rather than classification. Blacklisting affects inbound emails, not local spam categorization. Synchronization settings issues cause delays but don’t impact spam filtering directly.",
+      "examTip": "Check client-side spam filter thresholds when legitimate emails are consistently misclassified as spam."
     },
     {
       "id": 90,
-      "question": "What is 'cross-site request forgery' (CSRF or XSRF)?",
+      "question": "A technician needs to configure a Windows 10 workstation to prevent users from installing unauthorized applications without affecting critical system updates. Which feature provides the MOST effective solution?",
       "options": [
-        "A type of malware that encrypts files.",
-        "An attack that forces an end user to execute unwanted actions on a web application in which they are currently authenticated.",
-        "A type of social engineering attack.",
-        "A type of denial-of-service attack."
+        "AppLocker",
+        "Windows Defender SmartScreen",
+        "User Account Control (UAC)",
+        "Local Group Policy for software restrictions"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "CSRF is a web attack that tricks an authenticated user into submitting a request that they did not intend, potentially causing unwanted actions on a web application.",
-      "examTip": "Implement anti-CSRF tokens in web applications to prevent these types of attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "AppLocker allows precise control over which applications users can run, preventing unauthorized installations while permitting system updates. SmartScreen warns against suspicious downloads but doesn’t enforce strict controls. UAC controls privilege elevation but can be bypassed. Software restrictions via Group Policy are less granular than AppLocker’s rules.",
+      "examTip": "Implement AppLocker for robust application whitelisting in enterprise Windows environments."
     },
     {
       "id": 91,
-      "question": "You are working with a Linux system and need to determine the IP address, subnet mask, and default gateway configured on a network interface. Which command provides this information in a clear and concise format?",
+      "question": "A Linux administrator needs to create a compressed archive of a directory for transfer. Which command accomplishes this using gzip compression?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "netstat -r",
-        "route -n"
+        "tar -czvf archive.tar.gz /path/to/directory",
+        "zip -r archive.zip /path/to/directory",
+        "gzip -r /path/to/directory",
+        "tar -xvzf archive.tar.gz"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`ip addr show` displays detailed network interface information including IP address and subnet mask. (Note: `ifconfig` can also be used on older systems.)",
-      "examTip": "Use `ip addr show` on modern Linux systems to view interface configurations."
+      "correctAnswerIndex": 0,
+      "explanation": "The tar -czvf command creates a compressed archive (.tar.gz) using gzip. zip -r creates a .zip archive but doesn’t use tar. gzip -r compresses files but doesn’t bundle them into a single archive. tar -xvzf extracts archives, not creates them.",
+      "examTip": "Use 'tar -czvf' for creating compressed .tar.gz archives combining multiple files and directories."
     },
     {
       "id": 92,
-      "question": "What is a 'rainbow table' in the context of password cracking?",
+      "question": "A user’s Windows 10 machine shows a 'No Boot Device Found' error after connecting an external hard drive. Other devices boot correctly. What should the technician check FIRST?",
       "options": [
-        "A table of common passwords.",
-        "A precomputed table of password hashes used to quickly look up the plaintext password corresponding to a given hash.",
-        "A table of encryption keys.",
-        "A table of network addresses."
+        "The boot order in BIOS/UEFI settings.",
+        "The partition table of the internal drive.",
+        "The integrity of the external hard drive.",
+        "The power connection to the internal hard drive."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Rainbow tables are precomputed tables of hash values that allow attackers to reverse cryptographic hash functions for common passwords.",
-      "examTip": "Strong, unique passwords and salting hashes are effective defenses against rainbow table attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "An incorrect boot order in BIOS/UEFI can cause the system to attempt booting from an external drive without an OS. Partition table or power issues would affect the internal drive regardless of the external connection. External drive integrity doesn’t impact the system’s boot sequence unless incorrectly prioritized.",
+      "examTip": "Always confirm BIOS boot priority when external drives cause boot errors after connection."
     },
     {
       "id": 93,
-      "question": "You are troubleshooting a Windows computer that is experiencing network connectivity problems. You suspect a problem with the TCP/IP stack. Which command-line tool can you use to reset the TCP/IP stack to its default configuration?",
+      "question": "A technician needs to prevent a Windows 10 workstation from automatically installing driver updates via Windows Update. Which configuration path allows this change?",
       "options": [
-        "`ipconfig /release`",
-        "`ipconfig /renew`",
-        "`netsh int ip reset`",
-        "`ipconfig /flushdns`"
+        "System Properties > Hardware > Device Installation Settings",
+        "Windows Update Settings > Advanced Options",
+        "Group Policy Editor > Windows Components > Windows Update",
+        "Device Manager > Driver Settings"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`netsh int ip reset` resets the TCP/IP stack to its default settings, which can resolve many network connectivity issues.",
-      "examTip": "Use `netsh int ip reset` when TCP/IP settings appear to be causing network problems."
+      "correctAnswerIndex": 0,
+      "explanation": "Device Installation Settings in System Properties control whether Windows Update can automatically install drivers. Windows Update settings control general updates but not specific driver installations. Group Policy can control updates enterprise-wide but is more complex. Device Manager allows manual driver management but doesn’t prevent auto-updates.",
+      "examTip": "Access Device Installation Settings to control automatic driver updates on standalone Windows systems."
     },
     {
       "id": 94,
-      "question": "A user reports that their computer is running slowly and showing unusual network activity. You suspect malware. You've already run a full system scan with your antivirus, but nothing was detected. What is the NEXT BEST step?",
+      "question": "A Linux server fails to boot after a kernel update. The administrator needs to boot into a previous working kernel. Which bootloader screen key should be pressed during startup on most distributions?",
       "options": [
-        "Reinstall the operating system.",
-        "Run a scan with a different anti-malware tool, preferably one that specializes in rootkit detection or use a bootable rescue disk.",
-        "Disconnect the computer from the network.",
-        "Delete any unfamiliar files or programs."
+        "Shift (or Esc for some distributions) to access the GRUB menu.",
+        "Ctrl+Alt+Del to reload the boot process.",
+        "F12 to select an alternate boot device.",
+        "Tab to edit kernel parameters temporarily."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If one tool doesn't detect malware, a second opinion from another anti-malware program (especially one that targets rootkits) or a bootable rescue disk can be very effective.",
-      "examTip": "Try a different anti-malware solution if initial scans come up clean, particularly for stubborn or hidden threats."
+      "correctAnswerIndex": 0,
+      "explanation": "Pressing Shift or Esc during boot brings up the GRUB menu, allowing selection of a previous kernel. Ctrl+Alt+Del reboots the system. F12 selects boot devices but doesn’t provide kernel options. Tab edits kernel parameters but doesn’t display kernel versions for selection.",
+      "examTip": "Use GRUB’s kernel selection to revert to a previously working Linux kernel after problematic updates."
     },
     {
       "id": 95,
-      "question": "You are configuring a web server and want to ensure secure communication using HTTPS. You've obtained an SSL/TLS certificate from a Certificate Authority (CA). What is the NEXT step to enable HTTPS on the server?",
+      "question": "A user reports that their Windows 10 PC frequently shows 'Low Virtual Memory' warnings. Which step should the technician take FIRST to resolve the issue?",
       "options": [
-        "Install the SSL/TLS certificate on the web server and configure the web server software (e.g., IIS, Apache) to use the certificate for HTTPS connections (typically on port 443).",
-        "Install the certificate on all client computers.",
-        "Change the website's URL to use 'https://'.",
-        "Configure the firewall to block all traffic on port 80."
+        "Increase the size of the paging file in system settings.",
+        "Upgrade the system’s physical RAM.",
+        "Disable memory-intensive applications from startup.",
+        "Run memory diagnostics to check for faulty RAM."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "After obtaining the certificate, you must install it on the web server and configure your web server software to enable HTTPS connections.",
-      "examTip": "Ensure your web server is properly configured with your SSL/TLS certificate to support secure HTTPS connections."
+      "explanation": "Increasing the paging file size provides immediate relief for virtual memory shortages. RAM upgrades improve physical memory but are hardware-dependent. Disabling startup applications reduces memory load but doesn’t directly increase virtual memory. Memory diagnostics detect faults but aren’t related to virtual memory configuration.",
+      "examTip": "Adjust paging file settings first when addressing virtual memory warnings before considering hardware upgrades."
     },
     {
       "id": 96,
-      "question": "You are troubleshooting a network connectivity problem on a Linux server. You want to see which processes are currently listening for incoming network connections. Which command would you use?",
+      "question": "A company requires that all mobile devices accessing corporate resources enforce data encryption. Which mobile security solution BEST meets this requirement?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "`netstat -tulnp` (or `ss -tulnp` on newer systems)",
-        "route -n"
+        "Mobile Device Management (MDM) with enforced encryption policies.",
+        "User-configured encryption settings on each device.",
+        "Installing third-party encryption apps on mobile devices.",
+        "Requiring VPN usage for all mobile network connections."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`netstat -tulnp` (or `ss -tulnp`) displays all listening TCP and UDP ports along with the associated process IDs, which is ideal for troubleshooting.",
-      "examTip": "Use `netstat -tulnp` (or `ss -tulnp`) to identify which processes are listening on specific ports in Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "MDM allows centralized enforcement of encryption policies, ensuring consistency across devices. User-configured settings may be inconsistent. Third-party apps lack centralized management. VPNs encrypt network traffic, not device storage.",
+      "examTip": "Implement MDM solutions to centrally manage and enforce mobile encryption for enterprise security."
     },
     {
       "id": 97,
-      "question": "You are investigating a potential security breach on a Windows server. You need to review the security audit logs to see who has been accessing specific files and folders. Where would you find these logs?",
+      "question": "A Windows 10 PC experiences frequent 'Blue Screen of Death' (BSOD) errors after hardware upgrades. Which built-in tool can help identify hardware compatibility issues?",
       "options": [
-        "Task Manager",
-        "Resource Monitor",
-        "Event Viewer (specifically the Security log), assuming that object access auditing has been enabled.",
-        "System Information (msinfo32.exe)"
+        "Windows Memory Diagnostic",
+        "Device Manager",
+        "Reliability Monitor",
+        "System Configuration (msconfig)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Security-related events, including file and folder accesses (if auditing is enabled), are logged in the Security log in Event Viewer.",
-      "examTip": "Ensure object access auditing is enabled to capture file and folder access events in the Security log."
+      "correctAnswerIndex": 0,
+      "explanation": "Windows Memory Diagnostic tests RAM for errors that often cause BSODs after hardware changes. Device Manager shows device status but doesn’t run diagnostics. Reliability Monitor tracks error history but doesn’t diagnose hardware. msconfig manages startup processes but doesn’t test hardware.",
+      "examTip": "Run Windows Memory Diagnostic when BSOD errors suggest memory issues after hardware upgrades."
     },
     {
       "id": 98,
-      "question": "A user reports that their computer is displaying a 'Bootmgr is missing' error message when they try to start their Windows computer. What is the recommended FIRST step to attempt to repair this issue?",
+      "question": "A Linux administrator needs to monitor disk I/O performance in real-time on a production server. Which command provides the BEST output for this purpose?",
       "options": [
-        "Reinstall the operating system.",
-        "Replace the hard drive.",
-        "Boot from the Windows installation media (DVD or USB) and use the Recovery Environment to run Startup Repair.",
-        "Run a virus scan."
+        "iostat",
+        "df -h",
+        "du -sh",
+        "vmstat"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Booting from installation media and using Startup Repair is the recommended first step to fix Bootmgr issues without resorting to a complete OS reinstall.",
-      "examTip": "Use the Windows Recovery Environment and Startup Repair to address Bootmgr errors before considering more drastic measures."
+      "correctAnswerIndex": 0,
+      "explanation": "The iostat command provides real-time disk I/O statistics, essential for performance monitoring. df -h shows disk usage but not performance. du -sh summarizes directory sizes, not I/O data. vmstat reports system performance but focuses on memory and CPU rather than detailed disk I/O.",
+      "examTip": "Use 'iostat' for detailed, real-time disk I/O statistics when diagnosing Linux server performance issues."
     },
     {
       "id": 99,
-      "question": "You are configuring a new wireless network. You want to use WPA2 encryption. You have the choice of using TKIP or AES for the encryption algorithm. Which algorithm should you choose, and why?",
+      "question": "A user reports that their Windows 10 system shows the error 'Operating System not found' after a BIOS update. The hard drive is functional. What should the technician check FIRST?",
       "options": [
-        "TKIP, because it is faster than AES.",
-        "AES, because it is a stronger and more secure encryption algorithm than TKIP.",
-        "TKIP, because it is compatible with older devices.",
-        "AES, because it is easier to configure than TKIP."
+        "BIOS boot order settings.",
+        "Master Boot Record (MBR) integrity.",
+        "Hard drive cable connections.",
+        "UEFI Secure Boot configuration."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "AES is a far stronger encryption standard than TKIP. Although TKIP was an interim solution, AES is recommended for modern WPA2 networks due to its enhanced security.",
-      "examTip": "For WPA2 networks, always choose AES over TKIP for optimal security."
+      "correctAnswerIndex": 0,
+      "explanation": "A BIOS update may reset boot order settings, preventing the system from booting the correct drive. MBR integrity issues would require repair tools if boot order is correct. Cable issues would prevent drive detection entirely. Secure Boot configurations affect OS validation but not basic detection.",
+      "examTip": "Verify and correct boot order settings in BIOS after firmware updates that impact boot sequences."
     },
     {
       "id": 100,
-      "question": "You are troubleshooting a Windows laptop that is running very slowly. You open Task Manager and notice that disk activity is constantly at 100%, even when the system is idle. The laptop uses an SSD, and you've already ruled out malware and verified that SMART status is healthy. What is the NEXT BEST step to investigate?",
+      "question": "A user’s Windows 10 laptop fails to resume from sleep mode. The screen remains black, though power indicators are on. What is the MOST likely cause?",
       "options": [
-        "Run Disk Defragmenter.",
-        "Use Resource Monitor (resmon.exe) to identify which specific processes and files are causing high disk I/O; also check for driver issues and update SSD firmware if necessary.",
-        "Run Disk Cleanup.",
-        "Increase the size of the paging file."
+        "Outdated graphics driver causing display issues.",
+        "Corrupted system files preventing proper wake-up.",
+        "Hard drive entering hibernation mode unexpectedly.",
+        "Insufficient RAM preventing sleep recovery."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Constant 100% disk activity on an SSD is unusual. Using Resource Monitor will help pinpoint the process or file causing the issue. Additionally, verifying storage driver functionality and SSD firmware can help resolve such performance problems.",
-      "examTip": "Never defragment an SSD; instead, use Resource Monitor to investigate high disk I/O and consider updating drivers and firmware."
+      "correctAnswerIndex": 0,
+      "explanation": "Outdated or incompatible graphics drivers commonly cause black screens after sleep due to display initialization failures. Corrupted system files typically cause boot issues, not wake failures. Hard drive hibernation affects storage states but not display resumption. RAM shortages impact performance, not sleep recovery directly.",
+      "examTip": "Update graphics drivers when laptops fail to resume from sleep, presenting black screen issues."
     }
   ]
 });
