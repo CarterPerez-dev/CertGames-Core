@@ -1,1308 +1,1308 @@
 {
   "category": "secplus",
   "testId": 3,
-  "testName": "Security Practice Test #3 (Easy)",
+  "testName": "Practice Test #3 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "What is the main purpose of a VPN (Virtual Private Network)?",
+      "question": "Which type of attack attempts to guess a password by systematically trying every possible combination?",
       "options": [
-        "To increase internet speed by optimizing data flow.",
-        "To create a secure, encrypted connection over public networks.",
-        "To restrict access to some websites by blocking traffic.",
-        "To scan network traffic for potential virus signatures."
+        "Brute force attack",
+        "Phishing attack",
+        "Denial-of-Service (DoS) attack",
+        "Man-in-the-middle (MITM) attack"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A VPN encrypts your internet traffic, providing a secure tunnel that is especially useful on public Wi-Fi.",
-      "examTip": "Think of a VPN as a secure 'tunnel' for your internet traffic."
+      "correctAnswerIndex": 0,
+      "explanation": "A brute force attack systematically attempts every possible password combination until it finds the correct one. Phishing (option 2) tricks users into revealing passwords. DoS (option 3) overwhelms systems. MITM (option 4) intercepts communications.",
+      "examTip": "Brute force = 'Tries everything' until it cracks the password."
     },
     {
       "id": 2,
-      "question": "Which of the following is a good example of multi-factor authentication (MFA)?",
+      "question": "Which of the following security measures is used to verify a user's identity?",
       "options": [
-        "Relying solely on a long, complex password.",
-        "Pairing a password with a security question for extra verification.",
-        "Using a password and a fingerprint scan for a second factor.",
-        "Reusing a single password across all accounts."
+        "Authentication",
+        "Encryption",
+        "Firewall",
+        "Hashing"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "MFA uses two or more distinct factors, such as something you know (password) and something you are (biometrics).",
-      "examTip": "MFA significantly improves security by requiring multiple forms of verification."
+      "correctAnswerIndex": 0,
+      "explanation": "Authentication verifies a user's identity before granting access. Encryption (option 2) protects data but does not verify identity. Firewalls (option 3) control network traffic. Hashing (option 4) ensures data integrity but does not authenticate users.",
+      "examTip": "Authentication = 'Prove who you are' (e.g., password, MFA, biometrics)."
     },
     {
       "id": 3,
-      "question": "What is the primary goal of a phishing attack?",
+      "question": "Which security concept ensures that information is only accessible to authorized individuals?",
       "options": [
-        "To damage your computer hardware.",
-        "To trick you into revealing sensitive personal information.",
-        "To speed up your internet connection.",
-        "To help you organize your files."
+        "Confidentiality",
+        "Integrity",
+        "Availability",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing aims to obtain usernames, passwords, credit card details, or other private information by deceptive means.",
-      "examTip": "Be skeptical of emails and messages asking for personal information."
+      "correctAnswerIndex": 0,
+      "explanation": "Confidentiality ensures that only authorized users can access information. Integrity (option 2) ensures data remains unchanged. Availability (option 3) ensures system uptime. Non-repudiation (option 4) prevents users from denying actions they performed.",
+      "examTip": "Confidentiality = 'Keep it secret'—only the right people can access data."
     },
     {
       "id": 4,
-      "question": "Why is it important to keep your software updated?",
+      "question": "Which of the following is an example of a social engineering attack?",
       "options": [
-        "To change the visual appearance of the software.",
-        "To reduce the program's speed, which is not its intended purpose.",
-        "To address bugs and patch security vulnerabilities in the software.",
-        "To remove outdated files from the system."
+        "Phishing",
+        "SQL injection",
+        "Denial-of-Service (DoS)",
+        "Brute force attack"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Updates often contain security patches that protect against known vulnerabilities or exploits.",
-      "examTip": "Enable automatic software updates whenever possible."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing is a social engineering attack that tricks users into revealing sensitive information. SQL injection (option 2) targets databases. DoS (option 3) overwhelms systems. Brute force (option 4) guesses passwords systematically.",
+      "examTip": "Phishing = 'Fake emails, fake websites'—always verify before clicking!"
     },
     {
       "id": 5,
-      "question": "Which of these is a good practice for creating a strong password?",
+      "question": "Which of the following is the BEST way to protect data stored on a lost or stolen laptop?",
       "options": [
-        "Using your pet's name.",
-        "Using your birthday.",
-        "Using a mix of upper and lowercase letters, numbers, and symbols.",
-        "Using the word 'password'."
+        "Full-disk encryption",
+        "Using a strong password",
+        "Enabling automatic software updates",
+        "Installing antivirus software"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A strong password is more difficult to guess because it includes different character types.",
-      "examTip": "Use a password manager to help you create and store strong passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption protects data on a lost or stolen laptop by making it unreadable without the encryption key. Strong passwords (option 2) help but can be cracked. Software updates (option 3) fix vulnerabilities but don’t protect stored data. Antivirus (option 4) stops malware but does not prevent data theft if the laptop is stolen.",
+      "examTip": "Lost laptop? 'Full-disk encryption' = No data access without the key."
     },
     {
       "id": 6,
-      "question": "What is 'malware'?",
+      "question": "Which security principle limits user access to only the data and systems necessary for their job?",
       "options": [
-        "A type of computer hardware.",
-        "Software designed to harm your computer or steal your data.",
-        "A program that helps you write documents.",
-        "A type of computer game."
+        "Least privilege",
+        "Zero Trust",
+        "Separation of duties",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Malware includes viruses, worms, Trojans, ransomware, and other harmful programs.",
-      "examTip": "Use antivirus software and practice safe computing habits to protect against malware."
+      "correctAnswerIndex": 0,
+      "explanation": "Least privilege ensures users only have access to what they need for their job, reducing security risks. Zero Trust (option 2) assumes no one is trusted by default. Separation of duties (option 3) prevents fraud by dividing tasks. Non-repudiation (option 4) ensures actions cannot be denied.",
+      "examTip": "Least privilege = 'Need-to-know' access only!"
     },
     {
       "id": 7,
-      "question": "What does it mean to 'encrypt' data?",
+      "question": "Which of the following is a type of malware that encrypts files and demands payment to restore access?",
       "options": [
-        "To delete the data.",
-        "To make the data unreadable without the correct decryption key.",
-        "To copy the data to another location.",
-        "To make the data larger."
+        "Ransomware",
+        "Trojan",
+        "Spyware",
+        "Worm"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Encryption secures data by converting it into a form unreadable without the key.",
-      "examTip": "Encryption is essential for protecting sensitive data, both at rest and in transit."
+      "correctAnswerIndex": 0,
+      "explanation": "Ransomware encrypts files and demands payment to restore access. Trojans (option 2) disguise themselves as legitimate programs. Spyware (option 3) collects user data. Worms (option 4) self-replicate and spread without user action.",
+      "examTip": "Ransomware = 'Pay up or lose your files!'—Always back up your data!"
     },
     {
       "id": 8,
-      "question": "What is a 'firewall'?",
+      "question": "Which of the following BEST describes multi-factor authentication (MFA)?",
       "options": [
-        "A physical wall that prevents fires.",
-        "A program that helps you write emails.",
-        "A security solution that monitors and controls network traffic to block unauthorized access.",
-        "An online interactive game for entertainment."
+        "Using two or more authentication factors",
+        "Using a strong password",
+        "Using encryption to protect passwords",
+        "Allowing users to log in without a password"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A firewall acts as a barrier between your computer or network and the outside world.",
-      "examTip": "Enable your computer's built-in firewall and consider a hardware firewall for your network."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA requires two or more authentication factors (e.g., password + fingerprint). Strong passwords (option 2) are good security but not MFA. Encryption (option 3) protects passwords but is not an authentication method. Logging in without a password (option 4) is not secure.",
+      "examTip": "MFA = 'Two or more ways' to verify identity (password + phone code, fingerprint, etc.)."
     },
     {
       "id": 9,
-      "question": "What is a 'digital signature' used for?",
+      "question": "Which network device filters traffic based on security rules?",
       "options": [
-        "To draw pictures on a computer.",
-        "To verify the sender of a message and ensure it hasn't been tampered with.",
-        "To encrypt data.",
-        "To speed up your internet connection."
+        "Firewall",
+        "Router",
+        "Switch",
+        "Access point"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A digital signature confirms authenticity and checks the integrity of a digital document or message.",
-      "examTip": "Digital signatures are like electronic fingerprints for documents and messages."
+      "correctAnswerIndex": 0,
+      "explanation": "A firewall filters network traffic based on security rules. Routers (option 2) forward traffic between networks. Switches (option 3) connect devices within a network. Access points (option 4) provide Wi-Fi connectivity but do not enforce security policies.",
+      "examTip": "Firewall = 'Traffic cop' for network security."
     },
     {
       "id": 10,
-      "question": "What is the purpose of a 'backup'?",
+      "question": "Which of the following is a common method used to secure wireless networks?",
       "options": [
-        "To make your computer run faster.",
-        "To protect your computer from viruses.",
-        "To create a copy of your data in case the original is lost or damaged.",
-        "To organize your files."
+        "WPA3 encryption",
+        "Using open Wi-Fi",
+        "Disabling SSID broadcast",
+        "Using WEP encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Backups allow data restoration if files are lost, corrupted, or compromised.",
-      "examTip": "Make regular backups of your important data and store them in a separate location."
+      "correctAnswerIndex": 0,
+      "explanation": "WPA3 is the most secure wireless encryption standard. Open Wi-Fi (option 2) is insecure. Disabling SSID broadcast (option 3) hides the network but does not secure it. WEP (option 4) is outdated and vulnerable to attacks.",
+      "examTip": "WPA3 = 'Best Wi-Fi security'—always use it!"
     },
     {
       "id": 11,
-      "question": "What should you do if you suspect your computer is infected with malware?",
+      "question": "Which security measure prevents unauthorized devices from connecting to a network?",
       "options": [
-        "Ignore the issue and hope it resolves itself.",
-        "Disconnect from the network and run a full antivirus scan.",
-        "Share your computer with others to see if the problem persists.",
-        "Continue using the computer as usual."
+        "Network Access Control (NAC)",
+        "Intrusion Detection System (IDS)",
+        "Firewall",
+        "Virtual Private Network (VPN)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Disconnecting prevents the spread of malware, and scanning helps detect and remove it.",
-      "examTip": "Isolate the infected computer and then take steps to remove the malware."
+      "correctAnswerIndex": 0,
+      "explanation": "NAC enforces security policies and prevents unauthorized devices from connecting to the network. IDS (option 2) detects threats but does not block access. Firewalls (option 3) filter traffic but do not verify device authorization. VPNs (option 4) provide encrypted remote access but do not enforce network access policies.",
+      "examTip": "NAC = 'Network gatekeeper'—only approved devices can connect."
     },
     {
       "id": 12,
-      "question": "What is a good practice when using public Wi-Fi?",
+      "question": "Which security concept ensures that data is available and accessible when needed?",
       "options": [
-        "Conduct sensitive financial transactions without protection.",
-        "Share sensitive personal information freely.",
-        "Use a VPN to encrypt your connection on public networks.",
-        "Disable your computer's firewall to improve speed."
+        "Availability",
+        "Confidentiality",
+        "Integrity",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A VPN protects your data by encrypting your traffic on unsecured public Wi-Fi.",
-      "examTip": "Avoid accessing sensitive information on public Wi-Fi without a VPN."
+      "correctAnswerIndex": 0,
+      "explanation": "Availability ensures that systems and data remain accessible to authorized users when needed. Confidentiality (option 2) protects data from unauthorized access. Integrity (option 3) ensures data is not altered. Non-repudiation (option 4) prevents users from denying actions they performed.",
+      "examTip": "Availability = 'Always accessible'—no downtime!"
     },
     {
       "id": 13,
-      "question": "What does 'HTTPS' in a website address indicate?",
+      "question": "Which type of malware disguises itself as legitimate software but carries malicious code?",
       "options": [
-        "That the site lacks security features.",
-        "That the website uses encryption to protect data exchanged with your browser.",
-        "That the website is solely for shopping purposes.",
-        "That the website is designed for rapid loading speeds."
+        "Trojan",
+        "Ransomware",
+        "Spyware",
+        "Worm"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HTTPS ensures data exchanged with the site is encrypted.",
-      "examTip": "Look for 'HTTPS' and the padlock icon in your browser's address bar when entering sensitive information."
+      "correctAnswerIndex": 0,
+      "explanation": "A Trojan appears as legitimate software but contains hidden malicious code. Ransomware (option 2) encrypts files and demands payment. Spyware (option 3) secretly collects user data. Worms (option 4) self-replicate and spread across networks.",
+      "examTip": "Trojan = 'Looks safe but is dangerous'—never download unverified software!"
     },
     {
       "id": 14,
-      "question": "What is 'social engineering'?",
+      "question": "Which of the following BEST describes an Intrusion Prevention System (IPS)?",
       "options": [
-        "A type of computer programming technique.",
-        "Building physical infrastructure, which is unrelated.",
-        "Tricking people into giving up confidential information or performing actions they shouldn't.",
-        "A method for creating online communities."
+        "A security system that detects and blocks threats in real time",
+        "A device that allows or denies traffic based on predefined rules",
+        "A tool used to capture and analyze network traffic",
+        "A security solution that encrypts network communications"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Social engineering uses deception to exploit human behavior rather than technical flaws.",
-      "examTip": "Be skeptical and don't let others pressure you into revealing sensitive information or performing risky actions."
+      "correctAnswerIndex": 0,
+      "explanation": "An IPS actively detects and blocks threats in real time. Firewalls (option 2) filter traffic but do not detect threats. Packet analyzers (option 3) capture network traffic. Encryption (option 4) secures data but does not prevent attacks.",
+      "examTip": "IPS = 'Detect & Block'—stops threats before they spread."
     },
     {
       "id": 15,
-      "question": "Why is it important to log out of accounts when you're finished using them?",
+      "question": "Which of the following is a form of biometric authentication?",
       "options": [
-        "To make your computer run faster.",
-        "To save electrical power.",
-        "To prevent unauthorized access to your accounts by ending your session.",
-        "To clear up space on your hard drive."
+        "Fingerprint scan",
+        "Security question",
+        "Strong password",
+        "One-time passcode"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Logging out closes your active session so others cannot access your account.",
-      "examTip": "Always log out of accounts, especially on shared or public computers."
+      "correctAnswerIndex": 0,
+      "explanation": "Biometric authentication uses unique physical traits like fingerprints, facial recognition, or retina scans. Security questions (option 2) and passwords (option 3) rely on knowledge, not biometrics. One-time passcodes (option 4) use temporary numeric codes but are not biometrics.",
+      "examTip": "Biometric = 'Something you ARE' (fingerprint, face, eye scan)."
     },
     {
       "id": 16,
-      "question": "What is a 'Trojan horse' (or Trojan)?",
+      "question": "Which of the following is a preventive security control?",
       "options": [
-        "A type of computer hardware component.",
-        "A program that helps you manage your files.",
-        "Malware that disguises itself as legitimate software to trick you into installing it.",
-        "An online video game."
+        "Firewall",
+        "Incident response plan",
+        "Security log analysis",
+        "Forensic investigation"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Trojans pretend to be safe but carry harmful code once installed.",
-      "examTip": "Be cautious about downloading and installing software from untrusted sources."
+      "correctAnswerIndex": 0,
+      "explanation": "A firewall is a preventive control that blocks unauthorized access. Incident response plans (option 2) are corrective. Security log analysis (option 3) is detective. Forensic investigations (option 4) happen after an incident occurs.",
+      "examTip": "Firewall = 'Stops threats before they happen.'"
     },
     {
       "id": 17,
-      "question": "What is 'two-factor authentication' (2FA)?",
+      "question": "Which type of security control is used to detect security incidents after they occur?",
       "options": [
-        "Using two different passwords for one account.",
-        "An extra layer of security that requires a second verification method, like a code from your phone.",
-        "Using a very long password alone.",
-        "Having two separate user accounts for the same service."
+        "Detective",
+        "Preventive",
+        "Corrective",
+        "Compensating"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2FA requires a password plus another factor, such as a code or biometric scan, improving security.",
-      "examTip": "Enable 2FA on all accounts that support it, especially for important accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "Detective controls identify security incidents after they happen (e.g., IDS, security cameras, log monitoring). Preventive (option 2) stops incidents before they happen. Corrective (option 3) restores systems after an incident. Compensating (option 4) provides alternative security when primary controls fail.",
+      "examTip": "Detective = 'Finds' incidents after they occur (logs, IDS, cameras)."
     },
     {
       "id": 18,
-      "question": "What is a good practice after using a public computer?",
+      "question": "Which authentication method allows users to log in once and access multiple systems without re-entering credentials?",
       "options": [
-        "Leave your accounts logged in to save time.",
-        "Log out of all accounts and clear your browsing history.",
-        "Simply close the browser window without further action.",
-        "Leave the computer on for the next user."
+        "Single Sign-On (SSO)",
+        "Multi-factor Authentication (MFA)",
+        "Role-Based Access Control (RBAC)",
+        "Discretionary Access Control (DAC)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Logging out and clearing your history helps protect your privacy on shared computers.",
-      "examTip": "Assume that anything you do on a public computer could be seen by others."
+      "correctAnswerIndex": 0,
+      "explanation": "SSO allows users to log in once and access multiple systems without re-entering credentials. MFA (option 2) requires multiple authentication factors. RBAC (option 3) assigns access based on roles. DAC (option 4) allows users to control their own file access.",
+      "examTip": "SSO = 'One login, multiple access'—reduces password fatigue."
     },
     {
       "id": 19,
-      "question": "What is a 'worm' in computer security?",
+      "question": "Which security concept ensures that data has not been altered in transit?",
       "options": [
-        "A type of animal found in nature.",
-        "A program that helps improve computer performance.",
-        "Self-replicating malware that spreads automatically across networks.",
-        "A physical computer component."
+        "Integrity",
+        "Confidentiality",
+        "Availability",
+        "Least privilege"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Worms can spread without user interaction, exploiting network vulnerabilities.",
-      "examTip": "Keep your operating system and security software up to date to protect against worms."
+      "correctAnswerIndex": 0,
+      "explanation": "Integrity ensures that data remains unchanged. Confidentiality (option 2) protects data from unauthorized access. Availability (option 3) ensures resources remain accessible. Least privilege (option 4) limits access but does not ensure data integrity.",
+      "examTip": "Integrity = 'Data remains unchanged'—protected from tampering."
     },
     {
       "id": 20,
-      "question": "What is the purpose of a CAPTCHA?",
+      "question": "Which of the following is an example of a physical security control?",
       "options": [
-        "To encrypt data on a website.",
-        "To determine whether the user is human or a bot by presenting a challenge.",
-        "To speed up the website's loading time.",
-        "To store user preferences for future visits."
+        "Mantrap",
+        "Firewall",
+        "Antivirus software",
+        "Encryption"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "CAPTCHAs differentiate real users from automated programs.",
-      "examTip": "CAPTCHAs help prevent automated attacks and spam on websites."
+      "correctAnswerIndex": 0,
+      "explanation": "A mantrap is a physical security control that restricts access to secure areas. Firewalls (option 2) filter network traffic. Antivirus software (option 3) detects malware. Encryption (option 4) secures data but is not a physical control.",
+      "examTip": "Mantrap = 'Physical security'—prevents unauthorized entry."
     },
     {
       "id": 21,
-      "question": "What does 'confidentiality' mean in information security?",
+      "question": "Which type of attack involves an attacker intercepting communication between two parties without their knowledge?",
       "options": [
-        "Ensuring that data is free from errors.",
-        "Ensuring that data is available to those who need it.",
-        "Preventing unauthorized access and disclosure of information.",
-        "A method for encrypting data to speed up processing."
+        "Man-in-the-Middle (MITM)",
+        "Denial-of-Service (DoS)",
+        "Brute force",
+        "SQL injection"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Confidentiality ensures data is only accessible to those with proper authorization.",
-      "examTip": "Encryption is a common way to ensure confidentiality."
+      "correctAnswerIndex": 0,
+      "explanation": "A Man-in-the-Middle (MITM) attack intercepts and possibly alters communication between two parties. DoS (option 2) overwhelms a system with traffic. Brute force (option 3) guesses passwords. SQL injection (option 4) manipulates databases via input fields.",
+      "examTip": "MITM = 'Eavesdropping' on communication—intercepts & manipulates data."
     },
     {
       "id": 22,
-      "question": "What is a password manager?",
+      "question": "Which of the following is a common method used to secure online banking transactions?",
       "options": [
-        "A person responsible for managing passwords manually.",
-        "A notebook where you write down your passwords.",
-        "A software application that securely stores and organizes your passwords.",
-        "A type of hardware device used to generate passwords."
+        "Multi-factor authentication (MFA)",
+        "Simple passwords",
+        "Disabling encryption",
+        "Using HTTP instead of HTTPS"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Password managers help you store and generate strong, unique passwords in one secure place.",
-      "examTip": "Using a password manager is highly recommended for good password hygiene."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA adds an extra layer of security by requiring more than one method to verify identity. Simple passwords (option 2) are weak. Disabling encryption (option 3) makes data vulnerable. HTTP (option 4) is not secure; HTTPS encrypts web traffic.",
+      "examTip": "MFA = 'Extra security'—always enable it for banking!"
     },
     {
       "id": 23,
-      "question": "What does integrity mean in the CIA triad?",
+      "question": "Which protocol is used to securely transfer files over a network?",
       "options": [
-        "Keeping data secret from unauthorized users.",
-        "Ensuring data is accurate, complete, and unaltered.",
-        "Making sure data is accessible when needed.",
-        "A method for increasing data storage capacity."
+        "SFTP",
+        "FTP",
+        "Telnet",
+        "SMTP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Integrity means the data has not been altered or tampered with.",
-      "examTip": "Hashing and digital signatures are used to verify data integrity."
+      "correctAnswerIndex": 0,
+      "explanation": "SFTP (Secure File Transfer Protocol) encrypts file transfers. FTP (option 2) transfers files but lacks encryption. Telnet (option 3) is an insecure remote access protocol. SMTP (option 4) is used for sending emails.",
+      "examTip": "SFTP = 'Secure file transfer'—always use it instead of FTP."
     },
     {
       "id": 24,
-      "question": "What is the 'Internet of Things' (IoT)?",
+      "question": "Which type of malware spreads without user interaction and replicates itself across networks?",
       "options": [
-        "A type of social media platform.",
-        "A network of interconnected devices that communicate and exchange data.",
-        "A new operating system for computers.",
-        "A type of computer virus."
+        "Worm",
+        "Trojan",
+        "Spyware",
+        "Ransomware"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The IoT includes devices like smart thermostats, security cameras, and wearables.",
-      "examTip": "IoT devices can introduce security risks if not properly configured and secured."
+      "correctAnswerIndex": 0,
+      "explanation": "A worm spreads across networks without user interaction. Trojans (option 2) disguise themselves as legitimate software. Spyware (option 3) secretly collects data. Ransomware (option 4) encrypts files and demands payment.",
+      "examTip": "Worm = 'Self-spreading'—no user action needed."
     },
     {
       "id": 25,
-      "question": "What is 'ransomware'?",
+      "question": "Which of the following is a security best practice when creating passwords?",
       "options": [
-        "A program that helps manage your finances.",
-        "A type of computer hardware.",
-        "Malware that encrypts your files and demands a ransom for decryption.",
-        "A type of online video game."
+        "Use a long and complex password",
+        "Use the same password for all accounts",
+        "Use personal information in passwords",
+        "Write passwords on a sticky note"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Ransomware locks or encrypts your data until a ransom is paid.",
-      "examTip": "Regular backups are your best defense against ransomware attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "A long and complex password increases security. Reusing passwords (option 2) is risky. Personal information (option 3) makes passwords easy to guess. Writing passwords down (option 4) increases the risk of theft.",
+      "examTip": "Strong password = 'Long + Complex + Unique'—never reuse passwords!"
     },
     {
       "id": 26,
-      "question": "What is 'spyware'?",
+      "question": "Which of the following security tools can capture and analyze network traffic in real-time?",
       "options": [
-        "A type of computer hardware.",
-        "A program that helps you organize files.",
-        "Malware that secretly monitors your computer activity.",
-        "A type of video game."
+        "Packet sniffer",
+        "Firewall",
+        "Antivirus software",
+        "Password cracker"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Spyware gathers information about your activities and sends it to a third party.",
-      "examTip": "Use anti-spyware software and be cautious about what you download and install."
+      "correctAnswerIndex": 0,
+      "explanation": "A packet sniffer (e.g., Wireshark) captures and analyzes network traffic. Firewalls (option 2) filter traffic but do not analyze packets. Antivirus software (option 3) detects malware. Password crackers (option 4) attempt to break passwords.",
+      "examTip": "Packet sniffer = 'Network spy'—analyzes traffic in real-time."
     },
     {
       "id": 27,
-      "question": "Which of the following is an example of PII (Personally Identifiable Information)?",
+      "question": "Which security feature ensures that a system remains operational even if a component fails?",
       "options": [
-        "Your favorite color.",
-        "The type of computer you use.",
-        "Your Social Security number.",
-        "The weather outside."
+        "Fault tolerance",
+        "Confidentiality",
+        "Access control",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Social Security numbers can be used to identify someone and potentially steal their identity.",
-      "examTip": "Protect your PII carefully to prevent identity theft."
+      "correctAnswerIndex": 0,
+      "explanation": "Fault tolerance ensures that systems continue running even when components fail. Confidentiality (option 2) protects data. Access control (option 3) regulates permissions. Non-repudiation (option 4) ensures actions cannot be denied.",
+      "examTip": "Fault tolerance = 'No downtime' even if something breaks."
     },
     {
       "id": 28,
-      "question": "What is a good practice for securing your home Wi-Fi network?",
+      "question": "Which of the following is a common method attackers use to gain access to a system?",
       "options": [
-        "Using the default network name and password, which is insecure.",
-        "Leaving the network open so anyone can connect, which is not safe.",
-        "Using a strong, unique password and enabling WPA2 or WPA3 encryption.",
-        "Disabling the router's firewall to improve speed, which is unsafe."
+        "Phishing",
+        "Firewall configuration",
+        "Software updates",
+        "Using multi-factor authentication"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Strong passwords and modern encryption help keep your Wi-Fi network secure.",
-      "examTip": "Change the default password on your router and enable encryption."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing tricks users into revealing credentials, allowing attackers to gain access. Firewall configuration (option 2) is a security measure. Software updates (option 3) patch vulnerabilities. MFA (option 4) enhances security.",
+      "examTip": "Phishing = 'Tricks users' into giving up credentials—always verify links!"
     },
     {
       "id": 29,
-      "question": "What is a digital footprint?",
+      "question": "Which security concept ensures that users cannot deny actions they have performed?",
       "options": [
-        "A drawing of your foot on a computer.",
-        "The trail of data you leave behind when using the internet.",
-        "A type of computer virus.",
-        "A special kind of computer mouse."
+        "Non-repudiation",
+        "Confidentiality",
+        "Integrity",
+        "Availability"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Your digital footprint includes your online activity, posts, photos, browsing history, and any other information about you available online.",
-      "examTip": "Be mindful of your digital footprint and what it might reveal about you."
+      "correctAnswerIndex": 0,
+      "explanation": "Non-repudiation prevents users from denying their actions. Confidentiality (option 2) protects data. Integrity (option 3) ensures data is unaltered. Availability (option 4) ensures systems remain accessible.",
+      "examTip": "Non-repudiation = 'No denying'—digital signatures & logs prove actions."
     },
     {
       "id": 30,
-      "question": "What is authentication in computer security?",
+      "question": "Which security measure is commonly used to secure remote access to a corporate network?",
       "options": [
-        "The process of writing a book.",
-        "The process of verifying the identity of a user, device, or system.",
-        "Encrypting data to protect it.",
-        "Deleting files from a system."
+        "Virtual Private Network (VPN)",
+        "Simple passwords",
+        "Open Wi-Fi",
+        "Disabling encryption"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Authentication confirms that someone or something is who or what they claim to be.",
-      "examTip": "Strong authentication, like multi-factor authentication, is crucial for secure access control."
+      "correctAnswerIndex": 0,
+      "explanation": "A VPN encrypts remote connections, securing access to corporate networks. Simple passwords (option 2) are weak. Open Wi-Fi (option 3) is insecure. Disabling encryption (option 4) makes data vulnerable.",
+      "examTip": "VPN = 'Secure tunnel'—always use it for remote work!"
     },
     {
       "id": 31,
-      "question": "What is a common characteristic of a strong password?",
+      "question": "Which of the following is an example of a strong password?",
       "options": [
-        "It's short and easy to remember.",
-        "It's a word found in the dictionary.",
-        "It's a mix of uppercase and lowercase letters, numbers, and symbols.",
-        "It's based on your birthday."
+        "P@ssw0rd#2024!",
+        "12345678",
+        "password",
+        "qwerty123"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Strong passwords are complex, making them harder to crack with brute-force methods.",
-      "examTip": "Use a password manager to help generate and store strong, unique passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "A strong password includes uppercase and lowercase letters, numbers, and symbols. '12345678' (option 2), 'password' (option 3), and 'qwerty123' (option 4) are weak and commonly guessed.",
+      "examTip": "Strong password = 'Long + Complex + Unique'—never use common words!"
     },
     {
       "id": 32,
-      "question": "Why is it important to be careful about what you post on social media?",
+      "question": "Which security principle ensures that only authorized users can access sensitive information?",
       "options": [
-        "Because everything you post is immediately deleted, which is false.",
-        "Because your posts can be seen by many and may affect your privacy and reputation.",
-        "Because social media companies automatically remove your posts after a while.",
-        "Because posting online improves your computer's performance, which is not true."
+        "Confidentiality",
+        "Integrity",
+        "Availability",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Information on social media can be widely viewed and have long-lasting consequences.",
-      "examTip": "Think before you post and review your privacy settings on social media."
+      "correctAnswerIndex": 0,
+      "explanation": "Confidentiality ensures that only authorized users can access sensitive data. Integrity (option 2) ensures data is not altered. Availability (option 3) ensures data is accessible when needed. Non-repudiation (option 4) prevents denial of actions.",
+      "examTip": "Confidentiality = 'Keep it secret'—only authorized users can see it."
     },
     {
       "id": 33,
-      "question": "What is a good practice when creating online accounts?",
+      "question": "Which security measure is used to detect and prevent unauthorized access attempts?",
       "options": [
-        "Using the same password for all accounts, which is insecure.",
-        "Choosing a weak password that is easy to remember, which is not advisable.",
-        "Using a unique, strong password for each account.",
-        "Sharing your password with trusted friends, which is unsafe."
+        "Intrusion Prevention System (IPS)",
+        "Antivirus software",
+        "Access control list (ACL)",
+        "Data encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Unique, strong passwords mean one compromised account won't lead to others being compromised.",
-      "examTip": "A password manager can help you manage unique passwords for all your accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "IPS detects and blocks unauthorized access attempts in real-time. Antivirus software (option 2) detects malware. ACLs (option 3) define permissions but do not actively prevent attacks. Encryption (option 4) secures data but does not detect intrusions.",
+      "examTip": "IPS = 'Detect & Block'—stops unauthorized access instantly."
     },
     {
       "id": 34,
-      "question": "What is data loss prevention (DLP)?",
+      "question": "Which of the following BEST describes a denial-of-service (DoS) attack?",
       "options": [
-        "A method of encrypting data at rest, which is different.",
-        "Software or processes that prevent sensitive data from leaving an organization's control.",
-        "A way to back up your data, which is not the focus of DLP.",
-        "A type of antivirus software, which is unrelated."
+        "An attacker overwhelms a system with excessive traffic to make it unavailable",
+        "An attacker steals sensitive information from a database",
+        "An attacker uses stolen credentials to gain unauthorized access",
+        "An attacker modifies a website’s content without authorization"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DLP helps stop sensitive data from leaving an organization, whether accidental or intentional.",
-      "examTip": "DLP systems can monitor and block data transfers based on predefined rules."
+      "correctAnswerIndex": 0,
+      "explanation": "A DoS attack overwhelms a system with excessive traffic, making it unavailable. Data theft (option 2) is different from DoS. Unauthorized access (option 3) is not a DoS attack. Website modification (option 4) is known as defacement, not DoS.",
+      "examTip": "DoS = 'Overwhelm the system'—denies service by flooding it with traffic."
     },
     {
       "id": 35,
-      "question": "What is the purpose of a security audit?",
+      "question": "Which of the following security controls is used to enforce least privilege?",
       "options": [
-        "To review and assess the effectiveness of security controls and practices.",
-        "To boost your computer's speed, which is not its purpose.",
-        "To encrypt all your data, which is not an audit function.",
-        "To install new software, which is unrelated."
+        "Role-Based Access Control (RBAC)",
+        "Virtual Private Network (VPN)",
+        "Firewall",
+        "Antivirus software"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Security audits check whether security policies and controls are effective and uncover areas to improve.",
-      "examTip": "Regular security audits are an important part of a comprehensive security program."
+      "explanation": "RBAC assigns permissions based on user roles, enforcing least privilege. VPNs (option 2) encrypt connections but do not control access. Firewalls (option 3) filter network traffic. Antivirus software (option 4) protects against malware.",
+      "examTip": "RBAC = 'Only what you need'—users get access based on job role."
     },
     {
       "id": 36,
-      "question": "What is a common sign of a phishing email?",
+      "question": "Which type of attack involves injecting malicious code into a website to target visitors?",
       "options": [
-        "It comes from a known contact with no errors.",
-        "It often contains urgent language and grammatical mistakes, pressuring you to act quickly.",
-        "It includes detailed personal account information that you recognize.",
-        "It always uses professional language with no typos."
+        "Cross-site scripting (XSS)",
+        "Phishing",
+        "Brute force",
+        "SQL injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing messages frequently push urgency or fear and may contain obvious errors.",
-      "examTip": "Be skeptical of emails that ask for personal information or create a sense of urgency."
+      "correctAnswerIndex": 0,
+      "explanation": "XSS injects malicious scripts into a website to attack visitors. Phishing (option 2) tricks users into revealing data. Brute force (option 3) guesses passwords. SQL injection (option 4) manipulates database queries.",
+      "examTip": "XSS = 'Attacks website visitors'—malicious scripts run in the browser."
     },
     {
       "id": 37,
-      "question": "What is a zero-day vulnerability?",
+      "question": "Which of the following is an example of physical security?",
       "options": [
-        "A vulnerability that can be easily fixed, which is not zero-day.",
-        "A vulnerability unknown to the vendor with no patch available at the time of discovery.",
-        "A vulnerability that is widely known and already patched, which is not zero-day.",
-        "A vulnerability that only affects outdated software, which is not necessarily true."
+        "Biometric scanner",
+        "Firewalls",
+        "Encryption",
+        "Antivirus software"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Zero-day flaws have no immediate fix and are especially dangerous until patched.",
-      "examTip": "Keeping software up to date helps protect against known vulnerabilities, but zero-days remain a threat."
+      "correctAnswerIndex": 0,
+      "explanation": "A biometric scanner is a physical security control that verifies identity. Firewalls (option 2) filter network traffic. Encryption (option 3) secures data. Antivirus software (option 4) detects malware.",
+      "examTip": "Biometric scanner = 'Physical control'—uses fingerprints, retina, etc."
     },
     {
       "id": 38,
-      "question": "What is availability in the context of the CIA triad?",
+      "question": "Which of the following BEST describes a vulnerability scan?",
       "options": [
-        "Keeping information secret, which is confidentiality.",
-        "Ensuring that data is accurate and unaltered, which is integrity.",
-        "Ensuring authorized users have access to systems and data when needed.",
-        "A method for encrypting data, which is not availability."
+        "An automated tool that checks for security weaknesses in a system",
+        "A method of tricking users into revealing sensitive information",
+        "A tool used to block unauthorized access",
+        "A technique used to encrypt sensitive data"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Availability ensures that legitimate users can access resources as needed.",
-      "examTip": "Denial-of-service attacks target availability."
+      "correctAnswerIndex": 0,
+      "explanation": "A vulnerability scan automatically detects security weaknesses in a system. Trickery (option 2) describes social engineering. Blocking access (option 3) is handled by firewalls. Encryption (option 4) secures data but does not scan for weaknesses.",
+      "examTip": "Vulnerability scan = 'Finds weaknesses' before hackers do."
     },
     {
       "id": 39,
-      "question": "What does non-repudiation mean in security?",
+      "question": "Which of the following is a benefit of using multi-factor authentication (MFA)?",
       "options": [
-        "Encrypting data, which is not non-repudiation.",
-        "Making secure backups of data, which is not non-repudiation.",
-        "Ensuring that someone cannot deny having performed an action.",
-        "Deleting files permanently, which is not non-repudiation."
+        "It adds an extra layer of security beyond just a password",
+        "It eliminates the need for passwords",
+        "It makes passwords stronger",
+        "It allows users to bypass authentication"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Non-repudiation means there is proof of an action or message origin, preventing denial.",
-      "examTip": "Digital signatures are a common way to achieve non-repudiation."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA requires an additional authentication factor beyond a password, increasing security. Eliminating passwords (option 2) is incorrect. Making passwords stronger (option 3) is unrelated to MFA. Bypassing authentication (option 4) is insecure.",
+      "examTip": "MFA = 'Extra layer'—password + something else (e.g., phone, fingerprint)."
     },
     {
       "id": 40,
-      "question": "What is a good practice for protecting your personal information online?",
+      "question": "Which of the following is a characteristic of a zero-day attack?",
       "options": [
-        "Share your full birthdate and address on all your social media profiles.",
-        "Use the same password for every account to simplify management.",
-        "Be cautious about what you share and regularly review your privacy settings.",
-        "Accept all friend requests to increase your network."
+        "It exploits an unknown vulnerability before a fix is available",
+        "It requires social engineering to be successful",
+        "It only affects outdated software",
+        "It is always detected by antivirus software"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Controlling what you share and reviewing privacy options helps keep personal data secure.",
-      "examTip": "Think before you post or share anything online."
+      "correctAnswerIndex": 0,
+      "explanation": "A zero-day attack exploits unknown vulnerabilities before a fix is available. Social engineering (option 2) is unrelated. Outdated software (option 3) is vulnerable, but zero-days can affect any system. Antivirus software (option 4) may not detect new zero-day attacks.",
+      "examTip": "Zero-day = 'No fix yet'—attackers exploit unknown flaws."
     },
     {
       "id": 41,
-      "question": "What is shoulder surfing?",
+      "question": "Which type of attack attempts to overwhelm a system by sending a massive amount of traffic to it?",
       "options": [
-        "A type of water sport involving surfing on waves.",
-        "A method of encrypting sensitive data, which is not correct.",
-        "Secretly observing someone as they enter their password or sensitive information.",
-        "A computer virus that spreads through physical contact."
+        "Denial-of-Service (DoS)",
+        "Phishing",
+        "Brute force",
+        "Cross-site scripting (XSS)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Shoulder surfing is a low-tech way to capture details by watching someone input data.",
-      "examTip": "Be aware of your surroundings when entering passwords or other sensitive information."
+      "correctAnswerIndex": 0,
+      "explanation": "A DoS attack floods a system with excessive traffic, making it unavailable. Phishing (option 2) tricks users into revealing information. Brute force (option 3) guesses passwords repeatedly. XSS (option 4) injects malicious scripts into websites.",
+      "examTip": "DoS = 'Overload the system'—flooding it with traffic."
     },
     {
       "id": 42,
-      "question": "What is a keylogger?",
+      "question": "Which of the following is the MOST effective way to prevent brute force attacks?",
       "options": [
-        "A device that increases typing speed, which is not correct.",
-        "A program or device that records every keystroke you make.",
-        "A tool for generating strong passwords, which is not a keylogger.",
-        "A utility for monitoring network traffic, which is not its purpose."
+        "Account lockout policies",
+        "Using default passwords",
+        "Disabling encryption",
+        "Allowing unlimited login attempts"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Keyloggers capture keystrokes to steal information like passwords and usernames.",
-      "examTip": "Be cautious about using public computers, as they may have keyloggers installed."
+      "correctAnswerIndex": 0,
+      "explanation": "Account lockout policies limit the number of incorrect login attempts, preventing brute force attacks. Default passwords (option 2) are a security risk. Disabling encryption (option 3) makes data vulnerable. Allowing unlimited login attempts (option 4) enables brute force attacks.",
+      "examTip": "Brute force prevention = 'Lock accounts' after failed attempts."
     },
     {
       "id": 43,
-      "question": "What is biometrics?",
+      "question": "Which of the following security features ensures that a user cannot deny performing an action?",
       "options": [
-        "A type of computer virus, which is not biometrics.",
-        "The use of unique biological traits, such as fingerprints or facial recognition, for authentication.",
-        "A method for organizing digital files, which is not correct.",
-        "A program that creates digital art, which is unrelated."
+        "Non-repudiation",
+        "Confidentiality",
+        "Integrity",
+        "Availability"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Biometric authentication relies on physical characteristics to verify identity.",
-      "examTip": "Biometric authentication can be more secure and convenient than traditional passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "Non-repudiation ensures that a user cannot deny their actions (e.g., digital signatures, audit logs). Confidentiality (option 2) protects data from unauthorized access. Integrity (option 3) ensures data remains unaltered. Availability (option 4) ensures system uptime.",
+      "examTip": "Non-repudiation = 'No denial'—proof of user actions."
     },
     {
       "id": 44,
-      "question": "What is access control in information security?",
+      "question": "Which protocol is used to encrypt web traffic and ensure secure communication between a browser and a website?",
       "options": [
-        "A method for organizing files, which is not access control.",
-        "The process of managing who has access to resources like files or systems.",
-        "A technique to speed up your computer, which is unrelated.",
-        "A type of computer hardware used for data storage."
+        "TLS",
+        "HTTP",
+        "FTP",
+        "SNMP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Access control limits resource access to authorized users only.",
-      "examTip": "Access control is a fundamental security principle, often managed through usernames, passwords, and permissions."
+      "correctAnswerIndex": 0,
+      "explanation": "TLS (Transport Layer Security) encrypts web traffic, ensuring secure communication. HTTP (option 2) is unencrypted. FTP (option 3) is used for file transfers. SNMP (option 4) manages network devices but does not encrypt web traffic.",
+      "examTip": "TLS = 'Secure web traffic' (used in HTTPS)."
     },
     {
       "id": 45,
-      "question": "What is the purpose of security awareness training?",
+      "question": "Which type of security control is used to monitor and analyze network activity for suspicious behavior?",
       "options": [
-        "To educate employees about security risks and best practices.",
-        "To teach employees advanced hacking techniques, which is not the goal.",
-        "To install security software on employee devices, which is not training.",
-        "To monitor employee internet usage, which is not the purpose."
+        "Intrusion Detection System (IDS)",
+        "Firewall",
+        "Virtual Private Network (VPN)",
+        "Access Control List (ACL)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Security awareness programs inform employees about threats like phishing and social engineering.",
-      "examTip": "A security-aware workforce is a crucial part of any organization's defense."
+      "explanation": "An IDS detects and monitors network traffic for suspicious activity. Firewalls (option 2) block or allow traffic but do not analyze it for anomalies. VPNs (option 3) encrypt connections but do not monitor threats. ACLs (option 4) define access permissions.",
+      "examTip": "IDS = 'Network security camera'—detects suspicious behavior."
     },
     {
       "id": 46,
-      "question": "Which is a better security practice?",
+      "question": "Which of the following is the BEST method to protect a Wi-Fi network from unauthorized access?",
       "options": [
-        "Leaving your computer unlocked when you step away.",
-        "Using the same password for all your accounts.",
-        "Locking your computer when you're not using it.",
-        "Sharing your passwords with colleagues."
+        "Enabling WPA3 encryption",
+        "Using open Wi-Fi",
+        "Disabling encryption",
+        "Using WEP encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Locking your computer stops others from accessing it without permission.",
-      "examTip": "Make it a habit to lock your computer whenever you leave it unattended."
+      "correctAnswerIndex": 0,
+      "explanation": "WPA3 encryption provides the highest level of Wi-Fi security. Open Wi-Fi (option 2) is insecure. Disabling encryption (option 3) exposes the network. WEP (option 4) is outdated and vulnerable to attacks.",
+      "examTip": "Wi-Fi Security = 'Use WPA3'—never WEP or open networks!"
     },
     {
       "id": 47,
-      "question": "What is a DDoS attack?",
+      "question": "Which type of attack involves tricking users into providing sensitive information through fake websites or emails?",
       "options": [
-        "A type of computer virus, which is not DDoS.",
-        "A distributed denial-of-service attack that overwhelms a system with traffic from many sources.",
-        "A method for encrypting data, which is not DDoS.",
-        "A social engineering technique to steal information, which is not DDoS."
+        "Phishing",
+        "Ransomware",
+        "Brute force",
+        "Man-in-the-Middle (MITM)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DDoS attacks flood a site or service with excessive traffic, causing it to become unavailable.",
-      "examTip": "DDoS attacks can be difficult to prevent, but mitigation techniques exist."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing scams trick users into revealing sensitive information via fake emails or websites. Ransomware (option 2) encrypts files and demands payment. Brute force (option 3) guesses passwords. MITM (option 4) intercepts and manipulates communication.",
+      "examTip": "Phishing = 'Fake emails & websites'—always verify before clicking!"
     },
     {
       "id": 48,
-      "question": "What is a security policy?",
+      "question": "Which of the following is the BEST way to secure an account against unauthorized access?",
       "options": [
-        "A type of insurance for cybersecurity incidents.",
-        "A documented set of rules and guidelines that define how an organization protects its information assets.",
-        "A hardware device that encrypts data.",
-        "A program that helps you create documents."
+        "Enabling multi-factor authentication (MFA)",
+        "Using short, simple passwords",
+        "Reusing passwords across multiple sites",
+        "Disabling automatic updates"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Security policies outline an organization's approach to safeguarding its systems and data.",
-      "examTip": "Security policies should be clearly documented, communicated, and enforced."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA adds an extra layer of security by requiring multiple authentication factors. Short passwords (option 2) are weak. Reusing passwords (option 3) makes accounts vulnerable. Disabling updates (option 4) increases security risks.",
+      "examTip": "MFA = 'Extra protection'—always enable it!"
     },
     {
       "id": 49,
-      "question": "What is a benefit of using cloud storage?",
+      "question": "Which security concept ensures that only authorized individuals have access to sensitive information?",
       "options": [
-        "It is always more secure than local storage, which is not necessarily true.",
-        "It can provide easier access to your data from multiple devices and locations.",
-        "It makes your computer run faster, which is not its primary function.",
-        "It automatically encrypts all your data without any configuration."
+        "Confidentiality",
+        "Integrity",
+        "Availability",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cloud storage allows data access from anywhere with an internet connection, offering convenience and scalability.",
-      "examTip": "Choose a reputable cloud provider and understand its security options."
+      "correctAnswerIndex": 0,
+      "explanation": "Confidentiality ensures that only authorized users can access sensitive data. Integrity (option 2) ensures data is not altered. Availability (option 3) ensures data is accessible when needed. Non-repudiation (option 4) prevents denial of actions.",
+      "examTip": "Confidentiality = 'Keep it secret'—only authorized users can see it."
     },
     {
       "id": 50,
-      "question": "What is physical security?",
+      "question": "Which type of encryption is used to protect files stored on a hard drive?",
       "options": [
-        "Measures to protect computer systems from viruses.",
-        "Measures to protect physical assets like buildings, equipment, and people from unauthorized access or harm.",
-        "A type of encryption algorithm used in cyber defense.",
-        "A method for managing digital passwords."
+        "Full-disk encryption",
+        "TLS",
+        "SSH",
+        "SNMP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Physical security includes locks, surveillance, and access control to protect tangible assets.",
-      "examTip": "Physical security complements cybersecurity measures."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption protects stored data on a hard drive. TLS (option 2) secures web traffic. SSH (option 3) encrypts remote logins. SNMP (option 4) manages network devices but does not encrypt files.",
+      "examTip": "Full-disk encryption = 'Protects stored data'—even if the device is lost."
     },
     {
       "id": 51,
-      "question": "Which of the following is a common type of malware?",
+      "question": "Which type of malware is designed to spread across a network without user interaction?",
       "options": [
-        "A keyboard.",
-        "A virus.",
-        "A monitor.",
-        "A printer."
+        "Worm",
+        "Trojan",
+        "Spyware",
+        "Rootkit"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A virus is malicious software capable of spreading and causing damage.",
-      "examTip": "Use antivirus software to protect your computer from malware."
+      "correctAnswerIndex": 0,
+      "explanation": "A worm spreads across a network automatically, without requiring user action. A Trojan (option 2) disguises itself as legitimate software. Spyware (option 3) collects user data secretly. A rootkit (option 4) hides inside a system to avoid detection.",
+      "examTip": "Worm = 'Self-spreading'—moves across networks on its own."
     },
     {
       "id": 52,
-      "question": "What does HTTPS stand for in a website address?",
+      "question": "Which of the following is a preventive security control?",
       "options": [
-        "Hypertext Transfer Protocol Secure.",
-        "Hypertext Text Protocol Site.",
-        "High Transfer Protocol System.",
-        "Hypertext Transfer Program Standard."
+        "Firewall",
+        "Intrusion Detection System (IDS)",
+        "Security audit",
+        "Incident response plan"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "HTTPS ensures encryption of the data transferred between your browser and the site.",
-      "examTip": "Look for 'https' and a padlock icon in your browser's address bar when entering sensitive data."
+      "explanation": "A firewall is a preventive control that blocks unauthorized access. IDS (option 2) is a detective control. Security audits (option 3) review past security measures. Incident response plans (option 4) are corrective controls used after an incident occurs.",
+      "examTip": "Firewall = 'Blocks threats before they happen'—a preventive measure."
     },
     {
       "id": 53,
-      "question": "Which of these is the least secure way to store passwords?",
+      "question": "Which authentication factor is based on something a user has?",
       "options": [
-        "In a password manager.",
-        "Written down on paper kept in a locked safe.",
-        "In an unencrypted plain text file on your computer.",
-        "Memorized by you."
+        "Smart card",
+        "Password",
+        "Fingerprint scan",
+        "Security question"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A plain text file is easily accessed if someone gains control of your computer.",
-      "examTip": "Never store passwords in plain text files."
+      "correctAnswerIndex": 0,
+      "explanation": "A smart card is a 'something you have' authentication factor. Passwords (option 2) are 'something you know.' Fingerprint scans (option 3) are 'something you are.' Security questions (option 4) also fall under 'something you know.'",
+      "examTip": "'Something you have' = Smart card, security token, authentication app."
     },
     {
       "id": 54,
-      "question": "What is a good way to identify a phishing email?",
+      "question": "Which type of cyberattack tricks users into providing sensitive information by impersonating a legitimate entity?",
       "options": [
-        "It is always perfectly written with no errors.",
-        "It often contains urgent language, grammatical mistakes, and requests personal information.",
-        "It comes from a trusted sender with no signs of irregularity.",
-        "It never contains any links or attachments."
+        "Phishing",
+        "Denial-of-Service (DoS)",
+        "Brute force",
+        "SQL injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing emails typically push urgency and ask for sensitive details.",
-      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing uses fake emails or websites to steal user credentials. DoS (option 2) overwhelms a system with traffic. Brute force (option 3) guesses passwords repeatedly. SQL injection (option 4) manipulates databases via input fields.",
+      "examTip": "Phishing = 'Fake email/website'—always verify before clicking!"
     },
     {
       "id": 55,
-      "question": "What is the purpose of a software patch?",
+      "question": "Which of the following is an example of a strong password?",
       "options": [
-        "To change the software's appearance.",
-        "To add new features to the software.",
-        "To fix bugs and patch security vulnerabilities in the software.",
-        "To slow down the software deliberately."
+        "C0mp!exP@ssw0rd#78",
+        "123456",
+        "password",
+        "qwerty123"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Patches address security flaws and other issues that could be exploited.",
-      "examTip": "Apply patches promptly to keep systems safe."
+      "correctAnswerIndex": 0,
+      "explanation": "A strong password includes uppercase and lowercase letters, numbers, and symbols. '123456' (option 2), 'password' (option 3), and 'qwerty123' (option 4) are weak and commonly guessed.",
+      "examTip": "Strong password = 'Long + Complex + Unique'—never use common words!"
     },
     {
       "id": 56,
-      "question": "Which of the following is the most effective way to protect your data from loss?",
+      "question": "Which encryption method is commonly used to protect data in transit?",
       "options": [
-        "Using a strong password, which secures access but doesn't recover data.",
-        "Installing antivirus software, which protects against malware but doesn't recover lost data.",
-        "Regularly backing up your data to an external drive or cloud storage.",
-        "Never turning off your computer to avoid losing data."
+        "Transport Layer Security (TLS)",
+        "Full-disk encryption",
+        "MD5",
+        "SHA-256"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Backups are the most reliable method to recover data after incidents like hardware failure or malware.",
-      "examTip": "Follow the 3-2-1 backup rule: 3 copies, 2 media types, 1 offsite."
+      "correctAnswerIndex": 0,
+      "explanation": "TLS encrypts data in transit, such as web traffic and emails. Full-disk encryption (option 2) protects stored data. MD5 (option 3) and SHA-256 (option 4) are hashing algorithms, not encryption methods.",
+      "examTip": "TLS = 'Secures data in transit'—used in HTTPS, VPNs, email encryption."
     },
     {
       "id": 57,
-      "question": "What is tailgating in physical security?",
+      "question": "Which of the following is a characteristic of multi-factor authentication (MFA)?",
       "options": [
-        "Following someone closely to steal their belongings.",
-        "Observing someone to capture their PIN from a distance.",
-        "Gaining unauthorized access to a restricted area by following an authorized person without proper credentials.",
-        "Creating a fake ID badge to enter a secure area."
+        "It requires two or more authentication factors",
+        "It replaces passwords with a single sign-on (SSO)",
+        "It only uses passwords",
+        "It allows unlimited login attempts"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Tailgating happens when an unauthorized person follows an authorized individual into a secure area.",
-      "examTip": "Always ensure doors close behind you and don’t let strangers enter without proper authorization."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA requires at least two authentication factors (e.g., password + fingerprint). SSO (option 2) allows users to log in once but is not MFA. Password-only authentication (option 3) is not MFA. Allowing unlimited login attempts (option 4) is a security risk.",
+      "examTip": "MFA = 'Two or more ways' to verify identity (password + phone code, fingerprint, etc.)."
     },
     {
       "id": 58,
-      "question": "What is the purpose of a privacy policy on a website?",
+      "question": "Which network security tool monitors and analyzes incoming and outgoing traffic to detect threats?",
       "options": [
-        "To enhance the website's visual appeal.",
-        "To explain how the website collects, uses, and protects your personal information.",
-        "To advertise products and services.",
-        "To provide technical support instructions."
+        "Intrusion Detection System (IDS)",
+        "Firewall",
+        "Router",
+        "Access control list (ACL)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Privacy policies detail how your data is handled when you use the website.",
-      "examTip": "Read privacy policies to understand how websites handle your data."
+      "correctAnswerIndex": 0,
+      "explanation": "An IDS detects and analyzes suspicious network activity. Firewalls (option 2) block or allow traffic but do not analyze threats. Routers (option 3) direct network traffic but do not detect threats. ACLs (option 4) control access but do not analyze threats.",
+      "examTip": "IDS = 'Detects network threats'—like a security camera for traffic."
     },
     {
       "id": 59,
-      "question": "What is biometric authentication?",
+      "question": "Which of the following is a benefit of using a Virtual Private Network (VPN)?",
       "options": [
-        "Using a strong password, which is not biometric.",
-        "Using a security token, which is not biometric.",
-        "Using unique biological traits, like fingerprints or facial recognition, for identification.",
-        "Using a username and password, which is not biometric."
+        "It encrypts internet traffic for secure remote access",
+        "It speeds up internet connections",
+        "It eliminates the need for strong passwords",
+        "It allows users to bypass all security controls"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Biometrics rely on physical or behavioral characteristics to confirm identity.",
-      "examTip": "Biometric authentication can be more secure and convenient than traditional passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "A VPN encrypts internet traffic, securing remote access. VPNs (option 2) do not improve speed; they may slow it down. VPNs (option 3) do not replace strong passwords. VPNs (option 4) do not bypass security controls; they enhance security.",
+      "examTip": "VPN = 'Secure tunnel'—encrypts traffic for safe remote access."
     },
     {
       "id": 60,
-      "question": "What is a software vulnerability?",
+      "question": "Which of the following BEST describes the purpose of an access control list (ACL)?",
       "options": [
-        "A strong password, which is not a vulnerability.",
-        "A flaw or weakness in software that can be exploited by attackers.",
-        "A type of firewall, which is not a vulnerability.",
-        "A program that protects your computer, which is not a vulnerability."
+        "To define permissions for users and systems",
+        "To encrypt network traffic",
+        "To block malicious software",
+        "To scan for security vulnerabilities"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Vulnerabilities are weaknesses that attackers can exploit to compromise a system.",
-      "examTip": "Keep your software updated to patch known vulnerabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "ACLs define which users or systems can access specific resources. Encryption (option 2) secures data but does not control access. Blocking malware (option 3) is done by antivirus software. Vulnerability scanning (option 4) identifies security weaknesses.",
+      "examTip": "ACL = 'Who gets access to what'—defines permissions for resources."
     },
     {
       "id": 61,
-      "question": "Which of these is the least effective method for protecting your online accounts?",
+      "question": "Which of the following is an example of a social engineering attack?",
       "options": [
-        "Using multi-factor authentication.",
-        "Using strong, unique passwords for each account.",
-        "Reusing the same password for multiple accounts.",
-        "Using a password manager."
+        "Phishing",
+        "Denial-of-Service (DoS)",
+        "Brute force attack",
+        "Cross-site scripting (XSS)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Reusing passwords is risky, since one breach can compromise multiple accounts.",
-      "examTip": "Never reuse passwords across multiple accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing is a social engineering attack where attackers trick users into revealing sensitive information. DoS (option 2) overwhelms systems with traffic. Brute force (option 3) guesses passwords. XSS (option 4) injects malicious scripts into web pages.",
+      "examTip": "Social engineering = 'Manipulating people'—not hacking systems."
     },
     {
       "id": 62,
-      "question": "What is a cookie in web browsing?",
+      "question": "Which security concept ensures that data remains unaltered and trustworthy?",
       "options": [
-        "A type of dessert.",
-        "A small text file stored on your computer by a website to remember information about you.",
-        "A type of computer virus.",
-        "A program that helps you browse the internet."
+        "Integrity",
+        "Confidentiality",
+        "Availability",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cookies track login status, preferences, and browsing data. They can raise privacy concerns but are not inherently malicious.",
-      "examTip": "You can manage your browser's cookie settings to control which websites can store cookies on your computer."
+      "correctAnswerIndex": 0,
+      "explanation": "Integrity ensures that data remains unchanged and accurate. Confidentiality (option 2) protects sensitive data. Availability (option 3) ensures data is accessible. Non-repudiation (option 4) prevents users from denying actions they performed.",
+      "examTip": "Integrity = 'No unauthorized changes'—data remains accurate."
     },
     {
       "id": 63,
-      "question": "What is the principle of least privilege?",
+      "question": "Which of the following is an example of multi-factor authentication (MFA)?",
       "options": [
-        "Giving all users full access to every resource.",
-        "Granting users only the minimum access necessary to perform their job functions.",
-        "Providing every user with complete control over the system.",
-        "Restricting access so much that users cannot perform any tasks."
+        "Password + fingerprint scan",
+        "Two different passwords",
+        "Using a long, complex password",
+        "A security question"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Least privilege reduces risk by giving each user only the permissions they need.",
-      "examTip": "Always apply the principle of least privilege when assigning user permissions."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA requires two or more different authentication factors, such as a password and a fingerprint scan. Two passwords (option 2) are the same factor ('something you know'). A long password (option 3) is strong but not MFA. A security question (option 4) is another 'something you know' factor.",
+      "examTip": "MFA = 'Two or more different factors'—not just two passwords!"
     },
     {
       "id": 64,
-      "question": "What is integrity in the CIA triad?",
+      "question": "Which of the following is a best practice for securing a web application?",
       "options": [
-        "Keeping data secret from unauthorized users.",
-        "Ensuring data remains accurate and unaltered.",
-        "Making sure data is accessible when needed.",
-        "A method for encrypting data."
+        "Input validation",
+        "Using default credentials",
+        "Disabling encryption",
+        "Allowing all network traffic"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Integrity ensures data has not been modified or tampered with.",
-      "examTip": "Hashing and digital signatures are used to verify data integrity."
+      "correctAnswerIndex": 0,
+      "explanation": "Input validation helps prevent attacks like SQL injection and XSS by verifying user input. Default credentials (option 2) create security risks. Disabling encryption (option 3) exposes data to attacks. Allowing all network traffic (option 4) is insecure.",
+      "examTip": "Input validation = 'Check user input'—stops malicious code."
     },
     {
       "id": 65,
-      "question": "What should you do if you receive a suspicious email asking for personal information?",
+      "question": "Which security tool is used to scan a system for vulnerabilities?",
       "options": [
-        "Reply to the email and provide your information.",
-        "Click on any links in the email to verify its authenticity.",
-        "Delete the email and report it as spam or phishing.",
-        "Forward the email to all your contacts."
+        "Vulnerability scanner",
+        "Firewall",
+        "Access control list (ACL)",
+        "Antivirus software"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Suspicious emails should be deleted and flagged. Never share personal information through unverified messages.",
-      "examTip": "If you’re unsure about an email, contact the sender through an official channel."
+      "correctAnswerIndex": 0,
+      "explanation": "A vulnerability scanner identifies weaknesses in a system. Firewalls (option 2) block or allow traffic but do not scan for vulnerabilities. ACLs (option 3) control access but do not detect weaknesses. Antivirus software (option 4) detects malware but does not scan for vulnerabilities.",
+      "examTip": "Vulnerability scanner = 'Find weaknesses before hackers do.'"
     },
     {
       "id": 66,
-      "question": "If a website address starts with 'HTTPS', what does the 'S' stand for?",
+      "question": "Which type of malware disguises itself as legitimate software to trick users into installing it?",
       "options": [
-        "Speed",
-        "Secure",
-        "Site",
-        "Standard"
+        "Trojan",
+        "Worm",
+        "Spyware",
+        "Ransomware"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HTTPS indicates that data exchanged with the site is encrypted.",
-      "examTip": "Look for 'HTTPS' and the padlock icon in your browser's address bar when entering sensitive information online."
+      "correctAnswerIndex": 0,
+      "explanation": "A Trojan appears as legitimate software but contains malicious code. A worm (option 2) spreads without user interaction. Spyware (option 3) collects user data. Ransomware (option 4) encrypts files and demands payment.",
+      "examTip": "Trojan = 'Looks legit but is dangerous'—never download unverified software!"
     },
     {
       "id": 67,
-      "question": "What is social engineering?",
+      "question": "Which of the following is a characteristic of a strong password?",
       "options": [
-        "Building physical infrastructure.",
-        "Forming online friendships without deception.",
-        "Using deceptive techniques to manipulate individuals into revealing confidential information.",
-        "Developing computer software."
+        "At least 12 characters with a mix of letters, numbers, and symbols",
+        "Using common words for easy memorization",
+        "Reusing the same password for multiple accounts",
+        "Short and simple for convenience"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Social engineering exploits human trust or curiosity instead of technical weaknesses.",
-      "examTip": "Be skeptical and don’t let others pressure you into revealing sensitive information."
+      "correctAnswerIndex": 0,
+      "explanation": "A strong password has at least 12 characters and includes uppercase/lowercase letters, numbers, and symbols. Using common words (option 2) makes passwords easy to guess. Reusing passwords (option 3) is risky. Short and simple passwords (option 4) are weak.",
+      "examTip": "Strong password = 'Long + Complex + Unique'—never reuse passwords!"
     },
     {
       "id": 68,
-      "question": "What is the purpose of a firewall?",
+      "question": "Which of the following BEST describes a role-based access control (RBAC) system?",
       "options": [
-        "To warm up your computer.",
-        "To prevent unauthorized access by filtering network traffic based on rules.",
-        "To store backups of your data.",
-        "To monitor your computer for viruses."
+        "Permissions are assigned based on a user’s job function",
+        "Users can choose their own access levels",
+        "Access is granted to anyone who requests it",
+        "All users have the same access rights"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A firewall checks inbound and outbound traffic, permitting or blocking connections according to set rules.",
-      "examTip": "Enable your computer's built-in firewall and consider a hardware firewall for your network."
+      "correctAnswerIndex": 0,
+      "explanation": "RBAC assigns permissions based on job roles, ensuring least privilege. Allowing users to choose access levels (option 2) is insecure. Granting access to anyone (option 3) is not RBAC. Giving all users the same access (option 4) ignores security principles.",
+      "examTip": "RBAC = 'Only what you need'—access based on job role."
     },
     {
       "id": 69,
-      "question": "What is a common characteristic of a phishing email?",
+      "question": "Which of the following is a benefit of encrypting sensitive data?",
       "options": [
-        "It is always free of errors.",
-        "It is sent from a trusted source without any urgency.",
-        "It often contains urgent language and grammatical errors that prompt immediate action.",
-        "It never asks for personal information."
+        "It protects data from unauthorized access",
+        "It speeds up network performance",
+        "It eliminates the need for passwords",
+        "It makes data publicly accessible"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Phishing emails frequently use urgency or fear to push users into revealing info without caution.",
-      "examTip": "Be suspicious of emails that ask for personal information or create a sense of urgency."
+      "correctAnswerIndex": 0,
+      "explanation": "Encryption protects data by making it unreadable without the decryption key. It does not improve network speed (option 2). Passwords (option 3) are still needed for authentication. Encryption (option 4) does not make data public; it protects it.",
+      "examTip": "Encryption = 'Data protection'—only authorized users can access it."
     },
     {
       "id": 70,
-      "question": "What is ransomware?",
+      "question": "Which security tool is used to detect and respond to suspicious activity on a network?",
       "options": [
-        "A program that helps manage your finances.",
-        "A type of computer hardware.",
-        "Malware that encrypts your files and demands payment for the decryption key.",
-        "An online video game."
+        "Intrusion Detection System (IDS)",
+        "Firewall",
+        "Access control list (ACL)",
+        "Load balancer"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Ransomware locks your data by encrypting it, demanding payment for release.",
-      "examTip": "Regular backups are your best defense against ransomware attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "An IDS monitors network traffic and alerts administrators about suspicious activity. Firewalls (option 2) block traffic but do not analyze behavior. ACLs (option 3) define access permissions but do not detect threats. Load balancers (option 4) distribute network traffic but do not detect attacks.",
+      "examTip": "IDS = 'Network security camera'—detects suspicious activity."
     },
     {
       "id": 71,
-      "question": "What is a good practice for using public Wi-Fi?",
+      "question": "Which of the following is the BEST way to protect against phishing attacks?",
       "options": [
-        "Conduct sensitive transactions like online banking without protection.",
-        "Share sensitive personal information on public networks.",
-        "Use a VPN to encrypt your connection when on public Wi-Fi.",
-        "Disable your firewall to speed up your connection."
+        "User education and awareness training",
+        "Using a simple password",
+        "Disabling antivirus software",
+        "Clicking on all email links to verify authenticity"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A VPN creates an encrypted tunnel for your data, vital on unsecured public Wi-Fi.",
-      "examTip": "Avoid accessing sensitive information on public Wi-Fi without a VPN."
+      "correctAnswerIndex": 0,
+      "explanation": "User education and awareness training help employees recognize and avoid phishing attacks. Simple passwords (option 2) do not prevent phishing. Disabling antivirus software (option 3) increases risk. Clicking on all email links (option 4) increases exposure to phishing.",
+      "examTip": "Phishing prevention = 'User awareness'—think before clicking!"
     },
     {
       "id": 72,
-      "question": "What does two-factor authentication add to your account security?",
+      "question": "Which of the following BEST describes the principle of least privilege?",
       "options": [
-        "It makes your password longer.",
-        "It adds an extra layer of security by requiring a second verification method.",
-        "It speeds up the login process.",
-        "It automatically creates backups of your account data."
+        "Users only receive the minimum access needed to perform their job",
+        "All users have full administrative rights",
+        "Users decide their own access levels",
+        "All employees have the same permissions"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2FA combines something you know (password) with something you have or are, boosting protection.",
-      "examTip": "Enable 2FA on all accounts that support it, especially for important accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "Least privilege ensures users only have the access required for their job. Full admin rights (option 2) increase security risks. Letting users decide access (option 3) is insecure. Equal permissions for all employees (option 4) ignores security policies.",
+      "examTip": "Least privilege = 'Only what you need'—reduces security risks."
     },
     {
       "id": 73,
-      "question": "What does availability mean in the CIA triad?",
+      "question": "Which of the following BEST describes a brute force attack?",
       "options": [
-        "Keeping information secret.",
-        "Ensuring information is accurate.",
-        "Ensuring authorized users can access data and systems when needed.",
-        "A method for encrypting data."
+        "An attacker systematically tries every possible password combination",
+        "An attacker sends fake emails to steal login credentials",
+        "An attacker manipulates database queries to gain access",
+        "An attacker floods a server with excessive traffic"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Availability ensures legitimate users can reach the data or service whenever required.",
-      "examTip": "Denial-of-service attacks target availability."
+      "correctAnswerIndex": 0,
+      "explanation": "A brute force attack attempts every possible password combination until the correct one is found. Phishing (option 2) uses fake emails. SQL injection (option 3) manipulates database queries. A denial-of-service attack (option 4) floods a server with traffic.",
+      "examTip": "Brute force = 'Tries everything'—longer passwords help prevent it."
     },
     {
       "id": 74,
-      "question": "What should you do before disposing of an old computer or hard drive?",
+      "question": "Which type of attack involves inserting malicious SQL code into a database query?",
       "options": [
-        "Throw it away without any data removal.",
-        "Sell it online without wiping the data.",
-        "Securely erase or destroy the data to prevent recovery.",
-        "Give it to a friend without any data sanitization."
+        "SQL injection",
+        "Phishing",
+        "Denial-of-service (DoS)",
+        "Brute force"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Removing data securely helps prevent unauthorized recovery of personal or sensitive information.",
-      "examTip": "Protect your personal information by securely erasing data from old devices before disposal."
+      "correctAnswerIndex": 0,
+      "explanation": "SQL injection exploits vulnerabilities in database queries by inserting malicious code. Phishing (option 2) tricks users into revealing data. DoS (option 3) overwhelms a system with traffic. Brute force (option 4) guesses passwords repeatedly.",
+      "examTip": "SQL injection = 'Injects malicious code into a database.'"
     },
     {
       "id": 75,
-      "question": "What is a good way to protect your passwords?",
+      "question": "Which of the following is a common method to secure wireless networks?",
       "options": [
-        "Write them on a sticky note on your monitor.",
-        "Use the same password for all your accounts.",
-        "Store them in a secure password manager that encrypts them.",
-        "Share your passwords only with close friends."
+        "Enabling WPA3 encryption",
+        "Using open Wi-Fi",
+        "Disabling all encryption",
+        "Using WEP encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Password managers securely store and generate strong credentials, simplifying management.",
-      "examTip": "Using a password manager is a highly recommended security practice."
+      "correctAnswerIndex": 0,
+      "explanation": "WPA3 encryption provides strong security for wireless networks. Open Wi-Fi (option 2) is insecure. Disabling encryption (option 3) exposes networks to attacks. WEP encryption (option 4) is outdated and vulnerable.",
+      "examTip": "Wi-Fi security = 'Always use WPA3'—never WEP or open networks!"
     },
     {
       "id": 76,
-      "question": "What is spyware?",
+      "question": "Which of the following is the BEST way to protect sensitive data stored on a laptop?",
       "options": [
-        "A type of computer hardware.",
-        "A program that helps you organize your files.",
-        "Malicious software that secretly collects information about your activities.",
-        "A type of video game."
+        "Full-disk encryption",
+        "Using a strong password",
+        "Keeping the laptop in a locked drawer",
+        "Disabling automatic updates"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Spyware stealthily collects data from your computer and sends it to a third party.",
-      "examTip": "Use anti-spyware software and be cautious about what you download and install."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption ensures that even if the laptop is stolen, data remains protected. Strong passwords (option 2) help but do not encrypt data. Physical security (option 3) is important but does not protect stored data. Disabling updates (option 4) increases security risks.",
+      "examTip": "Lost laptop? 'Full-disk encryption' = No data access without the key."
     },
     {
       "id": 77,
-      "question": "What is a computer virus?",
+      "question": "Which of the following BEST describes two-factor authentication (2FA)?",
       "options": [
-        "A biological virus that affects living organisms.",
-        "A utility that speeds up your computer.",
-        "Malware that can replicate itself and infect other systems.",
-        "A physical component of a computer."
+        "Using two different authentication factors to verify identity",
+        "Using two passwords for added security",
+        "Using a single password but requiring longer length",
+        "Allowing users to log in without authentication"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A virus is a type of malware that infects files and can spread to other machines.",
-      "examTip": "Use antivirus software and practice safe computing habits to protect against viruses."
+      "correctAnswerIndex": 0,
+      "explanation": "2FA requires two different authentication factors (e.g., password + fingerprint). Two passwords (option 2) are the same factor. Longer passwords (option 3) are stronger but do not make it 2FA. Option 4 is insecure.",
+      "examTip": "2FA = 'Two different ways' to verify identity (password + phone code)."
     },
     {
       "id": 78,
-      "question": "What is the primary purpose of data backups?",
+      "question": "Which of the following is an example of a physical security control?",
       "options": [
-        "To improve your computer's performance.",
-        "To protect against viruses by storing duplicates of files.",
-        "To have a copy of your data in case the original is lost or damaged.",
-        "To organize your files more effectively."
+        "Security camera",
+        "Firewall",
+        "Antivirus software",
+        "Encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Backups allow you to recover data if files are lost or corrupted.",
-      "examTip": "Regularly back up your important data to an external drive or cloud storage."
+      "correctAnswerIndex": 0,
+      "explanation": "A security camera is a physical security control. Firewalls (option 2) filter network traffic. Antivirus software (option 3) detects malware. Encryption (option 4) protects data but is not a physical control.",
+      "examTip": "Physical security = 'Cameras, locks, fences'—not software!"
     },
     {
       "id": 79,
-      "question": "What is a good security practice when using email?",
+      "question": "Which of the following is the BEST way to secure a mobile device?",
       "options": [
-        "Open all attachments without verification.",
-        "Click on every link to see what they lead to.",
-        "Verify sender identities and avoid opening suspicious attachments or links.",
-        "Share your email password with trusted contacts."
+        "Enabling biometric authentication",
+        "Using a simple four-digit PIN",
+        "Disabling automatic updates",
+        "Connecting to open Wi-Fi networks"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Being cautious with links and attachments helps avoid malware and phishing.",
-      "examTip": "If an email seems suspicious, don't open attachments or click links. Verify through another channel."
+      "correctAnswerIndex": 0,
+      "explanation": "Biometric authentication (e.g., fingerprint or face scan) enhances security. Simple PINs (option 2) are weak. Disabling updates (option 3) exposes devices to vulnerabilities. Open Wi-Fi (option 4) is insecure.",
+      "examTip": "Mobile security = 'Biometric authentication' + strong passwords!"
     },
     {
       "id": 80,
-      "question": "What does encryption do to data?",
+      "question": "Which security concept ensures that a system remains available and operational even during a failure?",
       "options": [
-        "It deletes the data permanently.",
-        "It transforms data into an unreadable format without the correct key.",
-        "It creates a duplicate copy of the data.",
-        "It increases the data's file size significantly."
+        "Fault tolerance",
+        "Confidentiality",
+        "Access control",
+        "Non-repudiation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Encryption ensures data privacy by making it unreadable to unauthorized parties.",
-      "examTip": "Use encryption to protect sensitive data, both at rest and in transit."
+      "correctAnswerIndex": 0,
+      "explanation": "Fault tolerance ensures that systems remain operational even if a component fails. Confidentiality (option 2) protects sensitive data. Access control (option 3) regulates permissions. Non-repudiation (option 4) ensures actions cannot be denied.",
+      "examTip": "Fault tolerance = 'No downtime'—keeps systems running."
     },
     {
       "id": 81,
-      "question": "What is the Internet of Things (IoT)?",
+      "question": "Which of the following is the BEST way to prevent unauthorized access to a laptop?",
       "options": [
-        "A type of social media platform.",
-        "A network of interconnected physical devices that collect and exchange data.",
-        "A new operating system for computers.",
-        "A type of computer virus."
+        "Enable full-disk encryption and strong passwords",
+        "Use a simple password for convenience",
+        "Disable software updates",
+        "Write the password on a sticky note"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "IoT devices include smart thermostats, cameras, and wearables connected to the internet.",
-      "examTip": "IoT devices can introduce new security risks if not properly secured."
+      "correctAnswerIndex": 0,
+      "explanation": "Enabling full-disk encryption and using strong passwords protect data even if the laptop is stolen. Simple passwords (option 2) are easy to guess. Disabling updates (option 3) increases security risks. Writing passwords down (option 4) makes them vulnerable to theft.",
+      "examTip": "Laptop security = 'Encryption + Strong password'—never write it down!"
     },
     {
       "id": 82,
-      "question": "Which of the following actions is the most likely to compromise your online security?",
+      "question": "Which type of attack floods a network with excessive traffic to make resources unavailable?",
       "options": [
-        "Using a strong, unique password for each account.",
-        "Enabling multi-factor authentication on your accounts.",
-        "Reusing the same password for multiple accounts.",
-        "Keeping your software up to date."
+        "Denial-of-Service (DoS)",
+        "Phishing",
+        "Brute force",
+        "Man-in-the-Middle (MITM)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Using one password on multiple sites means a single breach can compromise multiple accounts.",
-      "examTip": "Never reuse passwords across different online accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "A DoS attack overwhelms a system with traffic, preventing legitimate access. Phishing (option 2) tricks users into revealing credentials. Brute force (option 3) attempts to guess passwords. MITM (option 4) intercepts and manipulates communication.",
+      "examTip": "DoS = 'Flood the network'—denies service to real users."
     },
     {
       "id": 83,
-      "question": "What is a firewall primarily designed to do?",
+      "question": "Which security control is used to restrict access to a network based on user identity?",
       "options": [
-        "Detect and remove viruses from your system.",
-        "Control network traffic and block unauthorized access.",
-        "Encrypt data on your hard drive.",
-        "Automatically back up your files."
+        "Access control list (ACL)",
+        "Firewall",
+        "Intrusion detection system (IDS)",
+        "Antivirus software"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A firewall filters traffic in and out of a network, blocking unauthorized connections.",
-      "examTip": "Think of a firewall as a gatekeeper for your network."
+      "correctAnswerIndex": 0,
+      "explanation": "An ACL defines permissions for users and devices accessing a network. Firewalls (option 2) filter traffic but do not enforce identity-based rules. IDS (option 3) detects threats but does not restrict access. Antivirus software (option 4) protects against malware but does not control access.",
+      "examTip": "ACL = 'Who gets access to what'—controls network permissions."
     },
     {
       "id": 84,
-      "question": "What is a good practice when using social media?",
+      "question": "Which of the following is an example of biometric authentication?",
       "options": [
-        "Accept friend requests from everyone you encounter online.",
-        "Share your full birthdate and home address publicly.",
-        "Be cautious about what you post and review your privacy settings regularly.",
-        "Use the same login credentials for all social media platforms."
+        "Fingerprint scan",
+        "Security question",
+        "Password",
+        "One-time passcode"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Reviewing privacy options and limiting what you post helps safeguard personal information.",
-      "examTip": "Regularly check your privacy settings on social media platforms."
+      "correctAnswerIndex": 0,
+      "explanation": "A fingerprint scan is a form of biometric authentication ('something you are'). Security questions (option 2) and passwords (option 3) are 'something you know.' One-time passcodes (option 4) are 'something you have,' not biometric.",
+      "examTip": "Biometric = 'Something you ARE'—fingerprint, retina, face scan."
     },
     {
       "id": 85,
-      "question": "What is the main function of antivirus software?",
+      "question": "Which type of encryption is commonly used to secure data in transit?",
       "options": [
-        "To speed up your computer's performance.",
-        "To help organize your files.",
-        "To detect, prevent, and remove malware from your computer.",
-        "To create documents and spreadsheets."
+        "TLS",
+        "SHA-256",
+        "Full-disk encryption",
+        "MD5"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Antivirus software guards against threats like viruses, worms, and other malware.",
-      "examTip": "Keep your antivirus software up to date and run regular scans."
+      "correctAnswerIndex": 0,
+      "explanation": "TLS (Transport Layer Security) encrypts data in transit (e.g., HTTPS, VPNs). SHA-256 (option 2) and MD5 (option 4) are hashing algorithms, not encryption. Full-disk encryption (option 3) protects stored data, not data in transit.",
+      "examTip": "TLS = 'Encrypts data in transit'—used for HTTPS, email, and VPNs."
     },
     {
       "id": 86,
-      "question": "What is phishing?",
+      "question": "Which of the following is the BEST way to prevent unauthorized physical access to a server room?",
       "options": [
-        "A type of water sport involving catching fish.",
-        "A method for detecting viruses by 'fishing' for malware.",
-        "An attempt by attackers to trick you into providing personal information through deceptive emails or websites.",
-        "A software program used to organize your files."
+        "Implementing biometric access controls",
+        "Using default passwords on servers",
+        "Allowing all employees to enter",
+        "Disabling logging for access attempts"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Phishing relies on deception to gather sensitive details like passwords or financial data.",
-      "examTip": "Be suspicious of unsolicited emails or messages asking for personal information."
+      "correctAnswerIndex": 0,
+      "explanation": "Biometric access controls (e.g., fingerprint or retina scans) ensure only authorized personnel enter the server room. Default passwords (option 2) are a security risk. Allowing all employees access (option 3) weakens security. Disabling logging (option 4) removes the ability to track access attempts.",
+      "examTip": "Server room security = 'Biometric access + Logging'—track who enters!"
     },
     {
       "id": 87,
-      "question": "What is a strong password?",
+      "question": "Which of the following BEST describes a zero-day attack?",
       "options": [
-        "Your pet's name, which is easily guessed.",
-        "123456, a simple numeric sequence.",
-        "A mix of uppercase and lowercase letters, numbers, and symbols that is hard to crack.",
-        "Your birthday, which is predictable."
+        "An exploit that takes advantage of a vulnerability before a fix is available",
+        "An attack that relies on outdated software",
+        "A brute force attack on a password",
+        "An attack that only affects cloud environments"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Passwords with multiple character types are more resistant to brute-force attacks.",
-      "examTip": "Use a password manager to help generate and store strong, unique passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "A zero-day attack exploits a vulnerability before a fix is available. Outdated software (option 2) can be vulnerable, but zero-day exploits affect even updated systems. Brute force attacks (option 3) involve guessing passwords, not exploiting unknown vulnerabilities. Zero-day attacks (option 4) can target any environment, not just the cloud.",
+      "examTip": "Zero-day = 'No fix yet'—attackers exploit unknown flaws."
     },
     {
       "id": 88,
-      "question": "Why should you log out of accounts after using a public computer?",
+      "question": "Which of the following BEST describes the purpose of a firewall?",
       "options": [
-        "To reduce power consumption, which is not the main concern.",
-        "To make your computer run faster, which is irrelevant.",
-        "To prevent unauthorized access to your accounts by ending your session.",
-        "To free up hard drive space, which is not the purpose."
+        "To filter network traffic based on security rules",
+        "To detect malware on a computer",
+        "To encrypt stored data",
+        "To monitor user behavior"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Logging out ensures your account can’t be accessed after you leave.",
-      "examTip": "Always log out of accounts and clear your browsing history after using a public computer."
+      "correctAnswerIndex": 0,
+      "explanation": "A firewall filters network traffic, blocking or allowing connections based on security rules. Malware detection (option 2) is handled by antivirus software. Encryption (option 3) protects data but does not filter traffic. Monitoring user behavior (option 4) is typically done by security logs or behavior analytics tools.",
+      "examTip": "Firewall = 'Traffic cop'—controls what enters and leaves the network."
     },
     {
       "id": 89,
-      "question": "What does updating your software do?",
+      "question": "Which of the following BEST describes a social engineering attack?",
       "options": [
-        "It changes the software's appearance without affecting functionality.",
-        "It installs the latest patches and fixes for bugs and security vulnerabilities.",
-        "It removes all your old files automatically.",
-        "It slows down your system intentionally."
+        "An attack that manipulates people into revealing sensitive information",
+        "A brute force attack to guess passwords",
+        "A denial-of-service (DoS) attack to overwhelm a server",
+        "An attack that exploits software vulnerabilities"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Software updates address potential exploits and enhance stability and security.",
-      "examTip": "Enable automatic updates whenever possible, or check regularly for updates."
+      "correctAnswerIndex": 0,
+      "explanation": "Social engineering attacks manipulate people into revealing confidential information. Brute force attacks (option 2) systematically guess passwords. DoS attacks (option 3) overwhelm a system with traffic. Software exploitation (option 4) involves attacking vulnerabilities, not people.",
+      "examTip": "Social engineering = 'Hacking people'—not systems!"
     },
     {
       "id": 90,
-      "question": "What is a good practice to help prevent becoming a victim of social engineering?",
+      "question": "Which of the following is the MOST secure way to authenticate a user?",
       "options": [
-        "Trust every message you receive online.",
-        "Be skeptical of unsolicited requests and verify the sender's identity before responding.",
-        "Share your personal details immediately to appear cooperative.",
-        "Click on every link to see what it leads to."
+        "Multi-factor authentication (MFA)",
+        "Using only a password",
+        "Relying on a security question",
+        "Using the same password for multiple accounts"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Social engineering relies on deception, so always verify unexpected requests for information.",
-      "examTip": "Don’t let others pressure you into revealing sensitive information or performing actions without verification."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA provides the highest level of security by requiring multiple authentication factors (e.g., password + fingerprint). Password-only authentication (option 2) is weaker. Security questions (option 3) can be guessed or found online. Reusing passwords (option 4) is a major security risk.",
+      "examTip": "MFA = 'More than one factor'—adds extra security!"
     },
     {
       "id": 91,
-      "question": "What is the purpose of a CAPTCHA test on a website?",
+      "question": "Which of the following is an example of a strong authentication method?",
       "options": [
-        "To modernize the website's design.",
-        "To verify that the user is human and not an automated bot.",
-        "To encrypt data sent to the website.",
-        "To measure your typing speed."
+        "Multi-factor authentication (MFA)",
+        "Using a short, simple password",
+        "Relying only on a security question",
+        "Using the same password across multiple accounts"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "CAPTCHAs differentiate real users from bots by presenting tasks hard for automated scripts.",
-      "examTip": "CAPTCHAs help prevent automated attacks and spam on websites."
+      "correctAnswerIndex": 0,
+      "explanation": "MFA enhances security by requiring multiple authentication factors. Short passwords (option 2) are easy to crack. Security questions (option 3) can be guessed or found online. Reusing passwords (option 4) increases security risks.",
+      "examTip": "MFA = 'More than one factor'—best way to secure accounts!"
     },
     {
       "id": 92,
-      "question": "What does the 'C' in 'CIA triad' stand for?",
+      "question": "Which of the following is a common way attackers gain unauthorized access to accounts?",
       "options": [
-        "Computer",
-        "Confidentiality",
-        "Control",
-        "Cybersecurity"
+        "Credential stuffing",
+        "Using complex passwords",
+        "Keeping software up to date",
+        "Enabling multi-factor authentication"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Confidentiality keeps data private and accessible only to authorized parties.",
-      "examTip": "Encryption is a common way to ensure confidentiality."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential stuffing involves using leaked usernames and passwords from previous breaches. Complex passwords (option 2) help prevent unauthorized access. Updating software (option 3) patches vulnerabilities. MFA (option 4) adds extra security.",
+      "examTip": "Credential stuffing = 'Using leaked passwords'—never reuse passwords!"
     },
     {
       "id": 93,
-      "question": "What is a digital footprint?",
+      "question": "Which of the following helps prevent unauthorized access to mobile devices?",
       "options": [
-        "A drawing of your foot made on a computer.",
-        "The trail of data you leave behind when using the internet.",
-        "A type of computer virus.",
-        "A special kind of computer mouse."
+        "Biometric authentication",
+        "Disabling security updates",
+        "Connecting to open Wi-Fi networks",
+        "Using a simple four-digit PIN"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A digital footprint includes all online activity and data traces linked to you.",
-      "examTip": "Be mindful of your digital footprint and what it might reveal about you."
+      "correctAnswerIndex": 0,
+      "explanation": "Biometric authentication (e.g., fingerprint or face scan) adds an extra layer of security. Disabling updates (option 2) increases risk. Open Wi-Fi (option 3) is insecure. A simple PIN (option 4) is easy to guess.",
+      "examTip": "Mobile security = 'Use biometrics + strong passwords'!"
     },
     {
       "id": 94,
-      "question": "What is malware short for?",
+      "question": "Which of the following BEST describes an insider threat?",
       "options": [
-        "Malicious hardware",
-        "Malicious software",
-        "Multiple software",
-        "Main software"
+        "A current or former employee misusing access to cause harm",
+        "A hacker exploiting a software vulnerability",
+        "An attacker launching a phishing campaign",
+        "A botnet launching a distributed denial-of-service (DDoS) attack"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Malware refers to any software designed to harm or gain unauthorized access to systems.",
-      "examTip": "Malware includes viruses, worms, Trojans, ransomware, spyware, and more."
+      "correctAnswerIndex": 0,
+      "explanation": "An insider threat comes from someone within the organization who misuses their access. Software exploits (option 2), phishing (option 3), and botnets (option 4) are external threats.",
+      "examTip": "Insider threat = 'The danger is inside'—employees misusing access."
     },
     {
       "id": 95,
-      "question": "Which of these is the best way to protect your data from loss?",
+      "question": "Which of the following is a primary benefit of encryption?",
       "options": [
-        "Using a very strong password, which secures access but doesn’t recover lost data.",
-        "Installing antivirus software, which helps prevent attacks but doesn’t recover data.",
-        "Regularly backing up your data to a separate location, ensuring recovery if data is lost.",
-        "Never turning off your computer, which is not a data protection strategy."
+        "Protects data from unauthorized access",
+        "Increases system speed",
+        "Eliminates the need for strong passwords",
+        "Makes data publicly accessible"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Backups safeguard against data loss from hardware failure or other incidents.",
-      "examTip": "Follow the 3-2-1 backup rule: 3 copies, 2 different media, 1 offsite."
+      "correctAnswerIndex": 0,
+      "explanation": "Encryption protects data by making it unreadable without the decryption key. It does not increase system speed (option 2). Strong passwords (option 3) are still necessary. Encryption (option 4) secures data, not makes it public.",
+      "examTip": "Encryption = 'Data stays safe'—only authorized users can read it."
     },
     {
       "id": 96,
-      "question": "What is a good practice for creating a secure password?",
+      "question": "Which of the following BEST describes the purpose of a honeypot?",
       "options": [
-        "Using your pet's name, which is easily guessed.",
-        "Using a short, simple word, which is not secure.",
-        "Using a long, complex combination of letters, numbers, and symbols that is unique.",
-        "Using your birthday, which is predictable."
+        "To lure and detect attackers",
+        "To prevent phishing attacks",
+        "To encrypt network traffic",
+        "To store sensitive company data"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Complex, unique passwords are vital for account security.",
-      "examTip": "Use a password manager to help you create and manage strong, unique passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "A honeypot is a decoy system designed to attract and study attackers. Phishing prevention (option 2) is done through email filters and training. Encryption (option 3) secures data but does not detect attacks. Storing sensitive data (option 4) should be done in secure environments, not honeypots.",
+      "examTip": "Honeypot = 'Fake system'—used to bait and track hackers."
     },
     {
       "id": 97,
-      "question": "What should you do if you receive a suspicious email asking for your personal information?",
+      "question": "Which of the following BEST describes the role of an intrusion prevention system (IPS)?",
       "options": [
-        "Reply to the email and provide the requested information.",
-        "Click on any links in the email to check its legitimacy.",
-        "Delete the email and report it as spam or phishing.",
-        "Forward the email
+        "Detects and blocks malicious activity in real-time",
+        "Encrypts sensitive data",
+        "Monitors physical security",
+        "Manages firewall rules"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Never provide personal information in response to unsolicited emails. Delete and report suspicious messages.",
-      "examTip": "If you're unsure about an email's legitimacy, contact the sender through a known, official channel."
+      "correctAnswerIndex": 0,
+      "explanation": "An IPS detects and actively blocks threats in real time. Encryption (option 2) secures data but does not detect attacks. Physical security (option 3) is handled by surveillance and access controls. Firewalls (option 4) filter traffic but do not always actively prevent intrusions.",
+      "examTip": "IPS = 'Detect & Block'—stops threats before they spread!"
     },
     {
       "id": 98,
-      "question": "What is a VPN primarily used for?",
+      "question": "Which of the following is an effective way to protect a network from malware?",
       "options": [
-        "To speed up your internet connection, which is not its primary function.",
-        "To create a secure, encrypted connection for protecting data on public networks.",
-        "To block access to specific websites, which is not its main role.",
-        "To scan your computer for viruses, which is not what a VPN does."
+        "Using endpoint protection software",
+        "Clicking on unknown email attachments",
+        "Disabling antivirus updates",
+        "Using weak passwords"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "VPNs encrypt your internet traffic, creating a secure tunnel and protecting your data, particularly on unsecured networks.",
-      "examTip": "Use a VPN when connecting to public Wi-Fi or accessing sensitive information online."
+      "correctAnswerIndex": 0,
+      "explanation": "Endpoint protection software detects and removes malware from systems. Clicking unknown attachments (option 2) increases infection risk. Disabling antivirus updates (option 3) leaves systems vulnerable. Weak passwords (option 4) do not prevent malware.",
+      "examTip": "Malware protection = 'Use endpoint security + Avoid suspicious links.'"
     },
     {
       "id": 99,
-      "question": "What is two-factor authentication (2FA)?",
+      "question": "Which of the following is the BEST way to secure cloud-based data?",
       "options": [
-        "Using two different passwords for a single account.",
-        "Adding an extra verification step, like a code from your phone, in addition to your password.",
-        "Using an exceptionally long password by itself.",
-        "Having two separate user accounts for a single service."
+        "Enable encryption and access controls",
+        "Use weak passwords",
+        "Disable security monitoring",
+        "Allow all users unrestricted access"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "2FA requires multiple, different types of authentication factors (something you know, have, or are) to verify your identity.",
-      "examTip": "Enable 2FA whenever possible, especially for important accounts like email and banking."
+      "correctAnswerIndex": 0,
+      "explanation": "Encrypting data and using strict access controls protect cloud-based data. Weak passwords (option 2) reduce security. Disabling monitoring (option 3) removes threat detection. Allowing unrestricted access (option 4) increases risks.",
+      "examTip": "Cloud security = 'Encryption + Access controls'—never leave it open!"
     },
     {
       "id": 100,
-      "question": "What does the 'I' in the CIA triad stand for?",
+      "question": "Which of the following BEST describes the CIA triad in cybersecurity?",
       "options": [
-        "Internet",
-        "Integrity",
-        "Information",
-        "Identification"
+        "Confidentiality, Integrity, Availability",
+        "Cybersecurity, Internet, Authentication",
+        "Cloud, Identity, Access",
+        "Control, Intelligence, Analysis"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Integrity means ensuring that data is accurate, complete, and hasn't been tampered with.",
-      "examTip": "Data integrity is crucial for making reliable decisions based on that data."
+      "correctAnswerIndex": 0,
+      "explanation": "The CIA triad stands for Confidentiality (data privacy), Integrity (data accuracy), and Availability (system uptime). The other options are unrelated to cybersecurity principles.",
+      "examTip": "CIA triad = 'Keep data safe, accurate, and available'!"
     }
   ]
-}
+});   
