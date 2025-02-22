@@ -23,7 +23,7 @@ db.tests.insertOne({
       "options": [
         "Coaxial cable",
         "Fiber optic cable",
-        "Ethernet cable (Cat 5e/Cat 6)",
+        "Ethernet cable",
         "USB cable"
       ],
       "correctAnswerIndex": 2,
@@ -438,9 +438,9 @@ db.tests.insertOne({
       "question": "What is the purpose of a 'printer driver'?",
       "options": [
         "To physically install a printer",
-        "To translate computer commands into printer language",
-        "To refill printer ink cartridges",
-        "To troubleshoot network connectivity"
+        "To translate commands into printer language",
+        "To refill printer ink cartridges within a computer",
+        "To troubleshoot printer network connectivity "
       ],
       "correctAnswerIndex": 1,
       "explanation": "A printer driver translates computer commands into a language the printer understands, enabling communication. It's not for physical installation, ink refilling, or network troubleshooting directly. Exam tip: Drivers = hardware communication facilitators.",
@@ -634,7 +634,7 @@ db.tests.insertOne({
       "options": [
         "USB network",
         "Bluetooth network",
-        "Local Area Network (LAN)",
+        "Local Area Network",
         "Powerline network"
       ],
       "correctAnswerIndex": 2,
