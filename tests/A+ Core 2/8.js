@@ -10,7 +10,7 @@ db.tests.insertOne({
       "options": [
         "A faulty network cable; replace the cable.",
         "An intermittent hardware problem with the network adapter; replace the adapter.",
-        "An intermittent issue with the user's configured DNS servers, or network congestion/packet loss between the user's computer and the DNS servers. Use `nslookup` to test *different* DNS servers (e.g., Google Public DNS - 8.8.8.8, Cloudflare - 1.1.1.1) and use `ping` and `tracert` to test connectivity *to the DNS servers themselves*.",
+        "An intermittent issue with the user's configured DNS servers.",
         "The user's web browser is corrupted; reinstall it."
       ],
       "correctAnswerIndex": 2,
