@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({{
   "category": "CompTIA Network+ N10-009",
   "testId": 2,
   "testName": "Practice Test #2 (Very Easy)",
