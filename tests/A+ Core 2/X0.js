@@ -1,1311 +1,1308 @@
 db.tests.insertOne({
-  "category": "aplus2",
+  "category": " "aplus2",
   "testId": 10,
-  "testName": "Practice Test #10 (Ultra Level)",
+  "testName": "Practice Test #10 (Ultimate Challenge Level)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "A Windows server is experiencing intermittent performance degradation. Users report that applications are slow to respond, and file access is sluggish.  You've ruled out common causes like high CPU utilization, memory exhaustion, and disk I/O bottlenecks.  Network connectivity is stable.  You suspect a problem with the *kernel-mode* handling of I/O requests. Which tool, and what specific technique, would provide the MOST detailed, low-level insight into the kernel's I/O operations, allowing you to potentially identify a driver or hardware issue causing the slowdown?",
+      "question": "A Windows 11 system intermittently freezes after waking from hibernation. Kernel-Power errors appear in Event Viewer. What is the MOST likely cause?",
       "options": [
-        "Task Manager; examine CPU usage.",
-        "Resource Monitor; examine disk I/O.",
-        "Event Viewer; examine the System log.",
-        "Windows Performance Recorder (WPR) to capture an *Xperf trace* with detailed I/O stack traces, and then analyze the trace using Windows Performance Analyzer (WPA).  Specifically, look for long I/O request packet (IRP) completion times and examine the stack traces to identify the responsible drivers or components.",
-        "Process Explorer, Check running processes"
+        "Outdated chipset drivers impacting power management.",
+        "Corrupted hibernation file preventing proper resume.",
+        "Insufficient virtual memory allocation after wake.",
+        "Faulty RAM modules causing wake-up instability."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "For deep, kernel-level I/O analysis, WPR/WPA with Xperf tracing is required. Xperf captures *extremely* detailed information about kernel-mode operations, including I/O request packets (IRPs) and their associated stack traces. Analyzing the IRP completion times and stack traces in WPA can reveal which drivers or hardware components are causing delays in I/O processing. Task Manager and Resource Monitor provide higher-level performance data. Event Viewer *might* contain relevant error messages, but WPR/WPA provides much more granular, real-time tracing. Process Explorer checks running processes.",
-      "examTip": "For deep dives into Windows kernel-mode behavior, learn to use WPR/WPA with Xperf tracing; it provides unparalleled visibility into I/O operations, driver behavior, and other low-level system activity."
+      "correctAnswerIndex": 0,
+      "explanation": "Kernel-Power errors following wake events commonly indicate outdated chipset drivers responsible for managing power states. Corrupted hibernation files typically prevent resumption altogether. Insufficient virtual memory would cause application crashes rather than system freezes. Faulty RAM results in random crashes rather than consistent freeze patterns post-hibernation.",
+      "examTip": "Update chipset drivers when troubleshooting Kernel-Power errors related to sleep and hibernation issues."
     },
     {
       "id": 2,
-      "question": "You are investigating a potential security breach on a Linux server. You suspect that an attacker might have gained root access and installed a rootkit to conceal their activities.  You've already checked common system directories and log files. What is a MORE ADVANCED technique, involving examining the *kernel's* loaded modules, that you can use to try to detect a potentially malicious kernel module?",
+      "question": "A Linux server's SSH sessions drop after a few minutes of inactivity. The network is stable. What configuration change is required to maintain persistent connections?",
       "options": [
-        "Run `ps aux` to view running processes.",
-        "Examine the output of `lsmod` (which lists loaded kernel modules) and compare it to a known-good baseline (if available). Look for modules with unusual names, unexpected dependencies, or missing information.  Also, consider using a specialized rootkit detection tool (like `chkrootkit` or `rkhunter`), but be aware that advanced rootkits can sometimes evade these tools.",
-        "Check the `/etc/passwd` file for new user accounts.",
-        "Examine the `/var/log/auth.log` file for login attempts."
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive intervals in kernel parameters.",
+        "Configure iptables to allow persistent SSH connections.",
+        "Enable compression for SSH sessions to reduce timeouts."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Kernel-mode rootkits often operate by modifying or adding kernel modules. Examining the loaded kernel modules (`lsmod`) and comparing them to a known-good baseline (a list of expected modules on a clean system) can help identify suspicious modules. Look for modules with unusual names, unexpected dependencies, or missing version information. Specialized rootkit detection tools can help, but advanced rootkits might be able to evade them. `ps aux` shows running processes, not kernel modules. `/etc/passwd` shows user accounts. `/var/log/auth.log` shows authentication events. While these are important for security investigations, they don't directly reveal loaded kernel modules.",
-      "examTip": "Be aware of kernel-mode rootkits and techniques for detecting them, including examining loaded kernel modules (`lsmod`) and comparing them to a known-good baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' ensure the SSH server sends keepalive messages, preventing idle session drops. Kernel TCP keepalive adjustments affect all connections system-wide and may not resolve the specific SSH issue. iptables rules control access but do not influence session persistence. Compression optimizes bandwidth usage but does not prevent timeouts.",
+      "examTip": "Adjust 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config to maintain persistent SSH sessions."
     },
     {
       "id": 3,
-      "question": "A user reports that their Windows computer is intermittently unable to access *any* websites, even though they can ping their default gateway and other devices on their local network. `nslookup` commands *also* fail to resolve *any* domain names.  You've already checked the network cable, and it's good. The user's IP address, subnet mask, and default gateway are correctly configured. What is a specific Windows service that, if stopped or malfunctioning, would cause this *complete* failure of DNS resolution, and how would you check its status?",
+      "question": "A macOS user reports that external USB drives are no longer recognized. The drives function on other systems. What is the FIRST action a technician should take?",
       "options": [
-        "The 'Network Location Awareness' service; check its status in Control Panel.",
-        "The 'DHCP Client' service; check its status in Device Manager.",
-        "The 'DNS Client' service (Dnscache); check its status and restart it if necessary using the Services console (`services.msc`) or the command line (`net stop dnscache` and `net start dnscache`).",
-        "The 'Windows Firewall' service; check its status in Windows Defender Firewall settings."
+        "Verify Finder preferences for external drive visibility.",
+        "Reset the System Management Controller (SMC).",
+        "Run Disk Utility First Aid to repair disk permissions.",
+        "Check system logs for hardware detection errors."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The 'DNS Client' service (`Dnscache`) is responsible for resolving and caching DNS names on Windows computers. If this service is stopped or malfunctioning, the computer will be unable to resolve any domain names, even if basic network connectivity (pinging IP addresses) is working. The Network Location Awareness service is for determining network location. The DHCP Client service obtains IP addresses. The Windows Firewall controls network access, but wouldn't directly cause a complete DNS resolution failure.",
-      "examTip": "The 'DNS Client' service (`Dnscache`) is crucial for DNS resolution in Windows; if it's stopped or malfunctioning, the computer will be unable to resolve domain names."
+      "correctAnswerIndex": 0,
+      "explanation": "If the external drives function elsewhere but not on the macOS system, checking Finder preferences for external drive visibility is the quickest initial step. Resetting the SMC addresses power and hardware management but is a broader solution. Disk Utility repairs disk-related issues but won't make invisible drives appear. Reviewing logs is informative but less immediate.",
+      "examTip": "Always check Finder preferences first when external drives fail to appear on macOS."
     },
     {
       "id": 4,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. You suspect a problem with the routing table. You want to view the routing table, but you also want to see the *interface* associated with each route and have the output displayed *numerically* (without resolving hostnames to IP addresses). Which command is BEST suited for this?",
+      "question": "A Windows 10 laptop with BitLocker enabled requests the recovery key after hardware upgrades. How can future prompts during upgrades be avoided?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "route -n",
-        "ip route show"
+        "Suspend BitLocker before performing hardware upgrades.",
+        "Disable TPM from BIOS before hardware changes.",
+        "Export and store the recovery key on external storage.",
+        "Reset Secure Boot settings to factory defaults."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "`ip route show` is the preferred command on modern Linux systems for displaying the kernel's routing table. It provides detailed and accurate information—including the associated interface and numerical addresses—without resolving hostnames.",
-      "examTip": "Use `ip route show` on modern Linux systems to view the routing table in detail, including interface associations and numerical addresses."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures TPM does not detect unauthorized changes during hardware upgrades, preventing recovery key prompts. Disabling TPM affects system security more broadly. Exporting the recovery key aids recovery but does not prevent prompts. Secure Boot settings ensure firmware integrity but are unrelated to BitLocker triggers.",
+      "examTip": "Always suspend BitLocker before hardware upgrades to avoid unnecessary recovery key prompts."
     },
     {
       "id": 5,
-      "question": "You are configuring a web server to use HTTPS. You've obtained a valid SSL/TLS certificate and private key, and you've configured the web server software (e.g., Apache, IIS, Nginx) to use them. However, when you access the website using `https://`, you get a browser error indicating a problem with the certificate *chain*. What does this mean, and how would you resolve it?",
+      "question": "A Linux administrator notices high I/O wait times on a server while CPU and memory usage remain normal. What is the MOST likely cause?",
       "options": [
-        "The certificate is expired.",
-        "The certificate's Common Name (CN) or Subject Alternative Name (SAN) does not match the website's domain name that you are using in the URL.",
-        "The browser doesn't trust the Certificate Authority (CA) that issued the certificate, or there's a missing or incorrect intermediate certificate in the chain of trust. You need to ensure that the complete certificate chain (including any intermediate certificates) is properly installed on the web server.",
-        "The web server is not listening on port 443."
+        "A failing disk causing slow read/write operations.",
+        "Swap partition being overutilized due to insufficient RAM.",
+        "High network traffic leading to storage bottlenecks.",
+        "Improper filesystem mounting options reducing throughput."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A 'certificate chain' error means the browser cannot validate the full chain of trust from your certificate back to a trusted root certificate. This usually occurs if an intermediate certificate is missing or misconfigured. The solution is to ensure that the complete certificate chain is correctly installed on the web server.",
-      "examTip": "Ensure that the complete certificate chain (including any intermediate certificates) is installed on your web server to avoid certificate chain errors."
+      "correctAnswerIndex": 0,
+      "explanation": "High I/O wait times with normal CPU and memory usage often indicate disk issues, such as a failing drive. Swap overutilization would correlate with high memory usage. Network traffic affects bandwidth, not local disk I/O. Mounting options influence performance but typically cause consistent, not intermittent, slowness.",
+      "examTip": "Check disk health using 'smartctl' or 'iostat' when encountering elevated I/O wait times on Linux systems."
     },
     {
       "id": 6,
-      "question": "A user reports that their Windows computer is exhibiting very slow performance. Task Manager shows high CPU utilization, but no single process is consuming all the CPU resources. Resource Monitor also shows high CPU, but no specific process stands out. You suspect a driver problem. You've already tried updating and rolling back common drivers (video, network). What is a MORE ADVANCED technique, using built-in Windows tools, to try to pinpoint the *specific driver* causing the high CPU usage?",
+      "question": "A user’s Windows 10 machine cannot access any HTTPS websites, though HTTP works fine. DNS and firewall settings are correct. What is the MOST likely cause?",
       "options": [
-        "Run System Restore.",
-        "Run Disk Cleanup.",
-        "Use the Windows Performance Recorder (WPR) to capture a CPU usage trace, and then analyze the trace using the Windows Performance Analyzer (WPA). This allows you to see CPU usage broken down by process, thread, and module (including drivers), and identify which driver is consuming the most CPU time.",
-        "Increase the size of the paging file."
+        "Corrupted or missing root certificates on the system.",
+        "Disabled TLS protocols in browser settings.",
+        "Expired SSL certificates on accessed websites.",
+        "Network driver issues affecting secure traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WPR/WPA provides extremely detailed performance tracing. Capturing a CPU trace with WPR and analyzing it in WPA can reveal which modules, including drivers, are consuming CPU time, helping pinpoint the issue.",
-      "examTip": "Learn to use WPR and WPA to diagnose CPU usage issues at a low level, including identifying problematic drivers."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates validate HTTPS connections; missing or corrupted certificates prevent access. TLS protocol settings would cause browser-specific warnings. Expired site certificates would affect only specific sites, not all HTTPS connections. Network driver issues typically cause broader connectivity problems.",
+      "examTip": "Validate the integrity of root certificates when HTTPS access fails but HTTP remains functional."
     },
     {
       "id": 7,
-      "question": "You are troubleshooting a network connectivity issue where a computer can access *some* websites but not others. Pings to the IP addresses of all websites (both working and non-working) are successful. `nslookup` also resolves all domain names correctly. You've checked the 'hosts' file, firewall rules, and proxy settings. You've also reset the TCP/IP stack using `netsh int ip reset`. What is a *very specific* Windows networking component, often associated with security software or VPNs, that could be selectively interfering with network traffic after DNS resolution and before it reaches the application layer, and how would you investigate it?",
+      "question": "A Linux administrator needs to ensure log files older than 30 days are automatically deleted. Which tool should be used?",
       "options": [
-        "The Windows Registry.",
-        "A potentially misconfigured or malicious LSP (Layered Service Provider). Use the command `netsh winsock show catalog` to list the installed LSPs. Investigate any unfamiliar or suspicious LSPs. You can also try resetting the Winsock catalog with `netsh winsock reset`.",
-        "The DNS Client service.",
-        "The DHCP Client service."
+        "logrotate with proper configuration settings.",
+        "cron jobs utilizing find and rm commands.",
+        "rsyslog with custom retention policies.",
+        "systemd-journald with persistent storage limits."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "LSPs (Layered Service Providers) can intercept and modify network traffic. A misconfigured or malicious LSP could selectively interfere with traffic after DNS resolution. Use `netsh winsock show catalog` to list installed LSPs and investigate any anomalies. Resetting with `netsh winsock reset` can help if necessary.",
-      "examTip": "Be aware of LSPs in Windows; they can cause selective network interference. Use `netsh winsock show catalog` to review them, and reset if needed."
+      "correctAnswerIndex": 0,
+      "explanation": "'logrotate' handles automated log management, including rotation and deletion based on retention periods. Cron jobs provide flexibility but require custom scripts. rsyslog focuses on log forwarding, not deletion. systemd-journald manages journal logs but not traditional log files.",
+      "examTip": "Configure 'logrotate' for automated log file retention and deletion based on organizational requirements."
     },
     {
       "id": 8,
-      "question": "You are investigating a potential security incident on a Linux server. You suspect that an attacker might have modified system files to maintain persistence or hide their activities. You want to verify the integrity of critical system files against a known-good baseline. Which tool is BEST suited for this task, assuming it has been properly configured and a baseline has been previously established?",
+      "question": "A Windows 11 machine prompts for a BitLocker recovery key after every reboot. TPM is enabled and operational. What could prevent this prompt in the future?",
       "options": [
-        "ls -l",
-        "AIDE (Advanced Intrusion Detection Environment) or Tripwire.",
-        "grep",
-        "find"
+        "Suspending BitLocker before firmware updates.",
+        "Manually clearing TPM keys after each update.",
+        "Resetting Secure Boot configurations before reboots.",
+        "Changing boot order priorities to encrypted drives first."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "AIDE and Tripwire are file integrity monitoring tools that compare current file states against a pre-established baseline to detect unauthorized changes.",
-      "examTip": "Use file integrity monitoring tools like AIDE or Tripwire on Linux to detect unauthorized modifications to critical system files."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures TPM measurement changes during firmware updates do not trigger recovery prompts. Clearing TPM keys removes essential decryption data. Secure Boot changes address firmware validation, not BitLocker operations. Boot order changes are unrelated unless the OS partition is inaccessible.",
+      "examTip": "Suspend BitLocker encryption before firmware changes to avoid recurring recovery key prompts."
     },
     {
       "id": 9,
-      "question": "You are troubleshooting a website that is intermittently unavailable. You've ruled out DNS issues and network connectivity problems. You suspect a problem with the web server itself. You have access to the server's logs. What specific types of log files, and what specific entries or patterns within those logs, would you examine to try to diagnose the cause of the intermittent unavailability?",
+      "question": "A macOS user reports kernel panics after installing third-party software. Safe Mode boots successfully. What is the MOST probable cause?",
       "options": [
-        "The Windows System log.",
-        "The web server's access logs (to see if requests are reaching the server), error logs (to identify any errors or exceptions occurring on the server), and potentially application-specific logs (if the website uses a framework or CMS that has its own logging). Look for error messages, timeouts, resource exhaustion indicators, and unusual patterns of requests.",
-        "The user's browser history.",
-        "The DHCP server logs."
+        "Third-party kernel extensions (kexts) causing system instability.",
+        "Insufficient system RAM for new software requirements.",
+        "Corrupted system preference files affecting kernel operations.",
+        "Outdated firmware requiring updates for compatibility."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Web server access and error logs (and any application-specific logs) can reveal whether requests are reaching the server and what errors or resource issues are occurring. This information is key to diagnosing intermittent availability problems.",
-      "examTip": "Examine the web server's access logs, error logs, and application logs to identify issues like timeouts, errors, or resource exhaustion."
+      "correctAnswerIndex": 0,
+      "explanation": "Third-party kernel extensions are common causes of kernel panics, especially if incompatible with the current macOS version. RAM shortages lead to performance issues, not panics. Preference file corruption typically affects user interface operations. Firmware issues would prevent booting altogether.",
+      "examTip": "Remove or update third-party kernel extensions when diagnosing kernel panics on macOS."
     },
     {
       "id": 10,
-      "question": "You are using the `tcpdump` command on a Linux system to capture network traffic. You want to capture *only* traffic that is destined for a specific IP address (192.168.1.100) or originates from that IP address, regardless of the port or protocol. Which `tcpdump` command would achieve this?",
+      "question": "A Windows 10 machine shows a 'BOOTMGR is missing' error after adding a new hard drive. What is the MOST likely cause?",
       "options": [
-        "`tcpdump -i any port 80`",
-        "`tcpdump -i any host 192.168.1.100`",
-        "`tcpdump -i any src host 192.168.1.100`",
-        "`tcpdump -i any dst host 192.168.1.100`"
+        "BIOS boot order prioritizing the new drive lacking an OS.",
+        "Corrupted boot sector on the primary drive requiring repair.",
+        "Disconnected SATA cables preventing drive detection.",
+        "Damaged boot partition necessitating recovery operations."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Using `tcpdump -i any host 192.168.1.100` captures traffic that has 192.168.1.100 as either the source or the destination IP address, regardless of port or protocol.",
-      "examTip": "Use the `host` filter in tcpdump to capture all traffic to or from a specific IP address."
+      "correctAnswerIndex": 0,
+      "explanation": "Adding a new drive can cause BIOS to default to it, resulting in the 'BOOTMGR is missing' error if the drive lacks an OS. Corrupted boot sectors and disconnected cables would cause different, more critical errors. A damaged boot partition would prevent OS detection altogether.",
+      "examTip": "Always verify and correct BIOS boot order after adding new hardware to prevent boot errors."
     },
     {
       "id": 11,
-      "question": "A user reports that their Windows computer is exhibiting slow performance and unusual behavior. You suspect a malware infection, but standard antivirus scans have not detected anything. You want to examine the system's network connections to see if there are any suspicious connections to unknown or malicious hosts. Which command-line tool, combined with thorough research of the identified IP addresses and ports, is BEST suited for this task on a Windows system?",
+      "question": "A Linux server’s web service returns a '503 Service Unavailable' error. The web server is running. What should the administrator check NEXT?",
       "options": [
-        "ping",
-        "tracert",
-        "`netstat -ano` (and then use Task Manager or Process Explorer to identify the processes associated with suspicious connections) combined with online research of the identified IP addresses and ports.",
-        "ipconfig /all"
+        "Status of the backend application server.",
+        "Server's available disk space for logs and temporary files.",
+        "Firewall configurations for blocked application ports.",
+        "Web server configuration files for syntax errors."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`netstat -ano` displays active network connections along with process IDs. This information, when combined with further research into the IP addresses and ports, can help identify suspicious activity.",
-      "examTip": "Use `netstat -ano` on Windows to view active network connections and their process IDs; then research the external IPs and ports to identify potential threats."
+      "correctAnswerIndex": 0,
+      "explanation": "A '503 Service Unavailable' error typically indicates that the backend application server is down or unreachable, despite the web server running. Disk space shortages or firewall issues would cause broader service failures. Configuration errors generally prevent the web server from starting at all.",
+      "examTip": "Always confirm backend service availability when '503 Service Unavailable' errors occur in multi-tier environments."
     },
     {
       "id": 12,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. The server has multiple network interfaces. You need to determine which network interface is currently being used as the *default gateway* for outgoing traffic. Which command is BEST suited for this task?",
+      "question": "A Windows system reports 'The trust relationship between this workstation and the primary domain failed.' What is the FASTEST resolution?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "ip route show | grep default",
-        "netstat -i"
+        "Rejoin the workstation to the domain using admin credentials.",
+        "Reset the computer account in Active Directory Users and Computers.",
+        "Flush DNS cache to resolve hostname trust issues.",
+        "Restart the Netlogon service to reestablish domain communication."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Using `ip route show | grep default` quickly displays the default route along with the associated interface, indicating which interface is used for outgoing traffic.",
-      "examTip": "Use `ip route show | grep default` on Linux to identify the default gateway and its associated interface."
+      "correctAnswerIndex": 0,
+      "explanation": "Rejoining the workstation to the domain resets the secure channel between the client and domain controller. Resetting the computer account also works but takes more time. DNS flushing and Netlogon restarts address different authentication issues, not trust relationships.",
+      "examTip": "Rejoin domain membership when encountering trust relationship errors for the fastest resolution."
     },
     {
       "id": 13,
-      "question": "You are configuring a web server to use HTTPS. You've obtained an SSL/TLS certificate. What is the purpose of the *private key* associated with the certificate, and why is it CRUCIAL to keep it secure?",
+      "question": "A Windows 10 laptop fails to connect to any VPN using L2TP/IPSec, displaying 'Negotiation failed.' What is the MOST likely cause?",
       "options": [
-        "The private key is used to encrypt all data sent from the client to the server; it must be kept secret to prevent unauthorized decryption.",
-        "The private key is kept secret on the server and is used to *decrypt* data encrypted by the client with the server's *public* key (which is part of the certificate). It is also used to digitally *sign* data sent from the server, proving its authenticity. If the private key is compromised, an attacker can impersonate the server or decrypt sensitive data.",
-        "The private key is used to encrypt all data sent from the server to the client; it must be kept secret to prevent unauthorized decryption.",
-        "The private key is used to authenticate users to the web server; it must be kept secret to prevent unauthorized access."
+        "UDP ports 500 and 4500 are blocked by firewall settings.",
+        "VPN client configuration file is corrupted.",
+        "VPN server certificate has expired, preventing authentication.",
+        "Outdated network adapter drivers causing VPN negotiation failure."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "In an SSL/TLS certificate pair, the private key is used to decrypt data encrypted with the public key and to digitally sign data sent from the server. Keeping it secure is essential, because if it is compromised, an attacker can impersonate the server or decrypt sensitive information.",
-      "examTip": "Protect the private key associated with your SSL/TLS certificate with utmost care; its compromise undermines your HTTPS security."
+      "correctAnswerIndex": 0,
+      "explanation": "L2TP/IPSec requires UDP ports 500 and 4500 for key exchange. Blocking these ports leads to negotiation failures. Corrupted configuration files would cause immediate errors during connection attempts. Expired certificates produce authentication errors. Network driver issues would affect broader connectivity, not solely VPN negotiation.",
+      "examTip": "Ensure firewall configurations allow UDP ports 500 and 4500 for successful L2TP/IPSec VPN negotiations."
     },
     {
       "id": 14,
-      "question": "A user reports that their Windows computer is displaying a 'Your connection is not private' error message in their web browser when they try to access a specific website. The website uses HTTPS. You've verified that the website's SSL/TLS certificate is *not* expired. What are some OTHER potential causes of this error, and how would you troubleshoot them?",
+      "question": "A Linux server's SSH service is running, but users report 'Connection refused' errors. What is the MOST likely cause?",
       "options": [
-        "The user's computer has a faulty network cable.",
-        "The website's server is down.",
-        "The user's DNS server settings are incorrect.",
-        "The website's SSL/TLS certificate's Common Name (CN) or Subject Alternative Name (SAN) does not match the domain name the user is trying to access; or the browser does not trust the Certificate Authority (CA) that issued the certificate (or an intermediate CA in the chain); or the user's computer's date and time are incorrect; or there's a man-in-the-middle attack in progress.  Troubleshooting steps: Check the certificate details in the browser, verify the date/time, check for intermediate certificates, try a different browser, and investigate potential MitM attacks."
+        "Firewall rules blocking port 22 on the server.",
+        "SSH daemon configuration errors preventing connections.",
+        "SELinux contexts blocking SSH access after updates.",
+        "Host-based access controls in /etc/hosts.deny denying user access."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A 'Your connection is not private' error may be due to a certificate name mismatch, untrusted CA, incorrect system date/time, or a man-in-the-middle attack. The solution is to check the certificate details, system settings, and the certificate chain.",
-      "examTip": "Examine certificate details, verify the system's date/time, and ensure the complete certificate chain is installed if you encounter connection privacy errors."
+      "correctAnswerIndex": 0,
+      "explanation": "'Connection refused' typically indicates that port 22 is blocked by a firewall, even if the SSH service is running. Configuration errors would prevent the SSH daemon from running entirely. SELinux issues generally log access denials rather than outright connection refusals. /etc/hosts.deny restrictions result in 'Permission denied' errors, not connection refusals.",
+      "examTip": "Always confirm firewall access on port 22 when SSH services are active but connections are refused."
     },
     {
       "id": 15,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. You want to see *all* active network connections, including the local and remote IP addresses and ports, the connection state (ESTABLISHED, LISTEN, etc.), *and* the process ID (PID) and program name associated with each connection. Which command, with appropriate options, is BEST suited for this task?",
+      "question": "A Windows 11 user reports slow logins when disconnected from the corporate network. The user has a domain account. What is the MOST likely cause?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "route -n",
-        "`netstat -tulnp` (or `ss -tulnp` on newer systems) is good, but `lsof -i` can provide additional context, especially for identifying potentially hidden processes.",
-        "`ss -tunapl`"
+        "The user profile is configured as a roaming profile dependent on network availability.",
+        "Group Policy Objects (GPOs) are failing to apply due to network unavailability.",
+        "The user’s DNS settings are incorrect, preventing domain controller lookups.",
+        "Network drive mappings are timing out during login attempts."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "While `ss -tunapl` is a powerful command that provides detailed information about active network connections, it is the best single command option listed for this purpose.",
-      "examTip": "Use `ss -tunapl` to view active network connections along with process IDs and names on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "Roaming profiles rely on network access; slow logins occur when the profile cannot be downloaded. GPO failures affect applied settings, not login speed. DNS issues prevent domain logins but not slow them. Network drive mapping timeouts may cause delays but are secondary to roaming profile dependencies.",
+      "examTip": "Convert roaming profiles to local profiles when users require frequent offline access to reduce login delays."
     },
     {
       "id": 16,
-      "question": "You are investigating a potential security incident on a Windows server. You need to determine if any unauthorized user accounts have been created on the system. You've already checked the Local Users and Groups snap-in (lusrmgr.msc). What is a MORE RELIABLE method to enumerate *all* local user accounts, including potentially hidden ones, and what is a specific technique attackers might use to hide a user account from the standard user management tools?",
+      "question": "A Windows 10 machine cannot access internal resources by hostname but can by IP address. What is the MOST likely cause?",
       "options": [
-        "Check the 'Users' folder on the C: drive.",
-        "Use the `net user` command from an elevated command prompt, or use PowerShell: `Get-LocalUser`. Attackers might create an account with a name ending in a '$' (dollar sign), which can make it hidden from some management tools, or they might manipulate the SAM registry hive directly.",
-        "Check the Windows Registry.",
-        "Look for suspicious files in the 'Program Files' folder."
+        "Incorrect DNS server settings on the client machine.",
+        "Corrupted local DNS cache preventing proper hostname resolution.",
+        "DHCP scope misconfigurations causing incorrect DNS suffix assignments.",
+        "Windows Firewall blocking outbound DNS traffic from the client."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Using `net user` (or PowerShell's `Get-LocalUser`) from an elevated command prompt will list all local user accounts, including those that might be hidden from the graphical interface. Attackers sometimes append a '$' to a username or manipulate the SAM directly to hide accounts.",
-      "examTip": "For complete enumeration of local user accounts on Windows, use `net user` (or `Get-LocalUser`) from an elevated prompt; be aware of techniques like appending '$' to hide accounts."
+      "correctAnswerIndex": 0,
+      "explanation": "Incorrect DNS server settings prevent hostname resolution, while IP access remains functional. DNS cache corruption would cause intermittent issues rather than consistent hostname resolution failures. DHCP misconfigurations would affect multiple clients. Firewall issues would block DNS lookups entirely, including external ones.",
+      "examTip": "Always validate DNS server settings on client devices when internal hostname resolution fails."
     },
     {
       "id": 17,
-      "question": "You are working on a Linux server and need to analyze the system's memory usage in detail. You want to see not only the total and free memory, but also the amount of memory used by buffers and caches, and the amount of swap space used. Which command provides this information in a human-readable format?",
+      "question": "A Linux server experiences frequent SSH session drops during file transfers. The network connection is stable. What configuration change could prevent this?",
       "options": [
-        "top",
-        "free -h",
-        "vmstat",
-        "df -h"
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' values in sshd_config.",
+        "Switch from SSH to SFTP for file transfers to maintain session stability.",
+        "Enable compression in SSH sessions to reduce data transfer times.",
+        "Adjust TCP keepalive settings in the server's kernel configuration."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`free -h` displays memory usage in a human-readable format, including details on RAM, swap, buffers, and caches.",
-      "examTip": "Use `free -h` on Linux to quickly view detailed memory usage statistics."
+      "correctAnswerIndex": 0,
+      "explanation": "Increasing 'ClientAliveInterval' and 'ClientAliveCountMax' sends keepalive packets that prevent session timeouts during long transfers. SFTP uses SSH and wouldn’t resolve session drops. Compression improves speed but doesn’t maintain sessions. Kernel TCP keepalive settings affect all connections and are not SSH-specific solutions.",
+      "examTip": "Modify SSH keepalive settings in sshd_config to maintain persistent connections during long file transfers."
     },
     {
       "id": 18,
-      "question": "A user reports that their Windows computer is exhibiting very slow performance when accessing files on a network share. Other users are not experiencing the same problem. You've verified basic network connectivity (ping, nslookup), and the user has the correct permissions to access the share. What is a Windows-specific feature, related to offline file access, that could be causing the slowdown, and how would you check/disable it?",
+      "question": "A user’s Android device shows increased data usage, even when connected to Wi-Fi. What setting should be checked FIRST?",
       "options": [
-        "The user's network cable is faulty.",
-        "Offline Files (also known as Client-Side Caching or CSC) might be enabled, and the synchronization process might be causing the slowdown. Check the status of Offline Files in the Sync Center (search for 'Sync Center' in the Start menu) and, if necessary, disable it for the specific network share or disable Offline Files entirely.",
-        "The user's DNS server settings are incorrect.",
-        "The file server is overloaded."
+        "'Wi-Fi Assist' or similar feature that uses mobile data when Wi-Fi is weak.",
+        "App background data settings allowing cellular data usage.",
+        "DNS configuration issues causing fallback to mobile networks.",
+        "Carrier network preferences overriding device data settings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Offline Files is a Windows feature that caches network files locally for offline access. If it is misbehaving, the synchronization process can slow down file access.",
-      "examTip": "Check the Sync Center in Windows to determine if Offline Files are affecting network share performance."
+      "correctAnswerIndex": 0,
+      "explanation": "'Wi-Fi Assist' allows devices to switch to mobile data when Wi-Fi signal strength weakens, increasing data consumption. Background data settings generally prioritize Wi-Fi by default. DNS configuration affects resolution times, not network choice. Carrier preferences would not override device network settings for Wi-Fi connectivity.",
+      "examTip": "Disable 'Wi-Fi Assist' to prevent unintended mobile data consumption when Wi-Fi connectivity fluctuates."
     },
     {
       "id": 19,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. A computer can access some websites but not others. Pings to the IP addresses of all websites are successful, and `nslookup` also resolves all domain names correctly. You've checked the 'hosts' file, firewall rules, proxy settings, and for malicious LSPs, and they all appear to be correct or have been addressed. What is a *very specific*, low-level network setting, related to the size of network packets, that could be causing this selective website access problem, and how would you test it?",
+      "question": "A macOS user reports that Spotlight cannot find recently saved files. Indexing appears incomplete. What is the correct command to rebuild the Spotlight index?",
       "options": [
-        "The user's network cable is faulty.",
-        "The user's web browser is corrupted.",
-        "The user's DNS server is misconfigured.",
-        "There's a problem with the MTU (Maximum Transmission Unit) settings or Path MTU Discovery along the path to the affected websites. Use the `ping` command with the `-l` option (Windows) or the `-s` option (Linux) to specify different packet sizes, and the `-f` option (Windows) or the Don't Fragment bit set (Linux) to test for MTU issues. Start with a small packet size and gradually increase it until you find the maximum size that works without fragmentation or packet loss."
+        "sudo mdutil -E /",
+        "sudo diskutil repairVolume /",
+        "sudo fsck -fy /dev/disk1",
+        "sudo launchctl load /System/Library/LaunchDaemons/com.apple.metadata.mds.plist"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "MTU issues can cause selective connectivity problems if packets exceeding the MTU are dropped or fragmented. Using ping with the Don't Fragment option and varying packet sizes can help determine the maximum packet size that works along the network path.",
-      "examTip": "Test for MTU mismatches by using ping with options to prevent fragmentation and gradually increasing packet size."
+      "correctAnswerIndex": 0,
+      "explanation": "'sudo mdutil -E /' erases and rebuilds the Spotlight index, resolving search issues. 'diskutil repairVolume' and 'fsck' address disk corruption, not search indexing. 'launchctl load' restarts the indexing daemon but does not rebuild indexes.",
+      "examTip": "Use 'mdutil -E /' to reset and rebuild Spotlight indexes when search fails to locate recent files."
     },
     {
       "id": 20,
-      "question": "You are investigating a suspected security breach on a Linux server. You believe an attacker might have gained root access and installed a rootkit to conceal their activities. You've already checked common system directories and log files. What is a more advanced technique, involving comparing system binaries with known-good copies, that can help detect tampered-with system files?",
+      "question": "A Linux administrator must configure a cron job to run a script at 1 AM on the first day of each month. What is the correct crontab entry?",
       "options": [
-        "Run `ps aux` to view running processes.",
-        "Check the `/etc/passwd` file for new user accounts.",
-        "Use a file integrity checking tool like AIDE, Tripwire, or Samhain (assuming one was previously configured and a baseline was established before the suspected compromise). If a file integrity checker wasn't pre-configured, you could try comparing the checksums (e.g., using `md5sum` or `sha256sum`) of critical system binaries (like `/bin/ls`, `/bin/ps`, `/usr/sbin/sshd`, etc.) against known-good checksums from a trusted source.",
-        "Examine the `/var/log/auth.log` file for login attempts."
+        "0 1 1 * * /path/to/script.sh",
+        "0 1 * * 1 /path/to/script.sh",
+        "0 1 1 1 * /path/to/script.sh",
+        "0 1 */1 * * /path/to/script.sh"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "File integrity checking is crucial for detecting unauthorized modifications to system binaries. Using tools like AIDE or Tripwire, or manually comparing checksums of critical binaries against known-good values, can help identify tampering. This process is more effective if a baseline was established before the incident.",
-      "examTip": "Use file integrity monitoring tools or manual checksum comparisons to verify the integrity of critical system binaries."
+      "correctAnswerIndex": 0,
+      "explanation": "'0 1 1 * *' runs the script at 1 AM on the first day of every month. '0 1 * * 1' runs weekly on Mondays. '0 1 1 1 *' runs only on January 1. '*/1' denotes daily execution rather than monthly scheduling.",
+      "examTip": "Always confirm crontab fields for correct scheduling when configuring recurring automated tasks."
     },
     {
       "id": 21,
-      "question": "You are troubleshooting a Windows computer that is exhibiting slow performance. You open Task Manager and notice that the 'Interrupts' process is consuming a significant amount of CPU time. What does the 'Interrupts' process represent, and what could high CPU usage by this process indicate?",
+      "question": "A Linux administrator finds that after a recent kernel update, a critical application fails to load due to missing kernel modules. What is the BEST way to resolve this issue while keeping the new kernel?",
       "options": [
-        "The 'Interrupts' process represents a web browser; high CPU usage is normal.",
-        "The 'Interrupts' process represents the CPU time spent handling hardware interrupts. High CPU usage by 'Interrupts' can indicate a hardware problem (a malfunctioning device constantly interrupting the CPU), a driver issue, or, less commonly, a software conflict.",
-        "The 'Interrupts' process is a third-party application; you should uninstall it.",
-        "The 'Interrupts' process is a virus; you should immediately delete it."
+        "Rebuild kernel modules for the updated kernel version.",
+        "Roll back to the previous kernel until modules are updated.",
+        "Reinstall the critical application to restore dependencies.",
+        "Compile the kernel from source with all necessary modules."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The 'Interrupts' process reflects the CPU time used to handle hardware interrupts. Excessive usage usually suggests a hardware or driver problem causing frequent interrupts.",
-      "examTip": "High CPU usage by 'Interrupts' typically indicates hardware or driver issues; investigate connected devices and drivers."
+      "correctAnswerIndex": 0,
+      "explanation": "Rebuilding kernel modules ensures compatibility with the updated kernel without rolling back or recompiling. Rolling back loses the benefits of the latest kernel. Reinstalling the application doesn't resolve kernel module dependencies. Compiling from source is time-consuming and unnecessary for module issues.",
+      "examTip": "Use 'dkms' or relevant build tools to rebuild kernel modules after kernel upgrades to maintain application compatibility."
     },
     {
       "id": 22,
-      "question": "You are configuring a SOHO router. You want to allow remote access to an internal web server (running on port 8080) from the internet. The server has a private IP address of 192.168.1.100. You also have a second internal server running on 192.168.2.100. You do NOT want to expose any other internal resources to the internet. Which router configuration would achieve this securely, and why is it important to avoid using the DMZ in this scenario?",
+      "question": "A Windows 11 user reports that after joining a domain, the system displays 'User profile service failed the sign-in.' What is the MOST likely cause?",
       "options": [
-        "Enable UPnP (Universal Plug and Play) on the router.",
-        "Configure port forwarding to forward external port 8080 to the internal IP address 192.168.1.100, port 8080. Do not forward any traffic to 192.168.2.100. Avoid using the DMZ, as it would expose the entire designated DMZ host to the internet, increasing risk.",
-        "Enable the DMZ (demilitarized zone) feature and set the DMZ host to 192.168.1.100.",
-        "Configure the router's firewall to block all incoming traffic."
+        "Corrupt default user profile on the domain controller.",
+        "DNS misconfiguration preventing domain authentication.",
+        "Disabled user account in Active Directory.",
+        "Corrupt local user profile on the workstation."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port forwarding is the secure method to allow external access to a specific internal server without exposing the entire network. The DMZ would expose the entire host, increasing risk.",
-      "examTip": "Use port forwarding to restrict external access to a specific internal server, avoiding the broader exposure of a DMZ."
+      "correctAnswerIndex": 0,
+      "explanation": "A corrupt default user profile on the domain controller prevents new domain profiles from being created. DNS misconfiguration would block domain authentication altogether. Disabled accounts prevent login, not profile creation. Local profile corruption affects only existing profiles, not new ones from the domain.",
+      "examTip": "Replace or repair the default user profile on the domain controller when domain-joined systems fail to create profiles."
     },
     {
       "id": 23,
-      "question": "You are using the `tcpdump` command on a Linux system to capture and analyze network traffic. You want to capture all traffic *to or from* a specific host (IP address 192.168.1.50) and a specific port (port 22), and you want to save the captured packets in a PCAP file named `ssh_traffic.pcap` for later analysis with Wireshark. Which `tcpdump` command would accomplish this?",
+      "question": "A Windows 10 system shows 'The trust relationship between this workstation and the primary domain failed' after restoring from a backup. What is the FASTEST fix?",
       "options": [
-        "`tcpdump -i any host 192.168.1.50`",
-        "`tcpdump -i any port 22`",
-        "`tcpdump -i any host 192.168.1.50 and port 22 -w ssh_traffic.pcap`",
-        "`tcpdump -i any host 192.168.1.50 or port 22`"
+        "Rejoin the workstation to the domain using administrator credentials.",
+        "Reset the computer object in Active Directory.",
+        "Manually update the machine password using PowerShell.",
+        "Restore the system from a more recent backup."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The command `tcpdump -i any host 192.168.1.50 and port 22 -w ssh_traffic.pcap` captures only traffic that meets both criteria (traffic to/from IP 192.168.1.50 and on port 22) and writes it to the specified file.",
-      "examTip": "Combine tcpdump filters with the `-w` option to capture specific traffic for later analysis."
+      "correctAnswerIndex": 0,
+      "explanation": "Rejoining the domain resets the secure channel efficiently. Resetting the computer object may cause profile mismatches. PowerShell commands are more complex and time-consuming. Restoring from another backup doesn't guarantee the trust relationship will be fixed.",
+      "examTip": "When restoring domain-joined systems, rejoin the domain if trust relationship errors occur."
     },
     {
       "id": 24,
-      "question": "A user calls in with a computer that blue screens every time on boot. They can get into Safe Mode. What would be the best way to determine what is causing the computer to blue screen?",
+      "question": "An Android device shows high battery usage from 'Google Play Services.' What should the technician check FIRST?",
       "options": [
-        "Event Viewer",
-        "MSCONFIG",
-        "Resource Monitor",
-        "WinDbg Preview and analyze the dump file"
+        "Pending system updates affecting background services.",
+        "Outdated apps dependent on Google Play Services APIs.",
+        "Malware disguised as legitimate Google services.",
+        "Battery optimization settings disabled for critical apps."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Memory dump files created during BSODs contain detailed information about the crash. Analyzing the dump file with WinDbg Preview is the best way to determine the cause.",
-      "examTip": "Use WinDbg to analyze BSOD memory dump files for detailed crash diagnostics."
+      "correctAnswerIndex": 0,
+      "explanation": "Pending system updates can cause Google Play Services to consume more battery due to background syncing. Outdated apps cause issues but generally not excessive battery drain. Malware disguised as Play Services would exhibit additional suspicious behaviors. Battery optimization settings don’t usually cause such high drain from system services.",
+      "examTip": "Always check for pending system updates when core services like Google Play Services consume excessive battery."
     },
     {
       "id": 25,
-      "question": "You are troubleshooting a computer with multiple hard drives. The computer will not boot and displays the message 'No Operating System Found.' You enter the BIOS and verify that it can see both drives, and the boot order is set to the correct drive. What is the next step?",
+      "question": "A Linux server fails to boot after an unexpected power outage, showing 'GRUB rescue>' prompt. What is the FIRST step to recover?",
       "options": [
-        "Replace the hard drive.",
-        "Reinstall the operating system.",
-        "Boot to installation media, enter the recovery environment and attempt to repair the BCD.",
-        "Run a virus scan."
+        "Identify and set the correct boot partition using GRUB commands.",
+        "Reinstall GRUB from a live CD environment.",
+        "Check disk integrity using fsck from a rescue shell.",
+        "Restore the master boot record from a recent backup."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "If the BIOS sees the drives and the boot order is correct, but no OS is found, the boot configuration is likely the problem. Booting to installation media and repairing the BCD is the next step.",
-      "examTip": "If BIOS detects the drive but no OS is found, attempt to repair the boot configuration using recovery tools."
+      "correctAnswerIndex": 0,
+      "explanation": "Setting the correct boot partition using GRUB commands allows quick recovery if GRUB cannot find its files. Reinstalling GRUB or running fsck should follow if partition correction fails. MBR restoration is a last resort if the MBR is actually damaged.",
+      "examTip": "Use 'set prefix' and 'set root' commands at the GRUB rescue prompt to recover from missing or misconfigured boot paths."
     },
     {
       "id": 26,
-      "question": "You are working on a system that uses BitLocker. The owner forgot their password, and also lost their recovery key. What can you do?",
+      "question": "A user reports that after enabling BitLocker on their Windows 11 laptop, boot times have significantly increased. The device uses a traditional HDD. What is the MOST likely reason?",
       "options": [
-        "Use a password reset tool.",
-        "Reinstall the operating system and restore from a backup. Without the password or recovery key, the data is unrecoverable.",
-        "Contact Microsoft for assistance.",
-        "Format the drive."
+        "Full-disk encryption overhead on HDDs impacts read/write performance.",
+        "BitLocker is waiting for user PIN input, delaying automatic startup.",
+        "TPM misconfigurations are causing extended authentication times.",
+        "Secure Boot conflicts are slowing down the boot process."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Without the BitLocker password or recovery key, the encrypted data cannot be decrypted and is unrecoverable. The only option is to reinstall the OS and restore from backup.",
-      "examTip": "BitLocker requires the password or recovery key to access data; if both are lost, the data cannot be recovered."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption adds overhead, especially noticeable on HDDs. TPM issues usually prompt for recovery keys rather than slowing boots. Secure Boot conflicts result in different boot errors. PIN prompts delay boot only if configured explicitly.",
+      "examTip": "Use SSDs for systems with BitLocker enabled to minimize encryption-related boot delays."
     },
     {
       "id": 27,
-      "question": "A user calls in complaining that sometimes when they print, the printer prints random characters instead of the document. They are using a USB printer, and the cable is connected securely. You have already reinstalled the print driver. What should you check NEXT?",
+      "question": "A Windows 10 machine fails to install cumulative updates, returning '0x800f0922' error. What is the MOST likely cause?",
       "options": [
-        "Check the toner levels.",
-        "Run a virus scan.",
-        "Try a different USB port and, if possible, a different USB cable. Also check for any physical damage on the printer. Finally attempt to update the printer's firmware.",
-        "Restart the print spooler."
+        "Insufficient space in the system-reserved partition.",
+        "Corrupted Windows Update components.",
+        "Active third-party antivirus software blocking updates.",
+        "Faulty network connectivity to update servers."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Random characters when printing often indicate a communication problem, which can be due to a faulty USB port, cable, or physical damage. Since the driver has been reinstalled, the next step is to check the physical connection and update firmware if needed.",
-      "examTip": "Check physical connections (USB port/cable) and update firmware when printing issues produce random characters."
+      "correctAnswerIndex": 0,
+      "explanation": "Error '0x800f0922' is commonly due to lack of space in the system-reserved partition. Corrupted components cause different error codes. Antivirus software issues typically produce rollback errors. Network connectivity issues would lead to download failures, not installation errors.",
+      "examTip": "Expand the system-reserved partition when encountering '0x800f0922' Windows Update errors."
     },
     {
       "id": 28,
-      "question": "A technician is plugging in an external hard drive. It has a USB-C port on the drive, and a USB-C port on the computer. Upon plugging in the drive the system is unresponsive. After a reboot the system displays a message about over current on USB port. What could be the cause?",
+      "question": "A Linux system shows 'Permission denied' errors when running a script, even though the user has execute permissions. What is the MOST likely cause?",
       "options": [
-        "Faulty Motherboard",
-        "The USB-C cable is likely only rated for power, and not data. Use a cable rated for both power and data.",
-        "Faulty hard drive",
-        "Faulty RAM"
+        "Incorrect shebang (#!) line specifying a non-existent interpreter.",
+        "SELinux is enforcing policies that prevent execution.",
+        "Filesystem mount options disallowing script execution.",
+        "User lacks permissions for required dependencies."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A USB-C cable that is only rated for power may not support data transfer properly, leading to over current errors.",
-      "examTip": "If over current errors occur with a USB-C device, try a cable rated for both power and data."
+      "correctAnswerIndex": 0,
+      "explanation": "An incorrect shebang line prevents the OS from finding the script interpreter, resulting in 'Permission denied' despite correct file permissions. SELinux denials would be logged explicitly. Mount options would block all script execution, not just one. Missing dependencies usually yield different runtime errors.",
+      "examTip": "Verify the shebang line points to the correct interpreter when scripts fail with 'Permission denied' despite execute permissions."
     },
     {
       "id": 29,
-      "question": "A user is trying to go to your company's website and is receiving an error that says 'This site can't be reached, DNS_PROBE_FINISHED_NXDOMAIN.' You can go to the website just fine. What is likely the cause?",
+      "question": "A Windows user reports slow network drive access after a hostname change. Pings by IP address work fine, but hostname pings fail. What is the MOST likely cause?",
       "options": [
-        "Server is down",
-        "Firewall is blocking the user",
-        "User has a bad network cable",
-        "User has a bad DNS server or the DNS record is incorrect"
+        "DNS records were not updated to reflect the new hostname.",
+        "DHCP server is associating the old hostname with the current IP.",
+        "WINS server entries were not refreshed post-hostname change.",
+        "Local DNS resolver cache needs to be flushed on the client."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "NXDOMAIN is a DNS error indicating that the domain name cannot be resolved. Since you can access the site, the user's DNS settings are likely misconfigured or the DNS record is problematic.",
-      "examTip": "NXDOMAIN errors point to DNS resolution issues; check the user's DNS configuration."
+      "correctAnswerIndex": 0,
+      "explanation": "DNS records must be updated after a hostname change; otherwise, clients cannot resolve the new name. DHCP typically doesn’t handle DNS registrations directly. WINS is deprecated in most environments. Flushing the DNS cache helps only after DNS records are correctly updated.",
+      "examTip": "Update DNS records following hostname changes to ensure proper network resource resolution."
     },
     {
       "id": 30,
-      "question": "A user reports that a computer suddenly shuts off with no warning or error messages, and it does this often. RAM has been tested and is good, CPU temperatures are normal, and the system isn't under load. What is the likely cause?",
+      "question": "A Linux administrator finds that a critical web service restarts automatically after failure but doesn’t stay running. What systemd directive ensures repeated restarts do not occur indefinitely?",
       "options": [
-        "Motherboard or PSU",
-        "CPU",
-        "Hard Drive",
-        "GPU"
+        "RestartSec=5",
+        "Restart=on-failure",
+        "StartLimitBurst=3",
+        "TimeoutStartSec=10"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Frequent, sudden shutdowns with no warning typically point to power issues (PSU) or motherboard faults.",
-      "examTip": "Investigate the PSU and motherboard when a computer shuts down suddenly without errors."
+      "correctAnswerIndex": 2,
+      "explanation": "'StartLimitBurst' limits the number of restarts in a given time period, preventing endless loops. 'Restart=on-failure' ensures restarts but without limits. 'RestartSec' sets the delay between restarts. 'TimeoutStartSec' defines the maximum time to consider the service started, unrelated to restart limits.",
+      "examTip": "Set 'StartLimitBurst' in systemd service files to prevent endless restart loops after repeated service failures."
     },
     {
       "id": 31,
-      "question": "A technician is called in to work on a computer, and they get shocked when touching the case. What is the likely cause?",
+      "question": "A macOS user reports that Spotlight cannot locate newly saved documents. Indexing seems stuck. Which command rebuilds the Spotlight index for the entire disk?",
       "options": [
-        "Bad power supply.",
-        "Improper grounding of the electrical outlet, or a faulty power supply.",
-        "Bad RAM.",
-        "Bad motherboard."
+        "sudo mdutil -E /",
+        "sudo diskutil verifyVolume /",
+        "sudo fsck_apfs -n /dev/disk1",
+        "sudo launchctl kickstart -k system/com.apple.metadata.mds"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A shock when touching the computer case typically indicates an issue with grounding or a faulty power supply.",
-      "examTip": "If a computer case gives you a shock, check the outlet's grounding and the PSU for faults."
+      "correctAnswerIndex": 0,
+      "explanation": "'sudo mdutil -E /' erases and rebuilds the Spotlight index, resolving indexing issues. 'diskutil verifyVolume' checks disk integrity. 'fsck_apfs' checks APFS volumes for errors. 'launchctl kickstart' restarts services but doesn’t rebuild indexes.",
+      "examTip": "Use 'mdutil -E /' to force a full Spotlight reindex when search issues persist on macOS."
     },
     {
       "id": 32,
-      "question": "A user reports that anytime they go to a website with video, the video plays very choppy, and the audio is out of sync. What is the MOST likely cause?",
+      "question": "A Windows 11 system with full-disk BitLocker encryption repeatedly asks for the recovery key after firmware updates. TPM is functioning. How can future prompts be prevented?",
       "options": [
-        "The user's network connection is slow or unstable.",
-        "Outdated or incompatible video drivers, insufficient system resources (especially RAM or GPU), or a misconfigured media player.",
-        "The user's computer has a virus.",
-        "The website's server is overloaded."
+        "Suspend BitLocker protection before performing firmware updates.",
+        "Reset TPM ownership after updates complete.",
+        "Disable Secure Boot during firmware updates.",
+        "Move recovery keys to a hardware security module (HSM)."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Choppy video and out-of-sync audio are typically caused by local performance issues such as outdated drivers or insufficient system resources, rather than a network problem (assuming basic connectivity is fine).",
-      "examTip": "Investigate video driver updates, system resource usage, and media player settings when facing video playback issues."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures that TPM measurement changes during firmware updates don’t trigger recovery prompts. Resetting TPM ownership affects all encrypted data. Secure Boot changes don’t impact BitLocker’s TPM integration. HSMs store keys securely but don’t prevent prompts related to TPM measurement changes.",
+      "examTip": "Always suspend BitLocker before firmware updates to maintain TPM measurement consistency and avoid recovery key prompts."
     },
     {
       "id": 33,
-      "question": "A user reports that their Windows computer is experiencing network connectivity problems. `ipconfig /all` shows a valid IP address, subnet mask, default gateway, and DNS servers. You can ping the default gateway and other devices on the local network, but you cannot access any websites. `nslookup` commands consistently fail to resolve domain names. What is the MOST likely cause, and how would you confirm your suspicion?",
+      "question": "A Linux system’s SSH connections drop after short idle periods. The network is stable. How can this be prevented?",
       "options": [
-        "The user's web browser is corrupted.",
-        "The DNS Client service (Dnscache) on the user's computer is stopped or malfunctioning, or there's a problem with the configured DNS servers themselves. Use `nslookup` to query different DNS servers (e.g., Google Public DNS - 8.8.8.8, Cloudflare - 1.1.1.1) to see if the problem is specific to the user's configured DNS servers. Also, check the status of the DNS Client service.",
-        "The user's network cable is faulty.",
-        "The user's computer has a virus."
+        "Configure 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalives globally via sysctl parameters.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Use 'screen' or 'tmux' to maintain session persistence."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Valid network configuration and local connectivity paired with DNS resolution failure point to a DNS-related issue, likely involving the DNS Client service or DNS server problems. Testing with alternative DNS servers can help confirm the problem.",
-      "examTip": "When DNS resolution fails despite correct IP configuration, verify the DNS Client service and test using alternative DNS servers with `nslookup`."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' ensure the server sends keepalive messages, preventing timeouts. TCP keepalives apply system-wide, not just SSH. Mosh requires client and server configuration changes. 'screen' and 'tmux' maintain sessions but don’t prevent connection drops.",
+      "examTip": "Adjust SSH server keepalive settings for persistent connections during idle periods on Linux systems."
     },
     {
       "id": 34,
-      "question": "A user reports that their computer will not boot and displays the message 'No Operating System Found.' You have verified in the BIOS that the computer can detect all hard drives, and the boot order is set to the correct drive. What is the next step?",
+      "question": "A Windows 10 system shows 'Operating System not found' after adding a second drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "Replace the hard drive.",
-        "Reinstall the operating system.",
-        "Boot to installation media, enter the recovery environment, and attempt to repair the boot configuration (e.g., using bootrec commands).",
-        "Run a virus scan."
+        "Incorrect boot order prioritizing the new, non-bootable drive.",
+        "Corrupted master boot record (MBR) on the primary drive.",
+        "Disconnected SATA cables on the primary drive.",
+        "Damaged boot partition requiring repair."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "If the BIOS detects the drives and the boot order is correct, the issue is likely with the boot configuration. Booting into the recovery environment and repairing the boot configuration is the appropriate next step.",
-      "examTip": "Repair the boot configuration if BIOS sees the drive but no operating system is found."
+      "correctAnswerIndex": 0,
+      "explanation": "New drive installations can cause BIOS to prioritize the wrong drive, leading to boot errors. MBR corruption and partition damage would prevent detection or prompt different errors. Disconnected cables would result in the drive being undetected in BIOS.",
+      "examTip": "Verify BIOS boot order after hardware changes to ensure the correct boot drive is prioritized."
     },
     {
       "id": 35,
-      "question": "You are working on a system that uses BitLocker. The owner forgot their password, and also lost their recovery key. What can you do?",
+      "question": "A Linux administrator needs to ensure a critical service automatically restarts on failure but stops attempting after three failures in ten minutes. What is the correct systemd configuration?",
       "options": [
-        "Use a password reset tool.",
-        "Reinstall the operating system and restore from a backup. Without the password or recovery key, the data is unrecoverable.",
-        "Contact Microsoft for assistance.",
-        "Format the drive."
+        "Restart=on-failure, StartLimitIntervalSec=600, StartLimitBurst=3",
+        "Restart=always, RestartSec=5, TimeoutStartSec=600",
+        "Restart=on-abort, StartLimitBurst=3, RestartSec=10",
+        "Restart=on-failure, TimeoutStartSec=600, RestartSec=5"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "BitLocker is designed to protect data. Without the password or recovery key, the data remains encrypted and is unrecoverable.",
-      "examTip": "Without the BitLocker password or recovery key, the encrypted data cannot be accessed."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration ensures restarts on failure but limits attempts to three within ten minutes. 'Restart=always' doesn’t differentiate failure causes. 'Restart=on-abort' is for abnormal terminations. 'TimeoutStartSec' controls startup timing, not restart frequency.",
+      "examTip": "Combine 'Restart=on-failure' with 'StartLimitBurst' and 'StartLimitIntervalSec' for controlled restart attempts in systemd."
     },
     {
       "id": 36,
-      "question": "A user calls in complaining that sometimes when they print, the printer prints random characters instead of the document. They are using a USB printer, and the cable is connected securely. You have already reinstalled the print driver. What should you check NEXT?",
+      "question": "A user reports that after changing their Windows password, mapped network drives fail to reconnect. What is the MOST likely cause?",
       "options": [
-        "Check the toner levels.",
-        "Run a virus scan.",
-        "Try a different USB port and, if possible, a different USB cable. Also check for any physical damage on the printer. Finally attempt to update the printer's firmware.",
-        "Restart the print spooler."
+        "Cached credentials no longer match the updated password.",
+        "Group Policy Objects (GPOs) blocking drive mappings after password changes.",
+        "DNS resolution failures preventing server access.",
+        "Network adapter driver corruption affecting SMB traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Random characters often indicate a communication issue, so checking the physical connection (USB port, cable) and updating the firmware is the next step.",
-      "examTip": "If printing issues persist after reinstalling drivers, verify physical connections and update firmware."
+      "correctAnswerIndex": 0,
+      "explanation": "Password changes invalidate cached credentials, preventing drive reconnections. GPOs typically enforce, not block, mappings. DNS issues would affect all network access. Driver corruption would impact overall connectivity, not just drive mappings.",
+      "examTip": "Update cached credentials in Credential Manager after password changes to restore mapped drive access."
     },
     {
       "id": 37,
-      "question": "A user calls complaining that their computer blue screens every time on boot. They can get into Safe Mode. What would be the best way to determine what is causing the computer to blue screen?",
+      "question": "A Windows 11 laptop has slow startup times after enabling full-disk encryption. The device uses a mechanical hard drive. What is the MOST likely cause?",
       "options": [
-        "Event Viewer",
-        "MSCONFIG",
-        "Resource Monitor",
-        "WinDbg Preview and analyze the dump file"
+        "BitLocker encryption overhead affecting HDD performance.",
+        "TPM authentication delays during the pre-boot phase.",
+        "BIOS boot order scanning non-bootable devices first.",
+        "Corrupted bootloader requiring repair."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Analyzing the memory dump (minidump) using WinDbg Preview provides detailed insights into the cause of the blue screen.",
-      "examTip": "Use WinDbg to analyze the memory dump file from a BSOD for detailed diagnostics."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption adds processing overhead that is more pronounced on HDDs compared to SSDs. TPM delays usually involve recovery prompts. BIOS scanning delays affect all boot processes. Bootloader corruption prevents booting entirely.",
+      "examTip": "Upgrade to SSD storage when using full-disk encryption on Windows systems to reduce boot times."
     },
     {
       "id": 38,
-      "question": "A computer has multiple hard drives but will not boot and displays 'No Operating System Found.' The BIOS detects the drives, and the boot order is correct. What is the next step?",
+      "question": "A Linux administrator needs to monitor real-time CPU usage per process. Which command is BEST suited?",
       "options": [
-        "Replace the hard drive.",
-        "Reinstall the operating system.",
-        "Boot to installation media, enter the recovery environment, and attempt to repair the boot configuration.",
-        "Run a virus scan."
+        "top",
+        "htop",
+        "ps aux --sort=-%cpu",
+        "vmstat 1"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "If the BIOS sees the drives and the boot order is correct, the problem likely lies with the boot configuration. The next step is to repair the boot configuration using recovery media.",
-      "examTip": "If BIOS detects the drive but no OS is found, use recovery tools to repair the boot configuration."
+      "correctAnswerIndex": 0,
+      "explanation": "'top' provides real-time per-process CPU usage and is universally available. 'htop' offers enhanced visualization but may not be installed by default. 'ps aux' provides snapshots, not continuous monitoring. 'vmstat' focuses on system-wide metrics, not per-process details.",
+      "examTip": "Use 'top' for immediate, real-time insights into per-process CPU usage on Linux systems."
     },
     {
       "id": 39,
-      "question": "A technician is working on a system with BitLocker enabled. The owner forgot their BitLocker password and lost the recovery key. What can the technician do to access the data?",
+      "question": "A macOS user reports persistent prompts for iCloud password after an OS update. What is the MOST likely cause?",
       "options": [
-        "Use a password reset tool.",
-        "Reinstall the operating system and restore from a backup. Without the password or recovery key, the data is unrecoverable.",
-        "Contact Microsoft for assistance.",
-        "Format the drive."
+        "Keychain corruption preventing iCloud authentication.",
+        "Expired Apple ID credentials requiring reset.",
+        "Firewall settings blocking iCloud services.",
+        "Corrupted iCloud preference files in the user library."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Without the BitLocker password or recovery key, the data remains encrypted and is unrecoverable.",
-      "examTip": "BitLocker encryption is strong; without the password or recovery key, the data cannot be accessed."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption is a common cause of repeated iCloud authentication prompts. Expired Apple ID credentials would prevent login across all Apple services. Firewall issues would block access rather than cause repeated prompts. Corrupted preference files typically affect only the iCloud UI, not authentication.",
+      "examTip": "Reset or repair Keychain Access when encountering repeated iCloud authentication prompts on macOS."
     },
     {
       "id": 40,
-      "question": "A user calls complaining that sometimes when they print, the printer prints random characters instead of the document. They are using a USB printer, and the cable is connected securely. You have already reinstalled the print driver. What should you check NEXT?",
+      "question": "A Windows 10 system shows 'NTLDR is missing' after changing BIOS settings. What is the FIRST troubleshooting step?",
       "options": [
-        "Check the toner levels.",
-        "Run a virus scan.",
-        "Try a different USB port and cable, and check for physical damage on the printer. Update the printer's firmware if available.",
-        "Restart the print spooler."
+        "Check and correct the BIOS boot order.",
+        "Repair the master boot record using recovery tools.",
+        "Restore BIOS settings to default configuration.",
+        "Reinstall Windows bootloader from installation media."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "This is similar to a previous printing issue; after reinstalling the driver, the next step is to check the physical connection and update firmware.",
-      "examTip": "Investigate physical connection issues and update firmware if printing random characters persists."
+      "correctAnswerIndex": 0,
+      "explanation": "The 'NTLDR is missing' error typically occurs when the BIOS boot order points to a non-bootable device. Repairing the MBR or bootloader is secondary. Restoring BIOS defaults may not address the specific boot order issue. Reinstallation is a last-resort step.",
+      "examTip": "Verify BIOS boot sequence after configuration changes when encountering boot errors like 'NTLDR is missing.'"
     },
     {
       "id": 41,
-      "question": "A computer suddenly shuts off with no warning or error codes, and it does so frequently. RAM is good, CPU temperatures are normal, and the system is lightly loaded. What is the likely cause?",
+      "question": "A Linux web server running Apache is returning a '403 Forbidden' error after a configuration change. The website files have correct permissions. What is the MOST likely cause?",
       "options": [
-        "Motherboard or PSU",
-        "CPU",
-        "Hard Drive",
-        "GPU"
+        "SELinux is enforcing policies blocking access to web content.",
+        "The Apache service lacks proper read permissions on the web directory.",
+        "The firewall is blocking inbound HTTP requests on port 80.",
+        "The .htaccess file has incorrect directives preventing access."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Frequent, sudden shutdowns with no error messages typically point to power issues or motherboard faults.",
-      "examTip": "Investigate the PSU and motherboard when a computer shuts off suddenly without warning."
+      "explanation": "SELinux commonly causes '403 Forbidden' errors if proper contexts are not set, even when file permissions are correct. Apache read permission issues would present as '403' but typically show explicit permission errors. Firewall misconfigurations would block requests entirely, resulting in connection errors, not '403.' Misconfigured .htaccess files cause '403' errors but would not coincide directly with a known SELinux-enforced environment unless explicitly modified.",
+      "examTip": "Use 'ls -Z' to check SELinux contexts and 'restorecon -R /var/www/html' to correct them for Apache web directories."
     },
     {
       "id": 42,
-      "question": "A technician is called in to work on a computer, and they get shocked when touching the case. What is the likely cause?",
+      "question": "A user reports that their Windows 11 system boots into BitLocker recovery mode after a BIOS update. TPM is enabled and operational. How can future recovery prompts after such updates be prevented?",
       "options": [
-        "Bad power supply.",
-        "Improper grounding of the electrical outlet, or a faulty power supply.",
-        "Bad RAM.",
-        "Bad motherboard."
+        "Suspend BitLocker encryption before performing BIOS updates.",
+        "Clear the TPM and reinitialize it after the update.",
+        "Disable Secure Boot before updating the BIOS.",
+        "Manually export and import the BitLocker recovery key after each update."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A shock when touching the computer case indicates improper grounding or a faulty power supply.",
-      "examTip": "If you get shocked by a computer case, check for proper grounding and test the PSU."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before BIOS updates ensures TPM measurements remain consistent, preventing recovery prompts. Clearing TPM can lead to data loss if not properly managed. Secure Boot is unrelated to BitLocker TPM measurements. Exporting the recovery key helps in recovery but does not prevent future prompts.",
+      "examTip": "Always suspend BitLocker before firmware or BIOS updates to avoid unnecessary recovery key prompts."
     },
     {
       "id": 43,
-      "question": "A user reports that anytime they go to a website with video, the video plays very choppy, and the audio is out of sync. What is the MOST likely cause?",
+      "question": "A macOS user reports slow performance and frequent beachball icons after upgrading to the latest version. The system shows high disk activity. What is the MOST likely cause?",
       "options": [
-        "The user's network connection is slow or unstable.",
-        "Outdated or incompatible video drivers, insufficient system resources (especially RAM or GPU), or a misconfigured media player.",
-        "The user's computer has a virus.",
-        "The website's server is overloaded."
+        "Spotlight is reindexing the file system after the upgrade.",
+        "The file system is corrupted and requires First Aid via Disk Utility.",
+        "The macOS upgrade failed to complete, leaving temporary files.",
+        "A third-party kernel extension is causing resource contention."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Choppy video playback and audio sync issues are most often due to local performance problems such as outdated drivers or insufficient resources.",
-      "examTip": "Check for updated video drivers, verify system resource availability, and review media player settings when troubleshooting video playback issues."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight reindexing after macOS upgrades causes high disk activity and temporary slow performance. File system corruption would show mounting errors. Failed upgrades typically result in missing features or boot loops. Third-party kernel extensions cause instability rather than persistent disk activity.",
+      "examTip": "Allow Spotlight to complete reindexing post-upgrade; performance typically normalizes afterward."
     },
     {
       "id": 44,
-      "question": "A user reports that their Windows computer is experiencing network connectivity problems. `ipconfig /all` shows a valid IP configuration, and you can ping local devices, but you cannot access any websites. `nslookup` commands consistently fail to resolve domain names. What is the MOST likely cause, and how would you confirm your suspicion?",
+      "question": "A Linux administrator needs to ensure that a critical service restarts automatically on failure but stops trying after three failures within five minutes. What is the correct systemd configuration?",
       "options": [
-        "The user's web browser is corrupted.",
-        "The DNS Client service (Dnscache) on the user's computer is stopped or malfunctioning, or there's a problem with the configured DNS servers themselves. Use `nslookup` to query different DNS servers (e.g., 8.8.8.8, 1.1.1.1) and check the DNS Client service status.",
-        "The user's network cable is faulty.",
-        "The user's computer has a virus."
+        "Restart=on-failure\nStartLimitIntervalSec=300\nStartLimitBurst=3",
+        "Restart=always\nRestartSec=60\nTimeoutStartSec=300",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=10",
+        "Restart=on-failure\nTimeoutStopSec=300\nRestartSec=5"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If network configuration is valid and local connectivity works but DNS resolution fails, the issue likely lies with the DNS Client service or DNS server settings. Testing with alternative DNS servers can help confirm the cause.",
-      "examTip": "When DNS resolution fails despite valid IP settings, verify the DNS Client service and test with different DNS servers using `nslookup`."
+      "correctAnswerIndex": 0,
+      "explanation": "This combination ensures the service restarts on failure but stops after three attempts in five minutes. 'Restart=always' doesn’t consider failure types. 'on-abort' applies only to abnormal exits. 'TimeoutStopSec' and 'RestartSec' manage timing but not restart limits.",
+      "examTip": "Set 'StartLimitBurst' and 'StartLimitIntervalSec' together with 'Restart=on-failure' for controlled automatic restarts."
     },
     {
       "id": 45,
-      "question": "A technician is plugging in an external hard drive. It has a USB-C port on the drive, and a USB-C port on the computer. Upon plugging in the drive, the system becomes unresponsive. After a reboot, the system displays a message about over current on the USB port. What could be the cause?",
+      "question": "A Windows 10 machine shows a 'BOOTMGR is missing' error after connecting an external USB drive. What is the MOST likely cause?",
       "options": [
-        "Faulty Motherboard",
-        "The USB-C cable is likely only rated for power, and not data. Use a cable rated for both power and data.",
-        "Faulty hard drive",
-        "Faulty RAM"
+        "The BIOS boot order prioritizes the external USB drive.",
+        "The master boot record on the internal drive is corrupted.",
+        "The external drive contains an incomplete boot sector.",
+        "The boot partition on the internal drive has been deleted."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A USB-C cable that supports only power may not properly handle data transmission, leading to over current errors.",
-      "examTip": "If you encounter over current errors with USB-C devices, try a cable that supports both power and data."
+      "correctAnswerIndex": 0,
+      "explanation": "External drives can change the BIOS boot priority. If the external drive lacks a bootable OS, a 'BOOTMGR is missing' error appears. MBR corruption or partition deletion would cause persistent boot issues regardless of external drives. Incomplete boot sectors on external drives wouldn’t affect internal boot orders unless prioritized by BIOS.",
+      "examTip": "Check and correct BIOS boot priorities after adding new storage devices to avoid boot errors."
     },
     {
       "id": 46,
-      "question": "A user is trying to go to your company's website and receives an error 'This site can't be reached, DNS_PROBE_FINISHED_NXDOMAIN.' You can access the website fine. What is likely the cause?",
+      "question": "A Linux administrator is troubleshooting SSH session drops after several minutes of inactivity. Network connectivity is stable. What configuration should be adjusted?",
       "options": [
-        "Server is down",
-        "Firewall is blocking the user",
-        "User has a bad network cable",
-        "User has a bad DNS server or the DNS record is incorrect"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive timeouts in kernel settings.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Implement 'PermitRootLogin' to maintain administrative sessions."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "NXDOMAIN errors indicate that the domain name could not be resolved, pointing to a DNS configuration issue on the user's side.",
-      "examTip": "NXDOMAIN typically signals a DNS problem; check the user's DNS server settings."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' prevent SSH timeouts by sending periodic keepalives. Kernel TCP settings affect all connections, which may not be desirable. Mosh can maintain sessions but requires additional software. 'PermitRootLogin' is a security risk and unrelated to session persistence.",
+      "examTip": "Modify SSH keepalive settings to maintain idle connections without relying on broader network-level changes."
     },
     {
       "id": 47,
-      "question": "A computer suddenly shuts off with no warning or error codes, and it does this often. RAM has been tested and is good, CPU temperatures are normal, and the system is lightly loaded. What is the likely cause?",
+      "question": "A user reports that after updating their Android OS, the device experiences rapid battery drain. What is the MOST likely reason?",
       "options": [
-        "Motherboard or PSU",
-        "CPU",
-        "Hard Drive",
-        "GPU"
+        "Background app optimization settings were reset during the update.",
+        "The battery has reached end-of-life and cannot hold charge efficiently.",
+        "A rogue application is bypassing system battery optimization policies.",
+        "The update included enhanced encryption increasing CPU cycles."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Sudden shutdowns without warning are usually due to power issues (PSU) or motherboard faults.",
-      "examTip": "Investigate the PSU and motherboard when a computer shuts down unexpectedly."
+      "explanation": "Android updates can reset app optimization settings, causing apps to run persistently. Battery end-of-life would result in poor charging behavior, not just drain. Rogue apps would need to be confirmed with resource usage tools. Encryption upgrades would have minimal impact on idle battery performance.",
+      "examTip": "Review and reapply battery optimization settings after OS updates to restore normal power consumption."
     },
     {
       "id": 48,
-      "question": "A technician is called in to work on a computer, and they get shocked when touching the case. What is the likely cause?",
+      "question": "A Windows 11 device connected to a VPN shows successful connection but cannot access internal resources by hostname. What should the technician check FIRST?",
       "options": [
-        "Bad power supply.",
-        "Improper grounding of the electrical outlet, or a faulty power supply.",
-        "Bad RAM.",
-        "Bad motherboard."
+        "DNS settings to ensure internal hostnames are routed through the VPN.",
+        "Split-tunneling configurations that may route traffic incorrectly.",
+        "Active Directory permissions for resource access authorization.",
+        "Firewall rules that may block internal DNS requests."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Getting shocked when touching a computer case typically indicates a grounding issue or a faulty power supply.",
-      "examTip": "If a computer case shocks you, check for proper grounding and test the power supply."
+      "correctAnswerIndex": 0,
+      "explanation": "DNS misconfigurations are a common reason internal hostnames fail while IP-based access remains functional. Split-tunneling issues affect all traffic types, not just DNS resolution. Active Directory permissions govern resource access but wouldn’t prevent name resolution. Firewall rules would impact both hostname and IP resolution.",
+      "examTip": "Verify DNS routing settings when VPN connections allow IP traffic but fail for hostname resolutions."
     },
     {
       "id": 49,
-      "question": "A user reports that anytime they go to a website with video, the video plays very choppy, and the audio is out of sync. What is the MOST likely cause?",
+      "question": "A macOS user reports that after connecting to public Wi-Fi, all network traffic is being redirected to a suspicious login page. What is the MOST likely cause?",
       "options": [
-        "The user's network connection is slow or unstable.",
-        "Outdated or incompatible video drivers, insufficient system resources (especially RAM or GPU), or a misconfigured media player.",
-        "The user's computer has a virus.",
-        "The website's server is overloaded."
+        "An 'Evil Twin' access point is mimicking a legitimate network.",
+        "The ISP's captive portal requires authentication before internet access.",
+        "The user’s DNS settings have been altered to redirect traffic.",
+        "The firewall has been disabled, allowing unsolicited traffic."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Choppy video and out-of-sync audio are typically due to local system issues such as outdated drivers or insufficient resources, rather than network problems, assuming basic connectivity is working.",
-      "examTip": "When video playback is choppy, check for updated video drivers and verify that the system has sufficient resources."
+      "correctAnswerIndex": 0,
+      "explanation": "An 'Evil Twin' access point is designed to capture user credentials by mimicking legitimate networks. ISPs typically display branded captive portals. DNS changes wouldn’t redirect all traffic, especially HTTPS. Firewalls affect inbound traffic, not initial redirects.",
+      "examTip": "Verify SSID authenticity and avoid unsecured networks to mitigate risks from 'Evil Twin' attacks."
     },
     {
       "id": 50,
-      "question": "A computer will power on, the fans spin, but there is no display, and no POST beeps. You've verified the monitor and cable are working. What is the MOST likely cause?",
+      "question": "A Windows 10 system fails to apply Group Policy settings after a recent domain migration. What is the MOST likely cause?",
       "options": [
-        "Operating system corruption.",
-        "Faulty RAM.",
-        "Hard drive failure.",
-        "Motherboard, CPU, or RAM failure (or potentially a PSU issue, though the fans spinning makes that slightly less likely). A complete lack of POST beeps can sometimes indicate a severe motherboard or CPU problem.",
-        "PSU Failure"
+        "The client’s secure channel with the new domain controller is broken.",
+        "The SYSVOL folder on the domain controller is inaccessible.",
+        "DNS entries for the domain controller are incorrect.",
+        "The user lacks permissions to apply specific GPO settings."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "No display and no POST beeps typically indicate a fundamental hardware issue occurring before the OS loads—commonly a motherboard, CPU, or RAM failure. Although PSU issues are possible, the fans spinning make a complete PSU failure less likely.",
-      "examTip": "A lack of POST beeps and no display usually point to severe hardware issues (motherboard, CPU, or RAM); systematically test or swap components to isolate the cause."
+      "correctAnswerIndex": 0,
+      "explanation": "A broken secure channel prevents Group Policy from applying because authentication to the domain controller fails. SYSVOL inaccessibility impacts all GPO distribution, not just selective failure. DNS issues would prevent domain controller detection entirely. Permissions issues would cause partial GPO failures, not a complete absence of policy applications.",
+      "examTip": "Use the 'Test-ComputerSecureChannel' PowerShell cmdlet to validate secure channel status after domain migrations."
     },
     {
       "id": 51,
-      "question": "A user reports that their Windows computer is displaying a message stating, 'Operating System Not Found' when they try to boot the system.  You've verified that the hard drive is detected in the BIOS/UEFI settings, and the boot order is correct. What are some potential causes, and what troubleshooting steps would you take?",
+      "question": "A Linux server is configured with fail2ban but is still experiencing brute-force SSH attacks. What configuration adjustment will MOST effectively reduce attack success?",
       "options": [
-        "The monitor cable is disconnected.",
-        "The keyboard is not working.",
-        "The network cable is unplugged.",
-        "The boot sector on the hard drive is corrupted or missing, the BCD (Boot Configuration Data) store is corrupted or missing, the active partition is not set correctly, or the Master Boot Record (MBR) is damaged (on older systems). Troubleshooting steps: Boot from Windows installation media, enter the Recovery Environment, and try Startup Repair. If that fails, use `bootrec` commands (`/fixmbr`, `/fixboot`, `/rebuildbcd`). In more complex cases, you might need to use `bcdedit` to manually configure the BCD. If those fail, you might need to consider data recovery and a clean OS installation."
+        "Lower the 'maxretry' value in the fail2ban SSH filter settings.",
+        "Increase the 'bantime' duration in the fail2ban jail configuration.",
+        "Change the default SSH port from 22 to a non-standard port.",
+        "Disable password authentication in favor of SSH key-based authentication."
       ],
       "correctAnswerIndex": 3,
-      "explanation": "An 'Operating System Not Found' error, when the hard drive is detected and the boot order is correct, indicates a problem with the boot files or the boot configuration on the hard drive. The most common causes are: Corrupted or Missing Boot Sector, Corrupted or Missing BCD, Incorrect Active Partition, or a Damaged MBR (on older systems). Troubleshooting steps involve booting from Windows installation media, entering the Recovery Environment, and using tools like Startup Repair, bootrec commands, and possibly bcdedit.",
-      "examTip": "The 'Operating System Not Found' error often indicates a problem with the boot sector, BCD, or active partition; use the Windows Recovery Environment and tools like bootrec and bcdedit to attempt repairs."
+      "explanation": "Disabling password authentication entirely eliminates brute-force attack vectors regardless of fail2ban configurations. Lowering 'maxretry' or increasing 'bantime' delays attackers but doesn’t prevent attempts. Changing the default SSH port provides security through obscurity, which isn’t a robust solution.",
+      "examTip": "Use SSH key-based authentication and disable passwords to render brute-force attempts ineffective."
     },
     {
       "id": 52,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. The server has multiple network interfaces. You need to determine the specific network interface that is currently being used as the default gateway for outgoing traffic. Which command is BEST suited for this task, and how would you interpret the output?",
+      "question": "A Windows 11 user reports frequent 'Credential Manager' errors after changing Active Directory passwords. What is the FIRST step to resolve this?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "route -n",
-        "ip route show | grep default"
+        "Clear cached credentials in Windows Credential Manager.",
+        "Rejoin the computer to the domain to reset secure channels.",
+        "Run 'gpupdate /force' to refresh domain policies.",
+        "Delete and recreate the user profile locally."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "The command `ip route show | grep default` displays the default route along with the associated interface. For example, an output like `default via 192.168.1.1 dev eth0` tells you that 192.168.1.1 is the default gateway and `eth0` is the interface used.",
-      "examTip": "Use `ip route show | grep default` on Linux to quickly identify the default gateway and the network interface it's using."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager retains passwords for network resources. After AD password changes, outdated credentials cause authentication errors. Rejoining domains or recreating profiles is excessive. 'gpupdate' affects policy settings, not cached credentials.",
+      "examTip": "Always clear cached credentials after AD password changes to prevent authentication errors."
     },
     {
       "id": 53,
-      "question": "You are configuring a new Windows computer and want to ensure that the system clock is automatically and accurately synchronized with a reliable time source. You know that Windows uses the Windows Time service (w32time) for this purpose. What are some of the key command-line options for the `w32tm` utility that you can use to configure and troubleshoot time synchronization?",
+      "question": "A Linux administrator discovers high CPU usage from the 'journald' process. Log files are consuming most of the available disk space. How can this be mitigated?",
       "options": [
-        "`w32tm /register` and `w32tm /unregister`",
-        "`w32tm /query /source`, `w32tm /config /manualpeerlist:<peers> /syncfromflags:manual /reliable:yes`, `w32tm /resync`, and `w32tm /monitor`",
-        "`w32tm /stripchart`",
-        "All of the above"
+        "Set 'SystemMaxUse' in journald.conf to limit disk usage.",
+        "Manually clear logs in '/var/log/journal/'.",
+        "Switch to rsyslog for all system logging needs.",
+        "Disable persistent logging in journald."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Key options include: `w32tm /query /source` to show the current time source; `w32tm /config /manualpeerlist:<peers> /syncfromflags:manual /reliable:yes` to configure synchronization with specific NTP servers; `w32tm /resync` to force a time sync; and `w32tm /monitor` to monitor synchronization status.",
-      "examTip": "Familiarize yourself with `w32tm` options for configuring and troubleshooting time synchronization in Windows."
+      "correctAnswerIndex": 0,
+      "explanation": "Setting 'SystemMaxUse' in 'journald.conf' enforces automatic disk usage limits, preventing logs from consuming excessive space. Manual deletion is temporary. rsyslog can supplement but doesn’t resolve journald issues. Disabling persistent logging sacrifices valuable audit trails.",
+      "examTip": "Configure disk usage limits for journald to prevent uncontrolled log growth on Linux systems."
     },
     {
       "id": 54,
-      "question": "A user reports that their Windows computer is exhibiting very slow performance when accessing files on a network share. Other users are not experiencing the same problem. You've verified basic network connectivity (ping, nslookup), and the user has the correct permissions to access the share. You suspect a problem specific to the SMB (Server Message Block) protocol on the user's computer. What is a specific Windows feature, related to SMB and file sharing, that could be causing the slowdown, and how would you check its status and potentially disable it?",
+      "question": "A Windows 10 system shows 'No Boot Device Found' after adding a secondary SSD. BIOS detects both drives. What should the technician check FIRST?",
       "options": [
-        "The Windows Firewall.",
-        "Offline Files (Client-Side Caching or CSC) might be enabled, and the synchronization process might be causing the slowdown. Check the status of Offline Files in the Sync Center and, if necessary, disable it for the specific share or entirely.",
-        "The DNS Client service.",
-        "The DHCP Client service."
+        "BIOS boot order to ensure the primary OS drive is prioritized.",
+        "UEFI Secure Boot settings for compatibility with the boot drive.",
+        "SATA mode settings (AHCI vs. RAID) affecting drive recognition.",
+        "Corruption of the EFI system partition on the primary drive."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Offline Files caches network files for offline access. If it malfunctions or the synchronization process is slow or corrupted, it can slow file access even if the network is functioning correctly.",
-      "examTip": "Check the Sync Center in Windows to determine if Offline Files is affecting network share performance."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS may default to booting from the new drive if prioritized incorrectly, causing 'No Boot Device Found' errors. Secure Boot or SATA mode issues produce more specific errors. EFI partition corruption would prevent booting but wouldn’t impact drive detection in BIOS.",
+      "examTip": "After adding new storage, always verify BIOS boot priorities to prevent boot path disruptions."
     },
     {
       "id": 55,
-      "question": "You are investigating a security incident where an attacker might have gained unauthorized access to a Linux server. You want to see a list of all user accounts on the system, including those that might be hidden or not typically used for interactive logins. Which command is BEST suited for this task, and what are some specific techniques attackers might use to hide user accounts on a Linux system?",
+      "question": "A user complains that their Windows 11 device is unable to connect to any HTTPS websites, but HTTP works fine. The system date and time are correct. What is the MOST likely cause?",
       "options": [
-        "ls -l /home",
-        "cat /etc/passwd (and potentially examine /etc/shadow for password hashes). Attackers might create accounts with names similar to existing system accounts, use names that start with a dot to hide them, or modify /etc/passwd and /etc/shadow directly.",
-        "who",
-        "last"
+        "Corrupted or outdated root certificates on the local machine.",
+        "Browser TLS settings misconfigured after recent updates.",
+        "Network firewall blocking port 443 specifically.",
+        "DNS resolution failures causing secure connections to time out."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The /etc/passwd file lists all user accounts on a Linux system, including system accounts and those not used for interactive logins. Attackers might hide accounts by using names that start with a dot or ones that closely mimic system accounts.",
-      "examTip": "Examine /etc/passwd (and /etc/shadow) on Linux to list all user accounts and detect potentially hidden ones."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates are essential for validating HTTPS connections. If they’re corrupted or outdated, secure websites fail to load. TLS settings misconfigurations would produce explicit browser warnings. Firewall port blocking would affect all secure traffic regardless of certificate status. DNS failures would affect both HTTP and HTTPS.",
+      "examTip": "Check and update root certificates if HTTPS traffic fails despite functional HTTP connectivity and correct system time."
     },
     {
       "id": 56,
-      "question": "You are troubleshooting a Windows computer that is not booting. You receive an error that bootmgr is missing or corrupt. You attempt to use the recovery console with a Windows installation disk, but the system will not boot to the disk. What should you verify?",
+      "question": "A Linux administrator wants to enforce a restart of a service after failure but avoid infinite restarts. Which systemd directive achieves this?",
       "options": [
-        "Verify the hard drive is functional",
-        "Verify the optical drive is functional and that the BIOS/UEFI is set to boot to the optical drive first.",
-        "Verify the monitor is functional",
-        "Verify the RAM is functional"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=on-abort\nRestartSec=5\nStartLimitBurst=5",
+        "Restart=always\nTimeoutStopSec=120\nRestartSec=15"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "If the system will not boot from the installation media, you must ensure the optical drive is working and the BIOS/UEFI boot order is set to boot from it first.",
-      "examTip": "Verify the optical drive and boot order if the system will not boot from installation media."
+      "correctAnswerIndex": 0,
+      "explanation": "This combination ensures services restart on failure but stop after three attempts within ten minutes, preventing infinite loops. 'Restart=always' forces restarts regardless of exit reasons. 'on-abort' applies only to abnormal terminations. Timeout directives regulate timing, not restart limitations.",
+      "examTip": "Combine 'Restart=on-failure' with 'StartLimit' directives for controlled restart behavior in systemd-managed services."
     },
     {
       "id": 57,
-      "question": "You are troubleshooting a server and believe there to be an issue with a network card. You have already updated drivers. What would be the next best action to take?",
+      "question": "A user’s macOS device fails to connect to Wi-Fi networks after an OS update. Other devices connect without issues. What is the MOST likely cause?",
       "options": [
-        "Replace the network card",
-        "Run diagnostics on the network card. If possible, test the card in a different system, or test with a known-good network card in the original system. Also, check Event Viewer logs and consider using a cable tester.",
-        "Restart the server",
-        "Reinstall the OS"
+        "Corrupted network preference files requiring reset.",
+        "Outdated wireless adapter firmware incompatible with the new OS.",
+        "Router incompatibility with updated macOS security protocols.",
+        "Keychain corruption affecting Wi-Fi password storage."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Before replacing the network card, further diagnostics (such as testing in another system, checking logs, or using a cable tester) should be performed to confirm the issue.",
-      "examTip": "Test hardware components in another system or swap in a known-good card to isolate network issues."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted network preference files often prevent Wi-Fi reconnections post-update. Firmware incompatibility would prevent the adapter from appearing entirely. Router incompatibility would affect all connected devices. Keychain issues would impact password authentication, not network detection.",
+      "examTip": "Reset network preferences on macOS if Wi-Fi issues persist after system updates."
     },
     {
       "id": 58,
-      "question": "A technician is working on a computer, and they smell a burning smell. They immediately unplug the computer. What should the technician do NEXT?",
+      "question": "A Windows user reports that mapped network drives fail to reconnect after a password change. What is the MOST likely cause?",
       "options": [
-        "Turn the computer back on to see if it boots.",
-        "Visually inspect the internal components for signs of damage (burned components, melted plastic, etc.). If the source is not immediately obvious, systematically test or replace components as needed.",
-        "Replace the hard drive.",
-        "Replace the RAM."
+        "Cached credentials in Credential Manager no longer match the new password.",
+        "Group Policy mappings are not refreshing after credential updates.",
+        "DNS entries for the file server are outdated or incorrect.",
+        "SMB protocol mismatches between the client and file server."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A burning smell indicates likely internal damage. The technician should inspect for damage before attempting to power the computer on.",
-      "examTip": "A burning smell is a serious warning; immediately unplug the system and inspect for damage."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager caches passwords for network resources. After password changes, outdated credentials prevent reconnection. GPO issues would affect all users equally. DNS mismatches would prevent all access, not just mapped drives. SMB protocol issues typically cause connection rejections, not authentication failures.",
+      "examTip": "Clear and update Credential Manager entries after password changes to restore network drive mappings."
     },
     {
       "id": 59,
-      "question": "A computer you are working on has an Intel processor. What built in feature allows the processor to run multiple operating systems simultaneously?",
+      "question": "A Linux server’s SSH connections drop after short idle periods. The administrator confirms stable network connectivity. What configuration change prevents this?",
       "options": [
-        "Hyper-V",
-        "Hyperthreading",
-        "VT-x",
-        "Virtual PC"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive settings globally in sysctl.conf.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Use 'screen' or 'tmux' to maintain session persistence."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Intel VT-x is the hardware virtualization technology that allows a processor to efficiently support multiple virtual machines. Hyperthreading improves multitasking but does not provide virtualization.",
-      "examTip": "Ensure Intel VT-x is enabled in the BIOS/UEFI for optimal virtualization performance."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic keepalive packets, preventing session drops. Kernel TCP keepalive adjustments affect all network traffic. Mosh offers persistent sessions but requires additional software. 'screen' and 'tmux' maintain session states but don’t prevent connection drops.",
+      "examTip": "Configure SSH server keepalive settings for stable, persistent connections during idle periods."
     },
     {
       "id": 60,
-      "question": "You are troubleshooting a network connectivity issue on a Windows computer. A computer can access some websites but not others. Pings and nslookup work for all websites. The user's 'hosts' file is clean, and basic firewall settings appear correct. The problem is isolated to this one computer; other devices can access all websites. What is a very specific Windows networking component, often associated with security software or VPNs, that could be selectively interfering with network traffic after DNS resolution and before it reaches the web browser, and how would you investigate it?",
+      "question": "A Windows 10 system fails to boot, displaying 'NTLDR is missing' after a firmware update. What is the FIRST troubleshooting step?",
       "options": [
-        "The Windows Registry.",
-        "A corrupted web browser.",
-        "A misconfigured or malicious LSP (Layered Service Provider). Use `netsh winsock show catalog` to list installed LSPs. Investigate any unfamiliar entries. You can also try `netsh winsock reset`.",
-        "The DNS Client service is stopped."
+        "Check and correct BIOS boot order settings.",
+        "Reinstall the Windows bootloader using recovery media.",
+        "Restore default BIOS settings to correct boot mode changes.",
+        "Repair the master boot record using 'bootrec /fixmbr'."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A misconfigured or malicious LSP can intercept and modify network traffic after DNS resolution. The Winsock catalog can be viewed with `netsh winsock show catalog` and reset with `netsh winsock reset` if needed.",
-      "examTip": "Inspect the Winsock catalog for suspicious LSPs using `netsh winsock show catalog` if selective network issues occur."
+      "correctAnswerIndex": 0,
+      "explanation": "Firmware updates can reset boot priorities, causing 'NTLDR is missing' errors when the BIOS attempts to boot from non-bootable devices. Reinstalling bootloaders or repairing MBRs are subsequent actions if boot order adjustments fail. Restoring default BIOS settings may not address specific boot order issues.",
+      "examTip": "Always verify BIOS boot order after firmware updates to ensure the correct drive is prioritized for booting."
     },
     {
       "id": 61,
-      "question": "You are working on a Linux server and need to examine the kernel's message buffer for recent system messages, including hardware detection, driver loading, and kernel errors. Which command is specifically designed for this purpose?",
+      "question": "A Linux administrator needs to limit the disk space used by system logs without disabling persistent logging. What is the MOST effective method?",
       "options": [
-        "journalctl",
-        "dmesg",
-        "syslog",
-        "messages"
+        "Set 'SystemMaxUse' in journald.conf to cap log size.",
+        "Manually delete logs from /var/log directory weekly.",
+        "Disable persistent logging in journald to limit disk usage.",
+        "Configure rsyslog to overwrite logs after a set period."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`dmesg` prints the kernel's ring buffer, which includes messages from hardware detection, driver loading, and kernel errors.",
-      "examTip": "Use `dmesg` on Linux to view the kernel message buffer for troubleshooting."
+      "correctAnswerIndex": 0,
+      "explanation": "Setting 'SystemMaxUse' in 'journald.conf' limits the disk space used by logs automatically, providing a scalable and persistent solution. Manual deletion is prone to human error. Disabling persistent logging sacrifices essential logs. rsyslog overwriting can complement but doesn't control journald usage directly.",
+      "examTip": "Set 'SystemMaxUse' in journald for automatic disk usage management without losing critical logs."
     },
     {
       "id": 62,
-      "question": "You are troubleshooting a Windows computer that is experiencing intermittent Blue Screen of Death (BSOD) errors. You've obtained the memory dump file (.dmp) from a recent crash and are using WinDbg to analyze it. You run the `!analyze -v` command, and the output indicates a likely cause of `DRIVER_IRQL_NOT_LESS_OR_EQUAL` with a specific driver file implicated (e.g., `ntkrnlmp.exe`). What does this error typically indicate, and what are some common causes?",
+      "question": "A Windows 11 machine fails to access HTTPS websites, while HTTP works fine. The system clock is accurate, and the firewall is disabled. What is the MOST likely cause?",
       "options": [
-        "A problem with the hard drive.",
-        "A problem with network connectivity.",
-        "This error typically indicates that a kernel-mode driver attempted to access paged-out memory at an IRQL that was too high. Common causes include faulty or incompatible device drivers, memory corruption, or hardware problems.",
-        "A problem with the user's web browser."
+        "Corrupted or outdated root certificates on the system.",
+        "Browser cache corruption preventing secure site loading.",
+        "Malware intercepting HTTPS traffic for man-in-the-middle attacks.",
+        "Network router firmware blocking TLS traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The DRIVER_IRQL_NOT_LESS_OR_EQUAL error indicates that a kernel-mode driver accessed memory at an invalid IRQL. This is most commonly due to a faulty or incompatible driver, memory corruption, or hardware issues.",
-      "examTip": "Investigate drivers, memory, and hardware when you see DRIVER_IRQL_NOT_LESS_OR_EQUAL BSOD errors."
+      "correctAnswerIndex": 0,
+      "explanation": "HTTPS relies on valid root certificates for encryption. Corrupted or outdated certificates prevent secure site access. Cache corruption affects browsing generally but not specifically HTTPS. Malware would exhibit additional suspicious activity. Router issues typically impact all network traffic, not just secure connections.",
+      "examTip": "Check and update root certificates when HTTPS traffic fails while HTTP remains unaffected."
     },
     {
       "id": 63,
-      "question": "You are investigating a potential security incident on a Linux server. You suspect that an attacker might have used a technique called 'log tampering' to cover their tracks. What does 'log tampering' mean, and what are some techniques you can use to detect or prevent it?",
+      "question": "A macOS user notices significantly slower performance after upgrading the OS. Disk activity is unusually high. What is the MOST likely cause?",
       "options": [
-        "Log tampering means encrypting log files.",
-        "Log tampering involves modifying or deleting log files to hide evidence of malicious activity. Techniques to detect or prevent it include using a centralized log server, implementing file integrity monitoring, and configuring logs to be write-once.",
-        "Log tampering means backing up log files.",
-        "Log tampering means compressing log files to save disk space."
+        "Spotlight reindexing files after the upgrade.",
+        "FileVault encryption process running in the background.",
+        "Corrupted system caches slowing down performance.",
+        "Outdated kernel extensions causing kernel task spikes."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Log tampering is when an attacker alters or deletes log files to hide their activities. Preventative measures include centralized logging, file integrity monitoring, and using write-once logs.",
-      "examTip": "Implement centralized logging and file integrity monitoring to help detect and prevent log tampering."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight indexing causes high disk activity after an OS upgrade as it rebuilds its database. FileVault encryption affects CPU usage differently. Corrupted caches cause specific application issues. Kernel extension issues would trigger kernel panics, not just slow performance.",
+      "examTip": "Allow Spotlight indexing to complete after macOS upgrades; performance typically improves afterward."
     },
     {
       "id": 64,
-      "question": "You are troubleshooting a Windows computer that is exhibiting slow performance. You open Task Manager and notice that a process named `SearchIndexer.exe` (or related processes) is consuming a significant amount of CPU and disk I/O. What is the normal function of these processes, and in what situations might they legitimately cause high resource utilization? What troubleshooting steps could you consider?",
+      "question": "A Linux administrator observes repeated 'Permission denied' errors while executing a shell script, despite having execute permissions. What is the MOST likely cause?",
       "options": [
-        "These processes are related to a web browser; high resource usage is normal.",
-        "These processes are part of the Windows Search service, which indexes files for faster search. High resource usage is normal during initial indexing or after large file changes. Troubleshooting steps include rebuilding the search index or excluding certain folders from indexing.",
-        "These processes are related to network connectivity; high resource usage indicates a network problem.",
-        "These processes are part of the Windows Update service; high resource usage indicates updates are being installed."
+        "The shebang line references a non-existent interpreter.",
+        "The script lacks the correct SELinux context for execution.",
+        "Filesystem mount options prevent execution of scripts.",
+        "User lacks permissions for dependent system binaries."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SearchIndexer.exe and its related processes belong to the Windows Search service. They index files to facilitate faster searches, and high resource usage is expected during the initial indexing process or after significant file changes.",
-      "examTip": "If Windows Search processes cause high resource usage, consider rebuilding the index or adjusting indexing options."
+      "correctAnswerIndex": 0,
+      "explanation": "An incorrect shebang line prevents the system from finding the interpreter, resulting in 'Permission denied.' SELinux context issues would be logged separately. Mount options typically prevent execution entirely, not selectively. Missing binary permissions would yield 'command not found' or similar errors.",
+      "examTip": "Verify the shebang (#!) line to ensure it points to a valid interpreter when execution permissions are present but errors persist."
     },
     {
       "id": 65,
-      "question": "You are configuring a web server to use HTTPS. You have a valid SSL/TLS certificate and private key. You are using Nginx as your web server. What are the essential directives you need to include in your Nginx configuration file to enable HTTPS and use the certificate?",
+      "question": "A Windows 10 device connected to a VPN reports successful connection but cannot access internal resources by hostname. IP-based access works fine. What should be checked FIRST?",
       "options": [
-        "`listen 80;` and `root /var/www/html;`",
-        "`listen 443 ssl;`, `ssl_certificate /path/to/your/certificate.crt;`, `ssl_certificate_key /path/to/your/private.key;`, and a server block configured for your domain.",
-        "`server_name example.com;` and `index index.html;`",
-        "`error_log /var/log/nginx/error.log;` and `access_log /var/log/nginx/access.log;`"
+        "VPN DNS settings to ensure proper internal resolution.",
+        "Split-tunneling configurations that may bypass DNS requests.",
+        "Firewall rules potentially blocking internal DNS traffic.",
+        "Network adapter binding order affecting DNS prioritization."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "For HTTPS in Nginx, you need to set the server block to listen on port 443 with SSL enabled, and specify the paths to your SSL certificate and private key.",
-      "examTip": "Ensure your Nginx configuration includes `listen 443 ssl;`, `ssl_certificate`, and `ssl_certificate_key` for HTTPS."
+      "correctAnswerIndex": 0,
+      "explanation": "If IP access works but hostname resolution fails, VPN DNS settings are likely misconfigured. Split-tunneling issues typically affect all internal access, not just DNS. Firewall rules blocking DNS would prevent all DNS lookups. Adapter binding issues would affect all network resolution processes, not just VPN-specific ones.",
+      "examTip": "Confirm VPN DNS settings to ensure internal hostname resolution functions correctly after establishing connections."
     },
     {
       "id": 66,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. A computer can access some websites but not others. Pings and nslookup work for all websites. You've checked the hosts file, firewall, proxy settings, and LSPs, and reset the TCP/IP stack. What is a very specific, low-level network parameter, related to TCP, that could be causing selective access issues, and how would you investigate it?",
+      "question": "A Windows 11 laptop boots into BitLocker recovery mode after a firmware update. TPM is enabled and functional. How can future recovery prompts be avoided?",
       "options": [
-        "The computer's hostname.",
-        "A problem with TCP window scaling or other TCP parameters. Use Wireshark to capture traffic for both successful and unsuccessful connections and compare TCP options, window sizes, and signs of packet loss.",
-        "The computer's default gateway.",
-        "The computer's DNS server settings."
+        "Suspend BitLocker protection before firmware updates.",
+        "Disable Secure Boot prior to updating firmware.",
+        "Clear TPM and restore it after completing updates.",
+        "Store recovery keys on a hardware security module (HSM)."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Advanced TCP parameters, such as window scaling, can affect connectivity. Using Wireshark to analyze TCP handshakes and options can reveal subtle differences that might cause selective access issues.",
-      "examTip": "Use Wireshark to analyze TCP handshakes and options if you suspect advanced TCP issues affecting connectivity."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before firmware updates maintains TPM measurement consistency, preventing recovery prompts. Disabling Secure Boot affects firmware integrity checks, not TPM. Clearing TPM risks data loss if not handled properly. Storing keys externally doesn’t prevent recovery prompts caused by TPM measurement changes.",
+      "examTip": "Always suspend BitLocker before firmware updates to maintain TPM measurement consistency and avoid recovery key prompts."
     },
     {
       "id": 67,
-      "question": "You are working on a Linux server and need to determine the complete command line used to launch a running process (including all arguments). Given the process ID (e.g., 1234), which command is BEST suited for this task?",
+      "question": "A Linux administrator discovers that SSH sessions terminate after a few minutes of inactivity. Network connectivity is stable. What configuration change prevents this?",
       "options": [
-        "ps -ef | grep 1234",
-        "top -p 1234",
-        "cat /proc/1234/cmdline",
-        "lsof -p 1234"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive intervals at the kernel level.",
+        "Switch to Mosh for maintaining persistent sessions.",
+        "Enable compression in SSH to reduce idle disconnections."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The file `/proc/1234/cmdline` contains the full command line that was used to launch the process with PID 1234.",
-      "examTip": "Use `cat /proc/<PID>/cmdline` on Linux to retrieve the full command line for a process."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic keepalives from the server, maintaining SSH sessions during idle periods. Kernel TCP keepalive adjustments affect all connections. Mosh requires separate client and server configuration. SSH compression improves transfer speeds, not session persistence.",
+      "examTip": "Configure SSH keepalive settings in sshd_config to maintain persistent SSH sessions during periods of inactivity."
     },
     {
       "id": 68,
-      "question": "You are investigating a potential security incident on a Windows server. You want to see a list of all network shares on the server, including hidden shares. Which command-line tool is BEST suited for this task?",
+      "question": "A user’s Windows 10 machine fails to reconnect mapped network drives after changing their Active Directory password. What is the MOST likely cause?",
       "options": [
-        "net view",
-        "net share",
-        "netstat",
-        "nbtstat"
+        "Outdated cached credentials stored in Windows Credential Manager.",
+        "Group Policy settings preventing automatic network drive reconnections.",
+        "DNS resolution issues preventing access to file servers by hostname.",
+        "SMB protocol version mismatches between the client and server."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The `net share` command lists all shared resources on a Windows system, including hidden shares (those ending with a '$').",
-      "examTip": "Use `net share` to list all shared resources on a Windows server, including hidden ones."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager caches old credentials. After a password change, reconnection fails unless the cache is updated. GPO issues typically affect all users. DNS issues would impact hostname access regardless of authentication. SMB mismatches would result in access denial errors, not authentication failures.",
+      "examTip": "Clear and update cached credentials in Credential Manager following password changes to restore network drive access."
     },
     {
       "id": 69,
-      "question": "You are troubleshooting a network connectivity issue on a Windows computer that intermittently cannot access network resources despite having valid IP configuration. You suspect a problem with the network adapter or its driver. What is a more advanced technique using built-in Windows tools to diagnose intermittent network adapter issues?",
+      "question": "A Windows 10 laptop connected to a VPN can access internal resources by IP but not by hostname. What should be the technician's FIRST troubleshooting step?",
       "options": [
-        "Reinstall the network adapter driver.",
-        "Use the Network Adapter Troubleshooter in Windows.",
-        "Enable and analyze the 'Microsoft-Windows-NDIS-PacketCapture' provider in Event Tracing for Windows (ETW) using tools like `netsh trace` to capture detailed network adapter events.",
-        "Run System Restore."
+        "Verify that the VPN client is correctly pushing DNS settings.",
+        "Flush the local DNS resolver cache on the laptop.",
+        "Manually set DNS server addresses provided by the network administrator.",
+        "Restart the DNS Client service on the local machine."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Using ETW with the 'Microsoft-Windows-NDIS-PacketCapture' provider (via tools like `netsh trace`) enables detailed capture of network adapter events, which is invaluable for diagnosing intermittent issues.",
-      "examTip": "For advanced network adapter troubleshooting in Windows, use ETW tracing with the NDIS-PacketCapture provider."
+      "correctAnswerIndex": 0,
+      "explanation": "VPN clients often push DNS settings required for internal name resolution. If these settings aren’t applied, hostname resolution fails despite IP access. Flushing DNS resolves cached issues, not misconfigurations. Manually setting DNS addresses is secondary. Restarting DNS services clears temporary issues, not configuration ones.",
+      "examTip": "Always verify VPN DNS configurations first when hostname resolution issues arise despite successful VPN connections."
     },
     {
       "id": 70,
-      "question": "You are investigating a potential security incident on a Windows computer. You want to see a list of all currently logged-on user sessions, including local, Remote Desktop, and network share sessions. Which command-line tool is BEST suited for this task?",
+      "question": "A macOS user cannot unlock their encrypted external drive with FileVault. The correct password returns an authentication error. What is the MOST likely cause?",
       "options": [
-        "net user",
-        "query user /server:<servername> (or quser)",
-        "tasklist",
-        "netstat"
+        "The encryption key file on the drive has been corrupted.",
+        "The macOS Keychain has lost synchronization with FileVault.",
+        "The drive's file system is damaged, preventing decryption.",
+        "FileVault is disabled on the system, preventing access to encrypted drives."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The `query user` (or `quser`) command displays detailed information about all user sessions on a Windows computer, including session state and logon time.",
-      "examTip": "Use `query user` (or `quser`) to list all active user sessions on a Windows computer."
+      "correctAnswerIndex": 0,
+      "explanation": "Corruption of the encryption key file prevents successful decryption even with the correct password. Keychain issues impact login credentials, not drive encryption. File system damage affects data access after decryption. FileVault being disabled on the host system does not affect previously encrypted drives.",
+      "examTip": "Always back up FileVault recovery keys and regularly check external drives for integrity to prevent permanent data loss."
     },
     {
       "id": 71,
-      "question": "You are troubleshooting a network connectivity issue on a Linux server. The server has multiple network interfaces. You need to determine which interface is used as the default gateway for outgoing traffic. Which command is BEST suited for this?",
+      "question": "A Linux administrator must ensure a critical service restarts automatically after failure but limits restart attempts to three times within 10 minutes. What systemd configuration is correct?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "ip route show | grep default",
-        "netstat -r"
+        "Restart=on-failure\nStartLimitIntervalSec=600\nStartLimitBurst=3",
+        "Restart=always\nRestartSec=5\nTimeoutStartSec=600",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=10",
+        "Restart=on-failure\nRestartSec=5\nTimeoutStopSec=300"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Using `ip route show | grep default` displays the default route and the associated interface used for outgoing traffic.",
-      "examTip": "Use `ip route show | grep default` on Linux to identify the default gateway and its corresponding interface."
+      "correctAnswerIndex": 0,
+      "explanation": "The specified configuration ensures the service restarts on failure but halts after three failures within ten minutes. 'Restart=always' would restart the service regardless of the reason. 'on-abort' applies to abnormal exits. Timeout directives impact start/stop timing but not restart limits.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' in systemd service units to prevent uncontrolled restart loops."
     },
     {
       "id": 72,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might have installed a malicious Layered Service Provider (LSP) to intercept network traffic. Which command can you use to display the list of installed LSPs, and how can you reset them if necessary?",
+      "question": "A Windows 11 user reports frequent 'NTLDR is missing' errors after adding a secondary hard drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "ipconfig /all",
-        "netsh winsock show catalog",
-        "netstat -ano",
-        "tasklist"
+        "The BIOS boot order prioritizes the new, non-bootable drive.",
+        "The system partition on the primary drive was accidentally deleted.",
+        "The master boot record on the primary drive is corrupted.",
+        "Secure Boot settings were reset, causing boot validation failures."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The command `netsh winsock show catalog` displays the list of installed LSPs. To reset them, you can use `netsh winsock reset`.",
-      "examTip": "Use `netsh winsock show catalog` to view installed LSPs and `netsh winsock reset` to reset the Winsock catalog if necessary."
+      "correctAnswerIndex": 0,
+      "explanation": "Adding a new drive may shift BIOS boot order. If the new drive is prioritized but lacks a bootloader, 'NTLDR is missing' errors occur. Partition deletion or MBR corruption would prevent drive detection or produce different errors. Secure Boot issues affect signature validations, not NTLDR errors.",
+      "examTip": "Always verify BIOS boot order after hardware changes to ensure the correct drive boots first."
     },
     {
       "id": 73,
-      "question": "You are investigating a potential security incident on a Linux server. You need to monitor disk I/O activity in real-time, broken down by process, to identify potential performance issues or malicious activity. Which command is BEST suited for this task?",
+      "question": "A Windows system repeatedly prompts for a BitLocker recovery key after every reboot. TPM is functional, and firmware updates were recently performed. How can this be resolved?",
       "options": [
-        "top",
-        "free -m",
-        "df -h",
-        "iotop"
+        "Suspend BitLocker before future firmware updates.",
+        "Reset the TPM and re-enable BitLocker encryption.",
+        "Disable Secure Boot to prevent recovery key prompts.",
+        "Reinstall Windows Boot Manager using recovery tools."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "`iotop` is specifically designed for real-time monitoring of disk I/O activity on a per-process basis in Linux.",
-      "examTip": "Use `iotop` on Linux to monitor disk I/O activity by process."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before firmware updates maintains TPM measurements, preventing recovery prompts. Resetting TPM risks data loss. Secure Boot disables firmware security checks but doesn’t affect BitLocker. Reinstalling the boot manager is unnecessary unless corruption is detected.",
+      "examTip": "Always suspend BitLocker before firmware upgrades to avoid repeated recovery key prompts after reboot."
     },
     {
       "id": 74,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might be using a technique called 'process hollowing' to hide its activities. What is process hollowing, and how might you detect it using a combination of tools?",
+      "question": "A Linux system's SSH sessions frequently disconnect during long file transfers. Network connectivity tests show no issues. What configuration should be adjusted?",
       "options": [
-        "Process hollowing is a type of social engineering attack.",
-        "Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, removes its memory, and replaces it with malicious code. Use Process Explorer and Process Monitor to detect discrepancies.",
-        "Process hollowing is a type of denial-of-service attack.",
-        "Process hollowing is a technique for optimizing application performance."
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive globally via sysctl configurations.",
+        "Switch to SFTP for more stable file transfers.",
+        "Use SCP with compression enabled for faster transfers."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Process hollowing involves creating a legitimate process in a suspended state, hollowing out its memory, and injecting malicious code so that the malicious code runs under the guise of the legitimate process. Tools such as Process Explorer and Process Monitor can help detect anomalies between the process's on-disk image and its in-memory image.",
-      "examTip": "Use Process Explorer and Process Monitor to detect discrepancies that may indicate process hollowing."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic messages that keep SSH connections alive during extended operations. Kernel-level TCP keepalives affect all traffic. SFTP and SCP changes may optimize performance but won’t prevent session drops without proper keepalive configurations.",
+      "examTip": "Modify SSH server keepalive settings to prevent idle disconnects during long file transfers."
     },
     {
       "id": 75,
-      "question": "You are troubleshooting a network connectivity issue on a Windows computer. A computer can access local network resources but cannot access any internet resources. `ipconfig /all` shows a valid IP configuration, but `nslookup` fails to resolve domain names. What is the MOST likely cause?",
+      "question": "A macOS user reports their device is prompting repeatedly for iCloud password after an OS update. What is the MOST likely cause?",
       "options": [
-        "The computer's network cable is unplugged.",
-        "The computer's web browser is corrupted.",
-        "The DNS Client service (Dnscache) is malfunctioning or stopped, or the configured DNS servers are unreachable. Verify the status of the DNS Client service and test with alternative DNS servers using nslookup.",
-        "The computer has a virus."
+        "Keychain corruption preventing iCloud credential retrieval.",
+        "Expired iCloud credentials requiring reauthentication.",
+        "iCloud servers experiencing temporary outages.",
+        "Firewall settings blocking authentication traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "When local connectivity is fine but DNS resolution fails, the issue is typically with the DNS Client service or the DNS server configuration. Testing with different DNS servers helps isolate the problem.",
-      "examTip": "If DNS resolution fails despite valid IP settings, verify the DNS Client service and test with alternative DNS servers using nslookup."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption after system updates can cause persistent authentication prompts. Expired credentials would block access across all devices. Server outages would impact all users globally. Firewall issues would block all network access, not just iCloud authentication.",
+      "examTip": "Reset or repair Keychain Access when experiencing repeated iCloud authentication prompts post-macOS updates."
     },
     {
       "id": 76,
-      "question": "You are investigating a potential security incident on a Windows computer. You want to determine if an attacker has installed a malicious kernel module. Which command is BEST suited for listing all currently loaded kernel modules, and what should you look for?",
+      "question": "A Linux administrator notices that the SSH service restarts infinitely after failure. What systemd configuration prevents infinite restart loops?",
       "options": [
-        "ps aux",
-        "ls -l /proc/modules",
-        "lsmod",
-        "dmesg"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=5\nTimeoutStopSec=120",
+        "Restart=on-abort\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=always\nTimeoutStartSec=600\nRestartSec=15"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The `lsmod` command lists all currently loaded kernel modules on a Linux system. (Note: While Windows does not use lsmod, this question appears in the context of a mixed environment.) When investigating a Windows system, you would use tools like Driver Verifier or Process Explorer; however, in Linux, lsmod is used to check for suspicious or unexpected modules.",
-      "examTip": "Use lsmod on Linux to check for unexpected kernel modules; for Windows, consider using tools like Driver Verifier and Process Explorer."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration limits restart attempts to three within ten minutes, preventing endless loops. 'Restart=always' restarts services regardless of exit status. 'on-abort' applies only to abnormal exits. Timeout directives control timing, not restart frequencies.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' together in systemd units to cap restart attempts after service failures."
     },
     {
       "id": 77,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that an attacker might have installed a malicious scheduled task to maintain persistence. Which command-line tool is BEST suited for enumerating all scheduled tasks, including those that may not be visible in the Task Scheduler GUI?",
+      "question": "A Windows 10 machine is unable to connect to any HTTPS websites after installing new security updates. HTTP access works fine. What is the MOST likely cause?",
       "options": [
-        "tasklist",
-        "schtasks /query /fo LIST /v",
-        "msconfig",
-        "netstat"
+        "Corrupted root certificates following the security update.",
+        "TLS protocol settings disabled during the update process.",
+        "ISP restrictions impacting secure web traffic.",
+        "DNS misconfigurations causing secure connection failures."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The `schtasks /query /fo LIST /v` command displays all scheduled tasks with detailed information in a list format, including those that might be hidden from the GUI.",
-      "examTip": "Use `schtasks /query /fo LIST /v` on Windows to enumerate all scheduled tasks and identify potential persistence mechanisms."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates ensure HTTPS validation. Corruption or removal during updates prevents secure site access. TLS settings misconfigurations would display explicit protocol errors. ISP restrictions rarely target HTTPS specifically. DNS issues affect both HTTP and HTTPS traffic.",
+      "examTip": "Check and restore root certificates when HTTPS traffic fails after applying security updates."
     },
     {
       "id": 78,
-      "question": "You are investigating a potential security incident on a Windows computer. You need to view the kernel's routing table in detail, including numeric IP addresses, associated interfaces, and route metrics. Which command is BEST suited for this task?",
+      "question": "A Windows 11 device experiences long boot times after enabling full-disk BitLocker encryption. The system uses a traditional HDD. What is the MOST likely cause?",
       "options": [
-        "ifconfig",
-        "ip addr show",
-        "route -n",
-        "ip route show"
+        "Encryption overhead impacting HDD read/write speeds during boot.",
+        "TPM misconfiguration delaying authentication during the boot process.",
+        "Secure Boot interfering with the BitLocker encryption process.",
+        "Boot partition misalignment causing slow OS loading times."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "`ip route show` is the modern and preferred command on Linux to display the kernel's routing table with numeric addresses, interfaces, and metrics.",
-      "examTip": "Use `ip route show` on Linux to view a detailed routing table with numeric information."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker encryption adds performance overhead during startup, more pronounced on HDDs than SSDs. TPM misconfigurations usually prompt for recovery keys. Secure Boot ensures firmware integrity but doesn’t slow down encryption processes. Partition misalignment affects performance but is less likely after encryption.",
+      "examTip": "Use SSD storage when enabling full-disk encryption on Windows devices to minimize boot delays."
     },
     {
       "id": 79,
-      "question": "You are investigating a potential security incident on a Windows computer. You want to verify the integrity of a critical system file (e.g., kernel32.dll). Which built-in command-line tool can you use to compute the cryptographic hash of the file, and how would you use it?",
+      "question": "A Linux server reports repeated '503 Service Unavailable' errors for a web application. The web server is running without issues. What is the MOST likely cause?",
       "options": [
-        "certutil -hashfile kernel32.dll MD5",
-        "sigcheck -h kernel32.dll",
-        "fc /b kernel32.dll",
-        "checksum kernel32.dll"
+        "The backend application server is down or unreachable.",
+        "Firewall settings are blocking backend server communication.",
+        "Incorrect proxy configurations in the web server settings.",
+        "Insufficient permissions for the web server to access backend APIs."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The `certutil` command with the `-hashfile` option computes a file's cryptographic hash. For example, `certutil -hashfile kernel32.dll MD5` will generate the MD5 hash of the file.",
-      "examTip": "Use `certutil -hashfile <filename> <hash algorithm>` on Windows to verify file integrity by comparing hashes."
+      "explanation": "'503 Service Unavailable' indicates that the web server cannot connect to the upstream server. Firewall settings would block traffic entirely. Proxy misconfigurations would result in connection errors. Permission issues typically produce '403' or '401' errors instead.",
+      "examTip": "Check backend server health first when encountering '503' errors from reverse proxy setups."
     },
     {
       "id": 80,
-      "question": "You are investigating a potential security incident on a Linux server and need to monitor disk I/O activity in real-time, broken down by process. Which command is BEST suited for this task?",
+      "question": "A user reports that their Windows 10 laptop fails to boot after a recent BIOS update, showing a 'No Boot Device Found' error. What should the technician check FIRST?",
       "options": [
-        "top",
-        "free -m",
-        "df -h",
-        "iotop"
+        "BIOS boot order settings to ensure the correct drive is prioritized.",
+        "SATA mode configurations (AHCI vs. RAID) in BIOS settings.",
+        "UEFI Secure Boot settings conflicting with boot loader signatures.",
+        "Potential corruption of the EFI system partition on the boot drive."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "`iotop` is specifically designed for real-time monitoring of disk I/O activity per process on Linux.",
-      "examTip": "Use `iotop` to identify processes with high disk I/O on Linux."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS updates can reset boot order priorities, causing the system to attempt booting from non-bootable devices. SATA mode changes affect OS recognition but not initial drive detection. Secure Boot errors typically display signature-related warnings. EFI partition corruption would produce different boot error messages.",
+      "examTip": "Always verify BIOS boot priorities after firmware updates to ensure the correct drive boots first."
     },
     {
       "id": 81,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might be using a technique called 'process hollowing' to hide its activities. What is process hollowing, and how might you detect it using a combination of tools?",
+      "question": "A Linux server’s Apache web service is running, but users receive a '403 Forbidden' error when accessing the website. File permissions are correct. What is the MOST likely cause?",
       "options": [
-        "Process hollowing is a type of social engineering attack.",
-        "Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, unmaps its memory, and replaces it with malicious code. Use Process Explorer and Process Monitor to detect discrepancies.",
-        "Process hollowing is a type of denial-of-service attack.",
-        "Process hollowing is a technique for optimizing application performance."
+        "SELinux is enforcing security policies blocking access.",
+        "Apache’s configuration file has incorrect directory indexes.",
+        "The web server firewall is blocking HTTP traffic.",
+        "The document root directory is missing an index file."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Process hollowing involves creating a legitimate process in a suspended state, hollowing out its memory, and injecting malicious code so that the code runs within a trusted process. Tools such as Process Explorer and Process Monitor can help detect such anomalies.",
-      "examTip": "Use Process Explorer and Process Monitor to compare the in-memory image of a process to its on-disk image to detect process hollowing."
+      "correctAnswerIndex": 0,
+      "explanation": "SELinux contexts can prevent web access even with correct file permissions. Apache directory index issues typically show a directory listing error. Firewall blocks cause connection failures, not '403' errors. Missing index files return listing errors, not permission-related messages.",
+      "examTip": "Use 'ls -Z' to check SELinux contexts and 'restorecon' if necessary for Apache web directories."
     },
     {
       "id": 82,
-      "question": "You are investigating a potential security incident on a Windows computer. You need to check the integrity of a critical system file (e.g., kernel32.dll) against a known-good baseline. Without a pre-existing baseline, what manual technique can you use, and what are its limitations?",
+      "question": "A Windows 11 user reports that after enabling BitLocker, the system takes significantly longer to boot. The device uses a traditional HDD. What is the MOST likely reason?",
       "options": [
-        "Check file permissions with ls -l",
-        "Manually compare checksums of critical files (using md5sum or sha256sum) against known-good checksums from a trusted source. Limitations include the need for a reliable baseline and the manual effort required.",
-        "Use ps aux to view running processes",
-        "Examine /var/log/auth.log for suspicious activity"
+        "Full-disk encryption overhead on HDDs slows read/write operations.",
+        "BitLocker is waiting for a user-entered PIN at each startup.",
+        "The Trusted Platform Module (TPM) is misconfigured, delaying authentication.",
+        "The Secure Boot configuration is conflicting with BitLocker settings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing file checksums is a valid technique for verifying file integrity, but it is time-consuming and relies on having access to trustworthy known-good hashes.",
-      "examTip": "Manually verify file integrity by comparing checksums, but this method is labor-intensive without a pre-established baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker encryption imposes additional read/write demands, significantly affecting HDD performance. TPM misconfigurations would typically result in recovery prompts. Secure Boot conflicts manifest as boot failures, not slowdowns. PIN prompts delay startup only if configured, not by default.",
+      "examTip": "For better performance with BitLocker, use SSDs instead of HDDs to minimize encryption overhead."
     },
     {
       "id": 83,
-      "question": "You are investigating a potential security incident on a Windows computer. You want to determine the fully qualified domain name (FQDN) of the system. Which command-line tool provides this information most directly?",
+      "question": "A user reports that their Android device uses excessive mobile data even when connected to Wi-Fi. What setting should be checked FIRST?",
       "options": [
-        "ipconfig /all",
-        "hostname",
-        "systeminfo | findstr /C:\"Domain\"",
-        "PowerShell: [System.Net.Dns]::GetHostByName(($env:computername)).HostName"
+        "Wi-Fi Assist, which may use mobile data when Wi-Fi signals are weak.",
+        "Background data permissions for specific applications.",
+        "Carrier-specific data management settings overriding Wi-Fi preferences.",
+        "VPN configurations that could force mobile data routing."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "While several commands show parts of the information, the provided PowerShell command returns the FQDN directly in a clear manner.",
-      "examTip": "Use PowerShell to retrieve the fully qualified domain name of a Windows computer."
+      "correctAnswerIndex": 0,
+      "explanation": "Wi-Fi Assist allows mobile data use when Wi-Fi is weak, leading to unexpected data usage. Background data settings generally prioritize Wi-Fi. Carrier management settings rarely override active Wi-Fi. VPN configurations impact routing but don’t default to mobile data unless specified.",
+      "examTip": "Disable Wi-Fi Assist on Android devices to prevent mobile data usage when Wi-Fi connections are weak."
     },
     {
       "id": 84,
-      "question": "You are investigating a potential security incident on a Linux server. You suspect that an attacker might have modified critical system files to install a backdoor. Without a pre-existing file integrity baseline, what manual technique can you use to verify file integrity, and what are its limitations?",
+      "question": "A Linux administrator observes that SSH sessions drop after several minutes of inactivity, despite stable network connectivity. What configuration prevents this?",
       "options": [
-        "Check file sizes with ls -l",
-        "Manually compare checksums of critical files (using md5sum or sha256sum) against known-good checksums from a trusted source. Limitations include reliance on having a trustworthy baseline and the manual effort required.",
-        "Use ps aux to view running processes",
-        "Examine /var/log/auth.log for suspicious login attempts"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive globally via sysctl settings.",
+        "Switch from SSH to Mosh for persistent session management.",
+        "Use 'screen' or 'tmux' to maintain active sessions."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing checksums is a valid approach to verify file integrity, but it is time-consuming and depends on having a trusted source of known-good checksums.",
-      "examTip": "Manually verify file integrity by comparing checksums, but note that this approach is labor-intensive without a pre-existing baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' settings ensure the SSH server keeps idle connections alive. Kernel TCP keepalives affect all network connections and may not be appropriate. Mosh requires additional installations. 'screen' and 'tmux' manage session persistence locally, not connection drops.",
+      "examTip": "Adjust SSH keepalive parameters to maintain stable connections during periods of inactivity."
     },
     {
       "id": 85,
-      "question": "You are investigating a potential security incident on a Windows computer and need to determine the exact version and build number of the operating system, including service packs and updates. Which command-line tool provides this information in a concise manner?",
+      "question": "A Windows 10 system shows 'NTLDR is missing' after adding a new hard drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "systeminfo",
-        "winver",
-        "ver",
-        "msinfo32"
+        "The BIOS boot order prioritizes the non-bootable new drive.",
+        "The master boot record (MBR) on the primary drive is corrupted.",
+        "The new drive's partition table conflicts with the system partition.",
+        "The boot partition was deleted during the new drive's installation."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The winver command displays a dialog with the Windows version, build number, and service pack information in a clear format.",
-      "examTip": "Use winver to quickly determine the Windows version, build number, and service pack level."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS may prioritize the new drive after hardware changes, leading to the 'NTLDR is missing' error if that drive lacks a bootloader. MBR corruption results in different boot failures. Partition table conflicts wouldn’t cause this specific error. Deleting the boot partition would prevent BIOS from detecting any OS.",
+      "examTip": "Check BIOS boot order after adding drives to ensure the correct drive is selected as the primary boot device."
     },
     {
       "id": 86,
-      "question": "You are investigating a potential security incident on a Linux server. You suspect that an attacker may have modified critical system files to install a backdoor. You don't have a pre-existing file integrity baseline. What manual technique can you use to verify file integrity, and what are its limitations?",
+      "question": "A macOS user reports that Spotlight cannot find recently added files. Indexing seems stuck. What is the correct command to rebuild the Spotlight index?",
       "options": [
-        "Use ls -l to check file sizes",
-        "Manually compare checksums (using md5sum or sha256sum) of critical files against known-good values from a trusted source. Limitations include the need for a reliable baseline and the manual process involved.",
-        "Run ps aux to check running processes",
-        "Examine /var/log/syslog for file changes"
+        "sudo mdutil -E /",
+        "sudo diskutil repairVolume /",
+        "sudo fsck -fy /dev/disk1",
+        "sudo launchctl load /System/Library/LaunchDaemons/com.apple.metadata.mds.plist"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing checksums is a valid method for verifying file integrity; however, it requires a trusted source of known-good checksums and is a manual, time-consuming process.",
-      "examTip": "Manually compare checksums to verify file integrity, but be aware of its limitations without a pre-established baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "'sudo mdutil -E /' forces Spotlight to erase and rebuild its index, resolving search issues. 'diskutil repairVolume' and 'fsck' check disk integrity but don’t affect indexing. 'launchctl load' restarts indexing services but won’t rebuild the index.",
+      "examTip": "Use 'mdutil -E /' on macOS to rebuild Spotlight indexes when search issues persist."
     },
     {
       "id": 87,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might have installed a malicious scheduled task to maintain persistence. Which command-line tool is BEST suited for enumerating all scheduled tasks, including those that may not be visible in the Task Scheduler GUI?",
+      "question": "A Linux administrator must ensure a web application restarts automatically but stops attempting after three failures within 10 minutes. What systemd configuration is correct?",
       "options": [
-        "tasklist",
-        "schtasks /query /fo LIST /v",
-        "msconfig",
-        "netstat"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=5",
+        "Restart=on-failure\nTimeoutStopSec=300\nRestartSec=5"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The `schtasks /query /fo LIST /v` command lists all scheduled tasks with detailed information, which helps reveal tasks that might not be visible in the GUI.",
-      "examTip": "Use `schtasks /query /fo LIST /v` on Windows to enumerate all scheduled tasks and detect potential persistence mechanisms."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration ensures automatic restarts but prevents endless loops by limiting attempts to three within ten minutes. 'Restart=always' ignores failure types. 'on-abort' applies only to abnormal terminations. Timeout settings affect start/stop timing, not restart control.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' to manage controlled service restarts with systemd."
     },
     {
       "id": 88,
-      "question": "You are investigating a potential security incident on a Windows computer. You want to check the integrity of a critical system file (e.g., kernel32.dll). Which built-in command-line tool can you use to compute the file's cryptographic hash, and how would you use it?",
+      "question": "A Windows 11 system connected to a VPN can access internal resources via IP but not by hostname. What is the FIRST step to resolve this?",
       "options": [
-        "certutil -hashfile kernel32.dll MD5",
-        "sigcheck -h kernel32.dll",
-        "fc /b kernel32.dll",
-        "checksum kernel32.dll"
+        "Verify VPN DNS settings to ensure proper hostname resolution.",
+        "Restart the DNS Client service on the machine.",
+        "Flush the local DNS resolver cache using ipconfig.",
+        "Manually add host entries to the local hosts file."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The command `certutil -hashfile kernel32.dll MD5` computes the MD5 hash of kernel32.dll. You can replace MD5 with SHA1 or SHA256 as needed.",
-      "examTip": "Use `certutil -hashfile <filename> <hash algorithm>` on Windows to verify the integrity of critical files."
+      "explanation": "VPN DNS misconfigurations commonly cause hostname resolution failures despite IP connectivity. Restarting DNS services and flushing caches address temporary issues, not configuration problems. Manually editing host files is a last resort for persistent issues.",
+      "examTip": "Always verify that VPN-provided DNS settings are applied correctly when hostname resolution fails."
     },
     {
       "id": 89,
-      "question": "You are investigating a potential security incident on a Linux server and need to copy a large directory structure from one location to another while preserving all file permissions, ownership, timestamps, and symbolic links. Which command, with appropriate options, is BEST suited for this task?",
+      "question": "A user reports that their macOS device repeatedly prompts for an iCloud password after a macOS update. What is the MOST likely cause?",
       "options": [
-        "cp",
-        "cp -r",
-        "cp -a (or cp --preserve=all)",
-        "mv"
+        "Keychain corruption preventing iCloud credential retrieval.",
+        "Outdated Apple ID requiring re-authentication after updates.",
+        "Firewall rules blocking iCloud authentication requests.",
+        "Incorrect iCloud server configurations after the update."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "`cp -a` (or `cp --preserve=all`) copies directories recursively while preserving all attributes, making it ideal for archiving files.",
-      "examTip": "Use `cp -a` on Linux to copy directory structures while preserving all file attributes."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption is a common cause of repeated authentication prompts after macOS updates. Outdated Apple IDs affect all Apple services, not just iCloud. Firewall rules would block all traffic, not cause repeated prompts. Server configurations are managed by Apple and rarely affect individual devices.",
+      "examTip": "Reset or repair Keychain Access when encountering repeated iCloud password prompts after macOS updates."
     },
     {
       "id": 90,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might be using a technique called 'process hollowing' to hide its activities. What is process hollowing, and how might you detect it using a combination of tools?",
+      "question": "A Windows 10 laptop connected to a VPN fails to reconnect mapped network drives after a password change. What is the MOST likely cause?",
       "options": [
-        "Process hollowing is a type of social engineering attack.",
-        "Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, unmaps its memory, and replaces it with malicious code. Use Process Explorer and Process Monitor to detect discrepancies.",
-        "Process hollowing is a type of denial-of-service attack.",
-        "Process hollowing is a technique for optimizing application performance."
+        "Outdated cached credentials in Windows Credential Manager.",
+        "DNS resolution failures preventing hostname mapping.",
+        "SMB protocol version mismatches between client and server.",
+        "Group Policy Object (GPO) restrictions blocking reconnections."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Process hollowing involves creating a legitimate process in a suspended state, removing its memory, and injecting malicious code. Tools like Process Explorer and Process Monitor can help detect discrepancies between the process's in-memory image and its on-disk image.",
-      "examTip": "Use Process Explorer and Process Monitor to compare the memory image of a process with its on-disk image to detect process hollowing."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager retains old passwords. After a change, reconnections fail unless updated. DNS issues prevent hostname resolution entirely. SMB mismatches cause connection refusals but would provide specific protocol errors. GPO restrictions typically affect all users, not just one after a password change.",
+      "examTip": "Clear and update cached credentials in Credential Manager after password changes to restore network drive access."
     },
     {
       "id": 91,
-      "question": "You are troubleshooting a Windows computer and need to determine the fully qualified domain name (FQDN) of the system. Which command-line tool provides this information most directly?",
+      "question": "A Linux administrator notices SSH connections dropping after several minutes of inactivity, despite stable network conditions. What should be adjusted to fix this?",
       "options": [
-        "ipconfig /all",
-        "hostname",
-        "systeminfo | findstr /C:\"Domain\"",
-        "PowerShell: [System.Net.Dns]::GetHostByName(($env:computername)).HostName"
+        "Configure 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive settings in /etc/sysctl.conf.",
+        "Switch from SSH to Mosh for more robust session management.",
+        "Use 'screen' or 'tmux' to maintain persistent session environments."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "The provided PowerShell command returns the system's fully qualified domain name (FQDN) directly and reliably.",
-      "examTip": "Use PowerShell to retrieve the FQDN of a Windows computer."
+      "correctAnswerIndex": 0,
+      "explanation": "Configuring 'ClientAliveInterval' and 'ClientAliveCountMax' ensures SSH sends periodic keepalive signals, preventing timeouts. Kernel TCP keepalives affect all traffic and may have unintended effects. Mosh is an alternative but requires additional configuration. 'screen' and 'tmux' manage terminal sessions, not underlying connection drops.",
+      "examTip": "Set SSH keepalive parameters in sshd_config to prevent connection drops due to inactivity."
     },
     {
       "id": 92,
-      "question": "You are investigating a potential security incident on a Linux server. You want to check the integrity of critical system binaries against a known-good baseline, but you don't have a pre-existing baseline. What manual technique can you use, and what are its limitations?",
+      "question": "A Windows 11 machine shows 'No Boot Device Found' after a firmware update. BIOS detects all drives. What is the MOST likely cause?",
       "options": [
-        "Check file permissions with ls -l",
-        "Manually compare checksums (using md5sum or sha256sum) of critical files against known-good checksums from a trusted source. Limitations include the need for a reliable baseline and the manual effort required.",
-        "Use ps aux to view running processes",
-        "Examine /var/log/auth.log for suspicious activity"
+        "BIOS boot order reset to prioritize a non-bootable device.",
+        "Secure Boot settings conflict with the OS bootloader signature.",
+        "SATA mode settings changed from AHCI to RAID, affecting boot.",
+        "EFI system partition corruption on the boot drive."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing checksums is a valid method for verifying file integrity, but it is labor-intensive and relies on having access to trustworthy known-good checksums.",
-      "examTip": "Manually verify file integrity by comparing checksums, keeping in mind that this approach is time-consuming without a pre-established baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "Firmware updates often reset BIOS settings, including boot order. If the primary drive isn’t prioritized, boot failures occur. Secure Boot issues generate signature-related errors. SATA mode changes lead to blue screens rather than missing boot device messages. EFI partition corruption prevents bootloader detection, showing different errors.",
+      "examTip": "Always check and correct BIOS boot order after firmware updates to ensure proper boot sequencing."
     },
     {
       "id": 93,
-      "question": "You are investigating a potential security incident on a Windows computer and need to determine the exact version and build number of the operating system, including service packs and updates. Which command-line tool provides this information in a concise manner?",
+      "question": "A Linux server's SSH sessions frequently disconnect during large file transfers. Network connectivity tests pass without issues. What configuration should be adjusted?",
       "options": [
-        "systeminfo",
-        "winver",
-        "ver",
-        "msinfo32"
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable compression in SSH connections for faster transfers.",
+        "Switch to SFTP instead of SCP for more stable file transfers.",
+        "Implement TCP keepalive adjustments at the kernel level."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The winver command displays a dialog box with the Windows version, build number, and service pack information in a clear format.",
-      "examTip": "Use winver to quickly determine the Windows version, build number, and service pack details."
+      "correctAnswerIndex": 0,
+      "explanation": "SSH keepalive settings ensure active sessions during lengthy operations like file transfers. Compression improves transfer speeds but doesn’t prevent disconnections. SFTP provides reliability but doesn’t inherently fix connection drops. Kernel TCP keepalive adjustments impact all traffic, not just SSH.",
+      "examTip": "Configure SSH server keepalive settings to maintain stable connections during long-running file transfers."
     },
     {
       "id": 94,
-      "question": "You are investigating a potential security incident on a Linux server. You suspect that an attacker may have modified critical system files to install a backdoor. What manual technique can you use to verify file integrity, and what are its limitations?",
+      "question": "A macOS user reports slow performance and frequent beachball icons after a recent OS update. Disk usage appears unusually high. What is the MOST likely cause?",
       "options": [
-        "Use ls -l to check file sizes",
-        "Manually compare checksums of critical files (using md5sum or sha256sum) against known-good values from a trusted source. Limitations include reliance on a trustworthy baseline and the manual process required.",
-        "Use ps aux to check running processes",
-        "Examine /var/log/syslog for file changes"
+        "Spotlight indexing is rebuilding the search database post-update.",
+        "The file system requires repair via Disk Utility's First Aid feature.",
+        "Third-party kernel extensions are causing kernel task spikes.",
+        "A background Time Machine backup is consuming system resources."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing checksums of critical files is effective for verifying file integrity, but it requires a reliable source of known-good checksums and can be very time-consuming.",
-      "examTip": "Manually verify file integrity by comparing checksums, but this method is labor-intensive without a pre-established baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight reindexing is common after macOS updates, causing high disk activity and temporary slowness. File system corruption would show mounting errors. Kernel extension issues lead to kernel panics, not consistent slowdowns. Time Machine backups impact network traffic more than disk performance.",
+      "examTip": "Allow Spotlight indexing to complete after macOS updates; performance typically improves once indexing is done."
     },
     {
       "id": 95,
-      "question": "You are investigating a potential security incident on a Windows computer and need to determine the operating system's version, build number, and service pack level. Which command-line tool provides this information concisely?",
+      "question": "A Windows 10 user reports inability to connect to HTTPS websites, though HTTP sites load fine. The system clock is correct. What is the MOST likely cause?",
       "options": [
-        "systeminfo",
-        "winver",
-        "ver",
-        "msinfo32"
+        "Corrupted root certificates on the local machine.",
+        "TLS protocols disabled in browser security settings.",
+        "Firewall rules blocking secure port 443 traffic.",
+        "DNS issues preventing secure name resolutions."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The winver command provides a concise dialog box showing the Windows version, build number, and service pack level.",
-      "examTip": "Use winver to quickly determine the Windows version and build details."
+      "correctAnswerIndex": 0,
+      "explanation": "HTTPS relies on valid root certificates. If these are corrupted, secure sites will fail while HTTP works. TLS misconfigurations would produce browser protocol errors. Firewall issues would block port 443 entirely, affecting all secure traffic. DNS issues affect both HTTP and HTTPS traffic equally.",
+      "examTip": "Validate and restore root certificates when HTTPS access fails but HTTP connectivity remains unaffected."
     },
     {
       "id": 96,
-      "question": "You are investigating a potential security incident on a Windows computer running a custom application. The application is crashing intermittently, and you suspect a race condition or other concurrency bug. Standard debugging has not revealed the cause. What advanced technique, involving modifying the application's execution environment, can help expose the bug more reliably?",
+      "question": "A Linux server’s web application returns a '503 Service Unavailable' error. The web server is running without issues. What is the MOST likely cause?",
       "options": [
-        "Run the application with increased memory.",
-        "Run the application as a different user.",
-        "Use the `strace` command to trace system calls made by the application.",
-        "Use the ThreadSanitizer (TSan) tool to dynamically analyze the application's execution for data races and concurrency issues, which requires recompiling with TSan instrumentation."
+        "The backend application server is down or unreachable.",
+        "Firewall configurations are blocking traffic to backend services.",
+        "The web server lacks permissions to access backend resources.",
+        "DNS resolution issues prevent the web server from reaching the backend."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "ThreadSanitizer (TSan) is a dynamic analysis tool that detects race conditions and other concurrency issues. It requires recompiling the application with TSan instrumentation but is highly effective in exposing subtle race conditions.",
-      "examTip": "For concurrency bugs, consider using ThreadSanitizer (TSan), but be aware that it usually requires recompiling the application."
+      "correctAnswerIndex": 0,
+      "explanation": "'503 Service Unavailable' typically indicates that the web server cannot connect to its backend services. Firewall issues would cause connection errors. Permission issues would result in '403 Forbidden' errors. DNS resolution problems would display hostname-related errors, not service unavailability messages.",
+      "examTip": "Check backend application server health first when '503' errors occur on web front-end systems."
     },
     {
       "id": 97,
-      "question": "You are investigating a potential security incident on a Linux server. You need to copy a large directory structure from one location to another while preserving all file permissions, ownership, timestamps, and symbolic links. Which command, with appropriate options, is BEST suited for this task?",
+      "question": "A Windows 11 user reports slow boot times after enabling full-disk encryption with BitLocker. The system uses an HDD. What is the MOST likely reason?",
       "options": [
-        "cp",
-        "cp -r",
-        "cp -a (or cp --preserve=all)",
-        "mv"
+        "Encryption overhead during startup slows HDD performance.",
+        "TPM authentication delays are extending pre-boot phases.",
+        "Secure Boot conflicts with BitLocker encryption processes.",
+        "Boot partition misalignment is causing prolonged loading times."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The `cp -a` command (or `cp --preserve=all`) recursively copies a directory while preserving all file attributes, making it ideal for archiving files.",
-      "examTip": "Use `cp -a` on Linux to copy directories while preserving permissions, ownership, timestamps, and symbolic links."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption imposes processing overhead that is more noticeable on HDDs than SSDs. TPM delays typically manifest as recovery key prompts. Secure Boot ensures firmware integrity and doesn’t slow down boot times. Partition misalignment affects overall performance but is less likely after BitLocker implementation.",
+      "examTip": "Use SSDs for systems with BitLocker to minimize encryption-related boot slowdowns."
     },
     {
       "id": 98,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might be using a technique called 'process hollowing' to hide its activities. What is process hollowing, and how might you detect it?",
+      "question": "A Linux administrator finds that fail2ban is enabled but SSH brute-force attempts continue. What action will BEST mitigate these attacks?",
       "options": [
-        "Process hollowing is a type of social engineering attack.",
-        "Process hollowing is a technique where an attacker creates a legitimate process in a suspended state, removes its memory, and replaces it with malicious code. Use Process Explorer and Process Monitor to detect discrepancies.",
-        "Process hollowing is a type of denial-of-service attack.",
-        "Process hollowing is a technique for optimizing application performance."
+        "Disable password authentication and use SSH key pairs exclusively.",
+        "Change the default SSH port from 22 to a non-standard port.",
+        "Lower the 'maxretry' value in fail2ban configuration.",
+        "Increase 'bantime' in fail2ban jail settings to extend block duration."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Process hollowing is a stealthy code injection technique in which a legitimate process is created in a suspended state, its memory is cleared, and malicious code is injected. Tools like Process Explorer and Process Monitor can help detect discrepancies between a process's expected and actual memory images.",
-      "examTip": "Use Process Explorer and Process Monitor to detect process hollowing by comparing the in-memory and on-disk images of processes."
+      "correctAnswerIndex": 0,
+      "explanation": "Disabling password authentication eliminates brute-force vectors. Changing ports provides only obscurity, not security. Adjusting fail2ban parameters delays attackers but doesn’t prevent them. SSH keys provide robust protection against brute-force attempts.",
+      "examTip": "Implement SSH key-based authentication and disable password login to eliminate brute-force SSH vulnerabilities."
     },
     {
       "id": 99,
-      "question": "You are investigating a potential security incident on a Windows computer. You suspect that malware might have modified system files to install a backdoor. Without a pre-existing file integrity baseline, what manual technique can you use to check file integrity, and what are its limitations?",
+      "question": "A user reports their macOS device fails to connect to Wi-Fi networks after an OS update. Other devices connect without issues. What is the MOST likely cause?",
       "options": [
-        "Check file permissions with ls -l",
-        "Manually compare checksums (using md5sum or sha256sum) of critical files against known-good checksums from a trusted source. Limitations include the need for a reliable baseline and the manual effort required.",
-        "Use ps aux to view running processes",
-        "Examine /var/log/auth.log for suspicious activity"
+        "Corrupted network preference files requiring reset.",
+        "Outdated wireless adapter firmware incompatible with the update.",
+        "Router incompatibility with the latest macOS security protocols.",
+        "Keychain corruption affecting Wi-Fi password storage."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Manually comparing checksums of critical system files is a valid way to verify file integrity, but it requires a trustworthy source of known-good hashes and can be very time-consuming without an automated baseline.",
-      "examTip": "Manually verify file integrity by comparing checksums, keeping in mind this method is labor-intensive without a pre-established baseline."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted network preferences prevent Wi-Fi reconnections after macOS updates. Firmware incompatibility affects hardware detection entirely. Router incompatibility would affect all devices. Keychain issues impact saved passwords, not Wi-Fi detection.",
+      "examTip": "Reset network preferences in macOS when Wi-Fi issues persist after system updates."
     },
     {
       "id": 100,
-      "question": "You are investigating a potential security incident on a Windows computer running a custom application. The application is experiencing intermittent crashes, and you suspect a race condition or other concurrency bug. Standard debugging tools have not revealed the cause. What advanced technique, involving modifying the application's execution environment, can help expose the bug more reliably?",
+      "question": "A Windows 10 user reports that mapped network drives no longer reconnect automatically after a password change. What is the MOST likely cause?",
       "options": [
-        "Run the application with increased memory.",
-        "Run the application as a different user.",
-        "Use the `strace` command to trace system calls made by the application.",
-        "Use the ThreadSanitizer (TSan) tool to dynamically analyze the application's execution for data races and concurrency issues, which requires recompiling with TSan instrumentation."
+        "Cached credentials in Credential Manager no longer match the new password.",
+        "DNS resolution failures preventing drive access by hostname.",
+        "Group Policy restrictions preventing automatic drive mapping.",
+        "SMB protocol version mismatches between the client and server."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "ThreadSanitizer (TSan) is a dynamic analysis tool that can detect data races and concurrency bugs by instrumenting the code. It requires recompiling the application but is highly effective in exposing race conditions.",
-      "examTip": "For detecting race conditions, use ThreadSanitizer (TSan) to dynamically analyze the application; note that this often requires recompiling the application with TSan instrumentation."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager stores network credentials. After a password change, reconnections fail unless the cache is updated. DNS issues would prevent all hostname resolutions. GPO restrictions typically affect all users. SMB mismatches would show protocol errors, not authentication issues.",
+      "examTip": "Clear and update Credential Manager after password changes to restore mapped drive connectivity."
     }
   ]
 });
