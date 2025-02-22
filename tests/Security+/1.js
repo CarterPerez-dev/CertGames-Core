@@ -1,1308 +1,1308 @@
-{
+db.tests.insertOne({
   "category": "secplus",
   "testId": 1,
-  "testName": "Security Practice Test #1 (Normal)",
+  "testName": "Security+ Practice Test #1 (Normal)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "Which of the following security control types is PRIMARILY focused on preventing security incidents before they occur?",
+      "question": "You are a security administrator reviewing access control measures in your organization. You need to implement a method that grants permissions based on job roles, ensuring users only have the access necessary for their responsibilities. Which access control model should you implement?",
       "options": [
-        "Detective controls that identify and log security events after they occur.",
-        "Preventive controls that proactively block incidents before they happen.",
-        "Corrective controls that remedy issues after a breach has been detected.",
-        "Compensating controls that serve as alternative measures when primary controls cannot be implemented."
+        "Mandatory Access Control (MAC)",
+        "Role-Based Access Control (RBAC)",
+        "Discretionary Access Control (DAC)",
+        "Rule-Based Access Control"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Preventive controls are designed to stop incidents from happening in the first place (e.g., firewalls, access control lists). Detective controls identify incidents after they've occurred, corrective controls fix systems after an incident, and compensating controls are alternative controls used when the primary control isn't feasible.",
-      "examTip": "Remember the core purpose of each control type: Prevent, Detect, Correct, Compensate."
+      "explanation": "RBAC assigns permissions based on roles within an organization, ensuring users have appropriate access levels without direct user-to-resource assignments.\n\nMandatory Access Control (MAC) enforces strict access rules controlled by the system, not user roles.\nDiscretionary Access Control (DAC) allows users to define access to resources, which is less restrictive.\nRule-Based Access Control grants or denies access based on specific rules, not roles.",
+      "examTip": "RBAC is the most commonly used model in enterprise environments due to its scalability and ease of administration."
     },
     {
       "id": 2,
-      "question": "What is the PRIMARY goal of the 'Confidentiality' aspect of the CIA triad?",
+      "question": "Your organization has recently suffered a phishing attack, and multiple employees have reported suspicious emails requesting login credentials. What should be your FIRST course of action?",
       "options": [
-        "Ensuring data remains accurate and complete to support overall system reliability.",
-        "Preventing unauthorized disclosure by keeping sensitive information private.",
-        "Ensuring systems remain available and operational when needed.",
-        "Guaranteeing that every action can be traced back to its origin for accountability."
+        "Instruct employees to reset their passwords immediately",
+        "Analyze email headers and sender details for verification",
+        "Block the sender’s email domain at the email gateway",
+        "Report the phishing attempt to your security operations team"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Confidentiality focuses on preventing unauthorized access to data.  Integrity ensures data accuracy, availability ensures uptime, and non-repudiation deals with traceability.",
-      "examTip": "Think of CIA as: Confidentiality = Privacy, Integrity = Accuracy, Availability = Uptime."
+      "correctAnswerIndex": 3,
+      "explanation": "Reporting the incident to the security team allows for a proper investigation, containment, and awareness to prevent further compromise.\n\nResetting passwords is important but should be done after verifying a compromise.\nAnalyzing email headers is useful but not the first step.\nBlocking the sender’s domain is a potential mitigation but does not address the full incident response.",
+      "examTip": "Always follow incident response protocols before taking individual remediation actions."
     },
     {
       "id": 3,
-      "question": "You are setting up a new network segment for sensitive financial data.  Which of the following is the BEST approach to isolate this segment?",
+      "question": "Which cryptographic method uses one-way hashing to ensure the integrity of a message?",
       "options": [
-        "Deploy a distinct SSID for wireless access, although this offers only minimal isolation.",
-        "Implement a VLAN to logically segregate and isolate sensitive financial traffic.",
-        "Modify the default gateway settings, which does not truly separate traffic within the same broadcast domain.",
-        "Employ a stronger WPA2 password, which improves wireless security but does not isolate the network segment."
+        "AES (Advanced Encryption Standard)",
+        "RSA (Rivest-Shamir-Adleman)",
+        "SHA-256 (Secure Hash Algorithm 256-bit)",
+        "ECC (Elliptic Curve Cryptography)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "VLANs (Virtual LANs) provide logical segmentation, isolating traffic at Layer 2.  SSID and WPA2 passwords are for wireless security, and changing the gateway won't isolate traffic within the same broadcast domain.",
-      "examTip": "VLANs are the standard way to logically segment networks for security and performance."
+      "correctAnswerIndex": 2,
+      "explanation": "SHA-256 is a hashing algorithm designed to provide message integrity by generating a unique hash value that cannot be reversed.\n\nAES is a symmetric encryption method, not a hashing algorithm.\nRSA is an asymmetric encryption technique used for secure communication.\nECC is an encryption algorithm that enhances security with smaller key sizes.",
+      "examTip": "Hashing is used for integrity, while encryption is used for confidentiality."
     },
     {
       "id": 4,
-      "question": "Which cryptographic concept ensures that a sender cannot deny having sent a message?",
+      "question": "Which of the following is the BEST method to mitigate the risks associated with employees using personal devices (BYOD) in an enterprise environment?",
       "options": [
-        "Encryption, which secures data confidentiality through algorithmic encoding.",
-        "Hashing, a process used primarily to verify data integrity.",
-        "Non-repudiation, providing verifiable proof of message origin and sender intent.",
-        "Obfuscation, which hides data details but does not confirm the sender's identity."
+        "Implement strong password policies for all devices",
+        "Enforce a Mobile Device Management (MDM) solution",
+        "Restrict access to corporate applications",
+        "Require employees to use company-provided devices only"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Non-repudiation provides proof of origin and prevents the sender from denying their actions.  Encryption protects confidentiality, hashing ensures integrity, and obfuscation hides data.",
-      "examTip": "Non-repudiation is crucial for accountability and legal admissibility of digital actions."
+      "correctAnswerIndex": 1,
+      "explanation": "MDM enables administrators to enforce security policies, control access, and remotely wipe data from personal devices if necessary.\n\nStrong password policies improve security but do not address all BYOD risks.\nRestricting access may impact productivity and is not a comprehensive solution.\nRequiring company devices may not be feasible in all organizations.",
+      "examTip": "MDM is essential for securing mobile devices while allowing BYOD flexibility."
     },
     {
       "id": 5,
-      "question": "What is the FIRST step in a typical incident response process?",
+      "question": "You are analyzing firewall logs and notice multiple failed login attempts from a foreign IP address targeting administrative accounts. What is the BEST action to take?",
       "options": [
-        "Containment, which involves limiting the spread of an incident after detection.",
-        "Eradication, the process of removing the threat following detection.",
-        "Preparation, which establishes procedures, training, and tools before an incident occurs.",
-        "Recovery, focused on restoring operations after an incident."
+        "Immediately block the IP address at the firewall",
+        "Notify the affected users and ask them to reset passwords",
+        "Implement multi-factor authentication (MFA) for all admin accounts",
+        "Investigate further before taking any immediate action"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Preparation is the crucial first step, involving establishing procedures, training, and tools.  The other steps follow in a specific order after an incident is detected.",
-      "examTip": "Remember the incident response phases: Preparation, Detection/Analysis, Containment, Eradication, Recovery, Lessons Learned."
+      "correctAnswerIndex": 0,
+      "explanation": "Blocking the malicious IP prevents further unauthorized attempts while the investigation continues.\n\nNotifying users is important but does not stop the attack.\nImplementing MFA is a great preventive measure but does not address an active attack.\nInvestigating further is necessary but should not delay urgent defensive actions.",
+      "examTip": "Blocking suspicious activity quickly minimizes potential damage while further investigation occurs."
     },
     {
       "id": 6,
-      "question": "Which of the following is an example of a physical security control?",
+      "question": "Which of the following BEST describes the purpose of a honeypot in cybersecurity?",
       "options": [
-        "A firewall, which is a technical control that filters network traffic.",
-        "An Intrusion Detection System, a monitoring tool for detecting network anomalies.",
-        "A security guard, a physical measure to monitor and control access to facilities.",
-        "Encryption software, a logical control used to protect data."
+        "To detect and analyze malicious activity by attracting attackers",
+        "To prevent unauthorized access to a network using encryption",
+        "To store confidential data securely using access control mechanisms",
+        "To replace traditional firewall solutions for better security"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A security guard is a physical control, protecting physical access to assets. Firewalls and IDS are technical controls, and encryption is a logical/technical control.",
-      "examTip": "Physical controls deal with tangible security measures like locks, guards, and fences."
+      "correctAnswerIndex": 0,
+      "explanation": "A honeypot is a decoy system designed to attract attackers and analyze their behavior.\n\nEncryption is used for securing data, not detecting attackers.\nAccess control mechanisms restrict unauthorized access, not lure threats.\nFirewalls act as network barriers, but they do not function as honeypots.",
+      "examTip": "Honeypots are used for threat intelligence and attack analysis, not prevention."
     },
     {
       "id": 7,
-      "question": "What type of malware disguises itself as legitimate software to trick users into installing it?",
+      "question": "What is the PRIMARY purpose of hashing in cryptography?",
       "options": [
-        "A worm, which self-replicates without necessarily relying on user interaction.",
-        "A Trojan, malware that masquerades as a benign program to deceive users into installing it.",
-        "A virus, which attaches itself to legitimate files and often requires user action to spread.",
-        "A rootkit, designed to conceal its presence while providing unauthorized access."
+        "To encrypt and decrypt data securely",
+        "To generate a unique, irreversible fingerprint of data",
+        "To establish a secure communication channel",
+        "To exchange encryption keys between parties"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A Trojan horse (Trojan) masquerades as legitimate software. Worms self-replicate, viruses infect files, and rootkits provide hidden, privileged access.",
-      "examTip": "Remember the 'Trojan Horse' analogy – it looks harmless but contains something malicious."
+      "explanation": "Hashing is used to generate a unique, irreversible fingerprint of data for integrity verification.\n\nEncryption and decryption secure data but are reversible.\nSecure communication channels use encryption protocols.\nKey exchange is done using asymmetric cryptography, not hashing.",
+      "examTip": "Hashing is a one-way function used for integrity, not confidentiality."
     },
     {
       "id": 8,
-      "question": "Which type of attack involves overwhelming a system with a flood of traffic from multiple sources?",
+      "question": "Your company is adopting a Zero Trust security model. Which of the following BEST aligns with Zero Trust principles?",
       "options": [
-        "A Man-in-the-Middle Attack, which intercepts communications between parties.",
-        "SQL Injection, which targets databases through malicious queries.",
-        "Distributed Denial-of-Service (DDoS), where multiple sources flood a target with traffic to disrupt service.",
-        "Cross-Site Scripting (XSS), which injects malicious scripts into web pages."
+        "Allowing full access to internal resources after authentication",
+        "Blocking all external traffic by default while allowing internal traffic",
+        "Requiring continuous verification of identity and access permissions",
+        "Using a single authentication method for all employees"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A DDoS attack uses multiple compromised systems to flood a target.  The others are different types of attacks with different mechanisms.",
-      "examTip": "DDoS attacks are characterized by their distributed nature and high volume of traffic."
+      "explanation": "Zero Trust requires continuous verification of identity and access permissions, rather than assuming trust based on network location.\n\nAllowing full access contradicts Zero Trust principles.\nBlocking external traffic does not address insider threats.\nUsing a single authentication method is insufficient for modern security threats.",
+      "examTip": "Zero Trust follows the 'never trust, always verify' approach to access control."
     },
     {
       "id": 9,
-      "question": "Which of the following is a common social engineering technique that uses email to trick users into revealing sensitive information?",
+      "question": "Which of the following is the BEST example of multifactor authentication (MFA)?",
       "options": [
-        "Phishing, an email-based scam designed to steal sensitive information.",
-        "Vishing, which uses voice calls to deceive targets into providing confidential details.",
-        "Smishing, a technique that employs SMS messages for phishing attempts.",
-        "Tailgating, a physical breach method where an attacker follows someone into a secure area."
+        "Entering a password and a security question answer",
+        "Using a fingerprint and entering a PIN",
+        "Scanning an ID badge and entering a username",
+        "Typing a password and using a username"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing uses email. Vishing uses voice calls, smishing uses SMS, and tailgating is physical unauthorized entry.",
-      "examTip": "Remember the prefixes: Phishing (email), Vishing (voice), Smishing (SMS)."
+      "correctAnswerIndex": 1,
+      "explanation": "MFA requires two or more factors from different authentication categories, such as biometrics (fingerprint) and knowledge-based (PIN).\n\nA password and security question both fall under 'something you know.'\nAn ID badge and username do not represent different authentication factors.\nA password and username are both knowledge-based and do not qualify as MFA.",
+      "examTip": "MFA should include at least two different factor types: knowledge, possession, or biometrics."
     },
     {
       "id": 10,
-      "question": "What is the purpose of a Hardware Security Module (HSM)?",
+      "question": "Which of the following security controls is an example of a preventive control?",
       "options": [
-        "A device for securely storing user credentials, though not its primary purpose.",
-        "A secure hardware module designed for cryptographic key generation, storage, and management.",
-        "A firewall-like appliance used to filter network traffic, which is not the function of an HSM.",
-        "An intrusion detection tool that monitors network traffic for suspicious activity."
+        "Intrusion detection system (IDS)",
+        "Security audit logs",
+        "Access control lists (ACLs)",
+        "Security cameras"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HSMs are specialized hardware devices for secure cryptographic operations. They are not general-purpose password stores, firewalls, or intrusion detection systems.",
-      "examTip": "HSMs are tamper-resistant devices specifically designed for high-security cryptographic tasks."
+      "correctAnswerIndex": 2,
+      "explanation": "ACLs are preventive controls that restrict access before an action occurs.\n\nIDS is a detective control that alerts on malicious activity.\nSecurity audit logs record events but do not prevent them.\nSecurity cameras provide monitoring but do not actively prevent incidents.",
+      "examTip": "Preventive controls stop threats before they happen, while detective controls identify them after they occur."
     },
     {
       "id": 11,
-      "question": "Which principle dictates that users should only be granted the minimum necessary access rights to perform their job duties?",
+      "question": "An organization needs to encrypt all data at rest on company laptops. Which technology would BEST meet this requirement?",
       "options": [
-        "Separation of Duties, which divides responsibilities to mitigate risks.",
-        "Least Privilege, ensuring users have only the access essential for their tasks.",
-        "Defense in Depth, a strategy that employs multiple security layers.",
-        "Need to Know, which restricts access based on necessity but is broader in scope."
+        "TLS (Transport Layer Security)",
+        "Full-disk encryption (FDE)",
+        "SHA-256 hashing",
+        "SSL VPN"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Least privilege restricts access to the absolute minimum required. Separation of duties divides responsibilities, defense in depth uses multiple layers of security, and need-to-know is a related, but broader concept.",
-      "examTip": "Always consider 'Least Privilege' first when thinking about access control."
+      "explanation": "FDE encrypts an entire storage device, securing data at rest.\n\nTLS secures data in transit, not at rest.\nSHA-256 is used for hashing, not encryption.\nSSL VPN secures remote connections, not stored data.",
+      "examTip": "Use FDE to protect data stored on devices, ensuring confidentiality."
     },
     {
       "id": 12,
-      "question": "Which of the following is a characteristic of symmetric key encryption?",
+      "question": "Which type of malware is specifically designed to execute and spread without user interaction?",
       "options": [
-        "Uses two distinct keys for encryption and decryption, typical of asymmetric methods.",
-        "Uses a single shared key for both encryption and decryption, characteristic of symmetric encryption.",
-        "Is primarily utilized for digital signatures, a function of asymmetric encryption.",
-        "Is generally faster than asymmetric encryption, contrary to the suggestion that it is slower."
+        "Trojan",
+        "Ransomware",
+        "Worm",
+        "Spyware"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Symmetric encryption uses the same key for both encryption and decryption. Asymmetric uses two different keys (public and private).  Symmetric encryption is generally faster than asymmetric.",
-      "examTip": "Symmetric = Same key; Asymmetric = Different keys (public and private)."
+      "correctAnswerIndex": 2,
+      "explanation": "A worm is self-replicating malware that spreads without user interaction.\n\nTrojans require users to execute them manually.\nRansomware encrypts data but typically requires user action to start.\nSpyware collects user data but does not self-replicate.",
+      "examTip": "Worms exploit vulnerabilities to spread automatically, unlike Trojans or ransomware."
     },
     {
       "id": 13,
-      "question": "You discover a file on a server that contains a list of usernames and hashed passwords. Which type of attack is MOST likely being prepared for?",
+      "question": "Which of the following is an example of a compensating control?",
       "options": [
-        "SQL Injection, which targets databases by inserting malicious queries.",
-        "Cross-Site Scripting (XSS), aimed at injecting scripts into web pages.",
-        "Brute-Force or Dictionary Attack, where attackers try numerous password guesses against hashed credentials.",
-        "Man-in-the-Middle Attack, which intercepts communications rather than attacking stored credentials."
+        "Using a UPS to maintain power during outages",
+        "Implementing MFA when passwords cannot be strengthened",
+        "Deploying a honeypot to attract attackers",
+        "Installing an IDS to monitor suspicious activity"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Hashed passwords are the target of brute-force and dictionary attacks, which try to guess the original passwords. The other attacks target different vulnerabilities.",
-      "examTip": "Hashed passwords are a prime target for offline cracking attempts."
+      "correctAnswerIndex": 1,
+      "explanation": "Compensating controls provide an alternative security measure when primary controls are impractical, such as using MFA instead of stronger passwords.\n\nA UPS is a resilience measure, not a compensating control.\nHoneypots are deception tools, not compensating controls.\nIDS is a detective control, not a compensating one.",
+      "examTip": "Compensating controls are used when primary security controls cannot be fully implemented."
     },
     {
       "id": 14,
-      "question": "What is the purpose of a Certificate Authority (CA) in a Public Key Infrastructure (PKI)?",
+      "question": "Which of the following security measures would BEST protect against a brute-force attack on user passwords?",
       "options": [
-        "To encrypt and decrypt data, which is not the primary function of a CA.",
-        "To generate, validate, and issue digital certificates that verify the identity of certificate holders.",
-        "To securely store private keys, a responsibility typically managed by dedicated key storage solutions.",
-        "To perform hashing algorithms, which is separate from the issuance of digital certificates."
+        "Account lockout policy",
+        "Antivirus software",
+        "Network firewall",
+        "Regular security audits"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "CAs are trusted entities that issue digital certificates, vouching for the identity of the certificate holder.  They do not directly handle encryption/decryption or hashing.",
-      "examTip": "Think of a CA as a digital notary, verifying identities for online transactions."
+      "correctAnswerIndex": 0,
+      "explanation": "An account lockout policy prevents repeated login attempts, effectively stopping brute-force attacks.\n\nAntivirus software detects malware but does not protect against password guessing.\nNetwork firewalls filter traffic but do not specifically prevent brute-force attacks.\nSecurity audits help identify vulnerabilities but do not actively stop attacks.",
+      "examTip": "Account lockout policies limit repeated login attempts, making brute-force attacks ineffective."
     },
     {
       "id": 15,
-      "question": "Which of the following is an example of an access control model that uses labels and clearances to determine access rights?",
+      "question": "An attacker sends a fraudulent email pretending to be from a legitimate source, requesting sensitive information from employees. What type of attack is this?",
       "options": [
-        "Role-Based Access Control (RBAC), which assigns permissions based on user roles.",
-        "Mandatory Access Control (MAC), which uses security labels and clearances to enforce access restrictions.",
-        "Discretionary Access Control (DAC), where resource owners determine who can access their data.",
-        "Rule-Based Access Control, which applies fixed rules rather than security labels."
+        "Phishing",
+        "Denial-of-Service (DoS)",
+        "Man-in-the-middle (MITM)",
+        "SQL Injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "MAC uses labels (e.g., Top Secret, Secret) assigned to both subjects and objects. RBAC uses roles, DAC allows owners to control access, and rule-based uses predefined rules.",
-      "examTip": "MAC is commonly used in high-security environments like government and military."
+      "correctAnswerIndex": 0,
+      "explanation": "Phishing involves tricking users into providing sensitive information by pretending to be a legitimate entity.\n\nA DoS attack floods a system with traffic to make it unavailable.\nA MITM attack intercepts communication between two parties.\nSQL Injection exploits web database vulnerabilities.",
+      "examTip": "Phishing attacks rely on social engineering and deceptive emails to steal information."
     },
     {
       "id": 16,
-      "question": "A user reports that their computer is running slowly and displaying unusual pop-up ads.  What type of malware is MOST likely the cause?",
+      "question": "Which security principle ensures that users and systems can only access the minimum resources necessary to perform their tasks?",
       "options": [
-        "Ransomware, which typically encrypts files rather than generating pop-up ads.",
-        "Spyware/Adware, which often slows performance and displays unsolicited advertisements.",
-        "Rootkit, which is designed to remain hidden rather than causing overt pop-ups.",
-        "Logic Bomb, which triggers under specific conditions rather than causing persistent slowdowns."
+        "Separation of duties",
+        "Least privilege",
+        "Need-to-know",
+        "Role-based access control (RBAC)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Slow performance and pop-up ads are classic signs of spyware or adware. Ransomware encrypts files, rootkits hide, and logic bombs trigger under specific conditions.",
-      "examTip": "Unwanted ads and slowdowns are often indicators of adware or spyware."
+      "explanation": "The principle of least privilege restricts access rights to only what is necessary for a user or system to function.\n\nSeparation of duties ensures no single user has excessive control.\nNeed-to-know limits access to information but does not cover all system permissions.\nRBAC assigns access based on roles but does not enforce minimal permissions.",
+      "examTip": "Apply the least privilege principle to minimize security risks and limit damage from compromised accounts."
     },
     {
       "id": 17,
-      "question": "Which type of vulnerability scan attempts to exploit identified vulnerabilities to determine the extent of potential damage?",
+      "question": "Which of the following is an example of steganography?",
       "options": [
-        "Credentialed Scan, which uses valid credentials to identify vulnerabilities without active exploitation.",
-        "Non-Credentialed Scan, which tests vulnerabilities without authorized access but does not exploit them.",
-        "Penetration Test, which actively attempts to exploit vulnerabilities to assess their real-world impact.",
-        "Compliance Scan, which verifies adherence to security standards rather than testing exploitability."
+        "Encrypting an email attachment with AES-256",
+        "Hiding a secret message within an image file",
+        "Using a VPN to mask network traffic",
+        "Applying a digital signature to a document"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A penetration test actively tries to exploit vulnerabilities.  Credentialed and non-credentialed scans identify vulnerabilities, and compliance scans check for adherence to standards.",
-      "examTip": "Penetration testing goes beyond simply identifying vulnerabilities; it attempts to exploit them."
+      "correctAnswerIndex": 1,
+      "explanation": "Steganography is the practice of concealing data within other files, such as embedding a message in an image.\n\nEncryption protects data but does not hide its existence.\nA VPN secures network traffic but does not hide messages within files.\nDigital signatures verify authenticity but do not conceal messages.",
+      "examTip": "Steganography hides data inside other media, while encryption protects data visibility."
     },
     {
       "id": 18,
-      "question": "What is the purpose of data masking in data security?",
+      "question": "Which of the following authentication factors is considered 'something you have'?",
       "options": [
-        "To encrypt data so that it cannot be read without the corresponding decryption key.",
-        "To replace sensitive data with realistic, non-sensitive substitutes while preserving the original format.",
-        "To permanently delete sensitive data from storage devices.",
-        "To prevent data from being copied or moved between systems."
+        "A strong password",
+        "A fingerprint scan",
+        "A smart card",
+        "A security question answer"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data masking replaces sensitive data (e.g., credit card numbers) with realistic but fake data, preserving the format but protecting the real information. Encryption protects confidentiality, deletion removes data, and DLP prevents unauthorized data movement.",
-      "examTip": "Data masking is often used in testing and development environments to protect sensitive data."
+      "correctAnswerIndex": 2,
+      "explanation": "A smart card is a physical object, making it an example of the 'something you have' authentication factor.\n\nPasswords and security questions are 'something you know.'\nA fingerprint scan is 'something you are' (biometric).",
+      "examTip": "Authentication factors: 'Something you know' (password), 'Something you have' (smart card), 'Something you are' (biometrics)."
     },
     {
       "id": 19,
-      "question": "Which of the following is a key benefit of using a Security Information and Event Management (SIEM) system?",
+      "question": "What is the PRIMARY goal of a penetration test?",
       "options": [
-        "Centralized log aggregation and real-time analysis of security events for improved incident detection.",
-        "Automated patching of software vulnerabilities, which is generally managed by other systems.",
-        "Encryption of data at rest to enhance data confidentiality.",
-        "Prevention of phishing attacks through user training and email filtering."
+        "To identify vulnerabilities before attackers exploit them",
+        "To permanently fix all security weaknesses",
+        "To prevent all cyberattacks",
+        "To replace antivirus software"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SIEM systems aggregate security logs and events from across an organization, providing a central point for monitoring, analysis, and incident response. They don't automate patching, encrypt data at rest, or directly prevent phishing.",
-      "examTip": "SIEM is a central hub for security monitoring and incident response."
+      "explanation": "Penetration testing simulates real-world attacks to identify security vulnerabilities before attackers do.\n\nIt does not fix issues but identifies them for remediation.\nIt reduces risk but cannot prevent all attacks.\nAntivirus software addresses malware, not penetration testing.",
+      "examTip": "Penetration tests proactively uncover vulnerabilities to improve security posture."
     },
     {
       "id": 20,
-      "question": "What is the purpose of a demilitarized zone (DMZ) in network security?",
+      "question": "Which of the following BEST describes the function of a SIEM (Security Information and Event Management) system?",
       "options": [
-        "To create a buffer zone that isolates the internal network from external threats by hosting public-facing servers.",
-        "To provide a secure location for storing backup data away from the main network.",
-        "To host internal web servers in an environment separate from external access.",
-        "To segment the network based on user roles and permissions using VLANs."
+        "Blocking malicious traffic at the firewall",
+        "Detecting and analyzing security threats in real-time",
+        "Encrypting sensitive data",
+        "Preventing phishing attacks"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A DMZ is a buffer zone between the internal network and the internet, hosting publicly accessible servers while protecting the internal network. It's not primarily for backups, internal servers, or role-based segmentation.",
-      "examTip": "Think of a DMZ as a 'no man's land' between your trusted network and the untrusted internet."
+      "correctAnswerIndex": 1,
+      "explanation": "SIEM systems aggregate and analyze security events in real-time to detect and respond to threats.\n\nFirewalls block traffic but do not provide security event correlation.\nEncryption protects data but does not monitor security events.\nPhishing prevention involves user training and email security tools.",
+      "examTip": "SIEM provides centralized security event monitoring and threat detection."
     },
     {
       "id": 21,
-      "question": "An attacker sends an email pretending to be from a legitimate bank, asking users to click a link and update their account information. What type of attack is this?",
+      "question": "A cybersecurity analyst wants to ensure that a revoked certificate is no longer used for authentication. Which of the following should they check?",
       "options": [
-        "Spear Phishing, a targeted email attack designed to trick recipients into divulging sensitive information.",
-        "Whaling, which specifically targets high-profile individuals with customized phishing attacks.",
-        "Pharming, where users are redirected to fraudulent websites without their knowledge.",
-        "Credential Harvesting, which refers to the general act of collecting login information."
+        "Public Key Infrastructure (PKI)",
+        "Certificate Revocation List (CRL)",
+        "Transport Layer Security (TLS)",
+        "Key Management System (KMS)"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Spear phishing is a targeted phishing attack directed at specific individuals or organizations.  Whaling targets high-profile individuals, pharming redirects users to fake websites, and credential harvesting is the general goal of stealing login information.",
-      "examTip": "Spear phishing is more targeted and personalized than generic phishing."
+      "correctAnswerIndex": 1,
+      "explanation": "A Certificate Revocation List (CRL) is a list of certificates that have been revoked and should no longer be trusted.\n\nPKI is the overall framework for managing encryption keys and certificates.\nTLS secures communications but does not handle certificate revocation.\nA KMS manages encryption keys but does not track revoked certificates.",
+      "examTip": "Always check the CRL or use OCSP (Online Certificate Status Protocol) to verify revoked certificates."
     },
     {
       "id": 22,
-      "question": "What is the purpose of a honeypot in network security?",
+      "question": "Which of the following BEST describes an insider threat?",
       "options": [
-        "Filtering malicious traffic is the role of firewalls, not honeypots.",
-        "Attracting and trapping attackers in a controlled environment to analyze their tactics.",
-        "Encrypting data transmitted over the network is handled by VPNs and encryption protocols.",
-        "Authenticating users accessing the network is managed by access control systems."
+        "An attacker breaching a company's firewall from the internet",
+        "An employee intentionally leaking sensitive data",
+        "A hacker using stolen credentials to access a system",
+        "A distributed denial-of-service (DDoS) attack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A honeypot is a decoy system designed to lure attackers and study their techniques. It doesn't filter traffic, encrypt data, or authenticate users.",
-      "examTip": "Honeypots are traps set for attackers, providing valuable threat intelligence."
+      "explanation": "An insider threat is an individual within an organization, such as an employee, who intentionally or unintentionally compromises security.\n\nExternal attackers breaching firewalls are not insider threats.\nHackers using stolen credentials are external threats.\nDDoS attacks originate externally and do not involve insiders.",
+      "examTip": "Insider threats can be intentional (malicious employees) or unintentional (accidental data leaks)."
     },
     {
       "id": 23,
-      "question": "Which type of attack involves injecting malicious code into a legitimate website to target users who visit that site?",
+      "question": "Which type of attack involves sending fraudulent emails that appear to come from a trusted source to manipulate individuals into revealing sensitive information?",
       "options": [
-        "SQL Injection, which targets databases through malicious queries rather than affecting website visitors directly.",
-        "Cross-Site Scripting (XSS), where attackers inject malicious scripts into web pages that execute in users' browsers.",
-        "Cross-Site Request Forgery (CSRF), which tricks users into executing unwanted actions rather than injecting code.",
-        "Buffer Overflow, an attack that exploits memory vulnerabilities in applications."
+        "Phishing",
+        "Smishing",
+        "Spear phishing",
+        "Vishing"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "XSS injects malicious scripts into websites to be executed by users' browsers. SQL injection targets databases, CSRF exploits user sessions, and buffer overflows exploit memory vulnerabilities.",
-      "examTip": "XSS attacks target the users of a website, not the website itself directly."
+      "correctAnswerIndex": 2,
+      "explanation": "Spear phishing is a targeted attack that tailors fraudulent emails to specific individuals or organizations.\n\nPhishing is a broader term for fraudulent emails.\nSmishing involves SMS-based phishing.\nVishing refers to voice-based phishing attacks.",
+      "examTip": "Spear phishing is more targeted than general phishing and often includes personal details to appear legitimate."
     },
     {
       "id": 24,
-      "question": "What does the term 'zero-day vulnerability' refer to?",
+      "question": "Which of the following is a primary benefit of implementing role-based access control (RBAC)?",
       "options": [
-        "A vulnerability discovered very recently, though it may still have a patch available.",
-        "A vulnerability unknown to the vendor with no available patch at the time of discovery.",
-        "A vulnerability that affects all versions of a given software product.",
-        "A vulnerability that is particularly easy to exploit under normal circumstances."
+        "It allows users to set their own access permissions",
+        "It restricts access based on job responsibilities",
+        "It prevents all types of security breaches",
+        "It eliminates the need for authentication"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A zero-day vulnerability is a vulnerability that is unknown to the vendor and has no patch available.  The 'zero days' refers to the vendor having zero days to fix it before it was discovered/exploited.",
-      "examTip": "Zero-day vulnerabilities are highly valuable to attackers because they are unpatched."
+      "explanation": "RBAC limits access to systems and data based on a user’s job role, ensuring least privilege access.\n\nUsers do not set their own permissions in RBAC.\nRBAC reduces risk but does not prevent all security breaches.\nRBAC still requires authentication mechanisms.",
+      "examTip": "RBAC improves security by restricting access based on organizational roles."
     },
     {
       "id": 25,
-      "question": "Which of the following is an example of multi-factor authentication (MFA)?",
+      "question": "An attacker successfully exploits a web application by entering malicious SQL code into a form field. What type of attack has occurred?",
       "options": [
-        "Using a strong password alone, which represents a single factor of authentication.",
-        "Using a password combined with a security question, though both are knowledge-based factors.",
-        "Using a password along with a fingerprint scan, combining something you know with something you are.",
-        "Using two different passwords, which still relies on the same type of factor."
+        "Cross-site scripting (XSS)",
+        "SQL Injection",
+        "Man-in-the-middle (MITM)",
+        "Buffer overflow"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "MFA requires two or more *different* factors (something you know, something you have, something you are).  A password and fingerprint scan are two different factors. The other options use only one factor.",
-      "examTip": "MFA significantly increases security by requiring multiple forms of authentication."
+      "correctAnswerIndex": 1,
+      "explanation": "SQL Injection occurs when an attacker inputs malicious SQL statements into a form to manipulate a database.\n\nXSS injects malicious scripts into web pages.\nMITM attacks intercept communication between two parties.\nA buffer overflow occurs when too much data is sent to a memory buffer.",
+      "examTip": "Prevent SQL Injection by using parameterized queries and input validation."
     },
     {
       "id": 26,
-      "question": "What is the main difference between a virus and a worm?",
+      "question": "Which security measure would be MOST effective in preventing unauthorized access to a company’s wireless network?",
       "options": [
-        "A virus typically needs user interaction to propagate, whereas a worm can self-replicate and spread autonomously.",
-        "A virus is always more harmful than a worm, although the impact depends on the specific malware.",
-        "A virus only affects Windows systems, while worms can target multiple operating systems.",
-        "A virus encrypts files while a worm is designed to delete them."
+        "Disabling SSID broadcasting",
+        "Implementing WPA3 encryption",
+        "Using MAC address filtering",
+        "Changing the default router password"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Worms self-replicate and spread across networks without user intervention. Viruses typically require a user to execute an infected file.  Harmfulness and OS targeting vary.",
-      "examTip": "Think of worms as 'traveling' on their own, while viruses need a 'ride.'"
+      "correctAnswerIndex": 1,
+      "explanation": "WPA3 encryption provides the strongest wireless security by encrypting communications and preventing unauthorized access.\n\nDisabling SSID broadcasting only hides the network but does not prevent access.\nMAC address filtering is easily bypassed by attackers.\nChanging the default password is good practice but does not fully secure the network.",
+      "examTip": "WPA3 is the most secure wireless encryption standard currently available."
     },
     {
       "id": 27,
-      "question": "What is the purpose of a VPN (Virtual Private Network)?",
+      "question": "Which of the following describes a risk of using end-of-life (EOL) software?",
       "options": [
-        "Blocking access to specific websites is generally managed by content filters.",
-        "Creating a secure, encrypted tunnel over public networks to protect data in transit.",
-        "Scanning for viruses is the function of antivirus software rather than VPNs.",
-        "Managing user accounts and permissions is handled by identity management solutions."
+        "Increased licensing costs",
+        "Lack of vendor security patches",
+        "Decreased application response time",
+        "Incompatibility with mobile devices"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VPNs encrypt data and create a secure tunnel over a public network (like the internet). They don't primarily block websites, scan for viruses, or manage user accounts.",
-      "examTip": "VPNs are essential for secure remote access and protecting data on public Wi-Fi."
+      "explanation": "EOL software no longer receives security patches from the vendor, making it vulnerable to exploits.\n\nLicensing costs are unrelated to software being EOL.\nApplication response time is not necessarily affected.\nMobile device compatibility depends on the software’s design, not its lifecycle status.",
+      "examTip": "Avoid using EOL software since it no longer receives security updates, increasing attack risk."
     },
     {
       "id": 28,
-      "question": "Which security concept involves dividing a network into smaller, isolated segments to limit the impact of a security breach?",
+      "question": "Which of the following is an example of a deterrent security control?",
       "options": [
-        "Encryption secures data but does not create network segmentation.",
-        "Segmentation divides a network into isolated sections to contain breaches.",
-        "Redundancy provides backup resources but does not isolate segments.",
-        "Authentication verifies user identities, not network structure."
+        "Security cameras placed in visible areas",
+        "Implementing firewalls to filter traffic",
+        "Encrypting sensitive data",
+        "Using an antivirus program"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Segmentation (or network segmentation) isolates parts of the network. Encryption protects data confidentiality, redundancy ensures availability, and authentication verifies identity.",
-      "examTip": "Segmentation is like building compartments in a ship to prevent flooding from spreading."
+      "correctAnswerIndex": 0,
+      "explanation": "Visible security cameras deter malicious activity by discouraging potential attackers.\n\nFirewalls filter network traffic but do not deter directly.\nEncryption protects data confidentiality but does not deter attackers.\nAntivirus programs detect and remove malware but are not deterrents.",
+      "examTip": "Deterrent controls discourage attacks by making security measures visible to potential attackers."
     },
     {
       "id": 29,
-      "question": "What is the role of an Intrusion Detection System (IDS)?",
+      "question": "Which of the following BEST describes the principle of non-repudiation in cybersecurity?",
       "options": [
-        "Preventing unauthorized access is typically the role of a firewall.",
-        "Detecting and alerting on suspicious network activity without actively blocking it.",
-        "Encrypting data transmitted over a network is managed by encryption protocols.",
-        "Managing user accounts and passwords is not a function of an IDS."
+        "Ensuring that data cannot be modified after being sent",
+        "Preventing users from denying their actions",
+        "Ensuring only authorized users can access data",
+        "Limiting user access to only necessary resources"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An IDS monitors network traffic for suspicious activity and generates alerts.  It doesn't *prevent* access (that's a firewall), encrypt data, or manage accounts.",
-      "examTip": "An IDS is like a security camera – it detects and records, but doesn't necessarily stop intruders."
+      "explanation": "Non-repudiation ensures that an entity cannot deny having performed an action, such as sending a message or making a transaction.\n\nEnsuring data cannot be modified is part of integrity, not non-repudiation.\nAuthorization controls access but does not provide proof of actions.\nThe principle of least privilege limits access but is unrelated to non-repudiation.",
+      "examTip": "Digital signatures and logging mechanisms help enforce non-repudiation by providing verifiable proof of actions."
     },
     {
       "id": 30,
-      "question": "What is 'salting' in the context of password security?",
+      "question": "Which of the following is the PRIMARY function of a VPN?",
       "options": [
-        "Adding a unique random value to a password before hashing to thwart precomputed attacks.",
-        "Encrypting the password with a robust algorithm is a different process.",
-        "Storing passwords in plain text is highly insecure.",
-        "Using the same password across multiple accounts is a risky practice."
+        "To encrypt data transmitted over an untrusted network",
+        "To provide a backup internet connection",
+        "To monitor network traffic for suspicious activity",
+        "To accelerate internet speed for remote users"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Salting adds a unique, random string to each password before hashing, making rainbow table attacks much more difficult.  It's not encryption, and storing passwords in plain text is extremely insecure.",
-      "examTip": "Salting makes each password hash unique, even if the original passwords are the same."
+      "explanation": "A VPN encrypts data traffic to protect it from interception when transmitted over an untrusted network.\n\nA VPN does not provide backup internet connections.\nIt does not monitor network traffic for threats.\nA VPN does not enhance internet speed, and it can sometimes slow down connections due to encryption overhead.",
+      "examTip": "Use a VPN to securely access remote networks and protect data from interception."
     },
     {
       "id": 31,
-      "question": "Which type of security assessment involves simulating real-world attacks to identify vulnerabilities and weaknesses?",
+      "question": "A company wants to protect against data exfiltration by preventing employees from uploading files to cloud storage platforms. Which security solution would be MOST effective?",
       "options": [
-        "A vulnerability scan identifies potential issues without active exploitation.",
-        "A penetration test actively attempts to exploit vulnerabilities to assess their real-world impact.",
-        "A security audit reviews configurations and policies without simulating attacks.",
-        "A risk assessment analyzes potential threats and impacts without conducting active testing."
+        "Intrusion detection system (IDS)",
+        "Antivirus software",
+        "Data loss prevention (DLP)",
+        "Web application firewall (WAF)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Penetration testing actively simulates attacks. Vulnerability scans identify potential weaknesses, security audits verify compliance, and risk assessments identify and analyze risks.",
-      "examTip": "Penetration testing is like a 'fire drill' for your security systems."
+      "correctAnswerIndex": 2,
+      "explanation": "DLP solutions monitor and prevent unauthorized data transfers, making them the best choice for preventing data exfiltration.\n\nIDS detects intrusions but does not actively prevent file uploads.\nAntivirus software protects against malware but does not restrict data uploads.\nWAF protects web applications from attacks but does not prevent data exfiltration.",
+      "examTip": "Use DLP solutions to monitor, block, or encrypt sensitive data before it leaves the network."
     },
     {
       "id": 32,
-      "question": "Which access control model allows the owner of a resource to determine who has access to it?",
+      "question": "Which type of attack occurs when an attacker exploits a system’s memory by overflowing a buffer with excessive input data?",
       "options": [
-        "Mandatory Access Control (MAC) enforces policies based on security labels.",
-        "Discretionary Access Control (DAC) lets resource owners set access permissions.",
-        "Role-Based Access Control (RBAC) assigns permissions based on predefined roles.",
-        "Rule-Based Access Control applies fixed rules to control access."
+        "SQL Injection",
+        "Man-in-the-middle (MITM)",
+        "Cross-site scripting (XSS)",
+        "Buffer overflow"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "In DAC, the data owner controls access. MAC uses labels, RBAC uses roles, and rule-based uses predefined rules.",
-      "examTip": "DAC is the most common access control model in operating systems like Windows and Linux."
+      "correctAnswerIndex": 3,
+      "explanation": "A buffer overflow occurs when excessive data overwrites memory, potentially leading to code execution or system crashes.\n\nSQL Injection manipulates databases, not memory.\nMITM intercepts communication rather than exploiting memory vulnerabilities.\nXSS injects malicious scripts into web pages but does not overflow memory.",
+      "examTip": "Prevent buffer overflow attacks by using secure coding practices and implementing input validation."
     },
     {
       "id": 33,
-      "question": "What is the FIRST step you should take when you suspect your computer is infected with malware?",
+      "question": "Which of the following would provide the BEST defense against an attacker trying to brute-force user passwords?",
       "options": [
-        "Running a full antivirus scan is important but should follow initial isolation.",
-        "Disconnecting the computer from the network to prevent further spread is the first step.",
-        "Deleting all suspicious files might remove evidence and worsen the situation.",
-        "Reformatting the hard drive is a drastic measure that should be a last resort."
+        "Using account lockout policies",
+        "Hiding login pages from the public",
+        "Enabling full-disk encryption",
+        "Blocking all traffic from foreign IP addresses"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Disconnecting from the network prevents the malware from spreading or communicating with command-and-control servers. Running a scan is important, but isolation is the priority. Deleting files or reformatting are drastic steps that should be considered later.",
-      "examTip": "Isolate first, then investigate and remediate."
+      "correctAnswerIndex": 0,
+      "explanation": "Account lockout policies prevent brute-force attacks by locking accounts after a set number of failed login attempts.\n\nHiding login pages does not stop automated brute-force attacks.\nFull-disk encryption protects stored data but does not prevent login attacks.\nBlocking foreign IPs may help but is not a complete solution.",
+      "examTip": "Implementing account lockout policies significantly reduces brute-force attack success rates."
     },
     {
       "id": 34,
-      "question": "Which of the following is a BEST practice for securing a wireless network?",
+      "question": "Which of the following BEST describes the function of a digital signature?",
       "options": [
-        "Using WEP encryption, which is outdated and easily compromised.",
-        "Disabling SSID broadcasting offers minimal protection and relies on obscurity.",
-        "Utilizing WPA2 or WPA3 encryption with a strong, unique password for robust wireless security.",
-        "Leaving the default router password unchanged exposes the network to unauthorized access."
+        "Encrypting a message for confidentiality",
+        "Verifying the sender's identity and ensuring integrity",
+        "Preventing unauthorized access to a system",
+        "Providing encryption for network traffic"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WPA2 or WPA3 with a strong password provides the best wireless security. WEP is outdated and easily cracked, disabling SSID broadcasting is security through obscurity, and leaving the default password is a major vulnerability.",
-      "examTip": "Always use the strongest available encryption protocol (currently WPA3) for wireless networks."
+      "correctAnswerIndex": 1,
+      "explanation": "A digital signature verifies the sender’s identity and ensures the integrity of a message.\n\nEncryption provides confidentiality but does not confirm the sender's identity.\nPreventing unauthorized access is handled by authentication methods, not digital signatures.\nNetwork encryption is provided by protocols such as TLS, not digital signatures.",
+      "examTip": "Digital signatures ensure authenticity and integrity using cryptographic methods like RSA."
     },
     {
       "id": 35,
-      "question": "What is the purpose of a firewall in network security?",
+      "question": "A company wants to restrict network access based on device type, user role, and location. Which security measure would BEST achieve this goal?",
       "options": [
-        "Monitoring network traffic for intrusions is typically the role of an IDS.",
-        "Controlling network traffic based on predefined rules to allow or block specific data flows.",
-        "Encrypting data transmitted over the network is handled by VPNs and encryption protocols.",
-        "Managing user accounts and permissions is not the function of a firewall."
+        "Firewall rules",
+        "Access control lists (ACLs)",
+        "Network access control (NAC)",
+        "Virtual Private Network (VPN)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Firewalls act as a barrier, allowing or blocking traffic based on rules.  IDS monitors traffic, VPNs encrypt data, and access control systems manage accounts.",
-      "examTip": "Think of a firewall as a gatekeeper, controlling who and what can enter and leave your network."
+      "correctAnswerIndex": 2,
+      "explanation": "NAC enforces security policies based on user identity, device type, and location before granting network access.\n\nFirewalls filter traffic but do not enforce user-based access controls.\nACLs define which IP addresses or devices can access resources but lack contextual awareness.\nVPNs encrypt traffic but do not restrict access based on user roles or device type.",
+      "examTip": "NAC ensures that only compliant, authorized devices and users can access the network."
     },
     {
       "id": 36,
-      "question": "You receive an email from a colleague asking you to urgently wire money to a new bank account.  What should you do FIRST?",
+      "question": "Which of the following authentication methods is considered the MOST secure?",
       "options": [
-        "Immediately wiring the money without further verification is extremely risky.",
-        "Replying to the email may confirm your information to potential attackers.",
-        "Verifying the request through an independent communication channel, such as a phone call, is the safest first step.",
-        "Forwarding the email to your IT department can help later, but first verify the request personally."
+        "Username and password",
+        "Security questions",
+        "Multifactor authentication (MFA)",
+        "Single sign-on (SSO)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Verify the request out-of-band (e.g., phone call) to confirm its legitimacy.  This helps prevent Business Email Compromise (BEC) attacks.  Replying to the email might go to the attacker, and immediate action without verification is risky.",
-      "examTip": "Always independently verify unusual requests, especially those involving financial transactions."
+      "explanation": "MFA is the most secure method because it requires multiple factors (something you know, have, or are) to authenticate.\n\nUsername and password authentication is weak and vulnerable to breaches.\nSecurity questions can be guessed or leaked.\nSSO improves convenience but does not inherently increase security without MFA.",
+      "examTip": "MFA adds extra security by requiring multiple authentication factors, reducing unauthorized access risks."
     },
     {
       "id": 37,
-      "question": "What is the purpose of a digital signature?",
+      "question": "Which of the following is a primary security benefit of implementing network segmentation?",
       "options": [
-        "Encrypting data ensures confidentiality but does not verify the sender.",
-        "Verifying the authenticity and integrity of a digital message or document through a unique signature.",
-        "Hiding data within another file, which is a technique known as steganography.",
-        "Preventing data from being copied or moved is not achieved with digital signatures."
+        "Increases overall network speed",
+        "Reduces the impact of security breaches",
+        "Eliminates the need for firewalls",
+        "Allows unrestricted access between departments"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Digital signatures provide authentication (proof of sender) and integrity (proof the message hasn't been altered). Encryption protects confidentiality, steganography hides data, and DLP prevents data leakage.",
-      "examTip": "Digital signatures are like electronic fingerprints, verifying the sender and ensuring message integrity."
+      "explanation": "Network segmentation limits lateral movement within a network, reducing the impact of security breaches.\n\nIt does not inherently increase network speed.\nFirewalls are still necessary for network security.\nUnrestricted access between departments contradicts segmentation principles.",
+      "examTip": "Segmenting networks reduces attack surfaces and limits the spread of threats."
     },
     {
       "id": 38,
-      "question": "Which type of cloud computing service provides access to a complete operating system and applications over the internet?",
+      "question": "Which of the following BEST describes the function of a web application firewall (WAF)?",
       "options": [
-        "Infrastructure as a Service (IaaS) provides virtualized hardware but not complete applications.",
-        "Platform as a Service (PaaS) offers a development platform rather than ready-to-use applications.",
-        "Software as a Service (SaaS) delivers complete software solutions, including operating systems and applications, over the internet.",
-        "Network as a Service (NaaS) provides network resources rather than complete operating environments."
+        "Blocks malicious traffic at the network perimeter",
+        "Protects web applications from attacks such as SQL injection and cross-site scripting",
+        "Encrypts data transmitted over the internet",
+        "Scans web applications for vulnerabilities"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "SaaS provides ready-to-use applications. IaaS provides infrastructure (servers, storage), PaaS provides a platform for developing and deploying applications, and NaaS provides network resources.",
-      "examTip": "Think of SaaS as 'software on demand,' like webmail or online office suites."
+      "correctAnswerIndex": 1,
+      "explanation": "A WAF protects web applications from common threats like SQL injection and cross-site scripting (XSS).\n\nFirewalls block network traffic but do not focus on web application security.\nEncryption secures data but does not prevent web attacks.\nVulnerability scanning identifies weaknesses but does not actively block attacks.",
+      "examTip": "Use a WAF to protect web applications against SQL injection, XSS, and other web-based threats."
     },
     {
       "id": 39,
-      "question": "What is the purpose of the `chmod` command in Linux?",
+      "question": "Which of the following BEST describes a supply chain attack?",
       "options": [
-        "Changing the ownership of a file or directory is done with 'chown', not 'chmod'.",
-        "Modifying the permissions of a file or directory using the 'chmod' command.",
-        "Creating a new directory is achieved with 'mkdir'.",
-        "Displaying the contents of a file is performed by 'cat' or 'less'."
+        "An attack that targets an organization's third-party vendors to compromise the primary target",
+        "An attack that floods a network with excessive traffic",
+        "An attack that exploits software vulnerabilities on a web server",
+        "An attack that intercepts communication between two parties"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`chmod` (change mode) modifies file and directory permissions (read, write, execute). `chown` changes ownership, `mkdir` creates directories, and `cat` or `less` display file contents.",
-      "examTip": "Remember `chmod` controls *who* can do *what* with a file or directory."
+      "correctAnswerIndex": 0,
+      "explanation": "A supply chain attack compromises third-party vendors to infiltrate the primary target organization.\n\nDDoS attacks flood a network with traffic.\nWeb-based exploits target software vulnerabilities.\nMITM attacks intercept communications between two parties.",
+      "examTip": "To mitigate supply chain risks, vet vendors and ensure they follow strong security practices."
     },
     {
       "id": 40,
-      "question": "Which of the following is a common technique used to improve the security of passwords stored in a database?",
+      "question": "Which of the following security controls is designed to detect and alert on suspicious activity within a network?",
       "options": [
-        "Storing passwords in plain text provides no security and is highly discouraged.",
-        "Using the same password for all users is a significant vulnerability.",
-        "Hashing and salting passwords is the standard method to securely store credentials.",
-        "Encrypting passwords with a weak algorithm does not adequately protect them."
+        "Firewall",
+        "Intrusion detection system (IDS)",
+        "Data loss prevention (DLP)",
+        "Encryption"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Hashing and salting is the standard practice. Storing passwords in plain text is extremely insecure, using the same password for all users is a major vulnerability, and weak encryption is easily broken.",
-      "examTip": "Never store passwords in plain text; always hash and salt them."
+      "correctAnswerIndex": 1,
+      "explanation": "An IDS monitors network activity and generates alerts for suspicious behavior.\n\nFirewalls block unauthorized traffic but do not actively detect attacks.\nDLP prevents unauthorized data exfiltration but does not monitor general network activity.\nEncryption protects data confidentiality but does not detect threats.",
+      "examTip": "IDS detects suspicious activity but does not block it—use IPS for active prevention."
     },
     {
       "id": 41,
-      "question": "You notice unusual network activity originating from an internal server. What is the BEST initial step to investigate?",
+      "question": "Which of the following types of malware is designed to record keystrokes and send them to an attacker?",
       "options": [
-        "Shutting down the server immediately might destroy valuable evidence.",
-        "Reviewing the server's logs and network traffic to gather details about the anomaly is the best first step.",
-        "Reinstalling the operating system on the server is premature without proper investigation.",
-        "Disconnecting the server from the internet might not isolate the problem if it originates internally."
+        "Trojan",
+        "Ransomware",
+        "Keylogger",
+        "Rootkit"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Reviewing logs and network traffic provides crucial information about the activity. Shutting down or reinstalling the OS could destroy evidence, while disconnecting from the internet may not be sufficient if the compromise is internal.",
-      "examTip": "Log analysis is often the first step in investigating security incidents."
+      "correctAnswerIndex": 2,
+      "explanation": "A keylogger records keystrokes to steal sensitive information, such as passwords and credit card details.\n\nTrojans disguise themselves as legitimate programs.\nRansomware encrypts files and demands a ransom.\nRootkits provide attackers with hidden system access.",
+      "examTip": "To prevent keyloggers, use endpoint security tools and avoid downloading unknown software."
     },
     {
       "id": 42,
-      "question": "Which of the following is a key principle of the 'defense in depth' security strategy?",
+      "question": "Which of the following is the BEST method to ensure sensitive data remains confidential when transmitted over an untrusted network?",
       "options": [
-        "Using a single, strong security control creates a single point of failure.",
-        "Implementing multiple, overlapping layers of security controls to protect against a variety of threats.",
-        "Relying solely on perimeter security ignores internal threats.",
-        "Focusing exclusively on preventing attacks without ensuring detection and response is insufficient."
+        "Hashing",
+        "Encryption",
+        "Access control lists (ACLs)",
+        "Intrusion prevention systems (IPS)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Defense in depth uses multiple, overlapping security layers. A single control creates a single point of failure, and relying only on the perimeter or prevention is insufficient.",
-      "examTip": "Think of defense in depth like an onion, with multiple layers of protection."
+      "explanation": "Encryption ensures data confidentiality by making it unreadable to unauthorized users during transmission.\n\nHashing verifies data integrity but does not provide confidentiality.\nACLs control access to resources but do not encrypt data.\nIPS detects and blocks threats but does not secure transmitted data.",
+      "examTip": "Always encrypt sensitive data before transmitting it over an untrusted network."
     },
     {
       "id": 43,
-      "question": "What is the primary purpose of a Security Content Automation Protocol (SCAP) compliant tool?",
+      "question": "Which of the following security principles requires that no single individual has complete control over a critical system or process?",
       "options": [
-        "Automatically generating strong passwords is not its function.",
-        "Automating the process of checking systems for security compliance and vulnerabilities.",
-        "Encrypting data in transit is handled by other security measures.",
-        "Providing remote access to a network is not related to SCAP compliance."
+        "Least privilege",
+        "Implicit deny",
+        "Separation of duties",
+        "Mandatory access control (MAC)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SCAP tools automate security configuration checks and vulnerability assessments. They don't generate passwords, encrypt data, or provide remote access.",
-      "examTip": "SCAP helps organizations maintain consistent security configurations and identify vulnerabilities."
+      "correctAnswerIndex": 2,
+      "explanation": "Separation of duties ensures that no single individual can perform critical actions alone, reducing the risk of fraud or misuse.\n\nLeast privilege restricts user access to only necessary permissions.\nImplicit deny blocks access unless explicitly allowed.\nMAC enforces strict access control rules based on classifications.",
+      "examTip": "Separation of duties reduces insider threats by requiring multiple individuals to complete critical processes."
     },
     {
       "id": 44,
-      "question": "Which type of attack involves an attacker intercepting communications between two parties without their knowledge?",
+      "question": "Which of the following security controls is considered a detective control?",
       "options": [
-        "Denial-of-Service (DoS) attacks overwhelm systems rather than intercept communications.",
-        "Man-in-the-Middle (MitM) attacks involve secretly intercepting and possibly altering communications between parties.",
-        "SQL Injection targets databases via malicious queries.",
-        "Phishing deceives users but does not intercept active communications."
+        "Security awareness training",
+        "Intrusion detection system (IDS)",
+        "Data encryption",
+        "Multi-factor authentication (MFA)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A MitM attack involves secretly intercepting and potentially altering communications. DoS overwhelms a system, SQL injection targets databases, and phishing uses deception.",
-      "examTip": "Man-in-the-Middle attacks can be very difficult to detect without proper security measures."
+      "explanation": "Detective controls, such as an IDS, monitor systems and alert administrators to potential security incidents.\n\nSecurity awareness training is a preventive control.\nData encryption is a preventive control for confidentiality.\nMFA is an authentication control, not a detective control.",
+      "examTip": "Detective controls identify security breaches but do not prevent them."
     },
     {
       "id": 45,
-      "question": "Which cryptographic algorithm is commonly used for digital signatures?",
+      "question": "Which of the following is a characteristic of a rootkit?",
       "options": [
-        "AES is a symmetric encryption algorithm not typically used for digital signatures.",
-        "DES is outdated and not suitable for modern digital signature applications.",
-        "RSA, an asymmetric algorithm, is widely used for digital signatures and encryption.",
-        "Twofish is a symmetric cipher and is not common for digital signatures."
+        "It spreads automatically without user interaction.",
+        "It modifies system files to evade detection.",
+        "It encrypts files and demands ransom payments.",
+        "It disguises itself as legitimate software updates."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "RSA is widely used for digital signatures (and encryption). AES, DES, and Twofish are symmetric encryption algorithms.",
-      "examTip": "RSA is a versatile algorithm used for both encryption and digital signatures."
+      "correctAnswerIndex": 1,
+      "explanation": "Rootkits modify system files to evade detection and maintain persistent access to a compromised system.\n\nWorms spread automatically without user interaction.\nRansomware encrypts files and demands payment.\nTrojans disguise themselves as legitimate software updates.",
+      "examTip": "Rootkits are difficult to detect because they embed themselves deep within the operating system."
     },
     {
       "id": 46,
-      "question": "What is the purpose of a 'backout plan' in change management?",
+      "question": "Which of the following is the BEST way to secure sensitive data stored in a cloud environment?",
       "options": [
-        "Documenting the changes made to a system is important but not the function of a backout plan.",
-        "Testing changes before implementation is a separate part of the process.",
-        "Reverting to the previous state if the new changes cause problems is the primary purpose of a backout plan.",
-        "Obtaining approval for changes is part of change management but not the backout strategy."
+        "Relying on cloud provider security settings",
+        "Using encryption before uploading files",
+        "Enforcing complex passwords for cloud accounts",
+        "Backing up data to an external drive"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A backout plan (or rollback plan) defines how to undo changes if they are unsuccessful. Documentation, testing, and approval are separate parts of the change management process.",
-      "examTip": "Always have a backout plan in case something goes wrong during a system change."
+      "correctAnswerIndex": 1,
+      "explanation": "Encrypting files before uploading them ensures confidentiality, even if the cloud provider is compromised.\n\nRelying solely on the cloud provider's security settings is risky.\nComplex passwords protect accounts but do not secure stored data.\nBackups ensure availability but do not provide encryption.",
+      "examTip": "Use client-side encryption to secure data before uploading it to the cloud."
     },
     {
       "id": 47,
-      "question": "An employee receives an email that appears to be from their bank, asking them to click a link and verify their account details. What should the employee do?",
+      "question": "An attacker has gained unauthorized access to a user’s account and is accessing files remotely. Which security control would have BEST prevented this attack?",
       "options": [
-        "Clicking the link and entering account details risks exposing sensitive credentials.",
-        "Forwarding the email to a personal account does nothing to verify its authenticity.",
-        "Contacting the bank directly through a trusted phone number or website to verify the email is the safest approach.",
-        "Replying to the email for additional information could confirm your details to attackers."
+        "Firewall rules",
+        "Multi-factor authentication (MFA)",
+        "Antivirus software",
+        "Disabling unused network ports"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Contacting the bank directly through a trusted channel is the safest way to verify the email's authenticity. Clicking links or replying to suspicious emails can lead to phishing attacks.",
-      "examTip": "Never trust unsolicited emails asking for sensitive information. Always verify independently."
+      "correctAnswerIndex": 1,
+      "explanation": "MFA would have added an extra layer of security, preventing unauthorized access even if credentials were compromised.\n\nFirewalls filter traffic but do not prevent credential theft.\nAntivirus software detects malware but does not prevent account takeovers.\nDisabling unused ports improves security but would not prevent an attacker with stolen credentials.",
+      "examTip": "MFA significantly reduces the risk of unauthorized account access."
     },
     {
       "id": 48,
-      "question": "What is a common vulnerability associated with web applications?",
+      "question": "Which of the following BEST describes a watering hole attack?",
       "options": [
-        "Weak passwords are a common issue but not specific to web applications.",
-        "Cross-Site Scripting (XSS) allows attackers to inject malicious scripts into web pages.",
-        "Lack of physical security affects hardware rather than web app vulnerabilities.",
-        "Unpatched operating systems impact overall security but XSS is specific to web apps."
+        "An attacker injects malicious code into a frequently visited website.",
+        "An attacker impersonates a trusted source in an email.",
+        "An attacker uses brute-force techniques to guess user credentials.",
+        "An attacker gains physical access to a restricted area."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "XSS is a web application vulnerability. Weak passwords are a general vulnerability, lack of physical security is a physical threat, and unpatched OS applies to systems, not specifically web apps.",
-      "examTip": "Web application security requires specific testing and mitigation techniques."
+      "correctAnswerIndex": 0,
+      "explanation": "A watering hole attack involves injecting malicious code into a website that is frequently visited by the target audience.\n\nPhishing attacks use impersonation in emails.\nBrute-force attacks involve repeatedly guessing credentials.\nPhysical access attacks require gaining entry to a secure location.",
+      "examTip": "Watering hole attacks compromise trusted websites to target specific users."
     },
     {
       "id": 49,
-      "question": "What is the main purpose of data loss prevention (DLP) systems?",
+      "question": "Which of the following provides the STRONGEST authentication?",
       "options": [
-        "Encrypting data at rest protects confidentiality but is not the focus of DLP.",
-        "Preventing unauthorized data exfiltration or leakage by monitoring data flows is the primary function of DLP.",
-        "Backing up data to remote locations ensures availability but does not stop data leakage.",
-        "Detecting malware on endpoints is managed by antivirus software, not DLP systems."
+        "Username and password",
+        "Biometric scan and password",
+        "Security questions and PIN",
+        "Single sign-on (SSO)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "DLP focuses on preventing sensitive data from leaving the organization's control. Encryption protects data confidentiality, backups ensure availability, and antivirus detects malware.",
-      "examTip": "DLP is like a security guard for your data, preventing it from being stolen or leaked."
+      "explanation": "Using a biometric scan (something you are) along with a password (something you know) provides strong multifactor authentication.\n\nUsername and password are weak and prone to attacks.\nSecurity questions and PIN are both knowledge-based factors, making them less secure.\nSSO simplifies authentication but does not strengthen it.",
+      "examTip": "For the strongest authentication, combine different factor types (knowledge, possession, and biometrics)."
     },
     {
       "id": 50,
-      "question": "What is a 'rainbow table' used for in the context of password cracking?",
+      "question": "Which of the following attack types exploits vulnerabilities in dynamic web pages by injecting malicious scripts?",
       "options": [
-        "Generating strong, random passwords is not the function of rainbow tables.",
-        "Storing pre-computed hash values to expedite password cracking attempts is the primary purpose of a rainbow table.",
-        "Encrypting passwords with complex algorithms is a different process.",
-        "Managing user accounts and permissions is unrelated to rainbow tables."
+        "SQL Injection",
+        "Cross-site scripting (XSS)",
+        "Man-in-the-middle (MITM)",
+        "Denial-of-service (DoS)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Rainbow tables are pre-calculated tables of password hashes, used to speed up password cracking. They are not for generating passwords, encrypting them, or managing accounts.",
-      "examTip": "Rainbow tables are a powerful tool for attackers, highlighting the importance of strong password policies and salting."
+      "explanation": "XSS attacks inject malicious scripts into web pages, which then execute in a user's browser.\n\nSQL Injection targets databases.\nMITM attacks intercept communications.\nDoS attacks flood a system with traffic to cause disruption.",
+      "examTip": "To prevent XSS, implement input validation and use secure coding practices."
     },
     {
       "id": 51,
-      "question": "",
+      "question": "Which of the following is the PRIMARY purpose of a firewall?",
       "options": [
-        "Deleting the files and emptying the recycle bin only removes file pointers and leaves data recoverable.",
-        "Formatting the hard drive may leave residual data accessible with advanced forensic tools.",
-        "Performing a single-pass overwrite might not completely eliminate data remnants.",
-        "Physically destroying the hard drive ensures that data is irrecoverable."
+        "To detect and remove malware from systems",
+        "To prevent unauthorized network access",
+        "To encrypt data in transit",
+        "To filter spam emails"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Physically destroying the hard drive is the most secure method, ensuring data is unrecoverable. Deleting and formatting don't fully erase data, and even a single overwrite might be recoverable with advanced techniques. Multiple overwrites are good, but destruction is best for highly sensitive data.",
-      "examTip": "For maximum security when disposing of storage media, physical destruction is the recommended approach."
+      "correctAnswerIndex": 1,
+      "explanation": "Firewalls are designed to prevent unauthorized access to or from a network by filtering incoming and outgoing traffic.\n\nAntivirus software, not firewalls, removes malware.\nEncryption secures data but is not a firewall function.\nSpam filters handle unwanted emails, not network access control.",
+      "examTip": "Firewalls are essential for blocking unauthorized access and filtering network traffic."
     },
     {
       "id": 52,
-      "question": "Which type of attack involves exploiting a vulnerability in a web application to gain unauthorized access to the underlying database?",
+      "question": "Which of the following authentication protocols is used to securely exchange encryption keys over an untrusted network?",
       "options": [
-        "Cross-Site Scripting (XSS) targets web browsers, not databases.",
-        "SQL Injection exploits vulnerabilities in web application queries to access databases.",
-        "Denial-of-Service (DoS) aims to overwhelm systems rather than gain access.",
-        "Man-in-the-Middle (MitM) intercepts communications instead of exploiting database vulnerabilities."
+        "Secure Sockets Layer (SSL)",
+        "Diffie-Hellman",
+        "Lightweight Directory Access Protocol (LDAP)",
+        "Challenge-Handshake Authentication Protocol (CHAP)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SQL injection targets databases by injecting malicious SQL code. XSS targets users, DoS overwhelms systems, and MitM intercepts communications.",
-      "examTip": "SQL injection is a serious threat to web applications that interact with databases."
+      "explanation": "The Diffie-Hellman algorithm is used to securely exchange encryption keys over an untrusted network without transmitting the actual key.\n\nSSL encrypts data but does not primarily focus on key exchange.\nLDAP is used for directory services authentication.\nCHAP is used for remote authentication but not key exchange.",
+      "examTip": "Diffie-Hellman allows secure key exchange even over insecure channels."
     },
     {
       "id": 53,
-      "question": "What is the purpose of a 'sandbox' in computer security?",
+      "question": "Which of the following attacks involves intercepting network traffic and potentially modifying it in real time?",
       "options": [
-        "Storing backup copies of important files is not the function of a sandbox.",
-        "Providing a restricted, isolated environment for safely running untrusted code without affecting the host system.",
-        "Encrypting data stored on a hard drive is unrelated to sandboxing.",
-        "Managing user accounts and permissions is not associated with sandbox environments."
+        "Denial-of-service (DoS) attack",
+        "Man-in-the-middle (MITM) attack",
+        "SQL Injection attack",
+        "Cross-site scripting (XSS) attack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A sandbox isolates untrusted code, preventing it from harming the host system.  It's not for backups, encryption, or user account management.",
-      "examTip": "Sandboxing is a common technique used by antivirus software and web browsers to execute potentially malicious code safely."
+      "explanation": "MITM attacks intercept and modify communication between two parties without their knowledge.\n\nDoS attacks overwhelm a system with traffic.\nSQL Injection targets databases.\nXSS exploits web vulnerabilities but does not intercept traffic.",
+      "examTip": "To mitigate MITM attacks, use encryption protocols like TLS and VPNs."
     },
     {
       "id": 54,
-      "question": "What is 'shoulder surfing'?",
+      "question": "A user reports receiving an email from their bank asking them to verify account details via a provided link. What type of attack is this?",
       "options": [
-        "A network attack involves digital intrusion, not physical observation.",
-        "A social engineering technique where an attacker observes a user entering sensitive information in person.",
-        "A method for encrypting data is unrelated to shoulder surfing.",
-        "A type of malware infects systems, which is not what shoulder surfing entails."
+        "Spear phishing",
+        "Phishing",
+        "Smishing",
+        "Whaling"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Shoulder surfing is the act of looking over someone's shoulder to steal information. It's not a network attack, encryption method, or malware.",
-      "examTip": "Be aware of your surroundings when entering passwords or other sensitive information."
+      "explanation": "Phishing attacks attempt to trick users into revealing sensitive information by posing as a trusted entity.\n\nSpear phishing is a targeted form of phishing.\nSmishing is phishing conducted via SMS.\nWhaling targets high-profile individuals, such as executives.",
+      "examTip": "Always verify the legitimacy of emails requesting sensitive information before taking action."
     },
     {
       "id": 55,
-      "question": "What is 'credential stuffing'?",
+      "question": "Which of the following security measures is used to verify the integrity of a file or message?",
       "options": [
-        "A method to bypass multi-factor authentication is not what credential stuffing involves.",
-        "The automated injection of stolen username/password pairs across multiple sites to gain unauthorized access.",
-        "A phishing technique that targets high-level executives is more aligned with whaling.",
-        "A technique for encrypting data at rest is unrelated to credential stuffing."
+        "Symmetric encryption",
+        "Public key infrastructure (PKI)",
+        "Hashing",
+        "Multifactor authentication (MFA)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Credential stuffing utilizes stolen credentials from one breach to try and access other accounts. It does not bypass MFA necessarily, isn't specific to high-level executives, and is unrelated to encryption.",
-      "examTip": "Credential stuffing highlights the danger of password reuse across multiple sites."
+      "correctAnswerIndex": 2,
+      "explanation": "Hashing generates a unique fixed-length output (hash) to verify data integrity without encrypting the data.\n\nSymmetric encryption secures data confidentiality, not integrity.\nPKI manages digital certificates and encryption keys.\nMFA secures authentication but does not verify file integrity.",
+      "examTip": "Hashing is used to ensure data integrity, while encryption ensures confidentiality."
     },
     {
       "id": 56,
-      "question": "You are tasked with hardening a newly installed web server. Which of the following actions should you take?",
+      "question": "Which of the following attacks is designed to consume all available system resources, preventing legitimate users from accessing a service?",
       "options": [
-        "Leaving all default ports open for easy access increases the attack surface.",
-        "Disabling unnecessary services and applications to reduce potential vulnerabilities.",
-        "Using a weak administrator password for convenience greatly compromises security.",
-        "Installing all available software packages can introduce unneeded vulnerabilities."
+        "Man-in-the-middle (MITM) attack",
+        "Denial-of-service (DoS) attack",
+        "Brute-force attack",
+        "Session hijacking"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Disabling unnecessary services reduces the attack surface. Leaving default ports open, using weak passwords, and installing unnecessary software all increase vulnerability.",
-      "examTip": "Server hardening involves minimizing the attack surface and configuring secure settings."
+      "explanation": "DoS attacks flood a system with excessive requests, exhausting its resources and causing service disruptions.\n\nMITM attacks intercept and manipulate network traffic.\nBrute-force attacks attempt to guess passwords.\nSession hijacking takes control of an active user session.",
+      "examTip": "To mitigate DoS attacks, use rate limiting, firewalls, and traffic filtering solutions."
     },
     {
       "id": 57,
-      "question": "Which type of log file would MOST likely contain information about failed login attempts on a Windows server?",
+      "question": "Which of the following is the BEST way to protect a password database from being compromised?",
       "options": [
-        "The Application Log records software-specific events rather than detailed security events.",
-        "The System Log tracks system-level events but not detailed security incidents.",
-        "The Security Log documents security-related events, including failed login attempts.",
-        "The Setup Log focuses on installation events rather than ongoing security monitoring."
+        "Encrypt stored passwords",
+        "Store passwords in plain text",
+        "Use short passwords to improve performance",
+        "Only allow complex passwords"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "The Security Log in Windows records security-related events, including failed logins. Application, System, and Setup logs track other types of events.",
-      "examTip": "The Windows Security Log is a critical resource for auditing and investigating security incidents."
+      "correctAnswerIndex": 0,
+      "explanation": "Encrypting stored passwords ensures they remain secure even if the database is compromised.\n\nStoring passwords in plain text makes them vulnerable to theft.\nShort passwords are easier to crack.\nComplex passwords improve security but do not protect stored passwords if they are not encrypted.",
+      "examTip": "Always store passwords using strong hashing algorithms and encryption to prevent exposure."
     },
     {
       "id": 58,
-      "question": "Which of the following is a characteristic of a 'stateful' firewall?",
+      "question": "Which of the following would BEST prevent an unauthorized user from accessing a company’s network from a stolen laptop?",
       "options": [
-        "Examining each packet in isolation is typical of a stateless firewall.",
-        "Keeping track of the state of network connections to make informed filtering decisions.",
-        "Filtering traffic based solely on source and destination IP addresses is a basic, stateless function.",
-        "Being less secure than a stateless firewall is incorrect; stateful firewalls are generally more secure."
+        "Implementing full-disk encryption",
+        "Using a screen saver password",
+        "Changing the network firewall settings",
+        "Requiring employees to sign an acceptable use policy"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Stateful firewalls track connection states (e.g., TCP sessions), providing more context for filtering decisions. Stateless firewalls examine packets individually. Stateful firewalls are generally more secure.",
-      "examTip": "Stateful firewalls provide better security by understanding the context of network traffic."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption ensures that data on a stolen laptop cannot be accessed without the encryption key.\n\nA screen saver password only prevents access to an active session, not the entire system.\nChanging firewall settings does not secure a stolen device.\nAn acceptable use policy is important but does not provide physical security.",
+      "examTip": "Full-disk encryption protects data on lost or stolen devices by preventing unauthorized access."
     },
     {
       "id": 59,
-      "question": "What is the primary function of an Intrusion Prevention System (IPS)?",
+      "question": "Which security model enforces access controls based on security labels and classifications, such as 'Top Secret' and 'Confidential'?",
       "options": [
-        "Detecting and logging malicious network activity is typically the role of an IDS.",
-        "Actively blocking or mitigating detected intrusions is the core function of an IPS.",
-        "Encrypting network traffic is handled by VPNs and encryption protocols.",
-        "Providing a virtual private network connection is not within the scope of an IPS."
+        "Discretionary Access Control (DAC)",
+        "Mandatory Access Control (MAC)",
+        "Role-Based Access Control (RBAC)",
+        "Rule-Based Access Control"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "An IPS actively blocks or prevents intrusions. An IDS detects and logs, but does not typically take action.  The other options describe VPNs and encryption.",
-      "examTip": "An IPS is like a security guard who can *stop* intruders, not just watch them."
+      "explanation": "MAC enforces strict security classifications, requiring users to have the appropriate clearance to access information.\n\nDAC allows owners to set permissions.\nRBAC assigns access based on job roles, not classifications.\nRule-Based Access Control grants or denies access based on predefined rules.",
+      "examTip": "MAC is commonly used in government and military environments for enforcing strict access controls."
     },
     {
       "id": 60,
-      "question": "What is a common method used by attackers to exploit software vulnerabilities?",
+      "question": "Which of the following is an example of a physical security control?",
       "options": [
-        "Social engineering manipulates human behavior rather than directly exploiting software vulnerabilities.",
-        "Buffer overflow attacks exploit flaws in memory handling within software.",
-        "Physical theft of devices is a risk but does not involve software exploitation.",
-        "Shoulder surfing targets user input, not software vulnerabilities."
+        "Encryption",
+        "Biometric authentication",
+        "Access control lists (ACLs)",
+        "Firewall rules"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Buffer overflows exploit vulnerabilities in how software handles data in memory. Social engineering, physical theft, and shoulder surfing are different attack vectors.",
-      "examTip": "Buffer overflow attacks are a classic example of exploiting software vulnerabilities."
+      "explanation": "Biometric authentication is a physical security control that restricts access based on unique biological traits.\n\nEncryption is a data protection method, not a physical control.\nACLs are logical access controls, not physical ones.\nFirewall rules regulate network traffic but do not control physical access.",
+      "examTip": "Physical security controls include locks, biometric scanners, and security guards."
     },
     {
       "id": 61,
-      "question": "Which type of malware is designed to encrypt a user's files and demand a ransom for decryption?",
+      "question": "Which of the following protocols is used to securely transfer files over a network?",
       "options": [
-        "Spyware covertly collects information rather than encrypting files.",
-        "Ransomware encrypts files and then demands payment for the decryption key.",
-        "Rootkits are designed to hide their presence and provide unauthorized access.",
-        "Trojans disguise themselves as legitimate software but do not necessarily encrypt files."
+        "FTP",
+        "Telnet",
+        "SFTP",
+        "SNMP"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Ransomware encrypts files and demands payment. Spyware collects information, rootkits hide, and Trojans disguise themselves as legitimate software.",
-      "examTip": "Ransomware attacks can be devastating, highlighting the importance of backups and security awareness."
+      "correctAnswerIndex": 2,
+      "explanation": "SFTP (Secure File Transfer Protocol) encrypts file transfers over a network.\n\nFTP transmits data in plaintext, making it insecure.\nTelnet is used for remote access but is insecure.\nSNMP is used for network management, not file transfers.",
+      "examTip": "Use SFTP instead of FTP to securely transfer files over a network."
     },
     {
       "id": 62,
-      "question": "What is 'whaling' in the context of phishing attacks?",
+      "question": "Which type of attack attempts to redirect a domain name to a fraudulent website by altering DNS records?",
       "options": [
-        "A generic phishing attack targeting a large number of users is not considered whaling.",
-        "Whaling targets high-profile individuals, such as CEOs, with highly tailored phishing attempts.",
-        "Phishing via voice calls is known as vishing.",
-        "Redirecting users to fake websites describes pharming."
+        "Phishing",
+        "DNS poisoning",
+        "Man-in-the-middle (MITM)",
+        "Brute-force attack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Whaling specifically targets high-value individuals. Generic phishing targets many users, vishing uses voice, and pharming redirects to fake sites.",
-      "examTip": "Whaling attacks are often highly customized and sophisticated."
+      "explanation": "DNS poisoning alters DNS records to redirect users to malicious websites.\n\nPhishing involves deceptive emails.\nMITM intercepts and manipulates communication.\nBrute-force attacks attempt to guess passwords.",
+      "examTip": "Prevent DNS poisoning by using DNSSEC to ensure integrity of DNS records."
     },
     {
       "id": 63,
-      "question": "What is the purpose of the principle of 'separation of duties'?",
+      "question": "Which of the following is the BEST way to prevent unauthorized devices from connecting to a corporate Wi-Fi network?",
       "options": [
-        "Ensuring that users have unrestricted access to all resources is contrary to separation of duties.",
-        "Dividing critical tasks among multiple individuals to reduce the risk of fraud or errors.",
-        "Encrypting data so it cannot be read without a decryption key is not related to separation of duties.",
-        "Backing up data to a remote location is a data preservation measure, not a control on duties."
+        "Enable MAC address filtering",
+        "Disable SSID broadcasting",
+        "Implement WPA3 authentication",
+        "Use a VPN for wireless connections"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Separation of duties prevents any single individual from having complete control over a critical process, reducing the risk of insider threats and malicious activity. It is distinct from access control, encryption and backups.",
-      "examTip": "Separation of duties is a key control for preventing internal threats and ensuring accountability."
+      "correctAnswerIndex": 2,
+      "explanation": "WPA3 provides strong encryption and authentication, preventing unauthorized access.\n\nMAC address filtering can be bypassed by spoofing.\nDisabling SSID broadcasting hides the network but does not prevent connections.\nVPNs secure network traffic but do not prevent unauthorized device connections.",
+      "examTip": "WPA3 is the most secure Wi-Fi authentication standard and should be used whenever possible."
     },
     {
       "id": 64,
-      "question": "What is the purpose of a Certificate Revocation List (CRL)?",
+      "question": "Which of the following is an example of a compensating security control?",
       "options": [
-        "Storing a list of trusted Certificate Authorities is not the role of a CRL.",
-        "Listing certificates that have been revoked before their expiration date to ensure they are no longer trusted.",
-        "Generating new digital certificates is the function of a CA.",
-        "Encrypting data using public key cryptography is not a function of a CRL."
+        "Using encryption when multi-factor authentication (MFA) is unavailable",
+        "Configuring a firewall to allow all outbound traffic",
+        "Providing administrative access to all employees",
+        "Using a default password for new user accounts"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A CRL contains a list of certificates that are no longer valid.  It's not a list of CAs, a certificate generator, or an encryption tool.",
-      "examTip": "Checking the CRL is essential to ensure that a digital certificate is still valid."
+      "correctAnswerIndex": 0,
+      "explanation": "A compensating control provides alternative security when a primary control is not feasible, such as using encryption instead of MFA.\n\nAllowing all outbound traffic weakens security.\nGiving all employees administrative access is a security risk.\nUsing default passwords increases vulnerability.",
+      "examTip": "Compensating controls mitigate risks when preferred security measures are not possible."
     },
     {
       "id": 65,
-      "question": "What is the main function of a proxy server in a network?",
+      "question": "Which of the following is the BEST example of a preventive security control?",
       "options": [
-        "Providing a direct connection to the internet bypasses the intermediary role of a proxy.",
-        "Acting as an intermediary between clients and servers to enhance security and performance.",
-        "Encrypting data transmitted over the network is typically handled by VPNs.",
-        "Managing user accounts and permissions is the function of identity management systems."
+        "Security logs",
+        "Antivirus software",
+        "Incident response plans",
+        "Forensic analysis"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Proxy servers act as intermediaries, forwarding requests and responses between clients and servers. They don't provide direct connections, encrypt data (primarily), or handle authentication (primarily).",
-      "examTip": "Proxy servers can improve security, performance, and provide content filtering."
+      "explanation": "Antivirus software prevents malware infections before they occur.\n\nSecurity logs record events but do not prevent them.\nIncident response plans help after a breach has occurred.\nForensic analysis is used for investigation, not prevention.",
+      "examTip": "Preventive controls aim to stop security incidents before they happen."
     },
     {
       "id": 66,
-      "question": "What is the purpose of using a 'canary' in the context of software security?",
+      "question": "Which of the following is a common technique used in social engineering attacks?",
       "options": [
-        "Encrypting data stored in a database is unrelated to canary usage.",
-        "Placing a known value in memory to detect buffer overflow attacks by verifying if the value has been altered.",
-        "Monitoring network traffic for malicious activity is the role of IDS/IPS, not canaries.",
-        "Providing a secure channel for remote access is achieved by VPNs, not by using a canary."
+        "Using a vulnerability scanner",
+        "Exploiting human trust through deception",
+        "Running automated password cracking tools",
+        "Intercepting network traffic"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A canary is a value placed in memory to detect if a buffer overflow has overwritten it. It's not related to encryption, network monitoring, or remote access.",
-      "examTip": "Canaries are a simple but effective technique for detecting buffer overflows."
+      "explanation": "Social engineering exploits human trust to trick individuals into revealing sensitive information.\n\nVulnerability scanning identifies system weaknesses.\nPassword cracking is an automated attack method.\nNetwork interception is a technical attack, not social engineering.",
+      "examTip": "Always verify requests for sensitive information, even from seemingly trusted sources."
     },
     {
       "id": 67,
-      "question": "Which of the following is an example of a biometric authentication method?",
+      "question": "Which of the following authentication methods is the MOST resistant to credential theft?",
       "options": [
-        "A password, which is a knowledge-based factor rather than a biometric trait.",
-        "A security token, which relies on something you have rather than a physical characteristic.",
-        "A fingerprint scan, which uses unique biological features for authentication.",
-        "A smart card, which is a hardware token and not based on biometric data."
+        "Username and password",
+        "Two-factor authentication (2FA)",
+        "Security questions",
+        "Single sign-on (SSO)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Biometrics uses unique biological characteristics. Fingerprint scans are biometric, while passwords, tokens, and smart cards are not.",
-      "examTip": "Biometrics relies on 'something you are' for authentication."
+      "correctAnswerIndex": 1,
+      "explanation": "2FA requires a second authentication factor, making it more resistant to credential theft.\n\nPasswords alone are vulnerable to attacks.\nSecurity questions can be guessed or leaked.\nSSO simplifies authentication but does not add security by itself.",
+      "examTip": "Use 2FA to add an extra layer of protection against stolen credentials."
     },
     {
       "id": 68,
-      "question": "What is the difference between symmetric and asymmetric encryption?",
+      "question": "Which of the following security tools is used to scan for open ports on a network?",
       "options": [
-        "Symmetric encryption is generally faster, though its security depends on proper key management.",
-        "Asymmetric encryption uses a key pair (public and private) while symmetric encryption relies on a single shared key.",
-        "The distinction is not based on data in transit versus data at rest, as both methods have varied applications.",
-        "Both symmetric and asymmetric encryption are used in web browsers, so the difference is not about their usage context."
+        "Nmap",
+        "Wireshark",
+        "Metasploit",
+        "Burp Suite"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Asymmetric uses a key pair (public and private); symmetric uses a single shared key. While symmetric is generally faster, stating it's less secure isn't always true, as it depends on key management.",
-      "examTip": "Asymmetric encryption solves the key exchange problem inherent in symmetric encryption."
+      "correctAnswerIndex": 0,
+      "explanation": "Nmap is a network scanning tool used to identify open ports and services.\n\nWireshark is a packet analysis tool.\nMetasploit is used for penetration testing.\nBurp Suite is primarily for web security testing.",
+      "examTip": "Nmap is commonly used for network reconnaissance and vulnerability scanning."
     },
     {
       "id": 69,
-      "question": "Which of the following is the BEST description of a 'logic bomb'?",
+      "question": "Which of the following BEST mitigates the risk of a brute-force attack on user accounts?",
       "options": [
-        "Malware that spreads rapidly through a network is more characteristic of a worm.",
-        "A logic bomb is dormant malware that triggers when a specific event or condition is met.",
-        "Malware that surreptitiously collects user data is typically classified as spyware.",
-        "Malware that encrypts files and demands a ransom is known as ransomware."
+        "Using complex passwords",
+        "Enforcing account lockout policies",
+        "Implementing single sign-on (SSO)",
+        "Using antivirus software"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Logic bombs activate upon a specific condition (date, time, file deletion, etc.). Worms spread, spyware collects data, and ransomware encrypts.",
-      "examTip": "Logic bombs are often used for sabotage, triggered by a specific event."
+      "explanation": "Account lockout policies prevent repeated failed login attempts, stopping brute-force attacks.\n\nComplex passwords improve security but do not prevent automated attacks.\nSSO simplifies authentication but does not mitigate brute-force attempts.\nAntivirus software detects malware but does not protect against password attacks.",
+      "examTip": "Use account lockout policies and CAPTCHA to defend against brute-force attacks."
     },
     {
       "id": 70,
-      "question": "Which of the following would be considered PII (Personally Identifiable Information)?",
+      "question": "Which of the following security measures ensures that system files remain unchanged unless authorized modifications are made?",
       "options": [
-        "A user's favorite color, which does not uniquely identify an individual.",
-        "A user's IP address, which may be considered PII in certain contexts but is less direct.",
-        "A user's Social Security number, which directly identifies an individual and is highly sensitive.",
-        "A user's computer's operating system, which is not considered personally identifiable information."
+        "Encryption",
+        "Access control lists (ACLs)",
+        "File integrity monitoring (FIM)",
+        "Multi-factor authentication (MFA)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A Social Security number directly identifies an individual.  Favorite color and OS are not identifying, and an IP address can be PII, but the SSN is the most direct and sensitive identifier.",
-      "examTip": "PII is any information that can be used to identify a specific person."
+      "explanation": "File integrity monitoring (FIM) detects unauthorized changes to system files, ensuring data integrity.\n\nEncryption protects confidentiality but does not monitor changes.\nACLs control access but do not detect unauthorized file modifications.\nMFA strengthens authentication but does not monitor file changes.",
+      "examTip": "FIM tools help detect unauthorized modifications to critical system files."
     },
     {
       "id": 71,
-      "question": "Which of the following is a key benefit of using a SIEM (Security Information and Event Management) system?",
+      "question": "Which of the following describes the role of a certificate authority (CA) in Public Key Infrastructure (PKI)?",
       "options": [
-        "Automated vulnerability patching is not a core function of SIEM systems.",
-        "Centralized log management with real-time analysis and correlation of security events enhances incident detection.",
-        "Data encryption at rest and in transit is handled by dedicated encryption solutions.",
-        "Automated user provisioning and de-provisioning is typically managed by identity management systems."
+        "Encrypting data transmissions",
+        "Generating encryption keys",
+        "Issuing and managing digital certificates",
+        "Performing vulnerability scans"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SIEM systems' core strength lies in aggregating logs from many sources and analyzing them in real-time to detect patterns and anomalies. While some SIEMs might integrate with other tools to perform actions like patching or user management, their primary role is centralized monitoring.",
-      "examTip": "SIEM is like a central nervous system for security, collecting and analyzing information from across the environment."
+      "correctAnswerIndex": 2,
+      "explanation": "A CA issues and manages digital certificates, ensuring the authenticity of users and devices in a PKI system.\n\nEncryption is performed using cryptographic algorithms, not by a CA.\nEncryption keys are generated by key management systems, not directly by CAs.\nVulnerability scanning is unrelated to PKI.",
+      "examTip": "The CA is a trusted entity responsible for issuing and managing digital certificates in PKI."
     },
     {
       "id": 72,
-      "question": "What is the primary goal of a Business Impact Analysis (BIA)?",
+      "question": "Which of the following security principles ensures that users are only given the minimum access necessary to perform their job functions?",
       "options": [
-        "Identifying and assessing all potential threats is part of risk assessment, not a BIA.",
-        "Determining the potential impact of disruptive events on critical business functions to prioritize recovery efforts.",
-        "Developing a plan for recovering from a disaster is the focus of disaster recovery planning.",
-        "Implementing security controls to prevent incidents is a part of risk mitigation rather than a BIA."
+        "Implicit deny",
+        "Separation of duties",
+        "Least privilege",
+        "Role-based access control (RBAC)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The BIA focuses on the consequences of disruption, prioritizing business functions and determining acceptable downtime (RTO) and data loss (RPO). Identifying threats is part of risk assessment, recovery planning is the DRP, and implementing controls is part of risk mitigation.",
-      "examTip": "BIA helps prioritize recovery efforts by understanding the impact of losing specific business functions."
+      "correctAnswerIndex": 2,
+      "explanation": "The least privilege principle ensures users only have the permissions necessary to perform their tasks, reducing security risks.\n\nImplicit deny blocks access unless explicitly granted but does not determine privilege levels.\nSeparation of duties prevents conflicts of interest but does not minimize access rights.\nRBAC assigns permissions based on roles, but least privilege applies across all access models.",
+      "examTip": "Always follow the least privilege principle to reduce the risk of insider threats and unauthorized access."
     },
     {
       "id": 73,
-      "question": "What is the purpose of a 'salt' in password hashing?",
+      "question": "Which of the following security measures helps prevent unauthorized access by verifying that a user has permission before executing a command?",
       "options": [
-        "Encrypting the password before storing it is not what salting does.",
-        "Adding a unique random string to a password before hashing to make precomputed rainbow table attacks more difficult.",
-        "Making the password longer and more complex is not the primary function of a salt.",
-        "Preventing users from choosing weak passwords is managed through policy, not salting."
+        "Authorization",
+        "Authentication",
+        "Auditing",
+        "Logging"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Salting adds a unique random value to each password before hashing. This defeats pre-computed rainbow tables. It's distinct from encryption, password complexity rules, or password policy enforcement.",
-      "examTip": "Salting is a critical defense against password cracking attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "Authorization determines whether a user has permission to execute a command or access a resource.\n\nAuthentication verifies identity but does not grant access rights.\nAuditing tracks user actions but does not enforce access control.\nLogging records events but does not control permissions.",
+      "examTip": "Authentication verifies identity, while authorization determines access permissions."
     },
     {
       "id": 74,
-      "question": "A company wants to allow employees to use their own mobile devices for work purposes. What type of policy should be implemented to address the security risks?",
+      "question": "Which of the following security measures helps prevent unauthorized access by requiring users to verify their identity using multiple authentication factors?",
       "options": [
-        "An Acceptable Use Policy (AUP) governs general IT usage but doesn't specifically address personal device security.",
-        "A Bring Your Own Device (BYOD) Policy is designed to manage and secure employees' personal devices when accessing corporate resources.",
-        "A Password Policy focuses on password requirements and does not cover device management.",
-        "A Data Retention Policy deals with how long data is stored, not with device usage."
+        "Single sign-on (SSO)",
+        "Multi-factor authentication (MFA)",
+        "Role-based access control (RBAC)",
+        "Discretionary access control (DAC)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A BYOD policy specifically addresses the security implications of personal devices accessing company resources. AUPs are broader, password policies focus on passwords, and data retention policies address data storage.",
-      "examTip": "BYOD policies balance employee convenience with the need to protect company data."
+      "explanation": "MFA enhances security by requiring multiple authentication factors, such as a password and a biometric scan.\n\nSSO simplifies authentication but does not require multiple factors.\nRBAC controls access based on roles, not authentication factors.\nDAC allows data owners to set permissions but does not enforce multi-factor authentication.",
+      "examTip": "MFA adds an extra layer of security, making it harder for attackers to gain unauthorized access."
     },
     {
       "id": 75,
-      "question": "What is the main difference between a vulnerability scan and a penetration test?",
+      "question": "Which of the following types of malware is designed to appear legitimate but secretly performs malicious actions in the background?",
       "options": [
-        "The distinction is not solely based on automation, as both can be automated or manual.",
-        "Vulnerability scans identify potential weaknesses, while penetration tests actively attempt to exploit them to assess real-world impact.",
-        "Both vulnerability scans and penetration tests can be performed by internal or external teams; this is not the primary difference.",
-        "Neither approach is inherently more comprehensive; they serve different purposes."
+        "Trojan",
+        "Ransomware",
+        "Worm",
+        "Rootkit"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The key difference is the action. Vulnerability scans identify potential vulnerabilities (like finding unlocked doors). Penetration tests go further by actively trying to exploit them (like trying to open the doors and see what's inside). Both can be automated/manual, and performed internally or externally. Cost varies.",
-      "examTip": "Think of a vulnerability scan as finding potential problems, and a penetration test as demonstrating the consequences of those problems."
+      "correctAnswerIndex": 0,
+      "explanation": "A Trojan disguises itself as legitimate software while secretly performing malicious activities.\n\nRansomware encrypts files and demands payment.\nWorms spread without user interaction.\nRootkits embed themselves deep in the system to evade detection.",
+      "examTip": "Always verify software sources before downloading to avoid Trojan infections."
     },
     {
       "id": 76,
-      "question": "Which type of attack involves an attacker inserting malicious code into a database query?",
+      "question": "Which of the following BEST describes the purpose of a VPN?",
       "options": [
-        "Cross-Site Scripting (XSS) targets web page content rather than database queries.",
-        "SQL Injection involves inserting malicious SQL code into queries to manipulate databases.",
-        "Man-in-the-Middle (MitM) attacks intercept communications without inserting code into queries.",
-        "Denial-of-Service (DoS) attacks aim to overwhelm systems rather than manipulate database queries."
+        "To accelerate internet speed",
+        "To protect network traffic using encryption",
+        "To provide unlimited access to restricted websites",
+        "To replace firewalls for network security"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SQL injection targets databases by inserting malicious SQL code. XSS targets users, MitM intercepts communications, and DoS attacks disrupt service.",
-      "examTip": "SQL injection can give attackers control over a database and access to sensitive data."
+      "explanation": "A VPN encrypts network traffic, ensuring secure communication over untrusted networks.\n\nVPNs do not increase internet speed.\nThey may bypass restrictions but are primarily used for secure access.\nFirewalls control traffic but do not encrypt it like a VPN does.",
+      "examTip": "Use a VPN when accessing public Wi-Fi to protect sensitive data from interception."
     },
     {
       "id": 77,
-      "question": "",
+      "question": "Which of the following techniques is commonly used in brute-force attacks?",
       "options": [
-        "Acting as a network firewall is not the purpose of this specialized device.",
-        "Providing a secure, tamper-resistant environment for cryptographic key generation, storage, and management.",
-        "Storing user passwords securely is typically handled by other systems.",
-        "Monitoring network traffic for intrusions is the role of IDS/IPS, not this device."
+        "Guessing passwords systematically",
+        "Exploiting software vulnerabilities",
+        "Injecting malicious code into databases",
+        "Intercepting network traffic"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "HSMs are specialized, tamper-resistant hardware devices designed to securely manage cryptographic keys and perform cryptographic operations. They provide a much higher level of security than software-based key management.",
-      "examTip": "HSMs provide a higher level of security for cryptographic keys than software-based solutions."
+      "correctAnswerIndex": 0,
+      "explanation": "Brute-force attacks involve systematically guessing passwords until the correct one is found.\n\nExploiting software vulnerabilities is part of an exploit attack.\nSQL Injection injects malicious database queries.\nIntercepting network traffic is characteristic of MITM attacks.",
+      "examTip": "Use account lockout policies and strong password requirements to prevent brute-force attacks."
     },
     {
       "id": 78,
-      "question": "What is 'smishing'?",
+      "question": "Which security control is specifically designed to ensure data integrity?",
       "options": [
-        "A type of malware that infects mobile devices is not what smishing refers to.",
-        "A phishing attack that uses SMS text messages to lure victims into revealing sensitive information.",
-        "A method for encrypting data on mobile devices is unrelated to smishing.",
-        "A technique for bypassing multi-factor authentication is not characteristic of smishing."
+        "Hashing",
+        "Encryption",
+        "Access control lists (ACLs)",
+        "Multi-factor authentication (MFA)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Smishing is phishing via SMS. It's not malware, a method of encryption, or an MFA bypass.",
-      "examTip": "Be cautious of unsolicited text messages asking for personal information or clicking links."
+      "correctAnswerIndex": 0,
+      "explanation": "Hashing ensures data integrity by generating a unique, irreversible value that changes if the data is modified.\n\nEncryption protects confidentiality but does not verify integrity.\nACLs control access but do not guarantee data integrity.\nMFA secures authentication but does not verify data integrity.",
+      "examTip": "Use hashing to ensure data integrity and detect unauthorized modifications."
     },
     {
       "id": 79,
-      "question": "Which type of attack involves an attacker gaining unauthorized access to a system by exploiting a vulnerability in the operating system or application software?",
+      "question": "Which of the following describes an on-path attack (formerly known as a man-in-the-middle attack)?",
       "options": [
-        "Social Engineering manipulates individuals rather than exploiting software vulnerabilities.",
-        "Privilege Escalation exploits software vulnerabilities to gain elevated access on a system.",
-        "Denial-of-Service (DoS) attacks are intended to disrupt service, not to gain unauthorized access.",
-        "Phishing deceives users into revealing credentials, which is different from exploiting software flaws."
+        "Intercepting and modifying communication between two parties",
+        "Overloading a system with excessive network traffic",
+        "Using stolen credentials to access a system",
+        "Executing malicious scripts within a website"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Privilege escalation involves gaining higher-level access (e.g., administrator) by exploiting vulnerabilities. Social engineering manipulates people, DoS disrupts availability, and phishing uses deception.",
-      "examTip": "Privilege escalation is a common goal for attackers after gaining initial access to a system."
+      "correctAnswerIndex": 0,
+      "explanation": "An on-path (MITM) attack intercepts and modifies communication between two parties without their knowledge.\n\nA DoS attack overloads a system with traffic.\nUsing stolen credentials is an unauthorized access attack.\nExecuting malicious scripts within a website describes an XSS attack.",
+      "examTip": "Use TLS encryption and VPNs to prevent MITM attacks."
     },
     {
       "id": 80,
-      "question": "What is the primary purpose of data encryption?",
+      "question": "Which of the following BEST protects against unauthorized wireless network access?",
       "options": [
-        "Preventing data from being copied or moved is not achieved through encryption.",
-        "Protecting the confidentiality of data by transforming it into an unreadable format without the decryption key.",
-        "Backing up data to a secure location is not the role of encryption.",
-        "Detecting and removing malware is handled by antivirus software, not encryption."
+        "MAC address filtering",
+        "Disabling SSID broadcasting",
+        "Using WPA3 encryption",
+        "Lowering the router's transmission power"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Encryption transforms data into an unreadable format, protecting its confidentiality. It doesn't prevent copying, back up data, or detect malware.",
-      "examTip": "Encryption is essential for protecting sensitive data, both at rest and in transit."
+      "correctAnswerIndex": 2,
+      "explanation": "WPA3 encryption provides the strongest wireless security, protecting against unauthorized access.\n\nMAC filtering is easily bypassed.\nDisabling SSID broadcasting only hides the network but does not prevent access.\nLowering transmission power reduces signal range but does not ensure security.",
+      "examTip": "Always use WPA3 encryption to secure wireless networks against unauthorized access."
     },
     {
       "id": 81,
-      "question": "What is the purpose of a DMZ (Demilitarized Zone) in a network?",
+      "question": "Which type of malware is designed to self-replicate without needing user interaction?",
       "options": [
-        "Hosting internal servers in a DMZ exposes them to external threats.",
-        "Providing a buffer zone that isolates publicly accessible servers from the internal network.",
-        "Storing backup copies of sensitive data is not the function of a DMZ.",
-        "Segmenting the network based on user roles is typically achieved with VLANs, not a DMZ."
+        "Trojan",
+        "Ransomware",
+        "Worm",
+        "Spyware"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DMZ acts as a buffer between the public internet and the private internal network, hosting servers that need to be accessible from the outside (e.g., web servers, email servers) while protecting the internal network.",
-      "examTip": "Think of a DMZ as a 'neutral zone' between your trusted network and the untrusted internet."
+      "correctAnswerIndex": 2,
+      "explanation": "A worm is a type of malware that spreads automatically without user interaction.\n\nTrojans require users to execute them.\nRansomware encrypts files but does not self-replicate.\nSpyware collects user data but does not spread itself.",
+      "examTip": "Worms exploit vulnerabilities to spread across networks without user action."
     },
     {
       "id": 82,
-      "question": "What is the difference between a 'black hat' hacker and a 'white hat' hacker?",
+      "question": "Which of the following is an example of a preventive security measure?",
       "options": [
-        "Black hat hackers being more skilled than white hat hackers is not the defining difference.",
-        "Black hat hackers engage in illegal activities, while white hat hackers use their skills for ethical purposes like security testing.",
-        "Black hat hackers only target large corporations, while white hat hackers focus on individuals is an inaccurate generalization.",
-        "Black hat hackers use Linux while white hat hackers use Windows is irrelevant to their ethical differences."
+        "Security cameras",
+        "Intrusion detection system (IDS)",
+        "Firewalls",
+        "Incident response procedures"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The difference is intent. Black hats have malicious intent, while white hats (ethical hackers) use their skills to improve security. Skill level, targets, and OS preference are not defining factors.",
-      "examTip": "Ethical hacking (white hat) is a crucial part of cybersecurity, helping organizations identify and fix vulnerabilities before malicious actors can exploit them."
+      "correctAnswerIndex": 2,
+      "explanation": "Firewalls act as a preventive measure by filtering traffic to block unauthorized access.\n\nSecurity cameras monitor but do not prevent.\nIDS detects intrusions but does not prevent them.\nIncident response occurs after a security event.",
+      "examTip": "Preventive controls reduce security risks by stopping threats before they occur."
     },
     {
       "id": 83,
-      "question": "Which of the following is a common security measure used to protect against SQL injection attacks?",
+      "question": "Which of the following BEST mitigates the risk of zero-day vulnerabilities?",
       "options": [
-        "Employing input validation and parameterized queries to sanitize user input and prevent injection.",
-        "Using strong passwords for database accounts enhances security but does not prevent SQL injection.",
-        "Encrypting the database protects data confidentiality but doesn't stop injection attacks.",
-        "Implementing a firewall helps block some attacks but is not a direct defense against SQL injection."
+        "Applying patches regularly",
+        "Using outdated software",
+        "Relying solely on antivirus software",
+        "Using only open-source applications"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Input validation (checking user input for malicious code) and parameterized queries (using prepared statements) are the primary defenses against SQL injection. Strong passwords, encryption, and firewalls are important security measures, but they don't directly prevent SQL injection.",
-      "examTip": "Always sanitize and validate user input to prevent SQL injection and other code injection attacks."
+      "explanation": "Regular patching helps mitigate zero-day vulnerabilities by ensuring systems are updated against known threats.\n\nUsing outdated software increases security risks.\nAntivirus software may not detect zero-day exploits.\nOpen-source applications can still have vulnerabilities.",
+      "examTip": "Patch management is key to reducing exposure to zero-day vulnerabilities."
     },
     {
       "id": 84,
-      "question": "What is the purpose of a 'honeypot' in cybersecurity?",
+      "question": "Which of the following is an example of a deterrent security control?",
       "options": [
-        "Encrypting sensitive data stored on a server is not the function of a honeypot.",
-        "Attracting and trapping attackers in a decoy environment to analyze their methods and tools.",
-        "Providing a secure connection for remote access is managed by VPNs, not honeypots.",
-        "Filtering malicious traffic from entering a network is the role of a firewall."
+        "An alarm system that sounds when unauthorized access is detected",
+        "A firewall that blocks unauthorized network traffic",
+        "A security awareness training program",
+        "A visible security camera to discourage malicious activity"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A honeypot is a decoy system designed to lure attackers and gather information about their activities. It doesn't encrypt data, provide remote access, or filter traffic.",
-      "examTip": "Honeypots can provide valuable threat intelligence and help organizations understand attacker behavior."
+      "correctAnswerIndex": 3,
+      "explanation": "Deterrent controls, such as visible security cameras, discourage potential attackers from attempting unauthorized actions.\n\nAlarm systems are detective controls, alerting security teams to breaches.\nFirewalls are preventive controls that block threats.\nSecurity awareness training educates users but does not directly deter attackers.",
+      "examTip": "Deterrent controls do not actively stop attacks but discourage them from happening in the first place."
     },
     {
       "id": 85,
-      "question": "What is 'vishing'?",
+      "question": "Which of the following is a key function of a Security Information and Event Management (SIEM) system?",
       "options": [
-        "A type of malware that infects voice communication systems is not what vishing entails.",
-        "A phishing attack that uses voice calls or VoIP to trick individuals into revealing sensitive information.",
-        "A method for securing voice communications is not related to vishing.",
-        "A technique for bypassing two-factor authentication does not describe vishing."
+        "Blocking malicious network traffic",
+        "Monitoring and analyzing security events in real time",
+        "Encrypting sensitive data stored on a server",
+        "Preventing unauthorized access to wireless networks"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Vishing is voice phishing. It's not malware, a security method, or an MFA bypass technique.",
-      "examTip": "Be wary of unsolicited phone calls asking for personal information or requesting urgent action."
+      "explanation": "A SIEM system collects, monitors, and analyzes security events in real time to detect potential threats.\n\nFirewalls block malicious network traffic, not SIEMs.\nEncryption protects data confidentiality but is not a SIEM function.\nWireless security controls prevent unauthorized access, not SIEM systems.",
+      "examTip": "SIEM systems are crucial for centralized security monitoring and incident response."
     },
     {
       "id": 86,
-      "question": "You need to ensure that data stored on a laptop's hard drive is protected even if the laptop is stolen. What is the BEST solution?",
+      "question": "Which of the following is the BEST way to secure an IoT (Internet of Things) device?",
       "options": [
-        "Using a strong password on the user account may protect access but not the data if the drive is removed.",
-        "Full Disk Encryption (FDE) encrypts all data on the drive, rendering it unreadable without the decryption key.",
-        "Data Loss Prevention (DLP) software monitors data flows but doesn't secure data on a stolen device.",
-        "Remote wipe capability is a reactive measure and may not be reliable if the device is lost."
+        "Changing default credentials and applying updates",
+        "Disabling Wi-Fi connectivity",
+        "Only using IoT devices with weak encryption",
+        "Relying on the device manufacturer’s security settings"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "FDE encrypts the entire hard drive, making the data unreadable without the decryption key. A strong password protects the account, but the data itself is still accessible if the drive is removed. DLP prevents data leakage, and remote wipe is a reactive measure, not preventative like FDE.",
-      "examTip": "FDE is a crucial security measure for protecting data on portable devices."
+      "correctAnswerIndex": 0,
+      "explanation": "Changing default credentials and regularly applying updates significantly enhance IoT security by preventing unauthorized access and patching vulnerabilities.\n\nDisabling Wi-Fi connectivity limits functionality.\nUsing weak encryption increases security risks.\nManufacturer default settings may not provide sufficient security.",
+      "examTip": "Always change default passwords and keep IoT devices updated to prevent unauthorized access."
     },
     {
       "id": 87,
-      "question": "Which of the following is a characteristic of a 'zero-day' vulnerability?",
+      "question": "Which of the following BEST describes the function of an intrusion prevention system (IPS)?",
       "options": [
-        "It is a vulnerability that has been publicly disclosed, which does not qualify it as a zero-day.",
-        "It is a vulnerability that has a known patch available, meaning it is not zero-day.",
-        "It is a vulnerability that is unknown to the vendor and has no patch available at the time of discovery.",
-        "It is a vulnerability that is easy to exploit, which is not a defining feature."
+        "Detecting and alerting on suspicious activity",
+        "Blocking and preventing malicious activity in real time",
+        "Scanning endpoints for malware infections",
+        "Filtering spam emails before delivery"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A zero-day vulnerability is one that is unknown to the vendor and remains unpatched at the time of discovery. The 'zero' refers to the vendor having zero days to fix it before it was discovered/exploited. It may or may not be publicly disclosed, and difficulty of exploitation varies.",
-      "examTip": "Zero-day vulnerabilities are highly valuable to attackers because they are unpatched."
+      "correctAnswerIndex": 1,
+      "explanation": "An IPS actively blocks and prevents malicious activity in real time, stopping threats before they cause harm.\n\nAn IDS detects threats but does not prevent them.\nMalware scanners focus on endpoint protection.\nSpam filters help prevent phishing emails but are not IPS solutions.",
+      "examTip": "An IPS provides proactive security by blocking threats in real time, unlike an IDS, which only detects them."
     },
     {
       "id": 88,
-      "question": "What is the primary function of a web application firewall (WAF)?",
+      "question": "Which of the following attack types involves tricking a user into executing malicious code by disguising it as legitimate content?",
       "options": [
-        "Encrypting web traffic is not the main function of a WAF.",
-        "Filtering HTTP traffic to block malicious requests and protect web applications from attacks like XSS and SQL injection.",
-        "Managing user accounts and passwords for web applications is handled by identity services.",
-        "Providing a virtual private network connection for web browsing is not a function of a WAF."
+        "Phishing",
+        "Trojan horse",
+        "Man-in-the-middle (MITM)",
+        "Denial-of-service (DoS)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A WAF specifically protects web applications by filtering HTTP traffic and blocking malicious requests based on predefined rules and signatures. It doesn't primarily encrypt traffic, manage user accounts, or provide VPN services.",
-      "examTip": "A WAF is a specialized firewall designed to protect web applications."
+      "explanation": "A Trojan horse disguises itself as legitimate software while secretly executing malicious actions in the background.\n\nPhishing tricks users into revealing sensitive information but does not execute hidden malicious code.\nMITM attacks intercept communications.\nDoS attacks flood a system with traffic to disrupt service.",
+      "examTip": "Avoid downloading unverified software, as Trojans often pose as legitimate applications."
     },
     {
       "id": 89,
-      "question": "Which security principle dictates that users should only be given the minimum necessary access rights to perform their job duties?",
+      "question": "Which of the following security measures would be MOST effective in preventing privilege escalation attacks?",
       "options": [
-        "Separation of Duties divides responsibilities but is not solely about limiting access.",
-        "Least Privilege ensures users have only the access required to perform their tasks.",
-        "Defense in Depth involves multiple layers of security rather than minimal access.",
-        "Need to Know restricts information but is broader than just access rights."
+        "Disabling unused ports",
+        "Applying the principle of least privilege",
+        "Using multi-factor authentication (MFA)",
+        "Enforcing strong password policies"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Least privilege restricts access to the bare minimum required. Separation of duties divides responsibilities, defense in depth involves multiple security layers, and need-to-know is a related but broader concept about information access.",
-      "examTip": "Always apply the principle of least privilege when configuring user accounts and permissions."
+      "explanation": "The principle of least privilege ensures that users have only the minimum access necessary, reducing the risk of privilege escalation attacks.\n\nDisabling unused ports enhances security but does not directly prevent privilege escalation.\nMFA improves authentication security but does not control privilege levels.\nStrong passwords protect accounts but do not limit user privileges.",
+      "examTip": "Limit user permissions to the minimum necessary to perform job functions to prevent privilege escalation."
     },
     {
       "id": 90,
-      "question": "What is the purpose of a Security Information and Event Management (SIEM) system?",
+      "question": "Which of the following BEST describes the purpose of a honeynet?",
       "options": [
-        "Encrypting data at rest is not the function of a SIEM system.",
-        "Providing centralized, real-time monitoring and analysis of security logs and events from various sources.",
-        "Automatically patching software vulnerabilities is handled by other systems.",
-        "Managing user accounts and passwords is not within the scope of SIEM capabilities."
+        "To block malicious traffic before it enters the network",
+        "To lure attackers into a controlled environment for analysis",
+        "To encrypt sensitive data stored on a network",
+        "To provide network redundancy in case of an outage"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SIEM systems collect, aggregate, and analyze security logs, providing real-time monitoring and alerting. They are not primarily encryption tools, patch management systems, or user account managers.",
-      "examTip": "SIEM systems are essential for detecting and responding to security incidents."
+      "explanation": "A honeynet is a decoy network designed to attract attackers and analyze their behavior.\n\nFirewalls block malicious traffic but are not honeynets.\nEncryption secures data but does not involve trapping attackers.\nNetwork redundancy ensures uptime but is unrelated to honeynets.",
+      "examTip": "Honeynets help cybersecurity teams study attack methods in a controlled setting."
     },
     {
       "id": 91,
-      "question": "Which of the following is a common social engineering tactic used to gain unauthorized access to a building?",
+      "question": "Which of the following security controls would BEST protect against data exfiltration via USB devices?",
       "options": [
-        "Phishing targets digital communications rather than physical entry.",
-        "Tailgating involves following someone into a secure area without proper credentials.",
-        "Spear Phishing targets individuals via personalized emails, not physical access.",
-        "Whaling targets high-profile individuals through digital methods, not for building entry."
+        "Full-disk encryption",
+        "Data Loss Prevention (DLP)",
+        "Multi-factor authentication (MFA)",
+        "Strong password policies"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Tailgating (following someone closely through a secured entrance) is a physical social engineering technique. Phishing, spear phishing, and whaling are digital/communication-based attacks.",
-      "examTip": "Be aware of people trying to follow you into restricted areas without proper authorization."
+      "explanation": "DLP solutions monitor and block unauthorized data transfers, preventing exfiltration via USB devices.\n\nFull-disk encryption secures stored data but does not prevent unauthorized copying.\nMFA strengthens authentication but does not prevent data leaks.\nStrong password policies help protect accounts but do not stop data exfiltration.",
+      "examTip": "DLP solutions help prevent unauthorized data transfers via USB, email, and cloud services."
     },
     {
       "id": 92,
-      "question": "What is the primary purpose of a VPN (Virtual Private Network)?",
+      "question": "Which of the following is the PRIMARY goal of a security awareness training program?",
       "options": [
-        "Blocking access to specific websites is generally handled by content filters.",
-        "Creating a secure, encrypted tunnel over public networks to protect data in transit.",
-        "Scanning for viruses and malware is the role of antivirus software.",
-        "Filtering network traffic based on predefined rules is managed by firewalls."
+        "To ensure employees can perform penetration testing",
+        "To educate users on recognizing and avoiding security threats",
+        "To configure firewalls and intrusion prevention systems",
+        "To enforce compliance with regulatory standards"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VPNs create encrypted tunnels for secure communication over public networks like the internet. They don't primarily block websites, scan for malware, or filter traffic based on rules.",
-      "examTip": "Use a VPN when connecting to public Wi-Fi to protect your data from eavesdropping."
+      "explanation": "Security awareness training helps users recognize and avoid security threats, reducing the risk of human-related breaches.\n\nPenetration testing is performed by security professionals, not general employees.\nFirewalls and IPS configuration are technical tasks, not the focus of awareness training.\nWhile training may support compliance, its primary goal is user education.",
+      "examTip": "Human error is a major security risk—regular training helps users avoid phishing and social engineering attacks."
     },
     {
       "id": 93,
-      "question": "Which type of attack involves an attacker attempting to guess passwords by trying many different combinations?",
+      "question": "Which of the following provides the STRONGEST protection for stored passwords?",
       "options": [
-        "SQL Injection targets vulnerabilities in queries rather than password guessing.",
-        "Cross-Site Scripting (XSS) injects malicious scripts, not password guesses.",
-        "A brute-force attack systematically attempts many password combinations to gain access.",
-        "Man-in-the-Middle (MitM) attacks intercept communications rather than guessing passwords."
+        "Storing passwords in plain text",
+        "Using a secure hashing algorithm with salting",
+        "Encrypting passwords with a weak cipher",
+        "Requiring password expiration every 30 days"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Brute-force attacks try many password combinations. SQL injection exploits vulnerabilities in queries, XSS involves script injection, and MitM intercepts communications.",
-      "examTip": "Strong, complex passwords and account lockout policies are important defenses against brute-force attacks."
+      "correctAnswerIndex": 1,
+      "explanation": "Using a secure hashing algorithm with salting ensures passwords are stored securely and cannot be easily reversed.\n\nStoring passwords in plain text exposes them to theft.\nWeak encryption can be cracked, reducing security.\nFrequent password changes can lead to poor password practices.",
+      "examTip": "Always store passwords using strong hashing algorithms like bcrypt, PBKDF2, or Argon2 with salting."
     },
     {
       "id": 94,
-      "question": "What is 'data sovereignty'?",
+      "question": "Which of the following authentication methods relies on a challenge-response mechanism to verify user identity?",
       "options": [
-        "The concept that data is subject to the laws and regulations of the country where it is physically stored.",
-        "The right of individuals to control their own personal data, a principle more aligned with data privacy.",
-        "The process of encrypting data to protect its confidentiality, which is not data sovereignty.",
-        "The ability to recover data after a disaster, which relates to availability rather than sovereignty."
+        "Kerberos",
+        "Biometric authentication",
+        "Public Key Infrastructure (PKI)",
+        "Role-Based Access Control (RBAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Data sovereignty deals with the legal jurisdiction over data based on its physical location. It's not about individual rights (data privacy), encryption (data protection), or recovery (data availability).",
-      "examTip": "Data sovereignty is an important consideration for organizations operating in multiple countries or using cloud services."
+      "explanation": "Kerberos uses a challenge-response mechanism with encrypted tickets to authenticate users securely.\n\nBiometric authentication verifies identity based on physical traits but does not use challenge-response.\nPKI is a system for managing encryption keys and certificates, not authentication.\nRBAC defines user access levels but does not handle authentication itself.",
+      "examTip": "Kerberos is commonly used in enterprise environments for secure network authentication."
     },
     {
       "id": 95,
-      "question": "Which of the following is a common method used to secure wireless networks?",
+      "question": "Which of the following attacks is characterized by sending specially crafted network packets to overflow a system’s memory?",
       "options": [
-        "WEP encryption is outdated and insecure.",
-        "WPA2 or WPA3 encryption combined with a strong, unique password is the standard for securing wireless networks.",
-        "Disabling SSID broadcast offers minimal protection and relies on obscurity.",
-        "Using the default router password is a significant vulnerability."
+        "SQL Injection",
+        "Denial-of-Service (DoS)",
+        "Buffer Overflow",
+        "Cross-Site Scripting (XSS)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "WPA2 and WPA3 are the current standards for secure wireless encryption. WEP is outdated and insecure, disabling SSID broadcast is security through obscurity, and using the default password is highly insecure.",
-      "examTip": "Always use WPA2 or WPA3 with a strong, unique password for your wireless network."
+      "correctAnswerIndex": 2,
+      "explanation": "Buffer overflow attacks attempt to send excessive data to a program's memory, causing crashes or enabling malicious code execution.\n\nSQL Injection manipulates database queries.\nDoS floods a system with traffic to cause disruption.\nXSS injects malicious scripts into web pages.",
+      "examTip": "Prevent buffer overflow attacks by using secure coding practices and input validation."
     },
     {
       "id": 96,
-      "question": "Which control is BEST suited to mitigate the risk of an insider threat maliciously altering critical financial records?",
+      "question": "Which of the following BEST describes the concept of implicit deny in access control?",
       "options": [
-        "Background checks on all employees help screen candidates but do not prevent malicious actions once hired.",
-        "Implementation of multi-factor authentication secures access but does not limit internal privileges.",
-        "Strict enforcement of least privilege and separation of duties minimizes the risk of unauthorized alterations.",
-        "Regular security awareness training on phishing addresses external threats more than insider risks."
+        "Blocking all access unless explicitly granted",
+        "Granting all access unless explicitly denied",
+        "Automatically granting access to all authenticated users",
+        "Applying the same permissions to all users by default"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "While all options are good security practices, least privilege and separation of duties directly address the insider threat scenario. Least privilege limits what an insider can do, and separation of duties prevents any single person from having full control.",
-      "examTip": "Insider threats are often best mitigated by controlling access and permissions within the organization."
+      "correctAnswerIndex": 0,
+      "explanation": "Implicit deny means access is denied unless explicitly permitted, enforcing a default-deny security posture.\n\nGranting access unless denied is the opposite of implicit deny.\nAutomatically granting access weakens security.\nApplying the same permissions to all users disregards access control principles.",
+      "examTip": "Implicit deny is a fundamental security principle that ensures only explicitly authorized access is allowed."
     },
     {
       "id": 97,
-      "question": "What is the function of the command `traceroute` (or `tracert` on Windows)?",
+      "question": "Which of the following security controls helps mitigate the risk of an attacker using a stolen password?",
       "options": [
-        "Displaying the local machine's IP address is done with commands like 'ipconfig' or 'ifconfig'.",
-        "Showing the route that packets take to reach a destination host is the primary function of traceroute.",
-        "Scanning a network for open ports is performed by tools such as Nmap.",
-        "Encrypting network traffic is not a function of traceroute."
+        "Password complexity rules",
+        "Multi-factor authentication (MFA)",
+        "Account lockout policy",
+        "Encryption of stored passwords"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "`traceroute`/`tracert` maps the network path to a destination. It doesn't show the local IP (ipconfig/ifconfig), scan ports (nmap), or encrypt traffic (VPNs/TLS).",
-      "examTip": "`traceroute` is a valuable tool for troubleshooting network connectivity issues."
+      "explanation": "MFA ensures that even if a password is stolen, an attacker cannot access the account without the second authentication factor.\n\nPassword complexity rules make guessing harder but do not prevent stolen passwords from being used.\nAccount lockout policies limit brute-force attempts but do not stop password reuse.\nEncrypting stored passwords protects them in storage but does not prevent their use once stolen.",
+      "examTip": "MFA adds an extra layer of security, making it significantly harder for attackers to use stolen credentials."
     },
     {
       "id": 98,
-      "question": "What is a common characteristic of Advanced Persistent Threats (APTs)?",
+      "question": "Which of the following would BEST protect a system from a zero-day exploit?",
       "options": [
-        "They are typically short-term attacks aimed at causing immediate disruption, which is not characteristic of APTs.",
-        "They are often state-sponsored and use sophisticated techniques to maintain long-term, stealthy access to target networks.",
-        "They are usually carried out by unskilled attackers, which contradicts the advanced nature of APTs.",
-        "They primarily target individual users rather than organizations, which is generally not the case."
+        "Regular software updates",
+        "Intrusion prevention system (IPS)",
+        "Network segmentation",
+        "Security audits"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "APTs are characterized by their long-term, stealthy nature, often involving state actors and advanced techniques. They are not short-term, unskilled, or focused solely on individuals.",
-      "examTip": "APTs are a serious threat to organizations, requiring advanced security measures for detection and prevention."
+      "explanation": "An IPS detects and blocks malicious activity, helping to mitigate the risk of zero-day exploits before patches are available.\n\nRegular updates help protect against known vulnerabilities but not zero-day threats.\nNetwork segmentation limits attack spread but does not block exploits.\nSecurity audits identify weaknesses but do not actively prevent zero-day attacks.",
+      "examTip": "Use an IPS to detect and block zero-day attacks in real time."
     },
     {
       "id": 99,
-      "question": "Which type of access control model is based on predefined rules that determine access rights?",
+      "question": "Which of the following types of penetration testing provides the tester with no prior knowledge of the target environment?",
       "options": [
-        "Mandatory Access Control (MAC) uses security labels rather than fixed rules.",
-        "Discretionary Access Control (DAC) allows resource owners to set permissions.",
-        "Role-Based Access Control (RBAC) assigns permissions based on user roles.",
-        "Rule-Based Access Control uses predefined rules to determine access rights."
+        "White-box testing",
+        "Gray-box testing",
+        "Black-box testing",
+        "Vulnerability scanning"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Rule-based access control uses pre-defined rules to determine who can access resources. MAC uses labels, DAC gives data owners control, and RBAC uses roles.",
-      "examTip": "Rule-based access control is often used in firewalls and network devices."
+      "correctAnswerIndex": 2,
+      "explanation": "Black-box penetration testing simulates an external attack with no prior knowledge of the target environment.\n\nWhite-box testing provides full knowledge of the system.\nGray-box testing provides partial knowledge.\nVulnerability scanning identifies weaknesses but is not a penetration test.",
+      "examTip": "Black-box testing mimics real-world cyberattacks by testing security from an outsider's perspective."
     },
     {
       "id": 100,
-      "question": "What is the BEST way to protect against ransomware attacks?",
+      "question": "Which of the following BEST describes the purpose of a disaster recovery plan (DRP)?",
       "options": [
-        "Paying the ransom is not recommended and encourages further attacks.",
-        "Regular data backups and a robust incident response plan ensure recovery without rewarding attackers.",
-        "Installing antivirus software is helpful, but relying solely on it is not sufficient.",
-        "Ignoring suspicious emails is part of prevention but does not guarantee recovery if an attack occurs."
+        "To prevent all security incidents from occurring",
+        "To ensure business operations can quickly resume after a disruption",
+        "To monitor network traffic for malicious activity",
+        "To enforce compliance with data privacy regulations"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Regular offline backups are the most reliable way to recover from ransomware. Paying the ransom is not guaranteed to work and encourages attackers. Antivirus is important, but not foolproof, and ignoring suspicious emails is only one part of prevention.",
-      "examTip": "A strong backup and recovery plan is the best defense against ransomware."
+      "explanation": "A DRP ensures business operations can quickly resume after a security incident or natural disaster.\n\nIt does not prevent incidents but prepares for recovery.\nMonitoring network traffic is handled by intrusion detection systems.\nData privacy compliance is part of security governance, not DRP.",
+      "examTip": "A DRP is essential for minimizing downtime and ensuring business continuity after an incident."
     }
-  ]
-}
+  ] 
+);
