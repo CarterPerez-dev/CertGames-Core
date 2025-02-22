@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": " "aplus2",
   "testId": 10,
-  "testName": "Practice Test #10 (Ultimate Challenge Level)",
+  "testName": "A+ Core 2 Practice Test #10 (Ultimate Challenge Level)",
   "xpPerCorrect": 10,
   "questions": [
     {
