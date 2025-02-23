@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "secplus",
-  "testId": 7,
-  "testName": "Security+ Practice Test #7 (Challenging)",
+  "testId": 6,
+  "testName": "Security+ Practice Test #7 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
