@@ -1,7 +1,7 @@
 {
   "category": "secplus",
   "testId": 3,
-  "testName": "Practice Test #3 (Very Easy)",
+  "testName": "Practice Test #3 (Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
