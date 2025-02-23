@@ -1984,6 +1984,4 @@ db.tests.insertOne({
       "examTip": "SOAR streamlines incident response, letting analysts handle sophisticated threats while mundane tasks run automatically."
     }
   ]
-}
-
-
+});
