@@ -1,6 +1,6 @@
 db.tests.insertOne({
   "category": "nplus",
-  "testId": 9,
+  "testId": 8,
   "testName": "Network+ Practice Test #9 (Very Challenging)",
   "xpPerCorrect": 10,
   "questions": [
