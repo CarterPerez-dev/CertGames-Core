@@ -523,13 +523,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Mutual TLS (mTLS) authenticates both client and server endpoints, providing encryption and verifying identities in microservices communications.",
       "examTip": "Adopt service meshes like Istio that natively support mTLS for scalable and secure microservices architectures."
-    }
-
-
-
-
-{
-  "questions": [
+    },
     {
       "id": 41,
       "question": "An enterprise's SOC team detects a large volume of encrypted outbound traffic to a suspicious domain. The organization suspects data exfiltration via an encrypted channel. What should the team do FIRST to prevent further loss?",
