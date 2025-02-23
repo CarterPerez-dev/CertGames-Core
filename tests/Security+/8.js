@@ -1305,5 +1305,4 @@ db.tests.insertOne({
       "examTip": "While obscurity can add friction, it’s inadequate as a primary defense. Rely on robust, vetted security measures for real protection."
     }
   ]
-}
-
+});
