@@ -1,5 +1,5 @@
 db.tests.insertOne({
-  "category": "CASP+",
+  "category": "caspplus",
   "testId": 6,
   "testName": "SecurityX Practice Test #6 (Formidable)",
   "xpPerCorrect": 10,
