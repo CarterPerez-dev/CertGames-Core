@@ -1,7 +1,7 @@
 
   "category": "secplus",
   "testId": 7,
-  "testName": "Security Practice Test #7 (Challenging)",
+  "testName": "Security+ Practice Test #7 (Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
