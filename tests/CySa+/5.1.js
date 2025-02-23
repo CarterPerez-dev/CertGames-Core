@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cysa",
-  "testId": 6,
-  "testName": "CySa Practice Test #6 (Formidable)",
+  "testId": 5,
+  "testName": "CySa Practice Test #5 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -653,17 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "SIEM systems *complement* other security controls, not replace them. They don't automatically patch vulnerabilities, and no system can guarantee *complete* protection. The core value of a SIEM is that it acts as a central hub for security monitoring and incident response. It *collects* logs from diverse sources, *analyzes* them in real-time, *correlates* events across different systems, and generates *alerts* for potential security incidents. This provides a comprehensive view of an organization's security posture and enables faster, more effective incident detection and response.",
       "examTip": "SIEM systems are essential for centralized security monitoring and incident response."
-    }
-  ]
-}
-
-
-{
-  "category": "cysa",
-  "testId": 6,
-  "testName": "CySa Practice Test #6 (Formidable)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "Examine the following code snippet:\n\n```php\n<?php\n$id = $_GET['id'];\n$query = \"SELECT * FROM products WHERE id = \" . $id;\n?>\n```\n\nWhat type of vulnerability is present, and how could an attacker exploit it?",
