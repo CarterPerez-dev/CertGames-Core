@@ -200,6 +200,71 @@ db.tests.insertOne({
       examTip: "DNS issues typically manifest as domain name failures but still allow direct IP connections. Check DNS configurations when encountering this problem."
     },
     {
+      "id": 16,
+      "question": "Which protocol should be used to securely manage and monitor network devices?",
+      "options": [
+        "SNMPv3",
+        "FTP",
+        "Telnet",
+        "SNMPv2c"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SNMPv3 adds encryption and authentication for secure management of network devices. SNMPv2c lacks encryption. FTP is for file transfers and is unencrypted. Telnet provides unencrypted remote access.",
+      "examTip": "SNMPv3 = Security first. Always choose v3 for encrypted device monitoring."
+    },
+    {
+      "id": 17,
+      "question": "A user reports they can access internal resources but cannot access any websites. Which of the following should be the FIRST step in troubleshooting this issue?",
+      "options": [
+        "Verify DNS settings on the user’s device.",
+        "Check the firewall for outbound web traffic rules.",
+        "Test internet connectivity from the user’s device using ping.",
+        "Ensure the user’s IP configuration matches network policies."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "If internal resources are accessible but external websites are not, DNS resolution issues are likely. Verifying DNS settings should be the first step. Checking the firewall and testing connectivity with ping are valid, but DNS misconfigurations often cause such issues. IP configuration mismatches would affect internal connectivity too.",
+      "examTip": "Website access issues + internal connectivity OK? **Check DNS first** — it's the usual suspect."
+    },
+    {
+      "id": 18,
+      "question": "An organization wants to ensure its cloud deployment allows for rapid scaling during peak usage while maintaining control over internal processes. Which cloud model BEST meets these requirements?",
+      "options": [
+        "Hybrid cloud",
+        "Private cloud",
+        "Public cloud",
+        "Community cloud"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A hybrid cloud combines private infrastructure control with the scalability of public cloud services during peak demands. Private clouds lack the rapid scalability of public cloud resources. Public clouds provide scalability but less control. Community clouds cater to multiple organizations with shared interests but not necessarily rapid scalability.",
+      "examTip": "**Hybrid cloud = Control + Scalability.** Ideal for fluctuating workloads needing flexibility."
+    },
+    {
+      "id": 19,
+      "question": "Which OSI layer is responsible for reliable data transfer, including error correction and flow control?",
+      "options": [
+        "Transport",
+        "Network",
+        "Session",
+        "Data Link"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The Transport layer (Layer 4) ensures reliable data transfer through error correction and flow control (e.g., using TCP). The Network layer (Layer 3) handles routing and addressing. The Session layer (Layer 5) manages sessions between applications but not data reliability. The Data Link layer (Layer 2) ensures data transfer across the physical link but without end-to-end reliability.",
+      "examTip": "Remember TCP operates at the Transport layer for reliable delivery, while UDP also works at this layer without guaranteed delivery."
+    },
+    {
+      "id": 20,
+      "question": "Which of these best defines **Phishing**?",
+      "options": [
+        "The process of analyzing network traffic for threats",
+        "A method of securing wireless networks",
+        "A technique to trick users into revealing sensitive information",
+        "A vulnerability exploitation method"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Phishing is a type of social engineering attack where attackers trick users into revealing sensitive information such as passwords or credit card numbers.",
+      "examTip": "Understand common attack methods like phishing, which often exploit human error."
+    },
+    {
       id: 21,
       question: "Which of the following is a characteristic of 'Platform as a Service' (PaaS) cloud computing model in terms of vendor responsibility and user control?",
       options: [
