@@ -1,8 +1,8 @@
 {
-  "category": "CompTIA Network+ N10-009",
+  "category": "nplus",
   "testId": 10,
-  "testName": "Practice Test #10 (Ultra Level)",
-  "xpPerCorrect": 40,
+  "testName": "Network+ Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
