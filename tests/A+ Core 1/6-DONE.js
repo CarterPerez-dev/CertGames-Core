@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
-  "testName": "A+ Practice Test #6 (Formidable)",
+  "testName": "A+ Core 1 Practice Test #6 (Formidable)",
   "xpPerCorrect": 10,
   "questions": [
     {
