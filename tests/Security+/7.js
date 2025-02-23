@@ -1,4 +1,4 @@
-
+db.tests.insertOne({
   "category": "secplus",
   "testId": 7,
   "testName": "Security+ Practice Test #7 (Challenging)",
