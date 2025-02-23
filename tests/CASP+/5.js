@@ -783,10 +783,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "Non-repudiation provides proof of the origin and integrity of data, ensuring that parties cannot deny their actions or commitments.",
       "examTip": "Digital signatures and audit logs are commonly used to enforce non-repudiation in secure systems."
-    }
-
-{
-  "questions": [
+    },
     {
       "id": 61,
       "question": "An organization wants to ensure that files sent between departments are encrypted both in transit and at rest. Which solution BEST meets this requirement?",
