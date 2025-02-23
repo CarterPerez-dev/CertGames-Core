@@ -1,7 +1,7 @@
 db.tests.insertOne({
-  "category": "CompTIA Network+ N10-009",
+  "category": "nplus",
   "testId": 1,
-  "testName": "Practice Test #1 (Normal)",
+  "testName": "Network+ Practice Test #1 (Normal)",
   "xpPerCorrect": 10,
   "questions": [
     {
