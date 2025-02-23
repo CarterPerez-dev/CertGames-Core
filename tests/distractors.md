@@ -8,3 +8,4 @@
 ### 💀 Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
 ### 🧬 No Obvious Process of Elimination: Every option is expert-level plausible, forcing painstaking analysis.
 ### 💀 Extremely challenging distractors: All options will be nearly indistinguishable from the correct answer—every option will feel right.
+### 💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer.
