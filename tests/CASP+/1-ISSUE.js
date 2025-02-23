@@ -265,6 +265,136 @@ db.tests.insertOne({
       "examTip": "SCA tools help detect risks in third-party software libraries during development."
     },
     {
+      "id": 21,
+      "question": "A security team requires an encryption solution that allows analytics on customer data stored in a public cloud without decrypting it. The solution must also ensure quantum resilience. Which solution meets both requirements?",
+      "options": [
+        "Fully Homomorphic Encryption (FHE) with Kyber key exchanges",
+        "Symmetric encryption using AES-256-GCM with secure enclaves",
+        "Asymmetric encryption using RSA-8192 with TLS 1.3",
+        "Post-quantum signatures using Dilithium combined with PFS"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "FHE enables data processing without decryption, and Kyber ensures quantum-resistant key exchange, making this combination future-proof and secure during computation.",
+      "examTip": "Compute on encrypted data, quantum-safe? FHE + Kyber = future-ready analytics."
+    },
+    {
+      "id": 22,
+      "question": "A threat actor uses timing discrepancies in cryptographic operations to extract encryption keys from a multi-tenant cloud platform. Which countermeasure MOST effectively mitigates this side-channel attack?",
+      "options": [
+        "Implementing constant-time cryptographic algorithms",
+        "Deploying secure enclaves for sensitive workloads",
+        "Enforcing strict key rotation policies with ephemeral keys",
+        "Using Perfect Forward Secrecy (PFS) with lattice-based key exchanges"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Constant-time algorithms eliminate timing discrepancies, closing the side-channel exploited by attackers to infer cryptographic keys.",
+      "examTip": "Timing attacks rely on differences—constant-time operations erase these signals."
+    },
+    {
+      "id": 23,
+      "question": "A forensic analyst detects AI-generated polymorphic malware that changes its code structure and behavior dynamically. Traditional detection methods fail. Which solution MOST effectively detects this malware?",
+      "options": [
+        "Extended Detection and Response (XDR) aggregating multi-layer telemetry",
+        "Endpoint Detection and Response (EDR) with signatureless detection",
+        "SIEM solutions integrated with machine learning threat models",
+        "User and Entity Behavior Analytics (UEBA) monitoring execution anomalies"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "XDR correlates data across endpoints, networks, and cloud environments, detecting AI-powered polymorphic malware that evades single-layer detection methods.",
+      "examTip": "Polymorphic malware shifts fast—XDR’s cross-layer vision catches what single tools miss."
+    },
+    {
+      "id": 24,
+      "question": "A penetration tester successfully bypasses API authentication by exploiting predictable JWT token structures. Which control MOST effectively mitigates this vulnerability?",
+      "options": [
+        "Server-side validation of JWT 'alg' claims and strong signing algorithms",
+        "Encrypting JWT tokens using AES-256-GCM before transmission",
+        "Implementing audience claim validation for all token verifications",
+        "Reducing token lifespan with automatic rotation upon usage"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Strict server-side validation of the 'alg' claim ensures that only expected signing algorithms are accepted, preventing algorithm substitution attacks.",
+      "examTip": "JWT security starts at ‘alg’—validate it server-side, trust no shortcuts."
+    },
+    {
+      "id": 25,
+      "question": "An attacker exfiltrates data using encrypted DNS over HTTPS (DoH) to evade traditional DNS monitoring. Which detection approach MOST effectively identifies this exfiltration?",
+      "options": [
+        "Machine learning-based anomaly detection on DNS query patterns",
+        "Blocking DoH at network egress using deep packet inspection (DPI)",
+        "Behavioral correlation between user actions and DNS activity",
+        "TLS handshake analysis for irregular DoH traffic identification"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "ML-driven analysis detects abnormal DNS traffic patterns indicative of exfiltration, even when encryption hides the payload.",
+      "examTip": "Encryption hides content, not patterns—ML finds exfiltration in DoH noise."
+    },
+    {
+      "id": 26,
+      "question": "A cloud-native microservices architecture needs protection against lateral movement due to compromised container credentials. What control MOST effectively prevents this risk?",
+      "options": [
+        "Service mesh enforcing mutual TLS (mTLS) for inter-service communication",
+        "PodSecurityPolicies (PSPs) limiting container privileges",
+        "API gateway enforcing strict authentication and authorization",
+        "Network segmentation between microservices and control plane components"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Service meshes with mTLS secure communication between microservices, preventing attackers from moving laterally after compromising one component.",
+      "examTip": "Microservice security means zero trust between services—mTLS via service mesh ensures it."
+    },
+    {
+      "id": 27,
+      "question": "An attacker employs steganography to embed sensitive data within outbound image files for exfiltration. The images pass perimeter security undetected. Which detection technique MOST effectively identifies this attack?",
+      "options": [
+        "Steganalysis tools performing content inspection of outbound media",
+        "Traffic flow analysis for irregular outbound data patterns",
+        "Data Loss Prevention (DLP) solutions configured with regex patterns",
+        "Endpoint protection platforms (EPP) using heuristic content analysis"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Steganalysis specifically detects hidden data within media files, making it the most effective solution against steganographic exfiltration.",
+      "examTip": "When data hides in images, steganalysis reveals what shouldn’t be there."
+    },
+    {
+      "id": 28,
+      "question": "An attacker exploits a Kubernetes cluster by escaping a compromised container to access underlying host resources. Which mitigation MOST effectively prevents such an attack?",
+      "options": [
+        "Implementing PodSecurityPolicies (PSPs) with strict resource controls",
+        "Enforcing Role-Based Access Control (RBAC) with least privilege principles",
+        "Isolating container workloads using kernel-level seccomp profiles",
+        "Configuring Kubernetes network policies for inter-pod segmentation"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Seccomp profiles restrict system calls available to containers, reducing the attack surface and preventing container escape exploits targeting kernel resources.",
+      "examTip": "Container escape? Seccomp at the kernel level locks down system call abuse."
+    },
+    {
+      "id": 29,
+      "question": "An AI-powered vishing attack uses synthesized voice recordings to impersonate C-level executives. Which control MOST effectively prevents this type of social engineering attack?",
+      "options": [
+        "Real-time voice biometrics during sensitive call authentication",
+        "Mandatory multi-factor authentication (MFA) for all privileged access",
+        "Contextual behavior analytics monitoring call pattern deviations",
+        "AI-generated phishing simulations in regular user training sessions"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Voice biometrics authenticate speakers in real time, preventing AI-generated voice impersonations from deceiving employees during sensitive communications.",
+      "examTip": "AI can fake a voice—biometric authentication keeps the line secure."
+    },
+    {
+      "id": 30,
+      "question": "A threat actor performs protocol downgrade attacks during TLS handshakes to force weaker cipher suites. Which configuration MOST directly prevents these downgrade attempts?",
+      "options": [
+        "TLS_FALLBACK_SCSV enabled for all TLS handshakes",
+        "Strict enforcement of TLS 1.3 with hardened cipher suites",
+        "Certificate pinning across all high-value endpoints",
+        "HSTS policies with preloaded browser configurations"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "TLS_FALLBACK_SCSV signals servers to reject fallback handshakes unless explicitly intended, directly preventing protocol downgrade attacks.",
+      "examTip": "Downgrade attempts mean weaker encryption—TLS_FALLBACK_SCSV stops them cold."
+    },
+    {
       "id": 31,
       "question": "A company is concerned about unauthorized users accessing its web applications. Which solution would BEST ensure that only authenticated users can access sensitive data within the applications?",
       "options": [
@@ -1176,5 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-
