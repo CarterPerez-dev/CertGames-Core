@@ -263,16 +263,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "PTP provides sub-microsecond synchronization essential for time-sensitive industries. NTP offers millisecond accuracy, insufficient for high-speed trading. SNMP manages network elements but doesn’t sync time. Syslog collects logs without time synchronization capabilities.",
       "examTip": "**PTP = Ultra-precise timing.** Mandatory for financial trading platforms and next-gen telecom systems."
-    }
-
-
-
-{
-  "category": "CompTIA Network+ N10-009",
-  "testId": 9,
-  "testName": "Practice Test #9 (Ruthless)",
-  "xpPerCorrect": 35,
-  "questions": [
+    },
     {
       "id": 21,
       "question": "An organization must implement a high-availability WAN solution that automatically reroutes traffic based on real-time application performance metrics while enforcing granular security controls. Which solution BEST meets these requirements?",
