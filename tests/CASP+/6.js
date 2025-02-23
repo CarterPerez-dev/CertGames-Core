@@ -783,12 +783,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Application whitelisting enforces strict execution policies, allowing only approved applications to run, preventing unauthorized software execution.",
       "examTip": "Pair application whitelisting with endpoint detection solutions for comprehensive endpoint security."
-    }
-
-
-
-{
-  "questions": [
+    },
     {
       "id": 61,
       "question": "An organization needs to protect sensitive data processed in real-time on untrusted cloud infrastructure. Which encryption approach BEST allows computations on encrypted data without decryption?",
