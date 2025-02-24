@@ -312,6 +312,7 @@ def update_test_attempt(user_id, test_id):
             "totalQuestions": data.get("totalQuestions", 0),
             "currentQuestionIndex": data.get("currentQuestionIndex", 0),
             "shuffleOrder": data.get("shuffleOrder", []),
+            "answerOrder": data.get("answerOrder", []),
             "finished": data.get("finished", False)
         }
     }
