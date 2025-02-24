@@ -2,6 +2,69 @@
 ### ok so for thre test view i need it so the "next questionto be  logged better in my databse/testview as a whole. so basically  the issue is that if they click "next quetsion" without answeing there needs to be a popup that say liek "yoiu havent answered, pelase answer or hit skip" 
 -----------------------
 ### fix cost of 200% xp boost
+
+```js
+So i need to update this in my mongosh databse so how would i do that and give me teh update command please
+
+so i have thsi in my mongosh databse
+
+db.shopItems.insertMany([
+  {
+    type: "xpBoost",
+    title: "XP Boost 25",
+    description: "Increase your XP gain by 25%.",
+    cost: 40000,
+    imageUrl: "/xp/xp25.png",
+    effectValue: 1.25
+  },
+  {
+    type: "xpBoost",
+    title: "XP Boost 100",
+    description: "Increase your XP gain by 100%.",
+    cost: 100000,
+    imageUrl: "/xp/xp100.png",
+    effectValue: 2
+  },
+  {
+    type: "xpBoost",
+    title: "XP Boost 200",
+    description: "Increase your XP gain by 200%.",
+    cost: 200000,
+    imageUrl: "/xp/xp200.png",
+    effectValue: 3
+  },
+  {
+    type: "xpBoost",
+    title: "XP Boost 10",
+    description: "Increase your XP gain by 10%.",
+    cost: 15000,
+    imageUrl: "/xp/xp10.png",
+    effectValue: 1.1
+  },
+  {
+    type: "xpBoost",
+    title: "XP Boost 50",
+    description: "Increase your XP gain by 50%.",
+    cost: 75000,
+    imageUrl: "/xp/xp50.png",
+    effectValue: 1.5
+  }
+]);
+
+
+
+and i made chnages to the xboost 200 so now i need to update that exact item specifuxally but nto affec any of the others
+- so please give me teh commad in order to do so.
+
+    type: "xpBoost",
+    title: "XP Boost 200",
+    description: "Increase your XP gain by 200%.",
+    cost: 200000,
+    imageUrl: "/xp/xp200.png",
+    effectValue: 3
+
+
+```
 --------------------------
 ### achievemnt popups arent popping up when achieiving
 ------------------------------------------------
