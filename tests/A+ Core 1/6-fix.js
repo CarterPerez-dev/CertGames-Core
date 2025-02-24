@@ -1,3 +1,51 @@
+
+Q3, Q11, Q14
+All ask about the “desktop boots to a black screen with a cursor after a Windows update” scenario, with the same answer referencing System Restore.
+Q2, Q13
+Both describe installing a dedicated GPU in a desktop, no video output, solution is “connect the PCIe power cables.”
+Q5, Q15
+Laptop’s trackpad becomes unresponsive after plugging in an external USB mouse; solution is a function-key toggle.
+Q6, Q16
+Which printer type uses “charging, exposing, developing, transferring, fusing” steps? Answer is laser.
+Q7, Q17
+“A user hears loud clicking noises from a desktop PC … fails to load OS” referencing a failing mechanical HDD.
+Q8, Q18
+Need secure email download on iOS → “IMAP over SSL (IMAPS).”
+Q9, Q19
+CPU feature that lets one core appear as two → “Hyper-Threading.”
+Q10, Q20
+“Which cable is best for Thunderbolt 3 or 4 speeds?” → “USB-C Thunderbolt-certified cable.”
+Then from Q21 onward, there is another large set of repeated “basic computer questions.” Many of them appear multiple times (sometimes even triple or quadruple) in this single test. For example:
+
+Q25, Q34, Q52
+“What is the purpose of a printer driver?”
+Q27, Q35, Q53, Q89
+“Which of these is a common type of internet browser?” (Chrome, Firefox, Edge, etc.)
+Q28, Q36, Q54, Q90
+“What is ‘email’ used for?” → “Sending and receiving digital messages.”
+Q33, Q51, Q69
+“Which of these is a common type of computer virus? Trojan/worm/ransomware?” → “All of the above.”
+Q37, Q55, Q91
+“Which of these is a storage medium that uses flash memory? → SSD.”
+Q40, Q58
+“What is the purpose of ‘data backup’?” → “To create copies of important data for recovery.”
+Q41, Q59
+“Which of these is a common port for connecting peripherals?” → “USB.”
+Q42, Q60
+“What is ‘cloud computing’?”
+Q44, Q62
+“What is ‘phishing’ in cybersecurity?” → “Deceptive attempts to steal personal info.”
+Q45, Q63
+“Which component is essential for cooling the CPU?” → “Heat sink.”
+…and so forth.
+
+
+
+
+
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
