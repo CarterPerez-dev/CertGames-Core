@@ -1,4 +1,4 @@
-db.tests.insertOne({{
+db.tests.insertOne({
   "category": "nplus",
   "testId": 2,
   "testName": "Network+ Practice Test #2 (Very Easy)",
