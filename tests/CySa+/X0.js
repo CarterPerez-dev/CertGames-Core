@@ -133,7 +133,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "The `schtasks` command schedules a malicious executable to run every 5 minutes, ensuring persistence.",
       "examTip": "Regularly audit scheduled tasks and remove unauthorized entries."
-    }
+    },
     {
       "id": 11,
       "question": "A security analyst detects a suspicious command executed on a compromised Windows machine:\n\n`rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication\"`\n\nWhat is the attacker's objective?",
