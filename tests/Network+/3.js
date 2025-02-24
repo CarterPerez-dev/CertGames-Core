@@ -1,3 +1,11 @@
+Duplicate or Overlapping Questions
+
+Within Test #3:
+Question #13 and Question #73 both ask, nearly verbatim, “Which wireless standard introduced MU-MIMO technology…?” This appears to be a duplicate concept (almost the same question repeated).
+
+
+
+
 db.tests.insertOne({
   "category": "nplus",
   "testId": 3,
