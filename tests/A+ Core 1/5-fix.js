@@ -1,4 +1,15 @@
-  db.tests.insertOne({
+
+Duplicate Questions Within Test #5
+
+Question #14 and Question #19 both ask exactly the same: “What is the purpose of a ‘Hardware Security Module’ (HSM)?” with the same answer. This is a duplicated question in the same test.
+Question #62 and Question #82 both deal with OLED burn-in. They are phrased slightly differently but effectively cover the same concept of OLED’s susceptibility to image retention/burn-in. This is another duplicate pair.
+
+
+
+
+
+
+db.tests.insertOne({
     "category": "aplus",
     "testId": 5,
     "testName": "A+ Core 1 Practice Test #5 (Intermediate)",
