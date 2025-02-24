@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 6,
-  "testName": "CySa+ Practice Test #6 (Formidable)",
+  "testName": "CySa+ Practice Test #5 (Intermediate)",
   "xpPerCorrect": 10,
   "questions": [
     {
