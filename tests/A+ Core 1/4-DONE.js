@@ -1,3 +1,10 @@
+Most question texts, explanations, and exam tips appear complete. However, question #62 shows a possible mismatch between the question and the explanation:
+Question #62: Mentions “toner easily wiping off,” which typically points to a fuser or heat/pressure issue.
+Explanation #62: Discusses an empty toner cartridge causing blank pages, not “toner wiping off.”
+This appears to be an error or misalignment between the question text and the explanation.
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 4,
