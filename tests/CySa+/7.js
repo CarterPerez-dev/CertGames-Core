@@ -1,3 +1,19 @@
+1) Duplicate Questions: #8 and #15
+Question #8:
+"Which of the following BEST describes the purpose of the MITRE ATT&CK framework?"
+Question #15:
+"Which of the following BEST describes the purpose of the MITRE ATT&CK framework?"
+They are identical in wording and appear in the same test. Both have the same answer set and correct answer index. So this is a verbatim duplicate.
+
+2) Duplicate Questions: #9 and #16
+Question #9:
+"Which of the following BEST describes a compensating control in vulnerability management?"
+Question #16:
+"Which of the following BEST describes a compensating control in vulnerability management?"
+Again, identical in wording, with the same correct answer index and explanation. Another verbatim duplicate.
+
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 7,
