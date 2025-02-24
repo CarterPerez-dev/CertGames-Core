@@ -1,3 +1,32 @@
+
+
+Internal Duplicate Checks Within Test #7
+
+Many questions from about Q7 onward match earlier test content nearly word-for-word, but within Test #7 itself, some questions are also repeated:
+
+Q62 and Q73 both describe a color-specific smear on laser printer pages:
+
+“A laser printer is producing prints with a repeating 'smear' or 'streak' mark that appears only on one color … Which printer consumable is MOST likely causing this color-specific smudge?”
+Essentially the same scenario, identical answers, pointing to a defective color toner cartridge.
+
+Q63 (“…best practice for securing user accounts against brute-force attacks on cloud services?”) and Q74 have the same question about brute-force attacks on cloud accounts, same correct answer referencing MFA + IP restrictions.
+
+Q64 (“Which of the following TCP ports is used by … Kerberos Administration protocol (kadmin) … ?”) is repeated again at Q75 and at Q99. They all ask about port 749 for remote KDC administration.
+
+Q68 (“Which of the following is a BEST practice for securing user accounts against brute-force attacks on web application login pages?”) is repeated as Q79 with the exact same text and answer referencing CAPTCHA/rate limiting.
+
+Q95 and Q99 both ask the same question about “Which of the following TCP ports is used by Microsoft Active Directory Kerberos Administration protocol (kadmin) … ?” again referencing port 749.
+
+There may be additional repeats in the later 60–100 range involving laser printer scenarios, user account security, AD port configurations, etc.
+
+Overall, multiple pairs (or even triples) of questions within Test #7 share identical wording and correct answers.
+
+
+
+
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 7,
