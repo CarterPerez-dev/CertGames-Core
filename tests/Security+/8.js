@@ -1,3 +1,12 @@
+CSRF Definition:
+– Question 27 and Question 61 both ask for the definition of cross‑site request forgery (CSRF/XSRF). Their wording and answer options are essentially identical.
+SQL Injection Prevention:
+– Question 16 and Question 31 both focus on the best method to prevent SQL injection attacks, with both answers emphasizing the use of parameterized queries combined with input validation.
+Threat Modeling:
+– Question 47 and Question 98 ask what threat modeling is (or its primary use). Their content overlaps almost exactly.
+
+
+
 db.tests.insertOne({
   "category": "secplus",
   "testId": 8,
