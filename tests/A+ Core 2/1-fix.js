@@ -1,3 +1,7 @@
+
+Exam Tip: Missing for multiple questions (e.g., #21, #67, #77, #78, #79, #100, and others). Every question is supposed to include an examTip, but many do not.
+
+
 db.tests.insertOne({
   "category": "aplus2",
   "testId": 1,
