@@ -1,3 +1,33 @@
+
+Duplicate Questions Within Test #3
+
+The following pairs of questions are exactly duplicated (same wording and answers):
+#37 and #57
+#38 and #58
+#39 and #59
+#40 and #60
+#41 and #61
+#42 and #62
+#43 and #63
+#44 and #64
+#45 and #65
+#46 and #66
+#47 and #67
+#48 and #68
+#49 and #69
+#50 and #70
+#51 and #71
+#52 and #72
+#53 and #73
+#54 and #74
+#55 and #75
+This results in 19 repeated questions (each pair is duplicated text).
+
+
+
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 3,
