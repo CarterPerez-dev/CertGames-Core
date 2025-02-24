@@ -1,0 +1,33 @@
+Across Test #1 and Test #2
+Phishing also appeared in Test #1 (e.g., Test #1, Q15: “An attacker sends a fraudulent email pretending to be from a legitimate source... What type of attack is this?”). This is effectively the same concept repeated in Test #2’s several phishing questions.
+Confidentiality is similarly duplicated across both tests. For instance, Test #1 had questions ensuring only authorized users can access sensitive data (though the exact numbering differs).
+No other major overlaps or verbatim copies beyond these core, repeated security concepts were noted. However, the phishing, confidentiality, and DoS/least-privilege questions recur in both tests.
+
+Across Tests #1, #2, and #3
+Phishing: Appears extensively in all three tests with near-identical definitions.
+DoS: Also found in each test describing “flooding” or “overwhelming” a target.
+Confidentiality: Repeated in multiple tests with similar wording.
+Least Privilege, RBAC, Encryption (especially WPA3 and full-disk encryption), and MFA also recur in very similar forms between the tests.
+
+Across Tests #1, #2, and #3
+Phishing: Common concept repeated across earlier tests; Test #4 Q3, Q56, Q89 are similar in definition to Test #1, #2, #3 questions on phishing.
+DDoS: Test #4 Q4, Q8, Q32, Q37, Q77, Q87 mirror prior tests’ definitions of flooding a target.
+RBAC / Least Privilege: Multiple references in earlier tests, e.g., Q9, Q34, Q38, Q47 in Test #4 also align with repeated definitions from prior tests.
+CIA Triad: Q22 in Test #4 also overlaps with earlier tests covering Confidentiality, Integrity, Availability.
+IDS and firewalls: Repeated extensively in previous tests with very similar explanation.
+Encryption (AES, WPA2/WPA3, TLS, etc.) has also appeared across all prior tests in near-identical forms.
+Thus, Test #4 does contain multiple duplicate (or near-duplicate) concepts seen in Tests #1–3, though sometimes with slightly more detailed or “moderate” phrasing.
+
+VPN / IPSec: Repeated from earlier tests in different forms (Test #1 Q30, Test #2 Q22, Test #3 Q30, Test #4 references).
+Phishing / Spear Phishing: Consistent presence across all tests with near-identical definitions (Q10, Q25, Q57, etc.).
+Least Privilege: Repeated in multiple tests; Test #5 Q5, Q74, Q92 align with earlier tests.
+Firewall Rule Ordering: Revisited in PBQs across multiple tests (similar scenario in Test #2, #3, #4).
+Encryption (especially AES, S/MIME, WPA3) is covered heavily in earlier tests as well.
+Intrusion detection (HIDS/IDS) also appears frequently across all tests.
+No direct verbatim question duplications from the prior four tests, but the standard Security+ topics (phishing, least privilege, encryption, firewall, etc.) are covered again with slightly modified wording.
+
+
+o those in Test #8. For example:
+Question #1 here closely matches Test #8’s Question #1 on quantum computing and lattice-based cryptography for backups.
+Question #2 on compromised administrator credentials in a cloud environment and the attacker misusing temporary credentials is also extremely similar to Test #8’s Question #2.
+Reviewing further confirms that a large subset of these 100 questions (including #1, #2, #3, #4, #5, etc.) repeat or closely mirror those from Test #8—both in question structure and answer sets. If the goal is to present fresh, unique questions, you may wish to rephrase or replace these duplicates to maintain distinctiveness across tests.
