@@ -1,3 +1,8 @@
+Potentially Duplicate Questions Within Test #2
+
+Question #1 and Question #11 both ask about “the primary function” / “the purpose” of a SIEM. Although the wording and answer choices are slightly different, they cover essentially the same concept (SIEM’s main role in aggregating/analyzing security logs). This might be an intentional minor variation, but it’s worth noting they are quite similar.
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 2,
