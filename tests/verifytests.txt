@@ -30,6 +30,7 @@ Check for Spelling Errors
 Look for obvious spelling mistakes in the question text, options, explanations, and exam tips.
 Report any words that appear to be significantly misspelled. (High sensitivity: even if you are not 100% certain, note the potential error.)
 Check for Syntax Issues
+also keep in mind theres 10 tests per category 100 questions each, so check for dduplciate sounding questions in all 1-10 tests not just the 1-100 questions. so if if i give you test 1 and theres no duplciates in test 1 cool, but then make sure theres no test 1 questions in test 10 either and so on.
 
 Verify that the JSON structure is valid and does not contain syntax errors.
 Identify any parsing issues or improperly formatted JSON.
