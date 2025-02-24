@@ -344,15 +344,14 @@ db.tests.insertOne({
     },
     {
       "id": 27,
-      "question": "A SIEM generates alerts for the following sequence of events:\n- Successful login from an unfamiliar IP address\n- Creation of multiple user accounts with admin privileges\n- Outbound traffic to an external C2 server on port 8080\n\nWhich MITRE ATT&CK tactics BEST represent these activities? (Select TWO)",
+      "question": "A SIEM generates alerts for the following sequence of events:\n- Successful login from an unfamiliar IP address\n- Creation of multiple user accounts with admin privileges\n- Outbound traffic to an external C2 server on port 8080\n\nWhat MITRE ATT&CK tactic BEST represent these activities?",
       "options": [
         "Persistence",
         "Privilege Escalation",
         "Initial Access",
-        "Command and Control",
         "Lateral Movement"
       ],
-      "correctAnswerIndex": [0, 3],
+      "correctAnswerIndex": 0,
       "explanation": "Creating admin users reflects persistence, ensuring long-term access. Outbound C2 traffic on port 8080 suggests command and control activity.",
       "examTip": "Look for admin account creation and outbound connections—strong indicators of persistence and C2 tactics."
     },
