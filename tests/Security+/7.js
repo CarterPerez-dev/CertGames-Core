@@ -4,6 +4,11 @@ Question #72 and Question #94 both ask:
 While the exact wording of the answer options differs slightly, they convey almost the same concept. The correct answer is effectively identical (unique, strong passwords with minimal user effort).
 This is effectively a duplicate question within the same test.
 
+
+Question #7 and Question #54 both cover:
+
+“Which of the following best describes the concept of 'defense in depth'?”
+They differ slightly in phrasing (“network security” vs. “cybersecurity”), but the scenario and correct concept are basically the same. They likely test the same knowledge and thus represent a near-duplicate.
 db.tests.insertOne({
   "category": "secplus",
   "testId": 7,
