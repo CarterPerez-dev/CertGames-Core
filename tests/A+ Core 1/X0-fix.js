@@ -1,3 +1,15 @@
+summary of Clear Duplicates
+Hypervisor Selection:
+
+Test #10, Q35 and Q72 (exact duplicate)
+Port Security – Single Device Enforcement:
+
+Test #10, Q89 and Q97 (near–duplicates with the same underlying concept)
+CMOS Battery/BIOS Reset:
+
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 10,
