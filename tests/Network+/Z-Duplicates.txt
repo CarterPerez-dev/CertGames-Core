@@ -1,1 +1,10 @@
+Similar “MU-MIMO introduction” questions appear in Test #1 (Question #85) and Test #2 (Question #80). While the exact wording differs slightly, the content is highly similar. If the goal is to avoid repeated topics, this might be worth reviewing.
+
+Repeated topics such as “Which port does RDP use?”, “Which protocol for secure remote administration (SSH)?”, or “Which wireless security standard is most secure?” appear in Tests #1, #2, #3, and #4. They may be intentional reinforcement, but are near-duplicates.
+
+
+Comparing to Tests #1–4: Common topics such as “port 3389 for RDP” or “WPA3 as the most secure standard” recur in multiple tests, though the wording varies. This may be intentional reinforcement, but the content is notably repeated.
+
+Comparing with Tests #1–6:
+Some recurring themes (e.g., WPA3, BGP attributes, IPv6 transition) also appeared in earlier tests, but the wording here is distinct enough to be considered non-duplicate. They seem more like repeated topics rather than the same question text.
 
