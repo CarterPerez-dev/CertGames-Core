@@ -1,3 +1,22 @@
+Duplicate or Repeated Questions
+
+Multiple questions appear exactly repeated later in the list. Specifically, these pairs have identical text (question and answers) repeated:
+#50 and #62 (both about the purpose of cookies in web browsing)
+#51 and #63 (ping command for network diagnosis)
+#52 and #64 (VPN acronym)
+#53 and #65 (Micro-ATX case form factor)
+#54 and #66 (system restore in Windows)
+#55 and #67 (3.5mm audio jack)
+#56 and #68 (spam email)
+#57 and #69 (smartphones as mobile devices)
+#58 and #70 (PSU powering components)
+#59 and #71 (RJ45 connector)
+#60 and #72 (definition of computer hardware)
+#61 and #73 (operating system as a type of software)
+That’s a total of 12 duplicated questions out of 100.
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 2,
