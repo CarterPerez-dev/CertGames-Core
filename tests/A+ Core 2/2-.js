@@ -1,3 +1,18 @@
+Duplicate (Repeated) Questions Within Test #2
+Several questions appear more than once, often verbatim or nearly so. For instance:
+
+Question #16 and #29 are identical (malware infection troubleshooting).
+Question #18 and #31 (UAC prompt reasons).
+Question #19 and #32 (Windows 10 edition supporting BitLocker and domain join).
+Question #20 and #33 (RAM upgrade not recognized by Windows).
+Question #21 and #34 (RDP firewall port 3389).
+Question #72, #76, #78, and #92 repeat the same domain-join question multiple times.
+Question #73, #79, and #93 repeat the system time mismatch / certificate error question.
+So there are numerous internal duplicates in this test, often with different IDs but the same wording and answer.
+
+
+
+
 db.tests.insertOne({
   "category": "aplus2",
   "testId": 2,
