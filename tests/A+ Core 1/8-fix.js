@@ -1,3 +1,31 @@
+Internal Duplicate Checks Within Test #8
+
+Several questions appear more than once, sometimes verbatim, later in the test. A few examples:
+
+Link Aggregation (LACP) question:
+
+Appears at Q66 (“… implement 'link aggregation control protocol' (LACP)… advantage of LACP over static aggregation?”)
+Also at Q81 and Q96 with the same text and same correct answer referencing LACP’s dynamic failover.
+Serverless computing / FaaS security question:
+
+Appears at Q67 (“key security challenge with 'serverless computing'…?”)
+Repeated at Q82 and Q97 with identical wording regarding “increased granularity and complexity in managing permissions for individual functions.”
+Laser printer 'light and dark banding' Venetian blind question:
+
+Found at Q68 (“A laser printer is producing prints with a repeating 'light and dark banding' pattern…?”)
+Repeated at Q83 and Q98 referencing the laser scanner assembly or polygon mirror.
+Securing user accounts against credential theft question:
+
+Found at Q69 (“Which of the following is a BEST practice for securing user accounts against credential theft…?”)
+Repeated at Q84 and Q99 referencing MFA, user education, and endpoint security.
+High-density Wi-Fi for a stadium question:
+
+Appears at Q71 (“… design a high-density Wi-Fi network for a large outdoor stadium…?”)
+Repeated at Q86 and Q100 referencing 802.11ax (Wi-Fi 6/6E) with advanced features for extreme load.
+These exact duplicates are scattered throughout the latter part of the test (roughly Q66, Q67, Q68… repeating again in Q81, Q82, Q83… and Q96, Q97, Q98… etc.).
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 8,
