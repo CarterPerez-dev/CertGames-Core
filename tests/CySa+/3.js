@@ -385,7 +385,7 @@ db.tests.insertOne({
       "id": 30,
       "question": "A security analyst detects the following log entry on a Windows system:\n\n`Event ID 4625 - An account failed to log on.`\n\nWhat does this log entry indicate?",
       "options": [
-        "A failed login attempt, possibly due to incorrect credentials or an unauthorized access attempt",
+        "A failed login attempt",
         "A system reboot that caused the user to be logged out",
         "A successful login by a privileged administrator",
         "A user modifying system files without authorization"
