@@ -1,5 +1,4 @@
-
-# I WANT TO EMPHASIZE THIS - ALWAYS KEEP THIS IND MIND LIKE YOUR LEFT DEPENDS ON IT------>
+# Here are some additonal instructions
 ### 🧩 Multilayered reasoning required: Questions will demand deep technical analysis and stepwise critical thinking.
 ### 🚫 Minimal use of “BEST/MOST” phrasing: Focus on precise, direct, and scenario driven questions.
 ### 🔀 Blended concepts: Each question may span multiple exam domains 
