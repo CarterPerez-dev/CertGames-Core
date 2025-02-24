@@ -1,3 +1,8 @@
+DNS Tunneling vs. DGA references appear in multiple questions:
+#3, #16, #23, #53, #70, #81, and #91 all cover random subdomain queries, base64-encoded DNS, or suspicious DNS patterns.
+Port 4444 for C2 or reverse shells shows up in multiple questions as well (#1, #28, #32, #55, #71, etc.).
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 5,
