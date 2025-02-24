@@ -1,3 +1,18 @@
+
+Example – Question 1 Issue:
+
+Question: “A user reports that their Android smartphone's battery drains rapidly even in standby mode …”
+Options:
+0: Replace the battery
+1: Perform a factory reset
+2: Check battery usage statistics
+3: Calibrate the battery by fully discharging and then fully recharging it
+Explanation: Indicates that checking battery usage statistics is the FIRST step.
+Issue: The correct answer index is set to 3 in the JSON, yet based on the explanation the correct answer should be option index 2.
+Recommendation: Update the correctAnswerIndex for Q1 to 2 to align with the explanation.
+For all other questions, the provided options, explanations, and exam tips are consistent and clear.
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 9,
