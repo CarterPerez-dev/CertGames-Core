@@ -913,7 +913,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "A regular backup strategy ensures data can be recovered in case of cyberattacks, hardware failures, or disasters, minimizing data loss and downtime.",
       "examTip": "Regular backups are essential for disaster recovery and business continuity planning."
-    }
+    },
     {
       "id": 71,
       "question": "What is the PRIMARY difference between 'vulnerability scanning' and 'penetration testing'?",
