@@ -3,7 +3,9 @@ Question #62: Mentions “toner easily wiping off,” which typically points to 
 Explanation #62: Discusses an empty toner cartridge causing blank pages, not “toner wiping off.”
 This appears to be an error or misalignment between the question text and the explanation.
 
+Duplicate or Repeated Questions Within Test #4
 
+Question #90 and Question #100 are exact duplicates (both ask about “Which tool is MOST appropriate for capturing and displaying network packets …?” with the same answer referencing a protocol analyzer).
 
 db.tests.insertOne({
   "category": "aplus",
