@@ -1,6 +1,6 @@
 
 Exam Tip: Missing for multiple questions (e.g., #21, #67, #77, #78, #79, #100, and others). Every question is supposed to include an examTip, but many do not.
-
+Question #54, Option 1: “Facial recognition with fingerprint identication” (likely meant to be “identification”).
 
 db.tests.insertOne({
   "category": "aplus2",
