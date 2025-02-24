@@ -68,3 +68,8 @@ A question about BIOS/UEFI resetting due to a failing CMOS battery appears in mu
 The remainder of the questions, although sometimes addressing similar topics, include differences in scenario details or phrasing that make them unique.
 
 If you’d like a more granular, line‐by–line report on any specific pair or further verification, let me know!
+
+A question about BIOS/UEFI settings resetting due to a failing CMOS battery appears in at least two tests (e.g., Test #9 and Test #10) with virtually identical wording.
+Rootkit Detection:
+
+Test #9, Q51 and Test #10, Q51 (exact duplicate)
