@@ -1,3 +1,26 @@
+Q1: “attempts every possible combination”
+Q73: “systematically tries every possible password combination”
+Phishing is asked in:
+
+Q4, Q47, Q54, Q61, Q89 (all revolve around phishing or social engineering).
+Denial-of-Service (DoS) recurs:
+
+Q34, Q41, Q82 similarly describe “flooding a network/system with excessive traffic.”
+Confidentiality is repeated:
+
+Q3, Q32, Q49 (all define “only authorized users” can access data).
+MFA appears repeatedly:
+
+Q8, Q39, Q48, Q57, Q63, Q77, Q90, Q91.
+Full-Disk Encryption recurs:
+
+Q5, Q76, Q81 (all mention “protecting data on a lost/stolen laptop”).
+Worm vs. Trojan:
+
+Q24, Q51 for Worm; Q13, Q66 for Trojan—very similar definitions repeated.
+
+
+
 db.tests.insertOne({
   "category": "secplus",
   "testId": 3,
