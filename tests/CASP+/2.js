@@ -1,3 +1,10 @@
+SSH-based remote management
+Test #1, Question #7 vs. Test #2, Question #14 both revolve around choosing SSH as the secure protocol for remote logins or device management.
+SFTP for secure file transfers
+Test #1, Question #90 vs. Test #2, Question #41 both ask which protocol is best/commonly used for secure file transfers (answer: SFTP).
+TLS/HTTPS for secure web traffic
+Test #1, Question #16 (TLS) vs. Test #2, Question #1 (HTTPS) and Question #29 (TLS). All address securing web communication, albeit worded slightly differently.
+
 db.tests.insertOne({
   "category": "caspplus",
   "testId": 2,
