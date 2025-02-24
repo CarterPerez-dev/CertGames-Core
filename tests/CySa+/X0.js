@@ -1,3 +1,39 @@
+Q6: “Repeated failed authentication attempts followed by a successful login... MOST likely attack technique?” → Credential stuffing.
+Q24: “Repeated failed authentication attempts followed by a successful login using a privileged account... MOST likely attack type?” → Credential stuffing.
+Q30: “Multiple failed authentication attempts from different IPs using variations of common passwords... attacker’s likely technique?” → Credential stuffing.
+Q55: “Repeated authentication requests using different variations of common passwords from multiple IP addresses... attacker’s likely technique?” → Credential stuffing.
+Q73: “Repeated failed authentication attempts followed by a successful login from a foreign IP using a privileged account... most likely attack technique?” → Credential stuffing.
+
+
+4. Potential Question–Answer Mismatches
+Question #81 Potentially Mismatched Explanation
+In question #81:
+
+perl
+Copy
+Edit
+"id": 81,
+"question": "A forensic analyst detects the following encoded PowerShell execution ...
+What is the attacker trying to accomplish?",
+"options": [
+  "Modifying Windows security policies",
+  "Disabling Windows Defender real-time protection",
+  "Extracting stored credentials from Windows Credential Manager",
+  "Executing a remote reverse shell"
+],
+"correctAnswerIndex": 0, // or whichever is chosen
+"explanation": "Decoding the Base64 string reveals a command to change Windows positioning..."
+But the “change Windows positioning settings” part might be contradictory or unaligned with the question or the chosen correct answer. Just ensure that:
+
+The chosen correct answer index actually matches what the script is doing.
+The explanation text is consistent with the question + correct answer.
+Double-check that question #81 (or any question) does not have a leftover snippet that belongs to a different scenario. If the explanation says “change Windows positioning,” but your options[0] says “Modifying Windows security policies,” you have a mismatch.
+
+
+  
+
+
+  
 db.tests.insertOne({
   "category": "cysa",
   "testId": 10,
