@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "linuxplus",
   "testId": 2,
   "testName": "Linux+ Practice Test #2 (Very Easy)",
