@@ -1,3 +1,5 @@
+refer to duplciates.txt
+
 db.tests.insertOne({
   "category": "secplus",
   "testId": 9,
