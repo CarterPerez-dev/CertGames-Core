@@ -1,3 +1,30 @@
+Within Test #2
+Several questions repeat the same core concept (sometimes nearly identical wording):
+
+Phishing appears multiple times:
+
+Q4: “Which type of attack involves tricking a user into revealing sensitive information by pretending to be a trusted entity?”
+Q19: “Which of the following BEST describes a phishing attack?”
+Q31: “Which of the following BEST describes phishing?”
+Q95: “Which attack involves an attacker sending fraudulent emails that appear to come from a trusted source?”
+All are essentially describing phishing.
+
+Denial-of-Service (DoS) questions:
+
+Q8, Q39, Q56 each ask about “flooding a network/system with excessive traffic” and point to DoS.
+Confidentiality questions:
+
+Q1, Q32, Q57 all ask which principle ensures data is only accessible to authorized individuals.
+Least Privilege questions:
+
+Q12, Q45, Q73 repeat the definition of least privilege (ensuring users have only the minimum permissions needed).
+In total, these create multiple near-duplicates within Test #2 itself, covering the same topics in very similar wording.
+
+
+
+
+
+
 db.tests.insertOne({
   "category": "secplus",
   "testId": 2,
