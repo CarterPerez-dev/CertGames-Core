@@ -424,7 +424,7 @@ db.tests.insertOne({{
       "id": 33,
       "question": "Which wireless standard supports the 6GHz frequency band and offers improved performance for dense environments?",
       "options": [
-        "802.11ax (Wi-Fi 6E)",
+        "802.11ax",
         "802.11ac",
         "802.11n",
         "802.11g"
