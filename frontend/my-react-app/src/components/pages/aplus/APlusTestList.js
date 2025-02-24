@@ -1,106 +1,142 @@
-// src/components/pages/testpage/APlusTestList.js
-
-import React, { useState, useEffect } from "react";
+// APlusTestList.js
+// (Server-based progress version, unchanged except for the new "View Review" navigation state)
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import "../../test.css";
 
 const APlusTestList = () => {
   const navigate = useNavigate();
-  const totalQuestions = 100;
   const { userId } = useSelector((state) => state.user);
+  const totalQuestionsPerTest = 100;
   const category = "aplus";
 
-  // Store attempt objects from the backend (keyed by test number)
-  const [attempts, setAttempts] = useState({});
+  const [attemptData, setAttemptData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Fetch the attempt for each test (tests 1 to 10) from the backend
   useEffect(() => {
     if (!userId) return;
-    const fetchAttempts = async () => {
-      const newAttempts = {};
-      for (let testNumber = 1; testNumber <= 10; testNumber++) {
-        try {
-          const res = await fetch(`/api/test/attempts/${userId}/${testNumber}`);
-          if (res.ok) {
-            const data = await res.json();
-            newAttempts[testNumber] = data.attempt; // either an object or null
-          } else {
-            newAttempts[testNumber] = null;
-          }
-        } catch (err) {
-          console.error("Error fetching attempt for test", testNumber, err);
-          newAttempts[testNumber] = null;
-        }
-      }
-      setAttempts(newAttempts);
-    };
-    fetchAttempts();
-  }, [userId]);
+    setLoading(true);
 
-  // Helper: Return display string based on the fetched attempt document
-  const getProgressDisplay = (testNumber) => {
-    const attempt = attempts[testNumber];
-    if (!attempt) {
-      return "No progress yet";
-    }
-    if (attempt.finished) {
-      const percentage = Math.round((attempt.score / totalQuestions) * 100);
-      return `Final Score: ${percentage}% (${attempt.score}/${totalQuestions})`;
-    } else if (typeof attempt.currentQuestionIndex === "number") {
-      return `Progress: ${attempt.currentQuestionIndex + 1} / ${totalQuestions}`;
+    // Single fetch for entire user attempt list
+    const fetchAttempts = async () => {
+      try {
+        const res = await fetch(`/api/test/attempts/${userId}/list`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch attempts for user");
+        }
+        const data = await res.json();
+        const attemptList = data.attempts || [];
+
+        // We only care about A+ attempts
+        const relevant = attemptList.filter((a) => a.category === category);
+
+        // For each testId, figure out the best attempt doc to show (unfinished if it exists, otherwise last finished)
+        const bestAttempts = {};
+        for (let att of relevant) {
+          const testKey = att.testId;
+          if (!bestAttempts[testKey]) {
+            bestAttempts[testKey] = att;
+          } else {
+            const existing = bestAttempts[testKey];
+            // Prefer the unfinished attempt if it exists
+            if (!existing.finished && att.finished) {
+              // keep existing
+            } else if (existing.finished && !att.finished) {
+              bestAttempts[testKey] = att;
+            } else {
+              // both finished or both unfinished => pick whichever is newer
+              const existingTime = new Date(existing.finishedAt || 0).getTime();
+              const newTime = new Date(att.finishedAt || 0).getTime();
+              if (newTime > existingTime) {
+                bestAttempts[testKey] = att;
+              }
+            }
+          }
+        }
+
+        setAttemptData(bestAttempts);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchAttempts();
+  }, [userId, category]);
+
+  if (!userId) {
+    return <div className="tests-list-container">Please log in.</div>;
+  }
+
+  if (loading) {
+    return <div className="tests-list-container">Loading attempts...</div>;
+  }
+  if (error) {
+    return <div className="tests-list-container">Error: {error}</div>;
+  }
+
+  const getAttemptDoc = (testNumber) => {
+    return attemptData[testNumber] || null;
+  };
+
+  const getProgressDisplay = (attemptDoc) => {
+    if (!attemptDoc) return "No progress yet";
+    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    if (finished) {
+      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
+      return `Final Score: ${pct}% (${score}/${totalQuestions || totalQuestionsPerTest})`;
+    } else {
+      if (typeof currentQuestionIndex === "number") {
+        return `Progress: ${currentQuestionIndex + 1} / ${totalQuestions || totalQuestionsPerTest}`;
+      }
     }
     return "No progress yet";
   };
 
-  // Optional: Difficulty mapping for visual flair
-  const getDifficultyData = (testNumber) => {
-    const data = {
-      1: { label: "Normal", color: "hsl(0, 0%, 100%)" },
-      2: { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
-      3: { label: "Easy", color: "hsl(120, 100%, 70%)" },
-      4: { label: "Moderate", color: "hsl(120, 100%, 60%)" },
-      5: { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
-      6: { label: "Formidable", color: "hsl(120, 100%, 40%)" },
-      7: { label: "Challenging", color: "hsl(120, 100%, 30%)" },
-      8: { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
-      9: { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
-      10: { label: "Ultra Level", color: "#000" }
-    };
-    return data[testNumber] || { label: "", color: "#fff" };
-  };
-
-  // Handler for restarting a test
+  // This "restart test" upserts a fresh attempt doc
   const handleRestartTest = async (testNumber) => {
-    if (!userId) return;
     try {
-      // Upsert a new (empty) attempt document for the given testNumber
       await fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          category,
           answers: [],
           score: 0,
-          totalQuestions,
-          category,
+          totalQuestions: totalQuestionsPerTest,
           currentQuestionIndex: 0,
           shuffleOrder: [],
           finished: false
         })
       });
-      // Re-fetch the attempt for this testNumber
-      const res = await fetch(`/api/test/attempts/${userId}/${testNumber}`);
-      if (res.ok) {
-        const data = await res.json();
-        setAttempts((prev) => ({ ...prev, [testNumber]: data.attempt }));
-      }
+      // Remove local data so we re-fetch or re-check next time
+      const newData = { ...attemptData };
+      delete newData[testNumber];
+      setAttemptData(newData);
 
-      // Immediately navigate so the user starts fresh
       navigate(`/practice-tests/a-plus/${testNumber}`);
-    } catch (error) {
-      console.error("Error restarting test", testNumber, error);
+    } catch (err) {
+      console.error("Failed to restart test:", err);
     }
   };
+
+  // Simple difficulty labels/colors
+  const difficultyColors = [
+    { label: "Normal", color: "hsl(0, 0%, 100%)" },
+    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
+    { label: "Easy", color: "hsl(120, 100%, 70%)" },
+    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
+    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
+    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
+    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
+    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
+    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
+    { label: "Ultra Level", color: "#000" }
+  ];
 
   return (
     <div className="tests-list-container">
@@ -108,9 +144,9 @@ const APlusTestList = () => {
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
-          const difficulty = getDifficultyData(testNumber);
-          const progressDisplay = getProgressDisplay(testNumber);
-          const attempt = attempts[testNumber];
+          const attemptDoc = getAttemptDoc(testNumber);
+          const progressDisplay = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
 
           return (
             <div key={testNumber} className="test-card">
@@ -122,59 +158,52 @@ const APlusTestList = () => {
                 {difficulty.label}
               </div>
               <p className="test-progress">{progressDisplay}</p>
-              {attempt ? (
-                <div className="test-card-buttons">
-                  {attempt.finished ? (
-                    <>
-                      {/* 
-                        Pass review: true in location.state so
-                        GlobalTestPage can decide to show the review.
-                      */}
-                      <button
-                        className="resume-button"
-                        onClick={() =>
-                          navigate(`/practice-tests/a-plus/${testNumber}`, {
-                            state: { review: true },
-                          })
-                        }
-                      >
-                        View Review
-                      </button>
-                      <button
-                        className="restart-button-testlist"
-                        onClick={() => handleRestartTest(testNumber)}
-                      >
-                        Restart Test
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="resume-button"
-                        onClick={() =>
-                          navigate(`/practice-tests/a-plus/${testNumber}`)
-                        }
-                      >
-                        Resume Test
-                      </button>
-                      <button
-                        className="restart-button-testlist"
-                        onClick={() => handleRestartTest(testNumber)}
-                      >
-                        Restart Test
-                      </button>
-                    </>
-                  )}
-                </div>
-              ) : (
+
+              {!attemptDoc && (
                 <button
                   className="start-button"
-                  onClick={() =>
-                    navigate(`/practice-tests/a-plus/${testNumber}`)
-                  }
+                  onClick={() => navigate(`/practice-tests/a-plus/${testNumber}`)}
                 >
                   Click to Start
                 </button>
+              )}
+
+              {attemptDoc && !attemptDoc.finished && (
+                <div className="test-card-buttons">
+                  <button
+                    className="resume-button"
+                    onClick={() => navigate(`/practice-tests/a-plus/${testNumber}`)}
+                  >
+                    Resume Test
+                  </button>
+                  <button
+                    className="restart-button-testlist"
+                    onClick={() => handleRestartTest(testNumber)}
+                  >
+                    Restart Test
+                  </button>
+                </div>
+              )}
+
+              {attemptDoc && attemptDoc.finished && (
+                <div className="test-card-buttons">
+                  <button
+                    className="resume-button"
+                    onClick={() =>
+                      navigate(`/practice-tests/a-plus/${testNumber}`, {
+                        state: { review: true }
+                      })
+                    }
+                  >
+                    View Review
+                  </button>
+                  <button
+                    className="restart-button-testlist"
+                    onClick={() => handleRestartTest(testNumber)}
+                  >
+                    Restart Test
+                  </button>
+                </div>
               )}
             </div>
           );

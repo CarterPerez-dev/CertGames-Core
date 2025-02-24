@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useRef
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setXPAndCoins } from "./pages/store/userSlice";
 import { fetchShopItems } from "./pages/store/shopSlice";
@@ -14,7 +14,6 @@ import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "./pages/store/AchievementToast";
 import "./test.css";
 
-// Icon imports for achievements
 import {
   FaTrophy,
   FaMedal,
@@ -29,20 +28,27 @@ import {
 } from "react-icons/fa";
 
 /* ------------------------------------------------------------------
-   1) Helper: Shuffle an array of question indices
-      We won't store the entire question text in localStorage anymore.
+   1) Helper: Shuffle an array
 ------------------------------------------------------------------ */
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/* 
+   Helper to generate a shuffle of question indices 
+*/
 function shuffleIndices(length) {
   const indices = Array.from({ length }, (_, i) => i);
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [indices[i], indices[j]] = [indices[j], indices[i]];
-  }
-  return indices;
+  return shuffleArray(indices);
 }
 
 /* ------------------------------------------------------------------
-   2) Icon & Color Mappings for Achievements
+   2) Achievements Icon/Color Mappings
 ------------------------------------------------------------------ */
 const iconMapping = {
   test_rookie: FaTrophy,
@@ -107,37 +113,36 @@ const colorMapping = {
 };
 
 /* ------------------------------------------------------------------
-   3) The Global Test Page (Server-Side Progress Storage)
+   3) Dropdown for jumping to a question
 ------------------------------------------------------------------ */
-const QuestionDropdown = ({ 
-  totalQuestions, 
-  currentQuestionIndex, 
-  onQuestionSelect, 
-  answers, 
-  flaggedQuestions, 
-  testData, 
-  shuffleOrder 
+const QuestionDropdown = ({
+  totalQuestions,
+  currentQuestionIndex,
+  onQuestionSelect,
+  answers,
+  flaggedQuestions,
+  testData,
+  shuffleOrder
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const getQuestionStatus = (index) => {
     const realIndex = shuffleOrder[index];
     const question = testData.questions[realIndex];
-    const answer = answers.find(a => a.questionId === question.id);
+    const answer = answers.find((a) => a.questionId === question.id);
     const isFlagged = flaggedQuestions.includes(question.id);
-    
+
     return {
       isAnswered: answer?.userAnswerIndex !== undefined,
       isSkipped: answer?.userAnswerIndex === null,
@@ -163,15 +168,21 @@ const QuestionDropdown = ({
                   onQuestionSelect(i);
                   setIsOpen(false);
                 }}
-                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''}`}
+                className={`dropdown-item ${
+                  i === currentQuestionIndex ? "active" : ""
+                }`}
               >
                 <span>Question {i + 1}</span>
                 <div className="status-indicators">
                   {status.isSkipped && <span className="skip-indicator">⏭️</span>}
                   {status.isFlagged && <span className="flag-indicator">🚩</span>}
                   {status.isAnswered && !status.isSkipped && (
-                    <span className={`answer-indicator ${status.isCorrect ? 'correct' : 'incorrect'}`}>
-                      {status.isCorrect ? '✓' : '✗'}
+                    <span
+                      className={`answer-indicator ${
+                        status.isCorrect ? "correct" : "incorrect"
+                      }`}
+                    >
+                      {status.isCorrect ? "✓" : "✗"}
                     </span>
                   )}
                 </div>
@@ -184,12 +195,15 @@ const QuestionDropdown = ({
   );
 };
 
-
+/* ------------------------------------------------------------------
+   4) The Main "GlobalTestPage" with both question-shuffle & answer-shuffle
+------------------------------------------------------------------ */
 const GlobalTestPage = ({
-  testId,           // e.g. "1"
-  category,         // e.g. "secplus"
-  backToListPath    // e.g. "/practice-tests/security-plus"
+  testId,
+  category,
+  backToListPath
 }) => {
+  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -206,14 +220,13 @@ const GlobalTestPage = ({
   const achievements = useSelector((state) => state.achievements.all);
   const { items: shopItems, status: shopStatus } = useSelector((state) => state.shop);
 
-  // State for question data & progress
-  const [testData, setTestData] = useState(null);          // Full question text
-  const [shuffleOrder, setShuffleOrder] = useState([]);    // Array of indices
+  // Local states for test logic
+  const [testData, setTestData] = useState(null);
+  const [shuffleOrder, setShuffleOrder] = useState([]); // question shuffle
+  const [answerOrder, setAnswerOrder] = useState([]);   // array-of-arrays for answer choices
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);              // e.g. [{ questionId, userAnswerIndex, correctAnswerIndex }, ...]
+  const [answers, setAnswers] = useState([]);
   const [score, setScore] = useState(0);
-
-  // Flags
   const [loadingTest, setLoadingTest] = useState(true);
   const [error, setError] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
@@ -223,13 +236,12 @@ const GlobalTestPage = ({
   // Overlays
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [showReviewMode, setShowReviewMode] = useState(false);
-  const [reviewFilter, setReviewFilter] = useState("all");
 
-  // Confetti
+  // Confetti on level-up
   const [localLevel, setLocalLevel] = useState(level);
   const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
 
-  // Flag questions
+  // Flags
   const [flaggedQuestions, setFlaggedQuestions] = useState([]);
 
   // Confirmation popups
@@ -237,67 +249,83 @@ const GlobalTestPage = ({
   const [showFinishPopup, setShowFinishPopup] = useState(false);
   const [showNextPopup, setShowNextPopup] = useState(false);
 
-  /* -----------------------------------------------------
-     A) On mount: fetch partial attempt, then fetch test
-  ----------------------------------------------------- */
-  
-
   useEffect(() => {
-    // fetch shop items if needed
     if (shopStatus === "idle") {
       dispatch(fetchShopItems());
     }
   }, [shopStatus, dispatch]);
 
-  // 1) fetch partial attempt from /attempts/<userId>/<testId>
-  // 2) fetch test from /api/test/tests/<testId>
-  // 3) apply shuffle order to test
+  // This is the main fetch that loads or creates the attempt doc
   const fetchTestAndAttempt = async () => {
     setLoadingTest(true);
     try {
-      // Step 1) Partial attempt:
       let attemptDoc = null;
       if (userId) {
         const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
         const attemptData = await attemptRes.json();
-        attemptDoc = attemptData.attempt; // might be null
+        attemptDoc = attemptData.attempt || null;
       }
 
-      // Step 2) Full test doc
+      // fetch the actual test doc
       const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
       if (!testRes.ok) {
         const errData = await testRes.json().catch(() => ({}));
         throw new Error(errData.error || "Failed to fetch test data");
       }
       const testDoc = await testRes.json();
+      setTestData(testDoc);
 
-      // We'll keep testDoc.questions as "testData"
-      setTestData(testDoc); // question text + answers
+      const totalQ = testDoc.questions.length;
 
       if (attemptDoc) {
-        // We have partial data from the server
+        // We have partial or finished attempt
         setAnswers(attemptDoc.answers || []);
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
 
+        // question shuffle
         if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length > 0) {
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
-          // If no shuffle saved, generate one
-          const newOrder = shuffleIndices(testDoc.questions.length);
-          setShuffleOrder(newOrder);
+          const newQOrder = shuffleIndices(totalQ);
+          setShuffleOrder(newQOrder);
         }
+
+        // ANSWER CHOICES shuffle
+        if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === totalQ) {
+          // re-use existing
+          setAnswerOrder(attemptDoc.answerOrder);
+        } else {
+          // generate brand-new
+          const generatedAnswerOrder = testDoc.questions.map((q) => {
+            const numOptions = q.options.length;
+            // create an array [0,1,2,3,...], shuffle
+            return shuffleArray([...Array(numOptions).keys()]);
+          });
+          setAnswerOrder(generatedAnswerOrder);
+        }
+
+        // current question index
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
       } else {
-        // No partial attempt => brand new
-        const newOrder = shuffleIndices(testDoc.questions.length);
-        setShuffleOrder(newOrder);
+        // brand new attempt
         setScore(0);
         setAnswers([]);
         setIsFinished(false);
         setCurrentQuestionIndex(0);
 
-        // Create an attempt doc in DB with an upsert call:
+        // generate question shuffle
+        const newQOrder = shuffleIndices(totalQ);
+        setShuffleOrder(newQOrder);
+
+        // generate answer shuffle
+        const generatedAnswerOrder = testDoc.questions.map((q) => {
+          const numOptions = q.options.length;
+          return shuffleArray([...Array(numOptions).keys()]);
+        });
+        setAnswerOrder(generatedAnswerOrder);
+
+        // upsert attempt doc if user is logged in
         if (userId) {
           await fetch(`/api/test/attempts/${userId}/${testId}`, {
             method: "POST",
@@ -305,10 +333,11 @@ const GlobalTestPage = ({
             body: JSON.stringify({
               answers: [],
               score: 0,
-              totalQuestions: testDoc.questions.length,
+              totalQuestions: totalQ,
               category: testDoc.category || category,
               currentQuestionIndex: 0,
-              shuffleOrder: newOrder,
+              shuffleOrder: newQOrder,
+              answerOrder: generatedAnswerOrder, // <-- storing newly generated
               finished: false
             })
           });
@@ -326,9 +355,7 @@ const GlobalTestPage = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testId, userId]);
 
-  /* -----------------------------------------------------
-     B) Confetti if user levels up
-  ----------------------------------------------------- */
+  // Confetti if user levels up
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -338,71 +365,106 @@ const GlobalTestPage = ({
     }
   }, [level, localLevel]);
 
-  /* -----------------------------------------------------
-     C) Helper: Get the "real" question index from shuffle
-  ----------------------------------------------------- */
-  const getShuffledIndex = useCallback((i) => {
-    if (!shuffleOrder || shuffleOrder.length === 0) {
-      return i;
+  // If navigated with { state: { review: true } } and test is finished => show review
+  useEffect(() => {
+    if (location.state?.review && isFinished) {
+      setShowReviewMode(true);
     }
-    return shuffleOrder[i];
-  }, [shuffleOrder]);
+  }, [location.state, isFinished]);
 
-  /* -----------------------------------------------------
-     D) If we have question data + shuffle, figure out Q
-  ----------------------------------------------------- */
+  // Basic helper to get the question index from shuffle
+  const getShuffledIndex = useCallback(
+    (i) => {
+      if (!shuffleOrder || shuffleOrder.length === 0) return i;
+      return shuffleOrder[i];
+    },
+    [shuffleOrder]
+  );
+
+  // We have totalQuestions, realIndex, questionObject
   const totalQuestions = testData?.questions?.length || 0;
   const realIndex = getShuffledIndex(currentQuestionIndex);
   const questionObject = totalQuestions > 0
     ? testData.questions[realIndex]
     : null;
 
-  // Determine if we have an existing answer for the current question
+  // On each new question, figure out if we had answered it
   useEffect(() => {
     if (!questionObject) return;
     const existing = answers.find((a) => a.questionId === questionObject.id);
     if (existing) {
-      setSelectedOptionIndex(existing.userAnswerIndex);
-      setIsAnswered(existing.userAnswerIndex !== null && existing.userAnswerIndex !== undefined);
+      setSelectedOptionIndex(null);
+      if (
+        existing.userAnswerIndex !== null &&
+        existing.userAnswerIndex !== undefined
+      ) {
+        // Need to find which "display index" that corresponds to in the shuffled answer array
+        const displayIndex = answerOrder[realIndex].indexOf(existing.userAnswerIndex);
+        if (displayIndex >= 0) {
+          setSelectedOptionIndex(displayIndex);
+          setIsAnswered(true);
+        } else {
+          // Some mismatch
+          setIsAnswered(false);
+        }
+      } else {
+        // It's "skipped"
+        setIsAnswered(true);
+      }
     } else {
       setSelectedOptionIndex(null);
       setIsAnswered(false);
     }
-  }, [questionObject, answers]);
+  }, [questionObject, answers, realIndex, answerOrder]);
 
-  /* -----------------------------------------------------
-     E) Send partial updates to server after each action
-  ----------------------------------------------------- */
-  const updateServerProgress = useCallback(async (updatedAnswers, updatedScore, finished = false) => {
-    if (!userId) return;
-    try {
-      await fetch(`/api/test/attempts/${userId}/${testId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          answers: updatedAnswers,
-          score: updatedScore,
-          totalQuestions,
-          category: testData?.category || category,
-          currentQuestionIndex,
-          shuffleOrder,
-          finished
-        })
-      });
-    } catch (err) {
-      console.error("Failed to update test attempt on backend", err);
-    }
-  }, [testId, userId, totalQuestions, testData, category, currentQuestionIndex, shuffleOrder]);
+  // We'll store partial attempt in the server
+  const updateServerProgress = useCallback(
+    async (updatedAnswers, updatedScore, finished = false) => {
+      if (!userId) return;
+      try {
+        await fetch(`/api/test/attempts/${userId}/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            answers: updatedAnswers,
+            score: updatedScore,
+            totalQuestions,
+            category: testData?.category || category,
+            currentQuestionIndex,
+            shuffleOrder,
+            answerOrder, // INCLUDE answerOrder so it’s saved
+            finished
+          })
+        });
+      } catch (err) {
+        console.error("Failed to update test attempt on backend", err);
+      }
+    },
+    [
+      testId,
+      userId,
+      totalQuestions,
+      testData,
+      category,
+      currentQuestionIndex,
+      shuffleOrder,
+      answerOrder
+    ]
+  );
 
-  /* -----------------------------------------------------
-     F) Handle Option Click
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     5) Handling a user answer
+  ------------------------------------------------------------------ */
   const handleOptionClick = useCallback(
-    async (optionIndex) => {
+    async (displayOptionIndex) => {
+      // e.g. user clicked the "2nd" visible choice, 
+      // so find the "actual" answer index from answerOrder
       if (isAnswered || !questionObject) return;
-      setSelectedOptionIndex(optionIndex);
+      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
+      setSelectedOptionIndex(displayOptionIndex);
 
       try {
+        // normal scoring logic
         const baseXP = testData?.xpPerCorrect || 10;
         const effectiveXP = baseXP * xpBoost;
         const response = await fetch(`/api/test/user/${userId}/submit-answer`, {
@@ -412,50 +474,50 @@ const GlobalTestPage = ({
             testId,
             questionId: questionObject.id,
             correctAnswerIndex: questionObject.correctAnswerIndex,
-            selectedIndex: optionIndex,
+            selectedIndex: actualAnswerIndex, // store the "true" index
             xpPerCorrect: effectiveXP,
             coinsPerCorrect: 5
           })
         });
         const result = await response.json();
         if (response.ok) {
-          const { isCorrect, alreadyCorrect, awardedXP, newXP, newCoins } = result;
+          const {
+            isCorrect,
+            alreadyCorrect,
+            awardedXP,
+            newXP,
+            newCoins
+          } = result;
+          // if it’s newly correct, update user xp + coins
           if (isCorrect && !alreadyCorrect && awardedXP > 0) {
             dispatch(setXPAndCoins({ xp: newXP, coins: newCoins }));
           }
+          // update local score
+          let newScore = score;
           if (isCorrect) {
-            const newScore = score + 1;
+            newScore = score + 1;
             setScore(newScore);
-
-            // Update server partial progress
-            const updatedAnswers = [...answers];
-            const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
-            const newAnswerObj = {
-              questionId: questionObject.id,
-              userAnswerIndex: optionIndex,
-              correctAnswerIndex: questionObject.correctAnswerIndex
-            };
-            if (idx >= 0) updatedAnswers[idx] = newAnswerObj;
-            else updatedAnswers.push(newAnswerObj);
-            setAnswers(updatedAnswers);
-
-            // if correct, increment local score
-            updateServerProgress(updatedAnswers, newScore, false);
-          } else {
-            // incorrect or no new xp
-            const updatedAnswers = [...answers];
-            const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
-            const newAnswerObj = {
-              questionId: questionObject.id,
-              userAnswerIndex: optionIndex,
-              correctAnswerIndex: questionObject.correctAnswerIndex
-            };
-            if (idx >= 0) updatedAnswers[idx] = newAnswerObj;
-            else updatedAnswers.push(newAnswerObj);
-            setAnswers(updatedAnswers);
-
-            updateServerProgress(updatedAnswers, score, false);
           }
+
+          // update our local "answers"
+          const updatedAnswers = [...answers];
+          const idx = updatedAnswers.findIndex(
+            (a) => a.questionId === questionObject.id
+          );
+          const newAnswerObj = {
+            questionId: questionObject.id,
+            userAnswerIndex: actualAnswerIndex,       // store the real index
+            correctAnswerIndex: questionObject.correctAnswerIndex
+          };
+          if (idx >= 0) {
+            updatedAnswers[idx] = newAnswerObj;
+          } else {
+            updatedAnswers.push(newAnswerObj);
+          }
+          setAnswers(updatedAnswers);
+
+          // update partial attempt
+          updateServerProgress(updatedAnswers, newScore, false);
         } else {
           console.error("submit-answer error:", result);
         }
@@ -475,15 +537,16 @@ const GlobalTestPage = ({
       dispatch,
       score,
       answers,
-      updateServerProgress
+      updateServerProgress,
+      realIndex,
+      answerOrder
     ]
   );
 
-  /* -----------------------------------------------------
-     G) Next / Previous
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     6) Finishing the test
+  ------------------------------------------------------------------ */
   const finishTestProcess = useCallback(async () => {
-    // finalize local score
     let finalScore = 0;
     answers.forEach((ans) => {
       if (ans.userAnswerIndex === ans.correctAnswerIndex) {
@@ -492,7 +555,6 @@ const GlobalTestPage = ({
     });
     setScore(finalScore);
 
-    // call /attempts/.../finish
     try {
       const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
         method: "POST",
@@ -505,7 +567,9 @@ const GlobalTestPage = ({
       const finishData = await res.json();
       if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
         finishData.newlyUnlocked.forEach((achievementId) => {
-          const achievement = achievements.find((a) => a.achievementId === achievementId);
+          const achievement = achievements.find(
+            (a) => a.achievementId === achievementId
+          );
           if (achievement) {
             const IconComp = iconMapping[achievement.achievementId] || null;
             const color = colorMapping[achievement.achievementId] || "#fff";
@@ -522,27 +586,18 @@ const GlobalTestPage = ({
       console.error("Failed to finish test attempt:", err);
     }
 
-    // Mark local states
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(true);
-  }, [
-    answers,
-    userId,
-    testId,
-    totalQuestions,
-    achievements
-  ]);
+  }, [answers, userId, testId, totalQuestions, achievements]);
 
   const handleNextQuestion = useCallback(() => {
     if (currentQuestionIndex === totalQuestions - 1) {
       finishTestProcess();
       return;
     }
-    // Move to next
     const nextIndex = currentQuestionIndex + 1;
     setCurrentQuestionIndex(nextIndex);
-    // Also update server partial progress
     updateServerProgress(answers, score, false);
   }, [
     currentQuestionIndex,
@@ -561,14 +616,16 @@ const GlobalTestPage = ({
     }
   }, [currentQuestionIndex, updateServerProgress, answers, score]);
 
-  /* -----------------------------------------------------
-     H) Skip / Flag
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     7) Skipping / Flagging
+  ------------------------------------------------------------------ */
   const handleSkipQuestion = () => {
     if (!questionObject) return;
-    // Insert or update an answer with userAnswerIndex = null
     const updatedAnswers = [...answers];
-    const idx = updatedAnswers.findIndex((a) => a.questionId === questionObject.id);
+    const idx = updatedAnswers.findIndex(
+      (a) => a.questionId === questionObject.id
+    );
+    // store userAnswerIndex=null to mark “skipped”
     const skipObj = {
       questionId: questionObject.id,
       userAnswerIndex: null,
@@ -595,12 +652,10 @@ const GlobalTestPage = ({
     }
   };
 
-  /* -----------------------------------------------------
-     I) Restart
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     8) Restart
+  ------------------------------------------------------------------ */
   const handleRestartTest = useCallback(async () => {
-    // remove the attempt doc or mark it as finished so we can start fresh
-    // We'll just do the same approach as "new attempt"
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
     setIsAnswered(false);
@@ -611,12 +666,18 @@ const GlobalTestPage = ({
     setShowReviewMode(false);
     setShowScoreOverlay(false);
 
-    // generate a new shuffle
     if (testData?.questions?.length) {
+      // new question shuffle
       const newOrder = shuffleIndices(testData.questions.length);
       setShuffleOrder(newOrder);
 
-      // upsert attempt doc from scratch
+      // new answer shuffle
+      const newAnswerOrder = testData.questions.map((q) => {
+        const numOpts = q.options.length;
+        return shuffleArray([...Array(numOpts).keys()]);
+      });
+      setAnswerOrder(newAnswerOrder);
+
       if (userId && testId) {
         await fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -628,6 +689,7 @@ const GlobalTestPage = ({
             category: testData.category || category,
             currentQuestionIndex: 0,
             shuffleOrder: newOrder,
+            answerOrder: newAnswerOrder,
             finished: false
           })
         });
@@ -639,9 +701,11 @@ const GlobalTestPage = ({
     finishTestProcess();
   };
 
-  /* -----------------------------------------------------
-     J) Review
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     9) Review
+  ------------------------------------------------------------------ */
+  const [reviewFilter, setReviewFilter] = useState("all");
+
   const handleReviewAnswers = () => {
     setShowReviewMode(true);
     setReviewFilter("all");
@@ -651,25 +715,12 @@ const GlobalTestPage = ({
     if (!isFinished) setShowReviewMode(false);
   };
 
-  const onNextClick = useCallback(() => {
-    // if user hasn't answered => show confirm
-    if (!isAnswered) {
-      setShowNextPopup(true);
-    } else {
-      handleNextQuestion();
-    }
-  }, [isAnswered, handleNextQuestion]);
-
-  /* -----------------------------------------------------
-     K) Filter for Review Mode
-  ----------------------------------------------------- */
   const filteredQuestions = useMemo(() => {
     if (!testData || !testData.questions) return [];
-    return testData.questions.filter((q, realIdx) => {
+    return testData.questions.filter((q) => {
       const userAns = answers.find((a) => a.questionId === q.id);
       const isFlagged = flaggedQuestions.includes(q.id);
       if (!userAns) {
-        // user never answered => skip or "no answer"
         return reviewFilter === "skipped" || reviewFilter === "all";
       }
       const isSkipped = userAns.userAnswerIndex === null;
@@ -683,21 +734,16 @@ const GlobalTestPage = ({
     });
   }, [testData, answers, flaggedQuestions, reviewFilter]);
 
-  /* -----------------------------------------------------
-     Overlays & Confirm Popups
-  ----------------------------------------------------- */
-  // Confirmation Popup
+  /* ------------------------------------------------------------------
+     10) Confirmation Popups & Overlays
+  ------------------------------------------------------------------ */
   const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
         <p>{message}</p>
         <div className="confirm-popup-buttons">
-          <button className="confirm-popup-yes" onClick={onConfirm}>
-            Yes
-          </button>
-          <button className="confirm-popup-no" onClick={onCancel}>
-            No
-          </button>
+          <button className="confirm-popup-yes" onClick={onConfirm}>Yes</button>
+          <button className="confirm-popup-no" onClick={onCancel}>No</button>
         </div>
       </div>
     </div>
@@ -759,10 +805,16 @@ const GlobalTestPage = ({
             Your score: <strong>{percentage}%</strong> ({score}/{totalQuestions})
           </p>
           <div className="overlay-buttons">
-            <button className="restart-button" onClick={() => setShowRestartPopup(true)}>
+            <button
+              className="restart-button"
+              onClick={() => setShowRestartPopup(true)}
+            >
               Restart Test
             </button>
-            <button className="review-button" onClick={handleReviewAnswers}>
+            <button
+              className="review-button"
+              onClick={handleReviewAnswers}
+            >
               View Review
             </button>
             <button
@@ -774,9 +826,7 @@ const GlobalTestPage = ({
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() =>
-                  navigate(`${backToListPath}/${Number(testId) + 1}`)
-                }
+                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
               >
                 Next Test
               </button>
@@ -857,7 +907,6 @@ const GlobalTestPage = ({
               const isFlagged = flaggedQuestions.includes(q.id);
 
               if (!userAns) {
-                // no answer
                 return (
                   <div key={q.id} className="review-question-card">
                     <h3>
@@ -922,9 +971,9 @@ const GlobalTestPage = ({
     );
   };
 
-  /* -----------------------------------------------------
-     L) Final Return
-  ----------------------------------------------------- */
+  /* ------------------------------------------------------------------
+     11) Final Render
+  ------------------------------------------------------------------ */
   if (error) {
     return <div style={{ color: "#fff" }}>Error: {error}</div>;
   }
@@ -935,7 +984,7 @@ const GlobalTestPage = ({
     return <div style={{ color: "#fff" }}>No questions found.</div>;
   }
 
-  // Determine avatar URL
+  // figure out user avatar
   let avatarUrl = "https://via.placeholder.com/60";
   if (currentAvatar && shopItems && shopItems.length > 0) {
     const avatarItem = shopItems.find((item) => item._id === currentAvatar);
@@ -944,12 +993,20 @@ const GlobalTestPage = ({
     }
   }
 
-  const progressPercentage = totalQuestions > 0
+  // progress bar color
+  const progressPercentage = totalQuestions
     ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)
     : 0;
-
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
+
+  // build "display" options for the current question from answerOrder
+  let displayedOptions = [];
+  if (questionObject && answerOrder[realIndex]) {
+    displayedOptions = answerOrder[realIndex].map(
+      (optionIdx) => questionObject.options[optionIdx]
+    );
+  }
 
   return (
     <div className="aplus-test-container">
@@ -960,9 +1017,6 @@ const GlobalTestPage = ({
       {renderNextPopup()}
       {renderScoreOverlay()}
       {renderReviewMode()}
-
-
-
 
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
@@ -1006,7 +1060,6 @@ const GlobalTestPage = ({
 
       <h1 className="aplus-title">{testData.testName}</h1>
 
-      {/* Avatar + XP + Coins */}
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -1019,7 +1072,6 @@ const GlobalTestPage = ({
         <div className="coins-display">Coins: {coins}</div>
       </div>
 
-      {/* Progress Bar */}
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -1029,30 +1081,35 @@ const GlobalTestPage = ({
         </div>
       </div>
 
-      {/* Main question UI (if not finished/score overlay/review) */}
+      {/* The main question UI if not finished or reviewing */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">
             {questionObject && questionObject.question}
           </div>
           <ul className="options-list">
-            {questionObject.options.map((option, idx) => {
+            {displayedOptions.map((option, displayIdx) => {
               let optionClass = "option-button";
               const correctIndex = questionObject.correctAnswerIndex;
-              if (isAnswered && idx === correctIndex) {
+              const actualIndex = answerOrder[realIndex][displayIdx];
+
+              if (isAnswered && actualIndex === correctIndex) {
+                // highlight the correct option
                 optionClass += " correct-option";
               } else if (
                 isAnswered &&
-                idx === selectedOptionIndex &&
-                idx !== correctIndex
+                displayIdx === selectedOptionIndex &&
+                actualIndex !== correctIndex
               ) {
+                // user-chosen is wrong
                 optionClass += " incorrect-option";
               }
+
               return (
-                <li className="option-item" key={idx}>
+                <li className="option-item" key={displayIdx}>
                   <button
                     className={optionClass}
-                    onClick={() => handleOptionClick(idx)}
+                    onClick={() => handleOptionClick(displayIdx)}
                     disabled={isAnswered}
                   >
                     {option}
@@ -1065,7 +1122,9 @@ const GlobalTestPage = ({
           {isAnswered && questionObject && (
             <div className="explanation">
               <strong>
-                {selectedOptionIndex === questionObject.correctAnswerIndex
+                {selectedOptionIndex !== null &&
+                answerOrder[realIndex][selectedOptionIndex] ===
+                  questionObject.correctAnswerIndex
                   ? "Correct!"
                   : "Incorrect!"}
               </strong>
@@ -1083,11 +1142,11 @@ const GlobalTestPage = ({
                 Previous Question
               </button>
               {currentQuestionIndex === totalQuestions - 1 ? (
-                <button className="next-question-btn" onClick={onNextClick}>
+                <button className="next-question-btn" onClick={handleNextQuestion}>
                   Finish Test
                 </button>
               ) : (
-                <button className="next-question-btn" onClick={onNextClick}>
+                <button className="next-question-btn" onClick={handleNextQuestion}>
                   Next Question
                 </button>
               )}
