@@ -1,3 +1,9 @@
+Question #72 and Question #94 both ask:
+
+“What is the main advantage of using a password manager?”
+While the exact wording of the answer options differs slightly, they convey almost the same concept. The correct answer is effectively identical (unique, strong passwords with minimal user effort).
+This is effectively a duplicate question within the same test.
+
 db.tests.insertOne({
   "category": "secplus",
   "testId": 7,
