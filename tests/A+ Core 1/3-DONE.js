@@ -1,5 +1,3 @@
-2 pbq for 5 adn 34
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 3,
@@ -60,16 +58,16 @@ db.tests.insertOne({
     },
     {
       "id": 5,
-      "question": "A user is unable to access websites by name but can access them by IP address. What is the MOST likely service that is malfunctioning?",
+      "question": "Performance-Based Question: A user’s Windows 10 laptop repeatedly fails to connect to a known Wi-Fi network, even though other devices connect without issues. Which sequence of steps should be completed FIRST to troubleshoot this problem effectively?",
       "options": [
-        "DHCP (Dynamic Host Configuration Protocol)",
-        "DNS (Domain Name System)",
-        "SMTP (Simple Mail Transfer Protocol)",
-        "HTTP (Hypertext Transfer Protocol)"
+        "1) Verify the Wi-Fi switch is enabled on the laptop, 2) Reboot the router, 3) Reinstall the operating system, 4) Replace the laptop’s Wi-Fi card, 5) Restore router to factory defaults",
+        "1) Disable and re-enable the Wi-Fi adapter in Device Manager, 2) Verify the password for the Wi-Fi network, 3) Run a malware scan, 4) Reboot the router, 5) Update the NIC drivers",
+        "1) Check if Airplane Mode is off, 2) Try connecting to a different Wi-Fi network, 3) Update Wi-Fi adapter drivers, 4) Temporarily disable any third-party firewall or antivirus, 5) Reboot laptop and router",
+        "1) Perform a BIOS update, 2) Swap the hard drive, 3) Remove any USB devices, 4) Change the laptop's power plan, 5) Download a new network configuration tool"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "DNS (Domain Name System) is responsible for translating domain names (like websites names) into IP addresses. If name resolution fails but IP access works, DNS is the likely culprit. DHCP assigns IP addresses, SMTP is for email, and HTTP is for web traffic itself. Exam tip: DNS = name to IP translation.",
-      "examTip": "DNS is the phonebook of the internet. If you can't reach websites by name but IPs work, DNS is the problem."
+      "correctAnswerIndex": 2,
+      "explanation": "Before making drastic changes, confirm that the laptop’s wireless features are actually enabled (e.g., Airplane Mode off). Testing on another network determines if the issue is specific to one router or SSID. Updating the Wi-Fi drivers ensures the hardware is using the latest fixes. Disabling security software briefly checks for firewall or antivirus blocks. Finally, rebooting the laptop and router can resolve transient conflicts or IP assignment issues.",
+      "examTip": "A systematic approach to Wi-Fi problems starts with verifying simple toggles (like Airplane Mode) and confirming the Wi-Fi driver is up to date. Avoid reinstallation or major hardware swaps until easier potential conflicts are ruled out."
     },
     {
       "id": 6,
@@ -437,16 +435,16 @@ db.tests.insertOne({
     },
     {
       "id": 34,
-      "question": "What is the purpose of a 'firewall' in network security?",
+      "question": "Performance-Based Question: After upgrading to a new graphics card, a desktop boots normally but displays no audio output through HDMI when connected to an external monitor with built-in speakers. Which steps should you perform FIRST to fix the audio issue?",
       "options": [
-        "To boost internet speed",
-        "To prevent unauthorized access to a network",
-        "To manage network cables",
-        "To cool down computer components"
+        "1) Replace the monitor’s power cable, 2) Update DirectX, 3) Restart the audio service, 4) Use a dedicated 3.5mm audio cable to the monitor, 5) Disable the motherboard’s integrated audio",
+        "1) Check the Windows Playback Devices settings, 2) Confirm the HDMI audio driver is installed, 3) Ensure HDMI is set as the default audio device, 4) Update the graphics card drivers, 5) Reboot the system",
+        "1) Reinstall the operating system, 2) Enable virtualization in BIOS, 3) Downgrade the graphics card drivers, 4) Replace the HDMI cable, 5) Use headphones instead",
+        "1) Reconnect all power connectors on the motherboard, 2) Remove any additional PCIe devices, 3) Update monitor firmware, 4) Try a DisplayPort-to-HDMI adapter, 5) Reinstall Windows from scratch"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A firewall's main purpose is to prevent unauthorized access to a network by monitoring and controlling incoming and outgoing network traffic based on security rules. It doesn't boost speed, manage cables, or cool components. Exam tip: Firewall = network security guard.",
-      "examTip": "Firewalls are your network's security guards. They control what traffic is allowed in and out to protect your network."
+      "explanation": "When HDMI audio isn’t working after a graphics card upgrade, verify that HDMI audio drivers are properly installed. Then, select the HDMI output as the default audio device in Windows’ Playback settings. Updating the graphics card drivers can also resolve missing or outdated HDMI audio components. Rebooting is a quick final check to confirm that system changes have taken effect.",
+      "examTip": "Graphics cards that support HDMI often require their own audio drivers. Always check Windows’ audio device list when you encounter missing sound through HDMI. Updating drivers is a quick fix for many post-upgrade issues."
     },
     {
       "id": 35,
