@@ -1,31 +1,3 @@
-Internal Duplicate Checks Within Test #8
-
-Several questions appear more than once, sometimes verbatim, later in the test. A few examples:
-
-Link Aggregation (LACP) question:
-
-Appears at Q66 (“… implement 'link aggregation control protocol' (LACP)… advantage of LACP over static aggregation?”)
-Also at Q81 and Q96 with the same text and same correct answer referencing LACP’s dynamic failover.
-Serverless computing / FaaS security question:
-
-Appears at Q67 (“key security challenge with 'serverless computing'…?”)
-Repeated at Q82 and Q97 with identical wording regarding “increased granularity and complexity in managing permissions for individual functions.”
-Laser printer 'light and dark banding' Venetian blind question:
-
-Found at Q68 (“A laser printer is producing prints with a repeating 'light and dark banding' pattern…?”)
-Repeated at Q83 and Q98 referencing the laser scanner assembly or polygon mirror.
-Securing user accounts against credential theft question:
-
-Found at Q69 (“Which of the following is a BEST practice for securing user accounts against credential theft…?”)
-Repeated at Q84 and Q99 referencing MFA, user education, and endpoint security.
-High-density Wi-Fi for a stadium question:
-
-Appears at Q71 (“… design a high-density Wi-Fi network for a large outdoor stadium…?”)
-Repeated at Q86 and Q100 referencing 802.11ax (Wi-Fi 6/6E) with advanced features for extreme load.
-These exact duplicates are scattered throughout the latter part of the test (roughly Q66, Q67, Q68… repeating again in Q81, Q82, Q83… and Q96, Q97, Q98… etc.).
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 8,
@@ -558,7 +530,7 @@ db.tests.insertOne({
       "options": [
         "Port 88 (Kerberos)",
         "Port 464 (kpasswd/changepw)",
-        "Port 749 (Kerberos v5)",
+        "Port 749 (kadmin/administration)",
         "Port 3269 (GCoverSSL)"
       ],
       "correctAnswerIndex": 0,
@@ -575,7 +547,7 @@ db.tests.insertOne({
         "Using patch antennas mounted on the ceiling facing downwards."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Deploying access points in a less dense pattern with non-overlapping channels in both bands and adjusted power levels provides balanced coverage and capacity.",
+      "explanation": "Directional antennas (Yagi or Panel) pointed along the office length are BEST for focused coverage and minimizing spillover.",
       "examTip": "For long, narrow spaces, directional antennas are ideal for focusing Wi-Fi signals where needed and reducing bleed-over."
     },
     {
@@ -1074,55 +1046,55 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "A technician is asked to implement 'link aggregation control protocol' (LACP) on a managed switch. What is the primary advantage of using LACP over static link aggregation?",
+      "question": "A traveling sales manager reports that whenever they plug their laptop into an older conference room's power outlet, performance slows dramatically. The laptop runs normally when on battery or with a modern AC adapter elsewhere. Which is the MOST likely cause?",
       "options": [
-        "LACP provides higher maximum bandwidth compared to static aggregation.",
-        "LACP automatically detects and configures link aggregation, providing dynamic link management and failover.",
-        "LACP simplifies network configuration by eliminating the need for manual link configuration.",
-        "LACP reduces network latency by optimizing traffic distribution across aggregated links."
+        "Damaged CPU thermal paste leading to random thermal shutdowns.",
+        "Corrupted operating system halting CPU-intensive processes.",
+        "An underpowered or incorrect-wattage power adapter triggering CPU throttling.",
+        "A faulty memory module causing slow paging."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "LACP automatically detects and configures link aggregation, offering dynamic management and failover capabilities.",
-      "examTip": "LACP offers dynamic, automatic link aggregation management, making it more resilient than static configurations."
+      "correctAnswerIndex": 2,
+      "explanation": "If the laptop’s AC adapter cannot supply sufficient wattage (or is incompatible), the system firmware may throttle the CPU to prevent power draw that exceeds what the adapter can provide. This manifests as severe performance slowdowns when plugged into that specific power source, yet normal operation on battery or with a proper adapter.",
+      "examTip": "Always match laptop power adapters to the required wattage/voltage. An inadequate adapter can cause CPU/GPU throttling or unexpected shutdowns."
     },
     {
       "id": 82,
-      "question": "Which of the following is a key security challenge associated with 'serverless computing' or 'Function-as-a-Service (FaaS)' cloud models in terms of access control and permissions management?",
+      "question": "Which of the following accurately distinguishes NVMe from older AHCI-based SSD protocols?",
       "options": [
-        "Simplified access control due to provider-managed security.",
-        "Increased granularity and complexity in managing permissions for individual functions and event sources.",
-        "Lack of access control options as serverless functions are inherently publicly accessible.",
-        "Reduced complexity in auditing and monitoring access due to centralized function execution logs."
+        "NVMe relies on parallel SCSI commands, whereas AHCI uses a single queue model.",
+        "NVMe is designed for mechanical HDDs, while AHCI handles flash storage.",
+        "NVMe supports significantly higher queue depths and lower latency, leveraging PCIe for greater performance.",
+        "AHCI is only compatible with PCIe-based M.2 drives, while NVMe focuses on SATA interfaces."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Serverless computing requires managing permissions for a large number of individual functions and event sources, increasing complexity.",
-      "examTip": "Be prepared for granular and complex permission management in serverless architectures."
+      "correctAnswerIndex": 2,
+      "explanation": "NVMe (Non-Volatile Memory Express) is built specifically for flash storage, leveraging PCIe’s high bandwidth and supporting deep command queues for lower latency. AHCI is an older interface originally designed for spinning drives, limiting queue depth and throughput. NVMe dramatically improves performance for modern SSDs.",
+      "examTip": "If you see a PCIe-based SSD with extremely high throughput, it’s almost certainly NVMe rather than AHCI."
     },
     {
       "id": 83,
-      "question": "A laser printer is producing prints with a repeating 'light and dark banding' pattern perpendicular to the paper feed direction, resembling a Venetian blind effect. Which printer component is MOST likely causing this banding pattern?",
+      "question": "A user just replaced their M.2 NVMe SSD but finds the drive is not detected in the UEFI BIOS or Windows Setup. The old M.2 SATA SSD in the same slot worked fine. Which issue is MOST likely?",
       "options": [
-        "Toner Cartridge (defective metering blade causing uneven toner flow)",
-        "Fuser Assembly (roller surface irregularities causing uneven fusing)",
-        "Imaging Drum (periodic sensitivity variations or defects along its circumference)",
-        "Laser Scanner Assembly (polygon mirror facet irregularities or inconsistent laser modulation)"
+        "The M.2 slot only supports SATA-based M.2 drives and does not support NVMe protocol.",
+        "The user forgot to partition the new SSD in Disk Management.",
+        "The drive is physically damaged and must be RMA'd immediately.",
+        "Windows Setup requires a specialized network driver before it can detect NVMe drives."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Inconsistent laser modulation or polygon mirror irregularities in the Laser Scanner Assembly can cause a repeating Venetian blind effect.",
-      "examTip": "Examine the laser scanner assembly if you observe regular light and dark banding patterns in your prints."
+      "correctAnswerIndex": 0,
+      "explanation": "Many motherboards have M.2 slots that support SATA M.2 drives only, or require a specific slot for NVMe. If the motherboard does not support NVMe on that slot, an NVMe drive won’t be recognized. This is more likely than a hardware failure if the old SATA M.2 worked fine.",
+      "examTip": "Always check motherboard compatibility: some M.2 slots are keyed for SATA only, some for NVMe, and some support both (M.2 ‘combo’ slots)."
     },
     {
       "id": 84,
-      "question": "Which of the following is a BEST practice for securing user accounts against credential theft attacks, such as phishing or malware-based credential harvesting?",
+      "question": "Which bus interface is MOST commonly used by modern laptop expansion cards such as Wi-Fi adapters or cellular modems, providing both PCIe and USB signals in one slot?",
       "options": [
-        "Storing passwords in plain text databases.",
-        "Disabling multi-factor authentication (MFA).",
-        "Implementing multi-factor authentication (MFA), anti-phishing training, and endpoint security measures.",
-        "Relying solely on complex password policies without additional security layers."
+        "PCI Express Mini Card (Mini PCIe)",
+        "ExpressCard",
+        "CardBus",
+        "M.2 (NGFF)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Implementing MFA, along with user training and endpoint security, significantly reduces the risk of credential theft.",
-      "examTip": "Layered security including MFA, user education, and endpoint protection is key to defending against credential theft."
+      "correctAnswerIndex": 3,
+      "explanation": "M.2 (NGFF) slots are widely used in modern laptops, supporting various card types (like Wi-Fi, SSDs, cellular modems). The M.2 interface can carry PCIe and/or USB signals, enabling multiple device classes in one form factor. Mini PCIe and ExpressCard are older, and CardBus is legacy.",
+      "examTip": "M.2 is the standard go-to interface in today’s ultrabooks and laptops for both storage and connectivity modules."
     },
     {
       "id": 85,
@@ -1139,16 +1111,16 @@ db.tests.insertOne({
     },
     {
       "id": 86,
-      "question": "A technician is asked to design a high-density Wi-Fi network for a large outdoor stadium requiring very high capacity and density to support tens of thousands of concurrent users. Which Wi-Fi technology and advanced features are MOST critical for ensuring network performance and stability under extreme load?",
+      "question": "After replacing a motherboard in a custom-built PC, the user reports that the system now fails to POST. The CPU fan spins momentarily, then stops, and the system restarts in a loop. Which scenario is MOST likely to blame?",
       "options": [
-        "802.11b access points with omnidirectional antennas.",
-        "802.11g access points with channel bonding in the 2.4 GHz band.",
-        "802.11ax (Wi-Fi 6 or Wi-Fi 6E) with high-density features like OFDMA, MU-MIMO, BSS Coloring, and 160 MHz channels in the 5 GHz and 6 GHz bands, combined with advanced cell planning and load balancing.",
-        "Standard 802.11ac (Wi-Fi 5) access points with increased transmit power and high-gain omnidirectional antennas."
+        "The power supply wattage is too high and triggering protective shutdowns.",
+        "An incompatible CPU microarchitecture for the replacement motherboard’s chipset.",
+        "A faulty SATA cable that prevents the BIOS from detecting the boot drive.",
+        "Insufficient RAM installed for the new motherboard’s requirements (minimum 32 GB)."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "802.11ax (Wi-Fi 6/6E) with advanced high-density features is specifically designed to handle extreme loads in environments like large outdoor stadiums.",
-      "examTip": "For stadium-scale Wi-Fi, utilize the full suite of advanced 802.11ax features combined with expert network planning to support massive concurrent usage."
+      "correctAnswerIndex": 1,
+      "explanation": "If the new motherboard’s chipset or BIOS doesn’t support the CPU architecture, the system may power cycle without posting. This is more common than excessive PSU wattage or a single bad SATA cable causing a complete inability to POST. The notion that 32 GB is mandatory is unrealistic for typical boards; CPU incompatibility is the prime suspect.",
+      "examTip": "Always verify CPU compatibility with the new motherboard’s socket and BIOS revision before finalizing a replacement."
     },
     {
       "id": 87,
@@ -1269,68 +1241,68 @@ db.tests.insertOne({
     },
     {
       "id": 96,
-      "question": "A technician is asked to implement 'link aggregation control protocol' (LACP) on a managed switch. What is the primary advantage of using LACP over static link aggregation?",
+      "question": "A user replaced their lost OEM laptop charger with a cheap third-party adapter. Now the battery status shows 'plugged in, not charging,' and the system performance is throttled. Which explanation is MOST likely?",
       "options": [
-        "LACP provides higher maximum bandwidth compared to static aggregation.",
-        "LACP automatically detects and configures link aggregation, providing dynamic link management and failover.",
-        "LACP simplifies network configuration by eliminating the need for manual link configuration.",
-        "LACP reduces network latency by optimizing traffic distribution across aggregated links."
+        "The new adapter’s barrel connector includes an embedded GPU driver mismatch.",
+        "The laptop’s battery is damaged due to ESD from the old charger cable.",
+        "Manufacturer laptops often require an adapter ID signal that cheaper clones lack, causing the laptop to reject or limit power.",
+        "Windows Update installed an incorrect AC adapter driver preventing charging."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "LACP automatically detects and configures link aggregation, offering dynamic management and failover capabilities.",
-      "examTip": "LACP offers dynamic, automatic link aggregation management, making it more resilient than static configurations."
+      "correctAnswerIndex": 2,
+      "explanation": "Many laptop brands check for a proprietary signal or 'adapter ID' from the power brick. If it’s missing or invalid, the laptop may refuse to charge or may run at reduced performance to protect against damage. This commonly occurs with unapproved third-party adapters.",
+      "examTip": "Always match OEM specs and ID requirements when replacing laptop power adapters. Unrecognized adapters may cause throttling or non-charging conditions."
     },
     {
       "id": 97,
-      "question": "Which of the following is a key security challenge associated with 'serverless computing' or 'Function-as-a-Service (FaaS)' cloud models in terms of access control and permissions management?",
+      "question": "Which of the following Intel CPU sockets uses an LGA1151 layout and typically supports 6th to 9th generation Core processors, but is incompatible with AMD’s AM4 CPUs?",
       "options": [
-        "Simplified access control due to provider-managed security.",
-        "Increased granularity and complexity in managing permissions for individual functions and event sources.",
-        "Lack of access control options as serverless functions are inherently publicly accessible.",
-        "Reduced complexity in auditing and monitoring access due to centralized function execution logs."
+        "Socket AM4",
+        "Socket TR4",
+        "Socket LGA1151",
+        "Socket FM2+"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Serverless computing requires managing permissions for a large number of individual functions and event sources, increasing complexity.",
-      "examTip": "Be prepared for granular and complex permission management in serverless architectures."
+      "correctAnswerIndex": 2,
+      "explanation": "LGA1151 is the Intel socket that fits many 6th to 9th gen Core CPUs. AMD uses AM4 for mainstream Ryzen processors, and TR4 for Threadripper. FM2+ is an older AMD socket. LGA stands for 'Land Grid Array,' typical of Intel designs.",
+      "examTip": "Intel’s LGA1151 is distinct from AMD’s AM4. Always confirm socket compatibility before installing a CPU."
     },
     {
       "id": 98,
-      "question": "A laser printer is producing prints with a repeating 'light and dark banding' pattern perpendicular to the paper feed direction, resembling a Venetian blind effect. Which printer component is MOST likely causing this banding pattern?",
+      "question": "A user reports that after a major Windows update, their desktop no longer produces any sound—even though Device Manager shows no errors. The headphone jack works correctly when booting into a Linux live USB. Which is the MOST likely fix?",
       "options": [
-        "Toner Cartridge (defective metering blade causing uneven toner flow)",
-        "Fuser Assembly (roller surface irregularities causing uneven fusing)",
-        "Imaging Drum (periodic sensitivity variations or defects along its circumference)",
-        "Laser Scanner Assembly (polygon mirror facet irregularities or inconsistent laser modulation)"
+        "Replacing the motherboard’s audio codec chip for hardware-level faults.",
+        "Enabling the SATA AHCI driver in the BIOS so Windows can detect the sound card.",
+        "Reinstalling or updating the Windows audio driver and verifying the default playback device.",
+        "Reseating the system’s front panel audio connector on the motherboard."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Inconsistent laser modulation or polygon mirror irregularities in the Laser Scanner Assembly can cause a repeating Venetian blind effect.",
-      "examTip": "Examine the laser scanner assembly if you observe regular light and dark banding patterns in your prints."
+      "correctAnswerIndex": 2,
+      "explanation": "If audio hardware is fine under a different OS, then a Windows driver or default device configuration problem is likely after the major update. Reinstalling audio drivers and ensuring the correct playback device is selected typically resolves the issue.",
+      "examTip": "Always check the OS driver status and default device selection if hardware works fine in another operating system."
     },
     {
       "id": 99,
-      "question": "Which of the following is a BEST practice for securing user accounts against credential theft attacks, such as phishing or malware-based credential harvesting?",
+      "question": "Which of the following statements correctly compares a patch panel to individual keystone jacks for network cable management?",
       "options": [
-        "Storing passwords in plain text databases.",
-        "Disabling multi-factor authentication (MFA).",
-        "Implementing multi-factor authentication (MFA), anti-phishing training, and endpoint security measures.",
-        "Relying solely on complex password policies without additional security layers."
+        "Patch panels primarily provide wireless connectivity, whereas keystone jacks are used for DSL connections only.",
+        "Patch panels aggregate multiple cable runs into one organized panel, while keystone jacks are singular connectors typically used in wall plates or modular panels.",
+        "Keystone jacks must always be unshielded, while patch panels are only sold in shielded varieties.",
+        "Patch panels are mandatory for fiber optics, and keystone jacks can handle copper cables exclusively."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Implementing MFA, along with user training and endpoint security, significantly reduces the risk of credential theft.",
-      "examTip": "Layered security including MFA, user education, and endpoint protection is key to defending against credential theft."
+      "correctAnswerIndex": 1,
+      "explanation": "A patch panel is a centralized termination point for multiple cable runs, providing an organized interface for interconnecting or rearranging cables. Keystone jacks are individual connectors that snap into wall plates or modular panels. They are often used together: keystones in the patch panel or at the wall outlet, forming a flexible system.",
+      "examTip": "Patch panels offer cable organization and easy re-patching, whereas individual keystone jacks are discrete connectors for each run."
     },
     {
       "id": 100,
-      "question": "A technician is asked to design a high-density Wi-Fi network for a large outdoor stadium requiring very high capacity and density to support tens of thousands of concurrent users. Which Wi-Fi technology and advanced features are MOST critical for ensuring network performance and stability under extreme load?",
+      "question": "A user connects a new 4K monitor to their older desktop’s integrated GPU, only to find it caps at 30 Hz refresh. They want 60 Hz at full 4K resolution for smoother animation. Which upgrade is MOST likely needed?",
       "options": [
-        "802.11b access points with omnidirectional antennas.",
-        "802.11g access points with channel bonding in the 2.4 GHz band.",
-        "802.11ax (Wi-Fi 6 or Wi-Fi 6E) with high-density features like OFDMA, MU-MIMO, BSS Coloring, and 160 MHz channels in the 5 GHz and 6 GHz bands, combined with advanced cell planning and load balancing.",
-        "Standard 802.11ac (Wi-Fi 5) access points with increased transmit power and high-gain omnidirectional antennas."
+        "An updated BIOS to unlock higher integrated GPU refresh rates.",
+        "Replacing the motherboard with the same chipset revision but new onboard video.",
+        "A discrete graphics card supporting 4K@60 Hz over HDMI 2.0 or DisplayPort.",
+        "Installing faster DDR4 RAM for the integrated GPU to boost pixel clock speed."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "802.11ax (Wi-Fi 6/6E) with advanced high-density features is specifically designed to handle extreme loads in environments like large outdoor stadiums.",
-      "examTip": "For stadium-scale Wi-Fi, utilize the full suite of advanced 802.11ax features combined with expert network planning to support massive concurrent usage."
+      "explanation": "Older integrated GPUs often limit 4K output to 30 Hz. A discrete GPU with HDMI 2.0 or DisplayPort 1.2+ is typically required for stable 4K@60 Hz. Simply updating the BIOS or using faster RAM rarely overcomes hardware bandwidth limitations of older integrated video.",
+      "examTip": "When a user demands higher refresh rates at 4K, confirm the GPU and cable standards (HDMI 2.0/2.1 or DP 1.2+) support it."
     }
   ]
 });
