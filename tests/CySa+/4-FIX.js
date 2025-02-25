@@ -1,50 +1,35 @@
 IDS vs. IPS
 
 Question #6: “What is the primary difference between an IDS and an IPS?”
-Question #16: “What is the primary difference between an IDS and an IPS?”
-Both have the same theme, revolve around “IDS detects, IPS can block/prevent.” The wording and correct answer are nearly identical.
-Self-Replicating Malware / Worm
+
+
 
 Question #7: “Which type of malware is characterized by its ability to self-replicate and spread across networks without requiring a host file?”
-Question #17: “Which type of malware is characterized by its ability to self-replicate and spread across networks without requiring a host file?”
-These two are effectively the same question about worms vs. viruses/Trojans, repeated twice.
-CSRF Mitigation
+
+
 
 Question #4: “Which of the following is the MOST effective technique for mitigating the risk of cross-site request forgery (CSRF) attacks?”
-Question #18: “Which of the following is the MOST effective technique for mitigating the risk of cross-site request forgery (CSRF) attacks?”
-Both ask for the primary defense against CSRF (anti-CSRF token).
-Privilege Escalation
+
 
 Question #14: “Which of the following is a common technique used by attackers to escalate privileges on a compromised system?”
-Question #57: “Which of the following is a common technique used by attackers for 'privilege escalation'?”
-Each question has the same emphasis on exploiting unpatched flaws or misconfigurations to gain elevated rights.
-Wireshark
+
 
 Question #19: “What is 'Wireshark' primarily used for?”
-Question #72: “What is 'Wireshark'?”
-Both revolve around packet capture/analysis functionality.
-Securing a Wireless Network
+
 
 Question #81: “Which of the following is the MOST important practice for securing a wireless network?”
-Question #85: “Which of the following is the MOST important practice for securing a wireless network?”
-Both are nearly identical, correct answer: enabling WPA2/WPA3 with a strong passphrase.
-Lateral Movement
+
 
 Question #23: “What is 'lateral movement' in the context of a cyberattack?”
 Question #89: “What is 'lateral movement' within a compromised network?”
-Question #94: “What is 'lateral movement' within a compromised network?”
-All three revolve around the same concept of pivoting from one system to another inside a network.
-Persistence Mechanisms
+
 
 Question #76: “Which of the following is a common tactic used by attackers to maintain persistence on a compromised system?”
 Question #90: “Which of the following is a common technique used to maintain persistence on a compromised system?”
-Question #95: “Which of the following is a common technique used to maintain persistence on a compromised system?”
-All have the same essential answer: creating hidden accounts, modifying startup scripts, installing rootkits.
-Detecting Unknown Malware (Behavior-based)
+
 
 Question #74: “Which of the following is the MOST effective method for detecting and responding to unknown malware (zero-day exploits)?”
-Question #100: “Which of the following is the MOST effective method for detecting and responding to unknown malware or zero-day exploits?”
-Both advocate behavior-based monitoring, anomaly detection, and active threat hunting.
+
 
 
 
