@@ -1,8 +1,3 @@
-Potentially Duplicate Questions Within Test #2
-
-Question #1 and Question #11 both ask about “the primary function” / “the purpose” of a SIEM. Although the wording and answer choices are slightly different, they cover essentially the same concept (SIEM’s main role in aggregating/analyzing security logs). This might be an intentional minor variation, but it’s worth noting they are quite similar.
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 2,
@@ -10,17 +5,17 @@ db.tests.insertOne({
   "xpPerCorrect": 10,
   "questions": [
     {
-      "id": 1,
-      "question": "Which of the following best describes the primary function of a Security Information and Event Management (SIEM) system?",
+      "id": 8,
+      "question": "Senior leadership mandates the integration of third-party vendors for a high-profile project. To uphold governance requirements, which of the following steps should be taken FIRST to manage third-party risk effectively?",
       "options": [
-        "Aggregating and analyzing security logs for threat detection",
-        "Blocking network traffic based on predefined security rules",
-        "Encrypting sensitive data to prevent unauthorized access",
-        "Providing user authentication and access management"
+        "Obtain non-disclosure agreements (NDAs) from all vendors to prevent unauthorized data sharing.",
+        "Implement continuous monitoring of vendor systems to detect any policy violations in real-time.",
+        "Incorporate robust vendor risk assessments into the procurement process prior to contract finalization.",
+        "Isolate vendor access to a secure network segment to ensure zero lateral movement across systems."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A SIEM collects, aggregates, and analyzes security logs to detect threats, helping security teams identify potential incidents.",
-      "examTip": "Use SIEM solutions to centralize log management and improve threat detection capabilities."
+      "correctAnswerIndex": 2,
+      "explanation": "Conducting vendor risk assessments before finalizing a contract ensures that only organizations meeting governance standards are onboarded. NDAs, segmentation, or continuous monitoring are important but come into play once a vendor relationship is established.",
+      "examTip": "Vetting third-party vendors at the outset can prevent security gaps and compliance issues before they arise."
     },
     {
       "id": 2,
