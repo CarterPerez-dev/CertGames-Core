@@ -35,6 +35,8 @@ we probaly need to create uniuqe names for each/import the achiveemnt list where
 -------------------------------------------------------------------------------------------------------------------------
 ### verify all achievemnts acheive when actually achieved/ when criteria is met
 
+### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
+#### also consider a backup sever in case soemthing happens to the production one we can easily go to cloudfare and chnage IP address A record and upkeep 99% uptime---- conisder wasy to automate that somehow (prolly very very hard- essentially would haev to know- IF server donw = replace A record automcially somehow-- actually prolly easy tbh)
 
 ### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc
 
