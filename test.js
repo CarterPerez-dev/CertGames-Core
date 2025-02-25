@@ -1,23 +1,23 @@
    const updateServerProgress = useCallback(
-     async (updatedAnswers, updatedScore, finished = false, onlyUpdateQuestion = null) => {
+     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
        if (!userId) return;
        try {
-         // If we're only updating a single answer, use a targeted endpoint
-         if (onlyUpdateQuestion) {
+         // If we're sending a single answer update
+         if (singleAnswer) {
            await fetch(`/api/test/attempts/${userId}/${testId}/answer`, {
              method: "POST",
              headers: { "Content-Type": "application/json" },
              body: JSON.stringify({
-               questionId: onlyUpdateQuestion.questionId,
-               userAnswerIndex: onlyUpdateQuestion.userAnswerIndex,
-               correctAnswerIndex: onlyUpdateQuestion.correctAnswerIndex,
+               questionId: singleAnswer.questionId,
+               userAnswerIndex: singleAnswer.userAnswerIndex,
+               correctAnswerIndex: singleAnswer.correctAnswerIndex,
                score: updatedScore
              })
            });
            return;
          }
          
-         // For navigation/position updates, only send the minimal data needed
+         // For navigation position updates (much smaller payload)
          await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
            method: "POST",
            headers: { "Content-Type": "application/json" },
@@ -30,5 +30,5 @@
          console.error("Failed to update test attempt on backend", err);
        }
      },
-     [/* same dependencies */]
+     [userId, testId, currentQuestionIndex]
    );
