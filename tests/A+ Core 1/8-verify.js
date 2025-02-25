@@ -1,3 +1,10 @@
+rEPLACE THESE QUETSIOSN WITH COMPTIA a+ CORE 1 PBQ STYLE QUESTIOSN IN TEH SAEM ROMAT AS TEH REST OF TEH QUESTIONS AND MAKE SURE 💡 Zero obvious elimination clues: All distractors will sound plausible, forcing a decision based purely on expert level nuance.
+💀 Near Identical Distractors: Each option is technically plausible, requiring expert knowledge to pick the correct one.
+💀 Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
+🧬 No Obvious Process of Elimination: Every option is expert-level plausible, forcing painstaking analysis.
+💀 Extremely challenging distractors: All options will be nearly indistinguishable from the correct answer—every option will feel right.
+💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer. AND MAKE SURE THE PBQ STYLE QUESTIOSN ARE EXTREMLY EXTREMLY UNIQUE AND COVER DIFFERENET DOMAISN OF COMPTIA A+ CORE 1
+
 
 AND WHEN I SAY REPLACE THEM I AM TALKING ABOUT THE FEW # NUMBERS LISTED BELOW
 
