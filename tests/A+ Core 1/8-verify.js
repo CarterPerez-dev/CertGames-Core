@@ -1,28 +1,3 @@
-rEPLACE THESE QUETSIOSN WITH COMPTIA a+ CORE 1 PBQ STYLE QUESTIOSN IN TEH SAEM ROMAT AS TEH REST OF TEH QUESTIONS AND MAKE SURE 💡 Zero obvious elimination clues: All distractors will sound plausible, forcing a decision based purely on expert level nuance.
-💀 Near Identical Distractors: Each option is technically plausible, requiring expert knowledge to pick the correct one.
-💀 Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
-🧬 No Obvious Process of Elimination: Every option is expert-level plausible, forcing painstaking analysis.
-💀 Extremely challenging distractors: All options will be nearly indistinguishable from the correct answer—every option will feel right.
-💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer. AND MAKE SURE THE PBQ STYLE QUESTIOSN ARE EXTREMLY EXTREMLY UNIQUE AND COVER DIFFERENET DOMAISN OF COMPTIA A+ CORE 1
-
-
-AND WHEN I SAY REPLACE THEM I AM TALKING ABOUT THE FEW # NUMBERS LISTED BELOW
-
-
-#47
-#48
-#68
-#72, 
-#87
-#74, 
-#89
-#79, 
-#94 
-
-
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 8,
@@ -627,32 +602,37 @@ db.tests.insertOne({
       "explanation": "Port 88 (Kerberos) uses both TCP and UDP, and UDP is often used for initial authentication requests due to its lower overhead.",
       "examTip": "Kerberos (port 88) uses both TCP and UDP, with UDP being common for initial authentication requests."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 47,
-      "question": "A technician is optimizing Wi-Fi for a long, narrow office space. Which Wi-Fi antenna type and placement strategy is MOST effective for directing the signal along the length of the office and minimizing spillover to adjacent areas?",
+      "question": "Performance-Based Question (PBQ): A user is preparing a brand-new 2 TB GPT disk in a UEFI-based system to install Windows 10 Pro. They want two partitions: one for the OS and one for data. Which of the following sequences is the CORRECT order of steps to create and format these partitions during Windows Setup?",
       "options": [
-        "Using omnidirectional antennas placed centrally.",
-        "Using high-gain omnidirectional antennas placed at each end of the office.",
-        "Using directional antennas (e.g., Yagi or Panel antennas) pointed along the length of the office.",
-        "Using patch antennas mounted on the ceiling facing downwards."
+        "1) Select the disk, click Next to begin install, 2) Wait for Windows to auto-partition, 3) Format the OS partition post-install, 4) Create a second data partition in Disk Management after installation.",
+        "1) Delete any existing partitions, 2) Create a new partition for the OS and format it, 3) Create a second data partition and format it, 4) Proceed with installation on the OS partition.",
+        "1) Choose 'Upgrade' install so partitions are pre-preserved, 2) Format the entire disk as MBR, 3) Create one large partition, 4) Convert it to GPT after Windows is installed.",
+        "1) Select 'Repair Your Computer', 2) Run diskpart to convert the drive to dynamic, 3) Create a single primary partition, 4) Cancel and re-run Setup with default partitioning."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Directional antennas (Yagi or Panel) pointed along the office length are BEST for focused coverage and minimizing spillover.",
-      "examTip": "For long, narrow spaces, directional antennas are ideal for focusing Wi-Fi signals where needed and reducing bleed-over."
+      "correctAnswerIndex": 1,
+      "explanation": "In a UEFI system using GPT, you typically delete any existing partitions on a brand-new disk (or confirm it's blank), create your OS partition, format it, then create and format the data partition. You can then install Windows onto the OS partition. The second partition is also created before installation if you want it recognized immediately. This approach ensures the Windows setup respects the GPT style and places the necessary EFI and recovery partitions automatically. Other methods are either incomplete or out of sequence.",
+      "examTip": "When installing Windows under UEFI, always confirm GPT usage, delete old partitions (if any), then create and format new partitions in Setup or via diskpart—especially for multi-partition layouts."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 48,
-      "question": "Which of the following is a key challenge associated with 'lift-and-shift' migration strategy when moving legacy applications to a public cloud environment?",
+      "question": "Performance-Based Question (PBQ): A technician is troubleshooting a user’s inability to reach a specific internal website. Arrange the following diagnostic steps in the CORRECT order to isolate the root cause.",
       "options": [
-        "Simplified application management in the cloud.",
-        "Automatic optimization of application performance and scalability in the cloud environment.",
-        "Limited ability to leverage cloud-native features and potential for inefficient resource utilization and higher costs.",
-        "Reduced security risks due to inherent cloud security features."
+        "1) Reinstall the web browser, 2) Swap in a new network interface card, 3) Check Wi-Fi driver logs, 4) Perform nslookup or ping to the site’s hostname/IP, then review DNS settings.",
+        "1) Open the site on a known working PC for baseline, 2) Flush DNS cache and attempt to ping site by IP, 3) Check local hosts file entries, 4) Review DNS server settings or internal IP blocks.",
+        "1) Run a full virus scan, 2) Power cycle all network hardware, 3) Revert to a previous system restore point, 4) Modify DHCP scope on the router to include the site’s IP in reservations.",
+        "1) Disable the firewall entirely, 2) Replace the router, 3) Configure a static IP on the client, 4) Attempt to browse the site with new credentials."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Limited ability to leverage cloud-native features and potential for inefficient resource utilization and higher costs are key challenges of lift-and-shift migration. 'Lift-and-shift' involves moving applications to the cloud without significant re-architecting. This often means legacy apps don't fully utilize cloud benefits like auto-scaling or managed services, leading to inefficiencies and potentially higher long-term costs compared to cloud-native approaches.",
-      "examTip": "Lift-and-shift is often a quick migration path, but it can lead to inefficiencies and missed opportunities to fully leverage cloud benefits. It's a trade-off between speed and cloud optimization."
+      "correctAnswerIndex": 1,
+      "explanation": "A systematic approach is best: first confirm the site works elsewhere, then flush DNS and check connectivity by IP to see if DNS is the issue. Next, verify the hosts file and DNS server settings. Steps like reinstalling the browser or changing hardware are more drastic and typically come later. Starting with methodical network checks helps isolate DNS or routing issues first.",
+      "examTip": "When diagnosing internal site issues, always compare with a working reference, then check DNS and local overrides (hosts file), before investigating deeper networking or hardware problems."
     },
+
     {
       "id": 49,
       "question": "A laser printer is producing prints with a repeating 'horizontal band of missing print' across the page, perpendicular to the paper feed direction. Which printer component is MOST likely causing this horizontal band defect?",
@@ -900,19 +880,22 @@ db.tests.insertOne({
       "explanation": "Serverless computing requires managing permissions for a large number of individual functions and event sources, increasing complexity.",
       "examTip": "Be prepared for granular and complex permission management in serverless architectures."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 68,
-      "question": "A laser printer is producing prints with a repeating 'light and dark banding' pattern perpendicular to the paper feed direction, resembling a Venetian blind effect. Which printer component is MOST likely causing this banding pattern?",
+      "question": "Performance-Based Question (PBQ): A user is building a custom CAD workstation that must handle complex 3D modeling. They have four possible configurations with near-identical specs. Which configuration is BEST for this specialized workload?",
       "options": [
-        "Toner Cartridge (defective metering blade causing uneven toner flow)",
-        "Fuser Assembly (roller surface irregularities causing uneven fusing)",
-        "Imaging Drum (periodic sensitivity variations or defects along its circumference)",
-        "Laser Scanner Assembly (polygon mirror facet irregularities or inconsistent laser modulation)"
+        "1) High-core-count CPU, entry-level GPU, 16 GB RAM, standard HDD, mid-range PSU.",
+        "2) Balanced quad-core CPU, standard GPU, 8 GB RAM, high-speed SSD, low-watt PSU.",
+        "3) High-frequency CPU with fewer cores, professional-grade GPU (Workstation card), 32 GB RAM, SSD storage, quality PSU.",
+        "4) Mid-range CPU, integrated GPU, 64 GB RAM, SATA HDD, generic PSU."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Inconsistent laser modulation or polygon mirror irregularities in the Laser Scanner Assembly can cause a repeating Venetian blind effect.",
-      "examTip": "Examine the laser scanner assembly if you observe regular light and dark banding patterns in your prints."
+      "correctAnswerIndex": 2,
+      "explanation": "For CAD and 3D modeling, a high-frequency CPU helps with single-thread performance, but a workstation-class GPU (e.g., NVIDIA Quadro or AMD Radeon Pro) is also crucial. Large RAM (32 GB or more) and fast SSD storage significantly reduce bottlenecks. A stable, quality PSU is important for reliability. High-core-count consumer CPUs with weak GPUs won’t optimize 3D tasks, and integrated graphics would be insufficient for complex modeling.",
+      "examTip": "CAD work relies on both CPU speed (often single-threaded tasks) and professional GPU capabilities for accurate rendering. Memory and fast storage also matter for large project files."
     },
+
     {
       "id": 69,
       "question": "Which of the following is a BEST practice for securing user accounts against credential theft attacks, such as phishing or malware-based credential harvesting?",
@@ -952,19 +935,22 @@ db.tests.insertOne({
       "explanation": "802.11ax (Wi-Fi 6/6E) with advanced high-density features is specifically designed to handle extreme loads in environments like large outdoor stadiums.",
       "examTip": "For stadium-scale Wi-Fi, utilize the full suite of advanced 802.11ax features combined with expert network planning to support massive concurrent usage."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 72,
-      "question": "Which of the following is a key consideration when designing a 'Backup and Disaster Recovery' (DR) strategy for a hybrid cloud environment?",
+      "question": "Performance-Based Question (PBQ): A PC is repeatedly blue-screening with minimal useful data in logs. The user also notes random file corruption. Arrange the following steps in the CORRECT order to systematically identify the failing component.",
       "options": [
-        "Assuming that public cloud components are inherently protected and do not require backup.",
-        "Focusing solely on backing up on-premises private cloud components, as public cloud data is provider-managed.",
-        "Developing a unified backup and DR strategy that covers both private and public cloud components, addressing data consistency and recovery across environments.",
-        "Ignoring data replication between private and public clouds for simplicity and cost reduction."
+        "1) Reinstall the OS immediately, 2) Swap in a different power supply, 3) Use a known-good GPU, 4) Validate RAM with a diagnostic tool.",
+        "1) Disconnect all peripherals, 2) Perform a clean boot, 3) Update BIOS, 4) Run a CPU stress test, 5) Reseat all cables.",
+        "1) Create a bootable diagnostic USB, 2) Run memory tests (e.g., MemTest86), 3) Check drive health via SMART or chkdsk, 4) If inconclusive, test PSU voltages or replace hardware sequentially.",
+        "1) Boot into Safe Mode, 2) Disable the antivirus, 3) Update all device drivers, 4) Restore user data from backup, 5) Re-partition the drive if issues persist."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Developing a unified backup and DR strategy that covers both private and public cloud components is essential in a hybrid cloud environment.",
-      "examTip": "Ensure your DR plan addresses all components of your hybrid cloud for data consistency and rapid recovery."
+      "explanation": "When diagnosing BSODs and random file corruption, it’s best to gather hardware diagnostics first: memory tests, then disk checks, then methodical hardware elimination (PSU, etc.). Reinstalling the OS or disabling antivirus early won’t isolate hardware failures. Testing each piece systematically—especially RAM and storage—is essential before concluding it’s a software issue.",
+      "examTip": "Start with structured diagnostic steps (RAM, disk, PSU) before reformatting or updating drivers. Random file corruption often points to failing hardware or unstable power."
     },
+
     {
       "id": 73,
       "question": "A laser printer is producing prints with a consistent 'smear' or 'blur' that is most pronounced at the bottom of the page and gradually fades towards the top. Which printer component is MOST likely causing this bottom-heavy smear defect?",
@@ -978,19 +964,22 @@ db.tests.insertOne({
       "explanation": "An uneven fuser assembly, particularly at the output end, can result in a bottom-heavy smear as toner is not properly fused.",
       "examTip": "Inspect the fuser assembly for uneven pressure or temperature issues if smearing is more pronounced at the bottom of the page."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 74,
-      "question": "Which of the following is a BEST practice for securing user accounts against session hijacking attacks in web applications?",
+      "question": "Performance-Based Question (PBQ): You are building a virtualization host for a small business lab. The manager wants maximum concurrent virtual machines with minimal slowdown. Which of the following configurations is MOST appropriate?",
       "options": [
-        "Using HTTP for all web traffic to avoid encryption overhead.",
-        "Implementing HTTPS for all web traffic, using HTTP-only and Secure flags on session cookies, and regularly regenerating session IDs.",
-        "Storing session IDs in URL parameters for easier access and management.",
-        "Disabling session timeouts to minimize user interruptions."
+        "1) Single-core CPU at high frequency, 8 GB RAM, basic RAID 1 HDD, integrated NIC.",
+        "2) Multiple-core CPU with virtualization extensions, 64 GB ECC RAM, RAID 10 SSD array, dual NICs.",
+        "3) Dual-core CPU, 16 GB RAM, single SSD, dedicated sound card, one NIC.",
+        "4) GPU-centric build with minimal RAM and a basic HDD, focusing on high clock speed over core count."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Implementing HTTPS, secure cookie flags, and session ID regeneration are essential practices to prevent session hijacking in web applications.",
-      "examTip": "Secure your web applications with HTTPS and proper session management to mitigate session hijacking risks."
+      "explanation": "Virtualization hosts thrive on large amounts of RAM, multiple CPU cores with hardware virtualization extensions, and fast storage (SSD-based RAID). Dual NICs help with network throughput or failover. Sound cards or single-core CPUs have little benefit for virtualization. ECC RAM adds reliability in a virtualized environment.",
+      "examTip": "Prioritize CPU cores, substantial RAM, and robust storage for virtualization. Features like ECC RAM and multiple NICs further optimize stability and performance."
     },
+
     {
       "id": 75,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Global Catalog for LDAP queries to retrieve objects from the entire forest, and is often used for initial domain searches?",
@@ -1043,19 +1032,22 @@ db.tests.insertOne({
       "explanation": "A repeating surface defect or obstruction on the imaging drum can cause consistent voids of missing toner in prints.",
       "examTip": "Inspect the imaging drum for defects if you observe a regular pattern of missing toner spots."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 79,
-      "question": "Which of the following is a BEST practice for securing user accounts against password reuse across different online services and applications?",
+      "question": "Performance-Based Question (PBQ): A user cannot connect to the company Wi-Fi despite seeing the SSID. They insist the password is correct. Place the following diagnostic actions in the MOST logical order to find and resolve the issue.",
       "options": [
-        "Using the same password for all online accounts for easy management.",
-        "Disabling password managers to encourage users to memorize passwords.",
-        "Educating users about the risks of password reuse and promoting the use of password managers to generate and store unique, strong passwords for each account.",
-        "Storing passwords in a simple spreadsheet for personal record-keeping."
+        "1) Forget the network and re-enter credentials, 2) Check Wi-Fi adapter driver version, 3) Temporarily disable antivirus, 4) Replace the router’s firmware, 5) Verify the correct wireless profile settings.",
+        "1) Modify the AP to use WPA instead of WPA2, 2) Run Windows Update, 3) Check an alternate SSID, 4) Reboot the user's device, 5) Reset the user’s password in Active Directory.",
+        "1) Check if other devices connect successfully, 2) Compare the user’s Wi-Fi security settings with the official standard, 3) Update or reinstall the Wi-Fi driver if needed, 4) Remove and re-add the SSID profile, 5) Try a different frequency band if supported.",
+        "1) Immediately replace the user’s laptop, 2) Force 802.11b mode on the AP, 3) Reset the user’s domain account password, 4) Switch the user to a guest network to confirm it works, 5) Hardcode the IP address."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Educating users about the risks of password reuse and using password managers to generate unique passwords is the best practice to prevent credential compromise across services.",
-      "examTip": "Encourage the use of password managers and educate users on the dangers of password reuse."
+      "explanation": "First, verify if the issue is user-specific by checking other devices and ensuring the correct security standard (e.g., WPA2 or WPA3). If drivers are outdated, update them. Then remove/re-add the SSID profile to eliminate corrupted settings. Finally, testing a different frequency band can reveal interference or compatibility issues. Replacing hardware or changing router firmware are last-resort steps and less logical as an initial approach.",
+      "examTip": "Always check if other clients can connect before suspecting the infrastructure. Then confirm your Wi-Fi settings match the network’s security requirements and that drivers are current."
     },
+
     {
       "id": 80,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for initial authentication requests, and is often targeted in Kerberos 'Golden Ticket' attacks?",
@@ -1147,19 +1139,22 @@ db.tests.insertOne({
       "explanation": "If the new motherboard’s chipset or BIOS doesn’t support the CPU architecture, the system may power cycle without posting. This is more common than excessive PSU wattage or a single bad SATA cable causing a complete inability to POST. The notion that 32 GB is mandatory is unrealistic for typical boards; CPU incompatibility is the prime suspect.",
       "examTip": "Always verify CPU compatibility with the new motherboard’s socket and BIOS revision before finalizing a replacement."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 87,
-      "question": "Which of the following is a key consideration when designing a 'Backup and Disaster Recovery' (DR) strategy for a hybrid cloud environment?",
+      "question": "Performance-Based Question (PBQ): A user complains that a multi-function printer (MFP) is not scanning to email, even though printing and copying work fine. Select the BEST step-by-step approach to diagnose and fix the issue.",
       "options": [
-        "Assuming that public cloud components are inherently protected and do not require backup.",
-        "Focusing solely on backing up on-premises private cloud components, as public cloud data is provider-managed.",
-        "Developing a unified backup and DR strategy that covers both private and public cloud components, addressing data consistency and recovery across environments.",
-        "Ignoring data replication between private and public clouds for simplicity and cost reduction."
+        "1) Reinstall printer drivers on all workstations, 2) Update firmware, 3) Enable spooler logging, 4) Test scanning after each step.",
+        "1) Verify MFP network connectivity and DNS, 2) Check MFP’s SMTP settings (server address, authentication), 3) Validate correct email credentials or port, 4) Send a test scan to email.",
+        "1) Power cycle the entire office switch, 2) Disable scan-to-folder on the MFP, 3) Install a second network card in the MFP, 4) Use static IP addressing.",
+        "1) Configure the MFP for direct USB scanning, 2) Install a third-party scanning utility, 3) Force static DNS on each client, 4) Restart all user sessions."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Developing a unified backup and DR strategy that covers both private and public cloud components is essential in a hybrid cloud environment.",
-      "examTip": "Ensure your DR plan addresses all components of your hybrid cloud for data consistency and rapid recovery."
+      "correctAnswerIndex": 1,
+      "explanation": "When troubleshooting scan-to-email, first confirm the MFP has proper network access and can resolve the mail server (DNS). Then verify SMTP server settings, authentication method, and correct email credentials. A test scan helps confirm functionality. Reinstalling drivers or forcibly changing network hardware is excessive if the core network and print functions already work.",
+      "examTip": "Focus on the scanning feature’s specific requirements—SMTP configuration, DNS resolution, and valid credentials—before mass reinstallations or reboots."
     },
+
     {
       "id": 88,
       "question": "A laser printer is producing prints with a consistent 'smear' or 'blur' that is most pronounced at the bottom of the page and gradually fades towards the top. Which printer component is MOST likely causing this bottom-heavy smear defect?",
@@ -1173,19 +1168,22 @@ db.tests.insertOne({
       "explanation": "An uneven fuser assembly, particularly at the output end, can result in a bottom-heavy smear as toner is not properly fused.",
       "examTip": "Inspect the fuser assembly for uneven pressure or temperature issues if smearing is more pronounced at the bottom of the page."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 89,
-      "question": "Which of the following is a BEST practice for securing user accounts against session hijacking attacks in web applications?",
+      "question": "Performance-Based Question (PBQ): A new technician must replace a power supply in a desktop PC. Which set of ESD-prevention steps is the MOST accurate and safe sequence for performing this upgrade?",
       "options": [
-        "Using HTTP for all web traffic to avoid encryption overhead.",
-        "Implementing HTTPS for all web traffic, using HTTP-only and Secure flags on session cookies, and regularly regenerating session IDs.",
-        "Storing session IDs in URL parameters for easier access and management.",
-        "Disabling session timeouts to minimize user interruptions."
+        "1) Power off PC, 2) Touch a metal object, 3) Put on gloves, 4) Remove PSU, 5) Attach anti-static wrist strap after removing PSU.",
+        "1) Leave the PC on for grounding, 2) Clip the anti-static strap to a painted surface, 3) Replace PSU, 4) Turn off power when finished.",
+        "1) Shut down and unplug the PC, 2) Connect the anti-static wrist strap to an unpainted chassis area, 3) Discharge yourself on a metal part of the case, 4) Remove and replace PSU, 5) Reassemble carefully.",
+        "1) Unplug the PC, 2) Wear rubber-soled shoes on carpet, 3) Quickly swap PSU without touching any metal parts, 4) Reboot the system to test."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Implementing HTTPS, secure cookie flags, and session ID regeneration are essential practices to prevent session hijacking in web applications.",
-      "examTip": "Secure your web applications with HTTPS and proper session management to mitigate session hijacking risks."
+      "correctAnswerIndex": 2,
+      "explanation": "For proper ESD prevention: power off and unplug the system, attach the wrist strap to a bare metal part of the chassis, and periodically ground yourself. Then remove and replace the PSU. Wearing rubber-soled shoes on carpet or waiting to attach the strap until after you remove components significantly raises ESD risk.",
+      "examTip": "Correct ESD protocol: remove power, ground yourself with a wrist strap to unpainted metal, handle components by edges, and recheck for static frequently."
     },
+
     {
       "id": 90,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Global Catalog for LDAP queries to retrieve objects from the entire forest, and is often used for initial domain searches?",
@@ -1238,19 +1236,22 @@ db.tests.insertOne({
       "explanation": "A repeating surface defect or obstruction on the imaging drum can cause consistent voids of missing toner in prints.",
       "examTip": "Inspect the imaging drum for defects if you observe a regular pattern of missing toner spots."
     },
+
+    /* REPLACED with PBQ style question */
     {
       "id": 94,
-      "question": "Which of the following is a BEST practice for securing user accounts against password reuse across different online services and applications?",
+      "question": "Performance-Based Question (PBQ): A PC emits a series of beeps at startup but never displays video. The user suspects a hardware failure. Which sequence of checks is MOST appropriate to isolate the cause?",
       "options": [
-        "Using the same password for all online accounts for easy management.",
-        "Disabling password managers to encourage users to memorize passwords.",
-        "Educating users about the risks of password reuse and promoting the use of password managers to generate and store unique, strong passwords for each account.",
-        "Storing passwords in a simple spreadsheet for personal record-keeping."
+        "1) Replace the CPU with a random spare, 2) Update chipset drivers, 3) Boot into Windows Safe Mode, 4) Reseat GPU if CPU swap fails.",
+        "1) Note the beep code pattern, 2) Compare it to the motherboard’s POST beep references, 3) Reseat or replace the indicated component (GPU or RAM), 4) Clear CMOS if issue persists.",
+        "1) Swap out the PSU for a higher wattage model, 2) Run MemTest86, 3) Boot from a Linux live USB, 4) Update the BIOS if memory passes.",
+        "1) Check if the integrated NIC is lit, 2) Replace the system’s case fan, 3) Enter BIOS and enable performance mode, 4) Move the RAM to a different channel."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Educating users about the risks of password reuse and using password managers to generate unique passwords is the best practice to prevent credential compromise across services.",
-      "examTip": "Encourage the use of password managers and educate users on the dangers of password reuse."
+      "correctAnswerIndex": 1,
+      "explanation": "Most motherboards provide unique beep codes to signal hardware issues (common codes relate to RAM or GPU). Documenting the pattern, checking the motherboard reference, and reseating or replacing the offending component is the logical path. Clearing CMOS may help if the beep code is still ambiguous. Randomly replacing CPUs or NIC-based checks do not specifically address beep codes.",
+      "examTip": "Always look up the specific beep code pattern in the motherboard’s manual. It often directs you exactly which component to troubleshoot (RAM, GPU, etc.)."
     },
+
     {
       "id": 95,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for initial authentication requests, and is often targeted in Kerberos 'Golden Ticket' attacks?",
