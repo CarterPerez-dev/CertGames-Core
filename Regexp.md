@@ -1,4 +1,4 @@
-# Important Github Replace ```regex```
+# Important Github Replace ```Regexp```
 ---------------------------------------
 ### Find all words/characters in ()
 ```regex
