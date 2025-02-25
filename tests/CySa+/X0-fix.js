@@ -1,3 +1,12 @@
+#5
+#7
+#11
+#13 
+#15
+#16,
+#3 
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 10,
