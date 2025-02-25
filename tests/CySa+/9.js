@@ -1,3 +1,6 @@
+7,9,12,27,50,57,19
+
+
 db.tests.insertOne({
   "category": "cysa",
   "testId": 9,
