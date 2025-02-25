@@ -1,15 +1,11 @@
 
-Question #7: “Which type of malware is characterized by its ability to self-replicate and spread across networks without requiring a host file?”
 
 
 
-Question #4: “Which of the following is the MOST effective technique for mitigating the risk of cross-site request forgery (CSRF) attacks?”
 
 
-Question #14: “Which of the following is a common technique used by attackers to escalate privileges on a compromised system?”
 
 
-Question #19: “What is 'Wireshark' primarily used for?”
 
 
 Question #81: “Which of the following is the MOST important practice for securing a wireless network?”
@@ -78,16 +74,16 @@ db.tests.insertOne({
     },
     {
       "id": 4,
-      "question": "Which of the following is the MOST effective technique for mitigating the risk of cross-site request forgery (CSRF) attacks?",
+      "question": "An external auditor discovers that internal security policies are outdated and do not reflect current regulations. To address this, which of the following actions should the GRC team prioritize?",
       "options": [
-        "Enforce comprehensive password policies for all user accounts to reduce unauthorized access.",
-        "Include randomized anti-CSRF tokens within web forms to invalidate unauthorized requests.",
-        "Protect all data transmission with HTTPS to secure sensitive information in transit.",
-        "Perform routine vulnerability assessments to detect potential weaknesses on a regular basis."
+        "Purchase the latest threat intelligence feeds",
+        "Review and revise policies to meet updated regulatory requirements",
+        "Deploy a new SIEM platform for more comprehensive log correlation",
+        "Implement continuous network scans to identify new vulnerabilities"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Strong passwords help generally, but not specifically against CSRF. HTTPS protects data *in transit*, not the request itself. Vulnerability scans *identify* the vulnerability. *Anti-CSRF tokens* (unique, unpredictable, secret tokens) are the most effective defense. The server generates a token for each session, includes it in forms, and verifies it upon submission. This prevents attackers from forging requests, as they won't know the token.",
-      "examTip": "Anti-CSRF tokens are the primary defense against CSRF attacks."
+      "explanation": "Updating policies to reflect the latest regulations is a governance responsibility and ensures compliance alignment.",
+      "examTip": "Always align internal governance documents (policies, procedures) with current laws, regulations, and standards."
     },
     {
       "id": 5,
@@ -208,16 +204,16 @@ db.tests.insertOne({
     },
     {
       "id": 14,
-      "question": "Which of the following is a common technique used by attackers to escalate privileges on a compromised system?",
+      "question": "A healthcare organization must comply with HIPAA requirements and wants to establish robust data governance. Which of the following BEST ensures compliance from a governance standpoint?",
       "options": [
-        "Installing host-based firewalls as a protective measure on newly compromised systems.",
-        "Leveraging flaws or misconfigurations in software to gain elevated rights or permissions.",
-        "Applying patches promptly on every application to minimize potential security holes.",
-        "Encrypting entire disk volumes so only privileged users can read the stored contents."
+        "Implementing an advanced EDR solution across endpoints",
+        "Running daily vulnerability scans on all clinical devices",
+        "Creating a formal data classification policy that incorporates PHI handling",
+        "Hiring a third-party to conduct annual social engineering tests"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Installing firewalls and patching are *defensive* measures. Encryption could be used, but it doesn't directly grant higher privileges. Privilege escalation is the process of an attacker gaining *higher-level access* (e.g., administrator or root privileges) than they initially had. This is typically achieved by exploiting vulnerabilities in software or taking advantage of misconfigured system settings.",
-      "examTip": "Privilege escalation allows attackers to gain greater control over a system."
+      "correctAnswerIndex": 2,
+      "explanation": "A formal data classification policy aligned with PHI handling is a core governance measure to ensure HIPAA compliance.",
+      "examTip": "Understand how data governance, classification, and handling procedures map to specific regulatory requirements."
     },
     {
       "id": 15,
@@ -273,16 +269,16 @@ db.tests.insertOne({
     },
     {
       "id": 19,
-      "question": "What is 'Wireshark' primarily used for?",
+      "question": "An IT director notices a lack of alignment between IT projects and business objectives. From a governance perspective, which of the following solutions addresses this gap?",
       "options": [
-        "Customize and maintain firewall rule sets for enhanced perimeter defense.",
-        "Capture live network traffic and dissect individual packets for in-depth protocol analysis.",
-        "Scan hosts for known security flaws and suggest remediation strategies automatically.",
-        "Transform all data in transit by using strong cryptographic methods throughout the network."
+        "Establishing a vulnerability management program",
+        "Creating an executive-led IT steering committee",
+        "Performing penetration tests quarterly",
+        "Implementing role-based access control for databases"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Wireshark is not a firewall manager, vulnerability scanner, or encryption tool. Wireshark is a powerful and widely used *packet capture* and analysis tool. It allows you to capture network traffic in real-time or load a capture file, and then *inspect individual packets* to analyze protocols, troubleshoot network problems, and detect suspicious activity. It's an essential tool for network and security professionals.",
-      "examTip": "Wireshark is the go-to tool for network traffic analysis and troubleshooting."
+      "explanation": "An IT steering committee ensures IT initiatives align with organizational goals and fosters consistent governance decisions.",
+      "examTip": "Governance often involves forming committees or boards to oversee alignment of technical activities with strategic objectives."
     },
     {
       "id": 20,
@@ -1079,16 +1075,16 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "Which of the following is the MOST important practice for securing a wireless network?",
+      "question": "A new regulation requires systematic risk assessments for financial institutions. Which of the following BEST ensures compliance and ongoing governance for this requirement?",
       "options": [
-        "Leaving the router’s default SSID and administrator password unchanged.",
-        "Enabling WPA2 or WPA3 with a robust passphrase to encrypt wireless communications.",
-        "Turning off wireless security features to achieve faster network throughput.",
-        "Making the SSID visible to everyone so guests can connect without restriction."
+        "Defining risk tolerance levels in a corporate policy and repeating assessments periodically",
+        "Conducting an annual penetration test on all customer-facing applications",
+        "Implementing a firewall upgrade to meet the new standards",
+        "Hiring a certified ethical hacker to verify application security"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Using default credentials, disabling security, and broadcasting the SSID are all *extremely insecure*. The *most important* practice is to use strong *encryption* (WPA2 or, preferably, WPA3) with a *complex, unique password*. This protects the confidentiality and integrity of data transmitted over the wireless network and prevents unauthorized access.",
-      "examTip": "Always use strong encryption (WPA2/WPA3) and a complex password for Wi-Fi."
+      "correctAnswerIndex": 0,
+      "explanation": "Establishing risk tolerance levels in policy and scheduling regular risk assessments is a core governance practice for ensuring compliance.",
+      "examTip": "Ongoing governance includes documented policies defining risk appetite and ensuring assessments occur regularly."
     },
     {
       "id": 82,
@@ -1183,16 +1179,16 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "What is 'lateral movement' within a compromised network?",
+      "question": "Management wants to reduce liability by formally transferring certain risks to a third party. From a governance and risk perspective, which of the following is the MOST appropriate action?",
       "options": [
-        "Establishing initial access to a system or account through a single entry point.",
-        "Moving from one infected host to others, extending an attacker’s control within the network.",
-        "Encrypting affected files and requesting payment in exchange for the decryption key.",
-        "Exfiltrating valuable data from corporate servers to an external attacker-controlled location."
+        "Requiring the third party to install advanced intrusion prevention systems",
+        "Negotiating cyber insurance coverage to offset potential financial losses",
+        "Hiring a new security architect to redesign the network perimeter",
+        "Implementing daily vulnerability scans to detect third-party risks"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Initial compromise is the attacker's *entry point*. Data encryption is characteristic of *ransomware*. Data exfiltration is the *theft* of data. Lateral movement is how an attacker *expands their control* *within* a network *after* gaining initial access. They compromise one system and then use that access (often by exploiting vulnerabilities or using stolen credentials) to pivot to other, more valuable systems, escalating privileges and gaining deeper access.",
-      "examTip": "Lateral movement is a key tactic for attackers to increase their impact within a network."
+      "explanation": "Transferring risk through insurance is a recognized strategy under risk management. This action helps the organization handle financial liability without eliminating the underlying threat.",
+      "examTip": "Be aware of different risk response strategies (accept, avoid, mitigate, transfer) and understand how governance drives those decisions."
     },
     {
       "id": 90,
