@@ -1,34 +1,3 @@
-In Test #9, I see items like #30, #63, #90, and #96 revolve around the same scenario: “A forensic analyst detects repeated failed authentication attempts followed by a successful login... What is the MOST likely cause?” The correct answer is “Credential stuffing attack.”
-
-Here is a quick highlight for potential duplicates:
-
-Test #9, Q30: “A security analyst detects repeated failed authentication attempts followed by a successful login using a privileged account...”
-Explanation says “Credential stuffing.”
-Test #9, Q63: “An attacker successfully compromises a Linux system and executes the following command: (something else)?” Possibly not the same.
-Actually Q63 is also: *“A security analyst detects repeated failed authentication attempts followed by a successful login from the same IP...**"
-Test #9, Q90: Again* repeated failed logins, followed by success = “Credential stuffing.”
-Test #9, Q96: *“repeated failed authentication attempts + successful login → credential stuffing.”
-That means within Test #9 alone, we see that exact scenario described at Q30, Q90, and Q96—all describing repeated failed attempts followed by success on a privileged account. The correct answer is always “Credential stuffing.”
-
-Let’s see if the question text is truly identical or if it’s just extremely close:
-
-Q30:
-
-“A security analyst detects repeated failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?”
-
-Q90:
-
-“A forensic analyst reviewing logs finds multiple failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?”
-
-Q96:
-
-“A forensic analyst detects repeated failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?”
-
-The wording is slightly different but effectively the same question and same correct answer. That means Test #9 has at least three near-duplicates just for the “credential stuffing attack” scenario:
-
-Q30, Q90, Q96
-This is typically considered redundant. Having the same scenario repeated 3 times in a single test is probably not beneficial for test-takers. You might want to remove or vary them if you don’t want so much repetition.
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 9,
@@ -414,16 +383,16 @@ db.tests.insertOne({
     },
     {
       "id": 30,
-      "question": "A security analyst detects repeated failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?",
+      "question": "An organization’s board of directors has mandated an overhaul of the governance framework to address emerging compliance challenges. Which approach BEST ensures a successful transition without overwhelming current operations?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Implement the new governance framework enterprise-wide in a single rollout for maximum consistency.",
+        "Assign an external consultancy firm full responsibility for governance implementation and management.",
+        "Adopt a phased rollout, starting with critical business units, while maintaining legacy controls in other areas.",
+        "Delay the new framework until all employees complete a mandatory governance certification program."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) to mitigate credential stuffing attacks."
+      "correctAnswerIndex": 2,
+      "explanation": "Introducing the new governance model in targeted phases avoids operational shock and allows lessons learned to be applied before expanding the rollout across all units. Immediate, full-scale adoption can hinder business continuity if issues arise.",
+      "examTip": "A staged approach to implementing new governance structures helps manage risk and promotes organizational acceptance."
     },
     {
       "id": 31,
@@ -843,16 +812,16 @@ db.tests.insertOne({
     },
     {
       "id": 63,
-      "question": "A security analyst detects repeated failed authentication attempts followed by a successful login from the same IP using a privileged account. What is the MOST likely attack technique?",
+      "question": "After a recent data breach, senior management decides to tighten compliance with external standards. Which step is MOST crucial to ensure the updated compliance programs effectively address the root causes of the breach?",
       "options": [
-        "Credential stuffing",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Focus on punitive measures against those found responsible for non-compliant behavior.",
+        "Update system configurations to match every requirement in the latest compliance standard.",
+        "Conduct a post-incident review to identify exact policy gaps that enabled the breach and remediate accordingly.",
+        "Require all employees to retake mandatory security training and sign an updated acceptable use policy."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) and monitor failed login attempts for anomalies."
+      "correctAnswerIndex": 2,
+      "explanation": "A post-incident review pinpoints the specific failures that led to the breach, enabling targeted improvements to the compliance program. Merely matching a standard or penalizing employees may overlook the real underlying issues.",
+      "examTip": "Identify the true root cause before designing remediation measures; a targeted fix is more effective than broad changes."
     },
     {
       "id": 64,
@@ -1194,16 +1163,16 @@ db.tests.insertOne({
     },
     {
       "id": 90,
-      "question": "A forensic analyst reviewing logs finds multiple failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?",
+      "question": "An international manufacturing conglomerate is formalizing an enterprise governance model to enhance accountability across multiple subsidiaries. Which action is MOST critical to ensure consistent risk management practices throughout the organization?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Mandate each subsidiary to adopt the exact risk controls used at corporate headquarters without modifications.",
+        "Institute a unified risk taxonomy and require subsidiaries to map their local controls to this standard framework.",
+        "Launch ad-hoc audits of each subsidiary to ensure they are adhering to at least some corporate guidelines.",
+        "Allow each subsidiary to use its own risk approach, provided it submits quarterly compliance updates."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) to mitigate credential stuffing attacks."
+      "correctAnswerIndex": 1,
+      "explanation": "Standardizing the risk language ensures each subsidiary’s controls are measured against a unified framework. This approach recognizes local variations while preserving enterprise-wide governance consistency.",
+      "examTip": "A single, coherent risk taxonomy underpins effective, scalable governance across diverse operations."
     },
     {
       "id": 91,
@@ -1272,16 +1241,16 @@ db.tests.insertOne({
     },
     {
       "id": 96,
-      "question": "A forensic analyst detects repeated failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely cause?",
+      "question": "A newly appointed Chief Compliance Officer (CCO) wants to strengthen internal oversight of data protection obligations after recent regulatory changes. Which of the following should be the FIRST step to ensure cohesive policy alignment across all departments?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Penalize any department that fails to meet the latest regulatory requirements within a set deadline.",
+        "Communicate a zero-exception policy and replace existing data-handling guidelines with stricter measures.",
+        "Centralize policy creation in the CCO’s office, requiring formal acceptance by each department head.",
+        "Conduct a comprehensive policy review to identify inconsistencies in departmental procedures."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) to mitigate credential stuffing attacks."
+      "correctAnswerIndex": 3,
+      "explanation": "Reviewing existing policies for inconsistencies allows the CCO to identify areas requiring updates or re-alignment. Immediately imposing a blanket policy or penalties may ignore unique departmental challenges and create resistance.",
+      "examTip": "Always identify the current state of compliance before making sweeping changes to governance or regulatory policy structures."
     },
     {
       "id": 97,
