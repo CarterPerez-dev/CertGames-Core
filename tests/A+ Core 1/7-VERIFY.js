@@ -303,8 +303,6 @@ db.tests.insertOne({
       "explanation": "Physically destroying the drive (e.g., shredding or degaussing) is the MOST secure practice because it ensures data is completely unrecoverable.",
       "examTip": "For ultimate data security during disposal, physical destruction of hard drives is the gold standard."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 24,
       "question": "Performance-Based Question (PBQ): A user reports that a laptop is completely unresponsive to power. Arrange the following diagnostic steps in the MOST logical order to identify the root cause and restore power.",
@@ -318,7 +316,6 @@ db.tests.insertOne({
       "explanation": "The best sequence is to first discharge residual power and ensure the AC adapter is functional and known-good, then check the DC jack for physical damage, and finally test without the battery (some laptops can power on with adapter alone). Reattaching the battery last confirms if it’s battery-related or DC jack/adapter related. Replacing the motherboard or performing firmware updates are more advanced steps typically done after confirming simpler hardware causes aren’t at fault.",
       "examTip": "Always verify adapter functionality and basic power paths before suspecting large-scale component failure. Remove the battery to isolate whether it or the DC jack is preventing power-up."
     },
-
     {
       "id": 25,
       "question": "A technician is optimizing a wireless network for a high-throughput, low-latency application like real-time video editing over Wi-Fi. Which Wi-Fi standard and advanced feature combination is MOST suitable?",
@@ -436,8 +433,6 @@ db.tests.insertOne({
       "explanation": "Implementing MFA and educating users about phishing are effective strategies for mitigating phishing risks.",
       "examTip": "Use MFA and educate users to recognize phishing attempts to secure accounts effectively."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 34,
       "question": "Performance-Based Question (PBQ): A user complains of random system shutdowns in a hot office environment. Arrange these troubleshooting actions in the MOST logical order to diagnose and fix a thermal shutdown issue.",
@@ -451,7 +446,6 @@ db.tests.insertOne({
       "explanation": "The recommended approach is to clean out dust and verify fans first, then confirm proper airflow, reapply thermal paste if needed, and finally test under load. Random shutdowns in a hot environment often stem from overheating. Checking or replacing thermal paste prematurely, or messing with voltages, can be a later step, but verifying cooling hardware is always first. Monitoring final temperatures ensures the fix is effective.",
       "examTip": "Thermal shutdowns often have a simple cause: blocked airflow or dried-out thermal compound. Always confirm the basics—fan operation and dust removal—before more advanced interventions."
     },
-
     {
       "id": 35,
       "question": "A technician is optimizing a wireless network for a large area with thick walls and obstacles. Which of the following strategies is MOST effective for improving signal coverage and penetration?",
@@ -660,8 +654,6 @@ db.tests.insertOne({
       "explanation": "Directional antennas pointed down aisles between racking can provide targeted coverage and reduce reflections from metal surfaces.",
       "examTip": "In warehouses, use directional antennas to focus the signal along aisles and minimize interference from metal structures."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 51,
       "question": "Performance-Based Question (PBQ): A user complains that after upgrading their workstation for CAD usage, graphics performance is erratic. Place the following troubleshooting steps in the BEST order to isolate the issue on a new high-end GPU setup.",
@@ -675,7 +667,6 @@ db.tests.insertOne({
       "explanation": "To diagnose erratic performance on a new CAD-oriented GPU, confirm the PSU is adequate, verify driver installation, then run a dedicated stress/benchmark test while monitoring temps and clock speeds. If the GPU overheats or the PSU underperforms, you’ll see dips or crashes. Steps like re-installing the OS or adjusting VRAM voltage come later. Focusing on drivers, PSU power, and GPU thermals first is the usual approach.",
       "examTip": "Always ensure your power supply and drivers are up to the task when troubleshooting new GPU setups. Stress tests under load reveal power or thermal shortfalls quickly."
     },
-
     {
       "id": 52,
       "question": "A laser printer is producing prints with a repeating 'smear' or 'blur' extending vertically down the page from the same horizontal position. Which printer component is MOST likely causing this vertical smear defect?",
@@ -741,8 +732,6 @@ db.tests.insertOne({
       "explanation": "Microsegmentation reduces the attack surface by isolating workloads, thereby limiting lateral movement in case of a breach.",
       "examTip": "Use microsegmentation to contain potential breaches within small segments of your network."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 57,
       "question": "Performance-Based Question (PBQ): A small business’s all-in-one laser printer produces a faint secondary image (ghosting) below the primary image. Arrange the following diagnostic actions in the MOST logical order to isolate the root cause.",
@@ -756,7 +745,6 @@ db.tests.insertOne({
       "explanation": "Ghosting typically stems from leftover toner not fully discharged or fused. The correct sequence is to check/clean the fuser, ensure correct media settings (which affect heat/pressure), then check the drum or transfer components for residual charge. If ghosting persists, replace or clean those parts. Steps like driver updates or memory reseating usually won’t solve a physical ghosting issue caused by leftover toner or insufficient fusing.",
       "examTip": "When dealing with ghosting, think physically: leftover charge or poorly fused toner is the culprit. Always verify the right media settings and fusing temperature first."
     },
-
     {
       "id": 58,
       "question": "A laser printer is producing prints with a consistent 'smear' or 'blur' that is most pronounced at the bottom of the page and gradually fades towards the top. Which printer component is MOST likely causing this bottom-heavy smear defect?",
@@ -796,8 +784,6 @@ db.tests.insertOne({
       "explanation": "Using non-overlapping channels in the 5 GHz band with minimized channel width is most effective in reducing interference in dense environments.",
       "examTip": "For dense environments, the 5 GHz band with proper channel planning helps mitigate interference effectively."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 61,
       "question": "Performance-Based Question (PBQ): A new IT hire must configure a Windows 10 system to host two VMs simultaneously for software testing. Arrange the following setup tasks in the CORRECT order to ensure virtualization functions properly.",
@@ -811,7 +797,6 @@ db.tests.insertOne({
       "explanation": "To run two VMs on Windows 10, you must first enable hardware virtualization in BIOS, then install or enable the hypervisor (like Hyper-V). After that, allocate enough RAM/disk for each VM, and finally create/configure the virtual machines. Skipping the BIOS step or the hypervisor installation would prevent VMs from functioning properly.",
       "examTip": "Always confirm virtualization is enabled at the hardware level before installing hypervisor software, or your VMs won’t even boot."
     },
-
     {
       "id": 62,
       "question": "A laser printer is producing prints with a repeating 'spots' or 'dots' of excess toner randomly scattered across the page. Which printer consumable is MOST likely causing this random speckling issue?",
@@ -838,8 +823,6 @@ db.tests.insertOne({
       "explanation": "Multi-factor authentication combined with IP-based access restrictions significantly reduces the risk of brute-force attacks on cloud services.",
       "examTip": "Implement MFA and restrict access by IP to strengthen cloud service security against brute-force attempts."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 64,
       "question": "Performance-Based Question (PBQ): An office user complains about extremely slow printing from a networked laser printer. Every job eventually prints, but only after long delays. Which sequence of steps is MOST likely to isolate the bottleneck?",
@@ -853,8 +836,6 @@ db.tests.insertOne({
       "explanation": "Slow prints can be caused by spooler issues, network congestion, or a corrupted driver. The best approach is to check the printer’s internal queue, confirm the switch port for errors, then update drivers. Testing a local USB or direct print can differentiate server or network spooler delays from hardware issues. Replacing toner or re-cabling the entire office rarely fixes slow spooling problems.",
       "examTip": "Always confirm spooler health, network port status, and driver integrity when diagnosing slow network printing. A local test can prove if the hardware is fine."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 65,
       "question": "Performance-Based Question (PBQ): You must troubleshoot a newly built gaming PC that randomly shuts off during graphically intense gameplay. Arrange the following diagnostic steps in the BEST order to pinpoint the cause.",
@@ -868,8 +849,6 @@ db.tests.insertOne({
       "explanation": "High-load shutdowns typically come from PSU or thermal issues. First ensure the PSU is adequate and stable, then watch GPU/CPU temps with a stress test. If temps or voltages are fine, next update GPU drivers. Finally, inspect or reseat power cables. Reinstalling the OS or fiddling with the network wouldn’t solve a power/thermal shutdown.",
       "examTip": "Always verify power supply capacity and component temps under stress when a PC crashes during intense graphics tasks."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 66,
       "question": "Performance-Based Question (PBQ): A technician must configure RAID 5 on a workstation using three new HDDs and the built-in motherboard RAID option. Which series of steps is CORRECT for creating a functional RAID 5 array?",
@@ -883,7 +862,6 @@ db.tests.insertOne({
       "explanation": "To create RAID 5 with on-board motherboard RAID, you must first enable RAID mode in BIOS, then define a RAID 5 volume across all three drives in the RAID utility, and either install the OS onto that array or assign it as data storage. AHCI mode, spanned volumes, or purely software-based RAID 0 steps won’t yield RAID 5 fault tolerance.",
       "examTip": "Motherboard-based RAID typically requires switching from AHCI to RAID mode in BIOS, then configuring the drives in the dedicated RAID utility before installing the OS or initializing the array."
     },
-
     {
       "id": 67,
       "question": "Performance-Based Question (PBQ): A company’s multi-function device is printing extra toner specks on every page. Place the following diagnostic actions in the MOST logical order to fix random toner spotting.",
@@ -923,8 +901,6 @@ db.tests.insertOne({
       "explanation": "Port 3268 is used for non-secure Global Catalog LDAP queries for forest-wide data retrieval.",
       "examTip": "Use port 3268 for standard Global Catalog LDAP queries in Active Directory."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 70,
       "question": "Performance-Based Question (PBQ): Your company wants to deploy multiple new APs in a large conference venue to support thousands of concurrent users on Wi-Fi 6. Select the BEST sequence for installing and configuring these APs for immediate readiness and load balancing.",
@@ -938,7 +914,6 @@ db.tests.insertOne({
       "explanation": "Effective large-venue Wi-Fi deployment starts with a site survey, ensuring correct AP spacing and channel selection. A central controller for load balancing/band steering is crucial for thousands of users. Using secure encryption (WPA3 or WPA2 Enterprise) is best practice. Random placement, minimal encryption, or ignoring coverage planning typically leads to interference and poor user experience.",
       "examTip": "Always begin large Wi-Fi deployments with a thorough site survey and a controller-based approach, especially if you need to handle massive crowds simultaneously."
     },
-
     {
       "id": 71,
       "question": "Which of the following is a key security consideration related to 'serverless computing' or 'Function-as-a-Service (FaaS)' cloud models?",
@@ -952,8 +927,6 @@ db.tests.insertOne({
       "explanation": "Serverless computing reduces visibility and control over the execution environment, which can create security blind spots despite provider-managed infrastructure security.",
       "examTip": "Be aware that while serverless shifts some security responsibilities to the provider, it also reduces your control over the runtime environment, requiring careful management of function-level security."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 72,
       "question": "Performance-Based Question (PBQ): A user complains that multiple VMs on a single hypervisor become sluggish when heavy disk I/O occurs. Arrange the following troubleshooting measures to best address the shared storage bottleneck.",
@@ -967,7 +940,6 @@ db.tests.insertOne({
       "explanation": "When VMs slow down under heavy I/O, first measure disk queue length to confirm a bottleneck. Next, consider moving to faster storage (SSD or RAID upgrades). Check each VM’s virtual disk settings (e.g., thin vs. thick provisioning) and if needed, implement I/O throttling or QoS. Swapping hypervisors or messing with NIC drivers doesn’t address disk throughput. USB-based enclosures aren’t suitable for production I/O loads.",
       "examTip": "Investigate disk performance metrics first. If queue length is high, upgrading storage or implementing I/O QoS can dramatically improve multi-VM performance."
     },
-
     {
       "id": 73,
       "question": "A technician is troubleshooting a system with intermittent 'blue screen of death' (BSOD) errors. After extensive diagnostics, the technician suspects a hardware issue related to the memory subsystem. However, standard memory tests show no errors. Which of the following tools or techniques is MOST likely to reveal subtle memory errors that might be missed by conventional tests?",
@@ -981,8 +953,6 @@ db.tests.insertOne({
       "explanation": "Memtest86+ in extended, multi-pass mode with strict error checking is the MOST likely to reveal subtle memory errors. While standard memory tests might pass, more rigorous testing like Memtest86+ (especially in extended modes with many passes and strict error checking) can uncover intermittent or subtle errors that only manifest under specific conditions or after prolonged stress. Disk Defragmenter is for hard drives, SFC checks system file integrity, and Event Viewer logs errors but doesn't actively test for them.",
       "examTip": "For elusive memory errors, go beyond basic tests. Memtest86+ in extended mode with multiple passes is your best bet for uncovering subtle RAM issues that can cause intermittent system instability."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 74,
       "question": "Performance-Based Question (PBQ): A user reports that after enabling virtualization in the BIOS, the system reboots randomly when running multiple VMs. Arrange the following steps in the BEST order to determine if the power supply (PSU) is causing instability.",
@@ -996,7 +966,6 @@ db.tests.insertOne({
       "explanation": "To confirm if the PSU is insufficient or failing, you should test with a known-good PSU first under the same VM load, then check the original PSU with a multimeter or PSU tester. Compare voltages and stability to see if the random reboots vanish. Reinstalling hypervisors or swapping motherboards is premature if a power shortfall is suspected.",
       "examTip": "Virtualization can stress CPU/PSU more. Always test power supply rails with a known-good unit when random resets coincide with high load."
     },
-
     {
       "id": 75,
       "question": "A technician suspects a failing graphics card after artifacts appear on the display and random system freezes occur under GPU-intensive tasks. The standard driver update and OS logs show no obvious issue. Which test scenario is MOST likely to confirm the GPU failure definitively?",
@@ -1075,8 +1044,6 @@ db.tests.insertOne({
       "explanation": "Port 389 is the default port for non-secure LDAP queries to domain controllers.",
       "examTip": "Use port 389 for standard, unencrypted LDAP queries in Active Directory."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 81,
       "question": "Performance-Based Question (PBQ): A remote worker complains of drastically reduced laptop performance only when docking to a universal USB-C hub that also charges the laptop. Arrange the following troubleshooting steps in the BEST order to identify and resolve a possible power shortfall.",
@@ -1090,8 +1057,6 @@ db.tests.insertOne({
       "explanation": "When performance drops with a universal dock, the device may be underpowered. Verifying the dock’s power delivery spec and cable rating is crucial. Monitoring system for CPU/GPU throttling under load can confirm insufficient power. If performance is normal with the OEM charger or a higher-wattage dock, you’ve isolated the cause. OS reinstallation, domain credentials, or trackpad settings won’t solve a power shortfall.",
       "examTip": "For docking stations, ensure it delivers adequate wattage. Insufficient power often leads to performance throttling, especially under heavy CPU or GPU loads."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 82,
       "question": "Performance-Based Question (PBQ): A technician suspects the new M.2 NVMe SSD is not performing at full speed in a user’s laptop. Arrange these steps to verify the SSD is fully compatible and achieving optimal throughput.",
@@ -1196,8 +1161,6 @@ db.tests.insertOne({
       "explanation": "LACP automatically detects and configures link aggregation, offering dynamic management and failover capabilities.",
       "examTip": "LACP offers dynamic, automatic link aggregation management, making it more resilient than static configurations."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 90,
       "question": "Performance-Based Question (PBQ): An outdoor music festival needs urgent Wi-Fi deployment for a massive crowd. Place the following steps in the BEST order to set up a high-density Wi-Fi 6/6E network with minimal interference and maximum throughput.",
@@ -1211,7 +1174,6 @@ db.tests.insertOne({
       "explanation": "For a large, high-density event, a site survey (even a rushed one) is crucial. Controller-based APs with load balancing and carefully planned 5 GHz or 6 GHz channels will minimize interference. Implement robust encryption and do a pilot test to ensure everything runs smoothly. Random channel assignment or single-channel setups in a huge crowd lead to chaos.",
       "examTip": "High-density Wi-Fi 6/6E deployments need careful channel planning and load balancing. Don’t skip even a basic site survey for large events."
     },
-
     {
       "id": 91,
       "question": "Which of the following is a key security benefit of using 'containerization' for application deployment compared to traditional virtual machines?",
@@ -1329,8 +1291,6 @@ db.tests.insertOne({
       "explanation": "While Windows Indexing, Update Delivery Optimization, and System Protection can have various performance implications, traditional scheduled disk defragmentation is typically unnecessary and can be detrimental for SSDs. Modern Windows versions automatically adjust drive optimization methods for SSDs, using TRIM rather than heavy defragmentation. Manually forcing defrag on SSDs could reduce the drive’s lifespan without providing real performance benefit.",
       "examTip": "On SSDs, TRIM replaces the need for old-school defrag. Always review advanced SSD-optimization practices when configuring new machines or upgrading to Windows 11."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 100,
       "question": "Performance-Based Question (PBQ): You’re tasked with deploying a massive Wi-Fi 6/6E network in a sports stadium for tens of thousands of users streaming video. Arrange these planning steps in the MOST logical order to ensure stable, high-density coverage.",
@@ -1346,4 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-/* ^ REPLACED QUESTIONS: #24, #34, #57, #67, #59, #51, #70, #61, #64, #65, #66, #81, #82, #90, #100 */
