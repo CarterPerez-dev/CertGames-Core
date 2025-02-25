@@ -1,51 +1,3 @@
-
-Q3, Q11, Q14
-All ask about the “desktop boots to a black screen with a cursor after a Windows update” scenario, with the same answer referencing System Restore.
-Q2, Q13
-Both describe installing a dedicated GPU in a desktop, no video output, solution is “connect the PCIe power cables.”
-Q5, Q15
-Laptop’s trackpad becomes unresponsive after plugging in an external USB mouse; solution is a function-key toggle.
-Q6, Q16
-Which printer type uses “charging, exposing, developing, transferring, fusing” steps? Answer is laser.
-Q7, Q17
-“A user hears loud clicking noises from a desktop PC … fails to load OS” referencing a failing mechanical HDD.
-Q8, Q18
-Need secure email download on iOS → “IMAP over SSL (IMAPS).”
-Q9, Q19
-CPU feature that lets one core appear as two → “Hyper-Threading.”
-Q10, Q20
-“Which cable is best for Thunderbolt 3 or 4 speeds?” → “USB-C Thunderbolt-certified cable.”
-Then from Q21 onward, there is another large set of repeated “basic computer questions.” Many of them appear multiple times (sometimes even triple or quadruple) in this single test. For example:
-
-Q25, Q34, Q52
-“What is the purpose of a printer driver?”
-Q27, Q35, Q53, Q89
-“Which of these is a common type of internet browser?” (Chrome, Firefox, Edge, etc.)
-Q28, Q36, Q54, Q90
-“What is ‘email’ used for?” → “Sending and receiving digital messages.”
-Q33, Q51, Q69
-“Which of these is a common type of computer virus? Trojan/worm/ransomware?” → “All of the above.”
-Q37, Q55, Q91
-“Which of these is a storage medium that uses flash memory? → SSD.”
-Q40, Q58
-“What is the purpose of ‘data backup’?” → “To create copies of important data for recovery.”
-Q41, Q59
-“Which of these is a common port for connecting peripherals?” → “USB.”
-Q42, Q60
-“What is ‘cloud computing’?”
-Q44, Q62
-“What is ‘phishing’ in cybersecurity?” → “Deceptive attempts to steal personal info.”
-Q45, Q63
-“Which component is essential for cooling the CPU?” → “Heat sink.”
-…and so forth.
-
-
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
@@ -184,16 +136,16 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "A user's desktop boots to a black screen with a cursor after a Windows update. The user can access Task Manager via Ctrl+Alt+Delete. Which advanced startup option is MOST likely to help revert the system to a functional state?",
+      "question": "A user reports random bursts of static electricity when touching their high-end gaming desktop, which sometimes reboots the system. Which is the MOST likely underlying issue?",
       "options": [
-        "Safe Mode with Networking",
-        "System Restore",
-        "Command Prompt",
-        "Startup Repair"
+        "Insufficient power supply wattage for the GPU",
+        "Improper grounding in the PC case or power outlet",
+        "Corrupted operating system files preventing normal boot",
+        "A failing CPU cooler causing system overheating"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "System Restore can revert recent OS changes that might have caused issues. This is often the fastest way to restore a functional state following a problematic update.",
-      "examTip": "System Restore is a powerful rollback feature. Use it if a new update or driver installation breaks the OS."
+      "explanation": "If a desktop is not properly grounded—either by the case’s internal standoffs or by the building’s electrical system—electrostatic discharges can occur and cause sporadic reboots or system instability.",
+      "examTip": "Always ensure the PC case, power supply, and building wiring are correctly grounded to avoid ESD-related reboots."
     },
     {
       "id": 12,
@@ -210,29 +162,29 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "A technician installs a new dedicated graphics card in a desktop PC, but upon boot, the system powers on with no video output. Which step is MOST likely to resolve the issue?",
+      "question": "A technician wants to test a newly installed liquid-cooling loop in a custom PC without risking immediate component damage. Which practice is MOST appropriate before powering the full system?",
       "options": [
-        "Re-enable the integrated GPU in the BIOS.",
-        "Connect the PCIe power cables from the PSU to the GPU.",
-        "Move the card to a different PCIe x1 slot.",
-        "Reseat the CPU in the socket."
+        "Remove the RAM and power on to see if any POST codes occur.",
+        "Use a dedicated PSU jumper to run the liquid-cooling pump in a ‘leak test’ for several hours.",
+        "Install the graphics card and run a stress test at maximum load for 24 hours.",
+        "Enable Safe Mode in BIOS to reduce voltage across the CPU."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "High-performance GPUs often require dedicated PCIe power connectors from the power supply. If these are not connected, the GPU may receive insufficient power and fail to output video.",
-      "examTip": "Always check whether the GPU has 6-pin, 8-pin, or other PCIe power requirements. No power = no video."
+      "explanation": "When assembling a custom liquid-cooling loop, it’s common to perform a leak test by jumping the PSU (so only the pump runs) for several hours. This ensures no coolant leaks before powering all sensitive components.",
+      "examTip": "Always leak-test new liquid-cooling setups offline to avoid hardware damage from unexpected leaks."
     },
     {
       "id": 14,
-      "question": "A user's desktop boots to a black screen with a cursor after a Windows update. The user can access Task Manager via Ctrl+Alt+Delete. Which advanced startup option is MOST likely to help revert the system to a functional state?",
+      "question": "A mobile workstation includes a unique embedded micro-lidar sensor on the lid that scans short-range 3D shapes for CAD software. The sensor stops working after a BIOS update. Which step is MOST likely to fix this?",
       "options": [
-        "Safe Mode with Networking",
-        "System Restore",
-        "Command Prompt",
-        "Startup Repair"
+        "Enable the micro-lidar device in the advanced BIOS peripherals menu.",
+        "Downgrade to a 32-bit operating system for better sensor driver compatibility.",
+        "Perform a full system reformat to reset hardware resources.",
+        "Disable all integrated devices except the micro-lidar sensor in Device Manager."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "System Restore can revert recent OS changes that might have caused issues. This is often the fastest way to restore a functional state following a problematic update.",
-      "examTip": "System Restore is a powerful rollback feature. Use it if a new update or driver installation breaks the OS."
+      "correctAnswerIndex": 0,
+      "explanation": "After certain firmware updates, specialized or less-common embedded peripherals can be disabled by default. Re-enabling them in advanced BIOS/UEFI settings usually restores functionality.",
+      "examTip": "When new firmware resets default configurations, always re-check any custom or unusual integrated devices."
     },
     {
       "id": 15,
@@ -249,68 +201,68 @@ db.tests.insertOne({
     },
     {
       "id": 16,
-      "question": "Which type of printer relies on the 'charging, exposing, developing, transferring, fusing' process to produce a printed image?",
+      "question": "A specialized color 3D printer uses advanced resin layers cured by UV lasers. Which process step is unique to this printing technology compared to traditional laser or inkjet printers?",
       "options": [
-        "Inkjet",
-        "Laser",
-        "Thermal",
-        "Dot matrix"
+        "Charging a photoconductor drum before transferring toner",
+        "Heating a thermal ribbon to imprint wax onto the paper",
+        "Solidifying liquid resin by targeted ultraviolet exposure",
+        "Utilizing a high-voltage corona wire for static adhesion"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Laser printers use an electro-photographic process that includes these key steps to apply toner and fuse it to the paper.",
-      "examTip": "Know the distinct print processes: laser printing has multiple steps involving static charges and toner."
+      "correctAnswerIndex": 2,
+      "explanation": "In resin-based 3D printing, liquid resin is cured layer-by-layer using UV light. This differs fundamentally from toner or ink processes in traditional laser or inkjet printers.",
+      "examTip": "3D resin printing relies on UV curing to harden each layer—no fusing drum or thermal heads."
     },
     {
       "id": 17,
-      "question": "A user hears loud clicking noises from a desktop PC that eventually fails to load the operating system. Which hardware component is MOST likely causing this symptom?",
+      "question": "A workshop desktop includes a rugged helium-filled HDD designed for high-capacity storage. The user reports the drive repeatedly spins down under moderate load, causing file transfers to stall. Which is the MOST likely culprit?",
       "options": [
-        "RAM",
-        "Power Supply",
-        "Hard Disk Drive (HDD)",
-        "CPU fan"
+        "Excessive VRAM usage on the dedicated GPU",
+        "The drive’s helium chamber has leaked and lowered RPM speed",
+        "An over-aggressive power management setting forcing spin-down",
+        "A failing CPU cooler triggers system thermal throttling"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A failing mechanical HDD commonly makes loud clicking sounds (the 'click of death') and can cause system boot failures or data corruption.",
-      "examTip": "Always back up data immediately if an HDD starts making unusual clicking or grinding noises."
+      "explanation": "Even specialized helium HDDs can be subject to OS power-saving policies that spin down the drive too quickly. This leads to stalling or slow file transfers.",
+      "examTip": "Check OS or firmware power settings that may prematurely spin down HDDs, especially in high-capacity drives."
     },
     {
       "id": 18,
-      "question": "A technician needs to configure an iOS device to securely retrieve corporate email. Which protocol is MOST likely used for secure email downloading?",
+      "question": "A traveling user needs secure point-of-sale transactions on a tablet with built-in NFC hardware. Which additional wireless security measure is MOST critical for safeguarding these tap-to-pay features?",
       "options": [
-        "POP3",
-        "IMAP over SSL (IMAPS)",
-        "SMTP",
-        "Telnet"
+        "Using WPA3 encryption on the tablet’s Wi-Fi connection",
+        "Enabling Bluetooth tethering to a trusted smartphone",
+        "Installing a second antivirus program for redundancy",
+        "Disabling all DNS over HTTPS (DoH) protocols"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "IMAP over SSL (IMAPS) provides an encrypted channel for receiving email, ensuring data confidentiality. POP3 is less commonly used today, and SMTP is primarily for sending email.",
-      "examTip": "For secure email retrieval, look for IMAP/POP with SSL/TLS (often referred to as IMAPS or POP3S)."
+      "correctAnswerIndex": 0,
+      "explanation": "Tap-to-pay (NFC) usage should be supplemented by robust Wi-Fi security (WPA3) when the device connects to networks. WPA3 significantly reduces the risk of eavesdropping or traffic hijacking that could compromise transactions.",
+      "examTip": "Keep Wi-Fi encryption at the highest standard (like WPA3) to protect sensitive NFC financial transactions."
     },
     {
       "id": 19,
-      "question": "Which CPU feature allows a single physical core to appear as two logical processors, improving multitasking performance?",
+      "question": "A laptop’s BIOS supports a novel “Adaptive Quad-Core Heterogeneous Computing” feature, showing two performance cores and two specialized low-power cores. Which function does this design MOST closely resemble?",
       "options": [
-        "Overclocking",
-        "Hyper-Threading",
-        "Integrated graphics",
-        "Dual-channel memory"
+        "It mirrors dual-boot functionality for separate OS partitions.",
+        "It parallels CPU virtualization from a Type 1 hypervisor.",
+        "It mimics the ‘big.LITTLE’ concept found in mobile ARM CPUs.",
+        "It replicates purely symmetrical multiprocessing across all cores."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Hyper-Threading (Intel) enables one physical CPU core to handle multiple threads simultaneously, making it appear as two logical cores to the operating system.",
-      "examTip": "Hyper-Threading helps with parallel processing and is especially useful for multi-threaded applications."
+      "correctAnswerIndex": 2,
+      "explanation": "Heterogeneous CPU designs, often branded as big.LITTLE in ARM architectures, pair high-performance cores with energy-efficient ones to balance power consumption and compute needs.",
+      "examTip": "Mixed-core setups handle background tasks on low-power cores while performance cores handle heavier loads."
     },
     {
       "id": 20,
-      "question": "Which cable choice is BEST for achieving full Thunderbolt 3 or 4 speeds when connecting an external high-speed storage device to a laptop?",
+      "question": "A user wants to connect an external VR headset that demands simultaneous 8K video feed and data transfer on a single cable. Which connection standard is REQUIRED for stable operation?",
       "options": [
-        "Cat 6 Ethernet cable",
-        "USB 2.0 Type-A cable",
-        "USB 3.0 Type-A to Type-B cable",
-        "USB-C Thunderbolt-certified cable"
+        "HDMI 2.0 with Ethernet channel",
+        "DisplayPort 1.2 without MST",
+        "Thunderbolt 4 (USB-C) with full 40 Gbps bandwidth",
+        "USB 3.1 Gen 1 Type-A"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Thunderbolt 3/4 can deliver up to 40 Gbps but requires a certified USB-C Thunderbolt cable. Other cable options won't achieve Thunderbolt’s maximum data rates.",
-      "examTip": "Thunderbolt often uses the same USB-C connector form factor, but the cable and port must specifically support Thunderbolt."
+      "correctAnswerIndex": 2,
+      "explanation": "To support an 8K VR feed plus data on one cable, Thunderbolt 4’s 40 Gbps capacity is necessary. Other standards don’t reliably provide the combined throughput needed.",
+      "examTip": "High-bandwidth VR solutions often need Thunderbolt-level speeds, far beyond typical USB or older HDMI specs."
     },
     {
       "id": 21,
@@ -470,55 +422,55 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "Which of the following is a type of computer virus?",
+      "question": "A next-generation motherboard includes a built-in quantum-safe co-processor for encryption. Which scenario BEST highlights why this co-processor could be valuable?",
       "options": [
-        "Trojan horse",
-        "Worm",
-        "Ransomware",
-        "All of the above"
+        "Decompressing ZIP archives faster than a standard CPU",
+        "Protecting data against future quantum-based cryptographic attacks",
+        "Displaying multiple 8K video outputs without a GPU",
+        "Reducing system temperature by offloading random number generation"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
-      "examTip": "Remember, malware includes many types such as Trojan horses, worms, and ransomware."
+      "correctAnswerIndex": 1,
+      "explanation": "Quantum-safe or post-quantum cryptography is designed to resist decryption attempts by quantum computers, ensuring long-term data confidentiality.",
+      "examTip": "As quantum computing advances, specialized hardware can safeguard encryption algorithms against new attack vectors."
     },
     {
       "id": 34,
-      "question": "What is the purpose of a 'printer driver'?",
+      "question": "A dual-screen laptop features an auxiliary OLED panel above the keyboard for specialized shortcuts. The panel stays blank after a Windows update. Which step is MOST likely to restore its functionality?",
       "options": [
-        "To physically install a printer",
-        "To translate computer commands into printer language",
-        "To refill printer ink cartridges",
-        "To troubleshoot network connectivity"
+        "Replace the main battery and perform a BIOS factory reset.",
+        "Install the manufacturer-specific auxiliary panel driver or utility software.",
+        "Disable integrated graphics in Device Manager to force external GPU usage.",
+        "Switch the laptop to a Linux distribution that supports multiple displays."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A printer driver translates computer commands into a language the printer understands.",
-      "examTip": "Printer drivers act as translators between your computer and your printer."
+      "explanation": "Unique hardware like an auxiliary OLED panel often relies on specialized drivers or vendor utilities. After major OS updates, reinstallation of these custom drivers is often necessary.",
+      "examTip": "Always check manufacturer support software for non-standard hardware panels or input surfaces."
     },
     {
       "id": 35,
-      "question": "Which of these is a common type of internet browser?",
+      "question": "A newly released AR headset requires custom Windows software for spatial scanning. After installation, the system lags severely. Which factor is MOST likely responsible?",
       "options": [
-        "Google Chrome",
-        "Mozilla Firefox",
-        "Microsoft Edge",
-        "All of the above"
+        "The AR software demands real-time depth mapping that overwhelms a low-spec CPU/GPU combo.",
+        "The operating system detected a virus in the scanning driver and quarantined the entire package.",
+        "The user left the AR headset in direct sunlight, causing sensor calibration errors.",
+        "Bluetooth was disabled, preventing the AR headset from pairing properly."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Google Chrome, Mozilla Firefox, and Microsoft Edge are all common internet browsers.",
-      "examTip": "Chrome, Firefox, Safari, and Edge are your main web browsers."
+      "correctAnswerIndex": 0,
+      "explanation": "Augmented Reality scanning often involves heavy CPU/GPU usage for real-time depth mapping. Low-spec hardware or integrated graphics may struggle to handle these tasks smoothly.",
+      "examTip": "Check system requirements for advanced AR or VR applications—they can be far higher than typical office apps."
     },
     {
       "id": 36,
-      "question": "What is 'email' used for?",
+      "question": "A touchscreen laptop includes a mini detachable e-ink display on its lid for quick notes. After an OS update, pen input on the e-ink panel fails. Which fix is MOST likely?",
       "options": [
-        "To send and receive digital messages",
-        "To store files",
-        "To run applications",
-        "To browse the internet"
+        "Lower the display resolution to 1024x768 for e-ink compatibility.",
+        "Install or update the e-ink panel’s pen digitizer driver from the manufacturer’s support site.",
+        "Set the Windows power plan to High Performance mode.",
+        "Disable the integrated webcam to free up I/O resources."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Email is used for sending and receiving digital messages electronically.",
-      "examTip": "Email stands for electronic mail and is used for communication."
+      "correctAnswerIndex": 1,
+      "explanation": "Detachable or secondary e-ink displays with pen input usually need a specialized driver. OS updates can disrupt these custom components, requiring a driver reinstallation or update.",
+      "examTip": "When unusual hardware breaks after updates, always look for niche driver updates from the OEM."
     },
     {
       "id": 37,
@@ -678,29 +630,29 @@ db.tests.insertOne({
     },
     {
       "id": 49,
-      "question": "Which of the following is a type of computer network based on geographic scale?",
+      "question": "A specialized gaming cafe uses a local fiber ring to connect all PCs at 10 Gbps. Which best describes this network design’s physical or logical topology characteristic?",
       "options": [
-        "Local Area Network (LAN)",
-        "USB network",
-        "Bluetooth network",
-        "Powerline network"
+        "It represents a simplistic bus topology with daisy-chained repeaters.",
+        "It is a ring-based layout allowing symmetrical high-speed access for each node.",
+        "It uses star topology with each PC connecting to a single central switch.",
+        "It is a purely mesh network requiring each PC to have multiple NICs."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A Local Area Network (LAN) is defined by its limited geographic scale, typically within a home or office.",
-      "examTip": "LANs cover small areas, while WANs and MANs cover larger areas."
+      "correctAnswerIndex": 1,
+      "explanation": "A ring-based fiber layout can provide uniform, high-speed connections, especially if the ring is used to guarantee symmetrical throughput among nodes. This differs from more common star-based LANs.",
+      "examTip": "While star LANs are typical, ring-based topologies can appear in specialized or high-performance setups."
     },
     {
       "id": 50,
-      "question": "What is the purpose of 'cookies' in web browsing?",
+      "question": "A new browser extension logs user credentials for advanced single sign-on (SSO) across multiple apps. Which serious privacy concern could this extension introduce?",
       "options": [
-        "To store small pieces of data about your browsing activity",
-        "To block advertisements",
-        "To speed up website loading times",
-        "To protect against viruses"
+        "It might reduce image rendering quality on websites.",
+        "It can store plain-text passwords or transmit them insecurely, risking credential theft.",
+        "It blocks automatic OS updates, causing system instability.",
+        "It halts cookies from loading properly, disabling all web logins."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Cookies store small pieces of data about your browsing activity, such as preferences or login sessions.",
-      "examTip": "Cookies help websites remember information about you."
+      "correctAnswerIndex": 1,
+      "explanation": "Password or credential-management extensions must securely handle user data; if they store or send passwords in plain text, attackers can easily intercept or steal them.",
+      "examTip": "Always ensure password managers or SSO extensions encrypt credentials at rest and in transit."
     },
     {
       "id": 51,
@@ -713,50 +665,50 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 3,
       "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
-      "examTip": "Remember, malware comes in many forms including Trojans, worms, or ransomware."
+      "examTip": "Remember, malware includes many types such as Trojan horses, worms, and ransomware."
     },
     {
       "id": 52,
-      "question": "What is the purpose of a 'printer driver'?",
+      "question": "An industrial label printer uses advanced near-field drying ink to produce smudge-proof tags instantly. Which unusual driver requirement might this printer need?",
       "options": [
-        "To translate computer commands into printer language",
-        "To physically install a printer",
-        "To refill printer ink cartridges",
-        "To troubleshoot network connectivity"
+        "A real-time temperature control interface to manage ink drying speed",
+        "2D GPU acceleration for rendering complex spreadsheets",
+        "Wireless channel bonding over 802.11ac",
+        "Continuous fuser calibration identical to a laser printer"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A printer driver translates computer commands into a language that the printer can understand.",
-      "examTip": "Think of a printer driver as a translator between your computer and your printer."
+      "explanation": "Near-field drying printers often incorporate real-time temperature or UV-curing controls that are handled by specialized driver modules. Standard text drivers won’t account for these parameters.",
+      "examTip": "Some industrial printers require specialized driver features to control hardware beyond simple page layout."
     },
     {
       "id": 53,
-      "question": "Which of these is a common type of internet browser?",
+      "question": "A VR software suite includes a built-in micro-browser that scans real-world objects for augmented overlays. Which factor most differentiates it from standard desktop browsers?",
       "options": [
-        "Google Chrome",
-        "Mozilla Firefox",
-        "Microsoft Edge",
-        "All of the above"
+        "It uses real-time camera feeds for ‘browsing’ physical objects instead of web URLs.",
+        "It cannot display text or images, only plain shapes.",
+        "It is restricted to 2D rendering with no dynamic elements.",
+        "It only runs on macOS and not on Windows or Linux."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Google Chrome, Mozilla Firefox, and Microsoft Edge are all common internet browsers.",
-      "examTip": "Popular browsers include Chrome, Firefox, Safari, and Edge."
+      "correctAnswerIndex": 0,
+      "explanation": "In AR/VR environments, a ‘browser’ might interpret real-world objects via camera input, rendering overlays or tooltips in place of conventional HTML/URL navigation.",
+      "examTip": "Extended-reality browsers revolve around environment scanning rather than typical webpage fetching."
     },
     {
       "id": 54,
-      "question": "What is 'email' used for?",
+      "question": "A new collaboration device can send short secure messages via a proprietary protocol akin to email, but it uses blockchain-based validation. Which advantage does this approach MOST likely offer?",
       "options": [
-        "Sending and receiving digital messages",
-        "Storing files and documents",
-        "Running applications",
-        "Browsing the internet"
+        "Eliminates the need for any operating system at all",
+        "Ensures each message has a tamper-evident record, preventing unauthorized modification",
+        "Allows the user to revert to an older firmware for advanced features",
+        "Drastically reduces the device’s power consumption to near-zero"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Email is used for sending and receiving digital messages.",
-      "examTip": "Email stands for electronic mail."
+      "correctAnswerIndex": 1,
+      "explanation": "Blockchain-based messaging can store each message transaction in a tamper-evident ledger, making unauthorized modification or forgery far more difficult.",
+      "examTip": "Blockchain’s immutability can enhance security for specialized messaging beyond standard email protocols."
     },
     {
       "id": 55,
-      "question": "Which of these is a storage medium that uses flash memory?",
+      "question": "Which of the following is a type of computer virus?",
       "options": [
         "Solid State Drive (SSD)",
         "Hard Disk Drive (HDD)",
@@ -782,29 +734,29 @@ db.tests.insertOne({
     },
     {
       "id": 57,
-      "question": "Which of these is a type of network protocol?",
+      "question": "A newly proposed enterprise standard uses a ‘stream-based handshake’ to replace TCP’s three-way SYN/ACK exchange. Which potential benefit might this approach offer?",
       "options": [
-        "TCP/IP",
-        "HTTP",
-        "FTP",
-        "All of the above"
+        "Faster connection setup and reduced latency for short-lived data exchanges",
+        "Complete backward compatibility with all legacy TCP/IP stacks",
+        "Elimination of the need for IP addressing or routing",
+        "Encryption without the need for certificates or keys"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "TCP/IP, HTTP, and FTP are all network protocols.",
-      "examTip": "Network protocols are the rules that govern data communication on the internet."
+      "correctAnswerIndex": 0,
+      "explanation": "Protocols that reduce multi-step handshakes can lower latency, especially beneficial in scenarios with frequent, short connections. However, they typically require new or updated network stacks.",
+      "examTip": "Cutting down handshake steps can speed up data flows, but adoption depends on system support for the new protocol."
     },
     {
       "id": 58,
-      "question": "What is the purpose of 'data backup'?",
+      "question": "An enterprise IT team plans to replicate critical data to a floating underwater datacenter module for disaster recovery. Which major challenge must their backup solution address?",
       "options": [
-        "To create copies of important data for recovery",
-        "To delete unnecessary files",
-        "To speed up system performance",
-        "To organize files into folders"
+        "Ensuring the modules remain within Wi-Fi range of the main office",
+        "Accommodating high-latency or intermittently connected submarine fiber links",
+        "Preventing sharks from damaging the standard Cat 5 cables",
+        "Requiring staff to physically dive underwater to swap tapes"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Data backup creates copies of important data so it can be recovered if data is lost.",
-      "examTip": "Regular backups protect your data against loss."
+      "correctAnswerIndex": 1,
+      "explanation": "Underwater or subsea datacenters might involve unique connectivity constraints, such as high-latency or less-stable fiber links. Backup solutions must handle potential link disruptions and latencies.",
+      "examTip": "Unconventional data center deployments demand robust networking and resilience against unpredictable link conditions."
     },
     {
       "id": 59,
@@ -847,98 +799,98 @@ db.tests.insertOne({
     },
     {
       "id": 62,
-      "question": "What is 'phishing' in cybersecurity?",
+      "question": "An office receives repeated phone calls claiming to be from ‘IT Support’ demanding remote access for urgent patches. Which approach BEST describes this threat vector?",
       "options": [
-        "Deceptive attempts to steal personal information",
-        "Improving network speed",
-        "A type of antivirus software",
-        "Creating strong passwords"
+        "Tailgating",
+        "Shoulder surfing",
+        "Physical intrusion",
+        "Vishing (voice phishing)"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing involves deceptive attempts to steal personal information, often via emails or fake websites.",
-      "examTip": "Be cautious of emails asking for personal details."
+      "correctAnswerIndex": 3,
+      "explanation": "Vishing is a form of phishing conducted over the phone, where attackers pretend to be legitimate to trick users into revealing sensitive info or granting remote access.",
+      "examTip": "Always verify callers claiming to be IT or support; legitimate IT staff rarely cold-call demanding immediate remote entry."
     },
     {
       "id": 63,
-      "question": "Which component is essential for cooling the CPU in a computer?",
+      "question": "A high-performance workstation uses a liquid metal compound instead of thermal paste for the CPU. What additional consideration is MOST crucial with this type of cooling?",
       "options": [
-        "Heat sink",
-        "Power supply unit (PSU)",
-        "RAM module",
-        "Network Interface Card (NIC)"
+        "Ensuring the liquid metal never contacts aluminum surfaces to avoid corrosion",
+        "Underclocking the CPU by 50% to reduce operating temperatures",
+        "Using dedicated VRAM to offload CPU heat",
+        "Disabling all CPU turbo modes in BIOS"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A heat sink (usually with a fan) is essential for cooling the CPU by dissipating heat.",
-      "examTip": "Effective CPU cooling typically involves a heat sink and fan."
+      "explanation": "Liquid metal compounds (often gallium-based) can corrode or react with certain metals, especially aluminum. Manufacturers usually recommend copper-based heatsinks and care during application.",
+      "examTip": "Liquid metal can yield excellent temps, but handle carefully to prevent damage or chemical reactions."
     },
     {
       "id": 64,
-      "question": "What is the purpose of 'disk defragmentation'?",
+      "question": "A server uses multi-tier caching across numerous SSDs. Which new approach might render traditional disk defragmentation unnecessary or counterproductive?",
       "options": [
-        "To reorganize files on a hard drive for faster access",
-        "To delete files permanently",
-        "To increase storage capacity",
-        "To install new software"
+        "Advanced TRIM and wear-leveling algorithms that optimize SSD data placement automatically",
+        "Locking the drive in read-only mode for improved performance",
+        "Switching from MBR to GPT partition tables",
+        "Mounting the filesystem as a read-write NFS share"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Disk defragmentation reorganizes fragmented data on a hard drive, making file access faster.",
-      "examTip": "Defragmenting helps improve the performance of mechanical hard drives."
+      "explanation": "Modern SSDs rely on internal wear-leveling and TRIM commands to efficiently organize data. Manually defragging can cause unnecessary writes, reducing SSD lifespan.",
+      "examTip": "SSD best practices typically advise against frequent defragmentation—it does little good and adds wear."
     },
     {
       "id": 65,
-      "question": "Which of these is a common type of optical storage media?",
+      "question": "A proprietary high-capacity disc format uses a multi-layer fluorescent substrate read by a specialized laser. Which advantage does it claim over standard DVD or Blu-ray?",
       "options": [
-        "DVD",
-        "SSD",
-        "HDD",
-        "USB flash drive"
+        "Magnetic data encoding for indefinite rewrites",
+        "Less sensitivity to surface scratches due to deeper layer reading",
+        "Ability to read discs using standard DVD drives without firmware updates",
+        "Eliminates any need for a spinning motor, making the disc purely electronic"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "DVDs are a common type of optical storage media that use lasers to read and write data.",
-      "examTip": "Optical storage includes CDs, DVDs, and Blu-ray discs."
+      "correctAnswerIndex": 1,
+      "explanation": "Some experimental optical formats incorporate fluorescent or multi-layer technology that can read deeper data layers more reliably than standard discs, potentially resisting scratches better.",
+      "examTip": "Innovative optical formats sometimes push capacity via multiple reflective or fluorescent layers."
     },
     {
       "id": 66,
-      "question": "What is the function of a 'graphics card' or 'GPU'?",
+      "question": "A new GPU model features a built-in neural engine for machine learning tasks. Which benefit might this provide compared to a traditional GPU pipeline?",
       "options": [
-        "To process and display images and video",
-        "To manage network connections",
-        "To store files and documents",
-        "To regulate power supply"
+        "Reduced need for any system memory when rendering 3D scenes",
+        "Faster inference for AI-driven features like real-time super-resolution or object detection",
+        "Incompatibility with standard DX12 or Vulkan APIs, ensuring no backwards support",
+        "Automatic CPU overclocking by offloading all arithmetic to the GPU"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A GPU processes and displays images and video on the monitor.",
-      "examTip": "GPUs are vital for rendering graphics in games and video applications."
+      "correctAnswerIndex": 1,
+      "explanation": "Specialized ML hardware inside a GPU can accelerate AI-related workloads, such as super-resolution, upscaling, or object detection, beyond standard shader pipelines.",
+      "examTip": "Modern GPUs often contain dedicated ML or tensor cores to boost AI performance in real-time applications."
     },
     {
       "id": 67,
-      "question": "Which of the following is a type of computer network based on geographic scale?",
+      "question": "A microbranch office sets up a wireless bridging system covering multiple blocks. This arrangement merges each building into one logical network. Which best describes this design?",
       "options": [
-        "Local Area Network (LAN)",
-        "USB network",
-        "Bluetooth network",
-        "Powerline network"
+        "A local star topology connecting all laptops via USB",
+        "A wide-area mesh bridging scheme that emulates a larger LAN domain",
+        "A ring network that tunnels data using fiber to each building",
+        "Single-hop Wi-Fi direct connections with no central router"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A LAN is defined by its limited geographic area, such as an office or home.",
-      "examTip": "LANs cover small areas; WANs and MANs cover larger areas."
+      "correctAnswerIndex": 1,
+      "explanation": "A distributed wireless bridging solution can create a larger unified network by meshing building segments together, effectively treating them as one extended LAN domain across several blocks.",
+      "examTip": "Wireless mesh or bridging extends a LAN’s coverage area across multiple physical locations."
     },
     {
       "id": 68,
-      "question": "What is the purpose of 'cookies' in web browsing?",
+      "question": "A specialized browser plugin stores user web session data in an encrypted hardware token rather than a typical cookie on disk. Which advantage does this method offer?",
       "options": [
-        "To store small pieces of data about your browsing activity",
-        "To block advertisements",
-        "To speed up website loading times",
-        "To protect against viruses"
+        "Reduces network latency by half for all websites",
+        "Protects session data from malware scanning local storage",
+        "Forces the browser to run only in private/incognito mode",
+        "Eliminates the need for two-factor authentication"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Cookies store small pieces of data about your browsing activity, like preferences and session data.",
-      "examTip": "Cookies help websites remember you and your settings."
+      "correctAnswerIndex": 1,
+      "explanation": "By storing session info in an external hardware token (e.g., a secure dongle), attackers cannot simply read or modify cookies on the user’s drive, raising the bar for session hijacking.",
+      "examTip": "Hardware-backed session storage can thwart many cookie-based attacks by isolating credentials from the filesystem."
     },
     {
       "id": 69,
-      "question": "Which of these is a common type of computer virus?",
+      "question": "Which of the following is a type of computer virus?",
       "options": [
         "Trojan horse",
         "Worm",
@@ -946,8 +898,8 @@ db.tests.insertOne({
         "All of the above"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Trojan horses, worms, and ransomware are all types of malware (often referred to as computer viruses).",
-      "examTip": "Malware includes many types, such as Trojans, worms, and ransomware."
+      "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
+      "examTip": "Malware includes many types, such as Trojan horses, worms, and ransomware."
     },
     {
       "id": 70,
@@ -1198,42 +1150,42 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "Which of these is a common type of internet browser?",
+      "question": "A corporate kiosk uses a custom “information browser” to display dynamic campus maps. Which feature might this kiosk browser have that typical browsers lack?",
       "options": [
-        "Google Chrome",
-        "Mozilla Firefox",
-        "Microsoft Edge",
-        "All of the above"
+        "Full support for online multiplayer gaming",
+        "A locked-down navigation mode that prevents users from entering arbitrary URLs",
+        "Unrestricted file system access to user home directories",
+        "Built-in cryptocurrency mining for background revenue"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Google Chrome, Mozilla Firefox, and Microsoft Edge are all common internet browsers.",
-      "examTip": "Popular browsers include Chrome, Firefox, Safari, and Edge."
+      "correctAnswerIndex": 1,
+      "explanation": "Public-facing kiosks often restrict user navigation to a limited set of pages or features. Typical web browsers do not forcibly limit URL entry without additional policy or kiosk mode configurations.",
+      "examTip": "Kiosk/browser solutions typically enforce a locked environment to prevent users from accessing unauthorized sites."
     },
     {
       "id": 90,
-      "question": "What is the purpose of 'email'?",
+      "question": "A secure enterprise messaging platform is introduced as an ‘email alternative’ but includes ephemeral channels that auto-delete after reading. Which advantage does this specifically provide over standard email?",
       "options": [
-        "Sending and receiving digital messages",
-        "Storing files and documents",
-        "Running applications",
-        "Browsing the internet"
+        "Seamless printing for permanent archives",
+        "Guaranteed offline access to all historical threads",
+        "Immediate compliance with all retention regulations",
+        "A reduced data footprint and minimal recoverability if messages are compromised"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Email is used for sending and receiving digital messages.",
-      "examTip": "Email stands for electronic mail."
+      "correctAnswerIndex": 3,
+      "explanation": "Ephemeral messaging drastically cuts persistent storage of communications, minimizing the data footprint and limiting the window for forensic recovery in case of a breach.",
+      "examTip": "Ephemeral or self-destructing messages can improve privacy but may conflict with certain archival requirements."
     },
     {
       "id": 91,
-      "question": "Which of these is a storage medium that uses flash memory?",
+      "question": "A cutting-edge external drive claims to use ‘DNA-based’ data storage. Which aspect would MOST differentiate it from ordinary flash-based SSDs?",
       "options": [
-        "Solid State Drive (SSD)",
-        "Hard Disk Drive (HDD)",
-        "Optical Disc (DVD)",
-        "Floppy Disk"
+        "It physically appears identical to a 3.5-inch HDD, including spinning platters",
+        "Data is encoded in synthetic DNA strands and read by a specialized molecular sequencer",
+        "It must be defragmented daily to maintain read speeds",
+        "The device is only readable by Windows XP"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "SSDs use flash memory for data storage.",
-      "examTip": "SSDs are faster than HDDs because they use flash memory."
+      "correctAnswerIndex": 1,
+      "explanation": "DNA data storage uses synthetic DNA sequences to store digital information at extremely high density. Reading requires specialized sequencing, unlike typical electronic flash memory.",
+      "examTip": "Exotic storage technologies (like DNA-based) promise massive density but require unique read/write mechanisms."
     },
     {
       "id": 92,
