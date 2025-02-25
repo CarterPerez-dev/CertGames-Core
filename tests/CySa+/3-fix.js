@@ -1,11 +1,8 @@
-Question #33 and Question #78 both ask essentially the same thing about “sandboxing.”
-#33: “What is 'sandboxing' used for in security analysis?”
-#78: “What is 'sandboxing' primarily used for in cybersecurity?”
-Both revolve around isolating/analyzing potentially malicious code in a controlled environment.
-Question #34 and Question #90 both address “the main/primary purpose of network segmentation.”
-#34: “What is the main purpose of 'network segmentation'?”
-#90: “What is the primary purpose of 'network segmentation'?”
-In each case, the correct answer is basically “to improve network security by dividing it into smaller, isolated subnetworks.”
+#33
+
+
+#34
+
 
 
 
