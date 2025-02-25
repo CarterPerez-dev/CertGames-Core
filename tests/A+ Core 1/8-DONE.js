@@ -1,3 +1,17 @@
+#47
+#48
+#68
+#72, 
+#87
+#74, 
+#89
+#79, 
+#94 
+
+
+
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 8,
