@@ -79,3 +79,12 @@ so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i 
 ### update everyhing possible iwth aplus testlist/page and glovaltestpage--- THEN update teh rest of your testlists/pages
 -------------------------------------------------------------------------------------------------------------------------
 ### verify all achievemnts acheive when actually achieved/ when criteria is met
+
+
+### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING 
+
+### ADD RATE LIMITER TO AI COMPONENTS
+
+### ADD MORE RESOURCES TO RESOURCE PAGE
+
+
