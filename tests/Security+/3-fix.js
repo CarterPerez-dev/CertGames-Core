@@ -1,26 +1,3 @@
-Q1: “attempts every possible combination”
-Q73: “systematically tries every possible password combination”
-Phishing is asked in:
-
-Q4, Q47, Q54, Q61, Q89 (all revolve around phishing or social engineering).
-Denial-of-Service (DoS) recurs:
-
-Q34, Q41, Q82 similarly describe “flooding a network/system with excessive traffic.”
-Confidentiality is repeated:
-
-Q3, Q32, Q49 (all define “only authorized users” can access data).
-MFA appears repeatedly:
-
-Q8, Q39, Q48, Q57, Q63, Q77, Q90, Q91.
-Full-Disk Encryption recurs:
-
-Q5, Q76, Q81 (all mention “protecting data on a lost/stolen laptop”).
-Worm vs. Trojan:
-
-Q24, Q51 for Worm; Q13, Q66 for Trojan—very similar definitions repeated.
-
-
-
 db.tests.insertOne({
   "category": "secplus",
   "testId": 3,
@@ -53,7 +30,7 @@ db.tests.insertOne({
       "explanation": "Authentication verifies a user's identity before granting access. Encryption (option 2) protects data but does not verify identity. Firewalls (option 3) control network traffic. Hashing (option 4) ensures data integrity but does not authenticate users.",
       "examTip": "Authentication = 'Prove who you are' (e.g., password, MFA, biometrics)."
     },
-    {
+        {
       "id": 3,
       "question": "Which security concept ensures that information is only accessible to authorized individuals?",
       "options": [
@@ -432,16 +409,16 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "Which security principle ensures that only authorized users can access sensitive information?",
+      "question": "You are investigating multiple suspicious login attempts from unknown IP addresses. Which step should you take FIRST to accurately track the source of these attempts?",
       "options": [
-        "Confidentiality",
-        "Integrity",
-        "Availability",
-        "Non-repudiation"
+        "Implement geolocation blocking for all foreign IP addresses",
+        "Enable detailed authentication logging on the affected systems",
+        "Immediately block the IP addresses at the firewall",
+        "Force a password reset for all user accounts"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Confidentiality ensures that only authorized users can access sensitive data. Integrity (option 2) ensures data is not altered. Availability (option 3) ensures data is accessible when needed. Non-repudiation (option 4) prevents denial of actions.",
-      "examTip": "Confidentiality = 'Keep it secret'—only authorized users can see it."
+      "correctAnswerIndex": 1,
+      "explanation": "Enabling detailed authentication logging provides critical information for tracking and correlating suspicious behavior before taking broader actions like blocking addresses or resetting passwords.",
+      "examTip": "Always gather sufficient evidence and logs before making potentially disruptive changes."
     },
     {
       "id": 33,
@@ -523,16 +500,16 @@ db.tests.insertOne({
     },
     {
       "id": 39,
-      "question": "Which of the following is a benefit of using multi-factor authentication (MFA)?",
+      "question": "A new SIEM deployment is capturing large volumes of logs. Which initial configuration is MOST critical to ensure effective threat detection?",
       "options": [
-        "It adds an extra layer of security beyond just a password",
-        "It eliminates the need for passwords",
-        "It makes passwords stronger",
-        "It allows users to bypass authentication"
+        "Setting up alert thresholds and correlation rules",
+        "Upgrading all network switches to the latest firmware",
+        "Implementing full-disk encryption on the SIEM server",
+        "Training employees to identify phishing emails"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MFA requires an additional authentication factor beyond a password, increasing security. Eliminating passwords (option 2) is incorrect. Making passwords stronger (option 3) is unrelated to MFA. Bypassing authentication (option 4) is insecure.",
-      "examTip": "MFA = 'Extra layer'—password + something else (e.g., phone, fingerprint)."
+      "explanation": "Properly tuned alert thresholds and correlation rules are key to identifying real threats among massive log data. Without these, the SIEM may produce noise instead of actionable alerts.",
+      "examTip": "A well-configured SIEM relies on carefully refined rules and thresholds to reduce false positives."
     },
     {
       "id": 40,
@@ -549,16 +526,16 @@ db.tests.insertOne({
     },
     {
       "id": 41,
-      "question": "Which type of attack attempts to overwhelm a system by sending a massive amount of traffic to it?",
+      "question": "A security engineer must choose a block cipher mode for bulk data encryption that ensures both confidentiality and authenticity. Which mode is the BEST choice?",
       "options": [
-        "Denial-of-Service (DoS)",
-        "Phishing",
-        "Brute force",
-        "Cross-site scripting (XSS)"
+        "Electronic Codebook (ECB)",
+        "Cipher Block Chaining (CBC)",
+        "Galois/Counter Mode (GCM)",
+        "Output Feedback (OFB)"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A DoS attack floods a system with excessive traffic, making it unavailable. Phishing (option 2) tricks users into revealing information. Brute force (option 3) guesses passwords repeatedly. XSS (option 4) injects malicious scripts into websites.",
-      "examTip": "DoS = 'Overload the system'—flooding it with traffic."
+      "correctAnswerIndex": 2,
+      "explanation": "Galois/Counter Mode (GCM) provides authenticated encryption, ensuring data integrity while encrypting it. ECB is insecure, CBC doesn't inherently provide authenticity, and OFB doesn't offer integrity checks.",
+      "examTip": "GCM is widely used for its combination of encryption and data integrity verification."
     },
     {
       "id": 42,
@@ -627,16 +604,16 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "Which type of attack involves tricking users into providing sensitive information through fake websites or emails?",
+      "question": "A company wants to classify its data to comply with new privacy regulations. Which classification label should be used for personal customer information that can result in identity theft if exposed?",
       "options": [
-        "Phishing",
-        "Ransomware",
-        "Brute force",
-        "Man-in-the-Middle (MITM)"
+        "Public",
+        "Confidential",
+        "Sensitive",
+        "Private"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing scams trick users into revealing sensitive information via fake emails or websites. Ransomware (option 2) encrypts files and demands payment. Brute force (option 3) guesses passwords. MITM (option 4) intercepts and manipulates communication.",
-      "examTip": "Phishing = 'Fake emails & websites'—always verify before clicking!"
+      "correctAnswerIndex": 2,
+      "explanation": "Personal customer data that can lead to identity theft is often classified as Sensitive. Exposure can severely impact individuals and the organization.",
+      "examTip": "Classify data based on potential harm if exposed—stricter controls for higher-risk data."
     },
     {
       "id": 48,
@@ -653,16 +630,16 @@ db.tests.insertOne({
     },
     {
       "id": 49,
-      "question": "Which security concept ensures that only authorized individuals have access to sensitive information?",
+      "question": "An organization needs to encrypt large volumes of data at rest quickly. Which algorithm is the BEST choice for efficient symmetric encryption?",
       "options": [
-        "Confidentiality",
-        "Integrity",
-        "Availability",
-        "Non-repudiation"
+        "AES",
+        "RSA",
+        "Diffie-Hellman",
+        "ECC"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Confidentiality ensures that only authorized users can access sensitive data. Integrity (option 2) ensures data is not altered. Availability (option 3) ensures data is accessible when needed. Non-repudiation (option 4) prevents denial of actions.",
-      "examTip": "Confidentiality = 'Keep it secret'—only authorized users can see it."
+      "explanation": "AES (Advanced Encryption Standard) is a widely adopted symmetric cipher that provides strong security and efficient performance for large-scale data encryption.",
+      "examTip": "Symmetric algorithms like AES are faster than asymmetric approaches for bulk data."
     },
     {
       "id": 50,
@@ -679,16 +656,16 @@ db.tests.insertOne({
     },
     {
       "id": 51,
-      "question": "Which type of malware is designed to spread across a network without user interaction?",
+      "question": "A manufacturing plant is connecting hundreds of IoT sensors to its network. Which measure is MOST critical to secure these devices?",
       "options": [
-        "Worm",
-        "Trojan",
-        "Spyware",
-        "Rootkit"
+        "Assigning default passwords for each device",
+        "Placing them on an isolated VLAN with strict ACLs",
+        "Allowing outbound connections on every port",
+        "Disabling encryption to reduce overhead"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A worm spreads across a network automatically, without requiring user action. A Trojan (option 2) disguises itself as legitimate software. Spyware (option 3) collects user data secretly. A rootkit (option 4) hides inside a system to avoid detection.",
-      "examTip": "Worm = 'Self-spreading'—moves across networks on its own."
+      "correctAnswerIndex": 1,
+      "explanation": "IoT devices often have limited security features. Isolating them with VLANs and ACLs minimizes exposure and prevents lateral movement if a device is compromised.",
+      "examTip": "Network segmentation is crucial when dealing with large numbers of potentially vulnerable endpoints."
     },
     {
       "id": 52,
@@ -718,16 +695,16 @@ db.tests.insertOne({
     },
     {
       "id": 54,
-      "question": "Which type of cyberattack tricks users into providing sensitive information by impersonating a legitimate entity?",
+      "question": "After analyzing firewall logs, you notice repeated connection attempts from a single external IP to an internal database server. Which action should you take FIRST?",
       "options": [
-        "Phishing",
-        "Denial-of-Service (DoS)",
-        "Brute force",
-        "SQL injection"
+        "Automatically block the IP at the router",
+        "Update the database server to the latest firmware",
+        "Investigate the firewall log data for more context",
+        "Reboot the server to clear potential intrusion"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing uses fake emails or websites to steal user credentials. DoS (option 2) overwhelms a system with traffic. Brute force (option 3) guesses passwords repeatedly. SQL injection (option 4) manipulates databases via input fields.",
-      "examTip": "Phishing = 'Fake email/website'—always verify before clicking!"
+      "correctAnswerIndex": 2,
+      "explanation": "Gathering detailed context on the suspicious attempts helps in determining motive, potential vulnerability, and if the IP is erroneously flagged. Then you can decide on blocking or patching.",
+      "examTip": "Investigate thoroughly before implementing final countermeasures to avoid interrupting legitimate traffic."
     },
     {
       "id": 55,
@@ -757,16 +734,16 @@ db.tests.insertOne({
     },
     {
       "id": 57,
-      "question": "Which of the following is a characteristic of multi-factor authentication (MFA)?",
+      "question": "The security team suspects unauthorized data exfiltration from an employee’s workstation. Which step is MOST appropriate to confirm and stop the exfiltration?",
       "options": [
-        "It requires two or more authentication factors",
-        "It replaces passwords with a single sign-on (SSO)",
-        "It only uses passwords",
-        "It allows unlimited login attempts"
+        "Disable the user account without notice",
+        "Implement Data Loss Prevention (DLP) monitoring on the workstation",
+        "Install a rootkit on the employee's system",
+        "Delete all user data from the workstation"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "MFA requires at least two authentication factors (e.g., password + fingerprint). SSO (option 2) allows users to log in once but is not MFA. Password-only authentication (option 3) is not MFA. Allowing unlimited login attempts (option 4) is a security risk.",
-      "examTip": "MFA = 'Two or more ways' to verify identity (password + phone code, fingerprint, etc.)."
+      "correctAnswerIndex": 1,
+      "explanation": "DLP tools can detect sensitive data leaving the network and help block exfiltration. Immediately disabling the account or deleting data may disrupt the investigation without confirming the cause.",
+      "examTip": "Use monitoring solutions like DLP to identify and block suspicious data transfers."
     },
     {
       "id": 58,
@@ -809,16 +786,16 @@ db.tests.insertOne({
     },
     {
       "id": 61,
-      "question": "Which of the following is an example of a social engineering attack?",
+      "question": "A user reports their account is locked out multiple times daily, suggesting repeated unauthorized login attempts. Which approach BEST addresses this scenario?",
       "options": [
-        "Phishing",
-        "Denial-of-Service (DoS)",
-        "Brute force attack",
-        "Cross-site scripting (XSS)"
+        "Disable account lockouts to reduce user inconvenience",
+        "Enable a higher lockout threshold so it locks less frequently",
+        "Review authentication logs for suspicious patterns and IP addresses",
+        "Share the user's password with the security team for investigation"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Phishing is a social engineering attack where attackers trick users into revealing sensitive information. DoS (option 2) overwhelms systems with traffic. Brute force (option 3) guesses passwords. XSS (option 4) injects malicious scripts into web pages.",
-      "examTip": "Social engineering = 'Manipulating people'—not hacking systems."
+      "correctAnswerIndex": 2,
+      "explanation": "Examining logs helps identify if the lockouts stem from malicious attempts, password-guessing attacks, or misconfigurations. Adjusting policies without investigating can mask real threats.",
+      "examTip": "Always investigate the root cause before modifying security policies."
     },
     {
       "id": 62,
@@ -874,16 +851,16 @@ db.tests.insertOne({
     },
     {
       "id": 66,
-      "question": "Which type of malware disguises itself as legitimate software to trick users into installing it?",
+      "question": "An administrator needs to protect sensitive subnets within the corporate network. Which method provides the MOST effective segmentation?",
       "options": [
-        "Trojan",
-        "Worm",
-        "Spyware",
-        "Ransomware"
+        "Using static IP addresses for all endpoints",
+        "Deploying VLANs with ACLs for each department",
+        "Allowing unrestricted Layer 2 traffic",
+        "Relying on a single router for the entire network"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A Trojan appears as legitimate software but contains malicious code. A worm (option 2) spreads without user interaction. Spyware (option 3) collects user data. Ransomware (option 4) encrypts files and demands payment.",
-      "examTip": "Trojan = 'Looks legit but is dangerous'—never download unverified software!"
+      "correctAnswerIndex": 1,
+      "explanation": "VLANs combined with access control lists offer granular segmentation and reduce lateral movement. Static IPs alone don’t enforce security, and using only one router or unrestricted traffic leads to poor containment.",
+      "examTip": "Network segmentation is key for confining breaches and protecting critical subnets."
     },
     {
       "id": 67,
@@ -965,16 +942,16 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "Which of the following BEST describes a brute force attack?",
+      "question": "The incident response team discovers a Trojan on multiple user endpoints. Which step should they take FIRST to mitigate further damage?",
       "options": [
-        "An attacker systematically tries every possible password combination",
-        "An attacker sends fake emails to steal login credentials",
-        "An attacker manipulates database queries to gain access",
-        "An attacker floods a server with excessive traffic"
+        "Shut down the entire corporate network",
+        "Quarantine affected machines from the network",
+        "Erase all data on the impacted machines",
+        "Contact local law enforcement"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A brute force attack attempts every possible password combination until the correct one is found. Phishing (option 2) uses fake emails. SQL injection (option 3) manipulates database queries. A denial-of-service attack (option 4) floods a server with traffic.",
-      "examTip": "Brute force = 'Tries everything'—longer passwords help prevent it."
+      "correctAnswerIndex": 1,
+      "explanation": "Isolating infected systems from the rest of the network prevents lateral movement and further contamination while the incident response team assesses the scope and severity.",
+      "examTip": "Containment is often the first step—limit the spread before deeper remediation."
     },
     {
       "id": 74,
@@ -1004,29 +981,29 @@ db.tests.insertOne({
     },
     {
       "id": 76,
-      "question": "Which of the following is the BEST way to protect sensitive data stored on a laptop?",
+      "question": "A company wants to improve email security by blocking malicious links and attachments. Which email gateway configuration is MOST effective?",
       "options": [
-        "Full-disk encryption",
-        "Using a strong password",
-        "Keeping the laptop in a locked drawer",
-        "Disabling automatic updates"
+        "Setting up content filters and attachment scanning",
+        "Enabling open relay to forward all emails",
+        "Disabling spam filtering for unfiltered logs",
+        "Blocking all emails from external domains"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Full-disk encryption ensures that even if the laptop is stolen, data remains protected. Strong passwords (option 2) help but do not encrypt data. Physical security (option 3) is important but does not protect stored data. Disabling updates (option 4) increases security risks.",
-      "examTip": "Lost laptop? 'Full-disk encryption' = No data access without the key."
+      "explanation": "By employing content filters and robust attachment scanning, the gateway can detect potentially harmful files or links before they reach end-users.",
+      "examTip": "A well-configured email gateway can significantly reduce phishing and malware incidents."
     },
     {
       "id": 77,
-      "question": "Which of the following BEST describes two-factor authentication (2FA)?",
+      "question": "The network administrator is implementing Network Access Control (NAC). Which policy ensures devices meet security standards BEFORE granting access?",
       "options": [
-        "Using two different authentication factors to verify identity",
-        "Using two passwords for added security",
-        "Using a single password but requiring longer length",
-        "Allowing users to log in without authentication"
+        "Post-admission NAC checks for malicious activity",
+        "Agentless scanning only after a device is infected",
+        "Pre-admission posture checks for required patches and AV",
+        "Unlimited access for unknown devices"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "2FA requires two different authentication factors (e.g., password + fingerprint). Two passwords (option 2) are the same factor. Longer passwords (option 3) are stronger but do not make it 2FA. Option 4 is insecure.",
-      "examTip": "2FA = 'Two different ways' to verify identity (password + phone code)."
+      "correctAnswerIndex": 2,
+      "explanation": "Pre-admission NAC posture checks ensure devices comply with security policies (e.g., current AV, patches) before allowing them to join the network.",
+      "examTip": "Enforcing posture checks prior to granting network access helps maintain a secure environment."
     },
     {
       "id": 78,
@@ -1069,29 +1046,29 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "Which of the following is the BEST way to prevent unauthorized access to a laptop?",
+      "question": "During a routine security audit, you notice an IPS signature matching 'SQL Injection Attack Attempt.' Which action should the IPS take by default?",
       "options": [
-        "Enable full-disk encryption and strong passwords",
-        "Use a simple password for convenience",
-        "Disable software updates",
-        "Write the password on a sticky note"
+        "Alert and block the malicious traffic",
+        "Log only and allow the traffic to pass",
+        "Redirect traffic to a sandbox environment",
+        "Disable the signature for performance reasons"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Enabling full-disk encryption and using strong passwords protect data even if the laptop is stolen. Simple passwords (option 2) are easy to guess. Disabling updates (option 3) increases security risks. Writing passwords down (option 4) makes them vulnerable to theft.",
-      "examTip": "Laptop security = 'Encryption + Strong password'—never write it down!"
+      "explanation": "An Intrusion Prevention System is designed to detect and actively block malicious traffic in real time, preventing potential harm to back-end databases.",
+      "examTip": "IPS = 'Intrusion Prevention'—it does more than just alert; it can stop attacks."
     },
     {
       "id": 82,
-      "question": "Which type of attack floods a network with excessive traffic to make resources unavailable?",
+      "question": "The security team observes abnormal egress traffic from a critical server at odd hours. Which approach helps identify potential data exfiltration?",
       "options": [
-        "Denial-of-Service (DoS)",
-        "Phishing",
-        "Brute force",
-        "Man-in-the-Middle (MITM)"
+        "Disable all outbound connections from the server",
+        "Implement NetFlow or network flow analysis to monitor outbound traffic",
+        "Reboot the server to clear suspicious activity",
+        "Expand outbound firewall rules to allow additional connections"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A DoS attack overwhelms a system with traffic, preventing legitimate access. Phishing (option 2) tricks users into revealing credentials. Brute force (option 3) attempts to guess passwords. MITM (option 4) intercepts and manipulates communication.",
-      "examTip": "DoS = 'Flood the network'—denies service to real users."
+      "correctAnswerIndex": 1,
+      "explanation": "Network flow analysis (e.g., NetFlow) can reveal unusual data transfer patterns, indicating possible exfiltration attempts. Immediately blocking all traffic could disrupt legitimate services.",
+      "examTip": "Monitoring outbound traffic is crucial for catching unauthorized data leaks."
     },
     {
       "id": 83,
@@ -1173,16 +1150,16 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "Which of the following BEST describes a social engineering attack?",
+      "question": "A Windows server's event logs show repeated failed logon attempts from the same user account at 3 AM. Which step should you take FIRST to investigate?",
       "options": [
-        "An attack that manipulates people into revealing sensitive information",
-        "A brute force attack to guess passwords",
-        "A denial-of-service (DoS) attack to overwhelm a server",
-        "An attack that exploits software vulnerabilities"
+        "Disable logging to prevent log overflow",
+        "Use auditpol to enable detailed logon event tracking",
+        "Immediately reset all domain passwords",
+        "Cancel the account lockout policy"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Social engineering attacks manipulate people into revealing confidential information. Brute force attacks (option 2) systematically guess passwords. DoS attacks (option 3) overwhelm a system with traffic. Software exploitation (option 4) involves attacking vulnerabilities, not people.",
-      "examTip": "Social engineering = 'Hacking people'—not systems!"
+      "correctAnswerIndex": 1,
+      "explanation": "Enabling detailed logon auditing provides deeper insight into who or what is causing these attempts. Resetting passwords or removing lockouts prematurely might ignore critical forensic data.",
+      "examTip": "Increase audit detail to gather evidence before making changes to authentication policies."
     },
     {
       "id": 90,
@@ -1199,16 +1176,16 @@ db.tests.insertOne({
     },
     {
       "id": 91,
-      "question": "Which of the following is an example of a strong authentication method?",
+      "question": "An organization uses encryption keys for multiple cloud-based services. Which BEST practice ensures the keys remain secure and accessible?",
       "options": [
-        "Multi-factor authentication (MFA)",
-        "Using a short, simple password",
-        "Relying only on a security question",
-        "Using the same password across multiple accounts"
+        "Store encryption keys on an unsecured USB stick",
+        "Implement a Hardware Security Module (HSM) or secure key vault",
+        "Share the private keys with all departments",
+        "Email the keys to users for quick retrieval"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "MFA enhances security by requiring multiple authentication factors. Short passwords (option 2) are easy to crack. Security questions (option 3) can be guessed or found online. Reusing passwords (option 4) increases security risks.",
-      "examTip": "MFA = 'More than one factor'—best way to secure accounts!"
+      "correctAnswerIndex": 1,
+      "explanation": "Placing keys in an HSM or secure vault ensures they remain protected while still being accessible to authorized services. Publicly sharing or emailing keys compromises their security.",
+      "examTip": "Centralizing and hardening key storage is crucial for proper key management."
     },
     {
       "id": 92,
@@ -1328,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "CIA triad = 'Keep data safe, accurate, and available'!"
     }
   ]
-});   
+});
