@@ -18,7 +18,7 @@
 
 #### Find: 
 ```regex 
-^( {4})
+^( {replace with number})
 ```
 
 ### Removes /* xyz */ comments
