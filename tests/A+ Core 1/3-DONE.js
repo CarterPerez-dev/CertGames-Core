@@ -461,16 +461,16 @@ db.tests.insertOne({
     },
     {
       "id": 36,
-      "question": "What is the purpose of 'Virtual Private Network' (VPN)?",
+      "question": "A technician notices that during peak usage, users are reporting unexpected shutdowns of a network-attached storage (NAS) device. The environment is hot, and the NAS fans sound abnormally loud. Which of the following is the MOST likely issue?",
       "options": [
-        "To speed up internet browsing",
-        "To create a secure, encrypted connection over a public network",
-        "To manage network cables",
-        "To translate domain names to IP addresses"
+        "The system’s thermal paste on the CPU is incorrectly applied.",
+        "Insufficient cooling is causing the NAS to overheat, triggering thermal protection.",
+        "The device requires a grounded power strip to function correctly.",
+        "Excessive network traffic is overloading the NAS firmware."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A VPN (Virtual Private Network) creates a secure, encrypted connection over a public network like the internet, protecting data privacy and security. It doesn't primarily speed up browsing, manage cables, or translate domain names. Exam tip: VPN = secure, private internet connection.",
-      "examTip": "VPNs create a secure tunnel for your internet traffic, especially useful when using public Wi-Fi to protect your data."
+      "explanation": "NAS devices have built-in thermal safeguards. If internal temperatures exceed safety thresholds, the system may shut down to prevent damage. Fan noise and high ambient temperature strongly indicate an overheating issue.",
+      "examTip": "Ensure adequate airflow around NAS units and consider installing them in properly ventilated server racks or rooms to avoid thermal shutdowns."
     },
     {
       "id": 37,
