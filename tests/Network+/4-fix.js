@@ -1,7 +1,3 @@
-
-#55
-
-  
 db.tests.insertOne({
   "category": "nplus",
   "testId": 4,
@@ -712,16 +708,16 @@ db.tests.insertOne({
     },
     {
       "id": 55,
-      "question": "Which port is used by the Remote Desktop Protocol (RDP) for secure remote access to Windows systems?",
+      "question": "A network engineer needs to configure an inbound ACL on a router interface that meets the following requirements:\n1. Allow traffic from the 192.168.1.0/24 internal network to reach a server at 10.1.1.50\n2. Deny any traffic originating from the 10.0.0.0/8 network\n3. Deny all other traffic by default\n\nWhich of the following ACL configurations best meets these requirements?",
       "options": [
-        "3389",
-        "22",
-        "443",
-        "110"
+        "permit ip 192.168.1.0 0.0.0.255 host 10.1.1.50; deny ip 10.0.0.0 0.255.255.255 any; deny ip any any",
+        "permit ip any any; deny ip 10.0.0.0 0.255.255.255 any; permit ip 192.168.1.0 0.0.0.255 host 10.1.1.50",
+        "deny ip 10.0.0.0 0.255.255.255 any; permit ip 192.168.1.0 0.0.0.255 any; permit ip any any",
+        "deny ip 192.168.1.0 0.0.0.255 host 10.1.1.50; permit ip 10.0.0.0 0.255.255.255 any; deny ip any any"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "RDP uses port 3389 for secure remote desktop access. SSH uses port 22, HTTPS uses port 443, and port 110 is for POP3 email retrieval.",
-      "examTip": "**RDP = Remote Windows GUI.** Remember port 3389 for remote management."
+      "answerIndex": 0,
+      "explanation": "The first ACL entry permits traffic from the 192.168.1.0/24 network to the server at 10.1.1.50, fulfilling requirement 1. The second entry denies traffic from 10.0.0.0/8, fulfilling requirement 2. Finally, the implicit or explicit 'deny ip any any' blocks all other traffic, satisfying requirement 3.",
+      "examTip": "Remember that ACLs are processed in a top-down manner; the first matching rule is applied, so the order of statements is critical to enforcing your intended policy."
     },
     {
       "id": 56,
