@@ -1,15 +1,27 @@
-#24, #34, #88: All ask about Microsoft Active Directory Global Catalog over SSL/TLS (port 3269).
-#57, #97: Both ask about a laser printer producing double-image/echo effects.
-#67, #78: Both ask about a laser printer with repeating spots/dots from a leaking toner cartridge.
-#59, #80: Both are “Which port does LDAP (non-secure) use?” with Port 389 as the answer.
-#51, #83: Both ask about key considerations for VDI (storage speed & latency).
-#70, #84: Both address high-availability Wi-Fi network design (controller-based redundancy).
-#61, #72, #91: All revolve around the “key benefits/security of containerization”.
-#64 mismatch: (details below)
-#65, #76: Both ask about Wi-Fi for a public park with similar “Which antenna / deployment is best?” wording.
-#66, #77: Both ask about BYOD security considerations in nearly the same words.
-Several more near-duplicates regarding Wi-Fi optimization in dense apartment buildings (e.g., #60, #81, #82, #90, #100). Some are slightly different but heavily overlap with repeated answers about using 5 GHz, channel planning, etc.
+rEPLACE THESE QUETSIOSN WITH COMPTIA a+ CORE 1 PBQ STYLE QUESTIOSN IN TEH SAEM ROMAT AS TEH REST OF TEH QUESTIONS AND MAKE SURE 💡 Zero obvious elimination clues: All distractors will sound plausible, forcing a decision based purely on expert level nuance.
+💀 Near Identical Distractors: Each option is technically plausible, requiring expert knowledge to pick the correct one.
+💀 Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
+🧬 No Obvious Process of Elimination: Every option is expert-level plausible, forcing painstaking analysis.
+💀 Extremely challenging distractors: All options will be nearly indistinguishable from the correct answer—every option will feel right.
+💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer. AND MAKE SURE THE PBQ STYLE QUESTIOSN ARE EXTREMLY EXTREMLY UNIQUE AND COVER DIFFERENET DOMAISN OF COMPTIA A+ CORE 1
 
+
+
+#34,
+#24,
+#57,
+#67,
+#59,
+#51,
+#70,
+#61,
+#64 
+#65, .
+#66, 
+#81
+#82
+#90
+#100)
 
 
 db.tests.insertOne({
