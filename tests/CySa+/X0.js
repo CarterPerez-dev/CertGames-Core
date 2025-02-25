@@ -1,39 +1,3 @@
-Q6: “Repeated failed authentication attempts followed by a successful login... MOST likely attack technique?” → Credential stuffing.
-Q24: “Repeated failed authentication attempts followed by a successful login using a privileged account... MOST likely attack type?” → Credential stuffing.
-Q30: “Multiple failed authentication attempts from different IPs using variations of common passwords... attacker’s likely technique?” → Credential stuffing.
-Q55: “Repeated authentication requests using different variations of common passwords from multiple IP addresses... attacker’s likely technique?” → Credential stuffing.
-Q73: “Repeated failed authentication attempts followed by a successful login from a foreign IP using a privileged account... most likely attack technique?” → Credential stuffing.
-
-
-4. Potential Question–Answer Mismatches
-Question #81 Potentially Mismatched Explanation
-In question #81:
-
-perl
-Copy
-Edit
-"id": 81,
-"question": "A forensic analyst detects the following encoded PowerShell execution ...
-What is the attacker trying to accomplish?",
-"options": [
-  "Modifying Windows security policies",
-  "Disabling Windows Defender real-time protection",
-  "Extracting stored credentials from Windows Credential Manager",
-  "Executing a remote reverse shell"
-],
-"correctAnswerIndex": 0, // or whichever is chosen
-"explanation": "Decoding the Base64 string reveals a command to change Windows positioning..."
-But the “change Windows positioning settings” part might be contradictory or unaligned with the question or the chosen correct answer. Just ensure that:
-
-The chosen correct answer index actually matches what the script is doing.
-The explanation text is consistent with the question + correct answer.
-Double-check that question #81 (or any question) does not have a leftover snippet that belongs to a different scenario. If the explanation says “change Windows positioning,” but your options[0] says “Modifying Windows security policies,” you have a mismatch.
-
-
-  
-
-
-  
 db.tests.insertOne({
   "category": "cysa",
   "testId": 10,
@@ -341,16 +305,16 @@ db.tests.insertOne({
     },
     {
       "id": 24,
-      "question": "A security analyst detects repeated failed authentication attempts followed by a successful login using a privileged account. What is the MOST likely attack type?",
+      "question": "An organization wants to embed a formal risk culture throughout all levels of its operations to comply with new industry standards. Which of the following actions is MOST effective as the initial step in fostering a sustainable risk-aware environment?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Distribute a zero-tolerance risk policy and demand strict adherence from all personnel immediately.",
+        "Require employees to pass a one-time certification exam on the organization’s risk policies.",
+        "Create an ongoing training and awareness program to gradually integrate risk considerations into daily workflows.",
+        "Hire a dedicated risk officer solely responsible for maintaining compliance with the new standards."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) to mitigate credential stuffing attacks."
+      "correctAnswerIndex": 2,
+      "explanation": "A continuous training and awareness initiative ensures risk concepts become part of the day-to-day mindset rather than a one-time requirement. Making a single individual responsible or adopting an abrupt zero-tolerance policy won’t embed risk culture deeply across the organization.",
+      "examTip": "Cultivating a risk-aware culture requires sustained, iterative training that connects daily actions to broader compliance goals."
     },
     {
       "id": 25,
@@ -419,16 +383,16 @@ db.tests.insertOne({
     },
     {
       "id": 30,
-      "question": "A security analyst reviewing logs finds multiple failed authentication attempts from different IPs, each using variations of common passwords. What is the attacker's likely technique?",
+      "question": "A multinational retail group has identified discrepancies in how each regional office manages vendor contracts and data processing agreements. Which of the following steps should be taken FIRST to ensure consistent risk management and regulatory compliance?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "Man-in-the-middle attack"
+        "Instruct local offices to submit all vendor contracts for immediate review by a single global legal team.",
+        "Require each office to phase out current vendor contracts until they align fully with a new unified standard.",
+        "Perform a thorough cross-regional compliance assessment to compare each office’s contract policies to the global standard.",
+        "Designate a regional compliance champion to handle contracts independently, based on local preferences."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The attacker is using previously leaked credentials across multiple IPs, indicative of a credential stuffing attack.",
-      "examTip": "Enable multi-factor authentication (MFA) and block repeated failed authentication attempts."
+      "correctAnswerIndex": 2,
+      "explanation": "Conducting a cross-regional assessment reveals which contract terms deviate from the global standard, allowing for strategic adjustments rather than an abrupt, one-size-fits-all directive. This method avoids unnecessary contract terminations and fosters a data-driven approach.",
+      "examTip": "Gather detailed insights from each region before deciding on large-scale contract governance changes."
     },
     {
       "id": 31,
@@ -744,16 +708,16 @@ db.tests.insertOne({
     },
     {
       "id": 55,
-      "question": "A security analyst detects repeated authentication requests using different variations of common passwords from multiple IP addresses. What is the attacker's likely technique?",
+      "question": "In anticipation of pending data privacy legislation, a tech startup wants to formalize its governance processes. Which action should be the FIRST priority to build a robust foundation for compliance?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "Man-in-the-middle attack"
+        "Launch a specialized internal security operations center (SOC) to detect policy breaches.",
+        "Appoint a legal advisor to track evolving laws and update procedures on an as-needed basis.",
+        "Design and document a clear governance structure, detailing roles, responsibilities, and escalation paths.",
+        "Require all employees to acknowledge a corporate charter that includes a high-level compliance statement."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The attacker is attempting to authenticate using previously leaked credentials across multiple IPs, indicative of credential stuffing.",
-      "examTip": "Enable multi-factor authentication (MFA) and block repeated failed authentication attempts."
+      "correctAnswerIndex": 2,
+      "explanation": "A well-defined governance structure ensures everyone understands their part in compliance and escalation workflows. Relying solely on legal advisors, advanced security operations, or blanket acknowledgments will likely miss necessary operational discipline for lasting governance.",
+      "examTip": "Clarity in roles and responsibilities is the bedrock of a sustainable governance framework."
     },
     {
       "id": 56,
@@ -978,16 +942,16 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "A security analyst detects repeated failed authentication attempts followed by a successful login from a foreign IP using a privileged account. What is the most likely attack technique?",
+      "question": "After completing a risk assessment, a global e-commerce firm discovers conflicting regulatory requirements in different countries. Which approach BEST addresses these inconsistencies while maintaining enterprise-wide compliance standards?",
       "options": [
-        "Credential stuffing attack",
-        "Pass-the-hash attack",
-        "Kerberoasting attack",
-        "SQL injection"
+        "Enforce the strictest requirement from any jurisdiction in all locations to ensure maximum coverage.",
+        "Develop separate compliance frameworks for each country, completely independent of one another.",
+        "Adopt a core global standard and layer on local regulatory requirements where stricter rules apply.",
+        "Temporarily suspend operations in countries with conflicting regulations to avoid legal complications."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Credential stuffing involves using leaked credentials to gain unauthorized access, which matches the observed pattern.",
-      "examTip": "Enforce multi-factor authentication (MFA) and monitor failed login attempts for anomalies."
+      "correctAnswerIndex": 2,
+      "explanation": "Implementing a global baseline while adding local compliance overlays meets unique jurisdictional demands without fragmenting the overall governance approach. Applying the strictest standard everywhere may introduce unnecessary operational burdens or conflicts.",
+      "examTip": "A hybrid approach accommodates regional legal obligations while preserving a unified organizational standard."
     },
     {
       "id": 74,
@@ -1082,16 +1046,16 @@ db.tests.insertOne({
     },
     {
       "id": 81,
-      "question": "A forensic analyst detects the following encoded PowerShell execution:\n\n`powershell -enc UwBFAFQALQBXAEkATgBEAE8AVwBTAF8AUABPAFMASVRJT04AIAAkAHMAVABoAHIAZQBhAHQATABlAHYAZQBsACAAPQAgADEA`  \n\nWhat is the attacker trying to accomplish?",
+      "question": "A financial services firm wants to proactively address potential audit findings related to governance lapses. Which of the following actions will MOST effectively reduce the likelihood of negative audit outcomes in the long term?",
       "options": [
-        "Modifying Windows security policies",
-        "Disabling Windows Defender real-time protection",
-        "Extracting stored credentials from Windows Credential Manager",
-        "Executing a remote reverse shell"
+        "Instruct all departments to comply with every global standard, even if some standards do not apply to their operations.",
+        "Establish an internal continuous control monitoring (CCM) program to detect governance and compliance issues early.",
+        "Swap internal audit teams every six months to ensure they do not develop familiarity with specific departments.",
+        "Immediately penalize departments that fail any aspect of compliance testing, regardless of mitigation attempts."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Decoding the Base64 string reveals a command to change Windows positioning settings, which may be a precursor to other attacks.",
-      "examTip": "Monitor and decode suspicious PowerShell commands before taking remediation actions."
+      "correctAnswerIndex": 1,
+      "explanation": "A continuous control monitoring (CCM) program identifies governance issues in real time, enabling rapid remediation. Arbitrarily adopting all standards or rotating audit teams does not necessarily target root causes of governance lapses and can increase overhead.",
+      "examTip": "Ongoing oversight and immediate remediation, rather than sporadic checks, are key to effective, long-term compliance management."
     },
     {
       "id": 82,
