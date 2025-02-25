@@ -10,7 +10,7 @@ db.tests.insertOne({
       "options": [
         "Disk Defragmenter",
         "System File Checker (SFC)",
-        "Memtest86+ in extended, multi-pass mode with strict error checking",
+        "Memtest86+ in extended, multi-pass mode",
         "Windows Event Viewer"
       ],
       "correctAnswerIndex": 2,
