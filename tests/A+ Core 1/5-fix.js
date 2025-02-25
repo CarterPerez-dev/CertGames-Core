@@ -1,14 +1,3 @@
-
-Duplicate Questions Within Test #5
-
-Question #14 and Question #19 both ask exactly the same: “What is the purpose of a ‘Hardware Security Module’ (HSM)?” with the same answer. This is a duplicated question in the same test.
-Question #62 and Question #82 both deal with OLED burn-in. They are phrased slightly differently but effectively cover the same concept of OLED’s susceptibility to image retention/burn-in. This is another duplicate pair.
-
-
-
-
-
-
 db.tests.insertOne({
     "category": "aplus",
     "testId": 5,
@@ -251,16 +240,16 @@ db.tests.insertOne({
       },
       {
         "id": 19,
-        "question": "What is the purpose of a 'Hardware Security Module' (HSM)?",
+        "question": "Performance-Based Question: A user reports they cannot access the Internet, but they can successfully ping other devices on the local network. Which sequence of troubleshooting steps is MOST logical?",
         "options": [
-          "To manage network firewall rules.",
-          "To securely store and manage cryptographic keys.",
-          "To provide antivirus protection.",
-          "To manage user accounts and permissions."
+          "1) Power cycle the router, 2) Update the network card drivers, 3) Check TCP/IP settings, 4) Verify DNS server entries",
+          "1) Check TCP/IP settings, 2) Verify DNS server entries, 3) Power cycle the router, 4) Update the network card drivers",
+          "1) Check for IP conflicts, 2) Assign static IP, 3) Disable the firewall, 4) Replace the NIC",
+          "1) Perform a full OS reinstall, 2) Swap out all Ethernet cables, 3) Power cycle the entire network, 4) Configure a new user account"
         ],
         "correctAnswerIndex": 1,
-        "explanation": "A Hardware Security Module (HSM) is a dedicated hardware device used to securely store and manage cryptographic keys. HSMs provide a tamper-resistant environment for sensitive cryptographic operations, enhancing security for encryption, digital signatures, and authentication. Firewalls manage network security rules, antivirus protects against malware, and user account management is handled by directory services or operating systems.",
-        "examTip": "HSMs are specialized hardware for highly secure key management. They are used in scenarios requiring strong cryptographic security, like PKI and financial transactions."
+        "explanation": "A methodical approach to network troubleshooting begins with confirming TCP/IP settings. Next, verify DNS server configurations to ensure name resolution works. If the issue persists, power cycle the router to eliminate temporary hardware or configuration glitches. Finally, update the network card drivers to rule out driver compatibility issues.",
+        "examTip": "Always rule out simple configuration errors and DNS misconfigurations before moving on to more time-consuming solutions like driver updates or hardware replacements."
       },
       {
         "id": 20,
@@ -1070,16 +1059,16 @@ db.tests.insertOne({
       },
       {
         "id": 82,
-        "question": "Which display technology is known for its excellent black levels and contrast ratio, but may suffer from image retention or 'burn-in' over time?",
+        "question": "Performance-Based Question: A user’s Windows system boots to a blank screen after POST. You suspect a boot configuration issue. Which series of steps should be taken FIRST to diagnose and correct the problem?",
         "options": [
-          "TN (Twisted Nematic)",
-          "VA (Vertical Alignment)",
-          "LED-backlit LCD",
-          "OLED (Organic Light Emitting Diode)"
+          "1) Replace the motherboard, 2) Replace the hard drive, 3) Reinstall Windows, 4) Run Startup Repair",
+          "1) Check the power supply voltages, 2) Boot into Safe Mode, 3) Run System File Checker, 4) Defragment the system drive",
+          "1) Boot from Windows installation media, 2) Open Recovery Command Prompt, 3) Run bootrec /fixmbr and bootrec /fixboot, 4) Reboot the system",
+          "1) Pull the CMOS battery, 2) Boot into BIOS, 3) Disable Secure Boot, 4) Enable virtualization support"
         ],
-        "correctAnswerIndex": 3,
-        "explanation": "OLED (Organic Light Emitting Diode) technology is known for its excellent black levels and contrast ratio, but it is also susceptible to image retention or 'burn-in' over extended periods of displaying static images. This is due to the organic materials in OLEDs degrading unevenly over time. TN, VA, and LED-backlit LCDs are not prone to burn-in in the same way.",
-        "examTip": "OLEDs, while offering amazing black levels and contrast, can suffer from 'burn-in' or image retention if static images are displayed for too long. Burn-in mitigation techniques are important for OLED longevity."
+        "correctAnswerIndex": 2,
+        "explanation": "When Windows fails to boot past a blank screen, use the installation media to access repair tools. Running commands like 'bootrec /fixmbr' and 'bootrec /fixboot' repairs the Master Boot Record and boot sector, often resolving corrupted boot configuration issues. A simple reboot can confirm if the fix was successful.",
+        "examTip": "Master Boot Record (MBR) and boot sector issues are common causes for Windows boot failures. Familiarize yourself with command-line repair utilities for quick fixes in a test environment—and real world scenarios!"
       },
       {
         "id": 83,
