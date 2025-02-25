@@ -13,3 +13,11 @@
 ```bash
 ^\s*_id:\s*ObjectId\("[^"]+"\),?\s*(?:\r?\n)?
 ```
+
+### Move XYZ spaces back
+
+#### Find: 
+```bash 
+^( {4})
+```
+
