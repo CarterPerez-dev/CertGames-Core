@@ -1,7 +1,7 @@
 # Important Github Replace Regexp
 ---------------------------------------
 ### Find all words/characters in ()
- ```bash
+ ```python
 \(([^()]+)\)
  ```
 ---------------------------------------
@@ -10,14 +10,18 @@
 -1 $1
  ```
 ### Replace MongoSh Object ID's
-```bash
+```python
 ^\s*_id:\s*ObjectId\("[^"]+"\),?\s*(?:\r?\n)?
 ```
 
 ### Move XYZ spaces back
 
 #### Find: 
-```bash 
+```python 
 ^( {4})
 ```
 
+### Removes /* xyz */ comments and its respective line (white space)
+```python
+(?m)^\s*\/\*[\s\S]*?\*\/\s*(\r?\n\s*)+
+```
