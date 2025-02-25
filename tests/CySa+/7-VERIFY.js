@@ -1,19 +1,3 @@
-1) Duplicate Questions: #8 and #15
-Question #8:
-"Which of the following BEST describes the purpose of the MITRE ATT&CK framework?"
-Question #15:
-"Which of the following BEST describes the purpose of the MITRE ATT&CK framework?"
-They are identical in wording and appear in the same test. Both have the same answer set and correct answer index. So this is a verbatim duplicate.
-
-2) Duplicate Questions: #9 and #16
-Question #9:
-"Which of the following BEST describes a compensating control in vulnerability management?"
-Question #16:
-"Which of the following BEST describes a compensating control in vulnerability management?"
-Again, identical in wording, with the same correct answer index and explanation. Another verbatim duplicate.
-
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 7,
@@ -113,29 +97,29 @@ db.tests.insertOne({
     },
     {
       "id": 8,
-      "question": "Which of the following BEST describes the purpose of the MITRE ATT&CK framework?",
+      "question": "A global organization discovers regional inconsistencies in how employees handle sensitive data, leading to potential compliance gaps. Which of the following governance actions BEST ensures consistent data classification across all regions?",
       "options": [
-        "It provides a structured list of known malware signatures",
-        "It classifies network-based threats for firewall rules",
-        "It categorizes and maps adversary tactics, techniques, and procedures (TTPs)",
-        "It identifies physical security threats to an organization"
+        "Implementing an automated data loss prevention solution with default settings",
+        "Conducting bi-annual training sessions focusing on technology updates",
+        "Establishing a standardized, organization-wide data classification policy and requiring each region to adopt it",
+        "Restricting access to sensitive data only to those with department manager approval"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The MITRE ATT&CK framework is a globally recognized framework that maps adversary behaviors using Tactics, Techniques, and Procedures (TTPs).",
-      "examTip": "Use MITRE ATT&CK to improve threat detection, hunting, and response strategies."
+      "explanation": "A unified, formal data classification policy ensures that each region follows consistent guidelines for labeling and securing sensitive information. This governance-level directive mitigates inconsistent handling of data.",
+      "examTip": "For global organizations, uniformity in policy application is critical to reduce compliance gaps and enforce consistent data protection."
     },
     {
       "id": 9,
-      "question": "Which of the following BEST describes a compensating control in vulnerability management?",
+      "question": "Executive leadership is concerned about repeated compliance violations tied to employee negligence. From a governance perspective, which of the following is the MOST strategic way to address and prevent future occurrences?",
       "options": [
-        "A control that prevents a vulnerability from being exploited",
-        "A temporary measure implemented when a vulnerability cannot be immediately fixed",
-        "A security measure that completely eliminates the vulnerability",
-        "A patch deployed to remediate a security weakness"
+        "Purchasing additional endpoint detection solutions for all user laptops",
+        "Establishing a rigorous policy enforcement program supported by mandatory, trackable security awareness training",
+        "Deploying a bug bounty program to identify organizational weaknesses",
+        "Adding a new firewall segment for each department to isolate traffic"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Compensating controls are temporary security measures used when direct remediation (such as patching) is not possible due to operational constraints.",
-      "examTip": "Use compensating controls such as firewall rules or monitoring until a permanent fix can be applied."
+      "explanation": "Governance focuses on setting policies, ensuring their enforcement, and mandating security education. Tracking completion and comprehension of training helps reduce negligence-related violations.",
+      "examTip": "Long-term compliance improvement often hinges on robust governance measures: well-defined policies, enforced procedures, and comprehensive employee training."
     },
     {
       "id": 10,
