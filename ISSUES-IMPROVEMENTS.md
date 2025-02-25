@@ -67,8 +67,10 @@ and i made chnages to the xboost 200 so now i need to update that exact item spe
 ```
 --------------------------
 ### achievemnt popups arent popping up when achieiving
+so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i meet the cirteria/achieve a chievemtn? so liek my auth pages for logina dn stuff toat opopups show so why wont my ahcievemtn toat popups show when i achive soemwthing- i know this becvasue i achived soemthing as a test adn it didnt popup.
 ------------------------------------------------
 ### Need to make an 'EXAM && PRACTICE MODE'
+- so right now we have the explantions appear rigth affter the user answers. however- is there a way-easy way and efficent way so without slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne- to have an option on the test box liek atoggle on or off for "exam mode" to have it not tell you you if you got it wrong or right and also doesnt show you teh expalntion, then when fisnihed it you just review all of it in teh review mode (will be same review mode coponet we use for the other mode and also view rrevie wbutton) (and will have an small I symbol taht explains what exam mode means (it means what i just said). so would it be easy- well not easy but liek not a complete revamp of my code? and it woudlnt slow down any reaquests/slow user expericne overall?.
 -------------------------------------------------
 ### Need to make an option to do 25,50,75,100 question tests. SO i gues if they choose 25 its the first 25, if they choose 50 its the first 25 and then next 25, if its 75 its the first 75, if its 100 its all 100
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
