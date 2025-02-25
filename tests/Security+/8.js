@@ -1,9 +1,3 @@
- 
- 31 
-– Question 47 
-
-
-
 db.tests.insertOne({
   "category": "secplus",
   "testId": 8,
@@ -610,16 +604,16 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "What is 'threat modeling' primarily used for?",
+      "question": "A regional healthcare provider is updating its governance strategy after new privacy regulations come into effect. Which of the following should be done FIRST to ensure compliance without unnecessary operational disruption?",
       "options": [
-        "Designing elaborate 3D simulations of malware behavior for academic purposes",
-        "Systematically identifying potential attack vectors and weaknesses in the planning or development phases, then prioritizing fixes",
-        "Educating staff about spear phishing attempts and how to avoid them",
-        "Implementing incident containment steps after a major breach occurs"
+        "Immediately halt all non-compliant processes and begin a full audit of patient data handling.",
+        "Dispatch a legal team to preemptively engage regulators for potential exceptions to the new regulations.",
+        "Perform a targeted compliance gap analysis to identify where existing procedures fall short of new mandates.",
+        "Issue an emergency directive requiring each department to cease external data transfers until further notice."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Threat modeling is proactive—developers or architects anticipate how an adversary might attack, then institute mitigations early. It’s neither post-breach nor purely training or 3D demonstration.",
-      "examTip": "Inserting threat modeling into the SDLC fosters thorough coverage of potential vulnerabilities."
+      "correctAnswerIndex": 2,
+      "explanation": "Focusing on a gap analysis helps determine specifically which areas need attention, preventing a blanket shutdown of services. Approaching regulators or halting processes prematurely can lead to unnecessary disruptions if some procedures are already compliant.",
+      "examTip": "When dealing with new regulations, systematic gap analysis minimizes wasted effort and pinpoints exact compliance needs."
     },
     {
       "id": 48,
