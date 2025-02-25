@@ -503,29 +503,23 @@ const GlobalTestPage = ({
           // update our local "answers"
           const updatedAnswers = [...answers];
           const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
-          if (idx >= 0) {
-            updatedAnswers[idx] = newAnswerObj;
-          } else {
-            updatedAnswers.push(newAnswerObj);
-          }
-          setAnswers(updatedAnswers);
-            
-            
-          );
+         
           const newAnswerObj = {
             questionId: questionObject.id,
             userAnswerIndex: actualAnswerIndex,       // store the real index
             correctAnswerIndex: questionObject.correctAnswerIndex
           };
+          
           if (idx >= 0) {
             updatedAnswers[idx] = newAnswerObj;
           } else {
             updatedAnswers.push(newAnswerObj);
           }
           setAnswers(updatedAnswers);
+            
 
           // update partial attempt
-          updateServerProgress(updatedAnswers, newScore, false);
+          updateServerProgress(updatedAnswers, newScore, false, newAnswerObj);
         } else {
           console.error("submit-answer error:", result);
         }
@@ -646,7 +640,7 @@ const GlobalTestPage = ({
     }
     setAnswers(updatedAnswers);
     setIsAnswered(true);
-    updateServerProgress(updatedAnswers, score, false);
+    updateServerProgress(updatedAnswers, score, false, skipObj);
     handleNextQuestion();
   };
 
