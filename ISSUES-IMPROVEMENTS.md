@@ -36,9 +36,9 @@ we probaly need to create uniuqe names for each/import the achiveemnt list where
 ### verify all achievemnts acheive when actually achieved/ when criteria is met
 
 
-### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING 
+### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc
 
-### ADD RATE LIMITER TO AI COMPONENTS
+### ADD RATE LIMITER TO AI COMPONENTS- use claude 3.7
 
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 
