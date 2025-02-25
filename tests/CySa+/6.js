@@ -276,7 +276,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "A governance policy for risk categorization must specify who makes risk acceptance decisions and under what conditions, ensuring accountability.",
       "examTip": "Governance policies define authority and accountability. Operational details (e.g., IDS signatures) belong in more technical documents."
-    }
+    },
     {
       "id": 22,
       "question": "An organization’s SIEM triggers alerts showing multiple failed login attempts across different user accounts from the same IP address. The attempts occur over an extended period without triggering account lockouts.\n\nWhich attack type is MOST LIKELY occurring?",
