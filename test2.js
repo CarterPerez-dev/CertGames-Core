@@ -1,6 +1,6 @@
    const handleOptionClick = useCallback(
      async (displayOptionIndex) => {
-       // ... existing code ...
+       // existing code...
        
        // Create the new answer object
        const newAnswerObj = {
@@ -19,10 +19,10 @@
        }
        setAnswers(updatedAnswers);
    
-       // Update server with only the changed answer
+       // Send ONLY the new answer to the server
        updateServerProgress(updatedAnswers, newScore, false, newAnswerObj);
        
-       // ... rest of existing code ...
+       // existing code...
      },
      [/* same dependencies */]
    );
