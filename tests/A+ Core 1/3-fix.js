@@ -1,33 +1,3 @@
-
-Duplicate Questions Within Test #3
-
-The following pairs of questions are exactly duplicated (same wording and answers):
-#37 and #57
-#38 and #58
-#39 and #59
-#40 and #60
-#41 and #61
-#42 and #62
-#43 and #63
-#44 and #64
-#45 and #65
-#46 and #66
-#47 and #67
-#48 and #68
-#49 and #69
-#50 and #70
-#51 and #71
-#52 and #72
-#53 and #73
-#54 and #74
-#55 and #75
-This results in 19 repeated questions (each pair is duplicated text).
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 3,
@@ -356,7 +326,7 @@ db.tests.insertOne({
         "Punchdown tool"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A crimper is used to attach RJ45 connectors to the end of Ethernet cables, securing the wires in place. Toner probes trace cables, cable testers test continuity, and punchdown tools terminate wires in panels. Exam tip: Crimper = RJ45 connector attachment.",
+      "explanation": "A crimper is used to attach RJ45 connectors to the end of Ethernet cables, securing the wires in place. Toner probes trace cables, cable testers test continuity, and punchdown tools punch down wires. Exam tip: Crimper = RJ45 connector attachment.",
       "examTip": "A crimper is essential for making your own Ethernet cables. It's used to attach the RJ45 connector."
     },
     {
@@ -408,7 +378,7 @@ db.tests.insertOne({
         "To translate domain names to IP addresses"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "QoS (Quality of Service) prioritizes certain types of network traffic, like voice or video, to ensure they receive preferential treatment and better performance, especially when network bandwidth is limited. VPNs encrypt, cable management is physical, and DNS translates names to IPs. Exam tip: QoS = prioritize network traffic.",
+      "explanation": "QoS (Quality of Service) prioritizes certain types of network traffic, like voice or video, to ensure they receive preferential treatment and better performance, especially when network bandwidth is limited. VPNs encrypt traffic, cable management is physical, and DNS translates names to IPs. Exam tip: QoS = prioritize network traffic.",
       "examTip": "Quality of Service (QoS) lets you prioritize certain types of network traffic, like video streaming or VoIP, to ensure they run smoothly."
     },
     {
@@ -590,8 +560,8 @@ db.tests.insertOne({
         "OLED (Organic Light Emitting Diode)"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "OLED (Organic Light Emitting Diode) display technology is known for its deep blacks and high contrast ratio because each pixel can be turned off completely, achieving true black. IPS is for color, VA for contrast between TN and IPS, and TN for speed. Exam tip: OLED = deep blacks, high contrast.",
-      "examTip": "OLED panels are famous for their incredible contrast and true blacks. They are often found in high-end TVs and smartphones."
+      "explanation": "OLED (Organic Light Emitting Diode) display technology is known for its deep blacks and high contrast ratio because each pixel can be turned off completely, achieving true black. VA panels also have good contrast, IPS better color, and TN fastest response but weaker contrast/colors. Exam tip: OLED = deep blacks, high contrast.",
+      "examTip": "OLED panels are known for their superior contrast and black levels. They can achieve true black, making images pop."
     },
     {
       "id": 44,
@@ -764,250 +734,250 @@ db.tests.insertOne({
     },
     {
       "id": 57,
-      "question": "Which of the following is a common type of removable storage media that uses flash memory and connects via USB?",
+      "question": "A field technician is preparing a specialized mini-PC for deployment in a scorching, dust-heavy warehouse environment. Which measure helps ensure minimal dust intrusion and stable operation over the long term?",
       "options": [
-        "Optical Disc (DVD)",
-        "Floppy Disk",
-        "USB flash drive",
-        "Hard Disk Drive (HDD)"
+        "Install a high-airflow fan design with large open vents",
+        "Use a sealed fanless enclosure with passive heat dissipation fins",
+        "Position the PC directly under a high-powered ceiling fan for airflow",
+        "Schedule frequent compressed-air cleanings as the primary dust management method"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "USB flash drives are common removable storage media that use flash memory and connect via USB. DVDs are optical, floppy disks are outdated magnetic, and HDDs are typically not removable in the same way. Exam tip: USB drive = removable flash storage.",
-      "examTip": "USB flash drives (thumb drives, memory sticks) are portable, removable storage that uses flash memory and connects via USB."
+      "correctAnswerIndex": 1,
+      "explanation": "A sealed, fanless enclosure with passive cooling fins can keep dust out effectively, minimizing the need for internal fans that draw in particulate matter. While regular cleanings and high-airflow cooling are valid strategies in some contexts, they are less reliable in a continuously dust-heavy environment. Exam tip: In extreme conditions, reducing air intake paths is key to preventing hardware damage.",
+      "examTip": "Sealed or fanless designs help mitigate dust infiltration in harsh environments, extending hardware longevity."
     },
     {
       "id": 58,
-      "question": "Which of these IP addresses is considered an APIPA (Automatic Private IP Addressing) address?",
+      "question": "Which type of system memory includes an on-module buffer to reduce electrical load on the memory controller, commonly found in high-end servers and workstations?",
       "options": [
-        "192.168.1.1",
-        "10.0.0.1",
-        "172.16.0.1",
-        "169.254.1.1"
+        "Unbuffered SDRAM",
+        "Registered (Buffered) RAM",
+        "ECC SODIMM",
+        "Non-ECC DDR4"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "169.254.1.1 is an APIPA address. APIPA addresses fall in the range 169.254.0.0 - 169.254.255.255 and are automatically assigned when a device fails to get a DHCP address. The others are private IP ranges, not APIPA. Exam tip: 169.254.x.x = APIPA, DHCP failure.",
-      "examTip": "If you see an IP address in the 169.254.x.x range, it's an APIPA address. It means your computer couldn't get a DHCP address and assigned itself one."
+      "correctAnswerIndex": 1,
+      "explanation": "Registered (or Buffered) RAM has an additional register between the DRAM modules and the memory controller, reducing the electrical load on the controller and improving stability in systems with large amounts of RAM. Unbuffered memory lacks this register, ECC memory corrects data errors, and SODIMM is a form factor primarily for laptops. Exam tip: Registered memory is typically used in servers to handle higher memory densities more reliably.",
+      "examTip": "Registered RAM is especially useful in server environments where multiple high-capacity DIMMs are used, ensuring stable performance."
     },
     {
       "id": 59,
-      "question": "What is the purpose of 'Power over Ethernet' (PoE)?",
+      "question": "A research lab is trying to revive a legacy parallel port-based 2D plotter on a modern laptop that only has USB and USB-C ports. Which approach is most likely to enable stable functionality for the plotter?",
       "options": [
-        "To increase network bandwidth",
-        "To provide electrical power and data connection over a single Ethernet cable",
-        "To protect against power surges",
-        "To amplify Wi-Fi signals"
+        "Use a simple USB-to-parallel passive cable without any additional drivers",
+        "Install a PCIe parallel port card in the laptop's expansion slot",
+        "Use an active USB-to-parallel adapter designed for legacy printer support",
+        "Convert the plotter’s parallel port to an Ethernet adapter via a custom cable"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "PoE (Power over Ethernet) provides both electrical power and data connection over a single Ethernet cable, simplifying installation for devices like IP cameras and VoIP phones. It's not for bandwidth, surge protection, or Wi-Fi amplification. Exam tip: PoE = power + data over Ethernet.",
-      "examTip": "Power over Ethernet (PoE) is super convenient. It lets you power devices like IP cameras and phones directly through the Ethernet cable – no separate power cord needed."
+      "correctAnswerIndex": 2,
+      "explanation": "Active USB-to-parallel adapters include the necessary interface circuitry and driver support to properly emulate a parallel port for older printers or plotters. A simple passive cable usually fails because it does not provide the hardware-level translation. Laptops typically lack PCIe slots for parallel cards, and direct parallel-to-Ethernet conversion requires specialized hardware not commonly available for typical plotters. Exam tip: Legacy parallel devices need an active adapter to ensure correct signal conversion.",
+      "examTip": "For older parallel port printers on modern systems, active adapters with built-in conversion logic are essential for consistent functionality."
     },
     {
       "id": 60,
-      "question": "Which type of connector is commonly used for connecting external SATA (eSATA) drives?",
+      "question": "Which advanced CPU feature allows certain security policies to be enforced at the hardware level, helping to prevent malicious code from executing in protected areas of memory?",
       "options": [
-        "USB connector",
-        "HDMI connector",
-        "eSATA connector",
-        "RJ45 connector"
+        "Intel Hyper-Threading",
+        "AMD CrossFire",
+        "NX bit (No-eXecute bit) or XD bit",
+        "Overclocking multipliers"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "eSATA connectors are specifically designed for connecting external SATA drives, providing SATA speeds for external storage. USB is versatile, HDMI is video, and RJ45 is network. Exam tip: eSATA connector = external SATA drives.",
-      "examTip": "eSATA is an external version of SATA. It's designed for fast external hard drives, faster than USB in some older standards."
+      "explanation": "The NX (No-eXecute) bit, called the XD (eXecute Disable) bit in Intel terminology, is a hardware-based security feature that marks certain areas of memory as non-executable, preventing malicious code from running there. Hyper-Threading is about parallel execution, CrossFire is GPU-based, and overclocking multipliers adjust CPU frequency. Exam tip: The NX/XD bit is a crucial hardware security layer to mitigate buffer overflow attacks.",
+      "examTip": "When you see NX bit or XD bit in BIOS/UEFI, it's a hardware security feature that helps the OS enforce memory protection."
     },
     {
       "id": 61,
-      "question": "A user reports their computer is running very slowly after installing new software. What is a common troubleshooting step to check?",
+      "question": "A small business owner notices unpredictable reboots on their brand-new workstation whenever it automatically backs up data to an external NAS at midnight. Which factor is MOST likely causing these random shutdowns?",
       "options": [
-        "Reinstall the operating system",
-        "Check system resource usage in Task Manager",
-        "Replace the CPU",
-        "Format the hard drive"
+        "A failing mechanical hard drive that can’t sustain the backup speed",
+        "An underpowered power supply unit (PSU) struggling under backup load",
+        "A network router mismatch in Ethernet duplex settings causing system crashes",
+        "A misconfigured screen saver that triggers a forced reboot"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Checking system resource usage in Task Manager is a common troubleshooting step to see if the new software is consuming excessive CPU, RAM, or disk resources, causing slowdowns. Reinstalling OS, replacing CPU, or formatting are drastic steps too early. Exam tip: Task Manager = resource usage check.",
-      "examTip": "When your computer gets slow, Task Manager is your friend. Check it to see what programs are hogging resources like CPU and memory."
+      "explanation": "An underpowered power supply can cause system instability and random reboots when the system draws extra power, such as during backups that stress both the CPU and storage components. While mismatched duplex settings or failing drives can cause slowdowns or errors, they typically do not cause sudden complete reboots. A screen saver misconfiguration is unlikely to force restarts. Exam tip: Always ensure the PSU wattage is sufficient for all workloads.",
+      "examTip": "Power supply issues often manifest during peak load events, like backups or high CPU/GPU usage. Always match PSU capacity to system demands."
     },
     {
       "id": 62,
-      "question": "What is the standard port number for DNS (Domain Name System)?",
+      "question": "Which laser printing stage follows the 'developing' phase and involves transferring the toner from the imaging drum to the paper?",
       "options": [
-        "Port 25",
-        "Port 53",
-        "Port 80",
-        "Port 443"
+        "Charging",
+        "Fusing",
+        "Transferring",
+        "Cleaning"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port 53 is the standard port number for DNS, used for domain name resolution. Port 25 is for SMTP, Port 80 for HTTP, and Port 443 for HTTPS. Exam tip: DNS = port 53, name resolution.",
-      "examTip": "DNS (Domain Name System) uses port 53. It's essential for translating website names into IP addresses."
+      "correctAnswerIndex": 2,
+      "explanation": "In the laser printing process, the 'transferring' stage moves the toner from the drum onto the paper via an electrostatic charge. Charging readies the drum, developing applies toner to the charged areas, fusing permanently bonds toner to the paper via heat, and cleaning removes residual toner from the drum. Exam tip: The standard laser printing stages are charging, exposing, developing, transferring, fusing, and cleaning.",
+      "examTip": "Remember the six-step laser printing process in order: charging, exposing, developing, transferring, fusing, cleaning."
     },
     {
       "id": 63,
-      "question": "Which type of display panel technology is known for its deep blacks and high contrast ratio, often used in high-end TVs and smartphones?",
+      "question": "Which compact motherboard form factor measures just 6.7 x 6.7 inches and is commonly used for small form factor PCs?",
       "options": [
-        "IPS (In-Plane Switching)",
-        "VA (Vertical Alignment)",
-        "TN (Twisted Nematic)",
-        "OLED (Organic Light Emitting Diode)"
+        "ATX",
+        "MicroATX",
+        "Mini-ITX",
+        "Nano-ITX"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "OLED (Organic Light Emitting Diode) display technology is known for its deep blacks and high contrast ratio because each pixel can be turned off completely, achieving true black. VA panels also have good contrast, IPS better color, and TN fastest response but weaker contrast/colors. Exam tip: OLED = deep blacks, high contrast.",
-      "examTip": "OLED panels are known for their superior contrast and black levels. They can achieve true black, making images pop."
+      "correctAnswerIndex": 2,
+      "explanation": "Mini-ITX is a small form factor motherboard (6.7 x 6.7 inches) often used in HTPCs and compact desktop systems. MicroATX is larger, measuring up to 9.6 x 9.6 inches, while ATX is larger still. Nano-ITX exists but is less common than Mini-ITX in consumer PCs. Exam tip: Mini-ITX is a popular choice for small, quiet computer builds.",
+      "examTip": "Motherboard form factors define size, mounting hole positions, and expansion options. Mini-ITX is a standard choice for ultra-compact systems."
     },
     {
       "id": 64,
-      "question": "What is the purpose of 'Uninterruptible Power Supply' (UPS)?",
+      "question": "A city library employs self-service kiosks that randomly freeze when patrons print loan receipts. After investigating, the technician finds the thermal printers share a USB hub with multiple barcode scanners. Which solution is MOST likely to stabilize the kiosks?",
       "options": [
-        "To boost internet speed",
-        "To provide backup power in case of power outages",
-        "To manage network cables",
-        "To cool down computer components"
+        "Disabling all USB power-saving features in the OS device manager",
+        "Replacing the thermal printer with a slower dot matrix printer",
+        "Using a powered USB hub or dedicated USB ports for the thermal printer",
+        "Installing additional RAM in each kiosk for better printing performance"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A UPS (Uninterruptible Power Supply) provides backup power in case of power outages, allowing systems to shut down safely or continue running for a short period. It's not for speed, cable management, or cooling. Exam tip: UPS = backup power.",
-      "examTip": "UPS (Uninterruptible Power Supply) is like a battery backup for your computer. It protects against data loss during power outages."
+      "correctAnswerIndex": 2,
+      "explanation": "A powered USB hub or dedicated USB port ensures the thermal printer receives consistent power and data throughput, preventing freeze-ups often caused by power draw fluctuations or overloaded USB connections. While disabling USB power saving can help, it may not fully address power draw issues. Printer type changes or additional RAM are less relevant. Exam tip: High-draw USB devices often require dedicated power sources for stable operation.",
+      "examTip": "If multiple peripherals share a single bus-powered hub, the resulting power draw can cause system instability. Powered USB hubs or direct connections help."
     },
     {
       "id": 65,
-      "question": "Which tool is used to organize and manage network cables in a server room or wiring closet?",
+      "question": "Which file system supports file sizes larger than 4 GB, is commonly used for modern Windows installations, and includes features like file and folder permissions and encryption?",
       "options": [
-        "Crimper",
-        "Cable tester",
-        "Toner probe",
-        "Patch panel"
+        "FAT32",
+        "exFAT",
+        "NTFS",
+        "Ext4"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A patch panel is used to organize and manage network cables in a server room or wiring closet, providing a central point for cable terminations and easier management. Crimpers attach connectors, testers test cables, and probes trace cables. Exam tip: Patch panel = cable organization.",
-      "examTip": "Patch panels are like organized phone switchboards for network cables. They make it easy to manage and reroute connections in a server room."
+      "correctAnswerIndex": 2,
+      "explanation": "NTFS (New Technology File System) supports large file sizes beyond 4 GB, includes robust security features like permissions and encryption, and is the default file system for modern Windows OS installations. FAT32 is limited to 4 GB file sizes, exFAT is primarily for removable drives, and Ext4 is a Linux file system. Exam tip: NTFS is standard for Windows internal drives due to its security and advanced features.",
+      "examTip": "For Windows systems, especially internal disks, NTFS is the go-to due to its support for large files, file-level security, and journaling."
     },
     {
       "id": 66,
-      "question": "What is the purpose of 'Virtual LAN' (VLAN)?",
+      "question": "Which upgrade is generally most beneficial when a system frequently uses a large amount of virtual memory and experiences slow performance due to swapping?",
       "options": [
-        "To encrypt network traffic",
-        "To create separate logical networks on the same physical network",
-        "To manage network cables",
-        "To translate domain names to IP addresses"
+        "Installing a higher-wattage power supply",
+        "Adding more RAM modules",
+        "Replacing the mechanical hard drive with a slower model",
+        "Upgrading to a higher resolution monitor"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "VLANs (Virtual LANs) create separate logical networks on the same physical network infrastructure, improving security and network segmentation. VPNs encrypt traffic, cable management is physical, and DNS translates names to IPs. Exam tip: VLAN = logical network segmentation.",
-      "examTip": "VLANs let you divide your physical network into multiple logical networks, even using the same switches. This improves security and organization."
+      "explanation": "Adding more RAM reduces the system's reliance on virtual memory, decreasing the frequency of disk swapping and improving performance. A higher-wattage PSU addresses power issues, not memory bottlenecks. Replacing the drive with a slower model or upgrading the monitor resolution won't fix memory paging issues. Exam tip: If the system swaps to disk often, more RAM is the best remedy.",
+      "examTip": "When tasks exceed available physical RAM, the OS starts using disk space as virtual memory, which is much slower. More RAM alleviates this bottleneck."
     },
     {
       "id": 67,
-      "question": "Which of the following is a common type of memory card used in digital cameras and mobile devices?",
+      "question": "A traveling photographer needs to print high-resolution images directly from an SD card using a mobile photo printer in remote areas with no AC power. The user complains of frequent print failures. Which factor is MOST likely contributing to these failures?",
       "options": [
-        "DIMM",
-        "SODIMM",
-        "CompactFlash (CF)",
-        "SD card (Secure Digital)"
+        "The printer’s built-in Wi-Fi interfering with the SD card slot",
+        "Inadequate battery capacity or insufficient power supply",
+        "A corrupt SD card format that the printer cannot read",
+        "Using glossy photo paper instead of standard printer paper"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "SD cards (Secure Digital) are a common type of memory card used in digital cameras and mobile devices for removable storage. DIMM and SODIMM are RAM modules, and CF is another type of memory card but less common than SD in modern consumer devices. Exam tip: SD card = camera/mobile memory card.",
-      "examTip": "SD cards are the tiny memory cards you see in cameras and phones. They are small, portable, and widely used."
+      "correctAnswerIndex": 1,
+      "explanation": "Mobile photo printers require a stable power source, especially when generating high-resolution images. If the battery is underpowered, the printer may fail mid-print. While a corrupt SD card or paper mismatch can cause other errors, insufficient power is the most common cause of intermittent print failures in remote scenarios. Exam tip: Always check battery health or supply quality when operating printers off-grid.",
+      "examTip": "For portable printing in remote areas, ensure a reliable power source with enough capacity to handle the printer’s peak usage."
     },
     {
       "id": 68,
-      "question": "Which of these IP addresses is considered a public IP address?",
+      "question": "Which tool in Windows can be used to monitor disk health by scanning for bad sectors and file system errors, potentially repairing them if needed?",
       "options": [
-        "192.168.1.1",
-        "10.0.0.1",
-        "172.16.0.1",
-        "203.0.113.45"
+        "Device Manager",
+        "chkdsk",
+        "msconfig",
+        "dxdiag"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "203.0.113.45 is a public IP address, routable on the internet. The others are private IP addresses, used within private networks and not directly routable on the public internet. Exam tip: Public IP = internet routable.",
-      "examTip": "Public IP addresses are like your street address on the internet – they are unique and used for communication across the internet."
+      "correctAnswerIndex": 1,
+      "explanation": "The chkdsk (Check Disk) utility scans a disk for file system errors and bad sectors, and can attempt repairs. Device Manager manages hardware drivers, msconfig configures startup items, and dxdiag provides DirectX diagnostics. Exam tip: chkdsk is crucial for repairing file system corruption and marking bad sectors.",
+      "examTip": "Regularly running chkdsk can help detect and fix drive issues before they lead to data loss."
     },
     {
       "id": 69,
-      "question": "What is the purpose of 'Load Balancing' in networking?",
+      "question": "An office manager attempts to share a USB label printer between two PCs via a USB switch box. Both PCs intermittently lose connection, causing failed label prints. Which solution is MOST likely to provide reliable shared printing for this device?",
       "options": [
-        "To encrypt network traffic",
-        "To distribute network traffic across multiple servers",
-        "To manage network cables",
-        "To translate domain names to IP addresses"
+        "Use a high-quality USB extension cable with gold-plated connectors",
+        "Configure the label printer as a network printer via a dedicated print server",
+        "Enable port forwarding in the router’s firewall settings",
+        "Set each PC’s USB power management to maximum performance"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Load balancing distributes network traffic across multiple servers to prevent overload on a single server and improve performance and availability. VPNs encrypt, cable management is physical, and DNS translates names to IPs. Exam tip: Load balancing = traffic distribution for performance.",
-      "examTip": "Load balancers are like traffic controllers for web servers. They distribute incoming requests to multiple servers to handle high traffic and prevent overload."
+      "explanation": "Using a dedicated print server turns the USB label printer into a network printer accessible by multiple PCs without physically switching cables, eliminating intermittent connections. Higher-quality cables, router port forwarding, or adjusting power management won’t reliably solve the shared USB device issue. Exam tip: Converting a locally attached printer into a network resource is often more stable than manual USB switching.",
+      "examTip": "For multi-user access to a single USB printer, a network or print server solution avoids the pitfalls of physically switching USB connections."
     },
     {
       "id": 70,
-      "question": "Which type of connector is commonly used for modular power supply cables that connect to PCIe graphics cards?",
+      "question": "Which UTP (Unshielded Twisted Pair) cable category is officially rated for up to 10 Gbps Ethernet at 100 meters and is commonly used in modern network installations?",
       "options": [
-        "Molex connector",
-        "Berg connector",
-        "PCIe power connector (6-pin or 8-pin)",
-        "SATA power connector"
+        "Cat 5",
+        "Cat 5e",
+        "Cat 6",
+        "Cat 6a"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "PCIe power connectors (6-pin or 8-pin) are used for modular power supply cables to connect to PCIe graphics cards, providing additional power for high-performance GPUs. Molex and Berg are older power connectors, and SATA power is for SATA drives. Exam tip: PCIe power connector = GPU power.",
-      "examTip": "PCIe power connectors are specifically for powering graphics cards that need extra juice beyond what the motherboard slot provides."
+      "correctAnswerIndex": 3,
+      "explanation": "Category 6a (Cat 6a) cable is rated for 10 Gbps transmission over a distance of up to 100 meters. Cat 5 and 5e usually support up to 1 Gbps (though 5e can sometimes handle 10 Gbps at shorter distances), while Cat 6 can handle 10 Gbps but typically up to 55 meters. Exam tip: For full 10G at 100 meters, Cat 6a is the recognized standard.",
+      "examTip": "If you need guaranteed 10 Gbps over 100 meters on twisted pair, Cat 6a is your go-to cable rating."
     },
     {
       "id": 71,
-      "question": "A user reports that their inkjet printer is printing faded pages. What is a common initial troubleshooting step?",
+      "question": "A small design studio has an inkjet printer producing inconsistent color output, especially after printing large posters. The first few prints look fine, but subsequent prints have shifted hues. Which factor is MOST likely the cause?",
       "options": [
-        "Replace the fuser assembly",
-        "Check ink levels and replace low ink cartridges",
-        "Reinstall the printer driver",
-        "Clean the print head"
+        "Low-quality USB cable causing data corruption",
+        "Air bubbles in the ink channels requiring a complete head replacement",
+        "Printer’s ink supply running out mid-print for each color pass",
+        "Overheating of the printhead due to high-volume printing, impacting color consistency"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Checking ink levels and replacing low ink cartridges is a common initial step for faded inkjet prints. Fuser assemblies are for laser printers, driver issues usually cause garbled prints or no printing, and print head cleaning is for clogs, not primarily faded prints. Exam tip: Faded inkjet prints = check ink first.",
-      "examTip": "Faded prints on an inkjet printer are often due to low ink. Check your ink levels and replace cartridges if needed."
+      "correctAnswerIndex": 3,
+      "explanation": "High-volume color inkjet printing can cause the printhead to heat up, altering how ink droplets are dispensed and leading to shifted hues after prolonged use. While ink supply issues can cause fading or gaps, sudden color shifts often point to thermal stress on the printhead. Exam tip: If color consistency drops during large print runs, overheating or inadequate cooling may be the culprit.",
+      "examTip": "Monitor temperature and consider printer cool-down periods during large, continuous color printing jobs for consistent results."
     },
     {
       "id": 72,
-      "question": "What is the standard port number for IMAP (Internet Message Access Protocol)?",
+      "question": "Which feature found in many modern SSDs and operating systems helps extend drive lifespan by ensuring writes are spread evenly across memory cells?",
       "options": [
-        "Port 110",
-        "Port 143",
-        "Port 25",
-        "Port 80"
+        "Wear leveling",
+        "S.M.A.R.T. monitoring",
+        "High RPM spinning platters",
+        "Partition alignment"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Port 143 is the standard port number for IMAP, used for retrieving emails from a server while leaving them on the server. Port 110 is for POP3, Port 25 for SMTP, and Port 80 for HTTP. Exam tip: IMAP = port 143, server-side email access.",
-      "examTip": "IMAP (Internet Message Access Protocol) uses port 143 and is designed for accessing emails on a server, keeping them there."
+      "correctAnswerIndex": 0,
+      "explanation": "Wear leveling is a technique used by SSD controllers to distribute writes evenly across all memory cells, preventing premature wear on specific areas. S.M.A.R.T. monitoring tracks drive health, rotating platters are an HDD feature, and partition alignment affects performance but not specifically wear distribution. Exam tip: Wear leveling is critical for SSD longevity.",
+      "examTip": "SSDs rely on wear leveling to avoid overusing the same flash cells, thereby extending overall drive life."
     },
     {
       "id": 73,
-      "question": "Which type of display panel technology generally offers the best contrast ratio and black levels?",
+      "question": "A technician is configuring four VLANs on a managed switch: VLAN 10 (Management), VLAN 20 (Office), VLAN 30 (Guest), and VLAN 40 (VoIP). Drag each VLAN ID to match the correct interface assignment below (one VLAN per interface):\n\n- Interface g0/1: ____\n- Interface g0/2: ____\n- Interface g0/3: ____\n- Interface g0/4: ____\n\nWhich single CLI command most accurately reflects assigning VLAN 20 to interface g0/2?",
       "options": [
-        "IPS (In-Plane Switching)",
-        "TN (Twisted Nematic)",
-        "VA (Vertical Alignment)",
-        "OLED (Organic Light Emitting Diode)"
+        "switchport mode trunk; switchport trunk allowed vlan 20",
+        "switchport mode access; switchport access vlan 20",
+        "switchport mode access; switchport voice vlan 20",
+        "interface vlan 20; ip address dhcp"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "OLED (Organic Light Emitting Diode) display technology offers the best contrast ratio and black levels, as it can achieve true black by turning off individual pixels. VA panels also have good contrast, IPS better color, and TN fastest response but weaker contrast/colors. Exam tip: OLED = best contrast, black levels.",
-      "examTip": "OLED panels are known for their superior contrast and black levels. They can achieve true black, making images pop."
+      "correctAnswerIndex": 1,
+      "explanation": "When assigning a VLAN to a switch port on a typical managed switch, you set the port to access mode and specify the VLAN. The command syntax is usually: 'switchport mode access' followed by 'switchport access vlan <ID>'. Trunk mode is for carrying multiple VLANs, voice VLAN is separate from the data VLAN, and configuring 'interface vlan 20' is for setting up an SVI (Switched Virtual Interface), not assigning a port. Exam tip: For end-user access ports, use 'switchport mode access' and 'switchport access vlan <ID>'.",
+      "examTip": "In many CLI-based switches, each access port is assigned exactly one VLAN using 'switchport mode access' and 'switchport access vlan <ID>'."
     },
     {
       "id": 74,
-      "question": "What is the purpose of 'Power Supply Unit' (PSU) wattage rating?",
+      "question": "Which backup method archives all selected files since the last full backup and does not reset the archive bit, allowing multiple backups to track changes cumulatively?",
       "options": [
-        "To indicate the physical size of the PSU",
-        "To specify the maximum power the PSU can deliver",
-        "To measure the efficiency of the PSU",
-        "To determine the voltage output of the PSU"
+        "Full backup",
+        "Incremental backup",
+        "Differential backup",
+        "Snapshot backup"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The wattage rating of a PSU specifies the maximum power it can deliver to computer components. It's not about physical size, efficiency (though related), or just voltage output (it outputs multiple voltages). Exam tip: PSU wattage = max power capacity.",
-      "examTip": "A PSU's wattage rating tells you how much power it can supply. Make sure it's enough for all your computer components, especially the graphics card."
+      "correctAnswerIndex": 2,
+      "explanation": "A differential backup copies all changes since the last full backup but does not reset the archive bit, leading each successive differential to grow until the next full backup. An incremental backup only copies changes since the last full or incremental backup and resets the bit, while a full backup copies everything. Snapshots are a point-in-time representation often used in virtualization or advanced file systems. Exam tip: Differential backups require only the last full backup and the last differential to restore.",
+      "examTip": "Differential backups grow larger over time until another full backup occurs, while incremental backups remain smaller but require each incremental to restore fully."
     },
     {
       "id": 75,
-      "question": "Which tool is used to trace and locate network cables, especially behind walls or in ceilings?",
+      "question": "An artisan workshop uses a custom PC for laser engraving tasks. The device reboots whenever the engraving laser is activated at high power, causing job failures. Which cause is MOST likely?",
       "options": [
-        "Crimper",
-        "Cable tester",
-        "Toner probe",
-        "Punchdown tool"
+        "A faulty CPU that overheats under heavy processing loads",
+        "Excess electromagnetic interference (EMI) from the laser disabling the motherboard",
+        "An incorrectly installed operating system patch causing crashes during I/O",
+        "A safety interlock in the laser software forcibly rebooting the PC for calibration"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A toner probe (or toner and probe kit) is used to trace and locate network cables, especially when they are hidden behind walls or in ceilings. Crimpers attach connectors, testers test cables, and punchdown tools terminate wires. Exam tip: Toner probe = cable tracing.",
-      "examTip": "A toner probe is like a detective for network cables. It helps you find and trace cables hidden in walls or ceilings."
+      "correctAnswerIndex": 1,
+      "explanation": "High-powered lasers can generate significant electromagnetic interference, causing system instability if the PC is not shielded or grounded properly. While CPU overheating can cause reboots, the direct correlation with laser activation points to EMI. OS patch issues or safety interlocks rarely force hardware-level reboots. Exam tip: In environments with strong EMI sources, additional shielding and proper grounding are critical for PC stability.",
+      "examTip": "High-power industrial equipment can create intense EMI. Always verify proper grounding, shielding, and cable routing in such setups to prevent reboots or data corruption."
     },
     {
       "id": 76,
