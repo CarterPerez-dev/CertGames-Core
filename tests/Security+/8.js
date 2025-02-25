@@ -1,9 +1,6 @@
-CSRF Definition:
-– Question 27 and Question 61 both ask for the definition of cross‑site request forgery (CSRF/XSRF). Their wording and answer options are essentially identical.
-SQL Injection Prevention:
-– Question 16 and Question 31 both focus on the best method to prevent SQL injection attacks, with both answers emphasizing the use of parameterized queries combined with input validation.
-Threat Modeling:
-– Question 47 and Question 98 ask what threat modeling is (or its primary use). Their content overlaps almost exactly.
+ 
+ 31 
+– Question 47 
 
 
 
@@ -353,16 +350,16 @@ db.tests.insertOne({
     },
     {
       "id": 27,
-      "question": "What is 'threat modeling'?",
+      "question": "A compliance officer notices that the organization’s risk appetite statements are inconsistent with new lines of business recently introduced. What is the MOST important next step to align governance with these expanded activities?",
       "options": [
-        "Developing realistic 3D simulations of viruses and worms to visualize infection routes",
-        "Systematically identifying potential attack vectors and vulnerabilities in an application during early design and coding phases, then prioritizing and mitigating them",
-        "Conducting basic employee training sessions to familiarize staff with common phishing scams",
-        "Coordinating incident response actions after a data breach has been confirmed"
+        "Train staff on how to follow the existing risk appetite parameters and ensure company-wide adherence.",
+        "Periodically revise the risk register entries to reflect the new lines of business and assess potential impacts.",
+        "Escalate the inconsistency to the board, recommending an immediate redefinition of the organization’s risk thresholds.",
+        "Benchmark competitor practices to understand industry standards and adjust risk appetite statements accordingly."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Threat modeling is a proactive approach—analyzing how an adversary might target your system and prioritizing defenses. It’s not about post-incident steps, 3D visuals, or basic awareness training alone.",
-      "examTip": "By anticipating possible threats early, you can integrate stronger safeguards in the design stage."
+      "correctAnswerIndex": 2,
+      "explanation": "When the risk appetite is misaligned with evolving business needs, senior leadership or the board should re-evaluate and redefine risk thresholds. Simply updating the register or training staff may not address fundamental changes introduced by new business lines.",
+      "examTip": "Ensure risk appetite aligns with the organization’s current strategic direction. Governance must evolve alongside expanding or shifting business activities."
     },
     {
       "id": 28,
@@ -405,16 +402,16 @@ db.tests.insertOne({
     },
     {
       "id": 31,
-      "question": "What is the 'principle of least privilege'?",
+      "question": "A multinational organization has discovered an unapproved cloud storage solution being used to share sensitive project documentation. Which of the following actions should be taken FIRST to address this governance violation?",
       "options": [
-        "Assigning administrative permissions to every user, reducing helpdesk calls about insufficient access",
-        "Granting each user only the access absolutely necessary to perform their job tasks, and no more, to curtail potential misuse or overreach",
-        "Enabling universal read-write access across the network to foster collaboration, since trust is presumed between colleagues",
-        "Locking down so many resources that employees cannot accomplish standard duties"
+        "Directly remove the cloud storage access from all user accounts to prevent further data exposure.",
+        "Disseminate a corporate-wide memorandum reiterating the approved file-sharing policies and consequences of non-compliance.",
+        "Conduct an urgent risk assessment of the cloud storage to evaluate potential compliance gaps.",
+        "Request a legal review to determine the implications of third-party data handling and privacy requirements."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Least privilege means restricting each user or process to the minimal privileges needed. Over-permissive or universal access is dangerous, and overly restrictive setups hamper productivity. The correct approach is a balanced but minimized allotment.",
-      "examTip": "Applying least privilege greatly reduces insider threat impacts and constraints the blast radius of compromised accounts."
+      "correctAnswerIndex": 2,
+      "explanation": "Evaluating the risk first is crucial to determine the scope and impact of the unauthorized solution. While immediate removal or a legal review may be valid, a formal risk assessment uncovers the actual threats to compliance, enabling a more targeted and justified response.",
+      "examTip": "Prioritizing a formal risk assessment helps pinpoint areas of highest impact before taking decisive remediation steps."
     },
     {
       "id": 32,
