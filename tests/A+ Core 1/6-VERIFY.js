@@ -1,3 +1,11 @@
+ #12 ask the same “wireless security from default settings” question.
+ #15 both ask about a laptop trackpad disabling itself when a USB mouse is plugged in.
+#56 are both “What is the function of a ‘monitor’?”
+#59 both “Which of these is a common type of computer port for connecting peripherals?”
+#60 both “What is ‘cloud computing’?”
+#69
+
+
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
