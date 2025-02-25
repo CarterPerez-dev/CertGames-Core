@@ -122,7 +122,7 @@ db.tests.insertOne({
       "examTip": "Long-term compliance improvement often hinges on robust governance measures: well-defined policies, enforced procedures, and comprehensive employee training."
     },
     {
-      "id": 20,
+      "id": 10,
       "question": "A financial services firm wants to proactively address potential audit findings related to governance lapses. Which of the following actions will MOST effectively reduce the likelihood of negative audit outcomes in the long term?",
       "options": [
         "Instruct all departments to comply with every global standard, even if some standards do not apply to their operations.",
