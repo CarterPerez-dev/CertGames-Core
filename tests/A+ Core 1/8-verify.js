@@ -602,8 +602,6 @@ db.tests.insertOne({
       "explanation": "Port 88 (Kerberos) uses both TCP and UDP, and UDP is often used for initial authentication requests due to its lower overhead.",
       "examTip": "Kerberos (port 88) uses both TCP and UDP, with UDP being common for initial authentication requests."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 47,
       "question": "Performance-Based Question (PBQ): A user is preparing a brand-new 2 TB GPT disk in a UEFI-based system to install Windows 10 Pro. They want two partitions: one for the OS and one for data. Which of the following sequences is the CORRECT order of steps to create and format these partitions during Windows Setup?",
@@ -617,8 +615,6 @@ db.tests.insertOne({
       "explanation": "In a UEFI system using GPT, you typically delete any existing partitions on a brand-new disk (or confirm it's blank), create your OS partition, format it, then create and format the data partition. You can then install Windows onto the OS partition. The second partition is also created before installation if you want it recognized immediately. This approach ensures the Windows setup respects the GPT style and places the necessary EFI and recovery partitions automatically. Other methods are either incomplete or out of sequence.",
       "examTip": "When installing Windows under UEFI, always confirm GPT usage, delete old partitions (if any), then create and format new partitions in Setup or via diskpart—especially for multi-partition layouts."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 48,
       "question": "Performance-Based Question (PBQ): A technician is troubleshooting a user’s inability to reach a specific internal website. Arrange the following diagnostic steps in the CORRECT order to isolate the root cause.",
@@ -632,7 +628,6 @@ db.tests.insertOne({
       "explanation": "A systematic approach is best: first confirm the site works elsewhere, then flush DNS and check connectivity by IP to see if DNS is the issue. Next, verify the hosts file and DNS server settings. Steps like reinstalling the browser or changing hardware are more drastic and typically come later. Starting with methodical network checks helps isolate DNS or routing issues first.",
       "examTip": "When diagnosing internal site issues, always compare with a working reference, then check DNS and local overrides (hosts file), before investigating deeper networking or hardware problems."
     },
-
     {
       "id": 49,
       "question": "A laser printer is producing prints with a repeating 'horizontal band of missing print' across the page, perpendicular to the paper feed direction. Which printer component is MOST likely causing this horizontal band defect?",
@@ -880,8 +875,6 @@ db.tests.insertOne({
       "explanation": "Serverless computing requires managing permissions for a large number of individual functions and event sources, increasing complexity.",
       "examTip": "Be prepared for granular and complex permission management in serverless architectures."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 68,
       "question": "Performance-Based Question (PBQ): A user is building a custom CAD workstation that must handle complex 3D modeling. They have four possible configurations with near-identical specs. Which configuration is BEST for this specialized workload?",
@@ -895,7 +888,6 @@ db.tests.insertOne({
       "explanation": "For CAD and 3D modeling, a high-frequency CPU helps with single-thread performance, but a workstation-class GPU (e.g., NVIDIA Quadro or AMD Radeon Pro) is also crucial. Large RAM (32 GB or more) and fast SSD storage significantly reduce bottlenecks. A stable, quality PSU is important for reliability. High-core-count consumer CPUs with weak GPUs won’t optimize 3D tasks, and integrated graphics would be insufficient for complex modeling.",
       "examTip": "CAD work relies on both CPU speed (often single-threaded tasks) and professional GPU capabilities for accurate rendering. Memory and fast storage also matter for large project files."
     },
-
     {
       "id": 69,
       "question": "Which of the following is a BEST practice for securing user accounts against credential theft attacks, such as phishing or malware-based credential harvesting?",
@@ -935,8 +927,6 @@ db.tests.insertOne({
       "explanation": "802.11ax (Wi-Fi 6/6E) with advanced high-density features is specifically designed to handle extreme loads in environments like large outdoor stadiums.",
       "examTip": "For stadium-scale Wi-Fi, utilize the full suite of advanced 802.11ax features combined with expert network planning to support massive concurrent usage."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 72,
       "question": "Performance-Based Question (PBQ): A PC is repeatedly blue-screening with minimal useful data in logs. The user also notes random file corruption. Arrange the following steps in the CORRECT order to systematically identify the failing component.",
@@ -950,7 +940,6 @@ db.tests.insertOne({
       "explanation": "When diagnosing BSODs and random file corruption, it’s best to gather hardware diagnostics first: memory tests, then disk checks, then methodical hardware elimination (PSU, etc.). Reinstalling the OS or disabling antivirus early won’t isolate hardware failures. Testing each piece systematically—especially RAM and storage—is essential before concluding it’s a software issue.",
       "examTip": "Start with structured diagnostic steps (RAM, disk, PSU) before reformatting or updating drivers. Random file corruption often points to failing hardware or unstable power."
     },
-
     {
       "id": 73,
       "question": "A laser printer is producing prints with a consistent 'smear' or 'blur' that is most pronounced at the bottom of the page and gradually fades towards the top. Which printer component is MOST likely causing this bottom-heavy smear defect?",
@@ -964,8 +953,6 @@ db.tests.insertOne({
       "explanation": "An uneven fuser assembly, particularly at the output end, can result in a bottom-heavy smear as toner is not properly fused.",
       "examTip": "Inspect the fuser assembly for uneven pressure or temperature issues if smearing is more pronounced at the bottom of the page."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 74,
       "question": "Performance-Based Question (PBQ): You are building a virtualization host for a small business lab. The manager wants maximum concurrent virtual machines with minimal slowdown. Which of the following configurations is MOST appropriate?",
@@ -979,7 +966,6 @@ db.tests.insertOne({
       "explanation": "Virtualization hosts thrive on large amounts of RAM, multiple CPU cores with hardware virtualization extensions, and fast storage (SSD-based RAID). Dual NICs help with network throughput or failover. Sound cards or single-core CPUs have little benefit for virtualization. ECC RAM adds reliability in a virtualized environment.",
       "examTip": "Prioritize CPU cores, substantial RAM, and robust storage for virtualization. Features like ECC RAM and multiple NICs further optimize stability and performance."
     },
-
     {
       "id": 75,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Global Catalog for LDAP queries to retrieve objects from the entire forest, and is often used for initial domain searches?",
@@ -1032,8 +1018,6 @@ db.tests.insertOne({
       "explanation": "A repeating surface defect or obstruction on the imaging drum can cause consistent voids of missing toner in prints.",
       "examTip": "Inspect the imaging drum for defects if you observe a regular pattern of missing toner spots."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 79,
       "question": "Performance-Based Question (PBQ): A user cannot connect to the company Wi-Fi despite seeing the SSID. They insist the password is correct. Place the following diagnostic actions in the MOST logical order to find and resolve the issue.",
@@ -1047,7 +1031,6 @@ db.tests.insertOne({
       "explanation": "First, verify if the issue is user-specific by checking other devices and ensuring the correct security standard (e.g., WPA2 or WPA3). If drivers are outdated, update them. Then remove/re-add the SSID profile to eliminate corrupted settings. Finally, testing a different frequency band can reveal interference or compatibility issues. Replacing hardware or changing router firmware are last-resort steps and less logical as an initial approach.",
       "examTip": "Always check if other clients can connect before suspecting the infrastructure. Then confirm your Wi-Fi settings match the network’s security requirements and that drivers are current."
     },
-
     {
       "id": 80,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for initial authentication requests, and is often targeted in Kerberos 'Golden Ticket' attacks?",
@@ -1139,8 +1122,6 @@ db.tests.insertOne({
       "explanation": "If the new motherboard’s chipset or BIOS doesn’t support the CPU architecture, the system may power cycle without posting. This is more common than excessive PSU wattage or a single bad SATA cable causing a complete inability to POST. The notion that 32 GB is mandatory is unrealistic for typical boards; CPU incompatibility is the prime suspect.",
       "examTip": "Always verify CPU compatibility with the new motherboard’s socket and BIOS revision before finalizing a replacement."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 87,
       "question": "Performance-Based Question (PBQ): A user complains that a multi-function printer (MFP) is not scanning to email, even though printing and copying work fine. Select the BEST step-by-step approach to diagnose and fix the issue.",
@@ -1154,7 +1135,6 @@ db.tests.insertOne({
       "explanation": "When troubleshooting scan-to-email, first confirm the MFP has proper network access and can resolve the mail server (DNS). Then verify SMTP server settings, authentication method, and correct email credentials. A test scan helps confirm functionality. Reinstalling drivers or forcibly changing network hardware is excessive if the core network and print functions already work.",
       "examTip": "Focus on the scanning feature’s specific requirements—SMTP configuration, DNS resolution, and valid credentials—before mass reinstallations or reboots."
     },
-
     {
       "id": 88,
       "question": "A laser printer is producing prints with a consistent 'smear' or 'blur' that is most pronounced at the bottom of the page and gradually fades towards the top. Which printer component is MOST likely causing this bottom-heavy smear defect?",
@@ -1168,8 +1148,6 @@ db.tests.insertOne({
       "explanation": "An uneven fuser assembly, particularly at the output end, can result in a bottom-heavy smear as toner is not properly fused.",
       "examTip": "Inspect the fuser assembly for uneven pressure or temperature issues if smearing is more pronounced at the bottom of the page."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 89,
       "question": "Performance-Based Question (PBQ): A new technician must replace a power supply in a desktop PC. Which set of ESD-prevention steps is the MOST accurate and safe sequence for performing this upgrade?",
@@ -1183,7 +1161,6 @@ db.tests.insertOne({
       "explanation": "For proper ESD prevention: power off and unplug the system, attach the wrist strap to a bare metal part of the chassis, and periodically ground yourself. Then remove and replace the PSU. Wearing rubber-soled shoes on carpet or waiting to attach the strap until after you remove components significantly raises ESD risk.",
       "examTip": "Correct ESD protocol: remove power, ground yourself with a wrist strap to unpainted metal, handle components by edges, and recheck for static frequently."
     },
-
     {
       "id": 90,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Global Catalog for LDAP queries to retrieve objects from the entire forest, and is often used for initial domain searches?",
@@ -1236,8 +1213,6 @@ db.tests.insertOne({
       "explanation": "A repeating surface defect or obstruction on the imaging drum can cause consistent voids of missing toner in prints.",
       "examTip": "Inspect the imaging drum for defects if you observe a regular pattern of missing toner spots."
     },
-
-    /* REPLACED with PBQ style question */
     {
       "id": 94,
       "question": "Performance-Based Question (PBQ): A PC emits a series of beeps at startup but never displays video. The user suspects a hardware failure. Which sequence of checks is MOST appropriate to isolate the cause?",
@@ -1251,7 +1226,6 @@ db.tests.insertOne({
       "explanation": "Most motherboards provide unique beep codes to signal hardware issues (common codes relate to RAM or GPU). Documenting the pattern, checking the motherboard reference, and reseating or replacing the offending component is the logical path. Clearing CMOS may help if the beep code is still ambiguous. Randomly replacing CPUs or NIC-based checks do not specifically address beep codes.",
       "examTip": "Always look up the specific beep code pattern in the motherboard’s manual. It often directs you exactly which component to troubleshoot (RAM, GPU, etc.)."
     },
-
     {
       "id": 95,
       "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for initial authentication requests, and is often targeted in Kerberos 'Golden Ticket' attacks?",
