@@ -1,5 +1,5 @@
 
-Question #19 ("Which protocol uses port 3389 for remote graphical access…?") and Question #55 ("Which port is used by the Remote Desktop Protocol (RDP)…?") are effectively the same concept, both asking for port 3389 for RDP. They differ slightly in wording, but the answer is the same.
+#55
 
   
 db.tests.insertOne({
