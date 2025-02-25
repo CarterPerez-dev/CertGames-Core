@@ -1,22 +1,3 @@
-Duplicate or Repeated Questions
-
-Multiple questions appear exactly repeated later in the list. Specifically, these pairs have identical text (question and answers) repeated:
-#50 and #62 (both about the purpose of cookies in web browsing)
-#51 and #63 (ping command for network diagnosis)
-#52 and #64 (VPN acronym)
-#53 and #65 (Micro-ATX case form factor)
-#54 and #66 (system restore in Windows)
-#55 and #67 (3.5mm audio jack)
-#56 and #68 (spam email)
-#57 and #69 (smartphones as mobile devices)
-#58 and #70 (PSU powering components)
-#59 and #71 (RJ45 connector)
-#60 and #72 (definition of computer hardware)
-#61 and #73 (operating system as a type of software)
-That’s a total of 12 duplicated questions out of 100.
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 2,
@@ -818,159 +799,159 @@ db.tests.insertOne({
     },
     {
       "id": 62,
-      "question": "What is the purpose of 'cookies' in web browsing?",
+      "question": "Darnell wants to add more system memory to his laptop for better performance. The modules he needs are smaller than standard desktop DIMMs. Which form factor is specifically designed for laptop memory?",
       "options": [
-        "To block advertisements",
-        "To store small pieces of data about your browsing activity",
-        "To speed up website loading times",
-        "To protect against viruses"
+        "M.2",
+        "SODIMM",
+        "PCIe",
+        "Micro-ATX"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Cookies are small pieces of data websites store on your computer to remember information about your browsing activity, like preferences or login status. They are not for ad blocking, speeding up websites directly, or virus protection. Exam tip: Cookies = website memory.",
-      "examTip": "Cookies are small files websites use to remember you and your preferences, enhancing your browsing experience (and sometimes tracking you)."
+      "explanation": "SODIMM (Small Outline Dual In-Line Memory Module) is the compact form factor used for laptop RAM. M.2 is typically used for storage, PCIe is an expansion bus standard, and Micro-ATX is a motherboard form factor for desktops.",
+      "examTip": "Laptop memory commonly uses SODIMM modules, which are physically smaller than desktop DIMMs."
     },
     {
-      "id": 63,
-      "question": "Which of the following is a common tool for diagnosing network connectivity issues?",
+      "id": 63, 
+      "question": "Maria found an old desktop monitor with a 15-pin connector. She wants to connect it to her computer’s legacy video output. Which cable is she most likely to need for this connection?",
       "options": [
-        "Microsoft Word",
-        "Ping command",
-        "Adobe Photoshop",
-        "Excel"
+        "RJ45 cable",
+        "VGA cable",
+        "SATA cable",
+        "USB Type-C cable"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The 'ping' command is a common tool for diagnosing network connectivity issues by testing if a host is reachable. Word, Photoshop, and Excel are applications, not network tools. Exam tip: Ping, Tracert, Ipconfig are network diagnostic tools.",
-      "examTip": "The 'ping' command is your basic network connectivity test. It checks if you can 'reach' another computer."
+      "explanation": "A 15-pin D-Sub (VGA) connector is typical for older analog monitors. RJ45 is for network, SATA is for internal storage, and USB Type-C is a newer, multi-purpose connector.",
+      "examTip": "VGA cables are often recognizable by the 15-pin blue connectors for older monitors or projectors."
     },
     {
-      "id": 64,
-      "question": "What does 'VPN' stand for in network security?",
+      "id": 64, 
+      "question": "Which Windows command-line tool displays the current IP configuration details, such as IP address and default gateway?",
       "options": [
-        "Virtual Private Network",
-        "Very Personal Network",
-        "Volume Protection Network",
-        "Verified Public Node"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "VPN stands for Virtual Private Network. It creates a secure, encrypted connection over a less secure network like the internet. The other options are not the correct expansions. Exam tip: VPN = secure, private network connection.",
-      "examTip": "Virtual Private Network (VPN) creates a secure tunnel for your internet traffic, protecting your privacy."
-    },
-    {
-      "id": 65,
-      "question": "Which of these is a type of computer case form factor, often used for smaller PCs?",
-      "options": [
-        "ATX",
-        "Micro-ATX",
-        "Full Tower",
-        "Server Rack"
+        "dir",
+        "ipconfig",
+        "netstat",
+        "cd"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Micro-ATX is a type of computer case form factor, smaller than standard ATX, and often used for compact PCs. ATX and Full Tower are larger form factors, and Server Rack is for server systems. Exam tip: ATX, Micro-ATX, Mini-ITX are common form factors.",
-      "examTip": "Micro-ATX is a smaller motherboard and case form factor, good for compact PCs."
+      "explanation": "The ipconfig command shows TCP/IP settings in Windows. 'dir' lists files, 'netstat' shows network connections, and 'cd' changes directories.",
+      "examTip": "Use ipconfig /all for detailed adapter configurations, including DNS, DHCP, and MAC addresses."
     },
     {
-      "id": 66,
-      "question": "What is the purpose of 'system restore' in Windows?",
+      "id": 65, 
+      "question": "When assembling a desktop PC, what is the primary function of applying thermal paste between the CPU and its heat sink?",
       "options": [
-        "To delete all personal files",
-        "To revert system settings and files to a previous state",
-        "To speed up system performance",
-        "To install new software"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "System Restore in Windows allows you to revert system settings and files to a previous point in time, often used to undo system changes that caused problems. It doesn't delete files, speed up performance directly, or install software. Exam tip: System Restore = undo system changes.",
-      "examTip": "System Restore is like a 'time machine' for your Windows system settings. It can undo changes if something goes wrong."
-    },
-    {
-      "id": 67,
-      "question": "Which of these is a common type of connector for audio output?",
-      "options": [
-        "VGA",
-        "HDMI",
-        "3.5mm audio jack",
-        "DVI"
+        "It provides an electrical connection for CPU sensors",
+        "It insulates the CPU to maintain consistent heat",
+        "It improves heat transfer from the CPU to the heat sink",
+        "It protects the CPU from dust and debris"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A 3.5mm audio jack is a common connector for audio output, used for headphones and speakers. VGA, HDMI, and DVI are primarily video connectors, though HDMI can carry audio as well. Exam tip: 3.5mm jack = standard audio connector.",
-      "examTip": "The 3.5mm audio jack is the standard for headphones and speakers on most computers and devices."
+      "explanation": "Thermal paste fills tiny gaps between the CPU and the heat sink surfaces, enhancing thermal conductivity. It’s not for insulation, dust protection, or electrical signaling.",
+      "examTip": "A correct layer of thermal compound can significantly impact CPU temperatures and overall system stability."
     },
     {
-      "id": 68,
-      "question": "What is 'spam' email?",
+      "id": 66, 
+      "question": "Which Windows command-line utility is used to scan and repair logical file system errors on a hard drive?",
       "options": [
-        "Important emails from banks",
-        "Unsolicited, unwanted emails, often advertisements",
-        "Emails with attachments",
-        "Emails from known contacts"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "Spam email is unsolicited, unwanted email, often advertisements or phishing attempts, sent in bulk. It's not important, wanted, or necessarily from known contacts. Exam tip: Spam = junk email.",
-      "examTip": "Spam is junk email – unwanted and often unsolicited messages, usually trying to sell you something or scam you."
-    },
-    {
-      "id": 69,
-      "question": "Which of the following is a type of mobile device?",
-      "options": [
-        "Desktop tower",
-        "Server rack",
-        "Smartphone",
-        "Mainframe computer"
+        "diskpart",
+        "format",
+        "chkdsk",
+        "sfc"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A smartphone is a type of mobile device, designed for portability and mobile use. Desktop towers and mainframes are stationary, and server racks are for server systems. Exam tip: Smartphones, tablets, laptops = mobile devices.",
-      "examTip": "Smartphones, tablets, and laptops are all mobile devices – designed to be carried around and used on the go."
+      "explanation": "chkdsk (Check Disk) inspects and can repair file system errors. diskpart manages partitions, format erases and initializes drives, and sfc checks system files.",
+      "examTip": "Use chkdsk /f to fix errors and chkdsk /r to locate bad sectors and recover data."
     },
     {
-      "id": 70,
-      "question": "What is the function of a 'power supply unit' (PSU) in a computer?",
+      "id": 67, 
+      "question": "Which short-range wireless technology allows two smartphones to exchange data by simply tapping them together?",
       "options": [
-        "To cool down the CPU",
-        "To provide power to computer components",
-        "To store data",
-        "To manage network connections"
+        "Bluetooth",
+        "NFC",
+        "Wi-Fi Direct",
+        "Infrared (IR)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The Power Supply Unit (PSU) provides power to all computer components, converting AC power from the wall to DC power the computer uses. Heat sinks cool CPUs, storage devices store data, and NICs manage networks. Exam tip: PSU = power provider.",
-      "examTip": "The Power Supply Unit (PSU) is the heart of your computer's power system. It provides energy to all components."
+      "explanation": "NFC (Near Field Communication) enables very close-proximity data exchange with minimal setup. Bluetooth pairs over longer distances, Wi-Fi Direct can connect devices without a router, and IR is largely outdated for file transfers.",
+      "examTip": "NFC is also commonly used for mobile payments and quick device pairing."
+    },
+    {
+      "id": 68, 
+      "question": "Which type of printer uses heat-sensitive paper and a heated printhead to produce text or images?",
+      "options": [
+        "Inkjet printer",
+        "Laser printer",
+        "Thermal printer",
+        "Dot matrix printer"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A thermal printer applies heat to special thermal paper. Inkjet printers spray ink, laser printers fuse toner, and dot matrix printers physically impact an ink ribbon.",
+      "examTip": "Thermal printers are common for receipts and shipping labels due to their low maintenance."
+    },
+    {
+      "id": 69, 
+      "question": "Which type of memory is built directly into the CPU to reduce latency by storing frequently accessed data?",
+      "options": [
+        "DRAM",
+        "Cache memory",
+        "ROM",
+        "Virtual memory"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Cache memory resides on the CPU for rapid access. DRAM is main system memory, ROM is read-only, and virtual memory is managed on storage devices.",
+      "examTip": "CPU cache is small but extremely fast, boosting performance by avoiding slower main memory for routine data."
+    },
+    {
+      "id": 70, 
+      "question": "Which short-range wireless standard is formally known by the IEEE designation 802.15.1?",
+      "options": [
+        "NFC",
+        "Zigbee",
+        "Bluetooth",
+        "Wi-Fi"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Bluetooth technology corresponds to IEEE 802.15.1. NFC, Zigbee, and Wi-Fi use different standards (e.g., 802.11 is Wi-Fi).",
+      "examTip": "Remember that Bluetooth is 802.15.1, whereas 802.11 covers Wi-Fi standards like 802.11n/ac/ax."
     },
     {
       "id": 71,
-      "question": "Which of these is a type of network cable connector?",
+      "question": "In the context of Wi-Fi routers, what does 'WPS' stand for?",
       "options": [
-        "USB connector",
-        "HDMI connector",
-        "RJ45 connector",
-        "Audio jack"
+        "Wireless Packet Security",
+        "Wi-Fi Power Supply",
+        "Wi-Fi Protected Setup",
+        "Wired Protection Standard"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "RJ45 is a type of connector used for Ethernet network cables. USB and HDMI are for peripherals and video, and audio jacks are for sound. Exam tip: RJ45 = Ethernet cable connector.",
-      "examTip": "RJ45 connectors are for Ethernet cables. Recognize them as network cable ends."
+      "explanation": "WPS (Wi-Fi Protected Setup) simplifies secure pairing between a router and wireless devices. It’s not a power or packet-level security feature.",
+      "examTip": "WPS often involves pressing a button on the router, allowing nearby devices to connect without typing a long password."
     },
     {
-      "id": 72,
-      "question": "What is 'computer hardware'?",
+      "id": 72, 
+      "question": "Some modern motherboards allow you to update firmware using a USB drive without installing a CPU. What is this feature commonly called?",
       "options": [
-        "The physical parts of a computer system",
-        "Software programs",
-        "Online services",
-        "Digital documents"
+        "Secure Boot",
+        "Virtualization Technology",
+        "BIOS Flashback (USB BIOS Flash)",
+        "Boot Manager"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Computer hardware refers to the physical parts of a computer system, like the CPU, RAM, HDD, etc. Software is programs, online services are internet-based, and documents are data files. Exam tip: Hardware = physical components.",
-      "examTip": "Computer hardware is the tangible, physical parts of your computer – what you can touch."
+      "correctAnswerIndex": 2,
+      "explanation": "BIOS Flashback (or USB BIOS Flash) lets you update the motherboard firmware with only standby power, no CPU or RAM required. Other options (Secure Boot, Virtualization, Boot Manager) serve different purposes.",
+      "examTip": "This feature is great if you need to flash a newer BIOS to support a CPU model that the board can’t initially boot with."
     },
     {
       "id": 73,
-      "question": "Which of these is a common type of computer software?",
+      "question": "Which type of memory is typically used on dedicated graphics cards to store textures and rendering data?",
       "options": [
-        "Keyboard",
-        "Monitor",
-        "Operating system",
-        "CPU"
+        "GDDR (Graphics Double Data Rate) memory",
+        "L1 cache",
+        "ECC RAM",
+        "DDR4 system memory"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "An operating system is a type of computer software, managing hardware and software resources. Keyboards, monitors, and CPUs are hardware components. Exam tip: OS, Applications, Drivers are software types.",
-      "examTip": "Operating Systems, applications like Word, and drivers are all types of computer software – the instructions for the hardware."
+      "correctAnswerIndex": 0,
+      "explanation": "GDDR (e.g., GDDR5, GDDR6) is designed for high-bandwidth graphics rendering. L1 cache is inside the CPU, ECC RAM is for error correction, and DDR4 is standard system memory.",
+      "examTip": "Graphics memory (GDDR) is specialized for parallel processing and high throughput, essential for modern GPUs."
     },
     {
       "id": 74,
