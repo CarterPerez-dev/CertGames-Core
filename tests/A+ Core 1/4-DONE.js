@@ -1292,7 +1292,7 @@ db.tests.insertOne({
       "examTip": "Port 3268 is for Global Catalog (GC) queries in Active Directory. Global Catalog provides domain-wide search capabilities and uses this port for client queries."
     },
     {
-      "id": 101,
+      "id": 100,
       "question": "Performance-Based Question: A user complains their computer is running extremely slow. Choose the MOST logical order of troubleshooting steps from the options below.",
       "options": [
         "1) Check for viruses, 2) Add more RAM, 3) Defragment the hard drive, 4) Update device drivers",
