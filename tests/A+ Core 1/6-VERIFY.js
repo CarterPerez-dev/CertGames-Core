@@ -1,19 +1,3 @@
-rEPLACE THESE QUETSIOSN WITH COMPTIA a+ CORE 1 PBQ STYLE QUESTIOSN IN TEH SAEM ROMAT AS TEH REST OF TEH QUESTIONS AND MAKE SURE 💡 Zero obvious elimination clues: All distractors will sound plausible, forcing a decision based purely on expert level nuance.
-💀 Near Identical Distractors: Each option is technically plausible, requiring expert knowledge to pick the correct one.
-💀 Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
-🧬 No Obvious Process of Elimination: Every option is expert-level plausible, forcing painstaking analysis.
-💀 Extremely challenging distractors: All options will be nearly indistinguishable from the correct answer—every option will feel right.
-💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer. AND MAKE SURE THE PBQ STYLE QUESTIOSN ARE EXTREMLY EXTREMLY UNIQUE AND COVER DIFFERENET DOMAISN OF COMPTIA A+ CORE 1- AND WHEN I SAY REPLACE THEM I AM TALKING ABOUT THE FEW # NUMBERS LISTED BELOW
-
-
-#12 
-#15
-#56 
-#59
-#60
-#69
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 6,
@@ -165,16 +149,16 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "A technician is configuring a SOHO router. Which of the following changes is the BEST initial step to improve wireless security from default settings?",
+      "question": "A customer wants to upgrade a server from RAID 5 to RAID 10 for better performance and fault tolerance. After reconfiguring, the server fails to boot. Which of the following steps was MOST likely overlooked?",
       "options": [
-        "Enable DHCP for all wireless clients.",
-        "Change the default SSID and Wi-Fi password.",
-        "Set up port forwarding for remote access.",
-        "Increase the router's transmit power."
+        "Disabling secure boot in the BIOS before reconfiguring the RAID.",
+        "Installing new power supplies to handle increased load.",
+        "Updating the RAID controller firmware to support RAID 10.",
+        "Backing up data and restoring it to the new RAID array."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Changing the default SSID and Wi-Fi passphrase is the first step in securing a wireless network. Default credentials are widely known, making the network vulnerable if unchanged.",
-      "examTip": "Always change default usernames, passwords, and SSIDs on new routers to prevent unauthorized access."
+      "correctAnswerIndex": 3,
+      "explanation": "When changing RAID levels, the data on the drives is typically lost unless a migration procedure is properly followed. If the technician did not back up data before reconfiguring, the OS and boot data would be erased, rendering the server unable to boot.",
+      "examTip": "Always perform a verified backup prior to altering RAID configurations. Data migration or restore processes are crucial."
     },
     {
       "id": 13,
@@ -204,17 +188,17 @@ db.tests.insertOne({
     },
     {
       "id": 15,
-      "question": "After plugging in an external USB mouse, a laptop’s built-in trackpad becomes unresponsive. The mouse works, but the trackpad does not. Which is the MOST likely fix?",
+      "question": "A user complains that their brand-new Wi-Fi 6 router has slower speeds than their previous Wi-Fi 5 router, especially in the far corners of their home. Which of the following is the MOST likely cause?",
       "options": [
-        "Replace the laptop motherboard.",
-        "Reinstall the operating system.",
-        "Press the function-key combination to enable the trackpad.",
-        "Physically reseat the trackpad cable inside the chassis."
+        "The modem is only DOCSIS 2.0 and restricts all Wi-Fi performance.",
+        "The new router uses external antennas and they are incorrectly positioned.",
+        "Wi-Fi 6 signals may have difficulty penetrating multiple walls and floors compared to certain Wi-Fi 5 frequencies.",
+        "Bandwidth-throttling software is activated on the router."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "On many laptops, a function-key toggle (e.g., Fn + F5) enables or disables the trackpad. It's easy to accidentally disable the trackpad after using external peripherals.",
-      "examTip": "Check for accidental function-key presses or settings that disable the trackpad when another pointing device is detected."
-    },
+      "explanation": "Although Wi-Fi 6 can provide higher speeds, certain frequencies or channel widths might have reduced range, especially with multiple obstructions. This can lead to slower performance in distant areas compared to older standards that used lower-frequency bands more effectively.",
+      "examTip": "Evaluate your environment’s layout and consider using range extenders, mesh systems, or adjusting router placement for optimal coverage."
+    }
     {
       "id": 16,
       "question": "A specialized color 3D printer uses advanced resin layers cured by UV lasers. Which process step is unique to this printing technology compared to traditional laser or inkjet printers?",
@@ -737,16 +721,16 @@ db.tests.insertOne({
     },
     {
       "id": 56,
-      "question": "What is the function of a 'monitor'?",
+      "question": "A technician notices one of the case fans in a high-end gaming PC no longer spins. After testing with a multimeter, they confirm the fan header on the motherboard is delivering correct voltage. Which of the following is the MOST appropriate next step?",
       "options": [
-        "To display images and video",
-        "To input text",
-        "To print documents",
-        "To play audio"
+        "Flash the motherboard BIOS to the latest version.",
+        "Replace the fan with a verified working fan.",
+        "Reseat all RAM modules to reset the system.",
+        "Enable fan control software and set RPM to max."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "A monitor displays images and video from the computer.",
-      "examTip": "Monitors are output devices that let you see what the computer is doing."
+      "correctAnswerIndex": 1,
+      "explanation": "If the header provides the correct voltage, the fan itself is likely faulty. Swapping the fan with a known working unit will confirm if the fan is defective.",
+      "examTip": "Always isolate the problem by testing individual components. If the power source is fine, the device (fan) may be the issue."
     },
     {
       "id": 57,
@@ -776,29 +760,29 @@ db.tests.insertOne({
     },
     {
       "id": 59,
-      "question": "Which of these is a common type of computer port for connecting peripherals?",
+      "question": "A technician is installing a custom liquid cooling loop in a workstation. After filling the loop, the pump runs silently, but temperatures soar within minutes of operation. Which of the following is the MOST probable cause?",
       "options": [
-        "USB port",
-        "Ethernet port",
-        "HDMI port",
-        "Audio port"
+        "The pump speed is automatically throttled by the BIOS.",
+        "There is an air bubble trapped in the cooling loop preventing proper fluid flow.",
+        "The CPU thermal paste has melted and provides no heat transfer.",
+        "A standard desk fan is blowing warm air into the PC."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "USB ports are commonly used to connect peripherals such as keyboards and mice.",
-      "examTip": "USB ports are found on nearly every computer."
+      "correctAnswerIndex": 1,
+      "explanation": "Air pockets can drastically reduce the efficiency of a liquid cooling system. A large air bubble can block fluid circulation, preventing coolant from moving through the radiator and around the CPU water block.",
+      "examTip": "When setting up custom loops, tilt and gently shake the system to dislodge air bubbles, and continuously monitor pump flow."
     },
     {
       "id": 60,
-      "question": "What is 'cloud computing'?",
+      "question": "A customer wants to upgrade a server from RAID 5 to RAID 10 for better performance and fault tolerance. After reconfiguring, the server fails to boot. Which of the following steps was MOST likely overlooked?",
       "options": [
-        "Storing and accessing data and programs over the internet",
-        "Using only desktop applications",
-        "Using only wired network connections",
-        "Processing data only on local computers"
+        "Disabling secure boot in the BIOS before reconfiguring the RAID.",
+        "Installing new power supplies to handle increased load.",
+        "Updating the RAID controller firmware to support RAID 10.",
+        "Backing up data and restoring it to the new RAID array."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Cloud computing involves storing and accessing data and programs over the internet instead of locally.",
-      "examTip": "Cloud computing enables access to resources from anywhere via the internet."
+      "correctAnswerIndex": 3,
+      "explanation": "When changing RAID levels, the data on the drives is typically lost unless a migration procedure is properly followed. If the technician did not back up data before reconfiguring, the OS and boot data would be erased, rendering the server unable to boot.",
+      "examTip": "Always perform a verified backup prior to altering RAID configurations. Data migration or restore processes are crucial."
     },
     {
       "id": 61,
@@ -906,16 +890,16 @@ db.tests.insertOne({
     },
     {
       "id": 69,
-      "question": "Which of the following is a type of computer virus?",
+      "question": "A user complains their all-in-one printer consistently jams when printing on glossy photo paper, but regular paper prints without issue. Which of the following is the MOST likely culprit?",
       "options": [
-        "Trojan horse",
-        "Worm",
-        "Ransomware",
-        "All of the above"
+        "Incorrect paper tray alignment in the printer firmware.",
+        "A worn-out fuser roller designed only for standard paper.",
+        "A paper type mismatch in the printer’s settings.",
+        "A broken paper output tray sensor."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Trojan horses, worms, and ransomware are all types of computer viruses/malware.",
-      "examTip": "Malware includes many types, such as Trojan horses, worms, and ransomware."
+      "correctAnswerIndex": 2,
+      "explanation": "Photo paper often requires adjusted print settings for heat and paper thickness. If the printer’s settings are still configured for standard paper, the paper feed and fuser mechanism may jam more frequently with thicker media.",
+      "examTip": "Check the printer driver or on-printer menu for media-specific adjustments to match paper type and thickness."
     },
     {
       "id": 70,
