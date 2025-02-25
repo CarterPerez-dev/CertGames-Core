@@ -1,11 +1,3 @@
-Duplicate or Overlapping Questions
-
-Within Test #3:
-Question #13 and Question #73 both ask, nearly verbatim, “Which wireless standard introduced MU-MIMO technology…?” This appears to be a duplicate concept (almost the same question repeated).
-
-
-
-
 db.tests.insertOne({
   "category": "nplus",
   "testId": 3,
@@ -950,16 +942,16 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "Which wireless standard introduced MU-MIMO technology, enhancing performance for multiple simultaneous users?",
+      "question": "A network administrator needs to configure inter-VLAN routing on a new switch that will handle VLANs 10, 20, and 30. The switch is connected to a router using a single physical link. Which of the following configurations should be used to allow devices in each VLAN to communicate with each other, while also conserving port usage on the router?",
       "options": [
-        "802.11ac",
-        "802.11n",
-        "802.11g",
-        "802.11a"
+        "Enable 802.1Q trunking on the switch port and configure subinterfaces for each VLAN on the router interface",
+        "Use separate physical interfaces on the router, each connected to an access port in the corresponding VLAN on the switch",
+        "Assign a separate IP address to each switch port in the VLANs and configure the router with a single default gateway",
+        "Configure VLAN trunking protocol (VTP) in transparent mode across all network devices"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "802.11ac introduced MU-MIMO (Multi-User Multiple Input Multiple Output), allowing multiple users to receive data simultaneously. 802.11n supports MIMO but not MU-MIMO. 802.11g and 802.11a are older and slower standards.",
-      "examTip": "802.11ac = 'ac'celerated multi-user performance; ideal for crowded networks."
+      "answerIndex": 0,
+      "explanation": "By enabling 802.1Q trunking on one interface and configuring subinterfaces (one for each VLAN) on the router, you can handle routing for multiple VLANs using a single physical link. This approach is commonly referred to as 'Router-on-a-Stick'.",
+      "examTip": "Know how to configure 802.1Q trunking and subinterfaces for inter-VLAN routing. It’s a fundamental skill for managing multiple VLANs efficiently in modern networks."
     },
     {
       "id": 74,
