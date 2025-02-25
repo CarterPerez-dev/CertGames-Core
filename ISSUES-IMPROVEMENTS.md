@@ -45,3 +45,17 @@ we probaly need to create uniuqe names for each/import the achiveemnt list where
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 
 
+---
+-
+# SPECIFIC PHONE ISSUES
+-
+--
+backround pictures look terrible - consider just making iphone backround pictures removed and replcaed with gradient backround specifically when on iphone- OR HONESLY JUST CREATE AN IPHONE APP FUCK ITTTT
+
+
+
+
+
+
+
+
