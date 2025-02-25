@@ -1,8 +1,3 @@
-IDS vs. IPS
-
-Question #6: “What is the primary difference between an IDS and an IPS?”
-
-
 
 Question #7: “Which type of malware is characterized by its ability to self-replicate and spread across networks without requiring a host file?”
 
@@ -109,29 +104,29 @@ db.tests.insertOne({
     },
     {
       "id": 6,
-      "question": "What is the primary difference between an IDS and an IPS?",
+      "question": "A multinational corporation needs to create a unified risk governance approach that accommodates multiple regulatory requirements. Which of the following BEST supports a cross-jurisdictional compliance effort?",
       "options": [
-        "An IDS is strictly hardware-based, whereas an IPS only runs as a software solution.",
-        "An IDS only alerts on suspicious activity, but an IPS can actually block harmful traffic.",
-        "An IDS primarily analyzes data packets in real time, while an IPS studies event logs only.",
-        "An IDS works best for small networks, but an IPS is designed for high-volume enterprise use."
+        "Developing separate risk registers for each region’s regulations",
+        "Using a consolidated GRC tool that maps diverse regulations to controls",
+        "Focusing exclusively on the strictest local regulation to cover all variations",
+        "Assigning a single compliance manager to handle all global regions"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Both can be hardware or software, and their placement can vary based on network design, not just size. The critical difference is the *action*. An IDS (Intrusion *Detection* System) *detects* suspicious activity and generates *alerts*. An IPS (Intrusion *Prevention* System) goes a step further: It can *actively block* or *prevent* detected malicious traffic or activity based on its ruleset.",
-      "examTip": "IDS detects; IPS detects and *prevents*."
+      "explanation": "Using a unified GRC (governance, risk management, compliance) platform ensures a single point of reference for mapping various global regulations to a consistent set of internal controls.",
+      "examTip": "When dealing with multiple regulations, seek alignment through a single framework or GRC solution to avoid fragmentation."
     },
     {
       "id": 7,
-      "question": "Which type of malware is characterized by its ability to self-replicate and spread across networks without requiring a host file?",
+      "question": "When evaluating enterprise-wide risk, a security manager creates a risk register to track issues. Which of the following entries would MOST likely appear in the governance section of the risk register?",
       "options": [
-        "A virus requires a host application to spread itself to new systems.",
-        "A worm can self-replicate across networks without needing a host file or user interaction.",
-        "A Trojan Horse appears genuine but installs malicious software without the user’s knowledge.",
-        "A rootkit is used to maintain hidden administrative privileges on compromised hosts."
+        "Insufficient encryption key length on publicly exposed web services",
+        "Outdated intrusion detection system with signature updates needed",
+        "Absence of a cross-departmental security council or steering committee",
+        "Inconsistent patch management schedule across database servers"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Viruses need a host file to spread. Trojans disguise themselves as legitimate software. Rootkits provide hidden, privileged access. A *worm* is a standalone malware program that can *replicate itself* and spread *independently* across networks, exploiting vulnerabilities to infect other systems. It doesn't need to attach to an existing file.",
-      "examTip": "Worms are particularly dangerous due to their ability to spread rapidly and autonomously."
+      "correctAnswerIndex": 2,
+      "explanation": "The governance section typically addresses policy-level or oversight concerns (e.g., a lack of steering committees, compliance boards, or clarity in decision-making structure).",
+      "examTip": "Categorize risks appropriately in a risk register to align them with the correct area, such as governance, operational, or technical domains."
     },
     {
       "id": 8,
