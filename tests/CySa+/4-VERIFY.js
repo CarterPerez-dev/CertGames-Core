@@ -1,32 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-Question #81: “Which of the following is the MOST important practice for securing a wireless network?”
-
-
-Question #23: “What is 'lateral movement' in the context of a cyberattack?”
-Question #89: “What is 'lateral movement' within a compromised network?”
-
-
-Question #76: “Which of the following is a common tactic used by attackers to maintain persistence on a compromised system?”
-Question #90: “Which of the following is a common technique used to maintain persistence on a compromised system?”
-
-
-Question #74: “Which of the following is the MOST effective method for detecting and responding to unknown malware (zero-day exploits)?”
-
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 4,
@@ -321,16 +292,16 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "What is 'lateral movement' in the context of a cyberattack?",
+      "question": "Senior leadership demands a clear, repeatable method for identifying, evaluating, and treating risks. Which of the following governance documents BEST satisfies this requirement?",
       "options": [
-        "Penetrating a network from the outside by exploiting a vulnerable entry point.",
-        "Moving between compromised devices inside the network to access additional resources.",
-        "Encrypting critical databases to prevent legitimate user access and force a ransom payment.",
-        "Stealing confidential documents by sending them out through unmonitored communication channels."
+        "Incident response playbooks detailing each containment step",
+        "A vulnerability assessment procedure for daily scanning",
+        "An enterprise risk management policy defining risk assessment procedures",
+        "A standard operating procedure for firewall configuration changes"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Initial compromise is the *entry point*. Data encryption is often the *payload* of ransomware. Exfiltration is the *theft* of data. Lateral movement is how an attacker *expands their control* *within* a network *after* gaining initial access. They compromise one system and then use that access to pivot to other, more valuable systems, escalating privileges and spreading the attack.",
-      "examTip": "Lateral movement is a key tactic used by attackers to gain deeper access within a network."
+      "correctAnswerIndex": 2,
+      "explanation": "An enterprise risk management policy provides the overarching approach for identifying, evaluating, and addressing risks consistently across the organization.",
+      "examTip": "Governance documentation should articulate high-level risk management strategies, while other processes (like scanning) are more operational."
     },
     {
       "id": 24,
@@ -984,16 +955,16 @@ db.tests.insertOne({
     },
     {
       "id": 74,
-      "question": "Which of the following is the MOST effective method for detecting and responding to unknown malware (zero-day exploits)?",
+      "question": "After implementing a new compliance framework, leadership needs assurances that employees follow updated policies. Which of the following governance controls BEST verifies policy adherence?",
       "options": [
-        "Rely solely on traditional antivirus software that checks known signatures.",
-        "Incorporate behavior-based monitoring, anomaly detection, and proactive threat hunts.",
-        "Conduct regular vulnerability scans and network penetration exercises.",
-        "Require every account to use multi-factor authentication and unique passwords."
+        "A robust SIEM solution that aggregates security logs",
+        "Frequent policy-related training and mandatory policy acknowledgment",
+        "Upgrading endpoint antivirus solutions with AI detection capabilities",
+        "Deploying next-generation firewalls at the network perimeter"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Signature-based antivirus is *ineffective* against *unknown* malware. Vulnerability scans/pen tests identify *known* weaknesses. Strong authentication helps, but doesn't *detect* malware. *Behavior-based detection* (monitoring how programs act), *anomaly detection* (identifying deviations from normal system behavior), and *threat hunting* (proactively searching for hidden threats) are the *most effective* approaches for detecting *unknown* malware and zero-day exploits, as they don't rely on pre-existing signatures.",
-      "examTip": "Behavioral analysis and anomaly detection are key to combating unknown threats."
+      "explanation": "Ensuring employees actually follow governance policies often involves training and requiring formal acknowledgment, which demonstrates compliance with updated policies.",
+      "examTip": "Governance controls include training, awareness, and certification of policy adherence—not just technical solutions."
     },
     {
       "id": 75,
@@ -1010,16 +981,16 @@ db.tests.insertOne({
     },
     {
       "id": 76,
-      "question": "Which of the following is a common tactic used by attackers to maintain persistence on a compromised system?",
+      "question": "Senior leadership demands a clear, repeatable method for identifying, evaluating, and treating risks. Which of the following governance documents BEST satisfies this requirement?",
       "options": [
-        "Applying each newly released security patch to reduce possible exploits.",
-        "Creating hidden accounts, adjusting startup scripts, or installing rootkits to ensure continued access.",
-        "Encrypting the machine’s disk to conceal all stored information from potential detection.",
-        "Removing network connectivity to keep the compromised system fully isolated."
+        "Incident response playbooks detailing each containment step",
+        "A vulnerability assessment procedure for daily scanning",
+        "An enterprise risk management policy defining risk assessment procedures",
+        "A standard operating procedure for firewall configuration changes"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Patching is a *defensive* measure. Encryption could be used (e.g., ransomware), but isn't about *persistence*. Disabling network connectivity would *limit* the attacker's access. Attackers use various techniques to maintain *persistent access* even if the initial vulnerability is fixed or the system is rebooted. This often involves creating *backdoor accounts*, modifying *system startup scripts* (so malware runs automatically), or installing *rootkits* to hide their presence and maintain privileged access.",
-      "examTip": "Persistence mechanisms allow attackers to maintain access even after initial detection."
+      "correctAnswerIndex": 2,
+      "explanation": "An enterprise risk management policy provides the overarching approach for identifying, evaluating, and addressing risks consistently across the organization.",
+      "examTip": "Governance documentation should articulate high-level risk management strategies, while other processes (like scanning) are more operational."
     },
     {
       "id": 77,
@@ -1192,16 +1163,16 @@ db.tests.insertOne({
     },
     {
       "id": 90,
-      "question": "Which of the following is a common technique used to maintain persistence on a compromised system?",
+      "question": "Which of the following BEST demonstrates management’s commitment to compliance governance within an organization?",
       "options": [
-        "Frequent patching of the operating system and installed applications.",
-        "Setting up secret accounts, altering boot scripts, or adding rootkits to ensure continued access.",
-        "Encrypting all local files to hide them from the system’s legitimate users.",
-        "Completely disconnecting the compromised host from any network connectivity."
+        "Installing high-end firewalls across all network segments",
+        "Defining role-based access controls at every user level",
+        "Establishing a cross-functional compliance committee with decision-making power",
+        "Conducting automated vulnerability scanning on a weekly schedule"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Patching is a *defensive* measure. Encryption might be used by attackers, but doesn't directly provide persistence. Disconnecting from the network would *limit* the attacker's access. Attackers use various techniques to maintain *persistent access* to a compromised system, even after reboots or initial detection attempts. This often includes creating *backdoor accounts*, modifying *system startup scripts* (so malware runs automatically), or installing *rootkits* to hide their presence and maintain privileged access.",
-      "examTip": "Persistence mechanisms ensure attackers can regain access to a system even after reboots."
+      "correctAnswerIndex": 2,
+      "explanation": "A cross-functional compliance committee at a management level indicates strong governance oversight and demonstrates commitment from leadership.",
+      "examTip": "Look for leadership involvement and structural elements (councils, boards, committees) as markers of governance maturity."
     },
     {
       "id": 91,
