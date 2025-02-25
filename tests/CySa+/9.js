@@ -1,6 +1,3 @@
-7,9,12,27,50,57,19
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 9,
@@ -87,16 +84,16 @@ db.tests.insertOne({
     },
     {
       "id": 7,
-      "question": "A security analyst detects the following PowerShell script execution:\n\n`Set-MpPreference -DisableRealtimeMonitoring $true`\n\nWhat is the attacker's likely goal?",
+      "question": "A multinational conglomerate, subject to multiple regulations, intends to unify its governance strategy across all subsidiaries. To ensure cohesive risk management and ongoing compliance, which action should be taken FIRST?",
       "options": [
-        "Disabling Windows Defender real-time protection",
-        "Dumping credentials from LSASS memory",
-        "Escalating privileges to SYSTEM",
-        "Executing a pass-the-hash attack"
+        "Immediately apply the strictest known regulation enterprise-wide to enforce a universally high standard.",
+        "Build an integrated control framework that merges shared requirements from each regulation, then roll out incrementally.",
+        "Appoint regional legal teams to draft localized policies without referencing corporate-level mandates.",
+        "Require each subsidiary to discontinue any processes not explicitly allowed under every applicable regulation."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "This PowerShell command disables Windows Defender's real-time protection, allowing malware execution without detection.",
-      "examTip": "Monitor security policy changes and restrict PowerShell execution policies."
+      "correctAnswerIndex": 1,
+      "explanation": "Developing an integrated control framework that consolidates overlapping requirements from various regulations allows for a phased, strategic rollout. Simply enforcing the most stringent controls or halting processes altogether can overburden or stall operations unnecessarily.",
+      "examTip": "Identifying commonalities between regulations is essential for streamlining compliance without compromising operations."
     },
     {
       "id": 8,
@@ -113,16 +110,16 @@ db.tests.insertOne({
     },
     {
       "id": 9,
-      "question": "An attacker executes the following SQL query:\n\n`SELECT username, password FROM users WHERE username='admin' --' AND password='password'`;\n\nWhat type of attack is being performed?",
+      "question": "After adopting a globally recognized governance framework, a large enterprise finds certain mandatory controls may not align with specific high-availability requirements in critical data centers. Which approach BEST ensures compliance without undermining the data centers’ operational goals?",
       "options": [
-        "SQL injection to bypass authentication",
-        "Cross-site scripting (XSS)",
-        "Remote code execution (RCE)",
-        "Privilege escalation"
+        "Relax the critical data centers' operational goals so they are fully compliant with all mandatory controls.",
+        "Formulate compensating controls that achieve equivalent risk mitigation, validated through a formal exception process.",
+        "Exclude critical data centers from the governance framework to maintain availability standards.",
+        "Adopt an alternative framework designed specifically for high-availability environments, discarding the initial framework."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The attacker is using SQL injection to manipulate the authentication query logic and bypass login security.",
-      "examTip": "Use parameterized queries and input validation to prevent SQL injection attacks."
+      "correctAnswerIndex": 1,
+      "explanation": "Utilizing compensating controls that provide equivalent or better security ensures both compliance and operational continuity. Simply relaxing requirements or excluding key environments can introduce unacceptable risk, while switching frameworks prematurely could create gaps elsewhere.",
+      "examTip": "A well-defined exception process with validated compensating controls allows organizations to remain flexible while complying with core governance principles."
     },
     {
       "id": 10,
@@ -152,16 +149,16 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "A security analyst discovers the following suspicious process running on a compromised Linux server:\n\n`/usr/bin/openssl enc -aes-256-cbc -salt -in /var/log/auth.log -out /tmp/encrypted.log`\n\nWhat is the attacker attempting to do?",
+      "question": "An enterprise risk management (ERM) team is updating the risk register to reflect newly identified legal liabilities stemming from multiple jurisdictions. Which step MOST effectively ensures the updates maintain accuracy and support ongoing governance requirements?",
       "options": [
-        "Encrypt log files to prevent forensic analysis",
-        "Steal user credentials from `/etc/shadow`",
-        "Modify user privileges for persistence",
-        "Inject malicious code into a running process"
+        "Overhaul the entire risk register with country-specific sections, making it highly detailed for each locality.",
+        "Conduct a comprehensive legal audit for each jurisdiction and align findings directly to entries in the existing risk register.",
+        "Create separate registers for each jurisdiction to isolate legal liabilities, then merge them quarterly.",
+        "Cancel all risky international ventures until the organization fully understands every local regulation."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The attacker is encrypting log files to make forensic analysis difficult.",
-      "examTip": "Monitor file modifications in `/var/log/` and use centralized logging to prevent log tampering."
+      "correctAnswerIndex": 1,
+      "explanation": "Aligning the risk register with up-to-date legal findings ensures each identified liability is accurately captured and monitored within the existing framework. Merely subdividing or segregating the register by country can obscure enterprise-wide risk visibility.",
+      "examTip": "Integrating diverse legal considerations into a unified risk register preserves a holistic, real-time view of enterprise liabilities."
     },
     {
       "id": 13,
@@ -243,16 +240,16 @@ db.tests.insertOne({
     },
     {
       "id": 19,
-      "question": "An attacker exploits a misconfigured cron job and executes the following command:\n\n`echo '* * * * * root /tmp/backdoor.sh' >> /etc/crontab`\n\nWhat is the attacker's goal?",
+      "question": "A global healthcare provider wants to optimize its governance processes after merging with a research laboratory. Both organizations follow different compliance frameworks. Which FIRST step ensures smooth integration without compromising either entity’s regulatory obligations?",
       "options": [
-        "Establishing persistence by executing a backdoor script every minute",
-        "Performing a privilege escalation exploit",
-        "Dumping credentials from a Linux system",
-        "Scanning for open ports on the local network"
+        "Immediately adopt the laboratory’s framework because it covers specialized research requirements.",
+        "Combine each control from both frameworks to form a larger list, ensuring no requirement is overlooked.",
+        "Perform a comparative analysis to identify overlapping and conflicting controls, then design a unified approach.",
+        "Disregard both frameworks temporarily and implement an internally developed set of enterprise policies."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The attacker is modifying `/etc/crontab` to run a backdoor every minute, ensuring persistence.",
-      "examTip": "Monitor cron job modifications and restrict write access to `/etc/crontab`."
+      "correctAnswerIndex": 2,
+      "explanation": "A comparative analysis highlights overlaps and conflicts, guiding a hybrid governance model that meets both healthcare and research standards. Merging all controls indiscriminately or discarding established frameworks can create confusion or compliance gaps.",
+      "examTip": "Efficient integration begins by mapping existing controls to uncover precise redundancies and divergences."
     },
     {
       "id": 20,
@@ -347,16 +344,16 @@ db.tests.insertOne({
     },
     {
       "id": 27,
-      "question": "A penetration tester runs the following command:\n\n`hashcat -m 5600 -a 0 hashes.txt wordlist.txt`\n\nWhat type of hashes is the tester attempting to crack?",
+      "question": "An organization plans to address potential gaps in its third-party risk management program, which is spread across various departments. Which of the following is the MOST critical first action to ensure consistent governance of vendor relationships?",
       "options": [
-        "NetNTLMv2 authentication hashes",
-        "MD5 password hashes",
-        "SHA-256 encrypted keys",
-        "Kerberos ticket hashes"
+        "Establish uniform scoring criteria for vendor risk assessments across all departments.",
+        "Enforce a freeze on contracting new vendors until all existing vendors pass a re-audit.",
+        "Reduce the number of external vendors significantly to simplify risk management.",
+        "Assign each department a unique set of vendor security requirements based on departmental priorities."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The `-m 5600` flag in Hashcat is used for cracking NetNTLMv2 authentication hashes.",
-      "examTip": "Enforce strong password policies and use multi-factor authentication to reduce the risk of credential compromise."
+      "explanation": "Implementing a unified scoring methodology enables objective comparison of vendor risks across departments. Freezing new contracts or arbitrarily downsizing the vendor pool might cause operational setbacks, and department-specific requirements may lead to inconsistent governance.",
+      "examTip": "Consistent, measurable criteria are the foundation of a strong third-party risk management strategy."
     },
     {
       "id": 28,
@@ -646,16 +643,16 @@ db.tests.insertOne({
     },
     {
       "id": 50,
-      "question": "A forensic analyst detects the following command executed on a compromised system:\n\n`curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/`\n\nWhat is the attacker's objective?",
+      "question": "A mid-size tech company must comply with both emerging data privacy regulations and security requirements from a major client. Which action should be taken FIRST to align these obligations under a single governance structure?",
       "options": [
-        "Stealing cloud instance metadata and IAM credentials",
-        "Scanning the local network for open ports",
-        "Bypassing a firewall using an internal proxy",
-        "Performing a SQL injection attack on a cloud database"
+        "Adopt the strictest client security requirement and enforce it as the single standard for all data handling.",
+        "Allow each department to choose either data privacy regulations or client security guidelines to follow.",
+        "Conduct a gap analysis between the privacy regulations and client requirements to identify overlaps and conflicts.",
+        "Eliminate any internal policies that do not directly relate to either the privacy regulations or client mandates."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Requests to `169.254.169.254` indicate an attempt to access cloud instance metadata, which attackers exploit to retrieve IAM credentials.",
-      "examTip": "Restrict access to cloud metadata services and enforce IMDSv2 in AWS environments."
+      "correctAnswerIndex": 2,
+      "explanation": "Evaluating where the client’s security requirements and data privacy regulations intersect helps the organization create a consolidated governance framework without duplicating or missing obligations. Simply enforcing the strictest standard or discarding unrelated policies can cause compliance blind spots.",
+      "examTip": "Understanding the nuanced relationship between different compliance drivers is crucial for a unified governance model."
     },
     {
       "id": 51,
@@ -737,16 +734,16 @@ db.tests.insertOne({
     },
     {
       "id": 57,
-      "question": "A penetration tester runs the following command:\n\n`hashcat -m 1000 -a 3 hashes.txt ?a?a?a?a?a?a`\n\nWhat is the goal of this attack?",
+      "question": "An enterprise risk committee is concerned that certain risk categories are under-reported in quarterly reviews. To bolster comprehensive governance, which of the following is the BEST method to ensure hidden or emerging risks are captured and managed?",
       "options": [
-        "Brute-forcing NTLM password hashes",
-        "Performing a pass-the-hash attack",
-        "Dumping NTLM hashes from memory",
-        "Decrypting SSL/TLS traffic"
+        "Require all employees to submit monthly risk checklists, covering every possible operational area.",
+        "Add a dedicated 'Shadow Risk' category to the existing risk register, highlighting unknown or unconfirmed risks.",
+        "Integrate qualitative feedback sessions and scenario planning exercises into regular risk workshops.",
+        "Double the frequency of audits in all departments, expecting more findings to surface potential risks."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Hashcat with `-m 1000` targets NTLM hashes, and `-a 3` specifies a brute-force attack.",
-      "examTip": "Use long, complex passwords and enable account lockout policies to mitigate password cracking attempts."
+      "correctAnswerIndex": 2,
+      "explanation": "Structured scenario planning and open-dialogue workshops can reveal less obvious threats that employees or managers might not formally document. Simply adding a 'Shadow Risk' category or increasing audits doesn’t necessarily prompt proactive discovery of unrecognized risks.",
+      "examTip": "Incorporate qualitative, collaborative methods to expose latent risks beyond standard metrics and registers."
     },
     {
       "id": 58,
