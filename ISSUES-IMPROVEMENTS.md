@@ -1,6 +1,10 @@
 
 ### ok so for thre test view i need it so the "next question" component to sorta be logged better for the testview an review mode as a whole. so basically, the issue is that if the user  clickd the "next quetsion" button without answering then there needs to be a popup that say something like "you havent answered, pelase answer or hit skip" just like the popups we have for  the restart/finish buttons.
 -----------------------
+
+--so for this right here- we need to highlight the "Skipped"
+![image](https://github.com/user-attachments/assets/27ca5db8-581f-41ef-b882-f792941e221a)
+
 ### achievemnt popups arent popping up when achieiving
 so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i meet the cirteria/achieve an achievemtn? so liek my auth pages for login aand stuff have the toast popup notifcations, so for my achievment toats notifation popups, why wont my ahcievemtn toat popups show when i achive soemwthing- i know this becvasue i achived soemthing as a test adn nothing popped up/ toast notifs.
 ------------------------------------------------
