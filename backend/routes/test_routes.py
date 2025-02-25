@@ -617,14 +617,16 @@ def update_single_answer(user_id, test_id):
                 "finished": False,
                 "$or": [{"testId": test_id_int}, {"testId": test_id}]
             },
-            {"$push": {
-                "answers": {
-                    "questionId": question_id,
-                    "userAnswerIndex": user_answer_index,
-                    "correctAnswerIndex": correct_answer_index
-                }
-            },
-            "$set": {"score": data.get("score", 0)}}
+            {
+                "$push": {
+                    "answers": {
+                        "questionId": question_id,
+                        "userAnswerIndex": user_answer_index,
+                        "correctAnswerIndex": correct_answer_index
+                    }
+                },
+                "$set": {"score": data.get("score", 0)}
+            }
         )
     
     return jsonify({"message": "Answer updated"}), 200
