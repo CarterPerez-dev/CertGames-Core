@@ -1,18 +1,3 @@
-Duplicate (Repeated) Questions Within Test #2
-Several questions appear more than once, often verbatim or nearly so. For instance:
-
-Question #16 and #29 are identical (malware infection troubleshooting).
-Question #18 and #31 (UAC prompt reasons).
-Question #19 and #32 (Windows 10 edition supporting BitLocker and domain join).
-Question #20 and #33 (RAM upgrade not recognized by Windows).
-Question #21 and #34 (RDP firewall port 3389).
-Question #72, #76, #78, and #92 repeat the same domain-join question multiple times.
-Question #73, #79, and #93 repeat the system time mismatch / certificate error question.
-So there are numerous internal duplicates in this test, often with different IDs but the same wording and answer.
-
-
-
-
 db.tests.insertOne({
   "category": "aplus2",
   "testId": 2,
@@ -30,7 +15,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "System Configuration (msconfig) is correct because it enables you to manage boot options and startup items, making it a primary tool for quick troubleshooting. Event Viewer is incorrect because it only shows system logs and error events; it does not control startup processes. Device Manager is incorrect because it manages device drivers and hardware, not startup items. Disk Management is incorrect because it manages partitions and volumes, not boot or startup entries.",
-      "examTip": "msconfig helps isolate problematic startup processes quickly. Use it early when troubleshooting slow boots or strange startup behaviors."
+      "examTip": "Remember msconfig as your first stop for controlling which apps and services launch at boot."
     },
     {
       "id": 2,
@@ -43,7 +28,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "winver is correct because running it opens a window displaying the exact Windows version and build number. ipconfig /all is incorrect because it only displays network configuration details. diskpart is incorrect because it is used for disk partitioning tasks and does not provide the Windows version. hostname is incorrect because it only shows the system’s network name, not the OS version.",
-      "examTip": "Use winver in the Run dialog or command line to quickly verify the Windows version and build without digging into settings."
+      "examTip": "For quick Windows version checks, 'winver' is your best friend—simple, direct, and foolproof."
     },
     {
       "id": 3,
@@ -56,7 +41,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Use at least 8 characters with mixed complexity is correct because strong passwords typically require multiple character types (uppercase, lowercase, numbers, special symbols) to reduce the chance of being easily guessed. Using only letters is incorrect because it reduces password complexity and makes it more vulnerable to attacks. Writing passwords on a sticky note is incorrect because it creates a physical security risk. Using the same password for every account is incorrect because it increases the impact of any single account compromise.",
-      "examTip": "Always encourage users to create long, complex passwords and change them regularly to mitigate security risks."
+      "examTip": "Use a mix of uppercase, lowercase, numbers, and symbols—your future self will thank you."
     },
     {
       "id": 4,
@@ -69,7 +54,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Administrator is correct because it has full local privileges to install software, change system settings, and manage other accounts on the local machine. Guest user is incorrect because it is severely limited and often turned off by default. Power user is incorrect because it does have elevated rights compared to standard users but not as extensive as Administrator. Standard user is incorrect because it has the least privileges and can only perform basic tasks.",
-      "examTip": "To limit unauthorized changes or accidental system damage, do not use the Administrator account for daily tasks; instead, use a standard account and escalate privileges as needed."
+      "examTip": "Reserve that Administrator account for system-level changes—daily tasks should stay on a Standard account."
     },
     {
       "id": 5,
@@ -82,7 +67,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Power Options is correct because it controls how the system manages power, including configuring behavior when closing the lid. Network and Sharing Center is incorrect because it manages network connections and sharing settings. Ease of Access is incorrect because it primarily deals with accessibility features. File Explorer Options is incorrect because it controls how files and folders are displayed and managed, not power behavior.",
-      "examTip": "Use Power Options to configure lid close actions, sleep settings, and custom power plans to optimize battery usage or performance."
+      "examTip": "Always check Power Options for controlling sleep, hibernation, and lid-close settings on laptops."
     },
     {
       "id": 6,
@@ -95,7 +80,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "NTFS is correct because it is the default file system for Windows internal drives, offering security permissions and larger file size support. FAT32 is incorrect because it is limited in file size capacity and mostly used for smaller partitions or removable media. exFAT is incorrect because it is mainly designed for flash drives requiring compatibility with both Windows and other devices. ext4 is incorrect because it is a common file system for Linux, not Windows.",
-      "examTip": "NTFS is preferred for Windows due to robust security features and support for large volumes; it’s the standard for most modern Windows installations."
+      "examTip": "NTFS is your Windows workhorse, with file-level security and wide capacity—don’t confuse it with FAT32 or exFAT."
     },
     {
       "id": 7,
@@ -108,7 +93,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Enabling a password-protected screensaver is correct because it ensures the system locks after a period of inactivity, requiring user authentication to regain access. Using auto-login is incorrect because it bypasses the login prompt, reducing security. Disabling mandatory password complexity is incorrect because it weakens password strength. Storing your password in a text file on the desktop is incorrect because it creates a significant security risk if someone gains access to the computer.",
-      "examTip": "Locking the workstation and requiring a password after inactivity is a fundamental step in protecting against casual insider threats or unauthorized physical access."
+      "examTip": "Lock your workstation automatically with a password-protected screensaver—simple step, huge security boost."
     },
     {
       "id": 8,
@@ -121,7 +106,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Task Manager is correct because it allows users to view running processes and monitor CPU, memory, and other resource usage. System Configuration (msconfig) is incorrect because it is more focused on startup programs and boot settings. Windows Defender Firewall is incorrect because it controls inbound/outbound traffic rules, not process resource usage. File Explorer Options is incorrect because it configures how files and folders are displayed, not resource use.",
-      "examTip": "Use Task Manager to pinpoint programs consuming excessive resources; you can end tasks, adjust startup, or investigate further if a process is suspicious."
+      "examTip": "When sluggish performance hits, pop open Task Manager and see exactly which process is hogging resources."
     },
     {
       "id": 9,
@@ -134,7 +119,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Using BitLocker To Go is correct because it is specifically designed for encrypting data on removable drives such as USB flash drives. Using chmod 777 is incorrect because that is a Linux-based permission command and it would grant wide-open permissions, not secure data. Formatting the drive in exFAT is incorrect because it only addresses file system compatibility, not encryption. Enabling Windows Firewall is incorrect because it filters network traffic, not data storage security.",
-      "examTip": "When working in a Windows domain environment, BitLocker To Go is the simplest built-in tool for encrypting removable drives without extra software."
+      "examTip": "BitLocker To Go is your friend when it comes to encrypting USBs in a Windows ecosystem."
     },
     {
       "id": 10,
@@ -147,7 +132,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Remote Desktop Connection is correct because it enables a user to log into and control another Windows system remotely. Task Scheduler is incorrect because it automates tasks based on triggers and schedules. Windows Update is incorrect because it manages OS updates and patches, not remote sessions. Performance Monitor is incorrect because it is used to track and analyze system performance, not remotely control a session.",
-      "examTip": "Remote Desktop is invaluable for support and management. However, ensure the target machine permits remote connections, or use Microsoft Remote Assistance for user-initiated help sessions."
+      "examTip": "RD is the key for quick remote fixes—just ensure the service and firewall rules are set up properly."
     },
     {
       "id": 11,
@@ -160,7 +145,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Power Users is correct because, in some Windows versions, they have higher privileges than Standard Users, such as installing software, but still do not hold full administrative rights. Administrators is incorrect because they can manage every aspect of the system. Standard Users is incorrect because they usually cannot install software system-wide. Guests is incorrect because they have extremely limited privileges and often cannot install software at all.",
-      "examTip": "Power Users is an older group primarily seen in legacy systems. Modern Windows often encourages Standard User + UAC prompts or full Administrator roles."
+      "examTip": "Power Users can do more than a Standard User, but they’re not the same as full-blown Administrators."
     },
     {
       "id": 12,
@@ -173,7 +158,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Checking if the hard drive is recognized in the BIOS/UEFI is correct because if the BIOS does not detect the drive, the operating system cannot load, causing this error. Reinstalling Windows immediately is incorrect because it’s a drastic step without confirming hardware detection. Replacing the motherboard is incorrect as an immediate step because it is more drastic and expensive; it should be a last resort after simpler checks. Disabling Fast Boot is incorrect because while it can affect POST checks, it is less likely to cause a complete OS not found issue compared to a missing drive.",
-      "examTip": "Always verify hardware detection in the BIOS/UEFI before attempting OS reinstallation. Basic hardware checks come before advanced troubleshooting steps."
+      "examTip": "When BIOS can’t see the drive, the OS can’t load—so always double-check hardware detection first."
     },
     {
       "id": 13,
@@ -186,7 +171,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "NTFS provides encryption and compression features, along with better security capabilities, which is why it is more robust than FAT32. FAT32’s file size limit is 4GB, so the statement that NTFS supports only up to 4GB is incorrect. NTFS absolutely supports file permissions, so saying it does not is incorrect. NTFS is not exclusively for removable USB drives; it is the default for Windows internal drives and can be used on various storage media.",
-      "examTip": "NTFS remains the default Windows file system for modern drives because it offers advanced features like permissions, encryption, and larger file size support than FAT32."
+      "examTip": "NTFS remains Windows’ powerhouse—offering advanced features you just don’t get with FAT32."
     },
     {
       "id": 14,
@@ -199,7 +184,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Task Scheduler is correct because it lets you automate tasks at specified times or events, such as running scripts or defragging drives. Resource Monitor is incorrect because it displays real-time resource usage, not scheduling. System Information is incorrect because it only shows hardware and software configuration details. gpedit.msc is incorrect because it is the Local Group Policy Editor, primarily used to configure policy settings, not scheduling tasks.",
-      "examTip": "Task Scheduler is your go-to for automating repetitive tasks and maintenance. It can trigger tasks based on time, events, or even conditions like system idle."
+      "examTip": "Remember to set up tasks in Task Scheduler for hands-off maintenance—your system will thank you."
     },
     {
       "id": 15,
@@ -212,7 +197,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Group Policy is correct because it can be used to implement software restriction policies or AppLocker to limit which applications specific users can run. Disk Cleanup is incorrect because it frees up disk space by removing temporary files. Event Viewer is incorrect because it only logs and reviews system events. Windows Firewall is incorrect because it primarily controls network traffic, not which local programs can run.",
-      "examTip": "Through Group Policy or AppLocker rules, administrators can define which executables or scripts are allowed or denied for specific users or groups."
+      "examTip": "Lock down user app usage with Group Policy or AppLocker—simple policies, big security gains."
     },
     {
       "id": 16,
@@ -225,7 +210,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Updating anti-malware software definitions is correct because ensuring you have the latest definitions is crucial before scanning and removing suspected malware. Disabling all scheduled backups is not a typical first step; you might disable System Restore after confirming infection, but not backups. Notifying the user to ignore the issue is dangerous and not part of best practices.",
-      "examTip": "Always ensure anti-malware tools are up to date before scanning. Outdated definitions might fail to catch newer threats."
+      "examTip": "Always arm your antivirus with the latest definitions—outdated tools risk missing new threats."
     },
     {
       "id": 17,
@@ -238,7 +223,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Encrypting File System (EFS) is correct because it encrypts files or folders at the file system level on NTFS volumes. Group Policy Editor manages OS policies, not direct file encryption. BitLocker To Go is used to encrypt entire removable drives rather than individual files. OneDrive Sync is a cloud-based syncing solution and does not natively encrypt files locally by default.",
-      "examTip": "EFS is user-specific file encryption; if you need to protect entire drives (including OS drives), you’d use BitLocker. Both can run on NTFS but serve different use cases."
+      "examTip": "Need file-level protection on NTFS? EFS is your go-to solution—personalized encryption on a per-file basis."
     },
     {
       "id": 18,
@@ -251,7 +236,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "UAC is warning about changes requiring elevated privileges is correct because User Account Control is designed to prevent unauthorized modifications by prompting for confirmation. Incorrect Windows installation does not specifically cause UAC prompts. Being on a domain might impose group policies, but it does not directly trigger UAC prompts for system changes. Out-of-date drivers do not generate UAC prompts; they cause other error messages.",
-      "examTip": "UAC is a core security feature. Reducing its severity can lower prompts but also increases risk. It's best practice to keep UAC at a recommended level."
+      "examTip": "UAC is that safety net preventing silent system changes—embrace the prompt, don’t just kill it."
     },
     {
       "id": 19,
@@ -264,7 +249,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows 10 Pro is correct because it supports BitLocker and can join a domain, making it suitable for business environments. Windows 10 Home does not have BitLocker or domain join functionality natively. Windows 10 S is a streamlined version restricted to Microsoft Store apps. Windows 10 Education is similar to Enterprise in some features, but Windows 10 Pro is the more common choice for domain join and BitLocker in standard business deployments.",
-      "examTip": "Always check the edition’s feature list before selecting a Windows license for corporate environments requiring encryption and domain management."
+      "examTip": "If you need domain join or BitLocker, Windows 10 Pro (or higher) is the must-have edition."
     },
     {
       "id": 20,
@@ -277,7 +262,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Checking the RAM usage in Task Manager’s Performance tab is correct because it shows the total physical memory recognized by Windows, confirming whether the new RAM is usable. Running Disk Cleanup helps free disk space and is unrelated to RAM. Updating antivirus definitions is important for security but irrelevant to hardware recognition. Disabling Windows Update does nothing to verify RAM detection.",
-      "examTip": "Whenever you upgrade RAM, confirm it in both BIOS/UEFI and Windows (e.g., Task Manager or System properties) to ensure compatibility and recognition."
+      "examTip": "Always double-check new RAM in Task Manager or System Info to ensure it’s actually recognized."
     },
     {
       "id": 21,
@@ -290,7 +275,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "An inbound rule for TCP port 3389 is correct because RDP (Remote Desktop Protocol) uses TCP 3389 by default for inbound connections. Outbound rule for TCP 22 relates to SSH, not RDP. UDP port 53 is DNS, not RDP. Blocking all inbound traffic would prevent the connection entirely rather than allow it.",
-      "examTip": "For Windows Remote Desktop, ensure port 3389 is open inbound on the target system’s firewall if connections fail."
+      "examTip": "Know your port numbers: RDP = 3389 inbound if you want remote desktop to succeed."
     },
     {
       "id": 22,
@@ -303,7 +288,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Using the 'Take Ownership' feature under folder properties is correct because sometimes folders belong to the system or another user, requiring the new owner to set or change permissions. Disabling UAC is too broad and does not address ownership directly. Repairing the OS with sfc /scannow is for corrupted system files, not file ownership or permissions. Disk Defragmenter is performance-related and irrelevant to permission issues.",
-      "examTip": "Even local administrators may need to take ownership for certain protected system folders, then reassign permissions to gain full control."
+      "examTip": "Even an admin might need to take ownership of certain folders—NTFS permissions can override local admin rights."
     },
     {
       "id": 23,
@@ -315,8 +300,8 @@ db.tests.insertOne({
         "Synthetic full backup, which combines incrementals with a full backup"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Differential is correct because it copies files changed since the last full backup and leaves the archive bit set, meaning each subsequent differential grows in size until another full backup. A full backup resets the archive bit and copies all data. An incremental backup copies changes since the last backup (full or incremental) and resets the archive bit. Synthetic full is a process that consolidates incrementals and a previous full to create a new full.",
-      "examTip": "Differential backups rely on the last full backup; incremental backups rely on the last full or incremental. Know their differences to design efficient backup strategies."
+      "explanation": "Differential is correct because it copies files changed since the last full backup and leaves the archive bit set, meaning each subsequent differential grows in size until another full backup. A full backup resets the archive bit and copies all data. An incremental backup copies changes since the last backup (full or incremental) and resets the archive bit. A synthetic full is a process that consolidates incrementals and a previous full to create a new full.",
+      "examTip": "Differential = only changed files since last full, archive bit stays put—makes for easier one-step restores."
     },
     {
       "id": 24,
@@ -329,7 +314,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows Sandbox (or enabling Hyper-V) is correct because it allows creating virtual machines or a disposable environment for testing within Windows 10 (Pro or higher). Disk Management partitioning alone will not provide an isolated environment unless you install another OS. Adjusting User Account Control does not create a separate OS instance. Multi-booting with Linux is possible but requires reboots and separate OS partitions, not a quick test environment.",
-      "examTip": "Hyper-V or Windows Sandbox (where available) offers a fast way to test software or changes safely without affecting the host OS. Ensure hardware virtualization is enabled in BIOS."
+      "examTip": "For a quick, risk-free testing bubble, spin up Windows Sandbox or a Hyper-V VM—no extra hardware needed."
     },
     {
       "id": 25,
@@ -342,7 +327,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Creating an inbound rule for the application is correct because inbound traffic on that specific port must be allowed from external sources to reach the website. Creating a new outbound rule is incorrect since the server is receiving requests. Disabling all firewall profiles is highly insecure. Limiting ephemeral ports is unrelated to explicitly allowing a specific TCP port for a service.",
-      "examTip": "When hosting a website or service, inbound firewall rules define what traffic can enter. Outbound rules limit what your server sends out."
+      "examTip": "Opening the inbound port on the server firewall is key for external clients to reach your internal service."
     },
     {
       "id": 26,
@@ -355,7 +340,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Network and Sharing Center is correct because it provides controls for network discovery, file sharing, and other sharing options that may be disabled, causing inaccessibility to shared folders. Windows Defender Firewall is incorrect as a first place to check; while firewall rules can block traffic, the primary discovery settings are in the Network and Sharing Center. Power Options is unrelated to network discovery settings. Device Manager helps manage drivers, not sharing configurations.",
-      "examTip": "Always verify basic network discovery and sharing settings in the Network and Sharing Center when troubleshooting local file-sharing issues."
+      "examTip": "Check Network and Sharing Center when shared folders vanish—discovery settings or sharing options are often the culprit."
     },
     {
       "id": 27,
@@ -368,7 +353,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "The user is logged into a Guest account is correct because Guest accounts have extremely limited privileges, which typically include blocking software installations. An expired domain password would prompt the user to change it, not block software installation with an admin credential prompt. A corrupted profile usually exhibits inconsistent behavior or inability to load settings, rather than installation restrictions. Missing Windows updates might cause security or compatibility issues, but not typically an admin password prompt for software installation.",
-      "examTip": "Guest and standard accounts lack installation privileges. Users generally need administrative rights or UAC approval to install system-wide software."
+      "examTip": "Guest accounts are intentionally crippled—if you need to install software, move to Standard or Admin privileges."
     },
     {
       "id": 28,
@@ -381,20 +366,20 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Passwords that expire periodically and require a mix of character types is correct because frequent changes and complexity help deter unauthorized access. Having no expiration or complexity is a significant security risk. Limiting to only letters and exactly 6 characters is too weak. Matching the user’s email address is a terrible idea, as it’s predictable and insecure.",
-      "examTip": "Implementing password expiration, length, and complexity requirements is standard in corporate environments to reduce brute force and guessing attacks."
+      "examTip": "Frequent changes + strong complexity = an effective layer against brute force and guessing attacks."
     },
     {
       "id": 29,
-      "question": "A technician suspects a malware infection on a user’s PC due to unusual network traffic. Which of the following steps should be done FIRST in accordance with malware removal best practices?",
+      "question": "A user’s laptop trackpad occasionally stops responding after a recent Windows update. Which action should the technician take FIRST to troubleshoot this issue?",
       "options": [
-        "Disable all scheduled backups to prevent potential malware spread",
-        "Update anti-malware definitions to ensure the latest threat detection",
-        "Enable System Restore points to facilitate rollback if needed",
-        "Instruct the user to disregard the unusual network traffic temporarily"
+        "Reinstall the entire operating system to eliminate software conflicts.",
+        "Check Device Manager for updated or missing drivers specific to the trackpad.",
+        "Advise the user to use an external USB mouse until a permanent fix is found.",
+        "Disable Windows Update entirely to prevent driver updates."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Updating anti-malware software definitions is correct because ensuring you have the latest definitions is crucial before scanning and removing suspected malware. Disabling all scheduled backups is not a typical first step; you might disable System Restore after confirming infection, but not backups. Notifying the user to ignore the issue is dangerous and not part of best practices.",
-      "examTip": "Always ensure anti-malware tools are up to date before scanning. Outdated definitions might fail to catch newer threats."
+      "explanation": "Examining Device Manager for driver issues is the first step. If the trackpad driver became outdated or replaced, reinstalling or rolling back the driver often resolves the intermittent issues. Reinstalling the OS is too extreme as an initial step, and disabling Windows Update is not recommended as it leaves the system vulnerable. Using an external mouse is a temporary workaround but does not solve the root cause.",
+      "examTip": "Always hunt driver issues first—rollbacks or updates usually fix recent hardware malfunctions."
     },
     {
       "id": 30,
@@ -407,59 +392,59 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Encrypting File System (EFS) is correct because it encrypts files or folders at the file system level on NTFS volumes. Group Policy Editor manages OS policies, not direct file encryption. BitLocker To Go is used to encrypt entire removable drives rather than individual files. OneDrive Sync is a cloud-based syncing solution and does not natively encrypt files locally by default.",
-      "examTip": "EFS is user-specific file encryption; if you need to protect entire drives (including OS drives), you’d use BitLocker. Both can run on NTFS but serve different use cases."
+      "examTip": "EFS is ideal for securing sensitive files on your local NTFS drive—lightweight and user-specific."
     },
     {
       "id": 31,
-      "question": "A user keeps getting a User Account Control prompt whenever they change system settings. Which of the following is the MOST likely reason Windows displays these prompts?",
+      "question": "A user complains that the Windows 10 search function no longer finds any local documents. Which initial step is MOST likely to fix the issue?",
       "options": [
-        "The Windows operating system is installed incorrectly",
-        "The user account is part of a Windows domain",
-        "UAC is prompting for changes that require elevated permissions",
-        "The system's hardware drivers are outdated or corrupted"
+        "Rebuild the Windows Search index from Indexing Options.",
+        "Convert the system from NTFS to exFAT for faster indexing.",
+        "Perform a full system restore to revert to a previous Windows installation.",
+        "Install a third-party search tool to replace Windows Search."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "UAC is warning about changes requiring elevated privileges is correct because User Account Control is designed to prevent unauthorized modifications by prompting for confirmation. Incorrect Windows installation does not specifically cause UAC prompts. Being on a domain might impose group policies, but it does not directly trigger UAC prompts for system changes. Out-of-date drivers do not generate UAC prompts; they cause other error messages.",
-      "examTip": "UAC is a core security feature. Reducing its severity can lower prompts but also increases risk. It's best practice to keep UAC at a recommended level."
+      "correctAnswerIndex": 0,
+      "explanation": "Rebuilding the Windows Search index often resolves issues where files or folders are not being indexed properly. Changing file systems is not needed just to fix indexing. A full system restore is too drastic for a search malfunction. Installing a third-party tool is not necessary when Windows Search index can be fixed in built-in settings.",
+      "examTip": "When Search breaks, refresh or rebuild the index—usually the simplest and quickest fix."
     },
     {
       "id": 32,
-      "question": "Which of the following Windows 10 editions is MOST likely to include BitLocker for full disk encryption and the ability to join a domain?",
+      "question": "A user wishes to encrypt sensitive files using EFS, but the target folder is on a FAT32-formatted partition. Which step is required FIRST?",
       "options": [
-        "Windows 10 Home, designed for basic home user needs",
-        "Windows 10 Pro, suitable for small businesses and advanced users",
-        "Windows 10 S, a streamlined version focused on security",
-        "Windows 10 Education, designed for academic institutions"
+        "Use a file-level antivirus scan on the FAT32 partition to ensure it’s malware-free.",
+        "Convert or move the folder to an NTFS-formatted partition before enabling EFS.",
+        "Rename the folder to indicate that it holds encrypted data for better clarity.",
+        "Upgrade the operating system to Windows 10 Enterprise, as EFS is only available there."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Windows 10 Pro is correct because it supports BitLocker and can join a domain, making it suitable for business environments. Windows 10 Home does not have BitLocker or domain join functionality natively. Windows 10 S is a streamlined version restricted to Microsoft Store apps. Windows 10 Education is similar to Enterprise in some features, but Windows 10 Pro is the more common choice for domain join and BitLocker in standard business deployments.",
-      "examTip": "Always check the edition’s feature list before selecting a Windows license for corporate environments requiring encryption and domain management."
+      "explanation": "EFS works exclusively on NTFS volumes, so the user must either convert the partition from FAT32 to NTFS or move the files to an NTFS volume first. An antivirus scan does not enable encryption, nor does simply renaming a folder. EFS is available on Windows 10 Pro and higher, not just Enterprise.",
+      "examTip": "No NTFS, no EFS—that’s the bottom line. Convert or move your data to an NTFS drive."
     },
     {
       "id": 33,
-      "question": "After upgrading the RAM in a Windows PC, the user notices the OS is still reporting the old memory amount. Which of the following is the MOST likely step to confirm the new RAM is recognized by the system?",
+      "question": "A user wants to share a folder with another local account on the same Windows 10 PC, but the account doesn't appear in the Sharing Wizard. What should the user do FIRST?",
       "options": [
-        "Verify RAM capacity within Task Manager's Performance section",
-        "Execute Windows Disk Cleanup to remove temporary files",
-        "Update antivirus definitions to enhance system security",
-        "Disable Windows Update to prevent automatic driver changes"
+        "Use File Explorer’s 'Map network drive' to map a local folder for the other account.",
+        "Convert both accounts to Microsoft accounts to enable local sharing.",
+        "Create or enable a password for the other local account, as blank passwords restrict sharing in some configurations.",
+        "Disable the Windows Firewall so the other account becomes visible on the network."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Checking the RAM usage in Task Manager’s Performance tab is correct because it shows the total physical memory recognized by Windows, confirming whether the new RAM is usable. Running Disk Cleanup helps free disk space and is unrelated to RAM. Updating antivirus definitions is important for security but irrelevant to hardware recognition. Disabling Windows Update does nothing to verify RAM detection.",
-      "examTip": "Whenever you upgrade RAM, confirm it in both BIOS/UEFI and Windows (e.g., Task Manager or System properties) to ensure compatibility and recognition."
+      "correctAnswerIndex": 2,
+      "explanation": "On Windows systems, accounts without passwords or with blank passwords are often restricted from receiving shared resources. Assigning a password to the other account typically allows it to show up in sharing scenarios. Mapping a drive or converting accounts to Microsoft accounts is unnecessary. Disabling the firewall is not recommended and unrelated to local account visibility.",
+      "examTip": "Windows is picky about password-less accounts for sharing—set a password if you want true local share access."
     },
     {
       "id": 34,
-      "question": "A manager needs to remotely log in to an office PC using Remote Desktop but cannot connect. Which firewall configuration is MOST likely required?",
+      "question": "A user wants to enable Hyper-V on Windows 10 but cannot find it under 'Turn Windows features on or off.' Which of the following is the MOST likely reason?",
       "options": [
-        "Configure an outbound rule specifically for TCP port 22",
-        "Configure an inbound rule specifically for TCP port 3389",
-        "Configure an inbound rule specifically for UDP port 53",
-        "Implement a custom rule that blocks all incoming traffic"
+        "The user’s system has an unsupported CPU that lacks hardware virtualization technology.",
+        "Hyper-V is automatically enabled on all Windows 10 Home installations.",
+        "The user’s PC is joined to a domain that restricts virtualization through Group Policy.",
+        "Windows automatically hides Hyper-V if less than 4 GB of RAM is installed."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "An inbound rule for TCP port 3389 is correct because RDP (Remote Desktop Protocol) requires inbound connections on TCP 3389 by default. An outbound rule on port 22 pertains to SSH, not RDP. Allowing UDP port 53 is related to DNS, not remote desktop. Blocking all incoming traffic would prevent any remote connection entirely.",
-      "examTip": "For Windows Remote Desktop, ensure that port 3389 is allowed inbound if users cannot connect from outside."
+      "correctAnswerIndex": 0,
+      "explanation": "Hyper-V requires hardware virtualization features (Intel VT-x or AMD-V) and sufficient hardware resources to appear in Windows 10 Pro and higher. On unsupported CPUs or in Windows 10 Home, the option will be missing. Domain policies typically don’t remove the feature from the Windows Feature list, and the 4 GB memory requirement is recommended but not an absolute condition for the feature to appear.",
+      "examTip": "Check if your CPU supports VT-x/AMD-V and that you’re on Pro or higher—no virtualization support means no Hyper-V menu."
     },
     {
       "id": 35,
@@ -472,7 +457,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Using Disk Cleanup and selecting “Previous Windows Installations” is the safest way to remove the Windows.old folder. Manually deleting might cause permission issues or partial deletion. Compressing or renaming does not address the core space issue fully, and the OS still sees the folder as an older installation.",
-      "examTip": "When removing old installation files, always use Microsoft’s recommended method (Disk Cleanup) to prevent partial removal or file permission errors."
+      "examTip": "When cleaning up Windows.old, trust Disk Cleanup for a clean, worry-free removal process."
     },
     {
       "id": 36,
@@ -485,7 +470,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Adding users to the Remote Desktop Users group is the recommended method for granting RDP permissions without giving full administrative rights. Administrators already can connect, but that’s often too broad. Backup Operators handle backup tasks, and Power Users is a legacy role not specifically for Remote Desktop.",
-      "examTip": "Keep RDP security tight: only add those who truly need remote access. Minimizing admin group membership reduces security risks."
+      "examTip": "Keep it clean—give RDP rights via Remote Desktop Users group rather than making everyone an admin."
     },
     {
       "id": 37,
@@ -498,7 +483,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Event Viewer is the most direct way to find detailed information about BSODs, including stop codes and driver names. Reliability Monitor can show an overview but not as much detail about crash codes. Device Manager helps identify driver issues, but it does not record crash logs. Network and Sharing Center deals with network configuration rather than crash analysis.",
-      "examTip": "Always note the BSOD stop code or error message. Event Viewer’s System log typically includes more granular data to help identify the faulty driver."
+      "examTip": "Event Viewer is your crash forensic detective—look there for stop codes and faulty driver names."
     },
     {
       "id": 38,
@@ -511,7 +496,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "System Restore is designed to revert the operating system to a previous state, focusing on critical system files, registry, and settings. File History mainly protects personal files. Windows Backup (wbAdmin) or System Image Recovery can restore the entire OS but are heavier solutions and do not provide the quick “snapshot” functionality that System Restore does.",
-      "examTip": "Use System Restore prior to major software installations or driver updates to facilitate easy rollback if something breaks."
+      "examTip": "Before major tweaks, set a restore point—simple insurance if things go sideways."
     },
     {
       "id": 39,
@@ -524,7 +509,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "bootrec /rebuildbcd scans for Windows installs and rebuilds the Boot Configuration Data. chkdsk /f repairs disk-related errors, sfc /scannow repairs system files, and diskpart manages partitions but does not directly fix bootloader or BCD issues.",
-      "examTip": "When Windows fails to boot due to BCD errors, bootrec is your go-to tool to fix MBR, boot sector, or BCD store corruption."
+      "examTip": "When the BCD is toast, 'bootrec /rebuildbcd' is your lifeline to revive Windows boot."
     },
     {
       "id": 40,
@@ -537,7 +522,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "AppLocker or Software Restriction Policies let administrators define rules to prevent or allow specific executables. Event Viewer logs events but does not block software. Windows Firewall restricts network traffic rather than blocking an application from running locally. System Configuration focuses on startup items and services, not actively blocking any app at all times.",
-      "examTip": "AppLocker offers more granular controls (file hash, path, or publisher rules) in newer Windows editions. Software Restriction Policies are an older but similar approach."
+      "examTip": "Use AppLocker or SRP to ban those problematic EXEs—far more secure than relying on user caution alone."
     },
     {
       "id": 41,
@@ -550,7 +535,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "The Windows Time service (w32time) handles time synchronization with domain controllers or external time sources. Secondary Logon allows running processes as different users. The Server and Workstation services relate to file and print sharing, not clock sync.",
-      "examTip": "In a domain environment, accurate time sync is crucial for Kerberos authentication. If your clock is off by too many minutes, logons may fail."
+      "examTip": "In a domain, correct time is crucial for Kerberos—trust w32time to keep everyone in sync."
     },
     {
       "id": 42,
@@ -563,7 +548,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Local accounts store credentials on the PC itself and do not require internet connectivity for authentication. Microsoft accounts leverage cloud features like settings sync across devices. Local accounts can still access network shares if properly configured. They are not stored on Microsoft’s servers.",
-      "examTip": "Microsoft accounts are convenient for syncing preferences and OneDrive, but local accounts are simpler when offline usage or privacy is a concern."
+      "examTip": "Local accounts = purely local. Microsoft accounts = cloud-based features and sync. Choose wisely."
     },
     {
       "id": 43,
@@ -576,7 +561,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "GPT is the recommended partition style on UEFI systems because it allows for more partitions and supports large capacity drives. MBR is limited to 4 primary partitions unless you create extended/logical partitions. Dynamic disks are typically for software RAID or spanning/striping volumes, not dual-boot OS installations specifically.",
-      "examTip": "UEFI-based modern PCs typically use GPT. If you see MBR, it’s often for legacy or compatibility scenarios."
+      "examTip": "GPT + UEFI is the modern standard for flexible, large-capacity disks and easy dual-boot setups."
     },
     {
       "id": 44,
@@ -589,7 +574,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "sfc /scannow (System File Checker) verifies the integrity of protected system files and repairs them if they’re corrupted. chkdsk /r checks the file system and sectors on the disk. diskpart manages disks and partitions. ipconfig /flushdns resets the local DNS resolver cache, unrelated to missing system files.",
-      "examTip": "Run sfc /scannow as an administrator to repair system files. If issues persist, you may also use DISM commands to fix the underlying Windows image."
+      "examTip": "Use sfc /scannow whenever the OS behaves oddly—this utility can fix many system file woes."
     },
     {
       "id": 45,
@@ -602,7 +587,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "When a problematic driver update causes crashes, Safe Mode starts Windows with a minimal set of drivers, allowing you to roll back or uninstall the driver safely. Resetting the time service doesn’t typically require Safe Mode. Disk Cleanup can run in normal mode. Troubleshooting an external drive often involves driver updates or cable checks, not necessarily Safe Mode.",
-      "examTip": "Safe Mode is essential for removing or disabling faulty drivers, software, or services that cause normal-mode crashes."
+      "examTip": "Safe Mode is your minimal environment to remove suspect drivers or software causing boot-loop mayhem."
     },
     {
       "id": 46,
@@ -615,7 +600,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Group Policy at the Domain Controller affects all domain-joined users. Configuring each machine’s Local Security Policy or User Accounts is time-consuming and inconsistent. BIOS/UEFI does not manage Windows domain password complexity. Centralizing via Group Policy ensures uniform enforcement across the domain.",
-      "examTip": "Domain controllers have Group Policy Management for controlling security settings, including password length, complexity, and expiration."
+      "examTip": "Domain password rules? Always set them via Group Policy on the Domain Controller—central control is king."
     },
     {
       "id": 47,
@@ -628,7 +613,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Marking a folder as hidden and properly adjusting NTFS permissions means other users cannot easily see or open them. Disabling indexing only affects search, not folder visibility. EFS encrypts the contents, but it doesn’t inherently hide the folder’s existence. Taking ownership is not just about hiding; it’s about controlling permissions, which might be overly complex compared to hidden+permission changes.",
-      "examTip": "Hiding a folder is cosmetic; combining it with strict permissions ensures other accounts truly can’t open or even list the folder."
+      "examTip": "Hiding a folder plus locking it down with NTFS permissions keeps prying eyes away—simple and effective."
     },
     {
       "id": 48,
@@ -641,7 +626,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows ICD (part of the Windows ADK) or DISM can capture and deploy custom images with integrated drivers or software. Sysprep is often used prior to imaging so the system is generalized. BCDEdit modifies boot loader entries, not full OS images. chkdsk checks the disk, unrelated to imaging.",
-      "examTip": "Combined usage of DISM, Sysprep, and ICD is common for customized deployments in enterprise environments."
+      "examTip": "Use DISM or ICD to build one golden image, then Sysprep if needed—your deployment process becomes a breeze."
     },
     {
       "id": 49,
@@ -654,7 +639,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Reliability Monitor offers a timeline of hardware/software errors, warning events, and other reliability metrics. Device Manager only flags devices with driver issues but does not provide a timeline. Performance Monitor helps track CPU/RAM usage but won’t present a straightforward chronological error list. Task Scheduler automates tasks, not logs errors.",
-      "examTip": "Reliability Monitor is an underrated troubleshooting tool that provides an at-a-glance stability index and event timeline."
+      "examTip": "Reliability Monitor is a hidden gem for seeing stability dips—watch for hardware or driver error patterns."
     },
     {
       "id": 50,
@@ -667,7 +652,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Using Group Policy to enforce automatic updates ensures that after a certain timeframe, updates will install and prompt for restart if needed. Simply notifying the user can result in indefinite postponement. Disabling Windows Update is insecure. Relying on manual checks is unreliable if the user continually ignores prompts.",
-      "examTip": "In business settings, enforced update policies protect the network by ensuring timely patch deployment."
+      "examTip": "Corporate environments typically rely on enforced updates—set deadlines so users can’t dodge crucial patches forever."
     },
     {
       "id": 51,
@@ -680,7 +665,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Account Lockout Policy sets thresholds for invalid login attempts before locking the account for a specified duration. BitLocker and EFS encrypt data but do not affect login attempt limits. Windows Hello is a convenience for authentication, not a brute-force lockout policy by itself.",
-      "examTip": "Lockout policies deter repeated password guessing but must be balanced to avoid locking out legitimate users who type mistakes."
+      "examTip": "Set an Account Lockout Policy—effective deterrent against repeated password guessing on Windows."
     },
     {
       "id": 52,
@@ -693,7 +678,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "“Go back to the previous version of Windows 10” is the dedicated feature for rolling back a major update if within the allowed time period (usually 10 days by default). Reset this PC reverts to factory-like conditions, removing apps. System Restore may help if there’s a restore point, but it’s not the standard approach for rolling back a full feature update. Disk Management doesn’t handle OS rollbacks directly.",
-      "examTip": "Always confirm the rollback window hasn’t expired. After that, you can’t revert to the previous build using this feature."
+      "examTip": "Windows allows a short rollback grace—if an update breaks things, revert quickly before that window closes."
     },
     {
       "id": 53,
@@ -706,7 +691,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Incrementals copy only the changes since the last backup (full or incremental), drastically reducing backup time and storage usage. They do reset the archive bit (differential does not). They *do* require at least an initial full backup. Security configurations are generally the same for any backup type.",
-      "examTip": "Incrementals are efficient but require the entire chain of backups for a complete restore, unlike differentials, which only need the last full plus one differential."
+      "examTip": "Incrementals are quick and storage-friendly—but keep that chain intact for a complete restore."
     },
     {
       "id": 54,
@@ -719,7 +704,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Disabling automatic restart on system failure lets you see the specific error or BSOD details without immediately rebooting, which can help identify the root cause. Safe Mode can be helpful but doesn’t necessarily stop the rollback loop. Last Known Good Configuration is no longer a prominent feature in newer Windows. Boot Logging helps with driver issues, not specifically update rollback loops.",
-      "examTip": "When troubleshooting repeated crashes or restarts, disable automatic restarts to observe the error codes or driver files causing the problem."
+      "examTip": "Turn off automatic restart to catch that error code—knowing the BSOD details is half the battle."
     },
     {
       "id": 55,
@@ -732,7 +717,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "BitLocker can function without TPM if you enable the policy to allow it and use a USB key (or password) for startup authentication. Network Unlock only works in certain scenarios with a domain environment and still typically requires TPM. BitLocker can work on NTFS, not exFAT for an OS drive. A third-party tool isn’t necessary if you configure BitLocker properly.",
-      "examTip": "For systems lacking TPM, you can still enable BitLocker. Windows will prompt for a USB or passphrase on boot to unlock the drive."
+      "examTip": "No TPM? No problem. Just allow BitLocker without TPM in Group Policy and use a USB or password at boot."
     },
     {
       "id": 56,
@@ -745,7 +730,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Delivery Optimization allows PCs to obtain updates from each other, reducing internet bandwidth usage. Disabling Windows Update is insecure. Re-imaging monthly is cumbersome and overkill for daily updates. Scheduling reboots ensures updates finish once downloaded but doesn’t help with more efficient distribution.",
-      "examTip": "In small networks without WSUS, Delivery Optimization can significantly save bandwidth by peer-to-peer update sharing."
+      "examTip": "Delivery Optimization can keep your update bandwidth usage in check by letting local PCs share patches peer-to-peer."
     },
     {
       "id": 57,
@@ -758,7 +743,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Power Management settings often allow Windows to turn off the device to save power. Ensuring the adapter is not power-cycled or is properly reactivated on wake can fix the connectivity issue. Disabling/re-enabling the driver might work temporarily but doesn’t address the root cause. Deleting the user profile or resetting the BIOS is unnecessarily drastic.",
-      "examTip": "When network adapters fail to wake properly, always check Device Manager > [Adapter Name] > Power Management tab. Uncheck 'Allow the computer to turn off this device to save power.'"
+      "examTip": "Check if the OS is 'helpfully' turning off your NIC to save power—common cause of lost connectivity post-sleep."
     },
     {
       "id": 58,
@@ -771,7 +756,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "A bootable antivirus or rescue environment scans without relying on the infected OS, enabling detection of bootkits or rootkits that could hide during normal operation. Quick or Safe Mode scans are helpful but might miss advanced rootkits. Blocking ports is unrelated to pre-boot infections.",
-      "examTip": "Pre-boot or root-level malware can conceal itself from normal OS-based scanners. Always keep a bootable AV tool handy for thorough offline scans."
+      "examTip": "Suspect rootkits? Go offline with a bootable AV disc—malware can’t hide if the OS never boots."
     },
     {
       "id": 59,
@@ -784,7 +769,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Windows Defender Exploit Guard’s Attack Surface Reduction can block or scan suspicious attachments before they execute. RDP with NLA is about remote connection security. Fast startup and Secure Boot help with boot integrity, not scanning attachments. A guest account is extremely limited but doesn’t actively scan or block attachments by default.",
-      "examTip": "Attack Surface Reduction rules can specifically mitigate threats in email attachments and malicious Office macros, providing proactive protection."
+      "examTip": "When attachments appear shady, Attack Surface Reduction rules can nip them in the bud before they do harm."
     },
     {
       "id": 60,
@@ -797,7 +782,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "UAC’s primary goal is to reduce unauthorized system changes by prompting for administrative credentials or confirmation. It does not inherently encrypt data. UAC has no effect on boot times or user-level registry writes (beyond protected system areas).",
-      "examTip": "UAC is a crucial security layer in Windows. Disabling it can open the door for silently elevated malware or unauthorized changes."
+      "examTip": "UAC might annoy some users, but it’s a critical checkpoint for blocking silent admin-level exploits."
     },
     {
       "id": 61,
@@ -810,7 +795,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 3,
       "explanation": "bootrec /rebuildbcd scans for installed operating systems and recreates a fresh BCD store if it’s missing or corrupt. /fixmbr and /fixboot fix the master boot record and boot sector, respectively, but may not rebuild the entire BCD. bcdedit /deletevalue modifies an existing BCD entry, which won’t help if it’s missing or fully corrupted.",
-      "examTip": "If the BCD error persists, try /fixboot and /fixmbr in tandem, but /rebuildbcd specifically addresses missing or damaged boot configuration data."
+      "examTip": "When the BCD itself is gone, /rebuildbcd is your best shot at resurrecting the boot path."
     },
     {
       "id": 62,
@@ -823,7 +808,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "A critical thermal event suggests overheating is causing the shutdown. Inspect fans, heatsinks, thermal paste, and airflow. System file checks (sfc) or disk checks (chkdsk) won’t address a thermal issue. Replacing the power supply might help if it’s failing or underpowered, but usually you should verify cooling first.",
-      "examTip": "Thermal events can appear as random shutdowns or restarts. Always rule out hardware cooling issues if you see heat warnings in logs."
+      "examTip": "If the system’s cooking itself, fix the cooling—BSODs and random shutdowns often point to overheating."
     },
     {
       "id": 63,
@@ -836,7 +821,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Running a virtual machine with a compatible older OS is usually the simplest way to run 16-bit software not natively supported by 64-bit Windows 10. Shrinking the partition and installing a second Windows 10 is redundant if the OS doesn’t support 16-bit anyway. Disabling antivirus or removing accounts doesn’t address 16-bit incompatibility.",
-      "examTip": "Virtualization is a common solution for legacy apps. If the current OS lacks 16-bit support (64-bit Windows typically does), an older OS VM can do the job."
+      "examTip": "When 16-bit apps won’t play nice on 64-bit Windows, spin up a VM—best of both worlds."
     },
     {
       "id": 64,
@@ -849,7 +834,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Increasing or allowing Windows to manage a larger paging file can help alleviate low virtual memory issues. Disabling system restore frees disk space but doesn’t directly affect paging file capacity. BitLocker encrypts the drive but doesn’t add memory. Upgrading to an SSD improves performance but doesn’t inherently increase available virtual memory.",
-      "examTip": "Windows automatically manages the paging file by default, but in cases of frequent low virtual memory warnings, a manual bump in paging file size can help."
+      "examTip": "If you’re always hitting the memory ceiling, bump up your paging file to ease those 'low virtual memory' nags."
     },
     {
       "id": 65,
@@ -862,7 +847,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "The 3-2-1 backup rule is correct because it states you should keep at least three copies of your data, stored on two different media, with one copy off-site. Incremental-only backups do not inherently ensure off-site storage or multiple forms of media. A single full backup per month leaves data at risk for the rest of the month. Auto-sync to one personal flash drive is not robust enough if that single drive is lost or damaged.",
-      "examTip": "Following the 3-2-1 principle significantly reduces the risk of data loss. Diversify backup media and locations for maximum resilience."
+      "examTip": "Three copies, two media, one off-site—that’s the classic 3-2-1 strategy for bulletproof backups."
     },
     {
       "id": 66,
@@ -875,7 +860,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Removing and wiping any internal storage or hard drive is correct because some printers store recent print jobs or address book data on internal memory. Wiping the exterior cleans only the surface and does not address data retention. Donating the printer is not safe without data removal. Simply powering off does nothing to protect stored data.",
-      "examTip": "Printers, copiers, and multifunction devices may store documents locally. Erase or destroy internal storage to secure sensitive information before disposal."
+      "examTip": "Never forget printers can store data—pull or shred the internal drive to avoid leaks upon disposal."
     },
     {
       "id": 67,
@@ -888,7 +873,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 3,
       "explanation": "Implementing emergency changes without documentation is NOT typically part of best practices, as every change should still be documented even if it’s urgent. Testing changes in a sandbox, obtaining approvals, and planning rollbacks are standard steps in change-management. Lack of documentation can lead to confusion and untraceable issues later.",
-      "examTip": "Even emergency fixes should be logged. Documentation ensures accountability, rollback strategies, and knowledge transfer, preventing repeated mistakes."
+      "examTip": "Even urgent fixes need some documentation—skipping it entirely is a recipe for chaos."
     },
     {
       "id": 68,
@@ -901,7 +886,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Checking the default playback device in Sound settings is correct because the system may still be routing audio to headphones or a disabled device. A factory reset is too drastic for an initial step. Replacing the motherboard is rarely the first step unless a thorough diagnosis confirms it. Increasing CPU speed in BIOS will not fix sound routing issues.",
-      "examTip": "When sound issues arise, always verify the selected audio output device first. Windows may keep sending audio to a disconnected or muted device."
+      "examTip": "When speakers go silent, look at your default playback device and volume mixer first—it’s often a simple fix."
     },
     {
       "id": 69,
@@ -914,7 +899,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Incremental backup is correct because it includes files changed since the last backup—whether full or incremental—and then clears the archive bit. A full backup copies all data and resets the bit. A differential backup does not reset the bit; it copies changes since the last full backup. A snapshot backup is a point-in-time image of a system or volume, conceptually different from the typical incremental approach.",
-      "examTip": "Remember: incrementals build on each other from the last backup (any type), while differentials only reference the last full backup."
+      "examTip": "Incrementals build on every previous backup, clearing the archive bit each time—they’re fast but require the entire chain for restores."
     },
     {
       "id": 70,
@@ -927,7 +912,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "SSH is correct because it provides encrypted text-based remote terminal access to Linux systems. RDP is graphical and primarily for Windows. Telnet is unencrypted and insecure. FTP is for file transfers, not interactive shell sessions.",
-      "examTip": "When dealing with remote command-line access on Linux or other Unix-like systems, SSH is the standard for secure communication, unlike Telnet which sends data in plain text."
+      "examTip": "Use SSH for secure command-line remote administration on Linux—Telnet is ancient and wide open."
     },
     {
       "id": 71,
@@ -940,7 +925,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Cancel the installation and locate a trusted source is correct because unknown or unverified publishers pose a high risk of malware. Disabling antivirus is extremely risky and potentially exposes the system further. Blindly proceeding is unsafe. Installing in Safe Mode does not guarantee safety from malicious code; it only limits system drivers, not the potential threat from the software itself.",
-      "examTip": "Always verify software from a reputable source or publisher. A “cannot be verified” message is a strong red flag for potential malicious or tampered software."
+      "examTip": "When Windows can’t verify a publisher, it’s your sign to back off and find a reputable alternative."
     },
     {
       "id": 72,
@@ -953,7 +938,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Windows 10 Home is correct because it does not have the option to join a domain. Windows 10 Pro, Enterprise, and Education all include domain join functionality. If the domain join option is absent, it strongly indicates the Home edition.",
-      "examTip": "Windows domain features require Pro, Enterprise, or Education editions. Home editions lack domain join capability unless upgraded."
+      "examTip": "For domain join, Home edition won’t cut it—upgrade to Pro or beyond to see that domain option."
     },
     {
       "id": 73,
@@ -966,7 +951,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Incorrect system date and time is correct because certificates rely on valid dates for trust validation. If the date/time is far off, browsers reject certificates. A local firewall blocking secure traffic would typically result in connection timeouts, not trust errors. Malware could remove certificates, but widespread immediate errors across many sites typically indicate a date/time issue. A DNS server not responding leads to inability to resolve hostnames, not certificate trust failures.",
-      "examTip": "Always check system clock accuracy when facing widespread SSL certificate trust issues. Certificates are time-sensitive and break if the clock drifts too much."
+      "examTip": "SSL depends on accurate system time—if your clock is off, expect widespread certificate trust issues."
     },
     {
       "id": 74,
@@ -979,7 +964,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Using the Balanced or Power Saver power plan is correct because these modes adjust CPU performance, screen brightness, and other factors to conserve energy. Enabling 3D screen savers consumes more battery. Setting display brightness to maximum reduces battery life. Disabling all sleep modes would keep the system fully active, draining the battery faster.",
-      "examTip": "Power-saving modes automatically lower resource usage when possible. This is crucial on laptops for extending battery life without major performance sacrifices."
+      "examTip": "Switch to Balanced or Power Saver when on battery—no need to run on max performance while idle."
     },
     {
       "id": 75,
@@ -992,20 +977,20 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "TCP 22 is correct because SSH uses port 22 for secure remote connections. TCP 443 is for HTTPS. TCP 25 is for SMTP email transmissions. TCP 3389 is for RDP (Remote Desktop Protocol).",
-      "examTip": "Remember core ports: SSH is 22, RDP is 3389, HTTPS is 443, and SMTP (simple mail transfer) is 25."
+      "examTip": "SSH listens on 22 by default—be sure your firewall has inbound TCP/22 open for remote shell access."
     },
     {
       "id": 76,
-      "question": "A technician is attempting to connect a user’s laptop to a domain, but the option is missing under System > About. Which Windows edition is the user MOST likely running?",
+      "question": "A remote worker with Windows 10 Pro complains they cannot synchronize their work files offline. Which Windows feature must be configured to allow Offline Files?",
       "options": [
-        "Windows 10 Home, which lacks native domain join capabilities.",
-        "Windows 10 Pro, which supports domain join but may require specific network configurations.",
-        "Windows 10 Enterprise, typically used in large organizations with domain-based networks.",
-        "Windows 10 Education, which supports domain join for academic environments."
+        "Switch to a Microsoft account to enable cloud synchronization automatically.",
+        "In Control Panel > Sync Center, enable Offline Files and select which network folders to sync.",
+        "Disable Windows Firewall to permit file syncing through the local domain connection.",
+        "Use Device Manager to enable the network adapter’s offline caching mode."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Windows 10 Home is correct because it does not have the option to join a domain. Windows 10 Pro, Enterprise, and Education all include domain join functionality. If the domain join option is absent, it strongly indicates the Home edition.",
-      "examTip": "Windows domain features require Pro, Enterprise, or Education editions. Home editions lack domain join capability unless upgraded."
+      "correctAnswerIndex": 1,
+      "explanation": "Offline Files is managed via Sync Center in the Control Panel. The user must enable it and specify which network folders to be available offline. Microsoft account sync is different, focusing on OneDrive. Disabling the firewall is not typically required for offline file sync, and network adapters don’t have an 'offline caching mode.'",
+      "examTip": "Configure Sync Center’s Offline Files for work-from-anywhere access to network shares—no network needed."
     },
     {
       "id": 77,
@@ -1018,33 +1003,33 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Cancel the installation and locate a trusted source is correct because unknown or unverified publishers pose a high risk of malware. Disabling antivirus is extremely risky and potentially exposes the system further. Blindly proceeding is unsafe. Installing in Safe Mode does not guarantee safety from malicious code; it only limits system drivers, not the potential threat from the software itself.",
-      "examTip": "Always verify software from a reputable source or publisher. A “cannot be verified” message is a strong red flag for potential malicious or tampered software."
+      "examTip": "Always favor reputable sources—unknown publishers often mean potential malware in disguise."
     },
     {
       "id": 78,
-      "question": "A technician is attempting to connect a user’s laptop to a domain, but the option is missing under System > About. Which Windows edition is the user MOST likely running?",
+      "question": "A user reports their system drive is nearly full, causing slow performance. Which built-in tool in Windows 10 can quickly free up disk space by removing unneeded files?",
       "options": [
-        "Windows 10 Home, which lacks native domain join capabilities.",
-        "Windows 10 Pro, which supports domain join but may require specific network configurations.",
-        "Windows 10 Enterprise, typically used in large organizations with domain-based networks.",
-        "Windows 10 Education, which supports domain join for academic environments."
+        "Disk Cleanup, which targets temporary files, Recycle Bin contents, and other unnecessary data",
+        "Device Manager, which can uninstall device drivers to save storage space",
+        "Group Policy Editor, which can enforce disk space quotas",
+        "Windows Defender Firewall, which deletes cached firewall logs automatically"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Windows 10 Home is correct because it does not have the option to join a domain. Windows 10 Pro, Enterprise, and Education all include domain join functionality. If the domain join option is absent, it strongly indicates the Home edition.",
-      "examTip": "Windows domain features require Pro, Enterprise, or Education editions. Home editions lack domain join capability unless upgraded."
+      "explanation": "Disk Cleanup is specifically designed to reclaim disk space by removing temporary files, old updates, and Recycle Bin data. Device Manager removes drivers but that’s minimal. Group Policy Editor can enforce quotas but not actively clean. Windows Defender Firewall doesn’t handle disk cleanup tasks.",
+      "examTip": "Disk Cleanup is your go-to for clearing out junk in a pinch—fast and built right into Windows."
     },
     {
       "id": 79,
-      "question": "A user calls the help desk complaining that all their internet browsers show 'Certificate Not Trusted' errors for most websites. Which is the MOST likely root cause?",
+      "question": "A Windows 10 user sees repeated notifications that their OneDrive is full, but they still have space on their local disk. Which action addresses this problem?",
       "options": [
-        "The web browser's certificate revocation list (CRL) is outdated or corrupted.",
-        "Incorrect system date and time, causing certificate validity checks to fail.",
-        "A firewall is configured to perform SSL inspection, but the root CA is not trusted.",
-        "The user's DNS settings are misconfigured, leading to incorrect hostname resolution."
+        "Upgrade to a higher OneDrive storage plan or remove files from OneDrive to free cloud space.",
+        "Run Disk Defragmenter on the local drive to compress data into free blocks.",
+        "Convert the partition to GPT to allow more file entries in OneDrive.",
+        "Disable Windows Firewall to prevent OneDrive from scanning for large files."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Incorrect system date and time is correct because certificates rely on valid dates for trust validation. If the date/time is far off, browsers reject certificates. A local firewall blocking secure traffic would typically result in connection timeouts, not trust errors. Malware could remove certificates, but widespread immediate errors across many sites typically indicate a date/time issue. A DNS server not responding leads to inability to resolve hostnames, not certificate trust failures.",
-      "examTip": "Always check system clock accuracy when facing widespread SSL certificate trust issues. Certificates are time-sensitive and break if the clock drifts too much."
+      "correctAnswerIndex": 0,
+      "explanation": "OneDrive storage limits are independent of local disk space. If the cloud quota is reached, upgrading the plan or removing unnecessary files is required. Defragmentation or partition type changes do not affect OneDrive’s cloud capacity. Disabling the firewall does not help with OneDrive space issues.",
+      "examTip": "Remember that local disk space and OneDrive cloud space are separate—freeing one doesn’t free the other."
     },
     {
       "id": 80,
@@ -1057,7 +1042,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows Memory Diagnostic is correct because it runs tests on RAM at reboot to detect memory issues. Disk Defragmenter optimizes hard drive data placement but doesn’t test RAM. chkdsk /f checks for file system and disk errors, not RAM errors. System Information only displays hardware and OS information; it doesn’t diagnose faulty components.",
-      "examTip": "If you suspect bad RAM, run Windows Memory Diagnostic or third-party tools like MemTest86. Persistent crashes can often be tied to memory failures."
+      "examTip": "Suspect bad memory? Boot up Windows Memory Diagnostic for a thorough RAM check."
     },
     {
       "id": 81,
@@ -1070,7 +1055,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "System > Advanced system settings is correct because that section contains the Environment Variables button, letting you define system and user variables. Network and Sharing Center is for network-related options. Programs and Features is for installing or uninstalling software. Ease of Access adjusts accessibility settings, not environment variables.",
-      "examTip": "Environment variables affect processes and can be set at the system or user level. Access them via System Properties for Windows or with commands like setx in a terminal."
+      "examTip": "System-wide environment variables reside under System Properties—always go there for global path changes."
     },
     {
       "id": 82,
@@ -1083,7 +1068,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows Server Update Services (WSUS) is correct because it centrally manages and deploys updates to Windows clients within a domain. Group Policy loopback merges user policies under certain conditions but does not handle Windows Updates specifically. Windows Defender Application Guard is about sandboxing the browser, not deploying updates. Network and Sharing Center manages network connections, not update distribution.",
-      "examTip": "WSUS is commonly used in corporate environments for controlled rollout of patches, ensuring all machines receive approved updates consistently and on schedule."
+      "examTip": "For a small domain environment, WSUS is the simplest way to unify and schedule all patch installations."
     },
     {
       "id": 83,
@@ -1096,7 +1081,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Disconnecting the computer from the network is correct because it prevents the spread of any malware to other machines and stops additional malicious downloads. Reinstalling the operating system immediately is premature; proper identification and scanning should occur first. A full disk wipe is an extreme step typically performed only if other remediation attempts fail. Replacing the hard drive is not necessary unless the drive is damaged or cannot be effectively cleaned of malware.",
-      "examTip": "Isolate first, then remediate. If malware is suspected, protect the rest of the network by removing the infected system from any wired or wireless connections."
+      "examTip": "Always pull an infected machine off the network first—cutting off malware’s exit or entry routes is critical."
     },
     {
       "id": 84,
@@ -1109,7 +1094,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Devices and Printers is correct because it provides a centralized interface to manage printer installations and settings. Internet Options only deals with browser and internet configurations. Resource Monitor shows real-time CPU, memory, and disk usage. Disk Management handles partitions and volumes, not printer management.",
-      "examTip": "For quick printer setup on Windows, Devices and Printers is your go-to. You can add local or network printers and tweak print preferences here."
+      "examTip": "Devices and Printers is a one-stop interface to see and tweak your installed printer setups in Windows."
     },
     {
       "id": 85,
@@ -1122,7 +1107,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "bootrec /fixmbr is correct because it specifically repairs a damaged master boot record. The format C: command wipes the partition, which is not ideal if you intend to preserve data. ipconfig /release manages IP addresses and is unrelated to boot sectors. chkdsk /r checks for disk errors and bad sectors but does not fix the MBR specifically.",
-      "examTip": "Bootrec is key for fixing Windows bootloader problems: /fixmbr fixes the MBR, /fixboot fixes the boot sector, and /rebuildbcd can rebuild the boot configuration data."
+      "examTip": "Use /fixmbr when the MBR goes bad—just be careful to avoid overwriting the wrong drive!"
     },
     {
       "id": 86,
@@ -1135,7 +1120,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "BitLocker To Go is correct because it encrypts removable drives, ensuring data is unreadable if lost or stolen. Windows Firewall only manages network traffic. Disk Cleanup frees up space by removing temporary files. NTFS Permissions help control access locally or in a domain environment, but removable drives can still be accessed outside that environment without encryption.",
-      "examTip": "BitLocker To Go integrates seamlessly for removable media encryption. Regular BitLocker is intended for fixed OS drives."
+      "examTip": "BitLocker To Go is your top choice for full-drive encryption on USB and other removable disks."
     },
     {
       "id": 87,
@@ -1148,7 +1133,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Placing a shortcut in the user’s Startup folder is correct because it will only launch after *that* user logs in. Enabling automatic login for the Administrator account is a separate approach and not secure. Modifying advanced startup options in msconfig affects all users on that computer. Creating a GPO at the domain level affects more than just one user unless specifically filtered, and it’s more complex than needed for a single user’s personal startup item.",
-      "examTip": "Remember, the Startup folder approach is local to the user profile, ensuring only that user triggers the software on login, not system-wide."
+      "examTip": "For a single user’s auto-start, drop a shortcut into their personal Startup folder—simple and specific."
     },
     {
       "id": 88,
@@ -1161,7 +1146,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Using a backup tool or migration utility to preserve personal files is correct because it ensures data safety during the upgrade. Deleting user data is counterproductive unless doing a totally clean install (and the user is aware). Relying solely on the OS upgrade’s built-in process can be risky if errors occur. Disabling System Restore before starting is typically part of malware removal, not a best practice for OS upgrades.",
-      "examTip": "Always back up critical data before an upgrade, even if you plan an in-place upgrade. Unexpected issues can arise, so a reliable backup is essential."
+      "examTip": "Always have a backup plan—never trust an in-place upgrade to perfectly preserve user data without fail."
     },
     {
       "id": 89,
@@ -1174,7 +1159,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "Incremental backup is correct because it includes files changed since the last backup—whether full or incremental—and then clears the archive bit. A full backup copies all data and resets the bit. A differential backup does not reset the bit; it copies changes since the last full backup. A snapshot backup is a point-in-time image of a system or volume, conceptually different from the typical incremental approach.",
-      "examTip": "Remember: incrementals build on each other from the last backup (any type), while differentials only reference the last full backup."
+      "examTip": "Incremental backups are nimble—just don’t lose track of any link in the backup chain or restoration gets messy."
     },
     {
       "id": 90,
@@ -1187,7 +1172,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 2,
       "explanation": "SSH is correct because it provides encrypted text-based remote terminal access to Linux systems. RDP is graphical and primarily for Windows. Telnet is unencrypted and insecure. FTP is for file transfers, not interactive shell sessions.",
-      "examTip": "When dealing with remote command-line access on Linux or other Unix-like systems, SSH is the standard for secure communication, unlike Telnet which sends data in plain text."
+      "examTip": "SSH is essential for secure CLI access on Linux—never rely on Telnet’s plaintext approach."
     },
     {
       "id": 91,
@@ -1200,33 +1185,33 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Cancel the installation and locate a trusted source is correct because unknown or unverified publishers pose a high risk of malware. Disabling antivirus is extremely risky and potentially exposes the system further. Blindly proceeding is unsafe. Installing in Safe Mode does not guarantee safety from malicious code; it only limits system drivers, not the potential threat from the software itself.",
-      "examTip": "Always verify software from a reputable source or publisher. A “cannot be verified” message is a strong red flag for potential malicious or tampered software."
+      "examTip": "Can’t verify the publisher? That’s your flashing red light to back away and find a legitimate source."
     },
     {
       "id": 92,
-      "question": "A technician is attempting to connect a user’s laptop to a domain, but the option is missing under System > About. Which Windows edition is the user MOST likely running?",
+      "question": "A user can print to a locally connected USB printer but cannot print to a network printer. All other network functions (web browsing, email) work. Which step is MOST likely to resolve the issue?",
       "options": [
-        "Windows 10 Home, which lacks native domain join capabilities.",
-        "Windows 10 Pro, which supports domain join but may require specific network configurations.",
-        "Windows 10 Enterprise, typically used in large organizations with domain-based networks.",
-        "Windows 10 Education, which supports domain join for academic environments."
+        "Run 'chkdsk /r' on the user's system drive to repair file system errors.",
+        "Update or reinstall the network printer’s driver from the manufacturer's website.",
+        "Convert the user’s file system from FAT32 to NTFS to allow network printing.",
+        "Disable the Windows Firewall to permit printer traffic on the local network."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Windows 10 Home is correct because it does not have the option to join a domain. Windows 10 Pro, Enterprise, and Education all include domain join functionality. If the domain join option is absent, it strongly indicates the Home edition.",
-      "examTip": "Windows domain features require Pro, Enterprise, or Education editions. Home editions lack domain join capability unless upgraded."
+      "correctAnswerIndex": 1,
+      "explanation": "If the network connection is functioning for internet and email, the main difference is the printer driver or print spooler configuration. Updating the driver often fixes compatibility or corrupted driver issues. Converting FAT32 to NTFS or disabling the firewall are not typical first steps for printing issues. Chkdsk addresses disk errors, not network printing problems.",
+      "examTip": "Network printer fails but everything else is online? Driver issues are suspect—update or reinstall first."
     },
     {
       "id": 93,
-      "question": "A user calls the help desk complaining that all their internet browsers show 'Certificate Not Trusted' errors for most websites. Which is the MOST likely root cause?",
+      "question": "A user with a Windows 10 laptop equipped with a fingerprint reader wants to enable Windows Hello for sign-in, but the option is unavailable. Which is the MOST likely reason?",
       "options": [
-        "The web browser's certificate revocation list (CRL) is outdated or corrupted.",
-        "Incorrect system date and time, causing certificate validity checks to fail.",
-        "A firewall is configured to perform SSL inspection, but the root CA is not trusted.",
-        "The user's DNS settings are misconfigured, leading to incorrect hostname resolution."
+        "The user needs to disable the local firewall to allow biometric data processing.",
+        "Windows Hello is only available on Windows 10 Pro or higher editions.",
+        "The laptop's fingerprint driver is not installed or is out of date, preventing Hello setup.",
+        "The user must have a Microsoft account instead of a local account."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Incorrect system date and time is correct because certificates rely on valid dates for trust validation. If the date/time is far off, browsers reject certificates. A local firewall blocking secure traffic would typically result in connection timeouts, not trust errors. Malware could remove certificates, but widespread immediate errors across many sites typically indicate a date/time issue. A DNS server not responding leads to inability to resolve hostnames, not certificate trust failures.",
-      "examTip": "Always check system clock accuracy when facing widespread SSL certificate trust issues. Certificates are time-sensitive and break if the clock drifts too much."
+      "correctAnswerIndex": 2,
+      "explanation": "If Windows Hello doesn’t detect any compatible biometric device, it won’t allow setup. Ensuring that the correct fingerprint reader driver is installed and recognized typically resolves this. Windows Hello is supported on Home edition as well. A Microsoft account is not strictly required for biometric sign-in, and firewall rules do not affect local biometric enrollment.",
+      "examTip": "For Hello to work, your device drivers must be up-to-date—no recognized sensor, no Hello."
     },
     {
       "id": 94,
@@ -1239,7 +1224,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows Memory Diagnostic is correct because it runs tests on RAM at reboot to detect memory issues. Disk Defragmenter optimizes hard drive data placement but doesn’t test RAM. chkdsk /f checks for file system and disk errors, not RAM errors. System Information only displays hardware and OS information; it doesn’t diagnose faulty components.",
-      "examTip": "If you suspect bad RAM, run Windows Memory Diagnostic or third-party tools like MemTest86. Persistent crashes can often be tied to memory failures."
+      "examTip": "RAM errors can mimic software issues—use Windows Memory Diagnostic to confirm if the sticks are going bad."
     },
     {
       "id": 95,
@@ -1252,7 +1237,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "System > Advanced system settings is correct because that section contains the Environment Variables button, letting you define system and user variables. Network and Sharing Center is for network-related options. Programs and Features is for installing or uninstalling software. Ease of Access adjusts accessibility settings, not environment variables.",
-      "examTip": "Environment variables affect processes and can be set at the system or user level. Access them via System Properties for Windows or with commands like setx in a terminal."
+      "examTip": "Environment Variables for everyone? Head to 'Advanced system settings' to set them globally."
     },
     {
       "id": 96,
@@ -1265,7 +1250,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Windows Server Update Services (WSUS) is correct because it centrally manages and deploys updates to Windows clients within a domain. Group Policy loopback merges user policies under certain conditions but does not handle Windows Updates specifically. Windows Defender Application Guard is about sandboxing the browser, not deploying updates. Network and Sharing Center manages network connections, not update distribution.",
-      "examTip": "WSUS is commonly used in corporate environments for controlled rollout of patches, ensuring all machines receive approved updates consistently and on schedule."
+      "examTip": "WSUS is a light-touch, centralized approach for distributing approved updates across a domain environment."
     },
     {
       "id": 97,
@@ -1278,7 +1263,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "Resource Monitor offers detailed, real-time data on network usage by processes, active TCP connections, and overall network activity, making it ideal for diagnosing connectivity issues.",
-      "examTip": "Use Resource Monitor to identify which processes are consuming network resources when experiencing connectivity problems."
+      "examTip": "Resource Monitor is often overlooked—use it to pinpoint which process is saturating or dropping your network."
     },
     {
       "id": 98,
@@ -1291,7 +1276,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "bcdedit is specifically designed to view and modify the Boot Configuration Data store, which contains boot configuration parameters for Windows.",
-      "examTip": "Be cautious when using bcdedit, as incorrect changes can prevent your system from booting properly."
+      "examTip": "bcdedit gives you full control of your boot data—just tread carefully to avoid locking out your OS."
     },
     {
       "id": 99,
@@ -1304,7 +1289,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Task Manager offers real-time monitoring of system resources and the ability to terminate unresponsive processes, making it a fundamental tool for troubleshooting.",
-      "examTip": "For a quick snapshot of system performance, open Task Manager (Ctrl+Shift+Esc) and review the Performance and Processes tabs."
+      "examTip": "Task Manager is your quick fix for out-of-control processes—one click to end them and see resource stats."
     },
     {
       "id": 100,
@@ -1317,7 +1302,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 1,
       "explanation": "EFS (Encrypted File System) enables users to encrypt specific files and folders on NTFS volumes, offering file-level security without encrypting the entire drive.",
-      "examTip": "Remember that EFS encryption is user-specific and only works on NTFS volumes, so it’s best used for protecting sensitive documents on your local drive."
+      "examTip": "EFS is straightforward file-level encryption—no need to lock the entire disk if you just want a few folders safe."
     }
   ]
 });
