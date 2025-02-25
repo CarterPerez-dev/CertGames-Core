@@ -122,17 +122,17 @@ db.tests.insertOne({
       "examTip": "Long-term compliance improvement often hinges on robust governance measures: well-defined policies, enforced procedures, and comprehensive employee training."
     },
     {
-      "id": 10,
-      "question": "Which technique would be MOST effective for an attacker trying to escalate privileges on a Windows system?",
+      "id": 20,
+      "question": "A financial services firm wants to proactively address potential audit findings related to governance lapses. Which of the following actions will MOST effectively reduce the likelihood of negative audit outcomes in the long term?",
       "options": [
-        "Pass-the-hash attack",
-        "Exploiting a misconfigured sudoers file",
-        "Kerberoasting",
-        "Cross-site scripting"
+        "Instruct all departments to comply with every global standard, even if some standards do not apply to their operations.",
+        "Establish an internal continuous control monitoring (CCM) program to detect governance and compliance issues early.",
+        "Swap internal audit teams every six months to ensure they do not develop familiarity with specific departments.",
+        "Immediately penalize departments that fail any aspect of compliance testing, regardless of mitigation attempts."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Kerberoasting allows attackers to steal service account credentials from memory and crack them offline to escalate privileges.",
-      "examTip": "Enforce strong Kerberos ticket encryption and service account password policies to mitigate Kerberoasting attacks."
+      "correctAnswerIndex": 1,
+      "explanation": "A continuous control monitoring (CCM) program identifies governance issues in real time, enabling rapid remediation. Arbitrarily adopting all standards or rotating audit teams does not necessarily target root causes of governance lapses and can increase overhead.",
+      "examTip": "Ongoing oversight and immediate remediation, rather than sporadic checks, are key to effective, long-term compliance management."
     },
     {
       "id": 11,
