@@ -1,17 +1,3 @@
-summary of Clear Duplicates
-Hypervisor Selection:
-
-Test #10, Q35 and Q72 (exact duplicate)
-Port Security – Single Device Enforcement:
-
-Test #10, Q89 and Q97 (near–duplicates with the same underlying concept)
-CMOS Battery/BIOS Reset:
-
-and 51
-
-so 3 pbq uestions 25% more fullt from whereever ur at now.
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 10,
@@ -462,16 +448,16 @@ db.tests.insertOne({
     },
     {
       "id": 35,
-      "question": "A laser printer is producing prints with a repeating 'vertical black bar' defect, consistently appearing on the left margin of every page. After replacing the imaging drum, the issue persists. Which component is MOST likely causing this consistent vertical black bar?",
+      "question": "Performance-Based Question: A technician needs to configure a new virtualization host that will run multiple critical virtual machines. The host’s performance must remain stable, and VMs should have sufficient resources without over-allocation. Select the MOST logical order of operations for ensuring a properly configured hypervisor environment.",
       "options": [
-        "Faulty Toner Cartridge Metering Blade.",
-        "Contamination on the Fuser Assembly Pressure Roller.",
-        "Defective Charge Corona Wire Assembly.",
-        "Laser Scanner Assembly Mirror Obstruction on the Left Side."
+        "1) Install hypervisor software, 2) Set up a default user account, 3) Create VMs, 4) Configure RAID array, 5) Update hypervisor to latest patches",
+        "1) Configure RAID array, 2) Update system BIOS, 3) Install hypervisor software, 4) Update hypervisor patches, 5) Create VMs and allocate resources",
+        "1) Create VMs, 2) Update system BIOS, 3) Install hypervisor software, 4) Allocate CPU/RAM, 5) Configure RAID array",
+        "1) Install the OS, 2) Install hypervisor software, 3) Decommission all network devices, 4) Create VMs, 5) Purchase new licenses"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A defective Charge Corona Wire Assembly can cause improper charging of the imaging drum, leading to a consistent vertical black bar on the left margin.",
-      "examTip": "Persistent vertical black bars often indicate issues with the charging system of the printer."
+      "correctAnswerIndex": 1,
+      "explanation": "In a virtualization environment, ensure reliable storage first by configuring and testing RAID. Then, update the system BIOS for hardware stability. Install your hypervisor software on a clean and optimized host. After installation, apply the latest hypervisor patches or updates to address security and performance issues. Finally, create the virtual machines and allocate CPU, memory, and storage resources appropriately based on workload requirements.",
+      "examTip": "Setting up a stable foundation is crucial for virtualization. Properly configured RAID and up-to-date firmware reduce the risk of data loss and hardware incompatibilities. Only then should you layer on the hypervisor and create the virtual machines."
     },
     {
       "id": 36,
@@ -670,16 +656,16 @@ db.tests.insertOne({
     },
     {
       "id": 51,
-      "question": "A technician suspects a user's workstation is infected with a rootkit. Which of the following tools or methods is MOST reliable for detecting and removing a kernel-level rootkit?",
+      "question": "Performance-Based Question: A company user complains that their email client frequently times out when sending or receiving large attachments, and multiple users in the same office have begun experiencing similar symptoms. Which sequence of steps should be taken FIRST to pinpoint and resolve the underlying cause?",
       "options": [
-        "Running antivirus software from within the infected operating system.",
-        "Using a bootable anti-malware scanner from external media (USB drive or DVD).",
-        "Checking for unusual entries in Task Manager or Resource Monitor.",
-        "Disabling unnecessary startup programs and services in System Configuration (msconfig)."
+        "1) Check the user’s firewall settings, 2) Disable antivirus, 3) Upgrade the email client, 4) Check the network switch logs, 5) Replace the network cables",
+        "1) Verify the email server’s status, 2) Check router/switch event logs, 3) Run speed/latency tests, 4) Restart the email client, 5) Swap to a wired connection",
+        "1) Inspect office cabling for physical damage, 2) Reseat RAM modules on user PCs, 3) Run a disk cleanup on user PCs, 4) Manually configure DNS servers, 5) Disable firewalls",
+        "1) Increase the email account’s storage quota, 2) Change the email client port settings, 3) Upgrade to faster NICs, 4) Reset the BIOS on user PCs, 5) Disable auto-updates"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Using a bootable anti-malware scanner from external media is most reliable because it bypasses the potentially compromised operating system, allowing for the detection of hidden rootkits.",
-      "examTip": "For rootkit detection, always use a bootable scanner to operate outside the infected OS environment."
+      "explanation": "When multiple users in the same location encounter email timeouts, start by confirming the email server is online and functioning. Next, check the router or switch logs to identify potential congestion or hardware errors. Running speed/latency tests can pinpoint network bottlenecks or ISP issues. Finally, restarting the email client or switching to a wired connection helps isolate whether the problem resides in software configuration or wireless bandwidth limitations.",
+      "examTip": "Always begin by verifying the health of the email server and the network infrastructure. Collecting logs from routers or switches can reveal real-time errors or high utilization causing timeouts."
     },
     {
       "id": 52,
@@ -1268,16 +1254,16 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "A technician needs to implement 'port security' on a managed switch to automatically learn and allow only the first device that connects to each port, and immediately disable the port if any other device attempts to connect. Which port security feature is MOST appropriate?",
+      "question": "Performance-Based Question: A user complains that their Windows 10 computer is intermittently freezing, particularly when running memory-intensive applications. You suspect possible issues related to RAM. Put the following steps in the MOST efficient order for diagnosing and fixing memory-related problems.",
       "options": [
-        "Static MAC Address Filtering with manual port configuration.",
-        "Dynamic MAC Address Learning with limited MAC address count per port and violation shutdown mode.",
-        "802.1X Port-Based Authentication with Single-Host Mode and MAC Authentication Bypass (MAB) fallback.",
-        "DHCP Snooping and IP Source Guard with fixed IP address assignments."
+        "1) Boot into Safe Mode, 2) Perform a Windows Memory Diagnostic test, 3) Swap RAM modules to different slots, 4) Test with known-good RAM, 5) Update BIOS/UEFI",
+        "1) Update BIOS/UEFI, 2) Remove all peripheral devices, 3) Perform a Windows Memory Diagnostic test, 4) Reinstall Windows, 5) Reseat the CPU",
+        "1) Reinstall Windows, 2) Update all device drivers, 3) Return the device to the vendor, 4) Replace the power supply, 5) Update BIOS/UEFI",
+        "1) Swap RAM modules to different slots, 2) Perform a Windows Memory Diagnostic test, 3) Boot into Safe Mode, 4) Test with known-good RAM, 5) Update BIOS/UEFI"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Dynamic MAC Address Learning with a limit of one MAC per port and violation shutdown mode is ideal to lock a port to the first device that connects.",
-      "examTip": "This dynamic mode automatically secures a port to a single device and shuts it down on any violation."
+      "correctAnswerIndex": 0,
+      "explanation": "Diagnosing potential RAM faults should begin with Safe Mode to see if the issue persists under minimal system drivers. Next, run the Windows Memory Diagnostic to check for errors. If problems are detected, swapping RAM modules or using known-good RAM helps pinpoint faulty modules or slots. Finally, a BIOS or UEFI update may resolve compatibility issues or known bugs impacting memory.",
+      "examTip": "Start with the simplest tests—Safe Mode and memory diagnostics—before you invest time in hardware swaps or BIOS updates. Always rule out easy software conflicts and known bugs first."
     },
     {
       "id": 98,
