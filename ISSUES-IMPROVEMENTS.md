@@ -7,6 +7,13 @@
 
 ### achievemnt popups arent popping up when achieiving
 so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i meet the cirteria/achieve an achievemtn? so liek my auth pages for login aand stuff have the toast popup notifcations, so for my achievment toats notifation popups, why wont my ahcievemtn toat popups show when i achive soemwthing- i know this becvasue i achived soemthing as a test adn nothing popped up/ toast notifs.
+
+
+# achievemnts dont show as nice looking text in userpfrofile (its showing as teh databse entry name)
+![image](https://github.com/user-attachments/assets/840804c2-3d14-47b6-9539-90f202f39ca6)
+we probaly need to create uniuqe names for each/import the achiveemnt list where we Const icon/names
+
+
 ------------------------------------------------
 ### Need to make an 'EXAM && PRACTICE MODE'
 - so right now we have the explantions appear rigth affter the user answers. however- is there a way-easy way and efficent way so without slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne- to have an option on the test box liek atoggle on or off for "exam mode" to have it not tell you you if you got it wrong or right and also doesnt show you teh expalntion, then when fisnihed it you just review all of it in teh review mode (will be same review mode coponet we use for the other mode and also view rrevie wbutton) (and will have an small I symbol taht explains what exam mode means (it means what i just said). so would it be easy- well not easy but liek not a complete revamp of my code? and it woudlnt slow down any reaquests/slow user expericne overall?. also how can we do this while maintaining all our other features/components.
