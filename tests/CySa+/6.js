@@ -1199,7 +1199,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "A policy requiring periodic re-assessment of controls ensures that governance structures adapt to evolving threats and compliance requirements.",
       "examTip": "Continuous compliance is underpinned by governance policies that enforce regular evaluations and updates of security controls."
-    }
+    },
     {
       "id": 93,
       "question": "A penetration tester discovers the following encoded PowerShell command in process logs:\n\n`powershell.exe -NoP -W Hidden -Enc SQBtAG0AbwByAHQAIABkAGEAdABh`\n\nWhat security measure would MOST effectively detect such obfuscated PowerShell activity?",
