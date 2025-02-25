@@ -1,12 +1,3 @@
-Most question texts, explanations, and exam tips appear complete. However, question #62 shows a possible mismatch between the question and the explanation:
-Question #62: Mentions “toner easily wiping off,” which typically points to a fuser or heat/pressure issue.
-Explanation #62: Discusses an empty toner cartridge causing blank pages, not “toner wiping off.”
-This appears to be an error or misalignment between the question text and the explanation.
-
-Duplicate or Repeated Questions Within Test #4
-
-Question #90 and Question #100 are exact duplicates (both ask about “Which tool is MOST appropriate for capturing and displaying network packets …?” with the same answer referencing a protocol analyzer).
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 4,
@@ -815,9 +806,9 @@ db.tests.insertOne({
         "Transfer Belt or Roller.",
         "Fuser Assembly."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "An empty or missing Toner Cartridge is the MOST likely cause of completely white pages from a laser printer. If there is no toner, or if the cartridge is depleted, the printer cannot create an image, resulting in blank pages. Fuser, high-voltage power supply, and paper feed issues typically cause different types of print defects, not completely white pages.",
-      "examTip": "Completely blank pages from a laser printer are almost always due to a lack of toner. Check the toner cartridge first when troubleshooting this issue."
+      "correctAnswerIndex": 3,
+      "explanation": "If toner easily rubs off a page, it points to a fuser problem. The fuser assembly must heat the toner to the proper temperature and apply adequate pressure so it bonds to the paper. When it’s malfunctioning or worn out, the toner doesn’t fuse correctly, causing it to wipe off after printing.",
+      "examTip": "When diagnosing smudging or toner not adhering, always suspect the fuser assembly first. Ensure it’s operating at the right temperature and applying enough pressure for proper toner bonding."
     },
     {
       "id": 63,
@@ -1176,7 +1167,7 @@ db.tests.insertOne({
       "options": [
         "Cable Tester.",
         "Bandwidth Tester.",
-        "Network Analyzer or Protocol Analyzer (e.g., Wireshark).",
+        "Network Analyzer.",
         "Toner Probe."
       ],
       "correctAnswerIndex": 2,
@@ -1215,7 +1206,7 @@ db.tests.insertOne({
       "options": [
         "Granting users full administrative privileges for ease of use.",
         "Disabling User Account Control (UAC) to reduce user prompts.",
-        "Implementing the principle of least privilege and using standard user accounts for daily tasks.",
+        "Implementing the principle of least privilege.",
         "Sharing local administrator passwords widely within the IT department."
       ],
       "correctAnswerIndex": 2,
@@ -1240,7 +1231,7 @@ db.tests.insertOne({
       "question": "A technician needs to measure the signal loss in a fiber optic cable run. Which tool is BEST suited for this purpose?",
       "options": [
         "Cable Tester.",
-        "Optical Time Domain Reflectometer (OTDR).",
+        "OTDR.",
         "Light Meter.",
         "Toner Probe."
       ],
@@ -1301,17 +1292,17 @@ db.tests.insertOne({
       "examTip": "Port 3268 is for Global Catalog (GC) queries in Active Directory. Global Catalog provides domain-wide search capabilities and uses this port for client queries."
     },
     {
-      "id": 100,
-      "question": "A technician wants to monitor network traffic in real-time for troubleshooting purposes. Which of the following tools is MOST appropriate for capturing and displaying network packets as they traverse the network?",
+      "id": 101,
+      "question": "Performance-Based Question: A user complains their computer is running extremely slow. Choose the MOST logical order of troubleshooting steps from the options below.",
       "options": [
-        "Cable Tester.",
-        "Bandwidth Tester.",
-        "Network Analyzer or Protocol Analyzer (e.g., Wireshark).",
-        "Toner Probe."
+        "1) Check for viruses, 2) Add more RAM, 3) Defragment the hard drive, 4) Update device drivers",
+        "1) Check Task Manager for resource usage, 2) Scan for malware, 3) Verify free disk space, 4) Update drivers",
+        "1) Perform a BIOS update, 2) Reinstall the operating system, 3) Add a new CPU, 4) Replace the motherboard",
+        "1) Defragment the hard drive, 2) Check Task Manager, 3) Reseat RAM, 4) Replace the hard drive"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A Network Analyzer or Protocol Analyzer (e.g., Wireshark) is MOST appropriate for capturing and displaying network packets in real-time. These tools capture packets as they move across the network and display them in a readable format, allowing for detailed analysis of network communications in real-time. Cable testers, bandwidth testers, and toner probes are not designed for packet capture and real-time traffic analysis.",
-      "examTip": "Network analyzers like Wireshark are invaluable for real-time network traffic monitoring. They let you 'see' the packets flying across the network and are essential for in-depth troubleshooting and analysis."
+      "correctAnswerIndex": 1,
+      "explanation": "A systematic approach is vital in performance troubleshooting. First, open Task Manager to identify processes consuming excessive resources. Next, perform a malware scan. Then, confirm there is adequate free disk space. Finally, update drivers to ensure compatibility and performance. This logical flow addresses common slow-performance culprits before moving on to more drastic measures.",
+      "examTip": "In performance-based questions, think about the order of steps: start with quick software checks (Task Manager, malware scans, disk space) before proceeding to hardware updates or OS reinstalls."
     }
   ]
 });
