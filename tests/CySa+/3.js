@@ -430,29 +430,29 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "What is 'sandboxing' used for in security analysis?",
+      "question": "An organization wants to align its security strategy with an internationally recognized standard. Which of the following provides a governance-focused framework suitable for enterprise IT management and oversight?",
       "options": [
-        "Long-term storage for confidential corporate records and data.",
-        "To isolate and execute potentially malicious code in a controlled environment.",
-        "Encrypting all traffic sent and received by specific applications.",
-        "Maintaining automated backups for essential files."
+        "NIST SP 800-53",
+        "COBIT",
+        "ISO 27001",
+        "PCI DSS"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Sandboxes are not for long-term data storage, encryption tools, or backup mechanisms. A sandbox is a *virtualized*, *isolated* environment.  It allows security analysts to run suspicious files or code *without* risking harm to the host system or network.  This allows observation of the code's behavior.",
-      "examTip": "Sandboxing allows safe analysis of potentially malicious code."
+      "explanation": "COBIT (Control Objectives for Information and Related Technologies) is a governance-focused framework that addresses enterprise IT from a management and oversight perspective.",
+      "examTip": "Familiarize yourself with different frameworks (e.g., NIST, ISO, COBIT) and know which domains they cover."
     },
     {
       "id": 34,
-      "question": "What is the main purpose of 'network segmentation'?",
+      "question": "During a compliance audit, an assessor identifies that the organization lacks formal policies and procedures for incident handling. Which of the following BEST addresses this gap in governance?",
       "options": [
-        "Connecting all organizational endpoints into one large broadcast domain.",
-        "To improve network security and performance by dividing a network into smaller, isolated subnetworks.",
-        "Implementing robust encryption protocols throughout every network segment, end to end.",
-        "Blocking all incoming connections to eliminate any chance of intrusion."
+        "Implementing file integrity monitoring on critical servers",
+        "Establishing a documented incident response plan",
+        "Outsourcing incident response to a managed security provider",
+        "Purchasing cyber insurance for potential losses"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Network segmentation is not about connecting *everything* to the internet, simply encrypting traffic or blocking *all* connections. Network segmentation involves dividing a network into smaller, isolated subnetworks (segments).  This limits the impact of a security breach – if one segment is compromised, the attacker's access to other segments is restricted. It also improves performance by reducing network congestion.",
-      "examTip": "Network segmentation limits the lateral spread of attacks."
+      "explanation": "A documented incident response plan under governance ensures consistent processes, roles, and responsibilities for incident handling.",
+      "examTip": "Governance requires formal documentation of policies and procedures for effective and repeatable incident response."
     },
     {
       "id": 35,
