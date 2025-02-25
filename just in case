@@ -1,0 +1,393 @@
+Below is (A) a proposal for the “Daily Station” (or whatever name you choose) page in your React app, including code that displays the 24‐hour bonus with a live countdown, and (B) a short list of gamified daily feature ideas you could add. Everything is designed to integrate smoothly with your existing Redux store (userSlice), backend routes (/user/<user_id>/daily-bonus, etc.), and front-end patterns (like the Sidebar).
+
+A) “Daily Station” Page
+Let’s name it DailyStationPage.js. You can rename to your liking (“Daily Hub,” “Daily Gains,” “Daily Arcade,” etc.). The key features:
+
+Daily 1000 coins claim with a countdown.
+Show any “universal daily messages” (motivation, tips, etc.).
+Potential place for other daily tasks (like “Answer 10 questions for an extra 500 coins,” or “Read a daily security tip,” etc.) if you decide to expand.
+Below is a fully working example.
+
+1) Front-End: DailyStationPage.js
+jsx
+Copy
+Edit
+// DailyStationPage.js
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserData } from '../store/userSlice'; // or wherever your userSlice is
+import './DailyStation.css'; // We'll define some basic CSS below
+
+// We'll assume your daily bonus route is: POST /api/test/user/<userId>/daily-bonus
+// which returns { success: true/false, message, ... }
+
+const DailyStationPage = () => {
+  const dispatch = useDispatch();
+  const {
+    userId,
+    coins,
+    username,
+    // The user doc presumably has lastDailyClaim or something similar
+    // If you store it in user doc, you can read it from the store if you want.
+  } = useSelector((state) => state.user);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [claimed, setClaimed] = useState(false);
+  const [countdown, setCountdown] = useState(0); // in seconds
+  const [motivationMessage, setMotivationMessage] = useState("");
+
+  // 1) On mount, fetch user data if needed (to get lastDailyClaim)
+  //    Or we rely on it already in the store. If your store doesn't
+  //    hold lastDailyClaim, you can skip or store it in local state.
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  }, [userId, dispatch]);
+
+  // 2) Optionally fetch or create a daily universal message
+  //    For now, we’ll just pick from a random set. 
+  //    Or you can store them on the backend.
+  useEffect(() => {
+    const messages = [
+      "Seize the day and conquer your goals!",
+      "Keep pushing, one question at a time!",
+      "A little progress every day adds up to big results.",
+      "Never stop learning—your future self will thank you!",
+      "Focus on improvement, not perfection. Go for it!"
+    ];
+    const randomIndex = Math.floor(Math.random() * messages.length);
+    setMotivationMessage(messages[randomIndex]);
+  }, []);
+
+  // 3) We'll have a function to call the daily bonus route, awarding 1000 coins if available
+  const claimDailyBonus = useCallback(async () => {
+    if (!userId) {
+      setError("Please log in first.");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await res.json();
+      setLoading(false);
+
+      if (res.ok && data.success) {
+        // success => we can refetch user data to update coins
+        setClaimed(true);
+        dispatch(fetchUserData(userId)); 
+        // data.message might say "Daily bonus applied" or "Already claimed"
+      } else {
+        // if already claimed or error
+        setError(data.message || "Failed to claim daily bonus.");
+      }
+    } catch (err) {
+      setError("An error occurred claiming daily bonus: " + err.message);
+      setLoading(false);
+    }
+  }, [userId, dispatch]);
+
+  // 4) The backend presumably sets lastDailyClaim to now if success. 
+  //    We want a countdown until 24 hours from that time.
+  //    If userDoc has lastDailyClaim, we can compute the next available time.
+  //    We'll do it in an effect that runs every second.
+
+  // For demonstration, we assume your user doc does:
+  //   lastDailyClaim: "2023-10-11T12:00:00.000Z"
+  // in UTC. Then we can parse that to find how many seconds remain.
+
+  const [nextClaimTime, setNextClaimTime] = useState(null);
+
+  // If your store doesn’t keep lastDailyClaim, fetch it from the user doc or set it in user doc. 
+  // We'll do a quick approach:
+  const [lastDailyClaim, setLastDailyClaim] = useState(null);
+
+  // We'll watch for user doc changes from fetchUserData
+  useEffect(() => {
+    // If your user doc has "lastDailyClaim", store it.
+    // This is just a demonstration approach:
+    // let’s pretend we store it in state. 
+    // In real code, you might store it in userSlice. 
+    // For example, user doc might have user.lastDailyClaim => store it.
+    // We'll do:
+    // setLastDailyClaim(user?.lastDailyClaim)
+    // But your slice doesn't show that property. So let's pretend we do a custom approach:
+    (async () => {
+      if (!userId) return;
+      try {
+        const res = await fetch(`/api/test/user/${userId}`);
+        if (res.ok) {
+          const userObj = await res.json();
+          if (userObj.lastDailyClaim) {
+            setLastDailyClaim(userObj.lastDailyClaim);
+          } else {
+            setLastDailyClaim(null);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, [userId]);
+
+  // Then we compute "time left" in seconds
+  useEffect(() => {
+    let interval = null;
+    const updateCountdown = () => {
+      if (!lastDailyClaim) {
+        setCountdown(0);
+        setNextClaimTime(null);
+        return;
+      }
+      // lastDailyClaim is an ISO string, parse:
+      const lastClaim = new Date(lastDailyClaim).getTime();
+      const now = Date.now(); 
+      // Next available is lastClaim + 24 hours => 24*3600*1000
+      const nextAvailable = lastClaim + (24 * 3600 * 1000);
+      const diff = nextAvailable - now;
+      if (diff <= 0) {
+        // means we can claim again
+        setCountdown(0);
+        setNextClaimTime(null);
+      } else {
+        setCountdown(Math.floor(diff / 1000));
+        setNextClaimTime(nextAvailable);
+      }
+    };
+
+    updateCountdown();
+    interval = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(interval);
+  }, [lastDailyClaim]);
+
+  // We'll produce a HH:MM:SS from countdown
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
+    const hh = String(h).padStart(2, '0');
+    const mm = String(m).padStart(2, '0');
+    const ss = String(s).padStart(2, '0');
+    return `${hh}:${mm}:${ss}`;
+  };
+
+  // If countdown > 0 => show "Next claim in HH:MM:SS"
+  // If countdown = 0 => we can show "Claim" if not claimed
+
+  const canClaimNow = (countdown === 0 && !claimed);
+  
+  return (
+    <div className="daily-station-container">
+      <h1 className="daily-station-title">Daily Station</h1>
+      <p>Welcome back, {username}!</p>
+
+      {motivationMessage && (
+        <div className="motivation-box">
+          <p className="motivation-text">{motivationMessage}</p>
+        </div>
+      )}
+
+      <div className="daily-bonus-section">
+        <h2>Daily 1000 Coin Bonus</h2>
+        <p>You currently have <strong>{coins}</strong> coins.</p>
+        {error && <p className="daily-error">Error: {error}</p>}
+
+        {loading ? (
+          <p>Claiming bonus...</p>
+        ) : canClaimNow ? (
+          <button className="claim-btn" onClick={claimDailyBonus}>
+            Claim Your 1000 Coins
+          </button>
+        ) : (
+          <>
+            {claimed ? (
+              <p className="claimed-msg">
+                You claimed your daily 1000 coins! 
+                Come back in 24 hours for more.
+              </p>
+            ) : (
+              <p className="countdown-msg">
+                Next claim available in: {formatTime(countdown)}
+              </p>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Additional daily features: placeholders for your expansions */}
+      <div className="daily-extras">
+        <h3>Daily Extras</h3>
+        <p>(Here you can add daily tasks, mini-challenges, or daily facts.)</p>
+      </div>
+    </div>
+  );
+};
+
+export default DailyStationPage;
+2) A Minimal CSS File: DailyStation.css
+css
+Copy
+Edit
+/* DailyStation.css */
+.daily-station-container {
+  color: #fff;
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.daily-station-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ff9900;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.motivation-box {
+  background: #333;
+  border: 2px solid #555;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.motivation-text {
+  font-style: italic;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.daily-bonus-section {
+  background: #222;
+  border: 2px dashed #666;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.claim-btn {
+  background: linear-gradient(45deg, #ffa500, #ff7518);
+  color: #000;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.claim-btn:hover {
+  background: linear-gradient(45deg, #ff7518, #ffa500);
+}
+
+.countdown-msg {
+  font-size: 1.1rem;
+  color: #ff4444;
+  font-weight: bold;
+}
+
+.claimed-msg {
+  color: #00ff00;
+  font-size: 1.1rem;
+}
+
+.daily-error {
+  color: #ff5555;
+}
+
+.daily-extras {
+  background: #333;
+  padding: 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+}
+3) Adding the New Page to the App
+Add the route in App.js (or wherever your routes are):
+jsx
+Copy
+Edit
+// App.js snippet
+import DailyStationPage from './components/pages/DailyStation/DailyStationPage'; // your location
+
+function App() {
+  // ...
+  return (
+    <Routes>
+      {/* ...existing routes... */}
+      <Route
+        path="/daily"
+        element={
+          <ProtectedRoute>
+            <DailyStationPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* ... */}
+    </Routes>
+  );
+}
+Add to Sidebar:
+jsx
+Copy
+Edit
+// Sidebar.js snippet
+<li>
+  <NavLink to="/daily" className={({ isActive }) => isActive ? 'active-link' : ''}>
+    /Daily Station
+  </NavLink>
+</li>
+…or maybe you want it as a sub‐item under /Shop or something. But you asked for a tab under Shop. Let’s rename “Daily Station” to “Daily Goodies” or “Daily Vault.” For example:
+
+jsx
+Copy
+Edit
+// Under the /Shop item
+<li className="sidebar-group">
+  <div className="group-header">/Shop & Daily</div>
+  <ul className="group-sublist">
+    <li><NavLink to="/shop">Shop</NavLink></li>
+    <li><NavLink to="/daily">Daily Goodies</NavLink></li>
+  </ul>
+</li>
+B) Some “Gamified Daily Feature” Ideas
+Besides the 24‐hour coin claim, here are a few other “daily” ideas:
+
+Daily Fact or Tip
+
+Show a random “fact of the day” about cybersecurity or general knowledge.
+Could store these in your DB. Each day, pick 1 or show a new tip.
+Daily “Question of the Day”
+
+Provide a single question (like a short quiz) that yields extra XP or coins if answered correctly.
+Ties in well with your existing GlobalTestPage, or keep it simpler.
+Daily Challenge / Task
+
+E.g., “Complete 5 questions from the Security+ test” or “Resume a test and answer 10 questions.”
+On completion, reward a small XP or coin bonus.
+Daily “Spin Wheel”
+
+A random spinner awarding between 500–2,000 coins or a random item from the Shop.
+Great for more gamification but requires some small front-end animation or library.
+Daily Ranking / Leaderboard
+
+Show how many daily tasks people have completed globally. Possibly do a “Daily Leaderboard” for how many questions answered that day, or how many tests finished.
+Daily Poll or Survey
+
+Show a new poll each day to engage users. E.g., “Which OS do you prefer for pen testing?”
+Not a direct reward, but fosters community engagement.
+Daily “Hidden Treasure”
+
+Hide an Easter egg on some random page each day. If user finds it, they get bonus coins or an achievement.
+All these revolve around hooking the user to come back daily, providing small tasks or fun experiences to keep them engaged. You can combine them or pick whichever suits your site’s vibe.
+
+That’s It
+Name the page “Daily Station,” “Daily Gains,” “Daily Vault,” etc.
+Place it in the sidebar or as a sub‐menu under Shop, whichever you prefer.
+The key logic is the 24hr check: once user claims, record lastDailyClaim in DB.
+Next time they come, compare now - lastDailyClaim < 24 hours => disable the button + show countdown.
+You already have the lastDailyClaim field in your user doc or you can store it if you’re not yet. Then the final piece is a front‐end countdown. The above code is an example that does exactly that.
