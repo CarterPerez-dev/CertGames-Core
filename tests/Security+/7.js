@@ -1,14 +1,3 @@
-Question #72 and Question #94 both ask:
-
-“What is the main advantage of using a password manager?”
-While the exact wording of the answer options differs slightly, they convey almost the same concept. The correct answer is effectively identical (unique, strong passwords with minimal user effort).
-This is effectively a duplicate question within the same test.
-
-
-Question #7 and Question #54 both cover:
-
-“Which of the following best describes the concept of 'defense in depth'?”
-They differ slightly in phrasing (“network security” vs. “cybersecurity”), but the scenario and correct concept are basically the same. They likely test the same knowledge and thus represent a near-duplicate.
 db.tests.insertOne({
   "category": "secplus",
   "testId": 7,
@@ -706,16 +695,16 @@ db.tests.insertOne({
     },
     {
       "id": 54,
-      "question": "Which of the following best describes the concept of 'defense in depth' in cybersecurity?",
+      "question": "During a routine audit, you discover a discrepancy between the organization’s published security policy and the actual access controls configured on a critical database. Which of the following is the MOST appropriate next step to ensure compliance?",
       "options": [
-        "The strategy of relying on a single layer of security controls to protect systems, assuming they will block all threats.",
-        "Layering multiple security controls at various levels within an organization to create redundancy and improve resilience to attacks.",
-        "Focusing primarily on securing the perimeter of an organization’s network and trusting internal systems as secure.",
-        "Implementing a single, highly effective security solution across the entire network to detect and respond to all threats."
+        "Update the security policy to reflect the currently implemented database permissions.",
+        "Document the variance in the risk register for future reference and continue monitoring.",
+        "Perform a gap analysis to determine whether the policy or the technical controls require adjustment.",
+        "Enforce an immediate configuration rollback to align with the originally published policy."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Defense in depth involves layering multiple security measures to protect an organization at various points, ensuring that if one layer fails, others will still provide protection.",
-      "examTip": "Don’t rely on just one security measure; ensure there are multiple layers of protection."
+      "correctAnswerIndex": 2,
+      "explanation": "Conducting a gap analysis clarifies whether the technical controls or the documented policy need changing. Immediate rollbacks might disrupt operations if the current controls are there for a valid reason, and adjusting the policy prematurely may introduce undiscovered risks.",
+      "examTip": "Always identify the root cause of policy and configuration mismatches before taking action; a gap analysis typically precedes sweeping changes."
     },
     {
       "id": 55,
@@ -1226,16 +1215,16 @@ db.tests.insertOne({
     },
     {
       "id": 94,
-      "question": "What is the main advantage of using a password manager?",
+      "question": "A global finance firm wants to adopt a new framework to strengthen its risk management and maintain compliance with emerging regulations. Which FIRST step ensures the chosen framework aligns best with organizational objectives?",
       "options": [
-        "Completely bypassing traditional password-based sign-ins and opting for near-instant auto login whenever you visit a known site.",
-        "Allowing you to create one weak password that is reused across all platforms, since the manager automates the login procedure.",
-        "Generating unique, complex passwords for each account, storing them securely, and minimizing user effort by autofilling login credentials.",
-        "Boosting overall CPU performance by offloading password verification tasks to an external service that handles cryptographic operations."
+        "Integrate controls from multiple frameworks and apply them simultaneously for maximum coverage.",
+        "Map the organization’s existing control library to the prospective framework’s requirements.",
+        "Require a third-party auditor to validate compliance standards before integrating any framework.",
+        "Immediately adopt the framework that offers the most comprehensive set of technical controls."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Password managers enable unique, complex passwords for every service without overload. They neither remove passwords entirely nor improve CPU performance. Relying on a single password is the opposite of best practice.",
-      "examTip": "Encourage safe usage of a trusted manager to drastically reduce reuse risk and password fatigue."
+      "correctAnswerIndex": 1,
+      "explanation": "Mapping current controls to the framework’s requirements allows the company to identify coverage gaps and ensures alignment with strategic objectives. Jumping directly to an auditor or adopting new controls without comparison to existing measures can create unnecessary overlaps or leave blind spots.",
+      "examTip": "When adopting new frameworks, always analyze existing controls to avoid duplication of effort or unrecognized compliance voids."
     },
     {
       "id": 95,
