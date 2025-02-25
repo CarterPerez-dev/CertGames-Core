@@ -418,39 +418,40 @@ const GlobalTestPage = ({
   }, [questionObject, answers, realIndex, answerOrder]);
 
   // We'll store partial attempt in the server
-  const updateServerProgress = useCallback(
-    async (updatedAnswers, updatedScore, finished = false) => {
-      if (!userId) return;
-      try {
-        await fetch(`/api/test/attempts/${userId}/${testId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            answers: updatedAnswers,
-            score: updatedScore,
-            totalQuestions,
-            category: testData?.category || category,
-            currentQuestionIndex,
-            shuffleOrder,
-            answerOrder, // INCLUDE answerOrder so it’s saved
-            finished
-          })
-        });
-      } catch (err) {
-        console.error("Failed to update test attempt on backend", err);
-      }
-    },
-    [
-      testId,
-      userId,
-      totalQuestions,
-      testData,
-      category,
-      currentQuestionIndex,
-      shuffleOrder,
-      answerOrder
-    ]
-  );
+   const updateServerProgress = useCallback(
+     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
+       if (!userId) return;
+       try {
+         // If we're sending a single answer update
+         if (singleAnswer) {
+           await fetch(`/api/test/attempts/${userId}/${testId}/answer`, {
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({
+               questionId: singleAnswer.questionId,
+               userAnswerIndex: singleAnswer.userAnswerIndex,
+               correctAnswerIndex: singleAnswer.correctAnswerIndex,
+               score: updatedScore
+             })
+           });
+           return;
+         }
+         
+         // For navigation position updates (much smaller payload)
+         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({
+             currentQuestionIndex,
+             finished
+           })
+         });
+       } catch (err) {
+         console.error("Failed to update test attempt on backend", err);
+       }
+     },
+     [userId, testId, currentQuestionIndex]
+   );
 
   /* ------------------------------------------------------------------
      5) Handling a user answer
@@ -501,8 +502,15 @@ const GlobalTestPage = ({
 
           // update our local "answers"
           const updatedAnswers = [...answers];
-          const idx = updatedAnswers.findIndex(
-            (a) => a.questionId === questionObject.id
+          const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
+          if (idx >= 0) {
+            updatedAnswers[idx] = newAnswerObj;
+          } else {
+            updatedAnswers.push(newAnswerObj);
+          }
+          setAnswers(updatedAnswers);
+            
+            
           );
           const newAnswerObj = {
             questionId: questionObject.id,
