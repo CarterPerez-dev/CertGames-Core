@@ -1,30 +1,3 @@
-Within Test #2
-Several questions repeat the same core concept (sometimes nearly identical wording):
-
-Phishing appears multiple times:
-
-Q4: “Which type of attack involves tricking a user into revealing sensitive information by pretending to be a trusted entity?”
-Q19: “Which of the following BEST describes a phishing attack?”
-Q31: “Which of the following BEST describes phishing?”
-Q95: “Which attack involves an attacker sending fraudulent emails that appear to come from a trusted source?”
-All are essentially describing phishing.
-
-Denial-of-Service (DoS) questions:
-
-Q8, Q39, Q56 each ask about “flooding a network/system with excessive traffic” and point to DoS.
-Confidentiality questions:
-
-Q1, Q32, Q57 all ask which principle ensures data is only accessible to authorized individuals.
-Least Privilege questions:
-
-Q12, Q45, Q73 repeat the definition of least privilege (ensuring users have only the minimum permissions needed).
-In total, these create multiple near-duplicates within Test #2 itself, covering the same topics in very similar wording.
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "secplus",
   "testId": 2,
@@ -267,16 +240,16 @@ db.tests.insertOne({
     },
     {
       "id": 19,
-      "question": "Which of the following BEST describes a phishing attack?",
+      "question": "Which of the following BEST describes a supply chain attack?",
       "options": [
-        "Tricking a user into revealing sensitive information via fake emails",
-        "Overloading a system with excessive traffic",
-        "Guessing passwords repeatedly until access is gained",
-        "Intercepting network traffic to steal sensitive data"
+        "An attacker compromises a vendor or third-party to infiltrate a target",
+        "A fake wireless network impersonating a legitimate hotspot",
+        "A malicious script embedded in a legitimate website",
+        "Tricking a user to reveal personal information via email"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Phishing uses fake emails or websites to trick users into revealing sensitive information. DoS attacks overload systems. Brute force attacks guess passwords repeatedly. MITM attacks intercept network traffic.",
-      "examTip": "Phishing = 'Fishing' for your data using deception."
+      "explanation": "In a supply chain attack, an attacker compromises a vendor or third-party that the target depends on, thereby infiltrating the target indirectly. This can allow attackers to bypass direct defenses.",
+      "examTip": "Focus on the entire chain: a single compromised vendor can yield a big breach."
     },
     {
       "id": 20,
@@ -423,29 +396,29 @@ db.tests.insertOne({
     },
     {
       "id": 31,
-      "question": "Which of the following BEST describes phishing?",
+      "question": "Which of the following BEST describes password spraying?",
       "options": [
-        "Tricking users into providing sensitive information via fake emails or websites",
-        "Using an automated tool to guess passwords",
-        "Overloading a network with traffic to disrupt services",
-        "Intercepting and altering network communications"
+        "An attacker tries one or a few common passwords across many user accounts",
+        "An attacker eavesdrops on a communication channel between two parties",
+        "An attacker sends malicious links disguised in emails to trick recipients",
+        "An attacker encrypts user files and demands payment for the key"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Phishing deceives users into revealing sensitive data via fake emails or websites. Brute force attacks (option 2) guess passwords. DoS attacks (option 3) flood networks with traffic. MITM attacks (option 4) intercept communications.",
-      "examTip": "Phishing = 'Fishing' for victims with fake emails and sites."
+      "explanation": "Password spraying is an attack where an adversary attempts a small set of likely passwords (e.g., 'Password123') across many different user accounts, hoping to find a weakly protected account without triggering lockouts.",
+      "examTip": "Unlike brute force on a single account, password spraying tries the same password(s) on many accounts."
     },
     {
       "id": 32,
-      "question": "Which security concept ensures that only authorized users can access sensitive data?",
+      "question": "Which principle ensures that an individual cannot deny having performed an action?",
       "options": [
+        "Non-repudiation",
         "Confidentiality",
-        "Integrity",
         "Availability",
-        "Non-repudiation"
+        "Integrity"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Confidentiality ensures only authorized users can access sensitive data. Integrity (option 2) ensures data is not altered. Availability (option 3) ensures system uptime. Non-repudiation (option 4) prevents users from denying actions they performed.",
-      "examTip": "Confidentiality = 'Keep it secret'—only authorized users should see the data."
+      "explanation": "Non-repudiation ensures that a user cannot deny performing a specific action, often achieved via digital signatures or audit logs. Confidentiality (option 2) restricts data access. Availability (option 3) ensures systems are up. Integrity (option 4) keeps data unaltered.",
+      "examTip": "Non-repudiation = 'No denying' that an action was taken."
     },
     {
       "id": 33,
@@ -527,16 +500,16 @@ db.tests.insertOne({
     },
     {
       "id": 39,
-      "question": "Which type of attack involves overwhelming a system with excessive requests, making it unavailable to users?",
+      "question": "Which of the following BEST describes data exfiltration as a security threat?",
       "options": [
-        "Denial-of-Service (DoS)",
-        "Man-in-the-middle (MITM)",
-        "Phishing",
-        "Trojan"
+        "Attackers stealthily transfer or steal sensitive data from an organization",
+        "Attackers flood a target system to cause a denial of service",
+        "Attackers embed malicious code into legitimate scripts",
+        "Attackers physically tailgate employees to gain facility access"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A DoS attack overwhelms a system with excessive requests to make it unavailable. MITM (option 2) intercepts communication. Phishing (option 3) tricks users into revealing sensitive information. Trojans (option 4) disguise themselves as legitimate programs but contain malicious code.",
-      "examTip": "DoS = 'Denies service' by overloading a system."
+      "explanation": "Data exfiltration involves unauthorized copying or transfer of sensitive information out of an organization. It's a stealthy process in which attackers can remain hidden while siphoning data.",
+      "examTip": "Data exfiltration is a critical threat—keeping an eye on unusual outbound traffic is key."
     },
     {
       "id": 40,
@@ -600,21 +573,21 @@ db.tests.insertOne({
         "Ransomware"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A worm spreads automatically across networks without user action. Trojans (option 2) disguise themselves as legitimate software. Rootkits (option 3) hide deep in systems. Ransomware (option 4) encrypts files and demands payment.",
+      "explanation": "A worm spreads automatically across networks without user action. Trojans (option 2) disguise themselves as legitimate software. Rootkits (option 3) allow deep system access while remaining hidden. Ransomware (option 4) encrypts files and demands payment.",
       "examTip": "Worm = 'Self-spreading' malware—no human interaction needed."
     },
     {
       "id": 45,
-      "question": "Which security principle ensures that users and systems only have access to the resources they need to perform their job?",
+      "question": "Which of the following BEST describes separation of duties?",
       "options": [
-        "Least privilege",
-        "Separation of duties",
-        "Zero Trust",
-        "Non-repudiation"
+        "No single individual has complete control over all aspects of a critical function",
+        "All user permissions are combined under one administrative role",
+        "Every staff member holds identical access privileges for flexibility",
+        "Users can delegate their permissions at their own discretion"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Least privilege grants users and systems the minimum access necessary to perform their job. Separation of duties (option 2) ensures no single person has full control over a process. Zero Trust (option 3) assumes no implicit trust. Non-repudiation (option 4) prevents users from denying actions they performed.",
-      "examTip": "Least privilege = 'Need-to-know' access only."
+      "explanation": "Separation of duties ensures that critical tasks require multiple individuals, preventing one person from having unchecked control. This reduces fraud or mistakes by distributing responsibilities.",
+      "examTip": "Splitting responsibilities among multiple people is a cornerstone of preventing insider threats."
     },
     {
       "id": 46,
@@ -709,7 +682,7 @@ db.tests.insertOne({
     },
     {
       "id": 53,
-      "question": "Which of the following attacks tricks users into clicking a hidden link by disguising it as something else?",
+      "question": "Which type of attack tricks users into clicking a hidden link by disguising it as something else?",
       "options": [
         "Clickjacking",
         "Phishing",
@@ -717,7 +690,7 @@ db.tests.insertOne({
         "Man-in-the-middle (MITM)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Clickjacking tricks users into clicking hidden links, often using transparent elements over legitimate buttons. Phishing (option 2) involves fake emails. Brute force (option 3) guesses passwords. MITM (option 4) intercepts communications.",
+      "explanation": "Clickjacking tricks users into clicking hidden links, often using transparent elements over legitimate buttons. Phishing (option 2) involves fake emails. Brute force (option 3) guesses passwords repeatedly. MITM (option 4) intercepts communication.",
       "examTip": "Clickjacking = 'Tricked clicks' with hidden buttons."
     },
     {
@@ -748,29 +721,29 @@ db.tests.insertOne({
     },
     {
       "id": 56,
-      "question": "Which type of cyberattack floods a network or system with excessive traffic to disrupt services?",
+      "question": "Which of the following BEST describes typosquatting?",
       "options": [
-        "Denial-of-Service (DoS)",
-        "Phishing",
-        "Brute force",
-        "SQL injection"
+        "Registering domain names similar to popular sites to trick users who mistype URLs",
+        "Overloading a system with excessive traffic to disrupt services",
+        "Guessing credentials by trying all possible password combinations",
+        "Intercepting and altering data in transit between two parties"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A DoS attack overwhelms a system with traffic, making it unavailable. Phishing (option 2) tricks users into revealing data. Brute force (option 3) cracks passwords. SQL injection (option 4) manipulates databases via input fields.",
-      "examTip": "DoS = 'Denies' service by overwhelming a system."
+      "explanation": "Typosquatting (also called URL hijacking) involves registering domains that are misspellings or close variations of legitimate sites to catch users who type the URL incorrectly, often leading them to malicious content.",
+      "examTip": "Typosquatting = 'Typo-lure' that capitalizes on common domain spelling errors."
     },
     {
       "id": 57,
-      "question": "Which security principle ensures that sensitive information is only accessible to authorized individuals?",
+      "question": "Which principle ensures resources remain accessible when needed?",
       "options": [
+        "Availability",
         "Confidentiality",
         "Integrity",
-        "Availability",
         "Non-repudiation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Confidentiality ensures that only authorized individuals can access sensitive information. Integrity (option 2) protects against data tampering. Availability (option 3) ensures resources remain accessible. Non-repudiation (option 4) prevents users from denying their actions.",
-      "examTip": "Confidentiality = 'Keep it secret'—only authorized users can see it."
+      "explanation": "Availability ensures that systems and data remain accessible to authorized users when required. Confidentiality (option 2) restricts data to authorized individuals. Integrity (option 3) keeps data accurate and unaltered. Non-repudiation (option 4) prevents denying actions.",
+      "examTip": "Availability = 'Always accessible' to the right users."
     },
     {
       "id": 58,
@@ -795,7 +768,7 @@ db.tests.insertOne({
         "Insider threat"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "An exploit attack targets known software vulnerabilities. Phishing (option 2) tricks users into revealing sensitive data. Brute force (option 3) guesses passwords. Insider threats (option 4) involve internal personnel abusing access.",
+      "explanation": "An exploit attack targets known software vulnerabilities. Phishing (option 2) tricks users into revealing sensitive data. Brute force (option 3) attempts to crack passwords. Insider threats (option 4) involve internal personnel abusing access.",
       "examTip": "Exploit attack = 'Takes advantage' of outdated software vulnerabilities."
     },
     {
@@ -969,16 +942,16 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "Which of the following security principles ensures that users are only given the minimum access necessary to perform their job?",
+      "question": "Which principle ensures that tasks are divided among multiple individuals to reduce the possibility of fraud or error?",
       "options": [
+        "Job rotation",
         "Least privilege",
-        "Separation of duties",
         "Zero Trust",
-        "Non-repudiation"
+        "Confidentiality"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Least privilege grants users only the permissions they need to do their job, reducing the risk of misuse. Separation of duties (option 2) ensures no single person has complete control over critical tasks. Zero Trust (option 3) assumes no implicit trust. Non-repudiation (option 4) ensures users cannot deny actions they performed.",
-      "examTip": "Least privilege = 'Need-to-know' access only."
+      "explanation": "Job rotation moves staff among roles, ensuring that no single individual remains in one position indefinitely, which helps detect irregularities and reduce insider threats. This principle, along with separation of duties, mitigates fraud or misuse.",
+      "examTip": "Rotating roles can uncover anomalies that might remain hidden if one person always holds the same position."
     },
     {
       "id": 74,
@@ -1255,16 +1228,16 @@ db.tests.insertOne({
     },
     {
       "id": 95,
-      "question": "Which attack involves an attacker sending fraudulent emails that appear to come from a trusted source?",
+      "question": "Which of the following BEST describes domain hijacking?",
       "options": [
-        "Phishing",
-        "Brute force",
-        "SQL injection",
-        "Denial-of-Service (DoS)"
+        "An attacker manipulates the domain registrar or DNS provider to redirect a domain’s traffic",
+        "A malicious software encrypts all files and demands payment",
+        "An attacker tricks users via fake emails from a trusted entity",
+        "A wireless impersonation attack that duplicates a legitimate SSID"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Phishing uses fake emails to trick users into providing sensitive information. Brute force (option 2) involves guessing passwords. SQL injection (option 3) exploits database vulnerabilities. DoS (option 4) overwhelms a system with traffic.",
-      "examTip": "Phishing = 'Fake email' scam—always verify senders!"
+      "explanation": "Domain hijacking occurs when an attacker compromises a domain’s registrar settings or DNS provider, gaining the ability to redirect or control the domain’s traffic. This can lead to significant disruption and data theft.",
+      "examTip": "Guard domain registrar accounts with strong security—losing domain control is catastrophic."
     },
     {
       "id": 96,
@@ -1281,16 +1254,16 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "Which of the following BEST describes an incident response plan?",
+      "question": "Which of the following is a key security challenge when an attacker compromises a domain registrar?",
       "options": [
-        "A documented process for handling security breaches",
-        "A tool that prevents malware infections",
-        "A software program that encrypts sensitive data",
-        "A method of securing network traffic"
+        "All local antivirus software fails to detect the breach",
+        "The domain’s DNS records can be altered to redirect legitimate traffic elsewhere",
+        "User passwords instantly become invalid across the domain",
+        "Encryption keys expire, forcing immediate certificate reissuance"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "An incident response plan outlines steps to handle security breaches. Malware prevention (option 2) is a security measure but not an incident response. Encryption (option 3) secures data but is unrelated to incident handling. Securing network traffic (option 4) is a security control, not an incident response plan.",
-      "examTip": "Incident response = 'Plan ahead' for security breaches."
+      "correctAnswerIndex": 1,
+      "explanation": "If a domain registrar is compromised, attackers can alter DNS records, effectively hijacking legitimate site traffic or redirecting email flow. This can be catastrophic for the domain owner and lead to data theft or impersonation.",
+      "examTip": "Registrar security is crucial: losing DNS control allows attackers to reroute all traffic."
     },
     {
       "id": 98,
