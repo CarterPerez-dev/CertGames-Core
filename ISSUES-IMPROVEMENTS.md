@@ -1,4 +1,11 @@
 
+# So currently if a user is logged in/ the browser essentially "rememebers that" and you are pretty much alwsy logged in until you log out-- however "IF LOGGED IN" then instead of the "info" page as the default (route) / --- instead it should be the userpofile as teh default route BUT ONLY IF LOGGED IN. IF a user has no account/ issnt logged in-- he default route shall remain as the "info page"
+we prbably need a model and or route (i think we already do) that stores if the user is "logged in" and if so then we prpbaly need to edit out App.js to have essentially two default routes- one for no logged in/no account and one for logged in.
+Info page as default route for non logged in/no account users
+Userprofile page default route for logged in users.
+---------------------------
+
+
 ### ok so for thre test view i need it so the "next question" component to sorta be logged better for the testview an review mode as a whole. so basically, the issue is that if the user  clickd the "next quetsion" button without answering then there needs to be a popup that say something like "you havent answered, pelase answer or hit skip" just like the popups we have for  the restart/finish buttons.
 -----------------------
 
