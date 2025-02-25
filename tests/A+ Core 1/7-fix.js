@@ -1,32 +1,3 @@
-
-
-Internal Duplicate Checks Within Test #7
-
-Many questions from about Q7 onward match earlier test content nearly word-for-word, but within Test #7 itself, some questions are also repeated:
-
-Q62 and Q73 both describe a color-specific smear on laser printer pages:
-
-“A laser printer is producing prints with a repeating 'smear' or 'streak' mark that appears only on one color … Which printer consumable is MOST likely causing this color-specific smudge?”
-Essentially the same scenario, identical answers, pointing to a defective color toner cartridge.
-
-Q63 (“…best practice for securing user accounts against brute-force attacks on cloud services?”) and Q74 have the same question about brute-force attacks on cloud accounts, same correct answer referencing MFA + IP restrictions.
-
-Q64 (“Which of the following TCP ports is used by … Kerberos Administration protocol (kadmin) … ?”) is repeated again at Q75 and at Q99. They all ask about port 749 for remote KDC administration.
-
-Q68 (“Which of the following is a BEST practice for securing user accounts against brute-force attacks on web application login pages?”) is repeated as Q79 with the exact same text and answer referencing CAPTCHA/rate limiting.
-
-Q95 and Q99 both ask the same question about “Which of the following TCP ports is used by Microsoft Active Directory Kerberos Administration protocol (kadmin) … ?” again referencing port 749.
-
-There may be additional repeats in the later 60–100 range involving laser printer scenarios, user account security, AD port configurations, etc.
-
-Overall, multiple pairs (or even triples) of questions within Test #7 share identical wording and correct answers.
-
-
-
-
-
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 7,
@@ -971,42 +942,42 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "A laser printer is producing prints with a repeating 'smear' or 'streak' mark that appears only on one color (e.g., only on cyan parts of the image). Which printer consumable is MOST likely causing this color-specific smudge?",
+      "question": "A technician is troubleshooting a system with intermittent 'blue screen of death' (BSOD) errors. After extensive diagnostics, the technician suspects a hardware issue related to the memory subsystem. However, standard memory tests show no errors. Which of the following tools or techniques is MOST likely to reveal subtle memory errors that might be missed by conventional tests?",
       "options": [
-        "Black Toner Cartridge.",
-        "Fuser Assembly.",
-        "Imaging Drum.",
-        "Specific Color Toner Cartridge (e.g., Cyan Toner Cartridge)."
+        "task Manager memory tab",
+        "System File Checker (SFC)",
+        "Memtest86+ in multi-pass mode",
+        "Windows Event Viewer"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A defective or leaking specific color toner cartridge, such as the cyan cartridge, is most likely responsible for color-specific smudges.",
-      "examTip": "When a print defect is isolated to a single color, check the corresponding toner cartridge first."
+      "correctAnswerIndex": 2,
+      "explanation": "Memtest86+ in extended, multi-pass mode with strict error checking is the MOST likely to reveal subtle memory errors. While standard memory tests might pass, more rigorous testing like Memtest86+ (especially in extended modes with many passes and strict error checking) can uncover intermittent or subtle errors that only manifest under specific conditions or after prolonged stress. Disk Defragmenter is for hard drives, SFC checks system file integrity, and Event Viewer logs errors but doesn't actively test for them.",
+      "examTip": "For elusive memory errors, go beyond basic tests. Memtest86+ in extended mode with multiple passes is your best bet for uncovering subtle RAM issues that can cause intermittent system instability."
     },
     {
       "id": 74,
-      "question": "Which of the following is a BEST practice for securing user accounts against brute-force attacks on cloud services?",
+      "question": "A user reports that after enabling virtualization in the BIOS, the system randomly reboots while running virtual machines. The motherboard, CPU, and RAM are known to be compatible with virtualization technologies. Which diagnostic or configuration step would MOST likely pinpoint the cause of the reboots?",
       "options": [
-        "Using easily guessable passwords to simplify cloud access.",
-        "Disabling multi-factor authentication (MFA) to improve login speed.",
-        "Implementing multi-factor authentication (MFA) and IP-based access restrictions.",
-        "Relying solely on username and password authentication."
+        "Replacing the graphics card and retesting",
+        "Using a digital multimeter to measure power supply rails under load",
+        "Upgrading to a larger capacity SSD",
+        "Turning off hardware virtualization in the OS settings"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Multi-factor authentication combined with IP-based access restrictions significantly reduces the risk of brute-force attacks on cloud services.",
-      "examTip": "Implement MFA and restrict access by IP to strengthen cloud service security against brute-force attempts."
+      "correctAnswerIndex": 1,
+      "explanation": "A failing or insufficient power supply can cause random reboots, especially under the additional load of virtual machines. Measuring the voltage on each power rail under load with a multimeter can reveal if voltage drops out of tolerance, leading to stability issues. The GPU and SSD are less likely culprits if their functions are normal outside virtualization environments; simply disabling virtualization in the OS doesn’t test the root cause.",
+      "examTip": "Always check power supply health when diagnosing unexplained reboots or instability; virtualization workloads can push power demands just enough to reveal PSU weaknesses."
     },
     {
       "id": 75,
-      "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Administration protocol (kadmin) for remote administration of the Kerberos KDC (Key Distribution Center)?",
+      "question": "A technician suspects a failing graphics card after artifacts appear on the display and random system freezes occur under GPU-intensive tasks. The standard driver update and OS logs show no obvious issue. Which test scenario is MOST likely to confirm the GPU failure definitively?",
       "options": [
-        "Port 88",
-        "Port 464 (kpasswd/changepw)",
-        "Port 749 (kadmin/administration)",
-        "Port 3269 (GCoverSSL)"
+        "Running a general CPU stress test (e.g., Prime95) for an hour",
+        "Performing a thermal camera check on the motherboard chipsets",
+        "Running a dedicated GPU benchmark or stress toolat maximum settings",
+        "Reinstalling the OS and checking for new hardware wizard alerts"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Port 749 is used for Kerberos administration (kadmin) for remote management of the KDC.",
-      "examTip": "For remote Kerberos administration, port 749 is the designated port."
+      "explanation": "Running a dedicated GPU stress tool like FurMark at maximum settings can push the graphics card to its limits and reveal instability or overheating issues specific to the GPU. CPU-only stress tests or OS reinstallation won’t isolate graphics-specific faults. Thermal imaging the motherboard chipsets won’t necessarily confirm a GPU-specific problem unless it explicitly reveals GPU overheating.",
+      "examTip": "When isolating graphics card issues, use GPU-focused stress tests. They can confirm if the GPU or VRAM is producing the artifacts or crashes."
     },
     {
       "id": 76,
@@ -1049,16 +1020,16 @@ db.tests.insertOne({
     },
     {
       "id": 79,
-      "question": "Which of the following is a BEST practice for securing user accounts against brute-force attacks on web application login pages?",
+      "question": "A user complains of slow file transfers and occasional disconnects when accessing large files on a newly installed NAS. Network traffic analysis shows periods of high latency. Which of the following steps is MOST likely to diagnose the underlying bottleneck for file transfer performance in this scenario?",
       "options": [
-        "Using default login page URLs (e.g., /login.php).",
-        "Disabling CAPTCHA to improve user experience.",
-        "Implementing CAPTCHA or reCAPTCHA, rate limiting login attempts, and using strong account lockout policies.",
-        "Storing login credentials in client-side local storage for faster authentication."
+        "Rebooting the NAS to clear potential cache issues",
+        "Replacing the network cable with a Cat 5 cable",
+        "Enabling jumbo frames",
+        "Disabling the firewall on client machines"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Implementing CAPTCHA, rate limiting, and strong account lockout policies are effective measures against brute-force attacks on login pages.",
-      "examTip": "Combine CAPTCHA and rate limiting with account lockout policies to secure web application logins."
+      "explanation": "Enabling jumbo frames (if the switch and NICs support it) can reduce overhead on large file transfers. High latency or slow file transfers might be due to inefficient packet handling. Jumbo frames can improve throughput if all network components are configured correctly. Simply rebooting or swapping with a lower-grade cable (Cat 5) typically won’t help; firewall settings are unlikely to cause chronic slow transfers in a LAN scenario.",
+      "examTip": "For high-volume file transfers, every bit of overhead matters. Confirm end-to-end jumbo-frame support—on the NAS, the client NICs, and the switch—to achieve optimal performance."
     },
     {
       "id": 80,
@@ -1309,16 +1280,16 @@ db.tests.insertOne({
     },
     {
       "id": 99,
-      "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Administration protocol (kadmin) for remote administration of the Kerberos KDC (Key Distribution Center)?",
+      "question": "A company has begun migrating to Windows 11 and wants to optimize disk performance on systems with new NVMe SSDs. A senior technician suggests disabling certain Windows features that are no longer beneficial on these drives. Which of the following features is generally considered unnecessary or even detrimental on modern SSDs?",
       "options": [
-        "Port 88",
-        "Port 464 (kpasswd/changepw)",
-        "Port 749 (kadmin/administration)",
-        "Port 3269 (GCoverSSL)"
+        "Windows Indexing",
+        "Windows Update Delivery Optimization",
+        "Windows System Protection",
+        "Disk Defragmentation (scheduled defrag)"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Port 749 is used for Kerberos administration (kadmin) for remote management of the KDC.",
-      "examTip": "For remote Kerberos administration, port 749 is the designated port."
+      "correctAnswerIndex": 3,
+      "explanation": "While Windows Indexing, Update Delivery Optimization, and System Protection can have various performance implications, traditional scheduled disk defragmentation is typically unnecessary and can be detrimental for SSDs. Modern Windows versions automatically adjust drive optimization methods for SSDs, using TRIM rather than heavy defragmentation. Manually forcing defrag on SSDs could reduce the drive’s lifespan without providing real performance benefit.",
+      "examTip": "On SSDs, TRIM replaces the need for old-school defrag. Always review advanced SSD-optimization practices when configuring new machines or upgrading to Windows 11."
     },
     {
       "id": 100,
