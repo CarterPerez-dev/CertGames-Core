@@ -1,18 +1,3 @@
-
-Example – Question 1 Issue:
-
-Question: “A user reports that their Android smartphone's battery drains rapidly even in standby mode …”
-Options:
-0: Replace the battery
-1: Perform a factory reset
-2: Check battery usage statistics
-3: Calibrate the battery by fully discharging and then fully recharging it
-Explanation: Indicates that checking battery usage statistics is the FIRST step.
-Issue: The correct answer index is set to 3 in the JSON, yet based on the explanation the correct answer should be option index 2.
-Recommendation: Update the correctAnswerIndex for Q1 to 2 to align with the explanation.
-For all other questions, the provided options, explanations, and exam tips are consistent and clear.
-
-
 db.tests.insertOne({
   "category": "aplus",
   "testId": 9,
@@ -20,17 +5,17 @@ db.tests.insertOne({
   "xpPerCorrect": 10,
   "questions": [
     {
-      "id": 1,
-      "question": "A user reports that their Android smartphone's battery drains rapidly even in standby mode and the device feels unusually warm to the touch. Which of the following troubleshooting steps should be performed FIRST?",
+      "id": 104,
+      "question": "Performance-Based Question: A user wants to install three different operating systems (Windows, Linux, and a specialized OS) on a single drive. They have reached the 4-partition limit on an MBR disk and can’t create more partitions. Which set of steps is the MOST appropriate to allow additional partitions?",
       "options": [
-        "Replace the battery with a new, high-capacity battery.",
-        "Perform a factory reset of the device to clear potential software issues.",
-        "Check battery usage statistics in settings to identify power-hungry apps.",
-        "Calibrate the battery by fully discharging and then fully recharging it."
+        "1) Create an extended partition, 2) Resize an existing partition, 3) Convert to NTFS, 4) Install the specialized OS",
+        "1) Backup all data, 2) Use Windows installation media to convert the disk from MBR to GPT, 3) Create new partitions in GPT format, 4) Install the additional OS",
+        "1) Modify BIOS settings to Legacy mode, 2) Shrink primary partitions, 3) Create a new logical drive, 4) Install all OSes without partition changes",
+        "1) Run 'chkdsk /f', 2) Defragment the disk, 3) Enable Secure Boot, 4) Use specialized tools to clone partitions"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Checking battery usage statistics is the FIRST step. This allows identifying specific apps or processes consuming excessive power, which is often the root cause of rapid drain and overheating. Replacing the battery or factory resetting are drastic steps to take before software diagnostics. Battery calibration is unlikely to resolve app-related drain.",
-      "examTip": "Always start with software diagnostics for mobile battery issues. Battery usage statistics are crucial for identifying rogue apps or processes."
+      "correctAnswerIndex": 1,
+      "explanation": "When you need more than four partitions, you must use the GPT partitioning scheme. Before converting, always back up your data since the process can potentially destroy existing partitions if performed incorrectly. Converting from MBR to GPT through Windows installation media or disk management tools allows you to create additional primary partitions. Once the drive is in GPT format, create new partitions to accommodate the extra operating systems.",
+      "examTip": "Always confirm your motherboard firmware supports UEFI when moving to GPT partitions—MBR is limited to four primary partitions, but GPT can support far more for complex multi-OS setups."
     },
     {
       "id": 2,
