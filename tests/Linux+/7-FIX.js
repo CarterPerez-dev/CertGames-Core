@@ -1113,12 +1113,188 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "`auditctl -w /var/www/html -p wa -k web_changes` sets up auditing for file modifications. `inotifywait` can monitor changes but does not store logs, `tripwire` detects integrity violations but does not trigger real-time actions, and `rsync` is used for backups.",
       "examTip": "Use `ausearch -k web_changes` to retrieve audit logs for monitored files."
+    },
+    {
+      "id": 87,
+      "question": "A Linux administrator suspects a disk failure and needs to retrieve SMART data from `/dev/sdb`. Which command should they use?",
+      "options": [
+        "smartctl -a /dev/sdb",
+        "fsck -y /dev/sdb",
+        "blkid /dev/sdb",
+        "tune2fs -l /dev/sdb"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`smartctl -a /dev/sdb` provides detailed SMART data, which helps assess disk health. `fsck` checks for filesystem errors, `blkid` shows partition attributes, and `tune2fs` displays filesystem parameters but not hardware health.",
+      "examTip": "Use `smartctl -t long /dev/sdb` to perform an extended disk health test."
+    },
+    {
+      "id": 88,
+      "question": "Which command allows an administrator to configure a persistent static route on a Debian-based system?",
+      "options": [
+        "echo '192.168.1.0/24 via 192.168.1.1' >> /etc/network/interfaces",
+        "ip route add 192.168.1.0/24 via 192.168.1.1",
+        "nmcli con mod eth0 ipv4.routes '192.168.1.0/24 192.168.1.1'",
+        "route add -net 192.168.1.0/24 gw 192.168.1.1"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "For NetworkManager-managed interfaces, `nmcli con mod eth0 ipv4.routes` ensures persistent static routes. `ip route add` is temporary, `route add -net` is deprecated, and modifying `/etc/network/interfaces` directly is no longer the recommended method.",
+      "examTip": "Use `nmcli con up eth0` after modifying routes to apply changes immediately."
+    },
+    {
+      "id": 89,
+      "question": "**(PBQ)** A system administrator needs to identify why a newly added storage device is not being recognized. What is the correct sequence of actions?",
+      "options": [
+        "1) lsblk 2) dmesg | grep sdX 3) partprobe /dev/sdX",
+        "1) fdisk -l 2) mount /dev/sdX /mnt 3) reboot",
+        "1) mkfs.ext4 /dev/sdX 2) df -h 3) resize2fs /dev/sdX",
+        "1) lvcreate -L 10G -n storage vg01 2) mount -a 3) systemctl restart udev"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) listing block devices with `lsblk`, (2) checking system logs with `dmesg`, and (3) using `partprobe` to force a rescan. Other sequences involve unnecessary or incorrect steps.",
+      "examTip": "Use `udevadm settle` to ensure device initialization completes before mounting."
+    },
+    {
+      "id": 90,
+      "question": "A Linux administrator needs to configure sudo access for a specific user without modifying the global sudoers file. Where should they create a configuration file?",
+      "options": [
+        "/etc/sudoers.d/<username>",
+        "/etc/sudoers",
+        "/etc/security/limits.conf",
+        "/etc/passwd"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Creating a file in `/etc/sudoers.d/` allows per-user sudo configuration without modifying `/etc/sudoers`. `limits.conf` is for resource limits, and `/etc/passwd` does not handle sudo access.",
+      "examTip": "Use `visudo -f /etc/sudoers.d/<username>` to safely edit sudo rules."
+    },
+    {
+      "id": 91,
+      "question": "Which command should an administrator use to enable detailed auditing of all commands executed by a specific user?",
+      "options": [
+        "auditctl -a always,exit -F arch=b64 -S execve -F auid=<UID> -k user_commands",
+        "journalctl -u auditd --since '1 hour ago'",
+        "ausearch -m EXECVE -ua <UID>",
+        "tail -f /var/log/audit/audit.log"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`auditctl -a always,exit -F arch=b64 -S execve -F auid=<UID>` logs every executed command for the specified user. `journalctl` retrieves logs but does not enable auditing, `ausearch` queries logs but does not configure rules, and `tail` monitors logs but does not enable tracking.",
+      "examTip": "Use `auditctl -l` to list active audit rules."
+    },
+    {
+      "id": 92,
+      "question": "A Linux administrator needs to configure a containerized application to restart automatically if it crashes. Which option should they use with `docker run`?",
+      "options": [
+        "--restart unless-stopped",
+        "--restart always",
+        "--restart on-failure",
+        "--restart manual"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "`--restart on-failure` ensures that the container restarts only if it crashes. `unless-stopped` prevents automatic restarts if manually stopped, `always` restarts under any condition, and `manual` is not a valid restart policy.",
+      "examTip": "Use `docker update --restart=on-failure <container>` to modify an existing container’s restart policy."
+    },
+    {
+      "id": 93,
+      "question": "Which command allows an administrator to determine whether a system is running as a virtual machine?",
+      "options": [
+        "systemd-detect-virt",
+        "virt-what",
+        "dmidecode -s system-manufacturer",
+        "lsmod | grep kvm"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`systemd-detect-virt` detects if the system is running inside a VM. `virt-what` provides similar functionality but may require additional installation, `dmidecode` shows hardware details but not VM status, and `lsmod | grep kvm` checks if KVM is loaded but does not determine VM presence.",
+      "examTip": "Use `systemd-detect-virt --vm` to check for virtualized environments specifically."
+    },
+    {
+      "id": 94,
+      "question": "Which command should an administrator use to dynamically change the priority of a running process?",
+      "options": [
+        "renice -n 10 -p <PID>",
+        "nice -n 10 <command>",
+        "kill -SIGSTOP <PID>",
+        "schedtool -n 10 -p <PID>"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`renice -n 10 -p <PID>` adjusts the priority of a running process. `nice` sets priority when launching a process, `kill -SIGSTOP` pauses a process but does not change priority, and `schedtool` can modify scheduling policies but is less commonly used.",
+      "examTip": "Use `ps -eo pid,ni,comm` to check process priority before modifying it."
+    },
+    {
+      "id": 95,
+      "question": "A Linux administrator needs to investigate why a system service failed at boot. Which command should they run first?",
+      "options": [
+        "journalctl -b -u <service>",
+        "systemctl restart <service>",
+        "dmesg | grep <service>",
+        "tail -f /var/log/syslog"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`journalctl -b -u <service>` retrieves logs for a specific service since the last boot. `systemctl restart` attempts to restart the service without identifying the root cause, `dmesg` provides kernel logs but may not capture service failures, and `syslog` may not contain systemd service logs.",
+      "examTip": "Use `systemctl status <service>` for a quick summary before checking logs."
+    },
+    {
+      "id": 96,
+      "question": "Which command should an administrator use to change the primary group of an existing user?",
+      "options": [
+        "usermod -g <group> <user>",
+        "groupmod -g <group> <user>",
+        "gpasswd -a <user> <group>",
+        "chgrp <group> <file>"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`usermod -g <group> <user>` modifies a user's primary group. `groupmod` changes group properties, `gpasswd -a` adds a user to a group but does not modify the primary group, and `chgrp` changes file group ownership but not user settings.",
+      "examTip": "Use `id <user>` to verify group memberships after modification."
+    },
+    {
+      "id": 97,
+      "question": "**(PBQ)** A Linux system is running out of inode space, causing file creation failures. What is the correct sequence of actions to diagnose and resolve the issue?",
+      "options": [
+        "1) df -i 2) find / -xdev -type d -exec du --inodes {} + 3) remove unnecessary files",
+        "1) fsck -y /dev/sda1 2) resize2fs /dev/sda1 3) reboot",
+        "1) lsof +D / 2) echo 3 > /proc/sys/vm/drop_caches 3) rm -rf /tmp/*",
+        "1) journalctl -u systemd-journald 2) truncate -s 0 /var/log/messages 3) sync"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) checking inode usage with `df -i`, (2) identifying directories consuming the most inodes, and (3) deleting unnecessary files to free up inodes.",
+      "examTip": "Use `tune2fs -l /dev/sda1 | grep Inode` to check inode settings on ext filesystems."
+    },
+    {
+      "id": 98,
+      "question": "A system administrator needs to enable logging of all executed commands for auditing purposes. Which file should they modify?",
+      "options": [
+        "/etc/bash.bashrc",
+        "/etc/audit/rules.d/audit.rules",
+        "/etc/sudoers",
+        "/etc/crontab"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Modifying `/etc/audit/rules.d/audit.rules` enables command logging via auditd. `bash.bashrc` can log commands but is user-specific, `sudoers` configures privilege escalation, and `crontab` schedules jobs but does not log command execution.",
+      "examTip": "Use `ausearch -m EXECVE` to review logged command execution."
+    },
+    {
+      "id": 99,
+      "question": "A Linux administrator needs to troubleshoot a storage device that is showing frequent I/O errors. Which command should they use to diagnose the issue?",
+      "options": [
+        "smartctl -H /dev/sdX",
+        "blkid /dev/sdX",
+        "df -h /dev/sdX",
+        "fdisk -l /dev/sdX"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`smartctl -H /dev/sdX` retrieves SMART health data to check for impending drive failures. `blkid` shows partition attributes, `df -h` reports disk space usage, and `fdisk -l` lists partitions but does not diagnose hardware issues.",
+      "examTip": "Use `smartctl -t long /dev/sdX` to run a detailed disk health test."
+    },
+    {
+      "id": 100,
+      "question": "Which of the following commands will verify the integrity of installed packages on a Debian-based system?",
+      "options": [
+        "debsums -c",
+        "dpkg -l",
+        "apt list --installed",
+        "dpkg --configure -a"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`debsums -c` checks the integrity of installed Debian packages. `dpkg -l` lists installed packages but does not verify them, `apt list --installed` shows package details but does not check integrity, and `dpkg --configure -a` attempts to fix broken installations but does not verify package integrity.",
+      "examTip": "Use `debsums -s` to verify package integrity without reporting missing files."
     }
-
-
-
-      
-
-
-
-
+  ]
+});
