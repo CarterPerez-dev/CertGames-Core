@@ -191,6 +191,7 @@ const userSlice = createSlice({
         state.nameColor = userDoc.nameColor || null;
         state.purchasedItems = userDoc.purchasedItems || [];
         state.subscriptionActive = userDoc.subscriptionActive || false;
+        state.lastDailyClaim = userDoc.lastDailyClaim || null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed';

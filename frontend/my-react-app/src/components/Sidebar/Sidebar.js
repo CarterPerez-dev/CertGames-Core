@@ -77,6 +77,11 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/daily" className={({ isActive }) => isActive ? 'active-link' : ''}>
+              /Bonus
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/leaderboard" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Leaderboard
             </NavLink>

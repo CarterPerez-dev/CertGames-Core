@@ -1,0 +1,340 @@
+/* src/components/pages/DailyStationRevamped.css */
+
+/* GLOBAL STYLES & BACKGROUND */
+.bonus-page-container {
+  position: relative;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Checkered background with darker tones for subtlety */
+.gradient-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    #101010 0,
+    #101010 25%,
+    #300000 25%,
+    #300000 50%
+  );
+  z-index: -1;
+}
+
+/* BONUS CLAIM OVERLAY - THIS IS THE "IN YOUR FACE" POPUP */
+.bonus-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.bonus-popup-content {
+  font-size: 2.2rem;
+  color: #0fd90f;
+  font-weight: bold;
+  text-align: center;
+  padding: 1.5rem 2rem;
+  border: 3px solid #0fd90f;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px #0fd90f;
+  /* This triggers the pop-in animation */
+  animation: bonusPopupIn 1.2s ease forwards;
+}
+
+/* Keyframe for the pop-in effect */
+@keyframes bonusPopupIn {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* TOP BAR */
+.top-bar-daily {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #b80000;
+}
+
+.app-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #ffcccc;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+}
+
+/* PLAYER INFO BAR */
+.player-info-bar {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid #b80000;
+  padding: 0.8rem 2rem;
+}
+
+.player-info {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.player-greeting {
+  font-weight: bold;
+  color: #fff;
+  margin-right: 1.5rem;
+}
+
+.player-coins,
+.player-xp {
+  background-color: #b80000;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+/* MAIN CONTENT WRAPPER */
+.content-wrapper {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem; /* made containers a bit bigger */
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+/* HEADINGS/TITLES */
+.section-title {
+  font-size: 1.6rem; /* slightly bigger for container titles */
+  margin-bottom: 0.8rem;
+  color: #ffcccc;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* MESSAGES & TEXT */
+.login-reminder,
+.loading-text,
+.no-question-text {
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.daily-error-msg {
+  color: #ff7373;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+/* BONUS SECTION */
+.bonus-section {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem; /* bigger container */
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid #b80000;
+  text-align: center;
+}
+
+.claim-bonus-button {
+  background-color: #b80000;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem; /* bigger font */
+  padding: 0.8rem 1.5rem; /* bigger button */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.claim-bonus-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #b80000;
+}
+
+.bonus-countdown {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* DAILY QUESTION BOX */
+.daily-question-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem; /* bigger container */
+  border-radius: 0.5rem;
+  border: 1px solid #b80000;
+  margin-bottom: 2rem;
+}
+
+/* PROMPT & OPTIONS */
+.question-prompt {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.question-input-section {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.option-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  text-align: left;
+  display: inline-block; /* for a neat vertical list in center */
+}
+
+.option-item {
+  margin: 0.5rem 0;
+}
+
+.option-label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.option-input {
+  margin-right: 0.5rem;
+}
+
+/* SUBMIT BUTTON */
+.submit-answer-button {
+  background-color: #0d6efd;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem; /* bigger font */
+  padding: 0.7rem 1.4rem;
+  border: none;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-answer-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px #0d6efd;
+}
+
+/* ALREADY ANSWERED SECTION */
+.already-answered-container {
+  text-align: center;
+}
+
+/* FEEDBACK FOR CORRECT/INCORRECT */
+.answer-feedback {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+.correct-answer {
+  color: #00ff00; /* green for correct */
+  font-weight: bold;
+}
+.not-correct-answer {
+  color: #008cff; /* changed to blue */
+  font-weight: bold;
+}
+
+/* COUNTDOWN */
+.next-question-countdown,
+.bonus-countdown {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.cool-countdown {
+  color: #00a2ff; /* replaced yellow with blue */
+  font-weight: bold;
+  animation: pulseTimer 2s infinite;
+}
+
+@keyframes pulseTimer {
+  0%, 100% {
+    text-shadow: 0 0 8px #00a2ff;
+  }
+  50% {
+    text-shadow: 0 0 18px #00a2ff;
+  }
+}
+
+/* ANIMATIONS FOR CORRECT/WRONG ANSWER */
+
+/* Correct answer animation: quick green glow */
+.correct-answer-animate {
+  animation: correctGlow 1s ease-in-out;
+}
+
+@keyframes correctGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(0, 255, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(0, 255, 0, 0);
+  }
+}
+
+/* Wrong answer animation: short shake */
+.wrong-answer-animate {
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-7px);
+  }
+  50% {
+    transform: translateX(7px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+

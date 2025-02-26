@@ -37,4 +37,4 @@ Flask-Migrate
 psutil
 pymongo[srv]
 Flask_Pymongo
-
+pytz

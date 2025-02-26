@@ -17,4 +17,8 @@ node_modules/
 my-react-app/build/
 
 # AWS EC2 SSH key
-xploitcraft.pem 
+ssh-key-2025-02-12.key
+ssh-key-2025-02-12.key
+
+
+

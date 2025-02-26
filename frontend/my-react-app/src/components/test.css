@@ -785,7 +785,7 @@ body {
 }
 
 .confirm-popup-content {
-  background: #212121;
+  background: #4d0000;
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
@@ -830,6 +830,25 @@ body {
   background: #bf360c;
 }
 
+
+.confirm-popup-ok {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+  font-size: 1em;
+}
+
+.confirm-popup-ok {
+  background: #2979ff;
+  color: #fff;
+}
+
+.confirm-popup-ok:hover {
+  background: #1565c0;
+}
 /*******************************************/
 /* Imported Fonts                          */
 /*******************************************/
@@ -888,6 +907,10 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.6rem;
 }
+
+
+    
+
 
 /*******************************************/
 /* Test Card (each test in the list)       */
@@ -1593,7 +1616,7 @@ body {
 }
 
 .confirm-popup-content {
-  background: #212121;
+  background: #4d0000;
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;

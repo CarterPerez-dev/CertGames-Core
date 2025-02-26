@@ -693,4 +693,28 @@ def check_and_unlock_achievements(user_id):
         )
 
     return newly_unlocked
+    
+    
+   
+
+def apply_daily_bonus(user_id):
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if not last_claim or (now - last_claim) > timedelta(hours=24):
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {
+                "$inc": {"coins": 1000},
+                "$set": {"lastDailyClaim": now}
+            }
+        )
+        return {"success": True, "message": "Daily bonus applied"}
+    else:
+        return {"success": False, "message": "Already claimed daily bonus."}
+
+    
 
