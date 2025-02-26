@@ -1,0 +1,314 @@
+/* NEW: Full-screen background that applies only if .leaderboard-container exists */
+body:has(.leaderboard-container) {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url('./leader.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed; /* might not work on some mobile browsers */
+  background-position: center;
+}
+
+/* src/components/pages/leaderboard/LeaderboardPage.css */
+
+.leaderboard-container {
+  padding: 20px;
+  color: #fff;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.leaderboard-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #cc0000;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 1px 1px 0px #fff;
+}
+
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.leaderboard-item {
+  background-color: #1e1e1e;
+  border: 2px solid #b30000;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  font-family: 'Roboto', sans-serif;
+  transition: transform 0.2s;
+}
+
+.leaderboard-item:hover {
+  transform: scale(1.02);
+}
+
+.rank-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 10px;
+  width: 40px;
+}
+
+.gold-rank .rank-label {
+  color: #ffd700;
+}
+.silver-rank .rank-label {
+  color: #c0c0c0;
+}
+.bronze-rank .rank-label {
+  color: #cd7f32;
+}
+
+.avatar-wrapper {
+  width: 60px;
+  height: 60px;
+}
+
+.leaderboard-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #cc0000;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 10px;
+}
+
+.username {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #b30000;
+}
+
+.user-level,
+.user-xp {
+  margin-top: 2px;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+/* Basic responsiveness */
+@media (max-width: 320px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+
+  .leaderboard-container {
+    padding: 15px;
+    font-size: 0.9rem; 
+  }
+
+  .leaderboard-title {
+    font-size: 1.6rem; /* Scale down the title */
+    margin-bottom: 0.75rem;
+  }
+
+  .leaderboard-item {
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+  }
+
+  .rank-label {
+    font-size: 1.3rem;
+    margin-right: 0;
+    width: auto; /* Let it shrink naturally */
+  }
+
+  .avatar-wrapper {
+    width: 50px;
+    height: 50px;
+  }
+
+  .user-info {
+    margin-left: 0;
+    align-items: center;
+  }
+
+  .username {
+    font-size: 1rem;
+  }
+
+  .user-level,
+  .user-xp {
+    font-size: 0.85rem;
+  }
+}
+
+/*******************************************/
+/* 2) Small Devices: max-width 480px       */
+/*******************************************/
+@media (max-width: 480px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
+  .leaderboard-container {
+    padding: 15px;
+    font-size: 0.95rem; /* Base font can be slightly smaller */
+  }
+
+  .leaderboard-title {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .leaderboard-item {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .rank-label {
+    font-size: 1.4rem;
+    margin-right: 0;
+    width: auto;
+  }
+
+  .avatar-wrapper {
+    width: 55px;
+    height: 55px;
+  }
+
+  .user-info {
+    margin-left: 0;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .username {
+    font-size: 1.1rem;
+  }
+
+  .user-level,
+  .user-xp {
+    font-size: 0.9rem;
+  }
+}
+
+/*******************************************/
+/* 3) Medium-Small Devices: max-width 600px*/
+/*******************************************/
+@media (max-width: 600px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
+  .leaderboard-container {
+    padding: 20px;
+    font-size: 1rem;
+  }
+
+  .leaderboard-title {
+    font-size: 1.9rem;
+  }
+
+  /* Possibly still vertical stacking if you prefer */
+  .leaderboard-item {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rank-label {
+    font-size: 1.4rem;
+    width: auto;
+    margin-right: 0;
+  }
+
+  .avatar-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-info {
+    margin-left: 0;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .username {
+    font-size: 1.1rem;
+  }
+
+  .user-level,
+  .user-xp {
+    font-size: 0.9rem;
+  }
+}
+
+/*******************************************/
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/*******************************************/
+@media (max-width: 768px) {
+  body:has(.leaderboard-container) {
+    background-attachment: scroll !important; 
+    background-position: center top !important; /* if you want to shift the focal point */
+  }
+  
+  .leaderboard-container {
+    padding: 20px;
+    font-size: 1rem;
+    max-width: 90%;
+  }
+
+  .leaderboard-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  /* If there's enough horizontal space, you can keep items in a row; 
+     otherwise, keep them stacked. Adjust as desired. */
+  .leaderboard-item {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .rank-label {
+    font-size: 1.5rem;
+    width: 40px; /* Or auto if you want more flexible spacing */
+  }
+
+  .avatar-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-info {
+    margin-left: 10px;
+    align-items: flex-start;
+  }
+
+  .username {
+    font-size: 1.15rem;
+  }
+
+  .user-level,
+  .user-xp {
+    font-size: 0.95rem;
+  }
+}
+

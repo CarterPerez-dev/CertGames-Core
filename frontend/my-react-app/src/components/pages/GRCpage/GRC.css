@@ -1,7 +1,7 @@
 .grc-wizard-page {
   position: relative;
   min-height: 100vh;
-  background-image: url('./GRCbackground.jpg');
+  background-image: url('./GRCbackground.jpg'); /* Keep your Kali Linux background here */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -13,62 +13,72 @@
 }
 
 .grc-wizard-container {
-  max-width: 90vw;
+  position: relative;
+  z-index: 2;
+  max-width: 95vw;
   width: 100%;
-  margin: 0 auto;
   padding: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.8); 
-  border: 0.125rem solid #b30000;
+  background-color: rgba(0, 0, 0, 0.65);
+  border: 2px solid #ff0000; /* Red accent */
   border-radius: 0.75rem;
   color: #fff;
-  font-family: "Courier New", monospace;
-  transition: all 0.1s ease;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+  transition: all 0.2s ease;
 }
 
+/* HEADER – TITLE & SUBTITLE */
 .grc-title {
   font-size: 3rem;
-  color: #b30000;
-  text-align: center;
+  color: #ff0000; /* Bold red */
   margin-bottom: 0.75rem;
+  text-shadow: 0.125rem 0.125rem #ffffff;
   word-wrap: break-word;
+  font-family: "VT323", monospace;
 }
 
 .grc-subtitle {
-  font-size: 1.1rem;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 1.75rem;
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
   word-wrap: break-word;
+  font-family: "VT323", monospace;
 }
 
+/* CONTROLS LAYOUT */
 .grc-wizard-controls {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1.25rem;
+  justify-content: center;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .grc-control {
   flex: 1;
-  min-width: 9.375rem;
+  min-width: 10rem;
+  text-align: left;
 }
 
+/* FORM LABELS */
 .grc-label {
   display: block;
   font-size: 1.2rem;
-  color: #e60000;
-  margin-bottom: 0.35rem;
+  font-weight: bold;
+  color: #ff0000; /* Red labels */
+  margin-bottom: 0.5rem;
   text-transform: uppercase;
+  font-family: 'Orbitron', sans-serif;
 }
 
+/* SELECT DROPDOWN */
 .grc-select {
   width: 100%;
   padding: 0.75rem;
-  background-color: #0d0d0d;
-  color: #e60000;
-  border: 0.125rem solid #fff;
-  border-radius: 0.75rem;
+  background-color: #111;
+  color: #ff0000;
+  border: 1px solid #fff;
+  border-radius: 0.5rem;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s ease, background-color 0.3s ease;
@@ -76,30 +86,40 @@
 
 .grc-select:hover,
 .grc-select:focus {
-  border-color: #cc0000;
-  background-color: #1a1a1a; 
+  border-color: #ff5555;
+  background-color: #222;
 }
 
-.grc-generate-btn {
-  flex: 1;
-  min-width: 6.25rem;
-  padding: 0.75rem 1.25rem;
-  background-color: #0d0d0d;
-  color: #fff;
-  border: 0.125rem solid #e60000;
-  border-radius: 1.25rem;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* GENERATE BUTTON & BUTTON CONTAINER */
+.button-and-sphere {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
+.grc-generate-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #ff0000;
+  border-radius: 1.25rem;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+
 .grc-generate-btn:hover:not(:disabled) {
-  background-color: #fff;
+  background-color: #ff0000;
   color: #000;
+  transform: translateY(-2px);
 }
 
 .grc-generate-btn:disabled {
@@ -107,24 +127,22 @@
   opacity: 0.6;
 }
 
-
+/* ANIMATED LOADING (TERMINAL TYPING EFFECT) */
 .grc-button-loading-version1 {
   display: inline-block;
   position: relative;
-  font-family: "Courier New", monospace;
   white-space: nowrap;
   overflow: hidden;
-  border-right: 2px solid #e60000;
+  border-right: 2px solid #ff0000;
   animation: terminalTyping 2s steps(14, end) infinite alternate;
 }
-
 
 @keyframes terminalTyping {
   0% {
     width: 0ch;
   }
   50% {
-    width: 11ch; 
+    width: 11ch;
   }
   100% {
     width: 11ch;
@@ -132,17 +150,17 @@
   }
 }
 
-
+/* QUESTION & OPTIONS */
 .grc-question-container {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .grc-question {
   font-size: 1.8rem;
   color: #fff;
-  text-align: center;
   margin-bottom: 1rem;
   word-wrap: break-word;
+  text-shadow: 0 0 5px #ff0000;
   max-width: 90%;
   margin-left: auto;
   margin-right: auto;
@@ -151,28 +169,25 @@
 .grc-options {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   max-width: 90%;
   margin: 0 auto;
 }
 
 .grc-option-btn {
   padding: 0.75rem 1rem;
-  background-color: #0d0d0d;
+  background-color: #111;
   color: #fff;
-  border: 0.125rem solid #b30000;
-  border-radius: 0.75rem;
+  border: 1px solid #ff0000;
+  border-radius: 0.5rem;
   font-size: 1rem;
-  text-align: center;
   cursor: pointer;
-  word-wrap: break-word;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .grc-option-btn:hover:not(:disabled) {
-  background-color: #696969;
-  color: #000;
-  transform: translateY(-2px); 
+  background-color: #333;
+  transform: translateY(-2px);
 }
 
 .grc-option-btn:active:not(:disabled) {
@@ -181,16 +196,18 @@
 
 .grc-option-btn.selected {
   background-color: #000;
-  color: #fff;
+  color: #ff0000;
+  border-color: #ff0000;
 }
 
+/* FEEDBACK MESSAGE */
 .grc-feedback {
+  position: relative;
   padding: 1rem;
   margin-top: 1.5rem;
-  border-radius: 0.375rem;
+  border-radius: 0.5rem;
   font-size: 1.2rem;
   text-align: center;
-  position: relative;
   line-height: 1.5;
   max-width: 90%;
   margin-left: auto;
@@ -201,29 +218,35 @@
 }
 
 .grc-feedback.correct {
-  background-color: #4caf50; 
-  color: #fff;
-  border: 0.125rem solid #2e7d32;
+  background-color: #006400;  /* Dark green for correct answers */
+  color: #adff2f;
+  border: 1px solid #00ff00;
 }
 
 .grc-feedback.incorrect {
-  background-color: #f44336; 
-  color: #fff;
-  border: 0.125rem solid #c62828;
+  background-color: #8b0000;  /* Dark red for incorrect answers */
+  color: #ff6347;
+  border: 1px solid #ff0000;
 }
 
+/* COPY BUTTON (IN FEEDBACK) */
 .copy-btn {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background-color: #696969;
-  color: #000;
-  border: 0.0625rem solid #000;
+  top: 0.01rem;
+  right: 0.01rem;
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #fff;
   border-radius: 1.25rem;
   padding: 0.2rem 0.5rem;
-  font-size: 0.6rem;
+  font-size: 0.5rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.copy-btn:hover {
+  background-color: #3333ff;
+  color: #000;
 }
 
 .copy-btn:active {
@@ -231,12 +254,9 @@
   opacity: 0.8;
 }
 
-.copy-btn:hover {
-  background-color: #fff;
-  color: #000;
-}
+/* RESPONSIVE MEDIA QUERIES */
 
-
+/* Tablets & Up */
 @media (min-width: 768px) {
   .grc-wizard-container {
     padding: 2rem;
@@ -245,10 +265,7 @@
     font-size: 3.5rem;
   }
   .grc-subtitle {
-    font-size: 1.2rem;
-  }
-  .grc-question-container {
-    margin-bottom: 1.75rem;
+    font-size: 1.3rem;
   }
   .grc-question {
     font-size: 2rem;
@@ -261,6 +278,7 @@
   }
 }
 
+/* Large Screens */
 @media (min-width: 1024px) {
   .grc-wizard-container {
     padding: 2.5rem;
@@ -269,7 +287,7 @@
     font-size: 4rem;
   }
   .grc-subtitle {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
   }
   .grc-question {
     font-size: 2.2rem;
@@ -282,6 +300,7 @@
   }
 }
 
+/* Mobile Devices (iPhone, Android, etc.) */
 @media (max-width: 767px) {
   .grc-wizard-container {
     padding: 1rem;
@@ -294,17 +313,13 @@
   }
   .grc-wizard-controls {
     flex-direction: column;
+    align-items: stretch;
   }
   .grc-control {
     min-width: 100%;
   }
   .grc-generate-btn {
     width: 100%;
-    padding: 0.75rem 1rem;
-  }
-  .button-and-sphere {
-    flex-direction: column;
-    align-items: flex-start;
   }
   .grc-question {
     font-size: 1.6rem;
@@ -316,4 +331,3 @@
     font-size: 1.1rem;
   }
 }
-

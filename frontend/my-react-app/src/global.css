@@ -1,0 +1,4 @@
+.main-content {
+  /* no margin-left at all */
+  transition: all 0.1s ease;  /* optional if you want smoothness */
+}

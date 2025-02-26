@@ -1,0 +1,536 @@
+/* src/components/pages/store/UserProfile.css */
+
+/* FULL-SCREEN BACKGROUND (only if .profile-container is in DOM) */
+body:has(.profile-container) {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.7)
+    ),
+    url('./user.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-attachment: fixed; /* might not work on some mobile browsers */
+  background-position: center;
+}
+
+/*******************************************/
+/* Base styles                             */
+/*******************************************/
+
+.profile-container {
+  color: #fff;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.profile-picture img {
+  width: 80px;
+  height: 80px;
+  border: 3px solid #cc0000;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-family: 'Orbitron', sans-serif;
+  color: #b30000;
+  text-shadow: 1px 1px 0px #fff;
+  margin: 0;
+}
+
+.logout-button {
+  margin-left: auto;
+  background: none;
+  border: 1px solid #ff0000;
+  color: #ff0000;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.logout-button:hover {
+  background: #ff0000;
+  color: #fff;
+}
+
+.profile-overview,
+.profile-actions,
+.profile-extra {
+  margin-bottom: 20px;
+}
+
+.profile-card,
+.action-card,
+.extra-card {
+  background: #1e1e1e;
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-card h2,
+.action-card h2,
+.extra-card h2 {
+  margin-top: 0;
+  font-family: 'Orbitron', sans-serif;
+  color: #b30000;
+}
+
+.profile-details p {
+  margin: 6px 0;
+}
+.profile-details .detail-label {
+  font-weight: bold;
+  color: #b30000;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.profile-btn {
+  background: #cc0000;
+  border: solid 1px #000;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.profile-btn:hover {
+  background: #ff0000;
+}
+
+.extra-card h2 {
+  margin-bottom: 10px;
+}
+
+.achievements-list,
+.purchased-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.achievement-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #292929;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.achievement-icon {
+  font-size: 3rem;
+  color: #ffd700;
+}
+
+.achievement-id {
+  font-weight: bold;
+  color: #fff;
+}
+
+.purchased-item-display {
+  background-color: #292929;
+  padding: 8px;
+  border-radius: 8px;
+}
+.purchased-item-title {
+  font-weight: bold;
+  color: #ffcccc;
+}
+
+/*******************************************/
+/* Additional styling for the change fields */
+/*******************************************/
+
+.change-section {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.change-section input {
+  width: 100%;
+  padding-right: 40px; /* Make room for an icon if needed */
+  box-sizing: border-box;
+}
+
+.change-section-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.change-section-buttons button {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.change-section-buttons button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.change-section-buttons button:active {
+  transform: scale(0.98);
+}
+
+/* status message styling */
+.status-message {
+  background: #d8ffd8;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  border: 1px solid #8f8;
+  border-radius: 6px;
+  color: #333;
+}
+
+/*******************************************/
+/* Inputs and unique eye icon classes      */
+/*******************************************/
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Overview password row */
+.password-display-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.password-value-container {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  background: #fff;
+  color: #000;
+  border-radius: 4px;
+  padding-right: 35px; /* space for the eye icon */
+}
+
+.password-value-container span {
+  padding: 8px;
+  font-size: 0.95rem;
+}
+
+/*******************************************/
+/* Change Password Section                 */
+/*******************************************/
+
+.change-password-section {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.password-row {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.password-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.password-input-container input {
+  width: 100%;
+  padding: 8px 35px 8px 12px; /* room for eye icon on right */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 40px;
+  box-sizing: border-box;
+}
+
+/*******************************************/
+/* The unique "profile-eye-icon" class     */
+/*******************************************/
+
+.profile-eye-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  z-index: 2;
+}
+
+.profile-eye-icon:hover {
+  color: #333;
+}
+
+.profile-eye-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/*******************************************/
+/* Responsive breakpoints                  */
+/*******************************************/
+
+/* 1) Extra-Small: max-width 320px */
+@media (max-width: 320px) {
+  .profile-container {
+    padding: 10px;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .profile-picture img {
+    width: 50px;
+    height: 50px;
+    border-width: 2px;
+  }
+
+  .profile-title {
+    font-size: 1.4rem;
+  }
+
+  .logout-button {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 10px;
+  }
+
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1rem;
+  }
+
+  .profile-details p {
+    font-size: 0.9rem; 
+  }
+
+  .profile-btn {
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+
+  .achievement-icon {
+    font-size: 1rem;
+  }
+
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 0.9rem;
+  }
+}
+
+/* 2) Small Devices: max-width 480px */
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 15px;
+    max-width: 100%;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .profile-picture img {
+    width: 60px;
+    height: 60px;
+    border-width: 2px;
+  }
+
+  .profile-title {
+    font-size: 1.5rem;
+  }
+  .logout-button {
+    margin-left: 0;
+    margin-top: 10px;
+    padding: 6px 12px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 12px;
+  }
+
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+
+  .profile-btn {
+    font-size: 1rem;
+    padding: 6px 10px;
+  }
+
+  .achievement-icon {
+    font-size: 1.1rem;
+  }
+
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
+  }
+}
+
+/* 3) Medium-Small Devices: max-width 600px*/
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 15px;
+    max-width: 95%;
+  }
+  
+  .profile-header {
+    gap: 20px;
+  }
+
+  .profile-picture img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .profile-title {
+    font-size: 1.6rem;
+  }
+
+  .logout-button {
+    padding: 7px 14px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 14px;
+  }
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+  .profile-btn {
+    padding: 7px 12px;
+    font-size: 1rem;
+  }
+
+  .achievement-icon {
+    font-size: 1.2rem;
+  }
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
+  }
+}
+
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 20px;
+    max-width: 90%;
+  }
+
+  .profile-header {
+    gap: 25px;
+  }
+  
+  .profile-title {
+    font-size: 1.7rem;
+  }
+
+  .logout-button {
+    padding: 8px 16px;
+    font-size: 1rem;
+  }
+
+  .profile-card,
+  .action-card,
+  .extra-card {
+    padding: 16px;
+  }
+  .profile-card h2,
+  .action-card h2,
+  .extra-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .profile-details p {
+    font-size: 1rem;
+  }
+
+  .profile-btn {
+    font-size: 1rem;
+    padding: 8px 12px;
+  }
+
+  .achievement-icon {
+    font-size: 1.3rem;
+  }
+  .achievement-id,
+  .purchased-item-title {
+    font-size: 1rem;
+  }
+}
+
