@@ -6,8 +6,6 @@ Userprofile page default route for logged in users.
 ---------------------------
 
 
-### so for this right here- we need to highlight the "Skipped"
-![image](https://github.com/user-attachments/assets/27ca5db8-581f-41ef-b882-f792941e221a)
 
 ### achievemnt popups arent popping up when achieiving
 so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i meet the cirteria/achieve an achievemtn? so liek my auth pages for login aand stuff have the toast popup notifcations, so for my achievment toats notifation popups, why wont my ahcievemtn toat popups show when i achive soemwthing- i know this becvasue i achived soemthing as a test adn nothing popped up/ toast notifs.
