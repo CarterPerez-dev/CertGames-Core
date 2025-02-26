@@ -23,8 +23,22 @@ Rate limiting: Implement rate limiting for each user to prevent abuse or acciden
 These optimizations become important as you scale to hundreds or thousands of concurrent test-takers. The current implementation works well for moderate usage, but these changes would help prepare for higher loads.
 ```
 
+### Achievements to Consider Removing:
 
+absolute_perfectionist - Requires checking if ALL tests are 100% perfect scores. Extremely computationally expensive and nearly impossible to achieve.
+exam_conqueror - Needs to verify minimum scores across ALL tests, requiring full data scans.
+redemption_arc - Requires chronological analysis comparing worst and best performances.
+consecutive_perfects - Tracking consecutive perfect scores is expensive and memory-intensive.
 
+Optimization Alternatives:
+
+Use Counter Fields: Instead of recalculating everything, maintain counter fields in the user document that update incrementally.
+Background Processing: Move achievement checks to a background task that runs periodically rather than after every test.
+Achievement Caching: Cache achievement eligibility checks with a TTL to prevent recalculating for every operation.
+Limit Scope: For category achievements, only check the specific category that just changed rather than all categories.
+
+Removing or simplifying these complex achievements would significantly improve overall system performance, especially during high traffic periods.
+###
 
 ------------------------------------------------
 ### Need to make an 'EXAM && PRACTICE MODE'
