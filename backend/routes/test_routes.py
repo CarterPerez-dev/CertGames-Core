@@ -54,6 +54,7 @@ def serialize_user(user):
 def serialize_datetime(dt):
     """Helper: convert a datetime to an ISO string (or return None)."""
     return dt.isoformat() if dt else None
+
 # -------------------------------------------------------------------
 # USER ROUTES
 # -------------------------------------------------------------------
@@ -68,7 +69,6 @@ def get_user(user_id):
     if "password" not in user:
         user["password"] = user.get("password")
     return jsonify(user), 200
-
 
 @api_bp.route('/user', methods=['POST'])
 def register_user():
@@ -85,7 +85,6 @@ def register_user():
         return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
-
 
 @api_bp.route('/login', methods=['POST'])
 def login():
@@ -124,8 +123,6 @@ def login():
         "password": user.get("password")
     }), 200
 
-
-
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
     data = request.json or {}
@@ -137,14 +134,20 @@ def add_xp_route(user_id):
     updated["newAchievements"] = new_achievements
     return jsonify(updated), 200
 
-
 @api_bp.route('/user/<user_id>/add-coins', methods=['POST'])
 def add_coins_route(user_id):
     data = request.json or {}
     coins_to_add = data.get("coins", 0)
     update_user_coins(user_id, coins_to_add)
-    return jsonify({"message": "Coins updated"}), 200
 
+    # <--- Add check_and_unlock_achievements so that if new achievements
+    # are unlocked by adding coins, we return them:
+    newly_unlocked = check_and_unlock_achievements(user_id)
+
+    return jsonify({
+        "message": "Coins updated",
+        "newlyUnlocked": newly_unlocked
+    }), 200
 
 # -------------------------------------------------------------------
 # SHOP ROUTES
@@ -157,7 +160,6 @@ def fetch_shop():
         item["_id"] = str(item["_id"])
     return jsonify(items), 200
 
-
 @api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
 def purchase_item_route(item_id):
     data = request.json or {}
@@ -167,10 +169,13 @@ def purchase_item_route(item_id):
 
     result = purchase_item(user_id, item_id)
     if result["success"]:
+        # After purchase, user might have enough coins spent or gained
+        # to unlock coin-based achievements. So do:
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        result["newlyUnlocked"] = newly_unlocked
         return jsonify(result), 200
     else:
         return jsonify(result), 400
-
 
 @api_bp.route('/shop/equip', methods=['POST'])
 def equip_item_route():
@@ -206,7 +211,6 @@ def equip_item_route():
     )
     return jsonify({"success": True, "message": "Avatar equipped"}), 200
 
-
 # -------------------------------------------------------------------
 # TESTS ROUTES
 # -------------------------------------------------------------------
@@ -219,7 +223,6 @@ def fetch_test_by_id_route(test_id):
         return jsonify({"error": "Test not found"}), 404
     test_doc["_id"] = str(test_doc["_id"])
     return jsonify(test_doc), 200
-
 
 @api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
 def fetch_test_by_category_and_id(category, test_id):
@@ -241,7 +244,6 @@ def fetch_test_by_category_and_id(category, test_id):
 
     test_doc["_id"] = str(test_doc["_id"])
     return jsonify(test_doc), 200
-
 
 # -------------------------------------------------------------------
 # PROGRESS / ATTEMPTS ROUTES
@@ -288,7 +290,6 @@ def get_test_attempt(user_id, test_id):
     attempt["userId"] = str(attempt["userId"])
     return jsonify({"attempt": attempt}), 200
 
-
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
     data = request.json or {}
@@ -319,7 +320,6 @@ def update_test_attempt(user_id, test_id):
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
     return jsonify({"message": "Progress updated"}), 200
 
-
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
     data = request.json or {}
@@ -349,7 +349,6 @@ def finish_test_attempt(user_id, test_id):
         "newlyUnlocked": newly_unlocked
     }), 200
 
-
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
     try:
@@ -376,7 +375,6 @@ def list_test_attempts(user_id):
         "page_size": page_size,
         "attempts": attempts
     }), 200
-
 
 # -------------------------------------------------------------------
 # FIRST-TIME-CORRECT ANSWERS
@@ -428,7 +426,6 @@ def submit_answer(user_id):
         "newCoins": new_coins
     }), 200
 
-
 # -------------------------------------------------------------------
 # ACHIEVEMENTS
 # -------------------------------------------------------------------
@@ -438,7 +435,6 @@ def fetch_achievements_route():
     for ach in ach_list:
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
-
 
 # -------------------------------------------------------------------
 # Leaderboard Route
@@ -470,7 +466,6 @@ def get_leaderboard():
 
     return jsonify(results), 200
 
-
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # USERNAME/EMAIL/PASSWORD CHANGES
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -498,7 +493,6 @@ def change_username():
     update_user_fields(user_id, {"username": new_username})
     return jsonify({"message": "Username updated"}), 200
 
-
 @api_bp.route('/user/change-email', methods=['POST'])
 def change_email():
     data = request.json or {}
@@ -521,7 +515,6 @@ def change_email():
 
     update_user_fields(user_id, {"email": new_email})
     return jsonify({"message": "Email updated"}), 200
-
 
 @api_bp.route('/user/change-password', methods=['POST'])
 def change_password():
@@ -553,14 +546,12 @@ def change_password():
     update_user_fields(user_id, {"password": new_password})
     return jsonify({"message": "Password updated"}), 200
 
-
 @api_bp.route('/subscription/cancel', methods=['POST'])
 def cancel_subscription():
     """
     Placeholder. Possibly set subscriptionActive=False
     """
     return jsonify({"message": "Cancel subscription placeholder"}), 200
-
 
 
 # For single answer updates
@@ -657,12 +648,6 @@ def update_position(user_id, test_id):
     
     return jsonify({"message": "Position updated"}), 200
 
-
-
-
-
-
-
 ##############################################
 # DAILY QUESTION ENDPOINTS
 ##############################################
@@ -696,17 +681,19 @@ def daily_bonus(user_id):
             {"$set": {"lastDailyClaim": now}}
         )
         updated_user = get_user_by_id(user_id)
+
+        # === NEW: Check achievements unlocked by this big coin addition
+        newly_unlocked = check_and_unlock_achievements(user_id)
+
         return jsonify({
             "success": True,
             "message": "Daily bonus applied",
             "newCoins": updated_user.get("coins", 0),
             "newXP": updated_user.get("xp", 0),
-            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim"))
+            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+            "newlyUnlocked": newly_unlocked
         }), 200
 
-# -------------------------------
-# Daily Question GET Endpoint
-# -------------------------------
 @api_bp.route('/daily-question', methods=['GET'])
 def get_daily_question():
     """
@@ -724,7 +711,6 @@ def get_daily_question():
         return jsonify({"error": "Invalid user ID"}), 400
 
     # For demo purposes, we use day_index 0.
-    # In production you might do: day_index = (UTC today - startDate).days % TOTAL_DAYS
     day_index = 0
 
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
@@ -744,9 +730,6 @@ def get_daily_question():
     }
     return jsonify(response), 200
 
-# -------------------------------
-# Daily Question Answer Endpoint
-# -------------------------------
 @api_bp.route('/daily-question/answer', methods=['POST'])
 def submit_daily_question():
     """
@@ -792,11 +775,16 @@ def submit_daily_question():
 
     update_user_coins(user_id, awarded_coins)
     updated_user = get_user_by_id(user_id)
+
+    # After awarding coins, check achievements
+    newly_unlocked = check_and_unlock_achievements(user_id)
+
     return jsonify({
         "message": "Answer submitted",
         "correct": is_correct,
         "awardedCoins": awarded_coins,
         "newCoins": updated_user.get("coins", 0),
         "newXP": updated_user.get("xp", 0),
-        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim"))
+        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+        "newlyUnlocked": newly_unlocked
     }), 200
