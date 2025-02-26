@@ -1,7 +1,8 @@
 // src/components/pages/DailyStationPage.js
+
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setXPAndCoins, fetchUserData, claimDailyBonus } from './userSlice'; 
+import { setXPAndCoins, fetchUserData } from './userSlice';
 import './DailyStation.css'; // Updated CSS import
 
 // Helper to format seconds as HH:MM:SS
@@ -88,40 +89,33 @@ const DailyStationPage = () => {
     return () => clearInterval(questionInterval);
   }, []);
 
-  // Claim daily bonus using the Redux thunk (claimDailyBonus)
-  async function claimBonus() {
+  // Claim daily bonus
+  async function claimDailyBonus() {
     if (!userId) {
       setBonusError('Please log in first.');
       return;
     }
     setLoadingBonus(true);
     setBonusError(null);
-
     try {
-      const resultAction = await dispatch(claimDailyBonus(userId));
-      if (claimDailyBonus.fulfilled.match(resultAction)) {
-        // The payload shape will look like: { success, message, newlyUnlocked, newCoins, newXP, ... }
-        const data = resultAction.payload;
-        setLoadingBonus(false);
-        if (data.success) {
-          // Show overlay animation
-          setShowBonusAnimation(true);
-          setTimeout(() => setShowBonusAnimation(false), 3000);
-          // Locally track the new daily claim time
-          setLocalLastDailyClaim(new Date().toISOString());
-          // Refresh user data to get updated coins/XP
-          dispatch(fetchUserData(userId));
-        } else {
-          setBonusError(data.message || 'Failed to claim daily bonus.');
-        }
+      const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
+        method: 'POST'
+      });
+      const data = await res.json();
+      setLoadingBonus(false);
+      if (res.ok && data.success) {
+        // Show a big, obvious overlay for 3 seconds
+        setShowBonusAnimation(true);
+        setTimeout(() => setShowBonusAnimation(false), 3000);
+
+        setLocalLastDailyClaim(new Date().toISOString());
+        dispatch(fetchUserData(userId));
       } else {
-        // Rejected
-        setLoadingBonus(false);
-        setBonusError(resultAction.payload || 'Error claiming daily bonus.');
+        setBonusError(data.message || 'Failed to claim daily bonus.');
       }
     } catch (err) {
-      setLoadingBonus(false);
       setBonusError('Error: ' + err.message);
+      setLoadingBonus(false);
     }
   }
 
@@ -208,7 +202,7 @@ const DailyStationPage = () => {
   } else {
     dailyBonusContent = (
       <button
-        onClick={claimBonus}
+        onClick={claimDailyBonus}
         disabled={loadingBonus}
         className="claim-bonus-button"
       >
@@ -308,7 +302,7 @@ const DailyStationPage = () => {
         <div className="app-title">Daily Station</div>
       </div>
 
-      {/* If user is logged in, show user info in a separate bar */}
+      {/* If user is logged in, show user info in a separate bar (to keep the title centered) */}
       {userId && (
         <div className="player-info-bar">
           <div className="player-info">
