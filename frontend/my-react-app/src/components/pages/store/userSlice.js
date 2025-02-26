@@ -6,6 +6,10 @@ import {
   FaCheckCircle, FaRegSmile, FaMagic
 } from 'react-icons/fa';
 
+// Import the thunks to fetch achievements and shop items
+import { fetchAchievements } from './achievementsSlice';
+import { fetchShopItems } from './shopSlice';
+
 // Same icon + color mapping as in achievements
 const iconMapping = {
   test_rookie: FaTrophy,
@@ -72,13 +76,9 @@ const colorMapping = {
 function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
   if (!newlyUnlocked || newlyUnlocked.length === 0) return;
   newlyUnlocked.forEach((achId) => {
-    // Find the achievement object from our Redux store if you like,
-    // but we can also rely on the ID to pick an icon + color
-    // If you have them in a slice, you can pass them in as well.
     const icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
     const color = colorMapping[achId] || "#fff";
 
-    // If you have "allAchievements" in memory, find the title/desc
     const foundAch = allAchievements?.find(a => a.achievementId === achId);
     const title = foundAch?.title || `Unlocked ${achId}`;
     const desc = foundAch?.description || 'Achievement Unlocked!';
@@ -149,6 +149,10 @@ export const loginUser = createAsyncThunk(
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
+      // Immediately fetch achievements + shop data after successful login
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -159,13 +163,18 @@ export const loginUser = createAsyncThunk(
 // FETCH USER DATA
 export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
-  async (userId, { rejectWithValue }) => {
+  async (userId, { rejectWithValue, dispatch }) => {
     try {
       const response = await fetch(`/api/test/user/${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch user data');
       }
       const data = await response.json();
+
+      // Also fetch achievements + shop items to ensure they're loaded
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -187,7 +196,6 @@ export const claimDailyBonus = createAsyncThunk(
       }
       // If new achievements came back, display them
       if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-        // If you want full achievement details, you can pass achievements slice data
         const allAchs = getState().achievements.all;
         showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
       }
@@ -351,7 +359,6 @@ const userSlice = createSlice({
         if (action.payload.success) {
           state.coins = action.payload.newCoins;
           state.xp = action.payload.newXP;
-          // Achievements were toasted in the thunk
         }
       })
       .addCase(claimDailyBonus.rejected, (state, action) => {
@@ -361,11 +368,8 @@ const userSlice = createSlice({
 
       // ADD COINS
       .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, we can re-fetch user or just patch coins.
-        // For simplicity, let's do a quick local patch
-        // The route does not return the new coin count, so re-fetch user or pass it.
-        // If we want the new total coins, we can do so after the route logic is updated.
-        // Alternatively, you can do dispatch(fetchUserData(userId)) from the thunk.
+        // If route succeeded, you could re-fetch user or do local updates here
+        // e.g., state.coins += ...
       });
   },
 });
