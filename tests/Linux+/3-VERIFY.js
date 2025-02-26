@@ -1,12 +1,8 @@
-find all **(PBQ)** and replcae them all
-and Q 63
-
-
 db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
+  "category": "linuxplus",
   "testId": 3,
-  "testName": "Practice Test #3 (Easy)",
-  "xpPerCorrect": 15,
+  "testName": "Linux+ Practice Test #3 (Easy)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
@@ -36,16 +32,16 @@ db.tests.insertOne({
     },
     {
       "id": 3,
-      "question": "**(PBQ)** A Linux administrator needs to configure firewall rules. Match each command with its function:",
+      "question": "  You have configured a software RAID1 setup on two drives. The array appears functional, but upon reboot, the system occasionally complains that one drive is ‘missing’ from the array. You verify that both disks are healthy. What is the NEXT logical action to diagnose this intermittent issue?",
       "options": [
-        "1. `firewall-cmd --add-port=443/tcp`  ->  A. Temporarily allows traffic on port 443",
-        "2. `iptables -A INPUT -p tcp --dport 22 -j ACCEPT`  ->  B. Adds a rule to allow SSH traffic",
-        "3. `ufw allow 80/tcp`  ->  C. Permits HTTP traffic using UFW",
-        "4. `nft add rule inet filter input tcp dport 53 accept`  ->  D. Allows DNS queries using nftables"
+        "Temporarily disable the RAID by editing /etc/fstab and then inspect the drives individually with badblocks.",
+        "Check the initramfs configuration to ensure RAID modules are included and rebuild the initramfs if necessary.",
+        "Run mdadm --stop /dev/md0, power cycle the server, then recreate the array from scratch using mdadm --create.",
+        "Configure a systemd service that forces a resync on every boot using mdadm --assemble --scan."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`firewall-cmd` manages `firewalld`, `iptables` manipulates legacy firewall rules, `ufw` is Ubuntu’s simplified firewall interface, and `nft` configures `nftables`.",
-      "examTip": "Use `firewall-cmd --runtime-to-permanent` to make `firewalld` rules persistent."
+      "correctAnswerIndex": 1,
+      "explanation": "An intermittent ‘missing drive’ error on boot often indicates the RAID modules or configuration aren't loaded early enough by the initramfs. Confirm that your RAID drivers and mdadm.conf are integrated into initramfs. Rebuilding it ensures the system properly recognizes all RAID members at startup.",
+      "examTip": "RAID arrays must be recognized and assembled during early boot stages. If modules or config are absent from initramfs, disks may appear ‘missing’ even if physically healthy."
     },
     {
       "id": 4,
@@ -166,16 +162,16 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "**(PBQ)** A system administrator needs to monitor system performance. Match each command with the resource it monitors:",
+      "question": "You need to temporarily grant a junior admin the ability to manage network interfaces without giving them root privileges. Which step addresses this requirement?",
       "options": [
-        "1. `top`  ->  A. CPU and memory usage",
-        "2. `iostat`  ->  B. Disk I/O statistics",
-        "3. `vmstat`  ->  C. System-wide performance overview",
-        "4. `netstat -i`  ->  D. Network interface statistics"
+        "Include the user in the root group to inherit complete root-level permissions over network settings.",
+        "Edit /etc/passwd so that the user’s shell is /sbin/nologin, restricting them from any administrative commands.",
+        "Set a SUID bit on /sbin/ifconfig to allow non-root execution of network configuration commands.",
+        "Use visudo to add a rule granting only network-related commands, such as /sbin/ifdown and /sbin/ifup, without full sudo access."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`top` shows CPU and memory usage, `iostat` reports disk I/O, `vmstat` provides system-wide metrics, and `netstat -i` displays network statistics.",
-      "examTip": "Use `htop` for an interactive version of `top` and `iotop` for disk I/O per process."
+      "correctAnswerIndex": 3,
+      "explanation": "By editing /etc/sudoers using visudo and specifying explicit commands, you can restrict the user to only those operations needed for managing network interfaces, avoiding a blanket root group addition or insecure SUID-based approaches.",
+      "examTip": "Always apply principle of least privilege: tailor sudo rules to just the commands required rather than giving broad privileges."
     },
     {
       "id": 14,
@@ -296,16 +292,16 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "**(PBQ)** A Linux administrator needs to modify file permissions. Match each command with its function:",
+      "question": "A Linux system is failing to mount an NFS share during boot. After the system is fully up, a manual mount works fine. System logs show a network service dependency error at boot time. Which action addresses the dependency issue so the NFS mount succeeds on startup?",
       "options": [
-        "1. `chmod 750 file.txt`  ->  A. Grants full access to the owner, read/execute to group",
-        "2. `chown user:group file.txt`  ->  B. Changes the owner and group of a file",
-        "3. `umask 022`  ->  C. Sets default file permissions for new files",
-        "4. `setfacl -m u:user:r file.txt`  ->  D. Grants read permissions to a specific user"
+        "Add the _netdev option to the NFS entry in /etc/fstab so the mount waits for network services.",
+        "Disable NetworkManager and revert to static configuration in /etc/sysconfig/network-scripts/ifcfg-<interface>.",
+        "Use systemctl mask nfs-server to force the NFS service to remain inactive until manual mount is triggered.",
+        "Add a pre-up script in /etc/network/interfaces to forcibly mount all NFS shares once the interface is up."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`chmod` modifies permissions, `chown` changes ownership, `umask` defines default permissions, and `setfacl` manages ACLs for fine-grained access control.",
-      "examTip": "Use `ls -l` to verify permissions and `getfacl` to check ACL settings."
+      "explanation": "The _netdev option in /etc/fstab ensures that the filesystem mounting will be delayed until the network is fully operational. This addresses the startup dependency so the system doesn’t attempt an NFS mount before the network is ready.",
+      "examTip": "NFS mounts can fail at boot if network services are not yet available. _netdev ensures proper ordering of dependencies."
     },
     {
       "id": 24,
@@ -426,16 +422,16 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "**(PBQ)** A system administrator needs to troubleshoot storage issues. Match each command with its function:",
+      "question": "You suspect a GRUB2 misconfiguration after a kernel update. The system fails to load the new kernel, booting only the old one. Which single command will regenerate the GRUB2 config file to include the new kernel entries?",
       "options": [
-        "1. `df -h`  ->  A. Displays filesystem disk usage",
-        "2. `du -sh /var/log`  ->  B. Shows disk usage for a specific directory",
-        "3. `lsblk`  ->  C. Lists block devices and partitions",
-        "4. `blkid`  ->  D. Displays UUID and filesystem type of storage devices"
+        "grub2-install /dev/sda",
+        "grub2-set-default 0",
+        "update-grub",
+        "grub2-mkconfig -o /boot/grub2/grub.cfg"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`df -h` shows overall filesystem usage, `du -sh` provides directory-level usage, `lsblk` lists block devices, and `blkid` displays UUIDs and filesystem types.",
-      "examTip": "Use `du -sh * | sort -hr` to list directories by size."
+      "correctAnswerIndex": 3,
+      "explanation": "On many distributions (particularly RPM-based), grub2-mkconfig -o /boot/grub2/grub.cfg is the standard approach to regenerate the grub.cfg with updated kernel entries. The command 'update-grub' is more common in Debian-based systems, but might not exist on others.",
+      "examTip": "Be mindful of distro-specific commands: RHEL/Fedora/CentOS use grub2-mkconfig, whereas Debian/Ubuntu typically use update-grub."
     },
     {
       "id": 34,
@@ -556,146 +552,16 @@ db.tests.insertOne({
     },
     {
       "id": 43,
-      "question": "**(PBQ)** A system administrator needs to configure network settings. Match each file with its purpose:",
+      "question": "Match each iptables chain to its primary purpose. Which mapping is correct?\n\nA) INPUT, B) OUTPUT, C) FORWARD\n\n1) Manages traffic leaving the system.\n2) Controls packets routed through the system to other networks.\n3) Governs incoming packets destined for the local machine.\n\nChoose the set [A->?, B->?, C->?].",
       "options": [
-        "1. `/etc/hosts`  ->  A. Local hostname-to-IP resolution",
-        "2. `/etc/resolv.conf`  ->  B. DNS server configuration",
-        "3. `/etc/network/interfaces`  ->  C. Network configuration on Debian-based systems",
-        "4. `/etc/sysconfig/network-scripts/ifcfg-eth0`  ->  D. Network configuration on RHEL-based systems"
+        "A->3, B->2, C->1",
+        "A->1, B->3, C->2",
+        "A->3, B->1, C->2",
+        "A->2, B->1, C->3"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`/etc/hosts` maps hostnames to IP addresses, `/etc/resolv.conf` defines DNS settings, `/etc/network/interfaces` is used in Debian-based systems, and `/etc/sysconfig/network-scripts/ifcfg-eth0` is used in RHEL-based distributions.",
-      "examTip": "Use `nmcli` or `ip a` to view current network settings."
-    },
-    {
-      "id": 44,
-      "question": "Which of the following commands will create a new filesystem on a partition?",
-      "options": [
-        "mkfs.ext4 /dev/sdX1",
-        "fdisk /dev/sdX",
-        "mount /dev/sdX1 /mnt",
-        "fsck /dev/sdX1"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`mkfs.ext4 /dev/sdX1` creates an ext4 filesystem on the specified partition. `fdisk` is used for partitioning, `mount` attaches an existing filesystem, and `fsck` checks filesystem integrity.",
-      "examTip": "Use `mkfs -t ext4 /dev/sdX1` for a filesystem type-independent command."
-    },
-    {
-      "id": 45,
-      "question": "Which command will list all systemd services along with their current states?",
-      "options": [
-        "systemctl list-units --type=service",
-        "systemctl list-services",
-        "systemctl list-running",
-        "service --status-all"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`systemctl list-units --type=service` lists all systemd services with their statuses. `systemctl list-services` is not a valid command, `list-running` shows only active services, and `service --status-all` applies to SysVinit systems.",
-      "examTip": "Use `systemctl --failed` to list only failed services."
-    },
-    {
-      "id": 46,
-      "question": "A system administrator wants to determine which user last modified a file. Which command should they use?",
-      "options": [
-        "auditctl -w /path/to/file -p wa",
-        "ls -lt /path/to/file",
-        "stat /path/to/file",
-        "getfacl /path/to/file"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`auditctl -w /path/to/file -p wa` enables auditing for file modifications, allowing tracking of which user last modified the file. `ls -lt` shows modification times but not the user, `stat` provides metadata, and `getfacl` lists access control details.",
-      "examTip": "Use `ausearch -f /path/to/file` to view audit logs for a specific file."
-    },
-    {
-      "id": 47,
-      "question": "Which command will display a real-time stream of system log messages on a systemd-based Linux system?",
-      "options": [
-        "journalctl -f",
-        "tail -f /var/log/syslog",
-        "dmesg -w",
-        "All of the above"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "All listed commands can display real-time logs. `journalctl -f` follows systemd journal logs, `tail -f` monitors syslog files, and `dmesg -w` follows kernel messages.",
-      "examTip": "Use `journalctl -xe` to see detailed logs, including errors and warnings."
-    },
-    {
-      "id": 48,
-      "question": "Which of the following commands will remove all untracked files from a Git repository?",
-      "options": [
-        "git clean -df",
-        "git reset --hard",
-        "git rm --cached",
-        "git checkout HEAD"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`git clean -df` removes untracked files and directories. `git reset --hard` resets tracked files, `git rm --cached` removes a file from staging without deleting it, and `git checkout HEAD` resets working directory changes but does not remove untracked files.",
-      "examTip": "Use `git clean -n` first to preview which files will be deleted."
-    },
-    {
-      "id": 49,
-      "question": "Which command will display detailed memory usage, including swap utilization, on a Linux system?",
-      "options": [
-        "free -m",
-        "vmstat -s",
-        "top",
-        "All of the above"
-      ],
-      "correctAnswerIndex": 3,
-      "explanation": "All listed commands provide memory usage details. `free -m` shows overall memory and swap, `vmstat -s` provides a breakdown, and `top` gives real-time monitoring.",
-      "examTip": "Use `free -h` for human-readable memory statistics."
-    },
-    {
-      "id": 50,
-      "question": "Which command will forcefully terminate a process with PID 1234?",
-      "options": [
-        "kill -9 1234",
-        "kill -15 1234",
-        "pkill 1234",
-        "killall 1234"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`kill -9 1234` sends the SIGKILL signal, terminating the process immediately. `kill -15` attempts a graceful termination, `pkill` searches for processes by name, and `killall` terminates all instances of a process name.",
-      "examTip": "Use `kill -15` first before resorting to `kill -9` to allow proper cleanup."
-    },
-    {
-      "id": 41,
-      "question": "Which of the following commands will display a list of all loaded kernel modules?",
-      "options": [
-        "lsmod",
-        "modinfo",
-        "modprobe -l",
-        "insmod"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`lsmod` lists all currently loaded kernel modules. `modinfo` provides details about a specific module, `modprobe -l` lists available modules but does not display which ones are loaded, and `insmod` manually inserts a module.",
-      "examTip": "Use `lsmod | grep <module>` to check if a specific module is loaded."
-    },
-    {
-      "id": 42,
-      "question": "A user is unable to write to a file they own. What is the MOST likely reason?",
-      "options": [
-        "The file has the immutable attribute set.",
-        "The user does not have execute permissions on the directory.",
-        "The file is owned by root.",
-        "The user’s shell does not support write operations."
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "If a file has the immutable attribute set (`chattr +i`), even the owner cannot modify it. Lack of execute permissions on a directory prevents traversal, but not writing to an existing file. File ownership does not matter if permissions allow writing, and shell limitations are unrelated.",
-      "examTip": "Use `lsattr filename` to check if a file has immutable attributes set."
-    },
-    {
-      "id": 43,
-      "question": "**(PBQ)** A system administrator needs to configure network settings. Match each file with its purpose:",
-      "options": [
-        "1. `/etc/hosts`  ->  A. Local hostname-to-IP resolution",
-        "2. `/etc/resolv.conf`  ->  B. DNS server configuration",
-        "3. `/etc/network/interfaces`  ->  C. Network configuration on Debian-based systems",
-        "4. `/etc/sysconfig/network-scripts/ifcfg-eth0`  ->  D. Network configuration on RHEL-based systems"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "`/etc/hosts` maps hostnames to IP addresses, `/etc/resolv.conf` defines DNS settings, `/etc/network/interfaces` is used in Debian-based systems, and `/etc/sysconfig/network-scripts/ifcfg-eth0` is used in RHEL-based distributions.",
-      "examTip": "Use `nmcli` or `ip a` to view current network settings."
+      "correctAnswerIndex": 2,
+      "explanation": "INPUT handles packets entering the host, OUTPUT handles packets generated locally leaving the host, and FORWARD handles traffic passing through the host. Therefore, the correct mapping is [A->3, B->1, C->2].",
+      "examTip": "Different iptables chains target distinct traffic directions. Understand which chain is used for local traffic vs. transit traffic."
     },
     {
       "id": 44,
@@ -816,16 +682,16 @@ db.tests.insertOne({
     },
     {
       "id": 53,
-      "question": "**(PBQ)** A Linux administrator is troubleshooting disk performance issues. Match each command with its function:",
+      "question": "You need to expand an existing LVM logical volume by 5GB in a VG (Volume Group) that has sufficient free space. Which single command achieves this expansion (assuming /dev/vgdata/lvdata is the LV and /mountpoint is already mounted)?",
       "options": [
-        "1. `iostat`  ->  A. Displays disk I/O statistics",
-        "2. `iotop`  ->  B. Shows real-time disk usage per process",
-        "3. `df -h`  ->  C. Reports filesystem usage",
-        "4. `lsblk`  ->  D. Lists block devices and partitions"
+        "lvcreate -n lvdata -L +5G /dev/vgdata && resize2fs /dev/vgdata/lvdata",
+        "lvextend -L +5G /dev/vgdata/lvdata && resize2fs /dev/vgdata/lvdata",
+        "vgextend /dev/vgdata -L +5G && resize2fs /dev/vgdata/lvdata",
+        "pvresize --setphysicalvolumesize +5G /dev/vgdata/lvdata && resize2fs /dev/vgdata/lvdata"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`iostat` provides disk I/O stats, `iotop` monitors per-process disk usage, `df -h` reports filesystem usage, and `lsblk` lists block devices and partitions.",
-      "examTip": "Use `iotop -o` to filter only processes currently writing to disk."
+      "correctAnswerIndex": 1,
+      "explanation": "To increase an existing LV by 5GB, lvextend -L +5G /dev/vgdata/lvdata is used, followed by an appropriate filesystem resize command (e.g., resize2fs) to expand the filesystem. The other commands do not correctly address a simple LV size expansion in an existing volume group.",
+      "examTip": "Always remember to resize the filesystem after extending the logical volume to ensure the OS sees the updated capacity."
     },
     {
       "id": 54,
@@ -917,13 +783,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`wc` (word count) without any options displays the number of lines, words, and characters in a file. `cat | wc` is redundant, `grep -c ''` counts lines only, and `awk '{print NR}'` prints the line count.",
       "examTip": "Use `wc -l`, `wc -w`, or `wc -c` to count lines, words, or characters separately."
-    }
-db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
-  "testId": 3,
-  "testName": "Practice Test #3 (Easy)",
-  "xpPerCorrect": 15,
-  "questions": [
+    },
     {
       "id": 61,
       "question": "A user wants to check which groups they are a member of. Which command should they use?",
@@ -951,11 +811,17 @@ db.tests.insertOne({
       "examTip": "Use `findmnt` for a tree-based view of mounted filesystems."
     },
     {
-
- 
-
-
-
+      "id": 63,
+      "question": "Match the core systemd unit types with their purpose. Which single matching set is correct?\n\nA) service, B) socket, C) target, D) mount\n\n1) Abstract grouping of other units, often used for synchronization points.\n2) Manages network or IPC endpoints that activate on-demand services.\n3) Attaches a filesystem to a specific directory hierarchy location.\n4) Defines how and when a system daemon is run.\n\nSelect the matching format [A->?, B->?, C->?, D->?].",
+      "options": [
+        "A->2, B->1, C->3, D->4",
+        "A->4, B->2, C->1, D->3",
+        "A->1, B->3, C->2, D->4",
+        "A->4, B->1, C->2, D->3"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "systemd unit types: service (.service) defines a system daemon, socket (.socket) manages listening sockets/ports, target (.target) groups or synchronizes units (like multi-user.target), and mount (.mount) points define filesystem mounting. Therefore, the correct match is [A->4, B->2, C->1, D->3].",
+      "examTip": "Understanding systemd unit types is key to controlling how services start, how sockets trigger services, and how targets group multiple units."
     },
     {
       "id": 64,
@@ -1440,12 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-
-
-
-                 
-
-
-
-
