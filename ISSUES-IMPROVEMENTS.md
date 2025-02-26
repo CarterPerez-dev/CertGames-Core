@@ -1,5 +1,11 @@
 ### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc
 
+### fix thsi route and see what happens
+```js
+// Global CSS import
+import './components/pages/XploitcraftPage/global.css';
+```
+
 ### ADD RATE LIMITER TO AI COMPONENTS- use claude 3.7
 -----
 ### Need to make an 'EXAM && PRACTICE MODE'
