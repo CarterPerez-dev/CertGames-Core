@@ -150,9 +150,6 @@ function App() {
           }/>
           <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
-            <ProtectedRoute>
-              <AdminInterface />
-            </ProtectedRoute>
           }/>
           <Route path="/practice-tests/a-plus" element={
             <ProtectedRoute>
