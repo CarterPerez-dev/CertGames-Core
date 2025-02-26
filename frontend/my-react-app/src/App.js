@@ -17,7 +17,6 @@ import ForgotPassword from './components/pages/auth/ForgotPassword';
 // Protected pages
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar/Sidebar';
-import AchievementPage from './components/pages/store/AchievementPage';
 
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
@@ -26,13 +25,15 @@ import Log from './components/pages/LogPage/Log';
 import GRC from './components/pages/GRCpage/GRC';
 import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
 import Resources from './components/pages/ResourcesPage/Resources';
-import AdminInterface from './components/pages/AdminInterface/AdminInterface';
-import PBQWizard from './components/pages/PBQpage/PBQWizard';
+
+// Gamified components and userprofile
+import DailyStationPage from './components/pages/store/DailyStationPage';
 import ShopPage from './components/pages/store/ShopPage';
 import UserProfile from './components/pages/store/UserProfile';
 import LeaderboardPage from './components/pages/store/LeaderboardPage';
+import AchievementPage from './components/pages/store/AchievementPage';
 
-// Test Pages
+// Unique Test Pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
 import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
 import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
@@ -46,8 +47,9 @@ import DataPlusTestPage from './components/pages/dataplus/DataPlusTestPage';
 import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage';
 import CisspTestPage from './components/pages/cissp/CisspTestPage';
 import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
+
+// Global Test Page
 import GlobalTestPage from './components/GlobalTestPage';
-import DailyStationPage from './components/pages/store/DailyStationPage';
 
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
@@ -154,17 +156,10 @@ function App() {
           }/>
           <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
-          <Route path="/admin" element={
             <ProtectedRoute>
               <AdminInterface />
             </ProtectedRoute>
           }/>
-          <Route path="/pbq" element={
-            <ProtectedRoute>
-              <PBQWizard />
-            </ProtectedRoute>
-          }/>
-          {/* Test Routes */}
           <Route path="/practice-tests/a-plus" element={
             <ProtectedRoute>
               <APlusTestPage />
