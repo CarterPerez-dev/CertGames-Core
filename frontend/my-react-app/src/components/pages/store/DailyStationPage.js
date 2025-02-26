@@ -219,20 +219,20 @@ const DailyStationPage = () => {
   let dailyBonusContent;
   if (!userId) {
     // If not logged in
-    dailyBonusContent = <p>Please log in first.</p>;
+    dailyBonusContent = <p className="info-text">Please log in first.</p>;
   } else if (bonusError && !bonusError.startsWith('Already claimed')) {
     // A genuine error, not the "already claimed" note
-    dailyBonusContent = <p className="daily-error-msg">{bonusError}</p>;
+    dailyBonusContent = <p className="error-message">{bonusError}</p>;
   } else if (!canClaim) {
     // We rely on local countdown for the user
     dailyBonusContent = (
       <>
         {bonusError && bonusError.startsWith('Already claimed') && (
-          <p className="claimed-msg">{bonusError}</p>
+          <p className="status-message info">{bonusError}</p>
         )}
-        <p className="bonus-countdown">
-          Next bonus in:{' '}
-          <span className="cool-countdown">{formatCountdown(bonusCountdown)}</span>
+        <p className="countdown-container">
+          <span className="countdown-label">Next bonus in:</span>{' '}
+          <span className="countdown-value">{formatCountdown(bonusCountdown)}</span>
         </p>
       </>
     );
@@ -242,7 +242,7 @@ const DailyStationPage = () => {
       <button
         onClick={claimDailyBonus}
         disabled={loadingBonus}
-        className="claim-bonus-button"
+        className="primary-button claim-button"
       >
         {loadingBonus ? 'Claiming...' : 'Claim 1000 coins'}
       </button>
@@ -252,35 +252,37 @@ const DailyStationPage = () => {
   // Daily question UI
   function renderDailyQuestion() {
     if (!userId) {
-      return <p className="login-reminder">Please log in to see the daily question.</p>;
+      return <p className="info-text centered">Please log in to see the daily question.</p>;
     }
     if (loadingQ) {
-      return <p className="loading-text">Loading daily question...</p>;
+      return <p className="status-message loading">Loading daily question...</p>;
     }
     if (qError) {
-      return <p className="daily-error-msg">{qError}</p>;
+      return <p className="error-message">{qError}</p>;
     }
     if (!questionData) {
-      return <p className="no-question-text">No daily question found.</p>;
+      return <p className="status-message info">No daily question found.</p>;
     }
 
     const { prompt, options, alreadyAnswered } = questionData;
     return (
       <div
-        className={`daily-question-box 
-                    ${showCorrectAnimation ? 'correct-answer-animate' : ''} 
-                    ${showWrongAnimation ? 'wrong-answer-animate' : ''}`}
+        className={`question-container 
+                    ${showCorrectAnimation ? 'animate-correct' : ''} 
+                    ${showWrongAnimation ? 'animate-wrong' : ''}`}
       >
         <h2 className="section-title">Daily PBQ Challenge</h2>
-        <p className="question-prompt">{prompt}</p>
+        <div className="question-prompt-container">
+          <p className="question-text">{prompt}</p>
+        </div>
         {alreadyAnswered ? (
-          <div className="already-answered-container">
+          <div className="result-container">
             {submitResult && (
               <p
                 className={
                   submitResult.correct
-                    ? 'answer-feedback correct-answer'
-                    : 'answer-feedback not-correct-answer'
+                    ? 'result-message correct'
+                    : 'result-message incorrect'
                 }
               >
                 {submitResult.correct
@@ -288,37 +290,37 @@ const DailyStationPage = () => {
                   : `Not quite, but you still got ${submitResult.awardedCoins} coins.`}
               </p>
             )}
-            <p className="next-question-countdown">
-              Next question in:{' '}
-              <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
-            </p>
+            <div className="countdown-container question-countdown">
+              <span className="countdown-label">Next question in:</span>{' '}
+              <span className="countdown-value">{formatCountdown(questionCountdown)}</span>
+            </div>
           </div>
         ) : (
-          <div className="question-input-section">
-            <ul className="option-list">
+          <div className="answer-section">
+            <ul className="options-list">
               {options.map((opt, idx) => (
                 <li key={idx} className="option-item">
-                  <label className="option-label">
+                  <label className={`option-label ${selectedAnswer === idx ? 'selected' : ''}`}>
                     <input
                       type="radio"
                       name="dailyQuestion"
                       value={idx}
                       checked={selectedAnswer === idx}
                       onChange={() => setSelectedAnswer(idx)}
-                      className="option-input"
+                      className="option-radio"
                     />
-                    {opt}
+                    <span className="option-text">{opt}</span>
                   </label>
                 </li>
               ))}
             </ul>
-            <button className="submit-answer-button" onClick={submitDailyAnswer}>
+            <button className="primary-button submit-button" onClick={submitDailyAnswer}>
               Submit
             </button>
-            <p className="next-question-countdown">
-              Time until next question:{' '}
-              <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
-            </p>
+            <div className="countdown-container question-countdown">
+              <span className="countdown-label">Time until next question:</span>{' '}
+              <span className="countdown-value">{formatCountdown(questionCountdown)}</span>
+            </div>
           </div>
         )}
       </div>
@@ -327,45 +329,63 @@ const DailyStationPage = () => {
 
   // Main render
   return (
-    <div className="bonus-page-container">
+    <div className="daily-station-page">
       <div className="gradient-background" />
 
-      {/* "In-your-face" bonus claim overlay */}
+      {/* Bonus claim overlay animation */}
       {showBonusAnimation && (
-        <div className="bonus-popup-overlay">
-          <div className="bonus-popup-content">+1000 Coins Claimed!</div>
-        </div>
-      )}
-
-      {/* Centered title row */}
-      <div className="top-bar-daily">
-        <div className="app-title">Daily Station</div>
-      </div>
-
-      {/* If user is logged in, show user info in a separate bar */}
-      {userId && (
-        <div className="player-info-bar">
-          <div className="player-info">
-            <span className="player-greeting">Welcome, {username}!</span>
-            <span className="player-coins">Coins: {coins}</span>
-            <span className="player-xp">XP: {xp}</span>
+        <div className="overlay">
+          <div className="overlay-content bonus-claimed">
+            <div className="coin-icon">💰</div>
+            <div className="claim-text">+1000 Coins Claimed!</div>
           </div>
         </div>
       )}
 
-      <div className="content-wrapper">
+      {/* Header section */}
+      <header className="page-header">
+        <h1 className="page-title">Daily Station</h1>
+      </header>
+
+      {/* User info bar */}
+      {userId && (
+        <div className="user-info-bar">
+          <div className="user-info-container">
+            <div className="user-greeting">Welcome, {username}!</div>
+            <div className="user-stats">
+              <div className="stat-item coins">
+                <span className="stat-icon">💰</span>
+                <span className="stat-value">{coins}</span>
+              </div>
+              <div className="stat-item xp">
+                <span className="stat-icon">⭐</span>
+                <span className="stat-value">{xp}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <main className="content-area">
         {!userId ? (
-          <p className="login-reminder">Please log in to see daily content.</p>
+          <div className="login-prompt">
+            <p className="info-text centered">Please log in to see daily content.</p>
+          </div>
         ) : (
           <>
-            <div className="bonus-section">
+            <section className="daily-bonus-section card">
               <h2 className="section-title">Daily Bonus</h2>
-              {dailyBonusContent}
-            </div>
-            {renderDailyQuestion()}
+              <div className="bonus-content">
+                {dailyBonusContent}
+              </div>
+            </section>
+            
+            <section className="daily-question-section card">
+              {renderDailyQuestion()}
+            </section>
           </>
         )}
-      </div>
+      </main>
     </div>
   );
 };
