@@ -1,6 +1,8 @@
 /* src/components/pages/store/UserProfile.css */
 
-/* FULL-SCREEN BACKGROUND (only if .profile-container is in DOM) */
+/* ------------------------------------------------------------------
+   1) Full-Screen Background (only if .profile-container is in DOM)
+   ------------------------------------------------------------------ */
 body:has(.profile-container) {
   margin: 0;
   padding: 0;
@@ -15,14 +17,121 @@ body:has(.profile-container) {
     ),
     url('./user.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-attachment: fixed; /* might not work on some mobile browsers */
+  background-attachment: fixed; /* may not work on some mobile browsers */
   background-position: center;
 }
 
-/*******************************************/
-/* Base styles                             */
-/*******************************************/
+/* ------------------------------------------------------------------
+   2) iOS-Specific Background Fix using feature detection
+   ------------------------------------------------------------------ */
+@supports (-webkit-touch-callout: none) {
+  /* Remove background from body on iOS */
+  body:has(.profile-container) {
+    background: none;
+    position: relative;
+  }
+  
+  /* Add the background back in as a fixed pseudo-element */
+  body:has(.profile-container)::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url('./user.jpg') no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    background-position: center;
+  }
+  
+  /* Ensure profile content is above the pseudo background */
+  .profile-container {
+    position: relative;
+    z-index: 1;
+  }
+}
 
+/* Adjust background position for smaller iOS devices */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    body:has(.profile-container)::before {
+      background-position: center top;
+    }
+  }
+}
+
+/* Special handling for iPhone models with notches */
+@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+  @supports (-webkit-touch-callout: none) {
+    body:has(.profile-container)::before {
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   3) Fallback for browsers without :has() support
+   ------------------------------------------------------------------ */
+@supports not (selector(:has(*))) {
+  /* Only apply to pages that are explicitly given the .profile-page class on body */
+  body.profile-page {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url('./user.jpg') no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll;
+  }
+  
+  /* iOS devices without :has() support */
+  @supports (-webkit-touch-callout: none) {
+    body.profile-page {
+      background: none;
+    }
+    body.profile-page::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.7)
+        ),
+        url('./user.jpg') no-repeat center center;
+      background-size: cover;
+      -webkit-background-size: cover;
+      background-position: center;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   4) Base styles
+   ------------------------------------------------------------------ */
 .profile-container {
   color: #fff;
   padding: 20px;
@@ -157,10 +266,9 @@ body:has(.profile-container) {
   color: #ffcccc;
 }
 
-/*******************************************/
-/* Additional styling for the change fields */
-/*******************************************/
-
+/* ------------------------------------------------------------------
+   5) Additional styling for the "change" fields
+   ------------------------------------------------------------------ */
 .change-section {
   position: relative;
   margin-top: 1rem;
@@ -188,17 +296,14 @@ body:has(.profile-container) {
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .change-section-buttons button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
-
 .change-section-buttons button:active {
   transform: scale(0.98);
 }
 
-/* status message styling */
 .status-message {
   background: #d8ffd8;
   padding: 0.75rem 1rem;
@@ -208,10 +313,9 @@ body:has(.profile-container) {
   color: #333;
 }
 
-/*******************************************/
-/* Inputs and unique eye icon classes      */
-/*******************************************/
-
+/* ------------------------------------------------------------------
+   6) Inputs and unique eye icon classes
+   ------------------------------------------------------------------ */
 input[type="text"],
 input[type="password"],
 input[type="email"] {
@@ -247,10 +351,9 @@ input[type="email"] {
   font-size: 0.95rem;
 }
 
-/*******************************************/
-/* Change Password Section                 */
-/*******************************************/
-
+/* ------------------------------------------------------------------
+   7) Change Password Section
+   ------------------------------------------------------------------ */
 .change-password-section {
   width: 100%;
   max-width: 400px;
@@ -269,17 +372,14 @@ input[type="email"] {
 
 .password-input-container input {
   width: 100%;
-  padding: 8px 35px 8px 12px; /* room for eye icon on right */
+  padding: 8px 35px 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   height: 40px;
   box-sizing: border-box;
 }
 
-/*******************************************/
-/* The unique "profile-eye-icon" class     */
-/*******************************************/
-
+/* The unique "profile-eye-icon" class */
 .profile-eye-icon {
   position: absolute;
   right: 10px;
@@ -295,19 +395,17 @@ input[type="email"] {
   color: #666;
   z-index: 2;
 }
-
 .profile-eye-icon:hover {
   color: #333;
 }
-
 .profile-eye-icon svg {
   width: 16px;
   height: 16px;
 }
 
-/*******************************************/
-/* Responsive breakpoints                  */
-/*******************************************/
+/* ------------------------------------------------------------------
+   8) Responsive Breakpoints
+   ------------------------------------------------------------------ */
 
 /* 1) Extra-Small: max-width 320px */
 @media (max-width: 320px) {
@@ -432,7 +530,7 @@ input[type="email"] {
   }
 }
 
-/* 3) Medium-Small Devices: max-width 600px*/
+/* 3) Medium-Small Devices: max-width 600px */
 @media (max-width: 600px) {
   .profile-container {
     padding: 15px;
@@ -533,4 +631,3 @@ input[type="email"] {
     font-size: 1rem;
   }
 }
-
