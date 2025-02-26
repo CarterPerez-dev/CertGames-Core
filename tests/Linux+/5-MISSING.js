@@ -32,7 +32,7 @@ db.tests.insertOne({
     },
     {
       "id": 3,
-      "question": "**(PBQ)** A system administrator notices that a web server running on port 8080 is not accessible remotely. What is the correct sequence of actions to diagnose and resolve the issue?",
+      "question": "A system administrator notices that a web server running on port 8080 is not accessible remotely. What is the correct sequence of actions to diagnose and resolve the issue?",
       "options": [
         "1) ss -tunlp | grep 8080 2) firewall-cmd --list-ports 3) firewall-cmd --permanent --add-port=8080/tcp && firewall-cmd --reload",
         "1) iptables -L -n | grep 8080 2) systemctl restart httpd 3) traceroute <client_ip>",
@@ -149,7 +149,7 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "**(PBQ)** A system administrator suspects high memory usage is causing system slowdowns. What is the correct sequence of actions?",
+      "question": "A system administrator suspects high memory usage is causing system slowdowns. What is the correct sequence of actions?",
       "options": [
         "1) free -m 2) ps aux --sort=-%mem 3) kill -9 <PID>",
         "1) vmstat 1 5 2) swapoff -a 3) reboot",
@@ -279,7 +279,7 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "**(PBQ)** A system administrator needs to diagnose a network issue where a server cannot reach external sites. What is the correct sequence of actions?",
+      "question": "A system administrator needs to diagnose a network issue where a server cannot reach external sites. What is the correct sequence of actions?",
       "options": [
         "1) ping 8.8.8.8 2) ip route show 3) systemctl restart networking",
         "1) nslookup google.com 2) traceroute 8.8.8.8 3) systemctl restart NetworkManager",
@@ -409,7 +409,7 @@ db.tests.insertOne({
     },
     {
       "id": 33,
-      "question": "**(PBQ)** A system administrator needs to recover a deleted log file that was still open by a running process. What is the correct sequence of actions?",
+      "question": "A system administrator needs to recover a deleted log file that was still open by a running process. What is the correct sequence of actions?",
       "options": [
         "1) lsof | grep deleted 2) cp /proc/<PID>/fd/<FD> /var/log/recovered.log 3) restart process",
         "1) tail -f /var/log/syslog 2) kill -9 <PID> 3) recover /var/log/syslog",
@@ -539,7 +539,7 @@ db.tests.insertOne({
     },
     {
       "id": 43,
-      "question": "**(PBQ)** A Linux administrator is troubleshooting high system load. What is the correct sequence of actions?",
+      "question": "A Linux administrator is troubleshooting high system load. What is the correct sequence of actions?",
       "options": [
         "1) uptime 2) top 3) ps aux --sort=-%cpu",
         "1) free -m 2) pkill -9 <process> 3) reboot",
@@ -669,7 +669,7 @@ db.tests.insertOne({
     },
     {
       "id": 53,
-      "question": "**(PBQ)** A Linux administrator needs to diagnose slow disk performance on a production database server. What is the correct sequence of actions?",
+      "question": "A Linux administrator needs to diagnose slow disk performance on a production database server. What is the correct sequence of actions?",
       "options": [
         "1) iostat -x 1 10 2) df -h 3) fsck -y /dev/sdX",
         "1) vmstat 1 5 2) iotop 3) tune2fs -o journal_data_writeback /dev/sdX1",
@@ -786,7 +786,7 @@ db.tests.insertOne({
     },
     {
       "id": 63,
-      "question": "**(PBQ)** A Linux administrator notices that a web server is running out of disk space. What is the correct sequence of actions to diagnose and resolve the issue?",
+      "question": "A Linux administrator notices that a web server is running out of disk space. What is the correct sequence of actions to diagnose and resolve the issue?",
       "options": [
         "1) df -h 2) du -sh /var/log 3) truncate -s 0 /var/log/access.log",
         "1) ls -lh /var/www 2) rm -rf /var/www/html 3) reboot",
@@ -942,7 +942,7 @@ db.tests.insertOne({
     },
     {
       "id": 75,
-      "question": "**(PBQ)** A system administrator is troubleshooting slow system performance. What is the correct sequence of actions?",
+      "question": "A system administrator is troubleshooting slow system performance. What is the correct sequence of actions?",
       "options": [
         "1) uptime 2) vmstat 1 5 3) kill -9 <PID>",
         "1) iostat -x 1 5 2) free -m 3) renice -10 <PID>",
@@ -1046,7 +1046,7 @@ db.tests.insertOne({
     },
     {
       "id": 83,
-      "question": "**(PBQ)** A system administrator needs to troubleshoot why a scheduled job did not execute. What is the correct sequence of actions?",
+      "question": "A system administrator needs to troubleshoot why a scheduled job did not execute. What is the correct sequence of actions?",
       "options": [
         "1) crontab -l 2) grep CRON /var/log/syslog 3) check user permissions",
         "1) systemctl list-timers 2) atq 3) restart crond",
@@ -1176,7 +1176,7 @@ db.tests.insertOne({
     },
     {
       "id": 93,
-      "question": "**(PBQ)** A system administrator needs to analyze why a service fails to start on boot. What is the correct sequence of actions?",
+      "question": "A system administrator needs to analyze why a service fails to start on boot. What is the correct sequence of actions?",
       "options": [
         "1) systemctl status <service> 2) journalctl -u <service> 3) systemctl restart <service>",
         "1) ps aux | grep <service> 2) systemctl start <service> 3) reboot",
