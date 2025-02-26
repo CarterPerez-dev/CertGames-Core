@@ -239,7 +239,7 @@
   background-color: #ff6e40;
 }
 
-.submit-button {
+.submit-button-station {
   display: block;
   width: 100%;
   max-width: 280px;
@@ -285,35 +285,35 @@
 }
 
 /* Question Container */
-.question-container {
+.question-container-station {
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.question-prompt-container {
+.question-prompt-container-station {
   background-color: var(--bg-light);
   border-radius: 8px;
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
 }
 
-.question-text {
+.question-text-station {
   font-size: 17px;
   line-height: 1.6;
   margin: 0;
 }
 
 /* Options List */
-.options-list {
+.options-list-station {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.option-item {
+.option-item-station {
   margin-bottom: var(--spacing-md);
 }
 
-.option-label {
+.option-label-station {
   display: flex;
   align-items: center;
   padding: var(--spacing-md);
@@ -323,12 +323,12 @@
   cursor: pointer;
 }
 
-.option-label:hover {
+.option-label-station:hover {
   border-color: var(--primary-light);
   background-color: rgba(74, 108, 250, 0.05);
 }
 
-.option-label.selected {
+.option-label-station.selected {
   border-color: var(--primary-color);
   background-color: rgba(74, 108, 250, 0.1);
 }
@@ -340,7 +340,7 @@
   height: 0;
 }
 
-.option-label::before {
+.option-label-station::before {
   content: '';
   display: inline-block;
   width: 20px;
@@ -352,23 +352,23 @@
   flex-shrink: 0;
 }
 
-.option-label.selected::before {
+.option-label-station.selected::before {
   border-color: var(--primary-color);
   background-color: var(--primary-color);
   box-shadow: inset 0 0 0 4px white;
 }
 
-.option-text {
+.option-text-station {
   flex: 1;
 }
 
 /* Result Container */
-.result-container {
+.result-container-station {
   text-align: center;
   padding: var(--spacing-md);
 }
 
-.result-message {
+.result-message-station {
   font-size: 18px;
   font-weight: 600;
   padding: var(--spacing-md);
@@ -376,22 +376,22 @@
   margin-bottom: var(--spacing-lg);
 }
 
-.result-message.correct {
+.result-message-station.correct {
   color: var(--success-color);
   background-color: rgba(76, 175, 80, 0.1);
 }
 
-.result-message.incorrect {
+.result-message-station.incorrect {
   color: var(--warning-color);
   background-color: rgba(255, 152, 0, 0.1);
 }
 
 /* Animations */
-.animate-correct {
+.animate-station-correct {
   animation: pulseGreen 0.5s;
 }
 
-.animate-wrong {
+.animate-station-wrong {
   animation: pulseRed 0.5s;
 }
 
@@ -500,12 +500,12 @@
     margin-bottom: var(--spacing-md);
   }
   
-  .question-text {
+  .question-text-station {
     font-size: 16px;
     line-height: 1.5;
   }
   
-  .option-label {
+  .option-label-station {
     padding: 10px;
   }
 }
@@ -548,7 +548,7 @@
     transform: translateX(-50%);
   }
   
-  .question-text {
+  .question-text-station {
     font-size: 15px;
   }
   
@@ -564,28 +564,28 @@
     font-size: 12px;
   }
   
-  .option-label::before {
+  .option-label-station::before {
     width: 18px;
     height: 18px;
     margin-right: var(--spacing-sm);
   }
   
-  .option-text {
+  .option-text-station {
     font-size: 14px;
   }
   
-  .result-message {
+  .result-message-station {
     font-size: 16px;
     padding: var(--spacing-sm);
   }
   
-  .claim-button, .submit-button {
+  .claim-button, .submit-button-station {
     max-width: 100%;
     padding: 12px 16px;
     font-size: 15px;
   }
   
-  .overlay-content {
+  .overlay-content-station {
     padding: var(--spacing-lg);
     width: 85%;
   }
@@ -638,35 +638,35 @@
     height: 2px;
   }
   
-  .question-prompt-container {
+  .question-prompt-container-station {
     padding: var(--spacing-sm);
     margin-bottom: var(--spacing-sm);
   }
   
-  .question-text {
+  .question-text-station {
     font-size: 14px;
     line-height: 1.4;
   }
   
-  .options-list {
+  .options-list-station {
     margin-top: var(--spacing-sm);
   }
   
-  .option-item {
+  .option-item-station {
     margin-bottom: var(--spacing-sm);
   }
   
-  .option-label {
+  .option-label-station {
     padding: 8px;
   }
   
-  .option-label::before {
+  .option-label-station::before {
     width: 16px;
     height: 16px;
     margin-right: var(--spacing-sm);
   }
   
-  .option-text {
+  .option-text-station {
     font-size: 13px;
   }
   
@@ -684,11 +684,11 @@
     border-radius: 6px;
   }
   
-  .claim-button, .submit-button {
+  .claim-button, .submit-button-station {
     margin: var(--spacing-sm) auto;
   }
   
-  .result-message {
+  .result-message-station {
     font-size: 14px;
     padding: var(--spacing-xs);
   }
@@ -702,7 +702,7 @@
     font-size: 13px;
   }
   
-  .overlay-content {
+  .overlay-content-station {
     padding: var(--spacing-md);
   }
   
