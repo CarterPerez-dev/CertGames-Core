@@ -1,6 +1,6 @@
 // src/store/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAchievementToast } from '../../components/pages/store/AchievementToast';
+import { showAchievementToast } from './AchievementToast';
 import {
   FaTrophy, FaMedal, FaStar, FaCrown, FaBolt, FaBook, FaBrain,
   FaCheckCircle, FaRegSmile, FaMagic
