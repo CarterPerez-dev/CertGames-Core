@@ -1,3 +1,7 @@
+missing question 10,60
+
+
+
 db.tests.insertOne({
   "category": "linuxplus",
   "testId": 5,
@@ -887,7 +891,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`chown -R webadmin:developers /var/www` recursively changes ownership. `chmod` modifies permissions, `usermod` modifies group memberships but not ownership, and `groupmod` changes group names.",
       "examTip": "Use `ls -ld /var/www` to verify ownership after changing it."
-    }.
+    },
     {
       "id": 71,
       "question": "A system administrator needs to create a new partition on `/dev/sdb` and format it as XFS. Which sequence of commands should be used?",
