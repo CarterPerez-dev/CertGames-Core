@@ -2,7 +2,9 @@
 
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
+import pytz
+
 
 # Mongo collections
 from mongodb.database import (
@@ -11,7 +13,9 @@ from mongodb.database import (
     achievements_collection,
     tests_collection,
     testAttempts_collection,
-    correctAnswers_collection
+    correctAnswers_collection,
+    dailyQuestions_collection,
+    dailyAnswers_collection
 )
 
 # Models
@@ -47,6 +51,9 @@ def serialize_user(user):
         user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
     return user
 
+def serialize_datetime(dt):
+    """Helper: convert a datetime to an ISO string (or return None)."""
+    return dt.isoformat() if dt else None
 # -------------------------------------------------------------------
 # USER ROUTES
 # -------------------------------------------------------------------
@@ -117,13 +124,6 @@ def login():
         "password": user.get("password")
     }), 200
 
-
-@api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
-def daily_bonus(user_id):
-    result = apply_daily_bonus(user_id)
-    if not result:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify(result), 200
 
 
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
@@ -656,3 +656,147 @@ def update_position(user_id, test_id):
     )
     
     return jsonify({"message": "Position updated"}), 200
+
+
+
+
+
+
+
+##############################################
+# DAILY QUESTION ENDPOINTS
+##############################################
+
+@api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
+def daily_bonus(user_id):
+    """
+    Award a daily bonus (1000 coins) if 24 hours have passed.
+    Returns updated coins, xp, and newLastDailyClaim.
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if last_claim and (now - last_claim) < timedelta(hours=24):
+        # Calculate time left in seconds
+        seconds_left = int(24 * 3600 - (now - last_claim).total_seconds())
+        return jsonify({
+            "success": False,
+            "message": f"Already claimed. Next bonus in: {seconds_left} seconds",
+            "newCoins": user.get("coins", 0),
+            "newXP": user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(last_claim)
+        }), 200
+    else:
+        update_user_coins(user_id, 1000)
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"lastDailyClaim": now}}
+        )
+        updated_user = get_user_by_id(user_id)
+        return jsonify({
+            "success": True,
+            "message": "Daily bonus applied",
+            "newCoins": updated_user.get("coins", 0),
+            "newXP": updated_user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim"))
+        }), 200
+
+# -------------------------------
+# Daily Question GET Endpoint
+# -------------------------------
+@api_bp.route('/daily-question', methods=['GET'])
+def get_daily_question():
+    """
+    GET /api/test/daily-question?userId=<userId>
+    Computes the dayIndex (for demo we use 0; in production you might compute based on a start date)
+    and returns the daily question plus whether the user has already answered.
+    """
+    user_id = request.args.get("userId")
+    if not user_id:
+        return jsonify({"error": "No userId provided"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    # For demo purposes, we use day_index 0.
+    # In production you might do: day_index = (UTC today - startDate).days % TOTAL_DAYS
+    day_index = 0
+
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    existing_answer = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+
+    response = {
+        "dayIndex": day_index,
+        "prompt": daily_doc.get("prompt"),
+        "options": daily_doc.get("options"),
+        "alreadyAnswered": bool(existing_answer)
+    }
+    return jsonify(response), 200
+
+# -------------------------------
+# Daily Question Answer Endpoint
+# -------------------------------
+@api_bp.route('/daily-question/answer', methods=['POST'])
+def submit_daily_question():
+    """
+    Expects JSON: { userId, dayIndex, selectedIndex }
+    Checks answer against daily question’s correctIndex, awards coins,
+    and returns updated user info.
+    """
+    data = request.json or {}
+    user_id = data.get("userId")
+    day_index = data.get("dayIndex")
+    selected_index = data.get("selectedIndex")
+
+    if not user_id or day_index is None or selected_index is None:
+        return jsonify({"error": "Missing userId, dayIndex, or selectedIndex"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    existing = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+    if existing:
+        return jsonify({"error": "You already answered today's question"}), 400
+
+    correct_index = daily_doc.get("correctIndex", 0)
+    is_correct = (selected_index == correct_index)
+    awarded_coins = 250 if is_correct else 50
+
+    dailyAnswers_collection.insert_one({
+        "userId": user_oid,
+        "dayIndex": day_index,
+        "answeredAt": datetime.utcnow(),
+        "userAnswerIndex": selected_index,
+        "isCorrect": is_correct
+    })
+
+    update_user_coins(user_id, awarded_coins)
+    updated_user = get_user_by_id(user_id)
+    return jsonify({
+        "message": "Answer submitted",
+        "correct": is_correct,
+        "awardedCoins": awarded_coins,
+        "newCoins": updated_user.get("coins", 0),
+        "newXP": updated_user.get("xp", 0),
+        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim"))
+    }), 200

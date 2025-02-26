@@ -23,3 +23,7 @@ tests_collection = db.tests
 # NEW collections for attempts and correct answers:
 testAttempts_collection = db.testAttempts
 correctAnswers_collection = db.correctAnswers
+
+# NEW collections for daily bonus and questions
+dailyQuestions_collection = db.dailyQuestions
+dailyAnswers_collection = db.dailyAnswers

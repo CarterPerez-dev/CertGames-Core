@@ -418,40 +418,40 @@ const GlobalTestPage = ({
   }, [questionObject, answers, realIndex, answerOrder]);
 
   // We'll store partial attempt in the server
-   const updateServerProgress = useCallback(
-     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
-       if (!userId) return;
-       try {
-         // If we're sending a single answer update
-         if (singleAnswer) {
-           await fetch(`/api/test/attempts/${userId}/${testId}/answer`, {
-             method: "POST",
-             headers: { "Content-Type": "application/json" },
-             body: JSON.stringify({
-               questionId: singleAnswer.questionId,
-               userAnswerIndex: singleAnswer.userAnswerIndex,
-               correctAnswerIndex: singleAnswer.correctAnswerIndex,
-               score: updatedScore
-             })
-           });
-           return;
-         }
-         
-         // For navigation position updates (much smaller payload)
-         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({
-             currentQuestionIndex,
-             finished
-           })
-         });
-       } catch (err) {
-         console.error("Failed to update test attempt on backend", err);
-       }
-     },
-     [userId, testId, currentQuestionIndex]
-   );
+  const updateServerProgress = useCallback(
+    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
+      if (!userId) return;
+      try {
+        // If we're sending a single answer update
+        if (singleAnswer) {
+          await fetch(`/api/test/attempts/${userId}/${testId}/answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              questionId: singleAnswer.questionId,
+              userAnswerIndex: singleAnswer.userAnswerIndex,
+              correctAnswerIndex: singleAnswer.correctAnswerIndex,
+              score: updatedScore
+            })
+          });
+          return;
+        }
+        
+        // For navigation position updates (much smaller payload)
+        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentQuestionIndex,
+            finished
+          })
+        });
+      } catch (err) {
+        console.error("Failed to update test attempt on backend", err);
+      }
+    },
+    [userId, testId, currentQuestionIndex]
+  );
 
   /* ------------------------------------------------------------------
      5) Handling a user answer
@@ -517,7 +517,6 @@ const GlobalTestPage = ({
           }
           setAnswers(updatedAnswers);
             
-
           // update partial attempt
           updateServerProgress(updatedAnswers, newScore, false, newAnswerObj);
         } else {
@@ -737,15 +736,48 @@ const GlobalTestPage = ({
   }, [testData, answers, flaggedQuestions, reviewFilter]);
 
   /* ------------------------------------------------------------------
-     10) Confirmation Popups & Overlays
+     10) Single-Button "Next Question" Popup
+     (Custom popup with only one "OK" button.)
+  ------------------------------------------------------------------ */
+  const NextQuestionAlert = ({ message, onOk }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-ok" onClick={onOk}>
+            OK🤪
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNextPopup = () => {
+    if (!showNextPopup) return null;
+    return (
+      <NextQuestionAlert
+        message="You haven't answered. Please answer or skip question ⏩."
+        onOk={() => {
+          setShowNextPopup(false);
+        }}
+      />
+    );
+  };
+
+  /* ------------------------------------------------------------------
+     11) Other Confirmation Popups & Overlays
   ------------------------------------------------------------------ */
   const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
         <p>{message}</p>
         <div className="confirm-popup-buttons">
-          <button className="confirm-popup-yes" onClick={onConfirm}>Yes</button>
-          <button className="confirm-popup-no" onClick={onCancel}>No</button>
+          <button className="confirm-popup-yes" onClick={onConfirm}>
+            Yes
+          </button>
+          <button className="confirm-popup-no" onClick={onCancel}>
+            No
+          </button>
         </div>
       </div>
     </div>
@@ -779,20 +811,6 @@ const GlobalTestPage = ({
     );
   };
 
-  const renderNextPopup = () => {
-    if (!showNextPopup) return null;
-    return (
-      <ConfirmPopup
-        message="You haven't answered this question. Continue without answering?"
-        onConfirm={() => {
-          handleNextQuestion();
-          setShowNextPopup(false);
-        }}
-        onCancel={() => setShowNextPopup(false)}
-      />
-    );
-  };
-
   const renderScoreOverlay = () => {
     if (!showScoreOverlay) return null;
     const percentage = totalQuestions
@@ -813,16 +831,10 @@ const GlobalTestPage = ({
             >
               Restart Test
             </button>
-            <button
-              className="review-button"
-              onClick={handleReviewAnswers}
-            >
+            <button className="review-button" onClick={handleReviewAnswers}>
               View Review
             </button>
-            <button
-              className="back-btn"
-              onClick={() => navigate(backToListPath)}
-            >
+            <button className="back-btn" onClick={() => navigate(backToListPath)}>
               Back to Test List
             </button>
             {Number(testId) < 9999 && (
@@ -938,9 +950,11 @@ const GlobalTestPage = ({
                   </h3>
                   <p>
                     <strong>Your Answer:</strong>{" "}
-                    {isSkipped
-                      ? "Skipped"
-                      : q.options[userAns.userAnswerIndex]}
+                    {isSkipped ? (
+                      <span style={{ color: "orange" }}>Skipped</span>
+                    ) : (
+                      q.options[userAns.userAnswerIndex]
+                    )}
                   </p>
                   <p>
                     <strong>Correct Answer:</strong>{" "}
@@ -974,7 +988,18 @@ const GlobalTestPage = ({
   };
 
   /* ------------------------------------------------------------------
-     11) Final Render
+     12) Next Question Button logic
+  ------------------------------------------------------------------ */
+  const handleNextQuestionButtonClick = () => {
+    if (!isAnswered) {
+      setShowNextPopup(true);
+    } else {
+      handleNextQuestion();
+    }
+  };
+
+  /* ------------------------------------------------------------------
+     13) Final Render
   ------------------------------------------------------------------ */
   if (error) {
     return <div style={{ color: "#fff" }}>Error: {error}</div>;
@@ -1144,11 +1169,17 @@ const GlobalTestPage = ({
                 Previous Question
               </button>
               {currentQuestionIndex === totalQuestions - 1 ? (
-                <button className="next-question-btn" onClick={handleNextQuestion}>
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
                   Finish Test
                 </button>
               ) : (
-                <button className="next-question-btn" onClick={handleNextQuestion}>
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
                   Next Question
                 </button>
               )}

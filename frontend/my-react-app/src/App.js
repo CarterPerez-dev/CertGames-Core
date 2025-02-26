@@ -47,6 +47,7 @@ import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage
 import CisspTestPage from './components/pages/cissp/CisspTestPage';
 import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
 import GlobalTestPage from './components/GlobalTestPage';
+import DailyStationPage from './components/pages/store/DailyStationPage';
 
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
@@ -96,6 +97,11 @@ function App() {
           <Route path="/shop" element={
             <ProtectedRoute>
               <ShopPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/daily" element={
+            <ProtectedRoute>
+              <DailyStationPage />
             </ProtectedRoute>
           }/>
           <Route path="/leaderboard" element={
