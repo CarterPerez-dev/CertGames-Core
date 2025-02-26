@@ -1,10 +1,11 @@
-# src/routes/test_routes.py
-
+# ==============================
+# Updated test_routes.py (FULL FILE)
+# ==============================
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import pytz
-
+import time
 
 # Mongo collections
 from mongodb.database import (
@@ -40,6 +41,15 @@ from models.test import (
 
 api_bp = Blueprint('test', __name__)
 
+#############################################
+# Leaderboard Caching Setup (15-second TTL)
+#############################################
+# We'll cache the top 1000 once every 15 sec;
+# then serve slices (pagination) from memory.
+leaderboard_cache = []
+leaderboard_cache_timestamp = 0
+LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
+
 def serialize_user(user):
     """Helper to convert _id, etc. to strings if needed."""
     if not user:
@@ -58,14 +68,13 @@ def serialize_datetime(dt):
 # -------------------------------------------------------------------
 # USER ROUTES
 # -------------------------------------------------------------------
-
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = get_user_by_id(user_id)
     if not user:
         return jsonify({"error": "User not found"}), 404
     user = serialize_user(user)
-    # Make sure password is included in the response, if that's desired
+    # Optionally show or hide password in response
     if "password" not in user:
         user["password"] = user.get("password")
     return jsonify(user), 200
@@ -130,6 +139,7 @@ def add_xp_route(user_id):
     updated = update_user_xp(user_id, xp_to_add)
     if not updated:
         return jsonify({"error": "User not found"}), 404
+
     new_achievements = check_and_unlock_achievements(user_id)
     updated["newAchievements"] = new_achievements
     return jsonify(updated), 200
@@ -140,10 +150,7 @@ def add_coins_route(user_id):
     coins_to_add = data.get("coins", 0)
     update_user_coins(user_id, coins_to_add)
 
-    # <--- Add check_and_unlock_achievements so that if new achievements
-    # are unlocked by adding coins, we return them:
     newly_unlocked = check_and_unlock_achievements(user_id)
-
     return jsonify({
         "message": "Coins updated",
         "newlyUnlocked": newly_unlocked
@@ -152,7 +159,6 @@ def add_coins_route(user_id):
 # -------------------------------------------------------------------
 # SHOP ROUTES
 # -------------------------------------------------------------------
-
 @api_bp.route('/shop', methods=['GET'])
 def fetch_shop():
     items = get_shop_items()
@@ -169,8 +175,6 @@ def purchase_item_route(item_id):
 
     result = purchase_item(user_id, item_id)
     if result["success"]:
-        # After purchase, user might have enough coins spent or gained
-        # to unlock coin-based achievements. So do:
         newly_unlocked = check_and_unlock_achievements(user_id)
         result["newlyUnlocked"] = newly_unlocked
         return jsonify(result), 200
@@ -199,7 +203,7 @@ def equip_item_route():
     if not item_doc:
         return jsonify({"success": False, "message": "Item not found in shop"}), 404
 
-    # If user hasn't purchased it, check level-based unlock
+    # If user hasn't purchased it, check if it's level-based unlock
     if oid not in user.get("purchasedItems", []):
         if user.get("level", 1) < item_doc.get("unlockLevel", 1):
             return jsonify({"success": False, "message": "Item not unlocked"}), 400
@@ -214,11 +218,9 @@ def equip_item_route():
 # -------------------------------------------------------------------
 # TESTS ROUTES
 # -------------------------------------------------------------------
-
 @api_bp.route('/tests/<test_id>', methods=['GET'])
 def fetch_test_by_id_route(test_id):
-    # This is your original single-parameter route
-    test_doc = get_test_by_id_and_category(test_id, None)  # or your old get_test_by_id
+    test_doc = get_test_by_id_and_category(test_id, None)
     if not test_doc:
         return jsonify({"error": "Test not found"}), 404
     test_doc["_id"] = str(test_doc["_id"])
@@ -227,7 +229,6 @@ def fetch_test_by_id_route(test_id):
 @api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
 def fetch_test_by_category_and_id(category, test_id):
     """
-    NEW route that fetches a test doc by both category and testId
     e.g. /tests/aplus/1
     """
     try:
@@ -248,13 +249,11 @@ def fetch_test_by_category_and_id(category, test_id):
 # -------------------------------------------------------------------
 # PROGRESS / ATTEMPTS ROUTES
 # -------------------------------------------------------------------
-
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
 def get_test_attempt(user_id, test_id):
     """
-    Returns either an unfinished attempt if it exists;
-    otherwise returns the most recently finished attempt for that user/test.
-    This version searches for testId as either an integer or a string.
+    Returns either an unfinished attempt if it exists,
+    otherwise the most recent finished attempt.
     """
     try:
         user_oid = ObjectId(user_id)
@@ -265,7 +264,6 @@ def get_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    # Build query with $or for testId
     query = {"userId": user_oid, "finished": False}
     if test_id_int is not None:
         query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
@@ -273,14 +271,14 @@ def get_test_attempt(user_id, test_id):
         query["testId"] = test_id
 
     attempt = testAttempts_collection.find_one(query)
-
-    # If no unfinished attempt, check the most recent finished one
     if not attempt:
+        # If no unfinished, grab the most recent finished
         query_finished = {"userId": user_oid, "finished": True}
         if test_id_int is not None:
             query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
         else:
             query_finished["testId"] = test_id
+
         attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
 
     if not attempt:
@@ -302,7 +300,11 @@ def update_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    filter_ = {"userId": user_oid, "finished": False, "$or": [{"testId": test_id_int}, {"testId": test_id}]}
+    filter_ = {
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
     update_doc = {
         "$set": {
             "userId": user_oid,
@@ -332,7 +334,11 @@ def finish_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    filter_ = {"userId": user_oid, "finished": False, "$or": [{"testId": test_id_int}, {"testId": test_id}]}
+    filter_ = {
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
     update_doc = {
         "$set": {
             "finished": True,
@@ -437,34 +443,65 @@ def fetch_achievements_route():
     return jsonify(ach_list), 200
 
 # -------------------------------------------------------------------
-# Leaderboard Route
+# Leaderboard Route with Lazy Loading & Pagination
 # -------------------------------------------------------------------
 @api_bp.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    top_users_cursor = mainusers_collection.find(
-        {},
-        {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
-    ).sort("level", -1).limit(100)
+    """
+    GET /api/test/leaderboard?skip=0&limit=50
+      - skip, limit => for lazy loading / pagination
+      - We'll return { data: [...], total: <int> }
+    """
+    global leaderboard_cache
+    global leaderboard_cache_timestamp
 
-    results = []
-    rank = 1
-    for user in top_users_cursor:
-        user_data = {
-            "username": user.get("username", "unknown"),
-            "level": user.get("level", 1),
-            "xp": user.get("xp", 0),
-            "rank": rank,
-            "avatarUrl": None
-        }
-        if user.get("currentAvatar"):
-            avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
-            if avatar_item and "imageUrl" in avatar_item:
-                user_data["avatarUrl"] = avatar_item["imageUrl"]
+    now_ms = int(time.time() * 1000)
+    if now_ms - leaderboard_cache_timestamp > LEADERBOARD_CACHE_DURATION_MS:
+        # Re-fetch top 1000 from DB
+        cursor = mainusers_collection.find(
+            {},
+            {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
+        ).sort("level", -1).limit(1000)
 
-        results.append(user_data)
-        rank += 1
+        new_results = []
+        rank = 1
+        for user in cursor:
+            user_data = {
+                "username": user.get("username", "unknown"),
+                "level": user.get("level", 1),
+                "xp": user.get("xp", 0),
+                "rank": rank,
+                "avatarUrl": None
+            }
+            if user.get("currentAvatar"):
+                avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+                if avatar_item and "imageUrl" in avatar_item:
+                    user_data["avatarUrl"] = avatar_item["imageUrl"]
+            new_results.append(user_data)
+            rank += 1
 
-    return jsonify(results), 200
+        leaderboard_cache = new_results
+        leaderboard_cache_timestamp = now_ms
+
+    # Extract skip & limit for pagination
+    try:
+        skip = int(request.args.get("skip", 0))
+        limit = int(request.args.get("limit", 50))
+    except:
+        skip, limit = 0, 50
+
+    # Bound the skip/limit within the cached 1000
+    total_entries = len(leaderboard_cache)
+    end_index = skip + limit
+    if skip > total_entries:
+        sliced_data = []
+    else:
+        sliced_data = leaderboard_cache[skip:end_index]
+
+    return jsonify({
+        "data": sliced_data,
+        "total": total_entries
+    }), 200
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # USERNAME/EMAIL/PASSWORD CHANGES
@@ -477,12 +514,10 @@ def change_username():
     if not user_id or not new_username:
         return jsonify({"error": "Missing userId or newUsername"}), 400
 
-    # Validate new username using the new rules.
     valid, errors = validate_username(new_username)
     if not valid:
         return jsonify({"error": "Invalid new username", "details": errors}), 400
 
-    # Check if username is already taken.
     if mainusers_collection.find_one({"username": new_username}):
         return jsonify({"error": "Username already taken"}), 400
 
@@ -501,7 +536,6 @@ def change_email():
     if not user_id or not new_email:
         return jsonify({"error": "Missing userId or newEmail"}), 400
 
-    # Validate new email using the new rules.
     valid, errors = validate_email(new_email)
     if not valid:
         return jsonify({"error": "Invalid email", "details": errors}), 400
@@ -529,7 +563,6 @@ def change_password():
     if new_password != confirm:
         return jsonify({"error": "New passwords do not match"}), 400
 
-    # Validate the new password using the new rules.
     valid, errors = validate_password(new_password)
     if not valid:
         return jsonify({"error": "Invalid new password", "details": errors}), 400
@@ -538,8 +571,6 @@ def change_password():
     if not user_doc:
         return jsonify({"error": "User not found"}), 404
 
-    # NOTE: This example compares plain-text passwords.
-    # In production, ensure you hash passwords and use a proper verification method.
     if user_doc.get("password") != old_password:
         return jsonify({"error": "Old password is incorrect"}), 401
 
@@ -548,11 +579,7 @@ def change_password():
 
 @api_bp.route('/subscription/cancel', methods=['POST'])
 def cancel_subscription():
-    """
-    Placeholder. Possibly set subscriptionActive=False
-    """
     return jsonify({"message": "Cancel subscription placeholder"}), 200
-
 
 # For single answer updates
 @api_bp.route('/attempts/<user_id>/<test_id>/answer', methods=['POST'])
@@ -568,17 +595,14 @@ def update_single_answer(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
     
-    # Find the attempt
     attempt = testAttempts_collection.find_one({
         "userId": user_oid, 
         "finished": False,
         "$or": [{"testId": test_id_int}, {"testId": test_id}]
     })
-    
     if not attempt:
         return jsonify({"error": "Attempt not found"}), 404
     
-    # Check if the answer already exists
     existing_answer_index = None
     for i, ans in enumerate(attempt.get("answers", [])):
         if ans.get("questionId") == question_id:
@@ -586,7 +610,6 @@ def update_single_answer(user_id, test_id):
             break
     
     if existing_answer_index is not None:
-        # Update existing answer using $ positional operator
         testAttempts_collection.update_one(
             {
                 "userId": user_oid,
@@ -601,7 +624,6 @@ def update_single_answer(user_id, test_id):
             }}
         )
     else:
-        # Add new answer to array
         testAttempts_collection.update_one(
             {
                 "userId": user_oid,
@@ -651,12 +673,10 @@ def update_position(user_id, test_id):
 ##############################################
 # DAILY QUESTION ENDPOINTS
 ##############################################
-
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
 def daily_bonus(user_id):
     """
     Award a daily bonus (1000 coins) if 24 hours have passed.
-    Returns updated coins, xp, and newLastDailyClaim.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -665,7 +685,6 @@ def daily_bonus(user_id):
     now = datetime.utcnow()
     last_claim = user.get("lastDailyClaim")
     if last_claim and (now - last_claim) < timedelta(hours=24):
-        # Calculate time left in seconds
         seconds_left = int(24 * 3600 - (now - last_claim).total_seconds())
         return jsonify({
             "success": False,
@@ -681,10 +700,7 @@ def daily_bonus(user_id):
             {"$set": {"lastDailyClaim": now}}
         )
         updated_user = get_user_by_id(user_id)
-
-        # === NEW: Check achievements unlocked by this big coin addition
         newly_unlocked = check_and_unlock_achievements(user_id)
-
         return jsonify({
             "success": True,
             "message": "Daily bonus applied",
@@ -696,11 +712,6 @@ def daily_bonus(user_id):
 
 @api_bp.route('/daily-question', methods=['GET'])
 def get_daily_question():
-    """
-    GET /api/test/daily-question?userId=<userId>
-    Computes the dayIndex (for demo we use 0; in production you might compute based on a start date)
-    and returns the daily question plus whether the user has already answered.
-    """
     user_id = request.args.get("userId")
     if not user_id:
         return jsonify({"error": "No userId provided"}), 400
@@ -710,7 +721,7 @@ def get_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # For demo purposes, we use day_index 0.
+    # Demo dayIndex=0
     day_index = 0
 
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
@@ -732,11 +743,6 @@ def get_daily_question():
 
 @api_bp.route('/daily-question/answer', methods=['POST'])
 def submit_daily_question():
-    """
-    Expects JSON: { userId, dayIndex, selectedIndex }
-    Checks answer against daily question’s correctIndex, awards coins,
-    and returns updated user info.
-    """
     data = request.json or {}
     user_id = data.get("userId")
     day_index = data.get("dayIndex")
@@ -775,8 +781,6 @@ def submit_daily_question():
 
     update_user_coins(user_id, awarded_coins)
     updated_user = get_user_by_id(user_id)
-
-    # After awarding coins, check achievements
     newly_unlocked = check_and_unlock_achievements(user_id)
 
     return jsonify({
