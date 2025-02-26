@@ -4,10 +4,7 @@ we prbably need a model and or route (i think we already do) that stores if the 
 Info page as default route for non logged in/no account users
 Userprofile page default route for logged in users.
 ---------------------------
-## Daily Ranking / Leaderboard- for this you actually gave me a great idea to expand my current leaderbaord page- so liek right now i have i guess an "all time leaderboad" which is just current top players (based on lvl) however i want to expand this leaderboad page to where it has a top leevl (horiztant) navbar/category selction of like leaderbaod. so the default one/first one that shows would be highest lvl whcih is what we have right now- howwver i want there two be 2 more- so a "all time" but name it whatver fits- of "answered questions" but beteter label that fits- which will be teh user with most questions answer "of all time" (not nessciarly that name) which is overall most questions answered- but then a dynamcic "daily" thing you can click. which shows most questions answered for that day- i guess maybe we could do it from 2am to 2am or 12am-12am and it resets idk how we will go about it but giev me recomndaiton on how the daily leaderboard most questions would work. so yea- teh frist tab is "of all time" lvl- but then you can lcick soemthign like "questions" adn then "daily questions" which would be what i just said. make sense?
 
-### ok so for thre test view i need it so the "next question" component to sorta be logged better for the testview an review mode as a whole. so basically, the issue is that if the user  clickd the "next quetsion" button without answering then there needs to be a popup that say something like "you havent answered, pelase answer or hit skip" just like the popups we have for  the restart/finish buttons.
------------------------
 
 ### so for this right here- we need to highlight the "Skipped"
 ![image](https://github.com/user-attachments/assets/27ca5db8-581f-41ef-b882-f792941e221a)
@@ -29,8 +26,6 @@ we probaly need to create uniuqe names for each/import the achiveemnt list where
 -------------------------------------------------
 ### Need to make an option to do 25,50,75,100 question tests. SO i gues if they choose 25 its the first 25, if they choose 50 its the first 25 and then next 25, if its 75 its the first 75, if its 100 its all 100. how would we implement this? How/Where should the feature be to choose the lenth? How can we efficently and effectly do this? Hwo can we ensure it doesnt slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne. also how can we do this while maintaining all our other features/components.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-### I need to add a daily bonus hwere you get 1000 coins. it will have a page on the sdiabr called like daily bonus and says "laim bonus" and if you click the button it give syou 1000 coins, and it resets every 24 hours so everyday yiou can go to the page and claim 1000 coins, obvisolsy it has to be unqiue to the user.
------------------------------------------------------------------------------------------
 ### update everyhing possible iwth aplus testlist/page and glovaltestpage--- THEN update teh rest of your testlists/pages
 -------------------------------------------------------------------------------------------------------------------------
 ### verify all achievemnts acheive when actually achieved/ when criteria is met
