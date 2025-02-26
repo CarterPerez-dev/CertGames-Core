@@ -942,7 +942,7 @@ db.tests.insertOne({
     },
     {
       "id": 73,
-      "question": "**(PBQ)** A system administrator suspects that a process is consuming excessive network bandwidth and needs to identify and terminate it. What is the correct sequence of actions?",
+      "question": "A system administrator suspects that a process is consuming excessive network bandwidth and needs to identify and terminate it. What is the correct sequence of actions?",
       "options": [
         "1) ss -tunap 2) kill -9 <PID> 3) systemctl restart network",
         "1) netstat -tulnp 2) pkill -9 <process_name> 3) ifconfig eth0 down",
@@ -1072,7 +1072,7 @@ db.tests.insertOne({
     },
     {
       "id": 83,
-      "question": "**(PBQ)** A Linux administrator needs to configure a new disk for use. What is the correct sequence of actions?",
+      "question": "A Linux administrator needs to configure a new disk for use. What is the correct sequence of actions?",
       "options": [
         "1) fdisk /dev/sdX 2) mkfs.ext4 /dev/sdX1 3) mount /dev/sdX1 /mnt/data",
         "1) mkfs.ext4 /dev/sdX 2) mount /dev/sdX /mnt/data 3) fdisk /dev/sdX",
@@ -1202,7 +1202,7 @@ db.tests.insertOne({
     },
     {
       "id": 93,
-      "question": "**(PBQ)** A Linux administrator needs to set up a persistent firewall rule to allow SSH traffic. What is the correct sequence of actions?",
+      "question": "A Linux administrator needs to set up a persistent firewall rule to allow SSH traffic. What is the correct sequence of actions?",
       "options": [
         "1) firewall-cmd --permanent --add-service=ssh 2) firewall-cmd --reload",
         "1) iptables -A INPUT -p tcp --dport 22 -j ACCEPT 2) service iptables save",
