@@ -1,16 +1,3 @@
-
-# So currently if a user is logged in/ the browser essentially "rememebers that" and you are pretty much alwsy logged in until you log out-- however "IF LOGGED IN" then instead of the "info" page as the default (route) / --- instead it should be the userpofile as teh default route BUT ONLY IF LOGGED IN. IF a user has no account/ issnt logged in-- he default route shall remain as the "info page"
-we prbably need a model and or route (i think we already do) that stores if the user is "logged in" and if so then we prpbaly need to edit out App.js to have essentially two default routes- one for no logged in/no account and one for logged in.
-Info page as default route for non logged in/no account users
-Userprofile page default route for logged in users.
----------------------------
-
-
-
-### achievemnt popups arent popping up when achieiving
-so anazlye all my files. Then tell my why my ahcivemnt popups dont popup when i meet the cirteria/achieve an achievemtn? so liek my auth pages for login aand stuff have the toast popup notifcations, so for my achievment toats notifation popups, why wont my ahcievemtn toat popups show when i achive soemwthing- i know this becvasue i achived soemthing as a test adn nothing popped up/ toast notifs.
-
-
 ------------------------------------------------
 ### Need to make an 'EXAM && PRACTICE MODE'
 - so right now we have the explantions appear rigth affter the user answers. however- is there a way-easy way and efficent way so without slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne- to have an option on the test box liek atoggle on or off for "exam mode" to have it not tell you you if you got it wrong or right and also doesnt show you teh expalntion, then when fisnihed it you just review all of it in teh review mode (will be same review mode coponet we use for the other mode and also view rrevie wbutton) (and will have an small I symbol taht explains what exam mode means (it means what i just said). so would it be easy- well not easy but liek not a complete revamp of my code? and it woudlnt slow down any reaquests/slow user expericne overall?. also how can we do this while maintaining all our other features/components.
