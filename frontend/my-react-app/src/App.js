@@ -52,6 +52,23 @@ import DailyStationPage from './components/pages/store/DailyStationPage';
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
 
+/* 
+  HomeOrProfile Component
+  - If user data is still loading, shows a loading message.
+  - If user is logged in, redirects to /profile.
+  - Otherwise, renders the public InfoPage.
+*/
+function HomeOrProfile() {
+  const { userId, status } = useSelector((state) => state.user);
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+  if (userId) {
+    return <Navigate to="/profile" replace />;
+  }
+  return <InfoPage />;
+}
+
 function App() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user);
@@ -79,7 +96,8 @@ function App() {
       />
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<InfoPage />} />
+          {/* The default route now depends on whether the user is logged in */}
+          <Route path="/" element={<HomeOrProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -278,8 +296,6 @@ function App() {
             </ProtectedRoute>
           }/>
 
-          
-          
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
@@ -288,4 +304,3 @@ function App() {
 }
 
 export default App;
-
