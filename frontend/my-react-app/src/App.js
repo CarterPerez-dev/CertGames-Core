@@ -21,7 +21,6 @@ import Sidebar from './components/Sidebar/Sidebar';
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
 import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
-import Log from './components/pages/LogPage/Log';
 import GRC from './components/pages/GRCpage/GRC';
 import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
 import Resources from './components/pages/ResourcesPage/Resources';
@@ -142,11 +141,6 @@ function App() {
           <Route path="/analogyhub" element={
             <ProtectedRoute>
               <AnalogyHub />
-            </ProtectedRoute>
-          }/>
-          <Route path="/log" element={
-            <ProtectedRoute>
-              <Log />
             </ProtectedRoute>
           }/>
           <Route path="/grc" element={
