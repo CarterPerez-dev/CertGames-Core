@@ -267,22 +267,22 @@ const DailyStationPage = () => {
     const { prompt, options, alreadyAnswered } = questionData;
     return (
       <div
-        className={`question-container 
-                    ${showCorrectAnimation ? 'animate-correct' : ''} 
-                    ${showWrongAnimation ? 'animate-wrong' : ''}`}
+        className={`question-container-station 
+                    ${showCorrectAnimation ? 'animate-station-correct' : ''} 
+                    ${showWrongAnimation ? 'animate-station-wrong' : ''}`}
       >
         <h2 className="section-title">Daily PBQ Challenge</h2>
-        <div className="question-prompt-container">
-          <p className="question-text">{prompt}</p>
+        <div className="question-prompt-container-station">
+          <p className="question-text-station">{prompt}</p>
         </div>
         {alreadyAnswered ? (
-          <div className="result-container">
+          <div className="result-container-station">
             {submitResult && (
               <p
                 className={
                   submitResult.correct
-                    ? 'result-message correct'
-                    : 'result-message incorrect'
+                    ? 'result-message-station correct'
+                    : 'result-message-station incorrect'
                 }
               >
                 {submitResult.correct
@@ -296,11 +296,11 @@ const DailyStationPage = () => {
             </div>
           </div>
         ) : (
-          <div className="answer-section">
-            <ul className="options-list">
+          <div className="answer-section-station">
+            <ul className="options-list-station">
               {options.map((opt, idx) => (
-                <li key={idx} className="option-item">
-                  <label className={`option-label ${selectedAnswer === idx ? 'selected' : ''}`}>
+                <li key={idx} className="option-item-station">
+                  <label className={`option-label-station ${selectedAnswer === idx ? 'selected' : ''}`}>
                     <input
                       type="radio"
                       name="dailyQuestion"
@@ -309,12 +309,12 @@ const DailyStationPage = () => {
                       onChange={() => setSelectedAnswer(idx)}
                       className="option-radio"
                     />
-                    <span className="option-text">{opt}</span>
+                    <span className="option-text-station">{opt}</span>
                   </label>
                 </li>
               ))}
             </ul>
-            <button className="primary-button submit-button" onClick={submitDailyAnswer}>
+            <button className="primary-button submit-button-station" onClick={submitDailyAnswer}>
               Submit
             </button>
             <div className="countdown-container question-countdown">
@@ -335,7 +335,7 @@ const DailyStationPage = () => {
       {/* Bonus claim overlay animation */}
       {showBonusAnimation && (
         <div className="overlay">
-          <div className="overlay-content bonus-claimed">
+          <div className="overlay-content--station bonus-claimed">
             <div className="coin-icon">💰</div>
             <div className="claim-text">+1000 Coins Claimed!</div>
           </div>
