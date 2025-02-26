@@ -119,11 +119,6 @@ const Sidebar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/log" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
-                    Log Analysis
-                  </NavLink>
-                </li>
-                <li>
                   <NavLink to="/grc" className={({ isActive }) => isActive ? 'active-subtab' : ''}>
                     GRC Wizard
                   </NavLink>
