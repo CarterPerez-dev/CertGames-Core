@@ -1,5 +1,4 @@
-// src/components/pages/DailyStationPage.js
-
+// src/components/pages/store/DailyStationPage.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setXPAndCoins, fetchUserData } from './userSlice';
@@ -42,18 +41,10 @@ const DailyStationPage = () => {
     setLocalLastDailyClaim(lastDailyClaim);
   }, [lastDailyClaim]);
 
-  // Fetch daily question if user is logged in
-  useEffect(() => {
-    if (userId) {
-      fetchDailyQuestion();
-    } else {
-      setLoadingQ(false);
-    }
-  }, [userId]);
-
-  // Bonus countdown logic
+  // Bonus countdown logic (runs every second)
   useEffect(() => {
     if (!localLastDailyClaim) {
+      // If we have no known claim, show "canClaim" right away
       setBonusCountdown(0);
       setCanClaim(true);
       return;
@@ -62,7 +53,7 @@ const DailyStationPage = () => {
 
     function tickBonus() {
       const now = Date.now();
-      const diff = lastClaimTime + 24 * 3600 * 1000 - now;
+      const diff = lastClaimTime + 24 * 3600 * 1000 - now; // 24h window
       if (diff <= 0) {
         setBonusCountdown(0);
         setCanClaim(true);
@@ -76,7 +67,7 @@ const DailyStationPage = () => {
     return () => clearInterval(bonusInterval);
   }, [localLastDailyClaim]);
 
-  // Daily question refresh countdown logic (midnight UTC)
+  // Daily question refresh countdown logic (resets at midnight UTC)
   useEffect(() => {
     function tickQuestion() {
       const now = new Date();
@@ -89,7 +80,16 @@ const DailyStationPage = () => {
     return () => clearInterval(questionInterval);
   }, []);
 
-  // Claim daily bonus
+  // Fetch daily question if user is logged in
+  useEffect(() => {
+    if (userId) {
+      fetchDailyQuestion();
+    } else {
+      setLoadingQ(false);
+    }
+  }, [userId]);
+
+  // Claim daily bonus (direct fetch, not a thunk)
   async function claimDailyBonus() {
     if (!userId) {
       setBonusError('Please log in first.');
@@ -97,21 +97,47 @@ const DailyStationPage = () => {
     }
     setLoadingBonus(true);
     setBonusError(null);
+
     try {
       const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
         method: 'POST'
       });
       const data = await res.json();
       setLoadingBonus(false);
-      if (res.ok && data.success) {
-        // Show a big, obvious overlay for 3 seconds
+
+      if (!res.ok) {
+        // Hard error, e.g. 404 user not found
+        setBonusError(data.error || 'Error claiming daily bonus');
+        return;
+      }
+
+      if (data.success) {
+        // Claimed for the first time or after 24h
         setShowBonusAnimation(true);
         setTimeout(() => setShowBonusAnimation(false), 3000);
 
+        // Mark localLastDailyClaim as "now" so the countdown begins
         setLocalLastDailyClaim(new Date().toISOString());
-        dispatch(fetchUserData(userId));
+        dispatch(fetchUserData(userId)); // refresh coins/xp
       } else {
-        setBonusError(data.message || 'Failed to claim daily bonus.');
+        // "Already claimed" case => parse how many seconds left from data.message if you want
+        // e.g. "Already claimed. Next bonus in: 51085 seconds"
+        // We'll do a quick check to see if there's a number
+        const match = data.message && data.message.match(/(\d+)/);
+        if (match) {
+          const secondsLeft = parseInt(match[1], 10);
+          if (!isNaN(secondsLeft) && secondsLeft > 0) {
+            // We'll artificially set lastDailyClaim so the local effect sees we have "secondsLeft"
+            const nowMs = Date.now();
+            const msLeft = secondsLeft * 1000;
+            // So lastClaimTime = now - (24h - msLeft)
+            const lastClaimTime = nowMs - (86400000 - msLeft);
+            setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
+          }
+        }
+        // Optionally set a small note, but not an "error" that kills the countdown UI
+        // We can store it in bonusError if we want a small text note:
+        setBonusError(data.message);
       }
     } catch (err) {
       setBonusError('Error: ' + err.message);
@@ -189,17 +215,29 @@ const DailyStationPage = () => {
     }
   }
 
-  // Daily bonus UI
+  // Daily bonus UI logic
   let dailyBonusContent;
-  if (bonusError) {
+  if (!userId) {
+    // If not logged in
+    dailyBonusContent = <p>Please log in first.</p>;
+  } else if (bonusError && !bonusError.startsWith('Already claimed')) {
+    // A genuine error, not the "already claimed" note
     dailyBonusContent = <p className="daily-error-msg">{bonusError}</p>;
   } else if (!canClaim) {
+    // We rely on local countdown for the user
     dailyBonusContent = (
-      <p className="bonus-countdown">
-        Next bonus in: <span className="cool-countdown">{formatCountdown(bonusCountdown)}</span>
-      </p>
+      <>
+        {bonusError && bonusError.startsWith('Already claimed') && (
+          <p className="claimed-msg">{bonusError}</p>
+        )}
+        <p className="bonus-countdown">
+          Next bonus in:{' '}
+          <span className="cool-countdown">{formatCountdown(bonusCountdown)}</span>
+        </p>
+      </>
     );
   } else {
+    // They can claim now
     dailyBonusContent = (
       <button
         onClick={claimDailyBonus}
@@ -251,7 +289,8 @@ const DailyStationPage = () => {
               </p>
             )}
             <p className="next-question-countdown">
-              Next question in: <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
+              Next question in:{' '}
+              <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
             </p>
           </div>
         ) : (
@@ -277,7 +316,8 @@ const DailyStationPage = () => {
               Submit
             </button>
             <p className="next-question-countdown">
-              Time until next question: <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
+              Time until next question:{' '}
+              <span className="cool-countdown">{formatCountdown(questionCountdown)}</span>
             </p>
           </div>
         )}
@@ -302,7 +342,7 @@ const DailyStationPage = () => {
         <div className="app-title">Daily Station</div>
       </div>
 
-      {/* If user is logged in, show user info in a separate bar (to keep the title centered) */}
+      {/* If user is logged in, show user info in a separate bar */}
       {userId && (
         <div className="player-info-bar">
           <div className="player-info">
