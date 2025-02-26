@@ -86,7 +86,7 @@ function Donate() {
                     <div className="manual-leaderboard">
                         <h4>Top Donors</h4>
                         <ul>
-                            <li>No donors yet--Be the first!</li>
+                            <li>Leon Tang $5</li>
                             {/* Donors */}
                         </ul>
                     </div>

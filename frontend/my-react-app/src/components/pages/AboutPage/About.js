@@ -111,7 +111,7 @@ My favorite show, Mr. Robot, inspires not only my mindset but also the aesthetic
 
 I also enjoy programming, web design, and creating tools to make life easier. Whether it’s writing scripts to streamline workflows or building applications just for fun, I love the mix of creativity and problem-solving. My long-term goals include growing into a cybersecurity analyst role, then transitioning into penetration testing. Eventually, I hope to step into a Chief Technology Officer (CTO) position—or even launch my own cybersecurity company.
 
-By the way, therss a simple little Easter Egg in this website, look through my git repo to find it or solve the riddle.
+By the way, there is a simple little Easter Egg in this website, look through my git repo to find it or solve the riddle.
  
  Riddle............ I’m the master of all, the start of the chain,
 Tap me once, and I’ll remain.
@@ -150,7 +150,7 @@ What lies behind the root of me.
           <h2 className="section-title-glitch ">Portfolio</h2>
           <p>
             Check out my{" "}
-            <a href="/myportfolio" target="_blank" rel="noopener noreferrer">
+            <a href="https://carterperez-dev.com/" target="_blank" rel="noopener noreferrer">
               Portfolio
             </a> 
           </p>

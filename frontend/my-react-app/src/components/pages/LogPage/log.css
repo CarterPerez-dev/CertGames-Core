@@ -113,11 +113,11 @@ html, body {
 
 .log-page-title {
   text-align: center;
-  font-size: 2.5rem;
+  font-size: 4rem;
   margin-bottom: 30px;
-  color: #000; 
-  text-shadow: 2px 2px 0px #fff;
-  font-family: 'Arial', sans-serif; 
+  color: #cc0000; 
+  text-shadow: 2px 2px 1px #fff;
+  font-family: 'VT323', monospace;
   font-weight: bold; 
 }
 
@@ -143,7 +143,7 @@ html, body {
   background-size: cover;
   opacity: 0.1;
   z-index: -1;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 
@@ -180,8 +180,9 @@ html, body {
 .control-group label {
   margin-bottom: 5px;
   font-weight: bold;
-  color: var(--accent-red);
-  font-family: 'Arial', sans-serif;
+  font-size: 1rem;
+  color: #cc0000; 
+  font-family: 'VT323', monospace;
 }
 
 
@@ -191,7 +192,7 @@ html, body {
   border: 2px solid var(--input-border);
   border-radius: 8px;
   background-color: var(--input-bg);
-  color: var(--text-color);
+  color: #0000ff;
   font-size: 1rem;
   outline: none;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -229,19 +230,21 @@ html, body {
   overflow: hidden;
   font-family: 'Arial', sans-serif;
   font-weight: bold;
+  border: 0.2rem solid #fff;
 }
 
 .generate-btn:hover,
 .reset-btn:hover,
 .history-controls button:hover {
   background-color: var(--button-hover-bg);
+  border: 0.2rem solid #fff;
 }
 
 .generate-btn:active,
 .reset-btn:active,
 .history-controls button:active {
   background-color: var(--button-active-bg);
-  box-shadow: 0 0 20px var(--primary-red);
+  border: 0.2rem solid #fff;
 }
 
 .analyze-individual-btn:disabled {
