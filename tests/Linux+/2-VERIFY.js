@@ -58,16 +58,16 @@ db.tests.insertOne({
     },
     {
       "id": 5,
-      "question": "**(PBQ)** You need to troubleshoot an issue where a server is not resolving domain names. Match each troubleshooting command with its function:",
+      "question": "A junior administrator reports that a particular user cannot log in despite entering valid credentials. No error messages appear in the logs, and other users are unaffected. After verifying the user’s password has not expired, what is the NEXT step to resolve this issue?",
       "options": [
-        "1. `dig example.com`  ->  A. Queries DNS records from authoritative name servers",
-        "2. `nslookup example.com`  ->  B. Resolves domain names using configured resolvers",
-        "3. `cat /etc/resolv.conf`  ->  C. Displays current DNS configuration",
-        "4. `systemctl restart systemd-resolved`  ->  D. Restarts the system's DNS resolver"
+        "Check the user’s entry in /etc/passwd to ensure the assigned shell is valid and not set to /bin/false or /sbin/nologin.",
+        "Inspect the /etc/shadow file for a locked password field by looking for an exclamation mark (!) preceding the hashed password.",
+        "Remove and re-add the user to the wheel group to verify that group membership is not interfering with authentication.",
+        "Use the chage -d 0 username command to force a password reset and re-enable normal login functionality."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`dig` queries DNS servers, `nslookup` resolves hostnames, `/etc/resolv.conf` contains resolver settings, and restarting `systemd-resolved` refreshes system DNS services.",
-      "examTip": "For deeper DNS troubleshooting, compare `dig +trace` with `nslookup` results."
+      "explanation": "If the user’s shell is set to /bin/false or /sbin/nologin, the user will be unable to log in even with valid credentials. Checking /etc/passwd to confirm that the user has a legitimate shell (e.g., /bin/bash) is the critical next diagnostic step.",
+      "examTip": "When login issues arise without an obvious error, verify the user’s assigned shell in /etc/passwd before checking more complex configurations."
     },
     {
       "id": 6,
@@ -149,16 +149,16 @@ db.tests.insertOne({
     },
     {
       "id": 12,
-      "question": "**(PBQ)** You need to verify network connectivity and diagnose an issue where a Linux server cannot reach an external website. Match each command to its function:",
+      "question": "In a systemd-based environment, which term correctly describes a service that is configured to start on boot but is currently not running at the moment you check its status?",
       "options": [
-        "1. `ping example.com`  ->  A. Tests basic connectivity and response time",
-        "2. `traceroute example.com`  ->  B. Identifies network hops between the local system and the destination",
-        "3. `dig example.com`  ->  C. Resolves domain names to IP addresses",
-        "4. `netstat -rn`  ->  D. Displays the system’s current routing table"
+        "Active",
+        "Enabled",
+        "Loaded",
+        "Running"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`ping` tests connectivity, `traceroute` traces network hops, `dig` queries DNS records, and `netstat -rn` shows routing information.",
-      "examTip": "If a host is unreachable, check DNS resolution first, then routing, and finally network hops."
+      "correctAnswerIndex": 1,
+      "explanation": "Under systemd, 'enabled' indicates a service is set to start at boot. 'Active' or 'running' indicates it is currently running, and 'loaded' means the unit file has been parsed without necessarily being enabled or running. Therefore, 'enabled' is correct for a service configured at boot but presently stopped.",
+      "examTip": "Differentiate between systemd states: 'enabled' vs. 'disabled' controls startup at boot, while 'active' vs. 'inactive' reveals runtime status."
     },
     {
       "id": 13,
@@ -305,16 +305,16 @@ db.tests.insertOne({
     },
     {
       "id": 24,
-      "question": "**(PBQ)** You are troubleshooting why a Linux system cannot resolve domain names. Match each file or command with its function:",
+      "question": "A server is experiencing unexpected low disk space on the root filesystem. The df -h command confirms nearly 100% utilization, but you suspect a single directory is consuming disproportionate space. Which action will most reliably identify the largest subdirectory consuming space?",
       "options": [
-        "1. `/etc/resolv.conf` -> A. Specifies DNS servers for the system",
-        "2. `/etc/nsswitch.conf` -> B. Defines the order of name resolution sources",
-        "3. `systemctl restart systemd-resolved` -> C. Restarts the system's DNS resolver",
-        "4. `dig example.com` -> D. Queries a domain's DNS records"
+        "Running du -sh /* from the root directory to see each top-level directory’s usage.",
+        "Issuing df -i to check inode usage instead of focusing on actual storage consumption.",
+        "Using ls -lahR / to recursively list file sizes in human-readable format.",
+        "Invoking parted /dev/sda print to review partition table details before resizing."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`/etc/resolv.conf` lists DNS servers, `/etc/nsswitch.conf` defines lookup order, restarting `systemd-resolved` refreshes DNS settings, and `dig` queries DNS records.",
-      "examTip": "If DNS fails, verify `/etc/resolv.conf` and check the resolver service status."
+      "explanation": "To isolate which top-level directory is taking the most space, du (disk usage) is the most direct approach. du -sh /* provides an immediate overview of the size of each directory, allowing pinpointing of high-usage paths.",
+      "examTip": "df reports filesystem-level usage, while du pinpoints the exact directories or files responsible for high storage usage."
     },
     {
       "id": 25,
@@ -409,16 +409,16 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "**(PBQ)** You need to manage a process running on a Linux system. Match each command with its purpose:",
+      "question": "You have created a new directory /srv/www to host a custom web application. SELinux enforcement is enabled. Which approach MINIMIZES disruption while properly assigning SELinux contexts to the new directory?",
       "options": [
-        "1. `ps aux`  ->  A. Lists all running processes with details",
-        "2. `kill -9 <PID>`  ->  B. Immediately terminates a process",
-        "3. `nice -n 10 <command>`  ->  C. Starts a process with lower priority",
-        "4. `pkill -u user`  ->  D. Kills all processes belonging to a specific user"
+        "Run chcon -u system_u /srv/www to match system_u user context across web content.",
+        "Use restorecon -Rv /srv/www after assigning the httpd_sys_rw_content_t context temporarily.",
+        "Directly edit /etc/selinux/config to disable SELinux, relabel the directory, then enable SELinux again.",
+        "Deploy semanage fcontext -a -t httpd_sys_content_t '/srv/www(/.*)?' and then execute restorecon -Rv /srv/www."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`ps aux` lists processes, `kill -9` forcefully stops a process, `nice` starts a process with a lower priority, and `pkill -u` terminates all processes owned by a user.",
-      "examTip": "Use `ps aux | grep <process>` to find process IDs before terminating them."
+      "correctAnswerIndex": 3,
+      "explanation": "To integrate a new directory for web content under SELinux, you must define the correct context permanently with semanage fcontext and then apply that context via restorecon. This ensures minimal service disruption and consistent labeling across reboots.",
+      "examTip": "Temporary chcon can break upon relabeling or reboot. Use semanage fcontext for persistent rules, followed by restorecon."
     },
     {
       "id": 33,
@@ -539,16 +539,16 @@ db.tests.insertOne({
     },
     {
       "id": 42,
-      "question": "**(PBQ)** You need to troubleshoot a Linux system that is running out of disk space. Match each command with the type of storage information it provides:",
+      "question": "PBQ-Style: Match each parted command with its MOST appropriate description. Which matching set is correct?\n\nA) mkpart, B) rm, C) print, D) resizepart\n\n1) Displays current partition table.\n2) Removes an existing partition.\n3) Creates a new partition of a specified length.\n4) Adjusts the start or end boundaries of an existing partition.\n\nSelect the single option that lists the matches in the format [A->?, B->?, C->?, D->?].",
       "options": [
-        "1. `df -h`  ->  A. Displays filesystem disk usage",
-        "2. `du -sh /var/log`  ->  B. Shows disk usage for a specific directory",
-        "3. `lsblk`  ->  C. Lists block devices and partitions",
-        "4. `blkid`  ->  D. Displays UUID and filesystem type of storage devices"
+        "A->1, B->4, C->2, D->3",
+        "A->3, B->2, C->1, D->4",
+        "A->2, B->3, C->4, D->1",
+        "A->4, B->1, C->3, D->2"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`df -h` shows overall filesystem usage, `du -sh` provides directory-level usage, `lsblk` lists block devices, and `blkid` displays UUIDs and filesystem types.",
-      "examTip": "Use `du` for per-directory storage checks and `df` for overall disk usage."
+      "correctAnswerIndex": 1,
+      "explanation": "The correct mapping is mkpart (A) = Create a new partition, rm (B) = Remove a partition, print (C) = Display partition table, and resizepart (D) = Adjust the start/end boundary of an existing partition. This yields [A->3, B->2, C->1, D->4].",
+      "examTip": "parted subcommands must be executed carefully; always verify partition boundaries before resizing to avoid data loss."
     },
     {
       "id": 43,
@@ -668,17 +668,17 @@ db.tests.insertOne({
       "examTip": "Use `sudo -i` for a full root session if multiple privileged commands are needed."
     },
     {
-      "id": 52,
-      "question": "**(PBQ)** A system administrator needs to identify the cause of a high CPU load on a Linux server. Match each command with its purpose:",
+      "id": 51,
+      "question": "You are tasked with recovering log data from a compromised Linux server. You discover that the /var/log/secure file is corrupted. The file system is intact, and no recent backups are available. Which approach should you perform FIRST to attempt to recover partial log data?",
       "options": [
-        "1. `top`  ->  A. Displays real-time CPU usage",
-        "2. `ps aux --sort=-%cpu`  ->  B. Lists processes sorted by CPU usage",
-        "3. `vmstat`  ->  C. Provides system performance statistics",
-        "4. `uptime`  ->  D. Displays system load averages"
+        "Immediately restore the entire /var partition from a backup image created six months ago.",
+        "Run debugfs on the underlying file system to examine and possibly extract the corrupted log contents.",
+        "Use the dmesg command to retrieve kernel messages as a substitute for the secure log.",
+        "Execute systemctl restart rsyslog to reinitialize the logging service and recreate the file."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`top` shows live CPU usage, `ps aux --sort=-%cpu` sorts processes by CPU consumption, `vmstat` provides performance metrics, and `uptime` displays load averages.",
-      "examTip": "Use `uptime` first to check load, then `top` or `ps` to identify problematic processes."
+      "correctAnswerIndex": 1,
+      "explanation": "debugfs provides a low-level way to analyze and potentially recover data blocks from an ext-based file system. Since no recent backups exist and the file system itself remains intact, debugfs is a common immediate step for partial data recovery attempts before other measures.",
+      "examTip": "If a critical log is corrupted and no backups exist, low-level filesystem tools like debugfs can help retrieve partial data."
     },
     {
       "id": 53,
@@ -799,16 +799,16 @@ db.tests.insertOne({
     },
     {
       "id": 62,
-      "question": "**(PBQ)** A system administrator is troubleshooting a slow network connection. Match each command with its function:",
+      "question": "A user complains that their custom cron job running every morning at 2 AM no longer executes. Upon checking, you confirm crond is running and the cron job entry is present in /var/spool/cron. The user’s account is valid, and the system time is correct. Which diagnostic step should you try NEXT?",
       "options": [
-        "1. `ping`  ->  A. Tests basic network connectivity",
-        "2. `traceroute`  ->  B. Identifies network hops between the source and destination",
-        "3. `netstat -s`  ->  C. Displays network statistics and errors",
-        "4. `mtr`  ->  D. Combines ping and traceroute for continuous monitoring"
+        "Review /etc/cron.allow and /etc/cron.deny to ensure the user is permitted to run cron jobs.",
+        "Delete the user’s cron entry and manually recreate it using crontab -e.",
+        "Check /etc/default/useradd for any invalid default shell configurations.",
+        "Execute journalctl -u anacron to confirm that anacron is not overriding the user’s cron schedule."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`ping` tests connectivity, `traceroute` tracks network hops, `netstat -s` shows network statistics, and `mtr` provides real-time network path analysis.",
-      "examTip": "Use `mtr` for diagnosing intermittent network issues as it continuously tracks latency."
+      "explanation": "When a cron job fails silently, verifying the user's presence in /etc/cron.allow (or absence in /etc/cron.deny) is a key step. If the user is blocked in these files, cron jobs simply won't run for that account.",
+      "examTip": "User-level permissions for cron are often overlooked. /etc/cron.allow and /etc/cron.deny can silently block valid cron entries."
     },
     {
       "id": 63,
@@ -929,16 +929,16 @@ db.tests.insertOne({
     },
     {
       "id": 72,
-      "question": "**(PBQ)** You need to identify potential performance bottlenecks on a Linux system. Match each command with its function:",
+      "question": "A system performance baseline shows a sudden spike in CPU usage. You suspect a rogue application is hogging resources. Which single command would provide a real-time, interactive listing of processes sorted by CPU utilization?",
       "options": [
-        "1. `iotop`  ->  A. Displays real-time disk I/O usage",
-        "2. `htop`  ->  B. Interactive process monitoring",
-        "3. `vmstat`  ->  C. Reports system-wide performance metrics",
-        "4. `free -m`  ->  D. Displays memory usage in megabytes"
+        "ps aux",
+        "watch ps -aux",
+        "htop",
+        "top"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`iotop` shows disk I/O per process, `htop` provides an interactive view of system processes, `vmstat` reports system-wide performance statistics, and `free -m` displays memory usage in megabytes.",
-      "examTip": "Use `iotop` for disk bottlenecks, `htop` for CPU/memory usage, and `vmstat` for system-wide performance trends."
+      "correctAnswerIndex": 3,
+      "explanation": "While htop is a popular enhanced alternative, top is traditionally installed by default and presents a dynamic, real-time view of process CPU and memory usage. htop may not be guaranteed on all Linux systems.",
+      "examTip": "Both top and htop show real-time stats, but top is standard and found on nearly all Linux distributions by default."
     },
     {
       "id": 73,
@@ -1059,16 +1059,16 @@ db.tests.insertOne({
     },
     {
       "id": 82,
-      "question": "**(PBQ)** A system administrator needs to analyze system logs. Match each log file with its purpose:",
+      "question": "Scenario-Based: Your production server is experiencing intermittent network slowdowns. Only SSH connections are timing out periodically. Web traffic remains unaffected. You discover that the SSH daemon is set to accept connections on a non-standard port. The firewall rules appear correct, and no anomalies show in /var/log/messages. What is the MOST logical step to troubleshoot the SSH issue?",
       "options": [
-        "1. `/var/log/syslog`  ->  A. General system messages",
-        "2. `/var/log/auth.log`  ->  B. User authentication and sudo attempts",
-        "3. `/var/log/dmesg`  ->  C. Kernel boot messages",
-        "4. `/var/log/cron`  ->  D. Scheduled job execution logs"
+        "Reconfigure the SSH daemon to listen on port 22 and use /etc/hosts.allow to explicitly grant access.",
+        "Update SELinux policy with a semanage port -a -t ssh_port_t -p tcp <non_standard_port> command and restart sshd.",
+        "Disable the firewall to confirm it is not silently dropping packets on the custom SSH port.",
+        "Enable verbose logging in sshd_config and observe /var/log/secure for error messages or disconnects."
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "`/var/log/syslog` contains general system messages, `/var/log/auth.log` records authentication attempts, `/var/log/dmesg` logs kernel boot messages, and `/var/log/cron` stores cron job execution details.",
-      "examTip": "Use `journalctl -xe` on systemd-based distributions to view system logs interactively."
+      "correctAnswerIndex": 3,
+      "explanation": "Before making significant changes (like reconfiguring ports or disabling security services), enabling more detailed SSH daemon logging is the logical next step. This can highlight handshake failures, authentication timeouts, or port-related policies dropping connections.",
+      "examTip": "Always gather more targeted logs or verbose output prior to reconfiguring or disabling services—especially when network symptoms are intermittent."
     },
     {
       "id": 83,
@@ -1189,17 +1189,17 @@ db.tests.insertOne({
     },
     {
       "id": 92,
-      "question": "**(PBQ)** A system administrator is troubleshooting network connectivity. Match each command with its function:",
+      "question": "PBQ-Style: Match the tar command options with their PRIMARY function. Which single matching set is correct?\n\nA) -x, B) -c, C) -z, D) -t\n\n1) Compress or decompress using gzip.\n2) Extract files from an archive.\n3) List contents of an archive without extracting.\n4) Create a new archive.\n\nSelect the option reflecting [A->?, B->?, C->?, D->?].",
       "options": [
-        "1. `ip addr show`  ->  A. Displays current IP address configuration",
-        "2. `ip route show`  ->  B. Shows system routing table",
-        "3. `dig example.com`  ->  C. Performs a DNS lookup",
-        "4. `arp -a`  ->  D. Displays ARP cache entries"
+        "A->2, B->4, C->1, D->3",
+        "A->3, B->2, C->4, D->1",
+        "A->1, B->2, C->3, D->4",
+        "A->4, B->1, C->2, D->3"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "`ip addr show` displays current network interfaces and IPs, `ip route show` lists routing tables, `dig` queries DNS records, and `arp -a` shows ARP cache entries.",
-      "examTip": "Use `ip addr` for interface details and `ip route` to diagnose routing issues."
-    },
+      "explanation": "The tar parameters are typically: -x (extract), -c (create), -z (use gzip), -t (list contents). Thus, the correct mapping is [A->2, B->4, C->1, D->3].",
+      "examTip": "In tar usage, remember: c = create, x = extract, t = list, z = gzip compression. Others like -j exist for bzip2."
+    }
     {
       "id": 93,
       "question": "Which of the following commands lists open files that are currently being accessed by a specific process?",
