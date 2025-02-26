@@ -1,10 +1,14 @@
-/* NEW: Full-screen background that applies only if .leaderboard-container exists */
+/* Leaderboard Page iOS Background Fix */
+
+/* ------------------------------------------
+   1) Original styles for desktop browsers
+   ------------------------------------------ */
 body:has(.leaderboard-container) {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  
+
   background:
     linear-gradient(
       to bottom,
@@ -13,10 +17,123 @@ body:has(.leaderboard-container) {
     ),
     url('./leader.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-attachment: fixed; /* might not work on some mobile browsers */
+  background-attachment: fixed;
   background-position: center;
 }
 
+/* -------------------------------------------------
+   2) iOS-specific fix to emulate a fixed background
+   ------------------------------------------------- */
+@supports (-webkit-touch-callout: none) {
+  /* Remove background from the body on iOS devices */
+  body:has(.leaderboard-container) {
+    background: none;
+    position: relative;
+  }
+
+  /* Create a fixed background container using a pseudo-element */
+  body:has(.leaderboard-container)::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url('./leader.jpg') no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    background-position: center;
+  }
+
+  /* Ensure the leaderboard container sits above the background */
+  .leaderboard-container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* -----------------------------------------------
+   3) Specific adjustments for smaller iOS devices
+   ----------------------------------------------- */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    body:has(.leaderboard-container)::before {
+      background-position: center top;
+    }
+  }
+}
+
+/* -----------------------------------------------------
+   4) Special handling for iPhone X and newer notched iPhones
+   ----------------------------------------------------- */
+@media screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3),
+       screen and (device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) {
+  @supports (-webkit-touch-callout: none) {
+    body:has(.leaderboard-container)::before {
+      /* Ensure full coverage including safe areas */
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
+  }
+}
+
+/* ------------------------------------------------
+   5) Fallback for browsers that don't support :has()
+   ------------------------------------------------ */
+@supports not (selector(:has(*))) {
+  /* Non-iOS or old browsers: normal background, no fixed attachment. */
+  body {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.7)
+      ),
+      url('./leader.jpg') no-repeat center center;
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll; /* Fallback */
+  }
+
+  /* For iOS devices without :has support */
+  @supports (-webkit-touch-callout: none) {
+    body {
+      background: none;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.7)
+        ),
+        url('./leader.jpg') no-repeat center center;
+      background-size: cover;
+      -webkit-background-size: cover;
+      background-position: center;
+    }
+  }
+}
+
+/* --------------------------------------------
+   6) Leaderboard Container & Item Styling
+   -------------------------------------------- */
 /* src/components/pages/leaderboard/LeaderboardPage.css */
 
 .leaderboard-container {
@@ -108,20 +225,24 @@ body:has(.leaderboard-container) {
   color: #ccc;
 }
 
-/* Basic responsiveness */
+/* ---------------------------------------
+   7) Additional Media Queries
+   --------------------------------------- */
+
+/* Extra-Small Devices: max-width 320px */
 @media (max-width: 320px) {
   body:has(.leaderboard-container) {
     background-attachment: scroll !important; 
-    background-position: center top !important; /* if you want to shift the focal point */
+    background-position: center top !important;
   }
 
   .leaderboard-container {
     padding: 15px;
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
   }
 
   .leaderboard-title {
-    font-size: 1.6rem; /* Scale down the title */
+    font-size: 1.6rem;
     margin-bottom: 0.75rem;
   }
 
@@ -134,7 +255,7 @@ body:has(.leaderboard-container) {
   .rank-label {
     font-size: 1.3rem;
     margin-right: 0;
-    width: auto; /* Let it shrink naturally */
+    width: auto;
   }
 
   .avatar-wrapper {
@@ -157,18 +278,16 @@ body:has(.leaderboard-container) {
   }
 }
 
-/*******************************************/
-/* 2) Small Devices: max-width 480px       */
-/*******************************************/
+/* Small Devices: max-width 480px */
 @media (max-width: 480px) {
   body:has(.leaderboard-container) {
     background-attachment: scroll !important; 
-    background-position: center top !important; /* if you want to shift the focal point */
+    background-position: center top !important;
   }
-  
+
   .leaderboard-container {
     padding: 15px;
-    font-size: 0.95rem; /* Base font can be slightly smaller */
+    font-size: 0.95rem;
   }
 
   .leaderboard-title {
@@ -209,15 +328,13 @@ body:has(.leaderboard-container) {
   }
 }
 
-/*******************************************/
-/* 3) Medium-Small Devices: max-width 600px*/
-/*******************************************/
+/* Medium-Small Devices: max-width 600px */
 @media (max-width: 600px) {
   body:has(.leaderboard-container) {
     background-attachment: scroll !important; 
-    background-position: center top !important; /* if you want to shift the focal point */
+    background-position: center top !important;
   }
-  
+
   .leaderboard-container {
     padding: 20px;
     font-size: 1rem;
@@ -227,7 +344,6 @@ body:has(.leaderboard-container) {
     font-size: 1.9rem;
   }
 
-  /* Possibly still vertical stacking if you prefer */
   .leaderboard-item {
     flex-direction: column;
     align-items: center;
@@ -260,15 +376,13 @@ body:has(.leaderboard-container) {
   }
 }
 
-/*******************************************/
-/* 4) Tablets / Larger Mobiles: max-width 768px */
-/*******************************************/
+/* Tablets / Larger Mobiles: max-width 768px */
 @media (max-width: 768px) {
   body:has(.leaderboard-container) {
     background-attachment: scroll !important; 
-    background-position: center top !important; /* if you want to shift the focal point */
+    background-position: center top !important;
   }
-  
+
   .leaderboard-container {
     padding: 20px;
     font-size: 1rem;
@@ -280,8 +394,6 @@ body:has(.leaderboard-container) {
     margin-bottom: 1rem;
   }
 
-  /* If there's enough horizontal space, you can keep items in a row; 
-     otherwise, keep them stacked. Adjust as desired. */
   .leaderboard-item {
     padding: 10px;
     gap: 8px;
@@ -289,7 +401,7 @@ body:has(.leaderboard-container) {
 
   .rank-label {
     font-size: 1.5rem;
-    width: 40px; /* Or auto if you want more flexible spacing */
+    width: 40px;
   }
 
   .avatar-wrapper {
@@ -311,4 +423,3 @@ body:has(.leaderboard-container) {
     font-size: 0.95rem;
   }
 }
-
