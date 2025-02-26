@@ -17,12 +17,9 @@ from routes.scenario_routes import scenario_bp
 from routes.analogy_routes import analogy_bp
 from routes.subscribe_routes import subscribe_bp
 from routes.unsubscribe_routes import unsubscribe_bp
-from routes.admin_newsletter_routes import admin_newsletter_bp
 from routes.grc_routes import grc_bp
 from routes.log_routes import log_bp
 from routes.celery_routes import celery_bp
-from routes.status_routes import status_bp
-from routes.pbq_routes import pbq_bp
 from routes.test_routes import api_bp
 
 # IMPORTANT: Now import from models.py (not models.user_subscription)
@@ -81,17 +78,8 @@ app.register_blueprint(grc_bp, url_prefix='/grc')
 app.register_blueprint(log_bp, url_prefix='/logs')
 app.register_blueprint(subscribe_bp, url_prefix='/subscribe')
 app.register_blueprint(unsubscribe_bp, url_prefix='/unsubscribe')
-app.register_blueprint(admin_newsletter_bp, url_prefix='/admin/newsletter')
 app.register_blueprint(celery_bp, url_prefix='/celery')
-app.register_blueprint(status_bp, url_prefix='/status')
-app.register_blueprint(pbq_bp, url_prefix='/pbq')
 app.register_blueprint(api_bp, url_prefix='/test')
-
-# ENV VAR for admin password
-ADMIN_API_KEY = os.getenv("ADMIN_API_KEY")
-
-
-
 
 
 @socketio.on('connect')
