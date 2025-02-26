@@ -497,3 +497,43 @@
   }
 }
 
+/* ----------------------------------------------------- */
+/* iOS Background Image Fix for .shop-page.mario-kart-theme */
+/* ----------------------------------------------------- */
+@supports (-webkit-touch-callout: none) {
+  .shop-page.mario-kart-theme {
+    background-attachment: scroll !important;
+    position: relative;
+    z-index: 1;
+  }
+  .shop-page.mario-kart-theme::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
+      url('./shopbg1.jpg') no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    background-position: center;
+  }
+}
+
+/* Additional fix for smaller iOS devices */
+@media (max-width: 768px) {
+  @supports (-webkit-touch-callout: none) {
+    .shop-page.mario-kart-theme::before {
+      background-position: center top;
+    }
+  }
+}
+
+/* Fallback fix for very old iOS versions */
+@media screen and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .shop-page.mario-kart-theme {
+    background-attachment: scroll !important;
+  }
+}
