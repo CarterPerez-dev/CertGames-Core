@@ -237,37 +237,38 @@ function frontValidatePassword(password, username, email) {
 }
 
 // ====================================
-// (Optional) Achievement Icons
+// Achievement icon mapping
+// (same as used in AchievementPage)
 // ====================================
 const iconMapping = {
-  test_rookie: FaTrophy,
-  accuracy_king: FaMedal,
-  bronze_grinder: FaBook,
-  silver_scholar: FaStar,
-  gold_god: FaCrown,
-  platinum_pro: FaMagic,
-  walking_encyclopedia: FaBrain,
-  redemption_arc: FaBolt,
-  memory_master: FaRegSmile,
-  coin_collector_5000: FaBook,
-  coin_hoarder_10000: FaBook,
-  coin_tycoon_50000: FaBook,
-  perfectionist_1: FaCheckCircle,
-  double_trouble_2: FaCheckCircle,
-  error404_failure_not_found: FaCheckCircle,
-  level_up_5: FaTrophy,
-  mid_tier_grinder_25: FaMedal,
-  elite_scholar_50: FaStar,
-  ultimate_master_100: FaCrown,
-  category_perfectionist: FaBolt,
-  absolute_perfectionist: FaBolt,
-  exam_conqueror: FaMedal,
-  subject_specialist: FaMedal,
-  answer_machine_1000: FaBook,
-  knowledge_beast_5000: FaBrain,
-  question_terminator: FaBrain,
-  test_finisher: FaCheckCircle,
-  subject_finisher: FaCheckCircle
+  "test_rookie": FaTrophy,
+  "accuracy_king": FaMedal,
+  "bronze_grinder": FaBook,
+  "silver_scholar": FaStar,
+  "gold_god": FaCrown,
+  "platinum_pro": FaMagic,
+  "walking_encyclopedia": FaBrain,
+  "redemption_arc": FaBolt,
+  "memory_master": FaRegSmile,
+  "coin_collector_5000": FaBook,
+  "coin_hoarder_10000": FaBook,
+  "coin_tycoon_50000": FaBook,
+  "perfectionist_1": FaCheckCircle,
+  "double_trouble_2": FaCheckCircle,
+  "error404_failure_not_found": FaCheckCircle,
+  "level_up_5": FaTrophy,
+  "mid_tier_grinder_25": FaMedal,
+  "elite_scholar_50": FaStar,
+  "ultimate_master_100": FaCrown,
+  "category_perfectionist": FaBolt,
+  "absolute_perfectionist": FaBolt,
+  "exam_conqueror": FaMedal,
+  "subject_specialist": FaMedal,
+  "answer_machine_1000": FaBook,
+  "knowledge_beast_5000": FaBrain,
+  "question_terminator": FaBrain,
+  "test_finisher": FaCheckCircle,
+  "subject_finisher": FaCheckCircle
 };
 
 const UserProfile = () => {
@@ -287,6 +288,12 @@ const UserProfile = () => {
     subscriptionActive,
     password
   } = useSelector((state) => state.user);
+
+  // Get all achievements from the store (so we can map IDs to titles, descriptions, icons)
+  const allAchievements = useSelector((state) => state.achievements.all);
+
+  // Get all shop items from the store (so we can map purchased IDs to actual item info)
+  const allShopItems = useSelector((state) => state.shop.items);
 
   // Toggles for showing/hiding different forms
   const [showChangeUsername, setShowChangeUsername] = useState(false);
@@ -315,8 +322,15 @@ const UserProfile = () => {
   // For success/error messages
   const [statusMessage, setStatusMessage] = useState('');
 
-  let profilePicUrl = '/avatars/avatar1.png'; 
-  // or logic if you have stored 'currentAvatar'
+  // If you have stored currentAvatar logic:
+  // Could do something like this if the user has an actual avatar in "allShopItems"
+  let profilePicUrl = '/avatars/avatar1.png';
+  if (currentAvatar) {
+    const foundAvatar = allShopItems.find(item => item._id === currentAvatar);
+    if (foundAvatar && foundAvatar.imageUrl) {
+      profilePicUrl = foundAvatar.imageUrl;
+    }
+  }
 
   const handleLogout = () => {
     dispatch(logout());
@@ -470,6 +484,16 @@ const UserProfile = () => {
       setStatusMessage('Error cancelling subscription: ' + err.message);
     }
   };
+
+  // Map user achievements IDs to full achievement data
+  const userAchievementsData = achievements
+    .map(achId => allAchievements.find(a => a.achievementId === achId))
+    .filter(Boolean); // remove any null/undefined
+
+  // Map user purchased item IDs to full shop item data
+  const userPurchasedItems = purchasedItems
+    .map(itemId => allShopItems.find(item => item._id === itemId))
+    .filter(Boolean);
 
   return (
     <div className="profile-container">
@@ -657,12 +681,21 @@ const UserProfile = () => {
         <div className="extra-card">
           <h2>Your Achievements</h2>
           <div className="achievements-list">
-            {achievements.length > 0 ? (
-              achievements.map((achId) => (
-                <div key={achId} className="achievement-display">
-                  {achId}
-                </div>
-              ))
+            {userAchievementsData.length > 0 ? (
+              userAchievementsData.map((ach) => {
+                const IconComp = iconMapping[ach.achievementId] || FaTrophy;
+                return (
+                  <div key={ach.achievementId} className="achievement-display">
+                    <div className="achievement-icon">
+                      <IconComp />
+                    </div>
+                    <div className="achievement-info">
+                      <h3>{ach.title}</h3>
+                      <p>{ach.description}</p>
+                    </div>
+                  </div>
+                );
+              })
             ) : (
               <p>You haven't unlocked any achievements yet.</p>
             )}
@@ -671,10 +704,18 @@ const UserProfile = () => {
         <div className="extra-card">
           <h2>Purchased Items</h2>
           <div className="purchased-items-list">
-            {purchasedItems && purchasedItems.length > 0 ? (
-              purchasedItems.map((itemId) => (
-                <div key={itemId} className="purchased-item-display">
-                  <div>Item ID: {itemId}</div>
+            {userPurchasedItems && userPurchasedItems.length > 0 ? (
+              userPurchasedItems.map((item) => (
+                <div key={item._id} className="purchased-item-display">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    style={{ width: '50px', marginRight: '0.5rem' }}
+                  />
+                  <div>
+                    <h4>{item.title}</h4>
+                    {item.description && <p>{item.description}</p>}
+                  </div>
                 </div>
               ))
             ) : (
@@ -694,4 +735,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-
