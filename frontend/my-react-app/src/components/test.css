@@ -1770,7 +1770,7 @@ body {
 /* Slider background */
 .toggle-switch .slider {
   display: block;
-  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.5);
   color: #fff;
   border-radius: 36px;
   cursor: pointer;
@@ -1791,7 +1791,7 @@ body {
   height: 28px;
   left: 4px;
   top: 4px;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   transition: transform 0.4s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
