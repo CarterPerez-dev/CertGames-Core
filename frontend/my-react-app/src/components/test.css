@@ -1739,51 +1739,51 @@ body {
 }
 
 /* 1) Center the container with extra vertical spacing */
+/* Center the toggle container with extra vertical spacing */
 .centered-toggle-container {
   display: flex;
-  justify-content: center; 
-  margin: 2rem 0; /* space above/below */
+  justify-content: center;
+  margin: 2rem 0;
 }
 
-/* 2) Use flex to align items horizontally and center them vertically */
+/* Align toggle, label, and info icon horizontally */
 .toggle-with-text {
   display: flex;
-  align-items: center; 
-  gap: 1rem; /* spacing between toggle, label, info icon */
+  align-items: center;
+  gap: 1rem; /* spacing between elements */
 }
 
-/* 3) The toggle switch itself, made bigger so the knob doesn't cover text */
+/* Toggle switch styling */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 70px;  /* larger width */
-  height: 36px; /* larger height */
+  width: 70px;   /* increased width */
+  height: 36px;  /* increased height */
 }
 
-/* Hide checkbox visually */
 .toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* The background bar of the toggle (OFF state) */
+/* Slider background */
 .toggle-switch .slider {
   display: block;
-  background-color: #ccc; 
+  background-color: #ccc;
   color: #fff;
-  border-radius: 36px; 
+  border-radius: 36px;
   cursor: pointer;
   text-align: center;
   font-size: 0.85rem;
-  line-height: 36px; /* so text "ON"/"OFF" is vertically centered */
+  line-height: 36px; /* vertical centering */
   user-select: none;
   transition: background-color 0.4s;
   position: relative;
-  box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
-/* The circle knob inside the toggle */
+/* Slider knob */
 .toggle-switch .slider::before {
   content: "";
   position: absolute;
@@ -1794,70 +1794,74 @@ body {
   background-color: #fff;
   border-radius: 50%;
   transition: transform 0.4s;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-/* Shift knob to the right when checked */
+/* When checked, shift the knob */
 .toggle-switch input:checked + .slider::before {
-  transform: translateX(34px); /* 70 - (28 + 4 + 4) = ~34 leftover */
+  transform: translateX(34px);
 }
 
-/* ON color */
+/* When checked, change slider background */
 .toggle-switch input:checked + .slider {
   background-color: #3399ff;
 }
 
-/* 4) The "Exam Mode" text on the same line & same height as the toggle. */
+/* Toggle label styling */
 .toggle-label {
   font-size: 1rem;
   color: #fff;
-  line-height: 36px; /* same as the toggle’s height => perfect alignment */
-  margin: 0;         /* ensure no extra spacing/padding pulls it out of line */
+  line-height: 36px; /* same as toggle height for alignment */
+  margin: 0;
 }
 
-/* 5) Info icon (🛈) styling */
+/* Info icon container */
 .info-icon-container {
-  position: relative; 
-  display: flex; 
+  position: relative;
+  display: flex;
   align-items: center;
 }
+
+/* Info icon styling */
 .info-icon {
-  font-size: 1.5rem; 
+  font-size: 1.5rem;
   width: 1.8em;
   height: 1.9em;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #3399ff; 
+  color: #3399ff;
 }
 
-/* 6) Modern tooltip styling */
+/* Tooltip styling positioned to the right of the icon */
 .info-tooltip {
   position: absolute;
-  bottom: calc(100% + 10px); /* place above the icon with a gap */
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  left: calc(100% + 10px); /* to the right with a 10px gap */
+  transform: translateY(-50%);
   background-color: #222;
   color: #fff;
   padding: 0.8rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   width: 240px;
   text-align: center;
   z-index: 999;
 }
 
+/* Tooltip arrow on left side */
 .info-tooltip::after {
   content: "";
   position: absolute;
-  top: 100%; /* arrow at the bottom of the tooltip */
-  left: 50%;
-  transform: translateX(-50%);
+  top: 50%;
+  right: 100%; /* arrow on the left edge */
+  transform: translateY(-50%);
   border: 8px solid transparent;
-  border-top-color: #222; /* arrow color matches bubble */
+  border-right-color: #222;
 }
+
 
 
 
