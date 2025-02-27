@@ -731,5 +731,332 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`Restart=on-failure` ensures the service restarts only when it crashes, while allowing manual stops to persist. `Restart=always` restarts the service under all conditions, `RestartSec=10` sets a delay but does not control restart behavior, and `ExecStartPre` delays startup but does not affect restart policy.",
       "examTip": "Use `systemctl show <service> | grep Restart` to check the current restart policy."
+    },
+db.tests.insertOne({
+  "category": "CompTIA Linux+ XK0-005",
+  "testId": 8,
+  "testName": "Practice Test #8 (Formidable)",
+  "xpPerCorrect": 40,
+  "questions": [
+    {
+      "id": 57,
+      "question": "A Linux administrator needs to verify if a remote server supports TLS 1.3. Which command should they use?",
+      "options": [
+        "openssl s_client -connect <host>:443 -tls1_3",
+        "nmap --script ssl-enum-ciphers -p 443 <host>",
+        "curl -v --tlsv1.3 https://<host>",
+        "sslyze <host>"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`openssl s_client -connect <host>:443 -tls1_3` tests a TLS 1.3 connection. `nmap --script ssl-enum-ciphers` scans for supported ciphers but does not specifically test TLS 1.3, `curl` checks TLS versions for HTTPS, and `sslyze` is an external tool, not a built-in command.",
+      "examTip": "Use `openssl s_client -connect <host>:443 | grep Protocol` to check TLS versions."
+    },
+    {
+      "id": 58,
+      "question": "Which command allows an administrator to scan a system for unauthorized listening ports and detect hidden backdoors?",
+      "options": [
+        "netstat -tulnp",
+        "ss -tulnp",
+        "lsof -i -P -n",
+        "nmap -sT -p- localhost"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "`nmap -sT -p- localhost` scans all ports on the local machine to detect unauthorized listening services. `netstat`, `ss`, and `lsof` list active connections but may not detect hidden services bound to high ports.",
+      "examTip": "Use `nmap -sU -p- localhost` to scan for unauthorized UDP services."
+    },
+    {
+      "id": 59,
+      "question": "**(PBQ)** A Linux administrator suspects that a user is running unauthorized cron jobs. What is the correct sequence of actions to investigate and resolve the issue?",
+      "options": [
+        "1) crontab -l -u <user> 2) grep CRON /var/log/syslog 3) rm /var/spool/cron/<user>",
+        "1) systemctl disable cron 2) ls -lh /etc/cron.d/ 3) reboot",
+        "1) echo '' > /var/spool/cron/crontabs/<user> 2) systemctl restart cron 3) notify the user",
+        "1) tail -f /var/log/auth.log 2) at -l 3) pkill -9 crond"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) listing the user’s cron jobs, (2) checking logs for suspicious activity, and (3) removing unauthorized cron jobs. Other sequences disable cron entirely or take actions without identifying the root cause.",
+      "examTip": "Use `crontab -e -u <user>` to review and modify a user’s scheduled jobs."
+    },
+    {
+      "id": 60,
+      "question": "Which command allows an administrator to recover deleted files from an ext4 filesystem, assuming the disk has not been overwritten?",
+      "options": [
+        "extundelete /dev/sdX --restore-all",
+        "fsck -y /dev/sdX",
+        "tune2fs -O dir_index /dev/sdX",
+        "rm -rf /lost+found"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`extundelete` can recover deleted files from an ext4 filesystem if they have not been overwritten. `fsck` repairs filesystem errors but does not restore files, `tune2fs` optimizes filesystem structures but does not recover data, and `rm -rf /lost+found` deletes potential recovery data.",
+      "examTip": "Use `debugfs /dev/sdX` to manually inspect deleted file inodes."
+    },
+    {
+      "id": 61,
+      "question": "A Linux administrator needs to check which CPU core a specific process is running on. Which command should they use?",
+      "options": [
+        "ps -eo pid,psr,comm | grep <PID>",
+        "taskset -p <PID>",
+        "mpstat -P ALL 1 5",
+        "htop"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ps -eo pid,psr,comm` displays the CPU core assigned to a process. `taskset` sets CPU affinity but does not display real-time assignments, `mpstat` provides CPU usage statistics but not process affinity, and `htop` is an interactive monitoring tool.",
+      "examTip": "Use `taskset -pc <PID>` to check and modify CPU core affinity."
+    },
+    {
+      "id": 62,
+      "question": "Which command should an administrator use to analyze the memory usage of a specific process?",
+      "options": [
+        "pmap -x <PID>",
+        "smem -p <PID>",
+        "top -p <PID>",
+        "free -m"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`pmap -x <PID>` provides a detailed memory map for a process, including heap, stack, and shared memory usage. `smem` visualizes memory usage but is not always installed, `top -p` shows real-time memory usage but lacks detail, and `free -m` displays overall system memory statistics.",
+      "examTip": "Use `grep VmPeak /proc/<PID>/status` to check peak memory usage."
+    },
+    {
+      "id": 63,
+      "question": "A Linux administrator needs to disable Transparent Huge Pages (THP) to improve database performance. Which command should they run?",
+      "options": [
+        "echo never > /sys/kernel/mm/transparent_hugepage/enabled",
+        "sysctl -w vm.nr_hugepages=0",
+        "echo 0 > /proc/sys/vm/overcommit_memory",
+        "tune2fs -O huge_file /dev/sdX"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`echo never > /sys/kernel/mm/transparent_hugepage/enabled` disables Transparent Huge Pages immediately. `sysctl` manages kernel parameters but does not disable THP, `overcommit_memory` relates to memory overcommit behavior, and `tune2fs` adjusts filesystem settings but does not affect THP.",
+      "examTip": "To persist changes, add `transparent_hugepage=never` to the kernel boot parameters."
+    },
+    {
+      "id": 64,
+      "question": "A system administrator needs to capture network packets related to DNS queries on `eth0`. Which command should they use?",
+      "options": [
+        "tcpdump -i eth0 port 53",
+        "tshark -i eth0 -f 'port 53'",
+        "iptables -A INPUT -p udp --dport 53 -j LOG",
+        "netstat -an | grep ':53'"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`tcpdump -i eth0 port 53` captures all DNS-related packets. `tshark` is an alternative tool but requires additional installation, `iptables` logs packets but does not capture them in real-time, and `netstat` shows open connections but does not capture traffic.",
+      "examTip": "Use `tcpdump -nn -i eth0 port 53 -w dns_traffic.pcap` to save captured packets for analysis."
+    },
+    {
+      "id": 65,
+      "question": "A Linux administrator needs to identify which process is generating excessive disk I/O on the system. Which command should they use?",
+      "options": [
+        "iotop",
+        "iostat -dx 1 5",
+        "vmstat 1 5",
+        "df -h"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`iotop` displays per-process disk I/O usage, making it the best tool for identifying processes causing high disk activity. `iostat` provides disk performance statistics but does not isolate processes, `vmstat` reports system-wide statistics, and `df` shows disk usage but not I/O statistics.",
+      "examTip": "Use `iotop -o` to filter only processes currently performing disk I/O."
+    },
+    {
+      "id": 66,
+      "question": "A Linux administrator wants to determine whether the system is suffering from excessive context switching. Which command should they use?",
+      "options": [
+        "vmstat 1 5",
+        "sar -w 1 5",
+        "top -H",
+        "ps aux --sort=-%cpu"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`sar -w 1 5` provides detailed context switch statistics, allowing administrators to detect excessive switching. `vmstat` gives overall system performance data but does not isolate context switches, `top -H` shows per-thread CPU usage, and `ps aux` sorts processes by CPU but does not track context switching.",
+      "examTip": "If context switching is excessive, check for high process creation rates with `ps -ef | wc -l`."
+    },
+    {
+      "id": 67,
+      "question": "**(PBQ)** A Linux administrator is investigating a suspected privilege escalation attack on a production server. What is the correct sequence of actions?",
+      "options": [
+        "1) ausearch -m USER_ROLE_CHANGE 2) grep 'sudo' /var/log/auth.log 3) disable affected accounts",
+        "1) systemctl restart sshd 2) pkill -9 root 3) update system packages",
+        "1) reboot into rescue mode 2) clear system logs 3) change all user passwords",
+        "1) lsof -i -nP 2) iptables -A INPUT -s <IP> -j DROP 3) restart networking"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best sequence is (1) using `ausearch` to check for privilege escalation, (2) analyzing authentication logs for unauthorized `sudo` usage, and (3) disabling compromised accounts. Other sequences involve unnecessary reboots, clearing logs, or making firewall changes without investigation.",
+      "examTip": "Use `auditctl -a always,exit -F arch=b64 -S execve` to log all executed commands."
+    },
+    {
+      "id": 68,
+      "question": "A Linux administrator needs to list all files in a directory along with their inode numbers. Which command should they use?",
+      "options": [
+        "ls -i",
+        "stat *",
+        "find . -type f -printf '%i %p\\n'",
+        "lsattr"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ls -i` displays filenames alongside their inode numbers. `stat` provides detailed metadata but does not list all files at once, `find` can retrieve inode numbers but requires a custom format, and `lsattr` lists file attributes but not inode numbers.",
+      "examTip": "Use `find / -inum <inode>` to locate files by inode number."
+    },
+    {
+      "id": 69,
+      "question": "A system administrator wants to monitor all newly created processes in real time. Which command should they use?",
+      "options": [
+        "execsnoop",
+        "ps -ef",
+        "watch -n 1 'ps aux'",
+        "pidstat -p ALL"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`execsnoop` is an advanced tool that monitors process execution in real time. `ps -ef` lists current processes but does not track new ones, `watch` refreshes process listings but does not trigger on new executions, and `pidstat` provides per-process statistics but does not monitor new executions.",
+      "examTip": "Install `bcc-tools` to use `execsnoop` for live process monitoring."
+    },
+    {
+      "id": 70,
+      "question": "A Linux administrator needs to determine which user ran a specific command on a system that uses auditd. Which command should they use?",
+      "options": [
+        "ausearch -m EXECVE -k command_exec",
+        "grep 'sudo' /var/log/auth.log",
+        "journalctl --grep 'executed'",
+        "ps aux | grep <command>"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ausearch -m EXECVE -k command_exec` queries audit logs to find commands executed by users. `grep` searches authentication logs but does not capture all executed commands, `journalctl` retrieves logs but does not specifically track command execution, and `ps aux` lists active processes but does not track historical executions.",
+      "examTip": "Use `auditctl -a always,exit -F arch=b64 -S execve -k command_exec` to log executed commands."
+    },
+    {
+      "id": 71,
+      "question": "A Linux administrator needs to find all symbolic links pointing to a specific file. Which command should they use?",
+      "options": [
+        "find / -type l -lname '/path/to/file'",
+        "ls -l /path/to/file",
+        "stat /path/to/file",
+        "readlink -f /path/to/file"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`find / -type l -lname '/path/to/file'` searches for all symbolic links pointing to a given file. `ls -l` displays symbolic link details but does not search system-wide, `stat` provides metadata but does not list links, and `readlink` resolves symbolic links but does not find all instances.",
+      "examTip": "Use `find / -xtype l` to locate broken symbolic links."
+    },
+    {
+      "id": 72,
+      "question": "A system administrator needs to apply a kernel parameter (`vm.overcommit_memory=1`) permanently. Which file should they modify?",
+      "options": [
+        "/etc/sysctl.conf",
+        "/etc/default/grub",
+        "/etc/security/limits.conf",
+        "/etc/fstab"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Adding `vm.overcommit_memory=1` to `/etc/sysctl.conf` ensures the change persists across reboots. `/etc/default/grub` configures bootloader options but does not manage runtime kernel parameters, `/etc/security/limits.conf` applies user limits, and `/etc/fstab` configures filesystem mounts.",
+      "examTip": "Run `sysctl -p` to apply changes immediately after modifying `/etc/sysctl.conf`."
+    }
 
+db.tests.insertOne({
+  "category": "CompTIA Linux+ XK0-005",
+  "testId": 8,
+  "testName": "Practice Test #8 (Formidable)",
+  "xpPerCorrect": 40,
+  "questions": [
+    {
+      "id": 73,
+      "question": "A Linux administrator needs to determine which users have an active SSH session on a remote server. Which command should they use?",
+      "options": [
+        "who",
+        "w",
+        "ss -tuna | grep ':22'",
+        "ps aux | grep sshd"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`w` displays logged-in users, including their originating IP addresses and active SSH sessions. `who` provides a simpler user listing, `ss -tuna` shows open SSH connections but not logged-in users, and `ps aux` lists SSH processes but does not track user sessions.",
+      "examTip": "Use `last -a | grep still` to check users who are still logged in."
+    },
+    {
+      "id": 74,
+      "question": "A system administrator needs to limit the number of concurrent SSH connections per user. Which configuration file should they modify?",
+      "options": [
+        "/etc/ssh/sshd_config",
+        "/etc/security/limits.conf",
+        "/etc/pam.d/sshd",
+        "/etc/sysctl.conf"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "In `/etc/ssh/sshd_config`, the `MaxSessions` and `MaxStartups` directives control concurrent SSH connections per user. `limits.conf` controls resource limits but not SSH sessions, `pam.d/sshd` handles authentication but does not set connection limits, and `sysctl.conf` manages kernel parameters.",
+      "examTip": "Restart SSH with `systemctl restart sshd` after modifying `sshd_config`."
+    },
+    {
+      "id": 75,
+      "question": "**(PBQ)** A system administrator needs to troubleshoot excessive TCP retransmissions affecting application performance. What is the correct sequence of actions?",
+      "options": [
+        "1) ss -s 2) tcpdump -i eth0 'tcp[tcpflags] & (tcp-syn|tcp-rst) != 0' 3) adjust TCP window size in sysctl",
+        "1) ip route show 2) clear ARP cache 3) restart networking",
+        "1) netstat -an | grep SYN_RECV 2) systemctl restart network 3) flush iptables rules",
+        "1) lsof -i -nP 2) restart affected applications 3) adjust MTU size"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) checking TCP statistics with `ss -s`, (2) capturing problematic packets with `tcpdump`, and (3) tuning TCP settings if necessary. Other sequences involve unnecessary reboots, firewall flushing, or restarting services without diagnosis.",
+      "examTip": "Use `sysctl -w net.ipv4.tcp_slow_start_after_idle=0` to adjust TCP behavior for high-latency networks."
+    },
+    {
+      "id": 76,
+      "question": "A Linux administrator wants to display all available systemd services, including disabled ones. Which command should they use?",
+      "options": [
+        "systemctl list-unit-files --type=service",
+        "systemctl list-units --type=service --all",
+        "systemctl list-timers",
+        "systemctl list-sockets"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`systemctl list-unit-files --type=service` lists all services, including disabled ones. `list-units --all` shows only loaded services, `list-timers` displays scheduled jobs, and `list-sockets` shows active sockets but not services.",
+      "examTip": "Use `systemctl list-units --failed` to find failed services."
+    },
+    {
+      "id": 77,
+      "question": "A Linux administrator needs to capture and analyze network traffic on a specific interface, filtering for only HTTPS traffic. Which command should they use?",
+      "options": [
+        "tcpdump -i eth0 port 443",
+        "ss -tuna | grep 443",
+        "netstat -antp | grep 443",
+        "ip a | grep eth0"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`tcpdump -i eth0 port 443` captures HTTPS packets on the specified interface. `ss` and `netstat` show connections but do not capture packets, and `ip a` displays interface configurations but not traffic data.",
+      "examTip": "Use `tcpdump -nn -i eth0 port 443 -w capture.pcap` to save captured traffic for analysis."
+    },
+    {
+      "id": 78,
+      "question": "A system administrator needs to configure a persistent static IP address for an interface on a Red Hat-based system. Which command should they use?",
+      "options": [
+        "nmcli con mod eth0 ipv4.address 192.168.1.100/24",
+        "ip addr add 192.168.1.100/24 dev eth0",
+        "echo '192.168.1.100/24' > /etc/sysconfig/network-scripts/ifcfg-eth0",
+        "netplan apply"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "On RHEL-based systems using NetworkManager, `nmcli con mod` configures a persistent static IP. `ip addr add` is temporary, modifying `ifcfg-eth0` directly is possible but less efficient, and `netplan apply` is used in Ubuntu-based systems.",
+      "examTip": "Use `nmcli con reload` to apply new network configurations."
+    },
+    {
+      "id": 79,
+      "question": "A Linux administrator wants to enforce mandatory access controls (MAC) on a web server to restrict process-level access to system resources. Which security framework should they use?",
+      "options": [
+        "SELinux",
+        "AppArmor",
+        "chroot",
+        "PAM"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "SELinux enforces mandatory access control (MAC) policies to restrict process and file access. AppArmor is an alternative but not as granular, `chroot` isolates processes but does not enforce MAC, and `PAM` handles authentication, not system-wide security policies.",
+      "examTip": "Use `getenforce` to check if SELinux is enabled and enforcing policies."
+    },
+    {
+      "id": 80,
+      "question": "A Linux administrator wants to identify files on a system that have the setuid or setgid bit enabled for security auditing purposes. Which command should they use?",
+      "options": [
+        "find / -perm -4000 -o -perm -2000 -type f",
+        "ls -l / | grep 's'",
+        "stat /usr/bin/* | grep 'setuid'",
+        "getfacl -R / | grep 'suid'"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`find / -perm -4000 -o -perm -2000 -type f` searches for files with the setuid (`4000`) or setgid (`2000`) bit set. `ls -l` lists file attributes but does not search recursively, `stat` provides metadata but does not filter by setuid/setgid, and `getfacl` retrieves ACLs but not file permission bits.",
+      "examTip": "Use `chmod u-s <file>` to remove the setuid bit from a file."
+    }
+  ]
+});
 
