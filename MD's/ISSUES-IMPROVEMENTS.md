@@ -1,7 +1,4 @@
 
-# fix dropdown list forr 1-100 showing corrct and incorret icons whene exam mode
-# fix how exam moe looks ITS STILL NOT EVENNNN
-# fix how when exam mode off it wont show xp and coins update rigth away- the xp adn coins at the nd is only for exam mode on
 
 
 
