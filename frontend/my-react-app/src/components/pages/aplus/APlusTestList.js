@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../test.css"; // Make sure this file includes the CSS below
+import "../../test.css"; // Ensure this file includes your updated CSS
 
 const APlusTestList = () => {
   const navigate = useNavigate();
@@ -41,7 +41,8 @@ const APlusTestList = () => {
         // For each testId, pick the best attempt doc (unfinished if exists, else latest finished)
         const bestAttempts = {};
         for (let att of relevant) {
-          const testKey = att.testId;
+          // Ensure testId is stored as a number (and keys become strings)
+          const testKey = String(att.testId);
           if (!bestAttempts[testKey]) {
             bestAttempts[testKey] = att;
           } else {
@@ -88,9 +89,9 @@ const APlusTestList = () => {
     return <div className="tests-list-container">Error: {error}</div>;
   }
 
-  // Helper: retrieve doc from bestAttempts or return null
+  // Convert test number (e.g., 1) to string to match the keys in attemptData
   const getAttemptDoc = (testNumber) => {
-    return attemptData[testNumber] || null;
+    return attemptData[String(testNumber)] || null;
   };
 
   // Display progress or final score
