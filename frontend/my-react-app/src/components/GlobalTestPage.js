@@ -207,21 +207,17 @@ const GlobalTestPage = ({
         setIsFinished(attemptDoc.finished === true);
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
-        // Use stored selectedLength, defaulting to totalQ if not present.
         const effectiveLength = attemptDoc.selectedLength || totalQ;
         setActiveTestLength(effectiveLength);
         if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length > 0) {
-          // Use the stored order (do not re-shuffle)
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
-          // Fall back to sequential order
           const sequentialOrder = Array.from({ length: effectiveLength }, (_, i) => i);
           setShuffleOrder(sequentialOrder);
         }
         if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === effectiveLength) {
           setAnswerOrder(attemptDoc.answerOrder);
         } else {
-          // Fall back to sequential order for answer options for each question
           const defaultAnswerOrder = testDoc.questions
             .slice(0, effectiveLength)
             .map((q) => Array.from({ length: q.options.length }, (_, i) => i));
@@ -622,11 +618,16 @@ const GlobalTestPage = ({
     </div>
   );
 
+  // Updated restart popup: if partially through a test, warn that changing length is not allowed.
   const renderRestartPopup = () => {
     if (!showRestartPopup) return null;
+    const message =
+      (!isFinished && currentQuestionIndex > 0)
+        ? `You are currently in progress with a ${activeTestLength}-question test. To change test length, you must finish the current attempt first. Do you want to restart the test with the current test length?`
+        : "Are you sure you want to restart the test? All progress will be lost!😱";
     return (
       <ConfirmPopup
-        message="Are you sure you want to restart the test? All progress will be lost!😱"
+        message={message}
         onConfirm={() => {
           handleRestartTest();
           setShowRestartPopup(false);
