@@ -156,8 +156,7 @@ const APlusTestList = () => {
   };
 
   // Description text for exam mode
-  const examInfoText = `Exam Mode hides immediate correctness and explanations,
-and awards XP only when you finish the test. You can change answers until the end.`;
+  const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
 
   return (
     <div className="tests-list-container">
