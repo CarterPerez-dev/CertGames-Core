@@ -21,7 +21,7 @@ Overall, the site aims to combine an interactive quiz/practice system with daily
 ---
 
 ## 2. **High-Level Architecture**
-Your application is split among these major components:
+My application is split among these major components:
 
 - **Frontend** (React) running at `:3000` (or served by the Apache container).
 - **Backend** (Flask + Socket.IO) running at `:5000`. This connects to:
@@ -302,7 +302,7 @@ Inside `frontend/my-react-app/src/components/pages/store/`:
 **Development**: Possibly you run `docker-compose up` or each container individually. Then:
 - **Frontend** on `http://localhost:3000`.
 - **Backend** on `http://localhost:5000`.
-- The reverse proxy on `http://localhost:8080` or so. (Your config might vary.)
+- The reverse proxy on `http://localhost:8080` or so. (My config might vary.)
 
 ---
 
@@ -325,6 +325,6 @@ Inside `frontend/my-react-app/src/components/pages/store/`:
 ---
 
 ### Conclusion
-Your web application is a multi-container platform that unites a gamified cybersecurity practice environment, daily content, AI-based scenario and question generation, a robust user system with achievements/levels, an item shop, and daily tasks. The back-end is structured with blueprint routes, Celery tasks for asynchronous operations, a well-thought-out schema in MongoDB, and a front-end React/Redux code structure that organizes test features by certification category. By combining streaming GPT responses, e-commerce-like item purchasing, and daily engagement loops, the project fosters a creative and educational experience focusing on repeated user engagement in cybersecurity topics.
+My web application is a multi-container platform that unites a gamified cybersecurity practice environment, daily content, AI-based scenario and question generation, a robust user system with achievements/levels, an item shop, and daily tasks. The back-end is structured with blueprint routes, Celery tasks for asynchronous operations, a well-thought-out schema in MongoDB, and a front-end React/Redux code structure that organizes test features by certification category. By combining streaming GPT responses, e-commerce-like item purchasing, and daily engagement loops, the project fosters a creative and educational experience focusing on repeated user engagement in cybersecurity topics.
 
 This concludes the **extremely** lengthy, detailed, and “high-level” (but ironically deeply comprehensive) overview. It should give any newcomer a solid sense of the entire codebase and its underlying logic, from data models and route design to front-end Redux patterns, achievements, daily engagement, and Celery-based tasks.
