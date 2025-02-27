@@ -17,7 +17,9 @@ step 2 Need to make an option to do 25,50,75,100 question tests. SO i gues if th
 Step 3 hen we need to Remove the bad achievements (refer down below), then we need to optimize the achivements we are keeping, then we need to convert/update the achievemnts to reflect the exam mode and practice mode, then we need to make them all actually work and verify them.
 - Add Counter Fields (Highest Impact)
 Update your user document structure to include achievement-specific counters:
+
 # Add these fields to your user documents
+```python
 user_data.setdefault("achievement_counters", {
     "total_tests_completed": 0,
     "perfect_tests_count": 0,
@@ -26,8 +28,10 @@ user_data.setdefault("achievement_counters", {
     "highest_score_ever": 0,
     "lowest_score_ever": 100
 })
+```
 Then update these incrementally when a test is finished:
-pythonCopy@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
+```python
+@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
     # ... existing code ...
     
@@ -45,8 +49,10 @@ def finish_test_attempt(user_id, test_id):
     
     newly_unlocked = check_and_unlock_achievements(user_id)
     # ...
+```
 2. Implement Achievement Caching (Moderate Complexity)
 # Add at top of file
+```python
 achievement_cache = {}
 ACHIEVEMENT_CACHE_TTL = 300  # 5 minutes
 
@@ -68,7 +74,9 @@ def check_and_unlock_achievements(user_id):
     }
     
     return newly_unlocked
+```
 3. Split Achievement Processing (Best Long-term)
+ ```python
 def check_and_unlock_achievements(user_id):
     """Two-tier achievement checking"""
     user = get_user_by_id(user_id)
@@ -89,6 +97,7 @@ def check_and_unlock_achievements(user_id):
         )
     
     return newly_unlocked
+```
 Which Achievements to Keep vs. Modify
 Keep but Optimize:
 category_perfectionist - Calculate from counters instead of rechecking tests
