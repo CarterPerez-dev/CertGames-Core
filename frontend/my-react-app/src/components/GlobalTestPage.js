@@ -685,7 +685,7 @@ const GlobalTestPage = ({
     if (!showNextPopup) return null;
     return (
       <NextQuestionAlert
-        message="You haven't answered. Please answer or skip question."
+        message="You haven't answered. Please answer or skip question.🤪"
         onOk={() => {
           setShowNextPopup(false);
         }}
@@ -713,7 +713,7 @@ const GlobalTestPage = ({
     if (!showRestartPopup) return null;
     return (
       <ConfirmPopup
-        message="Are you sure you want to restart the test? All progress will be lost."
+        message="Are you sure you want to restart the test? All progress will be lost!😱"
         onConfirm={() => {
           handleRestartTest();
           setShowRestartPopup(false);
@@ -727,7 +727,7 @@ const GlobalTestPage = ({
     if (!showFinishPopup) return null;
     return (
       <ConfirmPopup
-        message="Are you sure you want to finish the test now?"
+        message="Are you sure you want to finish the test now?😥"
         onConfirm={() => {
           handleFinishTest();
           setShowFinishPopup(false);
