@@ -450,8 +450,6 @@ def submit_answer(user_id):
     Accepts a single answer for the current question.
     If examMode == false => immediate awarding if first-time correct.
     If examMode == true => do not award now (bulk awarding on /finish).
-    So if examMode == true, we skip returning "isCorrect" to hide feedback.
-    We still store correctness in the testAttempts doc for final review.
     """
     data = request.json or {}
     test_id = str(data.get("testId"))
@@ -465,34 +463,30 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # See if attempt doc has examMode = true
+    # Ensure we only pick up the *unfinished* attempt doc for awarding logic
     attempt_doc = testAttempts_collection.find_one({
         "userId": user["_id"],
-        "$or": [{"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
-                {"testId": test_id}]
+        "finished": False,
+        "$or": [
+            {"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
+            {"testId": test_id}
+        ]
     })
     if not attempt_doc:
-        return jsonify({"error": "No attempt doc found for that user/test"}), 404
+        return jsonify({"error": "No unfinished attempt doc found for that user/test"}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
-
-    # We store the user's answer in the "answers" array within the attempt doc
-    # ignoring awarding if exam_mode == true
     is_correct = (selected_index == correct_index)
 
-    # 1) Update the attempt's "answers" array with the latest userAnswerIndex
+    # Update the attempt's "answers" array
     existing_answer_index = None
     for i, ans in enumerate(attempt_doc.get("answers", [])):
         if ans.get("questionId") == question_id:
             existing_answer_index = i
             break
 
-    # We'll set a local "updatedScore" if examMode == false
-    # but if examMode == true, we won't change the attemptDoc.score right now
     new_score = attempt_doc.get("score", 0)
-
     if existing_answer_index is not None:
-        # update existing
         update_payload = {
             "answers.$.userAnswerIndex": selected_index,
             "answers.$.correctAnswerIndex": correct_index
@@ -511,7 +505,6 @@ def submit_answer(user_id):
             }
         )
     else:
-        # push new
         new_answer_doc = {
             "questionId": question_id,
             "userAnswerIndex": selected_index,
@@ -527,13 +520,10 @@ def submit_answer(user_id):
             }
         )
 
-    # 2) If examMode == false => award XP/coins for newly-correct answers
-    #    (like your old logic).
-    #    If examMode == true => skip awarding now.
     awarded_xp = 0
     awarded_coins = 0
     if exam_mode is False:
-        # check if user answered it for the first time
+        # Check if user answered it for the first time
         already_correct = correctAnswers_collection.find_one({
             "userId": user["_id"],
             "testId": test_id,
@@ -554,19 +544,19 @@ def submit_answer(user_id):
         return jsonify({
             "examMode": False,
             "isCorrect": is_correct,
-            "alreadyCorrect": True if already_correct else False,
+            "alreadyCorrect": bool(already_correct),
             "awardedXP": awarded_xp,
             "awardedCoins": awarded_coins,
             "newXP": updated_user.get("xp", 0),
             "newCoins": updated_user.get("coins", 0)
         }), 200
     else:
-        # examMode == true => do NOT reveal correctness or do awarding
-        # just store data and return minimal info
+        # examMode == true => don't reveal correctness or do awarding now
         return jsonify({
             "examMode": True,
             "message": "Answer stored for final review. No immediate feedback in exam mode."
         }), 200
+
 
 
 # -------------------------------------------------------------------
