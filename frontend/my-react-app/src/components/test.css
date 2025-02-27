@@ -1865,6 +1865,28 @@ body {
 }
 
 
+/* New Test Length Selector Card Styles */
+.test-length-selector-card {
+  margin: 10px 0;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+.test-length-selector-card span {
+  font-weight: bold;
+  margin-right: 10px;
+}
+.test-length-selector-card label {
+  margin: 0 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+.test-length-selector-card input[type="radio"] {
+  margin-right: 3px;
+}
 
 
 
