@@ -357,9 +357,8 @@ def update_test_attempt(user_id, test_id):
 def finish_test_attempt(user_id, test_id):
     """
     Called when the user finishes a test attempt.
-    If examMode == true => we do a bulk awarding of XP/coins for any
-    first-time-correct answers in this attempt.
-    If examMode == false => same as old logic (already awarded per-question).
+    If examMode == true => we do a bulk awarding of XP/coins for any first-time correct answers.
+    If examMode == false => immediate awarding already occurred per question.
     """
     data = request.json or {}
     try:
@@ -381,7 +380,9 @@ def finish_test_attempt(user_id, test_id):
             "finished": True,
             "finishedAt": datetime.utcnow(),
             "score": data.get("score", 0),
-            "totalQuestions": data.get("totalQuestions", 0),
+            # For finishing, we still set totalQuestions from the client;
+            # however, the attempt doc already holds the chosen length in 'selectedLength'.
+            "totalQuestions": data.get("totalQuestions", 0)
         }
     }
     testAttempts_collection.update_one(filter_, update_doc)
@@ -396,8 +397,9 @@ def finish_test_attempt(user_id, test_id):
         return jsonify({"error": "Attempt not found after finishing."}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
+    # Use selectedLength if available; this represents the chosen number of questions for this attempt.
+    selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
 
-    # If examMode = true, do the bulk awarding
     if exam_mode:
         award_correct_answers_in_bulk(
             user_id=user_id,
@@ -407,16 +409,16 @@ def finish_test_attempt(user_id, test_id):
         )
 
     newly_unlocked = check_and_unlock_achievements(user_id)
-
-    # Retrieve updated user doc to get new XP/coins
     updated_user = get_user_by_id(user_id)
     return jsonify({
         "message": "Test attempt finished",
         "examMode": exam_mode,
+        "selectedLength": selected_length,
         "newlyUnlocked": newly_unlocked,
         "newXP": updated_user.get("xp", 0),
         "newCoins": updated_user.get("coins", 0)
     }), 200
+
 
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
