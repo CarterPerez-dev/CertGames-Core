@@ -15,10 +15,7 @@ import './components/pages/XploitcraftPage/global.css';
 
 ### ADD RATE LIMITER TO AI COMPONENTS- use claude 3.7
 -----
-
--------------------------------------------------
-### Need to make an option to do 25,50,75,100 question tests. SO i gues if they choose 25 its the first 25, if they choose 50 its the first 25 and then next 25, if its 75 its the first 75, if its 100 its all 100. how would we implement this? How/Where should the feature be to choose the lenth? How can we efficently and effectly do this? Hwo can we ensure it doesnt slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne. also how can we do this while maintaining all our other features/components.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------
 ## ACHIEVEMNT FIXING PLAN (refer to https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/ACHIEVEMENT-FIXING-PLAN.md)
 
 ### 
