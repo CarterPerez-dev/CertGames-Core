@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../test.css"; // Ensure you have your updated toggle & tooltip CSS here
+import "../../test.css"; // Make sure this file includes the CSS below
 
 const APlusTestList = () => {
   const navigate = useNavigate();
@@ -16,13 +16,12 @@ const APlusTestList = () => {
   // Persist examMode in localStorage
   const [examMode, setExamMode] = useState(() => {
     const stored = localStorage.getItem("examMode");
-    return stored === "true"; // Evaluate string => boolean
+    return stored === "true";
   });
 
   // Show/hide tooltip for the info icon
   const [showExamInfo, setShowExamInfo] = useState(false);
 
-  // Fetch attempts from backend once userId is available
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
@@ -47,8 +46,6 @@ const APlusTestList = () => {
             bestAttempts[testKey] = att;
           } else {
             const existing = bestAttempts[testKey];
-            // If we have an unfinished attempt, keep it;
-            // otherwise compare finish times.
             if (!existing.finished && att.finished) {
               // keep existing
             } else if (existing.finished && !att.finished) {
@@ -75,7 +72,7 @@ const APlusTestList = () => {
     fetchAttempts();
   }, [userId, category]);
 
-  // Whenever examMode changes, store it in localStorage
+  // Save examMode to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("examMode", examMode ? "true" : "false");
   }, [examMode]);
@@ -96,7 +93,7 @@ const APlusTestList = () => {
     return attemptData[testNumber] || null;
   };
 
-  // Display “progress” or final score
+  // Display progress or final score
   const getProgressDisplay = (attemptDoc) => {
     if (!attemptDoc) return "No progress yet";
     const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
@@ -111,13 +108,13 @@ const APlusTestList = () => {
     }
   };
 
-  // Start or resume a test
+  // Start/resume test
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
     if (existingAttempt && !doRestart) {
-      // resume
+      // Resume test
       navigate(`/practice-tests/a-plus/${testNumber}`);
     } else {
-      // brand new or forced restart => upsert doc with examMode
+      // New or forced restart: upsert doc with examMode
       fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +131,6 @@ const APlusTestList = () => {
         })
       })
         .then(() => {
-          // Navigate to the global test page, passing examMode in route state
           navigate(`/practice-tests/a-plus/${testNumber}`, {
             state: { examMode }
           });
@@ -153,7 +149,7 @@ and awards XP only when you finish the test. You can change answers until the en
     <div className="tests-list-container">
       <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
 
-      {/* Centered container for the toggle + label + info icon */}
+      {/* Centered container for toggle, label, and info icon */}
       <div className="centered-toggle-container">
         <div className="toggle-with-text">
           <label className="toggle-switch">
@@ -165,8 +161,6 @@ and awards XP only when you finish the test. You can change answers until the en
             <span className="slider">{examMode ? "ON" : "OFF"}</span>
           </label>
           <span className="toggle-label">Exam Mode</span>
-
-          {/* The info icon: hover or tap => show tooltip */}
           <div
             className="info-icon-container"
             onMouseEnter={() => setShowExamInfo(true)}
