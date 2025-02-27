@@ -1758,7 +1758,7 @@ body {
   position: relative;
   display: inline-block;
   width: 70px;   /* increased width */
-  height: 36px;  /* increased height */
+  height: 72px;  /* increased height */
 }
 
 .toggle-switch input {
