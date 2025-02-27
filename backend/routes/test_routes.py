@@ -292,34 +292,43 @@ def get_test_attempt(user_id, test_id):
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
     """
-    Upserts a user's test attempt document.
+    Upserts (creates or updates) a user's test attempt document.
+    Now supports setting 'examMode' in the attempt doc.
     Expects JSON with:
       {
         "category": <string>,
         "answers": [],
-        "score": <int>,
+        "score": 0,
         "totalQuestions": <int>,
         "currentQuestionIndex": <int>,
         "shuffleOrder": [],
         "answerOrder": [],
         "finished": <bool>,
-        "examMode": <bool>
+        "examMode": <bool>   <-- new
       }
     """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
-        # Force test_id to be an integer if possible
-        test_id_int = int(test_id)
-    except Exception:
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
+    except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    exam_mode_val = data.get("examMode", False)
+    exam_mode_val = data.get("examMode", False)  # new usage
 
+    filter_ = {
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
+    # If they've already finished the attempt, we can either ignore or upsert a new doc,
+    # but for simplicity, we'll continue to just upsert the same doc with new data.
     update_doc = {
         "$set": {
             "userId": user_oid,
-            "testId": test_id_int,  # always stored as an integer
+            "testId": test_id_int if isinstance(test_id_int, int) else test_id,
             "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
@@ -332,14 +341,11 @@ def update_test_attempt(user_id, test_id):
         }
     }
     if update_doc["$set"]["finished"] is True:
+        # if the caller sets finished=true here, also store a finish timestamp
         update_doc["$set"]["finishedAt"] = datetime.utcnow()
 
-    testAttempts_collection.update_one(
-        {"userId": user_oid, "testId": test_id_int, "finished": False},
-        update_doc,
-        upsert=True
-    )
-    return jsonify({"message": f"Progress updated (examMode set to {exam_mode_val})"}), 200
+    testAttempts_collection.update_one(filter_, update_doc, upsert=True)
+    return jsonify({"message": "Progress updated (examMode set to %s)" % exam_mode_val}), 200
 
 
 
@@ -407,9 +413,35 @@ def finish_test_attempt(user_id, test_id):
         "newXP": updated_user.get("xp", 0),
         "newCoins": updated_user.get("coins", 0)
     }), 200
-    
-    
-#----------------------------------------------------
+
+@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
+def list_test_attempts(user_id):
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    page = request.args.get("page", default=1, type=int)
+    page_size = request.args.get("page_size", default=50, type=int)
+    skip_count = (page - 1) * page_size
+
+    cursor = testAttempts_collection.find(
+        {"userId": user_oid}
+    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
+
+    attempts = []
+    for doc in cursor:
+        doc["_id"] = str(doc["_id"])
+        doc["userId"] = str(doc["userId"])
+        attempts.append(doc)
+
+    return jsonify({
+        "page": page,
+        "page_size": page_size,
+        "attempts": attempts
+    }), 200
+
+# -------------------------------------------------------------------
 # FIRST-TIME-CORRECT ANSWERS
 # -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
@@ -535,6 +567,8 @@ def submit_answer(user_id):
             "examMode": True,
             "message": "Answer stored for final review. No immediate feedback in exam mode."
         }), 200
+
+
 # -------------------------------------------------------------------
 # ACHIEVEMENTS
 # -------------------------------------------------------------------
@@ -755,15 +789,15 @@ def update_position(user_id, test_id):
     
     try:
         user_oid = ObjectId(user_id)
-        test_id_int = int(test_id)
-    except Exception:
+        test_id_int = int(test_id) if test_id.isdigit() else test_id
+    except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
     
     testAttempts_collection.update_one(
         {
             "userId": user_oid,
             "finished": False,
-            "testId": test_id_int
+            "$or": [{"testId": test_id_int}, {"testId": test_id}]
         },
         {"$set": {
             "currentQuestionIndex": current_index,
