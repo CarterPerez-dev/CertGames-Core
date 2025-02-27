@@ -206,23 +206,27 @@ const GlobalTestPage = ({
         setIsFinished(attemptDoc.finished === true);
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
+        // Use the stored selectedLength or default to totalQ
+        const effectiveLength = attemptDoc.selectedLength || totalQ;
+        setActiveTestLength(effectiveLength);
         if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length > 0) {
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
-          const newQOrder = shuffleIndices(totalQ);
+          const newQOrder = shuffleIndices(effectiveLength);
           setShuffleOrder(newQOrder);
         }
         if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === totalQ) {
           setAnswerOrder(attemptDoc.answerOrder);
         } else {
-          const generatedAnswerOrder = testDoc.questions.map((q) => {
-            const numOptions = q.options.length;
-            return shuffleArray([...Array(numOptions).keys()]);
-          });
+          const generatedAnswerOrder = testDoc.questions
+            .slice(0, effectiveLength)
+            .map((q) => {
+              const numOptions = q.options.length;
+              return shuffleArray([...Array(numOptions).keys()]);
+            });
           setAnswerOrder(generatedAnswerOrder);
         }
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
-        setActiveTestLength(attemptDoc.selectedLength || totalQ);
       } else {
         // No attempt doc exists: show the test length selector UI
         setActiveTestLength(null);
@@ -513,13 +517,15 @@ const GlobalTestPage = ({
     setShowReviewMode(false);
     setShowScoreOverlay(false);
     if (testData?.questions?.length && activeTestLength) {
-      const totalQ = testData.questions.length;
-      const newQOrder = Array.from({ length: activeTestLength }, (_, i) => i);
+      // Use the activeTestLength to shuffle only that many questions
+      const newQOrder = shuffleIndices(activeTestLength);
       setShuffleOrder(newQOrder);
-      const newAnswerOrder = testData.questions.slice(0, activeTestLength).map((q) => {
-        const numOpts = q.options.length;
-        return shuffleArray([...Array(numOpts).keys()]);
-      });
+      const newAnswerOrder = testData.questions
+        .slice(0, activeTestLength)
+        .map((q) => {
+          const numOpts = q.options.length;
+          return shuffleArray([...Array(numOpts).keys()]);
+        });
       setAnswerOrder(newAnswerOrder);
       if (userId && testId) {
         await fetch(`/api/test/attempts/${userId}/${testId}`, {
@@ -671,9 +677,7 @@ const GlobalTestPage = ({
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() =>
-                  navigate(`${backToListPath}/${Number(testId) + 1}`)
-                }
+                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
               >
                 Next Test
               </button>
@@ -848,8 +852,8 @@ const GlobalTestPage = ({
             setActiveTestLength(selectedLength);
             if (testData) {
               const totalQ = testData.questions.length;
-              // For this feature, we take the first 'selectedLength' questions.
-              const newQOrder = Array.from({ length: selectedLength }, (_, i) => i);
+              // For this feature, take the first 'selectedLength' questions and shuffle them
+              const newQOrder = shuffleIndices(selectedLength);
               setShuffleOrder(newQOrder);
               const newAnswerOrder = testData.questions
                 .slice(0, selectedLength)
