@@ -36,7 +36,8 @@ from models.test import (
     validate_email,
     validate_password,
     update_user_fields,
-    get_user_by_id
+    get_user_by_id,
+    award_correct_answers_in_bulk
 )
 
 api_bp = Blueprint('test', __name__)
@@ -290,6 +291,22 @@ def get_test_attempt(user_id, test_id):
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
+    """
+    Upserts (creates or updates) a user's test attempt document.
+    Now supports setting 'examMode' in the attempt doc.
+    Expects JSON with:
+      {
+        "category": <string>,
+        "answers": [],
+        "score": 0,
+        "totalQuestions": <int>,
+        "currentQuestionIndex": <int>,
+        "shuffleOrder": [],
+        "answerOrder": [],
+        "finished": <bool>,
+        "examMode": <bool>   <-- new
+      }
+    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
@@ -300,11 +317,14 @@ def update_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
+    exam_mode_val = data.get("examMode", False)  # new usage
+
     filter_ = {
         "userId": user_oid,
-        "finished": False,
         "$or": [{"testId": test_id_int}, {"testId": test_id}]
     }
+    # If they've already finished the attempt, we can either ignore or upsert a new doc,
+    # but for simplicity, we'll continue to just upsert the same doc with new data.
     update_doc = {
         "$set": {
             "userId": user_oid,
@@ -316,14 +336,26 @@ def update_test_attempt(user_id, test_id):
             "currentQuestionIndex": data.get("currentQuestionIndex", 0),
             "shuffleOrder": data.get("shuffleOrder", []),
             "answerOrder": data.get("answerOrder", []),
-            "finished": data.get("finished", False)
+            "finished": data.get("finished", False),
+            "examMode": exam_mode_val
         }
     }
+    if update_doc["$set"]["finished"] is True:
+        # if the caller sets finished=true here, also store a finish timestamp
+        update_doc["$set"]["finishedAt"] = datetime.utcnow()
+
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
-    return jsonify({"message": "Progress updated"}), 200
+    return jsonify({"message": "Progress updated (examMode set to %s)" % exam_mode_val}), 200
+
 
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
+    """
+    Called when the user finishes a test attempt.
+    If examMode == true => we do a bulk awarding of XP/coins for any
+    first-time-correct answers in this attempt.
+    If examMode == false => same as old logic (already awarded per-question).
+    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
@@ -349,44 +381,49 @@ def finish_test_attempt(user_id, test_id):
     }
     testAttempts_collection.update_one(filter_, update_doc)
 
+    # Retrieve the now-finished attempt doc
+    attempt_doc = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}],
+        "finished": True
+    })
+    if not attempt_doc:
+        return jsonify({"error": "Attempt not found after finishing."}), 404
+
+    exam_mode = attempt_doc.get("examMode", False)
+
+    # If examMode = true, do the bulk awarding
+    if exam_mode:
+        award_correct_answers_in_bulk(
+            user_id=user_id,
+            attempt_doc=attempt_doc,
+            xp_per_correct=10,
+            coins_per_correct=5
+        )
+
     newly_unlocked = check_and_unlock_achievements(user_id)
+
+    # Retrieve updated user doc to get new XP/coins
+    updated_user = get_user_by_id(user_id)
     return jsonify({
         "message": "Test attempt finished",
-        "newlyUnlocked": newly_unlocked
+        "examMode": exam_mode,
+        "newlyUnlocked": newly_unlocked,
+        "newXP": updated_user.get("xp", 0),
+        "newCoins": updated_user.get("coins", 0)
     }), 200
-
-@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
-def list_test_attempts(user_id):
-    try:
-        user_oid = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user ID"}), 400
-
-    page = request.args.get("page", default=1, type=int)
-    page_size = request.args.get("page_size", default=50, type=int)
-    skip_count = (page - 1) * page_size
-
-    cursor = testAttempts_collection.find(
-        {"userId": user_oid}
-    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
-
-    attempts = []
-    for doc in cursor:
-        doc["_id"] = str(doc["_id"])
-        doc["userId"] = str(doc["userId"])
-        attempts.append(doc)
-
-    return jsonify({
-        "page": page,
-        "page_size": page_size,
-        "attempts": attempts
-    }), 200
-
 # -------------------------------------------------------------------
 # FIRST-TIME-CORRECT ANSWERS
 # -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
+    """
+    Accepts a single answer for the current question.
+    If examMode == false => immediate awarding if first-time correct.
+    If examMode == true => do not award now (bulk awarding on /finish).
+    So if examMode == true, we skip returning "isCorrect" to hide feedback.
+    We still store correctness in the testAttempts doc for final review.
+    """
     data = request.json or {}
     test_id = str(data.get("testId"))
     question_id = data.get("questionId")
@@ -399,39 +436,108 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    is_correct = (selected_index == correct_index)
-    already_correct = correctAnswers_collection.find_one({
+    # See if attempt doc has examMode = true
+    attempt_doc = testAttempts_collection.find_one({
         "userId": user["_id"],
-        "testId": test_id,
-        "questionId": question_id
+        "$or": [{"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
+                {"testId": test_id}]
     })
+    if not attempt_doc:
+        return jsonify({"error": "No attempt doc found for that user/test"}), 404
 
+    exam_mode = attempt_doc.get("examMode", False)
+
+    # We store the user's answer in the "answers" array within the attempt doc
+    # ignoring awarding if exam_mode == true
+    is_correct = (selected_index == correct_index)
+
+    # 1) Update the attempt's "answers" array with the latest userAnswerIndex
+    existing_answer_index = None
+    for i, ans in enumerate(attempt_doc.get("answers", [])):
+        if ans.get("questionId") == question_id:
+            existing_answer_index = i
+            break
+
+    # We'll set a local "updatedScore" if examMode == false
+    # but if examMode == true, we won't change the attemptDoc.score right now
+    new_score = attempt_doc.get("score", 0)
+
+    if existing_answer_index is not None:
+        # update existing
+        update_payload = {
+            "answers.$.userAnswerIndex": selected_index,
+            "answers.$.correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+            update_payload["score"] = new_score
+
+        testAttempts_collection.update_one(
+            {
+                "_id": attempt_doc["_id"],
+                "answers.questionId": question_id
+            },
+            {
+                "$set": update_payload
+            }
+        )
+    else:
+        # push new
+        new_answer_doc = {
+            "questionId": question_id,
+            "userAnswerIndex": selected_index,
+            "correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+        testAttempts_collection.update_one(
+            {"_id": attempt_doc["_id"]},
+            {
+                "$push": {"answers": new_answer_doc},
+                "$set": {"score": new_score} if exam_mode is False and is_correct else {}
+            }
+        )
+
+    # 2) If examMode == false => award XP/coins for newly-correct answers
+    #    (like your old logic).
+    #    If examMode == true => skip awarding now.
     awarded_xp = 0
     awarded_coins = 0
-    if is_correct and not already_correct:
-        correctAnswers_collection.insert_one({
+    if exam_mode is False:
+        # check if user answered it for the first time
+        already_correct = correctAnswers_collection.find_one({
             "userId": user["_id"],
             "testId": test_id,
             "questionId": question_id
         })
-        update_user_xp(user_id, xp_per_correct)
-        update_user_coins(user_id, coins_per_correct)
-        awarded_xp = xp_per_correct
-        awarded_coins = coins_per_correct
+        if is_correct and not already_correct:
+            correctAnswers_collection.insert_one({
+                "userId": user["_id"],
+                "testId": test_id,
+                "questionId": question_id
+            })
+            update_user_xp(user_id, xp_per_correct)
+            update_user_coins(user_id, coins_per_correct)
+            awarded_xp = xp_per_correct
+            awarded_coins = coins_per_correct
 
-    updated_user = get_user_by_id(user_id)
-    new_xp = updated_user.get("xp", 0)
-    new_coins = updated_user.get("coins", 0)
-
-    return jsonify({
-        "isCorrect": is_correct,
-        "alreadyCorrect": True if already_correct else False,
-        "awardedXP": awarded_xp,
-        "awardedCoins": awarded_coins,
-        "newXP": new_xp,
-        "newCoins": new_coins
-    }), 200
-
+        updated_user = get_user_by_id(user_id)
+        return jsonify({
+            "examMode": False,
+            "isCorrect": is_correct,
+            "alreadyCorrect": True if already_correct else False,
+            "awardedXP": awarded_xp,
+            "awardedCoins": awarded_coins,
+            "newXP": updated_user.get("xp", 0),
+            "newCoins": updated_user.get("coins", 0)
+        }), 200
+    else:
+        # examMode == true => do NOT reveal correctness or do awarding
+        # just store data and return minimal info
+        return jsonify({
+            "examMode": True,
+            "message": "Answer stored for final review. No immediate feedback in exam mode."
+        }), 200
 # -------------------------------------------------------------------
 # ACHIEVEMENTS
 # -------------------------------------------------------------------
