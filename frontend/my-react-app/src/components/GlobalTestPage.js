@@ -201,30 +201,31 @@ const GlobalTestPage = ({
       setTestData(testDoc);
       const totalQ = testDoc.questions.length;
       if (attemptDoc) {
+        // Resume: do not re-shuffle; use stored orders if available.
         setAnswers(attemptDoc.answers || []);
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
-        // Use the stored selectedLength or default to totalQ
+        // Use stored selectedLength, defaulting to totalQ if not present.
         const effectiveLength = attemptDoc.selectedLength || totalQ;
         setActiveTestLength(effectiveLength);
         if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length > 0) {
+          // Use the stored order (do not re-shuffle)
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
-          const newQOrder = shuffleIndices(effectiveLength);
-          setShuffleOrder(newQOrder);
+          // Fall back to sequential order
+          const sequentialOrder = Array.from({ length: effectiveLength }, (_, i) => i);
+          setShuffleOrder(sequentialOrder);
         }
-        if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === totalQ) {
+        if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === effectiveLength) {
           setAnswerOrder(attemptDoc.answerOrder);
         } else {
-          const generatedAnswerOrder = testDoc.questions
+          // Fall back to sequential order for answer options for each question
+          const defaultAnswerOrder = testDoc.questions
             .slice(0, effectiveLength)
-            .map((q) => {
-              const numOptions = q.options.length;
-              return shuffleArray([...Array(numOptions).keys()]);
-            });
-          setAnswerOrder(generatedAnswerOrder);
+            .map((q) => Array.from({ length: q.options.length }, (_, i) => i));
+          setAnswerOrder(defaultAnswerOrder);
         }
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
       } else {
@@ -517,7 +518,7 @@ const GlobalTestPage = ({
     setShowReviewMode(false);
     setShowScoreOverlay(false);
     if (testData?.questions?.length && activeTestLength) {
-      // Use the activeTestLength to shuffle only that many questions
+      // For restart, generate new shuffle orders
       const newQOrder = shuffleIndices(activeTestLength);
       setShuffleOrder(newQOrder);
       const newAnswerOrder = testData.questions
@@ -677,7 +678,9 @@ const GlobalTestPage = ({
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
+                onClick={() =>
+                  navigate(`${backToListPath}/${Number(testId) + 1}`)
+                }
               >
                 Next Test
               </button>
@@ -852,7 +855,6 @@ const GlobalTestPage = ({
             setActiveTestLength(selectedLength);
             if (testData) {
               const totalQ = testData.questions.length;
-              // For this feature, take the first 'selectedLength' questions and shuffle them
               const newQOrder = shuffleIndices(selectedLength);
               setShuffleOrder(newQOrder);
               const newAnswerOrder = testData.questions
