@@ -41,6 +41,7 @@ function shuffleIndices(length) {
   return shuffleArray(indices);
 }
 
+// UPDATED: We now accept examMode as a prop so we can hide ✓/✗ when examMode=true
 const QuestionDropdown = ({
   totalQuestions,
   currentQuestionIndex,
@@ -48,7 +49,8 @@ const QuestionDropdown = ({
   answers,
   flaggedQuestions,
   testData,
-  shuffleOrder
+  shuffleOrder,
+  examMode
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -102,14 +104,9 @@ const QuestionDropdown = ({
                 <div className="status-indicators">
                   {status.isSkipped && <span className="skip-indicator">⏭️</span>}
                   {status.isFlagged && <span className="flag-indicator">🚩</span>}
-                  {/* 
-                    We could show ✓/✗ here for normal mode, 
-                    but you can skip them if exam mode is on. 
-                    This example just always shows them if answered 
-                    (but note that correctness is only truly correct 
-                     if examMode=false. We'll keep it simple.)
-                  */}
-                  {status.isAnswered && !status.isSkipped && (
+
+                  {/* Hide right/wrong if examMode=true */}
+                  {!examMode && status.isAnswered && !status.isSkipped && (
                     <span
                       className={`answer-indicator ${
                         status.isCorrect ? "correct" : "incorrect"
@@ -342,7 +339,7 @@ const GlobalTestPage = ({
       if (!userId) return;
       try {
         if (singleAnswer) {
-          // we call "submit-answer" to store in DB
+          // we call "submit-answer" to store in DB, but awarding is done separately if examMode=false
           await fetch(`/api/test/user/${userId}/submit-answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -373,25 +370,26 @@ const GlobalTestPage = ({
     [userId, testId, testData, xpBoost, currentQuestionIndex]
   );
 
+  // UPDATED: Checking (isAnswered || !questionObject) to avoid re-submission if already answered
   const handleOptionClick = useCallback(
     async (displayOptionIndex) => {
-      // Let them pick an option. If examMode = true, do not highlight correctness.
-      // We do store that selection, so they can see it if they come back.
+      if (isAnswered || !questionObject) return; // snippet from instructions
+
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
       setIsAnswered(true);
 
       try {
-        // Construct an answer doc
         const newAnswerObj = {
           questionId: questionObject.id,
           userAnswerIndex: actualAnswerIndex,
           correctAnswerIndex: questionObject.correctAnswerIndex
         };
 
-        // Update local answers array
         const updatedAnswers = [...answers];
-        const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
+        const idx = updatedAnswers.findIndex(
+          (a) => a.questionId === questionObject.id
+        );
         if (idx >= 0) {
           updatedAnswers[idx] = newAnswerObj;
         } else {
@@ -399,16 +397,15 @@ const GlobalTestPage = ({
         }
         setAnswers(updatedAnswers);
 
-        // Save to DB
+        // Save partial progress
         await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
 
-        // If examMode = false => immediate awarding of XP
-        //  (We skip showing correctness highlight if examMode=true)
+        // If NOT exam mode => immediate awarding
         if (!examMode) {
-          // We do a second fetch to /submit-answer to get awarding results
           const baseXP = testData?.xpPerCorrect || 10;
           const effectiveXP = baseXP * xpBoost;
-          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
+          // Second fetch calls awarding route
+          const awardRes = await fetch(`/api/test/user/${userId}/submit-answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -420,18 +417,17 @@ const GlobalTestPage = ({
               coinsPerCorrect: 5
             })
           });
-          const result = await res.json();
-          if (res.ok && result.examMode === false) {
-            // if correct => increment local "score"
-            if (result.isCorrect) {
-              setScore(prev => prev + 1);
+          const awardData = await awardRes.json();
+
+          if (awardRes.ok && awardData.examMode === false) {
+            if (awardData.isCorrect) {
+              setScore((prev) => prev + 1);
             }
-            // update local XP/coins
-            if (result.isCorrect && !result.alreadyCorrect && result.awardedXP) {
+            if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
               dispatch(
                 setXPAndCoins({
-                  xp: result.newXP,
-                  coins: result.newCoins
+                  xp: awardData.newXP,
+                  coins: awardData.newCoins
                 })
               );
             }
@@ -443,9 +439,10 @@ const GlobalTestPage = ({
     },
     [
       examMode,
+      isAnswered,
+      questionObject,
       answerOrder,
       realIndex,
-      questionObject,
       answers,
       updateServerProgress,
       score,
@@ -494,7 +491,7 @@ const GlobalTestPage = ({
         });
       }
 
-      // if examMode was true, we get a final awarding (newXP,newCoins)
+      // if examMode was true, final awarding is done here
       if (
         typeof finishData.newXP !== "undefined" &&
         typeof finishData.newCoins !== "undefined"
@@ -905,8 +902,8 @@ const GlobalTestPage = ({
   };
 
   const handleNextQuestionButtonClick = () => {
-    // If examMode = true, no correctness is shown anyway
-    // If examMode = false, ensure user answered or skip
+    // If examMode = true, no correctness highlight is shown
+    // If examMode = false, must answer or skip
     if (!isAnswered && !examMode) {
       setShowNextPopup(true);
     } else {
@@ -961,6 +958,8 @@ const GlobalTestPage = ({
             ? "Unflag"
             : "Flag"}
         </button>
+
+        {/* PASS EXAMMODE DOWN TO HIDE RIGHT/WRONG INDICATORS */}
         <QuestionDropdown
           totalQuestions={totalQuestions}
           currentQuestionIndex={currentQuestionIndex}
@@ -972,7 +971,9 @@ const GlobalTestPage = ({
           flaggedQuestions={flaggedQuestions}
           testData={testData}
           shuffleOrder={shuffleOrder}
+          examMode={examMode}
         />
+
         <button
           className="finish-test-btn"
           onClick={() => setShowFinishPopup(true)}
@@ -1051,7 +1052,6 @@ const GlobalTestPage = ({
                   <button
                     className={optionClass}
                     onClick={() => handleOptionClick(displayIdx)}
-                    // user can re-click to change
                   >
                     {option}
                   </button>
