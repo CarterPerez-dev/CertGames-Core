@@ -1,9 +1,7 @@
-// APlusTestList.js
-// (Server-based progress version, unchanged except for the new "View Review" navigation state)
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../test.css";
+import "../../test.css"; // Ensure you have your updated toggle & tooltip CSS here
 
 const APlusTestList = () => {
   const navigate = useNavigate();
@@ -15,11 +13,20 @@ const APlusTestList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Persist examMode in localStorage
+  const [examMode, setExamMode] = useState(() => {
+    const stored = localStorage.getItem("examMode");
+    return stored === "true"; // Evaluate string => boolean
+  });
+
+  // Show/hide tooltip for the info icon
+  const [showExamInfo, setShowExamInfo] = useState(false);
+
+  // Fetch attempts from backend once userId is available
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
 
-    // Single fetch for entire user attempt list
     const fetchAttempts = async () => {
       try {
         const res = await fetch(`/api/test/attempts/${userId}/list`);
@@ -29,10 +36,10 @@ const APlusTestList = () => {
         const data = await res.json();
         const attemptList = data.attempts || [];
 
-        // We only care about A+ attempts
+        // Filter attempts for this category
         const relevant = attemptList.filter((a) => a.category === category);
 
-        // For each testId, figure out the best attempt doc to show (unfinished if it exists, otherwise last finished)
+        // For each testId, pick the best attempt doc (unfinished if exists, else latest finished)
         const bestAttempts = {};
         for (let att of relevant) {
           const testKey = att.testId;
@@ -40,13 +47,13 @@ const APlusTestList = () => {
             bestAttempts[testKey] = att;
           } else {
             const existing = bestAttempts[testKey];
-            // Prefer the unfinished attempt if it exists
+            // If we have an unfinished attempt, keep it;
+            // otherwise compare finish times.
             if (!existing.finished && att.finished) {
               // keep existing
             } else if (existing.finished && !att.finished) {
               bestAttempts[testKey] = att;
             } else {
-              // both finished or both unfinished => pick whichever is newer
               const existingTime = new Date(existing.finishedAt || 0).getTime();
               const newTime = new Date(att.finishedAt || 0).getTime();
               if (newTime > existingTime) {
@@ -68,6 +75,11 @@ const APlusTestList = () => {
     fetchAttempts();
   }, [userId, category]);
 
+  // Whenever examMode changes, store it in localStorage
+  useEffect(() => {
+    localStorage.setItem("examMode", examMode ? "true" : "false");
+  }, [examMode]);
+
   if (!userId) {
     return <div className="tests-list-container">Please log in.</div>;
   }
@@ -79,10 +91,12 @@ const APlusTestList = () => {
     return <div className="tests-list-container">Error: {error}</div>;
   }
 
+  // Helper: retrieve doc from bestAttempts or return null
   const getAttemptDoc = (testNumber) => {
     return attemptData[testNumber] || null;
   };
 
+  // Display “progress” or final score
   const getProgressDisplay = (attemptDoc) => {
     if (!attemptDoc) return "No progress yet";
     const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
@@ -93,14 +107,18 @@ const APlusTestList = () => {
       if (typeof currentQuestionIndex === "number") {
         return `Progress: ${currentQuestionIndex + 1} / ${totalQuestions || totalQuestionsPerTest}`;
       }
+      return "No progress yet";
     }
-    return "No progress yet";
   };
 
-  // This "restart test" upserts a fresh attempt doc
-  const handleRestartTest = async (testNumber) => {
-    try {
-      await fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+  // Start or resume a test
+  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
+    if (existingAttempt && !doRestart) {
+      // resume
+      navigate(`/practice-tests/a-plus/${testNumber}`);
+    } else {
+      // brand new or forced restart => upsert doc with examMode
+      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -110,61 +128,78 @@ const APlusTestList = () => {
           totalQuestions: totalQuestionsPerTest,
           currentQuestionIndex: 0,
           shuffleOrder: [],
-          finished: false
+          answerOrder: [],
+          finished: false,
+          examMode
         })
-      });
-      // Remove local data so we re-fetch or re-check next time
-      const newData = { ...attemptData };
-      delete newData[testNumber];
-      setAttemptData(newData);
-
-      navigate(`/practice-tests/a-plus/${testNumber}`);
-    } catch (err) {
-      console.error("Failed to restart test:", err);
+      })
+        .then(() => {
+          // Navigate to the global test page, passing examMode in route state
+          navigate(`/practice-tests/a-plus/${testNumber}`, {
+            state: { examMode }
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to create new attempt doc:", err);
+        });
     }
   };
 
-  // Simple difficulty labels/colors
-  const difficultyColors = [
-    { label: "Normal", color: "hsl(0, 0%, 100%)" },
-    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
-    { label: "Easy", color: "hsl(120, 100%, 70%)" },
-    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
-    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
-    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
-    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
-    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
-    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
-    { label: "Ultra Level", color: "#000" }
-  ];
+  // Description text for exam mode
+  const examInfoText = `Exam Mode hides immediate correctness and explanations,
+and awards XP only when you finish the test. You can change answers until the end.`;
 
   return (
     <div className="tests-list-container">
       <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
+
+      {/* Centered container for the toggle + label + info icon */}
+      <div className="centered-toggle-container">
+        <div className="toggle-with-text">
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={examMode}
+              onChange={(e) => setExamMode(e.target.checked)}
+            />
+            <span className="slider">{examMode ? "ON" : "OFF"}</span>
+          </label>
+          <span className="toggle-label">Exam Mode</span>
+
+          {/* The info icon: hover or tap => show tooltip */}
+          <div
+            className="info-icon-container"
+            onMouseEnter={() => setShowExamInfo(true)}
+            onMouseLeave={() => setShowExamInfo(false)}
+            onClick={() => setShowExamInfo((prev) => !prev)}
+          >
+            <div className="info-icon">ⓘ</div>
+            {showExamInfo && (
+              <div className="info-tooltip">
+                {examInfoText}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
           const attemptDoc = getAttemptDoc(testNumber);
           const progressDisplay = getProgressDisplay(attemptDoc);
-          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
 
           return (
             <div key={testNumber} className="test-card">
               <div className="test-badge">Test {testNumber}</div>
-              <div
-                className="difficulty-label"
-                style={{ color: difficulty.color }}
-              >
-                {difficulty.label}
-              </div>
               <p className="test-progress">{progressDisplay}</p>
 
               {!attemptDoc && (
                 <button
                   className="start-button"
-                  onClick={() => navigate(`/practice-tests/a-plus/${testNumber}`)}
+                  onClick={() => startTest(testNumber, false, null)}
                 >
-                  Click to Start
+                  Start
                 </button>
               )}
 
@@ -172,15 +207,15 @@ const APlusTestList = () => {
                 <div className="test-card-buttons">
                   <button
                     className="resume-button"
-                    onClick={() => navigate(`/practice-tests/a-plus/${testNumber}`)}
+                    onClick={() => startTest(testNumber, false, attemptDoc)}
                   >
-                    Resume Test
+                    Resume
                   </button>
                   <button
                     className="restart-button-testlist"
-                    onClick={() => handleRestartTest(testNumber)}
+                    onClick={() => startTest(testNumber, true, attemptDoc)}
                   >
-                    Restart Test
+                    Restart
                   </button>
                 </div>
               )}
@@ -199,9 +234,9 @@ const APlusTestList = () => {
                   </button>
                   <button
                     className="restart-button-testlist"
-                    onClick={() => handleRestartTest(testNumber)}
+                    onClick={() => startTest(testNumber, true, attemptDoc)}
                   >
-                    Restart Test
+                    Restart
                   </button>
                 </div>
               )}
@@ -214,4 +249,3 @@ const APlusTestList = () => {
 };
 
 export default APlusTestList;
-
