@@ -362,11 +362,8 @@ const GlobalTestPage = ({
     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
       if (!userId) return;
       try {
-        // If singleAnswer => use /submit-answer route to store correctness
         if (singleAnswer) {
-          // but do NOT awarding if examMode = true
-          // awarding is done in handleOptionClick if examMode=false
-          await fetch(`/api/test/user/${userId}/submit-answer`, {
+          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -378,9 +375,10 @@ const GlobalTestPage = ({
               coinsPerCorrect: 5
             })
           });
-          return;
+          const data = await res.json();
+          return data;
         }
-        // If not singleAnswer => just update position
+        // If not a single answer update, just update the current position.
         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -395,26 +393,25 @@ const GlobalTestPage = ({
     },
     [userId, testId, testData, xpBoost, currentQuestionIndex]
   );
-
+  
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      4) Handling a user answer => immediate awarding if examMode=false
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   const handleOptionClick = useCallback(
     async (displayOptionIndex) => {
       if (isAnswered || !questionObject) return;
-
+  
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
       setIsAnswered(true);
-
+  
       try {
-        // Always update local answers + store in DB (so the user’s choice is saved).
+        // Update local answers
         const newAnswerObj = {
           questionId: questionObject.id,
           userAnswerIndex: actualAnswerIndex,
           correctAnswerIndex: questionObject.correctAnswerIndex
         };
-
         const updatedAnswers = [...answers];
         const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
         if (idx >= 0) {
@@ -423,40 +420,20 @@ const GlobalTestPage = ({
           updatedAnswers.push(newAnswerObj);
         }
         setAnswers(updatedAnswers);
-
-        // Save partial progress
-        await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
-
-        // If examMode = false => do immediate awarding
-        if (!examMode) {
-          const baseXP = testData?.xpPerCorrect || 10;
-          const effectiveXP = baseXP * xpBoost;
-          const awardRes = await fetch(`/api/test/user/${userId}/submit-answer`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              testId,
-              questionId: questionObject.id,
-              selectedIndex: actualAnswerIndex,
-              correctAnswerIndex: questionObject.correctAnswerIndex,
-              xpPerCorrect: effectiveXP,
-              coinsPerCorrect: 5
-            })
-          });
-          const awardData = await awardRes.json();
-
-          // If route says isCorrect => update local score
-          if (awardRes.ok && awardData.examMode === false) {
-            if (awardData.isCorrect) {
-              setScore(prev => prev + 1);
-            }
-            // Also update Redux if new XP or coins
-            if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
-              dispatch(setXPAndCoins({
-                xp: awardData.newXP,
-                coins: awardData.newCoins
-              }));
-            }
+  
+        // Update the backend and get the response (which includes new XP/coins)
+        const awardData = await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
+  
+        // If not in exam mode, update local score and Redux state immediately
+        if (!examMode && awardData && awardData.examMode === false) {
+          if (awardData.isCorrect) {
+            setScore(prev => prev + 1);
+          }
+          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
+            dispatch(setXPAndCoins({
+              xp: awardData.newXP,
+              coins: awardData.newCoins
+            }));
           }
         }
       } catch (err) {
@@ -479,7 +456,6 @@ const GlobalTestPage = ({
       answerOrder
     ]
   );
-
   /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
      5) Finishing the test => examMode => bulk awarding is done in the backend
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
