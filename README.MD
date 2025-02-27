@@ -1,7 +1,7 @@
 # HIGH LEVEL OVERVIEW
 ---
 ---
-Below is a comprehensive, wide-ranging overview of your entire codebase and web application, based on the merged repository content. This overview is designed to be extremely detailed so that someone unfamiliar with the project can grasp the context, architecture, goals, data flow, and even the intricacies of the front-end (Redux usage, components) and back-end (database, models, routes, concurrency, Celery tasks, etc.). While it’s called a “high-level overview,” it is intentionally exhaustive—covering most relevant code structures, design decisions, and logic flow.
+Below is a comprehensive, wide-ranging overview of my entire codebase and web application, based on the merged repository content. This overview is designed to be extremely detailed so that someone unfamiliar with the project can grasp the context, architecture, goals, data flow, and even the intricacies of the front-end (Redux usage, components) and back-end (database, models, routes, concurrency, Celery tasks, etc.). While it’s called a “high-level overview,” it is intentionally exhaustive—covering most relevant code structures, design decisions, and logic flow.
 
 ---
 
