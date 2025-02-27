@@ -268,7 +268,7 @@ const APlusTestList = () => {
         <div className="popup-overlay">
           <div className="popup-content">
             <p>
-              You are currently in progress on this test, are you sure you want to restart!😱. Also, if you want to change the test length, please finish your current attempt.
+              You are currently in progress on this test, are you sure you want to restart!?😱. Also, if you want to change the test length, please finish your current attempt.
               Restarting now will resume with your current test length and restart your progress🧙‍♂️.
             </p>
             <div className="popup-buttons">
@@ -280,7 +280,7 @@ const APlusTestList = () => {
                   setRestartPopupTest(null);
                 }}
               >
-                Yes, Restart
+                Yes, Restart!😎
               </button>
               <button onClick={() => setRestartPopupTest(null)}>Cancel</button>
             </div>
