@@ -1740,8 +1740,7 @@ body {
 
 /* 1) Center the container with extra vertical spacing */
 /* Center the toggle container with extra vertical spacing */
-.centered-toggle-container {
-* ===================== */
+
 .centered-toggle-container {
   display: flex;
   justify-content: center;
