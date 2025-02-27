@@ -1,13 +1,13 @@
 # Here are some additonal instructions
 ### 🧩 Multilayered reasoning required: Questions will demand deep technical analysis and stepwise critical thinking.
-### 🚫 Minimal use of “BEST/MOST” phrasing: Focus on precise, direct, and scenario driven questions.
+### 🚫 a little bit of “BEST/MOST” phrasing: Focus on precise, direct, and scenario driven questions.
 ### 🔀 Blended concepts: Each question may span multiple exam domains 
 ### ✅ Only 1 correct answer per question
 #### ✅ Mix of styles:
 
 ### Scenario-based (~30%)
-### PBQ-style (~15%) (matching in question 5)
-### BEST/MOST (~15%)
+### PBQ-style (~20%) (matching in question 5)
+### BEST/MOST (~10%)
 ### Direct and conceptual (~40%)
 ### ✅ All answer choices highly plausible
 ### ✅ Expert-level nuance required to distinguish correct answers
