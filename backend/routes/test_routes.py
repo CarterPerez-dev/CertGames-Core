@@ -412,7 +412,9 @@ def finish_test_attempt(user_id, test_id):
         "newXP": updated_user.get("xp", 0),
         "newCoins": updated_user.get("coins", 0)
     }), 200
-# -------------------------------------------------------------------
+    
+    
+----------------------------------------------------
 # FIRST-TIME-CORRECT ANSWERS
 # -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
