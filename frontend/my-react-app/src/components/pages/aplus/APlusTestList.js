@@ -108,6 +108,20 @@ const APlusTestList = () => {
     }
   };
 
+  // Simple difficulty labels/colors (added back from old file)
+  const difficultyColors = [
+    { label: "Normal", color: "hsl(0, 0%, 100%)" },
+    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
+    { label: "Easy", color: "hsl(120, 100%, 70%)" },
+    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
+    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
+    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
+    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
+    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
+    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
+    { label: "Ultra Level", color: "#000" }
+  ];
+
   // Start/resume test
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
     if (existingAttempt && !doRestart) {
@@ -182,10 +196,17 @@ and awards XP only when you finish the test. You can change answers until the en
           const testNumber = i + 1;
           const attemptDoc = getAttemptDoc(testNumber);
           const progressDisplay = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
 
           return (
             <div key={testNumber} className="test-card">
               <div className="test-badge">Test {testNumber}</div>
+              <div
+                className="difficulty-label"
+                style={{ color: difficulty.color }}
+              >
+                {difficulty.label}
+              </div>
               <p className="test-progress">{progressDisplay}</p>
 
               {!attemptDoc && (
