@@ -106,11 +106,17 @@ const APlusTestList = () => {
     if (!attemptDoc) return "No progress yet";
     const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
     if (finished) {
-      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
-      return `Final Score: ${pct}% (${score}/${totalQuestions || totalQuestionsPerTest})`;
+      const pct = Math.round(
+        (score / (totalQuestions || totalQuestionsPerTest)) * 100
+      );
+      return `Final Score: ${pct}% (${score}/${
+        totalQuestions || totalQuestionsPerTest
+      })`;
     } else {
       if (typeof currentQuestionIndex === "number") {
-        return `Progress: ${currentQuestionIndex + 1} / ${totalQuestions || totalQuestionsPerTest}`;
+        return `Progress: ${currentQuestionIndex + 1} / ${
+          totalQuestions || totalQuestionsPerTest
+        }`;
       }
       return "No progress yet";
     }
@@ -207,6 +213,9 @@ const APlusTestList = () => {
           const progressDisplay = getProgressDisplay(attemptDoc);
           const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
 
+          const isFinished = attemptDoc?.finished;
+          const noAttempt = !attemptDoc;
+
           return (
             <div key={testNumber} className="test-card">
               <div className="test-badge">Test {testNumber}</div>
@@ -218,8 +227,12 @@ const APlusTestList = () => {
               </div>
               <p className="test-progress">{progressDisplay}</p>
 
-              {/* If no attempt exists, show the test length selector */}
-              {!attemptDoc && (
+              {/* 
+                Show the test-length selector if:
+                1) No attempt doc yet, OR
+                2) The attempt doc is already finished.
+              */}
+              {(noAttempt || isFinished) && (
                 <div className="test-length-selector-card">
                   <p>Select Test Length:</p>
                   {allowedTestLengths.map((length) => (
@@ -229,7 +242,8 @@ const APlusTestList = () => {
                         name={`testLength-${testNumber}`}
                         value={length}
                         checked={
-                          (selectedLengths[testNumber] || totalQuestionsPerTest) === length
+                          (selectedLengths[testNumber] ||
+                            totalQuestionsPerTest) === length
                         }
                         onChange={(e) =>
                           setSelectedLengths((prev) => ({
@@ -244,7 +258,8 @@ const APlusTestList = () => {
                 </div>
               )}
 
-              {!attemptDoc && (
+              {/* 1) If no attempt doc => show "Start" */}
+              {noAttempt && (
                 <button
                   className="start-button"
                   onClick={() => startTest(testNumber, false, null)}
@@ -253,6 +268,7 @@ const APlusTestList = () => {
                 </button>
               )}
 
+              {/* 2) If attempt exists but not finished => show "Resume" / "Restart" */}
               {attemptDoc && !attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
@@ -270,6 +286,7 @@ const APlusTestList = () => {
                 </div>
               )}
 
+              {/* 3) If attempt is finished => "View Review" + "Restart" */}
               {attemptDoc && attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
@@ -300,8 +317,9 @@ const APlusTestList = () => {
         <div className="popup-overlay">
           <div className="popup-content">
             <p>
-              You are currently in progress on this test, are you sure you want to restart!?😱. Also, if you want to change the test length, please finish your current attempt.
-              Restarting now will resume with your current test length and restart your progress🧙‍♂️.
+              You are currently in progress on this test, are you sure you want to restart!?😱 
+              Also, if you want to change the test length, please finish your current attempt.
+              Restarting now will use your currently selected test length and reset your progress🧙‍♂️.
             </p>
             <div className="popup-buttons">
               <button
