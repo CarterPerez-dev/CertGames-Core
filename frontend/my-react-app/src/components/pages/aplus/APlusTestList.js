@@ -22,7 +22,7 @@ const APlusTestList = () => {
   // Show/hide tooltip for the info icon
   const [showExamInfo, setShowExamInfo] = useState(false);
 
-  // NEW: Per-test selected test length state (allowed lengths: 25,50,75,100)
+  // NEW: Per-test selected test length state (allowed lengths: 25, 50, 75, 100)
   const allowedTestLengths = [25, 50, 75, 100];
   const [selectedLengths, setSelectedLengths] = useState({});
 
@@ -112,7 +112,7 @@ const APlusTestList = () => {
     }
   };
 
-  // Simple difficulty labels/colors
+  // Simple difficulty labels/colors (added back from old file)
   const difficultyColors = [
     { label: "Normal", color: "hsl(0, 0%, 100%)" },
     { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
@@ -128,13 +128,14 @@ const APlusTestList = () => {
 
   // Start/resume test
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
-    // Determine selected length for this test; default to totalQuestionsPerTest if not set.
+    // Determine selected length for this test; default to full length if not set.
     let testLength = selectedLengths[testNumber] || totalQuestionsPerTest;
     if (existingAttempt && !doRestart) {
       // Resume test (do not change length)
       navigate(`/practice-tests/a-plus/${testNumber}`);
     } else {
-      // New or forced restart: upsert doc with examMode and selectedLength
+      // New or forced restart: upsert doc with examMode and selectedLength,
+      // and use the chosen test length for totalQuestions.
       fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -142,7 +143,7 @@ const APlusTestList = () => {
           category,
           answers: [],
           score: 0,
-          totalQuestions: totalQuestionsPerTest,
+          totalQuestions: testLength,
           currentQuestionIndex: 0,
           shuffleOrder: [],
           answerOrder: [],
@@ -162,11 +163,14 @@ const APlusTestList = () => {
     }
   };
 
+  // Description text for exam mode
   const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
 
   return (
     <div className="tests-list-container">
       <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
+
+      {/* Centered container for toggle, label, and info icon */}
       <div className="centered-toggle-container">
         <div className="toggle-with-text">
           <label className="toggle-switch">
@@ -193,12 +197,14 @@ const APlusTestList = () => {
           </div>
         </div>
       </div>
+
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
           const attemptDoc = getAttemptDoc(testNumber);
           const progressDisplay = getProgressDisplay(attemptDoc);
           const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
+
           return (
             <div key={testNumber} className="test-card">
               <div className="test-badge">Test {testNumber}</div>
