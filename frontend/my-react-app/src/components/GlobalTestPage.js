@@ -199,22 +199,36 @@ const GlobalTestPage = ({
       }
       const testDoc = await testRes.json();
       setTestData(testDoc);
+
       const totalQ = testDoc.questions.length;
+
+      // Check if attempt exists
       if (attemptDoc) {
+        // If the test is already finished, we keep the data but also mark isFinished
         setAnswers(attemptDoc.answers || []);
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
+
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
+
         // Use the chosen length if available
         const chosenLength = attemptDoc.selectedLength || totalQ;
-        if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length === chosenLength) {
+
+        if (
+          attemptDoc.shuffleOrder &&
+          attemptDoc.shuffleOrder.length === chosenLength
+        ) {
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
           const newQOrder = shuffleIndices(chosenLength);
           setShuffleOrder(newQOrder);
         }
-        if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === chosenLength) {
+
+        if (
+          attemptDoc.answerOrder &&
+          attemptDoc.answerOrder.length === chosenLength
+        ) {
           setAnswerOrder(attemptDoc.answerOrder);
         } else {
           const generatedAnswerOrder = testDoc.questions
@@ -225,6 +239,7 @@ const GlobalTestPage = ({
             });
           setAnswerOrder(generatedAnswerOrder);
         }
+
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
         setActiveTestLength(chosenLength);
       } else {
@@ -266,7 +281,9 @@ const GlobalTestPage = ({
     [shuffleOrder]
   );
 
-  const effectiveTotal = activeTestLength || (testData ? testData.questions.length : 0);
+  const effectiveTotal =
+    activeTestLength || (testData ? testData.questions.length : 0);
+
   const realIndex = getShuffledIndex(currentQuestionIndex);
   const questionObject =
     testData && testData.questions && testData.questions.length > 0
@@ -278,8 +295,13 @@ const GlobalTestPage = ({
     const existing = answers.find((a) => a.questionId === questionObject.id);
     if (existing) {
       setSelectedOptionIndex(null);
-      if (existing.userAnswerIndex !== null && existing.userAnswerIndex !== undefined) {
-        const displayIndex = answerOrder[realIndex].indexOf(existing.userAnswerIndex);
+      if (
+        existing.userAnswerIndex !== null &&
+        existing.userAnswerIndex !== undefined
+      ) {
+        const displayIndex = answerOrder[realIndex].indexOf(
+          existing.userAnswerIndex
+        );
         if (displayIndex >= 0) {
           setSelectedOptionIndex(displayIndex);
           setIsAnswered(true);
@@ -337,6 +359,7 @@ const GlobalTestPage = ({
       if (!examMode && isAnswered) return; // Only block if exam mode is off.
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
+
       // For non–exam mode, lock the answer; for exam mode, allow changes.
       if (!examMode) {
         setIsAnswered(true);
@@ -348,23 +371,33 @@ const GlobalTestPage = ({
           correctAnswerIndex: questionObject.correctAnswerIndex
         };
         const updatedAnswers = [...answers];
-        const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
+        const idx = updatedAnswers.findIndex(
+          (a) => a.questionId === questionObject.id
+        );
         if (idx >= 0) {
           updatedAnswers[idx] = newAnswerObj;
         } else {
           updatedAnswers.push(newAnswerObj);
         }
         setAnswers(updatedAnswers);
-        const awardData = await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
+
+        const awardData = await updateServerProgress(
+          updatedAnswers,
+          score,
+          false,
+          newAnswerObj
+        );
         if (!examMode && awardData && awardData.examMode === false) {
           if (awardData.isCorrect) {
-            setScore(prev => prev + 1);
+            setScore((prev) => prev + 1);
           }
           if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
-            dispatch(setXPAndCoins({
-              xp: awardData.newXP,
-              coins: awardData.newCoins
-            }));
+            dispatch(
+              setXPAndCoins({
+                xp: awardData.newXP,
+                coins: awardData.newCoins
+              })
+            );
           }
         }
       } catch (err) {
@@ -406,6 +439,7 @@ const GlobalTestPage = ({
         })
       });
       const finishData = await res.json();
+
       if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
         finishData.newlyUnlocked.forEach((achievementId) => {
           const achievement = achievements.find(
@@ -423,6 +457,7 @@ const GlobalTestPage = ({
           }
         });
       }
+
       if (
         typeof finishData.newXP !== "undefined" &&
         typeof finishData.newCoins !== "undefined"
@@ -520,8 +555,8 @@ const GlobalTestPage = ({
     setIsFinished(false);
     setShowReviewMode(false);
     setShowScoreOverlay(false);
+
     if (testData?.questions?.length && activeTestLength) {
-      const totalQ = testData.questions.length;
       const newQOrder = shuffleIndices(activeTestLength);
       setShuffleOrder(newQOrder);
       const newAnswerOrder = testData.questions
@@ -531,6 +566,7 @@ const GlobalTestPage = ({
           return shuffleArray([...Array(numOpts).keys()]);
         });
       setAnswerOrder(newAnswerOrder);
+
       if (userId && testId) {
         await fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -550,7 +586,14 @@ const GlobalTestPage = ({
         });
       }
     }
-  }, [testData, userId, testId, category, examMode, activeTestLength]);
+  }, [
+    testData,
+    userId,
+    testId,
+    category,
+    examMode,
+    activeTestLength
+  ]);
 
   const handleFinishTest = () => {
     finishTestProcess();
@@ -570,16 +613,21 @@ const GlobalTestPage = ({
     return testData.questions.slice(0, effectiveTotal).filter((q) => {
       const userAns = answers.find((a) => a.questionId === q.id);
       const isFlagged = flaggedQuestions.includes(q.id);
+
       if (!userAns) {
+        // Not answered => count it as "skipped" or "all"
         return reviewFilter === "skipped" || reviewFilter === "all";
       }
+
       const isSkipped = userAns.userAnswerIndex === null;
       const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
       if (reviewFilter === "all") return true;
       if (reviewFilter === "skipped" && isSkipped) return true;
       if (reviewFilter === "flagged" && isFlagged) return true;
       if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
       if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
+
       return false;
     });
   }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
@@ -653,6 +701,10 @@ const GlobalTestPage = ({
     );
   };
 
+  // -----
+  // MAIN FIX: We add a small block in the score overlay that allows the user
+  // to select a new test length if they've finished, before clicking Restart.
+  // -----
   const renderScoreOverlay = () => {
     if (!showScoreOverlay) return null;
     const percentage = effectiveTotal
@@ -665,6 +717,34 @@ const GlobalTestPage = ({
           <p className="score-details">
             Your score: <strong>{percentage}%</strong> ({score}/{effectiveTotal})
           </p>
+
+          {/* NEW: Test Length selection after finishing */}
+          <div className="length-selection" style={{ margin: "1rem 0" }}>
+            <p style={{ marginBottom: "0.5rem" }}>Select New Test Length:</p>
+            {allowedTestLengths.map((length) => (
+              <label
+                key={length}
+                style={{
+                  marginRight: "1rem",
+                  display: "inline-block"
+                }}
+              >
+                <input
+                  type="radio"
+                  name="finishedTestLength"
+                  value={length}
+                  checked={selectedLength === length}
+                  onChange={(e) => {
+                    const newLen = Number(e.target.value);
+                    setSelectedLength(newLen);
+                    setActiveTestLength(newLen);
+                  }}
+                />
+                {length}
+              </label>
+            ))}
+          </div>
+
           <div className="overlay-buttons">
             <button
               className="restart-button"
@@ -713,10 +793,8 @@ const GlobalTestPage = ({
           {isFinished && (
             <p className="review-score-line">
               Your final score: {score}/{effectiveTotal} (
-              {effectiveTotal
-                ? Math.round((score / effectiveTotal) * 100)
-                : 0
-              }%)
+              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
+              %)
             </p>
           )}
           <div className="review-filter-buttons">
@@ -758,6 +836,7 @@ const GlobalTestPage = ({
             {filteredQuestions.map((q) => {
               const userAns = answers.find((a) => a.questionId === q.id);
               const isFlagged = flaggedQuestions.includes(q.id);
+
               if (!userAns) {
                 return (
                   <div key={q.id} className="review-question-card">
@@ -769,15 +848,18 @@ const GlobalTestPage = ({
                       <strong>Your Answer:</strong> Unanswered
                     </p>
                     <p>
-                      <strong>Correct Answer:</strong> {q.options[q.correctAnswerIndex]}
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
                     </p>
                     <p style={{ color: "#F44336" }}>No Answer</p>
                     <p>{q.explanation}</p>
                   </div>
                 );
               }
+
               const isSkipped = userAns.userAnswerIndex === null;
               const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
               return (
                 <div key={q.id} className="review-question-card">
                   <h3>
@@ -831,7 +913,7 @@ const GlobalTestPage = ({
     }
   };
 
-  // NEW: Render the test length selector UI if no attempt exists.
+  // If no attempt doc was found (on first load), show test length UI:
   if (showTestLengthSelector) {
     return (
       <div className="test-length-selector">
@@ -899,9 +981,11 @@ const GlobalTestPage = ({
   if (error) {
     return <div style={{ color: "#fff" }}>Error: {error}</div>;
   }
+
   if (loadingTest) {
     return <div style={{ color: "#fff" }}>Loading test...</div>;
   }
+
   if (!testData || !testData.questions || testData.questions.length === 0) {
     return <div style={{ color: "#fff" }}>No questions found.</div>;
   }
@@ -930,11 +1014,13 @@ const GlobalTestPage = ({
   return (
     <div className="aplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
       {renderScoreOverlay()}
       {renderReviewMode()}
+
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {questionObject && flaggedQuestions.includes(questionObject.id)
@@ -961,6 +1047,7 @@ const GlobalTestPage = ({
           Finish Test
         </button>
       </div>
+
       <div className="upper-control-bar">
         <button
           className="restart-test-btn"
@@ -972,7 +1059,9 @@ const GlobalTestPage = ({
           Back to Test List
         </button>
       </div>
+
       <h1 className="aplus-title">{testData.testName}</h1>
+
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -984,6 +1073,7 @@ const GlobalTestPage = ({
         <div className="xp-level-display">XP: {xp}</div>
         <div className="coins-display">Coins: {coins}</div>
       </div>
+
       <div className="progress-container">
         <div
           className="progress-fill"
@@ -992,18 +1082,22 @@ const GlobalTestPage = ({
           {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
         </div>
       </div>
+
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">
             {questionObject && questionObject.question}
           </div>
+
           <ul className="options-list">
             {displayedOptions.map((option, displayIdx) => {
               let optionClass = "option-button";
+
               if (!examMode) {
                 if (isAnswered && questionObject) {
                   const correctIndex = questionObject.correctAnswerIndex;
                   const actualIndex = answerOrder[realIndex][displayIdx];
+
                   if (actualIndex === correctIndex) {
                     optionClass += " correct-option";
                   } else if (
@@ -1018,6 +1112,7 @@ const GlobalTestPage = ({
                   optionClass += " chosen-option";
                 }
               }
+
               return (
                 <li className="option-item" key={displayIdx}>
                   <button
@@ -1031,6 +1126,7 @@ const GlobalTestPage = ({
               );
             })}
           </ul>
+
           {isAnswered && questionObject && !examMode && (
             <div className="explanation">
               <strong>
@@ -1043,6 +1139,7 @@ const GlobalTestPage = ({
               <p>{questionObject.explanation}</p>
             </div>
           )}
+
           <div className="bottom-control-bar">
             <div className="bottom-control-row">
               <button
@@ -1068,6 +1165,7 @@ const GlobalTestPage = ({
                 </button>
               )}
             </div>
+
             <div className="bottom-control-row skip-row">
               <button className="skip-question-btn" onClick={handleSkipQuestion}>
                 Skip Question
