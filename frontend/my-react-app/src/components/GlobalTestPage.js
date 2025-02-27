@@ -12,8 +12,9 @@ import { fetchShopItems } from "./pages/store/shopSlice";
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "./pages/store/AchievementToast";
 import "./test.css";
-import iconMapping from "./iconMapping";
-import colorMapping from "./colorMapping";
+import iconMapping from "./iconMapping"; 
+import colorMapping from "./colorMapping"; 
+
 import {
   FaTrophy,
   FaMedal,
@@ -27,9 +28,6 @@ import {
   FaMagic
 } from "react-icons/fa";
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1) Helper: Shuffle an array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 function shuffleArray(arr) {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -39,17 +37,11 @@ function shuffleArray(arr) {
   return copy;
 }
 
-/* 
-   Helper to generate a shuffle of question indices 
-*/
 function shuffleIndices(length) {
   const indices = Array.from({ length }, (_, i) => i);
   return shuffleArray(indices);
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2) A Reusable "QuestionDropdown" that hides correctness if examMode = true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const QuestionDropdown = ({
   totalQuestions,
   currentQuestionIndex,
@@ -57,8 +49,7 @@ const QuestionDropdown = ({
   answers,
   flaggedQuestions,
   testData,
-  shuffleOrder,
-  examMode
+  shuffleOrder
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -79,12 +70,12 @@ const QuestionDropdown = ({
     const answer = answers.find((a) => a.questionId === question.id);
     const isFlagged = flaggedQuestions.includes(question.id);
 
-    const isAnswered = answer?.userAnswerIndex !== undefined;
-    const isSkipped = answer?.userAnswerIndex === null;
-    const isCorrect =
-      answer && answer.userAnswerIndex === question.correctAnswerIndex;
-
-    return { isAnswered, isSkipped, isCorrect, isFlagged };
+    return {
+      isAnswered: answer?.userAnswerIndex !== undefined,
+      isSkipped: answer?.userAnswerIndex === null,
+      isCorrect: answer?.userAnswerIndex === question.correctAnswerIndex,
+      isFlagged
+    };
   };
 
   return (
@@ -104,21 +95,19 @@ const QuestionDropdown = ({
                   onQuestionSelect(i);
                   setIsOpen(false);
                 }}
-                className="dropdown-item"
+                className={`dropdown-item ${
+                  i === currentQuestionIndex ? "active" : ""
+                }`}
               >
                 <span>Question {i + 1}</span>
                 <div className="status-indicators">
                   {status.isSkipped && <span className="skip-indicator">⏭️</span>}
                   {status.isFlagged && <span className="flag-indicator">🚩</span>}
-
-                  {/* Hide correctness if examMode = true */}
-                  {!examMode && status.isAnswered && !status.isSkipped && (
+                  {status.isAnswered && !status.isSkipped && (
                     <span
-                      className={
-                        status.isCorrect
-                          ? "answer-indicator correct"
-                          : "answer-indicator incorrect"
-                      }
+                      className={`answer-indicator ${
+                        status.isCorrect ? "correct" : "incorrect"
+                      }`}
                     >
                       {status.isCorrect ? "✓" : "✗"}
                     </span>
@@ -133,9 +122,6 @@ const QuestionDropdown = ({
   );
 };
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3) Main "GlobalTestPage" 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const GlobalTestPage = ({
   testId,
   category,
@@ -145,7 +131,6 @@ const GlobalTestPage = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Redux user data
   const {
     xp,
     level,
@@ -158,7 +143,6 @@ const GlobalTestPage = ({
   const achievements = useSelector((state) => state.achievements.all);
   const { items: shopItems, status: shopStatus } = useSelector((state) => state.shop);
 
-  // Local states for test logic
   const [testData, setTestData] = useState(null);
   const [shuffleOrder, setShuffleOrder] = useState([]);
   const [answerOrder, setAnswerOrder] = useState([]);
@@ -171,18 +155,14 @@ const GlobalTestPage = ({
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
 
-  // Overlays
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [showReviewMode, setShowReviewMode] = useState(false);
 
-  // Confetti on level-up
   const [localLevel, setLocalLevel] = useState(level);
   const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
 
-  // Flags
   const [flaggedQuestions, setFlaggedQuestions] = useState([]);
 
-  // Confirmation popups
   const [showRestartPopup, setShowRestartPopup] = useState(false);
   const [showFinishPopup, setShowFinishPopup] = useState(false);
   const [showNextPopup, setShowNextPopup] = useState(false);
@@ -196,7 +176,6 @@ const GlobalTestPage = ({
     }
   }, [shopStatus, dispatch]);
 
-  // This is the main fetch that loads or creates the attempt doc
   const fetchTestAndAttempt = async () => {
     setLoadingTest(true);
     try {
@@ -207,7 +186,6 @@ const GlobalTestPage = ({
         attemptDoc = attemptData.attempt || null;
       }
 
-      // fetch the actual test doc
       const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
       if (!testRes.ok) {
         const errData = await testRes.json().catch(() => ({}));
@@ -219,12 +197,11 @@ const GlobalTestPage = ({
       const totalQ = testDoc.questions.length;
 
       if (attemptDoc) {
-        // We have partial or finished attempt
         setAnswers(attemptDoc.answers || []);
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
 
-        // read examMode from doc
+        // examMode
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
 
@@ -247,7 +224,6 @@ const GlobalTestPage = ({
 
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
       } else {
-        // brand new attempt
         setScore(0);
         setAnswers([]);
         setIsFinished(false);
@@ -262,7 +238,8 @@ const GlobalTestPage = ({
         });
         setAnswerOrder(generatedAnswerOrder);
 
-        // read examMode from location.state or default false
+        // By default, if user didn't specify, examMode is false on brand-new attempt
+        // but we might pass it in location/state if we want
         const defaultExamMode = location.state?.examMode || false;
         setExamMode(defaultExamMode);
 
@@ -296,7 +273,6 @@ const GlobalTestPage = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testId, userId]);
 
-  // Confetti if user levels up
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -306,14 +282,12 @@ const GlobalTestPage = ({
     }
   }, [level, localLevel]);
 
-  // If navigated with { state: { review: true } } and test is finished => show review
   useEffect(() => {
     if (location.state?.review && isFinished) {
       setShowReviewMode(true);
     }
   }, [location.state, isFinished]);
 
-  // Basic helper to get the question index from shuffle
   const getShuffledIndex = useCallback(
     (i) => {
       if (!shuffleOrder || shuffleOrder.length === 0) return i;
@@ -322,14 +296,12 @@ const GlobalTestPage = ({
     [shuffleOrder]
   );
 
-  // We have totalQuestions, realIndex, questionObject
   const totalQuestions = testData?.questions?.length || 0;
   const realIndex = getShuffledIndex(currentQuestionIndex);
   const questionObject = totalQuestions > 0
     ? testData.questions[realIndex]
     : null;
 
-  // On each new question, figure out if we had answered it
   useEffect(() => {
     if (!questionObject) return;
     const existing = answers.find((a) => a.questionId === questionObject.id);
@@ -339,7 +311,6 @@ const GlobalTestPage = ({
         existing.userAnswerIndex !== null &&
         existing.userAnswerIndex !== undefined
       ) {
-        // Need to find which "display index" that corresponds to in the shuffled answer array
         const displayIndex = answerOrder[realIndex].indexOf(existing.userAnswerIndex);
         if (displayIndex >= 0) {
           setSelectedOptionIndex(displayIndex);
@@ -348,8 +319,7 @@ const GlobalTestPage = ({
           setIsAnswered(false);
         }
       } else {
-        // It's "skipped"
-        setIsAnswered(false);
+        setIsAnswered(true);
       }
     } else {
       setSelectedOptionIndex(null);
@@ -357,15 +327,12 @@ const GlobalTestPage = ({
     }
   }, [questionObject, answers, realIndex, answerOrder]);
 
-  // We'll store partial attempt in the server
   const updateServerProgress = useCallback(
     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
       if (!userId) return;
       try {
-        // If singleAnswer => use /submit-answer route to store correctness
         if (singleAnswer) {
-          // but do NOT awarding if examMode = true
-          // awarding is done in handleOptionClick if examMode=false
+          // we still call submit-answer route
           await fetch(`/api/test/user/${userId}/submit-answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -380,7 +347,7 @@ const GlobalTestPage = ({
           });
           return;
         }
-        // If not singleAnswer => just update position
+        // update position, finished
         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -396,42 +363,30 @@ const GlobalTestPage = ({
     [userId, testId, testData, xpBoost, currentQuestionIndex]
   );
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     4) Handling a user answer => immediate awarding if examMode=false
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   const handleOptionClick = useCallback(
     async (displayOptionIndex) => {
       if (isAnswered || !questionObject) return;
-
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
-      setIsAnswered(true);
 
       try {
-        // Always update local answers + store in DB (so the user’s choice is saved).
-        const newAnswerObj = {
+        // If examMode is false, we get immediate correctness & awarding
+        // If examMode is true, the response won't contain "isCorrect"
+        const singleAnsObj = {
           questionId: questionObject.id,
           userAnswerIndex: actualAnswerIndex,
           correctAnswerIndex: questionObject.correctAnswerIndex
         };
+        await updateServerProgress(answers, score, false, singleAnsObj);
 
-        const updatedAnswers = [...answers];
-        const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
-        if (idx >= 0) {
-          updatedAnswers[idx] = newAnswerObj;
-        } else {
-          updatedAnswers.push(newAnswerObj);
-        }
-        setAnswers(updatedAnswers);
-
-        // Save partial progress
-        await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
-
-        // If examMode = false => do immediate awarding
+        // If examMode is false, server returns isCorrect => we can update local XP/Coins
+        // But we've set up the "submit-answer" route so that if examMode = false,
+        // it returns { isCorrect, awardedXP, etc. }.
         if (!examMode) {
           const baseXP = testData?.xpPerCorrect || 10;
           const effectiveXP = baseXP * xpBoost;
-          const awardRes = await fetch(`/api/test/user/${userId}/submit-answer`, {
+          // We'll fetch the awarding result ourselves:
+          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -443,25 +398,46 @@ const GlobalTestPage = ({
               coinsPerCorrect: 5
             })
           });
-          const awardData = await awardRes.json();
-
-          // If route says isCorrect => update local score
-          if (awardRes.ok && awardData.examMode === false) {
-            if (awardData.isCorrect) {
-              setScore(prev => prev + 1);
-            }
-            // Also update Redux if new XP or coins
-            if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
+          const result = await res.json();
+          if (res.ok && result.examMode === false) {
+            if (result.isCorrect && !result.alreadyCorrect && result.awardedXP > 0) {
               dispatch(setXPAndCoins({
-                xp: awardData.newXP,
-                coins: awardData.newCoins
+                xp: result.newXP,
+                coins: result.newCoins
               }));
             }
+            if (result.isCorrect) {
+              setScore(score + 1);
+            }
           }
+        } else {
+          // examMode = true => no immediate awarding
+          // we also do not get isCorrect from the server
         }
+
+        // Update local "answers"
+        const updatedAnswers = [...answers];
+        const idx = updatedAnswers.findIndex(a => a.questionId === questionObject.id);
+        if (idx >= 0) {
+          updatedAnswers[idx] = {
+            questionId: questionObject.id,
+            userAnswerIndex: actualAnswerIndex,
+            correctAnswerIndex: questionObject.correctAnswerIndex
+          };
+        } else {
+          updatedAnswers.push({
+            questionId: questionObject.id,
+            userAnswerIndex: actualAnswerIndex,
+            correctAnswerIndex: questionObject.correctAnswerIndex
+          });
+        }
+        setAnswers(updatedAnswers);
+
       } catch (err) {
         console.error("Failed to submit answer to backend", err);
       }
+
+      setIsAnswered(true);
     },
     [
       isAnswered,
@@ -480,9 +456,6 @@ const GlobalTestPage = ({
     ]
   );
 
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     5) Finishing the test => examMode => bulk awarding is done in the backend
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
   const finishTestProcess = useCallback(async () => {
     let finalScore = 0;
     answers.forEach((ans) => {
@@ -502,7 +475,6 @@ const GlobalTestPage = ({
         })
       });
       const finishData = await res.json();
-
       if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
         finishData.newlyUnlocked.forEach((achievementId) => {
           const achievement = achievements.find(
@@ -521,18 +493,6 @@ const GlobalTestPage = ({
         });
       }
 
-      // If examMode was true, we get final awarding, so newXP/newCoins might be returned
-      if (
-        typeof finishData.newXP !== "undefined" &&
-        typeof finishData.newCoins !== "undefined"
-      ) {
-        dispatch(
-          setXPAndCoins({
-            xp: finishData.newXP,
-            coins: finishData.newCoins
-          })
-        );
-      }
     } catch (err) {
       console.error("Failed to finish test attempt:", err);
     }
@@ -540,15 +500,9 @@ const GlobalTestPage = ({
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(true);
-  }, [answers, userId, testId, totalQuestions, achievements, dispatch]);
+  }, [answers, userId, testId, totalQuestions, achievements]);
 
-  // Next/prev question logic
   const handleNextQuestion = useCallback(() => {
-    // If examMode = false => user must answer or skip
-    if (!isAnswered && !examMode) {
-      setShowNextPopup(true);
-      return;
-    }
     if (currentQuestionIndex === totalQuestions - 1) {
       finishTestProcess();
       return;
@@ -557,8 +511,6 @@ const GlobalTestPage = ({
     setCurrentQuestionIndex(nextIndex);
     updateServerProgress(answers, score, false);
   }, [
-    isAnswered,
-    examMode,
     currentQuestionIndex,
     totalQuestions,
     finishTestProcess,
@@ -575,7 +527,6 @@ const GlobalTestPage = ({
     }
   }, [currentQuestionIndex, updateServerProgress, answers, score]);
 
-  // Skipping sets userAnswerIndex = null
   const handleSkipQuestion = () => {
     if (!questionObject) return;
     const updatedAnswers = [...answers];
@@ -593,16 +544,9 @@ const GlobalTestPage = ({
       updatedAnswers.push(skipObj);
     }
     setAnswers(updatedAnswers);
-    setIsAnswered(false);
-    setSelectedOptionIndex(null);
-
+    setIsAnswered(true);
     updateServerProgress(updatedAnswers, score, false, skipObj);
-    // Next
-    if (currentQuestionIndex === totalQuestions - 1) {
-      finishTestProcess();
-      return;
-    }
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
+    handleNextQuestion();
   };
 
   const handleFlagQuestion = () => {
@@ -649,6 +593,7 @@ const GlobalTestPage = ({
             shuffleOrder: newOrder,
             answerOrder: newAnswerOrder,
             finished: false,
+            // preserve the existing examMode
             examMode
           })
         });
@@ -660,7 +605,6 @@ const GlobalTestPage = ({
     finishTestProcess();
   };
 
-  // For review filtering
   const [reviewFilter, setReviewFilter] = useState("all");
 
   const handleReviewAnswers = () => {
@@ -691,14 +635,13 @@ const GlobalTestPage = ({
     });
   }, [testData, answers, flaggedQuestions, reviewFilter]);
 
-  // For the next question popup if user hasn’t answered
   const NextQuestionAlert = ({ message, onOk }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
         <p>{message}</p>
         <div className="confirm-popup-buttons">
           <button className="confirm-popup-ok" onClick={onOk}>
-            OK
+            OK🤪
           </button>
         </div>
       </div>
@@ -709,7 +652,7 @@ const GlobalTestPage = ({
     if (!showNextPopup) return null;
     return (
       <NextQuestionAlert
-        message="You haven't answered. Please answer or skip question."
+        message="You haven't answered. Please answer or skip question ⏩."
         onOk={() => {
           setShowNextPopup(false);
         }}
@@ -881,7 +824,8 @@ const GlobalTestPage = ({
                       <strong>Your Answer:</strong> Unanswered
                     </p>
                     <p>
-                      <strong>Correct Answer:</strong> {q.options[q.correctAnswerIndex]}
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
                     </p>
                     <p style={{ color: "#F44336" }}>No Answer</p>
                     <p>{q.explanation}</p>
@@ -937,7 +881,7 @@ const GlobalTestPage = ({
   };
 
   const handleNextQuestionButtonClick = () => {
-    if (!isAnswered && !examMode) {
+    if (!isAnswered) {
       setShowNextPopup(true);
     } else {
       handleNextQuestion();
@@ -954,7 +898,6 @@ const GlobalTestPage = ({
     return <div style={{ color: "#fff" }}>No questions found.</div>;
   }
 
-  // figure out user avatar
   let avatarUrl = "https://via.placeholder.com/60";
   if (currentAvatar && shopItems && shopItems.length > 0) {
     const avatarItem = shopItems.find((item) => item._id === currentAvatar);
@@ -963,14 +906,12 @@ const GlobalTestPage = ({
     }
   }
 
-  // progress bar color
   const progressPercentage = totalQuestions
     ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)
     : 0;
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
-  // build "display" options for the current question from answerOrder
   let displayedOptions = [];
   if (questionObject && answerOrder[realIndex]) {
     displayedOptions = answerOrder[realIndex].map(
@@ -994,9 +935,6 @@ const GlobalTestPage = ({
             ? "Unflag"
             : "Flag"}
         </button>
-        {/* 
-          Updated: we pass examMode to the dropdown, so it hides correctness 
-        */}
         <QuestionDropdown
           totalQuestions={totalQuestions}
           currentQuestionIndex={currentQuestionIndex}
@@ -1008,7 +946,6 @@ const GlobalTestPage = ({
           flaggedQuestions={flaggedQuestions}
           testData={testData}
           shuffleOrder={shuffleOrder}
-          examMode={examMode}
         />
         <button
           className="finish-test-btn"
@@ -1055,7 +992,7 @@ const GlobalTestPage = ({
         </div>
       </div>
 
-      {/* The main question UI if not finished or reviewing */}
+      {/* If we haven't finished and aren't in review */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">
@@ -1080,7 +1017,8 @@ const GlobalTestPage = ({
                   }
                 }
               } else {
-                // examMode => do NOT show correctness
+                // examMode => do NOT highlight correctness
+                // we can highlight the chosen option in a neutral color if you want
                 if (isAnswered && displayIdx === selectedOptionIndex) {
                   optionClass += " chosen-option"; // neutral highlight
                 }
@@ -1091,8 +1029,7 @@ const GlobalTestPage = ({
                   <button
                     className={optionClass}
                     onClick={() => handleOptionClick(displayIdx)}
-                    disabled={examMode ? false : isAnswered} 
-                    // ^ If you want to allow re-click changes in exam mode, set false
+                    disabled={isAnswered}
                   >
                     {option}
                   </button>
@@ -1101,7 +1038,7 @@ const GlobalTestPage = ({
             })}
           </ul>
 
-          {/* Show explanation only if examMode=false and user answered */}
+          {/* show explanation if examMode == false and user answered */}
           {isAnswered && questionObject && !examMode && (
             <div className="explanation">
               <strong>
