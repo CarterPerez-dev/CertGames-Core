@@ -6,7 +6,7 @@ Below is a comprehensive, wide-ranging overview of my entire codebase and web ap
 ---
 
 ## 1. **Project Purpose and Goals**
-Your project is a gamified platform centered around cybersecurity, certification practice, daily newsletters, scenario-driven learning, and more. It has multiple services (backend, frontend, database, caching, etc.) that coordinate to deliver:
+This project is a gamified platform centered around cybersecurity, certification practice, daily newsletters, scenario-driven learning, and more. It has multiple services (backend, frontend, database, caching, etc.) that coordinate to deliver:
 
 1. **Practice Test Functionality** for certifications (e.g., CompTIA A+, Security+, CySA+, CASP+, etc.).
 2. **User Account Management**, including registration, login, XP leveling, achievements, and a virtual shop.
