@@ -27,9 +27,7 @@ import {
   FaMagic
 } from "react-icons/fa";
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1) Helper: Shuffle an array
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Helper functions
 function shuffleArray(arr) {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -39,17 +37,12 @@ function shuffleArray(arr) {
   return copy;
 }
 
-/* 
-   Helper to generate a shuffle of question indices 
-*/
 function shuffleIndices(length) {
   const indices = Array.from({ length }, (_, i) => i);
   return shuffleArray(indices);
 }
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2) A Reusable "QuestionDropdown" that hides correctness if examMode = true
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+// Reusable QuestionDropdown component
 const QuestionDropdown = ({
   totalQuestions,
   currentQuestionIndex,
@@ -78,12 +71,10 @@ const QuestionDropdown = ({
     const question = testData.questions[realIndex];
     const answer = answers.find((a) => a.questionId === question.id);
     const isFlagged = flaggedQuestions.includes(question.id);
-
     const isAnswered = answer?.userAnswerIndex !== undefined;
     const isSkipped = answer?.userAnswerIndex === null;
     const isCorrect =
       answer && answer.userAnswerIndex === question.correctAnswerIndex;
-
     return { isAnswered, isSkipped, isCorrect, isFlagged };
   };
 
@@ -92,7 +83,6 @@ const QuestionDropdown = ({
       <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
         Question {currentQuestionIndex + 1}
       </button>
-
       {isOpen && (
         <div className="dropdown-content">
           {Array.from({ length: totalQuestions }, (_, i) => {
@@ -110,8 +100,6 @@ const QuestionDropdown = ({
                 <div className="status-indicators">
                   {status.isSkipped && <span className="skip-indicator">⏭️</span>}
                   {status.isFlagged && <span className="flag-indicator">🚩</span>}
-
-                  {/* Hide correctness if examMode = true */}
                   {!examMode && status.isAnswered && !status.isSkipped && (
                     <span
                       className={
@@ -133,9 +121,6 @@ const QuestionDropdown = ({
   );
 };
 
-/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3) Main "GlobalTestPage" 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 const GlobalTestPage = ({
   testId,
   category,
@@ -146,17 +131,13 @@ const GlobalTestPage = ({
   const dispatch = useDispatch();
 
   // Redux user data
-  const {
-    xp,
-    level,
-    coins,
-    userId,
-    xpBoost,
-    currentAvatar
-  } = useSelector((state) => state.user);
-
+  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
+    (state) => state.user
+  );
   const achievements = useSelector((state) => state.achievements.all);
-  const { items: shopItems, status: shopStatus } = useSelector((state) => state.shop);
+  const { items: shopItems, status: shopStatus } = useSelector(
+    (state) => state.shop
+  );
 
   // Local states for test logic
   const [testData, setTestData] = useState(null);
@@ -187,8 +168,14 @@ const GlobalTestPage = ({
   const [showFinishPopup, setShowFinishPopup] = useState(false);
   const [showNextPopup, setShowNextPopup] = useState(false);
 
-  // NEW: track if exam mode is on
+  // Exam mode
   const [examMode, setExamMode] = useState(false);
+
+  // New: Test length selection state
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLength, setSelectedLength] = useState(100);
+  const [activeTestLength, setActiveTestLength] = useState(null);
+  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
 
   useEffect(() => {
     if (shopStatus === "idle") {
@@ -196,7 +183,6 @@ const GlobalTestPage = ({
     }
   }, [shopStatus, dispatch]);
 
-  // This is the main fetch that loads or creates the attempt doc
   const fetchTestAndAttempt = async () => {
     setLoadingTest(true);
     try {
@@ -206,8 +192,6 @@ const GlobalTestPage = ({
         const attemptData = await attemptRes.json();
         attemptDoc = attemptData.attempt || null;
       }
-
-      // fetch the actual test doc
       const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
       if (!testRes.ok) {
         const errData = await testRes.json().catch(() => ({}));
@@ -215,26 +199,19 @@ const GlobalTestPage = ({
       }
       const testDoc = await testRes.json();
       setTestData(testDoc);
-
       const totalQ = testDoc.questions.length;
-
       if (attemptDoc) {
-        // We have partial or finished attempt
         setAnswers(attemptDoc.answers || []);
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
-
-        // read examMode from doc
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
-
         if (attemptDoc.shuffleOrder && attemptDoc.shuffleOrder.length > 0) {
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
           const newQOrder = shuffleIndices(totalQ);
           setShuffleOrder(newQOrder);
         }
-
         if (attemptDoc.answerOrder && attemptDoc.answerOrder.length === totalQ) {
           setAnswerOrder(attemptDoc.answerOrder);
         } else {
@@ -244,45 +221,12 @@ const GlobalTestPage = ({
           });
           setAnswerOrder(generatedAnswerOrder);
         }
-
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
+        setActiveTestLength(attemptDoc.selectedLength || totalQ);
       } else {
-        // brand new attempt
-        setScore(0);
-        setAnswers([]);
-        setIsFinished(false);
-        setCurrentQuestionIndex(0);
-
-        const newQOrder = shuffleIndices(totalQ);
-        setShuffleOrder(newQOrder);
-
-        const generatedAnswerOrder = testDoc.questions.map((q) => {
-          const numOptions = q.options.length;
-          return shuffleArray([...Array(numOptions).keys()]);
-        });
-        setAnswerOrder(generatedAnswerOrder);
-
-        // read examMode from location.state or default false
-        const defaultExamMode = location.state?.examMode || false;
-        setExamMode(defaultExamMode);
-
-        if (userId) {
-          await fetch(`/api/test/attempts/${userId}/${testId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              answers: [],
-              score: 0,
-              totalQuestions: totalQ,
-              category: testDoc.category || category,
-              currentQuestionIndex: 0,
-              shuffleOrder: newQOrder,
-              answerOrder: generatedAnswerOrder,
-              finished: false,
-              examMode: defaultExamMode
-            })
-          });
-        }
+        // No attempt doc exists: show the test length selector UI
+        setActiveTestLength(null);
+        setShowTestLengthSelector(true);
       }
     } catch (err) {
       setError(err.message);
@@ -293,10 +237,8 @@ const GlobalTestPage = ({
 
   useEffect(() => {
     fetchTestAndAttempt();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [testId, userId]);
 
-  // Confetti if user levels up
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -306,14 +248,12 @@ const GlobalTestPage = ({
     }
   }, [level, localLevel]);
 
-  // If navigated with { state: { review: true } } and test is finished => show review
   useEffect(() => {
     if (location.state?.review && isFinished) {
       setShowReviewMode(true);
     }
   }, [location.state, isFinished]);
 
-  // Basic helper to get the question index from shuffle
   const getShuffledIndex = useCallback(
     (i) => {
       if (!shuffleOrder || shuffleOrder.length === 0) return i;
@@ -322,24 +262,20 @@ const GlobalTestPage = ({
     [shuffleOrder]
   );
 
-  // We have totalQuestions, realIndex, questionObject
-  const totalQuestions = testData?.questions?.length || 0;
+  // Determine effective total questions based on chosen test length.
+  const effectiveTotal = activeTestLength || (testData ? testData.questions.length : 0);
   const realIndex = getShuffledIndex(currentQuestionIndex);
-  const questionObject = totalQuestions > 0
-    ? testData.questions[realIndex]
-    : null;
+  const questionObject =
+    testData && testData.questions && testData.questions.length > 0
+      ? testData.questions[realIndex]
+      : null;
 
-  // On each new question, figure out if we had answered it
   useEffect(() => {
     if (!questionObject) return;
     const existing = answers.find((a) => a.questionId === questionObject.id);
     if (existing) {
       setSelectedOptionIndex(null);
-      if (
-        existing.userAnswerIndex !== null &&
-        existing.userAnswerIndex !== undefined
-      ) {
-        // Need to find which "display index" that corresponds to in the shuffled answer array
+      if (existing.userAnswerIndex !== null && existing.userAnswerIndex !== undefined) {
         const displayIndex = answerOrder[realIndex].indexOf(existing.userAnswerIndex);
         if (displayIndex >= 0) {
           setSelectedOptionIndex(displayIndex);
@@ -348,7 +284,6 @@ const GlobalTestPage = ({
           setIsAnswered(false);
         }
       } else {
-        // It's "skipped"
         setIsAnswered(false);
       }
     } else {
@@ -357,7 +292,6 @@ const GlobalTestPage = ({
     }
   }, [questionObject, answers, realIndex, answerOrder]);
 
-  // We'll store partial attempt in the server
   const updateServerProgress = useCallback(
     async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
       if (!userId) return;
@@ -378,7 +312,6 @@ const GlobalTestPage = ({
           const data = await res.json();
           return data;
         }
-        // If not a single answer update, just update the current position.
         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -393,20 +326,14 @@ const GlobalTestPage = ({
     },
     [userId, testId, testData, xpBoost, currentQuestionIndex]
   );
-  
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     4) Handling a user answer => immediate awarding if examMode=false
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
   const handleOptionClick = useCallback(
     async (displayOptionIndex) => {
       if (isAnswered || !questionObject) return;
-  
       const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
       setSelectedOptionIndex(displayOptionIndex);
       setIsAnswered(true);
-  
       try {
-        // Update local answers
         const newAnswerObj = {
           questionId: questionObject.id,
           userAnswerIndex: actualAnswerIndex,
@@ -420,11 +347,7 @@ const GlobalTestPage = ({
           updatedAnswers.push(newAnswerObj);
         }
         setAnswers(updatedAnswers);
-  
-        // Update the backend and get the response (which includes new XP/coins)
         const awardData = await updateServerProgress(updatedAnswers, score, false, newAnswerObj);
-  
-        // If not in exam mode, update local score and Redux state immediately
         if (!examMode && awardData && awardData.examMode === false) {
           if (awardData.isCorrect) {
             setScore(prev => prev + 1);
@@ -456,9 +379,7 @@ const GlobalTestPage = ({
       answerOrder
     ]
   );
-  /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     5) Finishing the test => examMode => bulk awarding is done in the backend
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
   const finishTestProcess = useCallback(async () => {
     let finalScore = 0;
     answers.forEach((ans) => {
@@ -467,18 +388,16 @@ const GlobalTestPage = ({
       }
     });
     setScore(finalScore);
-
     try {
       const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           score: finalScore,
-          totalQuestions
+          totalQuestions: effectiveTotal
         })
       });
       const finishData = await res.json();
-
       if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
         finishData.newlyUnlocked.forEach((achievementId) => {
           const achievement = achievements.find(
@@ -496,8 +415,6 @@ const GlobalTestPage = ({
           }
         });
       }
-
-      // If examMode was true, we get final awarding, so newXP/newCoins might be returned
       if (
         typeof finishData.newXP !== "undefined" &&
         typeof finishData.newCoins !== "undefined"
@@ -512,20 +429,17 @@ const GlobalTestPage = ({
     } catch (err) {
       console.error("Failed to finish test attempt:", err);
     }
-
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(true);
-  }, [answers, userId, testId, totalQuestions, achievements, dispatch]);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
 
-  // Next/prev question logic
   const handleNextQuestion = useCallback(() => {
-    // If examMode = false => user must answer or skip
     if (!isAnswered && !examMode) {
       setShowNextPopup(true);
       return;
     }
-    if (currentQuestionIndex === totalQuestions - 1) {
+    if (currentQuestionIndex === effectiveTotal - 1) {
       finishTestProcess();
       return;
     }
@@ -536,7 +450,7 @@ const GlobalTestPage = ({
     isAnswered,
     examMode,
     currentQuestionIndex,
-    totalQuestions,
+    effectiveTotal,
     finishTestProcess,
     updateServerProgress,
     answers,
@@ -551,7 +465,6 @@ const GlobalTestPage = ({
     }
   }, [currentQuestionIndex, updateServerProgress, answers, score]);
 
-  // Skipping sets userAnswerIndex = null
   const handleSkipQuestion = () => {
     if (!questionObject) return;
     const updatedAnswers = [...answers];
@@ -571,10 +484,8 @@ const GlobalTestPage = ({
     setAnswers(updatedAnswers);
     setIsAnswered(false);
     setSelectedOptionIndex(null);
-
     updateServerProgress(updatedAnswers, score, false, skipObj);
-    // Next
-    if (currentQuestionIndex === totalQuestions - 1) {
+    if (currentQuestionIndex === effectiveTotal - 1) {
       finishTestProcess();
       return;
     }
@@ -601,17 +512,15 @@ const GlobalTestPage = ({
     setIsFinished(false);
     setShowReviewMode(false);
     setShowScoreOverlay(false);
-
-    if (testData?.questions?.length) {
-      const newOrder = shuffleIndices(testData.questions.length);
-      setShuffleOrder(newOrder);
-
-      const newAnswerOrder = testData.questions.map((q) => {
+    if (testData?.questions?.length && activeTestLength) {
+      const totalQ = testData.questions.length;
+      const newQOrder = Array.from({ length: activeTestLength }, (_, i) => i);
+      setShuffleOrder(newQOrder);
+      const newAnswerOrder = testData.questions.slice(0, activeTestLength).map((q) => {
         const numOpts = q.options.length;
         return shuffleArray([...Array(numOpts).keys()]);
       });
       setAnswerOrder(newAnswerOrder);
-
       if (userId && testId) {
         await fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
@@ -620,9 +529,10 @@ const GlobalTestPage = ({
             answers: [],
             score: 0,
             totalQuestions: testData.questions.length,
+            selectedLength: activeTestLength,
             category: testData.category || category,
             currentQuestionIndex: 0,
-            shuffleOrder: newOrder,
+            shuffleOrder: newQOrder,
             answerOrder: newAnswerOrder,
             finished: false,
             examMode
@@ -630,27 +540,24 @@ const GlobalTestPage = ({
         });
       }
     }
-  }, [testData, userId, testId, category, examMode]);
+  }, [testData, userId, testId, category, examMode, activeTestLength]);
 
   const handleFinishTest = () => {
     finishTestProcess();
   };
 
-  // For review filtering
   const [reviewFilter, setReviewFilter] = useState("all");
-
   const handleReviewAnswers = () => {
     setShowReviewMode(true);
     setReviewFilter("all");
   };
-
   const handleCloseReview = () => {
     if (!isFinished) setShowReviewMode(false);
   };
 
   const filteredQuestions = useMemo(() => {
     if (!testData || !testData.questions) return [];
-    return testData.questions.filter((q) => {
+    return testData.questions.slice(0, effectiveTotal).filter((q) => {
       const userAns = answers.find((a) => a.questionId === q.id);
       const isFlagged = flaggedQuestions.includes(q.id);
       if (!userAns) {
@@ -665,9 +572,8 @@ const GlobalTestPage = ({
       if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
       return false;
     });
-  }, [testData, answers, flaggedQuestions, reviewFilter]);
+  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
 
-  // For the next question popup if user hasn’t answered
   const NextQuestionAlert = ({ message, onOk }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
@@ -739,16 +645,15 @@ const GlobalTestPage = ({
 
   const renderScoreOverlay = () => {
     if (!showScoreOverlay) return null;
-    const percentage = totalQuestions
-      ? Math.round((score / totalQuestions) * 100)
+    const percentage = effectiveTotal
+      ? Math.round((score / effectiveTotal) * 100)
       : 0;
-
     return (
       <div className="score-overlay">
         <div className="score-content">
           <h2 className="score-title">Test Complete!</h2>
           <p className="score-details">
-            Your score: <strong>{percentage}%</strong> ({score}/{totalQuestions})
+            Your score: <strong>{percentage}%</strong> ({score}/{effectiveTotal})
           </p>
           <div className="overlay-buttons">
             <button
@@ -766,7 +671,9 @@ const GlobalTestPage = ({
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
+                onClick={() =>
+                  navigate(`${backToListPath}/${Number(testId) + 1}`)
+                }
               >
                 Next Test
               </button>
@@ -779,7 +686,6 @@ const GlobalTestPage = ({
 
   const renderReviewMode = () => {
     if (!showReviewMode) return null;
-
     return (
       <div className="score-overlay review-overlay">
         <div className="score-content review-content">
@@ -798,9 +704,9 @@ const GlobalTestPage = ({
           <h2 className="score-title">Review Mode</h2>
           {isFinished && (
             <p className="review-score-line">
-              Your final score: {score}/{totalQuestions} (
-              {totalQuestions
-                ? Math.round((score / totalQuestions) * 100)
+              Your final score: {score}/{effectiveTotal} (
+              {effectiveTotal
+                ? Math.round((score / effectiveTotal) * 100)
                 : 0
               }%)
             </p>
@@ -840,12 +746,10 @@ const GlobalTestPage = ({
           <p className="score-details">
             Questions shown: {filteredQuestions.length}
           </p>
-
           <div className="review-mode-container">
             {filteredQuestions.map((q) => {
               const userAns = answers.find((a) => a.questionId === q.id);
               const isFlagged = flaggedQuestions.includes(q.id);
-
               if (!userAns) {
                 return (
                   <div key={q.id} className="review-question-card">
@@ -866,7 +770,6 @@ const GlobalTestPage = ({
               }
               const isSkipped = userAns.userAnswerIndex === null;
               const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
-
               return (
                 <div key={q.id} className="review-question-card">
                   <h3>
@@ -920,6 +823,72 @@ const GlobalTestPage = ({
     }
   };
 
+  // NEW: Render the test length selector UI if no attempt exists.
+  if (showTestLengthSelector) {
+    return (
+      <div className="test-length-selector">
+        <h2>Select Test Length</h2>
+        <p>Please select how many questions you want to answer:</p>
+        <div className="test-length-options">
+          {allowedTestLengths.map((length) => (
+            <label key={length}>
+              <input
+                type="radio"
+                name="testLength"
+                value={length}
+                checked={selectedLength === length}
+                onChange={(e) => setSelectedLength(Number(e.target.value))}
+              />
+              {length}
+            </label>
+          ))}
+        </div>
+        <button
+          onClick={async () => {
+            setActiveTestLength(selectedLength);
+            if (testData) {
+              const totalQ = testData.questions.length;
+              // For this feature, we take the first 'selectedLength' questions.
+              const newQOrder = Array.from({ length: selectedLength }, (_, i) => i);
+              setShuffleOrder(newQOrder);
+              const newAnswerOrder = testData.questions
+                .slice(0, selectedLength)
+                .map((q) => {
+                  const numOpts = q.options.length;
+                  return shuffleArray([...Array(numOpts).keys()]);
+                });
+              setAnswerOrder(newAnswerOrder);
+              try {
+                await fetch(`/api/test/attempts/${userId}/${testId}`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    answers: [],
+                    score: 0,
+                    totalQuestions: totalQ,
+                    selectedLength: selectedLength,
+                    category: testData.category || category,
+                    currentQuestionIndex: 0,
+                    shuffleOrder: newQOrder,
+                    answerOrder: newAnswerOrder,
+                    finished: false,
+                    examMode: location.state?.examMode || false
+                  })
+                });
+                setShowTestLengthSelector(false);
+                fetchTestAndAttempt();
+              } catch (err) {
+                console.error("Failed to start new attempt", err);
+              }
+            }
+          }}
+        >
+          Start Test
+        </button>
+      </div>
+    );
+  }
+
   if (error) {
     return <div style={{ color: "#fff" }}>Error: {error}</div>;
   }
@@ -930,7 +899,6 @@ const GlobalTestPage = ({
     return <div style={{ color: "#fff" }}>No questions found.</div>;
   }
 
-  // figure out user avatar
   let avatarUrl = "https://via.placeholder.com/60";
   if (currentAvatar && shopItems && shopItems.length > 0) {
     const avatarItem = shopItems.find((item) => item._id === currentAvatar);
@@ -939,14 +907,12 @@ const GlobalTestPage = ({
     }
   }
 
-  // progress bar color
-  const progressPercentage = totalQuestions
-    ? Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)
+  const progressPercentage = effectiveTotal
+    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
     : 0;
   const progressColorHue = (progressPercentage * 120) / 100;
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
-  // build "display" options for the current question from answerOrder
   let displayedOptions = [];
   if (questionObject && answerOrder[realIndex]) {
     displayedOptions = answerOrder[realIndex].map(
@@ -957,24 +923,19 @@ const GlobalTestPage = ({
   return (
     <div className="aplus-test-container">
       <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
-
       {renderRestartPopup()}
       {renderFinishPopup()}
       {renderNextPopup()}
       {renderScoreOverlay()}
       {renderReviewMode()}
-
       <div className="top-control-bar">
         <button className="flag-btn" onClick={handleFlagQuestion}>
           {questionObject && flaggedQuestions.includes(questionObject.id)
             ? "Unflag"
             : "Flag"}
         </button>
-        {/* 
-          Updated: we pass examMode to the dropdown, so it hides correctness 
-        */}
         <QuestionDropdown
-          totalQuestions={totalQuestions}
+          totalQuestions={effectiveTotal}
           currentQuestionIndex={currentQuestionIndex}
           onQuestionSelect={(index) => {
             setCurrentQuestionIndex(index);
@@ -1000,16 +961,11 @@ const GlobalTestPage = ({
         >
           Restart Test
         </button>
-        <button
-          className="back-btn"
-          onClick={() => navigate(backToListPath)}
-        >
+        <button className="back-btn" onClick={() => navigate(backToListPath)}>
           Back to Test List
         </button>
       </div>
-
       <h1 className="aplus-title">{testData.testName}</h1>
-
       <div className="top-bar">
         <div className="avatar-section">
           <div
@@ -1021,17 +977,14 @@ const GlobalTestPage = ({
         <div className="xp-level-display">XP: {xp}</div>
         <div className="coins-display">Coins: {coins}</div>
       </div>
-
       <div className="progress-container">
         <div
           className="progress-fill"
           style={{ width: `${progressPercentage}%`, background: progressColor }}
         >
-          {currentQuestionIndex + 1} / {totalQuestions} ({progressPercentage}%)
+          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
         </div>
       </div>
-
-      {/* The main question UI if not finished or reviewing */}
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">
@@ -1041,11 +994,9 @@ const GlobalTestPage = ({
             {displayedOptions.map((option, displayIdx) => {
               let optionClass = "option-button";
               if (!examMode) {
-                // Normal practice mode => highlight correct/wrong if answered
                 if (isAnswered && questionObject) {
                   const correctIndex = questionObject.correctAnswerIndex;
                   const actualIndex = answerOrder[realIndex][displayIdx];
-
                   if (actualIndex === correctIndex) {
                     optionClass += " correct-option";
                   } else if (
@@ -1056,19 +1007,16 @@ const GlobalTestPage = ({
                   }
                 }
               } else {
-                // examMode => do NOT show correctness
                 if (isAnswered && displayIdx === selectedOptionIndex) {
-                  optionClass += " chosen-option"; // neutral highlight
+                  optionClass += " chosen-option";
                 }
               }
-
               return (
                 <li className="option-item" key={displayIdx}>
                   <button
                     className={optionClass}
                     onClick={() => handleOptionClick(displayIdx)}
-                    disabled={examMode ? false : isAnswered} 
-                    // ^ If you want to allow re-click changes in exam mode, set false
+                    disabled={examMode ? false : isAnswered}
                   >
                     {option}
                   </button>
@@ -1076,8 +1024,6 @@ const GlobalTestPage = ({
               );
             })}
           </ul>
-
-          {/* Show explanation only if examMode=false and user answered */}
           {isAnswered && questionObject && !examMode && (
             <div className="explanation">
               <strong>
@@ -1090,7 +1036,6 @@ const GlobalTestPage = ({
               <p>{questionObject.explanation}</p>
             </div>
           )}
-
           <div className="bottom-control-bar">
             <div className="bottom-control-row">
               <button
@@ -1100,7 +1045,7 @@ const GlobalTestPage = ({
               >
                 Previous Question
               </button>
-              {currentQuestionIndex === totalQuestions - 1 ? (
+              {currentQuestionIndex === effectiveTotal - 1 ? (
                 <button
                   className="next-question-btn"
                   onClick={handleNextQuestionButtonClick}
