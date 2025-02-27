@@ -1732,10 +1732,10 @@ body {
 
 
 .option-button.chosen-option {
-  background-color: #cce5ff; /* light-blue highlight */
-  border: 2px solid #3399ff; /* a bright border so it’s obvious */
+  background-color: #2979ff; /* light-blue highlight */
+  border: 2px solid #000; /* a bright border so it’s obvious */
   transform: scale(1.03);
-  transition: all 0.15s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 /* 1) Center the container with extra vertical spacing */
