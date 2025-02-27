@@ -22,6 +22,10 @@ const APlusTestList = () => {
   // Show/hide tooltip for the info icon
   const [showExamInfo, setShowExamInfo] = useState(false);
 
+  // NEW: Per-test selected test length state (allowed lengths: 25,50,75,100)
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLengths, setSelectedLengths] = useState({});
+
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
@@ -108,7 +112,7 @@ const APlusTestList = () => {
     }
   };
 
-  // Simple difficulty labels/colors (added back from old file)
+  // Simple difficulty labels/colors
   const difficultyColors = [
     { label: "Normal", color: "hsl(0, 0%, 100%)" },
     { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
@@ -124,11 +128,13 @@ const APlusTestList = () => {
 
   // Start/resume test
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
+    // Determine selected length for this test; default to totalQuestionsPerTest if not set.
+    let testLength = selectedLengths[testNumber] || totalQuestionsPerTest;
     if (existingAttempt && !doRestart) {
-      // Resume test
+      // Resume test (do not change length)
       navigate(`/practice-tests/a-plus/${testNumber}`);
     } else {
-      // New or forced restart: upsert doc with examMode
+      // New or forced restart: upsert doc with examMode and selectedLength
       fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,7 +147,8 @@ const APlusTestList = () => {
           shuffleOrder: [],
           answerOrder: [],
           finished: false,
-          examMode
+          examMode,
+          selectedLength: testLength
         })
       })
         .then(() => {
@@ -155,14 +162,11 @@ const APlusTestList = () => {
     }
   };
 
-  // Description text for exam mode
   const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
 
   return (
     <div className="tests-list-container">
       <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
-
-      {/* Centered container for toggle, label, and info icon */}
       <div className="centered-toggle-container">
         <div className="toggle-with-text">
           <label className="toggle-switch">
@@ -189,14 +193,12 @@ const APlusTestList = () => {
           </div>
         </div>
       </div>
-
       <div className="tests-list-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
           const attemptDoc = getAttemptDoc(testNumber);
           const progressDisplay = getProgressDisplay(attemptDoc);
           const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
-
           return (
             <div key={testNumber} className="test-card">
               <div className="test-badge">Test {testNumber}</div>
@@ -207,7 +209,32 @@ const APlusTestList = () => {
                 {difficulty.label}
               </div>
               <p className="test-progress">{progressDisplay}</p>
-
+              {(!attemptDoc || (attemptDoc && attemptDoc.finished)) && (
+                <div className="test-length-selector-card">
+                  <span>Select Test Length:</span>
+                  {allowedTestLengths.map((length) => (
+                    <label key={length}>
+                      <input
+                        type="radio"
+                        name={`testLength-${testNumber}`}
+                        value={length}
+                        checked={
+                          selectedLengths[testNumber] === length ||
+                          (!selectedLengths[testNumber] &&
+                            length === totalQuestionsPerTest)
+                        }
+                        onChange={(e) =>
+                          setSelectedLengths((prev) => ({
+                            ...prev,
+                            [testNumber]: Number(e.target.value)
+                          }))
+                        }
+                      />
+                      {length}
+                    </label>
+                  ))}
+                </div>
+              )}
               {!attemptDoc && (
                 <button
                   className="start-button"
@@ -216,7 +243,6 @@ const APlusTestList = () => {
                   Start
                 </button>
               )}
-
               {attemptDoc && !attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
@@ -233,7 +259,6 @@ const APlusTestList = () => {
                   </button>
                 </div>
               )}
-
               {attemptDoc && attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
