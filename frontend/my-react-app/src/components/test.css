@@ -1771,11 +1771,13 @@ body {
 .toggle-switch .slider {
   display: block;
   background-color: rgba(255, 255, 255, 0.5);
-  color: #fff;
+  color: #000;
   border-radius: 36px;
+  border-color: 0.5px solid #000;
   cursor: pointer;
   text-align: center;
   font-size: 0.85rem;
+  font-weight: bold;
   line-height: 36px; /* vertical centering */
   user-select: none;
   transition: background-color 0.4s;
