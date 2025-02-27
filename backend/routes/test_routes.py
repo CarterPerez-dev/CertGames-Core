@@ -293,18 +293,19 @@ def get_test_attempt(user_id, test_id):
 def update_test_attempt(user_id, test_id):
     """
     Upserts (creates or updates) a user's test attempt document.
-    Now supports setting 'examMode' in the attempt doc.
+    Now supports setting 'examMode' and 'selectedLength' in the attempt doc.
     Expects JSON with:
       {
         "category": <string>,
         "answers": [],
         "score": 0,
-        "totalQuestions": <int>,
+        "totalQuestions": <int>,  # (can be provided if desired)
+        "selectedLength": <int>,  <-- NEW: chosen number of questions for this attempt (25,50,75,100)
         "currentQuestionIndex": <int>,
         "shuffleOrder": [],
         "answerOrder": [],
         "finished": <bool>,
-        "examMode": <bool>   <-- new
+        "examMode": <bool>
       }
     """
     data = request.json or {}
@@ -317,14 +318,14 @@ def update_test_attempt(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
-    exam_mode_val = data.get("examMode", False)  # new usage
+    exam_mode_val = data.get("examMode", False)
+    # NEW: read the selected test length from the client; if not provided, default to the value given in totalQuestions
+    selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
 
     filter_ = {
         "userId": user_oid,
         "$or": [{"testId": test_id_int}, {"testId": test_id}]
     }
-    # If they've already finished the attempt, we can either ignore or upsert a new doc,
-    # but for simplicity, we'll continue to just upsert the same doc with new data.
     update_doc = {
         "$set": {
             "userId": user_oid,
@@ -332,7 +333,9 @@ def update_test_attempt(user_id, test_id):
             "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
+            # Store both totalQuestions and the chosen length for clarity.
             "totalQuestions": data.get("totalQuestions", 0),
+            "selectedLength": selected_length,
             "currentQuestionIndex": data.get("currentQuestionIndex", 0),
             "shuffleOrder": data.get("shuffleOrder", []),
             "answerOrder": data.get("answerOrder", []),
@@ -341,11 +344,12 @@ def update_test_attempt(user_id, test_id):
         }
     }
     if update_doc["$set"]["finished"] is True:
-        # if the caller sets finished=true here, also store a finish timestamp
         update_doc["$set"]["finishedAt"] = datetime.utcnow()
 
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
-    return jsonify({"message": "Progress updated (examMode set to %s)" % exam_mode_val}), 200
+    return jsonify({
+        "message": "Progress updated (examMode set to %s, selectedLength set to %s)" % (exam_mode_val, selected_length)
+    }), 200
 
 
 
