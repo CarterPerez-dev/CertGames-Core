@@ -2,7 +2,7 @@
 .
 ├── IOS.MD
 ├── MD's
-│   ├── ACHIEVEMENT-FIXING-PLAN.md
+│   ├── ACHIEVEMENTING-PLAN.md
 │   ├── Admin.md
 │   ├── IMPORTANT_NOTES.md
 │   ├── IOS.APP.MD
@@ -222,27 +222,27 @@
 │   └── redis.conf
 └── tests
     ├── A+ Core 1
-    │   ├── 1-DONE.js
-    │   ├── 2-DONE.js
-    │   ├── 3-DONE.js
-    │   ├── 4-DONE.js
-    │   ├── 5-DONE.js
-    │   ├── 6-DONE.js
-    │   ├── 7-DONE.js
-    │   ├── 8-DONE.js
-    │   ├── 9-DONE.js
-    │   └── X0-DONE.js
+    │   ├── 1.js
+    │   ├── 2.js
+    │   ├── 3.js
+    │   ├── 4.js
+    │   ├── 5.js
+    │   ├── 6.js
+    │   ├── 7.js
+    │   ├── 8.js
+    │   ├── 9.js
+    │   └── X0.js
     ├── A+ Core 2
-    │   ├── 1-DONE.js
-    │   ├── 2-DONE.js
-    │   ├── 3-DONE.js
-    │   ├── 4-DONE.js
-    │   ├── 5-DONE.js
-    │   ├── 6-DONE.js
-    │   ├── 7-DONE.js
-    │   ├── 8-DONE.js
-    │   ├── 9-DONE.js
-    │   └── X0-DONE.js
+    │   ├── 1.js
+    │   ├── 2.js
+    │   ├── 3.js
+    │   ├── 4.js
+    │   ├── 5.js
+    │   ├── 6.js
+    │   ├── 7.js
+    │   ├── 8.js
+    │   ├── 9.js
+    │   └── X0.js
     ├── AWS-CLOUD
     │   └── mongo_test_1.js
     ├── Aiformula.txt
@@ -271,21 +271,21 @@
     │   ├── 7.js
     │   ├── 8.js
     │   ├── 9.js
-    │   └── X0-fix.js
+    │   └── X0.js
     ├── Data+
     │   └── mongo_test_1.js
     ├── DuplicateFix.txt
     ├── Linux+
-    │   ├── 1-VERIFY.js
-    │   ├── 2-VERIFY.js
-    │   ├── 3-VERIFY.js
-    │   ├── 4-VERIFY.js
-    │   ├── 5-FIX.js
-    │   ├── 6-VERIFY.js
-    │   ├── 7-FIX.js
-    │   ├── 8-VERIFY.js
-    │   ├── 9-VERIFY.js
-    │   └── X0-FIX.js
+    │   ├── 1.js
+    │   ├── 2.js
+    │   ├── 3.js
+    │   ├── 4.js
+    │   ├── 5.js
+    │   ├── 6.js
+    │   ├── 7.js
+    │   ├── 8.js
+    │   ├── 9.js
+    │   └── X0.js
     ├── Network+
     │   ├── 1.js
     │   ├── 2.js
