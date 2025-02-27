@@ -716,5 +716,43 @@ def apply_daily_bonus(user_id):
     else:
         return {"success": False, "message": "Already claimed daily bonus."}
 
-    
+def award_correct_answers_in_bulk(user_id, attempt_doc, xp_per_correct=10, coins_per_correct=5):
+    """
+    For examMode attempts, no XP was awarded during question-by-question.
+    So at 'finish', we do the awarding for each newly-correct question that
+    the user has never gotten correct before (per correctAnswers_collection).
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return
+
+    test_id = attempt_doc.get("testId")
+    answers = attempt_doc.get("answers", [])
+
+    # Tally how many new first-time correct answers the user got in this attempt
+    newly_correct_count = 0
+    for ans in answers:
+        if ans.get("userAnswerIndex") == ans.get("correctAnswerIndex"):
+            # it's correct
+            qid = ans.get("questionId")
+            already_correct = correctAnswers_collection.find_one({
+                "userId": user["_id"],
+                "testId": str(test_id),
+                "questionId": qid
+            })
+            if not already_correct:
+                # Insert it and increment counters
+                correctAnswers_collection.insert_one({
+                    "userId": user["_id"],
+                    "testId": str(test_id),
+                    "questionId": qid
+                })
+                newly_correct_count += 1
+
+    if newly_correct_count > 0:
+        # apply xp, coins
+        total_xp = xp_per_correct * newly_correct_count
+        total_coins = coins_per_correct * newly_correct_count
+        update_user_xp(user_id, total_xp)
+        update_user_coins(user_id, total_coins)    
 
