@@ -22,9 +22,13 @@ const APlusTestList = () => {
   // Show/hide tooltip for the info icon
   const [showExamInfo, setShowExamInfo] = useState(false);
 
-  // NEW: State to control the restart popup on the test list page.
+  // State to control the restart popup on the test list page.
   // If non-null, it holds the test number for which the popup is active.
   const [restartPopupTest, setRestartPopupTest] = useState(null);
+
+  // NEW: State to hold the chosen test length for each test card (keyed by test number)
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLengths, setSelectedLengths] = useState({});
 
   useEffect(() => {
     if (!userId) return;
@@ -132,7 +136,8 @@ const APlusTestList = () => {
       // Resume test
       navigate(`/practice-tests/a-plus/${testNumber}`);
     } else {
-      // New or forced restart: upsert doc with examMode
+      // For new or forced restart, use the chosen test length (default to totalQuestionsPerTest if not set)
+      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
       fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,6 +146,7 @@ const APlusTestList = () => {
           answers: [],
           score: 0,
           totalQuestions: totalQuestionsPerTest,
+          selectedLength: lengthToUse,
           currentQuestionIndex: 0,
           shuffleOrder: [],
           answerOrder: [],
@@ -212,6 +218,32 @@ const APlusTestList = () => {
               </div>
               <p className="test-progress">{progressDisplay}</p>
 
+              {/* If no attempt exists, show the test length selector */}
+              {!attemptDoc && (
+                <div className="test-length-selector-card">
+                  <p>Select Test Length:</p>
+                  {allowedTestLengths.map((length) => (
+                    <label key={length}>
+                      <input
+                        type="radio"
+                        name={`testLength-${testNumber}`}
+                        value={length}
+                        checked={
+                          (selectedLengths[testNumber] || totalQuestionsPerTest) === length
+                        }
+                        onChange={(e) =>
+                          setSelectedLengths((prev) => ({
+                            ...prev,
+                            [testNumber]: Number(e.target.value)
+                          }))
+                        }
+                      />
+                      {length}
+                    </label>
+                  ))}
+                </div>
+              )}
+
               {!attemptDoc && (
                 <button
                   className="start-button"
@@ -274,7 +306,6 @@ const APlusTestList = () => {
             <div className="popup-buttons">
               <button
                 onClick={() => {
-                  // Get the attemptDoc for the test we are restarting
                   const attemptDoc = getAttemptDoc(restartPopupTest);
                   startTest(restartPopupTest, true, attemptDoc);
                   setRestartPopupTest(null);
