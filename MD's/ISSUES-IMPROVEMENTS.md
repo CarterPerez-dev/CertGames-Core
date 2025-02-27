@@ -18,8 +18,7 @@ import './components/pages/XploitcraftPage/global.css';
 
 ### ADD RATE LIMITER TO AI COMPONENTS- use claude 3.7
 -----
-### Need to make an 'EXAM && PRACTICE MODE'
-- so right now we have the explantions appear rigth affter the user answers. however- is there a way-easy way and efficent way so without slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne- to have an option on the test box liek atoggle on or off for "exam mode" to have it not tell you you if you got it wrong or right and also doesnt show you teh expalntion, then when fisnihed it you just review all of it in teh review mode (will be same review mode coponet we use for the other mode and also view rrevie wbutton) (and will have an small I symbol taht explains what exam mode means (it means what i just said). so would it be easy- well not easy but liek not a complete revamp of my code? and it woudlnt slow down any reaquests/slow user expericne overall?. also how can we do this while maintaining all our other features/components.
+
 -------------------------------------------------
 ### Need to make an option to do 25,50,75,100 question tests. SO i gues if they choose 25 its the first 25, if they choose 50 its the first 25 and then next 25, if its 75 its the first 75, if its 100 its all 100. how would we implement this? How/Where should the feature be to choose the lenth? How can we efficently and effectly do this? Hwo can we ensure it doesnt slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne. also how can we do this while maintaining all our other features/components.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
