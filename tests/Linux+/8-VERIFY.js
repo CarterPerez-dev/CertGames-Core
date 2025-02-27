@@ -1,8 +1,8 @@
 db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
+  "category": "linuxplus",
   "testId": 8,
-  "testName": "Practice Test #8 (Formidable)",
-  "xpPerCorrect": 40,
+  "testName": "Linux+ Practice Test #8 (Formidable)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
@@ -627,5 +627,109 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "The correct sequence involves formatting the LUKS partition, opening it, creating a filesystem, and configuring persistent mounting. Other sequences lack proper steps for encryption setup.",
       "examTip": "Use `lsblk` to verify that the encrypted volume is available before mounting."
-    }
+    },
+    {
+      "id": 49,
+      "question": "A Linux administrator needs to configure a system to log all executed commands, including their arguments. Which file should they modify?",
+      "options": [
+        "/etc/audit/rules.d/audit.rules",
+        "/etc/security/access.conf",
+        "/etc/systemd/journald.conf",
+        "/etc/sudoers"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Adding a rule in `/etc/audit/rules.d/audit.rules` ensures that all executed commands are logged by auditd. `access.conf` controls login restrictions, `journald.conf` configures system logs but does not track executed commands, and `sudoers` controls privilege escalation but does not log all commands.",
+      "examTip": "Use `auditctl -a always,exit -F arch=b64 -S execve -k command_exec` to log all executed commands."
+    },
+    {
+      "id": 50,
+      "question": "Which command should an administrator use to analyze the CPU cache misses and instruction execution statistics for a running process?",
+      "options": [
+        "perf stat -p <PID>",
+        "mpstat -P ALL 1 5",
+        "sar -u 1 5",
+        "vmstat 1 5"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`perf stat -p <PID>` collects CPU performance counters, including cache misses and execution statistics. `mpstat` monitors CPU usage per core, `sar` gathers general system activity, and `vmstat` provides system-wide performance but not detailed CPU metrics.",
+      "examTip": "Use `perf record -p <PID>` to collect detailed profiling data for a process."
+    },
+    {
+      "id": 51,
+      "question": "**(PBQ)** A Linux administrator needs to migrate a PostgreSQL database from one server to another with minimal downtime. What is the correct sequence of actions?",
+      "options": [
+        "1) pg_dump -Fc -h source_host -U postgres dbname > backup.dump 2) scp backup.dump target_host:/tmp/ 3) pg_restore -d dbname -U postgres /tmp/backup.dump",
+        "1) systemctl stop postgresql 2) rsync -av /var/lib/pgsql target_host:/var/lib/pgsql 3) start PostgreSQL on the new server",
+        "1) mysqldump -u root -p --all-databases > backup.sql 2) scp backup.sql target_host:/tmp/ 3) mysql -u root -p < /tmp/backup.sql",
+        "1) pg_ctl stop -D /var/lib/pgsql 2) tar -czf pg_backup.tar.gz /var/lib/pgsql 3) restore it on the new server"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is using `pg_dump` with the custom format (`-Fc`), transferring the file, and restoring it with `pg_restore`. Other methods involve stopping the database, which increases downtime, or using MySQL-specific tools.",
+      "examTip": "Use `pg_dump -Fc -j 4` to speed up the backup process using multiple threads."
+    },
+    {
+      "id": 52,
+      "question": "A system administrator needs to inspect the LUKS encryption header of a disk to verify its encryption status. Which command should they use?",
+      "options": [
+        "cryptsetup luksDump /dev/sdb1",
+        "blkid /dev/sdb1",
+        "lsblk -o NAME,FSTYPE /dev/sdb1",
+        "fdisk -l /dev/sdb1"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`cryptsetup luksDump /dev/sdb1` displays the LUKS encryption header and its details. `blkid` shows basic filesystem metadata, `lsblk` lists block devices, and `fdisk` provides partitioning information but does not check encryption status.",
+      "examTip": "Use `cryptsetup isLuks /dev/sdb1` to check if a partition is LUKS-encrypted."
+    },
+    {
+      "id": 53,
+      "question": "A Linux administrator needs to perform live kernel patching on a production server without rebooting. Which tool should they use?",
+      "options": [
+        "kpatch",
+        "kexec",
+        "grub2-mkconfig",
+        "sysctl -w kernel.livepatch=1"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kpatch` is a tool for live kernel patching, allowing security updates without reboots. `kexec` loads a new kernel without a full reboot, `grub2-mkconfig` regenerates boot configurations, and `sysctl` does not enable live patching.",
+      "examTip": "Use `kpatch list` to check currently applied live patches."
+    },
+    {
+      "id": 54,
+      "question": "A Linux administrator needs to analyze a core dump file generated from a crashed process. Which command should they use?",
+      "options": [
+        "gdb /usr/bin/app /var/core/app.core",
+        "strace -p <PID>",
+        "journalctl --since '1 hour ago'",
+        "valgrind /usr/bin/app"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`gdb /usr/bin/app /var/core/app.core` loads the core dump into GDB for debugging. `strace` traces system calls but does not analyze core dumps, `journalctl` retrieves logs but does not inspect memory dumps, and `valgrind` detects memory leaks but does not analyze crashes post-mortem.",
+      "examTip": "Enable core dumps with `ulimit -c unlimited` before running applications that may crash."
+    },
+    {
+      "id": 55,
+      "question": "A Linux administrator needs to enable detailed logging of failed SSH login attempts. Which configuration file should they modify?",
+      "options": [
+        "/etc/ssh/sshd_config",
+        "/etc/security/faillog.conf",
+        "/etc/pam.d/sshd",
+        "/etc/login.defs"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Modifying `/etc/ssh/sshd_config` by setting `LogLevel VERBOSE` ensures failed SSH login attempts are logged. `faillog.conf` is not a standard file, `/etc/pam.d/sshd` controls authentication but not logging, and `/etc/login.defs` manages login policies but not SSH logging.",
+      "examTip": "Use `grep 'Failed password' /var/log/auth.log` to analyze past failed login attempts."
+    },
+    {
+      "id": 56,
+      "question": "A Linux administrator needs to configure a service to restart automatically if it crashes, but allow manual stops to persist. Which systemd directive should they use?",
+      "options": [
+        "Restart=on-failure",
+        "Restart=always",
+        "RestartSec=10",
+        "ExecStartPre=/bin/sleep 10"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`Restart=on-failure` ensures the service restarts only when it crashes, while allowing manual stops to persist. `Restart=always` restarts the service under all conditions, `RestartSec=10` sets a delay but does not control restart behavior, and `ExecStartPre` delays startup but does not affect restart policy.",
+      "examTip": "Use `systemctl show <service> | grep Restart` to check the current restart policy."
+
 
