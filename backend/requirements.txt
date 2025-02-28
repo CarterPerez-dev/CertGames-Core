@@ -36,5 +36,5 @@ tzdata
 Flask-Migrate
 psutil
 pymongo[srv]
-Flask_Pymongo
+Flask-Pymongo
 pytz
