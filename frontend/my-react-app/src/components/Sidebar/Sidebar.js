@@ -65,6 +65,16 @@ const Sidebar = () => {
             <NavLink to="/profile" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Profile
             </NavLink>
+            <ul className="sublist">
+              <li>
+                <NavLink
+                  to="/my-support"
+                  className={({ isActive }) => isActive ? 'active-subtab' : ''}
+                >
+                  Questions
+                </NavLink>
+              </li>
+            </ul>
           </li>
           <li>
             <NavLink to="/achievements" className={({ isActive }) => isActive ? 'active-link' : ''}>
