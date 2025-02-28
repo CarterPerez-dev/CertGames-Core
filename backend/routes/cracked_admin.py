@@ -80,31 +80,32 @@ def cracked_admin_logout():
 def admin_dashboard():
     """
     Summaries of user count, test attempts, daily bonus claims, etc.
-    Aggregates and caches them in statsCache for 60s.
+    Also fetches performance metrics and returns one combined JSON.
     """
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated as admin"}), 401
 
-    # Check cache
+    # Check the cache
     now = datetime.utcnow()
     cached_doc = db.statsCache.find_one({"_id": "admin_dashboard"})
     if cached_doc:
         last_updated = cached_doc.get("updatedAt", now)
         if (now - last_updated) < timedelta(seconds=60):
+            # Return the cached data if it's still fresh
             return jsonify(cached_doc["data"]), 200
     
-    # Recompute
     try:
+        # 1) Recompute the basic stats
         user_count = db.mainusers.count_documents({})
         test_attempts_count = db.testAttempts.count_documents({})
-        
-        # Example: daily bonus claims since midnight
+
+        # daily bonus claims since midnight
         start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
         daily_bonus_claims = db.mainusers.count_documents({
             "lastDailyClaim": {"$gte": start_of_day}
         })
-        
-        # Example: average test score if testAttempts store 'score' and 'totalQuestions'
+
+        # average test score
         pipeline = [
             {"$match": {"finished": True}},
             {"$group": {
@@ -121,55 +122,44 @@ def admin_dashboard():
         ]
         result = list(db.testAttempts.aggregate(pipeline))
         avg_score = result[0]["avgScorePercent"] if result else 0.0
-        
-        data = {
-            "user_count": user_count,
-            "test_attempts_count": test_attempts_count,
-            "daily_bonus_claims": daily_bonus_claims,
-            "average_test_score_percent": round(avg_score, 2),
-            "timestamp": now.isoformat()
-        }
-        
-        # upsert into statsCache
-        db.statsCache.replace_one(
-            {"_id": "admin_dashboard"},
-            {"data": data, "updatedAt": now},
-            upsert=True
-        )
-        return jsonify(data), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
-
-  perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
+        # 2) Fetch performance metrics
+        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
         if not perf_metrics:
-            # Fallback to dummy values if no data is available
+            # fallback/dummy data
             perf_metrics = {
-                "avg_request_time": 0.123,  # seconds
-                "avg_db_query_time": 0.045,   # seconds
+                "avg_request_time": 0.123,
+                "avg_db_query_time": 0.045,
                 "data_transfer_rate": "1.2MB/s",
-                "throughput": 50,             # requests per minute
-                "error_rate": 0.02,           # errors per request
+                "throughput": 50,
+                "error_rate": 0.02,
                 "timestamp": datetime.utcnow()
             }
         else:
-            # Convert ObjectId to string
-            perf_metrics['_id'] = str(perf_metrics['_id'])
-        
+            perf_metrics["_id"] = str(perf_metrics["_id"])
+
+        # 3) Combine everything into a single dictionary
         dashboard_data = {
             "user_count": user_count,
             "test_attempts_count": test_attempts_count,
             "daily_bonus_claims": daily_bonus_claims,
+            "average_test_score_percent": round(avg_score, 2),
+            "timestamp": now.isoformat(),
             "performance_metrics": perf_metrics
         }
+
+        # 4) Upsert into statsCache
+        db.statsCache.replace_one(
+            {"_id": "admin_dashboard"},
+            {"data": dashboard_data, "updatedAt": now},
+            upsert=True
+        )
+
+        # Return combined response
         return jsonify(dashboard_data), 200
 
     except Exception as e:
         return jsonify({"error": "Failed to retrieve dashboard metrics", "details": str(e)}), 500
-
-
-
-
 
 # -------------------------------------------------------
 # 1) USER MANAGEMENT
