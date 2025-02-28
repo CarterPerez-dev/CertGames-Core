@@ -39,7 +39,7 @@ function CrackedAdminDashboard() {
     setOverviewLoading(true);
     setOverviewError(null);
     try {
-      const res = await fetch("/cracked/dashboard", {
+      const res = await fetch("/api/cracked/dashboard", {
         method: "GET",
         credentials: "include",
       });
@@ -72,7 +72,7 @@ function CrackedAdminDashboard() {
     setPerfLoading(true);
     setPerfError(null);
     try {
-      const res = await fetch("/cracked/performance", {
+      const res = await fetch("/api/cracked/performance", {
         credentials: "include",
       });
       const data = await res.json();
@@ -111,7 +111,7 @@ function CrackedAdminDashboard() {
         page: userPage.toString(),
         limit: userLimit.toString(),
       });
-      const res = await fetch(`/cracked/users?${params.toString()}`, {
+      const res = await fetch(`/api/cracked/users?${params.toString()}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -152,7 +152,7 @@ function CrackedAdminDashboard() {
   const handleUserUpdateSubmit = async () => {
     if (!editUserId) return;
     try {
-      const res = await fetch(`/cracked/users/${editUserId}`, {
+      const res = await fetch(`/api/cracked/users/${editUserId}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -208,7 +208,7 @@ function CrackedAdminDashboard() {
       if (testCategory) {
         params.set("category", testCategory);
       }
-      const res = await fetch(`/cracked/tests?${params.toString()}`, {
+      const res = await fetch(`/api/cracked/tests?${params.toString()}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -239,7 +239,7 @@ function CrackedAdminDashboard() {
   const handleCreateTest = async () => {
     // naive example with minimal validations
     try {
-      const res = await fetch("/cracked/tests", {
+      const res = await fetch("/api/cracked/tests", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -267,7 +267,7 @@ function CrackedAdminDashboard() {
   const handleDeleteTest = async (testObj) => {
     if (!window.confirm(`Delete test: ${testObj.testName}?`)) return;
     try {
-      const res = await fetch(`/cracked/tests/${testObj._id}`, {
+      const res = await fetch(`/api/cracked/tests/${testObj._id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -294,7 +294,7 @@ function CrackedAdminDashboard() {
     setDailyLoading(true);
     setDailyError(null);
     try {
-      const res = await fetch("/cracked/daily", {
+      const res = await fetch("/api/cracked/daily", {
         credentials: "include",
       });
       const data = await res.json();
@@ -330,7 +330,7 @@ function CrackedAdminDashboard() {
         correctIndex: Number(newDaily.correctIndex) || 0,
         explanation: newDaily.explanation,
       };
-      const res = await fetch("/cracked/daily", {
+      const res = await fetch("/api/cracked/daily", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -352,7 +352,7 @@ function CrackedAdminDashboard() {
   const handleDeleteDaily = async (pbq) => {
     if (!window.confirm(`Delete daily PBQ: ${pbq.prompt}?`)) return;
     try {
-      const res = await fetch(`/cracked/daily/${pbq._id}`, {
+      const res = await fetch(`/api/cracked/daily/${pbq._id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -387,7 +387,7 @@ function CrackedAdminDashboard() {
       if (threadStatusFilter) {
         params.set("status", threadStatusFilter);
       }
-      const res = await fetch(`/cracked/supportThreads?${params.toString()}`, {
+      const res = await fetch(`/api/cracked/supportThreads?${params.toString()}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -411,7 +411,7 @@ function CrackedAdminDashboard() {
 
   const handleViewThread = async (threadId) => {
     try {
-      const res = await fetch(`/cracked/supportThreads/${threadId}`, {
+      const res = await fetch(`/api/cracked/supportThreads/${threadId}`, {
         credentials: "include",
       });
       const data = await res.json();
@@ -430,7 +430,7 @@ function CrackedAdminDashboard() {
     if (!currentThread || !currentThread._id) return;
     try {
       const res = await fetch(
-        `/cracked/supportThreads/${currentThread._id}/reply`,
+        `/api/cracked/supportThreads/${currentThread._id}/reply`,
         {
           method: "POST",
           credentials: "include",
@@ -455,7 +455,7 @@ function CrackedAdminDashboard() {
     const resolution = window.prompt("Enter a resolution note:", "Issue resolved.");
     if (resolution === null) return; // user canceled
     try {
-      const res = await fetch(`/cracked/supportThreads/${threadId}/close`, {
+      const res = await fetch(`/api/cracked/supportThreads/${threadId}/close`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
