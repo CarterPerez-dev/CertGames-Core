@@ -3,9 +3,8 @@
 
 
 
-### create backend tree, frontned tree, test tree, root tree
 
-### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc
+### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc AFTER ADMIN
 
 ### fix thsi route and see what happens
 ```js
