@@ -4,6 +4,9 @@ from collections import defaultdict
 import math
 import re
 import unicodedata
+import time
+from flask import g
+from functools import wraps
 
 # Import the new collections from database
 from mongodb.database import (
@@ -564,4 +567,29 @@ def award_correct_answers_in_bulk(user_id, attempt_doc, xp_per_correct=10, coins
         total_coins = coins_per_correct * newly_correct_count
         update_user_xp(user_id, total_xp)
         update_user_coins(user_id, total_coins)    
+
+
+
+
+# helpers/db_timing.py
+
+
+def measure_db_operation(func):
+    """
+    Decorator to measure time of a single DB operation.
+    Usage: decorate your typical DB calls or your function that does the operation.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        duration = time.time() - start
+
+        # If we have a 'db_time_accumulator' in Flask g, accumulate:
+        if not hasattr(g, "db_time_accumulator"):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return result
+    return wrapper
 
