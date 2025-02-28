@@ -20,6 +20,7 @@ from routes.unsubscribe_routes import unsubscribe_bp
 from routes.grc_routes import grc_bp
 from routes.test_routes import api_bp
 from .routes.cracked_admin import cracked_bp
+from .routes.support_routes.py import support_bp
 
 
 # IMPORTANT: Now import from models.py (not models.user_subscription)
@@ -81,6 +82,8 @@ app.register_blueprint(subscribe_bp, url_prefix='/subscribe')
 app.register_blueprint(unsubscribe_bp, url_prefix='/unsubscribe')
 app.register_blueprint(api_bp, url_prefix='/test')
 app.register_blueprint(cracked_bp, url_prefix="/cracked")
+app.register_blueprint(support_bp, url_prefix="/support")
+
 
 
 @socketio.on('connect')
