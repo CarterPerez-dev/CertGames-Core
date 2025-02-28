@@ -31,7 +31,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 mongo_uri = os.getenv("MONGO_URI")
 
-CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
+CRACKED_ADMIN_PASSWORD = os.getenv('AUTHKEY', 'authkey')
 
 client = MongoClient(mongo_uri)
 db = client.get_database()
