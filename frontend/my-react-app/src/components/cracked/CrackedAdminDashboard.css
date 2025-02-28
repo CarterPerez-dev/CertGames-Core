@@ -1,10 +1,19 @@
-/* CrackedAdminDashboard.css */
-/* 
-   Sleek, modern, and responsive admin dashboard UI with multi-tab support.
-   Styled for cross-browser compatibility and optimized for small devices (iPhone, etc.).
-   Customize color variables and spacing as needed for branding.
+/* ==========================
+   CrackedAdminDashboard.css
+   ==========================
+   1) All global `body` and `*` selectors replaced with a scoped .cracked-admin-dashboard wrapper.
+   2) You must wrap your Dashboard HTML with a container like:
+      <div class="cracked-admin-dashboard">
+         <!-- Dashboard markup here -->
+      </div>
+   3) Retains the same styles, but now isolated to .cracked-admin-dashboard.
 */
 
+/* We keep :root for shared CSS variables.
+   If you need to avoid collision with other pages entirely,
+   rename :root to something else or define custom properties
+   within .cracked-admin-dashboard instead.
+*/
 :root {
   /* Colors */
   --color-primary: #385898;
@@ -29,13 +38,13 @@
   --box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* Global Reset and Base */
-* {
+/* Scoped Reset and Base */
+.cracked-admin-dashboard * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body {
+.cracked-admin-dashboard {
   font-family: var(--font-family);
   background-color: var(--color-background);
   color: var(--color-text-dark);
@@ -43,17 +52,17 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-button {
+.cracked-admin-dashboard button {
   cursor: pointer;
 }
 
 /* Container & Title */
-.cracked-admin-dashboard-container {
+.cracked-admin-dashboard .cracked-admin-dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-md) var(--spacing-sm);
 }
-.admin-dashboard-title {
+.cracked-admin-dashboard .admin-dashboard-title {
   text-align: center;
   margin-bottom: var(--spacing-md);
   font-size: 1.8rem;
@@ -61,14 +70,14 @@ button {
 }
 
 /* Tabs Navigation */
-.admin-tabs {
+.cracked-admin-dashboard .admin-tabs {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-lg);
 }
-.admin-tabs button {
+.cracked-admin-dashboard .admin-tabs button {
   background-color: var(--color-secondary);
   border: none;
   border-radius: 4px;
@@ -77,16 +86,16 @@ button {
   color: var(--color-text-dark);
   transition: background-color 0.2s ease;
 }
-.admin-tabs button:hover {
+.cracked-admin-dashboard .admin-tabs button:hover {
   background-color: #dce1ea;
 }
-.admin-tabs .active {
+.cracked-admin-dashboard .admin-tabs .active {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
 
 /* Tab Content Areas */
-.tab-content {
+.cracked-admin-dashboard .tab-content {
   background-color: var(--color-white);
   border-radius: 6px;
   box-shadow: var(--box-shadow);
@@ -98,21 +107,21 @@ button {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.error-msg {
+.cracked-admin-dashboard .error-msg {
   color: var(--color-error);
   margin-bottom: var(--spacing-sm);
 }
 
 /* Overview Tab */
-.overview-tab ul {
+.cracked-admin-dashboard .overview-tab ul {
   list-style: none;
   margin-top: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.overview-tab li {
+.cracked-admin-dashboard .overview-tab li {
   margin-bottom: var(--spacing-xs);
 }
-.overview-tab button {
+.cracked-admin-dashboard .overview-tab button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -120,27 +129,27 @@ button {
   padding: var(--spacing-sm) var(--spacing-md);
   transition: background-color 0.2s ease;
 }
-.overview-tab button:hover {
+.cracked-admin-dashboard .overview-tab button:hover {
   background-color: var(--color-primary-hover);
 }
 
 /* Users Tab */
-.users-tab {
+.cracked-admin-dashboard .users-tab {
   font-size: 0.95rem;
 }
-.users-search-row {
+.cracked-admin-dashboard .users-search-row {
   display: flex;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.users-search-row input {
+.cracked-admin-dashboard .users-search-row input {
   flex: 1;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: var(--spacing-sm);
   font-size: 0.9rem;
 }
-.users-search-row button {
+.cracked-admin-dashboard .users-search-row button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -149,54 +158,54 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.users-search-row button:hover {
+.cracked-admin-dashboard .users-search-row button:hover {
   background-color: var(--color-primary-hover);
 }
-.users-tab p {
+.cracked-admin-dashboard .users-tab p {
   margin: var(--spacing-sm) 0;
 }
-.users-tab button {
+.cracked-admin-dashboard .users-tab button {
   margin-right: var(--spacing-xs);
 }
-.users-table {
+.cracked-admin-dashboard .users-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: var(--spacing-md);
   font-size: 0.9rem;
 }
-.users-table th,
-.users-table td {
+.cracked-admin-dashboard .users-table th,
+.cracked-admin-dashboard .users-table td {
   border: 1px solid #ddd;
   padding: var(--spacing-sm);
 }
-.users-table th {
+.cracked-admin-dashboard .users-table th {
   background-color: var(--color-secondary);
   text-align: left;
 }
-.users-table tbody tr:nth-child(even) {
+.cracked-admin-dashboard .users-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
 /* Tests Tab */
-.tests-tab {
+.cracked-admin-dashboard .tests-tab {
   font-size: 0.95rem;
 }
-.test-filter-row {
+.cracked-admin-dashboard .test-filter-row {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.test-filter-row label {
+.cracked-admin-dashboard .test-filter-row label {
   font-weight: 600;
 }
-.test-filter-row input {
+.cracked-admin-dashboard .test-filter-row input {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: var(--spacing-sm);
   font-size: 0.9rem;
 }
-.test-filter-row button {
+.cracked-admin-dashboard .test-filter-row button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -205,22 +214,22 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.test-filter-row button:hover {
+.cracked-admin-dashboard .test-filter-row button:hover {
   background-color: var(--color-primary-hover);
 }
-.create-test-form {
+.cracked-admin-dashboard .create-test-form {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.create-test-form input {
+.cracked-admin-dashboard .create-test-form input {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: var(--spacing-sm);
   font-size: 0.9rem;
 }
-.create-test-form button {
+.cracked-admin-dashboard .create-test-form button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -229,51 +238,51 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.create-test-form button:hover {
+.cracked-admin-dashboard .create-test-form button:hover {
   background-color: var(--color-primary-hover);
 }
-.tests-table {
+.cracked-admin-dashboard .tests-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: var(--spacing-md);
   font-size: 0.9rem;
 }
-.tests-table th,
-.tests-table td {
+.cracked-admin-dashboard .tests-table th,
+.cracked-admin-dashboard .tests-table td {
   border: 1px solid #ddd;
   padding: var(--spacing-sm);
 }
-.tests-table th {
+.cracked-admin-dashboard .tests-table th {
   background-color: var(--color-secondary);
   text-align: left;
 }
-.tests-table tbody tr:nth-child(even) {
+.cracked-admin-dashboard .tests-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
 /* Daily Tab */
-.daily-tab {
+.cracked-admin-dashboard .daily-tab {
   font-size: 0.95rem;
 }
-.create-daily-form {
+.cracked-admin-dashboard .create-daily-form {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.create-daily-form input,
-.create-daily-form textarea {
+.cracked-admin-dashboard .create-daily-form input,
+.cracked-admin-dashboard .create-daily-form textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: var(--spacing-sm);
   font-size: 0.9rem;
 }
-.create-daily-form textarea {
+.cracked-admin-dashboard .create-daily-form textarea {
   min-width: 200px;
   max-width: 100%;
   min-height: 60px;
 }
-.create-daily-form button {
+.cracked-admin-dashboard .create-daily-form button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -282,45 +291,45 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.create-daily-form button:hover {
+.cracked-admin-dashboard .create-daily-form button:hover {
   background-color: var(--color-primary-hover);
 }
-.daily-table {
+.cracked-admin-dashboard .daily-table {
   width: 100%;
   border-collapse: collapse;
   margin-top: var(--spacing-md);
   font-size: 0.9rem;
 }
-.daily-table th,
-.daily-table td {
+.cracked-admin-dashboard .daily-table th,
+.cracked-admin-dashboard .daily-table td {
   border: 1px solid #ddd;
   padding: var(--spacing-sm);
 }
-.daily-table th {
+.cracked-admin-dashboard .daily-table th {
   background-color: var(--color-secondary);
   text-align: left;
 }
-.daily-table tbody tr:nth-child(even) {
+.cracked-admin-dashboard .daily-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
 /* Support Tab */
-.support-tab {
+.cracked-admin-dashboard .support-tab {
   font-size: 0.95rem;
 }
-.thread-filter-row {
+.cracked-admin-dashboard .thread-filter-row {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.thread-filter-row input {
+.cracked-admin-dashboard .thread-filter-row input {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: var(--spacing-sm);
   font-size: 0.9rem;
 }
-.thread-filter-row button {
+.cracked-admin-dashboard .thread-filter-row button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -329,50 +338,50 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.thread-filter-row button:hover {
+.cracked-admin-dashboard .thread-filter-row button:hover {
   background-color: var(--color-primary-hover);
 }
-.support-threads-container {
+.cracked-admin-dashboard .support-threads-container {
   display: flex;
   gap: var(--spacing-md);
   margin-top: var(--spacing-md);
 }
-.threads-list {
+.cracked-admin-dashboard .threads-list {
   flex: 0 0 240px;
   max-height: 400px;
   overflow-y: auto;
   border-right: 1px solid #ccc;
   padding-right: var(--spacing-sm);
 }
-.threads-list ul {
+.cracked-admin-dashboard .threads-list ul {
   list-style: none;
 }
-.threads-list li {
+.cracked-admin-dashboard .threads-list li {
   padding: var(--spacing-sm) 0;
   border-bottom: 1px solid #ddd;
   font-size: 0.9rem;
   word-break: break-all;
 }
-.threads-list li button {
+.cracked-admin-dashboard .threads-list li button {
   margin-right: var(--spacing-xs);
 }
-.thread-details {
+.cracked-admin-dashboard .thread-details {
   flex: 1 1 auto;
   font-size: 0.9rem;
   min-height: 200px;
   display: flex;
   flex-direction: column;
 }
-.messages-list {
+.cracked-admin-dashboard .messages-list {
   list-style: none;
   padding-left: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
 }
-.messages-list li {
+.cracked-admin-dashboard .messages-list li {
   margin-bottom: var(--spacing-sm);
   word-break: break-word;
 }
-.thread-details textarea {
+.cracked-admin-dashboard .thread-details textarea {
   resize: none;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -381,7 +390,7 @@ button {
   font-size: 0.9rem;
   margin-bottom: var(--spacing-sm);
 }
-.thread-details button {
+.cracked-admin-dashboard .thread-details button {
   align-self: flex-start;
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -391,15 +400,15 @@ button {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.thread-details button:hover {
+.cracked-admin-dashboard .thread-details button:hover {
   background-color: var(--color-primary-hover);
 }
 
 /* Performance Tab */
-.perf-tab {
+.cracked-admin-dashboard .perf-tab {
   font-size: 0.95rem;
 }
-.perf-tab button {
+.cracked-admin-dashboard .perf-tab button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -409,29 +418,29 @@ button {
   transition: background-color 0.2s ease;
   margin-bottom: var(--spacing-md);
 }
-.perf-tab button:hover {
+.cracked-admin-dashboard .perf-tab button:hover {
   background-color: var(--color-primary-hover);
 }
-.perf-details {
+.cracked-admin-dashboard .perf-details {
   margin-top: var(--spacing-sm);
 }
-.perf-details p {
+.cracked-admin-dashboard .perf-details p {
   margin-bottom: var(--spacing-xs);
 }
 
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
-  .admin-tabs {
+  .cracked-admin-dashboard .admin-tabs {
     flex-direction: column;
     align-items: flex-start;
   }
-  .admin-tabs button {
+  .cracked-admin-dashboard .admin-tabs button {
     width: 100%;
   }
-  .support-threads-container {
+  .cracked-admin-dashboard .support-threads-container {
     flex-direction: column;
   }
-  .threads-list {
+  .cracked-admin-dashboard .threads-list {
     flex: unset;
     width: 100%;
     border-right: none;
@@ -440,14 +449,14 @@ button {
     margin-bottom: var(--spacing-md);
     max-height: 200px;
   }
-  .thread-details {
+  .cracked-admin-dashboard .thread-details {
     width: 100%;
   }
-  .create-test-form,
-  .create-daily-form {
+  .cracked-admin-dashboard .create-test-form,
+  .cracked-admin-dashboard .create-daily-form {
     flex-direction: column;
   }
-  .users-search-row {
+  .cracked-admin-dashboard .users-search-row {
     flex-direction: column;
   }
 }
