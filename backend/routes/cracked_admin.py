@@ -6,7 +6,7 @@ import io
 from flask import Blueprint, request, session, jsonify, make_response
 from datetime import datetime, timedelta
 from bson import ObjectId
-from ..mongodb.database import db
+from mongodb.database import db
 
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
 
