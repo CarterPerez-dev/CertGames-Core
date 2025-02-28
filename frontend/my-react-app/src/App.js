@@ -14,6 +14,10 @@ import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
 
+// Admin 
+import CrackedAdminLoginPage from './components/pages/cracked/CrackedAdminLoginPage';
+import CrackedAdminDashboard from './components/pages/cracked/CrackedAdminDashboard'; 
+
 // Protected pages
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar/Sidebar';
@@ -102,7 +106,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
+          <Route path="/cracked-admin/login" element={<CrackedAdminLoginPage />} />
+          <Route path="/cracked-admin/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />
