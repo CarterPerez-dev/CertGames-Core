@@ -31,8 +31,6 @@ from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
 
 
-CORS(app, supports_credentials=True)
-
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 mongo_uri = os.getenv("MONGO_URI")
@@ -49,7 +47,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
