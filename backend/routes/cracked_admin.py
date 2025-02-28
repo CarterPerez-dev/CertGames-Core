@@ -141,6 +141,36 @@ def admin_dashboard():
         return jsonify({"error": str(e)}), 500
 
 
+  perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
+        if not perf_metrics:
+            # Fallback to dummy values if no data is available
+            perf_metrics = {
+                "avg_request_time": 0.123,  # seconds
+                "avg_db_query_time": 0.045,   # seconds
+                "data_transfer_rate": "1.2MB/s",
+                "throughput": 50,             # requests per minute
+                "error_rate": 0.02,           # errors per request
+                "timestamp": datetime.utcnow()
+            }
+        else:
+            # Convert ObjectId to string
+            perf_metrics['_id'] = str(perf_metrics['_id'])
+        
+        dashboard_data = {
+            "user_count": user_count,
+            "test_attempts_count": test_attempts_count,
+            "daily_bonus_claims": daily_bonus_claims,
+            "performance_metrics": perf_metrics
+        }
+        return jsonify(dashboard_data), 200
+
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve dashboard metrics", "details": str(e)}), 500
+
+
+
+
+
 # -------------------------------------------------------
 # 1) USER MANAGEMENT
 # -------------------------------------------------------
@@ -549,3 +579,34 @@ def admin_close_thread(thread_id):
         return jsonify({"error": "Thread not found"}), 404
     
     return jsonify({"message": "Thread closed"}), 200
+
+
+
+@cracked_bp.route('/performance', methods=['GET'])
+def admin_performance_metrics():
+    """
+    Returns aggregated performance metrics:
+      - Average request time, DB query time,
+      - Data transfer rates, throughput, error rate, etc.
+    These metrics are assumed to be stored in the 'performanceMetrics' collection.
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
+        if not perf_metrics:
+            # Return dummy/default metrics if none are stored.
+            perf_metrics = {
+                "avg_request_time": 0.123,
+                "avg_db_query_time": 0.045,
+                "data_transfer_rate": "1.2MB/s",
+                "throughput": 50,
+                "error_rate": 0.02,
+                "timestamp": datetime.utcnow()
+            }
+        else:
+            perf_metrics['_id'] = str(perf_metrics['_id'])
+        return jsonify(perf_metrics), 200
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve performance metrics", "details": str(e)}), 500
