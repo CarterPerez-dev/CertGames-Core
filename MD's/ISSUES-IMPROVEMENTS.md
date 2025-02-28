@@ -2,7 +2,7 @@
 
 
 
-
+# supportThreads_collection.create_index("userId")
 
 ### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc AFTER ADMIN
 
