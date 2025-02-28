@@ -1,7 +1,7 @@
 db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
+  "category": "linuxplus",
   "testId": 10,
-  "testName": "Ultra-Difficulty Practice Test",
+  "testName": "Linux+ Practice Test 10 (Ultra Level)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -1107,4 +1107,201 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "If the directory is accessed via NFS, the NFS server might not enforce the SGID bit behavior. Certain NFS versions or export options can ignore group inheritance on newly created files.",
-     
+    },
+    {
+      "id": 86,
+      "question": "An administrator must inspect active network connections established specifically by processes running under the 'dbadmin' user. Which command achieves this precisely?",
+      "options": [
+        "lsof -i -u dbadmin",
+        "netstat -tunap | grep dbadmin",
+        "ss -ltnp | grep dbadmin",
+        "ps aux | grep dbadmin | netstat -p"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`lsof -i -u dbadmin` specifically targets network connections opened by the user 'dbadmin'. The other commands mix functionalities or rely on less precise user filtering.",
+      "examTip": "Use `lsof -iTCP -sTCP:LISTEN` to quickly find processes listening on TCP ports."
+    },
+    {
+      "id": 87,
+      "question": "You must create a backup of the bootloader configuration for a GRUB2-based Linux system without regenerating configuration files. Which command meets this requirement?",
+      "options": [
+        "cp /boot/grub2/grub.cfg /boot/grub2/grub.cfg.bak",
+        "grub2-mkconfig -o /boot/grub2/grub.cfg.bak",
+        "grub2-install --backup /boot/grub2/grub.cfg.bak",
+        "dracut --backup /boot/grub2/grub.cfg.bak"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using `cp` directly copies existing configuration without regenerating it. Other commands recreate or install rather than copying existing configuration.",
+      "examTip": "Always backup `/boot` files manually to prevent unwanted configuration overwrites."
+    },
+    {
+      "id": 88,
+      "question": "An admin needs to display only the UUID and filesystem type of all block devices. Which command precisely accomplishes this?",
+      "options": [
+        "lsblk -o UUID,FSTYPE",
+        "blkid -s UUID -s TYPE",
+        "fdisk -l | grep UUID",
+        "parted -l | grep -E 'UUID|FSTYPE'"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`blkid -s UUID -s TYPE` explicitly limits output to UUID and filesystem type. The others either display additional information or require extra filtering.",
+      "examTip": "`blkid` is ideal for scripting as it directly extracts specific block device attributes."
+    },
+    {
+      "id": 89,
+      "question": "To monitor live changes in SELinux permissions denials continuously, which tool provides direct, real-time visibility?",
+      "options": [
+        "tail -f /var/log/audit/audit.log | grep AVC",
+        "ausearch -m avc -ts recent",
+        "journalctl -u auditd -f",
+        "auditctl -w /var/log/audit/audit.log -p r"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using `tail -f` provides continuous real-time monitoring specifically of AVC denials. Other options either show historical or generic logs.",
+      "examTip": "For real-time SELinux troubleshooting, AVC logs via `tail -f` are highly effective."
+    },
+    {
+      "id": 90,
+      "question": "Which command sets a persistent sysctl parameter across reboots without requiring an immediate reboot to apply the changes?",
+      "options": [
+        "echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf && sysctl -p",
+        "sysctl -w net.ipv4.ip_forward=1",
+        "echo 1 > /proc/sys/net/ipv4/ip_forward",
+        "modprobe ip_forward persist=1"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Appending to `/etc/sysctl.conf` and then using `sysctl -p` makes the change persistent without rebooting. Others are temporary or incorrect.",
+      "examTip": "Always confirm persistence by checking `/etc/sysctl.conf`."
+    },
+    {
+      "id": 91,
+      "question": "To forcefully terminate a zombie process without rebooting, what precise action must an administrator perform?",
+      "options": [
+        "Kill its parent process",
+        "Kill the zombie PID directly",
+        "Send SIGKILL to init",
+        "Use `pkill -9 zombie`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Zombie processes can only be cleared by killing their parent process. Direct killing is ineffective since zombies are already dead.",
+      "examTip": "Identify zombie parents with `ps auxf` to visualize process relationships."
+    },
+    {
+      "id": 92,
+      "question": "Which command precisely retrieves kernel messages related to memory issues immediately after boot?",
+      "options": [
+        "dmesg | grep -i memory",
+        "journalctl -k | grep memory",
+        "cat /var/log/messages | grep memory",
+        "grep memory /var/log/boot.log"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "`journalctl -k` reliably retrieves boot-time kernel messages. `dmesg` may lose messages over time, and log files depend on syslog configuration.",
+      "examTip": "Prefer `journalctl` for persistent and structured boot logs."
+    },
+    {
+      "id": 93,
+      "question": "To precisely enable kernel crash dumps persistently, which file requires modification?",
+      "options": [
+        "/etc/kdump.conf",
+        "/etc/sysctl.conf",
+        "/etc/default/grub",
+        "/etc/kernel/crashdump.conf"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Crash dumps are specifically managed via `/etc/kdump.conf`. Other files control related but different aspects.",
+      "examTip": "Always verify crash dump paths in `/etc/kdump.conf` after editing."
+    },
+    {
+      "id": 94,
+      "question": "For accurately displaying detailed ACL entries of a file, which command is most precise?",
+      "options": [
+        "getfacl <filename>",
+        "ls -l <filename>",
+        "stat -c %A <filename>",
+        "aclshow <filename>"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`getfacl` accurately provides detailed ACL entries. Others display limited file permissions or are non-existent commands.",
+      "examTip": "Use `setfacl -m` to modify ACL permissions precisely."
+    },
+    {
+      "id": 95,
+      "question": "To precisely configure firewall rules persistently in a CentOS system without immediate reload, what must be edited directly?",
+      "options": [
+        "/etc/firewalld/zones/public.xml",
+        "/etc/sysconfig/iptables",
+        "iptables-save > /etc/sysconfig/firewall",
+        "firewall-cmd --runtime-to-permanent"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Directly editing `/etc/firewalld/zones/public.xml` persistently sets rules without immediate effect. Other methods apply instantly or improperly.",
+      "examTip": "Always verify firewall XML files directly for accurate persistence."
+    },
+    {
+      "id": 96,
+      "question": "A Linux administrator must temporarily override a kernel parameter to disable IPv6 forwarding until reboot. Which command correctly performs this task?",
+      "options": [
+        "sysctl net.ipv6.conf.all.forwarding=0",
+        "echo 0 > /proc/sys/net/ipv6/conf/default/forwarding",
+        "sysctl -w net.ipv6.conf.all.forwarding=0",
+        "sed -i 's/net.ipv6.conf.all.forwarding = 1/net.ipv6.conf.all.forwarding = 0/' /etc/sysctl.conf"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "`sysctl -w net.ipv6.conf.all.forwarding=0` immediately overrides the kernel parameter until reboot. `sysctl net.ipv6.conf.all.forwarding=0` is missing the `-w` option, making it ineffective. Writing directly to `/proc/sys/net/.../forwarding` impacts only the default, not all interfaces. Modifying `/etc/sysctl.conf` via `sed` would persist after reboot, contrary to the temporary requirement.",
+      "examTip": "Temporary kernel parameter changes use `sysctl -w`; permanent ones involve `/etc/sysctl.conf`."
+    },
+    {
+      "id": 97,
+      "question": "A junior engineer mistakenly deleted `/var/log/messages`. The senior admin must immediately recreate it with the same permissions and SELinux context. Which command achieves this accurately?",
+      "options": [
+        "install -m 0640 -o root -g root /dev/null /var/log/messages && restorecon /var/log/messages",
+        "touch /var/log/messages && chmod 0644 /var/log/messages && chown root:root /var/log/messages && restorecon /var/log/messages",
+        "cat /dev/null > /var/log/messages && chmod 0640 /var/log/messages && restorecon -v /var/log/messages",
+        "cp --preserve=context,mode,ownership /dev/null /var/log/messages"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The `install` command precisely recreates the file with explicit permissions (`0640`) and ownership (`root:root`), while `restorecon` correctly restores SELinux context. The `touch` command incorrectly sets permissions (`0644`). Using `cat` then `chmod` misses explicit ownership setting. `cp --preserve` cannot set correct permissions or ownership from `/dev/null`.",
+      "examTip": "`install` is superior for explicitly setting permissions and ownership when creating critical files."
+    },
+    {
+      "id": 98,
+      "question": "An administrator needs to securely erase sensitive data from `/dev/sdb1` ensuring no data recovery is possible. Which command is the most appropriate?",
+      "options": [
+        "shred -v -z -n 3 /dev/sdb1",
+        "dd if=/dev/urandom of=/dev/sdb1 bs=1M status=progress",
+        "wipefs -a -f /dev/sdb1 && dd if=/dev/zero of=/dev/sdb1 bs=1M",
+        "blkdiscard -s /dev/sdb1 && dd if=/dev/zero of=/dev/sdb1 bs=1M"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`shred -v -z -n 3 /dev/sdb1` securely overwrites data multiple times (3 passes) and zeros afterward, ensuring no recovery. `dd if=/dev/urandom` overwrites only once and slowly. Using `wipefs` followed by zeroing won't securely overwrite multiple times. `blkdiscard` merely signals SSDs to discard blocks but isn't reliable across all hardware.",
+      "examTip": "`shred` is specifically designed for secure data wiping through repeated overwriting."
+    },
+    {
+      "id": 99,
+      "question": "A critical service must restart automatically following unexpected termination. Which `systemd` unit directive ensures the service restarts exactly five times within a 10-minute interval?",
+      "options": [
+        "Restart=on-failure\nStartLimitBurst=5\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=120\nStartLimitInterval=600",
+        "Restart=on-abort\nRestartSec=120\nStartLimitBurst=5",
+        "Restart=on-failure\nRestartSec=120\nStartLimitAction=reboot\nStartLimitBurst=5"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`Restart=on-failure` combined with `StartLimitBurst=5` and `StartLimitIntervalSec=600` precisely restricts restarts to five times in ten minutes. `Restart=always` restarts continuously without explicit limit. `Restart=on-abort` misses other failures. Adding `StartLimitAction=reboot` causes unwanted reboots instead of graceful failure handling.",
+      "examTip": "Combining `Restart=on-failure` with `StartLimitBurst` effectively manages restart frequency in `systemd`."
+    },
+    {
+      "id": 100,
+      "question": "An admin must find files modified exactly 3 days ago in `/home`, excluding symbolic links, and delete them after confirmation. Which command meets these exact requirements?",
+      "options": [
+        "find /home -type f -mtime 3 -exec rm -i {} \\;",
+        "find /home -type f -mtime +3 -exec rm -ri {} \\;",
+        "find /home -type f -mtime 3 -print0 | xargs -0 rm -i",
+        "find /home -type f ! -type l -mtime 3 -exec rm -I {} \\;"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`find /home -type f -mtime 3 -exec rm -i {} \\;` correctly targets regular files modified exactly 3 days ago, prompting confirmation. `-mtime +3` targets older files, not exactly 3 days. Piping via `xargs` is valid but less direct. Using `! -type l` after `-type f` is redundant and misleading; `rm -I` prompts less safely than `-i`.",
+      "examTip": "`-mtime 3` is exact; `-mtime +3` finds older. Always confirm deletions explicitly using `-exec rm -i`."
+    }
+  ]
+});
