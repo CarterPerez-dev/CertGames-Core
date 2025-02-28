@@ -52,7 +52,7 @@ function CrackedAdminLoginPage() {
               id="adminKey"
               value={adminKey}
               onChange={(e) => setAdminKey(e.target.value)}
-              placeholder="Enter super-long admin key"
+              placeholder="Authenticate"
             />
           </div>
 
