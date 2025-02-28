@@ -700,8 +700,6 @@ function CrackedAdminDashboard() {
                 <td>{t.testName || "(Unnamed)"}</td>
                 <td>{t.questions ? t.questions.length : 0}</td>
                 <td>
-                  {/* For brevity, let's do only 'delete' here. 
-                      You can do an 'edit' flow similarly. */}
                   <button onClick={() => handleDeleteTest(t)}>Delete</button>
                 </td>
               </tr>
@@ -869,59 +867,61 @@ function CrackedAdminDashboard() {
   };
 
   return (
-    <div className="cracked-admin-dashboard-container">
-      <h1 className="admin-dashboard-title">Cracked Admin Dashboard</h1>
+    <div className="cracked-admin-dashboard">
+      <div className="cracked-admin-dashboard-container">
+        <h1 className="admin-dashboard-title">Cracked Admin Dashboard</h1>
 
-      {/* Tab Navigation */}
-      <div className="admin-tabs">
-        <button
-          className={activeTab === "overview" ? "active" : ""}
-          onClick={() => setActiveTab("overview")}
-        >
-          Overview
-        </button>
-        <button
-          className={activeTab === "users" ? "active" : ""}
-          onClick={() => setActiveTab("users")}
-        >
-          Users
-        </button>
-        <button
-          className={activeTab === "tests" ? "active" : ""}
-          onClick={() => setActiveTab("tests")}
-        >
-          Tests
-        </button>
-        <button
-          className={activeTab === "daily" ? "active" : ""}
-          onClick={() => setActiveTab("daily")}
-        >
-          Daily PBQs
-        </button>
-        <button
-          className={activeTab === "support" ? "active" : ""}
-          onClick={() => setActiveTab("support")}
-        >
-          Support
-        </button>
-        <button
-          className={activeTab === "performance" ? "active" : ""}
-          onClick={() => {
-            setActiveTab("performance");
-            fetchPerformance();
-          }}
-        >
-          Performance
-        </button>
+        {/* Tab Navigation */}
+        <div className="admin-tabs">
+          <button
+            className={activeTab === "overview" ? "active" : ""}
+            onClick={() => setActiveTab("overview")}
+          >
+            Overview
+          </button>
+          <button
+            className={activeTab === "users" ? "active" : ""}
+            onClick={() => setActiveTab("users")}
+          >
+            Users
+          </button>
+          <button
+            className={activeTab === "tests" ? "active" : ""}
+            onClick={() => setActiveTab("tests")}
+          >
+            Tests
+          </button>
+          <button
+            className={activeTab === "daily" ? "active" : ""}
+            onClick={() => setActiveTab("daily")}
+          >
+            Daily PBQs
+          </button>
+          <button
+            className={activeTab === "support" ? "active" : ""}
+            onClick={() => setActiveTab("support")}
+          >
+            Support
+          </button>
+          <button
+            className={activeTab === "performance" ? "active" : ""}
+            onClick={() => {
+              setActiveTab("performance");
+              fetchPerformance();
+            }}
+          >
+            Performance
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === "overview" && renderOverviewTab()}
+        {activeTab === "users" && renderUsersTab()}
+        {activeTab === "tests" && renderTestsTab()}
+        {activeTab === "daily" && renderDailyTab()}
+        {activeTab === "support" && renderSupportTab()}
+        {activeTab === "performance" && renderPerformanceTab()}
       </div>
-
-      {/* Tab Content */}
-      {activeTab === "overview" && renderOverviewTab()}
-      {activeTab === "users" && renderUsersTab()}
-      {activeTab === "tests" && renderTestsTab()}
-      {activeTab === "daily" && renderDailyTab()}
-      {activeTab === "support" && renderSupportTab()}
-      {activeTab === "performance" && renderPerformanceTab()}
     </div>
   );
 }
