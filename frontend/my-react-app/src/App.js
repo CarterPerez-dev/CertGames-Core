@@ -109,6 +109,7 @@ function App() {
           <Route path="/cracked-admin/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked-admin/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/profile" element={
+          <Route path="/my-support" element={<SupportAskAnythingPage />} />
             <ProtectedRoute>
               <UserProfile />
             </ProtectedRoute>
