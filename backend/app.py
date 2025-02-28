@@ -87,6 +87,64 @@ app.register_blueprint(api_bp, url_prefix='/test')
 app.register_blueprint(cracked_bp, url_prefix="/cracked")
 app.register_blueprint(support_bp, url_prefix="/support")
 
+##############################
+# 1) BEFORE REQUEST
+##############################
+@app.before_request
+def log_request_start():
+    """
+    1) Log the request path/method for debugging
+    2) Capture request start time
+    3) Initialize g.db_time_accumulator = 0.0
+    """
+    logger.info(f"Handling request to {request.path} (method {request.method})")
+    g.request_start_time = time.time()
+    g.db_time_accumulator = 0.0  # We reset this; measure_db_operation can add to it
+
+##############################
+# 2) AFTER REQUEST
+##############################
+@app.after_request
+def log_request_end(response):
+    """
+    1) measure how long the request took
+    2) find the DB time from g.db_time_accumulator
+    3) measure response size
+    4) insert doc in perfSamples
+    """
+    try:
+        # 1) Duration
+        duration_sec = time.time() - g.request_start_time
+
+        # 2) DB time
+        db_time_sec = getattr(g, 'db_time_accumulator', 0.0)
+
+        # 3) Response size in bytes
+        #    If you haven't set a content_length, you can do:
+        response_size = 0
+        if response.direct_passthrough is False and response.data:
+            response_size = len(response.data)
+        # Alternatively: if "Content-Length" in response.headers, parse that
+
+        # 4) HTTP status
+        http_status = response.status_code
+
+        # 5) Insert doc
+        doc = {
+            "route": request.path,
+            "method": request.method,
+            "duration_sec": duration_sec,
+            "db_time_sec": db_time_sec,
+            "response_bytes": response_size,
+            "http_status": http_status,
+            "timestamp": datetime.utcnow()
+        }
+        db.perfSamples.insert_one(doc)
+
+    except Exception as e:
+        logger.warning(f"Failed to insert perfSample: {e}")
+
+    return response
 
 
 @socketio.on('connect')
