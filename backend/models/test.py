@@ -385,29 +385,7 @@ def update_user_xp(user_id, xp_to_add):
     )
     return {"xp": new_xp, "level": new_level}
 
-##############################################
-# Daily Bonus
-##############################################
 
-def apply_daily_bonus(user_id):
-    """
-    If the user hasn't claimed daily bonus in the last 24 hours,
-    +50 coins, update lastDailyClaim
-    """
-    user = get_user_by_id(user_id)
-    if not user:
-        return None
-
-    now = datetime.utcnow()
-    last_claimed = user.get("lastDailyClaim")
-    if not last_claimed or (now - last_claimed) > timedelta(hours=24):
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$inc": {"coins": 50}, "$set": {"lastDailyClaim": now}}
-        )
-        return {"success": True, "message": "Daily bonus applied"}
-    else:
-        return {"success": False, "message": "Already claimed daily bonus"}
 
 ##############################################
 # Shop Logic
@@ -486,9 +464,7 @@ def purchase_item(user_id, item_id):
 def get_achievements():
     return list(achievements_collection.find({}))
     
-    
-    
-    
+
     
     
 
