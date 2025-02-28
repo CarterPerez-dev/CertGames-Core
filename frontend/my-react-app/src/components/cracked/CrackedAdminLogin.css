@@ -1,0 +1,75 @@
+.cracked-admin-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem auto;
+  max-width: 400px;
+  background: #2b2b2b;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 2px solid #cc0000;
+}
+
+.cracked-admin-login-title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #ffcccc;
+  text-shadow: 1px 1px 0 #000;
+  text-align: center;
+}
+
+.cracked-admin-login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.admin-input-row label {
+  color: #ffcccc;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.admin-input-row input,
+.admin-input-row select {
+  padding: 0.5rem;
+  border: 1px solid #444;
+  border-radius: 4px;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+.admin-error-message {
+  color: #ff4444;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.cracked-admin-login-button {
+  background: #cc0000;
+  color: #fff;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cracked-admin-login-button:hover:not(:disabled) {
+  background-color: #e60000;
+}
+
+.cracked-admin-login-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
