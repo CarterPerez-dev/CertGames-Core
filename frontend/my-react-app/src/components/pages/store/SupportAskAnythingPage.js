@@ -50,7 +50,7 @@ function SupportAskAnythingPage() {
   const refreshDataWithoutLoading = async () => {
     try {
       // fetch threads but do not set loading
-      const res = await fetch('/api/test/support/my-chat', {
+      const res = await fetch('/api/support/my-chat', {
         credentials: 'include',
       });
       const data = await res.json();
@@ -60,7 +60,7 @@ function SupportAskAnythingPage() {
 
       // If there's a selected thread, fetch its messages
       if (selectedThreadId) {
-        const res2 = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
+        const res2 = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
           credentials: 'include',
         });
         const data2 = await res2.json();
@@ -81,7 +81,7 @@ function SupportAskAnythingPage() {
     setLoadingThreads(true);
     setError(null);
     try {
-      const res = await fetch('/api/test/support/my-chat', {
+      const res = await fetch('/api/support/my-chat', {
         credentials: 'include',
       });
       const data = await res.json();
@@ -104,7 +104,7 @@ function SupportAskAnythingPage() {
     setError(null);
     try {
       const body = { subject: newThreadSubject.trim() };
-      const res = await fetch('/api/test/support/my-chat', {
+      const res = await fetch('/api/support/my-chat', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -132,7 +132,7 @@ function SupportAskAnythingPage() {
     setError(null);
 
     try {
-      const res = await fetch(`/api/test/support/my-chat/${threadId}`, {
+      const res = await fetch(`/api/support/my-chat/${threadId}`, {
         credentials: 'include',
       });
       const data = await res.json();
@@ -165,7 +165,7 @@ function SupportAskAnythingPage() {
     setError(null);
     try {
       const body = { content: userMessage.trim() };
-      const res = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
+      const res = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -189,7 +189,7 @@ function SupportAskAnythingPage() {
   const refreshMessagesOnly = async () => {
     if (!selectedThreadId) return;
     try {
-      const res = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
+      const res = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
         credentials: 'include',
       });
       const data = await res.json();
