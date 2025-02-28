@@ -1,75 +1,154 @@
-.cracked-admin-login-container {
+/* CrackedAdminLogin.css */
+/*
+   High-level, modern, and sleek design for the Cracked Admin Login page.
+   Maintains existing functionality while upgrading the visual style.
+   Responsive for cross-browser and mobile (iPhone, small devices) usage.
+*/
+
+:root {
+  --bg-gradient-start: #282c34;
+  --bg-gradient-end: #3b3f55;
+  --color-primary: #4c7ef3;
+  --color-primary-hover: #3e6fd0;
+  --color-white: #ffffff;
+  --color-error: #e74c3c;
+  --color-text: #f4f4f4;
+  --card-bg: #fff;
+  --card-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 32px;
+  
+  --font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background: linear-gradient(120deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  color: var(--color-text);
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 2rem auto;
-  max-width: 400px;
-  background: #2b2b2b;
-  padding: 2rem;
-  border-radius: 8px;
-  border: 2px solid #cc0000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.cracked-admin-login-title {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: #ffcccc;
-  text-shadow: 1px 1px 0 #000;
-  text-align: center;
-}
-
-.cracked-admin-login-form {
+/* Container & Card */
+.cracked-admin-login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
+  padding: var(--spacing-md);
+}
+.cracked-admin-login-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: var(--spacing-lg) var(--spacing-md);
+  width: 100%;
+  max-width: 400px;
+  animation: fadeInDown 0.5s ease;
+}
+
+/* Title */
+.cracked-admin-login-title {
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+  font-size: 1.6rem;
+  color: #333;
+}
+
+/* Form */
+.cracked-admin-login-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--spacing-md);
 }
 
+/* Label + Input Row */
 .admin-input-row {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: var(--spacing-xs);
 }
-
 .admin-input-row label {
-  color: #ffcccc;
-  font-weight: bold;
-  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;
 }
-
 .admin-input-row input,
 .admin-input-row select {
-  padding: 0.5rem;
-  border: 1px solid #444;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  background: #1f1f1f;
-  color: #fff;
+  padding: var(--spacing-sm);
+  font-size: 1rem;
+}
+.admin-input-row input:focus,
+.admin-input-row select:focus {
+  outline: none;
+  border-color: var(--color-primary);
 }
 
+/* Error Message */
 .admin-error-message {
-  color: #ff4444;
-  font-weight: bold;
-  margin-top: 0.5rem;
+  color: var(--color-error);
+  font-size: 0.9rem;
   text-align: center;
+  margin-top: var(--spacing-xs);
 }
 
+/* Submit Button */
 .cracked-admin-login-button {
-  background: #cc0000;
-  color: #fff;
-  padding: 0.75rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  font-size: 1rem;
   border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  border-radius: 4px;
+  padding: var(--spacing-md);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease;
+  width: 100%;
 }
-
-.cracked-admin-login-button:hover:not(:disabled) {
-  background-color: #e60000;
+.cracked-admin-login-button:hover {
+  background-color: var(--color-primary-hover);
 }
-
 .cracked-admin-login-button:disabled {
-  background-color: #999;
+  opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive for Small Devices */
+@media (max-width: 480px) {
+  .cracked-admin-login-card {
+    padding: var(--spacing-md);
+    margin: 0 var(--spacing-sm);
+  }
+  .cracked-admin-login-title {
+    font-size: 1.4rem;
+  }
+  .cracked-admin-login-button {
+    font-size: 0.95rem;
+  }
 }
