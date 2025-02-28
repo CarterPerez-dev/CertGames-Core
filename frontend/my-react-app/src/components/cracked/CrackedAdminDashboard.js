@@ -476,292 +476,6 @@ function CrackedAdminDashboard() {
   /*****************************************
    *  Tab UI: We define a big switch ...
    *****************************************/
-
-function CrackedAdminDashboard() {
-  // ------------------
-  // State Management
-  // ------------------
-  const [activeTab, setActiveTab] = useState("overview");
-
-  // For Overview tab
-  const [overviewData, setOverviewData] = useState(null);
-  const [overviewLoading, setOverviewLoading] = useState(false);
-  const [overviewError, setOverviewError] = useState(null);
-
-  // For Users tab
-  const [users, setUsers] = useState([]);
-  const [userSearch, setUserSearch] = useState("");
-  const [userPage, setUserPage] = useState(1);
-  const [userTotal, setUserTotal] = useState(0);
-  const [userLimit] = useState(10);
-  const [editUserId, setEditUserId] = useState(null);
-  const [editUserData, setEditUserData] = useState({});
-  const [usersLoading, setUsersLoading] = useState(false);
-  const [usersError, setUsersError] = useState(null);
-
-  // For Tests tab
-  const [tests, setTests] = useState([]);
-  const [testCategory, setTestCategory] = useState("");
-  const [testsLoading, setTestsLoading] = useState(false);
-  const [testsError, setTestsError] = useState(null);
-  const [newTestData, setNewTestData] = useState({
-    category: "",
-    testId: "",
-    testName: "",
-  });
-
-  // For Daily PBQs tab
-  const [dailyList, setDailyList] = useState([]);
-  const [newDaily, setNewDaily] = useState({
-    prompt: "",
-    dayIndex: "",
-    correctIndex: "",
-    explanation: "",
-  });
-  const [dailyLoading, setDailyLoading] = useState(false);
-  const [dailyError, setDailyError] = useState(null);
-
-  // For Support tab
-  const [threads, setThreads] = useState([]);
-  const [currentThread, setCurrentThread] = useState(null);
-  const [threadStatusFilter, setThreadStatusFilter] = useState("");
-  const [threadsLoading, setThreadsLoading] = useState(false);
-  const [threadsError, setThreadsError] = useState(null);
-  const [adminReply, setAdminReply] = useState("");
-
-  // For Performance tab
-  const [performanceData, setPerformanceData] = useState(null);
-  const [perfLoading, setPerfLoading] = useState(false);
-  const [perfError, setPerfError] = useState(null);
-
-  // ------------------
-  // Mocked Example API calls
-  // In production, replace these with real API calls.
-  // ------------------
-  const fetchOverview = async () => {
-    try {
-      setOverviewLoading(true);
-      setOverviewError(null);
-      // Simulate API
-      const fakeData = {
-        user_count: 999,
-        test_attempts_count: 456,
-        daily_bonus_claims: 37,
-        average_test_score_percent: 84,
-        timestamp: new Date().toISOString(),
-      };
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setOverviewData(fakeData);
-    } catch (e) {
-      setOverviewError("Failed to load overview data");
-    } finally {
-      setOverviewLoading(false);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      setUsersLoading(true);
-      setUsersError(null);
-      // Simulate search & pagination
-      const fakeUserList = Array.from({ length: 10 }, (_, i) => ({
-        _id: `user${(userPage - 1) * 10 + i + 1}`,
-        username: `User${(userPage - 1) * 10 + i + 1}`,
-        email: `user${i + 1}@example.com`,
-        coins: Math.floor(Math.random() * 1000),
-        xp: Math.floor(Math.random() * 5000),
-        level: Math.floor(Math.random() * 50),
-        suspended: false,
-      }));
-      // Simulate network delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setUsers(fakeUserList);
-      setUserTotal(50); // Suppose 50 total users
-    } catch (e) {
-      setUsersError("Failed to load users");
-    } finally {
-      setUsersLoading(false);
-    }
-  };
-
-  const handleUserEdit = (user) => {
-    setEditUserId(user._id);
-    setEditUserData({
-      username: user.username,
-      coins: user.coins,
-      xp: user.xp,
-      level: user.level,
-      suspended: user.suspended,
-    });
-  };
-
-  const handleUpdateUserField = (field, value) => {
-    setEditUserData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleUserUpdateSubmit = async () => {
-    // Update user logic
-    setEditUserId(null);
-  };
-
-  const handleUserDelete = async (userId) => {
-    // Delete user logic
-  };
-
-  const fetchTests = async () => {
-    try {
-      setTestsLoading(true);
-      setTestsError(null);
-      // Simulate fetch
-      const fakeTests = [
-        {
-          _id: "test1",
-          category: "aplus",
-          testId: 1,
-          testName: "Test A+ Basics",
-          questions: Array.from({ length: 5 }, (_, i) => ({ question: `Q${i}` })),
-        },
-        {
-          _id: "test2",
-          category: "network+",
-          testId: 2,
-          testName: "Network+ Essentials",
-          questions: Array.from({ length: 8 }, (_, i) => ({ question: `Q${i}` })),
-        },
-      ];
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setTests(fakeTests);
-    } catch (e) {
-      setTestsError("Failed to load tests");
-    } finally {
-      setTestsLoading(false);
-    }
-  };
-
-  const handleCreateTest = async () => {
-    // Create test logic
-  };
-
-  const handleDeleteTest = async (test) => {
-    // Delete test logic
-  };
-
-  const fetchDaily = async () => {
-    try {
-      setDailyLoading(true);
-      setDailyError(null);
-      // Simulate fetch
-      const fakeDaily = [
-        {
-          _id: "daily1",
-          prompt: "What is PBQ #1?",
-          dayIndex: 1,
-          correctIndex: 0,
-          explanation: "Explanation 1",
-        },
-      ];
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setDailyList(fakeDaily);
-    } catch (e) {
-      setDailyError("Failed to load Daily PBQs");
-    } finally {
-      setDailyLoading(false);
-    }
-  };
-
-  const handleCreateDaily = async () => {
-    // Create daily logic
-  };
-
-  const handleDeleteDaily = async (daily) => {
-    // Delete daily logic
-  };
-
-  const fetchThreads = async () => {
-    try {
-      setThreadsLoading(true);
-      setThreadsError(null);
-      // Simulate fetch
-      const fakeThreads = [
-        { _id: "th1", status: "open", messages: [] },
-        { _id: "th2", status: "closed", messages: [] },
-      ];
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setThreads(fakeThreads);
-    } catch (e) {
-      setThreadsError("Failed to load threads");
-    } finally {
-      setThreadsLoading(false);
-    }
-  };
-
-  const handleViewThread = async (threadId) => {
-    // Simulate detailed fetch
-    const foundThread = {
-      _id: threadId,
-      status: "open",
-      messages: [
-        {
-          sender: "user",
-          content: "I need help with my account!",
-          timestamp: new Date().toISOString(),
-        },
-      ],
-    };
-    setCurrentThread(foundThread);
-  };
-
-  const handleCloseThread = async (threadId) => {
-    // Close thread logic
-  };
-
-  const handleReplyToThread = async () => {
-    if (!currentThread) return;
-    // Send reply logic
-    setAdminReply("");
-  };
-
-  const fetchPerformance = async () => {
-    try {
-      setPerfLoading(true);
-      setPerfError(null);
-      // Simulate fetch
-      const fakePerfData = {
-        avg_request_time: 0.24,
-        avg_db_query_time: 0.12,
-        data_transfer_rate: "2MB/s",
-        throughput: 120,
-        error_rate: "0.5%",
-        timestamp: new Date().toISOString(),
-      };
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      setPerformanceData(fakePerfData);
-    } catch (e) {
-      setPerfError("Failed to load performance data");
-    } finally {
-      setPerfLoading(false);
-    }
-  };
-
-  // ------------------
-  // useEffect hooks (fetch data on mount)
-  // ------------------
-  useEffect(() => {
-    fetchOverview();
-  }, []);
-
-  useEffect(() => {
-    fetchUsers();
-  }, [userPage]); // refetch on page change
-
-  useEffect(() => {
-    fetchDaily();
-  }, []);
-
-  // ------------------
-  // Renderers
-  // ------------------
   const renderOverviewTab = () => {
     if (overviewLoading) {
       return <div className="tab-content">Loading overview...</div>;
@@ -798,12 +512,7 @@ function CrackedAdminDashboard() {
             placeholder="Search username/email..."
             onChange={(e) => setUserSearch(e.target.value)}
           />
-          <button
-            onClick={() => {
-              setUserPage(1);
-              fetchUsers();
-            }}
-          >
+          <button onClick={() => { setUserPage(1); fetchUsers(); }}>
             Search
           </button>
         </div>
@@ -991,7 +700,7 @@ function CrackedAdminDashboard() {
                 <td>{t.testName || "(Unnamed)"}</td>
                 <td>{t.questions ? t.questions.length : 0}</td>
                 <td>
-                  {/* For brevity, only 'delete' here. 
+                  {/* For brevity, let's do only 'delete' here. 
                       You can do an 'edit' flow similarly. */}
                   <button onClick={() => handleDeleteTest(t)}>Delete</button>
                 </td>
@@ -1016,17 +725,13 @@ function CrackedAdminDashboard() {
             type="text"
             placeholder="Prompt"
             value={newDaily.prompt}
-            onChange={(e) =>
-              setNewDaily((prev) => ({ ...prev, prompt: e.target.value }))
-            }
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, prompt: e.target.value }))}
           />
           <input
             type="text"
             placeholder="Day Index"
             value={newDaily.dayIndex}
-            onChange={(e) =>
-              setNewDaily((prev) => ({ ...prev, dayIndex: e.target.value }))
-            }
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, dayIndex: e.target.value }))}
           />
           <input
             type="text"
@@ -1116,7 +821,8 @@ function CrackedAdminDashboard() {
                 <ul className="messages-list">
                   {currentThread.messages.map((m, idx) => (
                     <li key={idx}>
-                      <strong>{m.sender}:</strong> {m.content} ({m.timestamp || ""})
+                      <strong>{m.sender}:</strong> {m.content} (
+                      {m.timestamp || ""})
                     </li>
                   ))}
                 </ul>
@@ -1162,69 +868,60 @@ function CrackedAdminDashboard() {
     );
   };
 
-  // ------------------
-  // Main Render
-  // ------------------
   return (
-    /* 
-      Wrap EVERYTHING in .cracked-admin-dashboard 
-      to avoid applying these styles globally.
-    */
-    <div className="cracked-admin-dashboard">
-      <div className="cracked-admin-dashboard-container">
-        <h1 className="admin-dashboard-title">Cracked Admin Dashboard</h1>
+    <div className="cracked-admin-dashboard-container">
+      <h1 className="admin-dashboard-title">Cracked Admin Dashboard</h1>
 
-        {/* Tab Navigation */}
-        <div className="admin-tabs">
-          <button
-            className={activeTab === "overview" ? "active" : ""}
-            onClick={() => setActiveTab("overview")}
-          >
-            Overview
-          </button>
-          <button
-            className={activeTab === "users" ? "active" : ""}
-            onClick={() => setActiveTab("users")}
-          >
-            Users
-          </button>
-          <button
-            className={activeTab === "tests" ? "active" : ""}
-            onClick={() => setActiveTab("tests")}
-          >
-            Tests
-          </button>
-          <button
-            className={activeTab === "daily" ? "active" : ""}
-            onClick={() => setActiveTab("daily")}
-          >
-            Daily PBQs
-          </button>
-          <button
-            className={activeTab === "support" ? "active" : ""}
-            onClick={() => setActiveTab("support")}
-          >
-            Support
-          </button>
-          <button
-            className={activeTab === "performance" ? "active" : ""}
-            onClick={() => {
-              setActiveTab("performance");
-              fetchPerformance();
-            }}
-          >
-            Performance
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === "overview" && renderOverviewTab()}
-        {activeTab === "users" && renderUsersTab()}
-        {activeTab === "tests" && renderTestsTab()}
-        {activeTab === "daily" && renderDailyTab()}
-        {activeTab === "support" && renderSupportTab()}
-        {activeTab === "performance" && renderPerformanceTab()}
+      {/* Tab Navigation */}
+      <div className="admin-tabs">
+        <button
+          className={activeTab === "overview" ? "active" : ""}
+          onClick={() => setActiveTab("overview")}
+        >
+          Overview
+        </button>
+        <button
+          className={activeTab === "users" ? "active" : ""}
+          onClick={() => setActiveTab("users")}
+        >
+          Users
+        </button>
+        <button
+          className={activeTab === "tests" ? "active" : ""}
+          onClick={() => setActiveTab("tests")}
+        >
+          Tests
+        </button>
+        <button
+          className={activeTab === "daily" ? "active" : ""}
+          onClick={() => setActiveTab("daily")}
+        >
+          Daily PBQs
+        </button>
+        <button
+          className={activeTab === "support" ? "active" : ""}
+          onClick={() => setActiveTab("support")}
+        >
+          Support
+        </button>
+        <button
+          className={activeTab === "performance" ? "active" : ""}
+          onClick={() => {
+            setActiveTab("performance");
+            fetchPerformance();
+          }}
+        >
+          Performance
+        </button>
       </div>
+
+      {/* Tab Content */}
+      {activeTab === "overview" && renderOverviewTab()}
+      {activeTab === "users" && renderUsersTab()}
+      {activeTab === "tests" && renderTestsTab()}
+      {activeTab === "daily" && renderDailyTab()}
+      {activeTab === "support" && renderSupportTab()}
+      {activeTab === "performance" && renderPerformanceTab()}
     </div>
   );
 }
