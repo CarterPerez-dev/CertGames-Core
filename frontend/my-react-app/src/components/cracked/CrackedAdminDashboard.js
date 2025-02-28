@@ -176,7 +176,7 @@ function CrackedAdminDashboard() {
   const handleUserDelete = async (userId) => {
     if (!window.confirm("Are you sure you want to DELETE this user?")) return;
     try {
-      const res = await fetch(`/cracked/users/${userId}`, {
+      const res = await fetch(`/api/cracked/users/${userId}`, {
         method: "DELETE",
         credentials: "include",
       });
