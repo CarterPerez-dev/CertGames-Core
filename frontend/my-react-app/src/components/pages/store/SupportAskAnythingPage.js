@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './SupportAskAnythingPage.css';
 
-
 /**
  * Complex multi-thread support/ask-anything page:
  * - The user can have multiple "threads" or "topics" (like separate conversation channels).
@@ -11,13 +10,22 @@ import './SupportAskAnythingPage.css';
  *     2) The messages in the currently selected thread (GET /api/test/support/threads/:threadId).
  * - The user can create a new thread with a subject, then post messages in it.
  * - We'll show a side panel with the thread list, and a main panel with the messages for the chosen thread.
- * - We poll every 10s for the new messages in the currently selected thread, 
- *   so if admin replies, user sees it promptly.
+ * - We poll every 10s for new messages in the currently selected thread, 
+ *   so if admin replies, the user sees it promptly.
  * 
- * No CSS is inlined here. We provide class names for you to style in a separate .css file.
+ * Usage:
+ *  1) Ensure your backend provides the routes:
+ *     - GET /api/test/support/threads
+ *     - POST /api/test/support/threads  (create new thread)
+ *     - GET /api/test/support/threads/:threadId
+ *     - POST /api/test/support/threads/:threadId (create new message)
+ *  2) Import and render <SupportAskAnythingPage />
+ *  3) Make sure "SupportAskAnythingPage.css" is in the same folder (or properly imported).
  * 
- * CRITICAL: In your backend, you need routes to handle multiple threads. 
- * Otherwise, adapt the single-thread approach as needed.
+ * NOTE:
+ *  To avoid styling collisions across your app, the entire markup is wrapped in:
+ *     <div className="support-ask-anything-page"> ... </div>
+ *  so that the CSS rules inside "SupportAskAnythingPage.css" can be scoped to just this component.
  */
 
 function SupportAskAnythingPage() {
@@ -51,11 +59,11 @@ function SupportAskAnythingPage() {
   useEffect(() => {
     fetchThreads();
 
-    // Start an interval that refreshes threads, 
-    // and also refreshes messages for the current thread
+    // Start an interval that refreshes threads and also refreshes messages
+    // for the current thread every 10s
     pollIntervalRef.current = setInterval(() => {
       refreshDataWithoutLoading();
-    }, 10000); // every 10 seconds
+    }, 10000);
 
     return () => {
       if (pollIntervalRef.current) {
@@ -64,7 +72,7 @@ function SupportAskAnythingPage() {
     };
   }, []);
 
-  // Quick method to do a forced refresh
+  // Quick method to do a forced refresh (no loading spinners)
   const refreshDataWithoutLoading = async () => {
     try {
       // fetch threads but do not set loading
@@ -76,7 +84,7 @@ function SupportAskAnythingPage() {
         setThreads(data);
       }
 
-      // If there's a selected thread, fetch messages 
+      // If there's a selected thread, fetch its messages
       if (selectedThreadId) {
         const res2 = await fetch(`/api/test/support/threads/${selectedThreadId}`, {
           credentials: 'include',
@@ -141,8 +149,7 @@ function SupportAskAnythingPage() {
   };
 
   // -----------------------------
-  // 4) selectThread
-  //    fetch that thread's messages
+  // 4) selectThread (fetch that thread's messages)
   // -----------------------------
   const selectThread = async (threadId) => {
     setSelectedThreadId(threadId);
@@ -204,7 +211,7 @@ function SupportAskAnythingPage() {
     }
   };
 
-  // utility to refresh messages for the selected thread only
+  // Utility to refresh messages for the selected thread only
   const refreshMessagesOnly = async () => {
     if (!selectedThreadId) return;
     try {
@@ -222,12 +229,13 @@ function SupportAskAnythingPage() {
   };
 
   // -----------------------------
-  // 6) handle text changes
+  // 6) handle text changes (typing)
   // -----------------------------
   const handleTyping = (e) => {
     setUserMessage(e.target.value);
     if (!isTyping) setIsTyping(true);
   };
+
   useEffect(() => {
     if (userMessage.trim().length === 0 && isTyping) {
       setIsTyping(false);
@@ -252,117 +260,127 @@ function SupportAskAnythingPage() {
     return d.toLocaleString();
   };
 
-  // UI rendering
+  // -----------------------------
+  // Render
+  // -----------------------------
   return (
-    <div className="support-container">
-      <h2 className="support-title">Ask Anything / Support Chat</h2>
+    <div className="support-ask-anything-page">
+      <div className="support-container">
+        <h2 className="support-title">Ask Anything / Support Chat</h2>
 
-      {error && <div className="support-error-box">Error: {error}</div>}
+        {error && <div className="support-error-box">Error: {error}</div>}
 
-      <div className="support-main-layout">
-        {/* Left panel: threads */}
-        <div className="support-left-panel">
-          <div className="create-thread-section">
-            <h3>Create New Thread</h3>
-            <input
-              type="text"
-              className="new-thread-input"
-              placeholder="Subject of new thread..."
-              value={newThreadSubject}
-              onChange={(e) => setNewThreadSubject(e.target.value)}
-            />
-            <button className="create-thread-button" onClick={createNewThread}>
-              Create
-            </button>
-          </div>
+        <div className="support-main-layout">
+          {/* Left panel: threads */}
+          <div className="support-left-panel">
+            <div className="create-thread-section">
+              <h3>Create New Thread</h3>
+              <input
+                type="text"
+                className="new-thread-input"
+                placeholder="Subject of new thread..."
+                value={newThreadSubject}
+                onChange={(e) => setNewThreadSubject(e.target.value)}
+              />
+              <button className="create-thread-button" onClick={createNewThread}>
+                Create
+              </button>
+            </div>
 
-          <div className="threads-list-wrapper">
-            <h3>Your Threads</h3>
-            {loadingThreads && <div className="threads-loading">Loading threads...</div>}
-            {threads.length === 0 && !loadingThreads && (
-              <div className="threads-empty">No threads yet</div>
-            )}
-            <ul className="threads-list">
-              {threads.map((t) => (
-                <li
-                  key={t._id}
-                  onClick={() => selectThread(t._id)}
-                  className={
-                    t._id === selectedThreadId
-                      ? 'thread-item thread-item-active'
-                      : 'thread-item'
-                  }
-                >
-                  <div className="thread-subject">{t.subject || 'Untitled Thread'}</div>
-                  <div className="thread-status">{t.status || 'open'}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        {/* Right panel: current thread's messages */}
-        <div className="support-right-panel">
-          {!selectedThreadId ? (
-            <div className="no-thread-selected">Select a thread or create a new one</div>
-          ) : (
-            <>
-              <div className="messages-header">
-                {loadingMessages ? (
-                  <span>Loading messages...</span>
-                ) : (
-                  <button
-                    className="refresh-messages-button"
-                    onClick={refreshMessagesOnly}
+            <div className="threads-list-wrapper">
+              <h3>Your Threads</h3>
+              {loadingThreads && (
+                <div className="threads-loading">Loading threads...</div>
+              )}
+              {threads.length === 0 && !loadingThreads && (
+                <div className="threads-empty">No threads yet</div>
+              )}
+              <ul className="threads-list">
+                {threads.map((t) => (
+                  <li
+                    key={t._id}
+                    onClick={() => selectThread(t._id)}
+                    className={
+                      t._id === selectedThreadId
+                        ? 'thread-item thread-item-active'
+                        : 'thread-item'
+                    }
                   >
-                    Refresh
+                    <div className="thread-subject">
+                      {t.subject || 'Untitled Thread'}
+                    </div>
+                    <div className="thread-status">{t.status || 'open'}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Right panel: current thread's messages */}
+          <div className="support-right-panel">
+            {!selectedThreadId ? (
+              <div className="no-thread-selected">
+                Select a thread or create a new one
+              </div>
+            ) : (
+              <>
+                <div className="messages-header">
+                  {loadingMessages ? (
+                    <span>Loading messages...</span>
+                  ) : (
+                    <button
+                      className="refresh-messages-button"
+                      onClick={refreshMessagesOnly}
+                    >
+                      Refresh
+                    </button>
+                  )}
+                </div>
+
+                <div className="messages-container">
+                  {messages.length === 0 ? (
+                    <div className="no-messages">No messages yet for this thread.</div>
+                  ) : (
+                    messages.map((m, idx) => {
+                      const isUser = m.sender === 'user';
+                      return (
+                        <div
+                          key={idx}
+                          className={`message-bubble ${
+                            isUser ? 'message-user' : 'message-admin'
+                          }`}
+                        >
+                          <div className="message-sender">
+                            {isUser ? 'You' : 'Admin'}
+                          </div>
+                          <div className="message-content">{m.content}</div>
+                          <div className="message-timestamp">
+                            {formatTimestamp(m.timestamp)}
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                  <div ref={chatEndRef} />
+                </div>
+
+                {isTyping && <div className="typing-indicator">You are typing...</div>}
+
+                <div className="send-message-area">
+                  <textarea
+                    className="send-message-textarea"
+                    rows={3}
+                    placeholder="Type your message..."
+                    value={userMessage}
+                    onChange={handleTyping}
+                  />
+                  <button className="send-message-button" onClick={sendMessage}>
+                    Send
                   </button>
-                )}
-              </div>
-
-              <div className="messages-container">
-                {messages.length === 0 ? (
-                  <div className="no-messages">No messages yet for this thread.</div>
-                ) : (
-                  messages.map((m, idx) => {
-                    const isUser = m.sender === 'user';
-                    return (
-                      <div
-                        key={idx}
-                        className={`message-bubble ${
-                          isUser ? 'message-user' : 'message-admin'
-                        }`}
-                      >
-                        <div className="message-sender">
-                          {isUser ? 'You' : 'Admin'}
-                        </div>
-                        <div className="message-content">{m.content}</div>
-                        <div className="message-timestamp">
-                          {formatTimestamp(m.timestamp)}
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-                <div ref={chatEndRef} />
-              </div>
-
-              {isTyping && <div className="typing-indicator">You are typing...</div>}
-
-              <div className="send-message-area">
-                <textarea
-                  className="send-message-textarea"
-                  rows={3}
-                  placeholder="Type your message..."
-                  value={userMessage}
-                  onChange={handleTyping}
-                />
-                <button className="send-message-button" onClick={sendMessage}>
-                  Send
-                </button>
-              </div>
-            </>
-          )}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
