@@ -7,7 +7,7 @@
 # Achievements for percentage-based criteria will only apply if selectedLength == 100 (enforced in code).
 # Everything else remains functionally the same.
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import pytz
@@ -276,7 +276,7 @@ def login():
     """
     Login: /api/login
     Expects { usernameOrEmail, password } in JSON
-    If success => return user doc in JSON (serialized)
+    If success => store session['userId'] and return user doc in JSON
     """
     data = request.json
     if not data:
@@ -290,6 +290,9 @@ def login():
     user = get_user_by_identifier(identifier)
     if not user or user.get("password") != password:
         return jsonify({"error": "Invalid username or password"}), 401
+
+    # Store this user's ID in session so require_user_logged_in() sees them as logged in
+    session['userId'] = str(user["_id"])
 
     user = serialize_user(user)
     return jsonify({
@@ -307,6 +310,7 @@ def login():
         "subscriptionActive": user.get("subscriptionActive", False),
         "password": user.get("password")
     }), 200
+
 
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
