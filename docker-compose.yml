@@ -26,6 +26,8 @@ services:
     volumes:
       - ./frontend/my-react-app:/app
       - /app/node_modules
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     networks:
