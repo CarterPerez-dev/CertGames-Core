@@ -3,7 +3,7 @@
 from flask import Blueprint, request, session, jsonify
 from datetime import datetime
 from bson import ObjectId
-from ..mongodb.database import db
+from mongodb.database import db
 
 support_bp = Blueprint('support', __name__, url_prefix='/support')
 
