@@ -87,7 +87,7 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/mysupport" className={({ isActive }) => isActive ? 'active-link' : ''}>
+            <NavLink to="/my-support" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Questions
             </NavLink>
           </li>
