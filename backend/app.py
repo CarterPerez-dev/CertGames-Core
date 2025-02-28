@@ -21,8 +21,8 @@ from routes.subscribe_routes import subscribe_bp
 from routes.unsubscribe_routes import unsubscribe_bp
 from routes.grc_routes import grc_bp
 from routes.test_routes import api_bp
-from .routes.cracked_admin import cracked_bp
-from .routes.support_routes import support_bp
+from routes.cracked_admin import cracked_bp
+from routes.support_routes import support_bp
 
 
 # IMPORTANT: Now import from models.py (not models.user_subscription)
