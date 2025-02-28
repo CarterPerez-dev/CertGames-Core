@@ -16,21 +16,25 @@ node_modules/
 # React build files (generated during production build, not needed in source control)
 my-react-app/build/
 
-# AWS EC2 SSH key
-ssh-key-2025-02-12.key
+# Oracle key
 ssh-key-2025-02-12.key
 
-
+# All these files I edit on remote repo/ web browser
 IOS.MD
 
-"MD's"/
+# .md files
+MD's/
 
+# All my practice tests
 tests/
 
+# Mongosh Data
 Mongo-Inputs/
 
+# Trees/strcuture of my project
 Trees/
 
+# these are just images-- no need to always push/pull
 avatars/
 
 
