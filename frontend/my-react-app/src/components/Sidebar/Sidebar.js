@@ -65,16 +65,6 @@ const Sidebar = () => {
             <NavLink to="/profile" className={({ isActive }) => isActive ? 'active-link' : ''}>
               /Profile
             </NavLink>
-            <ul className="sublist">
-              <li>
-                <NavLink
-                  to="/my-support"
-                  className={({ isActive }) => isActive ? 'active-subtab' : ''}
-                >
-                  Questions
-                </NavLink>
-              </li>
-            </ul>
           </li>
           <li>
             <NavLink to="/achievements" className={({ isActive }) => isActive ? 'active-link' : ''}>
@@ -96,7 +86,11 @@ const Sidebar = () => {
               /Leaderboard
             </NavLink>
           </li>
-
+          <li>
+            <NavLink to="/mysupport" className={({ isActive }) => isActive ? 'active-link' : ''}>
+              /Leaderboard
+            </NavLink>
+          </li>
           {/* Tools group */}
           <li className="sidebar-group">
             <div
@@ -246,4 +240,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
