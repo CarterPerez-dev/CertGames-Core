@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "linuxplus",
   "testId": 10,
-  "testName": "Linux+ Practice Test 10 (Ultra Level)",
+  "testName": "Linux+ Practice Test #10 (Ultra Level)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -1107,6 +1107,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "If the directory is accessed via NFS, the NFS server might not enforce the SGID bit behavior. Certain NFS versions or export options can ignore group inheritance on newly created files.",
+      "examTip": "Remember, NFS is like that rebellious friend—it often ignores SGID bits, so if your files don't switch groups, blame NFS!"
     },
     {
       "id": 86,
