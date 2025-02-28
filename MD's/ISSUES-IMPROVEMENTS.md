@@ -5,7 +5,7 @@
 supportThreads_collection.create_index("userId")
 ```
 ---
-## admin and support refinements ![Here](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md)
+## admin and support refinements [Here](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md)
 ---
 ### add to username and passsword authenication where it omits spaces. so bascially any spaces are still not allowe dbut that wouldnt matte rbacsue spaces essentially dont even get logged as a charcer. so like if they try to do spaces it wil dissalow them lets say for if they do anything in the middle of charcters so lke "carter perez" or like "c dog" orand so on it dissallows them- however if they do any spaces before any charctaers or after any charcters it doesn teven get logged as any charcters its baical;y invisible/void. so if a user did " carterperez" it gets logged as "carterperez" even if they did " carterperez " it gets logged as "carterperez" or if they just did "carterperez " it gets logged as "carterperez" 
 ---
@@ -23,7 +23,7 @@ import './global.css';
 ---
 ### ADD RATE LIMITER TO AI COMPONENTS
 -----
-## ACHIEVEMNT Verification ![refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
+## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
 ---
 # Input most files (slices, globaltestpage, unique testlists/pages, routes, app.py, dockerfiles etc etc) into claude 3.7, grok 3, deepseek R1, ChatGPT deep research and o1 Pro and ask for efficiency improvements then combine all data they gave you into one document and look for the best imporvements.
 ---
@@ -46,8 +46,8 @@ import './global.css';
 ### verify some more things and optimize design some more/ make everything look better, test test and test once more
 ----
 # THEN THE IOS APP GRIND STARTS
-### refer to [app][https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/IOS.MD]
-### and refer to [info][https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/IOS.APP.MD]
+### refer to [app](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/IOS.MD)
+### and refer to (info][https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/IOS.APP.MD)
 
 
 
