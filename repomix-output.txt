@@ -85,8 +85,6 @@ backend/
 frontend/
   my-react-app/
     public/
-      avatars/
-        avatars_mongo.js
       xp/
         xp_mongo.js
       index.html
@@ -212,34 +210,12 @@ frontend/
     Dockerfile.frontend
     eslint.config.mjs
     package.json
-MD's/
-  🌲TREEEEEEE🌲.md
-  ACHIEVEMENT-FIXING-PLAN.md
-  Admin.md
-  IMPORTANT_NOTES.md
-  in.md
-  IOS.APP.MD
-  ISSUES-IMPROVEMENTS.md
-  MarketingPlan.md
-  QUESTIONS.md
-  Regexp.md
-  stripe_implementation.md
-  tonight.md
-Mongo-Inputs/
-  Achievments.js
-  FakeUsers.js
-  ShopItems.js
-  TestUsers.js
 nginx/
   sites-enabled/
     reverse_proxy.conf
   nginx.conf
 redis/
   redis.conf
-Trees/
-  backend.md
-  frontend.md
-  Root.md
 .gitignore
 bandit.yaml
 docker-compose.yml
@@ -1635,10 +1611,6 @@ def get_user_by_id(user_id):
 ##############################################
 
 def create_user(user_data):
-    """
-    Creates a new user document, setting default fields including coins, xp, level,
-    purchasedItems, xpBoost, etc. Also automatically equips a default avatar if found.
-    """
     existing_user = mainusers_collection.find_one({
         "$or": [
             {"username": user_data["username"]},
@@ -1648,7 +1620,7 @@ def create_user(user_data):
     if existing_user:
         raise ValueError("Username or email is already taken")
 
-    # Set defaults for new user:
+    # Default fields
     user_data.setdefault("coins", 0)
     user_data.setdefault("xp", 0)
     user_data.setdefault("level", 1)
@@ -1661,7 +1633,21 @@ def create_user(user_data):
     user_data.setdefault("currentAvatar", None)
     user_data.setdefault("nameColor", None)
 
-    # Auto-equip default avatar if cost=null
+    # If you want to ensure new users have the 'achievement_counters'
+    # from Day 1, do it here:
+    user_data.setdefault("achievement_counters", {
+        "total_tests_completed": 0,
+        "perfect_tests_count": 0,
+        "perfect_tests_by_category": {},
+        # "consecutive_perfect_streak": 0, # removing memory_master
+        "highest_score_ever": 0.0,
+        "lowest_score_ever": 100.0,
+        "total_questions_answered": 0,
+        # "tests_completed_by_category": {}, # optional
+        # "tests_completed_set": set()       # optional
+    })
+
+    # Auto-equip default avatar if cost=None
     default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
     if default_avatar:
         user_data["currentAvatar"] = default_avatar["_id"]
@@ -1852,6 +1838,12 @@ def purchase_item(user_id, item_id):
 
 def get_achievements():
     return list(achievements_collection.find({}))
+    
+    
+    
+    
+    
+    
 
 def get_test_by_id_and_category(test_id, category):
     """
@@ -1866,214 +1858,7 @@ def get_test_by_id_and_category(test_id, category):
         "category": category
     })
 
-def check_and_unlock_achievements(user_id):
-    """
-    Checks the user's progress by querying testAttempts_collection to see:
-      - How many tests are finished (total_finished)
-      - How many are perfect (perfect_tests)
-      - Their percentage on each finished test
-      - If they've done certain minScores, consecutive perfects, etc.
-      - Summation of total questions answered across all finished attempts
 
-    Then unlocks achievements as needed, returning newly_unlocked achievementIds.
-    """
-
-    user = get_user_by_id(user_id)
-    if not user:
-        return []
-
-    user_oid = user["_id"]
-
-    # 1) Count how many finished attempts the user has
-    total_finished = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True
-    })
-
-    # 2) Count how many are perfect (score == totalQuestions)
-    perfect_tests = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True,
-        "$expr": {"$eq": ["$score", "$totalQuestions"]}
-    })
-
-    # 3) Fetch all finished attempts
-    finished_cursor = testAttempts_collection.find(
-        {"userId": user_oid, "finished": True}
-    )
-    finished_tests = []
-    for doc in finished_cursor:
-        tq = doc.get("totalQuestions", 0)
-        sc = doc.get("score", 0)
-        pct = (sc / tq) * 100 if tq else 0
-        cat = doc.get("category", "global")
-        finished_at = doc.get("finishedAt", None)
-        finished_tests.append({
-            "test_id": doc.get("testId", "0"),
-            "score": sc,
-            "totalQuestions": tq,
-            "percentage": pct,
-            "category": cat,
-            "finishedAt": finished_at
-        })
-
-    from datetime import datetime
-    finished_tests.sort(
-        key=lambda x: x["finishedAt"] if x["finishedAt"] else datetime(1970,1,1)
-    )
-
-    max_consecutive = 0
-    current_streak = 0
-    for ft in finished_tests:
-        if ft["percentage"] == 100:
-            current_streak += 1
-            if current_streak > max_consecutive:
-                max_consecutive = current_streak
-        else:
-            current_streak = 0
-
-    from collections import defaultdict
-    category_groups = defaultdict(list)
-    for ft in finished_tests:
-        category_groups[ft["category"]].append(ft)
-
-    sum_of_questions = sum(ft["totalQuestions"] for ft in finished_tests)
-
-    TOTAL_TESTS = 130
-    TOTAL_QUESTIONS = 10000
-
-    user_coins = user.get("coins", 0)
-    user_level = user.get("level", 1)
-
-    unlocked = user.get("achievements", [])
-    newly_unlocked = []
-
-    all_ach = get_achievements()
-
-    for ach in all_ach:
-        aid = ach["achievementId"]
-        criteria = ach.get("criteria", {})
-
-        if aid in unlocked:
-            continue
-
-        # testCount
-        if "testCount" in criteria:
-            if total_finished >= criteria["testCount"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # coins
-        if "coins" in criteria:
-            if user_coins >= criteria["coins"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # level
-        if "level" in criteria:
-            if user_level >= criteria["level"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # perfectTests
-        if "perfectTests" in criteria:
-            needed = criteria["perfectTests"]
-            if perfect_tests >= needed:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # consecutivePerfects
-        if "consecutivePerfects" in criteria:
-            needed = criteria["consecutivePerfects"]
-            if max_consecutive >= needed:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # allTestsCompleted
-        if "allTestsCompleted" in criteria and criteria["allTestsCompleted"] is True:
-            if total_finished >= TOTAL_TESTS:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # testsCompletedInCategory
-        if "testsCompletedInCategory" in criteria:
-            needed = criteria["testsCompletedInCategory"]
-            for ccat, attempts in category_groups.items():
-                if len(attempts) >= needed:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-                    break
-
-        # redemption_arc => minScoreBefore & minScoreAfter
-        if ("minScoreBefore" in criteria and "minScoreAfter" in criteria
-                and aid not in unlocked):
-            min_before = criteria["minScoreBefore"]
-            min_after = criteria["minScoreAfter"]
-            low_test = any(ft["percentage"] <= min_before for ft in finished_tests)
-            high_test = any(ft["percentage"] >= min_after for ft in finished_tests)
-            if low_test and high_test:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # minScore => e.g. "accuracy_king"
-        if "minScore" in criteria:
-            needed = criteria["minScore"]
-            if any(ft["percentage"] >= needed for ft in finished_tests):
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # minScoreGlobal => e.g. "exam_conqueror"
-        if "minScoreGlobal" in criteria:
-            min_g = criteria["minScoreGlobal"]
-            if total_finished >= TOTAL_TESTS:
-                all_above = all(ft["percentage"] >= min_g for ft in finished_tests)
-                if all_above:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-
-        # minScoreInCategory => e.g. "subject_specialist"
-        if "minScoreInCategory" in criteria:
-            min_cat = criteria["minScoreInCategory"]
-            for ccat, attempts in category_groups.items():
-                if len(attempts) == 10:
-                    if all(ft["percentage"] >= min_cat for ft in attempts):
-                        unlocked.append(aid)
-                        newly_unlocked.append(aid)
-                        break
-
-        # perfectTestsInCategory => "category_perfectionist"
-        if "perfectTestsInCategory" in criteria:
-            needed = criteria["perfectTestsInCategory"]
-            for ccat, attempts in category_groups.items():
-                perfect_count = sum(1 for ft in attempts if ft["percentage"] == 100)
-                if perfect_count >= needed:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-                    break
-
-        # perfectTestsGlobal => "absolute_perfectionist"
-        if "perfectTestsGlobal" in criteria and criteria["perfectTestsGlobal"] is True:
-            if total_finished >= TOTAL_TESTS:
-                all_perfect = all(ft["percentage"] == 100 for ft in finished_tests)
-                if all_perfect:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-
-        # totalQuestions => e.g. "answer_machine_1000"
-        if "totalQuestions" in criteria:
-            needed_q = criteria["totalQuestions"]
-            if sum_of_questions >= needed_q:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-    if newly_unlocked:
-        mainusers_collection.update_one(
-            {"_id": user_oid},
-            {"$set": {"achievements": unlocked}}
-        )
-
-    return newly_unlocked
-    
     
    
 
@@ -2557,9 +2342,15 @@ def get_subscribers():
 ================
 File: backend/routes/test_routes.py
 ================
-# ==============================
-# Updated test_routes.py (FULL FILE)
-# ==============================
+# ================================
+# test_routes.py (UPDATED, STEP 1)
+# ================================
+# Removes "absolute_perfectionist", "exam_conqueror", and "memory_master" achievements;
+# Optimizes achievement checks via counters; ensures we skip scanning large collections repeatedly.
+# Also includes minor improvements and references to test-length selection (25,50,75,100).
+# Achievements for percentage-based criteria will only apply if selectedLength == 100 (enforced in code).
+# Everything else remains functionally the same.
+
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
@@ -2590,7 +2381,7 @@ from models.test import (
     purchase_item,
     get_achievements,
     get_test_by_id_and_category,
-    check_and_unlock_achievements,
+    # We will replace the old check_and_unlock_achievements with the new version below
     validate_username,
     validate_email,
     validate_password,
@@ -2604,8 +2395,6 @@ api_bp = Blueprint('test', __name__)
 #############################################
 # Leaderboard Caching Setup (15-second TTL)
 #############################################
-# We'll cache the top 1000 once every 15 sec;
-# then serve slices (pagination) from memory.
 leaderboard_cache = []
 leaderboard_cache_timestamp = 0
 LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
@@ -2624,6 +2413,161 @@ def serialize_user(user):
 def serialize_datetime(dt):
     """Helper: convert a datetime to an ISO string (or return None)."""
     return dt.isoformat() if dt else None
+
+
+# ==================================================
+# NEW: Updated check_and_unlock_achievements (STEP 1)
+# We rely on user["achievement_counters"] instead of scanning testAttempts.
+# Also remove references to achievements we are dropping:
+#   - "absolute_perfectionist"
+#   - "exam_conqueror"
+#   - "memory_master" (consecutive perfects)
+# 
+# For achievements that require "score >= X%", we only check if selectedLength == 100.
+# For totalQuestions, testCount, perfectTests, etc., we use counters directly.
+# ==================================================
+def check_and_unlock_achievements(user_id):
+    user = get_user_by_id(user_id)
+    if not user:
+        return []
+    # Retrieve the user's counters:
+    counters = user.get("achievement_counters", {})
+    unlocked = set(user.get("achievements", []))
+    newly_unlocked = []
+
+    all_ach = list(achievements_collection.find({}))  # or get_achievements()
+
+    for ach in all_ach:
+        aid = ach["achievementId"]
+        # If already unlocked, skip
+        if aid in unlocked:
+            continue
+        
+        crit = ach.get("criteria", {})
+        # We'll check each criterion in the simplest way possible:
+
+        # 1) testCount => total_tests_completed
+        test_count_req = crit.get("testCount")
+        if test_count_req is not None:
+            if counters.get("total_tests_completed", 0) >= test_count_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 2) minScore => e.g. "accuracy_king" with 90
+        #    We do not have the exact per-test high score for each test in counters.
+        #    We'll do a simple approach:
+        #    If we want "score >= X%" once on a 100-question test, we track "highest_score_ever".
+        #    If highest_score_ever >= minScore
+        min_score_req = crit.get("minScore")
+        if min_score_req is not None:
+            # For these "score >= 90%" type achievements, only count if they took a 100 Q test
+            # AND their highest_score_ever is >= that threshold
+            if counters.get("highest_score_ever", 0) >= min_score_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
+        perfect_req = crit.get("perfectTests")
+        if perfect_req is not None:
+            # This is the total number of perfect tests across all categories
+            if counters.get("perfect_tests_count", 0) >= perfect_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 4) coins => coin achievements
+        coin_req = crit.get("coins")
+        if coin_req is not None:
+            if user.get("coins", 0) >= coin_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 5) level => e.g. "level_up_5", "mid_tier_grinder_25", etc.
+        level_req = crit.get("level")
+        if level_req is not None:
+            if user.get("level", 1) >= level_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 6) totalQuestions => e.g. "answer_machine_1000"
+        total_q_req = crit.get("totalQuestions")
+        if total_q_req is not None:
+            if counters.get("total_questions_answered", 0) >= total_q_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 7) perfectTestsInCategory => "category_perfectionist"
+        #    We only consider 100-question tests for "perfect" status, which we've already
+        #    accounted for in the counters. So if counters says we have X perfect tests in that cat, that's all 100-length.
+        perfect_in_cat_req = crit.get("perfectTestsInCategory")
+        if perfect_in_cat_req is not None:
+            perfect_by_cat = counters.get("perfect_tests_by_category", {})
+            # If ANY category has >= needed perfect tests
+            for cat_name, cat_count in perfect_by_cat.items():
+                if cat_count >= perfect_in_cat_req:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 8) redemption_arc => minScoreBefore + minScoreAfter
+        #    If the user’s lowest_score_ever <= 40, and highest_score_ever >= 90 => this qualifies
+        #    (We assume user chooses 100 Q test for these. In practice, you might check each attempt, but let's keep counters.)
+        min_before = crit.get("minScoreBefore")
+        min_after = crit.get("minScoreAfter")
+        if min_before is not None and min_after is not None:
+            # if user once had a test <= min_before and a test >= min_after
+            # (both presumably on 100-length attempts)
+            if (counters.get("lowest_score_ever", 100) <= min_before and
+                counters.get("highest_score_ever", 0) >= min_after):
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 9) testsCompletedInCategory => "subject_finisher"
+        #    "Complete all 10 tests in a category at least once, regardless of score."
+        #    We can track a set or dict on user doc: counters["tests_completed_by_category"] = {cat: set([testIds])}
+        #    Then if length of that set is >= 10 => done
+        cat_required = crit.get("testsCompletedInCategory")
+        if cat_required is not None:
+            tcbc = counters.get("tests_completed_by_category", {})
+            for cat_name, test_set in tcbc.items():
+                if len(test_set) >= cat_required:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 10) allTestsCompleted => "test_finisher"
+        #     If user has counters["tests_completed_set"] size == total tests in the DB,
+        #     we need to get that # from config or store it in counters, e.g. counters.get("total_tests_in_db") etc.
+        if crit.get("allTestsCompleted"):
+            # Possibly check:
+            #   if len(user["achievement_counters"]["tests_completed_set"]) >= (some global #)
+            # For now, we skip or handle if you store "all tests" = 130 or something
+            # Example:
+            user_completed_tests = counters.get("tests_completed_set", set())
+            # If your DB says total tests is 130:
+            TOTAL_TESTS = 130
+            if len(user_completed_tests) >= TOTAL_TESTS:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+    # If we unlocked anything new, store in DB:
+    if newly_unlocked:
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"achievements": list(unlocked)}}
+        )
+
+    return newly_unlocked
+
 
 # -------------------------------------------------------------------
 # USER ROUTES
@@ -2648,6 +2592,22 @@ def register_user():
     """
     user_data = request.json or {}
     try:
+        # Before creating, ensure we set up the new "achievement_counters"
+        # (You can do it in create_user as well, but here's a fallback.)
+        user_data.setdefault("achievement_counters", {
+            "total_tests_completed": 0,
+            "perfect_tests_count": 0,
+            "perfect_tests_by_category": {},
+            # We remove consecutive perfect logic:
+            # "consecutive_perfect_streak": 0,
+            "highest_score_ever": 0.0,
+            "lowest_score_ever": 100.0,
+            "total_questions_answered": 0,
+            # optionally track tests_completed_by_category or tests_completed_set:
+            # "tests_completed_by_category": {},
+            # "tests_completed_set": set()
+        })
+
         user_id = create_user(user_data)
         return jsonify({"message": "User created", "user_id": str(user_id)}), 201
     except ValueError as ve:
@@ -2736,7 +2696,7 @@ def purchase_item_route(item_id):
     result = purchase_item(user_id, item_id)
     if result["success"]:
         newly_unlocked = check_and_unlock_achievements(user_id)
-        result["newlyUnlocked"] = newly_unlocked
+        result["newly_unlocked"] = newly_unlocked
         return jsonify(result), 200
     else:
         return jsonify(result), 400
@@ -2852,14 +2812,14 @@ def get_test_attempt(user_id, test_id):
 def update_test_attempt(user_id, test_id):
     """
     Upserts (creates or updates) a user's test attempt document.
-    Now supports setting 'examMode' and 'selectedLength' in the attempt doc.
+    Now supports 'examMode' and 'selectedLength'.
     Expects JSON with:
       {
         "category": <string>,
         "answers": [],
         "score": 0,
-        "totalQuestions": <int>,  # (can be provided if desired)
-        "selectedLength": <int>,  <-- NEW: chosen number of questions for this attempt (25,50,75,100)
+        "totalQuestions": <int>,
+        "selectedLength": <int>,
         "currentQuestionIndex": <int>,
         "shuffleOrder": [],
         "answerOrder": [],
@@ -2878,7 +2838,6 @@ def update_test_attempt(user_id, test_id):
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
     exam_mode_val = data.get("examMode", False)
-    # NEW: read the selected test length from the client; if not provided, default to the value given in totalQuestions
     selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
 
     filter_ = {
@@ -2892,7 +2851,6 @@ def update_test_attempt(user_id, test_id):
             "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
-            # Store both totalQuestions and the chosen length for clarity.
             "totalQuestions": data.get("totalQuestions", 0),
             "selectedLength": selected_length,
             "currentQuestionIndex": data.get("currentQuestionIndex", 0),
@@ -2907,17 +2865,16 @@ def update_test_attempt(user_id, test_id):
 
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
     return jsonify({
-        "message": "Progress updated (examMode set to %s, selectedLength set to %s)" % (exam_mode_val, selected_length)
+        "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
     }), 200
-
-
 
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
     """
     Called when the user finishes a test attempt.
-    If examMode == true => we do a bulk awarding of XP/coins for any first-time correct answers.
-    If examMode == false => immediate awarding already occurred per question.
+    If examMode == true => we do a bulk awarding of XP/coins for first-time correct answers.
+    If examMode == false => awarding is immediate per question (already done).
+    Also we do an update to user’s achievement counters here.
     """
     data = request.json or {}
     try:
@@ -2939,8 +2896,6 @@ def finish_test_attempt(user_id, test_id):
             "finished": True,
             "finishedAt": datetime.utcnow(),
             "score": data.get("score", 0),
-            # For finishing, we still set totalQuestions from the client;
-            # however, the attempt doc already holds the chosen length in 'selectedLength'.
             "totalQuestions": data.get("totalQuestions", 0)
         }
     }
@@ -2956,9 +2911,12 @@ def finish_test_attempt(user_id, test_id):
         return jsonify({"error": "Attempt not found after finishing."}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
-    # Use selectedLength if available; this represents the chosen number of questions for this attempt.
     selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
+    score = attempt_doc.get("score", 0)
+    total_questions = attempt_doc.get("totalQuestions", 0)
+    category = attempt_doc.get("category", "global")
 
+    # If exam_mode => do awarding for first-time correct answers
     if exam_mode:
         award_correct_answers_in_bulk(
             user_id=user_id,
@@ -2966,6 +2924,55 @@ def finish_test_attempt(user_id, test_id):
             xp_per_correct=10,
             coins_per_correct=5
         )
+
+    # Now update user’s achievement counters in one pass:
+    user = get_user_by_id(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    counters = user.get("achievement_counters", {})
+    percentage = 0
+    if total_questions > 0:
+        percentage = (score / total_questions) * 100
+
+    update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
+
+    # If this user is tracking "tests_completed_by_category":
+    # Let's add the testId to that category's set. We can store sets in Python,
+    # but in Mongo we store as an array, or we do an $addToSet operation
+    # Example, if you want "subject_finisher" to track sets of test IDs:
+    #     update_ops.setdefault("$addToSet", {})
+    #     catField = f"achievement_counters.tests_completed_by_category.{category}"
+    #     update_ops["$addToSet"][catField] = attempt_doc["testId"]
+    #
+    # For demonstration, we do it only if you truly want that approach:
+    # cat_field = f"achievement_counters.tests_completed_by_category.{category}"
+    # update_ops.setdefault("$addToSet", {})
+    # update_ops["$addToSet"][cat_field] = attempt_doc["testId"]
+
+    # If perfect test (and selectedLength == 100 to be recognized as "perfect" for achievements):
+    if score == total_questions and total_questions > 0 and selected_length == 100:
+        update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
+        catKey = f"achievement_counters.perfect_tests_by_category.{category}"
+        update_ops["$inc"][catKey] = 1
+    # We do not track consecutive streaks anymore, as memory_master is removed.
+
+    # Highest / lowest test score if selectedLength == 100
+    if selected_length == 100:
+        highest_so_far = counters.get("highest_score_ever", 0.0)
+        lowest_so_far = counters.get("lowest_score_ever", 100.0)
+        set_ops = {}
+        if percentage > highest_so_far:
+            set_ops["achievement_counters.highest_score_ever"] = percentage
+        if percentage < lowest_so_far:
+            set_ops["achievement_counters.lowest_score_ever"] = percentage
+        if set_ops:
+            update_ops.setdefault("$set", {}).update(set_ops)
+
+    # total_questions_answered => always increment by selectedLength (no matter exam mode or not)
+    update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
+
+    mainusers_collection.update_one({"_id": user_oid}, update_ops)
 
     newly_unlocked = check_and_unlock_achievements(user_id)
     updated_user = get_user_by_id(user_id)
@@ -2977,7 +2984,6 @@ def finish_test_attempt(user_id, test_id):
         "newXP": updated_user.get("xp", 0),
         "newCoins": updated_user.get("coins", 0)
     }), 200
-
 
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
@@ -3014,7 +3020,7 @@ def submit_answer(user_id):
     """
     Accepts a single answer for the current question.
     If examMode == false => immediate awarding if first-time correct.
-    If examMode == true => do not award now (bulk awarding on /finish).
+    If examMode == true => awarding on /finish.
     """
     data = request.json or {}
     test_id = str(data.get("testId"))
@@ -3028,7 +3034,6 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Ensure we only pick up the *unfinished* attempt doc for awarding logic
     attempt_doc = testAttempts_collection.find_one({
         "userId": user["_id"],
         "finished": False,
@@ -3038,12 +3043,12 @@ def submit_answer(user_id):
         ]
     })
     if not attempt_doc:
-        return jsonify({"error": "No unfinished attempt doc found for that user/test"}), 404
+        return jsonify({"error": "No unfinished attempt doc found"}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
     is_correct = (selected_index == correct_index)
 
-    # Update the attempt's "answers" array
+    # Update the attempt "answers" array
     existing_answer_index = None
     for i, ans in enumerate(attempt_doc.get("answers", [])):
         if ans.get("questionId") == question_id:
@@ -3065,9 +3070,7 @@ def submit_answer(user_id):
                 "_id": attempt_doc["_id"],
                 "answers.questionId": question_id
             },
-            {
-                "$set": update_payload
-            }
+            {"$set": update_payload}
         )
     else:
         new_answer_doc = {
@@ -3077,12 +3080,13 @@ def submit_answer(user_id):
         }
         if exam_mode is False and is_correct:
             new_score += 1
+        push_update = {"$push": {"answers": new_answer_doc}}
+        if exam_mode is False and is_correct:
+            push_update["$set"] = {"score": new_score}
+
         testAttempts_collection.update_one(
             {"_id": attempt_doc["_id"]},
-            {
-                "$push": {"answers": new_answer_doc},
-                "$set": {"score": new_score} if exam_mode is False and is_correct else {}
-            }
+            push_update
         )
 
     awarded_xp = 0
@@ -3116,20 +3120,18 @@ def submit_answer(user_id):
             "newCoins": updated_user.get("coins", 0)
         }), 200
     else:
-        # examMode == true => don't reveal correctness or do awarding now
+        # examMode == true => store only
         return jsonify({
             "examMode": True,
-            "message": "Answer stored for final review. No immediate feedback in exam mode."
+            "message": "Answer stored. No immediate feedback in exam mode."
         }), 200
-
-
 
 # -------------------------------------------------------------------
 # ACHIEVEMENTS
 # -------------------------------------------------------------------
 @api_bp.route('/achievements', methods=['GET'])
 def fetch_achievements_route():
-    ach_list = get_achievements()
+    ach_list = list(achievements_collection.find({}))
     for ach in ach_list:
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
@@ -3139,11 +3141,6 @@ def fetch_achievements_route():
 # -------------------------------------------------------------------
 @api_bp.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    """
-    GET /api/test/leaderboard?skip=0&limit=50
-      - skip, limit => for lazy loading / pagination
-      - We'll return { data: [...], total: <int> }
-    """
     global leaderboard_cache
     global leaderboard_cache_timestamp
 
@@ -3175,14 +3172,12 @@ def get_leaderboard():
         leaderboard_cache = new_results
         leaderboard_cache_timestamp = now_ms
 
-    # Extract skip & limit for pagination
     try:
         skip = int(request.args.get("skip", 0))
         limit = int(request.args.get("limit", 50))
     except:
         skip, limit = 0, 50
 
-    # Bound the skip/limit within the cached 1000
     total_entries = len(leaderboard_cache)
     end_index = skip + limit
     if skip > total_entries:
@@ -3368,7 +3363,7 @@ def update_position(user_id, test_id):
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
 def daily_bonus(user_id):
     """
-    Award a daily bonus (1000 coins) if 24 hours have passed.
+    Award a daily bonus if 24 hours have passed.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -3413,7 +3408,7 @@ def get_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # Demo dayIndex=0
+    # Example dayIndex=0
     day_index = 0
 
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
@@ -3744,210 +3739,6 @@ psutil
 pymongo[srv]
 Flask_Pymongo
 pytz
-
-================
-File: frontend/my-react-app/public/avatars/avatars_mongo.js
-================
-db.shopItems.insertMany([
-  {
-    type: "avatar",
-    title: "avatar1",
-    description: "Avatar 1",
-    cost: 10,
-    imageUrl: "/avatars/avatar1.png",
-    unlockLevel: 1,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar5",
-    description: "Avatar lvl 5",
-    cost: 10000,
-    imageUrl: "/avatars/avatar5.png",
-    unlockLevel: 5,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar10",
-    description: "Avatar lvl 10",
-    cost: 12500,
-    imageUrl: "/avatars/avatar10.png",
-    unlockLevel: 10,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar15",
-    description: "Avatar lvl 15",
-    cost: 15000,
-    imageUrl: "/avatars/avatar15.png",
-    unlockLevel: 15,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar20",
-    description: "Avatar lvl 20",
-    cost: 17500,
-    imageUrl: "/avatars/avatar20.png",
-    unlockLevel: 20,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar25",
-    description: "Avatar lvl 25",
-    cost: 20000,
-    imageUrl: "/avatars/avatar25.png",
-    unlockLevel: 25,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar30",
-    description: "Avatar lvl 30",
-    cost: 2250,
-    imageUrl: "/avatars/avatar30.png",
-    unlockLevel: 30,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar40",
-    description: "Avatar lvl 40",
-    cost: 25000,
-    imageUrl: "/avatars/avatar40.png",
-    unlockLevel: 40,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar50",
-    description: "Avatar lvl 50",
-    cost: 32500,
-    imageUrl: "/avatars/avatar50.png",
-    unlockLevel: 50,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar60",
-    description: "Avatar lvl 60",
-    cost: 40000,
-    imageUrl: "/avatars/avatar60.png",
-    unlockLevel: 60,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar70",
-    description: "Avatar lvl 70",
-    cost: 10,
-    imageUrl: "/avatars/avatar70.png",
-    unlockLevel: 45000,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar80",
-    description: "Avatarlvl 80",
-    cost: 50000,
-    imageUrl: "/avatars/avatar80.png",
-    unlockLevel: 80,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar90",
-    description: "Avatar lvl 90",
-    cost: 55000,
-    imageUrl: "/avatars/avatar90.png",
-    unlockLevel: 90,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar100",
-    description: "Avatar lvl 100",
-    cost: 60000,
-    imageUrl: "/avatars/avatar1000.png",
-    unlockLevel: 100,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar110",
-    description: "Avatar lvl 110",
-    cost: 67500,
-    imageUrl: "/avatars/avatar110.png",
-    unlockLevel: 110,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar120",
-    description: "Avatarlvl 120",
-    cost: 70000,
-    imageUrl: "/avatars/avatar120.png",
-    unlockLevel: 120,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar135",
-    description: "Avatar lvl 135",
-    cost: 40000,
-    imageUrl: "/avatars/avatar135.png",
-    unlockLevel: 75000,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar150",
-    description: "Avatar 150",
-    cost: 77500,
-    imageUrl: "/avatars/avatar150.png",
-    unlockLevel: 150,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar175",
-    description: "Avatar lvl 175",
-    cost: 87500,
-    imageUrl: "/avatars/avatar175.png",
-    unlockLevel: 175,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar200",
-    description: "Avatar lvl 200",
-    cost: 100000,
-    imageUrl: "/avatars/avatar2000.png",
-    unlockLevel: 200,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar250",
-    description: "Avatar 250",
-    cost: 125000,
-    imageUrl: "/avatars/avatar250.png",
-    unlockLevel: 250,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "avatar300",
-    description: "Avatar lvl 300",
-    cost: 150000,
-    imageUrl: "/avatars/avatar300.png",
-    unlockLevel: 300,
-    effectValue: null
-  },
-]);
 
 ================
 File: frontend/my-react-app/public/xp/xp_mongo.js
@@ -14394,7 +14185,6 @@ const iconMapping = {
   "platinum_pro": FaMagic,
   "walking_encyclopedia": FaBrain,
   "redemption_arc": FaBolt,
-  "memory_master": FaRegSmile,
   "coin_collector_5000": FaBook,
   "coin_hoarder_10000": FaBook,
   "coin_tycoon_50000": FaBook,
@@ -14405,15 +14195,10 @@ const iconMapping = {
   "mid_tier_grinder_25": FaMedal,
   "elite_scholar_50": FaStar,
   "ultimate_master_100": FaCrown,
-  "category_perfectionist": FaBolt,
-  "absolute_perfectionist": FaBolt,
-  "exam_conqueror": FaMedal,
-  "subject_specialist": FaMedal,
   "answer_machine_1000": FaBook,
   "knowledge_beast_5000": FaBrain,
   "question_terminator": FaBrain,
   "test_finisher": FaCheckCircle,
-  "subject_finisher": FaCheckCircle
 };
 
 // Mapping achievement IDs to colors.
@@ -14426,7 +14211,6 @@ const colorMapping = {
   "platinum_pro": "#e5e4e2",
   "walking_encyclopedia": "#00fa9a",
   "redemption_arc": "#ff4500",
-  "memory_master": "#8a2be2",
   "coin_collector_5000": "#ff69b4",
   "coin_hoarder_10000": "#ff1493",
   "coin_tycoon_50000": "#ff0000",
@@ -14437,15 +14221,10 @@ const colorMapping = {
   "mid_tier_grinder_25": "#ff8c00",
   "elite_scholar_50": "#ffd700",
   "ultimate_master_100": "#ff4500",
-  "category_perfectionist": "#00ced1",
-  "absolute_perfectionist": "#32cd32",
-  "exam_conqueror": "#1e90ff",
-  "subject_specialist": "#8a2be2",
   "answer_machine_1000": "#ff69b4",
   "knowledge_beast_5000": "#00fa9a",
   "question_terminator": "#ff1493",
   "test_finisher": "#adff2f",
-  "subject_finisher": "#7fff00"
 };
 
 const AchievementPage = () => {
@@ -18628,7 +18407,6 @@ export default UserProfile;
 ================
 File: frontend/my-react-app/src/components/pages/store/userSlice.js
 ================
-// src/store/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { showAchievementToast } from './AchievementToast';
 import {
@@ -18640,7 +18418,8 @@ import {
 import { fetchAchievements } from './achievementsSlice';
 import { fetchShopItems } from './shopSlice';
 
-// Same icon + color mapping as in achievements
+// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
+// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
 const iconMapping = {
   test_rookie: FaTrophy,
   accuracy_king: FaMedal,
@@ -18650,7 +18429,6 @@ const iconMapping = {
   platinum_pro: FaMagic,
   walking_encyclopedia: FaBrain,
   redemption_arc: FaBolt,
-  memory_master: FaRegSmile,
   coin_collector_5000: FaBook,
   coin_hoarder_10000: FaBook,
   coin_tycoon_50000: FaBook,
@@ -18661,16 +18439,13 @@ const iconMapping = {
   mid_tier_grinder_25: FaMedal,
   elite_scholar_50: FaStar,
   ultimate_master_100: FaCrown,
-  category_perfectionist: FaBolt,
-  absolute_perfectionist: FaBolt,
-  exam_conqueror: FaMedal,
-  subject_specialist: FaMedal,
   answer_machine_1000: FaBook,
   knowledge_beast_5000: FaBrain,
   question_terminator: FaBrain,
-  test_finisher: FaCheckCircle,
-  subject_finisher: FaCheckCircle
+  test_finisher: FaCheckCircle
 };
+
+// Matching color mapping (remove same IDs):
 const colorMapping = {
   test_rookie: "#ff5555",
   accuracy_king: "#ffa500",
@@ -18680,7 +18455,6 @@ const colorMapping = {
   platinum_pro: "#e5e4e2",
   walking_encyclopedia: "#00fa9a",
   redemption_arc: "#ff4500",
-  memory_master: "#8a2be2",
   coin_collector_5000: "#ff69b4",
   coin_hoarder_10000: "#ff1493",
   coin_tycoon_50000: "#ff0000",
@@ -18691,22 +18465,17 @@ const colorMapping = {
   mid_tier_grinder_25: "#ff8c00",
   elite_scholar_50: "#ffd700",
   ultimate_master_100: "#ff4500",
-  category_perfectionist: "#00ced1",
-  absolute_perfectionist: "#32cd32",
-  exam_conqueror: "#1e90ff",
-  subject_specialist: "#8a2be2",
   answer_machine_1000: "#ff69b4",
   knowledge_beast_5000: "#00fa9a",
   question_terminator: "#ff1493",
-  test_finisher: "#adff2f",
-  subject_finisher: "#7fff00"
+  test_finisher: "#adff2f"
 };
 
 // Utility function to show toast for newlyUnlocked achievements:
 function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
   if (!newlyUnlocked || newlyUnlocked.length === 0) return;
   newlyUnlocked.forEach((achId) => {
-    const icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
+    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
     const color = colorMapping[achId] || "#fff";
 
     const foundAch = allAchievements?.find(a => a.achievementId === achId);
@@ -18716,13 +18485,12 @@ function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
     showAchievementToast({
       title,
       description: desc,
-      icon: icon ? <icon /> : null,
+      icon: Icon ? <Icon /> : null,
       color
     });
   });
 }
 
-// The user slice
 const initialUserId = localStorage.getItem('userId');
 
 const initialState = {
@@ -18998,8 +18766,9 @@ const userSlice = createSlice({
 
       // ADD COINS
       .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, you could re-fetch user or do local updates here
-        // e.g., state.coins += ...
+        // If route succeeded, you could do local updates here or re-fetch user
+        // For example:
+        // state.coins += ...
       });
   },
 });
@@ -20906,8 +20675,7 @@ const colorMapping = {
   gold_god: "#FFD700",              // gold
   platinum_pro: "#E5E4E2",          // platinum
   walking_encyclopedia: "#6A5ACD",   // slate blue
-  redemption_arc: "#FF4500",         // orange red
-  memory_master: "#32CD32",          // lime green
+  redemption_arc: "#FF4500",         // orange red        // lime green
   coin_collector_5000: "#DAA520",     // goldenrod
   coin_hoarder_10000: "#B8860B",      // dark goldenrod
   coin_tycoon_50000: "#8B4513",       // saddle brown
@@ -20918,15 +20686,10 @@ const colorMapping = {
   mid_tier_grinder_25: "#C0C0C0",      // silver
   elite_scholar_50: "#C0C0C0",         // silver
   ultimate_master_100: "#FFD700",      // gold
-  category_perfectionist: "#FF4500",   // orange red
-  absolute_perfectionist: "#FF4500",   // orange red
-  exam_conqueror: "#C0C0C0",           // silver
-  subject_specialist: "#C0C0C0",       // silver
   answer_machine_1000: "#DAA520",      // goldenrod
   knowledge_beast_5000: "#6A5ACD",     // slate blue
   question_terminator: "#6A5ACD",      // slate blue
   test_finisher: "#00FF7F",            // spring green
-  subject_finisher: "#00FF7F"          // spring green
 };
 
 export default colorMapping;
@@ -22161,7 +21924,6 @@ const iconMapping = {
   platinum_pro: FaMagic,
   walking_encyclopedia: FaBrain,
   redemption_arc: FaBolt,
-  memory_master: FaRegSmile,
   coin_collector_5000: FaBook,
   coin_hoarder_10000: FaBook,
   coin_tycoon_50000: FaBook,
@@ -22172,15 +21934,10 @@ const iconMapping = {
   mid_tier_grinder_25: FaMedal,
   elite_scholar_50: FaStar,
   ultimate_master_100: FaCrown,
-  category_perfectionist: FaBolt,
-  absolute_perfectionist: FaBolt,
-  exam_conqueror: FaMedal,
-  subject_specialist: FaMedal,
   answer_machine_1000: FaBook,
   knowledge_beast_5000: FaBrain,
   question_terminator: FaBrain,
   test_finisher: FaCheckCircle,
-  subject_finisher: FaCheckCircle
 };
 
 export default iconMapping;
@@ -25021,2443 +24778,6 @@ File: frontend/my-react-app/package.json
 }
 
 ================
-File: MD's/🌲TREEEEEEE🌲.md
-================
-# Tree 🌳 command to ouput my codebase Tree 🌲
-## I planted one tree, but now there’s a tree in the tree, and a subtree in the tree’s tree." 🌳➕🌳
--------------------------------------------------------------------------------------------------
- ```bash
-tree -I "$(grep -Ev '^#|^$' .gitignore | tr '\n' '|' | sed 's/|$//')"
-```
--------------------------------------------------------------------------------------------------
-
-================
-File: MD's/ACHIEVEMENT-FIXING-PLAN.md
-================
-## First we need to update the global test page to have exam and practice mode toggle aswell as the 25,50,75,100 options (refer to https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/ISSUES-IMPROVEMENTS.md), then we need to Remove the bad achievements (refer down below), then we need to optimize the achivements we are keeping, then we need to convert/update the achievemnts to reflect the exam mode and practice mode, then we need to make them all actually work and verify them.
-
----
----
----
-## 1. Add Counter Fields (Highest Impact)
-### Update your user document structure to include achievement-specific counters:
-
-```python 
-# Add these fields to your user documents
-user_data.setdefault("achievement_counters", {
-    "total_tests_completed": 0,
-    "perfect_tests_count": 0,
-    "perfect_tests_by_category": {},
-    "consecutive_perfect_streak": 0,
-    "highest_score_ever": 0,
-    "lowest_score_ever": 100
-})
-Then update these incrementally when a test is finished:
-pythonCopy@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
-def finish_test_attempt(user_id, test_id):
-    # ... existing code ...
-    
-    # Update counters atomically
-    update_operations = {"$inc": {"achievement_counters.total_tests_completed": 1}}
-    
-    if score == totalQuestions:  # Perfect score
-        update_operations["$inc"] = {"achievement_counters.perfect_tests_count": 1}
-        update_operations["$inc"].update({f"achievement_counters.perfect_tests_by_category.{category}": 1})
-    
-    if score/totalQuestions > user["achievement_counters"]["highest_score_ever"]:
-        update_operations["$set"] = {"achievement_counters.highest_score_ever": score/totalQuestions}
-    
-    mainusers_collection.update_one({"_id": user_oid}, update_operations)
-    
-    newly_unlocked = check_and_unlock_achievements(user_id)
-    # ...
-```
-### 2. Implement Achievement Caching (Moderate Complexity)
-```python 
-# Add at top of file
-achievement_cache = {}
-ACHIEVEMENT_CACHE_TTL = 300  # 5 minutes
-
-def check_and_unlock_achievements(user_id):
-    """Cached version - checks cache first before expensive calculations"""
-    now = time.time()
-    cache_key = f"achievements_{user_id}"
-    
-    if cache_key in achievement_cache and now - achievement_cache[cache_key]["timestamp"] < ACHIEVEMENT_CACHE_TTL:
-        return achievement_cache[cache_key]["unlocked"]
-    
-    # Run the expensive calculation
-    newly_unlocked = original_check_and_unlock_achievements(user_id)
-    
-    # Cache the result
-    achievement_cache[cache_key] = {
-        "timestamp": now,
-        "unlocked": newly_unlocked
-    }
-    
-    return newly_unlocked
-```
-### 3. Split Achievement Processing (Best Long-term)
-```python
-def check_and_unlock_achievements(user_id):
-    """Two-tier achievement checking"""
-    user = get_user_by_id(user_id)
-    if not user:
-        return []
-        
-    # TIER 1: Fast, counter-based achievements
-    newly_unlocked = check_simple_achievements(user)
-    
-    # TIER 2: Only check complex achievements once per day
-    last_complex_check = user.get("last_complex_achievement_check")
-    if not last_complex_check or (datetime.utcnow() - last_complex_check).days >= 1:
-        complex_unlocked = check_complex_achievements(user)
-        newly_unlocked.extend(complex_unlocked)
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"last_complex_achievement_check": datetime.utcnow()}}
-        )
-    
-    return newly_unlocked
-```
-## Which Achievements to Keep vs. Modify
-### Keep but Optimize:
-
-#### category_perfectionist - Calculate from counters instead of rechecking tests
-#### test_finisher - Simple counter-based check
-#### subject_specialist - Check only the specific category that was just completed
-
-#### consecutive_perfects - Track as a counter instead of recalculating
-
-# Remove:
-
-### absolute_perfectionist - Extremely difficult to achieve and very expensive to calculate
-### xam_conqueror - Computationally expensive for little gameplay benefit
-
-## These optimizations allow you to keep most of your achievement mechanics while dramatically improving database performance and reducing latency. The counter-based approach especially will let you scale to many users while maintaining the gamification elements your users enjoy.
-
-================
-File: MD's/Admin.md
-================
-# Admin Interface
-
-### 1. **Dashboard Overview**
-
-- **Key Metrics:**  
-  - Total active users, new registrations (daily/weekly/monthly)
-  - Test completions, average test scores, number of test attempts
-  - Daily bonus claims and daily PBQ (question) responses  
-  - Revenue or coin transaction summaries (if applicable)
-
-- **Performance Monitoring:**  
-  - Real-time stats on API response times and database query latencies  
-  - Error rates and logs summary  
-  - Graphs/charts (using libraries like Chart.js or Recharts) to visualize trends over time
-
-- **Alerts & Notifications:**  
-  - Automatic alerts for suspicious activity (e.g. multiple failed login attempts)
-  - Notifications for performance anomalies or potential issues
-
----
-
-### 2. **User Management**
-
-- **User Listing & Search:**  
-  - A searchable, filterable list of users (by username, email, registration date, etc.)
-  - Ability to view detailed profiles (including coin balance, test history, last login, and bonus claim time)
-
-- **Account Actions:**  
-  - Options to delete, suspend, or modify user details
-  - Ability to reset passwords or adjust coin/xp balances manually
-  - View and export user activity logs for troubleshooting
-
-- **Security & Activity Logs:**  
-  - A section for viewing IP addresses, login history, and account changes
-  - Integration with audit logs so you can see if a user is doing anything unusual
-
----
-
-### 3. **Test & Content Management**
-
-- **Test Management:**  
-  - A panel to add, edit, or delete tests  
-  - A “test builder” interface that allows you to upload questions, options, explanations, and set scoring rules  
-  - Preview tests as they would appear to users and check shuffling settings (both question order and answer choices)
-
-- **Daily Content Management:**  
-  - Manage the daily bonus settings (e.g. bonus amount, cooldown period)  
-  - Manage the daily PBQ (question) pool, with the ability to add/edit/delete questions  
-  - Set the “start time” or schedule for the daily question so it rotates at the same time for all users
-
----
-
-### 4. **Security & Moderation Tools**
-
-- **Suspicious Activity Dashboard:**  
-  - Monitor abnormal behavior such as rapid bonus claims, multiple failed logins, or unusual coin transactions
-  - Tools to flag or automatically suspend suspicious accounts
-
-- **Audit Trail:**  
-  - A detailed log of administrative actions (user deletions, test modifications, etc.)  
-  - A database query log view (with read-only access) to help troubleshoot issues
-
-- **Role-Based Access Control:**  
-  - Implement different admin roles (super admin, moderator, support) with granular permissions
-  - Enforce two-factor authentication (2FA) for admin logins
-
----
-
-### 5. **Database & Performance Tools**
-
-- **Embedded Database Shell (Read-Only):**  
-  - Provide a secure, read-only interface to view collection contents (with search and filter features)  
-  - Include index usage and query performance statistics
-
-- **Performance Monitoring:**  
-  - Integrate with a monitoring service (or build your own dashboard) to show real-time database metrics, such as average query time, connection counts, and error logs
-
-- **API Health Checks:**  
-  - Regularly run checks to verify that your critical endpoints (e.g. daily bonus, tests, user data) are performing well and not spamming unnecessarily
-
----
-
-### 6. **Analytics & Reporting**
-
-- **User & Test Analytics:**  
-  - Reports on test engagement, bonus claim frequency, and retention metrics  
-  - Visual charts showing trends (daily/weekly/monthly active users, coins awarded, test completion rates)
-
-- **Export Capabilities:**  
-  - Allow exporting of logs, user lists, and test statistics (CSV or Excel format) for offline analysis
-
----
-
-### 7. **Integration with iOS & Global Considerations**
-
-- **Unified Data:**  
-  - Ensure that any changes made in the admin interface (like deleting a user, updating a test, or modifying bonus settings) immediately reflect across both your web and iOS apps.
-
-- **Responsive Design:**  
-  - Make sure the admin panel is responsive and works well on tablets or large smartphones (in case admins need to work on the go).
-
-- **API Keys & Endpoints:**  
-  - Provide a secure area for managing API keys that might be used by your mobile apps.
-
----
-
-### Implementation Considerations
-
-- **Backend API Routes:**  
-  - Create routes for each of these functions. For example, routes to update user accounts, add/edit tests, view logs, and update bonus settings.
-  - Secure these routes heavily (using tokens, 2FA, and IP whitelisting if necessary).
-
-- **Frontend Framework:**  
-  - Use a modern UI framework like React with a component library (e.g., Material-UI or Ant Design) to quickly build a professional-looking admin interface.
-  - Implement proper state management (Redux or Context API) to manage the real-time updates (like bonus claim countdowns) across different views.
-
-- **Database Considerations:**  
-  - Ensure your database indexes are optimized for the queries used by the admin panel.
-  - Consider implementing caching for heavy queries (e.g., analytics data) to improve responsiveness.
-
----
-
-### Summary
-
-Your admin interface should serve as a central control panel that allows you to:
-- Monitor overall system health and user engagement.
-- Manage users and content (tests, daily questions, bonus settings).
-- Detect and respond to security issues.
-- Access detailed performance metrics and audit logs.
-- Provide seamless integration across your web and iOS apps.
-
-This approach not only streamlines administrative tasks but also helps maintain a high level of security and performance for your application.
-
----
-
-================
-File: MD's/IMPORTANT_NOTES.md
-================
-# achievment test
-There are several ways to simulate or verify your achievement–unlocking logic without having to complete thousands of tests manually. Here are a few approaches:
-
-Manually Insert Test Data:
-You can use the Mongo shell or a database admin tool (like MongoDB Compass) to insert or modify test attempt documents (in the testAttempts_collection) for a specific user. For example, if you want to simulate a “perfect” test (100% score), you can insert a finished attempt with score equal to totalQuestions, and with a finishedAt timestamp. By inserting several such documents (or modifying an existing user’s progress), you can simulate conditions like:
-
-One perfect test (to test the “perfectionist” achievement)
-5 perfect tests in a row (for “memory_master”)
-Finishing all tests with a certain score threshold (for “exam_conqueror” or “subject_specialist”)
-Write a Test Script:
-Create a small script (or use a unit testing framework) that:
-
-Creates a dummy user document,
-Inserts test attempt documents with the exact properties needed to trigger each achievement,
-Calls your check_and_unlock_achievements(user_id) function, and
-Verifies that the returned list of achievement IDs matches your expectations.
-This allows you to simulate multiple conditions without having to run through your full frontend flow.
-
-Use a Debug/Admin Route:
-You could add a temporary admin route (for testing only) that accepts simulated progress data for a given user and calls your achievements function. This endpoint can return the list of achievements unlocked, which you can compare to your expected results.
-
-Example (Manual Mongo Data Insert)
-For example, to simulate a perfect test for a user with _id of user123, you might insert a document like:
-
-```javascript
-db.testAttempts.insertOne({
-  userId: ObjectId("user123"),
-  testId: "1",
-  finished: true,
-  finishedAt: new Date(),
-  score: 10,
-  totalQuestions: 10,
-  category: "aplus",
-  // other fields (e.g., answers, etc.) as needed
-});
-```
-Repeat with different testIds and values to simulate consecutive perfect scores or tests with a score below/above certain thresholds.
-
-Summary
-Manually modify/inject test attempt data to mimic conditions required by each achievement.
-Use a test script or temporary endpoint to run the achievements function against simulated data.
-Once verified, you can remove any extra debugging endpoints or test code from production.
-This way, you can ensure your achievements logic (and popups via your frontend) work as expected without the need to manually complete every test.
-
-
-----------------------------------------------------------------------------------------------------------------------------
-For a production‑grade, cross‐device solution that remains fast and scalable, storing progress on the server (Option B) is the better choice.
-
-Here’s why:
-
-Cross‑Device & Cross‑Browser Consistency:
-Storing progress in your database means a user’s progress is tied to their account rather than a specific browser’s localStorage. This ensures they can pick up where they left off on any device, OS, or browser.
-
-Scalability:
-While localStorage is fast for small amounts of data, it has a strict size limit (around 5MB) and can become inefficient if you store large data (like thousands of questions). A server‑side solution can be optimized with caching, indexing, and proper data structures so that even if a user answers many questions, retrieving their progress remains fast.
-
-Performance & Future-Proofing:
-Although server requests add a network round-trip, you can mitigate this with asynchronous calls and caching strategies. This approach avoids potential browser freezes or “quota exceeded” errors as the user’s history grows over time.
-
-Data Integrity & Security:
-Centralizing data on the server means you can implement more robust backups, security measures, and audit logs. This is particularly important for features like achievements, shop items, and overall test progress.
-
-Conclusion:
-For a site where users might answer thousands of questions—and where progress should be available on any device—the server‑side storage option is faster (in terms of long‑term performance and user experience) and far more scalable.
-
-To implement this, you’d modify your progress-saving logic to send minimal progress data (such as IDs, answer indices, and shuffle order) to your backend, where it’s stored in MongoDB (or your chosen database). Then, when a user returns, you load their progress from the server rather than from localStorage.
-
-This solution pairs well with your existing backend structure (user data, achievements, shop items, etc.) and future improvements for a consistent, cross‑device user experience.
-
-
-
-
--------------------------------------------------------------------------------------------------------------------------------
-Explanation of Key Changes
-shuffleOrder and currentQuestionIndex are now stored and updated in the update_test_attempt endpoint:
-
-```python
-Copy
-Edit
-update_doc = {
-    "$set": {
-        ...
-        "currentQuestionIndex": data.get("currentQuestionIndex", 0),
-        "shuffleOrder": data.get("shuffleOrder", []),
-        "finished": data.get("finished", False)
-    }
-}
-```
-This ensures we’re saving minimal data about the user’s test flow (rather than the entire text of each question).
-
-get_test_attempt returns the entire attempt doc (including currentQuestionIndex and shuffleOrder) so the frontend can restore progress from the server for that user and test.
-
-We did not remove local achievements logic, daily bonus, final scoring logic, or any other existing routes. We only enhanced the partial‐progress storage to allow you to offload big data from localStorage to your server’s DB.
-
-With this approach, you no longer need to store big question arrays in localStorage. Instead, the frontend can:
-
-Fetch the test from the server to get the question text each time.
-Retrieve the attempt doc from the server (GET /attempts/<userId>/<testId>) to see currentQuestionIndex, shuffleOrder, answers, etc.
-Render accordingly, allowing truly cross‐device/cross‐browser continuity.
-Next Steps (Frontend Adjustments)
-Stop storing large question arrays in localStorage. Instead, fetch from /api/test/tests/<testId> each time you load the test page.
-Use the updated GET /attempts/<userId>/<testId> to retrieve partial progress (like shuffleOrder, currentQuestionIndex, answers).
-Use POST /attempts/<userId>/<testId> to update partial progress as the user answers each question (or moves to the next one).
-Remove references to saving the entire shuffledQuestions array in localStorage. Only keep enough data to show user feedback if you want local ephemeral storage. But all crucial progress data should be in the DB (Mongo) now, removing the 5MB localStorage limit problem.
-Once you’ve made the corresponding frontend changes, you’ll have a robust, server‐side storage approach for progress that automatically syncs across devices and solves the “Quota Exceeded” error.
-
-------------------------------------------------------------------------------------------------------------------------------
-  Tip: You can adjust how often you call updateServerProgress(...) (e.g., after each question or every few questions) to balance performance vs. real-time saving. But storing large text in localStorage is gone, solving the quota issue while preserving all features.
---------------------------------------------------------------------------------------------------------------------------------1) How Your Current Achievement-Checking Code Works
-In your models.py (or wherever check_and_unlock_achievements(user_id) lives), you have logic like:
-
-```
-python
-Copy
-Edit
-def check_and_unlock_achievements(user_id):
-    user = get_user_by_id(user_id)
-    if not user:
-        return []
-
-    user_oid = user["_id"]
-
-    # total finished attempts
-    total_finished = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True
-    })
-
-    # perfect tests (score == totalQuestions)
-    perfect_tests = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True,
-        "$expr": {"$eq": ["$score", "$totalQuestions"]}
-    })
-
-    # fetch finished attempts to get more details (like percentages)
-    finished_cursor = testAttempts_collection.find({"userId": user_oid, "finished": True})
-    finished_tests = []
-    for doc in finished_cursor:
-        tq = doc.get("totalQuestions", 0)
-        sc = doc.get("score", 0)
-        pct = (sc / tq) * 100 if tq else 0
-        cat = doc.get("category", "global")
-        finished_tests.append({
-            "test_id": doc.get("testId", "0"),
-            "percentage": pct,
-            "category": cat
-        })
-
-    # 1) Consecutive perfect logic (based on testId numbering):
-    perfect_list = [ft for ft in finished_tests if ft["percentage"] == 100]
-    perfect_list.sort(key=lambda x: x["test_id"])  # tries to sort by integer if possible
-    max_consecutive = 0
-    current_streak = 0
-    previous_test_id = None
-    for ft in perfect_list:
-        # The code tries to see if test_id is consecutive integer
-        try:
-            cid = int(ft["test_id"])
-        except:
-            cid = None
-
-        if previous_test_id is None or cid is None:
-            current_streak = 1
-        else:
-            if cid == previous_test_id + 1:
-                current_streak += 1
-            else:
-                current_streak = 1
-
-        max_consecutive = max(max_consecutive, current_streak)
-        previous_test_id = cid
-
-    # 2) Group tests by category
-    from collections import defaultdict
-    category_groups = defaultdict(list)
-    for ft in finished_tests:
-        cat = ft["category"]
-        category_groups[cat].append(ft)
-
-    # Possibly a total test threshold
-    #  (In your snippet, there's a mention of TOTAL_TESTS = 130 or something.)
-    #  This is used for "allTestsCompleted".
-    unlocked = user.get("achievements", [])
-    newly_unlocked = []
-    all_ach = get_achievements()  # from your achievements collection
-
-    for ach in all_ach:
-        aid = ach["achievementId"]
-        criteria = ach.get("criteria", {})
-
-        if aid in unlocked:
-            continue  # already unlocked
-
-        # Examples of checks your code does:
-        if "testCount" in criteria:
-            if total_finished >= criteria["testCount"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        if "coins" in criteria:
-            if user.get("coins", 0) >= criteria["coins"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        if "level" in criteria:
-            if user.get("level", 1) >= criteria["level"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        if "perfectTests" in criteria:
-            if perfect_tests >= criteria["perfectTests"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        if "consecutivePerfects" in criteria:
-            if max_consecutive >= criteria["consecutivePerfects"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        if "allTestsCompleted" in criteria and criteria["allTestsCompleted"] is True:
-            # e.g. if total_finished >= TOTAL_TESTS => unlock
-            # (Your code had something like total_finished >= 130 or similar.)
-            pass
-
-        if "testsCompletedInCategory" in criteria:
-            # your code checks if user has done enough tests in a single category
-            # e.g. if len(category_groups[cat]) >= that # => unlock
-            pass
-
-        if ("minScoreBefore" in criteria and "minScoreAfter" in criteria):
-            # redemption arc
-            # the code checks if user has any test with <= X% and any test with >= Y%
-            pass
-
-        # (That’s the gist of your existing checks.)
-    # End loop
-
-    if newly_unlocked:
-        mainusers_collection.update_one(
-            {"_id": user_oid},
-            {"$set": {"achievements": unlocked}}
-        )
-
-    return newly_unlocked
-```
-
-Which Criteria Are Actually Implemented?
-testCount (like 1, 10, 25, 50, 80) => This works. If you finish enough tests, you get it.
-
-coins (like 5,000 / 10,000 / 50,000) => The code matches “if user’s coin balance >= X.”
-
-level (like 5, 25, 50, 100) => Matches “if user’s level >= X.”
-
-perfectTests => “Score 100% on N tests total.” (like for perfectionist_1, double_trouble_2, etc.) This is actually implemented.
-
-consecutivePerfects => (like for “memory_master” = 5). The code tries to read consecutive test IDs. However, note that it’s not truly “5 perfect attempts in a row chronologically.” Instead, it looks for test IDs like 1,2,3,4,5 (all 100%). If you do tests #1, #3, #2, #5, #4 in random order, it might not count as consecutive. So that might be a mismatch from your intention.
-
-allTestsCompleted: true => E.g. the code might compare total_finished vs. TOTAL_TESTS = 130. If the user has finished 130 tests, it unlocks test_finisher. But your platform only has 13 categories × 10 tests each = 130 total. That part is presumably correct if you set TOTAL_TESTS = 130.
-
-testsCompletedInCategory => E.g. “If user completed 10 tests in that same category,” it unlocks an achievement (like “subject_finisher”). This is in the code snippet:
-
-```
-python
-Copy
-Edit
-if "testsCompletedInCategory" in criteria:
-    for ccat, attempts in category_groups.items():
-        if len(attempts) >= criteria["testsCompletedInCategory"]:
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-            break
-```
-
-That part is basically “complete 10 tests in the same category => unlock.” So subject_finisher is correct for that.
-
-minScoreBefore / minScoreAfter => This is the “redemption_arc.” The code checks if the user has any test with % <= minScoreBefore and any test with % >= minScoreAfter. So that’s good enough for a single check.
-
-Which Criteria Are Not Implemented in the Code
-minScore: 90 or accuracy_king:
-
-There’s no top-level check for “score ≥ 90% in any single test.” The existing code has:
-
-```
-python
-Copy
-Edit
-if "perfectTests" in criteria: ...
-if "consecutivePerfects" in criteria: ...
-if "minScoreBefore" and "minScoreAfter" in criteria: ...
-But no if "minScore" in criteria: logic.
-
-So “accuracy_king” (which says { minScore: 90 }) won’t ever unlock with current code. You’d need to add something like:
-
-python
-Copy
-Edit
-# e.g. inside your for ach in all_ach loop:
-if "minScore" in criteria:
-    # means user must have >= minScore on at least one test
-    # so check if any finished_tests item has >= criteria["minScore"]
-    if any(ft["percentage"] >= criteria["minScore"] for ft in finished_tests):
-        unlocked.append(aid)
-        newly_unlocked.append(aid)
-minScoreGlobal: 80 or exam_conqueror:
-```
-
-
-That means “score 80% or higher on every test in the entire platform.” There is no code that checks “the user’s percentage on every test >= 80%.”
-You would need logic that sees if the user has finished all tests, and every test has ≥80%. Something like:
-python
-Copy
-Edit
-if "minScoreGlobal" in criteria:
-    # Make sure user has finished all tests (or however many total)
-    if total_finished >= TOTAL_TESTS:
-        # Now check if all are >= criteria["minScoreGlobal"]
-        all_above = all(ft["percentage"] >= criteria["minScoreGlobal"] for ft in finished_tests)
-        if all_above:
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-minScoreInCategory: 80 or subject_specialist:
-
-Means “score 80%+ on all 10 tests in one exam category.” The code never checks that.
-You’d need something like:
-python
-Copy
-Edit
-if "minScoreInCategory" in criteria:
-    # For each category ccat, check if user finished all 10 tests in that category
-    # And each test in that category has >= minScoreInCategory
-    for ccat, attempts in category_groups.items():
-        if len(attempts) == 10:  # means user finished all 10 tests in ccat
-            if all(ft["percentage"] >= criteria["minScoreInCategory"] for ft in attempts):
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-                break
-perfectTestsInCategory: 10 or category_perfectionist:
-
-Means “score 100% on all 10 tests in one category.”
-The code does not do that. It only checks testsCompletedInCategory or overall perfectTests across the entire platform.
-You’d need something like:
-python
-Copy
-Edit
-if "perfectTestsInCategory" in criteria:
-    # user must have 10 perfect tests in the SAME category
-    for ccat, attempts in category_groups.items():
-        # attempts is a list of dicts w/ "percentage"
-        # check how many are 100%
-        perfect_count = sum(1 for ft in attempts if ft["percentage"] == 100)
-        if perfect_count >= criteria["perfectTestsInCategory"]:
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-            break
-minScore for “accuracy_king” is not covered in your code.
-
-“score 100% on all tests in entire platform” => “absolute_perfectionist.” The code for allTestsCompleted is just finishing them, not scoring 100%. You’d need a new check: do we have perfectTestsGlobal: true? That means user’s # of perfect tests = total tests in the entire platform.
-
-“score 80% in all tests in the platform,” or “score 80% in all tests in a single category,” also not coded.
-
-Large question-based achievements like “Answer 5,000 questions in total,” or “Answer all 10,000.” Currently your code does not track a cumulative sum of all questions answered. It checks test attempts, but not the total # questions answered. If you want to track that, you’d have to sum up sum(totalQuestions) for all finished attempts or store a separate aggregator (like a user’s “questionsAnswered” counter).
-
-Consecutive Perfect logic is ID-based, not time-based. For your “memory_master (5 perfect scores in a row)” requirement, the code sorts by test_id (like 1,2,3,4,5). That only works if you do them in ascending test ID order. If you wanted “5 perfect attempts in a row chronologically,” you’d track the order in which the user finished attempts. The existing code might cause confusion or never unlock if you do tests out of numeric order.
-
-3) Summary of Potential Issues
-Achievements referencing minScore, minScoreGlobal, minScoreInCategory, perfectTestsInCategory, or totalQuestions = X are not matched by the code you shared. The code checks for some things but not all.
-
-Some advanced achievements like “score 100% on all 10 tests in one category” or “score ≥80% across all tests in entire platform” have no direct logic in your check_and_unlock_achievements() function.
-
-“Memory Master” is presumably “5 perfect tests in a row,” but your code is checking “are the test IDs consecutive integers?” That might not reflect the real requirement (5 perfect attempts in chronological order).
-
-So you’ll need to extend check_and_unlock_achievements() if you truly want those advanced achievements to unlock. That means adding new conditions like:
-
-python
-Copy
-Edit
-# Example for minScore (like "accuracy_king")
-if "minScore" in criteria:
-    # Unlock if user has >= that % on at least 1 test
-    if any(ft["percentage"] >= criteria["minScore"] for ft in finished_tests):
-        unlocked.append(aid)
-        newly_unlocked.append(aid)
-
-# Example for minScoreInCategory
-if "minScoreInCategory" in criteria:
-    min_pct = criteria["minScoreInCategory"]
-    # Check for any category with 10 tests all above min_pct
-    for ccat, attempts in category_groups.items():
-        if len(attempts) == 10:
-            if all(ft["percentage"] >= min_pct for ft in attempts):
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-                break
-
-# Example for perfectTestsInCategory
-if "perfectTestsInCategory" in criteria:
-    needed_perfects = criteria["perfectTestsInCategory"]
-    for ccat, attempts in category_groups.items():
-        perfect_count = sum(1 for ft in attempts if ft["percentage"] == 100)
-        if perfect_count >= needed_perfects:
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-            break
-
-# Example for minScoreGlobal
-if "minScoreGlobal" in criteria:
-    min_pct = criteria["minScoreGlobal"]
-    # Must have finished ALL tests in your platform, e.g. total_finished >= 130
-    # Then check if every test is >= min_pct
-    if total_finished >= TOTAL_TESTS:  # e.g. 130
-        if all(ft["percentage"] >= min_pct for ft in finished_tests):
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-
-# Example for "absolute_perfectionist" => perfectTestsGlobal: true
-# Means user must have perfect attempts on ALL tests.
-if "perfectTestsGlobal" in criteria:
-    if total_finished >= TOTAL_TESTS:
-        all_perfect = all(ft["percentage"] == 100 for ft in finished_tests)
-        if all_perfect:
-            unlocked.append(aid)
-            newly_unlocked.append(aid)
-
-# For large question-based achievements, track sum of questions answered:
-# sum_of_questions = sum(ft["totalQuestions"] for ft in user’s finished attempts).
-# Then compare to criteria["totalQuestions"].
-4) Conclusion
-Your base achievements code does handle simpler cases (test counts, coins, level thresholds, perfect test counts, “testsCompletedInCategory = X,” “redemption_arc,” etc.).
-Advanced achievements referencing partial logic like minScore, minScoreGlobal, minScoreInCategory, “score 100% across entire category,” or “score≥80% across entire category,” etc., are not actually implemented in your code. They won’t unlock without additional checks.
-“Memory Master” is using a numeric test ID to track consecutive perfects. If your real definition is “5 perfect attempts in chronological order,” the current code logic will not match that exactly.
-If you want to fix these advanced achievements so that they truly match the definitions you inserted in db.achievements, you must extend check_and_unlock_achievements() to handle all relevant fields (like "minScore", "perfectTestsInCategory", "minScoreGlobal", etc.) and accurately track “consecutive attempts” vs. “consecutive test IDs.”
-Once you add these needed checks in code, your more complicated achievements (like “score 90%+ on any test,” or “score 80% in all tests,” or “100% on all 10 tests in a category”) will unlock as expected.
-----------------------------------------------------------------------------------------------------
-# all frontend validation errors
-
-The client-side validation catches and displays obvious errors immediately—so the user sees those errors as soon as they try to submit. But if the input passes those checks yet fails a more detailed or database-specific check on the server (like a duplicate username or a more comprehensive password policy), then the server will respond with an error that is passed back through Redux. In that case, the user sees the server's error message.
-
-In practice, you might see a mix of both:
-
-Client-Side Errors: For things like incorrect format, forbidden characters, or mismatched passwords.
-Server-Side Errors: For conditions that require database checks or more complex validation (e.g., "Username already taken" or "Password is too common").
-This approach improves user experience by providing immediate feedback while ensuring robust validation on the server side for security.
-
-
-
-
-
-
-You said:
-ok well evntaully i kinda want all the erros to show frontend wise
-Reasoned for a couple of seconds
-Yes—you can design your front‑end so that all errors (both client‑side and server‑side) are displayed together in a unified way. In practice, you might do something like this:
-
-Run Client‑side Checks:
-Immediately when the user submits the form, run your detailed client‑side validations. Collect any errors into an array and display them.
-
-Send the Data to the Server:
-If the client‑side checks pass, send the data to the server.
-
-Merge Errors if the Server Responds with Them:
-If the server returns additional errors (for example, “Username already taken” or “Password is too common”), merge those with any client‑side errors already captured (or simply replace the client‑side error messages if you prefer).
-
-Display All Errors Together:
-Use your UI to show the combined list of errors so that the user sees every issue with their input.
-
-================
-File: MD's/in.md
-================
-```javascript
-  const finishTestProcess = useCallback(async () => {
-    let finalScore = 0;
-    answers.forEach((ans) => {
-      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
-        finalScore++;
-      }
-    });
-    setScore(finalScore);
-  
-    try {
-      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          score: finalScore,
-          totalQuestions
-        })
-      });
-      const finishData = await res.json();
-  
-      // 1) If the backend returns newly unlocked achievements, show toasts
-      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
-        finishData.newlyUnlocked.forEach((achievementId) => {
-          const achievement = achievements.find(
-            (a) => a.achievementId === achievementId
-          );
-          if (achievement) {
-            const IconComp = iconMapping[achievement.achievementId] || null;
-            const color = colorMapping[achievement.achievementId] || "#fff";
-            showAchievementToast({
-              title: achievement.title,
-              description: achievement.description,
-              icon: IconComp ? <IconComp /> : null,
-              color
-            });
-          }
-        });
-      }
-  
-      // 2) If the backend returns newXP / newCoins, update Redux so the UI shows the new totals
-      if (typeof finishData.newXP !== "undefined" && typeof finishData.newCoins !== "undefined") {
-        dispatch(setXPAndCoins({
-          xp: finishData.newXP,
-          coins: finishData.newCoins
-        }));
-      }
-  
-    } catch (err) {
-      console.error("Failed to finish test attempt:", err);
-    }
-  
-    // Finally, set the UI to show the score overlay
-    setIsFinished(true);
-    setShowScoreOverlay(true);
-    setShowReviewMode(true);
-  }, [answers, userId, testId, totalQuestions, achievements, dispatch]);
-  ```
-
-================
-File: MD's/IOS.APP.MD
-================
-- Setting up React Native alongside your existing React/Redux frontend.
-- Implementing authentication using OAuth/JWT for both web and mobile.
-- Connecting the React Native app to your Flask-Python backend and MongoDB Atlas.
-- Handling online-dependent features while structuring the app to mirror your web app experience.
-- Deploying your app to the App Store.
-
-I’ll get back to you with a detailed plan shortly!
-
-# Step-by-Step Guide: Converting a Flask-React Web App into a Native iOS App with React Native
-
-Converting a Flask (Python) + ReactJS web application into a native iOS app using React Native involves setting up a proper development environment, reusing as much logic as possible, and ensuring the mobile app provides a seamless experience comparable to the web. Below is a detailed plan covering environment setup, backend integration, authentication, state management, UI considerations, testing, and App Store deployment.
-
-## 1. Set Up the React Native Environment and Project
-
-Before building the app, prepare your development environment and initialize a new React Native project:
-
-1. **Install Prerequisites**: Ensure you have Node.js (v18+), npm or Yarn, and Watchman installed for React Native development. On macOS, use Homebrew: `brew install node` and `brew install watchman`. Watchman optimizes file-watching and improves performance.
-2. **Install Xcode and Tools**: Download the latest Xcode from the Mac App Store and install the iOS Command Line Tools. This provides the iOS simulator and build tools for running React Native apps on iOS. After installing, open Xcode > **Settings** > **Locations** and select the latest Command Line Tools.
-3. **Create a New React Native App**: Use the React Native CLI to initialize a project. For example, run:  
-   ```bash
-   npx react-native init MyApp
-   cd MyApp
-   ```  
-   This sets up a new React Native project (using the bare React Native CLI, not Expo) with iOS and Android directories.
-4. **Run the iOS App Locally**: Open the project in Xcode (`ios/MyApp.xcworkspace`) and run the app on an iOS simulator to verify the setup. Alternatively, use the CLI: `npx react-native run-ios`. This should launch the default app on the simulator.
-5. **Add Essential Libraries**: Install any libraries needed for your app. Common ones include: 
-   - **Axios or Fetch** for API calls (React Native provides the global `fetch` API by default, but you can use Axios for convenience).
-   - **React Navigation** for screen routing and navigation.
-   - **Redux** and **React Redux** for state management (to mirror your web app’s Redux setup).
-   - **Axios interceptors or JWT decode** libraries for handling authentication tokens (optional).
-   - **CORS Handling**: On the Flask side, ensure you’ve enabled CORS (e.g., with `flask_cors`) so the mobile app can make API requests if running from a different host. In development, the iOS simulator shares the host’s network, so `http://localhost:<port>` calls reach your machine, but physical devices will need your machine’s IP or a hosted URL.
-
-6. **Connect to the Flask Backend**: Treat the React Native app as a client to your Flask API, just like the web app. Use your Flask app’s base URL for network requests. For example, if your Flask API is running at `http://localhost:5000/api`, test a GET request from the React Native app using `fetch` or Axios. Ensure the Flask app is running and accessible. Just like any other API consumer, the mobile app will consume the RESTful endpoints provided by Flask. The process is essentially the same as connecting a React web app to Flask, with the mobile app making HTTP requests to the backend:
-   - Use `fetch` or `axios.get` in React Native to call Flask endpoints (e.g., fetching initial data or submitting a form). React Native’s networking works similar to the browser, using the Fetch API for HTTP requests.
-   - Example with `fetch` in a React Native component:  
-     ```jsx
-     useEffect(() => {
-       fetch('http://<your-backend-ip>:5000/api/data')
-         .then(res => res.json())
-         .then(data => setData(data))
-         .catch(err => console.error(err));
-     }, []);
-     ```
-   - If the Flask backend requires authentication (JWT/OAuth, described later), attach the token in the request headers.
-
-7. **Reuse Backend Integration Logic**: If your web React app used a central file for API calls (like an Axios instance or Redux thunks/sagas for requests), replicate that in the React Native project. For instance, if you had an Axios instance with a base URL and interceptors for auth, create a similar one in the React Native app so both web and mobile handle requests consistently.
-
-8. **Verify Communication**: Launch the Flask server and use the iOS simulator to test API calls (the iOS simulator can reach `localhost` on your Mac; for physical devices, use the LAN IP or deploy the backend to an accessible URL). Ensure you receive expected responses. If you encounter network issues on a physical device, check device connectivity and consider using a tool like ngrok to expose your local server, or run the backend on a cloud/staging environment for testing.
-
-## 2. Implement Authentication (OAuth/JWT Best Practices)
-
-Implement a robust authentication flow that mirrors your web app’s login system, using OAuth or JWT as appropriate. The goal is to allow users to log in on mobile and obtain a token (or session) for authenticated API calls.
-
-1. **Reuse Authentication Strategy**: Determine if your web app uses OAuth (e.g., Google, Facebook login) or a custom JWT-based system:
-   - *OAuth 2.0*: If users log in via a third-party (Google, etc.), use an OAuth library for React Native. You can use **WebView** or in-app browser flows or libraries like **React Native App Auth** or **Expo AuthSession** to perform the OAuth flow. These will redirect the user to the provider’s login page and return an access token or authorization code.
-   - *JWT (Token Auth)*: If the web app uses a form-based login that returns a JWT, implement a similar login screen in React Native. Create a login form UI, and on submit, send a POST request to the Flask login endpoint (e.g., `POST /api/login`) with credentials. On success, you’ll get a JWT from the server.
-
-2. **Store Tokens Securely**: On mobile, **never store sensitive tokens in plain text**. Instead of regular AsyncStorage, use secure storage mechanisms:
-   - On iOS, leverage the **Keychain** to securely store JWTs or OAuth tokens. For example, use libraries like **react-native-keychain** or **Expo SecureStore** which abstract Keychain access. Keychain storage keeps tokens encrypted and accessible only to your app, which is ideal for credentials and tokens.
-   - If you need to persist refresh tokens or other credentials, also store them in secure storage. Avoid putting tokens in Redux or AsyncStorage without encryption, as that can be less secure.
-
-3. **Manage Token Refresh**: If using JWT with expiration:
-   - Implement logic to refresh tokens. For example, if your Flask backend provides refresh tokens, call the refresh endpoint when the access token expires. You can use an Axios interceptor or a global fetch wrapper to catch 401 responses, trigger a token refresh (store new tokens in Keychain), and retry the failed request.
-   - Ensure the refresh token itself is also stored securely. Only send it to the backend over HTTPS and refresh well before expiration to keep the user logged in.
-
-4. **OAuth Considerations**: If using OAuth, handle the OAuth callback in the mobile app:
-   - Register a custom URL scheme for your app (e.g., `myapp://oauth-callback`) or use a universal link for the OAuth provider to redirect back with tokens.
-   - The React Native OAuth library will handle receiving the token. Once received, store it securely and consider exchanging it for a JWT from your backend if your backend expects a JWT (some apps use OAuth access tokens directly for API calls, others exchange for a custom token).
-
-5. **Unified Authentication Backend**: Ensure your Flask backend can issue and accept the same tokens for mobile as it does for web:
-   - If using JWT, your Flask API should validate the JWT from the mobile app exactly as it does for the web app (the token is in the Authorization header, e.g., `Authorization: Bearer <token>`).
-   - If using session cookies (less likely for a mobile API), you would instead switch to token-based auth for mobile, since mobile apps don’t natively handle browser cookies. Flask can provide an HTTP-only cookie for web and a JWT for mobile clients, or you can adapt the web to use JWT as well so both use a consistent approach.
-
-6. **Implement Logout**: Provide a logout mechanism in the app:
-   - Clear the token from secure storage and reset any Redux state relating to the user.
-   - Optionally inform the backend (e.g., invalidate refresh token server-side if applicable).
-   - Ensure upon next launch the app doesn’t treat the user as authenticated if the token is removed or expired.
-
-7. **Test Authentication Flow**: Try logging in on the React Native app:
-   - For OAuth, ensure the external provider screen appears and returns to the app successfully.
-   - For JWT, ensure correct credentials receive a token, and invalid credentials show an error message (handle errors gracefully in the UI).
-   - After login, use the token to call an authenticated API endpoint (e.g., fetching user profile data) to confirm the whole flow works. All subsequent API requests from the app should include the auth token in headers (you can set this globally with Axios interceptors or attach it in fetch calls).
-
-**Best Practices**: Follow OAuth 2 best practices for native apps (e.g., **PKCE** for security if dealing with authorization codes), and never hardcode secrets in the app. Use HTTPS for all backend communication. By implementing mobile auth carefully, you create a secure bridge between your React Native app and the Flask backend, reusing the proven web authentication logic where possible.
-
-## 3. Handle API Requests and State Management with Redux
-
-Maintain consistent state management between the web and mobile apps by leveraging Redux in React Native. This allows you to reuse the global state logic and ensure the app’s behavior matches the web experience.
-
-1. **Install and Set Up Redux**: Add Redux libraries to your React Native project:
-   - Install `redux` and `react-redux` (and optionally Redux middleware like `redux-thunk` or `redux-saga` if your web app uses them). For example: `npm install redux react-redux @reduxjs/toolkit`.
-   - Create a Redux store in the React Native app, similar to your web app’s store configuration. You can often reuse the same reducers and action creators from the web project if they are not tied to web-specific code. For instance, if you have a Redux slice for user data or a to-do list, bring that logic into the mobile app.
-   - Wrap your root component (`App.js`) with the Redux `<Provider store={store}>` just as you would in a React web app. This makes the store available to all nested components.
-
-2. **Reuse Redux Logic**: Leverage your existing Redux **actions** and **reducers**:
-   - If your React web app has a well-structured Redux setup (with actions for fetching data, reducers updating state, etc.), port those files into the React Native project. You might need to adjust any code that uses browser-specific APIs, but most pure JS logic can be reused.
-   - Keep state shape consistent so that you can maintain similar UI logic. For example, if `state.auth.user` holds the logged-in user profile on web, use the same in mobile. This consistency will help ensure feature parity.
-
-3. **Handle Async API Calls in Redux**: Use Redux middleware or Redux Toolkit for side effects:
-   - If using Redux Thunk, define thunks in the mobile app to call the Flask API (using the token when needed) and dispatch results to reducers. E.g., `dispatch({ type: 'FETCH_ITEMS_REQUEST' })`, perform `fetch('/items')`, then `dispatch({ type: 'FETCH_ITEMS_SUCCESS', payload: data })`.
-   - If using Redux Saga, bring over your sagas that watch for action types and call APIs.
-   - Consider Redux Toolkit’s `createAsyncThunk` or RTK Query for a simpler approach to data fetching, if not already in use.
-
-4. **State Management for Forms and UI**: Manage local component state vs global state:
-   - Use Redux for global app state (authenticated user info, global settings, lists of data, etc.), similar to the web app. For transient UI state (like a controlled input value in a form), use React component state or React Native’s hooks (`useState`, etc.).
-   - Leverage Redux for navigation-based state if needed (for example, if user navigates to a detail screen, and you want to fetch data only once and store it globally for reuse).
-
-5. **Redux Persistence (Optional)**: If you want to persist Redux state between app launches (for example, cache some data for offline or to avoid refetching), consider using **redux-persist**. However, for sensitive data like auth tokens, **do not rely on redux-persist alone**, use secure storage as discussed. Non-sensitive state (like UI preferences or last viewed items) can be persisted in AsyncStorage via redux-persist to improve the user experience.
-
-6. **Testing State and API Calls**: Verify that Redux actions correctly trigger API calls to the Flask backend and update the state:
-   - For example, if the web app has an action `loadPosts()` that fetches posts from the backend, dispatch that action in the RN app (perhaps on a screen load) and ensure the posts appear in the UI.
-   - Use React Native Debugger or Redux DevTools (it can connect to React Native) to inspect the state changes and confirm they match expectations.
-
-By using Redux, the React Native app can maintain a predictable and synchronized state similar to the web app. This makes the behavior easier to manage and helps in keeping the two platforms aligned in functionality.
-
-## 4. Structure the Mobile UI for a Seamless Experience
-
-Design the React Native app’s UI to closely match the web experience while optimizing for mobile screens and iOS design conventions. This involves setting up navigation, translating components to React Native, and using appropriate mobile UI elements:
-
-1. **Choose a Navigation Library**: In a mobile app, screen navigation replaces web page routing. Use a library like **React Navigation** for a robust navigation solution:
-   - Install `@react-navigation/native` and the required stack/tab navigator packages. Set up a navigation container in your app, and define navigators (Stack, Tab, Drawer as needed) that mirror the structure of your web app. For example, if your web app has distinct pages (Home, Profile, Settings), create corresponding screens and maybe a bottom tab navigator or drawer.
-   - Ensure the navigation flows logically (e.g., after login, navigate to the main app screens; protect certain screens so they require authentication).
-
-2. **Replicate the Web Layouts with Native Components**: Identify key components/pages of your web UI and implement them using React Native components:
-   - Use **ScrollView** or **FlatList** for scrollable lists of content (e.g., lists of items from MongoDB).
-   - Use **View** and **Text** components for layout and text, styled with React Native’s StyleSheet (which uses CSS-like properties in JS objects).
-   - If your web app uses a design framework (like Material UI or Bootstrap), find equivalent React Native component libraries (e.g., **React Native Paper** or **NativeBase**) to get similar styled components, or style them manually to match.
-   - Keep the styling consistent with your brand – reuse colors, fonts (use custom fonts if needed via react-native link or in Xcode), and general spacing from the web app for consistency.
-
-3. **Optimize for Mobile UX**: Adjust the UI to feel natural on mobile:
-   - Some web layouts might need tweaking for smaller screens. Use React Native’s flexbox-based layout to create responsive designs that look good on various device sizes. Test on multiple iPhone screen sizes (using Xcode’s simulators like iPhone SE vs iPhone 14 Pro Max).
-   - Utilize mobile-specific UI patterns where appropriate: e.g., pull-to-refresh on lists, touch feedback on buttons (using **TouchableOpacity** or **Pressable** for interactive elements).
-   - Ensure usage of Safe Areas on iOS (especially for devices with notch) by using `<SafeAreaView>` or appropriate padding so content isn’t cut off.
-
-4. **Closely Match Web Experience**: While adjusting for mobile, strive to provide feature parity:
-   - All features available on the web (viewing data, performing actions) should be available in the app unless there’s a reason to omit something. This might mean implementing additional screens for flows that were modals or dialogs on web.
-   - **State Management in UI**: Since you’re using Redux, components can read from the global state to display data (e.g., list of items) and dispatch actions on user interactions (e.g., tapping a "like" button dispatches an action to the store, which triggers an API call).
-   - If your web app used forms or dialogs, use React Native’s **Modal** component for pop-ups or create separate screens for those interactions.
-
-5. **Performance Considerations**:
-   - Use **FlatList** for rendering large lists of data efficiently (it virtualizes the list).
-   - Avoid heavy computations on the main thread; move them to the backend or use optimized libraries if needed.
-   - Keep re-renders minimal by using React.memo or equivalent if you notice performance issues with many components.
-   - Test the app in release mode as well (debug mode can be slower). This ensures the UI remains smooth. Use performance monitoring tools or profiling in React Native if needed for fine-tuning.
-
-6. **Consistency with iOS Conventions**: Even as you mirror the web design, remember iOS users expect certain behaviors:
-   - Use iOS-specific UI elements where appropriate (e.g., swipe actions on list items can use the native gesture for delete/archive).
-   - Ensure the app has an **App Icon**, launch screen, and follows Apple’s Human Interface Guidelines (standard font sizes, tappable area sizes, etc.) to give a polished, native feel.
-
-By thoughtfully structuring the UI, your React Native app will provide a seamless experience that feels like the web app, yet optimized for mobile use. Keep components modular and reuse styles and components to maintain consistency and simplify maintenance.
-
-## 5. Testing the React Native App
-
-Thoroughly test your application to catch issues and ensure quality before deployment. This includes both manual testing and automated testing:
-
-1. **Manual Testing on Simulators and Devices**: 
-   - Use the iOS Simulator for quick testing during development. Test different iOS versions and device sizes (you can add simulators for various iPhone models in Xcode).
-   - Test on a **physical iPhone** as well. This helps catch issues with real device performance, camera or other hardware access if any, and ensures that networking works outside of the simulator (e.g., hitting a local dev server from a real phone using the computer’s IP address).
-   - Walk through all user flows: login, viewing data, performing create/update operations, logout. Ensure the app behaves correctly (state updates, navigation flows, etc.).
-   - Verify that authentication persists between app launches if intended (for example, close the app, reopen – if the token is valid, the user should still be logged in and skip the login screen).
-
-2. **Automated Testing (optional but recommended)**:
-   - **Unit Tests**: Write unit tests for critical functions and Redux reducers/sagas. You can use Jest (which comes with React Native by default) to test pure functions, reducers, and simple components. For example, test that a reducer correctly handles an action or that an action creator triggers the expected API call (you might mock the fetch/axios).
-   - **Integration/UI Tests**: Consider using a framework like **Detox** or **Appium** for end-to-end testing of the app’s UI. Detox can simulate user interactions (taps, swipes) on the app in a simulator to test flows like login and data fetching in an automated way.
-   - If using Expo or a simpler app, you might use **React Native Testing Library** for component tests that simulate user interactions at the component level.
-
-3. **Performance Testing**: In addition to functional tests, observe app performance:
-   - Monitor memory usage and CPU within Xcode instruments for any obvious leaks or heavy operations.
-   - Ensure list scrolling is smooth and screens load quickly (network calls should ideally be optimized on the backend; you might use loading spinners in the UI while fetching data to improve perceived performance).
-
-4. **Fixing Issues**: As you test, likely differences from the web will surface (e.g., a certain UI feature might not translate perfectly to mobile). Use this opportunity to refine the app:
-   - If you find any crashes or errors, use the stack traces (Xcode console or React Native red error screens) to pinpoint and fix them.
-   - Pay attention to any CORS or networking errors. If a fetch fails, ensure the request URL is correct and the backend is handling the request (check Flask logs).
-   - Check that all interactive elements are working with touch (sometimes a web design might not directly map to a touch interface, and adjustments are needed).
-
-5. **User Acceptance Testing**: If possible, have some end users or team members test a beta version (via TestFlight, see next section) to get feedback on the experience. They might catch usability issues or have suggestions to better align with the web experience.
-
-Testing is an ongoing process. By the time you finish, you should have confidence that the React Native app is stable, matches the web app’s functionality, and provides a smooth user experience.
-
-## 6. Deploying the App to the Apple App Store
-
-Once development and testing are complete, prepare to distribute the app through Apple’s App Store. Deploying a React Native app to iOS involves standard iOS app deployment steps:
-
-1. **Apple Developer Account**: Enroll in the Apple Developer Program if you haven’t already. A paid developer account is required to distribute apps on the App Store. Sign into Apple’s Developer Portal and register an App ID for your application (matching the bundle identifier of your React Native app).
-
-2. **Configure App Signing**: In Xcode, open the **MyApp.xcworkspace** (from the `ios` folder of your project). Update the project’s **Signing & Capabilities**:
-   - Set the Bundle Identifier to your unique App ID (e.g., `com.yourcompany.myapp`).
-   - Select your development team. Enable **Automatically manage signing** to let Xcode handle provisioning profiles, or manually create a distribution certificate and provisioning profile via the Apple Developer portal and select them.
-   - Choose the target as **Any iOS Device (arm64)** for archiving (not a simulator). Ensure the scheme is set to **Release** for a production build.
-
-3. **Build and Archive the App**: In Xcode, go to **Product > Archive**. This will compile the app in release mode and produce an archive suitable for distribution ([Publishing to Apple App Store · React Native](https://reactnative.dev/docs/publishing-to-app-store#:~:text=,Any%20iOS%20Device%20%28arm64)). Once the process completes, Xcode will open the Archives organizer. Select the latest archive for your app.
-
-4. **Upload to App Store Connect**: In the Xcode Archives organizer:
-   - Click **Distribute App**, then choose **App Store Connect > Upload** (for TestFlight and App Store distribution).
-   - Xcode will prompt for some distribution options. Select **Upload** and follow the prompts, ensuring all checkboxes (like including bitcode, symbols) are checked unless you have specific reasons to modify them.
-   - Xcode will then upload the build to Apple. You should see a success message if the upload completes without errors. (If there are errors, Xcode will show them – common issues might be invalid bundle ID, missing icons, etc., which you should fix and archive again.)
-
-5. **App Store Connect Setup**: Log in to App Store Connect (with your Apple developer account) and register your new app if not done already:
-   - In App Store Connect, create a **New App**, fill in the required details (name, primary language, bundle ID, SKU, etc.).
-   - Under the app’s TestFlight tab, you should see the build you uploaded (it may take a few minutes to process). You can first use **TestFlight** to distribute the app to internal testers (or yourself) by adding testers’ emails and enabling the build for testing. This is a good final sanity check on a real device via TestFlight.
-   - Once satisfied, go to the **App Store** tab in App Store Connect. Provide all required metadata: app description, category, pricing, screenshots for various iPhone sizes, an app icon, and any required compliance information.
-
-6. **App Review Submission**: In App Store Connect, select the build you uploaded in the app’s **App Store** > **Build** section. Then click **Submit for Review** (after ensuring you’ve filled out any App Store questionnaires like export compliance and content rights). Apple will then review your app. This process can take a few days or more. Keep an eye on your email or App Store Connect for feedback:
-   - If the app is approved, it can be released either immediately or on a scheduled release date as you choose.
-   - If rejected, read Apple’s notes, fix the issues, and resubmit. Common issues could be crashes (hence the importance of thorough testing), broken functionality, or not following guidelines.
-
-7. **Post-Release**: Once approved, your app will be live on the App Store for users to download:
-   - Monitor app analytics and crash reports (Apple provides some, and you can integrate additional tools like Sentry for crash reporting in React Native).
-   - Be prepared to release updates as needed. Set up a process to version your app, and use `react-native upgrade` carefully for RN version updates. Each update will need to repeat the archive and submission process.
-
-Throughout the deployment, remember that React Native iOS apps are essentially native apps. The deployment steps (certificates, provisioning, App Store Connect) are the same as any native iOS app. By following Apple’s guidelines and using the React Native documentation for publishing, you can streamline the release process and ensure a smooth launch of your app.
-
----
-
-**By following this step-by-step plan**, you will effectively transition your web application (Flask backend, React/Redux frontend) into a performant, maintainable React Native iOS application. The keys to success are reusing your existing logic (where appropriate), adhering to mobile best practices for UI/UX and security, and thoroughly testing the mobile app. With proper setup and careful implementation, the React Native app will closely match the web experience, leveraging the same Flask APIs and MongoDB database, and providing users the convenience of a native mobile interface. Good luck with your development and app store launch!
-
-================
-File: MD's/ISSUES-IMPROVEMENTS.md
-================
-### create backend tree, frontned tree, test tree, root tree
-
-### ADD THE PAGE WHERE THEY CAN ASK ME ANYTHING about exam/the webiste/support etc
-
-### fix thsi route and see what happens
-```js
-// Global CSS import
-import './components/pages/XploitcraftPage/global.css';
-```
-
-### ADD RATE LIMITER TO AI COMPONENTS- use claude 3.7
------
------------------------------------------
-## ACHIEVEMNT FIXING PLAN (refer to https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/ACHIEVEMENT-FIXING-PLAN.md)
-
-### 
-```ruby
-input most files (especially slices) into claude 3.7 and ask for efficiency improvements
-```
-### ADD MORE RESOURCES TO RESOURCE PAGE
-
-### update everyhing possible iwth aplus testlist/page and glovaltestpage--- THEN update teh rest of your testlists/pages
--------------------------------------------------------------------------------------------------------------------------
-### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
-----
-#### also consider a backup sever in case soemthing happens to the production one we can easily go to cloudfare and chnage IP address A record and upkeep 99% uptime---- conisder wasy to automate that somehow (prolly very very hard- essentially would haev to know- IF server donw = replace A record automcially somehow-- actually prolly easy tbh)
-
-
-### ADD MORE RESOURCES TO RESOURCE PAGE
-
-================
-File: MD's/MarketingPlan.md
-================
-
-
-================
-File: MD's/QUESTIONS.md
-================
-## So if i have an oracle vm and want to host a webiste on it- based on my wesbiet files(insert files or use an already contexted chat) and idea and then im expecting like 100 users whtiihn maybe teh first 2 weeeks hoepfully and will eventually strive to have 10,000+. so to essentially accomadet 10,000 users with very fast speeds- how much ram and cpu cores shoud i need for the vm? Give me ranges for both speed and users- so e.g 4 cpu cores, 16gbram 10,000 users each user = slow, 20 cores 80gb ram 10,000 users = fast. obviosly do this fro all ranges of cores/ram and all ranges of amount of users and more technical and in depht obviosly. also make sure to consider this based on teh conext of what my website is/ what techicnal features it does and components etc etc. Need HIgh leevl analzysis/recomendation
-
-================
-File: MD's/Regexp.md
-================
-# Important Github Replace ```Regexp```
----------------------------------------
-### Find all words/characters in ()
-```regex
-\(([^()]+)\)
- ```
----------------------------------------
-### Replace with a negtave space (-1 space)
-```regex
--1 $1
- ```
-### Replace MongoSh Object ID's
-```regex
-^\s*_id:\s*ObjectId\("[^"]+"\),?\s*(?:\r?\n)?
-```
-
-### Move XYZ spaces back
-
-#### Find: 
-```regex 
-^( {replace with number})
-```
-
-### Removes /* xyz */ comments
-```regex
-\/\*[\s\S]*?\*\/(\s*\n)?
-```
-
-### removes empty lines
-```regex
-^[ \t]*\n
-```
-
-================
-File: MD's/stripe_implementation.md
-================
-## Approach 1: On your backend routes, you check subscriptionActive for the user’s ID. If False, you return 403 Forbidden or redirect.
-## Approach 2: On the frontend (React, Redux), you store user’s subscriptionActive in state. If false, do not let them see protected pages.
-# Typically, both approaches are used for security. The frontend gating is for user convenience, the backend gating is for actual security.
---------------------------------------
-------------------------------------
-# Stripe:
-
-## Eventually, you’ll add a route (e.g., /create-checkout-session) that calls stripe.checkout.Session.create(), then redirect the user to the returned URL.
-## On success, set subscriptionActive=True (via webhook or direct API call).
-
-# Production Security:
-
-## For a real site, use hashed passwords. Right now, your code is storing plain text. Also consider more robust validation ## libraries (e.g., email_validator for emails, or bcrypt for passwords).
--------------------------------------------------------------
--------------------------------------------------------------
-
-1) High-Level Explanation (Dumbed Down)
-User signs up (or logs in, if returning).
-User tries to access your protected features (practice tests, profile, etc.).
-Website checks if the user has an active subscription.
-If yes, they can use the site.
-If no, they see a “Subscribe now” page, or they’re locked out.
-If they want to subscribe, you redirect them to Stripe’s checkout. They enter credit card info, and Stripe processes the payment.
-Stripe notifies your backend that the subscription is active. You store the status in your DB (e.g., subscriptionActive=True, subscriptionPlan="premium", etc.).
-If the user cancels their subscription in Stripe, your site eventually gets a webhook from Stripe telling you the subscription ended. You update the DB so subscriptionActive=False. Next time they try to access the site, they’re locked out.
-Essentially, the logic is “User must pay to unlock the site’s content.” Because your site is storing a boolean like user.subscriptionActive, you can easily check it in your existing route or Redux logic.
-
-2) Technical Overview and Best Practices
-A) Stripe Account & Plans
-Create a Stripe account and define your product (e.g., “Full Access Plan” for $10/month) or a one-time $10 charge if that’s what you want.
-If you want recurring charges, you’d set it up as a recurring subscription in Stripe.
-B) How the Subscription Flow Typically Works
-Frontend calls your backend to create a Checkout Session in Stripe.
-e.g., POST /create-checkout-session with the user’s ID and the plan they want.
-Backend uses the Stripe SDK (Python, Node, etc.) to create a Stripe Checkout Session linked to that user. The response is a unique url that the user is redirected to.
-User is redirected to the Stripe Checkout page, enters payment info, etc.
-Stripe collects payment. If successful, it calls your backend (via webhooks) to say “Subscription is active,” or “Payment succeeded.”
-Your backend updates the user doc in Mongo with something like:
-python
-Copy
-Edit
-{
-  "subscriptionActive": True,
-  "subscriptionPlan": "premium",
-  "stripeSubscriptionId": "...",
-  "stripeCustomerId": "...",
-  "subscriptionLastUpdated": datetime.utcnow()
-}
-Backend may also redirect the user after payment success to a “Thanks for subscribing!” page.
-C) Canceling & Renewal
-If the user cancels in Stripe, your site receives a Stripe Webhook: “customer.subscription.deleted,” or “canceled.”
-You update your DB: subscriptionActive=False.
-Next time they log in (or do any request), your site sees subscriptionActive==False => denies them or shows a “Reactivate your subscription” prompt.
-D) Ensuring Only Paying Users Access Content
-Approach 1: On your backend routes, you check subscriptionActive for the user’s ID. If False, you return 403 Forbidden or redirect.
-Approach 2: On the frontend (React, Redux), you store user’s subscriptionActive in state. If false, do not let them see protected pages.
-Typically, both approaches are used for security. The frontend gating is for user convenience, the backend gating is for actual security.
-E) Implementation in Steps
-Prepare your user model: You already have fields like subscriptionActive: bool, subscriptionPlan: string. That’s enough to hold the subscription data.
-Add a “Subscribe” button somewhere (maybe on the profile or a dedicated page).
-Implement a minimal Stripe “Checkout Session” route (like POST /api/subscribe).
-This route calls Stripe’s API to create a session with your product ID.
-The route responds with a url to Stripe’s Checkout.
-The frontend redirects the user to that url.
-Implement a Stripe Webhook route (like POST /stripe-webhook) that receives events from Stripe.
-On “payment_success” or “customer.subscription.created,” set subscriptionActive=True for that user in your DB.
-On “customer.subscription.deleted,” set subscriptionActive=False.
-Add logic in your login or protected routes to check if subscriptionActive is True. If not, redirect to a page that says “Please subscribe.”
------------------------------------------------------------------------------------------
-3) What You Can Implement Now Without Breaking Later
-Profile & Register Pages can remain. You do not need to rewrite them.
-
-You can add the fields in your user model: subscriptionActive, subscriptionPlan, subscriptionExpiresAt, etc. The user can have these fields from now.
-
-You can add a check in your React code or in your backend routes:
-
-js
-Copy
-Edit
-// Example in your ProtectedRoute or backend route
-if (!user.subscriptionActive) {
-  return res.status(403).json({ error: "Subscription required" });
-}
-but you can keep it turned off or optional until you wire in Stripe.
-
-“Cancel Subscription” link in the user profile can just be a placeholder for now. You can label it “Coming soon.” Eventually it’ll connect to Stripe’s customer portal or a custom route.
-
-Example Minimal Steps to Integrate Later
-Add a Subscribe button on your user profile that calls POST /api/subscribe.
-That endpoint creates a Stripe Checkout session with something like:
-python
-Copy
-Edit
-import stripe
-
-@app.route('/api/subscribe', methods=['POST'])
-def subscribe():
-    data = request.get_json()
-    user_id = data['userId']
-    # create Stripe checkout session
-    session = stripe.checkout.Session.create(
-        # product info, success url, cancel url, etc.
-    )
-    return jsonify({"url": session.url})
-In the success URL, you route them back to your site, say /subscription-success. Then either wait for a webhook or do a quick check with Stripe’s API to confirm the purchase.
-Mark subscriptionActive=True in your DB.
-That’s it—the rest of your site’s logic uses subscriptionActive to guard pages.
-4) Putting It All Together
-You already have a register and login flow. That’s fine. They can create an account, but if subscriptionActive is false, they can’t do anything beyond maybe a “Free Demo.”
-You do not need to heavily modify your existing user profile or “Change Email/Password” code. You can simply add an “active subscription” check in your protected routes.
-When you’re ready for Stripe, you add the subscription endpoints, track subscription status in your DB, and check that status before serving content.
-5) Summary & Best Practices
-Use a user field like subscriptionActive (boolean) or subscriptionPlan (“premium”, “free”).
-Protect your routes by checking that field, both in the frontend and backend.
-Stripe integration is mostly about:
-Creating Checkout Sessions (to charge them).
-Receiving Webhooks (to update your DB when subscriptions start or end).
-You don’t have to re-architect your register/login system. You just add an extra step: “Does the user have an active subscription?”
-Keep in mind session management: if their subscription ends (webhook says so), your DB sets subscriptionActive=false. Next time they load a protected route, they’re blocked or prompted to renew.
-This approach is standard for subscription-based membership sites. You can keep building your site now, store subscriptionActive in your user docs, and just add the actual Stripe checkout logic near the end. That will let you avoid rewriting too much code later.
-
-================
-File: MD's/tonight.md
-================
-so first and foremost anszlye all my file sin my codebase (repomix.txt) so you know all my files and are up to date with my codebase. then we are gonna wokr on a big u[pdate to it all and big fixing project tonight ok? you are gonmna be my por coder and you are the best in teh world. we will go step by step. adn polease alwsy output full files of whatver you fix. if it is a veyr veyr veyr tiny fix like mayeb less than 5 lines total then you dont have to- but if teh fiux is adding/remving any more than 5 liners you have to output teh updated file in full with the chanegs you applied. maek sure ot not remove or mess up any other features/fucntionilities in this whol process unless absolutly absolutly nessciary- anf if you do please let me know.
-we will go stepo by step. so start weith step 1 and once taht is compleet ill let you know when we do step 2 and assdo on. Ok? you ready?? lets go baby.
-
-
-
-
-
-
-
-step 1 Need to make an 'EXAM && PRACTICE MODE'
-so right now we have the explantions appear rigth affter the user answers. however- is there a way-easy way and efficent way so without slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne- to have an option on the test box liek atoggle on or off for "exam mode" to have it not tell you you if you got it wrong or right and also doesnt show you teh expalntion, then when fisnihed it you just review all of it in teh review mode (will be same review mode coponet we use for the other mode and also view rrevie wbutton) (and will have an small I symbol taht explains what exam mode means (it means what i just said). so would it be easy- well not easy but liek not a complete revamp of my code? and it woudlnt slow down any reaquests/slow user expericne overall?. also how can we do this while maintaining all our other features/components.
-
-
-step 2 Need to make an option to do 25,50,75,100 question tests. SO i gues if they choose 25 its the first 25, if they choose 50 its the first 25 and then next 25, if its 75 its the first 75, if its 100 its all 100. how would we implement this? How/Where should the feature be to choose the lenth? How can we efficently and effectly do this? Hwo can we ensure it doesnt slwoing down teh webiste or reqauests and just overall doesnt make it kinda slower for thew user expericne. also how can we do this while maintaining all our other features/components. 
-
-
-Step 3 hen we need to Remove the bad achievements (refer down below), then we need to optimize the achivements we are keeping, then we need to convert/update the achievemnts to reflect the exam mode and practice mode, then we need to make them all actually work and verify them.
-- Add Counter Fields (Highest Impact)
-Update your user document structure to include achievement-specific counters:
-
-# Add these fields to your user documents
-```python
-user_data.setdefault("achievement_counters", {
-    "total_tests_completed": 0,
-    "perfect_tests_count": 0,
-    "perfect_tests_by_category": {},
-    "consecutive_perfect_streak": 0,
-    "highest_score_ever": 0,
-    "lowest_score_ever": 100
-})
-```
-Then update these incrementally when a test is finished:
-```python
-@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
-def finish_test_attempt(user_id, test_id):
-    # ... existing code ...
-    
-    # Update counters atomically
-    update_operations = {"$inc": {"achievement_counters.total_tests_completed": 1}}
-    
-    if score == totalQuestions:  # Perfect score
-        update_operations["$inc"] = {"achievement_counters.perfect_tests_count": 1}
-        update_operations["$inc"].update({f"achievement_counters.perfect_tests_by_category.{category}": 1})
-    
-    if score/totalQuestions > user["achievement_counters"]["highest_score_ever"]:
-        update_operations["$set"] = {"achievement_counters.highest_score_ever": score/totalQuestions}
-    
-    mainusers_collection.update_one({"_id": user_oid}, update_operations)
-    
-    newly_unlocked = check_and_unlock_achievements(user_id)
-    # ...
-```
-2. Implement Achievement Caching (Moderate Complexity)
-# Add at top of file
-```python
-achievement_cache = {}
-ACHIEVEMENT_CACHE_TTL = 300  # 5 minutes
-
-def check_and_unlock_achievements(user_id):
-    """Cached version - checks cache first before expensive calculations"""
-    now = time.time()
-    cache_key = f"achievements_{user_id}"
-    
-    if cache_key in achievement_cache and now - achievement_cache[cache_key]["timestamp"] < ACHIEVEMENT_CACHE_TTL:
-        return achievement_cache[cache_key]["unlocked"]
-    
-    # Run the expensive calculation
-    newly_unlocked = original_check_and_unlock_achievements(user_id)
-    
-    # Cache the result
-    achievement_cache[cache_key] = {
-        "timestamp": now,
-        "unlocked": newly_unlocked
-    }
-    
-    return newly_unlocked
-```
-3. Split Achievement Processing (Best Long-term)
- ```python
-def check_and_unlock_achievements(user_id):
-    """Two-tier achievement checking"""
-    user = get_user_by_id(user_id)
-    if not user:
-        return []
-        
-    # TIER 1: Fast, counter-based achievements
-    newly_unlocked = check_simple_achievements(user)
-    
-    # TIER 2: Only check complex achievements once per day
-    last_complex_check = user.get("last_complex_achievement_check")
-    if not last_complex_check or (datetime.utcnow() - last_complex_check).days >= 1:
-        complex_unlocked = check_complex_achievements(user)
-        newly_unlocked.extend(complex_unlocked)
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"last_complex_achievement_check": datetime.utcnow()}}
-        )
-    
-    return newly_unlocked
-```
-Which Achievements to Keep vs. Modify
-Keep but Optimize:
-category_perfectionist - Calculate from counters instead of rechecking tests
-test_finisher - Simple counter-based check
-subject_specialist - Check only the specific category that was just completed
-consecutive_perfects - Track as a counter instead of recalculating
-Remove:
-absolute_perfectionist - Extremely difficult to achieve and very expensive to calculate
-xam_conqueror - Computationally expensive for little gameplay benefit
-These optimizations allow you to keep most of your achievement mechanics while dramatically improving database performance and reducing latency. The counter-based approach especially will let you scale to many users while maintaining the gamification elements your users enjoy.
-
-
-
-step 4- after we do all of that we need ot then fix my achiveemtns to reflex the exam mode and eh optiuon to choose amoutn of questiosn tehyc an take. so ffor example some of them are configured to be mayeb 100 questiuosn or soemthing or whatve rwhatver idk but the achievemnts that used to be based on the 100 test thing ro whatver idk we just have ti make sure mya chiveemnts still work based on the chanegs we made.
-
-step 5 - we need to then create users to inoput iunto my mongo datasbe to test the achiveemnts- so liek we inpout teh crtieria for an ahiveemnt into a suer and pretend we "achieved it" to see if it unlocks/gestachieved
-
-
-keep in mind alkl of this has to be based on scalabilty/future proofing, high leveel, keeps websiet speedds fast/ accomadable for ios app (not too compabitle but liek nothing to where its uncompabitle basically). and put on your thibking cap becasue your gonna need to be evry very veyr smart fro all fo this to work adn do it all.
-
-================
-File: Mongo-Inputs/Achievments.js
-================
-db.achievements.insertMany([
-  {
-    _id: ObjectId("679ef42d82ed36852c544cb2"),
-    achievementId: "test_rookie",
-    title: "🏆 Test Rookie",
-    description: "Complete your first test. (Welcome to the grind!)",
-    category: "global",
-    criteria: { testCount: 1 }
-  },
-  {
-    _id: ObjectId("679ef42d82ed36852c544cb3"),
-    achievementId: "accuracy_king",
-    title: "🎯 Accuracy King",
-    description: "Score 90% or higher on any test. (Are you even human?!)",
-    category: "global",
-    criteria: { minScore: 90 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb4"),
-    achievementId: "bronze_grinder",
-    title: "🏅 Bronze Grinder",
-    description: "Complete 10 tests. (You’re putting in the work!)",
-    category: "global",
-    criteria: { testCount: 10 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb5"),
-    achievementId: "silver_scholar",
-    title: "🥈 Silver Scholar",
-    description: "Complete 25 tests. (Starting to look like a pro!)",
-    category: "global",
-    criteria: { testCount: 25 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb6"),
-    achievementId: "gold_god",
-    title: "🥇 Gold God",
-    description: "Complete 50 tests. (Unstoppable!)",
-    category: "global",
-    criteria: { testCount: 50 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb7"),
-    achievementId: "platinum_pro",
-    title: "💎 Platinum Pro",
-    description: "Complete 80 tests. (No life, just tests!)",
-    category: "global",
-    criteria: { testCount: 80 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb8"),
-    achievementId: "walking_encyclopedia",
-    title: "📚 Walking Encyclopedia",
-    description: "Complete all 8,000 questions at least once. (You literally KNOW EVERYTHING.)",
-    category: "global",
-    criteria: { totalQuestions: 8000 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cb9"),
-    achievementId: "redemption_arc",
-    title: "🔄 Redemption Arc",
-    description: "Score 40% or lower on a test, then retake and score 90%+. (A true comeback story!)",
-    category: "global",
-    criteria: { minScoreBefore: 40, minScoreAfter: 90 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cba"),
-    achievementId: "memory_master",
-    title: "🧠 Memory Master",
-    description: "Get 5 perfect scores in a row. (Your brain is on fire!)",
-    category: "global",
-    criteria: { consecutivePerfects: 5 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cbb"),
-    achievementId: "coin_collector_5000",
-    title: "💰 Coin Collector (5,000 Coins)",
-    description: "Earn 5,000 coins from correct answers. (Keep stacking!)",
-    category: "global",
-    criteria: { coins: 5000 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cbc"),
-    achievementId: "coin_hoarder_10000",
-    title: "💰 Coin Hoarder (10,000 Coins)",
-    description: "Earn 10,000 coins from correct answers. (You're practically printing money.)",
-    category: "global",
-    criteria: { coins: 10000 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cbd"),
-    achievementId: "coin_tycoon_50000",
-    title: "💰 Coin Tycoon (50,000 Coins)",
-    description: "Earn 50,000 coins from correct answers. (You own the leaderboard now!)",
-    category: "global",
-    criteria: { coins: 50000 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cbe"),
-    achievementId: "perfectionist_1",
-    title: "✅ Perfection (1 Test)",
-    description: "Score 100% on a test. (One down, many to go!)",
-    category: "global",
-    criteria: { perfectTests: 1 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cbf"),
-    achievementId: "double_trouble_2",
-    title: "✅ Double Trouble (2 Tests)",
-    description: "Score 100% on two different tests. (You're on a roll!)",
-    category: "global",
-    criteria: { perfectTests: 2 }
-  },
-  {
-    _id: ObjectId("679ef42e82ed36852c544cc0"),
-    achievementId: "error404_failure_not_found",
-    title: "✅ Error 404 - Failure Not Found (3 Tests)",
-    description: "Score 100% on three different tests. (Perfection is your middle name!)",
-    category: "global",
-    criteria: { perfectTests: 3 }
-  },
-  {
-    _id: ObjectId("679f10a682ed36852c544cc1"),
-    achievementId: "level_up_5",
-    title: "🎚 Level Up! (Level 5)",
-    description: "Reach Level 5. (Just getting started!)",
-    category: "global",
-    criteria: { level: 5 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc2"),
-    achievementId: "mid_tier_grinder_25",
-    title: "⚡ Mid-Tier Grinder (Level 25)",
-    description: "Reach Level 25. (You're in deep now!)",
-    category: "global",
-    criteria: { level: 25 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc3"),
-    achievementId: "elite_scholar_50",
-    title: "🔥 Elite Scholar (Level 50)",
-    description: "Reach Level 50. (You're a force to be reckoned with!)",
-    category: "global",
-    criteria: { level: 50 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc4"),
-    achievementId: "ultimate_master_100",
-    title: "👑 The Ultimate Master (Level 100)",
-    description: "Reach Level 100. (You have ascended beyond mere mortals!)",
-    category: "global",
-    criteria: { level: 100 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc5"),
-    achievementId: "category_perfectionist",
-    title: "✅ Category Perfection",
-    description: "Score 100% on all 10 tests in one exam category. (Master of a subject!)",
-    category: "global",
-    criteria: { perfectTestsInCategory: 10 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc6"),
-    achievementId: "absolute_perfectionist",
-    title: "✅ Absolute Perfection",
-    description: "Score 100% on all tests in the entire platform. (The GOAT of test-taking!)",
-    category: "global",
-    criteria: { perfectTestsGlobal: true }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc7"),
-    achievementId: "exam_conqueror",
-    title: "🎖 Exam Conqueror (80% on All Tests)",
-    description: "Score 80% or higher on every test in the platform. (No question is too hard for you!)",
-    category: "global",
-    criteria: { minScoreGlobal: 80 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc8"),
-    achievementId: "subject_specialist",
-    title: "🎖 Subject Specialist (80% in One Category)",
-    description: "Score 80% or higher on all 10 tests in an exam category. (Master of one, instead of jack of all!)",
-    category: "global",
-    criteria: { minScoreInCategory: 80 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cc9"),
-    achievementId: "answer_machine_1000",
-    title: "📝 Answer Machine (1,000 Questions)",
-    description: "Answer 1,000 questions in total. (No stopping now!)",
-    category: "global",
-    criteria: { totalQuestions: 1000 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544cca"),
-    achievementId: "knowledge_beast_5000",
-    title: "📝 Knowledge Beast (5,000 Questions)",
-    description: "Answer 5,000 questions in total. (You're built different.)",
-    category: "global",
-    criteria: { totalQuestions: 5000 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544ccb"),
-    achievementId: "question_terminator",
-    title: "📝 Question Terminator (8,000 Questions)",
-    description: "Answer all 10,000 questions in total. (Achievement unlocked: Cyber Overlord.)",
-    category: "global",
-    criteria: { totalQuestions: 10000 }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544ccc"),
-    achievementId: "test_finisher",
-    title: "✅ Test Finisher",
-    description: "Complete all tests at least once, regardless of score. (Completionist vibes!)",
-    category: "global",
-    criteria: { allTestsCompleted: true }
-  },
-  {
-    _id: ObjectId("679f10a782ed36852c544ccd"),
-    achievementId: "subject_finisher",
-    title: "✅ Subject Finisher",
-    description: "Complete all 10 tests in a category at least once, regardless of score. (Master of consistency!)",
-    category: "global",
-    criteria: { testsCompletedInCategory: 10 }
-  }
-]);
-
-================
-File: Mongo-Inputs/FakeUsers.js
-================
-db.mainusers.insertMany([
-  {
-    "username": "Leon Liang Tang",
-    "email": "leonliangtang@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 54500,
-    "level": 77,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Leon Tang",
-    "email": "leontang@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 53500,
-    "level": 76,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Tang Leon",
-    "email": "tangleon@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 53700,
-    "level": 76,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Ava Smith",
-    "email": "ava.smith@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 52500,
-    "level": 75,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Benjamin Johnson",
-    "email": "benjamin.johnson@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 50500,
-    "level": 73,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Charlotte Williams",
-    "email": "charlotte.williams@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 48500,
-    "level": 71,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Daniel Brown",
-    "email": "daniel.brown@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 46500,
-    "level": 69,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Ella Jones",
-    "email": "ella.jones@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 44500,
-    "level": 67,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Fiona Miller",
-    "email": "fiona.miller@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 42500,
-    "level": 65,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Gabriel Davis",
-    "email": "gabriel.davis@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 40500,
-    "level": 63,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Hannah Garcia",
-    "email": "hannah.garcia@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 38500,
-    "level": 61,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Isaac Martinez",
-    "email": "isaac.martinez@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 36500,
-    "level": 59,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Julia Rodriguez",
-    "email": "julia.rodriguez@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 35900,
-    "level": 58,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Kevin Wilson",
-    "email": "kevin.wilson@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 35000,
-    "level": 57,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Lily Anderson",
-    "email": "lily.anderson@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 34300,
-    "level": 56,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Mason Thomas",
-    "email": "mason.thomas@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 33500,
-    "level": 55,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Nora Taylor",
-    "email": "nora.taylor@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 32900,
-    "level": 54,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Oliver Moore",
-    "email": "oliver.moore@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 32000,
-    "level": 53,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Penelope Jackson",
-    "email": "penelope.jackson@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 31400,
-    "level": 52,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Quinn Martin",
-    "email": "quinn.martin@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 30500,
-    "level": 51,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Ruby Lee",
-    "email": "ruby.lee@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 29800,
-    "level": 50,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Samuel Perez",
-    "email": "samuel.perez@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 29000,
-    "level": 49,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Tessa Thompson",
-    "email": "tessa.thompson@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 28300,
-    "level": 48,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Uriah White",
-    "email": "uriah.white@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 27500,
-    "level": 47,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  },
-  {
-    "username": "Violet Harris",
-    "email": "violet.harris@example.com",
-    "password": "yoshi",
-    "coins": 100000,
-    "xp": 26800,
-    "level": 46,
-    "achievements": [],
-    "subscriptionActive": false,
-    "subscriptionPlan": null,
-    "lastDailyClaim": null,
-    "purchasedItems": [],
-    "xpBoost": 1.0,
-    "nameColor": null
-  }
-]);
-
-================
-File: Mongo-Inputs/ShopItems.js
-================
-db.shopItems.insertMany([
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cac"),
-    type: "avatar",
-    title: "Shadow Nyx",
-    description: "Silent shadow with daggers of truth",
-    cost: 20000,
-    imageUrl: "/avatars/avatar25.png",
-    unlockLevel: 25,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cad"),
-    type: "avatar",
-    title: "Astral Revenant",
-    description: "Craftsman of the unknown",
-    cost: 22500,
-    imageUrl: "/avatars/avatar30.png",
-    unlockLevel: 30,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb2"),
-    type: "avatar",
-    title: "Celestial Bloom",
-    description: "A flower that grows where light and shadow converge",
-    cost: 50000,
-    imageUrl: "/avatars/avatar80.png",
-    unlockLevel: 80,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb7"),
-    type: "avatar",
-    title: "Draconic Ruin",
-    description: "A dragon fell, yet its shadow remained",
-    cost: 40000,
-    imageUrl: "/avatars/avatar135.png",
-    unlockLevel: 75,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb4"),
-    type: "avatar",
-    title: "Hellblade",
-    description: "Ashes fall like snow, a requiem for the unworthy",
-    cost: 60000,
-    imageUrl: "/avatars/avatar1000.png",
-    unlockLevel: 100,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cbb"),
-    type: "avatar",
-    title: "Dark Nexus",
-    description: "Infinity bends, but chaos never breaks",
-    cost: 125000,
-    imageUrl: "/avatars/avatar250.png",
-    unlockLevel: 250,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544caa"),
-    type: "avatar",
-    title: "Abyssal Empress",
-    description: "Power flows with the eternal tides",
-    cost: 15000,
-    imageUrl: "/avatars/avatar15.png",
-    unlockLevel: 15,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb6"),
-    type: "avatar",
-    title: "Zephyrbane",
-    description: "Darkness follows the storm, not as a shadow but as its heir",
-    cost: 70000,
-    imageUrl: "/avatars/avatar120.png",
-    unlockLevel: 120,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb1"),
-    type: "avatar",
-    title: "Infernal Bastion",
-    description: "A soul consumed by flames",
-    cost: 45000,
-    imageUrl: "/avatars/avatar70.png",
-    unlockLevel: 45,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544ca7"),
-    type: "avatar",
-    title: "Default",
-    description: "Default Avatar",
-    cost: null,
-    imageUrl: "/avatars/avatar1.png",
-    unlockLevel: 1,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb5"),
-    type: "avatar",
-    title: "Eternal Dune",
-    description: "What the wind reveals, the sand will bury",
-    cost: 67500,
-    imageUrl: "/avatars/avatar110.png",
-    unlockLevel: 110,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cbc"),
-    type: "avatar",
-    title: "Aetheris",
-    description: "The balance of the cosmos is neither still nor complete",
-    cost: 150000,
-    imageUrl: "/avatars/avatar300.png",
-    unlockLevel: 300,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cab"),
-    type: "avatar",
-    title: "Flarebound",
-    description: "Guardian of the eternal flame",
-    cost: 17500,
-    imageUrl: "/avatars/avatar20.png",
-    unlockLevel: 20,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544ca9"),
-    type: "avatar",
-    title: "Cosmos",
-    description: "Warden of the astral void",
-    cost: 12500,
-    imageUrl: "/avatars/avatar10.png",
-    unlockLevel: 10,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb9"),
-    type: "avatar",
-    title: "Zeroveil",
-    description: "Runes of despair etch themselves into eternity",
-    cost: 87500,
-    imageUrl: "/avatars/avatar175.png",
-    unlockLevel: 175,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb3"),
-    type: "avatar",
-    title: "Veilborn",
-    description: "Bound by shadows, forever bound to the void ",
-    cost: 55000,
-    imageUrl: "/avatars/avatar90.png",
-    unlockLevel: 90,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb8"),
-    type: "avatar",
-    title: "Nyxara",
-    description: "The moon whispers secrets only the stars understand",
-    cost: 77500,
-    imageUrl: "/avatars/avatar150.png",
-    unlockLevel: 150,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cae"),
-    type: "avatar",
-    title: "Leviathan’s Bride",
-    description: "Monarch of the watery abyss",
-    cost: 25000,
-    imageUrl: "/avatars/avatar40.png",
-    unlockLevel: 40,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544ca8"),
-    type: "avatar",
-    title: "Blue Sentinel",
-    description: "Forged in honor, crowned in victor",
-    cost: 10000,
-    imageUrl: "/avatars/avatar5.png",
-    unlockLevel: 5,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cb0"),
-    type: "avatar",
-    title: "Frostbane",
-    description: "An ancient force carved from the endless winter",
-    cost: 40000,
-    imageUrl: "/avatars/avatar60.png",
-    unlockLevel: 60,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544cba"),
-    type: "avatar",
-    title: "Serpent’s Apostle",
-    description: "The unseen holds more power than the known",
-    cost: 100000,
-    imageUrl: "/avatars/avatar2000.png",
-    unlockLevel: 200,
-    effectValue: null
-  },
-  {
-    _id: ObjectId("67a5a208e33c3cfa4b544caf"),
-    type: "avatar",
-    title: "Necroforge",
-    description: "Architect of eternal sleep",
-    cost: 32500,
-    imageUrl: "/avatars/avatar50.png",
-    unlockLevel: 50,
-    effectValue: null
-  },
-
-
-
-
-db.shopItems.insertMany([
-  {
-    type: "avatar",
-    title: "Shadow Nyx",
-    description: "Silent shadow with daggers of truth",
-    cost: 20000,
-    imageUrl: "/avatars/avatar25.png",
-    unlockLevel: 25,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Astral Revenant",
-    description: "Craftsman of the unknown",
-    cost: 22500,
-    imageUrl: "/avatars/avatar30.png",
-    unlockLevel: 30,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Celestial Bloom",
-    description: "A flower that grows where light and shadow converge",
-    cost: 50000,
-    imageUrl: "/avatars/avatar80.png",
-    unlockLevel: 80,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Draconic Ruin",
-    description: "A dragon fell, yet its shadow remained",
-    cost: 40000,
-    imageUrl: "/avatars/avatar135.png",
-    unlockLevel: 75,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Hellblade",
-    description: "Ashes fall like snow, a requiem for the unworthy",
-    cost: 60000,
-    imageUrl: "/avatars/avatar1000.png",
-    unlockLevel: 100,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Dark Nexus",
-    description: "Infinity bends, but chaos never breaks",
-    cost: 125000,
-    imageUrl: "/avatars/avatar250.png",
-    unlockLevel: 250,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Abyssal Empress",
-    description: "Power flows with the eternal tides",
-    cost: 15000,
-    imageUrl: "/avatars/avatar15.png",
-    unlockLevel: 15,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Zephyrbane",
-    description: "Darkness follows the storm, not as a shadow but as its heir",
-    cost: 70000,
-    imageUrl: "/avatars/avatar120.png",
-    unlockLevel: 120,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Infernal Bastion",
-    description: "A soul consumed by flames",
-    cost: 45000,
-    imageUrl: "/avatars/avatar70.png",
-    unlockLevel: 45,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Default",
-    description: "Default Avatar",
-    cost: null,
-    imageUrl: "/avatars/avatar1.png",
-    unlockLevel: 1,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Eternal Dune",
-    description: "What the wind reveals, the sand will bury",
-    cost: 67500,
-    imageUrl: "/avatars/avatar110.png",
-    unlockLevel: 110,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Aetheris",
-    description: "The balance of the cosmos is neither still nor complete",
-    cost: 150000,
-    imageUrl: "/avatars/avatar300.png",
-    unlockLevel: 300,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Flarebound",
-    description: "Guardian of the eternal flame",
-    cost: 17500,
-    imageUrl: "/avatars/avatar20.png",
-    unlockLevel: 20,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Cosmos",
-    description: "Warden of the astral void",
-    cost: 12500,
-    imageUrl: "/avatars/avatar10.png",
-    unlockLevel: 10,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Zeroveil",
-    description: "Runes of despair etch themselves into eternity",
-    cost: 87500,
-    imageUrl: "/avatars/avatar175.png",
-    unlockLevel: 175,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Veilborn",
-    description: "Bound by shadows, forever bound to the void",
-    cost: 55000,
-    imageUrl: "/avatars/avatar90.png",
-    unlockLevel: 90,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Nyxara",
-    description: "The moon whispers secrets only the stars understand",
-    cost: 77500,
-    imageUrl: "/avatars/avatar150.png",
-    unlockLevel: 150,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Leviathan’s Bride",
-    description: "Monarch of the watery abyss",
-    cost: 25000,
-    imageUrl: "/avatars/avatar40.png",
-    unlockLevel: 40,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Blue Sentinel",
-    description: "Forged in honor, crowned in victor",
-    cost: 10000,
-    imageUrl: "/avatars/avatar5.png",
-    unlockLevel: 5,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Frostbane",
-    description: "An ancient force carved from the endless winter",
-    cost: 40000,
-    imageUrl: "/avatars/avatar60.png",
-    unlockLevel: 60,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Serpent’s Apostle",
-    description: "The unseen holds more power than the known",
-    cost: 100000,
-    imageUrl: "/avatars/avatar2000.png",
-    unlockLevel: 200,
-    effectValue: null
-  },
-  {
-    type: "avatar",
-    title: "Necroforge",
-    description: "Architect of eternal sleep",
-    cost: 32500,
-    imageUrl: "/avatars/avatar50.png",
-    unlockLevel: 50,
-    effectValue: null
-  }
-]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-db.shopItems.insertMany([
-  {
-    type: "xpBoost",
-    title: "XP Boost 25",
-    description: "Increase your XP gain by 25%.",
-    cost: 40000,
-    imageUrl: "/xp/xp25.png",
-    effectValue: 1.25
-  },
-  {
-    type: "xpBoost",
-    title: "XP Boost 100",
-    description: "Increase your XP gain by 100%.",
-    cost: 100000,
-    imageUrl: "/xp/xp100.png",
-    effectValue: 2
-  },
-  {
-    type: "xpBoost",
-    title: "XP Boost 200",
-    description: "Increase your XP gain by 200%.",
-    cost: 200000,
-    imageUrl: "/xp/xp200.png",
-    effectValue: 3
-  },
-  {
-    type: "xpBoost",
-    title: "XP Boost 10",
-    description: "Increase your XP gain by 10%.",
-    cost: 15000,
-    imageUrl: "/xp/xp10.png",
-    effectValue: 1.1
-  },
-  {
-    type: "xpBoost",
-    title: "XP Boost 50",
-    description: "Increase your XP gain by 50%.",
-    cost: 75000,
-    imageUrl: "/xp/xp50.png",
-    effectValue: 1.5
-  }
-]);
-
-================
-File: Mongo-Inputs/TestUsers.js
-================
-
-
-================
 File: nginx/sites-enabled/reverse_proxy.conf
 ================
 server {
@@ -27576,541 +24896,6 @@ timeout 0
 tcp-keepalive 300
 
 ================
-File: Trees/backend.md
-================
-```ruby
-backend
-├── API
-│   └── AI.py
-├── Dockerfile.backend
-├── app.py
-├── helpers
-│   ├── analogy_helper.py
-│   ├── analogy_stream_helper.py
-│   ├── async_tasks.py
-│   ├── celery_app.py
-│   ├── daily_newsletter_helper.py
-│   ├── daily_newsletter_task.py
-│   ├── email_helper.py
-│   ├── grc_helper.py
-│   ├── grc_stream_helper.py
-│   ├── scenario_helper.py
-│   └── xploitcraft_helper.py
-├── models
-│   ├── newsletter_content.py
-│   ├── test.py
-│   └── user_subscription.py
-├── mongodb
-│   └── database.py
-├── requirements.txt
-└── routes
-    ├── analogy_routes.py
-    ├── daily_brief_routes.py
-    ├── grc_routes.py
-    ├── scenario_routes.py
-    ├── subscribe_routes.py
-    ├── test_routes.py
-    ├── unsubscribe_routes.py
-    └── xploit_routes.py
-
-6 directories, 27 files
-```
-
-================
-File: Trees/frontend.md
-================
-```ruby
-frontend
-└── my-react-app
-    ├── Dockerfile.audit
-    ├── Dockerfile.dev
-    ├── Dockerfile.frontend
-    ├── craco.config.js
-    ├── eslint.config.mjs
-    ├── package-lock.json
-    ├── package.json
-    ├── public
-    │   ├── appLogo.png
-    │   ├── favicon.ico
-    │   ├── index.html
-    │   ├── logo2.png
-    │   ├── manifest.json
-    │   ├── robots.txt
-    │   └── xp
-    │       ├── xp10.png
-    │       ├── xp100.png
-    │       ├── xp200.png
-    │       ├── xp25.png
-    │       ├── xp50.png
-    │       └── xp_mongo.js
-    └── src
-        ├── App.js
-        ├── App.test.js
-        ├── components
-        │   ├── ConfettiAnimation.js
-        │   ├── GlobalTestPage.js
-        │   ├── ProtectedRoute.js
-        │   ├── Sidebar
-        │   │   ├── Sidebar.css
-        │   │   ├── Sidebar.js
-        │   │   └── sidebarlogo.png
-        │   ├── colorMapping.js
-        │   ├── iconMapping.js
-        │   ├── pages
-        │   │   ├── AnalogyPage
-        │   │   │   ├── AnalogyHub.css
-        │   │   │   ├── AnalogyHub.js
-        │   │   │   ├── backround1.jpg
-        │   │   │   └── loading2.png
-        │   │   ├── DailyPage
-        │   │   │   ├── DailyCyberBrief.css
-        │   │   │   ├── DailyCyberBrief.js
-        │   │   │   └── backround7.jpg
-        │   │   ├── GRCpage
-        │   │   │   ├── GRC.css
-        │   │   │   ├── GRC.js
-        │   │   │   └── GRCbackground.jpg
-        │   │   ├── Info
-        │   │   │   ├── InfoPage.css
-        │   │   │   └── InfoPage.js
-        │   │   ├── ResourcesPage
-        │   │   │   ├── Resourcebackground.jpg
-        │   │   │   ├── Resources.css
-        │   │   │   └── Resources.js
-        │   │   ├── ScenarioPage
-        │   │   │   ├── ScenarioSphere.css
-        │   │   │   ├── ScenarioSphere.js
-        │   │   │   ├── attacks.js
-        │   │   │   └── backround5.jpg
-        │   │   ├── XploitcraftPage
-        │   │   │   ├── App.css
-        │   │   │   ├── Xploitcraft.js
-        │   │   │   ├── backround2.jpg
-        │   │   │   ├── global.css
-        │   │   │   ├── loading3.png
-        │   │   │   └── logo5.png
-        │   │   ├── aplus
-        │   │   │   ├── APlusTestList.js
-        │   │   │   └── APlusTestPage.js
-        │   │   ├── aplus2
-        │   │   │   ├── APlusCore2TestPage.js
-        │   │   │   └── AplusCore2TestList.js
-        │   │   ├── auth
-        │   │   │   ├── AuthToast.css
-        │   │   │   ├── ErrorDisplay.css
-        │   │   │   ├── ErrorDisplay.js
-        │   │   │   ├── ForgotPassword.css
-        │   │   │   ├── ForgotPassword.js
-        │   │   │   ├── Login.css
-        │   │   │   ├── Login.js
-        │   │   │   ├── PasswordRequirements.css
-        │   │   │   ├── PasswordRequirements.js
-        │   │   │   ├── Register.css
-        │   │   │   ├── Register.js
-        │   │   │   └── auth.css
-        │   │   ├── awscloud
-        │   │   │   ├── AWSCloudTestList.js
-        │   │   │   └── AWSCloudTestPage.js
-        │   │   ├── casp
-        │   │   │   ├── CaspPlusTestList.js
-        │   │   │   └── CaspPlusTestPage.js
-        │   │   ├── cissp
-        │   │   │   ├── CisspTestList.js
-        │   │   │   └── CisspTestPage.js
-        │   │   ├── cloudplus
-        │   │   │   ├── CloudPlusTestList.js
-        │   │   │   └── CloudPlusTestPage.js
-        │   │   ├── cysa
-        │   │   │   ├── CySAPlusTestList.js
-        │   │   │   └── CySAPlusTestPage.js
-        │   │   ├── dataplus
-        │   │   │   ├── DataPlusTestList.js
-        │   │   │   └── DataPlusTestPage.js
-        │   │   ├── linuxplus
-        │   │   │   ├── LinuxPlusTestList.js
-        │   │   │   └── LinuxPlusTestPage.js
-        │   │   ├── nplus
-        │   │   │   ├── NPlusTestList.js
-        │   │   │   └── NetworkPlusTestPage.js
-        │   │   ├── penplus
-        │   │   │   ├── PenPlusTestList.js
-        │   │   │   └── PenPlusTestPage.js
-        │   │   ├── secplus
-        │   │   │   ├── SecurityPlusTestList.js
-        │   │   │   └── SecurityPlusTestPage.js
-        │   │   ├── serverplus
-        │   │   │   ├── ServerPlusTestList.js
-        │   │   │   └── ServerPlusTestPage.js
-        │   │   └── store
-        │   │       ├── AchievementPage.css
-        │   │       ├── AchievementPage.js
-        │   │       ├── AchievementToast.css
-        │   │       ├── AchievementToast.js
-        │   │       ├── DailyStation.css
-        │   │       ├── DailyStationPage.js
-        │   │       ├── LeaderboardPage.css
-        │   │       ├── LeaderboardPage.js
-        │   │       ├── ShopPage.css
-        │   │       ├── ShopPage.js
-        │   │       ├── StreakCalendar.js
-        │   │       ├── UserProfile.css
-        │   │       ├── UserProfile.js
-        │   │       ├── ach.png
-        │   │       ├── achbgs1.jpg
-        │   │       ├── achievementsSlice.js
-        │   │       ├── leader.jpg
-        │   │       ├── shopSlice.js
-        │   │       ├── shopbg.png
-        │   │       ├── shopbg1.jpg
-        │   │       ├── store.js
-        │   │       ├── user.jpg
-        │   │       └── userSlice.js
-        │   └── test.css
-        ├── global.css
-        ├── index.css
-        ├── index.js
-        ├── reportWebVitals.js
-        └── setupTests.js
-
-30 directories, 121 files
-```
-
-================
-File: Trees/Root.md
-================
-```ruby
-.
-├── IOS.MD
-├── MD's
-│   ├── ACHIEVEMENTING-PLAN.md
-│   ├── Admin.md
-│   ├── IMPORTANT_NOTES.md
-│   ├── IOS.APP.MD
-│   ├── ISSUES-IMPROVEMENTS.md
-│   ├── MarketingPlan.md
-│   ├── QUESTIONS.md
-│   ├── Regexp.md
-│   ├── in.md
-│   ├── stripe_implementation.md
-│   ├── tonight.md
-│   └── 🌲TREEEEEEE🌲.md
-├── Mongo-Inputs
-│   ├── Achievments.js
-│   ├── FakeUsers.js
-│   ├── ShopItems.js
-│   └── TestUsers.js
-├── README.MD
-├── Root.txt
-├── Trees
-│   ├── Backend.ruby
-│   └── Frontend.ruby
-├── apache
-│   ├── Dockerfile.apache
-│   ├── apache_server.conf
-│   └── httpd.conf
-├── backend
-│   ├── API
-│   │   └── AI.py
-│   ├── Dockerfile.backend
-│   ├── app.py
-│   ├── helpers
-│   │   ├── analogy_helper.py
-│   │   ├── analogy_stream_helper.py
-│   │   ├── async_tasks.py
-│   │   ├── celery_app.py
-│   │   ├── daily_newsletter_helper.py
-│   │   ├── daily_newsletter_task.py
-│   │   ├── email_helper.py
-│   │   ├── grc_helper.py
-│   │   ├── grc_stream_helper.py
-│   │   ├── scenario_helper.py
-│   │   └── xploitcraft_helper.py
-│   ├── models
-│   │   ├── newsletter_content.py
-│   │   ├── test.py
-│   │   └── user_subscription.py
-│   ├── mongodb
-│   │   └── database.py
-│   ├── requirements.txt
-│   └── routes
-│       ├── analogy_routes.py
-│       ├── daily_brief_routes.py
-│       ├── grc_routes.py
-│       ├── scenario_routes.py
-│       ├── subscribe_routes.py
-│       ├── test_routes.py
-│       ├── unsubscribe_routes.py
-│       └── xploit_routes.py
-├── bandit.yaml
-├── docker-compose.yml
-├── frontend
-│   └── my-react-app
-│       ├── Dockerfile.audit
-│       ├── Dockerfile.dev
-│       ├── Dockerfile.frontend
-│       ├── craco.config.js
-│       ├── eslint.config.mjs
-│       ├── package-lock.json
-│       ├── package.json
-│       ├── public
-│       │   ├── appLogo.png
-│       │   ├── favicon.ico
-│       │   ├── index.html
-│       │   ├── logo2.png
-│       │   ├── manifest.json
-│       │   ├── robots.txt
-│       │   └── xp
-│       │       ├── xp10.png
-│       │       ├── xp100.png
-│       │       ├── xp200.png
-│       │       ├── xp25.png
-│       │       ├── xp50.png
-│       │       └── xp_mongo.js
-│       └── src
-│           ├── App.js
-│           ├── App.test.js
-│           ├── components
-│           │   ├── ConfettiAnimation.js
-│           │   ├── GlobalTestPage.js
-│           │   ├── ProtectedRoute.js
-│           │   ├── Sidebar
-│           │   │   ├── Sidebar.css
-│           │   │   ├── Sidebar.js
-│           │   │   └── sidebarlogo.png
-│           │   ├── colorMapping.js
-│           │   ├── iconMapping.js
-│           │   ├── pages
-│           │   │   ├── AnalogyPage
-│           │   │   │   ├── AnalogyHub.css
-│           │   │   │   ├── AnalogyHub.js
-│           │   │   │   ├── backround1.jpg
-│           │   │   │   └── loading2.png
-│           │   │   ├── DailyPage
-│           │   │   │   ├── DailyCyberBrief.css
-│           │   │   │   ├── DailyCyberBrief.js
-│           │   │   │   └── backround7.jpg
-│           │   │   ├── GRCpage
-│           │   │   │   ├── GRC.css
-│           │   │   │   ├── GRC.js
-│           │   │   │   └── GRCbackground.jpg
-│           │   │   ├── Info
-│           │   │   │   ├── InfoPage.css
-│           │   │   │   └── InfoPage.js
-│           │   │   ├── ResourcesPage
-│           │   │   │   ├── Resourcebackground.jpg
-│           │   │   │   ├── Resources.css
-│           │   │   │   └── Resources.js
-│           │   │   ├── ScenarioPage
-│           │   │   │   ├── ScenarioSphere.css
-│           │   │   │   ├── ScenarioSphere.js
-│           │   │   │   ├── attacks.js
-│           │   │   │   └── backround5.jpg
-│           │   │   ├── XploitcraftPage
-│           │   │   │   ├── App.css
-│           │   │   │   ├── Xploitcraft.js
-│           │   │   │   ├── backround2.jpg
-│           │   │   │   ├── global.css
-│           │   │   │   ├── loading3.png
-│           │   │   │   └── logo5.png
-│           │   │   ├── aplus
-│           │   │   │   ├── APlusTestList.js
-│           │   │   │   └── APlusTestPage.js
-│           │   │   ├── aplus2
-│           │   │   │   ├── APlusCore2TestPage.js
-│           │   │   │   └── AplusCore2TestList.js
-│           │   │   ├── auth
-│           │   │   │   ├── AuthToast.css
-│           │   │   │   ├── ErrorDisplay.css
-│           │   │   │   ├── ErrorDisplay.js
-│           │   │   │   ├── ForgotPassword.css
-│           │   │   │   ├── ForgotPassword.js
-│           │   │   │   ├── Login.css
-│           │   │   │   ├── Login.js
-│           │   │   │   ├── PasswordRequirements.css
-│           │   │   │   ├── PasswordRequirements.js
-│           │   │   │   ├── Register.css
-│           │   │   │   ├── Register.js
-│           │   │   │   └── auth.css
-│           │   │   ├── awscloud
-│           │   │   │   ├── AWSCloudTestList.js
-│           │   │   │   └── AWSCloudTestPage.js
-│           │   │   ├── casp
-│           │   │   │   ├── CaspPlusTestList.js
-│           │   │   │   └── CaspPlusTestPage.js
-│           │   │   ├── cissp
-│           │   │   │   ├── CisspTestList.js
-│           │   │   │   └── CisspTestPage.js
-│           │   │   ├── cloudplus
-│           │   │   │   ├── CloudPlusTestList.js
-│           │   │   │   └── CloudPlusTestPage.js
-│           │   │   ├── cysa
-│           │   │   │   ├── CySAPlusTestList.js
-│           │   │   │   └── CySAPlusTestPage.js
-│           │   │   ├── dataplus
-│           │   │   │   ├── DataPlusTestList.js
-│           │   │   │   └── DataPlusTestPage.js
-│           │   │   ├── linuxplus
-│           │   │   │   ├── LinuxPlusTestList.js
-│           │   │   │   └── LinuxPlusTestPage.js
-│           │   │   ├── nplus
-│           │   │   │   ├── NPlusTestList.js
-│           │   │   │   └── NetworkPlusTestPage.js
-│           │   │   ├── penplus
-│           │   │   │   ├── PenPlusTestList.js
-│           │   │   │   └── PenPlusTestPage.js
-│           │   │   ├── secplus
-│           │   │   │   ├── SecurityPlusTestList.js
-│           │   │   │   └── SecurityPlusTestPage.js
-│           │   │   ├── serverplus
-│           │   │   │   ├── ServerPlusTestList.js
-│           │   │   │   └── ServerPlusTestPage.js
-│           │   │   └── store
-│           │   │       ├── AchievementPage.css
-│           │   │       ├── AchievementPage.js
-│           │   │       ├── AchievementToast.css
-│           │   │       ├── AchievementToast.js
-│           │   │       ├── DailyStation.css
-│           │   │       ├── DailyStationPage.js
-│           │   │       ├── LeaderboardPage.css
-│           │   │       ├── LeaderboardPage.js
-│           │   │       ├── ShopPage.css
-│           │   │       ├── ShopPage.js
-│           │   │       ├── StreakCalendar.js
-│           │   │       ├── UserProfile.css
-│           │   │       ├── UserProfile.js
-│           │   │       ├── ach.png
-│           │   │       ├── achbgs1.jpg
-│           │   │       ├── achievementsSlice.js
-│           │   │       ├── leader.jpg
-│           │   │       ├── shopSlice.js
-│           │   │       ├── shopbg.png
-│           │   │       ├── shopbg1.jpg
-│           │   │       ├── store.js
-│           │   │       ├── user.jpg
-│           │   │       └── userSlice.js
-│           │   └── test.css
-│           ├── global.css
-│           ├── index.css
-│           ├── index.js
-│           ├── reportWebVitals.js
-│           └── setupTests.js
-├── nginx
-│   ├── nginx.conf
-│   └── sites-enabled
-│       └── reverse_proxy.conf
-├── redis
-│   └── redis.conf
-└── tests
-    ├── A+ Core 1
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── A+ Core 2
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── AWS-CLOUD
-    │   └── mongo_test_1.js
-    ├── Aiformula.txt
-    ├── CASP+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── CISSP
-    │   └── mongo_test_1.js
-    ├── Cloud+
-    │   └── mongo_test_1.js
-    ├── CySa+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── Data+
-    │   └── mongo_test_1.js
-    ├── DuplicateFix.txt
-    ├── Linux+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── Network+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── PenTest+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── Security+
-    │   ├── 1.js
-    │   ├── 2.js
-    │   ├── 3.js
-    │   ├── 4.js
-    │   ├── 5.js
-    │   ├── 6.js
-    │   ├── 7.js
-    │   ├── 8.js
-    │   ├── 9.js
-    │   └── X0.js
-    ├── Server+
-    │   └── mongo_test_1.js
-    ├── distractors-ExtraInstrcutions.md
-    ├── fixtest.txt
-    ├── list.txt
-    ├── refineTests.md
-    └── verifytests.txt
-
-58 directories, 269 files
-```
-
-================
 File: .gitignore
 ================
 # Python virtual environment folders (used to isolate dependencies)
@@ -28131,16 +24916,26 @@ node_modules/
 # React build files (generated during production build, not needed in source control)
 my-react-app/build/
 
-# AWS EC2 SSH key
-ssh-key-2025-02-12.key
+# Oracle key
 ssh-key-2025-02-12.key
 
-
+# All these files I edit on remote repo/ web browser
 IOS.MD
 
-"MD's"/
+# .md files
+MD's/
 
+# All my practice tests
 tests/
+
+# Mongosh Data
+Mongo-Inputs/
+
+# Trees/strcuture of my project
+Trees/
+
+# these are just images-- no need to always push/pull
+avatars/
 
 ================
 File: bandit.yaml
