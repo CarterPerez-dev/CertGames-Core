@@ -255,10 +255,6 @@ def get_user_by_id(user_id):
 ##############################################
 
 def create_user(user_data):
-    """
-    Creates a new user document, setting default fields including coins, xp, level,
-    purchasedItems, xpBoost, etc. Also automatically equips a default avatar if found.
-    """
     existing_user = mainusers_collection.find_one({
         "$or": [
             {"username": user_data["username"]},
@@ -268,7 +264,7 @@ def create_user(user_data):
     if existing_user:
         raise ValueError("Username or email is already taken")
 
-    # Set defaults for new user:
+    # Default fields
     user_data.setdefault("coins", 0)
     user_data.setdefault("xp", 0)
     user_data.setdefault("level", 1)
@@ -281,7 +277,21 @@ def create_user(user_data):
     user_data.setdefault("currentAvatar", None)
     user_data.setdefault("nameColor", None)
 
-    # Auto-equip default avatar if cost=null
+    # If you want to ensure new users have the 'achievement_counters'
+    # from Day 1, do it here:
+    user_data.setdefault("achievement_counters", {
+        "total_tests_completed": 0,
+        "perfect_tests_count": 0,
+        "perfect_tests_by_category": {},
+        # "consecutive_perfect_streak": 0, # removing memory_master
+        "highest_score_ever": 0.0,
+        "lowest_score_ever": 100.0,
+        "total_questions_answered": 0,
+        # "tests_completed_by_category": {}, # optional
+        # "tests_completed_set": set()       # optional
+    })
+
+    # Auto-equip default avatar if cost=None
     default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
     if default_avatar:
         user_data["currentAvatar"] = default_avatar["_id"]
@@ -472,6 +482,12 @@ def purchase_item(user_id, item_id):
 
 def get_achievements():
     return list(achievements_collection.find({}))
+    
+    
+    
+    
+    
+    
 
 def get_test_by_id_and_category(test_id, category):
     """
@@ -486,214 +502,7 @@ def get_test_by_id_and_category(test_id, category):
         "category": category
     })
 
-def check_and_unlock_achievements(user_id):
-    """
-    Checks the user's progress by querying testAttempts_collection to see:
-      - How many tests are finished (total_finished)
-      - How many are perfect (perfect_tests)
-      - Their percentage on each finished test
-      - If they've done certain minScores, consecutive perfects, etc.
-      - Summation of total questions answered across all finished attempts
 
-    Then unlocks achievements as needed, returning newly_unlocked achievementIds.
-    """
-
-    user = get_user_by_id(user_id)
-    if not user:
-        return []
-
-    user_oid = user["_id"]
-
-    # 1) Count how many finished attempts the user has
-    total_finished = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True
-    })
-
-    # 2) Count how many are perfect (score == totalQuestions)
-    perfect_tests = testAttempts_collection.count_documents({
-        "userId": user_oid,
-        "finished": True,
-        "$expr": {"$eq": ["$score", "$totalQuestions"]}
-    })
-
-    # 3) Fetch all finished attempts
-    finished_cursor = testAttempts_collection.find(
-        {"userId": user_oid, "finished": True}
-    )
-    finished_tests = []
-    for doc in finished_cursor:
-        tq = doc.get("totalQuestions", 0)
-        sc = doc.get("score", 0)
-        pct = (sc / tq) * 100 if tq else 0
-        cat = doc.get("category", "global")
-        finished_at = doc.get("finishedAt", None)
-        finished_tests.append({
-            "test_id": doc.get("testId", "0"),
-            "score": sc,
-            "totalQuestions": tq,
-            "percentage": pct,
-            "category": cat,
-            "finishedAt": finished_at
-        })
-
-    from datetime import datetime
-    finished_tests.sort(
-        key=lambda x: x["finishedAt"] if x["finishedAt"] else datetime(1970,1,1)
-    )
-
-    max_consecutive = 0
-    current_streak = 0
-    for ft in finished_tests:
-        if ft["percentage"] == 100:
-            current_streak += 1
-            if current_streak > max_consecutive:
-                max_consecutive = current_streak
-        else:
-            current_streak = 0
-
-    from collections import defaultdict
-    category_groups = defaultdict(list)
-    for ft in finished_tests:
-        category_groups[ft["category"]].append(ft)
-
-    sum_of_questions = sum(ft["totalQuestions"] for ft in finished_tests)
-
-    TOTAL_TESTS = 130
-    TOTAL_QUESTIONS = 10000
-
-    user_coins = user.get("coins", 0)
-    user_level = user.get("level", 1)
-
-    unlocked = user.get("achievements", [])
-    newly_unlocked = []
-
-    all_ach = get_achievements()
-
-    for ach in all_ach:
-        aid = ach["achievementId"]
-        criteria = ach.get("criteria", {})
-
-        if aid in unlocked:
-            continue
-
-        # testCount
-        if "testCount" in criteria:
-            if total_finished >= criteria["testCount"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # coins
-        if "coins" in criteria:
-            if user_coins >= criteria["coins"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # level
-        if "level" in criteria:
-            if user_level >= criteria["level"]:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # perfectTests
-        if "perfectTests" in criteria:
-            needed = criteria["perfectTests"]
-            if perfect_tests >= needed:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # consecutivePerfects
-        if "consecutivePerfects" in criteria:
-            needed = criteria["consecutivePerfects"]
-            if max_consecutive >= needed:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # allTestsCompleted
-        if "allTestsCompleted" in criteria and criteria["allTestsCompleted"] is True:
-            if total_finished >= TOTAL_TESTS:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # testsCompletedInCategory
-        if "testsCompletedInCategory" in criteria:
-            needed = criteria["testsCompletedInCategory"]
-            for ccat, attempts in category_groups.items():
-                if len(attempts) >= needed:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-                    break
-
-        # redemption_arc => minScoreBefore & minScoreAfter
-        if ("minScoreBefore" in criteria and "minScoreAfter" in criteria
-                and aid not in unlocked):
-            min_before = criteria["minScoreBefore"]
-            min_after = criteria["minScoreAfter"]
-            low_test = any(ft["percentage"] <= min_before for ft in finished_tests)
-            high_test = any(ft["percentage"] >= min_after for ft in finished_tests)
-            if low_test and high_test:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # minScore => e.g. "accuracy_king"
-        if "minScore" in criteria:
-            needed = criteria["minScore"]
-            if any(ft["percentage"] >= needed for ft in finished_tests):
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-        # minScoreGlobal => e.g. "exam_conqueror"
-        if "minScoreGlobal" in criteria:
-            min_g = criteria["minScoreGlobal"]
-            if total_finished >= TOTAL_TESTS:
-                all_above = all(ft["percentage"] >= min_g for ft in finished_tests)
-                if all_above:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-
-        # minScoreInCategory => e.g. "subject_specialist"
-        if "minScoreInCategory" in criteria:
-            min_cat = criteria["minScoreInCategory"]
-            for ccat, attempts in category_groups.items():
-                if len(attempts) == 10:
-                    if all(ft["percentage"] >= min_cat for ft in attempts):
-                        unlocked.append(aid)
-                        newly_unlocked.append(aid)
-                        break
-
-        # perfectTestsInCategory => "category_perfectionist"
-        if "perfectTestsInCategory" in criteria:
-            needed = criteria["perfectTestsInCategory"]
-            for ccat, attempts in category_groups.items():
-                perfect_count = sum(1 for ft in attempts if ft["percentage"] == 100)
-                if perfect_count >= needed:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-                    break
-
-        # perfectTestsGlobal => "absolute_perfectionist"
-        if "perfectTestsGlobal" in criteria and criteria["perfectTestsGlobal"] is True:
-            if total_finished >= TOTAL_TESTS:
-                all_perfect = all(ft["percentage"] == 100 for ft in finished_tests)
-                if all_perfect:
-                    unlocked.append(aid)
-                    newly_unlocked.append(aid)
-
-        # totalQuestions => e.g. "answer_machine_1000"
-        if "totalQuestions" in criteria:
-            needed_q = criteria["totalQuestions"]
-            if sum_of_questions >= needed_q:
-                unlocked.append(aid)
-                newly_unlocked.append(aid)
-
-    if newly_unlocked:
-        mainusers_collection.update_one(
-            {"_id": user_oid},
-            {"$set": {"achievements": unlocked}}
-        )
-
-    return newly_unlocked
-    
     
    
 

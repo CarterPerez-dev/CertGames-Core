@@ -27,7 +27,6 @@ const iconMapping = {
   "platinum_pro": FaMagic,
   "walking_encyclopedia": FaBrain,
   "redemption_arc": FaBolt,
-  "memory_master": FaRegSmile,
   "coin_collector_5000": FaBook,
   "coin_hoarder_10000": FaBook,
   "coin_tycoon_50000": FaBook,
@@ -38,15 +37,10 @@ const iconMapping = {
   "mid_tier_grinder_25": FaMedal,
   "elite_scholar_50": FaStar,
   "ultimate_master_100": FaCrown,
-  "category_perfectionist": FaBolt,
-  "absolute_perfectionist": FaBolt,
-  "exam_conqueror": FaMedal,
-  "subject_specialist": FaMedal,
   "answer_machine_1000": FaBook,
   "knowledge_beast_5000": FaBrain,
   "question_terminator": FaBrain,
   "test_finisher": FaCheckCircle,
-  "subject_finisher": FaCheckCircle
 };
 
 // Mapping achievement IDs to colors.
@@ -59,7 +53,6 @@ const colorMapping = {
   "platinum_pro": "#e5e4e2",
   "walking_encyclopedia": "#00fa9a",
   "redemption_arc": "#ff4500",
-  "memory_master": "#8a2be2",
   "coin_collector_5000": "#ff69b4",
   "coin_hoarder_10000": "#ff1493",
   "coin_tycoon_50000": "#ff0000",
@@ -70,15 +63,10 @@ const colorMapping = {
   "mid_tier_grinder_25": "#ff8c00",
   "elite_scholar_50": "#ffd700",
   "ultimate_master_100": "#ff4500",
-  "category_perfectionist": "#00ced1",
-  "absolute_perfectionist": "#32cd32",
-  "exam_conqueror": "#1e90ff",
-  "subject_specialist": "#8a2be2",
   "answer_machine_1000": "#ff69b4",
   "knowledge_beast_5000": "#00fa9a",
   "question_terminator": "#ff1493",
   "test_finisher": "#adff2f",
-  "subject_finisher": "#7fff00"
 };
 
 const AchievementPage = () => {

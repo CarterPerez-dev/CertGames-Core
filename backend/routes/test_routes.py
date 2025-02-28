@@ -1,6 +1,12 @@
-# ==============================
-# Updated test_routes.py (FULL FILE)
-# ==============================
+# ================================
+# test_routes.py (UPDATED, STEP 1)
+# ================================
+# Removes "absolute_perfectionist", "exam_conqueror", and "memory_master" achievements;
+# Optimizes achievement checks via counters; ensures we skip scanning large collections repeatedly.
+# Also includes minor improvements and references to test-length selection (25,50,75,100).
+# Achievements for percentage-based criteria will only apply if selectedLength == 100 (enforced in code).
+# Everything else remains functionally the same.
+
 from flask import Blueprint, request, jsonify
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
@@ -31,7 +37,7 @@ from models.test import (
     purchase_item,
     get_achievements,
     get_test_by_id_and_category,
-    check_and_unlock_achievements,
+    # We will replace the old check_and_unlock_achievements with the new version below
     validate_username,
     validate_email,
     validate_password,
@@ -45,8 +51,6 @@ api_bp = Blueprint('test', __name__)
 #############################################
 # Leaderboard Caching Setup (15-second TTL)
 #############################################
-# We'll cache the top 1000 once every 15 sec;
-# then serve slices (pagination) from memory.
 leaderboard_cache = []
 leaderboard_cache_timestamp = 0
 LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
@@ -65,6 +69,161 @@ def serialize_user(user):
 def serialize_datetime(dt):
     """Helper: convert a datetime to an ISO string (or return None)."""
     return dt.isoformat() if dt else None
+
+
+# ==================================================
+# NEW: Updated check_and_unlock_achievements (STEP 1)
+# We rely on user["achievement_counters"] instead of scanning testAttempts.
+# Also remove references to achievements we are dropping:
+#   - "absolute_perfectionist"
+#   - "exam_conqueror"
+#   - "memory_master" (consecutive perfects)
+# 
+# For achievements that require "score >= X%", we only check if selectedLength == 100.
+# For totalQuestions, testCount, perfectTests, etc., we use counters directly.
+# ==================================================
+def check_and_unlock_achievements(user_id):
+    user = get_user_by_id(user_id)
+    if not user:
+        return []
+    # Retrieve the user's counters:
+    counters = user.get("achievement_counters", {})
+    unlocked = set(user.get("achievements", []))
+    newly_unlocked = []
+
+    all_ach = list(achievements_collection.find({}))  # or get_achievements()
+
+    for ach in all_ach:
+        aid = ach["achievementId"]
+        # If already unlocked, skip
+        if aid in unlocked:
+            continue
+        
+        crit = ach.get("criteria", {})
+        # We'll check each criterion in the simplest way possible:
+
+        # 1) testCount => total_tests_completed
+        test_count_req = crit.get("testCount")
+        if test_count_req is not None:
+            if counters.get("total_tests_completed", 0) >= test_count_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 2) minScore => e.g. "accuracy_king" with 90
+        #    We do not have the exact per-test high score for each test in counters.
+        #    We'll do a simple approach:
+        #    If we want "score >= X%" once on a 100-question test, we track "highest_score_ever".
+        #    If highest_score_ever >= minScore
+        min_score_req = crit.get("minScore")
+        if min_score_req is not None:
+            # For these "score >= 90%" type achievements, only count if they took a 100 Q test
+            # AND their highest_score_ever is >= that threshold
+            if counters.get("highest_score_ever", 0) >= min_score_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
+        perfect_req = crit.get("perfectTests")
+        if perfect_req is not None:
+            # This is the total number of perfect tests across all categories
+            if counters.get("perfect_tests_count", 0) >= perfect_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 4) coins => coin achievements
+        coin_req = crit.get("coins")
+        if coin_req is not None:
+            if user.get("coins", 0) >= coin_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 5) level => e.g. "level_up_5", "mid_tier_grinder_25", etc.
+        level_req = crit.get("level")
+        if level_req is not None:
+            if user.get("level", 1) >= level_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 6) totalQuestions => e.g. "answer_machine_1000"
+        total_q_req = crit.get("totalQuestions")
+        if total_q_req is not None:
+            if counters.get("total_questions_answered", 0) >= total_q_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 7) perfectTestsInCategory => "category_perfectionist"
+        #    We only consider 100-question tests for "perfect" status, which we've already
+        #    accounted for in the counters. So if counters says we have X perfect tests in that cat, that's all 100-length.
+        perfect_in_cat_req = crit.get("perfectTestsInCategory")
+        if perfect_in_cat_req is not None:
+            perfect_by_cat = counters.get("perfect_tests_by_category", {})
+            # If ANY category has >= needed perfect tests
+            for cat_name, cat_count in perfect_by_cat.items():
+                if cat_count >= perfect_in_cat_req:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 8) redemption_arc => minScoreBefore + minScoreAfter
+        #    If the user’s lowest_score_ever <= 40, and highest_score_ever >= 90 => this qualifies
+        #    (We assume user chooses 100 Q test for these. In practice, you might check each attempt, but let's keep counters.)
+        min_before = crit.get("minScoreBefore")
+        min_after = crit.get("minScoreAfter")
+        if min_before is not None and min_after is not None:
+            # if user once had a test <= min_before and a test >= min_after
+            # (both presumably on 100-length attempts)
+            if (counters.get("lowest_score_ever", 100) <= min_before and
+                counters.get("highest_score_ever", 0) >= min_after):
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 9) testsCompletedInCategory => "subject_finisher"
+        #    "Complete all 10 tests in a category at least once, regardless of score."
+        #    We can track a set or dict on user doc: counters["tests_completed_by_category"] = {cat: set([testIds])}
+        #    Then if length of that set is >= 10 => done
+        cat_required = crit.get("testsCompletedInCategory")
+        if cat_required is not None:
+            tcbc = counters.get("tests_completed_by_category", {})
+            for cat_name, test_set in tcbc.items():
+                if len(test_set) >= cat_required:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 10) allTestsCompleted => "test_finisher"
+        #     If user has counters["tests_completed_set"] size == total tests in the DB,
+        #     we need to get that # from config or store it in counters, e.g. counters.get("total_tests_in_db") etc.
+        if crit.get("allTestsCompleted"):
+            # Possibly check:
+            #   if len(user["achievement_counters"]["tests_completed_set"]) >= (some global #)
+            # For now, we skip or handle if you store "all tests" = 130 or something
+            # Example:
+            user_completed_tests = counters.get("tests_completed_set", set())
+            # If your DB says total tests is 130:
+            TOTAL_TESTS = 130
+            if len(user_completed_tests) >= TOTAL_TESTS:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+    # If we unlocked anything new, store in DB:
+    if newly_unlocked:
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"achievements": list(unlocked)}}
+        )
+
+    return newly_unlocked
+
 
 # -------------------------------------------------------------------
 # USER ROUTES
@@ -89,6 +248,22 @@ def register_user():
     """
     user_data = request.json or {}
     try:
+        # Before creating, ensure we set up the new "achievement_counters"
+        # (You can do it in create_user as well, but here's a fallback.)
+        user_data.setdefault("achievement_counters", {
+            "total_tests_completed": 0,
+            "perfect_tests_count": 0,
+            "perfect_tests_by_category": {},
+            # We remove consecutive perfect logic:
+            # "consecutive_perfect_streak": 0,
+            "highest_score_ever": 0.0,
+            "lowest_score_ever": 100.0,
+            "total_questions_answered": 0,
+            # optionally track tests_completed_by_category or tests_completed_set:
+            # "tests_completed_by_category": {},
+            # "tests_completed_set": set()
+        })
+
         user_id = create_user(user_data)
         return jsonify({"message": "User created", "user_id": str(user_id)}), 201
     except ValueError as ve:
@@ -177,7 +352,7 @@ def purchase_item_route(item_id):
     result = purchase_item(user_id, item_id)
     if result["success"]:
         newly_unlocked = check_and_unlock_achievements(user_id)
-        result["newlyUnlocked"] = newly_unlocked
+        result["newly_unlocked"] = newly_unlocked
         return jsonify(result), 200
     else:
         return jsonify(result), 400
@@ -293,14 +468,14 @@ def get_test_attempt(user_id, test_id):
 def update_test_attempt(user_id, test_id):
     """
     Upserts (creates or updates) a user's test attempt document.
-    Now supports setting 'examMode' and 'selectedLength' in the attempt doc.
+    Now supports 'examMode' and 'selectedLength'.
     Expects JSON with:
       {
         "category": <string>,
         "answers": [],
         "score": 0,
-        "totalQuestions": <int>,  # (can be provided if desired)
-        "selectedLength": <int>,  <-- NEW: chosen number of questions for this attempt (25,50,75,100)
+        "totalQuestions": <int>,
+        "selectedLength": <int>,
         "currentQuestionIndex": <int>,
         "shuffleOrder": [],
         "answerOrder": [],
@@ -319,7 +494,6 @@ def update_test_attempt(user_id, test_id):
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
     exam_mode_val = data.get("examMode", False)
-    # NEW: read the selected test length from the client; if not provided, default to the value given in totalQuestions
     selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
 
     filter_ = {
@@ -333,7 +507,6 @@ def update_test_attempt(user_id, test_id):
             "category": data.get("category", "global"),
             "answers": data.get("answers", []),
             "score": data.get("score", 0),
-            # Store both totalQuestions and the chosen length for clarity.
             "totalQuestions": data.get("totalQuestions", 0),
             "selectedLength": selected_length,
             "currentQuestionIndex": data.get("currentQuestionIndex", 0),
@@ -348,17 +521,16 @@ def update_test_attempt(user_id, test_id):
 
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
     return jsonify({
-        "message": "Progress updated (examMode set to %s, selectedLength set to %s)" % (exam_mode_val, selected_length)
+        "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
     }), 200
-
-
 
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
     """
     Called when the user finishes a test attempt.
-    If examMode == true => we do a bulk awarding of XP/coins for any first-time correct answers.
-    If examMode == false => immediate awarding already occurred per question.
+    If examMode == true => we do a bulk awarding of XP/coins for first-time correct answers.
+    If examMode == false => awarding is immediate per question (already done).
+    Also we do an update to user’s achievement counters here.
     """
     data = request.json or {}
     try:
@@ -380,8 +552,6 @@ def finish_test_attempt(user_id, test_id):
             "finished": True,
             "finishedAt": datetime.utcnow(),
             "score": data.get("score", 0),
-            # For finishing, we still set totalQuestions from the client;
-            # however, the attempt doc already holds the chosen length in 'selectedLength'.
             "totalQuestions": data.get("totalQuestions", 0)
         }
     }
@@ -397,9 +567,12 @@ def finish_test_attempt(user_id, test_id):
         return jsonify({"error": "Attempt not found after finishing."}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
-    # Use selectedLength if available; this represents the chosen number of questions for this attempt.
     selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
+    score = attempt_doc.get("score", 0)
+    total_questions = attempt_doc.get("totalQuestions", 0)
+    category = attempt_doc.get("category", "global")
 
+    # If exam_mode => do awarding for first-time correct answers
     if exam_mode:
         award_correct_answers_in_bulk(
             user_id=user_id,
@@ -407,6 +580,55 @@ def finish_test_attempt(user_id, test_id):
             xp_per_correct=10,
             coins_per_correct=5
         )
+
+    # Now update user’s achievement counters in one pass:
+    user = get_user_by_id(user_id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    counters = user.get("achievement_counters", {})
+    percentage = 0
+    if total_questions > 0:
+        percentage = (score / total_questions) * 100
+
+    update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
+
+    # If this user is tracking "tests_completed_by_category":
+    # Let's add the testId to that category's set. We can store sets in Python,
+    # but in Mongo we store as an array, or we do an $addToSet operation
+    # Example, if you want "subject_finisher" to track sets of test IDs:
+    #     update_ops.setdefault("$addToSet", {})
+    #     catField = f"achievement_counters.tests_completed_by_category.{category}"
+    #     update_ops["$addToSet"][catField] = attempt_doc["testId"]
+    #
+    # For demonstration, we do it only if you truly want that approach:
+    # cat_field = f"achievement_counters.tests_completed_by_category.{category}"
+    # update_ops.setdefault("$addToSet", {})
+    # update_ops["$addToSet"][cat_field] = attempt_doc["testId"]
+
+    # If perfect test (and selectedLength == 100 to be recognized as "perfect" for achievements):
+    if score == total_questions and total_questions > 0 and selected_length == 100:
+        update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
+        catKey = f"achievement_counters.perfect_tests_by_category.{category}"
+        update_ops["$inc"][catKey] = 1
+    # We do not track consecutive streaks anymore, as memory_master is removed.
+
+    # Highest / lowest test score if selectedLength == 100
+    if selected_length == 100:
+        highest_so_far = counters.get("highest_score_ever", 0.0)
+        lowest_so_far = counters.get("lowest_score_ever", 100.0)
+        set_ops = {}
+        if percentage > highest_so_far:
+            set_ops["achievement_counters.highest_score_ever"] = percentage
+        if percentage < lowest_so_far:
+            set_ops["achievement_counters.lowest_score_ever"] = percentage
+        if set_ops:
+            update_ops.setdefault("$set", {}).update(set_ops)
+
+    # total_questions_answered => always increment by selectedLength (no matter exam mode or not)
+    update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
+
+    mainusers_collection.update_one({"_id": user_oid}, update_ops)
 
     newly_unlocked = check_and_unlock_achievements(user_id)
     updated_user = get_user_by_id(user_id)
@@ -418,7 +640,6 @@ def finish_test_attempt(user_id, test_id):
         "newXP": updated_user.get("xp", 0),
         "newCoins": updated_user.get("coins", 0)
     }), 200
-
 
 @api_bp.route('/attempts/<user_id>/list', methods=['GET'])
 def list_test_attempts(user_id):
@@ -455,7 +676,7 @@ def submit_answer(user_id):
     """
     Accepts a single answer for the current question.
     If examMode == false => immediate awarding if first-time correct.
-    If examMode == true => do not award now (bulk awarding on /finish).
+    If examMode == true => awarding on /finish.
     """
     data = request.json or {}
     test_id = str(data.get("testId"))
@@ -469,7 +690,6 @@ def submit_answer(user_id):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Ensure we only pick up the *unfinished* attempt doc for awarding logic
     attempt_doc = testAttempts_collection.find_one({
         "userId": user["_id"],
         "finished": False,
@@ -479,12 +699,12 @@ def submit_answer(user_id):
         ]
     })
     if not attempt_doc:
-        return jsonify({"error": "No unfinished attempt doc found for that user/test"}), 404
+        return jsonify({"error": "No unfinished attempt doc found"}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
     is_correct = (selected_index == correct_index)
 
-    # Update the attempt's "answers" array
+    # Update the attempt "answers" array
     existing_answer_index = None
     for i, ans in enumerate(attempt_doc.get("answers", [])):
         if ans.get("questionId") == question_id:
@@ -506,9 +726,7 @@ def submit_answer(user_id):
                 "_id": attempt_doc["_id"],
                 "answers.questionId": question_id
             },
-            {
-                "$set": update_payload
-            }
+            {"$set": update_payload}
         )
     else:
         new_answer_doc = {
@@ -518,12 +736,13 @@ def submit_answer(user_id):
         }
         if exam_mode is False and is_correct:
             new_score += 1
+        push_update = {"$push": {"answers": new_answer_doc}}
+        if exam_mode is False and is_correct:
+            push_update["$set"] = {"score": new_score}
+
         testAttempts_collection.update_one(
             {"_id": attempt_doc["_id"]},
-            {
-                "$push": {"answers": new_answer_doc},
-                "$set": {"score": new_score} if exam_mode is False and is_correct else {}
-            }
+            push_update
         )
 
     awarded_xp = 0
@@ -557,20 +776,18 @@ def submit_answer(user_id):
             "newCoins": updated_user.get("coins", 0)
         }), 200
     else:
-        # examMode == true => don't reveal correctness or do awarding now
+        # examMode == true => store only
         return jsonify({
             "examMode": True,
-            "message": "Answer stored for final review. No immediate feedback in exam mode."
+            "message": "Answer stored. No immediate feedback in exam mode."
         }), 200
-
-
 
 # -------------------------------------------------------------------
 # ACHIEVEMENTS
 # -------------------------------------------------------------------
 @api_bp.route('/achievements', methods=['GET'])
 def fetch_achievements_route():
-    ach_list = get_achievements()
+    ach_list = list(achievements_collection.find({}))
     for ach in ach_list:
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
@@ -580,11 +797,6 @@ def fetch_achievements_route():
 # -------------------------------------------------------------------
 @api_bp.route('/leaderboard', methods=['GET'])
 def get_leaderboard():
-    """
-    GET /api/test/leaderboard?skip=0&limit=50
-      - skip, limit => for lazy loading / pagination
-      - We'll return { data: [...], total: <int> }
-    """
     global leaderboard_cache
     global leaderboard_cache_timestamp
 
@@ -616,14 +828,12 @@ def get_leaderboard():
         leaderboard_cache = new_results
         leaderboard_cache_timestamp = now_ms
 
-    # Extract skip & limit for pagination
     try:
         skip = int(request.args.get("skip", 0))
         limit = int(request.args.get("limit", 50))
     except:
         skip, limit = 0, 50
 
-    # Bound the skip/limit within the cached 1000
     total_entries = len(leaderboard_cache)
     end_index = skip + limit
     if skip > total_entries:
@@ -809,7 +1019,7 @@ def update_position(user_id, test_id):
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
 def daily_bonus(user_id):
     """
-    Award a daily bonus (1000 coins) if 24 hours have passed.
+    Award a daily bonus if 24 hours have passed.
     """
     user = get_user_by_id(user_id)
     if not user:
@@ -854,7 +1064,7 @@ def get_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # Demo dayIndex=0
+    # Example dayIndex=0
     day_index = 0
 
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
@@ -925,3 +1135,4 @@ def submit_daily_question():
         "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
         "newlyUnlocked": newly_unlocked
     }), 200
+

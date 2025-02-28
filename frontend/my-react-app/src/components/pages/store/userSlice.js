@@ -1,4 +1,3 @@
-// src/store/userSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { showAchievementToast } from './AchievementToast';
 import {
@@ -10,7 +9,8 @@ import {
 import { fetchAchievements } from './achievementsSlice';
 import { fetchShopItems } from './shopSlice';
 
-// Same icon + color mapping as in achievements
+// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
+// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
 const iconMapping = {
   test_rookie: FaTrophy,
   accuracy_king: FaMedal,
@@ -20,7 +20,6 @@ const iconMapping = {
   platinum_pro: FaMagic,
   walking_encyclopedia: FaBrain,
   redemption_arc: FaBolt,
-  memory_master: FaRegSmile,
   coin_collector_5000: FaBook,
   coin_hoarder_10000: FaBook,
   coin_tycoon_50000: FaBook,
@@ -31,16 +30,13 @@ const iconMapping = {
   mid_tier_grinder_25: FaMedal,
   elite_scholar_50: FaStar,
   ultimate_master_100: FaCrown,
-  category_perfectionist: FaBolt,
-  absolute_perfectionist: FaBolt,
-  exam_conqueror: FaMedal,
-  subject_specialist: FaMedal,
   answer_machine_1000: FaBook,
   knowledge_beast_5000: FaBrain,
   question_terminator: FaBrain,
-  test_finisher: FaCheckCircle,
-  subject_finisher: FaCheckCircle
+  test_finisher: FaCheckCircle
 };
+
+// Matching color mapping (remove same IDs):
 const colorMapping = {
   test_rookie: "#ff5555",
   accuracy_king: "#ffa500",
@@ -50,7 +46,6 @@ const colorMapping = {
   platinum_pro: "#e5e4e2",
   walking_encyclopedia: "#00fa9a",
   redemption_arc: "#ff4500",
-  memory_master: "#8a2be2",
   coin_collector_5000: "#ff69b4",
   coin_hoarder_10000: "#ff1493",
   coin_tycoon_50000: "#ff0000",
@@ -61,22 +56,17 @@ const colorMapping = {
   mid_tier_grinder_25: "#ff8c00",
   elite_scholar_50: "#ffd700",
   ultimate_master_100: "#ff4500",
-  category_perfectionist: "#00ced1",
-  absolute_perfectionist: "#32cd32",
-  exam_conqueror: "#1e90ff",
-  subject_specialist: "#8a2be2",
   answer_machine_1000: "#ff69b4",
   knowledge_beast_5000: "#00fa9a",
   question_terminator: "#ff1493",
-  test_finisher: "#adff2f",
-  subject_finisher: "#7fff00"
+  test_finisher: "#adff2f"
 };
 
 // Utility function to show toast for newlyUnlocked achievements:
 function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
   if (!newlyUnlocked || newlyUnlocked.length === 0) return;
   newlyUnlocked.forEach((achId) => {
-    const icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
+    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
     const color = colorMapping[achId] || "#fff";
 
     const foundAch = allAchievements?.find(a => a.achievementId === achId);
@@ -86,13 +76,12 @@ function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
     showAchievementToast({
       title,
       description: desc,
-      icon: icon ? <icon /> : null,
+      icon: Icon ? <Icon /> : null,
       color
     });
   });
 }
 
-// The user slice
 const initialUserId = localStorage.getItem('userId');
 
 const initialState = {
@@ -368,11 +357,13 @@ const userSlice = createSlice({
 
       // ADD COINS
       .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, you could re-fetch user or do local updates here
-        // e.g., state.coins += ...
+        // If route succeeded, you could do local updates here or re-fetch user
+        // For example:
+        // state.coins += ...
       });
   },
 });
 
 export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
 export default userSlice.reducer;
+
