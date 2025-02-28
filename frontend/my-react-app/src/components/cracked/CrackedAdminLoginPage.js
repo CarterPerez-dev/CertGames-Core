@@ -29,7 +29,7 @@ function CrackedAdminLoginPage() {
         setError(data.error || "Unable to log in");
       } else {
         // On success, navigate to the admin dashboard
-        navigate("/api/cracked-admin/dashboard");
+        navigate("/cracked-admin/dashboard");
       }
     } catch (err) {
       console.error("Admin login error:", err);
