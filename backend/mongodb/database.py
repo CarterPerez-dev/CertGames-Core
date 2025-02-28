@@ -27,3 +27,7 @@ correctAnswers_collection = db.correctAnswers
 # NEW collections for daily bonus and questions
 dailyQuestions_collection = db.dailyQuestions
 dailyAnswers_collection = db.dailyAnswers
+
+
+#admin/support
+supportThreads_collection = db.supportThreads
