@@ -276,14 +276,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "System logs explicitly record privilege escalation attempts or unauthorized use of 'sudo.' Firewall checks, file scans, or disk analysis indirectly indicate security problems but do not specifically detect privilege escalation.",
       "examTip": "Regularly review logs for abnormal privilege escalation indicators to maintain secure access controls."
-    }
-
-db.tests.insertOne({
-  "category": "serverplus",
-  "testId": 1,
-  "testName": "Server+ Practice Test #1 (Normal)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 22,
       "question": "A technician must enable remote out-of-band server management without relying on the operating system's functionality. Which solution meets this requirement?",
@@ -933,9 +926,383 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Dual independent power circuits directly allow uninterrupted operation if one circuit fails. Single-phase setups, UPS, and voltage regulators don't inherently ensure dual-source redundancy.",
       "examTip": "Use dual power circuits for robust redundancy against power outages."
+    },
+    {
+      "id": 72,
+      "question": "What configuration change directly mitigates the risk of DHCP server spoofing on a network?",
+      "options": [
+        "Implementing VLAN segmentation",
+        "Deploying DHCP snooping features",
+        "Enabling NIC teaming",
+        "Setting shorter DHCP lease durations"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "DHCP snooping directly prevents unauthorized DHCP servers from assigning IP addresses. VLANs, NIC teaming, and lease durations don't directly prevent spoofing.",
+      "examTip": "Activate DHCP snooping to directly defend against DHCP spoofing."
+    },
+    {
+      "id": 73,
+      "question": "An administrator needs to ensure that critical server data remains continuously synchronized between two geographically separate locations. Which replication method directly fulfills this requirement?",
+      "options": [
+        "Daily incremental backups",
+        "Asynchronous replication",
+        "Synchronous replication",
+        "Weekly full backups"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Synchronous replication directly ensures real-time data consistency across separate locations. Incremental, asynchronous, and weekly backups cannot guarantee real-time synchronization.",
+      "examTip": "Use synchronous replication for immediate and continuous data consistency across locations."
+    },
+    {
+      "id": 74,
+      "question": "Which type of network storage access protocol directly supports Windows-based environments with file-level sharing?",
+      "options": [
+        "iSCSI",
+        "CIFS (SMB)",
+        "Fibre Channel",
+        "SATA"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "CIFS (SMB) directly provides file-level network access ideal for Windows environments. iSCSI, Fibre Channel, and SATA offer block-level or local storage connections.",
+      "examTip": "Use CIFS (SMB) for native Windows-based file-level network storage access."
+    },
+    {
+      "id": 75,
+      "question": "What measure directly reduces the risk of unauthorized physical access via copied access cards?",
+      "options": [
+        "Installing perimeter fencing",
+        "Requiring biometric verification",
+        "Deploying security cameras",
+        "Using video intercom systems"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Biometric verification directly prevents entry via duplicated access credentials. Fencing, cameras, and intercoms offer indirect or secondary security enhancements.",
+      "examTip": "Combine biometric verification with access cards to directly prevent unauthorized access via duplicates."
+    },
+    {
+      "id": 76,
+      "question": "An administrator must limit server access based strictly on job function. Which access control model directly enforces this?",
+      "options": [
+        "Rule-based access control",
+        "Role-based access control",
+        "Mandatory access control",
+        "Discretionary access control"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Role-based access control directly assigns permissions based on defined job roles. Rule-based, mandatory, and discretionary models use different criteria or are less directly role-focused.",
+      "examTip": "Implement role-based access control to precisely align permissions with job responsibilities."
+    },
+    {
+      "id": 77,
+      "question": "Which type of memory specifically corrects single-bit errors to maintain system stability?",
+      "options": [
+        "DDR4 SDRAM",
+        "Non-ECC RAM",
+        "ECC RAM",
+        "Cache memory"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "ECC RAM directly detects and corrects single-bit memory errors. DDR4, Non-ECC RAM, and cache memory do not inherently correct errors.",
+      "examTip": "Use ECC RAM in servers to maintain stability by correcting single-bit memory errors."
+    },
+    {
+      "id": 78,
+      "question": "Which storage media is most appropriate for long-term archival of large volumes of data with minimal power consumption?",
+      "options": [
+        "SSD drives",
+        "Magnetic tape",
+        "Hybrid HDD/SSD drives",
+        "High-speed HDD"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Magnetic tapes directly offer large-scale, long-term archival storage with minimal power usage. SSDs and HDD-based solutions consume more power or are less cost-effective long-term.",
+      "examTip": "Select magnetic tapes for cost-effective, energy-efficient archival storage."
+    },
+    {
+      "id": 79,
+      "question": "During troubleshooting, a server displays random kernel panic errors. Which hardware issue is most directly linked to this symptom?",
+      "options": [
+        "Faulty network card",
+        "Malfunctioning memory modules",
+        "Failing RAID controller battery",
+        "Improper BIOS boot settings"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Kernel panics are commonly caused directly by faulty or unstable memory modules. Network card, RAID battery, or BIOS settings rarely directly trigger kernel panics.",
+      "examTip": "Investigate memory modules first when diagnosing kernel panics."
+    },
+    {
+      "id": 80,
+      "question": "Which practice most directly ensures server OS integrity following patch installations?",
+      "options": [
+        "Regular hardware diagnostics",
+        "Post-installation patch validation",
+        "Monthly security training for administrators",
+        "Routine disk defragmentation"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Post-installation patch validation directly verifies OS integrity immediately after patch deployment. Diagnostics, training, or defragmentation indirectly support but do not validate OS patches.",
+      "examTip": "Always validate patches immediately after installation to confirm OS integrity."
+    },
+    {
+      "id": 81,
+      "question": "What type of documentation specifically assists with planning and visualizing network connectivity within a data center?",
+      "options": [
+        "Asset inventory lists",
+        "Infrastructure diagrams",
+        "Performance baselines",
+        "Warranty documents"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Infrastructure diagrams directly visualize network and hardware connectivity. Asset inventories, baselines, and warranties provide other critical information, but not network visualization.",
+      "examTip": "Maintain accurate infrastructure diagrams for clear visualization of network and hardware connections."
+    },
+    {
+      "id": 82,
+      "question": "What directly allows administrators to remotely power-cycle servers even when the OS is unresponsive?",
+      "options": [
+        "Secure Shell (SSH)",
+        "Remote Desktop Protocol (RDP)",
+        "IPMI management interfaces",
+        "Virtual Network Computing (VNC)"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "IPMI interfaces directly enable hardware-level remote power cycling independent of OS responsiveness. SSH, RDP, and VNC depend on OS functionality.",
+      "examTip": "Use IPMI for remote power management at the hardware level."
+    },
+    {
+      "id": 83,
+      "question": "An administrator needs immediate notification when server disk capacity reaches critical levels. Which solution directly addresses this requirement?",
+      "options": [
+        "Regular disk defragmentation",
+        "Automated performance monitoring alerts",
+        "Daily backup scheduling",
+        "Monthly hardware diagnostics"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Automated monitoring directly provides immediate alerts for critical disk usage. Defragmentation, backups, and hardware diagnostics indirectly support disk health but don't provide real-time notifications.",
+      "examTip": "Set automated monitoring alerts for timely responses to critical disk usage events."
+    },
+    {
+      "id": 84,
+      "question": "Which BIOS configuration directly improves physical server security against unauthorized boot attempts?",
+      "options": [
+        "Disabling Wake-on-LAN",
+        "Configuring a boot password",
+        "Updating firmware regularly",
+        "Reducing boot timeout duration"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Setting a boot password directly restricts unauthorized boot attempts. Wake-on-LAN, firmware updates, or boot timeout settings indirectly influence security.",
+      "examTip": "Configure BIOS boot passwords to directly secure servers against unauthorized boots."
+    },
+    {
+      "id": 85,
+      "question": "Which solution directly facilitates automatic failover between two network interfaces in case one fails?",
+      "options": [
+        "Network Address Translation (NAT)",
+        "NIC teaming in failover mode",
+        "VLAN trunking",
+        "Bridged networking"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "NIC teaming in failover mode directly provides automatic redundancy for NIC failures. NAT, VLAN trunking, and bridged networking don't inherently handle NIC-level failover.",
+      "examTip": "Configure NIC teaming in failover mode to directly address NIC redundancy."
+    },
+    {
+      "id": 86,
+      "question": "An administrator suspects unauthorized modifications to critical system files. Which method directly verifies file integrity?",
+      "options": [
+        "Checking server uptime statistics",
+        "Performing regular file checksum validations",
+        "Reviewing firewall log entries",
+        "Analyzing disk usage reports"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Checksum validations directly detect unauthorized file modifications. Uptime, firewall logs, and disk usage indirectly indicate issues.",
+      "examTip": "Regularly validate checksums to ensure critical file integrity."
+    },
+    {
+      "id": 87,
+      "question": "What directly enables multiple virtual machines to share physical CPU resources efficiently?",
+      "options": [
+        "Dynamic disk provisioning",
+        "Hypervisor resource scheduling",
+        "Network load balancing",
+        "Virtual LAN tagging"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Hypervisor resource scheduling directly manages CPU resource allocation efficiently among multiple VMs. Disk provisioning, load balancing, and VLAN tagging manage other resources or functions.",
+      "examTip": "Leverage hypervisor resource scheduling to optimize CPU resource allocation among virtual machines."
+    },
+    {
+      "id": 88,
+      "question": "Which cable type directly supports 10Gb Ethernet speeds over relatively short distances within server racks?",
+      "options": [
+        "Cat5e UTP",
+        "Cat6a UTP",
+        "Cat3 UTP",
+        "RG-59 coaxial cable"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Cat6a UTP directly supports reliable 10Gb Ethernet over short distances within racks. Cat5e and Cat3 support lower speeds, and RG-59 is unsuitable for Ethernet.",
+      "examTip": "Choose Cat6a cabling for short-distance, high-speed 10Gb Ethernet deployments."
+    },
+    {
+      "id": 89,
+      "question": "Which disaster recovery site type directly provides immediate full operational capacity with minimal downtime?",
+      "options": [
+        "Hot site",
+        "Warm site",
+        "Cold site",
+        "Archival site"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A hot site directly offers immediate operational capacity with minimal downtime. Warm, cold, and archival sites require varying degrees of setup and recovery time.",
+      "examTip": "Use hot sites for near-instantaneous operational recovery."
+    },
+    {
+      "id": 90,
+      "question": "A company experiences unauthorized access attempts on a physical server rack. Which measure directly enhances security against this specific threat?",
+      "options": [
+        "Deploying biometric rack locks",
+        "Increasing network firewall rules",
+        "Performing regular backups",
+        "Implementing RAID configurations"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Biometric rack locks directly prevent unauthorized physical access. Firewall rules, backups, and RAID configurations do not directly address physical security threats.",
+      "examTip": "Use biometric locks to directly secure physical server racks."
+    },
+    {
+      "id": 91,
+      "question": "Which backup strategy directly provides the fastest restoration time following a catastrophic server failure?",
+      "options": [
+        "Daily incremental backups",
+        "Weekly differential backups",
+        "Continuous replication to standby servers",
+        "Monthly full backups"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Continuous replication directly enables near-instantaneous restoration. Incremental, differential, or monthly backups require longer restoration periods.",
+      "examTip": "Implement continuous replication for minimal downtime after major server failures."
+    },
+    {
+      "id": 92,
+      "question": "What technology directly ensures secure, encrypted web server communications?",
+      "options": [
+        "SMTP protocol",
+        "SNMP protocol",
+        "HTTPS protocol",
+        "TFTP protocol"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "HTTPS directly encrypts web communications. SMTP, SNMP, and TFTP do not provide inherent encryption suitable for web servers.",
+      "examTip": "Always deploy HTTPS to secure web-based communications."
+    },
+    {
+      "id": 93,
+      "question": "Which power connector type is commonly used to supply power to modern rack-mounted servers in data centers?",
+      "options": [
+        "RJ45 connector",
+        "C13/C14 connectors",
+        "BNC connector",
+        "F-type connector"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "C13/C14 connectors are standard for supplying power to servers in data centers. RJ45, BNC, and F-type connectors serve network or coaxial connections, not power.",
+      "examTip": "Use C13/C14 connectors for reliable power connections in server racks."
+    },
+    {
+      "id": 94,
+      "question": "What documentation type directly helps track software license compliance?",
+      "options": [
+        "Infrastructure diagrams",
+        "Asset inventory records",
+        "Performance benchmarks",
+        "Operational procedures manuals"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Asset inventory records directly manage and track software license compliance. Diagrams, benchmarks, and procedure manuals don't specifically track licensing.",
+      "examTip": "Maintain detailed asset inventory records to ensure accurate license compliance tracking."
+    },
+    {
+      "id": 95,
+      "question": "Which scenario directly benefits from implementing RAID 6 over RAID 5?",
+      "options": [
+        "Servers requiring maximum read performance",
+        "Environments that cannot tolerate more than one simultaneous drive failure",
+        "Situations prioritizing minimal storage overhead",
+        "Systems needing fast write performance"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "RAID 6 directly supports two simultaneous drive failures. RAID 5 supports only one simultaneous failure, while the others focus on performance or minimal overhead.",
+      "examTip": "Choose RAID 6 to directly handle scenarios with potential simultaneous drive failures."
+    },
+    {
+      "id": 96,
+      "question": "Which configuration directly reduces network latency for virtual machines?",
+      "options": [
+        "Implementing storage deduplication",
+        "Using virtual switches connected directly to physical NICs",
+        "Increasing VM CPU allocation",
+        "Reducing VM memory usage"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Virtual switches directly connected to physical NICs reduce latency significantly. Deduplication, CPU, and memory allocation adjustments address unrelated performance factors.",
+      "examTip": "Directly connect virtual switches to physical NICs to minimize network latency."
+    },
+    {
+      "id": 97,
+      "question": "Which tool directly aids administrators in centrally managing Windows server updates?",
+      "options": [
+        "Windows Software Update Services (WSUS)",
+        "Remote Desktop Protocol (RDP)",
+        "File Transfer Protocol (FTP)",
+        "Network Load Balancing (NLB)"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "WSUS directly manages centralized Windows server updates. RDP, FTP, and NLB serve different functions and don't manage updates.",
+      "examTip": "Use WSUS for centralized management of Windows updates."
+    },
+    {
+      "id": 98,
+      "question": "What directly provides a layer of fault tolerance against data corruption within a file system?",
+      "options": [
+        "NTFS",
+        "ext4",
+        "ReFS",
+        "FAT32"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "ReFS directly provides built-in fault tolerance against data corruption. NTFS, ext4, and FAT32 offer limited or no built-in data resilience.",
+      "examTip": "Select ReFS for built-in fault tolerance and resilience against data corruption."
+    },
+    {
+      "id": 99,
+      "question": "Which practice directly reduces downtime during a system recovery?",
+      "options": [
+        "Using incremental backups exclusively",
+        "Performing routine security audits",
+        "Regularly testing restoration procedures",
+        "Applying security patches quarterly"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Regular restoration testing directly reduces recovery downtime by ensuring familiarity and efficiency. Incremental backups, audits, and patches indirectly support availability.",
+      "examTip": "Conduct regular restoration tests to ensure efficient, rapid recovery."
+    },
+    {
+      "id": 100,
+      "question": "Which protocol directly enables secure management of network devices using encryption?",
+      "options": [
+        "Telnet",
+        "SNMPv1",
+        "SNMPv3",
+        "FTP"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "SNMPv3 directly offers secure encrypted management of network devices. Telnet, SNMPv1, and FTP lack built-in encryption.",
+      "examTip": "Always utilize SNMPv3 for secure network device management."
     }
-
-
-
-     
-
+  ]
+});
