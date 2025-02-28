@@ -35,6 +35,7 @@ import ShopPage from './components/pages/store/ShopPage';
 import UserProfile from './components/pages/store/UserProfile';
 import LeaderboardPage from './components/pages/store/LeaderboardPage';
 import AchievementPage from './components/pages/store/AchievementPage';
+import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
 
 // Unique Test Pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
