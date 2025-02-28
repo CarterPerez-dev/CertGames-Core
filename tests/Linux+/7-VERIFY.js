@@ -1,7 +1,3 @@
-needs question 19-20
-
-
-
 db.tests.insertOne({
   "category": "linuxplus",
   "testId": 7,
@@ -242,20 +238,32 @@ db.tests.insertOne({
       "explanation": "`taskset -c 1,3 <command>` assigns a process to specific CPU cores. `nice` and `renice` modify process priority, while `schedtool` is an alternative but less common method.",
       "examTip": "Use `taskset -p <PID>` to check the CPU affinity of an existing process."
     }
-
-
-
-
-
-
-
-
-db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 35,
-  "questions": [
+    {
+      "id": 19,
+      "question": "A Linux administrator needs to expand the root Logical Volume (LV) by 20GB on a server running a mission-critical database. The existing Volume Group (VG) has unallocated space, and the root LV uses an ext4 filesystem. Which sequence of steps would correctly expand the LV and the ext4 filesystem without downtime?",
+      "options": [
+        "1) pvcreate /dev/sdb; 2) vgextend myVG /dev/sdb; 3) lvresize -r -L +20G /dev/myVG/root; 4) resize2fs /dev/myVG/root",
+        "1) lvextend -L +20G /dev/myVG/root; 2) pvcreate /dev/sdb; 3) resize2fs /dev/myVG/root; 4) vgextend myVG /dev/sdb",
+        "1) vgextend myVG /dev/sdb; 2) pvcreate /dev/sdb; 3) resize2fs /dev/myVG/root; 4) lvresize -r -L +20G /dev/myVG/root",
+        "1) pvcreate /dev/sdb; 2) vgextend myVG /dev/sdb; 3) lvextend -r -L +20G /dev/myVG/root; 4) resize2fs /dev/myVG/root"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "First, you must convert the new disk partition to a physical volume (pvcreate) and then extend the Volume Group (vgextend) with that PV. Next, extending the Logical Volume (lvextend or lvresize with -r) automatically updates the filesystem. If the -r flag is used, resize2fs is invoked automatically; however, it’s listed as a separate step for clarity. Ensuring the correct sequence of pvcreate -> vgextend -> lvextend -> filesystem resize is crucial.",
+      "examTip": "Use the '-r' (resizefs) option when extending or reducing LVM volumes for ext-based filesystems to streamline the process. Always verify available free extents in the Volume Group before resizing."
+    },
+    {
+      "id": 20,
+      "question": "A server has two interfaces, eth0 (192.168.10.10/24) and eth1 (10.10.0.10/24). The administrator wants to route all traffic to 192.168.20.0/24 via eth0 and all traffic to 10.10.1.0/24 via eth1. The default gateway is on 192.168.10.1. Which configuration steps ensure persistent routing for these two subnets?",
+      "options": [
+        "1) Add 'ip route add 192.168.20.0/24 dev eth0' and 'ip route add 10.10.1.0/24 dev eth1'; 2) Add default route to 192.168.10.1; 3) Place these commands in /etc/rc.local for persistence.",
+        "1) Edit /etc/sysconfig/network-scripts/ifcfg-eth0 and ifcfg-eth1 with static routes; 2) Add 'GATEWAY=192.168.10.1' under eth0; 3) Add '10.10.1.0/24 via 10.10.0.1 dev eth1'; 4) Add '192.168.20.0/24 via 192.168.10.1 dev eth0' in respective route files.",
+        "1) Delete all default routes and rely on dynamic routing; 2) Enable RIP or OSPF for multi-homed subnets; 3) Set GATEWAY=10.10.0.1 in ifcfg-eth1; 4) Let the router broadcast routes via RIP.",
+        "1) Manually add 'ip route add 10.10.1.0/24 dev eth1' and remove any default route; 2) Configure iptables to NAT traffic to 192.168.20.0/24; 3) Save the firewall rule; 4) Use DHCP for the default gateway on eth0."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Creating persistent static routes on Red Hat-based systems (and many others) involves configuring route files or using the 'ifcfg-ethX' scripts. Each subnet is directed to the appropriate interface, and the default gateway is set under the primary interface (eth0). Steps that rely on dynamic routing or manual additions to /etc/rc.local are less maintainable and can be error-prone, especially if network-scripts are expected to handle routing on startup.",
+      "examTip": "For persistent static routes on RPM-based distros, use dedicated route files or the ifcfg- interface scripts. On Debian-based systems, routes can go in /etc/network/interfaces or /etc/netplan/*. Always confirm your default gateway is on the correct interface."
+    },
     {
       "id": 21,
       "question": "A Linux system is configured with multiple network interfaces. The administrator needs to force all outbound traffic to a specific interface (`eth1`). Which command should they use?",
