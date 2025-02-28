@@ -1,0 +1,342 @@
+/* SupportAskAnythingPage.css */
+/* 
+   A sleek, modern, and responsive UI for multi-thread support chat.
+   Designed for cross-browser and mobile (iPhone, small devices, etc.) compatibility.
+   Utilizes flex layouts, subtle animations, and a clean color palette.
+   Customize color variables as needed for branding.
+*/
+
+:root {
+  /* Color Palette */
+  --color-primary: #4c6ef5;
+  --color-primary-hover: #3f5bd2;
+  --color-bg-light: #f7f9fc;
+  --color-bg-dark: #e9ecf4;
+  --color-white: #fff;
+  --color-black: #000;
+  --color-text-dark: #333;
+  --color-text-light: #666;
+  --color-error: #e74c3c;
+
+  /* Sizing & Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  
+  /* Font & Shadow */
+  --font-family: "Helvetica Neue", Arial, sans-serif;
+  --box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Global Resets & Base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-dark);
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+ul, li {
+  list-style: none;
+}
+
+/* Container & Title */
+.support-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+.support-title {
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+/* Error Box */
+.support-error-box {
+  background-color: var(--color-error);
+  color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 4px;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+/* Main Layout */
+.support-main-layout {
+  display: flex;
+  gap: var(--spacing-md);
+  min-height: 60vh;
+}
+
+/* Left Panel */
+.support-left-panel {
+  flex: 0 0 280px;
+  background-color: var(--color-white);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+}
+
+/* New Thread Section */
+.create-thread-section {
+  margin-bottom: var(--spacing-md);
+}
+.create-thread-section h3 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.1rem;
+  color: var(--color-text-dark);
+}
+.new-thread-input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-sm);
+  transition: border-color 0.2s ease;
+}
+.new-thread-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+.create-thread-button {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.create-thread-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Threads List */
+.threads-list-wrapper h3 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.1rem;
+  color: var(--color-text-dark);
+}
+.threads-loading {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  padding: var(--spacing-sm);
+}
+.threads-empty {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  padding: var(--spacing-sm);
+}
+.threads-list {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+}
+.thread-item {
+  background-color: var(--color-bg-light);
+  border-radius: 4px;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.thread-item:hover {
+  background-color: var(--color-bg-dark);
+}
+.thread-item-active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+.thread-subject {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.thread-status {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: inherit;
+}
+
+/* Right Panel */
+.support-right-panel {
+  flex: 1 1 auto;
+  background-color: var(--color-white);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-md);
+  position: relative;
+}
+
+/* No Thread Selected */
+.no-thread-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+/* Messages Header */
+.messages-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-sm);
+}
+.refresh-messages-button {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+.refresh-messages-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Messages Container */
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: var(--spacing-md);
+  padding-right: var(--spacing-xs);
+}
+.no-messages {
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-top: var(--spacing-md);
+}
+
+/* Message Bubbles */
+.message-bubble {
+  max-width: 80%;
+  margin: var(--spacing-sm) 0;
+  border-radius: 12px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  position: relative;
+  animation: fadeIn 0.3s ease-in;
+  line-height: 1.4;
+}
+
+.message-user {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: var(--color-white);
+  align-self: flex-end;
+  margin-left: auto;
+}
+.message-admin {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+  margin-right: auto;
+}
+
+/* Message Sender / Content / Timestamp */
+.message-sender {
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.9rem;
+}
+.message-content {
+  font-size: 0.95rem;
+}
+.message-timestamp {
+  margin-top: var(--spacing-xs);
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  text-align: right;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Send Message Area */
+.send-message-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  border-top: 1px solid #ccc;
+  padding-top: var(--spacing-md);
+}
+.send-message-textarea {
+  width: 100%;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: var(--spacing-sm);
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+.send-message-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+.send-message-button {
+  align-self: flex-end;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+.send-message-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Design for Mobile & Tablets */
+@media (max-width: 768px) {
+  .support-main-layout {
+    flex-direction: column;
+  }
+  .support-left-panel {
+    flex: unset;
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+  }
+  .support-right-panel {
+    flex: unset;
+    width: 100%;
+    min-height: 400px;
+  }
+  .thread-item,
+  .message-bubble {
+    font-size: 0.9rem;
+  }
+}
