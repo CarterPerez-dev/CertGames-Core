@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CrackedAdminLogin.css"; // unique CSS file
+import "./CrackedAdminLogin.css"; // Ensure you keep this import
 
-const CrackedAdminLoginPage = () => {
+function CrackedAdminLoginPage() {
   const navigate = useNavigate();
 
   // Local state for the adminKey and role
   const [adminKey, setAdminKey] = useState("");
-  const [role, setRole] = useState("basic"); // you can let the user pick or leave it
+  const [role, setRole] = useState("basic");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -21,16 +21,14 @@ const CrackedAdminLoginPage = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ adminKey, role }),
-        credentials: "include", 
-        // credentials include so cookies/sessions pass
+        credentials: "include",
       });
 
       const data = await response.json();
       if (!response.ok) {
-        // e.g. 403 or 400
         setError(data.error || "Unable to log in");
       } else {
-        // success -> you could navigate to your admin dashboard, e.g. "/cracked-admin/dashboard"
+        // On success, navigate to the admin dashboard
         navigate("/api/cracked-admin/dashboard");
       }
     } catch (err) {
@@ -43,45 +41,47 @@ const CrackedAdminLoginPage = () => {
 
   return (
     <div className="cracked-admin-login-container">
-      <h1 className="cracked-admin-login-title">Cracked Admin Login</h1>
+      <div className="cracked-admin-login-card">
+        <h1 className="cracked-admin-login-title">Cracked Admin Login</h1>
 
-      <form className="cracked-admin-login-form" onSubmit={handleLogin}>
-        <div className="admin-input-row">
-          <label htmlFor="adminKey">Admin Key:</label>
-          <input
-            type="password"
-            id="adminKey"
-            value={adminKey}
-            onChange={(e) => setAdminKey(e.target.value)}
-            placeholder="Enter super-long admin key"
-          />
-        </div>
+        <form className="cracked-admin-login-form" onSubmit={handleLogin}>
+          <div className="admin-input-row">
+            <label htmlFor="adminKey">Admin Key:</label>
+            <input
+              type="password"
+              id="adminKey"
+              value={adminKey}
+              onChange={(e) => setAdminKey(e.target.value)}
+              placeholder="Enter super-long admin key"
+            />
+          </div>
 
-        <div className="admin-input-row">
-          <label htmlFor="role">Role (optional):</label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
+          <div className="admin-input-row">
+            <label htmlFor="role">Role (optional):</label>
+            <select
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="basic">Basic</option>
+              <option value="supervisor">Supervisor</option>
+              <option value="superadmin">Superadmin</option>
+            </select>
+          </div>
+
+          {error && <p className="admin-error-message">{error}</p>}
+
+          <button
+            type="submit"
+            className="cracked-admin-login-button"
+            disabled={loading}
           >
-            <option value="basic">Basic</option>
-            <option value="supervisor">Supervisor</option>
-            <option value="superadmin">Superadmin</option>
-          </select>
-        </div>
-
-        {error && <p className="admin-error-message">{error}</p>}
-
-        <button
-          type="submit"
-          className="cracked-admin-login-button"
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
-};
+}
 
 export default CrackedAdminLoginPage;
