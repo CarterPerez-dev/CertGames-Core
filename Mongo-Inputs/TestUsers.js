@@ -1,3 +1,6 @@
+
+// input into mongodb and then got to admin page and see they if they were achieved
+
 db.mainusers.insertMany([
   // 1) test_rookie => total_tests_completed = 1
   {
