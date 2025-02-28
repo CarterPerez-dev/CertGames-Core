@@ -1,3 +1,8 @@
+So i need to add an admin interface, it will have its own login and will be a serpate path called "cracked" so /cracked. it will just have a password i enter (im gonna mae it very lon) and ill put the password in the .env and make it an .env like authkey or something. keep in mind when we make the login we must use very unique name fro the fucntions/cssc classes/backedn routes etc tec because we already haev a regualr login for normal users so we have to enure they dont affect one another. ALso i would liek to add a support page/question page in my web app where users can ask me any questiosn they want like a chatbot and ask anything from website support, what on the exams, anything of the sort and it will go to my admin interfece adn ill repodnf (like i said it will be a chatbot so ill be the other user answering evryhign) and teh messages have to be perstant per user so i guess we have to store the questions in my databse so the user can logout/refresh teh page etc etc and the chat still be there. also each user will obviosly have there own chat thing its not globably hared across all users (all users get to chat but they dont intersect with each other its there own messagre to me)
+
+so heres kinda what the admin interface will be abel to do
+
+
 # Admin Interface
 
 ### 1. **Dashboard Overview**
@@ -7,6 +12,7 @@
   - Test completions, average test scores, number of test attempts
   - Daily bonus claims and daily PBQ (question) responses  
   - Revenue or coin transaction summaries (if applicable)
+  - thing where i can answer the qustions from people asking me int he support page
 
 - **Performance Monitoring:**  
   - Real-time stats on API response times and database query latencies  
@@ -128,8 +134,16 @@ Your admin interface should serve as a central control panel that allows you to:
 - Detect and respond to security issues.
 - Access detailed performance metrics and audit logs.
 - Provide seamless integration across your web and iOS apps.
+- answer messages
 
 This approach not only streamlines administrative tasks but also helps maintain a high level of security and performance for your application.
 
 ---
+
+also you might need my mongosh command i use to go to my shell so her eit is 
+
+mongosh "mongodb+srv://yoshi:Yoshi200369root@proxy.nmo0cjq.mongodb.net/xploitcraft?retryWrites=true&w=majority&appName=proxy"
+
+
+so make sure to scan all my files and lets start with the backend models and routes
 
