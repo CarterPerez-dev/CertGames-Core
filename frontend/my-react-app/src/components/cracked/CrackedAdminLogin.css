@@ -1,8 +1,14 @@
-/* CrackedAdminLogin.css */
-/*
-   High-level, modern, and sleek design for the Cracked Admin Login page.
-   Maintains existing functionality while upgrading the visual style.
-   Responsive for cross-browser and mobile (iPhone, small devices) usage.
+/* ==========================
+   CrackedAdminLogin.css
+   ==========================
+   1) All global `body` and `*` selectors replaced with .cracked-admin-login-wrapper for isolation.
+   2) Wrap your Login HTML with:
+      <div class="cracked-admin-login-wrapper">
+        <div class="cracked-admin-login-container">
+           ...
+        </div>
+      </div>
+   3) This avoids overriding other pages' global styles.
 */
 
 :root {
@@ -15,22 +21,24 @@
   --color-text: #f4f4f4;
   --card-bg: #fff;
   --card-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 32px;
-  
+
   --font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-/* RESET */
-* {
+/* Scoped Reset */
+.cracked-admin-login-wrapper * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body {
+
+/* Login Wrapper Styles (instead of body) */
+.cracked-admin-login-wrapper {
   font-family: var(--font-family);
   background: linear-gradient(120deg, var(--bg-gradient-start), var(--bg-gradient-end));
   color: var(--color-text);
