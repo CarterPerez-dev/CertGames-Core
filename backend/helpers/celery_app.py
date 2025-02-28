@@ -1,5 +1,3 @@
-# helpers/celery_app.py
-
 import os
 import logging
 from celery import Celery
@@ -10,7 +8,6 @@ from async_tasks import aggregate_performance_metrics
 
 load_dotenv()
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
-
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -27,7 +24,7 @@ app = Celery(
     broker_connection_retry_on_startup=True,
     include=[
         'helpers.async_tasks',
-        'helpers.daily_newsletter_task'  
+        'helpers.daily_newsletter_task'
     ]
 )
 
@@ -35,24 +32,21 @@ app.conf.update({
     'worker_prefetch_multiplier': 1,
     'task_acks_late': True,
     'worker_concurrency': 8,
-    'timezone': 'America/New_York',  
-    'enable_utc': True,  
+    'timezone': 'America/New_York',
+    'enable_utc': True,
 })
-
-
 
 app.conf.beat_schedule = {
     'send-daily-newsletter-midnight': {
         'task': 'helpers.daily_newsletter_task.send_daily_newsletter',
-        'schedule': crontab(hour=0, minute=0),  
-
-     'aggregate-performance-every-minute': {
+        'schedule': crontab(hour=0, minute=0),
+    },
+    'aggregate-performance-every-minute': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 60.0,  # every 60 seconds   
+        'schedule': 60.0,  # every 60 seconds
     },
 }
 
 app.autodiscover_tasks(['helpers'])
 
 logger.info("Celery app initialized with broker %s and backend %s", CELERY_BROKER_URL, CELERY_RESULT_BACKEND)
-
