@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CrackedAdminLogin.css"; // Ensure you keep this import
+// Make sure your CrackedAdminLogin.css is scoped to .cracked-admin-login-wrapper
+// and references .cracked-admin-login-container inside it.
+import "./CrackedAdminLogin.css";
 
 function CrackedAdminLoginPage() {
   const navigate = useNavigate();
 
-  // Local state for the adminKey and role
   const [adminKey, setAdminKey] = useState("");
   const [role, setRole] = useState("basic");
   const [error, setError] = useState(null);
@@ -40,45 +41,48 @@ function CrackedAdminLoginPage() {
   };
 
   return (
-    <div className="cracked-admin-login-container">
-      <div className="cracked-admin-login-card">
-        <h1 className="cracked-admin-login-title">Cracked Admin Login</h1>
+    // Top-level wrapper for scoping:
+    <div className="cracked-admin-login-wrapper">
+      <div className="cracked-admin-login-container">
+        <div className="cracked-admin-login-card">
+          <h1 className="cracked-admin-login-title">Cracked Admin Login</h1>
 
-        <form className="cracked-admin-login-form" onSubmit={handleLogin}>
-          <div className="admin-input-row">
-            <label htmlFor="adminKey">Admin Key:</label>
-            <input
-              type="password"
-              id="adminKey"
-              value={adminKey}
-              onChange={(e) => setAdminKey(e.target.value)}
-              placeholder="Authenticate"
-            />
-          </div>
+          <form className="cracked-admin-login-form" onSubmit={handleLogin}>
+            <div className="admin-input-row">
+              <label htmlFor="adminKey">Admin Key:</label>
+              <input
+                type="password"
+                id="adminKey"
+                value={adminKey}
+                onChange={(e) => setAdminKey(e.target.value)}
+                placeholder="Authenticate"
+              />
+            </div>
 
-          <div className="admin-input-row">
-            <label htmlFor="role">Role (optional):</label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+            <div className="admin-input-row">
+              <label htmlFor="role">Role (optional):</label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="basic">Basic</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="superadmin">Superadmin</option>
+              </select>
+            </div>
+
+            {error && <p className="admin-error-message">{error}</p>}
+
+            <button
+              type="submit"
+              className="cracked-admin-login-button"
+              disabled={loading}
             >
-              <option value="basic">Basic</option>
-              <option value="supervisor">Supervisor</option>
-              <option value="superadmin">Superadmin</option>
-            </select>
-          </div>
-
-          {error && <p className="admin-error-message">{error}</p>}
-
-          <button
-            type="submit"
-            className="cracked-admin-login-button"
-            disabled={loading}
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
