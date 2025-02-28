@@ -6,6 +6,7 @@ from celery import Celery
 from celery.schedules import crontab
 from dotenv import load_dotenv
 
+from async_tasks import aggregate_performance_metrics
 
 load_dotenv()
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
@@ -39,10 +40,15 @@ app.conf.update({
 })
 
 
+
 app.conf.beat_schedule = {
     'send-daily-newsletter-midnight': {
         'task': 'helpers.daily_newsletter_task.send_daily_newsletter',
         'schedule': crontab(hour=0, minute=0),  
+
+     'aggregate-performance-every-minute': {
+        'task': 'helpers.async_tasks.aggregate_performance_metrics',
+        'schedule': 60.0,  # every 60 seconds   
     },
 }
 
