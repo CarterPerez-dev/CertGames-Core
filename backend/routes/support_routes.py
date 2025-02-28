@@ -14,129 +14,200 @@ def require_user_logged_in():
     """
     return bool(session.get('userId'))
 
-
 @support_bp.route('/my-chat', methods=['GET'])
-def get_my_support_thread():
+def list_user_threads():
     """
     GET /support/my-chat
-    Fetch the user's chat thread. Returns messages or empty if none.
+    Return an array of all threads belonging to the logged-in user.
+    Each thread includes: _id, subject, status, updatedAt (optional), 
+    but NOT the messages. The React code wants an array, not just one thread.
     """
     if not require_user_logged_in():
         return jsonify({"error": "Not logged in"}), 401
-    
-    user_id = session['userId']  # guaranteed by above
+
+    user_id = session['userId']
     user_obj_id = ObjectId(user_id)
-    
-    thread = db.supportThreads.find_one({"userId": user_obj_id})
+
+    threads_cursor = db.supportThreads.find({"userId": user_obj_id})
+    threads = []
+    for t in threads_cursor:
+        t['_id'] = str(t['_id'])
+        # Provide subject, status, etc. If there's no stored "subject," use a default
+        subject = t.get("subject", "")
+        status = t.get("status", "open")
+        updated_at = t.get("updatedAt")
+        # Return a minimal doc. The React code shows 'thread-subject' and 'thread-status'
+        threads.append({
+            "_id": t['_id'],
+            "subject": subject if subject else "Untitled Thread",
+            "status": status,
+            "updatedAt": updated_at.isoformat() if updated_at else None
+        })
+
+    return jsonify(threads), 200
+
+@support_bp.route('/my-chat', methods=['POST'])
+def create_user_thread():
+    """
+    POST /support/my-chat
+    Body: { "subject": "My new support topic" }
+    Creates a brand-new thread with empty messages[].
+    """
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.json or {}
+    subject = data.get('subject', '').strip()
+    if not subject:
+        subject = "Untitled Thread"
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+    now = datetime.utcnow()
+
+    new_thread = {
+        "userId": user_obj_id,
+        "subject": subject,
+        "messages": [],        # no messages until the user posts
+        "status": "open",
+        "createdAt": now,
+        "updatedAt": now
+    }
+    result = db.supportThreads.insert_one(new_thread)
+    if result.inserted_id:
+        return jsonify({"message": "Support thread created"}), 201
+    else:
+        return jsonify({"error": "Failed to create thread"}), 500
+
+@support_bp.route('/my-chat/<thread_id>', methods=['GET'])
+def get_single_thread(thread_id):
+    """
+    GET /support/my-chat/<thread_id>
+    Return the full thread doc (including messages) for the given thread.
+    The React code calls this to show the conversation in the right panel.
+    """
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
-        return jsonify({"messages": [], "status": "not_found"}), 200
-    
+        return jsonify({"error": "Thread not found"}), 404
+
     # Convert
     thread['_id'] = str(thread['_id'])
     thread['userId'] = str(thread['userId'])
-    for m in thread['messages']:
-        m['timestamp'] = m['timestamp'].isoformat()
+    messages = thread.get("messages", [])
+    for m in messages:
+        if "timestamp" in m and isinstance(m["timestamp"], datetime):
+            m["timestamp"] = m["timestamp"].isoformat()
+
+    # Return entire doc, including messages
     return jsonify(thread), 200
 
-
-@support_bp.route('/my-chat', methods=['POST'])
-def post_my_message():
+@support_bp.route('/my-chat/<thread_id>', methods=['POST'])
+def post_message_to_thread(thread_id):
     """
-    POST /support/my-chat
+    POST /support/my-chat/<thread_id>
     Body: { "content": "Hello, I need help" }
+    Appends a new message to the given thread. If the thread is closed,
+    optionally re-open it.
     """
     if not require_user_logged_in():
         return jsonify({"error": "Not logged in"}), 401
-    
+
     data = request.json or {}
     content = data.get('content', '').strip()
     if not content:
         return jsonify({"error": "No content"}), 400
-    
+
     user_id = session['userId']
     user_obj_id = ObjectId(user_id)
     now = datetime.utcnow()
-    
-    thread = db.supportThreads.find_one({"userId": user_obj_id})
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
-        # create new
-        new_thread = {
-            "userId": user_obj_id,
-            "messages": [
-                {
-                    "sender": "user",
-                    "content": content,
-                    "timestamp": now
-                }
-            ],
-            "status": "open",
-            "createdAt": now,
-            "updatedAt": now
-        }
-        db.supportThreads.insert_one(new_thread)
-        return jsonify({"message": "Support thread created"}), 201
-    else:
-        if thread.get("status") == "closed":
-            # If it's closed, optionally create a brand-new one or reopen it
-            # For demonstration, let's reopen:
-            db.supportThreads.update_one(
-                {"_id": thread["_id"]},
-                {
-                    "$push": {
-                        "messages": {
-                            "sender": "user",
-                            "content": content,
-                            "timestamp": now
-                        }
-                    },
-                    "$set": {
-                        "status": "open",
-                        "updatedAt": now
+        return jsonify({"error": "Thread not found"}), 404
+
+    if thread.get("status") == "closed":
+        # For demonstration, let's reopen if closed
+        db.supportThreads.update_one(
+            {"_id": thread["_id"]},
+            {
+                "$push": {
+                    "messages": {
+                        "sender": "user",
+                        "content": content,
+                        "timestamp": now
                     }
+                },
+                "$set": {
+                    "status": "open",
+                    "updatedAt": now
                 }
-            )
-            return jsonify({"message": "Thread was closed. Reopened with new message"}), 200
-        else:
-            # Just append message
-            db.supportThreads.update_one(
-                {"_id": thread["_id"]},
-                {
-                    "$push": {
-                        "messages": {
-                            "sender": "user",
-                            "content": content,
-                            "timestamp": now
-                        }
-                    },
-                    "$set": {"updatedAt": now}
+            }
+        )
+        return jsonify({"message": "Thread was closed. Reopened with new message"}), 200
+    else:
+        # Just append message
+        db.supportThreads.update_one(
+            {"_id": thread["_id"]},
+            {
+                "$push": {
+                    "messages": {
+                        "sender": "user",
+                        "content": content,
+                        "timestamp": now
+                    }
+                },
+                "$set": {
+                    "updatedAt": now
                 }
-            )
-            return jsonify({"message": "Message posted"}), 200
+            }
+        )
+        return jsonify({"message": "Message posted"}), 200
 
-
-@support_bp.route('/close', methods=['POST'])
-def user_close_thread():
+@support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
+def user_close_specific_thread(thread_id):
     """
-    Allow user to close their own thread if they consider it resolved.
-    Body can contain an optional reason or final message: { "content": "Thanks, solved" }
+    POST /support/my-chat/<thread_id>/close
+    Body can have: { "content": "Thanks, solved" } for a final user message
+    Closes that specific thread. 
     """
     if not require_user_logged_in():
         return jsonify({"error": "Not logged in"}), 401
-    
+
     data = request.json or {}
     content = data.get("content", "User closed the thread")
     now = datetime.utcnow()
-    
+
     user_id = session['userId']
     user_obj_id = ObjectId(user_id)
-    
-    thread = db.supportThreads.find_one({"userId": user_obj_id})
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
-        return jsonify({"error": "No thread found"}), 404
-    
+        return jsonify({"error": "Thread not found"}), 404
+
     if thread.get("status") == "closed":
         return jsonify({"message": "Thread is already closed"}), 200
-    
+
     db.supportThreads.update_one(
         {"_id": thread["_id"]},
         {
