@@ -15,8 +15,8 @@ import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
 
 // Admin 
-import CrackedAdminLoginPage from './components/pages/cracked/CrackedAdminLoginPage';
-import CrackedAdminDashboard from './components/pages/cracked/CrackedAdminDashboard'; 
+import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
+import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard'; 
 
 // Protected pages
 import ProtectedRoute from './components/ProtectedRoute';
