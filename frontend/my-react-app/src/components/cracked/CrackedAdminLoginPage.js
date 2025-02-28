@@ -17,7 +17,7 @@ const CrackedAdminLoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("/cracked/login", {
+      const response = await fetch("/api/cracked/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ adminKey, role }),
@@ -31,7 +31,7 @@ const CrackedAdminLoginPage = () => {
         setError(data.error || "Unable to log in");
       } else {
         // success -> you could navigate to your admin dashboard, e.g. "/cracked-admin/dashboard"
-        navigate("/cracked-admin/dashboard");
+        navigate("/api/cracked-admin/dashboard");
       }
     } catch (err) {
       console.error("Admin login error:", err);
