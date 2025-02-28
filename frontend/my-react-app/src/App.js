@@ -235,7 +235,7 @@ function App() {
           }/>
           <Route path="/practice-tests/linux-plus/:testId" element={
             <ProtectedRoute>
-              <linuxPlusTestPage />
+              <LinuxPlusTestPage />
             </ProtectedRoute>
           }/>
           <Route path="/practice-tests/cloud-plus" element={
