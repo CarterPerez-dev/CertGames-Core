@@ -9,7 +9,7 @@ supportThreads_collection.create_index("userId")
 ---
 ### add to username and passsword authenication where it omits spaces. so bascially any spaces are still not allowe dbut that wouldnt matte rbacsue spaces essentially dont even get logged as a charcer. so like if they try to do spaces it wil dissalow them lets say for if they do anything in the middle of charcters so lke "carter perez" or like "c dog" orand so on it dissallows them- however if they do any spaces before any charctaers or after any charcters it doesn teven get logged as any charcters its baical;y invisible/void. so if a user did " carterperez" it gets logged as "carterperez" even if they did " carterperez " it gets logged as "carterperez" or if they just did "carterperez " it gets logged as "carterperez" 
 ---
-### fix thsi route and see what happens
+### fix this import and see what happens because it hasnt been in affect this whole time since its the incorrect path LOLOL
 ```js
 // Global CSS import
 import './components/pages/XploitcraftPage/global.css';
