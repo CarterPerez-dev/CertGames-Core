@@ -1,32 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './SupportAskAnythingPage.css';
 
-/**
- * Complex multi-thread support/ask-anything page:
- * - The user can have multiple "threads" or "topics" (like separate conversation channels).
- * - Each thread has its own messages. 
- * - We'll poll the server for:
- *     1) A list of threads (GET /api/test/support/threads).
- *     2) The messages in the currently selected thread (GET /api/test/support/threads/:threadId).
- * - The user can create a new thread with a subject, then post messages in it.
- * - We'll show a side panel with the thread list, and a main panel with the messages for the chosen thread.
- * - We poll every 10s for new messages in the currently selected thread, 
- *   so if admin replies, the user sees it promptly.
- * 
- * Usage:
- *  1) Ensure your backend provides the routes:
- *     - GET /api/test/support/threads
- *     - POST /api/test/support/threads  (create new thread)
- *     - GET /api/test/support/threads/:threadId
- *     - POST /api/test/support/threads/:threadId (create new message)
- *  2) Import and render <SupportAskAnythingPage />
- *  3) Make sure "SupportAskAnythingPage.css" is in the same folder (or properly imported).
- * 
- * NOTE:
- *  To avoid styling collisions across your app, the entire markup is wrapped in:
- *     <div className="support-ask-anything-page"> ... </div>
- *  so that the CSS rules inside "SupportAskAnythingPage.css" can be scoped to just this component.
- */
 
 function SupportAskAnythingPage() {
   // -----------------------------
@@ -76,7 +50,7 @@ function SupportAskAnythingPage() {
   const refreshDataWithoutLoading = async () => {
     try {
       // fetch threads but do not set loading
-      const res = await fetch('/api/test/support/threads', {
+      const res = await fetch('/api/test/support/my-chat', {
         credentials: 'include',
       });
       const data = await res.json();
@@ -86,7 +60,7 @@ function SupportAskAnythingPage() {
 
       // If there's a selected thread, fetch its messages
       if (selectedThreadId) {
-        const res2 = await fetch(`/api/test/support/threads/${selectedThreadId}`, {
+        const res2 = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
           credentials: 'include',
         });
         const data2 = await res2.json();
@@ -107,7 +81,7 @@ function SupportAskAnythingPage() {
     setLoadingThreads(true);
     setError(null);
     try {
-      const res = await fetch('/api/test/support/threads', {
+      const res = await fetch('/api/test/support/my-chat', {
         credentials: 'include',
       });
       const data = await res.json();
@@ -130,7 +104,7 @@ function SupportAskAnythingPage() {
     setError(null);
     try {
       const body = { subject: newThreadSubject.trim() };
-      const res = await fetch('/api/test/support/threads', {
+      const res = await fetch('/api/test/support/my-chat', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -158,7 +132,7 @@ function SupportAskAnythingPage() {
     setError(null);
 
     try {
-      const res = await fetch(`/api/test/support/threads/${threadId}`, {
+      const res = await fetch(`/api/test/support/my-chat/${threadId}`, {
         credentials: 'include',
       });
       const data = await res.json();
@@ -191,7 +165,7 @@ function SupportAskAnythingPage() {
     setError(null);
     try {
       const body = { content: userMessage.trim() };
-      const res = await fetch(`/api/test/support/threads/${selectedThreadId}`, {
+      const res = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -215,7 +189,7 @@ function SupportAskAnythingPage() {
   const refreshMessagesOnly = async () => {
     if (!selectedThreadId) return;
     try {
-      const res = await fetch(`/api/test/support/threads/${selectedThreadId}`, {
+      const res = await fetch(`/api/test/support/my-chat/${selectedThreadId}`, {
         credentials: 'include',
       });
       const data = await res.json();
