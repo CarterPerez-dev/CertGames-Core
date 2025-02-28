@@ -58,7 +58,7 @@ def cracked_admin_login():
         # Example: store the role
         session['cracked_admin_role'] = input_role
         
-        return jsonify({"message": "Cracked admin login successful"}), 200
+        return jsonify({"message": "Authorization successful"}), 200
     else:
         return jsonify({"error": "Invalid admin password"}), 403
 
@@ -70,7 +70,7 @@ def cracked_admin_logout():
     """
     session.pop('cracked_admin_logged_in', None)
     session.pop('cracked_admin_role', None)
-    return jsonify({"message": "Cracked admin logged out"}), 200
+    return jsonify({"message": "admin logged out"}), 200
 
 
 # -------------------------------------------------------
