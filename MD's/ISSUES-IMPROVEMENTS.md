@@ -1,6 +1,9 @@
 # FIX
 ---
-## supportThreads_collection.create_index("userId")
+## DO THIS FOR MONGODB
+```js
+supportThreads_collection.create_index("userId")
+```
 ---
 ## admin and support refinements [Here][https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md]
 ---
