@@ -4,6 +4,8 @@
    Designed for cross-browser and mobile (iPhone, small devices, etc.) compatibility.
    Utilizes flex layouts, subtle animations, and a clean color palette.
    Customize color variables as needed for branding.
+
+   -- SCOPED UNDER .support-ask-anything-page TO AVOID OVERRIDES --
 */
 
 :root {
@@ -30,31 +32,44 @@
   --box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* Global Resets & Base */
-* {
+/* 
+  Scope all styles under .support-ask-anything-page 
+  to avoid leaking into other pages.
+*/
+.support-ask-anything-page,
+.support-ask-anything-page * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-body {
+
+/* Container acts like the "body" replacement */
+.support-ask-anything-page {
   font-family: var(--font-family);
   background-color: var(--color-bg-light);
   color: var(--color-text-dark);
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* If you want a full-page fill for the background, ensure
+     this container stretches accordingly (e.g., min-height: 100vh). */
+  min-height: 100vh;
 }
-ul, li {
+
+/* List styling reset, scoped */
+.support-ask-anything-page ul,
+.support-ask-anything-page li {
   list-style: none;
 }
 
 /* Container & Title */
-.support-container {
+.support-ask-anything-page .support-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: var(--spacing-md);
 }
-.support-title {
+
+.support-ask-anything-page .support-title {
   text-align: center;
   margin-bottom: var(--spacing-md);
   font-size: 1.8rem;
@@ -63,7 +78,7 @@ ul, li {
 }
 
 /* Error Box */
-.support-error-box {
+.support-ask-anything-page .support-error-box {
   background-color: var(--color-error);
   color: var(--color-white);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -73,14 +88,14 @@ ul, li {
 }
 
 /* Main Layout */
-.support-main-layout {
+.support-ask-anything-page .support-main-layout {
   display: flex;
   gap: var(--spacing-md);
   min-height: 60vh;
 }
 
 /* Left Panel */
-.support-left-panel {
+.support-ask-anything-page .support-left-panel {
   flex: 0 0 280px;
   background-color: var(--color-white);
   border-radius: 8px;
@@ -91,15 +106,17 @@ ul, li {
 }
 
 /* New Thread Section */
-.create-thread-section {
+.support-ask-anything-page .create-thread-section {
   margin-bottom: var(--spacing-md);
 }
-.create-thread-section h3 {
+
+.support-ask-anything-page .create-thread-section h3 {
   margin-bottom: var(--spacing-sm);
   font-size: 1.1rem;
   color: var(--color-text-dark);
 }
-.new-thread-input {
+
+.support-ask-anything-page .new-thread-input {
   width: 100%;
   padding: var(--spacing-sm);
   border: 1px solid #ccc;
@@ -108,11 +125,13 @@ ul, li {
   margin-bottom: var(--spacing-sm);
   transition: border-color 0.2s ease;
 }
-.new-thread-input:focus {
+
+.support-ask-anything-page .new-thread-input:focus {
   outline: none;
   border-color: var(--color-primary);
 }
-.create-thread-button {
+
+.support-ask-anything-page .create-thread-button {
   background-color: var(--color-primary);
   color: var(--color-white);
   padding: var(--spacing-sm) var(--spacing-md);
@@ -122,32 +141,37 @@ ul, li {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.create-thread-button:hover {
+
+.support-ask-anything-page .create-thread-button:hover {
   background-color: var(--color-primary-hover);
 }
 
 /* Threads List */
-.threads-list-wrapper h3 {
+.support-ask-anything-page .threads-list-wrapper h3 {
   margin-bottom: var(--spacing-sm);
   font-size: 1.1rem;
   color: var(--color-text-dark);
 }
-.threads-loading {
+
+.support-ask-anything-page .threads-loading {
   font-size: 0.9rem;
   color: var(--color-text-light);
   padding: var(--spacing-sm);
 }
-.threads-empty {
+
+.support-ask-anything-page .threads-empty {
   font-size: 0.9rem;
   color: var(--color-text-light);
   padding: var(--spacing-sm);
 }
-.threads-list {
+
+.support-ask-anything-page .threads-list {
   max-height: 350px;
   overflow-y: auto;
   padding-right: var(--spacing-xs);
 }
-.thread-item {
+
+.support-ask-anything-page .thread-item {
   background-color: var(--color-bg-light);
   border-radius: 4px;
   padding: var(--spacing-sm);
@@ -158,25 +182,29 @@ ul, li {
   justify-content: space-between;
   align-items: center;
 }
-.thread-item:hover {
+
+.support-ask-anything-page .thread-item:hover {
   background-color: var(--color-bg-dark);
 }
-.thread-item-active {
+
+.support-ask-anything-page .thread-item-active {
   background-color: var(--color-primary);
   color: var(--color-white);
 }
-.thread-subject {
+
+.support-ask-anything-page .thread-subject {
   font-weight: 600;
   font-size: 0.95rem;
 }
-.thread-status {
+
+.support-ask-anything-page .thread-status {
   font-size: 0.85rem;
   font-style: italic;
   color: inherit;
 }
 
 /* Right Panel */
-.support-right-panel {
+.support-ask-anything-page .support-right-panel {
   flex: 1 1 auto;
   background-color: var(--color-white);
   border-radius: 8px;
@@ -188,7 +216,7 @@ ul, li {
 }
 
 /* No Thread Selected */
-.no-thread-selected {
+.support-ask-anything-page .no-thread-selected {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,13 +226,14 @@ ul, li {
 }
 
 /* Messages Header */
-.messages-header {
+.support-ask-anything-page .messages-header {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   margin-bottom: var(--spacing-sm);
 }
-.refresh-messages-button {
+
+.support-ask-anything-page .refresh-messages-button {
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
@@ -214,18 +243,20 @@ ul, li {
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
 }
-.refresh-messages-button:hover {
+
+.support-ask-anything-page .refresh-messages-button:hover {
   background-color: var(--color-primary-hover);
 }
 
 /* Messages Container */
-.messages-container {
+.support-ask-anything-page .messages-container {
   flex: 1;
   overflow-y: auto;
   margin-bottom: var(--spacing-md);
   padding-right: var(--spacing-xs);
 }
-.no-messages {
+
+.support-ask-anything-page .no-messages {
   text-align: center;
   color: var(--color-text-light);
   font-size: 0.95rem;
@@ -233,7 +264,7 @@ ul, li {
 }
 
 /* Message Bubbles */
-.message-bubble {
+.support-ask-anything-page .message-bubble {
   max-width: 80%;
   margin: var(--spacing-sm) 0;
   border-radius: 12px;
@@ -243,28 +274,31 @@ ul, li {
   line-height: 1.4;
 }
 
-.message-user {
+.support-ask-anything-page .message-user {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
   color: var(--color-white);
   align-self: flex-end;
   margin-left: auto;
 }
-.message-admin {
+
+.support-ask-anything-page .message-admin {
   background-color: var(--color-bg-dark);
   color: var(--color-text-dark);
   margin-right: auto;
 }
 
 /* Message Sender / Content / Timestamp */
-.message-sender {
+.support-ask-anything-page .message-sender {
   font-weight: 600;
   margin-bottom: var(--spacing-xs);
   font-size: 0.9rem;
 }
-.message-content {
+
+.support-ask-anything-page .message-content {
   font-size: 0.95rem;
 }
-.message-timestamp {
+
+.support-ask-anything-page .message-timestamp {
   margin-top: var(--spacing-xs);
   font-size: 0.75rem;
   color: var(--color-text-light);
@@ -272,21 +306,22 @@ ul, li {
 }
 
 /* Typing Indicator */
-.typing-indicator {
+.support-ask-anything-page .typing-indicator {
   font-size: 0.85rem;
   color: var(--color-text-light);
   margin-bottom: var(--spacing-md);
 }
 
 /* Send Message Area */
-.send-message-area {
+.support-ask-anything-page .send-message-area {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
   border-top: 1px solid #ccc;
   padding-top: var(--spacing-md);
 }
-.send-message-textarea {
+
+.support-ask-anything-page .send-message-textarea {
   width: 100%;
   resize: none;
   border: 1px solid #ccc;
@@ -295,11 +330,13 @@ ul, li {
   font-size: 0.95rem;
   transition: border-color 0.2s ease;
 }
-.send-message-textarea:focus {
+
+.support-ask-anything-page .send-message-textarea:focus {
   outline: none;
   border-color: var(--color-primary);
 }
-.send-message-button {
+
+.support-ask-anything-page .send-message-button {
   align-self: flex-end;
   background-color: var(--color-primary);
   color: var(--color-white);
@@ -310,7 +347,8 @@ ul, li {
   font-size: 0.95rem;
   transition: background-color 0.2s ease;
 }
-.send-message-button:hover {
+
+.support-ask-anything-page .send-message-button:hover {
   background-color: var(--color-primary-hover);
 }
 
@@ -322,21 +360,21 @@ ul, li {
 
 /* Responsive Design for Mobile & Tablets */
 @media (max-width: 768px) {
-  .support-main-layout {
+  .support-ask-anything-page .support-main-layout {
     flex-direction: column;
   }
-  .support-left-panel {
+  .support-ask-anything-page .support-left-panel {
     flex: unset;
     width: 100%;
     margin-bottom: var(--spacing-md);
   }
-  .support-right-panel {
+  .support-ask-anything-page .support-right-panel {
     flex: unset;
     width: 100%;
     min-height: 400px;
   }
-  .thread-item,
-  .message-bubble {
+  .support-ask-anything-page .thread-item,
+  .support-ask-anything-page .message-bubble {
     font-size: 0.9rem;
   }
 }
