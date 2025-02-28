@@ -1,7 +1,3 @@
-missing question 10,60
-
-
-
 db.tests.insertOne({
   "category": "linuxplus",
   "testId": 5,
@@ -124,6 +120,19 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`runlevel` displays the previous and current runlevel on SysVinit systems. `systemctl get-default` applies to systemd, while `who -r` provides similar information but is less commonly used.",
       "examTip": "Use `systemctl list-units --type=target` to see all available runlevels (targets) in systemd."
+    },
+    {
+      "id": 10,
+      "question": "A Linux administrator notices that a critical application fails to start after a system reboot on a system running SELinux in enforcing mode. The application logs show 'Permission denied' errors for library files located in a custom directory. Which steps must the administrator perform to allow the application to run while maintaining SELinux in enforcing mode?",
+      "options": [
+        "1) Disable SELinux by editing /etc/selinux/config; 2) Reboot; 3) Ensure the application’s custom directory is in the default library path",
+        "1) Set SELINUX=permissive in /etc/selinux/config; 2) Reboot; 3) Run chcon -t bin_t on the custom directory and files",
+        "1) Identify the correct SELinux context with chcon or semanage; 2) Assign matching context (e.g., lib_t or usr_t) to the custom directory and files; 3) Restorefilecon to ensure context consistency",
+        "1) Use setenforce 0 before running the application; 2) Return SELinux to enforcing mode after application start; 3) Repeat each reboot"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "When an application uses libraries in non-standard directories, SELinux can block access if the context is not set correctly. Using tools like chcon or semanage fcontext to match the appropriate context (e.g., lib_t) and then running restorecon ensures persistent, correct labeling. Disabling or setting SELinux to permissive mode is not necessary and reduces security. Temporarily disabling SELinux is an ineffective solution for production environments.",
+      "examTip": "Always consider proper SELinux labeling over disabling enforcement. Use 'audit2allow' if you need to create custom policy modules for complex scenarios."
     },
     {
       "id": 11,
@@ -761,6 +770,19 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`/etc/passwd` stores user account information, including UIDs. `/etc/shadow` contains password hashes, `/etc/group` defines group memberships, and `/etc/login.defs` sets system-wide login policies.",
       "examTip": "Use `getent passwd` to retrieve user information from `/etc/passwd`."
+    },
+    {
+      "id": 60,
+      "question": "A systemd-based Linux server must automatically start a custom monitoring service that depends on network connectivity and a database service. The custom monitoring service is named 'monitor.service,' the network service is 'network-online.target,' and the database service is 'postgresql.service.' Which approach ensures the correct startup order and automatic restarts if the monitoring service fails?",
+      "options": [
+        "Create a cron job @reboot for monitor.service, referencing postgresql.service within the script. No changes to systemd files are required.",
+        "Modify /etc/rc.local to include 'service monitor start' after checking netstat for open ports. Add 'Restart=always' to /etc/sysconfig/monitor.conf.",
+        "Create /etc/systemd/system/monitor.service with 'After=network-online.target postgresql.service' and 'Wants=network-online.target postgresql.service'; include 'Restart=on-failure' and enable the service with systemctl.",
+        "Write a custom shell script that pings the database host, then starts monitor.service; schedule it with cron every minute until it detects connectivity."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Systemd requires defining dependencies (After=) and relationships (Wants=) to ensure services start in the correct order. Including 'Restart=on-failure' enables automatic restarts. Placing these directives in the [Unit] and [Service] sections of an explicit monitor.service file is the recommended method. Cron jobs and rc.local hacks offer less control and reliability.",
+      "examTip": "Use systemd’s native dependency management and service restart policies for resilient service orchestration. Always enable 'network-online.target' for services that need fully established network connectivity."
     },
     {
       "id": 61,
