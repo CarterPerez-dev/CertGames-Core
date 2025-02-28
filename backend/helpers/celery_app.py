@@ -4,7 +4,7 @@ from celery import Celery
 from celery.schedules import crontab
 from dotenv import load_dotenv
 
-from async_tasks import aggregate_performance_metrics
+from helpers.async_tasks import aggregate_performance_metrics
 
 load_dotenv()
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
