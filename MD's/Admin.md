@@ -142,7 +142,6 @@ This approach not only streamlines administrative tasks but also helps maintain 
 
 also you might need my mongosh command i use to go to my shell so her eit is 
 
-mongosh "mongodb+srv://yoshi:Yoshi200369root@proxy.nmo0cjq.mongodb.net/xploitcraft?retryWrites=true&w=majority&appName=proxy"
 
 
 so make sure to scan all my files and lets start with the backend models and routes
