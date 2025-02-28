@@ -169,9 +169,8 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #00e5ff;
   color: #000;
-  border: none;
+  border: 2px solid #4d9000;
   border-radius: 6px;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -410,7 +409,7 @@ body {
   font-size: 2.8rem;
   margin-bottom: 1rem;
   /* Neon yellow for maximum impact */
-  color: #ffeb3b;
+  color: #006600;
   font-weight: bold;
 }
 
@@ -1017,9 +1016,8 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #00e5ff;
   color: #000;
-  border: none;
+  border: 2px solid #4d0000;
   border-radius: 6px;
   padding: 0.5rem 1rem;
   cursor: pointer;
@@ -1233,13 +1231,13 @@ body {
 }
 
 .score-content {
-  background: linear-gradient(135deg, #6a1b9a, #2979ff);
+  background: linear-gradient(135deg, #202020 0%, #202020 88%, #2c1414 100%);
   padding: 2rem;
   border-radius: 12px;
   text-align: center;
   color: #fff;
-  max-width: 50rem;
-  width: 80%;
+  max-width: 70rem;
+  width: %;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   font-family: 'Trebuchet MS', sans-serif;
 }
@@ -1247,8 +1245,9 @@ body {
 .score-title {
   font-size: 2.8rem;
   margin-bottom: 1rem;
-  color: #ffeb3b;
+  color: #fff;
   font-weight: bold;
+  text-shadow: 0px 2px 2px #000
 }
 
 .score-details {
@@ -1319,7 +1318,7 @@ body {
   text-align: center;
   font-size: 1.5rem;
   margin-bottom: 0.75rem;
-  color: #000;
+  color: #fff;
   font-weight: bold;
 }
 
@@ -1868,25 +1867,66 @@ body {
 /* New Test Length Selector Card Styles */
 .test-length-selector-card {
   margin: 10px 0;
-  padding: 8px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
+  padding: 12px;
+  border-radius: 6px;
   text-align: center;
   font-size: 0.9rem;
+  color: #a93226;
+  /* Keep any existing rules you have, just refining for the new design */
 }
-.test-length-selector-card span {
-  font-weight: bold;
-  margin-right: 10px;
+
+/* Container that holds the four length options horizontally */
+.test-length-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
 }
-.test-length-selector-card label {
-  margin: 0 5px;
-  cursor: pointer;
+
+/* Style each option as a neat clickable "tab" */
+.test-length-option {
+  position: relative;
   display: inline-flex;
   align-items: center;
+  background-color: #2979ff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
 }
-.test-length-selector-card input[type="radio"] {
-  margin-right: 3px;
+
+/* Hide the raw radio input but keep it functional */
+.test-length-option input[type="radio"] {
+  display: none;
 }
+
+/* The visible label text */
+.test-length-option span {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Hover effect */
+.test-length-option:hover {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+/* Highlight the selected option */
+.test-length-option input[type="radio"]:checked + span {
+  color: #000;
+  font-weight: 600;
+}
+
+/* Optional: tweak the text styling for "Select Test Length:" */
+.test-length-selector-card p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Keep your other existing styles for the rest of the page/cards/etc. */
+
 
 
 /* Popup overlay to darken background */

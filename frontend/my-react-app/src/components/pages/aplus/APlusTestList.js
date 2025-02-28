@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../test.css"; // Make sure this file includes the CSS below
+import "../../test.css"; // Updated below, be sure to include our new styles
 
 const APlusTestList = () => {
   const navigate = useNavigate();
@@ -22,11 +22,10 @@ const APlusTestList = () => {
   // Show/hide tooltip for the info icon
   const [showExamInfo, setShowExamInfo] = useState(false);
 
-  // State to control the restart popup on the test list page.
-  // If non-null, it holds the test number for which the popup is active.
+  // Restart popup on the test list page (holds test number)
   const [restartPopupTest, setRestartPopupTest] = useState(null);
 
-  // NEW: State to hold the chosen test length for each test card (keyed by test number)
+  // Choose test length
   const allowedTestLengths = [25, 50, 75, 100];
   const [selectedLengths, setSelectedLengths] = useState({});
 
@@ -46,7 +45,7 @@ const APlusTestList = () => {
         // Filter attempts for this category
         const relevant = attemptList.filter((a) => a.category === category);
 
-        // For each testId, pick the best attempt doc (unfinished if exists, else latest finished)
+        // For each testId, pick the best attempt doc:
         const bestAttempts = {};
         for (let att of relevant) {
           const testKey = att.testId;
@@ -54,11 +53,13 @@ const APlusTestList = () => {
             bestAttempts[testKey] = att;
           } else {
             const existing = bestAttempts[testKey];
+            // Prefer an unfinished attempt if it exists; otherwise latest finished
             if (!existing.finished && att.finished) {
-              // keep existing
+              // Keep existing
             } else if (existing.finished && !att.finished) {
               bestAttempts[testKey] = att;
             } else {
+              // Both finished or both unfinished => pick newest
               const existingTime = new Date(existing.finishedAt || 0).getTime();
               const newTime = new Date(att.finishedAt || 0).getTime();
               if (newTime > existingTime) {
@@ -96,12 +97,10 @@ const APlusTestList = () => {
     return <div className="tests-list-container">Error: {error}</div>;
   }
 
-  // Helper: retrieve doc from bestAttempts or return null
   const getAttemptDoc = (testNumber) => {
     return attemptData[testNumber] || null;
   };
 
-  // Display progress or final score
   const getProgressDisplay = (attemptDoc) => {
     if (!attemptDoc) return "No progress yet";
     const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
@@ -122,7 +121,6 @@ const APlusTestList = () => {
     }
   };
 
-  // Simple difficulty labels/colors (added back from old file)
   const difficultyColors = [
     { label: "Normal", color: "hsl(0, 0%, 100%)" },
     { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
@@ -136,13 +134,12 @@ const APlusTestList = () => {
     { label: "Ultra Level", color: "#000" }
   ];
 
-  // Start/resume test
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
     if (existingAttempt && !doRestart) {
       // Resume test
       navigate(`/practice-tests/a-plus/${testNumber}`);
     } else {
-      // For new or forced restart, use the chosen test length (default to totalQuestionsPerTest if not set)
+      // New or forced restart
       const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
       fetch(`/api/test/attempts/${userId}/${testNumber}`, {
         method: "POST",
@@ -171,14 +168,12 @@ const APlusTestList = () => {
     }
   };
 
-  // Description text for exam mode
   const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
 
   return (
     <div className="tests-list-container">
       <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
 
-      {/* Centered container for toggle, label, and info icon */}
       <div className="centered-toggle-container">
         <div className="toggle-with-text">
           <label className="toggle-switch">
@@ -227,38 +222,36 @@ const APlusTestList = () => {
               </div>
               <p className="test-progress">{progressDisplay}</p>
 
-              {/* 
-                Show the test-length selector if:
-                1) No attempt doc yet, OR
-                2) The attempt doc is already finished.
-              */}
+              {/* If no attempt or finished => show length selector */}
               {(noAttempt || isFinished) && (
                 <div className="test-length-selector-card">
                   <p>Select Test Length:</p>
-                  {allowedTestLengths.map((length) => (
-                    <label key={length}>
-                      <input
-                        type="radio"
-                        name={`testLength-${testNumber}`}
-                        value={length}
-                        checked={
-                          (selectedLengths[testNumber] ||
-                            totalQuestionsPerTest) === length
-                        }
-                        onChange={(e) =>
-                          setSelectedLengths((prev) => ({
-                            ...prev,
-                            [testNumber]: Number(e.target.value)
-                          }))
-                        }
-                      />
-                      {length}
-                    </label>
-                  ))}
+                  <div className="test-length-options">
+                    {allowedTestLengths.map((length) => (
+                      <label key={length} className="test-length-option">
+                        <input
+                          type="radio"
+                          name={`testLength-${testNumber}`}
+                          value={length}
+                          checked={
+                            (selectedLengths[testNumber] ||
+                              totalQuestionsPerTest) === length
+                          }
+                          onChange={(e) =>
+                            setSelectedLengths((prev) => ({
+                              ...prev,
+                              [testNumber]: Number(e.target.value)
+                            }))
+                          }
+                        />
+                        <span>{length}</span>
+                      </label>
+                    ))}
+                  </div>
                 </div>
               )}
 
-              {/* 1) If no attempt doc => show "Start" */}
+              {/* Start / Resume / Restart */}
               {noAttempt && (
                 <button
                   className="start-button"
@@ -267,8 +260,6 @@ const APlusTestList = () => {
                   Start
                 </button>
               )}
-
-              {/* 2) If attempt exists but not finished => show "Resume" / "Restart" */}
               {attemptDoc && !attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
@@ -285,8 +276,6 @@ const APlusTestList = () => {
                   </button>
                 </div>
               )}
-
-              {/* 3) If attempt is finished => "View Review" + "Restart" */}
               {attemptDoc && attemptDoc.finished && (
                 <div className="test-card-buttons">
                   <button
@@ -312,7 +301,7 @@ const APlusTestList = () => {
         })}
       </div>
 
-      {/* Restart Popup for partially completed tests on the test list page */}
+      {/* Popup for partial restarts */}
       {restartPopupTest !== null && (
         <div className="popup-overlay">
           <div className="popup-content">
@@ -341,3 +330,4 @@ const APlusTestList = () => {
 };
 
 export default APlusTestList;
+
