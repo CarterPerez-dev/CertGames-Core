@@ -476,9 +476,6 @@ function CrackedAdminDashboard() {
   /*****************************************
    *  Tab UI: We define a big switch ...
    *****************************************/
-import React, { useState, useEffect } from "react";
-// (Import your scoped CrackedAdminDashboard.css if needed.)
-// e.g. import "./CrackedAdminDashboard.css";
 
 function CrackedAdminDashboard() {
   // ------------------
