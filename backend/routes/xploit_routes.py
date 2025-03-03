@@ -1,65 +1,37 @@
-import logging
-from flask import Blueprint, request, Response, jsonify
+from flask import Blueprint, request, jsonify, Response
 from helpers.xploitcraft_helper import Xploits
+import logging
 
-xploit_bp = Blueprint('xploit_bp', __name__)
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
-# Create a single instance of Xploits to be used across requests
-xploits = Xploits()
+xploit = Xploits()
 xploit_bp = Blueprint('xploit_bp', __name__)
 
 @xploit_bp.route('/generate_payload', methods=['POST'])
 def generate_payload_endpoint():
-    """
-    Streams exploit payload in real time (token-by-token).
-    Expects JSON with { vulnerability, evasion_technique }
-    Returns a text/plain streaming response.
-    """
-    data = request.get_json() or {}
-    vulnerability = data.get("vulnerability", "")
-    evasion_technique = data.get("evasion_technique", "")
+    data = request.get_json()
+    logger.debug(f"Received data: {data}")
 
-    if not vulnerability and not evasion_technique:
-        logger.error("Missing required fields: either vulnerability or evasion_technique must be provided")
-        return jsonify({"error": "At least one of vulnerability or evasion_technique must be provided"}), 400
+    if not data or (not data.get('vulnerability') and not data.get('evasion_technique')):
+        logger.error("Invalid request payload - need at least one of vulnerability or evasion_technique")
+        return jsonify({'error': 'Please provide at least one of vulnerability or evasion_technique'}), 400
+
+    vulnerability = data.get('vulnerability', "")
+    evasion_technique = data.get('evasion_technique', "")
+    stream_requested = data.get('stream', False)
 
     try:
-        def generate_chunks():
-            logger.info(f"Starting payload stream for vulnerability: '{vulnerability}', evasion: '{evasion_technique}'")
-            payload_generator = xploits.generate_exploit_payload(
-                vulnerability=vulnerability,
-                evasion_technique=evasion_technique,
-                stream=True
-            )
-            
-            # Stream each chunk as it's generated
-            for chunk in payload_generator:
-                if isinstance(chunk, str) and len(chunk) > 0:
-                    logger.debug(f"Streaming payload chunk of size: {len(chunk)}")
-                yield chunk
+        if stream_requested:
+            def generate():
+                for chunk in xploit.generate_exploit_payload(vulnerability, evasion_technique, stream=True):
+                    yield chunk
 
-        # Create the streaming response with all necessary headers
-        response = Response(generate_chunks(), mimetype='text/plain')
-        
-        # Essential headers for preventing buffering
-        response.headers['X-Accel-Buffering'] = 'no'
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-        response.headers['Pragma'] = 'no-cache'
-        response.headers['Expires'] = '0'
-        response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-        
-        # Enable chunked transfer encoding
-        response.headers['Transfer-Encoding'] = 'chunked'
-        
-        # Keep connection alive for streaming
-        response.headers['Connection'] = 'keep-alive'
-        
-        logger.info("Returning streaming payload response with headers set")
-        return response
+            return Response(generate(), mimetype='text/plain')
+        else:
+            payload = xploit.generate_exploit_payload(vulnerability, evasion_technique, stream=False)
+            logger.debug(f"Generated payload: {payload}")
+            return jsonify({'payload': payload})
 
     except Exception as e:
-        logger.error(f"Error generating payload: {str(e)}")
-        return jsonify({"error": str(e)}), 500
-
+        logger.error(f"Error while generating payload: {str(e)}")
+        return jsonify({'error': 'Failed to generate payload'}), 500
