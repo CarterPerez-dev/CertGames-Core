@@ -5,6 +5,21 @@ inferna, bastion is leevl 45000
 ---
 ## admin and support refinements [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md)
 ---
+Floating-point arithmetic in JavaScript can sometimes produce such imprecise values. To fix this, rounding the result before displaying it is essential. Here's a complete example that rounds to two decimal places:
+
+```javascript
+// Define the item with its effect value
+const item = { effectValue: 1.10 };
+
+// Calculate the XP boost and round it to two decimal places
+const xpBoost = ((item.effectValue - 1) * 100).toFixed(2);
+
+// Display the result in the desired format
+console.log(`+${xpBoost}% XP`);  // Expected output: +10.00% XP
+```
+
+In this snippet, the `toFixed(2)` method ensures that the result is formatted with exactly two decimal places, avoiding floating-point precision issues like "+10.000000000000009%".
+---
 ### add to username and passsword authenication where it omits spaces. so bascially any spaces are still not allowe dbut that wouldnt matte rbacsue spaces essentially dont even get logged as a charcer. so like if they try to do spaces it wil dissalow them lets say for if they do anything in the middle of charcters so lke "carter perez" or like "c dog" orand so on it dissallows them- however if they do any spaces before any charctaers or after any charcters it doesn teven get logged as any charcters its baical;y invisible/void. so if a user did " carterperez" it gets logged as "carterperez" even if they did " carterperez " it gets logged as "carterperez" or if they just did "carterperez " it gets logged as "carterperez" 
 ---
 ### fix this import and see what happens because it hasnt been in affect this whole time since its the incorrect path LOLOL
