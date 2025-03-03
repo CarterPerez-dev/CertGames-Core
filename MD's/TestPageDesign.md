@@ -5611,1366 +5611,3404 @@ We created each component with:
 4. Performance considerations for animations and transitions
 
 
-
-
-
-
-
-
-/*******************************************/
-/* Imported Fonts                          */
-/*******************************************/
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
-
-
-/*******************************************/
-/* Global Reset & Basics                   */
-/*******************************************/
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  /* Urban Graffiti Theme Background: Dark concrete with a subtle gradient */
-  background: linear-gradient(135deg, #2f2f2f, #000000);
-  font-family: 'Trebuchet MS', sans-serif;
-  color: #e0e0e0;
-}
-
-/*******************************************/
-/* Test List Container                     */
-/*******************************************/
-.tests-list-container {
-  width: 100%;
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(135deg, #2f2f2f, #000000);
-}
-
-.tests-list-title {
-  font-size: 2.8rem;
-  margin-bottom: 1rem;
-  /* Bold neon yellow with a spray-paint feel */
-  color: #f0f8ff;
-  text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
-  text-align: center;
-  font-family: 'Merriweather', serif;
-}
-
-.tests-list-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.6rem;
-}
-
-
-    
-
-
-/*******************************************/
-/* Test Card (each test in the list)       */
-/*******************************************/
-.test-card {
-  position: relative;
-  background: linear-gradient(135deg, #3a3a3a, #1f1f1f);
-  padding: 1.7rem;
-  border-radius: 8px;
-  border: 1px solid #a93226;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  overflow: hidden;
-}
-
-/* Force test 10 to appear centered in a three-column grid */
-.test-card[data-test-id="10"] {
-  grid-column: 2;
-}
-
-.test-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px #fff;
-}
-
-.test-badge {
-  font-size: 1.6rem;
-  font-weight: bold;
-  font-family: 'Merriweather', serif;
-  margin-bottom: 0.3rem;
-  color: #a93226;
-  text-shadow: .5px .5px 0 #fff, .5px .5px 0 #fff;
-}
-
-.difficulty-label {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-
-.test-progress {
-  font-size: 1rem;
-  color: #bfbfbf;
-  margin-bottom: 0.5rem;
-}
-
-/*******************************************/
-/* Buttons within Each Test Card           */
-/*******************************************/
-.test-card-buttons {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-}
-
-.resume-button {
-  background: #1a8cff;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: 1px solid #000;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.resume-button:hover {
-  background: #00b0ff;
-  border: 1px solid #000;
-}
-
-.restart-button-testlist {
-  background: #a93226;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: 1px solid #000;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.restart-button-testlist:hover {
-  background: #d62929;
-}
-
-/* The "Click to Start" button */
-.start-button {
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  background: #a93226;
-  color: #fff;
-  border: 1px solid #000;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.start-button:hover {
-  background: #d9d9d9;
-  color: #000;
-}
-
-.back-to-list-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #000;
-  border: 2px solid #4d0000;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.back-to-list-btn:hover {
-  background: #00b0ff;
-}
-
-/*******************************************/
-/* APlus Test Container                    */
-/*******************************************/
-.aplus-test-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: linear-gradient(135deg, #2f2f2f, #000000);
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
-  position: relative;
-}
-
-.aplus-title {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  font-family: 'Merriweather', serif;
-}
-
-/*******************************************/
-/* XP/Level & Coin Info                    */
-/*******************************************/
-.top-bar {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.avatar-section {
-  text-align: center;
-}
-
-.avatar-image {
-  width: 80px;
-  height: 80px;
-  background: url('https://via.placeholder.com/60') no-repeat center/cover;
-  border: 2px solid #000;
-  border-radius: 50%;
-  margin-bottom: 0.5rem;
-  box-shadow: 0px 0px 4px #fff;
-}
-
-.avatar-level,
-.xp-level-display,
-.coins-display {
-  font-size: 1.1rem;
-  color: #1a8cff;
-  text-align: center;
-  font-family: 'Orbitron', sans-serif;
-}
-
-/*******************************************/
-/* Progress Bar                            */
-/*******************************************/
-.progress-container {
-  position: relative;
-  height: 24px;
-  background-color: #424242;
-  border-radius: 12px;
-  margin: 0.75rem 0 1rem 0;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 12px;
-  text-align: center;
-  color: #000;
-  font-weight: bold;
-  line-height: 24px;
-  transition: width 0.3s ease-in-out;
-}
-
-/*******************************************/
-/* Question Card                           */
-/*******************************************/
-.question-card {
-  margin: 1.5rem 0;
-  padding: 1.5rem;
-  background: rgba(50, 50, 50, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.question-text {
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.5;
-  color: #d9d9d9;
-  font-weight: bold;
-}
-
-.options-list {
-  list-style: none;
-}
-
-.option-item {
-  margin: 0.5rem 0;
-}
-
-.option-button {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  text-align: left;
-  background: #212121;
-  color: #00e676;
-  transition: background 0.5s ease;
-  outline: none;
-}
-
-.option-button:hover {
-  background: #737373;
-}
-
-/* Correct/Incorrect Animations */
-.correct-option {
-  animation: correctAnswer 0.3s ease;
-  background: #239023 !important;
-  color: #fff !important;
-}
-
-@keyframes correctAnswer {
-  0% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
-  50% { transform: scale(1.05); box-shadow: 0 0 10px #00e676; }
-  100% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
-}
-
-.incorrect-option {
-  animation: incorrectAnswer 0.3s ease;
-  background: #c12525 !important;
-  color: #fff !important;
-}
-
-@keyframes incorrectAnswer {
-  0% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
-  50% { transform: scale(1.05); box-shadow: 0 0 10px #ff1744; }
-  100% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
-}
-
-.explanation {
-  margin-top: 1rem;
-  background: #465d7d;
-  padding: 1rem;
-  border-radius: 6px;
-  font-size: 1.1rem;
-  line-height: 1.5;
-  font-family: 'Trebuchet MS', sans-serif;
-}
-
-/*******************************************/
-/* Next Button                             */
-/*******************************************/
-.next-button {
-  display: inline-block;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #ff4081, #f50057);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: box-shadow 0.3s;
-  font-weight: 600;
-}
-
-.next-button:hover {
-  box-shadow: 0 0 10px rgba(245, 0, 87, 0.5);
-}
-
-/*******************************************/
-/* Overlay (Score & Review)                */
-/*******************************************/
-.score-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.5s forwards;
-  z-index: 9999;
-  font-family: 'Trebuchet MS', sans-serif;
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-.score-content {
-  background: linear-gradient(135deg, #202020 0%, #202020 88%, #2c1414 100%);
-  padding: 2rem;
-  border-radius: 12px;
-  text-align: center;
-  color: #fff;
-  max-width: 70rem;
-  width: %;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-  font-family: 'Trebuchet MS', sans-serif;
-}
-
-.score-title {
-  font-size: 2.8rem;
-  margin-bottom: 1rem;
-  color: #fff;
-  font-weight: bold;
-  text-shadow: 0px 2px 2px #000
-}
-
-.score-details {
-  font-size: 1.4rem;
-  margin-bottom: 1.5rem;
-  font-weight: bold;
-  color: #e0e0e0;
-  font-family: 'Trebuchet MS', sans-serif;
-}
-
-.overlay-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.restart-button,
-.review-button,
-.next-test-button,
-.back-btn {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: box-shadow 0.3s, transform 0.2s;
-}
-
-.restart-button {
-  background: linear-gradient(135deg, #ff1744, #d50000);
-  color: #fff;
-}
-
-.restart-button:hover {
-  background: linear-gradient(135deg, #d50000, #ff1744);
-  transform: scale(1.05);
-}
-
-.review-filter-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  justify-content: center;
-}
-
-.review-filter-buttons button {
-  background: #212121;
-  color: #fff;
-  border: 1px solid #fff;
-  padding: 1rem 2.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.review-filter-buttons button:hover {
-  background: #424242;
-}
-
-.review-filter-buttons .active-filter {
-  background: #ff1744;
-}
-
-.review-score-line {
-  text-align: center;
-  font-size: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: #fff;
-  font-weight: bold;
-}
-
-.score-details {
-  margin: 0.5rem 0 1rem 0;
-  font-size: 1.3rem;
-  text-align: center;
-  color: #e0e0e0;
-  font-weight: bold;
-}
-
-.review-button {
-  background: linear-gradient(135deg, #00e5ff, #00bcd4);
-  color: #000;
-}
-
-.review-button:hover {
-  background: linear-gradient(135deg, #00bcd4, #00e5ff);
-  transform: scale(1.05);
-}
-
-.next-test-button {
-  background: #ffea00;
-  color: #000;
-}
-
-.next-test-button:hover {
-  box-shadow: 0 0 10px rgba(255, 234, 0, 0.5);
-}
-
-.back-btn {
-  background: transparent;
-  border: 2px solid #fff;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.back-btn:hover {
-  background: #fff;
-  color: #000;
-  transform: scale(1.05);
-}
-
-/*******************************************/
-/* Level Up Overlay                        */
-/*******************************************/
-.simple-level-up-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 193, 7, 0.7);
-  color: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99999;
-  animation: levelUpFade 1s forwards;
-}
-
-@keyframes levelUpFade {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.simple-level-up-content {
-  font-size: 3rem;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px #000;
-}
-
-/*******************************************/
-/* Review Mode                             */
-/*******************************************/
-.review-mode-container {
-  margin: 2rem 0;
-}
-
-.review-question-card {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: rgba(237, 201, 175, 0.15);
-  border-radius: 6px;
-  font-family: 'Trebuchet MS', sans-serif;
-  line-height: 1.6;
-  font-size: 1.2rem;
-}
-
-.close-review-x {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #fdf6e3;
-  color: #d84315;
-  border: 2px solid #d84315;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-review-x:hover {
-  background: #d84315;
-  color: #fdf6e3;
-}
-
-.close-review-btn {
-  margin-top: 1rem;
-}
-
-.score-content.review-content {
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-/*******************************************/
-/* Minimal Level-Up Particle Burst         */
-/*******************************************/
-.simple-level-up-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  z-index: 3000;
-}
-
-.simple-level-up-content {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 2rem 3rem;
-  border-radius: 8px;
-  font-size: 2rem;
-  color: #fff;
-  text-align: center;
-  animation: simpleLevelUp 1s ease-out forwards;
-}
-
-@keyframes simpleLevelUp {
-  0% { transform: scale(0.5); opacity: 0; }
-  50% { transform: scale(1.2); opacity: 1; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-/*******************************************/
-/* New Control Bars for Test View          */
-/*******************************************/
-.top-control-bar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.top-control-bar .flag-btn,
-.top-control-bar .finish-test-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.top-control-bar .flag-btn {
-  background: #ffea00;
-  color: #000;
-}
-.top-control-bar .flag-btn:hover {
-  background: #424242;
-}
-
-.top-control-bar .finish-test-btn {
-  background: #d84315;
-  color: #fff;
-}
-.top-control-bar .finish-test-btn:hover {
-  background: #bf360c;
-}
-
-.upper-control-bar {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.upper-control-bar .restart-test-btn,
-.upper-control-bar .back-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.upper-control-bar .restart-test-btn {
-  background: #d84315;
-  color: #fff;
-}
-.upper-control-bar .restart-test-btn:hover {
-  background: #bf360c;
-}
-
-.bottom-control-bar {
-  display: flex;
-  flex-direction: column;
-  margin-top: 1rem;
-}
-
-.bottom-control-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
-.next-question-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  background: #2979ff;
-  color: #fff;
-  transition: background 0.3s;
-}
-.next-question-btn:hover {
-  background: #1565c0;
-}
-
-.skip-row {
-  justify-content: flex-end;
-}
-
-.skip-question-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  background: #ffea00;
-  color: #000;
-  transition: background 0.3s;
-}
-.skip-question-btn:hover {
-  background: #ffd600;
-}
-
-.prev-question-btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  background: #2979ff;
-  color: #fff;
-  transition: background 0.3s;
-}
-.prev-question-btn:hover {
-  background: #1565c0;
-}
-
-/*******************************************/
-/* Confirmation Popup Styles               */
-/*******************************************/
-.confirm-popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-}
-
-.confirm-popup-content {
-  background: #4d0000;
-  padding: 1.5rem;
-  border-radius: 8px;
-  text-align: center;
-  max-width: 400px;
-  width: 90%;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-  color: #fff;
-}
-
-.confirm-popup-buttons {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.confirm-popup-yes,
-.confirm-popup-no {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.confirm-popup-yes {
-  background: #2979ff;
-  color: #fff;
-}
-.confirm-popup-yes:hover {
-  background: #1565c0;
-}
-
-.confirm-popup-no {
-  background: #d84315;
-  color: #fff;
-}
-.confirm-popup-no:hover {
-  background: #bf360c;
-}
-
-/* Question Dropdown Styles */
-.question-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-button {
-  background-color: #2c3e50;
-  color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.dropdown-content {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #34495e;
-  min-width: 200px;
-  max-height: 400px;
-  overflow-y: auto;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  z-index: 1000;
-}
-
-.dropdown-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  color: white;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background-color: #2c3e50;
-}
-
-.dropdown-item.active {
-  background-color: #3498db;
-}
-
-.status-indicators {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.answer-indicator.correct {
-  color: #2ecc71;
-}
-
-.answer-indicator.incorrect {
-  color: #e74c3c;
-}
-
-.skip-indicator {
-  color: #f1c40f;
-}
-
-.flag-indicator {
-  color: #e74c3c;
-}
-
-
-.option-button.chosen-option {
-  background-color: #2979ff; /* light-blue highlight */
-  border: 2px solid #000; /* a bright border so it’s obvious */
-  transform: scale(1.03);
-  transition: all 0.1s ease-in-out;
-}
-
-/* 1) Center the container with extra vertical spacing */
-/* Center the toggle container with extra vertical spacing */
-.centered-toggle-container {
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0;
-}
-
-/* Align toggle, label, and info icon horizontally */
-.toggle-with-text {
-  display: flex;
-  align-items: center;
-  gap: 1rem; /* spacing between elements */
-}
-
-/* Toggle switch styling */
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 70px;   /* increased width */
-  height: 72px;  /* increased height */
-}
-
-.toggle-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* Slider background */
-.toggle-switch .slider {
-  display: block;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: #000;
-  border-radius: 36px;
-  border: 0.5px solid #fff;
-  cursor: pointer;
-  text-align: center;
-  font-size: 0.85rem;
-  font-weight: bold;
-  line-height: 36px; /* vertical centering */
-  user-select: none;
-  transition: background-color 0.4s;
-  position: relative;
-  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Slider knob */
-.toggle-switch .slider::before {
-  content: "";
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  left: 4px;
-  top: 4px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  transition: transform 0.4s;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-/* When checked, shift the knob */
-.toggle-switch input:checked + .slider::before {
-  transform: translateX(34px);
-}
-
-/* When checked, change slider background */
-.toggle-switch input:checked + .slider {
-  background-color: #3399ff;
-}
-
-/* Toggle label styling */
-.toggle-label {
-  font-size: 1rem;
-  color: #fff;
-  line-height: 36px; /* same as toggle height for alignment */
-  margin: 0;
-}
-
-/* Info icon container */
-.info-icon-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-/* Info icon styling */
-.info-icon {
-  font-size: 1.5rem;
-  width: 1.8em;
-  height: 1.9em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #3399ff;
-}
-
-/* Tooltip styling positioned to the right of the icon */
-.info-tooltip {
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 10px); /* to the right with a 10px gap */
-  transform: translateY(-50%);
-  background-color: #222;
-  color: #fff;
-  padding: 0.8rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  width: 240px;
-  text-align: center;
-  z-index: 999;
-}
-
-/* Tooltip arrow on left side */
-.info-tooltip::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 100%; /* arrow on the left edge */
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: #222;
-}
-
-
-/* New Test Length Selector Card Styles */
-.test-length-selector-card {
-  margin: 10px 0;
-  padding: 12px;
-  border-radius: 6px;
-  text-align: center;
-  font-size: 0.9rem;
-  color: #a93226;
-  /* Keep any existing rules you have, just refining for the new design */
-}
-
-/* Container that holds the four length options horizontally */
-.test-length-options {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 6px;
-}
-
-/* Style each option as a neat clickable "tab" */
-.test-length-option {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  background-color: #2979ff;
-  border: 1px solid #000;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
-}
-
-/* Hide the raw radio input but keep it functional */
-.test-length-option input[type="radio"] {
-  display: none;
-}
-
-/* The visible label text */
-.test-length-option span {
-  font-size: 0.9rem;
-  color: #b3b3b3;
-}
-
-/* Hover effect */
-.test-length-option:hover {
-  background-color: #3a3a3a;
-  color: #fff;
-}
-
-/* Highlight the selected option */
-.test-length-option input[type="radio"]:checked + span {
-  color: #000;
-  font-weight: 600;
-}
-
-/* Optional: tweak the text styling for "Select Test Length:" */
-.test-length-selector-card p {
-  margin: 0;
-  font-weight: 600;
-}
-
-/* Keep your other existing styles for the rest of the page/cards/etc. */
-
-
-
-/* Popup overlay to darken background */
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Popup content box */
-.popup-content {
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 8px;
-  max-width: 400px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: #000;
-  font-weight: bold;
-  font-size: 1.2rem
-}
-
-/* Popup buttons */
-.popup-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-around;
-}
-
-.popup-buttons button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  background-color: #1976d2;
-  color: #fff;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.popup-buttons button:hover {
-  background-color: #1565c0;
-}
-
-/* Optionally, style a cancel button differently */
-.popup-buttons button:last-child {
-  background-color: #e0e0e0;
-  color: #333;
-}
-
-.popup-buttons button:last-child:hover {
-  background-color: #bdbdbd;
-}
-
-
-
-
-
-
-
-
-
-
-*******************************************/
-/* 1) Extra-Small Devices: max-width 320px */
-/*******************************************/
-@media (max-width: 320px) {
-  body {
-    overflow-x: hidden;
+ok so the above text is what deisgned ravamping we are doing.
+
+so nwo is the a really complciated page
+
+so we haev 13 test categroies, so we have 13 test pages aswell. they all are gonan look and fucntion the same, however the tests are different obviolsy.
+
+sicne they all look and fcuntion the same we have a globabltestpage that has all the global fucntions and design and stuff, aswell as a global test css.
+
+so they each have their own unique testlist js file which is the saem fucntion and deisgn but it their won it defined teh category and what test categroy it is and stuff
+
+and then they al have their wown "testpage" file even tho its absicaly just getting teh test category aswell
+
+so the main revamp of design will be the compnents in the global testpage and their repsetive test lists. 
+so we will do the revamping of design weve been doing to the testlist and then just copy the contnets to all teh toehr ones then edit the unique parts in it for each
+and for the global test page i want to do the saem deisgn revamp weve been doing aswell inclduing teh review mode and testview
+
+
+however a very veyr veyr important thing is we MUST NOT alter teh fucnionality of any components/fcuntions or features, we must maintain all features and fcuntionlity whiel doing this though becaue it took me a very very long time to make it all work. you may add features but cannot remove any or alter any (on how they actually fucntion).
+
+ok so ill strat off with giving you the backedn routes just so you have some context, then ill give you the global test page, then ill give you one of teh testlist files, and alsofor context ill give you one of the unique "testpage" files.
+
+so give me the testlist file first updated and ill verify its good, then give me the full entire global test page updated in when i tell you too, when i tell you too- DO NOT OMITT OR REMOVE ANY FUCNTIONALITY AND MAKE SURE TEH UPDATED FILE IS IN FULL
+
+then after you give me the full entire global test page ill verify it adn ask for teh full test.css which encapuslates both testlist and globlatestpage compoenenst/design
+
+ok here are teh files
+
+starting with backedn routes fro conext, and il also give you my userslice file for context
+
+# ================================
+# test_routes.py
+# ================================
+
+from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
+from bson.objectid import ObjectId
+from datetime import datetime, timedelta
+import pytz
+import time
+from mongodb.database import db
+
+# Mongo collections
+from mongodb.database import (
+    mainusers_collection,
+    shop_collection,
+    achievements_collection,
+    tests_collection,
+    testAttempts_collection,
+    correctAnswers_collection,
+    dailyQuestions_collection,
+    dailyAnswers_collection
+)
+
+# Models
+from models.test import (
+    get_user_by_identifier,
+    create_user,
+    get_user_by_id,
+    update_user_coins,
+    update_user_xp,
+    apply_daily_bonus,
+    get_shop_items,
+    purchase_item,
+    get_achievements,
+    get_test_by_id_and_category,
+    validate_username,
+    validate_email,
+    validate_password,
+    update_user_fields,
+    get_user_by_id,
+    award_correct_answers_in_bulk
+)
+
+api_bp = Blueprint('test', __name__)
+
+#############################################
+# Leaderboard Caching Setup (15-second TTL)
+#############################################
+leaderboard_cache = []
+leaderboard_cache_timestamp = 0
+LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
+
+def serialize_user(user):
+    """Helper to convert _id, etc. to strings if needed."""
+    if not user:
+        return None
+    user['_id'] = str(user['_id'])
+    if 'currentAvatar' in user and user['currentAvatar']:
+        user['currentAvatar'] = str(user['currentAvatar'])
+    if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
+        user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
+    return user
+
+def serialize_datetime(dt):
+    """Helper: convert a datetime to an ISO string (or return None)."""
+    return dt.isoformat() if dt else None
+
+
+
+def check_and_unlock_achievements(user_id):
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return []
+
+    counters = user.get("achievement_counters", {})
+    unlocked = set(user.get("achievements", []))
+    newly_unlocked = []
+
+    start_db = time.time()
+    all_ach = list(achievements_collection.find({}))  # or get_achievements()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for ach in all_ach:
+        aid = ach["achievementId"]
+        # If already unlocked, skip
+        if aid in unlocked:
+            continue
+
+        crit = ach.get("criteria", {})
+
+        # 1) testCount => total_tests_completed
+        test_count_req = crit.get("testCount")
+        if test_count_req is not None:
+            if counters.get("total_tests_completed", 0) >= test_count_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 2) minScore => e.g. "accuracy_king" with 90
+        min_score_req = crit.get("minScore")
+        if min_score_req is not None:
+            if counters.get("highest_score_ever", 0) >= min_score_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
+        perfect_req = crit.get("perfectTests")
+        if perfect_req is not None:
+            if counters.get("perfect_tests_count", 0) >= perfect_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 4) coins => coin achievements
+        coin_req = crit.get("coins")
+        if coin_req is not None:
+            if user.get("coins", 0) >= coin_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 5) level => e.g. "level_up_5", "mid_tier_grinder_25", etc.
+        level_req = crit.get("level")
+        if level_req is not None:
+            if user.get("level", 1) >= level_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 6) totalQuestions => e.g. "answer_machine_1000"
+        total_q_req = crit.get("totalQuestions")
+        if total_q_req is not None:
+            if counters.get("total_questions_answered", 0) >= total_q_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 7) perfectTestsInCategory => "category_perfectionist"
+        perfect_in_cat_req = crit.get("perfectTestsInCategory")
+        if perfect_in_cat_req is not None:
+            perfect_by_cat = counters.get("perfect_tests_by_category", {})
+            for cat_name, cat_count in perfect_by_cat.items():
+                if cat_count >= perfect_in_cat_req:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 8) redemption_arc => minScoreBefore + minScoreAfter
+        min_before = crit.get("minScoreBefore")
+        min_after = crit.get("minScoreAfter")
+        if min_before is not None and min_after is not None:
+            if (counters.get("lowest_score_ever", 100) <= min_before and
+                counters.get("highest_score_ever", 0) >= min_after):
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 9) testsCompletedInCategory => "subject_finisher"
+        cat_required = crit.get("testsCompletedInCategory")
+        if cat_required is not None:
+            tcbc = counters.get("tests_completed_by_category", {})
+            for cat_name, test_set in tcbc.items():
+                if len(test_set) >= cat_required:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 10) allTestsCompleted => "test_finisher"
+        if crit.get("allTestsCompleted"):
+            user_completed_tests = counters.get("tests_completed_set", set())
+            TOTAL_TESTS = 130
+            if len(user_completed_tests) >= TOTAL_TESTS:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+    if newly_unlocked:
+        start_db = time.time()
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"achievements": list(unlocked)}}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    return newly_unlocked
+
+
+# -------------------------------------------------------------------
+# USER ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/user/<user_id>', methods=['GET'])
+def get_user(user_id):
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user = serialize_user(user)
+    if "password" not in user:
+        user["password"] = user.get("password")
+    return jsonify(user), 200
+
+@api_bp.route('/user', methods=['POST'])
+def register_user():
+    """
+    Registration: /api/user
+    Expects {username, email, password, confirmPassword} in JSON
+    Calls create_user, returns {message, user_id} or error.
+    """
+    user_data = request.json or {}
+    try:
+        user_data.setdefault("achievement_counters", {
+            "total_tests_completed": 0,
+            "perfect_tests_count": 0,
+            "perfect_tests_by_category": {},
+            "highest_score_ever": 0.0,
+            "lowest_score_ever": 100.0,
+            "total_questions_answered": 0,
+        })
+
+        start_db = time.time()
+        user_id = create_user(user_data)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
+@api_bp.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    if not data:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "No JSON data provided"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "No JSON data provided"}), 400
+
+    identifier = data.get("usernameOrEmail")
+    password = data.get("password")
+    if not identifier or not password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Missing username/password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "Username (or Email) and password are required"}), 400
+
+    start_db = time.time()
+    user = get_user_by_identifier(identifier)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user or user.get("password") != password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Invalid username or password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "Invalid username or password"}), 401
+
+    session['userId'] = str(user["_id"])
+
+    start_db = time.time()
+    db.auditLogs.insert_one({
+        "timestamp": datetime.utcnow(),
+        "userId": user["_id"],
+        "ip": request.remote_addr or "unknown",
+        "success": True
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    user = serialize_user(user)
+
+    return jsonify({
+        "user_id": user["_id"],
+        "username": user["username"],
+        "email": user.get("email", ""),
+        "coins": user.get("coins", 0),
+        "xp": user.get("xp", 0),
+        "level": user.get("level", 1),
+        "achievements": user.get("achievements", []),
+        "xpBoost": user.get("xpBoost", 1.0),
+        "currentAvatar": user.get("currentAvatar"),
+        "nameColor": user.get("nameColor"),
+        "purchasedItems": user.get("purchasedItems", []),
+        "subscriptionActive": user.get("subscriptionActive", False),
+        "password": user.get("password")
+    }), 200
+
+@api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
+def add_xp_route(user_id):
+    data = request.json or {}
+    xp_to_add = data.get("xp", 0)
+
+    start_db = time.time()
+    updated = update_user_xp(user_id, xp_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not updated:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    new_achievements = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    updated["newAchievements"] = new_achievements
+    return jsonify(updated), 200
+
+@api_bp.route('/user/<user_id>/add-coins', methods=['POST'])
+def add_coins_route(user_id):
+    data = request.json or {}
+    coins_to_add = data.get("coins", 0)
+
+    start_db = time.time()
+    update_user_coins(user_id, coins_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Coins updated",
+        "newlyUnlocked": newly_unlocked
+    }), 200
+
+# -------------------------------------------------------------------
+# SHOP ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/shop', methods=['GET'])
+def fetch_shop():
+    start_db = time.time()
+    items = get_shop_items()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for item in items:
+        item["_id"] = str(item["_id"])
+    return jsonify(items), 200
+
+@api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
+def purchase_item_route(item_id):
+    data = request.json or {}
+    user_id = data.get("userId")
+    if not user_id:
+        return jsonify({"success": False, "message": "userId is required"}), 400
+
+    start_db = time.time()
+    result = purchase_item(user_id, item_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if result["success"]:
+        start_db = time.time()
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        result["newly_unlocked"] = newly_unlocked
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 400
+
+@api_bp.route('/shop/equip', methods=['POST'])
+def equip_item_route():
+    data = request.json or {}
+    user_id = data.get("userId")
+    item_id = data.get("itemId")
+
+    if not user_id or not item_id:
+        return jsonify({"success": False, "message": "userId and itemId are required"}), 400
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        return jsonify({"success": False, "message": "Invalid item ID"}), 400
+
+    start_db = time.time()
+    item_doc = shop_collection.find_one({"_id": oid})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not item_doc:
+        return jsonify({"success": False, "message": "Item not found in shop"}), 404
+
+    if oid not in user.get("purchasedItems", []):
+        if user.get("level", 1) < item_doc.get("unlockLevel", 1):
+            return jsonify({"success": False, "message": "Item not unlocked"}), 400
+
+    start_db = time.time()
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"currentAvatar": oid}}
+    )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"success": True, "message": "Avatar equipped"}), 200
+
+# -------------------------------------------------------------------
+# TESTS ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/tests/<test_id>', methods=['GET'])
+def fetch_test_by_id_route(test_id):
+    start_db = time.time()
+    test_doc = get_test_by_id_and_category(test_id, None)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not test_doc:
+        return jsonify({"error": "Test not found"}), 404
+    test_doc["_id"] = str(test_doc["_id"])
+    return jsonify(test_doc), 200
+
+@api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
+def fetch_test_by_category_and_id(category, test_id):
+    try:
+        test_id_int = int(test_id)
+    except Exception:
+        return jsonify({"error": "Invalid test ID"}), 400
+
+    start_db = time.time()
+    test_doc = tests_collection.find_one({
+        "testId": test_id_int,
+        "category": category
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not test_doc:
+        return jsonify({"error": "Test not found"}), 404
+
+    test_doc["_id"] = str(test_doc["_id"])
+    return jsonify(test_doc), 200
+
+# -------------------------------------------------------------------
+# PROGRESS / ATTEMPTS ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
+def get_test_attempt(user_id, test_id):
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = None
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    query = {"userId": user_oid, "finished": False}
+    if test_id_int is not None:
+        query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+    else:
+        query["testId"] = test_id
+
+    start_db = time.time()
+    attempt = testAttempts_collection.find_one(query)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt:
+        query_finished = {"userId": user_oid, "finished": True}
+        if test_id_int is not None:
+            query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+        else:
+            query_finished["testId"] = test_id
+
+        start_db = time.time()
+        attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    if not attempt:
+        return jsonify({"attempt": None}), 200
+
+    attempt["_id"] = str(attempt["_id"])
+    attempt["userId"] = str(attempt["userId"])
+    return jsonify({"attempt": attempt}), 200
+
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
+def update_test_attempt(user_id, test_id):
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    exam_mode_val = data.get("examMode", False)
+    selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
+
+    filter_ = {
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
+    update_doc = {
+        "$set": {
+            "userId": user_oid,
+            "testId": test_id_int if isinstance(test_id_int, int) else test_id,
+            "category": data.get("category", "global"),
+            "answers": data.get("answers", []),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0),
+            "selectedLength": selected_length,
+            "currentQuestionIndex": data.get("currentQuestionIndex", 0),
+            "shuffleOrder": data.get("shuffleOrder", []),
+            "answerOrder": data.get("answerOrder", []),
+            "finished": data.get("finished", False),
+            "examMode": exam_mode_val
+        }
+    }
+    if update_doc["$set"]["finished"] is True:
+        update_doc["$set"]["finishedAt"] = datetime.utcnow()
+
+    start_db = time.time()
+    testAttempts_collection.update_one(filter_, update_doc, upsert=True)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
+    }), 200
+
+@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
+def finish_test_attempt(user_id, test_id):
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    filter_ = {
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
+    update_doc = {
+        "$set": {
+            "finished": True,
+            "finishedAt": datetime.utcnow(),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0)
+        }
+    }
+
+    start_db = time.time()
+    testAttempts_collection.update_one(filter_, update_doc)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    attempt_doc = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}],
+        "finished": True
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt_doc:
+        return jsonify({"error": "Attempt not found after finishing."}), 404
+
+    exam_mode = attempt_doc.get("examMode", False)
+    selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
+    score = attempt_doc.get("score", 0)
+    total_questions = attempt_doc.get("totalQuestions", 0)
+    category = attempt_doc.get("category", "global")
+
+    if exam_mode:
+        start_db = time.time()
+        award_correct_answers_in_bulk(
+            user_id=user_id,
+            attempt_doc=attempt_doc,
+            xp_per_correct=10,
+            coins_per_correct=5
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    counters = user.get("achievement_counters", {})
+    percentage = 0
+    if total_questions > 0:
+        percentage = (score / total_questions) * 100
+
+    update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
+
+    if score == total_questions and total_questions > 0 and selected_length == 100:
+        update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
+        catKey = f"achievement_counters.perfect_tests_by_category.{category}"
+        update_ops["$inc"][catKey] = 1
+
+    if selected_length == 100:
+        highest_so_far = counters.get("highest_score_ever", 0.0)
+        lowest_so_far = counters.get("lowest_score_ever", 100.0)
+        set_ops = {}
+        if percentage > highest_so_far:
+            set_ops["achievement_counters.highest_score_ever"] = percentage
+        if percentage < lowest_so_far:
+            set_ops["achievement_counters.lowest_score_ever"] = percentage
+        if set_ops:
+            update_ops.setdefault("$set", {}).update(set_ops)
+
+    update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
+
+    start_db = time.time()
+    mainusers_collection.update_one({"_id": user_oid}, update_ops)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Test attempt finished",
+        "examMode": exam_mode,
+        "selectedLength": selected_length,
+        "newlyUnlocked": newly_unlocked,
+        "newXP": updated_user.get("xp", 0),
+        "newCoins": updated_user.get("coins", 0)
+    }), 200
+
+@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
+def list_test_attempts(user_id):
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    page = request.args.get("page", default=1, type=int)
+    page_size = request.args.get("page_size", default=50, type=int)
+    skip_count = (page - 1) * page_size
+
+    start_db = time.time()
+    cursor = testAttempts_collection.find(
+        {"userId": user_oid}
+    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    attempts = []
+    for doc in cursor:
+        doc["_id"] = str(doc["_id"])
+        doc["userId"] = str(doc["userId"])
+        attempts.append(doc)
+
+    return jsonify({
+        "page": page,
+        "page_size": page_size,
+        "attempts": attempts
+    }), 200
+
+# -------------------------------------------------------------------
+# FIRST-TIME-CORRECT ANSWERS
+# -------------------------------------------------------------------
+@api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
+def submit_answer(user_id):
+    data = request.json or {}
+    test_id = str(data.get("testId"))
+    question_id = data.get("questionId")
+    selected_index = data.get("selectedIndex")
+    correct_index = data.get("correctAnswerIndex")
+    xp_per_correct = data.get("xpPerCorrect", 10)
+    coins_per_correct = data.get("coinsPerCorrect", 5)
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    attempt_doc = testAttempts_collection.find_one({
+        "userId": user["_id"],
+        "finished": False,
+        "$or": [
+            {"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
+            {"testId": test_id}
+        ]
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt_doc:
+        return jsonify({"error": "No unfinished attempt doc found"}), 404
+
+    exam_mode = attempt_doc.get("examMode", False)
+    is_correct = (selected_index == correct_index)
+
+    existing_answer_index = None
+    for i, ans in enumerate(attempt_doc.get("answers", [])):
+        if ans.get("questionId") == question_id:
+            existing_answer_index = i
+            break
+
+    new_score = attempt_doc.get("score", 0)
+    if existing_answer_index is not None:
+        update_payload = {
+            "answers.$.userAnswerIndex": selected_index,
+            "answers.$.correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+            update_payload["score"] = new_score
+
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "_id": attempt_doc["_id"],
+                "answers.questionId": question_id
+            },
+            {"$set": update_payload}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    else:
+        new_answer_doc = {
+            "questionId": question_id,
+            "userAnswerIndex": selected_index,
+            "correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+        push_update = {"$push": {"answers": new_answer_doc}}
+        if exam_mode is False and is_correct:
+            push_update["$set"] = {"score": new_score}
+
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {"_id": attempt_doc["_id"]},
+            push_update
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    awarded_xp = 0
+    awarded_coins = 0
+    if exam_mode is False:
+        start_db = time.time()
+        already_correct = correctAnswers_collection.find_one({
+            "userId": user["_id"],
+            "testId": test_id,
+            "questionId": question_id
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        if is_correct and not already_correct:
+            start_db = time.time()
+            correctAnswers_collection.insert_one({
+                "userId": user["_id"],
+                "testId": test_id,
+                "questionId": question_id
+            })
+            duration = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration
+
+            start_db = time.time()
+            update_user_xp(user_id, xp_per_correct)
+            duration2 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration2
+
+            start_db = time.time()
+            update_user_coins(user_id, coins_per_correct)
+            duration3 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration3
+
+            awarded_xp = xp_per_correct
+            awarded_coins = coins_per_correct
+
+        start_db = time.time()
+        updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({
+            "examMode": False,
+            "isCorrect": is_correct,
+            "alreadyCorrect": bool(already_correct),
+            "awardedXP": awarded_xp,
+            "awardedCoins": awarded_coins,
+            "newXP": updated_user.get("xp", 0),
+            "newCoins": updated_user.get("coins", 0)
+        }), 200
+    else:
+        return jsonify({
+            "examMode": True,
+            "message": "Answer stored. No immediate feedback in exam mode."
+        }), 200
+
+# -------------------------------------------------------------------
+# ACHIEVEMENTS
+# -------------------------------------------------------------------
+@api_bp.route('/achievements', methods=['GET'])
+def fetch_achievements_route():
+    start_db = time.time()
+    ach_list = list(achievements_collection.find({}))
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for ach in ach_list:
+        ach["_id"] = str(ach["_id"])
+    return jsonify(ach_list), 200
+
+# -------------------------------------------------------------------
+# Leaderboard Route with Lazy Loading & Pagination
+# -------------------------------------------------------------------
+@api_bp.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    global leaderboard_cache
+    global leaderboard_cache_timestamp
+
+    now_ms = int(time.time() * 1000)
+    if now_ms - leaderboard_cache_timestamp > LEADERBOARD_CACHE_DURATION_MS:
+        start_db = time.time()
+        cursor = mainusers_collection.find(
+            {},
+            {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
+        ).sort("level", -1).limit(1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        new_results = []
+        rank = 1
+        for user in cursor:
+            user_data = {
+                "username": user.get("username", "unknown"),
+                "level": user.get("level", 1),
+                "xp": user.get("xp", 0),
+                "rank": rank,
+                "avatarUrl": None
+            }
+            if user.get("currentAvatar"):
+                start_db = time.time()
+                avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+                duration = time.time() - start_db
+                if not hasattr(g, 'db_time_accumulator'):
+                    g.db_time_accumulator = 0.0
+                g.db_time_accumulator += duration
+
+                if avatar_item and "imageUrl" in avatar_item:
+                    user_data["avatarUrl"] = avatar_item["imageUrl"]
+            new_results.append(user_data)
+            rank += 1
+
+        leaderboard_cache = new_results
+        leaderboard_cache_timestamp = now_ms
+
+    try:
+        skip = int(request.args.get("skip", 0))
+        limit = int(request.args.get("limit", 50))
+    except:
+        skip, limit = 0, 50
+
+    total_entries = len(leaderboard_cache)
+    end_index = skip + limit
+    if skip > total_entries:
+        sliced_data = []
+    else:
+        sliced_data = leaderboard_cache[skip:end_index]
+
+    return jsonify({
+        "data": sliced_data,
+        "total": total_entries
+    }), 200
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# USERNAME/EMAIL/PASSWORD CHANGES
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@api_bp.route('/user/change-username', methods=['POST'])
+def change_username():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_username = data.get("newUsername")
+    if not user_id or not new_username:
+        return jsonify({"error": "Missing userId or newUsername"}), 400
+
+    valid, errors = validate_username(new_username)
+    if not valid:
+        return jsonify({"error": "Invalid new username", "details": errors}), 400
+
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "Username already taken"}), 400
+
+    start_db = time.time()
+    doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    update_user_fields(user_id, {"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Username updated"}), 200
+
+@api_bp.route('/user/change-email', methods=['POST'])
+def change_email():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_email = data.get("newEmail")
+    if not user_id or not new_email:
+        return jsonify({"error": "Missing userId or newEmail"}), 400
+
+    valid, errors = validate_email(new_email)
+    if not valid:
+        return jsonify({"error": "Invalid email", "details": errors}), 400
+
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "Email already in use"}), 400
+
+    start_db = time.time()
+    doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    update_user_fields(user_id, {"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Email updated"}), 200
+
+@api_bp.route('/user/change-password', methods=['POST'])
+def change_password():
+    data = request.json or {}
+    user_id = data.get("userId")
+    old_password = data.get("oldPassword")
+    new_password = data.get("newPassword")
+    confirm = data.get("confirmPassword")
+
+    if not user_id or not old_password or not new_password or not confirm:
+        return jsonify({"error": "All fields are required"}), 400
+    if new_password != confirm:
+        return jsonify({"error": "New passwords do not match"}), 400
+
+    valid, errors = validate_password(new_password)
+    if not valid:
+        return jsonify({"error": "Invalid new password", "details": errors}), 400
+
+    start_db = time.time()
+    user_doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user_doc:
+        return jsonify({"error": "User not found"}), 404
+
+    if user_doc.get("password") != old_password:
+        return jsonify({"error": "Old password is incorrect"}), 401
+
+    start_db = time.time()
+    update_user_fields(user_id, {"password": new_password})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Password updated"}), 200
+
+@api_bp.route('/subscription/cancel', methods=['POST'])
+def cancel_subscription():
+    return jsonify({"message": "Cancel subscription placeholder"}), 200
+
+# For single answer updates
+@api_bp.route('/attempts/<user_id>/<test_id>/answer', methods=['POST'])
+def update_single_answer(user_id, test_id):
+    data = request.json or {}
+    question_id = data.get("questionId")
+    user_answer_index = data.get("userAnswerIndex")
+    correct_answer_index = data.get("correctAnswerIndex")
+
+    try:
+        user_oid = ObjectId(user_id)
+        test_id_int = int(test_id) if test_id.isdigit() else test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    start_db = time.time()
+    attempt = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt:
+        return jsonify({"error": "Attempt not found"}), 404
+
+    existing_answer_index = None
+    for i, ans in enumerate(attempt.get("answers", [])):
+        if ans.get("questionId") == question_id:
+            existing_answer_index = i
+            break
+
+    if existing_answer_index is not None:
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "userId": user_oid,
+                "finished": False,
+                "$or": [{"testId": test_id_int}, {"testId": test_id}],
+                "answers.questionId": question_id
+            },
+            {"$set": {
+                "answers.$.userAnswerIndex": user_answer_index,
+                "answers.$.correctAnswerIndex": correct_answer_index,
+                "score": data.get("score", 0)
+            }}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    else:
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "userId": user_oid,
+                "finished": False,
+                "$or": [{"testId": test_id_int}, {"testId": test_id}]
+            },
+            {
+                "$push": {
+                    "answers": {
+                        "questionId": question_id,
+                        "userAnswerIndex": user_answer_index,
+                        "correctAnswerIndex": correct_answer_index
+                    }
+                },
+                "$set": {"score": data.get("score", 0)}
+            }
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    return jsonify({"message": "Answer updated"}), 200
+
+# For updating the current question position only
+@api_bp.route('/attempts/<user_id>/<test_id>/position', methods=['POST'])
+def update_position(user_id, test_id):
+    data = request.json or {}
+    current_index = data.get("currentQuestionIndex", 0)
+
+    try:
+        user_oid = ObjectId(user_id)
+        test_id_int = int(test_id) if test_id.isdigit() else test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    start_db = time.time()
+    testAttempts_collection.update_one(
+        {
+            "userId": user_oid,
+            "finished": False,
+            "$or": [{"testId": test_id_int}, {"testId": test_id}]
+        },
+        {"$set": {
+            "currentQuestionIndex": current_index,
+            "finished": data.get("finished", False)
+        }}
+    )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Position updated"}), 200
+
+##############################################
+# DAILY QUESTION ENDPOINTS
+##############################################
+@api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
+def daily_bonus(user_id):
+    user = None
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if last_claim and (now - last_claim) < timedelta(hours=24):
+        seconds_left = int(24 * 3600 - (now - last_claim).total_seconds())
+        return jsonify({
+            "success": False,
+            "message": f"Already claimed. Next bonus in: {seconds_left} seconds",
+            "newCoins": user.get("coins", 0),
+            "newXP": user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(last_claim)
+        }), 200
+    else:
+        start_db = time.time()
+        update_user_coins(user_id, 1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"lastDailyClaim": now}}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({
+            "success": True,
+            "message": "Daily bonus applied",
+            "newCoins": updated_user.get("coins", 0),
+            "newXP": updated_user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+            "newlyUnlocked": newly_unlocked
+        }), 200
+
+@api_bp.route('/daily-question', methods=['GET'])
+def get_daily_question():
+    user_id = request.args.get("userId")
+    if not user_id:
+        return jsonify({"error": "No userId provided"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    day_index = 0
+
+    start_db = time.time()
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    start_db = time.time()
+    existing_answer = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    response = {
+        "dayIndex": day_index,
+        "prompt": daily_doc.get("prompt"),
+        "options": daily_doc.get("options"),
+        "alreadyAnswered": bool(existing_answer)
+    }
+    return jsonify(response), 200
+
+@api_bp.route('/daily-question/answer', methods=['POST'])
+def submit_daily_question():
+    data = request.json or {}
+    user_id = data.get("userId")
+    day_index = data.get("dayIndex")
+    selected_index = data.get("selectedIndex")
+
+    if not user_id or day_index is None or selected_index is None:
+        return jsonify({"error": "Missing userId, dayIndex, or selectedIndex"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    start_db = time.time()
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    start_db = time.time()
+    existing = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "You already answered today's question"}), 400
+
+    correct_index = daily_doc.get("correctIndex", 0)
+    is_correct = (selected_index == correct_index)
+    awarded_coins = 250 if is_correct else 50
+
+    start_db = time.time()
+    dailyAnswers_collection.insert_one({
+        "userId": user_oid,
+        "dayIndex": day_index,
+        "answeredAt": datetime.utcnow(),
+        "userAnswerIndex": selected_index,
+        "isCorrect": is_correct
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    update_user_coins(str(user_oid), awarded_coins)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Answer submitted",
+        "correct": is_correct,
+        "awardedCoins": awarded_coins,
+        "newCoins": updated_user.get("coins", 0),
+        "newXP": updated_user.get("xp", 0),
+        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+        "newlyUnlocked": newly_unlocked
+    }), 200
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { showAchievementToast } from './AchievementToast';
+import {
+  FaTrophy, FaMedal, FaStar, FaCrown, FaBolt, FaBook, FaBrain,
+  FaCheckCircle, FaRegSmile, FaMagic
+} from 'react-icons/fa';
+
+// Import the thunks to fetch achievements and shop items
+import { fetchAchievements } from './achievementsSlice';
+import { fetchShopItems } from './shopSlice';
+
+// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
+// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
+const iconMapping = {
+  test_rookie: FaTrophy,
+  accuracy_king: FaMedal,
+  bronze_grinder: FaBook,
+  silver_scholar: FaStar,
+  gold_god: FaCrown,
+  platinum_pro: FaMagic,
+  walking_encyclopedia: FaBrain,
+  redemption_arc: FaBolt,
+  coin_collector_5000: FaBook,
+  coin_hoarder_10000: FaBook,
+  coin_tycoon_50000: FaBook,
+  perfectionist_1: FaCheckCircle,
+  double_trouble_2: FaCheckCircle,
+  error404_failure_not_found: FaCheckCircle,
+  level_up_5: FaTrophy,
+  mid_tier_grinder_25: FaMedal,
+  elite_scholar_50: FaStar,
+  ultimate_master_100: FaCrown,
+  answer_machine_1000: FaBook,
+  knowledge_beast_5000: FaBrain,
+  question_terminator: FaBrain,
+  test_finisher: FaCheckCircle
+};
+
+// Matching color mapping (remove same IDs):
+const colorMapping = {
+  test_rookie: "#ff5555",
+  accuracy_king: "#ffa500",
+  bronze_grinder: "#cd7f32",
+  silver_scholar: "#c0c0c0",
+  gold_god: "#ffd700",
+  platinum_pro: "#e5e4e2",
+  walking_encyclopedia: "#00fa9a",
+  redemption_arc: "#ff4500",
+  coin_collector_5000: "#ff69b4",
+  coin_hoarder_10000: "#ff1493",
+  coin_tycoon_50000: "#ff0000",
+  perfectionist_1: "#adff2f",
+  double_trouble_2: "#7fff00",
+  error404_failure_not_found: "#00ffff",
+  level_up_5: "#f08080",
+  mid_tier_grinder_25: "#ff8c00",
+  elite_scholar_50: "#ffd700",
+  ultimate_master_100: "#ff4500",
+  answer_machine_1000: "#ff69b4",
+  knowledge_beast_5000: "#00fa9a",
+  question_terminator: "#ff1493",
+  test_finisher: "#adff2f"
+};
+
+// Utility function to show toast for newlyUnlocked achievements:
+function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
+  if (!newlyUnlocked || newlyUnlocked.length === 0) return;
+  newlyUnlocked.forEach((achId) => {
+    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
+    const color = colorMapping[achId] || "#fff";
+
+    const foundAch = allAchievements?.find(a => a.achievementId === achId);
+    const title = foundAch?.title || `Unlocked ${achId}`;
+    const desc = foundAch?.description || 'Achievement Unlocked!';
+
+    showAchievementToast({
+      title,
+      description: desc,
+      icon: Icon ? <Icon /> : null,
+      color
+    });
+  });
+}
+
+const initialUserId = localStorage.getItem('userId');
+
+const initialState = {
+  userId: initialUserId ? initialUserId : null,
+  username: '',
+  email: '',
+  xp: 0,
+  level: 1,
+  coins: 0,
+  achievements: [],
+  xpBoost: 1.0,
+  currentAvatar: null,
+  nameColor: null,
+  purchasedItems: [],
+  subscriptionActive: false,
+
+  status: 'idle',
+  loading: false,
+  error: null,
+};
+
+// REGISTER
+export const registerUser = createAsyncThunk(
+  'user/registerUser',
+  async (formData, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch('/api/test/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// LOGIN
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (credentials, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch('/api/test/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+      // Immediately fetch achievements + shop data after successful login
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// FETCH USER DATA
+export const fetchUserData = createAsyncThunk(
+  'user/fetchUserData',
+  async (userId, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(`/api/test/user/${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const data = await response.json();
+
+      // Also fetch achievements + shop items to ensure they're loaded
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Example of a daily bonus thunk:
+export const claimDailyBonus = createAsyncThunk(
+  'user/claimDailyBonus',
+  async (userId, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch(`/api/test/user/${userId}/daily-bonus`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || data.error || 'Daily bonus error');
+      }
+      // If new achievements came back, display them
+      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
+        const allAchs = getState().achievements.all;
+        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
+      }
+      return data; 
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// If you have an "addCoins" route, likewise
+export const addCoins = createAsyncThunk(
+  'user/addCoins',
+  async ({ userId, amount }, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const res = await fetch(`/api/test/user/${userId}/add-coins`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coins: amount })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to add coins');
+      }
+      // Show newly unlocked achievements
+      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
+        const allAchs = getState().achievements.all;
+        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    setCurrentUserId(state, action) {
+      state.userId = action.payload;
+    },
+    logout(state) {
+      state.userId = null;
+      state.username = '';
+      state.email = '';
+      state.xp = 0;
+      state.level = 1;
+      state.coins = 0;
+      state.achievements = [];
+      state.xpBoost = 1.0;
+      state.currentAvatar = null;
+      state.nameColor = null;
+      state.purchasedItems = [];
+      state.subscriptionActive = false;
+      state.status = 'idle';
+      localStorage.removeItem('userId');
+    },
+    setXPAndCoins(state, action) {
+      const { xp, coins } = action.payload;
+      state.xp = xp;
+      state.coins = coins;
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // REGISTER
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // LOGIN
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const {
+          user_id,
+          username,
+          email,
+          coins,
+          xp,
+          level,
+          achievements,
+          xpBoost,
+          currentAvatar,
+          nameColor,
+          purchasedItems,
+          subscriptionActive,
+          password
+        } = action.payload;
+
+        state.userId = user_id;
+        state.username = username;
+        state.email = email || '';
+        state.coins = coins || 0;
+        state.xp = xp || 0;
+        state.level = level || 1;
+        state.achievements = achievements || [];
+        state.xpBoost = xpBoost !== undefined ? xpBoost : 1.0;
+        state.currentAvatar = currentAvatar || null;
+        state.nameColor = nameColor || null;
+        state.purchasedItems = purchasedItems || [];
+        state.subscriptionActive = subscriptionActive || false;
+
+        localStorage.setItem('userId', user_id);
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // FETCH USER DATA
+      .addCase(fetchUserData.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.error = null;
+        const userDoc = action.payload;
+
+        state.userId = userDoc._id;
+        state.username = userDoc.username;
+        state.email = userDoc.email || '';
+        state.xp = userDoc.xp || 0;
+        state.level = userDoc.level || 1;
+        state.coins = userDoc.coins || 0;
+        state.achievements = userDoc.achievements || [];
+        state.xpBoost = userDoc.xpBoost !== undefined ? userDoc.xpBoost : 1.0;
+        state.currentAvatar = userDoc.currentAvatar || null;
+        state.nameColor = userDoc.nameColor || null;
+        state.purchasedItems = userDoc.purchasedItems || [];
+        state.subscriptionActive = userDoc.subscriptionActive || false;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
+      // DAILY BONUS
+      .addCase(claimDailyBonus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(claimDailyBonus.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update local user coins/xp if success
+        if (action.payload.success) {
+          state.coins = action.payload.newCoins;
+          state.xp = action.payload.newXP;
+        }
+      })
+      .addCase(claimDailyBonus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ADD COINS
+      .addCase(addCoins.fulfilled, (state, action) => {
+        // If route succeeded, you could do local updates here or re-fetch user
+        // For example:
+        // state.coins += ...
+      });
+  },
+});
+
+export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
+export default userSlice.reducer;
+
+
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setXPAndCoins } from "./pages/store/userSlice";
+import { fetchShopItems } from "./pages/store/shopSlice";
+import ConfettiAnimation from "./ConfettiAnimation";
+import { showAchievementToast } from "./pages/store/AchievementToast";
+import "./test.css";
+import iconMapping from "./iconMapping";
+import colorMapping from "./colorMapping";
+import {
+  FaTrophy,
+  FaMedal,
+  FaStar,
+  FaCrown,
+  FaBolt,
+  FaBook,
+  FaBrain,
+  FaCheckCircle,
+  FaRegSmile,
+  FaMagic
+} from "react-icons/fa";
+
+// Helper functions
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleIndices(length) {
+  const indices = Array.from({ length }, (_, i) => i);
+  return shuffleArray(indices);
+}
+
+// Reusable QuestionDropdown component
+const QuestionDropdown = ({
+  totalQuestions,
+  currentQuestionIndex,
+  onQuestionSelect,
+  answers,
+  flaggedQuestions,
+  testData,
+  shuffleOrder,
+  examMode
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const getQuestionStatus = (index) => {
+    const realIndex = shuffleOrder[index];
+    const question = testData.questions[realIndex];
+    const answer = answers.find((a) => a.questionId === question.id);
+    const isFlagged = flaggedQuestions.includes(question.id);
+    const isAnswered = answer?.userAnswerIndex !== undefined;
+    const isSkipped = answer?.userAnswerIndex === null;
+    const isCorrect =
+      answer && answer.userAnswerIndex === question.correctAnswerIndex;
+    return { isAnswered, isSkipped, isCorrect, isFlagged };
+  };
+
+  return (
+    <div className="question-dropdown" ref={dropdownRef}>
+      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
+        Question {currentQuestionIndex + 1}
+      </button>
+      {isOpen && (
+        <div className="dropdown-content">
+          {Array.from({ length: totalQuestions }, (_, i) => {
+            const status = getQuestionStatus(i);
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  onQuestionSelect(i);
+                  setIsOpen(false);
+                }}
+                className="dropdown-item"
+              >
+                <span>Question {i + 1}</span>
+                <div className="status-indicators">
+                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
+                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
+                  {!examMode && status.isAnswered && !status.isSkipped && (
+                    <span
+                      className={
+                        status.isCorrect
+                          ? "answer-indicator correct"
+                          : "answer-indicator incorrect"
+                      }
+                    >
+                      {status.isCorrect ? "✓" : "✗"}
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const GlobalTestPage = ({
+  testId,
+  category,
+  backToListPath
+}) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux user data
+  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
+    (state) => state.user
+  );
+  const achievements = useSelector((state) => state.achievements.all);
+  const { items: shopItems, status: shopStatus } = useSelector(
+    (state) => state.shop
+  );
+
+  // Local states for test logic
+  const [testData, setTestData] = useState(null);
+  const [shuffleOrder, setShuffleOrder] = useState([]);
+  const [answerOrder, setAnswerOrder] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [score, setScore] = useState(0);
+  const [loadingTest, setLoadingTest] = useState(true);
+  const [error, setError] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  // Overlays
+  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
+  const [showReviewMode, setShowReviewMode] = useState(false);
+
+  // Confetti on level-up
+  const [localLevel, setLocalLevel] = useState(level);
+  const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
+
+  // Flags
+  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
+
+  // Confirmation popups
+  const [showRestartPopup, setShowRestartPopup] = useState(false);
+  const [showFinishPopup, setShowFinishPopup] = useState(false);
+  const [showNextPopup, setShowNextPopup] = useState(false);
+
+  // Exam mode
+  const [examMode, setExamMode] = useState(false);
+
+  // New: Test length selection state
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLength, setSelectedLength] = useState(100);
+  const [activeTestLength, setActiveTestLength] = useState(null);
+  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
+
+  useEffect(() => {
+    if (shopStatus === "idle") {
+      dispatch(fetchShopItems());
+    }
+  }, [shopStatus, dispatch]);
+
+  const fetchTestAndAttempt = async () => {
+    setLoadingTest(true);
+    try {
+      let attemptDoc = null;
+      if (userId) {
+        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
+        const attemptData = await attemptRes.json();
+        attemptDoc = attemptData.attempt || null;
+      }
+      const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
+      if (!testRes.ok) {
+        const errData = await testRes.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to fetch test data");
+      }
+      const testDoc = await testRes.json();
+      setTestData(testDoc);
+
+      const totalQ = testDoc.questions.length;
+
+      // Check if attempt exists
+      if (attemptDoc) {
+        // If the test is already finished, we keep the data but also mark isFinished
+        setAnswers(attemptDoc.answers || []);
+        setScore(attemptDoc.score || 0);
+        setIsFinished(attemptDoc.finished === true);
+
+        const attemptExam = attemptDoc.examMode || false;
+        setExamMode(attemptExam);
+
+        // Use the chosen length if available
+        const chosenLength = attemptDoc.selectedLength || totalQ;
+
+        if (
+          attemptDoc.shuffleOrder &&
+          attemptDoc.shuffleOrder.length === chosenLength
+        ) {
+          setShuffleOrder(attemptDoc.shuffleOrder);
+        } else {
+          const newQOrder = shuffleIndices(chosenLength);
+          setShuffleOrder(newQOrder);
+        }
+
+        if (
+          attemptDoc.answerOrder &&
+          attemptDoc.answerOrder.length === chosenLength
+        ) {
+          setAnswerOrder(attemptDoc.answerOrder);
+        } else {
+          const generatedAnswerOrder = testDoc.questions
+            .slice(0, chosenLength)
+            .map((q) => {
+              const numOptions = q.options.length;
+              return shuffleArray([...Array(numOptions).keys()]);
+            });
+          setAnswerOrder(generatedAnswerOrder);
+        }
+
+        setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
+        setActiveTestLength(chosenLength);
+      } else {
+        // No attempt doc exists: show the test length selector UI
+        setActiveTestLength(null);
+        setShowTestLengthSelector(true);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoadingTest(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestAndAttempt();
+  }, [testId, userId]);
+
+  useEffect(() => {
+    if (level > localLevel) {
+      setLocalLevel(level);
+      setShowLevelUpOverlay(true);
+      const t = setTimeout(() => setShowLevelUpOverlay(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [level, localLevel]);
+
+  useEffect(() => {
+    if (location.state?.review && isFinished) {
+      setShowReviewMode(true);
+    }
+  }, [location.state, isFinished]);
+
+  const getShuffledIndex = useCallback(
+    (i) => {
+      if (!shuffleOrder || shuffleOrder.length === 0) return i;
+      return shuffleOrder[i];
+    },
+    [shuffleOrder]
+  );
+
+  const effectiveTotal =
+    activeTestLength || (testData ? testData.questions.length : 0);
+
+  const realIndex = getShuffledIndex(currentQuestionIndex);
+  const questionObject =
+    testData && testData.questions && testData.questions.length > 0
+      ? testData.questions[realIndex]
+      : null;
+
+  useEffect(() => {
+    if (!questionObject) return;
+    const existing = answers.find((a) => a.questionId === questionObject.id);
+    if (existing) {
+      setSelectedOptionIndex(null);
+      if (
+        existing.userAnswerIndex !== null &&
+        existing.userAnswerIndex !== undefined
+      ) {
+        const displayIndex = answerOrder[realIndex].indexOf(
+          existing.userAnswerIndex
+        );
+        if (displayIndex >= 0) {
+          setSelectedOptionIndex(displayIndex);
+          setIsAnswered(true);
+        } else {
+          setIsAnswered(false);
+        }
+      } else {
+        setIsAnswered(false);
+      }
+    } else {
+      setSelectedOptionIndex(null);
+      setIsAnswered(false);
+    }
+  }, [questionObject, answers, realIndex, answerOrder]);
+
+  const updateServerProgress = useCallback(
+    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
+      if (!userId) return;
+      try {
+        if (singleAnswer) {
+          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              testId,
+              questionId: singleAnswer.questionId,
+              correctAnswerIndex: singleAnswer.correctAnswerIndex,
+              selectedIndex: singleAnswer.userAnswerIndex,
+              xpPerCorrect: (testData?.xpPerCorrect || 10) * xpBoost,
+              coinsPerCorrect: 5
+            })
+          });
+          const data = await res.json();
+          return data;
+        }
+        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentQuestionIndex,
+            finished
+          })
+        });
+      } catch (err) {
+        console.error("Failed to update test attempt on backend", err);
+      }
+    },
+    [userId, testId, testData, xpBoost, currentQuestionIndex]
+  );
+
+  // UPDATED: In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
+  const handleOptionClick = useCallback(
+    async (displayOptionIndex) => {
+      if (!questionObject) return;
+      if (!examMode && isAnswered) return; // Only block if exam mode is off.
+      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
+      setSelectedOptionIndex(displayOptionIndex);
+
+      // For non–exam mode, lock the answer; for exam mode, allow changes.
+      if (!examMode) {
+        setIsAnswered(true);
+      }
+      try {
+        const newAnswerObj = {
+          questionId: questionObject.id,
+          userAnswerIndex: actualAnswerIndex,
+          correctAnswerIndex: questionObject.correctAnswerIndex
+        };
+        const updatedAnswers = [...answers];
+        const idx = updatedAnswers.findIndex(
+          (a) => a.questionId === questionObject.id
+        );
+        if (idx >= 0) {
+          updatedAnswers[idx] = newAnswerObj;
+        } else {
+          updatedAnswers.push(newAnswerObj);
+        }
+        setAnswers(updatedAnswers);
+
+        const awardData = await updateServerProgress(
+          updatedAnswers,
+          score,
+          false,
+          newAnswerObj
+        );
+        if (!examMode && awardData && awardData.examMode === false) {
+          if (awardData.isCorrect) {
+            setScore((prev) => prev + 1);
+          }
+          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
+            dispatch(
+              setXPAndCoins({
+                xp: awardData.newXP,
+                coins: awardData.newCoins
+              })
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Failed to submit answer to backend", err);
+      }
+    },
+    [
+      isAnswered,
+      questionObject,
+      examMode,
+      testData,
+      xpBoost,
+      userId,
+      testId,
+      dispatch,
+      score,
+      answers,
+      updateServerProgress,
+      realIndex,
+      answerOrder
+    ]
+  );
+
+  const finishTestProcess = useCallback(async () => {
+    let finalScore = 0;
+    answers.forEach((ans) => {
+      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
+        finalScore++;
+      }
+    });
+    setScore(finalScore);
+    try {
+      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          score: finalScore,
+          totalQuestions: effectiveTotal
+        })
+      });
+      const finishData = await res.json();
+
+      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
+        finishData.newlyUnlocked.forEach((achievementId) => {
+          const achievement = achievements.find(
+            (a) => a.achievementId === achievementId
+          );
+          if (achievement) {
+            const IconComp = iconMapping[achievement.achievementId] || null;
+            const color = colorMapping[achievement.achievementId] || "#fff";
+            showAchievementToast({
+              title: achievement.title,
+              description: achievement.description,
+              icon: IconComp ? <IconComp /> : null,
+              color
+            });
+          }
+        });
+      }
+
+      if (
+        typeof finishData.newXP !== "undefined" &&
+        typeof finishData.newCoins !== "undefined"
+      ) {
+        dispatch(
+          setXPAndCoins({
+            xp: finishData.newXP,
+            coins: finishData.newCoins
+          })
+        );
+      }
+    } catch (err) {
+      console.error("Failed to finish test attempt:", err);
+    }
+    setIsFinished(true);
+    setShowScoreOverlay(true);
+    setShowReviewMode(true);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
+
+  const handleNextQuestion = useCallback(() => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+      return;
+    }
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    const nextIndex = currentQuestionIndex + 1;
+    setCurrentQuestionIndex(nextIndex);
+    updateServerProgress(answers, score, false);
+  }, [
+    isAnswered,
+    examMode,
+    currentQuestionIndex,
+    effectiveTotal,
+    finishTestProcess,
+    updateServerProgress,
+    answers,
+    score
+  ]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      const prevIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(prevIndex);
+      updateServerProgress(answers, score, false);
+    }
+  }, [currentQuestionIndex, updateServerProgress, answers, score]);
+
+  const handleSkipQuestion = () => {
+    if (!questionObject) return;
+    const updatedAnswers = [...answers];
+    const idx = updatedAnswers.findIndex(
+      (a) => a.questionId === questionObject.id
+    );
+    const skipObj = {
+      questionId: questionObject.id,
+      userAnswerIndex: null,
+      correctAnswerIndex: questionObject.correctAnswerIndex
+    };
+    if (idx >= 0) {
+      updatedAnswers[idx] = skipObj;
+    } else {
+      updatedAnswers.push(skipObj);
+    }
+    setAnswers(updatedAnswers);
+    setIsAnswered(false);
+    setSelectedOptionIndex(null);
+    updateServerProgress(updatedAnswers, score, false, skipObj);
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handleFlagQuestion = () => {
+    if (!questionObject) return;
+    const qId = questionObject.id;
+    if (flaggedQuestions.includes(qId)) {
+      setFlaggedQuestions(flaggedQuestions.filter((x) => x !== qId));
+    } else {
+      setFlaggedQuestions([...flaggedQuestions, qId]);
+    }
+  };
+
+  const handleRestartTest = useCallback(async () => {
+    setCurrentQuestionIndex(0);
+    setSelectedOptionIndex(null);
+    setIsAnswered(false);
+    setScore(0);
+    setAnswers([]);
+    setFlaggedQuestions([]);
+    setIsFinished(false);
+    setShowReviewMode(false);
+    setShowScoreOverlay(false);
+
+    if (testData?.questions?.length && activeTestLength) {
+      const newQOrder = shuffleIndices(activeTestLength);
+      setShuffleOrder(newQOrder);
+      const newAnswerOrder = testData.questions
+        .slice(0, activeTestLength)
+        .map((q) => {
+          const numOpts = q.options.length;
+          return shuffleArray([...Array(numOpts).keys()]);
+        });
+      setAnswerOrder(newAnswerOrder);
+
+      if (userId && testId) {
+        await fetch(`/api/test/attempts/${userId}/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            answers: [],
+            score: 0,
+            totalQuestions: testData.questions.length,
+            selectedLength: activeTestLength,
+            category: testData.category || category,
+            currentQuestionIndex: 0,
+            shuffleOrder: newQOrder,
+            answerOrder: newAnswerOrder,
+            finished: false,
+            examMode
+          })
+        });
+      }
+    }
+  }, [
+    testData,
+    userId,
+    testId,
+    category,
+    examMode,
+    activeTestLength
+  ]);
+
+  const handleFinishTest = () => {
+    finishTestProcess();
+  };
+
+  const [reviewFilter, setReviewFilter] = useState("all");
+  const handleReviewAnswers = () => {
+    setShowReviewMode(true);
+    setReviewFilter("all");
+  };
+  const handleCloseReview = () => {
+    if (!isFinished) setShowReviewMode(false);
+  };
+
+  const filteredQuestions = useMemo(() => {
+    if (!testData || !testData.questions) return [];
+    return testData.questions.slice(0, effectiveTotal).filter((q) => {
+      const userAns = answers.find((a) => a.questionId === q.id);
+      const isFlagged = flaggedQuestions.includes(q.id);
+
+      if (!userAns) {
+        // Not answered => count it as "skipped" or "all"
+        return reviewFilter === "skipped" || reviewFilter === "all";
+      }
+
+      const isSkipped = userAns.userAnswerIndex === null;
+      const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+      if (reviewFilter === "all") return true;
+      if (reviewFilter === "skipped" && isSkipped) return true;
+      if (reviewFilter === "flagged" && isFlagged) return true;
+      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
+      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
+
+      return false;
+    });
+  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
+
+  const NextQuestionAlert = ({ message, onOk }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-ok" onClick={onOk}>
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNextPopup = () => {
+    if (!showNextPopup) return null;
+    return (
+      <NextQuestionAlert
+        message="You haven't answered. Please answer or skip question.🤪"
+        onOk={() => {
+          setShowNextPopup(false);
+        }}
+      />
+    );
+  };
+
+  const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-yes" onClick={onConfirm}>
+            Yes
+          </button>
+          <button className="confirm-popup-no" onClick={onCancel}>
+            No
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRestartPopup = () => {
+    if (!showRestartPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to restart the test? All progress will be lost!😱"
+        onConfirm={() => {
+          handleRestartTest();
+          setShowRestartPopup(false);
+        }}
+        onCancel={() => setShowRestartPopup(false)}
+      />
+    );
+  };
+
+  const renderFinishPopup = () => {
+    if (!showFinishPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to finish the test now?😥"
+        onConfirm={() => {
+          handleFinishTest();
+          setShowFinishPopup(false);
+        }}
+        onCancel={() => setShowFinishPopup(false)}
+      />
+    );
+  };
+
+  // -----
+  // MAIN FIX: We add a small block in the score overlay that allows the user
+  // to select a new test length if they've finished, before clicking Restart.
+  // -----
+  const renderScoreOverlay = () => {
+    if (!showScoreOverlay) return null;
+    const percentage = effectiveTotal
+      ? Math.round((score / effectiveTotal) * 100)
+      : 0;
+    return (
+      <div className="score-overlay">
+        <div className="score-content">
+          <h2 className="score-title">Test Complete!</h2>
+          <p className="score-details">
+            Your score: <strong>{percentage}%</strong> ({score}/{effectiveTotal})
+          </p>
+
+          {/* NEW: Test Length selection after finishing */}
+          <div className="length-selection" style={{ margin: "1rem 0" }}>
+            <p style={{ marginBottom: "0.5rem" }}>Select New Test Length:</p>
+            {allowedTestLengths.map((length) => (
+              <label
+                key={length}
+                style={{
+                  marginRight: "1rem",
+                  display: "inline-block"
+                }}
+              >
+                <input
+                  type="radio"
+                  name="finishedTestLength"
+                  value={length}
+                  checked={selectedLength === length}
+                  onChange={(e) => {
+                    const newLen = Number(e.target.value);
+                    setSelectedLength(newLen);
+                    setActiveTestLength(newLen);
+                  }}
+                />
+                {length}
+              </label>
+            ))}
+          </div>
+
+          <div className="overlay-buttons">
+            <button
+              className="restart-button"
+              onClick={() => setShowRestartPopup(true)}
+            >
+              Restart Test
+            </button>
+            <button className="review-button" onClick={handleReviewAnswers}>
+              View Review
+            </button>
+            <button className="back-btn" onClick={() => navigate(backToListPath)}>
+              Back to Test List
+            </button>
+            {Number(testId) < 9999 && (
+              <button
+                className="next-test-button"
+                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
+              >
+                Next Test
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderReviewMode = () => {
+    if (!showReviewMode) return null;
+    return (
+      <div className="score-overlay review-overlay">
+        <div className="score-content review-content">
+          {isFinished ? (
+            <button
+              className="back-to-list-btn"
+              onClick={() => navigate(backToListPath)}
+            >
+              Go Back to Test List
+            </button>
+          ) : (
+            <button className="close-review-x" onClick={handleCloseReview}>
+              X
+            </button>
+          )}
+          <h2 className="score-title">Review Mode</h2>
+          {isFinished && (
+            <p className="review-score-line">
+              Your final score: {score}/{effectiveTotal} (
+              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
+              %)
+            </p>
+          )}
+          <div className="review-filter-buttons">
+            <button
+              className={reviewFilter === "all" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("all")}
+            >
+              All
+            </button>
+            <button
+              className={reviewFilter === "skipped" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("skipped")}
+            >
+              Skipped
+            </button>
+            <button
+              className={reviewFilter === "flagged" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("flagged")}
+            >
+              Flagged
+            </button>
+            <button
+              className={reviewFilter === "incorrect" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("incorrect")}
+            >
+              Incorrect
+            </button>
+            <button
+              className={reviewFilter === "correct" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("correct")}
+            >
+              Correct
+            </button>
+          </div>
+          <p className="score-details">
+            Questions shown: {filteredQuestions.length}
+          </p>
+          <div className="review-mode-container">
+            {filteredQuestions.map((q) => {
+              const userAns = answers.find((a) => a.questionId === q.id);
+              const isFlagged = flaggedQuestions.includes(q.id);
+
+              if (!userAns) {
+                return (
+                  <div key={q.id} className="review-question-card">
+                    <h3>
+                      Q{q.id}: {q.question}{" "}
+                      {isFlagged && <span className="flagged-icon">🚩</span>}
+                    </h3>
+                    <p>
+                      <strong>Your Answer:</strong> Unanswered
+                    </p>
+                    <p>
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
+                    </p>
+                    <p style={{ color: "#F44336" }}>No Answer</p>
+                    <p>{q.explanation}</p>
+                  </div>
+                );
+              }
+
+              const isSkipped = userAns.userAnswerIndex === null;
+              const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+              return (
+                <div key={q.id} className="review-question-card">
+                  <h3>
+                    Q{q.id}: {q.question}{" "}
+                    {isFlagged && <span className="flagged-icon">🚩</span>}
+                  </h3>
+                  <p>
+                    <strong>Your Answer:</strong>{" "}
+                    {isSkipped ? (
+                      <span style={{ color: "orange" }}>Skipped</span>
+                    ) : (
+                      q.options[userAns.userAnswerIndex]
+                    )}
+                  </p>
+                  <p>
+                    <strong>Correct Answer:</strong>{" "}
+                    {q.options[q.correctAnswerIndex]}
+                  </p>
+                  {!isSkipped && (
+                    <p
+                      style={{
+                        color: isCorrect ? "#8BC34A" : "#F44336"
+                      }}
+                    >
+                      {isCorrect ? "Correct!" : "Incorrect!"}
+                    </p>
+                  )}
+                  <p>{q.explanation}</p>
+                </div>
+              );
+            })}
+          </div>
+          {!isFinished && (
+            <button
+              className="review-button close-review-btn"
+              onClick={handleCloseReview}
+            >
+              Close Review
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const handleNextQuestionButtonClick = () => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+    } else {
+      handleNextQuestion();
+    }
+  };
+
+  // If no attempt doc was found (on first load), show test length UI:
+  if (showTestLengthSelector) {
+    return (
+      <div className="test-length-selector">
+        <h2>Select Test Length</h2>
+        <p>Please select how many questions you want to answer:</p>
+        <div className="test-length-options">
+          {allowedTestLengths.map((length) => (
+            <label key={length}>
+              <input
+                type="radio"
+                name="testLength"
+                value={length}
+                checked={selectedLength === length}
+                onChange={(e) => setSelectedLength(Number(e.target.value))}
+              />
+              {length}
+            </label>
+          ))}
+        </div>
+        <button
+          onClick={async () => {
+            setActiveTestLength(selectedLength);
+            if (testData) {
+              const totalQ = testData.questions.length;
+              const newQOrder = shuffleIndices(selectedLength);
+              setShuffleOrder(newQOrder);
+              const newAnswerOrder = testData.questions
+                .slice(0, selectedLength)
+                .map((q) => {
+                  const numOpts = q.options.length;
+                  return shuffleArray([...Array(numOpts).keys()]);
+                });
+              setAnswerOrder(newAnswerOrder);
+              try {
+                await fetch(`/api/test/attempts/${userId}/${testId}`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    answers: [],
+                    score: 0,
+                    totalQuestions: totalQ,
+                    selectedLength: selectedLength,
+                    category: testData.category || category,
+                    currentQuestionIndex: 0,
+                    shuffleOrder: newQOrder,
+                    answerOrder: newAnswerOrder,
+                    finished: false,
+                    examMode: location.state?.examMode || false
+                  })
+                });
+                setShowTestLengthSelector(false);
+                fetchTestAndAttempt();
+              } catch (err) {
+                console.error("Failed to start new attempt", err);
+              }
+            }
+          }}
+        >
+          Start Test
+        </button>
+      </div>
+    );
   }
 
-  /* Hide the row of filter buttons */
-  .review-filter-buttons {
-    flex-wrap: wrap;
-    justify-content: center; 
+  if (error) {
+    return <div style={{ color: "#fff" }}>Error: {error}</div>;
   }
 
-  /* Make each button smaller (both text & padding) */
-  .review-filter-buttons button {
-    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;         /* small margin around each button */
+  if (loadingTest) {
+    return <div style={{ color: "#fff" }}>Loading test...</div>;
   }
 
-
-
-  .tests-list-title {
-    font-size: 2.2rem;
-    margin-bottom: 0.75rem;
+  if (!testData || !testData.questions || testData.questions.length === 0) {
+    return <div style={{ color: "#fff" }}>No questions found.</div>;
   }
 
-  .tests-list-grid {
-    grid-template-columns: 1fr; /* Force single column on tiny screens */
+  let avatarUrl = "https://via.placeholder.com/60";
+  if (currentAvatar && shopItems && shopItems.length > 0) {
+    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
+    if (avatarItem && avatarItem.imageUrl) {
+      avatarUrl = avatarItem.imageUrl;
+    }
   }
 
-  .test-badge {
-    font-size: 1.3rem;
+  const progressPercentage = effectiveTotal
+    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
+    : 0;
+  const progressColorHue = (progressPercentage * 120) / 100;
+  const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
+
+  let displayedOptions = [];
+  if (questionObject && answerOrder[realIndex]) {
+    displayedOptions = answerOrder[realIndex].map(
+      (optionIdx) => questionObject.options[optionIdx]
+    );
   }
 
-  /* Buttons & Card text */
-  .resume-button, .restart-button-testlist, .start-button {
-    font-size: 0.85rem;
-    padding: 0.4rem 0.8rem;
-  }
-  .test-progress {
-    font-size: 0.85rem;
+  return (
+    <div className="aplus-test-container">
+      <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
+      {renderRestartPopup()}
+      {renderFinishPopup()}
+      {renderNextPopup()}
+      {renderScoreOverlay()}
+      {renderReviewMode()}
+
+      <div className="top-control-bar">
+        <button className="flag-btn" onClick={handleFlagQuestion}>
+          {questionObject && flaggedQuestions.includes(questionObject.id)
+            ? "Unflag"
+            : "Flag"}
+        </button>
+        <QuestionDropdown
+          totalQuestions={effectiveTotal}
+          currentQuestionIndex={currentQuestionIndex}
+          onQuestionSelect={(index) => {
+            setCurrentQuestionIndex(index);
+            updateServerProgress(answers, score, false);
+          }}
+          answers={answers}
+          flaggedQuestions={flaggedQuestions}
+          testData={testData}
+          shuffleOrder={shuffleOrder}
+          examMode={examMode}
+        />
+        <button
+          className="finish-test-btn"
+          onClick={() => setShowFinishPopup(true)}
+        >
+          Finish Test
+        </button>
+      </div>
+
+      <div className="upper-control-bar">
+        <button
+          className="restart-test-btn"
+          onClick={() => setShowRestartPopup(true)}
+        >
+          Restart Test
+        </button>
+        <button className="back-btn" onClick={() => navigate(backToListPath)}>
+          Back to Test List
+        </button>
+      </div>
+
+      <h1 className="aplus-title">{testData.testName}</h1>
+
+      <div className="top-bar">
+        <div className="avatar-section">
+          <div
+            className="avatar-image"
+            style={{ backgroundImage: `url(${avatarUrl})` }}
+          />
+          <div className="avatar-level">Lvl {level}</div>
+        </div>
+        <div className="xp-level-display">XP: {xp}</div>
+        <div className="coins-display">Coins: {coins}</div>
+      </div>
+
+      <div className="progress-container">
+        <div
+          className="progress-fill"
+          style={{ width: `${progressPercentage}%`, background: progressColor }}
+        >
+          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
+        </div>
+      </div>
+
+      {!showScoreOverlay && !showReviewMode && !isFinished && (
+        <div className="question-card">
+          <div className="question-text">
+            {questionObject && questionObject.question}
+          </div>
+
+          <ul className="options-list">
+            {displayedOptions.map((option, displayIdx) => {
+              let optionClass = "option-button";
+
+              if (!examMode) {
+                if (isAnswered && questionObject) {
+                  const correctIndex = questionObject.correctAnswerIndex;
+                  const actualIndex = answerOrder[realIndex][displayIdx];
+
+                  if (actualIndex === correctIndex) {
+                    optionClass += " correct-option";
+                  } else if (
+                    displayIdx === selectedOptionIndex &&
+                    actualIndex !== correctIndex
+                  ) {
+                    optionClass += " incorrect-option";
+                  }
+                }
+              } else {
+                if (isAnswered && displayIdx === selectedOptionIndex) {
+                  optionClass += " chosen-option";
+                }
+              }
+
+              return (
+                <li className="option-item" key={displayIdx}>
+                  <button
+                    className={optionClass}
+                    onClick={() => handleOptionClick(displayIdx)}
+                    disabled={examMode ? false : isAnswered}
+                  >
+                    {option}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          {isAnswered && questionObject && !examMode && (
+            <div className="explanation">
+              <strong>
+                {selectedOptionIndex !== null &&
+                answerOrder[realIndex][selectedOptionIndex] ===
+                  questionObject.correctAnswerIndex
+                  ? "Correct!"
+                  : "Incorrect!"}
+              </strong>
+              <p>{questionObject.explanation}</p>
+            </div>
+          )}
+
+          <div className="bottom-control-bar">
+            <div className="bottom-control-row">
+              <button
+                className="prev-question-btn"
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+              >
+                Previous Question
+              </button>
+              {currentQuestionIndex === effectiveTotal - 1 ? (
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  Finish Test
+                </button>
+              ) : (
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  Next Question
+                </button>
+              )}
+            </div>
+
+            <div className="bottom-control-row skip-row">
+              <button className="skip-question-btn" onClick={handleSkipQuestion}>
+                Skip Question
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GlobalTestPage;
+
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "../../test.css"; // Updated below, be sure to include our new styles
+
+const APlusTestList = () => {
+  const navigate = useNavigate();
+  const { userId } = useSelector((state) => state.user);
+  const totalQuestionsPerTest = 100;
+  const category = "aplus";
+
+  const [attemptData, setAttemptData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Persist examMode in localStorage
+  const [examMode, setExamMode] = useState(() => {
+    const stored = localStorage.getItem("examMode");
+    return stored === "true";
+  });
+
+  // Show/hide tooltip for the info icon
+  const [showExamInfo, setShowExamInfo] = useState(false);
+
+  // Restart popup on the test list page (holds test number)
+  const [restartPopupTest, setRestartPopupTest] = useState(null);
+
+  // Choose test length
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLengths, setSelectedLengths] = useState({});
+
+  useEffect(() => {
+    if (!userId) return;
+    setLoading(true);
+
+    const fetchAttempts = async () => {
+      try {
+        const res = await fetch(`/api/test/attempts/${userId}/list`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch attempts for user");
+        }
+        const data = await res.json();
+        const attemptList = data.attempts || [];
+
+        // Filter attempts for this category
+        const relevant = attemptList.filter((a) => a.category === category);
+
+        // For each testId, pick the best attempt doc:
+        const bestAttempts = {};
+        for (let att of relevant) {
+          const testKey = att.testId;
+          if (!bestAttempts[testKey]) {
+            bestAttempts[testKey] = att;
+          } else {
+            const existing = bestAttempts[testKey];
+            // Prefer an unfinished attempt if it exists; otherwise latest finished
+            if (!existing.finished && att.finished) {
+              // Keep existing
+            } else if (existing.finished && !att.finished) {
+              bestAttempts[testKey] = att;
+            } else {
+              // Both finished or both unfinished => pick newest
+              const existingTime = new Date(existing.finishedAt || 0).getTime();
+              const newTime = new Date(att.finishedAt || 0).getTime();
+              if (newTime > existingTime) {
+                bestAttempts[testKey] = att;
+              }
+            }
+          }
+        }
+
+        setAttemptData(bestAttempts);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchAttempts();
+  }, [userId, category]);
+
+  // Save examMode to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("examMode", examMode ? "true" : "false");
+  }, [examMode]);
+
+  if (!userId) {
+    return <div className="tests-list-container">Please log in.</div>;
   }
 
-  /* Next/option buttons in question area */
-  .prev-question-btn,
-  .next-question-btn,
-  .skip-question-btn {
-    font-size: 0.7rem;
-    padding: 0.4rem 0.7rem;
-    margin: 5px;
-    /* Or whatever smaller spacing you like */
+  if (loading) {
+    return <div className="tests-list-container">Loading attempts...</div>;
   }
-    
-    
-  .question-text {
-    font-size: 1.15rem;
-  }
-}
-
-/*******************************************/
-/* 2) Small Devices: max-width 480px       */
-/*******************************************/
-@media (max-width: 480px) {
-  body {
-    overflow-x: hidden;
+  if (error) {
+    return <div className="tests-list-container">Error: {error}</div>;
   }
 
-  /* Hide the row of filter buttons */
-  .review-filter-buttons {
-    flex-wrap: wrap;
-    justify-content: center; 
+  const getAttemptDoc = (testNumber) => {
+    return attemptData[testNumber] || null;
+  };
+
+  const getProgressDisplay = (attemptDoc) => {
+    if (!attemptDoc) return "No progress yet";
+    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    if (finished) {
+      const pct = Math.round(
+        (score / (totalQuestions || totalQuestionsPerTest)) * 100
+      );
+      return `Final Score: ${pct}% (${score}/${
+        totalQuestions || totalQuestionsPerTest
+      })`;
+    } else {
+      if (typeof currentQuestionIndex === "number") {
+        return `Progress: ${currentQuestionIndex + 1} / ${
+          totalQuestions || totalQuestionsPerTest
+        }`;
+      }
+      return "No progress yet";
+    }
+  };
+
+  const difficultyColors = [
+    { label: "Normal", color: "hsl(0, 0%, 100%)" },
+    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
+    { label: "Easy", color: "hsl(120, 100%, 70%)" },
+    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
+    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
+    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
+    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
+    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
+    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
+    { label: "Ultra Level", color: "#000" }
+  ];
+
+  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
+    if (existingAttempt && !doRestart) {
+      // Resume test
+      navigate(`/practice-tests/a-plus/${testNumber}`);
+    } else {
+      // New or forced restart
+      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
+      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          answers: [],
+          score: 0,
+          totalQuestions: totalQuestionsPerTest,
+          selectedLength: lengthToUse,
+          currentQuestionIndex: 0,
+          shuffleOrder: [],
+          answerOrder: [],
+          finished: false,
+          examMode
+        })
+      })
+        .then(() => {
+          navigate(`/practice-tests/a-plus/${testNumber}`, {
+            state: { examMode }
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to create new attempt doc:", err);
+        });
+    }
+  };
+
+  const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
+
+  return (
+    <div className="tests-list-container">
+      <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
+
+      <div className="centered-toggle-container">
+        <div className="toggle-with-text">
+          <label className="toggle-switch">
+            <input
+              type="checkbox"
+              checked={examMode}
+              onChange={(e) => setExamMode(e.target.checked)}
+            />
+            <span className="slider">{examMode ? "ON" : "OFF"}</span>
+          </label>
+          <span className="toggle-label">Exam Mode</span>
+          <div
+            className="info-icon-container"
+            onMouseEnter={() => setShowExamInfo(true)}
+            onMouseLeave={() => setShowExamInfo(false)}
+            onClick={() => setShowExamInfo((prev) => !prev)}
+          >
+            <div className="info-icon">ⓘ</div>
+            {showExamInfo && (
+              <div className="info-tooltip">
+                {examInfoText}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="tests-list-grid">
+        {Array.from({ length: 10 }, (_, i) => {
+          const testNumber = i + 1;
+          const attemptDoc = getAttemptDoc(testNumber);
+          const progressDisplay = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
+
+          const isFinished = attemptDoc?.finished;
+          const noAttempt = !attemptDoc;
+
+          return (
+            <div key={testNumber} className="test-card">
+              <div className="test-badge">Test {testNumber}</div>
+              <div
+                className="difficulty-label"
+                style={{ color: difficulty.color }}
+              >
+                {difficulty.label}
+              </div>
+              <p className="test-progress">{progressDisplay}</p>
+
+              {/* If no attempt or finished => show length selector */}
+              {(noAttempt || isFinished) && (
+                <div className="test-length-selector-card">
+                  <p>Select Test Length:</p>
+                  <div className="test-length-options">
+                    {allowedTestLengths.map((length) => (
+                      <label key={length} className="test-length-option">
+                        <input
+                          type="radio"
+                          name={`testLength-${testNumber}`}
+                          value={length}
+                          checked={
+                            (selectedLengths[testNumber] ||
+                              totalQuestionsPerTest) === length
+                          }
+                          onChange={(e) =>
+                            setSelectedLengths((prev) => ({
+                              ...prev,
+                              [testNumber]: Number(e.target.value)
+                            }))
+                          }
+                        />
+                        <span>{length}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Start / Resume / Restart */}
+              {noAttempt && (
+                <button
+                  className="start-button"
+                  onClick={() => startTest(testNumber, false, null)}
+                >
+                  Start
+                </button>
+              )}
+              {attemptDoc && !attemptDoc.finished && (
+                <div className="test-card-buttons">
+                  <button
+                    className="resume-button"
+                    onClick={() => startTest(testNumber, false, attemptDoc)}
+                  >
+                    Resume
+                  </button>
+                  <button
+                    className="restart-button-testlist"
+                    onClick={() => setRestartPopupTest(testNumber)}
+                  >
+                    Restart
+                  </button>
+                </div>
+              )}
+              {attemptDoc && attemptDoc.finished && (
+                <div className="test-card-buttons">
+                  <button
+                    className="resume-button"
+                    onClick={() =>
+                      navigate(`/practice-tests/a-plus/${testNumber}`, {
+                        state: { review: true }
+                      })
+                    }
+                  >
+                    View Review
+                  </button>
+                  <button
+                    className="restart-button-testlist"
+                    onClick={() => startTest(testNumber, true, attemptDoc)}
+                  >
+                    Restart
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Popup for partial restarts */}
+      {restartPopupTest !== null && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>
+              You are currently in progress on this test, are you sure you want to restart!?😱 
+              Also, if you want to change the test length, please finish your current attempt.
+              Restarting now will use your currently selected test length and reset your progress🧙‍♂️.
+            </p>
+            <div className="popup-buttons">
+              <button
+                onClick={() => {
+                  const attemptDoc = getAttemptDoc(restartPopupTest);
+                  startTest(restartPopupTest, true, attemptDoc);
+                  setRestartPopupTest(null);
+                }}
+              >
+                Yes, Restart!😎
+              </button>
+              <button onClick={() => setRestartPopupTest(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default APlusTestList;
+
+// APlusTestPage.js
+import React from "react";
+import { useParams } from "react-router-dom";
+import APlusTestList from "./APlusTestList";  // your existing test list component
+import GlobalTestPage from "../../GlobalTestPage"; // the new universal logic
+import "../../test.css";
+
+const APlusTestPage = () => {
+  const { testId } = useParams();
+
+  // If no testId in URL, show the test list
+  if (!testId) {
+    return <APlusTestList />;
   }
 
-  /* Make each button smaller (both text & padding) */
-  .review-filter-buttons button {
-    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;         /* small margin around each button */
-  }
+  // Otherwise, show the universal test runner
+  return (
+    <GlobalTestPage
+      testId={testId}
+      category="aplus"
+      backToListPath="/practice-tests/a-plus"
+    />
+  );
+};
 
-  .tests-list-title {
-    font-size: 2.4rem;
-    margin-bottom: 1rem;
-  }
+export default APlusTestPage;
 
-  .tests-list-grid {
-    grid-template-columns: 1fr; /* Single column still recommended */
-  }
-
-  .test-badge {
-    font-size: 1.4rem;
-  }
-
-  .resume-button, .restart-button-testlist, .start-button {
-    font-size: 0.8rem;
-    padding: 0.4rem 1rem;
-  }
-
-  .prev-question-btn,
-  .next-question-btn,
-  .skip-question-btn {
-    font-size: 0.8rem;
-    padding: 0.5rem 0.85rem;
-    margin: 5px;
-    /* Or whatever smaller spacing you like */
-  }
-  .question-text {
-    font-size: 1.2rem;
-  }
-}
-
-/*******************************************/
-/* 3) Medium-Small Devices: max-width 600px*/
-/*******************************************/
-@media (max-width: 600px) {
-  body {
-    overflow-x: hidden;
-  }
-
-  /* Hide the row of filter buttons */
-  .review-filter-buttons {
-    flex-wrap: wrap;
-    justify-content: center; 
-  }
-
-  /* Make each button smaller (both text & padding) */
-  .review-filter-buttons button {
-    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;         /* small margin around each button */
-  }
-
-
-  .tests-list-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  .tests-list-title {
-    font-size: 2.5rem;
-  }
-
-  .test-badge {
-    font-size: 1.5rem;
-  }
-
-  .resume-button, .restart-button-testlist, .start-button {
-    font-size: 0.95rem;
-    padding: 0.5rem 1rem;
-  }
-
-  .option-button,
-  .next-button {
-    font-size: 1rem;
-    padding: 0.7rem 1rem;
-  }
-  .question-text {
-    font-size: 1.25rem;
-  }
-}
-
-/*******************************************/
-/* 4) Tablets / Larger Mobiles: max-width 768px */
-/*******************************************/
-@media (max-width: 768px) {
-  body {
-    overflow-x: hidden;
-  }
-  
-  .review-filter-buttons {
-    flex-wrap: wrap;
-    justify-content: center; 
-  }
-
-  /* Make each button smaller (both text & padding) */
-  .review-filter-buttons button {
-    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
-    padding: 0.5rem 1rem;
-    margin: 0.25rem;         /* small margin around each button */
-  }
-  
-  .tests-list-grid {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-
-  .tests-list-title {
-    font-size: 2.6rem;
-  }
-
-  .test-badge {
-    font-size: 1.55rem;
-  }
-
-  .resume-button, .restart-button-testlist, .start-button {
-    font-size: 1rem;
-    padding: 0.6rem 1.2rem;
-  }
-
-  .option-button,
-  .next-button {
-    font-size: 1.05rem;
-    padding: 0.75rem 1rem;
-  }
-  .question-text {
-    font-size: 1.3rem;
-  }
-}
+ok go
