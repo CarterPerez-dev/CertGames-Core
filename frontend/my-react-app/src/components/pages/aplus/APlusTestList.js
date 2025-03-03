@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import "../../test.css"; // Updated below, be sure to include our new styles
+import "../../test.css";
+import {
+  FaPlay,
+  FaPause,
+  FaRedo,
+  FaEye,
+  FaInfoCircle,
+  FaChevronRight,
+  FaLock,
+  FaTrophy,
+  FaCog,
+  FaCheck,
+  FaTimes,
+  FaExclamationTriangle
+} from "react-icons/fa";
 
 const APlusTestList = () => {
   const navigate = useNavigate();
@@ -87,14 +101,49 @@ const APlusTestList = () => {
   }, [examMode]);
 
   if (!userId) {
-    return <div className="tests-list-container">Please log in.</div>;
+    return (
+      <div className="testlist-container">
+        <div className="testlist-auth-message">
+          <FaLock className="testlist-auth-icon" />
+          <h2>Please log in to access the practice tests</h2>
+          <button 
+            className="testlist-login-button"
+            onClick={() => navigate('/login')}
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
   }
 
   if (loading) {
-    return <div className="tests-list-container">Loading attempts...</div>;
+    return (
+      <div className="testlist-container">
+        <div className="testlist-loading">
+          <div className="testlist-loading-spinner"></div>
+          <p>Loading your test progress...</p>
+        </div>
+      </div>
+    );
   }
+
   if (error) {
-    return <div className="tests-list-container">Error: {error}</div>;
+    return (
+      <div className="testlist-container">
+        <div className="testlist-error">
+          <FaExclamationTriangle className="testlist-error-icon" />
+          <h2>Error Loading Tests</h2>
+          <p>{error}</p>
+          <button 
+            className="testlist-retry-button"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
   }
 
   const getAttemptDoc = (testNumber) => {
@@ -102,36 +151,41 @@ const APlusTestList = () => {
   };
 
   const getProgressDisplay = (attemptDoc) => {
-    if (!attemptDoc) return "No progress yet";
+    if (!attemptDoc) return { text: "Not started", percentage: 0 };
+    
     const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    
     if (finished) {
-      const pct = Math.round(
-        (score / (totalQuestions || totalQuestionsPerTest)) * 100
-      );
-      return `Final Score: ${pct}% (${score}/${
-        totalQuestions || totalQuestionsPerTest
-      })`;
+      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
+      return { 
+        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)`, 
+        percentage: pct,
+        isFinished: true
+      };
     } else {
       if (typeof currentQuestionIndex === "number") {
-        return `Progress: ${currentQuestionIndex + 1} / ${
-          totalQuestions || totalQuestionsPerTest
-        }`;
+        const progressPct = Math.round(((currentQuestionIndex + 1) / (totalQuestions || totalQuestionsPerTest)) * 100);
+        return { 
+          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}`, 
+          percentage: progressPct,
+          isFinished: false
+        };
       }
-      return "No progress yet";
+      return { text: "Not started", percentage: 0 };
     }
   };
 
-  const difficultyColors = [
-    { label: "Normal", color: "hsl(0, 0%, 100%)" },
-    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
-    { label: "Easy", color: "hsl(120, 100%, 70%)" },
-    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
-    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
-    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
-    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
-    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
-    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
-    { label: "Ultra Level", color: "#000" }
+  const difficultyCategories = [
+    { label: "Training Wheels", color: "#90ee90", textColor: "#1a1a1a" }, // Light green
+    { label: "Easy Going", color: "#3cb371", textColor: "#ffffff" }, // Medium green
+    { label: "Balanced", color: "#6543cc", textColor: "#ffffff" }, // Purple
+    { label: "Challenging", color: "#ff7950", textColor: "#ffffff" }, // Orange
+    { label: "Hard Core", color: "#cc4343", textColor: "#ffffff" }, // Red
+    { label: "Very Hard", color: "#990000", textColor: "#ffffff" }, // Dark red
+    { label: "Extreme", color: "#7a0099", textColor: "#ffffff" }, // Dark purple
+    { label: "Nightmare", color: "#4a0072", textColor: "#ffffff" }, // Deep purple
+    { label: "Insanity", color: "#2e004d", textColor: "#ffffff" }, // Very dark purple
+    { label: "Ultra Level", color: "#000000", textColor: "#ff3366" }  // Black with neon text
   ];
 
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
@@ -168,132 +222,176 @@ const APlusTestList = () => {
     }
   };
 
-  const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
+  const examInfoText = "Exam Mode simulates a real certification exam environment by hiding answer feedback and explanations until after you complete the entire test. This helps you prepare for the pressure and pace of an actual exam.";
 
   return (
-    <div className="tests-list-container">
-      <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
-
-      <div className="centered-toggle-container">
-        <div className="toggle-with-text">
-          <label className="toggle-switch">
+    <div className="testlist-container">
+      <div className="testlist-header">
+        <div className="testlist-title-section">
+          <h1 className="testlist-title">CompTIA A+ Core 1</h1>
+          <p className="testlist-subtitle">Practice Test Collection</p>
+        </div>
+        
+        <div className="testlist-mode-toggle">
+          <div className="testlist-mode-label">
+            <FaCog className="testlist-mode-icon" />
+            <span>Exam Mode</span>
+            
+            <div className="testlist-info-container">
+              <FaInfoCircle 
+                className="testlist-info-icon"
+                onMouseEnter={() => setShowExamInfo(true)}
+                onMouseLeave={() => setShowExamInfo(false)}
+                onClick={() => setShowExamInfo(!showExamInfo)}
+              />
+              
+              {showExamInfo && (
+                <div className="testlist-info-tooltip">
+                  {examInfoText}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <label className="testlist-toggle">
             <input
               type="checkbox"
               checked={examMode}
               onChange={(e) => setExamMode(e.target.checked)}
             />
-            <span className="slider">{examMode ? "ON" : "OFF"}</span>
+            <span className="testlist-toggle-slider">
+              <span className="testlist-toggle-text">
+                {examMode ? "ON" : "OFF"}
+              </span>
+            </span>
           </label>
-          <span className="toggle-label">Exam Mode</span>
-          <div
-            className="info-icon-container"
-            onMouseEnter={() => setShowExamInfo(true)}
-            onMouseLeave={() => setShowExamInfo(false)}
-            onClick={() => setShowExamInfo((prev) => !prev)}
-          >
-            <div className="info-icon">ⓘ</div>
-            {showExamInfo && (
-              <div className="info-tooltip">
-                {examInfoText}
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
-      <div className="tests-list-grid">
+      <div className="testlist-grid">
         {Array.from({ length: 10 }, (_, i) => {
           const testNumber = i + 1;
           const attemptDoc = getAttemptDoc(testNumber);
-          const progressDisplay = getProgressDisplay(attemptDoc);
-          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
+          const progress = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyCategories[i] || difficultyCategories[0];
 
           const isFinished = attemptDoc?.finished;
           const noAttempt = !attemptDoc;
+          const inProgress = attemptDoc && !isFinished;
 
           return (
-            <div key={testNumber} className="test-card">
-              <div className="test-badge">Test {testNumber}</div>
-              <div
-                className="difficulty-label"
-                style={{ color: difficulty.color }}
-              >
-                {difficulty.label}
+            <div key={testNumber} className={`testlist-card ${isFinished ? 'testlist-card-completed' : inProgress ? 'testlist-card-progress' : ''}`}>
+              <div className="testlist-card-header">
+                <div className="testlist-card-number">Test {testNumber}</div>
+                <div 
+                  className="testlist-difficulty" 
+                  style={{ backgroundColor: difficulty.color, color: difficulty.textColor }}
+                >
+                  {difficulty.label}
+                </div>
               </div>
-              <p className="test-progress">{progressDisplay}</p>
-
-              {/* If no attempt or finished => show length selector */}
-              {(noAttempt || isFinished) && (
-                <div className="test-length-selector-card">
-                  <p>Select Test Length:</p>
-                  <div className="test-length-options">
-                    {allowedTestLengths.map((length) => (
-                      <label key={length} className="test-length-option">
-                        <input
-                          type="radio"
-                          name={`testLength-${testNumber}`}
-                          value={length}
-                          checked={
-                            (selectedLengths[testNumber] ||
-                              totalQuestionsPerTest) === length
-                          }
-                          onChange={(e) =>
-                            setSelectedLengths((prev) => ({
-                              ...prev,
-                              [testNumber]: Number(e.target.value)
-                            }))
-                          }
-                        />
-                        <span>{length}</span>
-                      </label>
-                    ))}
+              
+              <div className="testlist-card-content">
+                <div className="testlist-progress-section">
+                  <div className="testlist-progress-text">{progress.text}</div>
+                  <div className="testlist-progress-bar-container">
+                    <div 
+                      className={`testlist-progress-bar ${isFinished ? 'testlist-progress-complete' : ''}`}
+                      style={{ width: `${progress.percentage}%` }}
+                    ></div>
                   </div>
                 </div>
-              )}
-
-              {/* Start / Resume / Restart */}
-              {noAttempt && (
-                <button
-                  className="start-button"
-                  onClick={() => startTest(testNumber, false, null)}
-                >
-                  Start
-                </button>
-              )}
-              {attemptDoc && !attemptDoc.finished && (
-                <div className="test-card-buttons">
-                  <button
-                    className="resume-button"
-                    onClick={() => startTest(testNumber, false, attemptDoc)}
-                  >
-                    Resume
-                  </button>
-                  <button
-                    className="restart-button-testlist"
-                    onClick={() => setRestartPopupTest(testNumber)}
-                  >
-                    Restart
-                  </button>
+                
+                {/* Length Selector */}
+                {(noAttempt || isFinished) && (
+                  <div className="testlist-length-selector">
+                    <div className="testlist-length-label">Select question count:</div>
+                    <div className="testlist-length-options">
+                      {allowedTestLengths.map((length) => (
+                        <label 
+                          key={length} 
+                          className={`testlist-length-option ${(selectedLengths[testNumber] || totalQuestionsPerTest) === length ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="radio"
+                            name={`testLength-${testNumber}`}
+                            value={length}
+                            checked={(selectedLengths[testNumber] || totalQuestionsPerTest) === length}
+                            onChange={(e) => 
+                              setSelectedLengths((prev) => ({
+                                ...prev,
+                                [testNumber]: Number(e.target.value)
+                              }))
+                            }
+                          />
+                          <span>{length}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className={`testlist-card-actions ${inProgress ? 'two-buttons' : ''}`}>
+                  {noAttempt && (
+                    <button
+                      className="testlist-action-button testlist-start-button"
+                      onClick={() => startTest(testNumber, false, null)}
+                    >
+                      <FaPlay className="testlist-action-icon" />
+                      <span>Start Test</span>
+                    </button>
+                  )}
+                  
+                  {inProgress && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-resume-button"
+                        onClick={() => startTest(testNumber, false, attemptDoc)}
+                      >
+                        <FaPlay className="testlist-action-icon" />
+                        <span>Resume</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => setRestartPopupTest(testNumber)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
+                  
+                  {isFinished && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-review-button"
+                        onClick={() => 
+                          navigate(`/practice-tests/a-plus/${testNumber}`, {
+                            state: { review: true }
+                          })
+                        }
+                      >
+                        <FaEye className="testlist-action-icon" />
+                        <span>View Results</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => startTest(testNumber, true, attemptDoc)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
                 </div>
-              )}
-              {attemptDoc && attemptDoc.finished && (
-                <div className="test-card-buttons">
-                  <button
-                    className="resume-button"
-                    onClick={() =>
-                      navigate(`/practice-tests/a-plus/${testNumber}`, {
-                        state: { review: true }
-                      })
-                    }
-                  >
-                    View Review
-                  </button>
-                  <button
-                    className="restart-button-testlist"
-                    onClick={() => startTest(testNumber, true, attemptDoc)}
-                  >
-                    Restart
-                  </button>
+              </div>
+              
+              {isFinished && progress.percentage >= 80 && (
+                <div className="testlist-achievement-badge">
+                  <FaTrophy className="testlist-achievement-icon" />
                 </div>
               )}
             </div>
@@ -301,26 +399,40 @@ const APlusTestList = () => {
         })}
       </div>
 
-      {/* Popup for partial restarts */}
+      {/* Restart Confirmation Popup */}
       {restartPopupTest !== null && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <p>
-              You are currently in progress on this test, are you sure you want to restart!?😱 
-              Also, if you want to change the test length, please finish your current attempt.
-              Restarting now will use your currently selected test length and reset your progress🧙‍♂️.
-            </p>
-            <div className="popup-buttons">
+        <div className="testlist-popup-overlay">
+          <div className="testlist-popup">
+            <div className="testlist-popup-header">
+              <FaExclamationTriangle className="testlist-popup-icon" />
+              <h3>Confirm Restart</h3>
+            </div>
+            
+            <div className="testlist-popup-content">
+              <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
+              <p>All current progress will be lost, and your test will begin with your selected length.</p>
+            </div>
+            
+            <div className="testlist-popup-actions">
               <button
+                className="testlist-popup-button testlist-popup-confirm"
                 onClick={() => {
                   const attemptDoc = getAttemptDoc(restartPopupTest);
                   startTest(restartPopupTest, true, attemptDoc);
                   setRestartPopupTest(null);
                 }}
               >
-                Yes, Restart!😎
+                <FaCheck className="testlist-popup-button-icon" />
+                <span>Yes, Restart</span>
               </button>
-              <button onClick={() => setRestartPopupTest(null)}>Cancel</button>
+              
+              <button 
+                className="testlist-popup-button testlist-popup-cancel"
+                onClick={() => setRestartPopupTest(null)}
+              >
+                <FaTimes className="testlist-popup-button-icon" />
+                <span>Cancel</span>
+              </button>
             </div>
           </div>
         </div>
@@ -330,4 +442,3 @@ const APlusTestList = () => {
 };
 
 export default APlusTestList;
-
