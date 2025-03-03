@@ -12,7 +12,7 @@
   --grc-text: #e2e2e2;
   --grc-text-secondary: #9da8b9;
   --grc-border: #2a2c3d;
-  --grc-input-bg: rgba(0, 0, 0, 0.2);
+  --grc-input-bg: #333333;
   --grc-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
   --grc-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
   --grc-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
