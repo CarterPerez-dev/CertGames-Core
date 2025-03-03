@@ -1,16 +1,16 @@
 /* Sidebar.css - Enhanced styling while maintaining core functionality */
 
 :root {
-  --sidebar-bg: #0f0f18;
-  --sidebar-border: #232535;
+  --sidebar-bg: #0b0c15;
+  --sidebar-border: #2a2c3d;
   --sidebar-text: #e2e2e2;
   --sidebar-text-hover: #ffffff;
-  --sidebar-accent: #5f4bb6;
-  --sidebar-accent-hover: #7a68d4;
+  --sidebar-accent: #6543cc;
+  --sidebar-accent-hover: #8a58fc;
   --sidebar-item-hover-bg: rgba(255, 255, 255, 0.05);
-  --sidebar-active-bg: rgba(95, 75, 182, 0.1);
+  --sidebar-active-bg: rgba(101, 67, 204, 0.1);
   --sidebar-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  --sidebar-glow: 0 0 10px rgba(95, 75, 182, 0.5);
+  --sidebar-glow: 0 0 10px rgba(101, 67, 204, 0.5);
 }
 /* Reset some defaults */
 body, html {
