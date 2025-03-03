@@ -1,6 +1,6 @@
 // GRCWizard.js
 import React, { useState, useCallback, useEffect } from "react";
-import "./GRCWizard.css";
+import "./GRC.css";
 import { 
   FaRandom, 
   FaShieldAlt, 
