@@ -1,6 +1,8 @@
 FROM python:3.11.3
 
+
 WORKDIR /app
+
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-transport-https \
@@ -11,32 +13,32 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+
+
 RUN python3 -m venv /venv
+
+
 RUN /venv/bin/pip install --upgrade pip setuptools wheel
 
-# Copy your requirements first
+
 COPY requirements.txt /app/requirements.txt
 
-# Important: Make sure your requirements have "gevent>=23.7.0"
+
 RUN /venv/bin/pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy in the rest of your code
+
 COPY . /app
+
 
 ENV VIRTUAL_ENV="/venv"
 ENV PATH="/venv/bin:$PATH"
 ENV FLASK_ENV=production
 ENV FLASK_APP=app.py
 
+
 RUN chmod +x /app/app.py
+
+
 EXPOSE 5000
 
-# Keep -k gevent if you must use gevent workers
-CMD ["/venv/bin/gunicorn", \
-     "-k", "gevent", \
-     "--worker-connections", "1000", \
-     "--keep-alive", "5", \
-     "--preload", \
-     "-b", "0.0.0.0:5000", \
-     "app:app", \
-     "--timeout", "120"]
+CMD ["/venv/bin/gunicorn", "-k", "gevent", "-b", "0.0.0.0:5000", "app:app", "--timeout", "120"]
