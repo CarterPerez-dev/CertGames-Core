@@ -1,5 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Resources.css'; 
+import { 
+  FaSearch, 
+  FaRandom, 
+  FaSortAlphaDown, 
+  FaSortAlphaUp, 
+  FaFilter, 
+  FaLink, 
+  FaBookmark, 
+  FaLightbulb, 
+  FaExternalLinkAlt, 
+  FaChevronRight,
+  FaReddit,
+  FaYoutube,
+  FaLinkedin,
+  FaGraduationCap,
+  FaToolbox,
+  FaShieldAlt,
+  FaCode,
+  FaLaptopCode,
+  FaNetworkWired,
+  FaLock,
+  FaCloudversify,
+  FaServer,
+  FaProjectDiagram,
+  FaDatabase,
+  FaLinux,
+  FaRandom as FaDice,
+  FaTimes,
+  FaSyncAlt,
+  FaFileAlt,
+  FaList,
+  FaTable,
+  FaChevronDown,
+  FaChevronUp
+} from 'react-icons/fa';
 
 
 const cyberSecurityTools = [
@@ -88,7 +123,7 @@ const redditPosts = [
   { title: 'How a dumdum like me passed sec+', url: 'https://www.reddit.com/r/CompTIA/comments/zkjs1d/how_a_dumdum_like_me_passed_sec/' },
   { title: 'How I passed COMPTIA A+ N+ S+', url: 'https://www.reddit.com/r/CompTIA/comments/1cra3cg/how_i_passed_comptia_a_n_s/' },
   { title: 'ChatGPT explained DHCP to me in gangsta terms', url: 'https://www.reddit.com/r/CompTIA/comments/11ytgbz/chatgpt_explained_dhcp_to_me_in_gangsta_terms/' },
-  { title: 'Don’t Pay for Udemy Courses! Access them for Free! Legally & Ethically', url: 'https://www.reddit.com/r/CompTIA/comments/12aug8f/dont_pay_for_udemy_courses_access_them_for_free/' },
+  { title: 'Don't Pay for Udemy Courses! Access them for Free! Legally & Ethically', url: 'https://www.reddit.com/r/CompTIA/comments/12aug8f/dont_pay_for_udemy_courses_access_them_for_free/' },
   { title: 'For Those Of You Wondering if COMPTIA is Worth it; Just Do it', url: 'https://www.reddit.com/r/CompTIA/comments/1f11fbc/for_those_of_you_wondering_if_comptia_is_worth_it/' },
   { title: '[UPDATE] 34 years old, posted a month ago about passing the A+, no IT experience, no college degree -- just got hired today after 2 weeks of sending out resumes. Wanted to share my experience and tips.', url: 'https://www.reddit.com/r/CompTIA/comments/m38lb8/update_34_years_old_posted_a_month_ago_about/' },
   { title: 'Just passed Network+! How I did it...', url: 'https://www.reddit.com/r/CompTIA/comments/1gfmkqf/just_passed_network_how_i_did_it/' },
@@ -385,7 +420,7 @@ const securityFrameworks = [
   { name: 'SWIFT Customer Security Programme (CSP)', url: 'https://www.swift.com/myswift/customer-security-programme-csp' },
   { name: 'AI Risk Management Framework (AI RMF)', url: 'https://www.nist.gov/itl/ai-risk-management-framework' },
   { name: 'BSI IT-Grundschutz (German Federal Office for Information Security)', url: 'https://www.bsi.bund.de/EN/Topics/IT-Grundschutz/it-grundschutz_node.html' },
-  { name: 'Canadian Centre for Cyber Security’s IT Security Guidance', url: 'https://cyber.gc.ca/en/guidance' },
+  { name: 'Canadian Centre for Cyber Security's IT Security Guidance', url: 'https://cyber.gc.ca/en/guidance' },
   { name: 'TISAX (Trusted Information Security Assessment Exchange)', url: 'https://enx.com/tisax/' },
   { name: 'MARISSA (Maritime Cybersecurity Standards)', url: 'https://www.maritimecybersecurity.center/' },
   { name: 'ANSI/ISA-62443 (Cybersecurity Standards for Automation)', url: 'https://www.isa.org/standards-and-publications/isa-standards/isa-62443-series-of-standards' },
@@ -897,117 +932,295 @@ const resourcesData = {
   ],
 };
 
+// Main resource categories with icons
+const resourceCategories = [
+  { id: 'all', name: 'All Resources', icon: <FaBookmark /> },
+  { id: 'reddit', name: 'Reddit', icon: <FaReddit /> },
+  { id: 'youtube', name: 'YouTube', icon: <FaYoutube /> },
+  { id: 'udemy', name: 'Udemy Courses', icon: <FaGraduationCap /> },
+  { id: 'CyberSecurity Tools', name: 'Security Tools', icon: <FaToolbox /> },
+  { id: 'frameworks', name: 'Security Frameworks', icon: <FaShieldAlt /> },
+  { id: 'CompTIA Certification Objectives', name: 'CompTIA Objectives', icon: <FaFileAlt /> },
+  { id: 'linkedin', name: 'LinkedIn Pros', icon: <FaLinkedin /> },
+  { id: 'other', name: 'Other Resources', icon: <FaLink /> },
+];
+
+// Certification categories with icons
+const certCategories = [
+  { id: 'A+', name: 'A+', icon: <FaLaptopCode /> },
+  { id: 'Network+', name: 'Network+', icon: <FaNetworkWired /> },
+  { id: 'Security+', name: 'Security+', icon: <FaLock /> },
+  { id: 'CySA+', name: 'CySA+', icon: <FaShieldAlt /> },
+  { id: 'SecurityX/CASP', name: 'SecurityX/CASP+', icon: <FaShieldAlt /> },
+  { id: 'PenTest+', name: 'PenTest+', icon: <FaCode /> },
+  { id: 'Cloud+/Cloud Essentials', name: 'Cloud+', icon: <FaCloudversify /> },
+  { id: 'Linux+', name: 'Linux+', icon: <FaLinux /> },
+  { id: 'Data+', name: 'Data+', icon: <FaDatabase /> },
+  { id: 'Server+', name: 'Server+', icon: <FaServer /> },
+  { id: 'Project+', name: 'Project+', icon: <FaProjectDiagram /> },
+  { id: 'ITF/TECH+', name: 'ITF/TECH+', icon: <FaLaptopCode /> },
+];
+
 function Resources() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sorted, setSorted] = useState(false);
   const [randomResource, setRandomResource] = useState(null);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+  const [showCerts, setShowCerts] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [showRandomModal, setShowRandomModal] = useState(false);
+  const [fadeOut, setFadeOut] = useState(false);
 
+  // Switch between resource categories and certification categories
+  const toggleCertCategories = () => {
+    setShowCerts(!showCerts);
+  };
+
+  // Handle search input change
   const handleSearch = (event) => setSearchTerm(event.target.value.toLowerCase());
-  const handleCategoryChange = (event) => setSelectedCategory(event.target.value);
+  
+  // Handle category selection
+  const handleCategoryChange = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setShowCategoryDropdown(false);
+  };
 
- 
+  // Toggle sorting
+  const handleToggleSort = () => {
+    setSorted(!sorted);
+  };
+
+  // Reset filters
+  const handleReset = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSorted(false);
+    setRandomResource(null);
+  };
+
+  // Toggle view mode between grid and list
+  const toggleViewMode = () => {
+    setViewMode(viewMode === 'grid' ? 'list' : 'grid');
+  };
+
+  // Get a random resource
+  const handleRandomResource = () => {
+    setLoading(true);
+    
+    // Simulate loading
+    setTimeout(() => {
+      const currentCategoryResources =
+        selectedCategory === "all"
+          ? Object.values(resourcesData).flat()
+          : resourcesData[selectedCategory] || [];
+
+      if (currentCategoryResources.length === 0) {
+        setRandomResource(null);
+        setLoading(false);
+        return;
+      }
+
+      const random = currentCategoryResources[Math.floor(Math.random() * currentCategoryResources.length)];
+      setRandomResource(random);
+      setLoading(false);
+      setShowRandomModal(true);
+    }, 800);
+  };
+
+  // Close the random resource modal
+  const closeRandomModal = () => {
+    setFadeOut(true);
+    setTimeout(() => {
+      setShowRandomModal(false);
+      setFadeOut(false);
+    }, 300);
+  };
+
+  // Clear search input
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
+  // Get icon for a category
+  const getCategoryIcon = (categoryId) => {
+    const allCategories = [...resourceCategories, ...certCategories];
+    const category = allCategories.find(cat => cat.id === categoryId);
+    return category ? category.icon : <FaBookmark />;
+  };
+
+  // Get display name for a category
+  const getCategoryName = (categoryId) => {
+    const allCategories = [...resourceCategories, ...certCategories];
+    const category = allCategories.find(cat => cat.id === categoryId);
+    return category ? category.name : capitalizeFirstLetter(categoryId);
+  };
+  
+  // Filter resources based on selected category and search term
   const filteredResources = Object.entries(resourcesData)
     .filter(([category]) => selectedCategory === "all" || category === selectedCategory)
     .flatMap(([, resources]) => resources)
     .filter((resource) => resource.name.toLowerCase().includes(searchTerm))
-    .sort((a, b) => (sorted ? a.name.localeCompare(b.name) : 0));
+    .sort((a, b) => {
+      if (sorted) {
+        return a.name.localeCompare(b.name);
+      }
+      return 0;
+    });
 
- 
-  const handleRandomResource = () => {
-    const currentCategoryResources =
-      selectedCategory === "all"
-        ? Object.values(resourcesData).flat()
-        : resourcesData[selectedCategory] || [];
-
-    if (currentCategoryResources.length === 0) {
-      setRandomResource(null);
-      return;
-    }
-
-    const random = currentCategoryResources[Math.floor(Math.random() * currentCategoryResources.length)];
-    setRandomResource(random);
+  // Get appropriate source icon for a resource based on its URL or name
+  const getSourceIcon = (resource) => {
+    const { url, name } = resource;
+    
+    if (url.includes('reddit.com')) return <FaReddit className="resource-source-icon reddit" />;
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return <FaYoutube className="resource-source-icon youtube" />;
+    if (url.includes('udemy.com')) return <FaGraduationCap className="resource-source-icon udemy" />;
+    if (url.includes('linkedin.com')) return <FaLinkedin className="resource-source-icon linkedin" />;
+    if (url.includes('github.com')) return <FaCode className="resource-source-icon github" />;
+    if (url.includes('comptia.org') || name.includes('CompTIA')) return <FaFileAlt className="resource-source-icon comptia" />;
+    if (name.toLowerCase().includes('pentest') || 
+        name.toLowerCase().includes('nmap') || 
+        name.toLowerCase().includes('kali')) return <FaToolbox className="resource-source-icon security" />;
+    
+    // Default icon
+    return <FaLink className="resource-source-icon default" />;
   };
 
   return (
-    <div className="resources-background">
-      <div className="resources-container">
-        <h1 className="resources-header">Cybersecurity Resources Hub</h1>
+    <div className="resources-container">
+      {/* Header Section */}
+      <div className="resources-header">
+        <div className="resources-header-content">
+          <h1 className="resources-title">Cybersecurity Resources Hub</h1>
+          <p className="resources-subtitle">Your curated collection of essential cybersecurity tools, courses, and references</p>
 
-        {/* Controls Section */}
-        <div className="resources-controls">
-          <input
-            type="text"
-            placeholder="Search resources..."
-            value={searchTerm}
-            onChange={handleSearch}
-            className="search-input"
-          />
-
-          <select
-            onChange={handleCategoryChange}
-            value={selectedCategory}
-            className="category-select"
-          >
-            <option value="all">All Categories</option>
-            {Object.keys(resourcesData).map((category) => (
-              <option key={category} value={category}>
-                {capitalizeFirstLetter(category)}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={() => setSorted(!sorted)}
-            className="sort-button"
-          >
-            {sorted ? "Unsort" : "Sort A-Z"}
-          </button>
-
-          <button
-            onClick={handleRandomResource}
-            className="random-button"
-          >
-            Random Resource
-          </button>
+          {/* Stats Banner */}
+          <div className="resources-stats">
+            <div className="resources-stat-item">
+              <FaToolbox className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{cyberSecurityTools.length}</span>
+                <span className="resources-stat-label">Security Tools</span>
+              </div>
+      
+      {/* Results Count */}
+      <div className="resources-results-count">
+        <div className="resources-count-badge">
+          <span>{filteredResources.length}</span> resources found
         </div>
+      </div>
 
-        {/* Random Resource Section */}
-        {randomResource && (
-          <div className="resources-random-resource">
-            <h2>Explore This Resource:</h2>
-            <a
-              href={randomResource.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {randomResource.name}
-            </a>
-          </div>
-        )}
-
-        {/* Resources List */}
-        <ul className="resources-list">
-          {filteredResources.length ? (
-            filteredResources.map((resource, index) => (
-              <li key={index}>
+      {/* Resources Content */}
+      <div className={`resources-content ${viewMode === 'grid' ? 'grid-view' : 'list-view'}`}>
+        {filteredResources.length > 0 ? (
+          filteredResources.map((resource, index) => (
+            <div key={index} className="resource-item">
+              <div className="resource-item-content">
+                {getSourceIcon(resource)}
+                <div className="resource-details">
+                  <a
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="resource-title"
+                  >
+                    {resource.name}
+                  </a>
+                </div>
                 <a
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="resource-link-icon"
                 >
-                  {resource.name}
+                  <FaExternalLinkAlt />
                 </a>
-              </li>
-            ))
-          ) : (
-            <p>No resources found.</p>
-          )}
-        </ul>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="resources-empty">
+            <FaSearch className="resources-empty-icon" />
+            <h3>No resources found</h3>
+            <p>Try adjusting your search criteria or category filter.</p>
+            <button className="resources-reset-btn" onClick={handleReset}>
+              Reset Filters
+            </button>
+          </div>
+        )}
       </div>
+      
+      {/* Random Resource Modal */}
+      {showRandomModal && (
+        <div className={`resource-modal ${fadeOut ? 'fade-out' : ''}`}>
+          <div className="resource-modal-content">
+            <button className="resource-modal-close" onClick={closeRandomModal}>
+              <FaTimes />
+            </button>
+            
+            <div className="resource-modal-header">
+              <div className="resource-modal-icon">
+                <FaLightbulb />
+              </div>
+              <h2 className="resource-modal-title">Resource Spotlight</h2>
+            </div>
+            
+            <div className="resource-modal-body">
+              <h3 className="resource-modal-resource-title">
+                {randomResource.name}
+              </h3>
+              
+              <div className="resource-modal-desc">
+                <p>Expand your cybersecurity knowledge with this resource:</p>
+              </div>
+              
+              <a
+                href={randomResource.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="resource-modal-link"
+              >
+                <span>Open Resource</span>
+                <FaExternalLinkAlt />
+              </a>
+              
+              <button 
+                className="resource-modal-random-btn"
+                onClick={() => {
+                  closeRandomModal();
+                  setTimeout(() => {
+                    handleRandomResource();
+                  }, 400);
+                }}
+              >
+                <FaRandom />
+                <span>Try Another</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  );
-}
-
-export default Resources;
-
+            </div>
+            <div className="resources-stat-item">
+              <FaGraduationCap className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{udemyCourses.length}</span>
+                <span className="resources-stat-label">Courses</span>
+              </div>
+            </div>
+            <div className="resources-stat-item">
+              <FaYoutube className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{youtubeVideos.length + youtubeChannels.length}</span>
+                <span className="resources-stat-label">YouTube Resources</span>
+              </div>
+            </div>
+            <div className="resources-stat-item">
+              <FaFileAlt className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{comptiaObjectives.length}</span>
+                <span className="resources-stat-label">CompTIA Objectives</span>
+              </div>
+            </div>
