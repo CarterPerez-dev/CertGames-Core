@@ -52,7 +52,7 @@ const difficultyColors = {
   "Hard": "#F44336" // Red
 };
 
-const GRCWizard = () => {
+const GRC = () => {
   // State management
   const [category, setCategory] = useState("Random");
   const [difficulty, setDifficulty] = useState("Easy");
@@ -418,4 +418,4 @@ const GRCWizard = () => {
   );
 };
 
-export default GRCWizard;
+export default GRC;
