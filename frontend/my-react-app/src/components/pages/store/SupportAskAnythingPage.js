@@ -1,360 +1,734 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { io } from 'socket.io-client';
 import './SupportAskAnythingPage.css';
+import { 
+  FaPaperPlane, 
+  FaPlus, 
+  FaSync, 
+  FaTimes, 
+  FaInfoCircle,
+  FaRegSmile,
+  FaEnvelope,
+  FaHourglassHalf
+} from 'react-icons/fa';
 
+// Keep a single socket instance at module level
+let socket = null;
 
 function SupportAskAnythingPage() {
-  // -----------------------------
-  // States
-  // -----------------------------
-  const [threads, setThreads] = useState([]);         // array of user’s threads
-  const [selectedThreadId, setSelectedThreadId] = useState(null); // the current topic
-  const [messages, setMessages] = useState([]);       // messages in the current thread
+  // Get user ID from Redux
+  const userIdFromRedux = useSelector((state) => state.user.userId);
+  
+  // Thread and message states
+  const [threads, setThreads] = useState([]);
+  const [selectedThreadId, setSelectedThreadId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  
+  // UI states
+  const [newThreadSubject, setNewThreadSubject] = useState('');
+  const [userMessage, setUserMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [adminIsTyping, setAdminIsTyping] = useState(false);
+  const [showSupportInfoPopup, setShowSupportInfoPopup] = useState(true);
+  
+  // Loading and error states
   const [loadingThreads, setLoadingThreads] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [error, setError] = useState(null);
-
-  // Creating new thread
-  const [newThreadSubject, setNewThreadSubject] = useState('');
-
-  // New message
-  const [userMessage, setUserMessage] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-
-  // For auto-polling
-  const pollIntervalRef = useRef(null);
-
-  // For auto-scrolling the chat
+  const [socketStatus, setSocketStatus] = useState('disconnected');
+  
+  // Refs
   const chatEndRef = useRef(null);
-
-  // -----------------------------
-  // 1) Initial load: fetch threads
-  //    and start poll
-  // -----------------------------
+  const messageInputRef = useRef(null);
+  
+  // Format timestamps
+  const formatTimestamp = (ts) => {
+    if (!ts) return '';
+    const date = new Date(ts);
+    
+    // If it's today, just show the time
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+    
+    // Otherwise show date and time
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+  
+  // Get thread status icon
+  const getStatusIcon = (status = 'open') => {
+    const s = status.toLowerCase();
+    if (s.includes('open')) return '🟢';
+    if (s.includes('pending')) return '🟡';
+    if (s.includes('resolved')) return '✅';
+    if (s.includes('closed')) return '⚪';
+    return '🟢';
+  };
+  
+  // Scroll to bottom of messages
+  const scrollToBottom = useCallback(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, []);
+  
+  //////////////////////////////////////////////////////////////////////////
+  // SOCKET SETUP - Initialize once and handle real-time events
+  //////////////////////////////////////////////////////////////////////////
   useEffect(() => {
-    fetchThreads();
-
-    // Start an interval that refreshes threads and also refreshes messages
-    // for the current thread every 10s
-    pollIntervalRef.current = setInterval(() => {
-      refreshDataWithoutLoading();
-    }, 10000);
-
-    return () => {
-      if (pollIntervalRef.current) {
-        clearInterval(pollIntervalRef.current);
+    // Initialize socket if not already done
+    if (!socket) {
+      console.log('Initializing Socket.IO for support chat...');
+      socket = io(window.location.origin, {
+        path: '/api/socket.io',
+        transports: ['websocket'],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000
+      });
+    }
+    
+    // Socket connection event handlers
+    const handleConnect = () => {
+      console.log('Support socket connected:', socket.id);
+      setSocketStatus('connected');
+      
+      // Join user's personal room for notifications
+      const userId = userIdFromRedux || localStorage.getItem('userId');
+      if (userId) {
+        socket.emit('join_user_room', { userId });
+        console.log(`Joined user room: user_${userId}`);
+      }
+      
+      // Re-join current thread room if there is one
+      if (selectedThreadId) {
+        socket.emit('join_thread', { threadId: selectedThreadId });
+        console.log(`Rejoined thread room on connect: ${selectedThreadId}`);
       }
     };
-  }, []);
-
-  // Quick method to do a forced refresh (no loading spinners)
-  const refreshDataWithoutLoading = async () => {
-    try {
-      // fetch threads but do not set loading
-      const res = await fetch('/api/support/my-chat', {
-        credentials: 'include',
-      });
-      const data = await res.json();
-      if (res.ok && Array.isArray(data)) {
-        setThreads(data);
-      }
-
-      // If there's a selected thread, fetch its messages
-      if (selectedThreadId) {
-        const res2 = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
-          credentials: 'include',
+    
+    const handleDisconnect = () => {
+      console.log('Support socket disconnected');
+      setSocketStatus('disconnected');
+    };
+    
+    const handleConnectError = (err) => {
+      console.error('Socket connection error:', err);
+      setSocketStatus('error');
+    };
+    
+    const handleNewMessage = (payload) => {
+      console.log('Received new_message event:', payload);
+      const { threadId, message } = payload;
+      
+      // Add message to current thread if it's selected
+      if (threadId === selectedThreadId) {
+        setMessages((prev) => {
+          // Check if message already exists to prevent duplicates
+          if (!prev.some(m => 
+              m.content === message.content && 
+              m.sender === message.sender && 
+              m.timestamp === message.timestamp)) {
+            return [...prev, message];
+          }
+          return prev;
         });
-        const data2 = await res2.json();
-        if (res2.ok && data2.messages) {
-          setMessages(data2.messages);
-          scrollToBottom();
-        }
+        scrollToBottom();
       }
-    } catch (err) {
-      // silently fail
+      
+      // Update thread's lastUpdated time
+      setThreads((prev) =>
+        prev.map((t) => {
+          if (t._id === threadId) {
+            return { ...t, lastUpdated: message.timestamp };
+          }
+          return t;
+        })
+      );
+    };
+    
+    const handleNewThread = (threadData) => {
+      console.log('Received new_thread event:', threadData);
+      
+      // Add to threads list if not already there
+      setThreads((prev) => {
+        if (prev.some((t) => t._id === threadData._id)) {
+          return prev;
+        }
+        return [threadData, ...prev];
+      });
+      
+      // Join the thread room
+      socket.emit('join_thread', { threadId: threadData._id });
+      console.log(`Joined new thread room: ${threadData._id}`);
+    };
+    
+    const handleAdminTyping = (data) => {
+      if (data.threadId === selectedThreadId) {
+        setAdminIsTyping(true);
+      }
+    };
+    
+    const handleAdminStopTyping = (data) => {
+      if (data.threadId === selectedThreadId) {
+        setAdminIsTyping(false);
+      }
+    };
+    
+    // Register socket event listeners
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    socket.on('connect_error', handleConnectError);
+    socket.on('new_message', handleNewMessage);
+    socket.on('new_thread', handleNewThread);
+    socket.on('admin_typing', handleAdminTyping);
+    socket.on('admin_stop_typing', handleAdminStopTyping);
+    
+    // If socket is already connected, manually trigger the connect handler
+    if (socket.connected) {
+      handleConnect();
     }
-  };
-
-  // -----------------------------
-  // 2) fetchThreads
-  // -----------------------------
-  const fetchThreads = async () => {
+    
+    // Cleanup function to remove event listeners
+    return () => {
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
+      socket.off('connect_error', handleConnectError);
+      socket.off('new_message', handleNewMessage);
+      socket.off('new_thread', handleNewThread);
+      socket.off('admin_typing', handleAdminTyping);
+      socket.off('admin_stop_typing', handleAdminStopTyping);
+    };
+  }, [selectedThreadId, userIdFromRedux, scrollToBottom]);
+  
+  //////////////////////////////////////////////////////////////////////////
+  // FETCH THREADS - Get user's support threads on mount
+  //////////////////////////////////////////////////////////////////////////
+  const fetchUserThreads = useCallback(async () => {
     setLoadingThreads(true);
     setError(null);
+    
     try {
       const res = await fetch('/api/support/my-chat', {
-        credentials: 'include',
+        method: 'GET',
+        credentials: 'include'
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to load threads');
+      
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || 'Failed to load threads');
+        }
+        
+        const threadList = Array.isArray(data) ? data : [];
+        setThreads(threadList);
+        
+        // Join all thread rooms if socket is connected
+        if (socket && socket.connected) {
+          threadList.forEach((t) => {
+            socket.emit('join_thread', { threadId: t._id });
+            console.log(`Joined thread room on load: ${t._id}`);
+          });
+        }
+      } else {
+        throw new Error('Server returned unexpected response format');
       }
-      setThreads(Array.isArray(data) ? data : []);
     } catch (err) {
       setError(err.message);
+      console.error('Error fetching threads:', err);
     } finally {
       setLoadingThreads(false);
     }
-  };
-
-  // -----------------------------
-  // 3) Create new thread
-  // -----------------------------
+  }, []);
+  
+  useEffect(() => {
+    fetchUserThreads();
+  }, [fetchUserThreads]);
+  
+  //////////////////////////////////////////////////////////////////////////
+  // CREATE THREAD - Start a new support thread
+  //////////////////////////////////////////////////////////////////////////
   const createNewThread = async () => {
-    if (!newThreadSubject.trim()) return;
+    if (!newThreadSubject.trim()) {
+      setError('Please enter a subject for your thread');
+      return;
+    }
+    
     setError(null);
+    
     try {
-      const body = { subject: newThreadSubject.trim() };
       const res = await fetch('/api/support/my-chat', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ subject: newThreadSubject.trim() })
       });
+      
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to create new thread');
+        throw new Error(data.error || 'Failed to create thread');
       }
-      // After creation, refresh threads
+      
+      // Add new thread to state
+      setThreads((prev) => [data, ...prev]);
       setNewThreadSubject('');
-      fetchThreads();
+      
+      // Select the newly created thread
+      setSelectedThreadId(data._id);
+      setMessages([]);
+      
+      // Join the thread room
+      if (socket && socket.connected) {
+        socket.emit('join_thread', { threadId: data._id });
+        console.log(`Joined new thread: ${data._id}`);
+      }
     } catch (err) {
       setError(err.message);
+      console.error('Error creating thread:', err);
     }
   };
-
-  // -----------------------------
-  // 4) selectThread (fetch that thread's messages)
-  // -----------------------------
+  
+  //////////////////////////////////////////////////////////////////////////
+  // SELECT THREAD - Load messages for a thread
+  //////////////////////////////////////////////////////////////////////////
   const selectThread = async (threadId) => {
+    // Skip if already selected
+    if (threadId === selectedThreadId) return;
+    
+    // Leave current thread room if any
+    if (selectedThreadId && socket && socket.connected) {
+      socket.emit('leave_thread', { threadId: selectedThreadId });
+      console.log(`Left thread room: ${selectedThreadId}`);
+    }
+    
     setSelectedThreadId(threadId);
     setMessages([]);
     setLoadingMessages(true);
     setError(null);
-
+    
+    // Join new thread room
+    if (socket && socket.connected) {
+      socket.emit('join_thread', { threadId });
+      console.log(`Joined thread room: ${threadId}`);
+    }
+    
     try {
       const res = await fetch(`/api/support/my-chat/${threadId}`, {
-        credentials: 'include',
+        method: 'GET',
+        credentials: 'include'
       });
+      
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to load thread messages');
+        throw new Error(data.error || 'Failed to load messages');
       }
-      if (data.messages) {
-        setMessages(data.messages);
-        scrollToBottom();
-      } else {
-        setMessages([]);
+      
+      setMessages(data.messages || []);
+      scrollToBottom();
+      
+      // Focus on message input
+      if (messageInputRef.current) {
+        messageInputRef.current.focus();
       }
     } catch (err) {
       setError(err.message);
+      console.error('Error loading thread messages:', err);
     } finally {
       setLoadingMessages(false);
     }
   };
-
-  // -----------------------------
-  // 5) Send a message in the selected thread
-  // -----------------------------
+  
+  //////////////////////////////////////////////////////////////////////////
+  // SEND MESSAGE - Send a message in the current thread
+  //////////////////////////////////////////////////////////////////////////
   const sendMessage = async () => {
     if (!selectedThreadId) {
-      alert('Please select a thread first.');
+      setError('Please select a thread first');
       return;
     }
-    if (!userMessage.trim()) return;
-
+    
+    if (!userMessage.trim()) {
+      return;
+    }
+    
     setError(null);
+    const messageToSend = userMessage.trim();
+    
+    // Optimistic update for better UX
+    const optimisticMessage = {
+      sender: 'user',
+      content: messageToSend,
+      timestamp: new Date().toISOString(),
+      optimistic: true
+    };
+    
+    setMessages((prev) => [...prev, optimisticMessage]);
+    setUserMessage('');
+    scrollToBottom();
+    
+    // Stop typing indicator
+    if (socket && socket.connected && selectedThreadId) {
+      socket.emit('user_stop_typing', { threadId: selectedThreadId });
+    }
+    setIsTyping(false);
+    
     try {
-      const body = { content: userMessage.trim() };
       const res = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ content: messageToSend })
       });
+      
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || 'Failed to send message');
-        return;
+        throw new Error(data.error || 'Failed to send message');
       }
-      // after sending, re-fetch messages (no loading spinner)
-      setUserMessage('');
-      setIsTyping(false);
-      await refreshMessagesOnly();
+      
+      // Update the thread's last updated time
+      setThreads((prev) =>
+        prev.map((t) => {
+          if (t._id === selectedThreadId) {
+            return { ...t, lastUpdated: new Date().toISOString() };
+          }
+          return t;
+        })
+      );
+      
+      // Replace optimistic message with confirmed one by refetching
+      loadMessagesForThread(selectedThreadId);
     } catch (err) {
       setError(err.message);
+      console.error('Error sending message:', err);
+      
+      // Remove optimistic message on error
+      setMessages((prev) => prev.filter((msg) => !msg.optimistic));
     }
   };
-
-  // Utility to refresh messages for the selected thread only
-  const refreshMessagesOnly = async () => {
-    if (!selectedThreadId) return;
+  
+  // Load messages for a thread
+  const loadMessagesForThread = async (threadId) => {
     try {
-      const res = await fetch(`/api/support/my-chat/${selectedThreadId}`, {
-        credentials: 'include',
+      const res = await fetch(`/api/support/my-chat/${threadId}`, {
+        credentials: 'include'
       });
+      
       const data = await res.json();
       if (res.ok && data.messages) {
         setMessages(data.messages);
         scrollToBottom();
       }
     } catch (err) {
-      // ignore
+      console.error('Error reloading messages:', err);
     }
   };
-
-  // -----------------------------
-  // 6) handle text changes (typing)
-  // -----------------------------
+  
+  //////////////////////////////////////////////////////////////////////////
+  // TYPING HANDLERS - Handle user typing events
+  //////////////////////////////////////////////////////////////////////////
   const handleTyping = (e) => {
-    setUserMessage(e.target.value);
-    if (!isTyping) setIsTyping(true);
-  };
-
-  useEffect(() => {
-    if (userMessage.trim().length === 0 && isTyping) {
-      setIsTyping(false);
-    }
-  }, [userMessage, isTyping]);
-
-  // -----------------------------
-  // 7) scrollToBottom
-  // -----------------------------
-  const scrollToBottom = () => {
-    if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    const val = e.target.value;
+    setUserMessage(val);
+    
+    // Emit typing events
+    if (socket && socket.connected && selectedThreadId) {
+      if (!isTyping && val.trim().length > 0) {
+        socket.emit('user_typing', { threadId: selectedThreadId });
+        setIsTyping(true);
+      } else if (isTyping && val.trim().length === 0) {
+        socket.emit('user_stop_typing', { threadId: selectedThreadId });
+        setIsTyping(false);
+      }
     }
   };
-
-  // -----------------------------
-  // 8) formatTimestamp
-  // -----------------------------
-  const formatTimestamp = (ts) => {
-    if (!ts) return '';
-    const d = new Date(ts);
-    return d.toLocaleString();
+  
+  // Handle message input keydown (for Enter key)
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
-
-  // -----------------------------
-  // Render
-  // -----------------------------
+  
+  // Close thread (user-initiated)
+  const closeThread = async () => {
+    if (!selectedThreadId) return;
+    
+    if (!window.confirm('Are you sure you want to close this thread?')) {
+      return;
+    }
+    
+    try {
+      const res = await fetch(`/api/support/my-chat/${selectedThreadId}/close`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: 'Thread closed by user' })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to close thread');
+      }
+      
+      // Update thread status in the list
+      setThreads((prev) =>
+        prev.map((t) => {
+          if (t._id === selectedThreadId) {
+            return { ...t, status: 'closed' };
+          }
+          return t;
+        })
+      );
+      
+      // Reload messages to show closure message
+      loadMessagesForThread(selectedThreadId);
+    } catch (err) {
+      setError(err.message);
+      console.error('Error closing thread:', err);
+    }
+  };
+  
+  // Get selected thread data
+  const selectedThread = threads.find(t => t._id === selectedThreadId);
+  const isThreadClosed = selectedThread?.status?.toLowerCase() === 'closed';
+  
   return (
-    <div className="support-ask-anything-page">
-      <div className="support-container">
-        <h2 className="support-title">Ask Anything / Support Chat</h2>
-
-        {error && <div className="support-error-box">Error: {error}</div>}
-
-        <div className="support-main-layout">
-          {/* Left panel: threads */}
-          <div className="support-left-panel">
-            <div className="create-thread-section">
-              <h3>Create New Thread</h3>
-              <input
-                type="text"
-                className="new-thread-input"
-                placeholder="Subject of new thread..."
-                value={newThreadSubject}
-                onChange={(e) => setNewThreadSubject(e.target.value)}
-              />
-              <button className="create-thread-button" onClick={createNewThread}>
-                Create
-              </button>
+    <div className="support-container">
+      <div className="support-header">
+        <h1 className="support-title">
+          <FaEnvelope className="support-title-icon" />
+          Support / Ask Anything
+        </h1>
+        
+        {showSupportInfoPopup && (
+          <div className="support-info-banner">
+            <div className="support-info-content">
+              <FaInfoCircle className="support-info-icon" />
+              <span>We typically respond within 1-24 hours (average ~3 hours)</span>
             </div>
-
-            <div className="threads-list-wrapper">
-              <h3>Your Threads</h3>
-              {loadingThreads && (
-                <div className="threads-loading">Loading threads...</div>
-              )}
-              {threads.length === 0 && !loadingThreads && (
-                <div className="threads-empty">No threads yet</div>
-              )}
+            <button 
+              className="support-info-close" 
+              onClick={() => setShowSupportInfoPopup(false)}
+            >
+              <FaTimes />
+            </button>
+          </div>
+        )}
+        
+        <p className="support-subtitle">
+          Ask us anything about exams, this website, or technical issues. We're here to help!
+        </p>
+      </div>
+      
+      {error && (
+        <div className="support-error-alert">
+          <span>{error}</span>
+          <button onClick={() => setError(null)}><FaTimes /></button>
+        </div>
+      )}
+      
+      <div className="support-connection-status">
+        <span className={`status-indicator status-${socketStatus}`}></span>
+        <span className="status-text">
+          {socketStatus === 'connected' 
+            ? 'Real-time connection active' 
+            : socketStatus === 'disconnected'
+              ? 'Connecting to real-time service...'
+              : 'Connection error - messages may be delayed'}
+        </span>
+      </div>
+      
+      <div className="support-layout">
+        {/* THREADS PANEL */}
+        <div className="support-threads-panel">
+          <div className="threads-header">
+            <h2>Your Conversations</h2>
+            <button 
+              className="refresh-button" 
+              onClick={fetchUserThreads} 
+              title="Refresh threads"
+            >
+              <FaSync />
+            </button>
+          </div>
+          
+          <div className="create-thread-form">
+            <input
+              type="text"
+              placeholder="New conversation subject..."
+              value={newThreadSubject}
+              onChange={(e) => setNewThreadSubject(e.target.value)}
+              className="create-thread-input"
+            />
+            <button 
+              className="create-thread-button" 
+              onClick={createNewThread}
+              disabled={!newThreadSubject.trim()}
+            >
+              <FaPlus />
+              <span>Create</span>
+            </button>
+          </div>
+          
+          <div className="threads-list-container">
+            {loadingThreads ? (
+              <div className="threads-loading">
+                <FaHourglassHalf className="loading-icon" />
+                <span>Loading conversations...</span>
+              </div>
+            ) : threads.length === 0 ? (
+              <div className="threads-empty">
+                <FaRegSmile className="empty-icon" />
+                <p>No conversations yet</p>
+                <p className="empty-hint">Create one to get started</p>
+              </div>
+            ) : (
               <ul className="threads-list">
-                {threads.map((t) => (
-                  <li
-                    key={t._id}
-                    onClick={() => selectThread(t._id)}
-                    className={
-                      t._id === selectedThreadId
-                        ? 'thread-item thread-item-active'
-                        : 'thread-item'
-                    }
+                {threads.map((thread) => (
+                  <li 
+                    key={thread._id}
+                    className={`thread-item ${selectedThreadId === thread._id ? 'thread-item-active' : ''} ${thread.status?.toLowerCase() === 'closed' ? 'thread-item-closed' : ''}`}
+                    onClick={() => selectThread(thread._id)}
                   >
-                    <div className="thread-subject">
-                      {t.subject || 'Untitled Thread'}
+                    <div className="thread-item-header">
+                      <span className="thread-status-indicator">
+                        {getStatusIcon(thread.status)}
+                      </span>
+                      <h3 className="thread-subject">{thread.subject}</h3>
                     </div>
-                    <div className="thread-status">{t.status || 'open'}</div>
+                    <div className="thread-item-footer">
+                      <span className="thread-status">
+                        {thread.status || 'open'}
+                      </span>
+                      <span className="thread-timestamp">
+                        {thread.lastUpdated ? formatTimestamp(thread.lastUpdated) : 'New'}
+                      </span>
+                    </div>
                   </li>
                 ))}
               </ul>
-            </div>
+            )}
           </div>
-
-          {/* Right panel: current thread's messages */}
-          <div className="support-right-panel">
-            {!selectedThreadId ? (
-              <div className="no-thread-selected">
-                Select a thread or create a new one
-              </div>
-            ) : (
-              <>
-                <div className="messages-header">
-                  {loadingMessages ? (
-                    <span>Loading messages...</span>
-                  ) : (
-                    <button
-                      className="refresh-messages-button"
-                      onClick={refreshMessagesOnly}
+        </div>
+        
+        {/* MESSAGES PANEL */}
+        <div className="support-messages-panel">
+          {!selectedThreadId ? (
+            <div className="no-thread-selected">
+              <FaEnvelope className="no-thread-icon" />
+              <h3>No conversation selected</h3>
+              <p>Choose a conversation from the list or create a new one</p>
+            </div>
+          ) : (
+            <>
+              <div className="messages-header">
+                <div className="selected-thread-info">
+                  <span className="selected-thread-status">
+                    {getStatusIcon(selectedThread?.status)}
+                  </span>
+                  <h2>{selectedThread?.subject}</h2>
+                </div>
+                <div className="messages-actions">
+                  {!isThreadClosed && (
+                    <button 
+                      className="close-thread-button" 
+                      onClick={closeThread}
+                      title="Close conversation"
                     >
-                      Refresh
+                      Close Thread
                     </button>
                   )}
                 </div>
-
-                <div className="messages-container">
-                  {messages.length === 0 ? (
-                    <div className="no-messages">No messages yet for this thread.</div>
-                  ) : (
-                    messages.map((m, idx) => {
-                      const isUser = m.sender === 'user';
+              </div>
+              
+              <div className="messages-container">
+                {loadingMessages ? (
+                  <div className="messages-loading">
+                    <FaHourglassHalf className="loading-icon spin" />
+                    <span>Loading messages...</span>
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div className="messages-empty">
+                    <p>No messages in this conversation yet</p>
+                    <p className="empty-hint">Start the conversation by sending a message</p>
+                  </div>
+                ) : (
+                  <div className="messages-list">
+                    {messages.map((message, index) => {
+                      const isUser = message.sender === 'user';
+                      const isSystem = message.sender === 'system';
+                      
                       return (
-                        <div
-                          key={idx}
-                          className={`message-bubble ${
-                            isUser ? 'message-user' : 'message-admin'
-                          }`}
+                        <div 
+                          key={index}
+                          className={`message ${isUser ? 'message-user' : isSystem ? 'message-system' : 'message-admin'}`}
                         >
-                          <div className="message-sender">
-                            {isUser ? 'You' : 'Admin'}
+                          {!isSystem && (
+                            <div className="message-sender">
+                              {isUser ? 'You' : 'Support Team'}
+                            </div>
+                          )}
+                          
+                          <div className="message-content">
+                            {message.content}
                           </div>
-                          <div className="message-content">{m.content}</div>
+                          
                           <div className="message-timestamp">
-                            {formatTimestamp(m.timestamp)}
+                            {formatTimestamp(message.timestamp)}
                           </div>
                         </div>
                       );
-                    })
-                  )}
-                  <div ref={chatEndRef} />
-                </div>
-
-                {isTyping && <div className="typing-indicator">You are typing...</div>}
-
-                <div className="send-message-area">
-                  <textarea
-                    className="send-message-textarea"
-                    rows={3}
-                    placeholder="Type your message..."
-                    value={userMessage}
-                    onChange={handleTyping}
-                  />
-                  <button className="send-message-button" onClick={sendMessage}>
-                    Send
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                    })}
+                    
+                    {adminIsTyping && (
+                      <div className="admin-typing-indicator">
+                        <div className="typing-dots">
+                          <span></span>
+                          <span></span>
+                          <span></span>
+                        </div>
+                        <span>Support Team is typing...</span>
+                      </div>
+                    )}
+                    
+                    <div ref={chatEndRef} />
+                  </div>
+                )}
+              </div>
+              
+              <div className="message-input-container">
+                {isThreadClosed ? (
+                  <div className="thread-closed-notice">
+                    This conversation is closed. You can create a new one if needed.
+                  </div>
+                ) : (
+                  <>
+                    <textarea
+                      ref={messageInputRef}
+                      className="message-input"
+                      placeholder="Type your message here..."
+                      value={userMessage}
+                      onChange={handleTyping}
+                      onKeyDown={handleKeyDown}
+                      disabled={isThreadClosed}
+                    />
+                    
+                    <button 
+                      className="send-message-button" 
+                      onClick={sendMessage}
+                      disabled={!userMessage.trim() || isThreadClosed}
+                    >
+                      <FaPaperPlane />
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

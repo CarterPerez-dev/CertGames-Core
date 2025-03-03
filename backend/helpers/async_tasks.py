@@ -1,14 +1,15 @@
-# helpers/async_tasks.py
-
+###############################
+# helpers/async_tasks.py (UPDATED)
+###############################
 from celery import shared_task
 from datetime import datetime, timedelta
 import math
 import logging
-
+import requests
 from helpers.celery_app import app
 from mongodb.database import db
 
-# ---------  AI Generation Imports  -----------
+# ---------  AI Generation Imports -----------
 from helpers.analogy_helper import (
     generate_single_analogy as _generate_single_analogy,
     generate_comparison_analogy as _generate_comparison_analogy,
@@ -18,7 +19,7 @@ from helpers.analogy_helper import (
 from helpers.scenario_helper import (
     generate_scenario as _generate_scenario,
     break_down_scenario as _break_down_scenario,
-    generate_interactive_questions as _generate_interactive_questions  
+    generate_interactive_questions as _generate_interactive_questions
 )
 
 from helpers.xploitcraft_helper import Xploits as _Xploits
@@ -175,18 +176,14 @@ def aggregate_performance_metrics():
     error_rate = (errors / total_requests) if total_requests else 0.0
 
     # data_transfer_rate => MB/s
-    # We have total_bytes over total_duration (in seconds).
     data_transfer_rate_mb_s = 0.0
     if total_duration > 0:
-        # Convert total bytes to MB => total_bytes / (1024*1024)
-        # Then divide by total_duration
         data_transfer_rate_mb_s = (total_bytes / (1024.0 * 1024.0)) / total_duration
 
-    # throughput => requests/min for that 5-minute window
-    # total_requests / 5.0
+    # throughput => requests/min
     throughput = total_requests / 5.0
 
-    # 4) Insert aggregator doc into performanceMetrics
+    # 4) Insert aggregator doc
     doc = {
         "avg_request_time": round(avg_request_time, 4),
         "avg_db_query_time": round(avg_db_query_time, 4),
@@ -197,8 +194,8 @@ def aggregate_performance_metrics():
     }
     db.performanceMetrics.insert_one(doc)
 
-    # 5) Cleanup old samples, e.g. older than 30 minutes
-    thirty_min_ago = now - timedelta(minutes=30)
+    # 5) Cleanup old samples (older than 30 min)
+    thirty_min_ago = now - timedelta(minutes=180)
     db.perfSamples.delete_many({"timestamp": {"$lt": thirty_min_ago}})
 
     logger.info(
@@ -209,4 +206,56 @@ def aggregate_performance_metrics():
     )
 
     return f"Aggregated {total_requests} samples; stored in performanceMetrics."
+
+@app.task(bind=True, max_retries=3, default_retry_delay=10)
+def check_api_endpoints(self):
+    """
+    Ping a small set of always-GET-friendly endpoints to confirm the Flask app is up.
+    """
+    endpoints = [
+        "http://backend:5000/health",
+        "http://backend:5000/test/achievements",
+        "http://backend:5000/test/leaderboard"
+    ]
+
+    results = []
+    now = datetime.utcnow()
+    for ep in endpoints:
+        try:
+            r = requests.get(ep, timeout=5)
+            status = r.status_code
+            ok = (status < 400)
+            results.append({"endpoint": ep, "status": status, "ok": ok})
+        except Exception as e:
+            results.append({"endpoint": ep, "status": "error", "ok": False, "error": str(e)})
+
+    doc = {
+        "checkedAt": now,
+        "results": results
+    }
+    db.apiHealth.insert_one(doc)
+    return True
+
+# -----------------------------
+# NEW: Cleanup logs for auditLogs & apiHealth
+# -----------------------------
+@shared_task
+def cleanup_logs():
+    """
+    Removes old audit logs and apiHealth docs older than 30 days.
+    Runs daily (per the schedule in celery_app).
+    """
+    now = datetime.utcnow()
+    cutoff = now - timedelta(days=3)
+
+
+    deleted_audit = db.auditLogs.delete_many({"timestamp": {"$lt": cutoff}})
+
+
+    deleted_health = db.apiHealth.delete_many({"checkedAt": {"$lt": cutoff}})
+
+    logger.info(f"Cleaned logs older than 30 days => auditLogs: {deleted_audit.deleted_count}, "
+                f"apiHealth: {deleted_health.deleted_count}")
+
+    return f"Cleanup complete: auditLogs={deleted_audit.deleted_count}, apiHealth={deleted_health.deleted_count}"
 

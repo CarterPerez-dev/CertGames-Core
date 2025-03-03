@@ -1,539 +1,876 @@
-/*******************************************/
-/* Base Imports & Fonts                   */
-/*******************************************/
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* ShopPage.css - Gamified Shop Page */
 
-/*******************************************/
-/* Base Styles for ShopPage               */
-/*******************************************/
-
-/* Root container for the page */
-.shop-page.mario-kart-theme {
-  font-family: 'Press Start 2P', cursive, sans-serif;
-  /* Faded overlay + background image */
-  background:
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
-    url('./shopbg1.jpg') no-repeat center fixed;
-  background-size: cover;
-  background-attachment: fixed;  /* keeps it fixed on scroll */
-  background-position: center;
-  
-  min-height: 100vh;
-  color: #fff;
-  padding: 20px;
+:root {
+  --shop-bg-dark: #0b0c15;
+  --shop-bg-card: #171a23;
+  --shop-accent: #6543cc;
+  --shop-accent-glow: #8a58fc;
+  --shop-accent-secondary: #ff4c8b;
+  --shop-success: #2ebb77;
+  --shop-error: #ff4e4e;
+  --shop-warning: #ffc107;
+  --shop-text: #e2e2e2;
+  --shop-text-secondary: #9da8b9;
+  --shop-border: #2a2c3d;
+  --shop-input-bg: rgba(0, 0, 0, 0.2);
+  --shop-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
+  --shop-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
+  --shop-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shop-glow: 0 0 15px rgba(134, 88, 252, 0.5);
+  --shop-coin-gold: #ffd700;
+  --shop-level-blue: #00a8ff;
+  --shop-xp-green: #00e676;
 }
 
-/* A fun, bold header */
+/* Main Container */
+.shop-page-container {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  color: var(--shop-text);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--shop-bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* =================== */
+/* HEADER SECTION      */
+/* =================== */
+
 .shop-header {
-  text-align: center;
-  margin-bottom: 30px;
+  background: var(--shop-bg-card);
+  border-radius: 15px;
+  margin-bottom: 20px;
+  padding: 25px;
+  box-shadow: var(--shop-shadow);
+  border: 1px solid var(--shop-border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.shop-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--shop-gradient-secondary);
+}
+
+.shop-title {
+  flex: 1;
+  min-width: 250px;
+}
+
+.shop-title h1 {
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  background: var(--shop-gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+}
+
+.shop-title p {
+  font-size: 16px;
+  color: var(--shop-text-secondary);
+  margin: 0;
+}
+
+.shop-user-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.shop-user-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--shop-input-bg);
+  border: 1px solid var(--shop-border);
+  border-radius: 10px;
+  padding: 10px 15px;
+}
+
+.shop-stat-icon {
+  font-size: 24px;
+}
+
+.shop-user-stat:nth-child(1) .shop-stat-icon {
+  color: var(--shop-coin-gold);
+}
+
+.shop-user-stat:nth-child(2) .shop-stat-icon {
+  color: var(--shop-level-blue);
+}
+
+.shop-stat-value {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--shop-text-secondary);
+}
+
+/* =================== */
+/* STATUS MESSAGE      */
+/* =================== */
+
+.shop-status-message {
+  background: var(--shop-bg-card);
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shop-shadow);
+  animation: slide-in 0.3s ease-out;
+  position: relative;
+  border: 1px solid var(--shop-border);
+}
+
+.shop-status-message.success {
+  border-left: 4px solid var(--shop-success);
+}
+
+.shop-status-message.error {
+  border-left: 4px solid var(--shop-error);
+}
+
+.shop-status-message.info {
+  border-left: 4px solid var(--shop-accent);
+}
+
+.shop-status-message p {
+  margin: 0;
+  flex: 1;
+}
+
+.status-close-btn {
+  background: none;
+  border: none;
+  color: var(--shop-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px;
+  transition: color 0.2s;
+}
+
+.status-close-btn:hover {
+  color: var(--shop-text);
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =================== */
+/* SHOP CONTROLS       */
+/* =================== */
+
+.shop-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.shop-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.shop-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--shop-bg-card);
+  border: 1px solid var(--shop-border);
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--shop-text-secondary);
+  transition: all 0.2s;
+}
+
+.shop-tab:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--shop-text);
+}
+
+.shop-tab.active {
+  background: var(--shop-gradient-primary);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--shop-glow);
+}
+
+.tab-icon {
+  font-size: 16px;
+}
+
+.shop-sort {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--shop-text-secondary);
+}
+
+.shop-select-wrapper {
   position: relative;
 }
 
-/* Title styling reminiscent of video-game titles */
-.shop-header .main-title {
-  font-size: 3rem;
-  color: #c0392b;
-  text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
-  margin-bottom: 10px;
-}
-
-/* Container with user info (coins, level) */
-.shop-user-info {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  font-size: 0.8rem;
-}
-
-/* Each user stat text */
-.shop-user-info .user-stat {
-  background: #444;
-  padding: 5px 10px;
+.shop-select {
+  appearance: none;
+  background: var(--shop-bg-card);
+  border: 1px solid var(--shop-border);
   border-radius: 8px;
-  border: 2px solid #c0392b;
+  padding: 10px 30px 10px 15px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--shop-text);
+  cursor: pointer;
+  min-width: 180px;
 }
 
-/* Purchase status feedback */
-.purchase-status {
-  background: #c0392b;
-  color: #000;
-  text-align: center;
-  font-size: 0.9rem;
-  padding: 10px;
-  margin: 0 auto 20px auto;
-  width: 70%;
-  border: 2px solid #222;
-  border-radius: 10px;
+.shop-select:focus {
+  outline: none;
+  border-color: var(--shop-accent);
 }
 
-/* Loading and error text */
-.loading-text,
-.error-text {
-  text-align: center;
-  margin: 20px 0;
+.select-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  color: var(--shop-text-secondary);
+  pointer-events: none;
 }
 
-/* Section containers for XP Boosts and Avatars 
-   with a transparent background that lets the background show through. */
+/* =================== */
+/* SHOP CONTENT        */
+/* =================== */
+
+.shop-content {
+  flex: 1;
+}
+
 .shop-section {
-  margin-bottom: 40px;
-  border: 2px dashed #c0392b;
-  border-radius: 10px;
-  padding: 20px;
+  margin-bottom: 30px;
 }
 
-/* Titles for each section */
-.section-title {
-  font-size: 1.2rem;
+.shop-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
-  color: #c0392b;
-  text-transform: uppercase;
-  text-shadow: 1px 1px 0 #000;
-  text-align: center;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
-/* Grid container for items */
+.shop-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-size: 24px;
+}
+
+.section-icon {
+  color: var(--shop-accent);
+}
+
+.shop-section-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.unlocked-info,
+.current-boost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--shop-input-bg);
+  border-radius: 30px;
+  padding: 8px 15px;
+  font-size: 14px;
+}
+
+.info-icon {
+  color: var(--shop-accent);
+}
+
+/* =================== */
+/* SHOP GRID           */
+/* =================== */
+
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  justify-items: center;
 }
 
-/* Individual item containers (shared by XP boosts and avatars) */
 .shop-item {
-  background: #333;
-  border: 2px solid #c0392b;
+  background: var(--shop-bg-card);
   border-radius: 12px;
-  width: 200px;
-  text-align: center;
-  padding: 10px;
+  border: 1px solid var(--shop-border);
+  overflow: hidden;
+  box-shadow: var(--shop-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
   position: relative;
-  transition: transform 0.2s ease-in-out;
 }
 
 .shop-item:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
+  box-shadow: var(--shop-shadow), var(--shop-glow);
 }
 
-/* Common styling for all item images */
-.shop-item-image {
+/* Special states */
+.shop-item.equipped {
+  border-color: var(--shop-success);
+}
+
+.shop-item.equipped::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--shop-success), #6aebb0, var(--shop-success));
+}
+
+.shop-item.active-boost {
+  border-color: var(--shop-accent);
+}
+
+.shop-item.active-boost::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--shop-gradient-primary);
+}
+
+.shop-item.level-locked {
+  opacity: 0.8;
+}
+
+.shop-item.unaffordable {
+  opacity: 0.7;
+}
+
+.shop-item-content {
+  padding: 15px;
+}
+
+.shop-item-image-container {
+  position: relative;
   width: 100%;
-  max-width: 120px;
-  object-fit: contain;
-  margin-bottom: 10px;
-  border: 2px solid #c0392b;
+  height: 160px;
+  margin-bottom: 15px;
+  background: var(--shop-input-bg);
   border-radius: 8px;
-  background: #222;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Shared item info area */
-.shop-item-info h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  color: #c0392b;
-  text-shadow: 1px 1px 0 #000;
+.shop-item-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s;
 }
 
-/* Minor texts inside item info (descriptions, cost, etc.) */
-.shop-item-info p {
-  margin: 5px 0;
-  font-size: 0.8rem;
-  line-height: 1.2rem;
+.shop-item:hover .shop-item-image {
+  transform: scale(1.05);
 }
 
-/* Cost, unlock level, etc. */
-.cost, .unlock-level, .default-tag {
-  color: #fff;
-  background: #444;
-  display: inline-block;
-  padding: 3px 6px;
+.equipped-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: var(--shop-success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.unaffordable-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: var(--shop-error);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.locked-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--shop-bg-dark);
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  color: var(--shop-text-secondary);
+  font-size: 12px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.shop-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.shop-item-title {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.shop-item-description {
+  font-size: 14px;
+  color: var(--shop-text-secondary);
+  margin: 0;
+  min-height: 40px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.shop-item-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.shop-item-requirement,
+.shop-item-cost,
+.shop-item-effect {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  background: var(--shop-input-bg);
   border-radius: 6px;
-  margin-bottom: 5px;
-  border: 1px solid #c0392b;
+  padding: 5px 10px;
 }
 
-/* The "Buy"/"Equip" buttons */
-.purchase-button {
+.shop-item-requirement .shop-icon {
+  color: var(--shop-level-blue);
+}
+
+.shop-item-cost .shop-icon {
+  color: var(--shop-coin-gold);
+}
+
+.shop-item-cost.unaffordable {
+  color: var(--shop-error);
+}
+
+.shop-item-effect .shop-icon {
+  color: var(--shop-xp-green);
+}
+
+.shop-item-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--shop-bg-dark);
+  color: var(--shop-text);
+  border: 1px solid var(--shop-border);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 14px;
   cursor: pointer;
-  font-family: 'Press Start 2P', sans-serif;
-  font-size: 0.7rem;
-  color: #000;
-  background: #c0392b;
-  border: 2px solid #222;
-  border-radius: 6px;
-  padding: 8px 12px;
+  transition: all 0.2s;
   margin-top: 10px;
-  text-transform: uppercase;
-  transition: background 0.2s;
+  width: 100%;
 }
 
-.purchase-button:hover:not(:disabled) {
-  background: #e74c3c;
+.shop-item-button.enabled {
+  background: var(--shop-gradient-primary);
+  color: white;
+  border-color: transparent;
 }
 
-.purchase-button:disabled {
-  background: #bbb;
-  color: #777;
+.shop-item-button.enabled:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(101, 67, 204, 0.4);
+}
+
+.shop-item-button.disabled {
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
-/*******************************************/
-/* Optional: Avatar-Specific Classes       */
-/*******************************************/
-
-/* If you want a distinct container look for avatars */
-.avatar-section {
-  /* Currently inherits .shop-section styles. 
-     Add any unique styling if desired. */
+.button-icon {
+  font-size: 16px;
 }
 
-/* If you want a distinct look for avatar items. 
-   They already inherit from .shop-item. */
-.avatar-item {
-  /* Additional/override styles for Avatars go here if needed. */
+.spin-icon {
+  animation: spin 1.5s linear infinite;
 }
 
-/*******************************************/
-/* Media Queries                           */
-/*******************************************/
-
-/*******************************************/
-/* 1) Extra-Small Devices: max-width 320px */
-/*******************************************/
-@media (max-width: 320px) {
-  .shop-page.mario-kart-theme {
-    padding: 10px;
-    font-size: 0.8rem; 
-    background-attachment: scroll !important;
-    background-position: center top !important; 
-  }
-
-  .shop-header .main-title {
-    font-size: 2rem;
-    margin-bottom: 5px;
-  }
-
-  .shop-user-info {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.7rem;
-  }
-
-  .purchase-status {
-    width: 90%;
-    font-size: 0.8rem;
-    padding: 8px;
-    margin-bottom: 15px;
-  }
-
-  .section-title {
-    font-size: 1rem;
-    margin-bottom: 15px;
-  }
-
-  /* XP/Avatar grid: single column for tiny screens */
-  .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .shop-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
-  }
-  .shop-item-image {
-    max-width: 80px;
-    margin-bottom: 5px;
-  }
-  .shop-item-info h3 {
-    font-size: 0.9rem;
-    margin-bottom: 5px;
-  }
-  .shop-item-info p {
-    font-size: 0.7rem;
-    line-height: 1rem;
-  }
-
-  .purchase-button {
-    font-size: 0.6rem;
-    padding: 6px 8px;
-    margin-top: 5px;
-  }
-  
-  /* Avatars (if you want them separate, same fix) */
-  .avatar-section .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  .avatar-section .shop-item.avatar-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
-  }
-  .avatar-section .shop-item.avatar-item .shop-item-image {
-    max-width: 80px;
-    margin-bottom: 5px;
-  }
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/*******************************************/
-/* 2) Small Devices: max-width 480px       */
-/*******************************************/
-@media (max-width: 480px) {
-  .shop-page.mario-kart-theme {
+/* =================== */
+/* LOADING & ERROR     */
+/* =================== */
+
+.shop-loading,
+.shop-error,
+.shop-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: var(--shop-bg-card);
+  border-radius: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  border: 1px solid var(--shop-border);
+  box-shadow: var(--shop-shadow);
+}
+
+.shop-loading-icon {
+  font-size: 40px;
+  color: var(--shop-accent);
+}
+
+.shop-error-icon {
+  font-size: 40px;
+  color: var(--shop-error);
+}
+
+.shop-loading p,
+.shop-error p,
+.shop-empty-state p {
+  margin: 0;
+  font-size: 18px;
+  color: var(--shop-text-secondary);
+}
+
+.shop-retry-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--shop-accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.shop-retry-button:hover {
+  background: var(--shop-accent-glow);
+}
+
+/* =================== */
+/* AVATAR PREVIEW      */
+/* =================== */
+
+.avatar-preview {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  animation: fade-in 0.3s ease;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.preview-container {
+  background: var(--shop-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--shop-border);
+  box-shadow: var(--shop-shadow);
+  width: 250px;
+  overflow: hidden;
+}
+
+.preview-header {
+  background: var(--shop-gradient-primary);
+  padding: 10px 15px;
+}
+
+.preview-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: white;
+}
+
+.preview-content {
+  padding: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.preview-avatar-container,
+.preview-current-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.preview-current-container h4 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--shop-text-secondary);
+}
+
+.preview-avatar,
+.preview-current {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--shop-border);
+}
+
+.preview-avatar {
+  border-color: var(--shop-accent);
+  box-shadow: var(--shop-glow);
+}
+
+/* =================== */
+/* RESPONSIVE STYLES   */
+/* =================== */
+
+/* Tablet Styles */
+@media (max-width: 992px) {
+  .shop-page-container {
     padding: 15px;
-    font-size: 0.85rem;
-    background-attachment: scroll !important;
-    background-position: center top !important; 
-  }
-
-  .shop-header .main-title {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
-  }
-
-  .shop-user-info {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.75rem;
-  }
-
-  .purchase-status {
-    width: 80%;
-    font-size: 0.85rem;
-    margin-bottom: 20px;
-  }
-
-  .section-title {
-    font-size: 1.1rem;
-  }
-
-  /* Keep it single column or minimal columns at 480px */
-  .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .shop-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
-  }
-  .shop-item-image {
-    max-width: 100px;
-    margin-bottom: 8px;
-  }
-  .shop-item-info h3 {
-    font-size: 0.7rem;
-  }
-  .shop-item-info p {
-    font-size: 0.75rem;
-    line-height: 1.1rem;
-  }
-
-  .purchase-button {
-    font-size: 0.65rem;
-    padding: 6px 10px;
   }
   
-  /* Avatars */
-  .avatar-section .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .shop-header {
+    padding: 20px;
   }
-  .avatar-section .shop-item.avatar-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
+  
+  .shop-title h1 {
+    font-size: 24px;
   }
-  .avatar-section .shop-item.avatar-item .shop-item-image {
-    max-width: 100px;
+  
+  .shop-title p {
+    font-size: 14px;
+  }
+  
+  .shop-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 15px;
+  }
+  
+  .shop-item-image-container {
+    height: 140px;
+  }
+  
+  .shop-item-title {
+    font-size: 16px;
+  }
+  
+  .shop-item-description {
+    font-size: 13px;
+    min-height: 36px;
   }
 }
 
-/*******************************************/
-/* 3) Medium-Small Devices: max-width 600px*/
-/*******************************************/
-@media (max-width: 600px) {
-  .shop-page.mario-kart-theme {
-    padding: 20px;
-    font-size: 0.9rem;
-    background-attachment: scroll !important;
-    background-position: center top !important; 
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .shop-page-container {
+    padding: 10px;
   }
-
-  .shop-header .main-title {
-    font-size: 2.7rem;
+  
+  .shop-header {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
   }
-
-  .shop-user-info {
-    justify-content: center;
-    gap: 15px;
-    font-size: 0.8rem;
+  
+  .shop-user-stats {
+    width: 100%;
+    justify-content: space-between;
   }
-
-  .purchase-status {
-    width: 75%;
-    font-size: 0.9rem;
+  
+  .shop-controls {
+    flex-direction: column;
+    align-items: stretch;
   }
-
-  .section-title {
-    font-size: 1.15rem;
+  
+  .shop-sort {
+    width: 100%;
+    justify-content: space-between;
   }
-
-  /* Potentially 1 column for safety, or 2 columns if you prefer */
+  
+  .shop-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
   .shop-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
   }
+  
+  .avatar-preview {
+    bottom: 10px;
+    right: 10px;
+  }
+  
+  .preview-container {
+    width: 200px;
+  }
+  
+  .preview-avatar,
+  .preview-current {
+    width: 70px;
+    height: 70px;
+  }
+}
 
-  .shop-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  .shop-title h1 {
+    font-size: 20px;
   }
-  .shop-item-image {
-    max-width: 110px;
-    margin-bottom: 10px;
+  
+  .shop-title p {
+    font-size: 12px;
   }
-  .shop-item-info h3 {
-    font-size: 0.7rem;
-  }
-  .shop-item-info p {
-    font-size: 0.7rem;
-    line-height: 1.2rem;
-  }
-
-  .purchase-button {
-    font-size: 0.7rem;
+  
+  .shop-user-stat {
     padding: 8px 12px;
   }
   
-  /* Avatars */
-  .avatar-section .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .avatar-section .shop-item.avatar-item {
-    width: 100%;
-    max-width: none;
-    margin: 0 auto;
-  }
-  .avatar-section .shop-item.avatar-item .shop-item-image {
-    max-width: 110px;
-  }
-}
-
-/*******************************************/
-/* 4) Tablets / Larger Mobiles: max-width 768px */
-/*******************************************/
-@media (max-width: 768px) {
-  .shop-page.mario-kart-theme {
-    padding: 25px;
-    font-size: 1rem;
-    background-attachment: scroll !important;
-    background-position: center top !important; 
-  }
-
-  .shop-header .main-title {
-    font-size: 3rem;
-  }
-
-  .shop-user-info {
-    font-size: 0.85rem;
-  }
-
-  .purchase-status {
-    width: 70%;
-    font-size: 0.95rem;
-  }
-
-  .section-title {
-    font-size: 1.2rem;
-  }
-
-  /* Keep it simple: single column or up to 2 columns if you prefer */
-  .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .shop-item {
-    max-width: 260px;
-    padding: 14px;
-  }
-  .shop-item-image {
-    max-width: 120px;
-    margin-bottom: 10px;
-  }
-  .shop-item-info h3 {
-    font-size: 0.7rem;
-  }
-  .shop-item-info p {
-    font-size: 0.6rem;
-    line-height: 1rem;
-  }
-  .purchase-button {
-    font-size: 0.75rem;
-    padding: 8px 14px;
+  .shop-stat-icon {
+    font-size: 20px;
   }
   
-  /* Avatars */
-  .avatar-section .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .stat-value {
+    font-size: 16px;
   }
-  .avatar-section .shop-item.avatar-item {
-    max-width: 150px;
-    margin: 0 auto;
+  
+  .stat-label {
+    font-size: 11px;
   }
-  .avatar-section .shop-item.avatar-item .shop-item-image {
-    max-width: 120px;
+  
+  .shop-tab {
+    padding: 8px 12px;
+    font-size: 13px;
   }
-}
-
-/* ----------------------------------------------------- */
-/* iOS Background Image Fix for .shop-page.mario-kart-theme */
-/* ----------------------------------------------------- */
-@supports (-webkit-touch-callout: none) {
-  .shop-page.mario-kart-theme {
-    background-attachment: scroll !important;
-    position: relative;
-    z-index: 1;
+  
+  .shop-item-content {
+    padding: 12px;
   }
-  .shop-page.mario-kart-theme::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7)),
-      url('./shopbg1.jpg') no-repeat center center;
-    background-size: cover;
-    -webkit-background-size: cover;
-    background-position: center;
+  
+  .shop-item-image-container {
+    height: 120px;
+  }
+  
+  .shop-loading p,
+  .shop-error p,
+  .shop-empty-state p {
+    font-size: 16px;
   }
 }
 
-/* Additional fix for smaller iOS devices */
-@media (max-width: 768px) {
-  @supports (-webkit-touch-callout: none) {
-    .shop-page.mario-kart-theme::before {
-      background-position: center top;
-    }
+/* iPhone SE and other small devices */
+@media (max-width: 375px) {
+  .preview-container {
+    width: 180px;
   }
-}
-
-/* Fallback fix for very old iOS versions */
-@media screen and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
-  .shop-page.mario-kart-theme {
-    background-attachment: scroll !important;
+  
+  .preview-avatar,
+  .preview-current {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .preview-header h3 {
+    font-size: 14px;
+  }
+  
+  .preview-current-container h4 {
+    font-size: 12px;
+  }
+  
+  .shop-item-details {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

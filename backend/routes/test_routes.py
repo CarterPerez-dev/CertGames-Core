@@ -1,17 +1,13 @@
 # ================================
-# test_routes.py (UPDATED, STEP 1)
+# test_routes.py
 # ================================
-# Removes "absolute_perfectionist", "exam_conqueror", and "memory_master" achievements;
-# Optimizes achievement checks via counters; ensures we skip scanning large collections repeatedly.
-# Also includes minor improvements and references to test-length selection (25,50,75,100).
-# Achievements for percentage-based criteria will only apply if selectedLength == 100 (enforced in code).
-# Everything else remains functionally the same.
 
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import pytz
 import time
+from mongodb.database import db
 
 # Mongo collections
 from mongodb.database import (
@@ -37,7 +33,6 @@ from models.test import (
     purchase_item,
     get_achievements,
     get_test_by_id_and_category,
-    # We will replace the old check_and_unlock_achievements with the new version below
     validate_username,
     validate_email,
     validate_password,
@@ -71,36 +66,36 @@ def serialize_datetime(dt):
     return dt.isoformat() if dt else None
 
 
-# ==================================================
-# NEW: Updated check_and_unlock_achievements (STEP 1)
-# We rely on user["achievement_counters"] instead of scanning testAttempts.
-# Also remove references to achievements we are dropping:
-#   - "absolute_perfectionist"
-#   - "exam_conqueror"
-#   - "memory_master" (consecutive perfects)
-# 
-# For achievements that require "score >= X%", we only check if selectedLength == 100.
-# For totalQuestions, testCount, perfectTests, etc., we use counters directly.
-# ==================================================
+
 def check_and_unlock_achievements(user_id):
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return []
-    # Retrieve the user's counters:
+
     counters = user.get("achievement_counters", {})
     unlocked = set(user.get("achievements", []))
     newly_unlocked = []
 
+    start_db = time.time()
     all_ach = list(achievements_collection.find({}))  # or get_achievements()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
     for ach in all_ach:
         aid = ach["achievementId"]
         # If already unlocked, skip
         if aid in unlocked:
             continue
-        
+
         crit = ach.get("criteria", {})
-        # We'll check each criterion in the simplest way possible:
 
         # 1) testCount => total_tests_completed
         test_count_req = crit.get("testCount")
@@ -111,14 +106,8 @@ def check_and_unlock_achievements(user_id):
                 continue
 
         # 2) minScore => e.g. "accuracy_king" with 90
-        #    We do not have the exact per-test high score for each test in counters.
-        #    We'll do a simple approach:
-        #    If we want "score >= X%" once on a 100-question test, we track "highest_score_ever".
-        #    If highest_score_ever >= minScore
         min_score_req = crit.get("minScore")
         if min_score_req is not None:
-            # For these "score >= 90%" type achievements, only count if they took a 100 Q test
-            # AND their highest_score_ever is >= that threshold
             if counters.get("highest_score_ever", 0) >= min_score_req:
                 unlocked.add(aid)
                 newly_unlocked.append(aid)
@@ -127,7 +116,6 @@ def check_and_unlock_achievements(user_id):
         # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
         perfect_req = crit.get("perfectTests")
         if perfect_req is not None:
-            # This is the total number of perfect tests across all categories
             if counters.get("perfect_tests_count", 0) >= perfect_req:
                 unlocked.add(aid)
                 newly_unlocked.append(aid)
@@ -158,12 +146,9 @@ def check_and_unlock_achievements(user_id):
                 continue
 
         # 7) perfectTestsInCategory => "category_perfectionist"
-        #    We only consider 100-question tests for "perfect" status, which we've already
-        #    accounted for in the counters. So if counters says we have X perfect tests in that cat, that's all 100-length.
         perfect_in_cat_req = crit.get("perfectTestsInCategory")
         if perfect_in_cat_req is not None:
             perfect_by_cat = counters.get("perfect_tests_by_category", {})
-            # If ANY category has >= needed perfect tests
             for cat_name, cat_count in perfect_by_cat.items():
                 if cat_count >= perfect_in_cat_req:
                     unlocked.add(aid)
@@ -172,13 +157,9 @@ def check_and_unlock_achievements(user_id):
             continue
 
         # 8) redemption_arc => minScoreBefore + minScoreAfter
-        #    If the user’s lowest_score_ever <= 40, and highest_score_ever >= 90 => this qualifies
-        #    (We assume user chooses 100 Q test for these. In practice, you might check each attempt, but let's keep counters.)
         min_before = crit.get("minScoreBefore")
         min_after = crit.get("minScoreAfter")
         if min_before is not None and min_after is not None:
-            # if user once had a test <= min_before and a test >= min_after
-            # (both presumably on 100-length attempts)
             if (counters.get("lowest_score_ever", 100) <= min_before and
                 counters.get("highest_score_ever", 0) >= min_after):
                 unlocked.add(aid)
@@ -186,9 +167,6 @@ def check_and_unlock_achievements(user_id):
                 continue
 
         # 9) testsCompletedInCategory => "subject_finisher"
-        #    "Complete all 10 tests in a category at least once, regardless of score."
-        #    We can track a set or dict on user doc: counters["tests_completed_by_category"] = {cat: set([testIds])}
-        #    Then if length of that set is >= 10 => done
         cat_required = crit.get("testsCompletedInCategory")
         if cat_required is not None:
             tcbc = counters.get("tests_completed_by_category", {})
@@ -200,27 +178,24 @@ def check_and_unlock_achievements(user_id):
             continue
 
         # 10) allTestsCompleted => "test_finisher"
-        #     If user has counters["tests_completed_set"] size == total tests in the DB,
-        #     we need to get that # from config or store it in counters, e.g. counters.get("total_tests_in_db") etc.
         if crit.get("allTestsCompleted"):
-            # Possibly check:
-            #   if len(user["achievement_counters"]["tests_completed_set"]) >= (some global #)
-            # For now, we skip or handle if you store "all tests" = 130 or something
-            # Example:
             user_completed_tests = counters.get("tests_completed_set", set())
-            # If your DB says total tests is 130:
             TOTAL_TESTS = 130
             if len(user_completed_tests) >= TOTAL_TESTS:
                 unlocked.add(aid)
                 newly_unlocked.append(aid)
                 continue
 
-    # If we unlocked anything new, store in DB:
     if newly_unlocked:
+        start_db = time.time()
         mainusers_collection.update_one(
             {"_id": user["_id"]},
             {"$set": {"achievements": list(unlocked)}}
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
     return newly_unlocked
 
@@ -230,11 +205,16 @@ def check_and_unlock_achievements(user_id):
 # -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return jsonify({"error": "User not found"}), 404
     user = serialize_user(user)
-    # Optionally show or hide password in response
     if "password" not in user:
         user["password"] = user.get("password")
     return jsonify(user), 200
@@ -248,23 +228,22 @@ def register_user():
     """
     user_data = request.json or {}
     try:
-        # Before creating, ensure we set up the new "achievement_counters"
-        # (You can do it in create_user as well, but here's a fallback.)
         user_data.setdefault("achievement_counters", {
             "total_tests_completed": 0,
             "perfect_tests_count": 0,
             "perfect_tests_by_category": {},
-            # We remove consecutive perfect logic:
-            # "consecutive_perfect_streak": 0,
             "highest_score_ever": 0.0,
             "lowest_score_ever": 100.0,
             "total_questions_answered": 0,
-            # optionally track tests_completed_by_category or tests_completed_set:
-            # "tests_completed_by_category": {},
-            # "tests_completed_set": set()
         })
 
+        start_db = time.time()
         user_id = create_user(user_data)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"message": "User created", "user_id": str(user_id)}), 201
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
@@ -273,28 +252,80 @@ def register_user():
 
 @api_bp.route('/login', methods=['POST'])
 def login():
-    """
-    Login: /api/login
-    Expects { usernameOrEmail, password } in JSON
-    If success => store session['userId'] and return user doc in JSON
-    """
     data = request.json
     if not data:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "No JSON data provided"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"error": "No JSON data provided"}), 400
 
     identifier = data.get("usernameOrEmail")
     password = data.get("password")
     if not identifier or not password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Missing username/password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"error": "Username (or Email) and password are required"}), 400
 
+    start_db = time.time()
     user = get_user_by_identifier(identifier)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user or user.get("password") != password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Invalid username or password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"error": "Invalid username or password"}), 401
 
-    # Store this user's ID in session so require_user_logged_in() sees them as logged in
     session['userId'] = str(user["_id"])
 
+    start_db = time.time()
+    db.auditLogs.insert_one({
+        "timestamp": datetime.utcnow(),
+        "userId": user["_id"],
+        "ip": request.remote_addr or "unknown",
+        "success": True
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     user = serialize_user(user)
+
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -311,16 +342,28 @@ def login():
         "password": user.get("password")
     }), 200
 
-
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
     data = request.json or {}
     xp_to_add = data.get("xp", 0)
+
+    start_db = time.time()
     updated = update_user_xp(user_id, xp_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not updated:
         return jsonify({"error": "User not found"}), 404
 
+    start_db = time.time()
     new_achievements = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     updated["newAchievements"] = new_achievements
     return jsonify(updated), 200
 
@@ -328,9 +371,21 @@ def add_xp_route(user_id):
 def add_coins_route(user_id):
     data = request.json or {}
     coins_to_add = data.get("coins", 0)
-    update_user_coins(user_id, coins_to_add)
 
+    start_db = time.time()
+    update_user_coins(user_id, coins_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
     newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({
         "message": "Coins updated",
         "newlyUnlocked": newly_unlocked
@@ -341,7 +396,13 @@ def add_coins_route(user_id):
 # -------------------------------------------------------------------
 @api_bp.route('/shop', methods=['GET'])
 def fetch_shop():
+    start_db = time.time()
     items = get_shop_items()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     for item in items:
         item["_id"] = str(item["_id"])
     return jsonify(items), 200
@@ -353,9 +414,21 @@ def purchase_item_route(item_id):
     if not user_id:
         return jsonify({"success": False, "message": "userId is required"}), 400
 
+    start_db = time.time()
     result = purchase_item(user_id, item_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if result["success"]:
+        start_db = time.time()
         newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         result["newly_unlocked"] = newly_unlocked
         return jsonify(result), 200
     else:
@@ -370,7 +443,13 @@ def equip_item_route():
     if not user_id or not item_id:
         return jsonify({"success": False, "message": "userId and itemId are required"}), 400
 
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return jsonify({"success": False, "message": "User not found"}), 404
 
@@ -379,20 +458,30 @@ def equip_item_route():
     except Exception:
         return jsonify({"success": False, "message": "Invalid item ID"}), 400
 
+    start_db = time.time()
     item_doc = shop_collection.find_one({"_id": oid})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not item_doc:
         return jsonify({"success": False, "message": "Item not found in shop"}), 404
 
-    # If user hasn't purchased it, check if it's level-based unlock
     if oid not in user.get("purchasedItems", []):
         if user.get("level", 1) < item_doc.get("unlockLevel", 1):
             return jsonify({"success": False, "message": "Item not unlocked"}), 400
 
-    # Equip the avatar
+    start_db = time.time()
     mainusers_collection.update_one(
         {"_id": user["_id"]},
         {"$set": {"currentAvatar": oid}}
     )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({"success": True, "message": "Avatar equipped"}), 200
 
 # -------------------------------------------------------------------
@@ -400,7 +489,13 @@ def equip_item_route():
 # -------------------------------------------------------------------
 @api_bp.route('/tests/<test_id>', methods=['GET'])
 def fetch_test_by_id_route(test_id):
+    start_db = time.time()
     test_doc = get_test_by_id_and_category(test_id, None)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not test_doc:
         return jsonify({"error": "Test not found"}), 404
     test_doc["_id"] = str(test_doc["_id"])
@@ -408,18 +503,21 @@ def fetch_test_by_id_route(test_id):
 
 @api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
 def fetch_test_by_category_and_id(category, test_id):
-    """
-    e.g. /tests/aplus/1
-    """
     try:
         test_id_int = int(test_id)
     except Exception:
         return jsonify({"error": "Invalid test ID"}), 400
 
+    start_db = time.time()
     test_doc = tests_collection.find_one({
         "testId": test_id_int,
         "category": category
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not test_doc:
         return jsonify({"error": "Test not found"}), 404
 
@@ -431,10 +529,6 @@ def fetch_test_by_category_and_id(category, test_id):
 # -------------------------------------------------------------------
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
 def get_test_attempt(user_id, test_id):
-    """
-    Returns either an unfinished attempt if it exists,
-    otherwise the most recent finished attempt.
-    """
     try:
         user_oid = ObjectId(user_id)
         try:
@@ -450,16 +544,26 @@ def get_test_attempt(user_id, test_id):
     else:
         query["testId"] = test_id
 
+    start_db = time.time()
     attempt = testAttempts_collection.find_one(query)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not attempt:
-        # If no unfinished, grab the most recent finished
         query_finished = {"userId": user_oid, "finished": True}
         if test_id_int is not None:
             query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
         else:
             query_finished["testId"] = test_id
 
+        start_db = time.time()
         attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
     if not attempt:
         return jsonify({"attempt": None}), 200
@@ -470,23 +574,6 @@ def get_test_attempt(user_id, test_id):
 
 @api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
 def update_test_attempt(user_id, test_id):
-    """
-    Upserts (creates or updates) a user's test attempt document.
-    Now supports 'examMode' and 'selectedLength'.
-    Expects JSON with:
-      {
-        "category": <string>,
-        "answers": [],
-        "score": 0,
-        "totalQuestions": <int>,
-        "selectedLength": <int>,
-        "currentQuestionIndex": <int>,
-        "shuffleOrder": [],
-        "answerOrder": [],
-        "finished": <bool>,
-        "examMode": <bool>
-      }
-    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
@@ -523,19 +610,19 @@ def update_test_attempt(user_id, test_id):
     if update_doc["$set"]["finished"] is True:
         update_doc["$set"]["finishedAt"] = datetime.utcnow()
 
+    start_db = time.time()
     testAttempts_collection.update_one(filter_, update_doc, upsert=True)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({
         "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
     }), 200
 
 @api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
 def finish_test_attempt(user_id, test_id):
-    """
-    Called when the user finishes a test attempt.
-    If examMode == true => we do a bulk awarding of XP/coins for first-time correct answers.
-    If examMode == false => awarding is immediate per question (already done).
-    Also we do an update to user’s achievement counters here.
-    """
     data = request.json or {}
     try:
         user_oid = ObjectId(user_id)
@@ -559,14 +646,25 @@ def finish_test_attempt(user_id, test_id):
             "totalQuestions": data.get("totalQuestions", 0)
         }
     }
-    testAttempts_collection.update_one(filter_, update_doc)
 
-    # Retrieve the now-finished attempt doc
+    start_db = time.time()
+    testAttempts_collection.update_one(filter_, update_doc)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
     attempt_doc = testAttempts_collection.find_one({
         "userId": user_oid,
         "$or": [{"testId": test_id_int}, {"testId": test_id}],
         "finished": True
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not attempt_doc:
         return jsonify({"error": "Attempt not found after finishing."}), 404
 
@@ -576,17 +674,26 @@ def finish_test_attempt(user_id, test_id):
     total_questions = attempt_doc.get("totalQuestions", 0)
     category = attempt_doc.get("category", "global")
 
-    # If exam_mode => do awarding for first-time correct answers
     if exam_mode:
+        start_db = time.time()
         award_correct_answers_in_bulk(
             user_id=user_id,
             attempt_doc=attempt_doc,
             xp_per_correct=10,
             coins_per_correct=5
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
-    # Now update user’s achievement counters in one pass:
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -597,27 +704,11 @@ def finish_test_attempt(user_id, test_id):
 
     update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
 
-    # If this user is tracking "tests_completed_by_category":
-    # Let's add the testId to that category's set. We can store sets in Python,
-    # but in Mongo we store as an array, or we do an $addToSet operation
-    # Example, if you want "subject_finisher" to track sets of test IDs:
-    #     update_ops.setdefault("$addToSet", {})
-    #     catField = f"achievement_counters.tests_completed_by_category.{category}"
-    #     update_ops["$addToSet"][catField] = attempt_doc["testId"]
-    #
-    # For demonstration, we do it only if you truly want that approach:
-    # cat_field = f"achievement_counters.tests_completed_by_category.{category}"
-    # update_ops.setdefault("$addToSet", {})
-    # update_ops["$addToSet"][cat_field] = attempt_doc["testId"]
-
-    # If perfect test (and selectedLength == 100 to be recognized as "perfect" for achievements):
     if score == total_questions and total_questions > 0 and selected_length == 100:
         update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
         catKey = f"achievement_counters.perfect_tests_by_category.{category}"
         update_ops["$inc"][catKey] = 1
-    # We do not track consecutive streaks anymore, as memory_master is removed.
 
-    # Highest / lowest test score if selectedLength == 100
     if selected_length == 100:
         highest_so_far = counters.get("highest_score_ever", 0.0)
         lowest_so_far = counters.get("lowest_score_ever", 100.0)
@@ -629,13 +720,29 @@ def finish_test_attempt(user_id, test_id):
         if set_ops:
             update_ops.setdefault("$set", {}).update(set_ops)
 
-    # total_questions_answered => always increment by selectedLength (no matter exam mode or not)
     update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
 
+    start_db = time.time()
     mainusers_collection.update_one({"_id": user_oid}, update_ops)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
+    start_db = time.time()
     newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
     updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({
         "message": "Test attempt finished",
         "examMode": exam_mode,
@@ -656,9 +763,14 @@ def list_test_attempts(user_id):
     page_size = request.args.get("page_size", default=50, type=int)
     skip_count = (page - 1) * page_size
 
+    start_db = time.time()
     cursor = testAttempts_collection.find(
         {"userId": user_oid}
     ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
     attempts = []
     for doc in cursor:
@@ -677,11 +789,6 @@ def list_test_attempts(user_id):
 # -------------------------------------------------------------------
 @api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
 def submit_answer(user_id):
-    """
-    Accepts a single answer for the current question.
-    If examMode == false => immediate awarding if first-time correct.
-    If examMode == true => awarding on /finish.
-    """
     data = request.json or {}
     test_id = str(data.get("testId"))
     question_id = data.get("questionId")
@@ -690,10 +797,17 @@ def submit_answer(user_id):
     xp_per_correct = data.get("xpPerCorrect", 10)
     coins_per_correct = data.get("coinsPerCorrect", 5)
 
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return jsonify({"error": "User not found"}), 404
 
+    start_db = time.time()
     attempt_doc = testAttempts_collection.find_one({
         "userId": user["_id"],
         "finished": False,
@@ -702,13 +816,17 @@ def submit_answer(user_id):
             {"testId": test_id}
         ]
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not attempt_doc:
         return jsonify({"error": "No unfinished attempt doc found"}), 404
 
     exam_mode = attempt_doc.get("examMode", False)
     is_correct = (selected_index == correct_index)
 
-    # Update the attempt "answers" array
     existing_answer_index = None
     for i, ans in enumerate(attempt_doc.get("answers", [])):
         if ans.get("questionId") == question_id:
@@ -725,6 +843,7 @@ def submit_answer(user_id):
             new_score += 1
             update_payload["score"] = new_score
 
+        start_db = time.time()
         testAttempts_collection.update_one(
             {
                 "_id": attempt_doc["_id"],
@@ -732,6 +851,11 @@ def submit_answer(user_id):
             },
             {"$set": update_payload}
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
     else:
         new_answer_doc = {
             "questionId": question_id,
@@ -744,32 +868,66 @@ def submit_answer(user_id):
         if exam_mode is False and is_correct:
             push_update["$set"] = {"score": new_score}
 
+        start_db = time.time()
         testAttempts_collection.update_one(
             {"_id": attempt_doc["_id"]},
             push_update
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
     awarded_xp = 0
     awarded_coins = 0
     if exam_mode is False:
-        # Check if user answered it for the first time
+        start_db = time.time()
         already_correct = correctAnswers_collection.find_one({
             "userId": user["_id"],
             "testId": test_id,
             "questionId": question_id
         })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         if is_correct and not already_correct:
+            start_db = time.time()
             correctAnswers_collection.insert_one({
                 "userId": user["_id"],
                 "testId": test_id,
                 "questionId": question_id
             })
+            duration = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration
+
+            start_db = time.time()
             update_user_xp(user_id, xp_per_correct)
+            duration2 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration2
+
+            start_db = time.time()
             update_user_coins(user_id, coins_per_correct)
+            duration3 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration3
+
             awarded_xp = xp_per_correct
             awarded_coins = coins_per_correct
 
+        start_db = time.time()
         updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({
             "examMode": False,
             "isCorrect": is_correct,
@@ -780,7 +938,6 @@ def submit_answer(user_id):
             "newCoins": updated_user.get("coins", 0)
         }), 200
     else:
-        # examMode == true => store only
         return jsonify({
             "examMode": True,
             "message": "Answer stored. No immediate feedback in exam mode."
@@ -791,7 +948,13 @@ def submit_answer(user_id):
 # -------------------------------------------------------------------
 @api_bp.route('/achievements', methods=['GET'])
 def fetch_achievements_route():
+    start_db = time.time()
     ach_list = list(achievements_collection.find({}))
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     for ach in ach_list:
         ach["_id"] = str(ach["_id"])
     return jsonify(ach_list), 200
@@ -806,11 +969,15 @@ def get_leaderboard():
 
     now_ms = int(time.time() * 1000)
     if now_ms - leaderboard_cache_timestamp > LEADERBOARD_CACHE_DURATION_MS:
-        # Re-fetch top 1000 from DB
+        start_db = time.time()
         cursor = mainusers_collection.find(
             {},
             {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
         ).sort("level", -1).limit(1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
         new_results = []
         rank = 1
@@ -823,7 +990,13 @@ def get_leaderboard():
                 "avatarUrl": None
             }
             if user.get("currentAvatar"):
+                start_db = time.time()
                 avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+                duration = time.time() - start_db
+                if not hasattr(g, 'db_time_accumulator'):
+                    g.db_time_accumulator = 0.0
+                g.db_time_accumulator += duration
+
                 if avatar_item and "imageUrl" in avatar_item:
                     user_data["avatarUrl"] = avatar_item["imageUrl"]
             new_results.append(user_data)
@@ -865,14 +1038,33 @@ def change_username():
     if not valid:
         return jsonify({"error": "Invalid new username", "details": errors}), 400
 
-    if mainusers_collection.find_one({"username": new_username}):
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
         return jsonify({"error": "Username already taken"}), 400
 
+    start_db = time.time()
     doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not doc:
         return jsonify({"error": "User not found"}), 404
 
+    start_db = time.time()
     update_user_fields(user_id, {"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({"message": "Username updated"}), 200
 
 @api_bp.route('/user/change-email', methods=['POST'])
@@ -887,14 +1079,33 @@ def change_email():
     if not valid:
         return jsonify({"error": "Invalid email", "details": errors}), 400
 
-    if mainusers_collection.find_one({"email": new_email}):
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
         return jsonify({"error": "Email already in use"}), 400
 
+    start_db = time.time()
     doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not doc:
         return jsonify({"error": "User not found"}), 404
 
+    start_db = time.time()
     update_user_fields(user_id, {"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({"message": "Email updated"}), 200
 
 @api_bp.route('/user/change-password', methods=['POST'])
@@ -914,14 +1125,26 @@ def change_password():
     if not valid:
         return jsonify({"error": "Invalid new password", "details": errors}), 400
 
+    start_db = time.time()
     user_doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user_doc:
         return jsonify({"error": "User not found"}), 404
 
     if user_doc.get("password") != old_password:
         return jsonify({"error": "Old password is incorrect"}), 401
 
+    start_db = time.time()
     update_user_fields(user_id, {"password": new_password})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({"message": "Password updated"}), 200
 
 @api_bp.route('/subscription/cancel', methods=['POST'])
@@ -935,28 +1158,35 @@ def update_single_answer(user_id, test_id):
     question_id = data.get("questionId")
     user_answer_index = data.get("userAnswerIndex")
     correct_answer_index = data.get("correctAnswerIndex")
-    
+
     try:
         user_oid = ObjectId(user_id)
         test_id_int = int(test_id) if test_id.isdigit() else test_id
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
-    
+
+    start_db = time.time()
     attempt = testAttempts_collection.find_one({
-        "userId": user_oid, 
+        "userId": user_oid,
         "finished": False,
         "$or": [{"testId": test_id_int}, {"testId": test_id}]
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not attempt:
         return jsonify({"error": "Attempt not found"}), 404
-    
+
     existing_answer_index = None
     for i, ans in enumerate(attempt.get("answers", [])):
         if ans.get("questionId") == question_id:
             existing_answer_index = i
             break
-    
+
     if existing_answer_index is not None:
+        start_db = time.time()
         testAttempts_collection.update_one(
             {
                 "userId": user_oid,
@@ -970,7 +1200,13 @@ def update_single_answer(user_id, test_id):
                 "score": data.get("score", 0)
             }}
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
     else:
+        start_db = time.time()
         testAttempts_collection.update_one(
             {
                 "userId": user_oid,
@@ -988,7 +1224,11 @@ def update_single_answer(user_id, test_id):
                 "$set": {"score": data.get("score", 0)}
             }
         )
-    
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
     return jsonify({"message": "Answer updated"}), 200
 
 # For updating the current question position only
@@ -996,13 +1236,14 @@ def update_single_answer(user_id, test_id):
 def update_position(user_id, test_id):
     data = request.json or {}
     current_index = data.get("currentQuestionIndex", 0)
-    
+
     try:
         user_oid = ObjectId(user_id)
         test_id_int = int(test_id) if test_id.isdigit() else test_id
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
-    
+
+    start_db = time.time()
     testAttempts_collection.update_one(
         {
             "userId": user_oid,
@@ -1014,7 +1255,11 @@ def update_position(user_id, test_id):
             "finished": data.get("finished", False)
         }}
     )
-    
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     return jsonify({"message": "Position updated"}), 200
 
 ##############################################
@@ -1022,10 +1267,14 @@ def update_position(user_id, test_id):
 ##############################################
 @api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
 def daily_bonus(user_id):
-    """
-    Award a daily bonus if 24 hours have passed.
-    """
+    user = None
+    start_db = time.time()
     user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -1041,13 +1290,37 @@ def daily_bonus(user_id):
             "newLastDailyClaim": serialize_datetime(last_claim)
         }), 200
     else:
+        start_db = time.time()
         update_user_coins(user_id, 1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
         mainusers_collection.update_one(
             {"_id": user["_id"]},
             {"$set": {"lastDailyClaim": now}}
         )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
         updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
         newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({
             "success": True,
             "message": "Daily bonus applied",
@@ -1068,17 +1341,27 @@ def get_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    # Example dayIndex=0
     day_index = 0
 
+    start_db = time.time()
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not daily_doc:
         return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
 
+    start_db = time.time()
     existing_answer = dailyAnswers_collection.find_one({
         "userId": user_oid,
         "dayIndex": day_index
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
     response = {
         "dayIndex": day_index,
@@ -1103,14 +1386,26 @@ def submit_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
+    start_db = time.time()
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if not daily_doc:
         return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
 
+    start_db = time.time()
     existing = dailyAnswers_collection.find_one({
         "userId": user_oid,
         "dayIndex": day_index
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if existing:
         return jsonify({"error": "You already answered today's question"}), 400
 
@@ -1118,6 +1413,7 @@ def submit_daily_question():
     is_correct = (selected_index == correct_index)
     awarded_coins = 250 if is_correct else 50
 
+    start_db = time.time()
     dailyAnswers_collection.insert_one({
         "userId": user_oid,
         "dayIndex": day_index,
@@ -1125,10 +1421,31 @@ def submit_daily_question():
         "userAnswerIndex": selected_index,
         "isCorrect": is_correct
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
-    update_user_coins(user_id, awarded_coins)
+    start_db = time.time()
+    update_user_coins(str(user_oid), awarded_coins)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
     updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
     newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
     return jsonify({
         "message": "Answer submitted",

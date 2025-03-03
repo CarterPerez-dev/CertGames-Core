@@ -1,14 +1,11 @@
 // src/components/pages/store/UserProfile.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchUserData } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
-import './UserProfile.css'; // Our updated CSS with the unique eye icon
+import './UserProfile.css';
 
-import '../auth/auth.css';
-import '../auth/AuthToast.css'; 
-import PasswordRequirements from '../auth/PasswordRequirements';
-
+// Icons import
 import {
   FaTrophy,
   FaMedal,
@@ -21,20 +18,36 @@ import {
   FaRegSmile,
   FaMagic,
   FaEye,
-  FaEyeSlash
+  FaEyeSlash,
+  FaCoins,
+  FaEdit,
+  FaUserAlt,
+  FaEnvelope,
+  FaKey,
+  FaSignOutAlt,
+  FaChevronRight,
+  FaChevronDown,
+  FaChevronUp,
+  FaStore,
+  FaTimes,
+  FaCheck,
+  FaUserCircle,
+  FaLevelUpAlt
 } from 'react-icons/fa';
 
-// ====================================
+// Requirements component for password validation
+import PasswordRequirements from '../auth/PasswordRequirements';
+
+// ==========================
 // FRONTEND VALIDATION HELPERS
-// (Approximating your Python rules)
-// ====================================
+// ==========================
 
 // Example small dictionary of very common passwords
 const COMMON_PASSWORDS = new Set([
   "password", "123456", "12345678", "qwerty", "letmein", "welcome"
 ]);
 
-// Private Use / Surrogates ranges (approx in JS)
+// Private Use / Surrogates ranges
 const PRIVATE_USE_RANGES = [
   [0xE000, 0xF8FF],
   [0xF0000, 0xFFFFD],
@@ -60,7 +73,7 @@ function hasForbiddenUnicodeScripts(str) {
   return false;
 }
 
-// Disallow mixing major scripts (Latin, Greek, Cyrillic) -- simplistic approach
+// Disallow mixing major scripts
 function disallowMixedScripts(str) {
   const scriptSets = new Set();
   for (let i = 0; i < str.length; i++) {
@@ -98,12 +111,12 @@ function frontValidateUsername(username) {
 
   // 2) Forbidden Unicode script checks
   if (hasForbiddenUnicodeScripts(name)) {
-    errors.push("Username contains forbidden Unicode blocks (private use or surrogates).");
+    errors.push("Username contains forbidden Unicode blocks.");
   }
 
   // 3) Disallow mixing multiple major scripts
   if (disallowMixedScripts(name)) {
-    errors.push("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).");
+    errors.push("Username cannot mix multiple Unicode scripts.");
   }
 
   // 4) Forbid control chars [0..31, 127] + suspicious punctuation
@@ -113,11 +126,11 @@ function frontValidateUsername(username) {
     const cp = name.charCodeAt(i);
     // Check ranges
     if (forbiddenRanges.some(([start, end]) => cp >= start && cp <= end)) {
-      errors.push("Username contains forbidden control characters (ASCII 0-31 or 127).");
+      errors.push("Username contains forbidden control characters.");
       break;
     }
     if (forbiddenChars.has(name[i])) {
-      errors.push("Username contains forbidden characters like <, >, or whitespace.");
+      errors.push("Username contains forbidden characters.");
       break;
     }
   }
@@ -157,7 +170,7 @@ function frontValidateEmail(email) {
   const forbiddenAscii = new Set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\']);
   for (let i = 0; i < e.length; i++) {
     if (forbiddenAscii.has(e[i])) {
-      errors.push("Email contains forbidden characters like <, >, or whitespace.");
+      errors.push("Email contains forbidden characters.");
       break;
     }
   }
@@ -236,10 +249,9 @@ function frontValidatePassword(password, username, email) {
   return errors;
 }
 
-// ====================================
-// Achievement icon mapping
-// (same as used in AchievementPage)
-// ====================================
+// ============================
+// ACHIEVEMENT ICON MAPPING
+// ============================
 const iconMapping = {
   "test_rookie": FaTrophy,
   "accuracy_king": FaMedal,
@@ -249,7 +261,6 @@ const iconMapping = {
   "platinum_pro": FaMagic,
   "walking_encyclopedia": FaBrain,
   "redemption_arc": FaBolt,
-  "memory_master": FaRegSmile,
   "coin_collector_5000": FaBook,
   "coin_hoarder_10000": FaBook,
   "coin_tycoon_50000": FaBook,
@@ -260,21 +271,46 @@ const iconMapping = {
   "mid_tier_grinder_25": FaMedal,
   "elite_scholar_50": FaStar,
   "ultimate_master_100": FaCrown,
-  "category_perfectionist": FaBolt,
-  "absolute_perfectionist": FaBolt,
-  "exam_conqueror": FaMedal,
-  "subject_specialist": FaMedal,
   "answer_machine_1000": FaBook,
   "knowledge_beast_5000": FaBrain,
   "question_terminator": FaBrain,
-  "test_finisher": FaCheckCircle,
-  "subject_finisher": FaCheckCircle
+  "test_finisher": FaCheckCircle
 };
 
+// ============================
+// COLOR MAPPING FOR ACHIEVEMENTS
+// ============================
+const colorMapping = {
+  "test_rookie": "#ff5555",
+  "accuracy_king": "#ffa500",
+  "bronze_grinder": "#cd7f32",
+  "silver_scholar": "#c0c0c0",
+  "gold_god": "#ffd700",
+  "platinum_pro": "#e5e4e2",
+  "walking_encyclopedia": "#00fa9a",
+  "redemption_arc": "#ff4500",
+  "coin_collector_5000": "#ff69b4",
+  "coin_hoarder_10000": "#ff1493",
+  "coin_tycoon_50000": "#ff0000",
+  "perfectionist_1": "#adff2f",
+  "double_trouble_2": "#7fff00",
+  "error404_failure_not_found": "#00ffff",
+  "level_up_5": "#f08080",
+  "mid_tier_grinder_25": "#ff8c00",
+  "elite_scholar_50": "#ffd700",
+  "ultimate_master_100": "#ff4500",
+  "answer_machine_1000": "#ff69b4",
+  "knowledge_beast_5000": "#00fa9a",
+  "question_terminator": "#ff1493",
+  "test_finisher": "#adff2f"
+};
+
+// Main UserProfile Component
 const UserProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Get user data from Redux store
   const {
     userId,
     username,
@@ -285,15 +321,15 @@ const UserProfile = () => {
     achievements = [],
     currentAvatar,
     purchasedItems,
-    subscriptionActive,
-    password
+    subscriptionActive
   } = useSelector((state) => state.user);
 
-  // Get all achievements from the store (so we can map IDs to titles, descriptions, icons)
+  // Get achievements and shop items data
   const allAchievements = useSelector((state) => state.achievements.all);
-
-  // Get all shop items from the store (so we can map purchased IDs to actual item info)
   const allShopItems = useSelector((state) => state.shop.items);
+
+  // Tabs state management
+  const [activeTab, setActiveTab] = useState('overview');
 
   // Toggles for showing/hiding different forms
   const [showChangeUsername, setShowChangeUsername] = useState(false);
@@ -304,7 +340,7 @@ const UserProfile = () => {
 
   const [showChangePassword, setShowChangePassword] = useState(false);
 
-  // Toggles for showing/hiding password text
+  // Password form states
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [oldPassword, setOldPassword] = useState('');
 
@@ -316,15 +352,29 @@ const UserProfile = () => {
 
   const [showRequirements, setShowRequirements] = useState(false);
 
-  // The "current password" in the overview
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-
-  // For success/error messages
+  // Status message
   const [statusMessage, setStatusMessage] = useState('');
+  const [statusType, setStatusType] = useState(''); // 'success', 'error'
 
-  // If you have stored currentAvatar logic:
-  // Could do something like this if the user has an actual avatar in "allShopItems"
-  let profilePicUrl = '/avatars/avatar1.png';
+  // Stats display toggles
+  const [showMoreAchievements, setShowMoreAchievements] = useState(false);
+  const [showMoreItems, setShowMoreItems] = useState(false);
+
+  // Calculate the percentage of XP to next level (just a visual approximation)
+  const calculateXpPercentage = () => {
+    const baseXpPerLevel = 1000; // Assuming 1000 XP per level
+    const currentLevelBaseXp = (level - 1) * baseXpPerLevel;
+    const nextLevelBaseXp = level * baseXpPerLevel;
+    const xpInCurrentLevel = xp - currentLevelBaseXp;
+    const xpRequiredForNextLevel = nextLevelBaseXp - currentLevelBaseXp;
+    return Math.min(100, (xpInCurrentLevel / xpRequiredForNextLevel) * 100);
+  };
+
+  // XP progress percentage
+  const xpPercentage = calculateXpPercentage();
+
+  // Get user avatar from shop items
+  let profilePicUrl = '/avatars/default-avatar.png'; // Default avatar
   if (currentAvatar) {
     const foundAvatar = allShopItems.find(item => item._id === currentAvatar);
     if (foundAvatar && foundAvatar.imageUrl) {
@@ -332,26 +382,42 @@ const UserProfile = () => {
     }
   }
 
+  // Handle logout
   const handleLogout = () => {
     dispatch(logout());
     localStorage.removeItem('userId');
     navigate('/login');
   };
 
+  // Refresh user data
   const refetchUser = () => {
     if (userId) {
       dispatch(fetchUserData(userId));
     }
   };
 
+  // Clear status message after 5 seconds
+  useEffect(() => {
+    if (statusMessage) {
+      const timer = setTimeout(() => {
+        setStatusMessage('');
+        setStatusType('');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [statusMessage]);
+
   // =======================
   // CHANGE USERNAME
   // =======================
   const handleChangeUsername = async () => {
     setStatusMessage('');
+    setStatusType('');
+    
     const errors = frontValidateUsername(newUsername);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
+      setStatusType('error');
       return;
     }
 
@@ -371,11 +437,13 @@ const UserProfile = () => {
         throw new Error(errorMsg);
       }
       setStatusMessage('Username updated successfully!');
+      setStatusType('success');
       setShowChangeUsername(false);
       setNewUsername('');
       refetchUser();
     } catch (err) {
-      setStatusMessage('Error changing username: ' + err.message);
+      setStatusMessage('Error: ' + err.message);
+      setStatusType('error');
     }
   };
 
@@ -384,9 +452,12 @@ const UserProfile = () => {
   // =======================
   const handleChangeEmail = async () => {
     setStatusMessage('');
+    setStatusType('');
+    
     const errors = frontValidateEmail(newEmail);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
+      setStatusType('error');
       return;
     }
 
@@ -406,11 +477,13 @@ const UserProfile = () => {
         throw new Error(errorMsg);
       }
       setStatusMessage('Email updated successfully!');
+      setStatusType('success');
       setShowChangeEmail(false);
       setNewEmail('');
       refetchUser();
     } catch (err) {
-      setStatusMessage('Error changing email: ' + err.message);
+      setStatusMessage('Error: ' + err.message);
+      setStatusType('error');
     }
   };
 
@@ -419,19 +492,23 @@ const UserProfile = () => {
   // =======================
   const handleChangePassword = async () => {
     setStatusMessage('');
+    setStatusType('');
 
     if (!oldPassword || !newPassword || !confirmPassword) {
       setStatusMessage('All password fields are required');
+      setStatusType('error');
       return;
     }
     if (newPassword !== confirmPassword) {
       setStatusMessage('New passwords do not match');
+      setStatusType('error');
       return;
     }
 
     const errors = frontValidatePassword(newPassword, username, email);
     if (errors.length > 0) {
       setStatusMessage(errors.join(' '));
+      setStatusType('error');
       return;
     }
 
@@ -457,13 +534,15 @@ const UserProfile = () => {
       }
 
       setStatusMessage('Password changed successfully!');
+      setStatusType('success');
       setShowChangePassword(false);
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setShowRequirements(false);
     } catch (err) {
-      setStatusMessage('Error changing password: ' + err.message);
+      setStatusMessage('Error: ' + err.message);
+      setStatusType('error');
     }
   };
 
@@ -478,17 +557,19 @@ const UserProfile = () => {
       if (!res.ok) {
         throw new Error(data.error || 'Failed to cancel subscription');
       }
-      setStatusMessage('Subscription cancelled (placeholder)');
+      setStatusMessage('Subscription cancelled successfully');
+      setStatusType('success');
       refetchUser();
     } catch (err) {
-      setStatusMessage('Error cancelling subscription: ' + err.message);
+      setStatusMessage('Error: ' + err.message);
+      setStatusType('error');
     }
   };
 
   // Map user achievements IDs to full achievement data
   const userAchievementsData = achievements
     .map(achId => allAchievements.find(a => a.achievementId === achId))
-    .filter(Boolean); // remove any null/undefined
+    .filter(Boolean);
 
   // Map user purchased item IDs to full shop item data
   const userPurchasedItems = purchasedItems
@@ -496,240 +577,604 @@ const UserProfile = () => {
     .filter(Boolean);
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        <div className="profile-picture">
-          <img src={profilePicUrl} alt="Profile Avatar" />
+    <div className="user-profile-container">
+      {/* Notification */}
+      {statusMessage && (
+        <div className={`profile-notification ${statusType === 'success' ? 'profile-notification-success' : 'profile-notification-error'}`}>
+          <span>{statusMessage}</span>
+          <button onClick={() => setStatusMessage('')} className="profile-notification-close">
+            <FaTimes />
+          </button>
         </div>
-        <h1 className="profile-title">{username}'s Profile</h1>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
+      )}
 
-      <div className="profile-overview">
-        <div className="profile-card">
-          <h2>Overview</h2>
-          <div className="profile-details">
-            <p><span className="detail-label">User ID:</span> {userId}</p>
-            <p><span className="detail-label">Level:</span> {level}</p>
-            <p><span className="detail-label">XP:</span> {xp}</p>
-            <p><span className="detail-label">Coins:</span> {coins}</p>
-            <p><span className="detail-label">Email:</span> {email}</p>
-            <p><span className="detail-label">Subscription Active:</span> {subscriptionActive ? 'Yes' : 'No'}</p>
-
-            <div className="password-display-row">
-              <span className="detail-label">Password:</span>
-              <div className="password-value-container">
-                <span>{showCurrentPassword ? password : '••••••••'}</span>
-                <button 
-                  className="profile-eye-icon"
-                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                >
-                  {showCurrentPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
+      {/* Main wrapper */}
+      <div className="profile-wrapper">
+        {/* Header section with profile info */}
+        <div className="profile-header-section">
+          <div className="profile-header-content">
+            <div className="profile-avatar-wrapper">
+              <img src={profilePicUrl} alt={`${username}'s avatar`} className="profile-avatar" />
+            </div>
+            
+            <div className="profile-header-info">
+              <h1 className="profile-username">{username}</h1>
+              
+              <div className="profile-level-container">
+                <div className="profile-level-badge">
+                  <span className="profile-level-number">{level}</span>
+                  <FaLevelUpAlt className="profile-level-icon" />
+                </div>
+                
+                <div className="profile-xp-container">
+                  <div className="profile-xp-bar">
+                    <div 
+                      className="profile-xp-progress" 
+                      style={{ width: `${xpPercentage}%` }}
+                    ></div>
+                  </div>
+                  <span className="profile-xp-text">{xp} XP</span>
+                </div>
               </div>
+              
+              <div className="profile-stats">
+                <div className="profile-stat-item">
+                  <FaCoins className="profile-stat-icon" />
+                  <span className="profile-stat-value">{coins}</span>
+                </div>
+                <div className="profile-stat-item">
+                  <FaTrophy className="profile-stat-icon" />
+                  <span className="profile-stat-value">{achievements.length}</span>
+                </div>
+                <div className="profile-stat-item">
+                  <FaStore className="profile-stat-icon" />
+                  <span className="profile-stat-value">{purchasedItems.length}</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="profile-actions">
+              <button className="profile-logout-btn" onClick={handleLogout}>
+                <FaSignOutAlt />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="profile-actions">
-        <div className="action-card">
-          <h2>Account Settings</h2>
-          <div className="action-buttons">
-            {/* Change username */}
-            {!showChangeUsername ? (
-              <button className="profile-btn" onClick={() => setShowChangeUsername(true)}>
-                Change Username
-              </button>
-            ) : (
-              <div className="change-section">
-                <input 
-                  type="text"
-                  placeholder="New username"
-                  value={newUsername}
-                  onChange={(e) => setNewUsername(e.target.value)}
-                />
-                <div className="change-section-buttons">
-                  <button onClick={handleChangeUsername}>Submit</button>
-                  <button onClick={() => {
-                    setShowChangeUsername(false);
-                    setNewUsername('');
-                  }}>Cancel</button>
-                </div>
-              </div>
-            )}
-
-            {/* Change email */}
-            {!showChangeEmail ? (
-              <button className="profile-btn" onClick={() => setShowChangeEmail(true)}>
-                Change Email
-              </button>
-            ) : (
-              <div className="change-section">
-                <input 
-                  type="email"
-                  placeholder="New email"
-                  value={newEmail}
-                  onChange={(e) => setNewEmail(e.target.value)}
-                />
-                <div className="change-section-buttons">
-                  <button onClick={handleChangeEmail}>Submit</button>
-                  <button onClick={() => {
-                    setShowChangeEmail(false);
-                    setNewEmail('');
-                  }}>Cancel</button>
-                </div>
-              </div>
-            )}
-
-            {/* Change password */}
-            {!showChangePassword ? (
-              <button className="profile-btn" onClick={() => setShowChangePassword(true)}>
-                Change Password
-              </button>
-            ) : (
-              <div className="change-section change-password-section">
-                <h3>Change Password</h3>
-                <div className="password-row">
-                  <div className="password-input-container">
-                    <input 
-                      type={showOldPassword ? 'text' : 'password'}
-                      placeholder="Old password"
-                      value={oldPassword}
-                      onChange={(e) => setOldPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="profile-eye-icon"
-                      onClick={() => setShowOldPassword(!showOldPassword)}
-                    >
-                      {showOldPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="password-row">
-                  <div className="password-input-container">
-                    <input 
-                      type={showNewPassword ? 'text' : 'password'}
-                      placeholder="New password"
-                      value={newPassword}
-                      onFocus={() => setShowRequirements(true)} 
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      onBlur={() => {
-                        if (!newPassword) {
-                          setShowRequirements(false);
-                        }
-                      }}
-                    />
-                    <button
-                      type="button"
-                      className="profile-eye-icon"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                    >
-                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-
-                {showRequirements && (
-                  <PasswordRequirements password={newPassword} />
-                )}
-
-                <div className="password-row">
-                  <div className="password-input-container">
-                    <input 
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      placeholder="Confirm new password"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
-                    <button
-                      type="button"
-                      className="profile-eye-icon"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="change-section-buttons">
-                  <button onClick={handleChangePassword}>Submit</button>
-                  <button onClick={() => {
-                    setShowChangePassword(false);
-                    setOldPassword('');
-                    setNewPassword('');
-                    setConfirmPassword('');
-                    setShowRequirements(false);
-                  }}>Cancel</button>
-                </div>
-              </div>
-            )}
-
-            {/* Cancel Subscription Placeholder */}
-            <button className="profile-btn" onClick={handleCancelSubscription}>
-              Cancel Subscription (placeholder)
-            </button>
-          </div>
+        {/* Navigation Tabs */}
+        <div className="profile-tabs">
+          <button 
+            className={`profile-tab ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
+          >
+            Overview
+          </button>
+          <button 
+            className={`profile-tab ${activeTab === 'achievements' ? 'active' : ''}`}
+            onClick={() => setActiveTab('achievements')}
+          >
+            Achievements
+          </button>
+          <button 
+            className={`profile-tab ${activeTab === 'items' ? 'active' : ''}`}
+            onClick={() => setActiveTab('items')}
+          >
+            Items
+          </button>
+          <button 
+            className={`profile-tab ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            Settings
+          </button>
         </div>
-      </div>
 
-      <div className="profile-extra">
-        <div className="extra-card">
-          <h2>Your Achievements</h2>
-          <div className="achievements-list">
-            {userAchievementsData.length > 0 ? (
-              userAchievementsData.map((ach) => {
-                const IconComp = iconMapping[ach.achievementId] || FaTrophy;
-                return (
-                  <div key={ach.achievementId} className="achievement-display">
-                    <div className="achievement-icon">
-                      <IconComp />
+        {/* Content section based on active tab */}
+        <div className="profile-content">
+          {/* Overview Tab */}
+          {activeTab === 'overview' && (
+            <div className="profile-overview-tab">
+              <div className="profile-overview-cards">
+                <div className="profile-card">
+                  <h2 className="profile-card-title">
+                    <FaUserAlt className="profile-card-icon" />
+                    User Info
+                  </h2>
+                  <div className="profile-card-content">
+                    <div className="profile-detail-item">
+                      <span className="profile-detail-label">ID:</span>
+                      <span className="profile-detail-value">{userId}</span>
                     </div>
-                    <div className="achievement-info">
-                      <h3>{ach.title}</h3>
-                      <p>{ach.description}</p>
+                    <div className="profile-detail-item">
+                      <span className="profile-detail-label">Username:</span>
+                      <span className="profile-detail-value">{username}</span>
+                    </div>
+                    <div className="profile-detail-item">
+                      <span className="profile-detail-label">Email:</span>
+                      <span className="profile-detail-value">{email}</span>
+                    </div>
+                    <div className="profile-detail-item">
+                      <span className="profile-detail-label">Subscription:</span>
+                      <span className="profile-detail-value">
+                        {subscriptionActive ? (
+                          <span className="profile-subscription-active">Active</span>
+                        ) : (
+                          <span className="profile-subscription-inactive">Inactive</span>
+                        )}
+                      </span>
                     </div>
                   </div>
-                );
-              })
-            ) : (
-              <p>You haven't unlocked any achievements yet.</p>
-            )}
-          </div>
-        </div>
-        <div className="extra-card">
-          <h2>Purchased Items</h2>
-          <div className="purchased-items-list">
-            {userPurchasedItems && userPurchasedItems.length > 0 ? (
-              userPurchasedItems.map((item) => (
-                <div key={item._id} className="purchased-item-display">
-                  <img
-                    src={item.imageUrl}
-                    alt={item.title}
-                    style={{ width: '50px', marginRight: '0.5rem' }}
-                  />
-                  <div>
-                    <h4>{item.title}</h4>
-                    {item.description && <p>{item.description}</p>}
+                </div>
+
+                <div className="profile-card">
+                  <h2 className="profile-card-title">
+                    <FaTrophy className="profile-card-icon" />
+                    Latest Achievements
+                  </h2>
+                  <div className="profile-card-content">
+                    {userAchievementsData.length > 0 ? (
+                      <div className="profile-mini-achievements">
+                        {userAchievementsData.slice(0, 3).map((ach) => {
+                          const AchIcon = iconMapping[ach.achievementId] || FaTrophy;
+                          const achColor = colorMapping[ach.achievementId] || "#ffffff";
+                          
+                          return (
+                            <div key={ach.achievementId} className="profile-mini-achievement">
+                              <div className="profile-mini-achievement-icon" style={{ color: achColor }}>
+                                <AchIcon />
+                              </div>
+                              <div className="profile-mini-achievement-info">
+                                <span className="profile-mini-achievement-title">{ach.title}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {userAchievementsData.length > 3 && (
+                          <button 
+                            className="profile-view-more-btn"
+                            onClick={() => setActiveTab('achievements')}
+                          >
+                            View All ({userAchievementsData.length})
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="profile-empty-message">No achievements yet. Start completing tests!</p>
+                    )}
                   </div>
                 </div>
-              ))
-            ) : (
-              <p>No purchased items yet (besides avatars).</p>
-            )}
-          </div>
+
+                <div className="profile-card">
+                  <h2 className="profile-card-title">
+                    <FaStore className="profile-card-icon" />
+                    Latest Items
+                  </h2>
+                  <div className="profile-card-content">
+                    {userPurchasedItems && userPurchasedItems.length > 0 ? (
+                      <div className="profile-mini-items">
+                        {userPurchasedItems.slice(0, 3).map((item) => (
+                          <div key={item._id} className="profile-mini-item">
+                            <img
+                              src={item.imageUrl}
+                              alt={item.title}
+                              className="profile-mini-item-image"
+                            />
+                            <span className="profile-mini-item-title">{item.title}</span>
+                          </div>
+                        ))}
+                        {userPurchasedItems.length > 3 && (
+                          <button 
+                            className="profile-view-more-btn"
+                            onClick={() => setActiveTab('items')}
+                          >
+                            View All ({userPurchasedItems.length})
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="profile-empty-message">No items purchased yet. Visit the shop!</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="profile-overview-stats">
+                <div className="profile-stats-card">
+                  <h2 className="profile-card-title">Player Stats</h2>
+                  <div className="profile-stats-grid">
+                    <div className="profile-stat-card">
+                      <div className="profile-stat-header">
+                        <FaLevelUpAlt className="profile-stat-header-icon" />
+                        <span>Level</span>
+                      </div>
+                      <div className="profile-stat-number">{level}</div>
+                    </div>
+
+                    <div className="profile-stat-card">
+                      <div className="profile-stat-header">
+                        <FaStar className="profile-stat-header-icon" />
+                        <span>XP</span>
+                      </div>
+                      <div className="profile-stat-number">{xp}</div>
+                    </div>
+
+                    <div className="profile-stat-card">
+                      <div className="profile-stat-header">
+                        <FaCoins className="profile-stat-header-icon" />
+                        <span>Coins</span>
+                      </div>
+                      <div className="profile-stat-number">{coins}</div>
+                    </div>
+
+                    <div className="profile-stat-card">
+                      <div className="profile-stat-header">
+                        <FaTrophy className="profile-stat-header-icon" />
+                        <span>Achievements</span>
+                      </div>
+                      <div className="profile-stat-number">{achievements.length}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Achievements Tab */}
+          {activeTab === 'achievements' && (
+            <div className="profile-achievements-tab">
+              <h2 className="profile-section-title">Your Achievements</h2>
+              
+              {userAchievementsData.length > 0 ? (
+                <div className="profile-achievements-grid">
+                  {userAchievementsData.map((ach) => {
+                    const AchIcon = iconMapping[ach.achievementId] || FaTrophy;
+                    const achColor = colorMapping[ach.achievementId] || "#ffffff";
+                    
+                    return (
+                      <div key={ach.achievementId} className="profile-achievement-card">
+                        <div className="profile-achievement-icon" style={{ color: achColor }}>
+                          {ach.title.includes('🏆') ? (
+                            <span className="profile-achievement-emoji">{ach.title.split(' ')[0]}</span>
+                          ) : (
+                            <AchIcon />
+                          )}
+                        </div>
+                        <div className="profile-achievement-content">
+                          <h3 className="profile-achievement-title">
+                            {ach.title.includes('🏆') ? ach.title.split(' ').slice(1).join(' ') : ach.title}
+                          </h3>
+                          <p className="profile-achievement-description">{ach.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="profile-empty-state">
+                  <FaTrophy className="profile-empty-icon" />
+                  <p>You haven't unlocked any achievements yet.</p>
+                  <p>Complete tests and challenges to earn achievements!</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Items Tab */}
+          {activeTab === 'items' && (
+            <div className="profile-items-tab">
+              <h2 className="profile-section-title">Your Items</h2>
+              
+              {userPurchasedItems && userPurchasedItems.length > 0 ? (
+                <div className="profile-items-grid">
+                  {userPurchasedItems.map((item) => (
+                    <div key={item._id} className="profile-item-card">
+                      <div className="profile-item-image-container">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          className="profile-item-image"
+                        />
+                      </div>
+                      <div className="profile-item-content">
+                        <h3 className="profile-item-title">{item.title}</h3>
+                        {item.description && (
+                          <p className="profile-item-description">{item.description}</p>
+                        )}
+                        <div className="profile-item-status">
+                          {item._id === currentAvatar ? (
+                            <span className="profile-item-equipped">Equipped</span>
+                          ) : (
+                            <span className="profile-item-owned">Owned</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="profile-empty-state">
+                  <FaStore className="profile-empty-icon" />
+                  <p>You haven't purchased any items yet.</p>
+                  <p>Visit the shop to buy avatars and other items!</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="profile-settings-tab">
+              <h2 className="profile-section-title">Account Settings</h2>
+              
+              <div className="profile-settings-grid">
+                {/* Change Username */}
+                <div className="profile-setting-card">
+                  <div className="profile-setting-header">
+                    <FaUserAlt className="profile-setting-icon" />
+                    <h3 className="profile-setting-title">Username</h3>
+                  </div>
+                  
+                  <div className="profile-setting-content">
+                    <p className="profile-setting-current">Current: <span>{username}</span></p>
+                    
+                    {!showChangeUsername ? (
+                      <button 
+                        className="profile-setting-action-btn"
+                        onClick={() => setShowChangeUsername(true)}
+                      >
+                        <FaEdit />
+                        <span>Change Username</span>
+                      </button>
+                    ) : (
+                      <div className="profile-setting-form">
+                        <div className="profile-setting-input-group">
+                          <input
+                            type="text"
+                            className="profile-setting-input"
+                            placeholder="New username"
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                          />
+                        </div>
+                        <div className="profile-setting-buttons">
+                          <button 
+                            className="profile-setting-submit-btn"
+                            onClick={handleChangeUsername}
+                          >
+                            <FaCheck />
+                            <span>Save</span>
+                          </button>
+                          <button 
+                            className="profile-setting-cancel-btn"
+                            onClick={() => {
+                              setShowChangeUsername(false);
+                              setNewUsername('');
+                            }}
+                          >
+                            <FaTimes />
+                            <span>Cancel</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Change Email */}
+                <div className="profile-setting-card">
+                  <div className="profile-setting-header">
+                    <FaEnvelope className="profile-setting-icon" />
+                    <h3 className="profile-setting-title">Email</h3>
+                  </div>
+                  
+                  <div className="profile-setting-content">
+                    <p className="profile-setting-current">Current: <span>{email}</span></p>
+                    
+                    {!showChangeEmail ? (
+                      <button 
+                        className="profile-setting-action-btn"
+                        onClick={() => setShowChangeEmail(true)}
+                      >
+                        <FaEdit />
+                        <span>Change Email</span>
+                      </button>
+                    ) : (
+                      <div className="profile-setting-form">
+                        <div className="profile-setting-input-group">
+                          <input
+                            type="email"
+                            className="profile-setting-input"
+                            placeholder="New email address"
+                            value={newEmail}
+                            onChange={(e) => setNewEmail(e.target.value)}
+                          />
+                        </div>
+                        <div className="profile-setting-buttons">
+                          <button 
+                            className="profile-setting-submit-btn"
+                            onClick={handleChangeEmail}
+                          >
+                            <FaCheck />
+                            <span>Save</span>
+                          </button>
+                          <button 
+                            className="profile-setting-cancel-btn"
+                            onClick={() => {
+                              setShowChangeEmail(false);
+                              setNewEmail('');
+                            }}
+                          >
+                            <FaTimes />
+                            <span>Cancel</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Change Password */}
+                <div className="profile-setting-card">
+                  <div className="profile-setting-header">
+                    <FaKey className="profile-setting-icon" />
+                    <h3 className="profile-setting-title">Password</h3>
+                  </div>
+                  
+                  <div className="profile-setting-content">
+                    <p className="profile-setting-current">Status: <span>*********</span></p>
+                    
+                    {!showChangePassword ? (
+                      <button 
+                        className="profile-setting-action-btn"
+                        onClick={() => setShowChangePassword(true)}
+                      >
+                        <FaEdit />
+                        <span>Change Password</span>
+                      </button>
+                    ) : (
+                      <div className="profile-setting-form">
+                        {/* Old Password */}
+                        <div className="profile-setting-input-group">
+                          <div className="profile-setting-password-field">
+                            <input
+                              type={showOldPassword ? 'text' : 'password'}
+                              className="profile-setting-input"
+                              placeholder="Current password"
+                              value={oldPassword}
+                              onChange={(e) => setOldPassword(e.target.value)}
+                            />
+                            <button
+                              type="button"
+                              className="profile-setting-password-toggle"
+                              onClick={() => setShowOldPassword(!showOldPassword)}
+                            >
+                              {showOldPassword ? <FaEyeSlash /> : <FaEye />}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* New Password */}
+                        <div className="profile-setting-input-group">
+                          <div className="profile-setting-password-field">
+                            <input
+                              type={showNewPassword ? 'text' : 'password'}
+                              className="profile-setting-input"
+                              placeholder="New password"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              onFocus={() => setShowRequirements(true)}
+                              onBlur={() => {
+                                if (!newPassword) {
+                                  setShowRequirements(false);
+                                }
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className="profile-setting-password-toggle"
+                              onClick={() => setShowNewPassword(!showNewPassword)}
+                            >
+                              {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* Password Requirements */}
+                        {showRequirements && (
+                          <div className="profile-password-requirements">
+                            <PasswordRequirements password={newPassword} />
+                          </div>
+                        )}
+                        
+                        {/* Confirm Password */}
+                        <div className="profile-setting-input-group">
+                          <div className="profile-setting-password-field">
+                            <input
+                              type={showConfirmPassword ? 'text' : 'password'}
+                              className="profile-setting-input"
+                              placeholder="Confirm new password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            <button
+                              type="button"
+                              className="profile-setting-password-toggle"
+                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <div className="profile-setting-buttons">
+                          <button 
+                            className="profile-setting-submit-btn"
+                            onClick={handleChangePassword}
+                          >
+                            <FaCheck />
+                            <span>Save</span>
+                          </button>
+                          <button 
+                            className="profile-setting-cancel-btn"
+                            onClick={() => {
+                              setShowChangePassword(false);
+                              setOldPassword('');
+                              setNewPassword('');
+                              setConfirmPassword('');
+                              setShowRequirements(false);
+                            }}
+                          >
+                            <FaTimes />
+                            <span>Cancel</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Subscription Management */}
+                <div className="profile-setting-card">
+                  <div className="profile-setting-header">
+                    <FaUserCircle className="profile-setting-icon" />
+                    <h3 className="profile-setting-title">Subscription</h3>
+                  </div>
+                  
+                  <div className="profile-setting-content">
+                    <p className="profile-setting-current">
+                      Status: 
+                      <span className={subscriptionActive ? "subscription-active" : "subscription-inactive"}>
+                        {subscriptionActive ? "Active" : "Inactive"}
+                      </span>
+                    </p>
+                    
+                    {subscriptionActive && (
+                      <button 
+                        className="profile-setting-action-btn profile-setting-danger-btn"
+                        onClick={handleCancelSubscription}
+                      >
+                        <FaTimes />
+                        <span>Cancel Subscription</span>
+                      </button>
+                    )}
+                    
+                    {!subscriptionActive && (
+                      <button 
+                        className="profile-setting-action-btn"
+                        onClick={() => navigate('/subscription')}
+                      >
+                        <FaCheck />
+                        <span>Subscribe Now</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {statusMessage && (
-        <div className="status-message">
-          {statusMessage}
-        </div>
-      )}
     </div>
   );
 };

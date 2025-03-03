@@ -30,7 +30,7 @@ function CrackedAdminLoginPage() {
         setError(data.error || "Unable to log in");
       } else {
         // On success, navigate to the admin dashboard
-        navigate("/cracked-admin/dashboard");
+        navigate("/cracked/dashboard");
       }
     } catch (err) {
       console.error("Admin login error:", err);
@@ -45,7 +45,7 @@ function CrackedAdminLoginPage() {
     <div className="cracked-admin-login-wrapper">
       <div className="cracked-admin-login-container">
         <div className="cracked-admin-login-card">
-          <h1 className="cracked-admin-login-title">Cracked Admin Login</h1>
+          <h1 className="cracked-admin-login-title">Admin Login</h1>
 
           <form className="cracked-admin-login-form" onSubmit={handleLogin}>
             <div className="admin-input-row">

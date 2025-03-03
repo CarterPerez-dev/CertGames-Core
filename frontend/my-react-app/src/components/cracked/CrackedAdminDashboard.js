@@ -1,35 +1,34 @@
+/**************************************************************************************
+ * CrackedAdminDashboard.jsx
+ * 
+ * Full updated code for the Admin Dashboard component with improved Support tab UI.
+ * This file references "CrackedAdminDashboard.css" for styling.
+ **************************************************************************************/
 import React, { useState, useEffect, useCallback } from "react";
+import { io } from "socket.io-client";
 import "./CrackedAdminDashboard.css";
 
-/**
- * This Admin Dashboard has multiple tabs:
- *  1) Overview
- *  2) Users
- *  3) Tests
- *  4) Daily PBQs
- *  5) Support Threads
- *  6) Performance
- * 
- * For each tab, we fetch data from the appropriate /cracked routes:
- *   - /cracked/dashboard       -> "Overview" stats
- *   - /cracked/performance     -> "Performance" metrics
- *   - /cracked/users           -> "Users"
- *   - /cracked/tests           -> "Tests"
- *   - /cracked/daily           -> "Daily PBQs"
- *   - /cracked/supportThreads  -> "Support Threads"
- * 
- * We'll manage local state for each part and implement some of the 
- * create/update/delete flows for each resource (like tests, daily PBQs, etc.).
- * 
- * We also demonstrate a rudimentary "search + pagination" for users, 
- * as your backend route supports "search, page, limit".
- */
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Legend
+} from "recharts";
+
+// We keep this as a top-level variable
+let adminSocket = null;
 
 function CrackedAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
 
   /*****************************************
-   *  1) OVERVIEW states & fetch
+   * OVERVIEW
    *****************************************/
   const [overviewData, setOverviewData] = useState(null);
   const [overviewLoading, setOverviewLoading] = useState(false);
@@ -39,10 +38,7 @@ function CrackedAdminDashboard() {
     setOverviewLoading(true);
     setOverviewError(null);
     try {
-      const res = await fetch("/api/cracked/dashboard", {
-        method: "GET",
-        credentials: "include",
-      });
+      const res = await fetch("/api/cracked/dashboard", { credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch dashboard");
@@ -62,7 +58,7 @@ function CrackedAdminDashboard() {
   }, [activeTab, fetchOverview]);
 
   /*****************************************
-   *  2) PERFORMANCE states & fetch
+   * PERFORMANCE
    *****************************************/
   const [performanceData, setPerformanceData] = useState(null);
   const [perfLoading, setPerfLoading] = useState(false);
@@ -72,9 +68,7 @@ function CrackedAdminDashboard() {
     setPerfLoading(true);
     setPerfError(null);
     try {
-      const res = await fetch("/api/cracked/performance", {
-        credentials: "include",
-      });
+      const res = await fetch("/api/cracked/performance", { credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch performance metrics");
@@ -88,20 +82,19 @@ function CrackedAdminDashboard() {
   }, []);
 
   /*****************************************
-   *  3) USERS states & fetch
+   * USERS
    *****************************************/
   const [users, setUsers] = useState([]);
   const [userTotal, setUserTotal] = useState(0);
   const [userSearch, setUserSearch] = useState("");
   const [userPage, setUserPage] = useState(1);
-  const [userLimit] = useState(10); // or 20, up to you
+  const [userLimit] = useState(10);
   const [usersLoading, setUsersLoading] = useState(false);
   const [usersError, setUsersError] = useState(null);
 
-  const [editUserId, setEditUserId] = useState(null); // For editing
+  const [editUserId, setEditUserId] = useState(null);
   const [editUserData, setEditUserData] = useState({});
 
-  // fetch user list
   const fetchUsers = useCallback(async () => {
     setUsersLoading(true);
     setUsersError(null);
@@ -109,10 +102,10 @@ function CrackedAdminDashboard() {
       const params = new URLSearchParams({
         search: userSearch,
         page: userPage.toString(),
-        limit: userLimit.toString(),
+        limit: userLimit.toString()
       });
       const res = await fetch(`/api/cracked/users?${params.toString()}`, {
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -145,7 +138,7 @@ function CrackedAdminDashboard() {
       xp: u.xp || 0,
       level: u.level || 1,
       subscriptionActive: !!u.subscriptionActive,
-      suspended: !!u.suspended,
+      suspended: !!u.suspended
     });
   };
 
@@ -156,7 +149,7 @@ function CrackedAdminDashboard() {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editUserData),
+        body: JSON.stringify(editUserData)
       });
       const data = await res.json();
       if (!res.ok) {
@@ -164,7 +157,6 @@ function CrackedAdminDashboard() {
         return;
       }
       alert("User updated!");
-      // refetch users
       fetchUsers();
     } catch (err) {
       console.error("User update error:", err);
@@ -178,7 +170,7 @@ function CrackedAdminDashboard() {
     try {
       const res = await fetch(`/api/cracked/users/${userId}`, {
         method: "DELETE",
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -192,13 +184,40 @@ function CrackedAdminDashboard() {
     }
   };
 
+  // EXTRA: Reset user password
+  const handleResetPassword = async (userId) => {
+    if (!window.confirm("Reset this user's password to a random token?")) return;
+    try {
+      const res = await fetch(`/api/cracked/users/${userId}/reset-password`, {
+        method: "POST",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to reset password");
+        return;
+      }
+      alert(`Password reset success. New password: ${data.newPassword}`);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to reset password.");
+    }
+  };
+
   /*****************************************
-   *  4) TEST MANAGEMENT states & fetch
+   * TEST MANAGEMENT
    *****************************************/
   const [tests, setTests] = useState([]);
   const [testCategory, setTestCategory] = useState("");
   const [testsLoading, setTestsLoading] = useState(false);
   const [testsError, setTestsError] = useState(null);
+
+  const [newTestData, setNewTestData] = useState({
+    category: "",
+    testId: "",
+    testName: "",
+    questions: []
+  });
 
   const fetchTests = useCallback(async () => {
     setTestsLoading(true);
@@ -209,7 +228,7 @@ function CrackedAdminDashboard() {
         params.set("category", testCategory);
       }
       const res = await fetch(`/api/cracked/tests?${params.toString()}`, {
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -229,26 +248,19 @@ function CrackedAdminDashboard() {
     }
   }, [activeTab, fetchTests]);
 
-  const [newTestData, setNewTestData] = useState({
-    category: "",
-    testId: "",
-    testName: "",
-    questions: [],
-  });
-
   const handleCreateTest = async () => {
-    // naive example with minimal validations
     try {
+      const body = {
+        category: newTestData.category,
+        testId: Number(newTestData.testId),
+        testName: newTestData.testName,
+        questions: []
+      };
       const res = await fetch("/api/cracked/tests", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category: newTestData.category,
-          testId: Number(newTestData.testId),
-          testName: newTestData.testName,
-          questions: [],
-        }),
+        body: JSON.stringify(body)
       });
       const data = await res.json();
       if (!res.ok) {
@@ -256,7 +268,6 @@ function CrackedAdminDashboard() {
         return;
       }
       alert("Test created!");
-      // refresh
       fetchTests();
       setNewTestData({ category: "", testId: "", testName: "", questions: [] });
     } catch (err) {
@@ -269,7 +280,7 @@ function CrackedAdminDashboard() {
     try {
       const res = await fetch(`/api/cracked/tests/${testObj._id}`, {
         method: "DELETE",
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -284,19 +295,24 @@ function CrackedAdminDashboard() {
   };
 
   /*****************************************
-   *  5) DAILY PBQs states & fetch
+   * DAILY PBQs
    *****************************************/
   const [dailyList, setDailyList] = useState([]);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [dailyError, setDailyError] = useState(null);
 
+  const [newDaily, setNewDaily] = useState({
+    prompt: "",
+    dayIndex: "",
+    correctIndex: "",
+    explanation: ""
+  });
+
   const fetchDailyPBQs = useCallback(async () => {
     setDailyLoading(true);
     setDailyError(null);
     try {
-      const res = await fetch("/api/cracked/daily", {
-        credentials: "include",
-      });
+      const res = await fetch("/api/cracked/daily", { credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch daily PBQs");
@@ -315,26 +331,19 @@ function CrackedAdminDashboard() {
     }
   }, [activeTab, fetchDailyPBQs]);
 
-  const [newDaily, setNewDaily] = useState({
-    prompt: "",
-    dayIndex: "",
-    correctIndex: "",
-    explanation: "",
-  });
-
   const handleCreateDaily = async () => {
     try {
       const body = {
         prompt: newDaily.prompt,
         dayIndex: Number(newDaily.dayIndex) || 0,
         correctIndex: Number(newDaily.correctIndex) || 0,
-        explanation: newDaily.explanation,
+        explanation: newDaily.explanation
       };
       const res = await fetch("/api/cracked/daily", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
       const data = await res.json();
       if (!res.ok) {
@@ -354,7 +363,7 @@ function CrackedAdminDashboard() {
     try {
       const res = await fetch(`/api/cracked/daily/${pbq._id}`, {
         method: "DELETE",
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -369,15 +378,23 @@ function CrackedAdminDashboard() {
   };
 
   /*****************************************
-   *  6) SUPPORT THREADS states & fetch
+   * SUPPORT
    *****************************************/
   const [threads, setThreads] = useState([]);
   const [threadsLoading, setThreadsLoading] = useState(false);
   const [threadsError, setThreadsError] = useState(null);
-
   const [threadStatusFilter, setThreadStatusFilter] = useState("");
   const [currentThread, setCurrentThread] = useState(null);
   const [adminReply, setAdminReply] = useState("");
+
+  // We store all threads (including messages) so we can do real‐time merges
+  const [allThreadMap, setAllThreadMap] = useState({});
+  // Show "user is typing" in real time
+  const [userIsTyping, setUserIsTyping] = useState(false);
+
+  // Admin create thread for user
+  const [adminTargetUserId, setAdminTargetUserId] = useState("");
+  const [adminInitialMsg, setAdminInitialMsg] = useState("");
 
   const fetchThreads = useCallback(async () => {
     setThreadsLoading(true);
@@ -388,7 +405,7 @@ function CrackedAdminDashboard() {
         params.set("status", threadStatusFilter);
       }
       const res = await fetch(`/api/cracked/supportThreads?${params.toString()}`, {
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -396,12 +413,82 @@ function CrackedAdminDashboard() {
       }
       setThreads(data);
       setCurrentThread(null);
+
+      // Join all threads so we get real‐time updates
+      if (adminSocket && data.length > 0) {
+        data.forEach((th) => {
+          adminSocket.emit("join_thread", { threadId: th._id });
+        });
+      }
     } catch (err) {
       setThreadsError(err.message);
     } finally {
       setThreadsLoading(false);
     }
   }, [threadStatusFilter]);
+
+  // Initialize adminSocket once
+  useEffect(() => {
+    if (!adminSocket) {
+      const socket = io(window.location.origin, {
+        path: "/api/socket.io",
+        transports: ["websocket"]
+      });
+      adminSocket = socket;
+
+      socket.on("connect", () => {
+        console.log("Admin socket connected:", socket.id);
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Admin socket disconnected");
+      });
+
+      // Listen for new messages across ANY thread
+      socket.on("new_message", (payload) => {
+        const { threadId, message } = payload;
+        setAllThreadMap((prev) => {
+          const oldThread = prev[threadId] || { messages: [] };
+          const oldMsgs = oldThread.messages;
+          return {
+            ...prev,
+            [threadId]: {
+              ...oldThread,
+              messages: [...oldMsgs, message]
+            }
+          };
+        });
+        // If the currentThread is the same, append
+        setCurrentThread((prev) => {
+          if (prev && prev._id === threadId) {
+            return {
+              ...prev,
+              messages: [...prev.messages, message]
+            };
+          }
+          return prev;
+        });
+      });
+
+      // user_typing / user_stop_typing
+      socket.on("user_typing", (data) => {
+        if (data.threadId && currentThread && currentThread._id === data.threadId) {
+          setUserIsTyping(true);
+        }
+      });
+      socket.on("user_stop_typing", (data) => {
+        if (data.threadId && currentThread && currentThread._id === data.threadId) {
+          setUserIsTyping(false);
+        }
+      });
+
+      // Admin sees newly created threads
+      socket.on("new_thread", (threadData) => {
+        setThreads((prev) => [threadData, ...prev]);
+        socket.emit("join_thread", { threadId: threadData._id });
+      });
+    }
+  }, [currentThread]);
 
   useEffect(() => {
     if (activeTab === "support") {
@@ -412,7 +499,7 @@ function CrackedAdminDashboard() {
   const handleViewThread = async (threadId) => {
     try {
       const res = await fetch(`/api/cracked/supportThreads/${threadId}`, {
-        credentials: "include",
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -421,6 +508,13 @@ function CrackedAdminDashboard() {
       }
       setCurrentThread(data);
       setAdminReply("");
+      setUserIsTyping(false);
+
+      // Merge into allThreadMap
+      setAllThreadMap((prev) => ({
+        ...prev,
+        [threadId]: data
+      }));
     } catch (err) {
       console.error("View thread error:", err);
     }
@@ -429,37 +523,56 @@ function CrackedAdminDashboard() {
   const handleReplyToThread = async () => {
     if (!currentThread || !currentThread._id) return;
     try {
-      const res = await fetch(
-        `/api/cracked/supportThreads/${currentThread._id}/reply`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: adminReply }),
-        }
-      );
+      const res = await fetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: adminReply })
+      });
       const data = await res.json();
       if (!res.ok) {
         alert(data.error || "Failed to reply");
         return;
       }
       alert("Reply sent!");
-      // re-fetch thread
+      // Refresh the single thread from DB
       handleViewThread(currentThread._id);
+
+      // Tell the user in real time
+      if (adminSocket) {
+        adminSocket.emit("admin_stop_typing", {
+          threadId: currentThread._id
+        });
+        adminSocket.emit("admin_new_message", {
+          threadId: currentThread._id,
+          message: {
+            sender: "admin",
+            content: adminReply,
+            timestamp: new Date().toISOString()
+          }
+        });
+      }
+      setAdminReply("");
     } catch (err) {
       console.error("Reply thread error:", err);
     }
   };
 
+  const handleAdminReplyTyping = (threadId) => {
+    if (adminSocket && threadId) {
+      adminSocket.emit("admin_typing", { threadId });
+    }
+  };
+
   const handleCloseThread = async (threadId) => {
     const resolution = window.prompt("Enter a resolution note:", "Issue resolved.");
-    if (resolution === null) return; // user canceled
+    if (resolution === null) return;
     try {
       const res = await fetch(`/api/cracked/supportThreads/${threadId}/close`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resolution }),
+        body: JSON.stringify({ resolution })
       });
       const data = await res.json();
       if (!res.ok) {
@@ -473,8 +586,156 @@ function CrackedAdminDashboard() {
     }
   };
 
+  const handleClearClosedThreads = async () => {
+    if (!window.confirm("Are you sure you want to permanently delete all closed threads?")) return;
+    try {
+      const res = await fetch("/api/cracked/supportThreads/clear-closed", {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to clear closed threads");
+        return;
+      }
+      alert(data.message || "Closed threads cleared");
+      fetchThreads();
+    } catch (err) {
+      alert("Error clearing closed threads");
+    }
+  };
+
+  const handleAdminCreateThread = async () => {
+    if (!adminTargetUserId) {
+      alert("Please enter a valid userId");
+      return;
+    }
+    try {
+      const body = {
+        userId: adminTargetUserId,
+        initialMessage: adminInitialMsg
+      };
+      const res = await fetch("/api/cracked/supportThreads/createFromAdmin", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to create thread from admin");
+        return;
+      }
+      alert("Created new thread successfully!");
+      setAdminTargetUserId("");
+      setAdminInitialMsg("");
+      fetchThreads();
+    } catch (err) {
+      console.error(err);
+      alert("Error creating admin thread");
+    }
+  };
+
   /*****************************************
-   *  Tab UI: We define a big switch ...
+   * ACTIVITY LOGS
+   *****************************************/
+  const [activityLogs, setActivityLogs] = useState([]);
+  const fetchActivityLogs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/activity-logs", { credentials: "include" });
+      const data = await res.json();
+      if (data.logs) {
+        setActivityLogs(data.logs);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * DB LOGS
+   *****************************************/
+  const [dbLogs, setDbLogs] = useState([]);
+  const fetchDbLogs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/db-logs", { credentials: "include" });
+      const data = await res.json();
+      setDbLogs(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * DB SHELL
+   *****************************************/
+  const [dbShellCollection, setDbShellCollection] = useState("");
+  const [dbShellFilter, setDbShellFilter] = useState("{}");
+  const [dbShellLimit, setDbShellLimit] = useState(5);
+  const [dbShellResults, setDbShellResults] = useState([]);
+
+  const handleDbShellRead = async () => {
+    try {
+      const parsedFilter = JSON.parse(dbShellFilter);
+      const body = {
+        collection: dbShellCollection,
+        filter: parsedFilter,
+        limit: dbShellLimit
+      };
+      const res = await fetch("/api/cracked/db-shell/read", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setDbShellResults(data);
+      } else {
+        alert(data.error || "Error reading DB");
+      }
+    } catch (err) {
+      alert("JSON filter is invalid or error occurred.");
+      console.error(err);
+    }
+  };
+
+  /*****************************************
+   * HEALTH CHECKS
+   *****************************************/
+  const [healthChecks, setHealthChecks] = useState([]);
+  const fetchHealthChecks = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/health-checks", { credentials: "include" });
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setHealthChecks(data);
+      } else if (data.results) {
+        setHealthChecks(data.results);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * TAB SWITCH
+   *****************************************/
+  const switchTab = (tabName) => {
+    setActiveTab(tabName);
+    if (tabName === "activity") {
+      fetchActivityLogs();
+    } else if (tabName === "dbLogs") {
+      fetchDbLogs();
+    } else if (tabName === "dbShell") {
+      setDbShellResults([]);
+    } else if (tabName === "healthChecks") {
+      fetchHealthChecks();
+    }
+  };
+
+  /*****************************************
+   * RENDER: OVERVIEW
    *****************************************/
   const renderOverviewTab = () => {
     if (overviewLoading) {
@@ -486,21 +747,144 @@ function CrackedAdminDashboard() {
     if (!overviewData) {
       return <div className="tab-content">No overview data yet.</div>;
     }
+
+    const hasChartArray =
+      Array.isArray(overviewData.recentStats) && overviewData.recentStats.length > 0;
+
     return (
       <div className="tab-content overview-tab">
         <h2>Overview Stats</h2>
         <ul>
           <li>User Count: {overviewData.user_count}</li>
-          <li>Test Attempts Count: {overviewData.test_attempts_count}</li>
+          <li>Test Attempts: {overviewData.test_attempts_count}</li>
           <li>Daily Bonus Claims Today: {overviewData.daily_bonus_claims}</li>
           <li>Avg Test Score (%): {overviewData.average_test_score_percent}</li>
-          <li>Timestamp: {overviewData.timestamp}</li>
+          <li>Timestamp (EST): {overviewData.timestamp_est}</li>
         </ul>
         <button onClick={fetchOverview}>Refresh Overview</button>
+
+        <div className="chart-section">
+          <h3>Recent Stats</h3>
+          {hasChartArray ? (
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={overviewData.recentStats}>
+                  <defs>
+                    <linearGradient id="colorDailyBonus" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorTestAttempts" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="label" />
+                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="dailyBonus"
+                    stroke="#2ecc71"
+                    fill="url(#colorDailyBonus)"
+                    name="Daily Bonus Claims"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="testAttempts"
+                    stroke="#3498db"
+                    fill="url(#colorTestAttempts)"
+                    name="Test Attempts"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p>No chart data available.</p>
+          )}
+        </div>
       </div>
     );
   };
 
+  /*****************************************
+   * RENDER: PERFORMANCE
+   *****************************************/
+  const renderPerformanceTab = () => {
+    return (
+      <div className="tab-content perf-tab">
+        <h2>Performance Metrics</h2>
+        <button onClick={fetchPerformance} style={{ marginBottom: "10px" }}>
+          Refresh Perf Data
+        </button>
+        {perfLoading && <p>Loading performance data...</p>}
+        {perfError && <p className="error-msg">Error: {perfError}</p>}
+        {performanceData && (
+          <>
+            <div className="perf-details">
+              <p>Avg Request Time: {performanceData.avg_request_time}s</p>
+              {"avg_db_query_time_ms" in performanceData ? (
+                <p>Avg DB Query Time: {performanceData.avg_db_query_time_ms} ms</p>
+              ) : (
+                <p>Avg DB Query Time: {performanceData.avg_db_query_time}s</p>
+              )}
+              <p>Data Transfer Rate: {performanceData.data_transfer_rate}</p>
+              <p>Throughput: {performanceData.throughput} req/min</p>
+              <p>Error Rate: {performanceData.error_rate}</p>
+              <p>Timestamp (EST): {performanceData.timestamp}</p>
+            </div>
+
+            <div className="chart-section">
+              <h3>Performance History</h3>
+              {Array.isArray(performanceData.history) && performanceData.history.length > 0 ? (
+                <div className="chart-container">
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={performanceData.history}>
+                      <defs>
+                        <linearGradient id="colorRequestTime" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#e67e22" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#e67e22" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="colorDbTime" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#9b59b6" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="#9b59b6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <XAxis dataKey="timestamp" />
+                      <YAxis />
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <Tooltip />
+                      <Area
+                        type="monotone"
+                        dataKey="requestTime"
+                        stroke="#e67e22"
+                        fill="url(#colorRequestTime)"
+                        name="Request Time (s)"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="dbTime"
+                        stroke="#9b59b6"
+                        fill="url(#colorDbTime)"
+                        name="DB Time (ms)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              ) : (
+                <p>No chart data available.</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: USERS
+   *****************************************/
   const renderUsersTab = () => {
     return (
       <div className="tab-content users-tab">
@@ -509,14 +893,19 @@ function CrackedAdminDashboard() {
           <input
             type="text"
             value={userSearch}
-            placeholder="Search username/email..."
+            placeholder="Search by username or email"
             onChange={(e) => setUserSearch(e.target.value)}
           />
-          <button onClick={() => { setUserPage(1); fetchUsers(); }}>
+          <button
+            onClick={() => {
+              setUserPage(1);
+              fetchUsers();
+            }}
+          >
             Search
           </button>
         </div>
-        <div>
+        <div style={{ marginTop: "10px" }}>
           <p>
             Page: {userPage} / {Math.ceil(userTotal / userLimit)} (Total: {userTotal})
           </p>
@@ -535,6 +924,7 @@ function CrackedAdminDashboard() {
         </div>
         {usersLoading && <div>Loading users...</div>}
         {usersError && <div className="error-msg">Error: {usersError}</div>}
+
         <table className="users-table">
           <thead>
             <tr>
@@ -604,9 +994,7 @@ function CrackedAdminDashboard() {
                       <input
                         type="checkbox"
                         checked={!!editUserData.suspended}
-                        onChange={(e) =>
-                          handleUpdateUserField("suspended", e.target.checked)
-                        }
+                        onChange={(e) => handleUpdateUserField("suspended", e.target.checked)}
                       />
                     ) : (
                       u.suspended ? "Yes" : "No"
@@ -621,6 +1009,7 @@ function CrackedAdminDashboard() {
                     ) : (
                       <>
                         <button onClick={() => handleUserEdit(u)}>Edit</button>
+                        <button onClick={() => handleResetPassword(u._id)}>Reset PW</button>
                         <button onClick={() => handleUserDelete(u._id)}>Delete</button>
                       </>
                     )}
@@ -634,6 +1023,9 @@ function CrackedAdminDashboard() {
     );
   };
 
+  /*****************************************
+   * RENDER: TESTS
+   *****************************************/
   const renderTestsTab = () => {
     return (
       <div className="tab-content tests-tab">
@@ -657,25 +1049,19 @@ function CrackedAdminDashboard() {
             type="text"
             placeholder="Category"
             value={newTestData.category}
-            onChange={(e) =>
-              setNewTestData((prev) => ({ ...prev, category: e.target.value }))
-            }
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, category: e.target.value }))}
           />
           <input
             type="text"
             placeholder="Test ID (number)"
             value={newTestData.testId}
-            onChange={(e) =>
-              setNewTestData((prev) => ({ ...prev, testId: e.target.value }))
-            }
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, testId: e.target.value }))}
           />
           <input
             type="text"
             placeholder="Test Name"
             value={newTestData.testName}
-            onChange={(e) =>
-              setNewTestData((prev) => ({ ...prev, testName: e.target.value }))
-            }
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, testName: e.target.value }))}
           />
           <button onClick={handleCreateTest}>Create Test</button>
         </div>
@@ -697,7 +1083,7 @@ function CrackedAdminDashboard() {
                 <td>{t._id}</td>
                 <td>{t.category}</td>
                 <td>{t.testId}</td>
-                <td>{t.testName || "(Unnamed)"}</td>
+                <td>{t.testName || "(Unnamed)"} </td>
                 <td>{t.questions ? t.questions.length : 0}</td>
                 <td>
                   <button onClick={() => handleDeleteTest(t)}>Delete</button>
@@ -710,6 +1096,9 @@ function CrackedAdminDashboard() {
     );
   };
 
+  /*****************************************
+   * RENDER: DAILY
+   *****************************************/
   const renderDailyTab = () => {
     return (
       <div className="tab-content daily-tab">
@@ -735,16 +1124,12 @@ function CrackedAdminDashboard() {
             type="text"
             placeholder="Correct Index"
             value={newDaily.correctIndex}
-            onChange={(e) =>
-              setNewDaily((prev) => ({ ...prev, correctIndex: e.target.value }))
-            }
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, correctIndex: e.target.value }))}
           />
           <textarea
             placeholder="Explanation"
             value={newDaily.explanation}
-            onChange={(e) =>
-              setNewDaily((prev) => ({ ...prev, explanation: e.target.value }))
-            }
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, explanation: e.target.value }))}
           />
           <button onClick={handleCreateDaily}>Create Daily PBQ</button>
         </div>
@@ -777,6 +1162,9 @@ function CrackedAdminDashboard() {
     );
   };
 
+  /*****************************************
+   * RENDER: SUPPORT
+   *****************************************/
   const renderSupportTab = () => {
     return (
       <div className="tab-content support-tab">
@@ -785,7 +1173,7 @@ function CrackedAdminDashboard() {
           <label>Status Filter:</label>
           <input
             type="text"
-            placeholder="open / closed?"
+            placeholder="open / closed? etc."
             value={threadStatusFilter}
             onChange={(e) => setThreadStatusFilter(e.target.value)}
           />
@@ -803,37 +1191,49 @@ function CrackedAdminDashboard() {
                   <button onClick={() => handleViewThread(th._id)}>View</button>
                   &nbsp;
                   {th.status !== "closed" && (
-                    <button onClick={() => handleCloseThread(th._id)}>
-                      Close
-                    </button>
+                    <button onClick={() => handleCloseThread(th._id)}>Close</button>
                   )}
                 </li>
               ))}
             </ul>
+            <button style={{ marginTop: "10px" }} onClick={handleClearClosedThreads}>
+              Clear All Closed Threads
+            </button>
           </div>
+
           <div className="thread-details">
             {currentThread ? (
-              <div>
+              <div className="current-thread-details">
                 <h4>Thread: {currentThread._id}</h4>
                 <p>Status: {currentThread.status}</p>
-                <ul className="messages-list">
-                  {currentThread.messages.map((m, idx) => (
-                    <li key={idx}>
-                      <strong>{m.sender}:</strong> {m.content} (
-                      {m.timestamp || ""})
-                    </li>
-                  ))}
-                </ul>
+                <div className="messages-list-container">
+                  <ul className="messages-list">
+                    {currentThread.messages.map((m, idx) => (
+                      <li key={idx}>
+                        <strong>{m.sender}:</strong> {m.content} ({m.timestamp || ""})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {/* Show if the user is typing */}
+                {userIsTyping && (
+                  <div className="typing-indicator-user">
+                    <em>User is typing...</em>
+                  </div>
+                )}
                 {currentThread.status !== "closed" && (
-                  <>
+                  <div className="reply-container">
                     <textarea
-                      rows={3}
+                      rows={5} // <---  made bigger
                       placeholder="Type an admin reply..."
                       value={adminReply}
-                      onChange={(e) => setAdminReply(e.target.value)}
+                      onChange={(e) => {
+                        setAdminReply(e.target.value);
+                        handleAdminReplyTyping(currentThread._id);
+                      }}
                     />
                     <button onClick={handleReplyToThread}>Send Reply</button>
-                  </>
+                  </div>
                 )}
               </div>
             ) : (
@@ -841,86 +1241,278 @@ function CrackedAdminDashboard() {
             )}
           </div>
         </div>
-      </div>
-    );
-  };
 
-  const renderPerformanceTab = () => {
-    return (
-      <div className="tab-content perf-tab">
-        <h2>Performance Metrics</h2>
-        <button onClick={fetchPerformance}>Refresh Perf Data</button>
-        {perfLoading && <p>Loading performance data...</p>}
-        {perfError && <p className="error-msg">Error: {perfError}</p>}
-        {performanceData && (
-          <div className="perf-details">
-            <p>Avg Request Time: {performanceData.avg_request_time}s</p>
-            <p>Avg DB Query Time: {performanceData.avg_db_query_time}s</p>
-            <p>Data Transfer Rate: {performanceData.data_transfer_rate}</p>
-            <p>Throughput: {performanceData.throughput} req/min</p>
-            <p>Error Rate: {performanceData.error_rate}</p>
-            <p>Timestamp: {performanceData.timestamp}</p>
+        <div style={{ marginTop: "20px" }}>
+          <h3>Create Thread on behalf of a user</h3>
+          <div
+            className="create-thread-row"
+            style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
+          >
+            <input
+              style={{ flex: "0 0 300px" }}
+              placeholder="Target UserId"
+              value={adminTargetUserId}
+              onChange={(e) => setAdminTargetUserId(e.target.value)}
+            />
+            <input
+              style={{ flex: "1" }}
+              placeholder="Initial admin message..."
+              value={adminInitialMsg}
+              onChange={(e) => setAdminInitialMsg(e.target.value)}
+            />
+            <button onClick={handleAdminCreateThread}>Create</button>
           </div>
-        )}
+        </div>
       </div>
     );
   };
 
+  /*****************************************
+   * RENDER: ACTIVITY LOGS
+   *****************************************/
+  const renderActivityLogsTab = () => {
+    return (
+      <div className="tab-content activity-tab">
+        <h2>Activity & Audit Logs</h2>
+        <button onClick={fetchActivityLogs} style={{ marginBottom: "10px" }}>
+          Refresh Logs
+        </button>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>Timestamp (EST)</th>
+              <th>IP</th>
+              <th>UserId</th>
+              <th>Success</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activityLogs.map((log) => (
+              <tr key={log._id}>
+                <td>{log.timestamp}</td>
+                <td>{log.ip}</td>
+                <td>{log.userId || ""}</td>
+                <td>{log.success ? "Yes" : "No"}</td>
+                <td>{log.reason || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: DB LOGS
+   *****************************************/
+  const renderDbLogsTab = () => {
+    return (
+      <div className="tab-content db-logs-tab">
+        <h2>DB Query Logs</h2>
+        <button onClick={fetchDbLogs} style={{ marginBottom: "10px" }}>
+          Refresh
+        </button>
+        <table className="db-logs-table">
+          <thead>
+            <tr>
+              <th>Timestamp (EST)</th>
+              <th>Route</th>
+              <th>Method</th>
+              <th>Duration (ms)</th>
+              <th>DB Time (ms)</th>
+              <th>Status</th>
+              <th>Bytes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dbLogs.map((log) => (
+              <tr key={log._id}>
+                <td>{log.timestamp}</td>
+                <td>{log.route}</td>
+                <td>{log.method}</td>
+                <td>{log.duration_ms}</td>
+                <td>{log.db_time_ms}</td>
+                <td>{log.http_status}</td>
+                <td>{log.response_bytes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: DB SHELL
+   *****************************************/
+  const renderDbShellTab = () => {
+    return (
+      <div className="tab-content db-shell-tab">
+        <h2>Read-Only DB Shell</h2>
+        <div className="db-shell-form">
+          <label>Collection:</label>
+          <input
+            type="text"
+            value={dbShellCollection}
+            onChange={(e) => setDbShellCollection(e.target.value)}
+          />
+          <label>Filter (JSON):</label>
+          <input
+            type="text"
+            value={dbShellFilter}
+            onChange={(e) => setDbShellFilter(e.target.value)}
+          />
+          <label>Limit:</label>
+          <input
+            type="number"
+            value={dbShellLimit}
+            onChange={(e) => setDbShellLimit(e.target.valueAsNumber)}
+          />
+          <button onClick={handleDbShellRead}>Execute Read</button>
+        </div>
+        <pre className="db-shell-results">
+          {JSON.stringify(dbShellResults, null, 2)}
+        </pre>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: HEALTH CHECKS
+   *****************************************/
+  const renderHealthChecksTab = () => {
+    return (
+      <div className="tab-content health-checks-tab">
+        <h2>API Health Checks</h2>
+        <button onClick={fetchHealthChecks} style={{ marginBottom: "10px" }}>
+          Refresh Checks
+        </button>
+        <table className="health-checks-table">
+          <thead>
+            <tr>
+              <th>checkedAt (EST)</th>
+              <th>Endpoint</th>
+              <th>Status</th>
+              <th>OK</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(healthChecks) &&
+              healthChecks.map((hc, idx) => {
+                if (hc.results) {
+                  // multi results
+                  return hc.results.map((r, j) => (
+                    <tr key={`${hc._id}_${j}`}>
+                      <td>{hc.checkedAt}</td>
+                      <td>{r.endpoint}</td>
+                      <td>{r.status}</td>
+                      <td>{r.ok ? "Yes" : "No"}</td>
+                      <td>{r.error || ""}</td>
+                    </tr>
+                  ));
+                } else {
+                  return (
+                    <tr key={idx}>
+                      <td>{hc.checkedAt}</td>
+                      <td>{hc.endpoint}</td>
+                      <td>{hc.status}</td>
+                      <td>{hc.ok ? "Yes" : "No"}</td>
+                      <td>{hc.error || ""}</td>
+                    </tr>
+                  );
+                }
+              })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * MAIN RETURN
+   *****************************************/
   return (
     <div className="cracked-admin-dashboard">
       <div className="cracked-admin-dashboard-container">
-        <h1 className="admin-dashboard-title">Cracked Admin Dashboard</h1>
+        <h1 className="admin-dashboard-title">Admin Dashboard</h1>
 
-        {/* Tab Navigation */}
+        {/* Tabs */}
         <div className="admin-tabs">
           <button
             className={activeTab === "overview" ? "active" : ""}
-            onClick={() => setActiveTab("overview")}
+            onClick={() => switchTab("overview")}
           >
             Overview
           </button>
           <button
             className={activeTab === "users" ? "active" : ""}
-            onClick={() => setActiveTab("users")}
+            onClick={() => switchTab("users")}
           >
             Users
           </button>
           <button
             className={activeTab === "tests" ? "active" : ""}
-            onClick={() => setActiveTab("tests")}
+            onClick={() => switchTab("tests")}
           >
             Tests
           </button>
           <button
             className={activeTab === "daily" ? "active" : ""}
-            onClick={() => setActiveTab("daily")}
+            onClick={() => switchTab("daily")}
           >
             Daily PBQs
           </button>
           <button
             className={activeTab === "support" ? "active" : ""}
-            onClick={() => setActiveTab("support")}
+            onClick={() => switchTab("support")}
           >
             Support
           </button>
           <button
             className={activeTab === "performance" ? "active" : ""}
-            onClick={() => {
-              setActiveTab("performance");
-              fetchPerformance();
-            }}
+            onClick={() => switchTab("performance")}
           >
             Performance
           </button>
+          <button
+            className={activeTab === "activity" ? "active" : ""}
+            onClick={() => switchTab("activity")}
+          >
+            Activity
+          </button>
+          <button
+            className={activeTab === "dbLogs" ? "active" : ""}
+            onClick={() => switchTab("dbLogs")}
+          >
+            DB Logs
+          </button>
+          <button
+            className={activeTab === "dbShell" ? "active" : ""}
+            onClick={() => switchTab("dbShell")}
+          >
+            DB Shell
+          </button>
+          <button
+            className={activeTab === "healthChecks" ? "active" : ""}
+            onClick={() => switchTab("healthChecks")}
+          >
+            Health Checks
+          </button>
         </div>
 
-        {/* Tab Content */}
+        {/* Tabs' Content */}
         {activeTab === "overview" && renderOverviewTab()}
         {activeTab === "users" && renderUsersTab()}
         {activeTab === "tests" && renderTestsTab()}
         {activeTab === "daily" && renderDailyTab()}
         {activeTab === "support" && renderSupportTab()}
         {activeTab === "performance" && renderPerformanceTab()}
+        {activeTab === "activity" && renderActivityLogsTab()}
+        {activeTab === "dbLogs" && renderDbLogsTab()}
+        {activeTab === "dbShell" && renderDbShellTab()}
+        {activeTab === "healthChecks" && renderHealthChecksTab()}
       </div>
     </div>
   );

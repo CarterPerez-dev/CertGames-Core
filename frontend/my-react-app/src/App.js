@@ -107,8 +107,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/cracked-admin/login" element={<CrackedAdminLoginPage />} />
-          <Route path="/cracked-admin/dashboard" element={<CrackedAdminDashboard />} />
+          <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
+          <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/my-support" element={<SupportAskAnythingPage />} />
           <Route path="/profile" element={
             <ProtectedRoute>
