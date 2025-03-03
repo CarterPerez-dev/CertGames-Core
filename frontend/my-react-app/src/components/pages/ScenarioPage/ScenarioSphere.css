@@ -441,11 +441,28 @@
 }
 
 .scenario-output-card.fade-in .scenario-output-content {
-  animation: fadeIn 0.5s ease forwards;
+  animation: fadeIn 0.3s ease forwards;
 }
 
 .scenario-output-content {
   padding: 20px;
+}
+
+.scenario-streaming-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--scenario-bg-panel);
+  border-radius: var(--scenario-element-radius);
+  padding: 10px 15px;
+  margin: 10px 0;
+  color: var(--scenario-accent);
+  font-size: 14px;
+}
+
+.scenario-placeholder {
+  color: var(--scenario-text-secondary);
+  font-style: italic;
 }
 
 .scenario-output-details {
