@@ -1,4 +1,5 @@
 /* ScenarioSphere.css - Gamified UI for cybersecurity scenario generation */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 :root {
   --scenario-bg-dark: #0b0c15;
@@ -821,6 +822,7 @@
 
 .option-text {
   flex: 1;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .option-icon {
