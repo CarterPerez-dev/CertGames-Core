@@ -17,7 +17,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct because using a compute-optimized instance family and enabling auto-scaling triggers prevents CPU bottlenecks without unnecessary overprovisioning. Option B wastes resources by running more instances perpetually, even when idle. Option C complicates the environment significantly and doesn’t necessarily solve CPU throttling in the public cloud. Option D requires a complete re-architecture and may not align with their continuous analytics needs. ",
       "examTip": "Match your instance family to your primary resource bottleneck—CPU, memory, storage, or network—to optimize performance."
     },
-
     /* ---------------------------- 2 (Direct/Conceptual) ---------------------------- */
     {
       "id": 2,
@@ -32,7 +31,6 @@ db.tests.insertOne({
       "explanation": "Option A organizes data in fixed-size blocks, while Option B relies on hierarchical file structures. Option C is correct because object storage manages data as objects with unique identifiers, facilitating large-scale distribution. Option D is a performance-boosting technique rather than a primary storage method. ",
       "examTip": "Remember that object storage is ideal for massive, unstructured data sets and global distribution."
     },
-
     /* ---------------------------- 3 (Direct/Conceptual) ---------------------------- */
     {
       "id": 3,
@@ -47,7 +45,6 @@ db.tests.insertOne({
       "explanation": "Option A typically traverses external links, which can add overhead. Option B is correct because VPC peering facilitates direct private connectivity among VPCs without using the public internet. Option C focuses on static edge-caching rather than private connectivity. Option D addresses WAN performance but still often uses external routes. ",
       "examTip": "Utilize VPC peering to securely connect cloud resources in different regions while bypassing public IP space."
     },
-
     /* ---------------------------- 4 (Scenario-based) ---------------------------- */
     {
       "id": 4,
@@ -62,7 +59,6 @@ db.tests.insertOne({
       "explanation": "Option A’s hourly intervals exceed the 15-minute recovery point objective. Option B’s synchronous replication might meet RPO but imposes heavy overhead and latency constraints. Option C is correct because near-synchronous replication with frequent snapshots can achieve around 15-minute intervals without continuous overhead. Option D’s nightly backups far exceed the required RPO window. ",
       "examTip": "Near-synchronous solutions strike a balance between minimal data loss and lower overhead than fully synchronous replication."
     },
-
     /* ---------------------------- 5 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 5,
@@ -77,7 +73,6 @@ db.tests.insertOne({
       "explanation": "In the correct sequence: Blue-Green (1) uses two distinct environments to switch traffic. Canary (2) routes a small percentage of traffic to the new version initially. Rolling (3) replaces instances in small batches. In-place (4) updates directly on the existing environment without parallel infrastructure. The other mappings mix up these definitions. ",
       "examTip": "Understand each deployment strategy’s primary trait and traffic flow before implementing an update plan."
     },
-
     /* ---------------------------- 6 (Direct/Conceptual) ---------------------------- */
     {
       "id": 6,
@@ -92,7 +87,6 @@ db.tests.insertOne({
       "explanation": "Option A focuses on detecting configuration drift, but not necessarily reapplying. Option B emphasizes storing definitions but doesn’t guarantee reapplication. Option C outlines a design philosophy rather than a direct reapplication practice. Option D, configuration reconciliation, is the process of reapplying definitions so the environment matches the declared state. ",
       "examTip": "Automatically reconcile your infrastructure to your code base, preventing unauthorized or accidental changes from persisting."
     },
-
     /* ---------------------------- 7 (Direct/Conceptual) ---------------------------- */
     {
       "id": 7,
@@ -107,7 +101,6 @@ db.tests.insertOne({
       "explanation": "Option A depends on ephemeral keys not controlled by the customer. Option B is correct because client-side encryption with on-premises key management ensures sole control over the keys. Option C uses the provider’s KMS, so the user does not have exclusive control. Option D omits encryption entirely and fails to protect data. ",
       "examTip": "When security policies require exclusive key control, client-side encryption is often the safest route."
     },
-
     /* ---------------------------- 8 (Scenario-based) ---------------------------- */
     {
       "id": 8,
@@ -122,7 +115,6 @@ db.tests.insertOne({
       "explanation": "Option A removing the CDN would degrade global performance, not reduce cost significantly. Option B is correct because edge caching at points of presence (POPs) prevents repeated long-distance data transfers, lowering egress charges. Option C centralizes content in one region, likely increasing egress to distant locations. Option D can help but typically does not eliminate standard cloud egress fees. ",
       "examTip": "Using a CDN effectively caches content closer to users, reducing outbound traffic from the origin and overall egress costs."
     },
-
     /* ---------------------------- 9 (Direct/Conceptual) ---------------------------- */
     {
       "id": 9,
@@ -137,7 +129,6 @@ db.tests.insertOne({
       "explanation": "Option A is not unique to FaaS. Option B is correct because FaaS abstracts the infrastructure, letting developers focus solely on code. Option C is not an inherent guarantee of FaaS. Option D is unrelated to standard FaaS pricing. ",
       "examTip": "Serverless platforms let you handle code at a function level, offloading OS and server management overhead."
     },
-
     /* ---------------------------- 10 (Direct/Conceptual) ---------------------------- */
     {
       "id": 10,
@@ -152,7 +143,6 @@ db.tests.insertOne({
       "explanation": "Option A only distributes traffic but does not aggregate logs. Option B is correct because forwarding logs to a centralized logging service allows unified collection and analysis. Option C protects each VM but does not address log aggregation. Option D lowers cost but does not unify logs. ",
       "examTip": "Use a dedicated logging pipeline to maintain consistent observability across distributed cloud environments."
     },
-
     /* ---------------------------- 11 (Scenario-based) ---------------------------- */
     {
       "id": 11,
@@ -167,7 +157,6 @@ db.tests.insertOne({
       "explanation": "Option A is not a drawback; costs typically increase with multi-region replication. Option B is incorrect because local replicas can actually decrease read latency. Option C is correct, as maintaining consistency across multiple regions adds complexity and potential write conflicts. Option D is unrelated to multi-region replication strategies. ",
       "examTip": "When data is replicated globally, consistency models and conflict resolution become a top concern."
     },
-
     /* ---------------------------- 12 (Direct/Conceptual) ---------------------------- */
     {
       "id": 12,
@@ -182,7 +171,6 @@ db.tests.insertOne({
       "explanation": "Option A is a layered security approach, not specifically about minimal permissions. Option B is correct because least privilege ensures users only have the permissions necessary for their tasks. Option C focuses on vulnerabilities that have no patch yet. Option D exacerbates management complexity rather than reducing privileges. ",
       "examTip": "Regularly audit permission scopes to ensure no user or service has more rights than needed."
     },
-
     /* ---------------------------- 13 (Direct/Conceptual) ---------------------------- */
     {
       "id": 13,
@@ -197,7 +185,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct because off-site replication guards against regional disasters by keeping data in a different location. Option B uses the same geographic region, which offers no protection against large-scale outages. Option C typically refers to ephemeral function usage, not necessarily data backups. Option D captures entire systems but doesn’t inherently store them away from the primary site. ",
       "examTip": "Locate backup data far enough from your primary site to mitigate the same disaster event affecting both."
     },
-
     /* ---------------------------- 14 (Scenario-based) ---------------------------- */
     {
       "id": 14,
@@ -212,7 +199,6 @@ db.tests.insertOne({
       "explanation": "Option A does not address disk throughput. Option B ephemeral local storage might offer faster I/O but is typically less durable and might not integrate well with an e-commerce app. Option C is correct because upgrading from HDD to SSD volumes directly boosts IOPS. Option D deals with concurrency at the application level rather than raw I/O performance. ",
       "examTip": "When I/O is the bottleneck, upgrading the volume type is often the quickest fix before considering refactoring."
     },
-
     /* ---------------------------- 15 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 15,
@@ -227,7 +213,6 @@ db.tests.insertOne({
       "explanation": "IaaS: raw VMs or infrastructure resources on demand. PaaS: a platform or framework for building custom apps. SaaS: a complete software solution, fully hosted by the provider. FaaS: event-driven serverless functions. Option C matches these definitions precisely. The other options either swap or confuse these characteristics. ",
       "examTip": "Be sure you can distinguish between IaaS, PaaS, SaaS, and FaaS by how much management the provider handles."
     },
-
     /* ---------------------------- 16 (Direct/Conceptual) ---------------------------- */
     {
       "id": 16,
@@ -242,7 +227,6 @@ db.tests.insertOne({
       "explanation": "Option A is vertical scaling by increasing resources on one VM. Option B is correct because creating multiple parallel instances behind a balancer is horizontal scaling. Option C is an architectural change, not strictly a scaling method. Option D is a storage upgrade, not about scaling out. ",
       "examTip": "Horizontal scaling involves distributing workloads across more instances, whereas vertical scaling focuses on growing a single instance."
     },
-
     /* ---------------------------- 17 (Direct/Conceptual) ---------------------------- */
     {
       "id": 17,
@@ -257,7 +241,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect because compliance remains a separate concern. Option B contradicts IaC’s automated approach. Option C is correct because IaC allows you to version and consistently recreate environments. Option D conflates IaC with application code generation. ",
       "examTip": "IaC is about codifying infrastructure, ensuring repeatability, version control, and reducing manual errors."
     },
-
     /* ---------------------------- 18 (Scenario-based) ---------------------------- */
     {
       "id": 18,
@@ -272,7 +255,6 @@ db.tests.insertOne({
       "explanation": "Option A requires adjusting container logic to handle shared storage. Option B is correct because increasing host VM local storage is straightforward and does not require code changes. Option C is a major architectural shift not guaranteed to solve ephemeral space issues. Option D might introduce latency and complexity. ",
       "examTip": "When ephemeral storage is insufficient, consider scaling the underlying host’s local disk capacity if the workload depends on fast local I/O."
     },
-
     /* ---------------------------- 19 (Direct/Conceptual) ---------------------------- */
     {
       "id": 19,
@@ -287,7 +269,6 @@ db.tests.insertOne({
       "explanation": "Option A caches content but does not usually make advanced routing decisions based on path or host. Option B is correct because an application load balancer operates at Layer 7 and routes traffic based on HTTP/HTTPS details. Option C enforces security rules but doesn’t load balance. Option D connects multiple VPCs but is not a load-balancing service. ",
       "examTip": "Layer 7 load balancers can differentiate traffic by headers, paths, or host fields in HTTP requests."
     },
-
     /* ---------------------------- 20 (Direct/Conceptual) ---------------------------- */
     {
       "id": 20,
@@ -302,7 +283,6 @@ db.tests.insertOne({
       "explanation": "Option A copies all data each time. Option B is correct because incremental backups store only changes since the most recent backup (whether full or incremental). Option C copies changes since the last full backup, not since the last incremental. Option D combines existing backups to form a new full set. ",
       "examTip": "Understand incremental vs. differential backups: incremental depends on the last backup of any type, whereas differential depends on the last full backup."
     },
-
     /* ---------------------------- 21 (Scenario-based) ---------------------------- */
     {
       "id": 21,
@@ -317,7 +297,6 @@ db.tests.insertOne({
       "explanation": "Option A fails because data physically resides in one bucket location, violating locality. Option B is correct because region-specific buckets store data in the required location, abiding by regulations, and the platform can replicate within that region for availability. Option C still centralizes writes in one region. Option D handles encryption but doesn’t address data locality or storage location. ",
       "examTip": "When data sovereignty is a requirement, ensure uploads physically stay within the mandated region."
     },
-
     /* ---------------------------- 22 (Direct/Conceptual) ---------------------------- */
     {
       "id": 22,
@@ -332,7 +311,6 @@ db.tests.insertOne({
       "explanation": "Option A, the recovery time objective, sets the acceptable time to restore services after an outage. Option B is not a standard term. Option C is not typically an SLA metric. Option D concerns audits, not downtime. ",
       "examTip": "RTO defines the maximum tolerable downtime to restore a service, which is crucial for SLA planning."
     },
-
     /* ---------------------------- 23 (Direct/Conceptual) ---------------------------- */
     {
       "id": 23,
@@ -347,7 +325,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct because VLAN tagging allows separate virtual LANs to isolate traffic. Option B synchronizes system clocks. Option C inspects traffic but doesn't isolate at Layer 2. Option D handles inbound connections but doesn't segment traffic at the data link layer. ",
       "examTip": "VLANs remain a foundational technology for segmenting broadcast domains even in cloud data centers."
     },
-
     /* ---------------------------- 24 (Scenario-based) ---------------------------- */
     {
       "id": 24,
@@ -362,7 +339,6 @@ db.tests.insertOne({
       "explanation": "Option A's hourly snapshots risk data loss if a failure happens near the end of the interval. Option B is correct for near-zero downtime because a hot site replicates data in real time. Option C requires a lengthy restore process. Option D's once-per-night approach also risks losing nearly a day's worth of data. ",
       "examTip": "Hot sites offer minimal downtime and data loss but come with higher operational costs."
     },
-
     /* ---------------------------- 25 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 25,
@@ -377,7 +353,6 @@ db.tests.insertOne({
       "explanation": "Autoscaling automatically scales resources based on load. Rightsizing ensures resource specs align with actual usage. Reserved instances require upfront or long-term commitment for discounts. Spot instances let you bid on spare capacity. Option B matches these definitions. ",
       "examTip": "Know each cost optimization approach: autoscaling adjusts capacity dynamically, while purchasing reserved or spot instances can reduce costs under specific usage patterns."
     },
-
     /* ---------------------------- 26 (Direct/Conceptual) ---------------------------- */
     {
       "id": 26,
@@ -392,7 +367,6 @@ db.tests.insertOne({
       "explanation": "Option A intentionally injects failures into production, not a standard way to test all changes first. Option B modifies production immediately. Option C indicates sending real-time traffic to the new environment, skipping thorough tests. Option D is correct because deploying to a staging environment first uncovers issues before production. ",
       "examTip": "Using a staging environment for validation helps catch configuration and integration issues early."
     },
-
     /* ---------------------------- 27 (Direct/Conceptual) ---------------------------- */
     {
       "id": 27,
@@ -407,7 +381,6 @@ db.tests.insertOne({
       "explanation": "Option A describes a monolithic approach. Option B is correct: microservices break functionality into smaller, independently deployable components. Option C can lead to tight coupling if a single database is shared improperly. Option D suggests a monolithic host. ",
       "examTip": "Microservices architecture promotes decoupling of components, enabling independent scaling and deployment."
     },
-
     /* ---------------------------- 28 (Scenario-based) ---------------------------- */
     {
       "id": 28,
@@ -422,7 +395,6 @@ db.tests.insertOne({
       "explanation": "Option A is infrequent and might not catch immediate deviations. Option B addresses instance lifespans but not configurations. Option C is correct because continuous scanning and automated remediation detect and fix drift quickly. Option D relies on manual oversight, prone to error. ",
       "examTip": "Configuration management tools should actively scan for drift and reconcile definitions on an ongoing basis."
     },
-
     /* ---------------------------- 29 (Direct/Conceptual) ---------------------------- */
     {
       "id": 29,
@@ -437,7 +409,6 @@ db.tests.insertOne({
       "explanation": "Option A is more typical of dedicated hosting. Option B is correct: serverless scales automatically, triggered by events, without explicit server management. Option C is the opposite of serverless: OS management is handled by the provider. Option D does not hold true, as data transfer costs usually still apply. ",
       "examTip": "Serverless platforms handle infrastructure details, letting you focus on code logic and event triggers."
     },
-
     /* ---------------------------- 30 (Direct/Conceptual) ---------------------------- */
     {
       "id": 30,
@@ -452,7 +423,6 @@ db.tests.insertOne({
       "explanation": "Option A consolidates services into one large unit, the opposite of cloud-native. Option B indicates strong dependencies. Option C is correct because loose coupling allows services to operate and scale independently. Option D focuses on not modifying existing servers, not necessarily independent failover. ",
       "examTip": "Loose coupling ensures each service can be developed, deployed, and scaled independently for optimal resilience."
     },
-
     /* ---------------------------- 31 (Scenario-based) ---------------------------- */
     {
       "id": 31,
@@ -467,7 +437,6 @@ db.tests.insertOne({
       "explanation": "Option A checks if pods are healthy but doesn’t alter resources. Option B scales the number of pods horizontally based on CPU, but not memory. Option C is correct because the vertical pod autoscaler automatically adjusts memory and CPU requests for pods. Option D is a manual approach, not truly dynamic. ",
       "examTip": "For memory-bound workloads, a vertical autoscaler can raise resource limits as needed, while horizontal autoscalers typically rely on metrics like CPU usage."
     },
-
     /* ---------------------------- 32 (Direct/Conceptual) ---------------------------- */
     {
       "id": 32,
@@ -482,7 +451,6 @@ db.tests.insertOne({
       "explanation": "Option A is overly expensive and possibly unnecessary. Option B is correct, as incremental backups after a full backup allow relatively fine-grained restore points while saving storage. Option C offers real-time duplication but no historical restore points. Option D only captures a full system snapshot with no incremental history. ",
       "examTip": "Combine periodic full backups with frequent incremental backups for granular restoration and cost efficiency."
     },
-
     /* ---------------------------- 33 (Direct/Conceptual) ---------------------------- */
     {
       "id": 33,
@@ -497,7 +465,6 @@ db.tests.insertOne({
       "explanation": "Option A addresses healthcare data. Option B concerns data protection and privacy in the EU. Option C covers service organization controls for data handling, not specifically payment cards. Option D, PCI DSS, sets standards for credit card information. ",
       "examTip": "If it involves payment cards, PCI DSS is typically the relevant standard."
     },
-
     /* ---------------------------- 34 (Scenario-based) ---------------------------- */
     {
       "id": 34,
@@ -512,7 +479,6 @@ db.tests.insertOne({
       "explanation": "Option A protects network access but not at-rest data. Option B aids cost management, not security. Option C is correct because encrypting data at rest with keys controlled by the customer ensures confidentiality. Option D offers temporary storage but doesn’t address long-term data security. ",
       "examTip": "Encrypting data at rest with your own keys prevents a provider compromise from exposing the underlying plaintext data."
     },
-
     /* ---------------------------- 35 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 35,
@@ -527,7 +493,6 @@ db.tests.insertOne({
       "explanation": "A persistent volume holds data beyond container restarts (1). Ephemeral storage is short-lived scratch space (2). A storage class defines dynamic provisioning (3). Volume snapshots capture a specific point in time (4). Option C places these definitions correctly. ",
       "examTip": "When dealing with containers, understand which storage is retained on restart and which is ephemeral, plus how dynamic provisioning is configured."
     },
-
     /* ---------------------------- 36 (Direct/Conceptual) ---------------------------- */
     {
       "id": 36,
@@ -542,7 +507,6 @@ db.tests.insertOne({
       "explanation": "Option A, input/output operations per second (IOPS), directly measures storage read/write operations. Option B is how quickly a system starts, Option C measures CPU consumption, and Option D tracks how long an API call takes end-to-end. ",
       "examTip": "IOPS is a common metric for assessing storage performance, especially for databases or transaction-heavy apps."
     },
-
     /* ---------------------------- 37 (Direct/Conceptual) ---------------------------- */
     {
       "id": 37,
@@ -557,7 +521,6 @@ db.tests.insertOne({
       "explanation": "Option A focuses on preparing code for release, Option B is correct because continuous integration merges changes often with immediate testing, Option C fully automates releases after successful tests, and Option D addresses infrastructure inconsistencies. ",
       "examTip": "CI is about merging code changes frequently and verifying them with automated tests to detect issues early."
     },
-
     /* ---------------------------- 38 (Scenario-based) ---------------------------- */
     {
       "id": 38,
@@ -572,7 +535,6 @@ db.tests.insertOne({
       "explanation": "Option A requires manual scaling, not ideal for sudden bursts. Option B is correct because an event-driven function can handle ingestion dynamically and queue data for asynchronous writes, smoothing out spikes. Option C is for static content caching, not dynamic sensor writes. Option D may reduce immediate write frequency, but sensors could lose data if local buffering fails. ",
       "examTip": "Offloading sudden write spikes via serverless queues or event-based ingestion is a common pattern for unpredictable workloads."
     },
-
     /* ---------------------------- 39 (Direct/Conceptual) ---------------------------- */
     {
       "id": 39,
@@ -587,7 +549,6 @@ db.tests.insertOne({
       "explanation": "Option A is purely manual, lacking automation. Option B is correct, as orchestration platforms like Kubernetes or Swarm handle scheduling, scaling, and failover. Option C is a manual approach. Option D suggests a single point of deployment with no distributed scheduling. ",
       "examTip": "Container orchestrators automate scheduling, scaling, and maintaining container health across a cluster."
     },
-
     /* ---------------------------- 40 (Direct/Conceptual) ---------------------------- */
     {
       "id": 40,
@@ -602,7 +563,6 @@ db.tests.insertOne({
       "explanation": "Option A, BGP, is used to exchange routing information dynamically. Option B addresses email transmission, Option C is a web protocol, and Option D provides remote shell access. ",
       "examTip": "BGP is often used in cloud site-to-site or hybrid setups to manage dynamic routing information."
     },
-
     /* ---------------------------- 41 (Scenario-based) ---------------------------- */
     {
       "id": 41,
@@ -617,7 +577,6 @@ db.tests.insertOne({
       "explanation": "Option A wastes resources during quiet periods. Option B is largely manual, not truly auto-scaling. Option C is correct because horizontal pod autoscalers add or remove replicas based on CPU usage. Option D moves away from containerization and orchestration entirely. ",
       "examTip": "Horizontal scaling is well-suited for front-end services that experience fluctuating load."
     },
-
     /* ---------------------------- 42 (Direct/Conceptual) ---------------------------- */
     {
       "id": 42,
@@ -632,7 +591,6 @@ db.tests.insertOne({
       "explanation": "Option A addresses logs but not environment freshness. Option B is correct because pulling the latest image ensures new containers use updated dependencies. Option C complicates the host and is not typical for ephemeral containers. Option D updates the host OS but may not refresh the actual container image. ",
       "examTip": "Frequent image pulls guarantee ephemeral containers run with the latest patches and configurations."
     },
-
     /* ---------------------------- 43 (Direct/Conceptual) ---------------------------- */
     {
       "id": 43,
@@ -647,7 +605,6 @@ db.tests.insertOne({
       "explanation": "Option A is a popular web server/reverse proxy, Option B is correct because Terraform is widely used for infrastructure automation, Option C is a load balancer, and Option D is for CI/CD pipeline jobs. ",
       "examTip": "Terraform is a key player in multi-cloud IaC, enabling consistent provisioning across different platforms."
     },
-
     /* ---------------------------- 44 (Scenario-based) ---------------------------- */
     {
       "id": 44,
@@ -662,7 +619,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect since containers share the host OS kernel. Option B is correct because containers generally start quicker and consume fewer resources. Option C is false; VMs still need OS patching. Option D is true but doesn’t solve overhead or startup latency. ",
       "examTip": "Containers often excel in ephemeral workloads, offering quick spin-up/down and efficient resource usage."
     },
-
     /* ---------------------------- 45 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 45,
@@ -677,7 +633,6 @@ db.tests.insertOne({
       "explanation": "Public cloud is typically offered over the internet to the general public (1). Private cloud is maintained by a single organization (2). Hybrid mixes on-premises resources with external public resources (3). Community cloud is shared by multiple organizations with a common purpose (4). Option B reflects these definitions. ",
       "examTip": "Distinguish each cloud model by who owns and manages the infrastructure, and how widely it's shared."
     },
-
     /* ---------------------------- 46 (Direct/Conceptual) ---------------------------- */
     {
       "id": 46,
@@ -692,7 +647,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: continuous deployment automates the final release step if tests succeed. Option B focuses on merging changes and running tests but not necessarily releasing. Option C is about defining resources in code. Option D addresses environment consistency. ",
       "examTip": "Continuous deployment extends CI by pushing validated builds into production automatically."
     },
-
     /* ---------------------------- 47 (Direct/Conceptual) ---------------------------- */
     {
       "id": 47,
@@ -707,7 +661,6 @@ db.tests.insertOne({
       "explanation": "Option A can be more expensive for certain usage patterns. Option B is essentially shared tenancy. Option C is correct because a dedicated host gives you hardware isolation and control over maintenance windows. Option D does not remove licensing obligations for specialized software. ",
       "examTip": "Dedicated hosts offer physical isolation and control but typically come at a premium compared to shared tenancy."
     },
-
     /* ---------------------------- 48 (Scenario-based) ---------------------------- */
     {
       "id": 48,
@@ -722,7 +675,6 @@ db.tests.insertOne({
       "explanation": "Option A would allow public pulls, negating privacy. Option B is correct because referencing registry credentials as a secret ensures the cluster can authenticate. Option C is simply rebranding but doesn’t solve the authentication requirement. Option D is unrelated to storing credentials securely. ",
       "examTip": "In private registry scenarios, store credentials in your orchestration platform’s secure secrets management and reference them in deployment specs."
     },
-
     /* ---------------------------- 49 (Direct/Conceptual) ---------------------------- */
     {
       "id": 49,
@@ -737,7 +689,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: vulnerability management scans, identifies, and fixes weaknesses. Option B manages identities across multiple domains. Option C is a testing method but not the entire process. Option D deals with resource labeling, not security remediation. ",
       "examTip": "Vulnerability management is an ongoing cycle of discovery, assessment, and remediation."
     },
-
     /* ---------------------------- 50 (Direct/Conceptual) ---------------------------- */
     {
       "id": 50,
@@ -752,7 +703,6 @@ db.tests.insertOne({
       "explanation": "Option A describes a Big Bang or in-place approach. Option B does not describe a typical rolling deployment; downtime can be minimized but not always guaranteed. Option C is correct because rolling deployments replace instances in phases. Option D describes a blue-green approach. ",
       "examTip": "Rolling deployments update instances in small batches, enabling phased rollouts and reducing immediate risk."
     },
-
     /* ---------------------------- 51 (Scenario-based) ---------------------------- */
     {
       "id": 51,
@@ -767,7 +717,6 @@ db.tests.insertOne({
       "explanation": "Option A is too infrequent. Option B is correct: automated reconciliation ensures the environment matches the IaC definitions, erasing manual modifications. Option C requires discipline but doesn’t revert changes. Option D centralizes code review but doesn’t directly prevent unapproved changes in production. ",
       "examTip": "Configuration drift tools enforce the declared state by overwriting or removing unapproved modifications automatically."
     },
-
     /* ---------------------------- 52 (Direct/Conceptual) ---------------------------- */
     {
       "id": 52,
@@ -782,7 +731,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: FIM inspects file hashes or changes. Option B is network-based, not file-level. Option C controls user logins, not file changes. Option D executes code in isolation but doesn’t watch for file tampering. ",
       "examTip": "FIM solutions detect and alert on unapproved file changes, especially in OS or application directories."
     },
-
     /* ---------------------------- 53 (Direct/Conceptual) ---------------------------- */
     {
       "id": 53,
@@ -797,7 +745,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; spot instances do not guarantee uptime. Option B is correct because if the spot price surpasses your bid, instances can terminate abruptly. Option C is false; spot instances can still be run in various regions. Option D is unrelated to standard pricing. ",
       "examTip": "Spot instances offer cost savings but must be designed with graceful interruption handling."
     },
-
     /* ---------------------------- 54 (Scenario-based) ---------------------------- */
     {
       "id": 54,
@@ -812,7 +759,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: if the retention period expires, unconsumed messages are discarded. Option B deals with consumer storage rather than the queue’s durability. Option C queue compression rarely discards messages. Option D credentials do not typically cause data loss. ",
       "examTip": "Always check your queue’s message retention settings—durable or not, unconsumed data may be dropped after the configured window."
     },
-
     /* ---------------------------- 55 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 55,
@@ -827,7 +773,6 @@ db.tests.insertOne({
       "explanation": "Differential backups (1) capture changes since the last full. Full backups (2) store the entire data set. Incremental (3) captures changes since the last backup of any kind. Synthetic full (4) compiles existing backups to form a new full. Option C aligns these definitions. ",
       "examTip": "Differential vs. incremental is a common point of confusion; remember differential is relative to the last full, incremental to the last backup of any type."
     },
-
     /* ---------------------------- 56 (Direct/Conceptual) ---------------------------- */
     {
       "id": 56,
@@ -842,7 +787,6 @@ db.tests.insertOne({
       "explanation": "Option A modifies existing servers. Option B is correct: immutable infrastructure treats servers as disposable, replaced instead of updated in place. Option C is contrary to immutability. Option D again modifies the existing servers. ",
       "examTip": "Immutable infrastructure simplifies deployments and rollbacks by eliminating the need to manage in-place updates."
     },
-
     /* ---------------------------- 57 (Direct/Conceptual) ---------------------------- */
     {
       "id": 57,
@@ -857,7 +801,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; Zero Trust often increases encryption usage. Option B is the opposite, as Zero Trust typically encourages MFA. Option C is correct because Zero Trust repeatedly verifies identity and context, limiting lateral attacker movement. Option D is the opposite of Zero Trust. ",
       "examTip": "Zero Trust treats every request as unverified, requiring strict authentication and authorization each time."
     },
-
     /* ---------------------------- 58 (Scenario-based) ---------------------------- */
     {
       "id": 58,
@@ -872,7 +815,6 @@ db.tests.insertOne({
       "explanation": "Option A forces distant users to connect to a single region. Option B is correct because local endpoints reduce round-trip times, enabling near-instant messaging. Option C does not necessarily improve global latency. Option D is unhelpful for real-time chat since CDN caches static data. ",
       "examTip": "Global real-time communication often benefits from distributed brokers that place message handling close to the end users."
     },
-
     /* ---------------------------- 59 (Direct/Conceptual) ---------------------------- */
     {
       "id": 59,
@@ -887,7 +829,6 @@ db.tests.insertOne({
       "explanation": "Option A suggests separation, not correlation. Option B is correct: centralized correlation helps detect patterns across diverse logs. Option C ephemeral logging is short-lived. Option D is manual and often lacks broader insight. ",
       "examTip": "Cross-referencing multiple log sources can reveal complex events or coordinated attacks that single logs won’t show."
     },
-
     /* ---------------------------- 60 (Direct/Conceptual) ---------------------------- */
     {
       "id": 60,
@@ -902,7 +843,6 @@ db.tests.insertOne({
       "explanation": "Option A references resource usage, not image storage. Option B is about identity, not container distribution. Option C is correct: registries store, version, and distribute images. Option D addresses application traffic, not image hosting. ",
       "examTip": "Container registries let teams manage image versions systematically, ensuring consistent deployments."
     },
-
     /* ---------------------------- 61 (Scenario-based) ---------------------------- */
     {
       "id": 61,
@@ -917,7 +857,6 @@ db.tests.insertOne({
       "explanation": "Option A might create significant latency for remote locations. Option B ephemeral containers alone might not meet persistent POS requirements. Option C is correct: local hypervisors at each store provide low-latency virtualization, while centralized management ensures consistent configuration. Option D keeps workloads in one region, risking latency and connectivity disruptions. ",
       "examTip": "Private clouds can be distributed across on-prem locations with central orchestration to minimize latency and unify management."
     },
-
     /* ---------------------------- 62 (Direct/Conceptual) ---------------------------- */
     {
       "id": 62,
@@ -932,7 +871,6 @@ db.tests.insertOne({
       "explanation": "Option A references storage redundancy (RAID). Option B is correct: RPO defines how up-to-date restored data must be. Option C is not a common DR metric. Option D concerns permissions, not recovery timelines. ",
       "examTip": "RPO indicates allowable data loss, while RTO defines allowable downtime."
     },
-
     /* ---------------------------- 63 (Direct/Conceptual) ---------------------------- */
     {
       "id": 63,
@@ -947,7 +885,6 @@ db.tests.insertOne({
       "explanation": "Option A references network-level security. Option B adds authentication factors but not role logic. Option C is correct because role-based access control grants permissions based on job functions. Option D suggests the resource owner decides permissions, a different model. ",
       "examTip": "RBAC simplifies management by assigning privileges to roles instead of individuals directly."
     },
-
     /* ---------------------------- 64 (Scenario-based) ---------------------------- */
     {
       "id": 64,
@@ -962,7 +899,6 @@ db.tests.insertOne({
       "explanation": "Option A suggests a relational approach with ACID compliance. Option B is correct: a flexible schema with frequent changes is well-suited to NoSQL. Option C also points to relational. Option D is typically simpler with a relational model if the schema is stable. ",
       "examTip": "NoSQL databases excel at handling frequent schema changes, massive scale, and rapid read/write demands."
     },
-
     /* ---------------------------- 65 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 65,
@@ -977,7 +913,6 @@ db.tests.insertOne({
       "explanation": "Build stage compiles and packages. Test stage runs automated checks. Release stage marks artifacts as ready. Deploy stage pushes them to production. Option B accurately reflects this typical CI/CD pipeline sequence. ",
       "examTip": "Knowing the standard phases of a CI/CD pipeline helps troubleshoot automation and set clear responsibilities."
     },
-
     /* ---------------------------- 66 (Direct/Conceptual) ---------------------------- */
     {
       "id": 66,
@@ -992,7 +927,6 @@ db.tests.insertOne({
       "explanation": "Option A describes a hot site. Option B is correct because cold sites have little or no active hardware until an incident occurs. Option C is again a hot site approach. Option D suggests a warm site if snapshots are frequently restored. ",
       "examTip": "Cold sites minimize cost but require more time to become fully operational in a disaster scenario."
     },
-
     /* ---------------------------- 67 (Direct/Conceptual) ---------------------------- */
     {
       "id": 67,
@@ -1007,7 +941,6 @@ db.tests.insertOne({
       "explanation": "Option A is not typically a cost factor. Option B is incorrect; dynamic protocols typically handle failover better. Option C is correct: static routes can be simpler and avoid unintended route advertisement. Option D is generally not a key advantage. ",
       "examTip": "Static routing can be simpler to maintain in smaller or more controlled environments, though it offers less flexibility."
     },
-
     /* ---------------------------- 68 (Scenario-based) ---------------------------- */
     {
       "id": 68,
@@ -1022,7 +955,6 @@ db.tests.insertOne({
       "explanation": "Option A locks them into long-term usage, not great if GPUs are underutilized. Option B is correct: spot instances lower costs for idle times, while on-demand provides fallback if spot capacity is revoked. Option C does not address cost optimization or scheduling. Option D focuses on updating, not cost reduction or idle capacity. ",
       "examTip": "Leverage spot instances for workloads that can tolerate interruptions, especially in GPU-heavy tasks that are not always at peak demand."
     },
-
     /* ---------------------------- 69 (Direct/Conceptual) ---------------------------- */
     {
       "id": 69,
@@ -1037,7 +969,6 @@ db.tests.insertOne({
       "explanation": "Option A can cause major disruptions if something goes wrong. Option B halts operations, impacting availability. Option C uses a transitional approach so both old and new code can run side by side until fully switched. Option D focuses on performance, not ensuring compatibility or minimal downtime. ",
       "examTip": "For database updates, ensure forward/backward compatibility when rolling out schema changes to avoid forced downtime."
     },
-
     /* ---------------------------- 70 (Direct/Conceptual) ---------------------------- */
     {
       "id": 70,
@@ -1052,7 +983,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: CDNs are globally distributed to cache content near end users. Option B describes a VPN or direct connect scenario. Option C relates to container orchestration. Option D addresses local load balancing. ",
       "examTip": "CDNs accelerate content delivery by serving cached copies from edge nodes closer to end users."
     },
-
     /* ---------------------------- 71 (Scenario-based) ---------------------------- */
     {
       "id": 71,
@@ -1067,7 +997,6 @@ db.tests.insertOne({
       "explanation": "Option A halts service availability. Option B is correct: a retry with exponential backoff handles temporary unavailability. Option C wastes resources and doesn't guarantee no scale-out events in the future. Option D is unrelated to the scaling or connection issue. ",
       "examTip": "Transient issues often arise during autoscaling; implement retry logic with gradual backoff to handle such transitions gracefully."
     },
-
     /* ---------------------------- 72 (Direct/Conceptual) ---------------------------- */
     {
       "id": 72,
@@ -1082,7 +1011,6 @@ db.tests.insertOne({
       "explanation": "Option A checks functionality at a small scale, Option B is typically done on a live or pre-production environment but is more targeted. Option C is correct: sandbox testing isolates code to identify malicious or insecure behaviors. Option D measures performance under load, not necessarily security. ",
       "examTip": "Sandboxing allows you to evaluate code behavior or third-party libraries in an isolated setting, identifying potential risks."
     },
-
     /* ---------------------------- 73 (Direct/Conceptual) ---------------------------- */
     {
       "id": 73,
@@ -1097,7 +1025,6 @@ db.tests.insertOne({
       "explanation": "Option A or B require persistent storage. Option C is correct: ephemeral storage is ideal for temporary data that can be discarded. Option D also requires persistent solutions. ",
       "examTip": "Ephemeral storage is best used for transient or non-critical data that does not need to persist across container restarts."
     },
-
     /* ---------------------------- 74 (Scenario-based) ---------------------------- */
     {
       "id": 74,
@@ -1112,7 +1039,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; strong consistency often requires synchronous replication to all relevant replicas. Option B is correct: many multi-region NoSQL databases default to eventual consistency for better performance. Option C is false; distributed SQL solutions do exist. Option D is incorrect, as replication across regions always adds latency. ",
       "examTip": "Global NoSQL setups often choose eventual consistency to reduce latency, whereas strong consistency can impose cross-region round-trip overhead."
     },
-
     /* ---------------------------- 75 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 75,
@@ -1127,7 +1053,6 @@ db.tests.insertOne({
       "explanation": "Metrics are numeric measurements (1). Logging stores detailed text entries (2). Tracing visualizes end-to-end calls (3). Alerting notifies teams (4). Option C places each concept correctly. ",
       "examTip": "Modern observability includes metrics, logs, and traces, with alerting layered on top of these data sources."
     },
-
     /* ---------------------------- 76 (Direct/Conceptual) ---------------------------- */
     {
       "id": 76,
@@ -1142,7 +1067,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; tags are managed per account or subscription. Option B is correct because tagging helps allocate costs. Option C is false; tagging alone doesn’t reduce cost. Option D conflates tagging with access control. ",
       "examTip": "Use tags to track usage and costs by project, environment, or department for better budget visibility."
     },
-
     /* ---------------------------- 77 (Direct/Conceptual) ---------------------------- */
     {
       "id": 77,
@@ -1157,7 +1081,6 @@ db.tests.insertOne({
       "explanation": "Option A is for load balancing, Option B addresses encryption, Option C is correct for WAF, and Option D typically references firewall rules at the network layer. ",
       "examTip": "A WAF inspects application-layer traffic (HTTP/HTTPS) to block or flag malicious requests like SQL injection or XSS."
     },
-
     /* ---------------------------- 78 (Scenario-based) ---------------------------- */
     {
       "id": 78,
@@ -1172,7 +1095,6 @@ db.tests.insertOne({
       "explanation": "Option A eliminates visibility. Option B is correct because an automated alert triggers before quotas are reached. Option C is too infrequent. Option D is not truly real-time. ",
       "examTip": "Set alerts on resource usage to catch potential quota limits and request increases in advance."
     },
-
     /* ---------------------------- 79 (Direct/Conceptual) ---------------------------- */
     {
       "id": 79,
@@ -1187,7 +1109,6 @@ db.tests.insertOne({
       "explanation": "Option A uses public internet routes. Option B is correct: Direct Connect or ExpressRoute provides a dedicated private link. Option C is for distributing web traffic, not private connectivity. Option D is typically for remote desktop, not data center connectivity. ",
       "examTip": "For predictable, high-bandwidth connections to the cloud, choose a dedicated circuit like AWS Direct Connect or Azure ExpressRoute."
     },
-
     /* ---------------------------- 80 (Direct/Conceptual) ---------------------------- */
     {
       "id": 80,
@@ -1202,7 +1123,6 @@ db.tests.insertOne({
       "explanation": "Option A is rarely possible with a managed service. Option B is incorrect; you still pay for associated resources. Option C is correct because managed services typically automate patching, backups, and scaling. Option D is generally not accurate, as licensing often recurs or is embedded in usage fees. ",
       "examTip": "Managed database services offload operational tasks so you can focus on data usage rather than infrastructure details."
     },
-
     /* ---------------------------- 81 (Scenario-based) ---------------------------- */
     {
       "id": 81,
@@ -1217,7 +1137,6 @@ db.tests.insertOne({
       "explanation": "Option A is rarely permissible in a managed serverless environment. Option B is correct because certain container-based serverless offerings allow GPU resources in ephemeral containers. Option C is a drastic shift, not typically aligned with serverless. Option D is typically not feasible. ",
       "examTip": "Some providers offer serverless containers that can use specialized hardware like GPUs. Confirm the provider supports GPU-enabled ephemeral workloads."
     },
-
     /* ---------------------------- 82 (Direct/Conceptual) ---------------------------- */
     {
       "id": 82,
@@ -1232,7 +1151,6 @@ db.tests.insertOne({
       "explanation": "Option A is an older methodology that doesn’t integrate dev and ops closely. Option B is correct because DevOps merges development and operations for rapid iteration. Option C is slow and manual, Option D is infrequent. ",
       "examTip": "DevOps shortens feedback loops by integrating development, QA, and operations tasks continuously."
     },
-
     /* ---------------------------- 83 (Direct/Conceptual) ---------------------------- */
     {
       "id": 83,
@@ -1247,7 +1165,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: readiness probes decide if a container is ready to serve requests. Option B is about resource quotas. Option C refers to secret management. Option D is more akin to a liveness probe. ",
       "examTip": "Readiness probes keep containers out of traffic rotation until they’re fully initialized."
     },
-
     /* ---------------------------- 84 (Scenario-based) ---------------------------- */
     {
       "id": 84,
@@ -1262,7 +1179,6 @@ db.tests.insertOne({
       "explanation": "Option A keeps a host running continuously, incurring constant costs. Option B is correct because ephemeral containers can be scheduled only when needed, reducing idle charges. Option C might not help unless the workload specifically benefits from GPUs. Option D can save cost if usage is continuous, but not if usage is sporadic. ",
       "examTip": "Using serverless or ephemeral container tasks is a common approach to pay only for runtime rather than idle resources."
     },
-
     /* ---------------------------- 85 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 85,
@@ -1277,7 +1193,6 @@ db.tests.insertOne({
       "explanation": "Ephemeral storage provides temporary scratch space (1). Microservices break apps into independently scalable services (2). A liveness probe detects unresponsive containers to restart them (3). Spot instances leverage spare capacity cheaply (4). Option C correctly aligns these benefits. ",
       "examTip": "For ephemeral storage, microservices, probes, and spot instances, know how each impacts cost, reliability, or performance."
     },
-
     /* ---------------------------- 86 (Direct/Conceptual) ---------------------------- */
     {
       "id": 86,
@@ -1292,7 +1207,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; a zero-day has no patch initially. Option B is not necessarily true. Option C is correct because zero-day exploits are unknown and unpatched. Option D is also incorrect, zero-days can affect any system. ",
       "examTip": "Zero-days demand swift mitigation strategies (e.g., workarounds, isolation) since no official fix exists initially."
     },
-
     /* ---------------------------- 87 (Direct/Conceptual) ---------------------------- */
     {
       "id": 87,
@@ -1307,7 +1221,6 @@ db.tests.insertOne({
       "explanation": "Option A is lifting and shifting without major code changes. Option B is correct: refactoring modifies code to utilize cloud-native capabilities. Option C is decommissioning entirely. Option D is another term for basic lift and shift. ",
       "examTip": "Refactoring typically improves application design to harness the full benefits of the cloud environment."
     },
-
     /* ---------------------------- 88 (Scenario-based) ---------------------------- */
     {
       "id": 88,
@@ -1322,7 +1235,6 @@ db.tests.insertOne({
       "explanation": "Option A might lead to partial job failures. Option B can help, but still might hit concurrency limits. Option C is correct: a concurrency limit increase plus queuing ensures tasks are processed without rejecting new executions. Option D ties up user requests and likely causes timeouts. ",
       "examTip": "When concurrency limits are reached, buffer tasks in a queue and consider requesting higher concurrency from the provider."
     },
-
     /* ---------------------------- 89 (Direct/Conceptual) ---------------------------- */
     {
       "id": 89,
@@ -1338,7 +1250,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; you still pay for nodes or usage. Option B is correct because many managed Kubernetes offerings handle the control plane and patching automatically. Option C is not typical for a managed service. Option D is false; compute usage still incurs costs. ",
       "examTip": "Managed Kubernetes often removes the burden of maintaining master nodes, OS patches, and high availability for the control plane."
     },
-
     /* ---------------------------- 90 (Direct/Conceptual) ---------------------------- */
     {
       "id": 90,
@@ -1353,7 +1264,6 @@ db.tests.insertOne({
       "explanation": "Option A is the opposite of a best practice. Option B is correct: group-based access streamlines permission assignments. Option C is unrelated to user access control. Option D is not typical or desired in multi-resource environments. ",
       "examTip": "Use group-based roles to avoid duplication of individual permission sets and reduce administrative overhead."
     },
-
     /* ---------------------------- 91 (Scenario-based) ---------------------------- */
     {
       "id": 91,
@@ -1368,7 +1278,6 @@ db.tests.insertOne({
       "explanation": "Option A is about performance, not data loss. Option B is correct because if snapshots or replication lag behind, data can be lost beyond the 15-minute RPO. Option C is a networking detail, not directly causing data loss. Option D may cause downtime but not additional data loss. ",
       "examTip": "To meet a strict RPO, replication or snapshot intervals must align with the required data currency across regions."
     },
-
     /* ---------------------------- 92 (Direct/Conceptual) ---------------------------- */
     {
       "id": 92,
@@ -1383,7 +1292,6 @@ db.tests.insertOne({
       "explanation": "Option A isolates logs per host, making cross-service correlation harder. Option B is correct: distributed tracing with correlation IDs provides an end-to-end view of requests. Option C only offers post-hoc analysis with potential delays. Option D addresses block storage but not cross-service tracing. ",
       "examTip": "Add correlation IDs to track requests across multiple services for clearer, integrated observability."
     },
-
     /* ---------------------------- 93 (Direct/Conceptual) ---------------------------- */
     {
       "id": 93,
@@ -1398,7 +1306,6 @@ db.tests.insertOne({
       "explanation": "Option A is not correct; versioning remains crucial. Option B is typically done via source control, not a registry. Option C is correct: a registry stores container images for retrieval in deployment. Option D is not standard functionality of a registry. ",
       "examTip": "A container registry is central to how DevOps pipelines store and deploy container images consistently."
     },
-
     /* ---------------------------- 94 (Scenario-based) ---------------------------- */
     {
       "id": 94,
@@ -1413,7 +1320,6 @@ db.tests.insertOne({
       "explanation": "Option A is correct: on-demand usage for 6 hours, then shutting down saves cost. Option B is continuous billing even when idle. Option C locks in cost for an entire year, possibly unused during idle times. Option D can abruptly terminate if spot capacity runs out, risking job failures. ",
       "examTip": "On-demand instances, combined with scheduling to shut down resources when idle, can significantly reduce costs for part-time workloads."
     },
-
     /* ---------------------------- 95 (PBQ-style: Matching) ---------------------------- */
     {
       "id": 95,
@@ -1428,7 +1334,6 @@ db.tests.insertOne({
       "explanation": "A VPC is a logically isolated virtual network (1). A subnet is a defined range of IP addresses within the VPC (2). A security group is a virtual firewall at the instance or resource level (3). A NAT gateway allows private instances to access the internet (4). Option B maps each concept correctly. ",
       "examTip": "Be sure you understand foundational cloud networking constructs: VPC, subnets, security groups, and NAT gateways."
     },
-
     /* ---------------------------- 96 (Direct/Conceptual) ---------------------------- */
     {
       "id": 96,
@@ -1443,7 +1348,6 @@ db.tests.insertOne({
       "explanation": "Option A is incorrect; major providers have DDoS protection. Option B is correct: auto-scaling can handle more traffic but also drives up costs. Option C is false; CDNs often help absorb or filter traffic. Option D oversimplifies DDoS mitigation. ",
       "examTip": "DDoS defenses usually combine layered approaches: CDN distribution, WAF, rate limiting, and possibly auto-scaling to handle spikes."
     },
-
     /* ---------------------------- 97 (Direct/Conceptual) ---------------------------- */
     {
       "id": 97,
@@ -1458,7 +1362,6 @@ db.tests.insertOne({
       "explanation": "Option A is the traditional approach. Option B is correct because SDN centralizes control logic, separate from the data forwarding plane. Option C contradicts the SDN concept of abstraction. Option D is the opposite of SDN's central management principle. ",
       "examTip": "SDN centralizes network control, enabling software-based automation and agility in configuring flows and policies."
     },
-
     /* ---------------------------- 98 (Scenario-based) ---------------------------- */
     {
       "id": 98,
@@ -1473,7 +1376,6 @@ db.tests.insertOne({
       "explanation": "Option A is an architectural shift but doesn’t solve ephemeral data issues. Option B is correct because persistent volumes ensure session data remains intact even if the container restarts. Option C is a large overhaul. Option D mitigates frequency but doesn't preserve session data. ",
       "examTip": "For data that must survive container restarts or updates, attach a persistent volume or use an external session store."
     },
-
     /* ---------------------------- 99 (Direct/Conceptual) ---------------------------- */
     {
       "id": 99,
@@ -1488,7 +1390,6 @@ db.tests.insertOne({
       "explanation": "Option A can complicate retrieval. Option B is correct: the sidecar pattern collects logs from standard output and forwards them to a centralized service. Option C discards logs, not recommended. Option D introduces delays and possibly lost logs if containers restart. ",
       "examTip": "The sidecar pattern is a common method to offload logging or monitoring tasks from the main application container."
     },
-
     /* ---------------------------- 100 (Direct/Conceptual) ---------------------------- */
     {
       "id": 100,
@@ -1503,7 +1404,5 @@ db.tests.insertOne({
       "explanation": "Option A is about resource setup, Option B is about system health, Option C is just the act of submitting code, while Option D specifically includes merging changes, building, and running tests. ",
       "examTip": "Continuous integration merges code frequently, runs builds and tests, and alerts developers of conflicts or failures."
     }
-
   ]
 });
-
