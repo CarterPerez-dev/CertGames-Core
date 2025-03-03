@@ -683,7 +683,7 @@
   box-shadow: var(--test-shadow);
 }
 
-.avatar-section {
+.avatar-section-test {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1539,7 +1539,7 @@
     align-items: stretch;
   }
   
-  .avatar-section {
+  .avatar-section-test {
     justify-content: center;
   }
   
