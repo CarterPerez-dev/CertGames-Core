@@ -136,28 +136,19 @@ def generate_grc_question_task(self, category, difficulty):
 @shared_task
 def aggregate_performance_metrics():
     """
-    Runs (e.g. once per minute) to gather perfSamples from the past 5 minutes,
+    Runs every 3 minutes to gather perfSamples from the past 3 minutes,
     compute average request time, DB query time, data transfer rate, throughput, etc.
-    Then store in 'performanceMetrics'.
-
-    Steps:
-      1) Query perfSamples within the last 5 minutes.
-      2) If none, do nothing.
-      3) Summarize total requests, total duration, total DB time, total bytes, etc.
-      4) Insert a doc in 'performanceMetrics'.
-      5) Optionally cleanup old perfSamples to prevent infinite growth.
+    Then store in 'performanceMetrics'. We'll keep the last 20 records in the front end.
     """
-    now = datetime.utcnow()
-    five_min_ago = now - timedelta(minutes=5)
 
-    # 1) Get all samples in last 5 minutes
-    samples = list(db.perfSamples.find({"timestamp": {"$gte": five_min_ago}}))
+    now = datetime.utcnow()
+    three_min_ago = now - timedelta(minutes=3)
+
+    samples = list(db.perfSamples.find({"timestamp": {"$gte": three_min_ago}}))
     total_requests = len(samples)
     if total_requests == 0:
-        # No data => no aggregator doc
-        return
+        return  # No aggregator doc if no data
 
-    # 2) Summation for our metrics
     total_duration = 0.0
     total_db_time = 0.0
     total_bytes = 0
@@ -170,42 +161,39 @@ def aggregate_performance_metrics():
         if s.get("http_status", 200) >= 400:
             errors += 1
 
-    # 3) Compute final aggregator stats
     avg_request_time = (total_duration / total_requests) if total_requests else 0
     avg_db_query_time = (total_db_time / total_requests) if total_requests else 0
     error_rate = (errors / total_requests) if total_requests else 0.0
 
-    # data_transfer_rate => MB/s
+    # data_transfer_rate in MB/s (numeric float)
     data_transfer_rate_mb_s = 0.0
     if total_duration > 0:
         data_transfer_rate_mb_s = (total_bytes / (1024.0 * 1024.0)) / total_duration
 
-    # throughput => requests/min
-    throughput = total_requests / 5.0
+    # throughput => requests / 3min => convert to requests/min
+    # total_requests / 3.0 => requests per minute if we polled 3-min block.
+    throughput = (total_requests / 3.0)
 
-    # 4) Insert aggregator doc
     doc = {
-        "avg_request_time": round(avg_request_time, 4),
-        "avg_db_query_time": round(avg_db_query_time, 4),
-        "data_transfer_rate": f"{data_transfer_rate_mb_s:.3f} MB/s",
-        "throughput": round(throughput, 2),
-        "error_rate": round(error_rate, 4),
+        "avg_request_time": round(avg_request_time, 4),         # in seconds
+        "avg_db_query_time": round(avg_db_query_time, 4),       # also in seconds, store raw for now
+        "data_transfer_rate": round(data_transfer_rate_mb_s, 3),# float in MB/s, no label text
+        "throughput": round(throughput, 2),                     # requests/min
+        "error_rate": round(error_rate, 4),                     # fraction: 0.0 -> 1.0
         "timestamp": now
     }
     db.performanceMetrics.insert_one(doc)
 
-    # 5) Cleanup old samples (older than 30 min)
-    thirty_min_ago = now - timedelta(minutes=180)
-    db.perfSamples.delete_many({"timestamp": {"$lt": thirty_min_ago}})
+    # Optionally remove older perfSamples beyond X minutes to save space
+    # e.g. keep only 60 minutes in raw samples:
+    sixty_min_ago = now - timedelta(minutes=60)
+    db.perfSamples.delete_many({"timestamp": {"$lt": sixty_min_ago}})
 
-    logger.info(
-        f"Performance metrics aggregated @ {now} => requests={total_requests}, "
-        f"avg_req_time={doc['avg_request_time']}s, db_time={doc['avg_db_query_time']}s, "
-        f"throughput={doc['throughput']} req/min, data_rate={doc['data_transfer_rate']}, "
-        f"error_rate={doc['error_rate']}"
-    )
+    # (Optional) Also remove old performanceMetrics older than 2 hours, if desired:
+    two_hours_ago = now - timedelta(hours=2)
+    db.performanceMetrics.delete_many({"timestamp": {"$lt": two_hours_ago}})
 
-    return f"Aggregated {total_requests} samples; stored in performanceMetrics."
+    return f"Aggregated {total_requests} samples into performanceMetrics."
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def check_api_endpoints(self):
