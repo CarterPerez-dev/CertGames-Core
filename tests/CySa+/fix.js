@@ -1,5 +1,5 @@
     {
-      "id": 5,
+      "id": 3,
       "question": "An analyst is investigating unusual DNS queries in which multiple subdomains with random strings are being requested against a single external domain. The outbound traffic volume is low, but persistent, and each random subdomain appears only once. Which attacker technique is most likely being observed?",
       "options": [
         "Exfiltrating data via DNS-based covert channels",
