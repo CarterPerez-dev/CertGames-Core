@@ -172,10 +172,12 @@ const ScenarioSphere = () => {
     setFeedback({});
     setGenerationProgress(0);
     setGenerationStage('Initializing scenario...');
-    setShowScenarioCard(false);
-    setFadeInCard(false);
     setShowQuestionsSection(false);
     setErrorMessage("");
+    
+    // Show the output card immediately for streaming
+    setShowScenarioCard(true);
+    setFadeInCard(true);
     
     // Start the simulation of progress
     const progressInterval = setInterval(() => {
@@ -236,13 +238,10 @@ const ScenarioSphere = () => {
               setIsGenerating(false);
               setScenarioText(scenarioAccumulator.trim());
               
-              // Trigger animations
-              setTimeout(() => {
-                setShowScenarioCard(true);
-                setTimeout(() => {
-                  setFadeInCard(true);
-                }, 100);
-              }, 500);
+              // Scroll to output if not already visible
+              if (outputRef.current) {
+                outputRef.current.scrollIntoView({ behavior: 'smooth' });
+              }
               
               // Fetch questions
               fetchQuestions(scenarioAccumulator.trim());
@@ -671,60 +670,75 @@ const ScenarioSphere = () => {
       </div>
       
       {/* Scenario output section */}
-      {(scenarioText || showScenarioCard) && (
-        <div 
-          ref={outputRef}
-          className={`scenario-output-card ${showScenarioCard ? 'visible' : ''} ${fadeInCard ? 'fade-in' : ''}`}
-        >
-          <div className="scenario-card-header scenario-output-header">
-            <h2 className="scenario-card-title">
-              <span>Scenario: {industry} + {attackType}</span>
-            </h2>
-            <div className="scenario-card-actions">
-              <button 
-                className="scenario-section-toggle"
-                onClick={() => toggleSectionExpansion('scenario')}
-                aria-label={isSectionExpanded('scenario') ? 'Collapse scenario' : 'Expand scenario'}
-              >
-                {isSectionExpanded('scenario') ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
-            </div>
+      <div 
+        ref={outputRef}
+        className={`scenario-output-card ${showScenarioCard ? 'visible' : ''} ${fadeInCard ? 'fade-in' : ''}`}
+      >
+        <div className="scenario-card-header scenario-output-header">
+          <h2 className="scenario-card-title">
+            <span>{isGenerating ? 'Generating Scenario...' : `Scenario: ${industry} + ${attackType}`}</span>
+          </h2>
+          <div className="scenario-card-actions">
+            <button 
+              className="scenario-section-toggle"
+              onClick={() => toggleSectionExpansion('scenario')}
+              aria-label={isSectionExpanded('scenario') ? 'Collapse scenario' : 'Expand scenario'}
+            >
+              {isSectionExpanded('scenario') ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
           </div>
-          
-          {isSectionExpanded('scenario') !== false && (
-            <div className="scenario-output-content">
-              <div className="scenario-output-details">
-                <div className="scenario-detail">
-                  <span className="detail-label">Industry:</span>
-                  <span className="detail-value">{industry}</span>
-                </div>
-                <div className="scenario-detail">
-                  <span className="detail-label">Attack:</span>
-                  <span className="detail-value">{attackType}</span>
-                </div>
-                <div className="scenario-detail">
-                  <span className="detail-label">Skill Level:</span>
-                  <span className="detail-value">{skillLevel}</span>
-                </div>
-                <div className="scenario-detail">
-                  <span className="detail-label">Intensity:</span>
-                  <span className={`detail-value intensity-${getIntensityColor(threatIntensity)}`}>
-                    {threatIntensity}
-                  </span>
-                </div>
+        </div>
+        
+        {isSectionExpanded('scenario') !== false && (
+          <div className="scenario-output-content">
+            <div className="scenario-output-details">
+              <div className="scenario-detail">
+                <span className="detail-label">Industry:</span>
+                <span className="detail-value">{industry}</span>
               </div>
-              
-              <div className="scenario-text-container">
-                {scenarioText.split('\n\n').map((paragraph, index) => (
+              <div className="scenario-detail">
+                <span className="detail-label">Attack:</span>
+                <span className="detail-value">{attackType}</span>
+              </div>
+              <div className="scenario-detail">
+                <span className="detail-label">Skill Level:</span>
+                <span className="detail-value">{skillLevel}</span>
+              </div>
+              <div className="scenario-detail">
+                <span className="detail-label">Intensity:</span>
+                <span className={`detail-value intensity-${getIntensityColor(threatIntensity)}`}>
+                  {threatIntensity}
+                </span>
+              </div>
+            </div>
+            
+            {isGenerating && (
+              <div className="scenario-streaming-indicator">
+                <FaSpinner className="spin-icon" />
+                <span>Streaming content in real-time...</span>
+              </div>
+            )}
+            
+            <div className="scenario-text-container">
+              {scenarioText ? (
+                scenarioText.split('\n\n').map((paragraph, index) => (
                   <p key={index} className="scenario-paragraph">
                     {paragraph}
                   </p>
-                ))}
-              </div>
+                ))
+              ) : isGenerating ? (
+                <p className="scenario-paragraph scenario-placeholder">
+                  Waiting for content...
+                </p>
+              ) : (
+                <p className="scenario-paragraph scenario-placeholder">
+                  Select parameters and click "Generate Scenario" to create a custom cybersecurity scenario.
+                </p>
+              )}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
       
       {/* Interactive questions section */}
       {interactiveQuestions.length > 0 && (
