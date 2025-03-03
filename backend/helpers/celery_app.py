@@ -44,9 +44,9 @@ app.conf.beat_schedule = {
         'task': 'helpers.daily_newsletter_task.send_daily_newsletter',
         'schedule': crontab(hour=0, minute=0),
     },
-    'aggregate-performance-every-minute': {
+    'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 60.0,
+        'schedule': 180.0,  # 3 minutes
     },
     # New: API health checks every 5 minutes
     'check-api-endpoints-every-5-min': {
