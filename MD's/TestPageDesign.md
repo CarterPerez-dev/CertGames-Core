@@ -1,0 +1,1357 @@
+/*******************************************/
+/* Imported Fonts                          */
+/*******************************************/
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap');
+
+
+/*******************************************/
+/* Global Reset & Basics                   */
+/*******************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  /* Urban Graffiti Theme Background: Dark concrete with a subtle gradient */
+  background: linear-gradient(135deg, #2f2f2f, #000000);
+  font-family: 'Trebuchet MS', sans-serif;
+  color: #e0e0e0;
+}
+
+/*******************************************/
+/* Test List Container                     */
+/*******************************************/
+.tests-list-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #2f2f2f, #000000);
+}
+
+.tests-list-title {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  /* Bold neon yellow with a spray-paint feel */
+  color: #f0f8ff;
+  text-shadow: 2px 2px 0 #000, 4px 4px 0 #a93226;
+  text-align: center;
+  font-family: 'Merriweather', serif;
+}
+
+.tests-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.6rem;
+}
+
+
+    
+
+
+/*******************************************/
+/* Test Card (each test in the list)       */
+/*******************************************/
+.test-card {
+  position: relative;
+  background: linear-gradient(135deg, #3a3a3a, #1f1f1f);
+  padding: 1.7rem;
+  border-radius: 8px;
+  border: 1px solid #a93226;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* Force test 10 to appear centered in a three-column grid */
+.test-card[data-test-id="10"] {
+  grid-column: 2;
+}
+
+.test-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px #fff;
+}
+
+.test-badge {
+  font-size: 1.6rem;
+  font-weight: bold;
+  font-family: 'Merriweather', serif;
+  margin-bottom: 0.3rem;
+  color: #a93226;
+  text-shadow: .5px .5px 0 #fff, .5px .5px 0 #fff;
+}
+
+.difficulty-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.test-progress {
+  font-size: 1rem;
+  color: #bfbfbf;
+  margin-bottom: 0.5rem;
+}
+
+/*******************************************/
+/* Buttons within Each Test Card           */
+/*******************************************/
+.test-card-buttons {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.resume-button {
+  background: #1a8cff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.resume-button:hover {
+  background: #00b0ff;
+  border: 1px solid #000;
+}
+
+.restart-button-testlist {
+  background: #a93226;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: 1px solid #000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.restart-button-testlist:hover {
+  background: #d62929;
+}
+
+/* The "Click to Start" button */
+.start-button {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: #a93226;
+  color: #fff;
+  border: 1px solid #000;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-button:hover {
+  background: #d9d9d9;
+  color: #000;
+}
+
+.back-to-list-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #000;
+  border: 2px solid #4d0000;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.back-to-list-btn:hover {
+  background: #00b0ff;
+}
+
+/*******************************************/
+/* APlus Test Container                    */
+/*******************************************/
+.aplus-test-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, #2f2f2f, #000000);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  position: relative;
+}
+
+.aplus-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  font-family: 'Merriweather', serif;
+}
+
+/*******************************************/
+/* XP/Level & Coin Info                    */
+/*******************************************/
+.top-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.avatar-section {
+  text-align: center;
+}
+
+.avatar-image {
+  width: 80px;
+  height: 80px;
+  background: url('https://via.placeholder.com/60') no-repeat center/cover;
+  border: 2px solid #000;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+  box-shadow: 0px 0px 4px #fff;
+}
+
+.avatar-level,
+.xp-level-display,
+.coins-display {
+  font-size: 1.1rem;
+  color: #1a8cff;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/*******************************************/
+/* Progress Bar                            */
+/*******************************************/
+.progress-container {
+  position: relative;
+  height: 24px;
+  background-color: #424242;
+  border-radius: 12px;
+  margin: 0.75rem 0 1rem 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 12px;
+  text-align: center;
+  color: #000;
+  font-weight: bold;
+  line-height: 24px;
+  transition: width 0.3s ease-in-out;
+}
+
+/*******************************************/
+/* Question Card                           */
+/*******************************************/
+.question-card {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: rgba(50, 50, 50, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.question-text {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.5;
+  color: #d9d9d9;
+  font-weight: bold;
+}
+
+.options-list {
+  list-style: none;
+}
+
+.option-item {
+  margin: 0.5rem 0;
+}
+
+.option-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  background: #212121;
+  color: #00e676;
+  transition: background 0.5s ease;
+  outline: none;
+}
+
+.option-button:hover {
+  background: #737373;
+}
+
+/* Correct/Incorrect Animations */
+.correct-option {
+  animation: correctAnswer 0.3s ease;
+  background: #239023 !important;
+  color: #fff !important;
+}
+
+@keyframes correctAnswer {
+  0% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #00e676; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #00e676; }
+}
+
+.incorrect-option {
+  animation: incorrectAnswer 0.3s ease;
+  background: #c12525 !important;
+  color: #fff !important;
+}
+
+@keyframes incorrectAnswer {
+  0% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px #ff1744; }
+  100% { transform: scale(1); box-shadow: 0 0 5px #ff1744; }
+}
+
+.explanation {
+  margin-top: 1rem;
+  background: #465d7d;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+/*******************************************/
+/* Next Button                             */
+/*******************************************/
+.next-button {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: linear-gradient(135deg, #ff4081, #f50057);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+  font-weight: 600;
+}
+
+.next-button:hover {
+  box-shadow: 0 0 10px rgba(245, 0, 87, 0.5);
+}
+
+/*******************************************/
+/* Overlay (Score & Review)                */
+/*******************************************/
+.score-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.5s forwards;
+  z-index: 9999;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.score-content {
+  background: linear-gradient(135deg, #202020 0%, #202020 88%, #2c1414 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  color: #fff;
+  max-width: 70rem;
+  width: %;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.score-title {
+  font-size: 2.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 0px 2px 2px #000
+}
+
+.score-details {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+  color: #e0e0e0;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.overlay-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.restart-button,
+.review-button,
+.next-test-button,
+.back-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: box-shadow 0.3s, transform 0.2s;
+}
+
+.restart-button {
+  background: linear-gradient(135deg, #ff1744, #d50000);
+  color: #fff;
+}
+
+.restart-button:hover {
+  background: linear-gradient(135deg, #d50000, #ff1744);
+  transform: scale(1.05);
+}
+
+.review-filter-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.review-filter-buttons button {
+  background: #212121;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 1rem 2.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.review-filter-buttons button:hover {
+  background: #424242;
+}
+
+.review-filter-buttons .active-filter {
+  background: #ff1744;
+}
+
+.review-score-line {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.score-details {
+  margin: 0.5rem 0 1rem 0;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #e0e0e0;
+  font-weight: bold;
+}
+
+.review-button {
+  background: linear-gradient(135deg, #00e5ff, #00bcd4);
+  color: #000;
+}
+
+.review-button:hover {
+  background: linear-gradient(135deg, #00bcd4, #00e5ff);
+  transform: scale(1.05);
+}
+
+.next-test-button {
+  background: #ffea00;
+  color: #000;
+}
+
+.next-test-button:hover {
+  box-shadow: 0 0 10px rgba(255, 234, 0, 0.5);
+}
+
+.back-btn {
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.back-btn:hover {
+  background: #fff;
+  color: #000;
+  transform: scale(1.05);
+}
+
+/*******************************************/
+/* Level Up Overlay                        */
+/*******************************************/
+.simple-level-up-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 193, 7, 0.7);
+  color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  animation: levelUpFade 1s forwards;
+}
+
+@keyframes levelUpFade {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.simple-level-up-content {
+  font-size: 3rem;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px #000;
+}
+
+/*******************************************/
+/* Review Mode                             */
+/*******************************************/
+.review-mode-container {
+  margin: 2rem 0;
+}
+
+.review-question-card {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: rgba(237, 201, 175, 0.15);
+  border-radius: 6px;
+  font-family: 'Trebuchet MS', sans-serif;
+  line-height: 1.6;
+  font-size: 1.2rem;
+}
+
+.close-review-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #fdf6e3;
+  color: #d84315;
+  border: 2px solid #d84315;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-review-x:hover {
+  background: #d84315;
+  color: #fdf6e3;
+}
+
+.close-review-btn {
+  margin-top: 1rem;
+}
+
+.score-content.review-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/*******************************************/
+/* Minimal Level-Up Particle Burst         */
+/*******************************************/
+.simple-level-up-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3000;
+}
+
+.simple-level-up-content {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2rem 3rem;
+  border-radius: 8px;
+  font-size: 2rem;
+  color: #fff;
+  text-align: center;
+  animation: simpleLevelUp 1s ease-out forwards;
+}
+
+@keyframes simpleLevelUp {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/*******************************************/
+/* New Control Bars for Test View          */
+/*******************************************/
+.top-control-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.top-control-bar .flag-btn,
+.top-control-bar .finish-test-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.top-control-bar .flag-btn {
+  background: #ffea00;
+  color: #000;
+}
+.top-control-bar .flag-btn:hover {
+  background: #424242;
+}
+
+.top-control-bar .finish-test-btn {
+  background: #d84315;
+  color: #fff;
+}
+.top-control-bar .finish-test-btn:hover {
+  background: #bf360c;
+}
+
+.upper-control-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.upper-control-bar .restart-test-btn,
+.upper-control-bar .back-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.upper-control-bar .restart-test-btn {
+  background: #d84315;
+  color: #fff;
+}
+.upper-control-bar .restart-test-btn:hover {
+  background: #bf360c;
+}
+
+.bottom-control-bar {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.bottom-control-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.next-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #2979ff;
+  color: #fff;
+  transition: background 0.3s;
+}
+.next-question-btn:hover {
+  background: #1565c0;
+}
+
+.skip-row {
+  justify-content: flex-end;
+}
+
+.skip-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #ffea00;
+  color: #000;
+  transition: background 0.3s;
+}
+.skip-question-btn:hover {
+  background: #ffd600;
+}
+
+.prev-question-btn {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  background: #2979ff;
+  color: #fff;
+  transition: background 0.3s;
+}
+.prev-question-btn:hover {
+  background: #1565c0;
+}
+
+/*******************************************/
+/* Confirmation Popup Styles               */
+/*******************************************/
+.confirm-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.confirm-popup-content {
+  background: #4d0000;
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  color: #fff;
+}
+
+.confirm-popup-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.confirm-popup-yes,
+.confirm-popup-no {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.confirm-popup-yes {
+  background: #2979ff;
+  color: #fff;
+}
+.confirm-popup-yes:hover {
+  background: #1565c0;
+}
+
+.confirm-popup-no {
+  background: #d84315;
+  color: #fff;
+}
+.confirm-popup-no:hover {
+  background: #bf360c;
+}
+
+/* Question Dropdown Styles */
+.question-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #34495e;
+  min-width: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #2c3e50;
+}
+
+.dropdown-item.active {
+  background-color: #3498db;
+}
+
+.status-indicators {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.answer-indicator.correct {
+  color: #2ecc71;
+}
+
+.answer-indicator.incorrect {
+  color: #e74c3c;
+}
+
+.skip-indicator {
+  color: #f1c40f;
+}
+
+.flag-indicator {
+  color: #e74c3c;
+}
+
+
+.option-button.chosen-option {
+  background-color: #2979ff; /* light-blue highlight */
+  border: 2px solid #000; /* a bright border so it’s obvious */
+  transform: scale(1.03);
+  transition: all 0.1s ease-in-out;
+}
+
+/* 1) Center the container with extra vertical spacing */
+/* Center the toggle container with extra vertical spacing */
+.centered-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+/* Align toggle, label, and info icon horizontally */
+.toggle-with-text {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* spacing between elements */
+}
+
+/* Toggle switch styling */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 70px;   /* increased width */
+  height: 72px;  /* increased height */
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider background */
+.toggle-switch .slider {
+  display: block;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #000;
+  border-radius: 36px;
+  border: 0.5px solid #fff;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: bold;
+  line-height: 36px; /* vertical centering */
+  user-select: none;
+  transition: background-color 0.4s;
+  position: relative;
+  box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Slider knob */
+.toggle-switch .slider::before {
+  content: "";
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  left: 4px;
+  top: 4px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transition: transform 0.4s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* When checked, shift the knob */
+.toggle-switch input:checked + .slider::before {
+  transform: translateX(34px);
+}
+
+/* When checked, change slider background */
+.toggle-switch input:checked + .slider {
+  background-color: #3399ff;
+}
+
+/* Toggle label styling */
+.toggle-label {
+  font-size: 1rem;
+  color: #fff;
+  line-height: 36px; /* same as toggle height for alignment */
+  margin: 0;
+}
+
+/* Info icon container */
+.info-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Info icon styling */
+.info-icon {
+  font-size: 1.5rem;
+  width: 1.8em;
+  height: 1.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #3399ff;
+}
+
+/* Tooltip styling positioned to the right of the icon */
+.info-tooltip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px); /* to the right with a 10px gap */
+  transform: translateY(-50%);
+  background-color: #222;
+  color: #fff;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 240px;
+  text-align: center;
+  z-index: 999;
+}
+
+/* Tooltip arrow on left side */
+.info-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%; /* arrow on the left edge */
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: #222;
+}
+
+
+/* New Test Length Selector Card Styles */
+.test-length-selector-card {
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #a93226;
+  /* Keep any existing rules you have, just refining for the new design */
+}
+
+/* Container that holds the four length options horizontally */
+.test-length-options {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+/* Style each option as a neat clickable "tab" */
+.test-length-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background-color: #2979ff;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Hide the raw radio input but keep it functional */
+.test-length-option input[type="radio"] {
+  display: none;
+}
+
+/* The visible label text */
+.test-length-option span {
+  font-size: 0.9rem;
+  color: #b3b3b3;
+}
+
+/* Hover effect */
+.test-length-option:hover {
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+/* Highlight the selected option */
+.test-length-option input[type="radio"]:checked + span {
+  color: #000;
+  font-weight: 600;
+}
+
+/* Optional: tweak the text styling for "Select Test Length:" */
+.test-length-selector-card p {
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Keep your other existing styles for the rest of the page/cards/etc. */
+
+
+
+/* Popup overlay to darken background */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Popup content box */
+.popup-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 8px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem
+}
+
+/* Popup buttons */
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.popup-buttons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: #1976d2;
+  color: #fff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.popup-buttons button:hover {
+  background-color: #1565c0;
+}
+
+/* Optionally, style a cancel button differently */
+.popup-buttons button:last-child {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.popup-buttons button:last-child:hover {
+  background-color: #bdbdbd;
+}
+
+
+
+
+
+
+
+
+
+
+*******************************************/
+/* 1) Extra-Small Devices: max-width 320px */
+/*******************************************/
+@media (max-width: 320px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
+
+
+  .tests-list-title {
+    font-size: 2.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .tests-list-grid {
+    grid-template-columns: 1fr; /* Force single column on tiny screens */
+  }
+
+  .test-badge {
+    font-size: 1.3rem;
+  }
+
+  /* Buttons & Card text */
+  .resume-button, .restart-button-testlist, .start-button {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+  .test-progress {
+    font-size: 0.85rem;
+  }
+
+  /* Next/option buttons in question area */
+  .prev-question-btn,
+  .next-question-btn,
+  .skip-question-btn {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.7rem;
+    margin: 5px;
+    /* Or whatever smaller spacing you like */
+  }
+    
+    
+  .question-text {
+    font-size: 1.15rem;
+  }
+}
+
+/*******************************************/
+/* 2) Small Devices: max-width 480px       */
+/*******************************************/
+@media (max-width: 480px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
+  .tests-list-title {
+    font-size: 2.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .tests-list-grid {
+    grid-template-columns: 1fr; /* Single column still recommended */
+  }
+
+  .test-badge {
+    font-size: 1.4rem;
+  }
+
+  .resume-button, .restart-button-testlist, .start-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .prev-question-btn,
+  .next-question-btn,
+  .skip-question-btn {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.85rem;
+    margin: 5px;
+    /* Or whatever smaller spacing you like */
+  }
+  .question-text {
+    font-size: 1.2rem;
+  }
+}
+
+/*******************************************/
+/* 3) Medium-Small Devices: max-width 600px*/
+/*******************************************/
+@media (max-width: 600px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Hide the row of filter buttons */
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+
+
+  .tests-list-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .tests-list-title {
+    font-size: 2.5rem;
+  }
+
+  .test-badge {
+    font-size: 1.5rem;
+  }
+
+  .resume-button, .restart-button-testlist, .start-button {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .option-button,
+  .next-button {
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+  }
+  .question-text {
+    font-size: 1.25rem;
+  }
+}
+
+/*******************************************/
+/* 4) Tablets / Larger Mobiles: max-width 768px */
+/*******************************************/
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+  
+  .review-filter-buttons {
+    flex-wrap: wrap;
+    justify-content: center; 
+  }
+
+  /* Make each button smaller (both text & padding) */
+  .review-filter-buttons button {
+    font-size: 0.9rem;       /* or 0.8rem if you need even smaller */
+    padding: 0.5rem 1rem;
+    margin: 0.25rem;         /* small margin around each button */
+  }
+  
+  .tests-list-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .tests-list-title {
+    font-size: 2.6rem;
+  }
+
+  .test-badge {
+    font-size: 1.55rem;
+  }
+
+  .resume-button, .restart-button-testlist, .start-button {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .option-button,
+  .next-button {
+    font-size: 1.05rem;
+    padding: 0.75rem 1rem;
+  }
+  .question-text {
+    font-size: 1.3rem;
+  }
+}
