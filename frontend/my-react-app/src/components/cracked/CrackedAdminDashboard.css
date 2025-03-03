@@ -1,21 +1,4 @@
-/* ==========================
-   CrackedAdminDashboard.css
-   ==========================
-   1) All global `body` and `*` selectors replaced with a scoped .cracked-admin-dashboard wrapper.
-   2) You must wrap your Dashboard HTML with a container like:
-      <div class="cracked-admin-dashboard">
-         <!-- Dashboard markup here -->
-      </div>
-   3) Retains the same styles, but now isolated to .cracked-admin-dashboard.
-*/
-
-/* We keep :root for shared CSS variables.
-   If you need to avoid collision with other pages entirely,
-   rename :root to something else or define custom properties
-   within .cracked-admin-dashboard instead.
-*/
 :root {
-  /* Colors */
   --color-primary: #385898;
   --color-primary-hover: #2d447b;
   --color-secondary: #E5E9F2;
@@ -26,50 +9,49 @@
   --color-text-light: #777;
   --color-error: #e74c3c;
 
-  /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Fonts & Shadows */
   --font-family: "Helvetica Neue", Arial, sans-serif;
-  --box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  --box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* Scoped Reset and Base */
-.cracked-admin-dashboard * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 .cracked-admin-dashboard {
   font-family: var(--font-family);
   background-color: var(--color-background);
   color: var(--color-text-dark);
   line-height: 1.4;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.cracked-admin-dashboard button {
-  cursor: pointer;
+  padding: var(--spacing-md);
 }
 
-/* Container & Title */
+.cracked-admin-dashboard * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container */
 .cracked-admin-dashboard .cracked-admin-dashboard-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: var(--spacing-md) var(--spacing-sm);
+  background-color: var(--color-white);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
 }
+
+/* Title */
 .cracked-admin-dashboard .admin-dashboard-title {
   text-align: center;
   margin-bottom: var(--spacing-md);
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: var(--color-primary);
 }
 
-/* Tabs Navigation */
+/* Tabs */
 .cracked-admin-dashboard .admin-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -82,9 +64,10 @@
   border: none;
   border-radius: 4px;
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 0.95rem;
+  font-size: 1rem;
   color: var(--color-text-dark);
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .admin-tabs button:hover {
   background-color: #dce1ea;
@@ -94,7 +77,7 @@
   color: var(--color-white);
 }
 
-/* Tab Content Areas */
+/* Tab Content Container */
 .cracked-admin-dashboard .tab-content {
   background-color: var(--color-white);
   border-radius: 6px;
@@ -104,12 +87,25 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .cracked-admin-dashboard .error-msg {
   color: var(--color-error);
   margin-bottom: var(--spacing-sm);
+}
+
+/* Headings inside content */
+.cracked-admin-dashboard h2 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.4rem;
+  color: var(--color-text-dark);
 }
 
 /* Overview Tab */
@@ -128,6 +124,7 @@
   border-radius: 4px;
   padding: var(--spacing-sm) var(--spacing-md);
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .overview-tab button:hover {
   background-color: var(--color-primary-hover);
@@ -135,7 +132,7 @@
 
 /* Users Tab */
 .cracked-admin-dashboard .users-tab {
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 .cracked-admin-dashboard .users-search-row {
   display: flex;
@@ -157,6 +154,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .users-search-row button:hover {
   background-color: var(--color-primary-hover);
@@ -166,6 +164,7 @@
 }
 .cracked-admin-dashboard .users-tab button {
   margin-right: var(--spacing-xs);
+  cursor: pointer;
 }
 .cracked-admin-dashboard .users-table {
   width: 100%;
@@ -213,6 +212,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .test-filter-row button:hover {
   background-color: var(--color-primary-hover);
@@ -237,6 +237,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .create-test-form button:hover {
   background-color: var(--color-primary-hover);
@@ -290,6 +291,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .create-daily-form button:hover {
   background-color: var(--color-primary-hover);
@@ -337,6 +339,7 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
+  cursor: pointer;
 }
 .cracked-admin-dashboard .thread-filter-row button:hover {
   background-color: var(--color-primary-hover);
@@ -347,8 +350,8 @@
   margin-top: var(--spacing-md);
 }
 .cracked-admin-dashboard .threads-list {
-  flex: 0 0 240px;
-  max-height: 400px;
+  flex: 0 0 25%; /* Slightly narrower list */
+  max-height: 500px;
   overflow-y: auto;
   border-right: 1px solid #ccc;
   padding-right: var(--spacing-sm);
@@ -364,44 +367,73 @@
 }
 .cracked-admin-dashboard .threads-list li button {
   margin-right: var(--spacing-xs);
+  font-size: 0.95rem; /* Slightly bigger for "View" / "Close" */
+  padding: 4px 10px;
 }
 .cracked-admin-dashboard .thread-details {
   flex: 1 1 auto;
-  font-size: 0.9rem;
-  min-height: 200px;
+  width: 75%; /* Larger space to view messages */
+  min-height: 250px;
   display: flex;
   flex-direction: column;
+  padding-left: var(--spacing-sm);
+}
+.cracked-admin-dashboard .current-thread-details {
+  background-color: #fafafa;
+  border-radius: 4px;
+  padding: 10px;
+  margin-top: 10px;
+}
+.cracked-admin-dashboard .messages-list-container {
+  max-height: 400px; /* more vertical space */
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #fff;
 }
 .cracked-admin-dashboard .messages-list {
   list-style: none;
-  padding-left: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
+  margin: 0;
+  padding: 0;
 }
 .cracked-admin-dashboard .messages-list li {
-  margin-bottom: var(--spacing-sm);
-  word-break: break-word;
+  margin-bottom: 6px;
+  line-height: 1.4;
 }
-.cracked-admin-dashboard .thread-details textarea {
-  resize: none;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: var(--spacing-sm);
-  font-family: var(--font-family);
-  font-size: 0.9rem;
-  margin-bottom: var(--spacing-sm);
+.cracked-admin-dashboard .typing-indicator-user {
+  font-style: italic;
+  color: #555;
 }
-.cracked-admin-dashboard .thread-details button {
+.cracked-admin-dashboard .reply-container {
+  display: flex;
+  flex-direction: column;
+}
+.cracked-admin-dashboard .reply-container textarea {
+  margin-bottom: 10px;
+  resize: vertical;
+  width: 100%;
+  min-height: 60px;
+  font-size: 0.95rem;
+}
+.cracked-admin-dashboard .reply-container button {
   align-self: flex-start;
   background-color: var(--color-primary);
   color: var(--color-white);
   border: none;
   border-radius: 4px;
   padding: var(--spacing-sm) var(--spacing-md);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
-.cracked-admin-dashboard .thread-details button:hover {
+.cracked-admin-dashboard .reply-container button:hover {
   background-color: var(--color-primary-hover);
+}
+.cracked-admin-dashboard .support-tab button {
+  font-size: 0.95rem;
 }
 
 /* Performance Tab */
@@ -417,6 +449,7 @@
   font-size: 0.9rem;
   transition: background-color 0.2s ease;
   margin-bottom: var(--spacing-md);
+  cursor: pointer;
 }
 .cracked-admin-dashboard .perf-tab button:hover {
   background-color: var(--color-primary-hover);
@@ -428,8 +461,124 @@
   margin-bottom: var(--spacing-xs);
 }
 
-/* Responsive Design for Mobile */
-@media (max-width: 768px) {
+/* Activity Tab */
+.cracked-admin-dashboard .activity-tab table.activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+}
+.cracked-admin-dashboard .activity-table th,
+.cracked-admin-dashboard .activity-table td {
+  border: 1px solid #ddd;
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+.cracked-admin-dashboard .activity-table th {
+  background-color: var(--color-secondary);
+}
+.cracked-admin-dashboard .activity-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* DB Logs Tab */
+.cracked-admin-dashboard .db-logs-tab table.db-logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+}
+.cracked-admin-dashboard .db-logs-table th,
+.cracked-admin-dashboard .db-logs-table td {
+  border: 1px solid #ddd;
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+.cracked-admin-dashboard .db-logs-table th {
+  background-color: var(--color-secondary);
+}
+.cracked-admin-dashboard .db-logs-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* DB Shell Tab */
+.cracked-admin-dashboard .db-shell-tab .db-shell-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  align-items: center;
+}
+.cracked-admin-dashboard .db-shell-tab .db-shell-form label {
+  font-weight: 600;
+  margin-right: 4px;
+}
+.cracked-admin-dashboard .db-shell-tab .db-shell-form input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: var(--spacing-sm);
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+.cracked-admin-dashboard .db-shell-tab .db-shell-form button {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 4px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+.cracked-admin-dashboard .db-shell-tab .db-shell-form button:hover {
+  background-color: var(--color-primary-hover);
+}
+.cracked-admin-dashboard .db-shell-tab .db-shell-results {
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: var(--spacing-sm);
+  white-space: pre-wrap;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Health Checks Tab */
+.cracked-admin-dashboard .health-checks-tab table.health-checks-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-md);
+}
+.cracked-admin-dashboard .health-checks-table th,
+.cracked-admin-dashboard .health-checks-table td {
+  border: 1px solid #ddd;
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+.cracked-admin-dashboard .health-checks-table th {
+  background-color: var(--color-secondary);
+}
+.cracked-admin-dashboard .health-checks-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/**********************************
+ * Chart-Specific Styling
+ **********************************/
+.cracked-admin-dashboard .chart-section {
+  margin-top: var(--spacing-md);
+}
+.cracked-admin-dashboard .chart-container {
+  width: 100%;
+  height: 300px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: var(--spacing-sm);
+  box-shadow: var(--box-shadow);
+  margin-top: var(--spacing-sm);
+}
+
+/* Responsive */
+@media (max-width: 850px) {
   .cracked-admin-dashboard .admin-tabs {
     flex-direction: column;
     align-items: flex-start;
@@ -441,8 +590,7 @@
     flex-direction: column;
   }
   .cracked-admin-dashboard .threads-list {
-    flex: unset;
-    width: 100%;
+    width: 100% !important;
     border-right: none;
     border-bottom: 1px solid #ccc;
     padding-right: 0;
@@ -450,7 +598,8 @@
     max-height: 200px;
   }
   .cracked-admin-dashboard .thread-details {
-    width: 100%;
+    width: 100% !important;
+    padding-left: 0;
   }
   .cracked-admin-dashboard .create-test-form,
   .cracked-admin-dashboard .create-daily-form {

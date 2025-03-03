@@ -1,8 +1,23 @@
 // src/components/pages/store/DailyStationPage.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setXPAndCoins, fetchUserData } from './userSlice';
-import './DailyStation.css'; // Updated CSS import
+import { claimDailyBonus, setXPAndCoins, fetchUserData } from './userSlice';
+import './DailyStation.css';
+
+// Icon imports
+import {
+  FaCoins,
+  FaStar,
+  FaTrophy,
+  FaCalendarCheck,
+  FaHourglassHalf,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaLightbulb,
+  FaChevronRight,
+  FaSyncAlt,
+  FaGift
+} from 'react-icons/fa';
 
 // Helper to format seconds as HH:MM:SS
 function formatCountdown(seconds) {
@@ -14,10 +29,11 @@ function formatCountdown(seconds) {
 
 const DailyStationPage = () => {
   const dispatch = useDispatch();
-  const { userId, username, coins, xp, lastDailyClaim } = useSelector((state) => state.user);
+  const { userId, username, coins, xp, lastDailyClaim, loading: userLoading } = useSelector((state) => state.user);
 
   // Local states
   const [bonusError, setBonusError] = useState(null);
+  const [bonusSuccess, setBonusSuccess] = useState(false);
   const [loadingBonus, setLoadingBonus] = useState(false);
   const [canClaim, setCanClaim] = useState(false);
   const [bonusCountdown, setBonusCountdown] = useState(0);
@@ -38,8 +54,27 @@ const DailyStationPage = () => {
 
   // Sync local lastDailyClaim whenever Redux store changes
   useEffect(() => {
-    setLocalLastDailyClaim(lastDailyClaim);
+    if (lastDailyClaim) {
+      setLocalLastDailyClaim(lastDailyClaim);
+    }
   }, [lastDailyClaim]);
+
+  // Check if user can claim bonus on initial load
+  useEffect(() => {
+    if (!localLastDailyClaim) {
+      setCanClaim(true);
+    } else {
+      const lastClaimTime = new Date(localLastDailyClaim).getTime();
+      const now = Date.now();
+      const diff = lastClaimTime + 24 * 3600 * 1000 - now; // 24h window
+      if (diff <= 0) {
+        setCanClaim(true);
+      } else {
+        setCanClaim(false);
+        setBonusCountdown(Math.floor(diff / 1000));
+      }
+    }
+  }, [localLastDailyClaim]);
 
   // Bonus countdown logic (runs every second)
   useEffect(() => {
@@ -49,8 +84,9 @@ const DailyStationPage = () => {
       setCanClaim(true);
       return;
     }
-    const lastClaimTime = new Date(localLastDailyClaim).getTime();
 
+    const lastClaimTime = new Date(localLastDailyClaim).getTime();
+    
     function tickBonus() {
       const now = Date.now();
       const diff = lastClaimTime + 24 * 3600 * 1000 - now; // 24h window
@@ -62,7 +98,8 @@ const DailyStationPage = () => {
         setCanClaim(false);
       }
     }
-    tickBonus();
+    
+    tickBonus(); // Run immediately
     const bonusInterval = setInterval(tickBonus, 1000);
     return () => clearInterval(bonusInterval);
   }, [localLastDailyClaim]);
@@ -75,7 +112,8 @@ const DailyStationPage = () => {
       const diff = Math.floor((nextMidnightUTC - now) / 1000);
       setQuestionCountdown(diff);
     }
-    tickQuestion();
+    
+    tickQuestion(); // Run immediately
     const questionInterval = setInterval(tickQuestion, 1000);
     return () => clearInterval(questionInterval);
   }, []);
@@ -89,114 +127,130 @@ const DailyStationPage = () => {
     }
   }, [userId]);
 
-  // Claim daily bonus (direct fetch, not a thunk)
-  async function claimDailyBonus() {
+  // Claim daily bonus
+  const handleClaimDailyBonus = async () => {
     if (!userId) {
       setBonusError('Please log in first.');
       return;
     }
+    
     setLoadingBonus(true);
     setBonusError(null);
-
+    
     try {
       const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
         method: 'POST'
       });
       const data = await res.json();
-      setLoadingBonus(false);
-
+      
       if (!res.ok) {
         // Hard error, e.g. 404 user not found
         setBonusError(data.error || 'Error claiming daily bonus');
+        setLoadingBonus(false);
         return;
       }
-
+      
       if (data.success) {
-        // Claimed for the first time or after 24h
+        // Claimed successfully
         setShowBonusAnimation(true);
         setTimeout(() => setShowBonusAnimation(false), 3000);
-
-        // Mark localLastDailyClaim as "now" so the countdown begins
+        setBonusSuccess(true);
+        
+        // Update state immediately to show countdown
         setLocalLastDailyClaim(new Date().toISOString());
-        dispatch(fetchUserData(userId)); // refresh coins/xp
+        setCanClaim(false);
+        
+        // Refresh user data to update coins/xp
+        dispatch(fetchUserData(userId));
       } else {
-        // "Already claimed" case => parse how many seconds left from data.message if you want
-        // e.g. "Already claimed. Next bonus in: 51085 seconds"
-        // We'll do a quick check to see if there's a number
+        // Already claimed case
+        setBonusError(data.message);
+        
+        // Parse seconds left from message if available
         const match = data.message && data.message.match(/(\d+)/);
         if (match) {
           const secondsLeft = parseInt(match[1], 10);
           if (!isNaN(secondsLeft) && secondsLeft > 0) {
-            // We'll artificially set lastDailyClaim so the local effect sees we have "secondsLeft"
+            // Calculate the last claim time based on seconds left
             const nowMs = Date.now();
             const msLeft = secondsLeft * 1000;
-            // So lastClaimTime = now - (24h - msLeft)
             const lastClaimTime = nowMs - (86400000 - msLeft);
             setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
+            setCanClaim(false);
           }
         }
-        // Optionally set a small note, but not an "error" that kills the countdown UI
-        // We can store it in bonusError if we want a small text note:
-        setBonusError(data.message);
       }
+      
+      setLoadingBonus(false);
     } catch (err) {
       setBonusError('Error: ' + err.message);
       setLoadingBonus(false);
     }
-  }
+  };
 
   // Fetch daily question
-  async function fetchDailyQuestion() {
+  const fetchDailyQuestion = async () => {
     setLoadingQ(true);
     setQError(null);
+    
     try {
       const res = await fetch(`/api/test/daily-question?userId=${userId}`);
       const data = await res.json();
-      setLoadingQ(false);
+      
       if (!res.ok) {
         setQError(data.error || 'Failed to fetch daily question');
       } else {
         setQuestionData(data);
       }
-    } catch (err) {
+      
       setLoadingQ(false);
+    } catch (err) {
       setQError('Error fetching daily question: ' + err.message);
+      setLoadingQ(false);
     }
-  }
+  };
 
   // Submit daily answer
-  async function submitDailyAnswer() {
+  const submitDailyAnswer = async () => {
     if (!questionData || questionData.alreadyAnswered) {
       setQError("You've already answered today's question!");
       return;
     }
+    
     if (selectedAnswer === null) {
-      setQError('Please pick an answer first.');
+      setQError('Please select an answer first.');
       return;
     }
+    
     setQError(null);
+    
     try {
       const body = {
         userId,
         dayIndex: questionData.dayIndex,
         selectedIndex: selectedAnswer
       };
+      
       const res = await fetch('/api/test/daily-question/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
+      
       const ansData = await res.json();
+      
       if (!res.ok) {
-        setQError(ansData.error || 'Error submitting daily answer.');
+        setQError(ansData.error || 'Error submitting answer.');
       } else {
         setSubmitResult(ansData);
+        
         dispatch(
           setXPAndCoins({
             xp: ansData.newXP || xp,
             coins: ansData.newCoins || coins
           })
         );
+        
         setQuestionData((prev) => ({
           ...prev,
           alreadyAnswered: true
@@ -204,188 +258,226 @@ const DailyStationPage = () => {
 
         if (ansData.correct) {
           setShowCorrectAnimation(true);
-          setTimeout(() => setShowCorrectAnimation(false), 1500);
+          setTimeout(() => setShowCorrectAnimation(false), 2000);
         } else {
           setShowWrongAnimation(true);
-          setTimeout(() => setShowWrongAnimation(false), 1500);
+          setTimeout(() => setShowWrongAnimation(false), 2000);
         }
       }
     } catch (err) {
       setQError('Error: ' + err.message);
     }
-  }
+  };
 
-  // Daily bonus UI logic
-  let dailyBonusContent;
-  if (!userId) {
-    // If not logged in
-    dailyBonusContent = <p className="info-text">Please log in first.</p>;
-  } else if (bonusError && !bonusError.startsWith('Already claimed')) {
-    // A genuine error, not the "already claimed" note
-    dailyBonusContent = <p className="error-message">{bonusError}</p>;
-  } else if (!canClaim) {
-    // We rely on local countdown for the user
-    dailyBonusContent = (
-      <>
-        {bonusError && bonusError.startsWith('Already claimed') && (
-          <p className="status-message info">{bonusError}</p>
-        )}
-        <p className="countdown-container">
-          <span className="countdown-label">Next bonus in:</span>{' '}
-          <span className="countdown-value">{formatCountdown(bonusCountdown)}</span>
-        </p>
-      </>
-    );
-  } else {
-    // They can claim now
-    dailyBonusContent = (
-      <button
-        onClick={claimDailyBonus}
-        disabled={loadingBonus}
-        className="primary-button claim-button"
-      >
-        {loadingBonus ? 'Claiming...' : 'Claim 1000 coins'}
-      </button>
-    );
-  }
-
-  // Daily question UI
-  function renderDailyQuestion() {
-    if (!userId) {
-      return <p className="info-text centered">Please log in to see the daily question.</p>;
-    }
-    if (loadingQ) {
-      return <p className="status-message loading">Loading daily question...</p>;
-    }
-    if (qError) {
-      return <p className="error-message">{qError}</p>;
-    }
-    if (!questionData) {
-      return <p className="status-message info">No daily question found.</p>;
-    }
-
-    const { prompt, options, alreadyAnswered } = questionData;
-    return (
-      <div
-        className={`question-container-station 
-                    ${showCorrectAnimation ? 'animate-station-correct' : ''} 
-                    ${showWrongAnimation ? 'animate-station-wrong' : ''}`}
-      >
-        <h2 className="section-title">Daily PBQ Challenge</h2>
-        <div className="question-prompt-container-station">
-          <p className="question-text-station">{prompt}</p>
+  return (
+    <div className="daily-station-container">
+      {/* HEADER SECTION */}
+      <div className="daily-station-header">
+        <div className="daily-station-title">
+          <h1>Daily Station</h1>
+          <p>Claim your daily rewards and answer the challenge</p>
         </div>
-        {alreadyAnswered ? (
-          <div className="result-container-station">
-            {submitResult && (
-              <p
-                className={
-                  submitResult.correct
-                    ? 'result-message-station correct'
-                    : 'result-message-station incorrect'
-                }
-              >
-                {submitResult.correct
-                  ? `Correct! You earned ${submitResult.awardedCoins} coins.`
-                  : `Not quite, but you still got ${submitResult.awardedCoins} coins.`}
-              </p>
-            )}
-            <div className="countdown-container question-countdown">
-              <span className="countdown-label">Next question in:</span>{' '}
-              <span className="countdown-value">{formatCountdown(questionCountdown)}</span>
+        
+        {userId && (
+          <div className="daily-station-user-stats">
+            <div className="daily-station-stat">
+              <FaCoins className="daily-station-stat-icon coins" />
+              <span className="daily-station-stat-value">{coins}</span>
             </div>
-          </div>
-        ) : (
-          <div className="answer-section-station">
-            <ul className="options-list-station">
-              {options.map((opt, idx) => (
-                <li key={idx} className="option-item-station">
-                  <label className={`option-label-station ${selectedAnswer === idx ? 'selected' : ''}`}>
-                    <input
-                      type="radio"
-                      name="dailyQuestion"
-                      value={idx}
-                      checked={selectedAnswer === idx}
-                      onChange={() => setSelectedAnswer(idx)}
-                      className="option-radio"
-                    />
-                    <span className="option-text-station">{opt}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-            <button className="primary-button submit-button-station" onClick={submitDailyAnswer}>
-              Submit
-            </button>
-            <div className="countdown-container question-countdown">
-              <span className="countdown-label">Time until next question:</span>{' '}
-              <span className="countdown-value">{formatCountdown(questionCountdown)}</span>
+            <div className="daily-station-stat">
+              <FaStar className="daily-station-stat-icon xp" />
+              <span className="daily-station-stat-value">{xp}</span>
             </div>
           </div>
         )}
       </div>
-    );
-  }
 
-  // Main render
-  return (
-    <div className="daily-station-page">
-      <div className="gradient-background" />
-
-      {/* Bonus claim overlay animation */}
-      {showBonusAnimation && (
-        <div className="overlay">
-          <div className="overlay-content--station bonus-claimed">
-            <div className="coin-icon">💰</div>
-            <div className="claim-text">+1000 Coins Claimed!</div>
+      {/* MAIN CONTENT */}
+      <div className="daily-station-content">
+        {!userId ? (
+          <div className="daily-station-login-required">
+            <div className="daily-station-login-message">
+              <FaLightbulb className="daily-station-login-icon" />
+              <h2>Login Required</h2>
+              <p>Please log in to claim daily rewards and participate in daily challenges.</p>
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Header section */}
-      <header className="page-header">
-        <h1 className="page-title">Daily Station</h1>
-      </header>
-
-      {/* User info bar */}
-      {userId && (
-        <div className="user-info-bar">
-          <div className="user-info-container">
-            <div className="user-greeting">Welcome, {username}!</div>
-            <div className="user-stats">
-              <div className="stat-item coins">
-                <span className="stat-icon">💰</span>
-                <span className="stat-value">{coins}</span>
+        ) : (
+          <>
+            {/* DAILY BONUS SECTION */}
+            <div className="daily-station-card bonus-card">
+              <div className="daily-station-card-header">
+                <FaGift className="daily-station-card-icon" />
+                <h2>Daily Bonus</h2>
               </div>
-              <div className="stat-item xp">
-                <span className="stat-icon">⭐</span>
-                <span className="stat-value">{xp}</span>
+              
+              <div className="daily-station-card-content">
+                <div className="daily-station-bonus-info">
+                  <div className="daily-station-bonus-value">
+                    <FaCoins className="daily-station-bonus-coin-icon" />
+                    <span>1000</span>
+                  </div>
+                  <p>Claim your free coins every 24 hours!</p>
+                </div>
+                
+                {/* Show error if any */}
+                {bonusError && !bonusError.includes("Next bonus in") && (
+                  <div className="daily-station-error">
+                    <p>{bonusError}</p>
+                  </div>
+                )}
+                
+                {/* Claim Button or Countdown */}
+                <div className="daily-station-bonus-action">
+                  {canClaim ? (
+                    <button 
+                      className="daily-station-claim-btn"
+                      onClick={handleClaimDailyBonus}
+                      disabled={loadingBonus}
+                    >
+                      {loadingBonus ? (
+                        <>
+                          <FaSyncAlt className="loading-icon" />
+                          <span>Claiming...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaCoins />
+                          <span>Claim Bonus</span>
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <div className="daily-station-countdown">
+                      <FaHourglassHalf className="daily-station-countdown-icon" />
+                      <div className="daily-station-countdown-info">
+                        <span className="daily-station-countdown-label">Next bonus in:</span>
+                        <span className="daily-station-countdown-time">{formatCountdown(bonusCountdown)}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
+            </div>
+            
+            {/* DAILY QUESTION SECTION */}
+            <div className="daily-station-card question-card">
+              <div className="daily-station-card-header">
+                <FaLightbulb className="daily-station-card-icon" />
+                <h2>Daily Challenge</h2>
+              </div>
+              
+              <div className="daily-station-card-content">
+                {loadingQ ? (
+                  <div className="daily-station-loading">
+                    <FaSyncAlt className="loading-icon" />
+                    <p>Loading challenge...</p>
+                  </div>
+                ) : qError ? (
+                  <div className="daily-station-error">
+                    <p>{qError}</p>
+                  </div>
+                ) : !questionData ? (
+                  <div className="daily-station-empty">
+                    <p>No challenges available today. Check back tomorrow!</p>
+                  </div>
+                ) : (
+                  <div className={`daily-station-question ${showCorrectAnimation ? 'correct-animation' : ''} ${showWrongAnimation ? 'wrong-animation' : ''}`}>
+                    <div className="daily-station-question-prompt">
+                      <p>{questionData.prompt}</p>
+                    </div>
+                    
+                    {questionData.alreadyAnswered ? (
+                      <div className="daily-station-question-answered">
+                        {submitResult && (
+                          <div className={`daily-station-result ${submitResult.correct ? 'correct' : 'incorrect'}`}>
+                            {submitResult.correct ? (
+                              <>
+                                <FaCheckCircle className="daily-station-result-icon" />
+                                <p>Correct! You earned {submitResult.awardedCoins} coins.</p>
+                              </>
+                            ) : (
+                              <>
+                                <FaTimesCircle className="daily-station-result-icon" />
+                                <p>Not quite, but you still got {submitResult.awardedCoins} coins.</p>
+                              </>
+                            )}
+                          </div>
+                        )}
+                        
+                        <div className="daily-station-next-question">
+                          <div className="daily-station-countdown">
+                            <FaCalendarCheck className="daily-station-countdown-icon" />
+                            <div className="daily-station-countdown-info">
+                              <span className="daily-station-countdown-label">Next challenge in:</span>
+                              <span className="daily-station-countdown-time">{formatCountdown(questionCountdown)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="daily-station-question-options">
+                        <div className="daily-station-options-list">
+                          {questionData.options.map((option, index) => (
+                            <label 
+                              key={index} 
+                              className={`daily-station-option ${selectedAnswer === index ? 'selected' : ''}`}
+                            >
+                              <input
+                                type="radio"
+                                name="dailyQuestion"
+                                value={index}
+                                checked={selectedAnswer === index}
+                                onChange={() => setSelectedAnswer(index)}
+                                className="daily-station-option-input"
+                              />
+                              <span className="daily-station-option-text">{option}</span>
+                              {selectedAnswer === index && (
+                                <FaChevronRight className="daily-station-option-indicator" />
+                              )}
+                            </label>
+                          ))}
+                        </div>
+                        
+                        <button 
+                          className="daily-station-submit-btn"
+                          onClick={submitDailyAnswer}
+                          disabled={selectedAnswer === null}
+                        >
+                          Submit Answer
+                        </button>
+                        
+                        <div className="daily-station-next-question">
+                          <div className="daily-station-countdown">
+                            <FaCalendarCheck className="daily-station-countdown-icon" />
+                            <div className="daily-station-countdown-info">
+                              <span className="daily-station-countdown-label">Challenge refreshes in:</span>
+                              <span className="daily-station-countdown-time">{formatCountdown(questionCountdown)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      
+      {/* BONUS CLAIM ANIMATION OVERLAY */}
+      {showBonusAnimation && (
+        <div className="daily-station-overlay">
+          <div className="daily-station-bonus-animation">
+            <FaCoins className="daily-station-bonus-icon" />
+            <div className="daily-station-bonus-text">
+              <h3>Daily Bonus Claimed!</h3>
+              <p>+1000 coins added to your account</p>
             </div>
           </div>
         </div>
       )}
-
-      <main className="content-area">
-        {!userId ? (
-          <div className="login-prompt">
-            <p className="info-text centered">Please log in to see daily content.</p>
-          </div>
-        ) : (
-          <>
-            <section className="daily-bonus-section card">
-              <h2 className="section-title">Daily Bonus</h2>
-              <div className="bonus-content">
-                {dailyBonusContent}
-              </div>
-            </section>
-            
-            <section className="daily-question-section card">
-              {renderDailyQuestion()}
-            </section>
-          </>
-        )}
-      </main>
     </div>
   );
 };

@@ -38,3 +38,4 @@ psutil
 pymongo[srv]
 Flask-Pymongo
 pytz
+requests

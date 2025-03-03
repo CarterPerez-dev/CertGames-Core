@@ -1,10 +1,13 @@
+###############################
+# celery_app.py (UPDATED)
+###############################
 import os
 import logging
 from celery import Celery
 from celery.schedules import crontab
 from dotenv import load_dotenv
 from datetime import datetime
-
+import requests
 
 load_dotenv()
 SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
@@ -43,10 +46,21 @@ app.conf.beat_schedule = {
     },
     'aggregate-performance-every-minute': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 60.0,  # every 60 seconds
+        'schedule': 60.0,
+    },
+    # New: API health checks every 5 minutes
+    'check-api-endpoints-every-5-min': {
+        'task': 'helpers.async_tasks.check_api_endpoints',
+        'schedule': crontab(minute='*/5')
+    },
+    # ADDITION: Log cleanup daily at 2 AM
+    'cleanup-logs-daily': {
+        'task': 'helpers.async_tasks.cleanup_logs',
+        'schedule': crontab(hour=2, minute=0),
     },
 }
 
 app.autodiscover_tasks(['helpers'])
 
 logger.info("Celery app initialized with broker %s and backend %s", CELERY_BROKER_URL, CELERY_RESULT_BACKEND)
+
