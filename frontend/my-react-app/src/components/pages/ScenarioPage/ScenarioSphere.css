@@ -823,6 +823,7 @@
 .option-text {
   flex: 1;
   font-family: 'Open Sans', sans-serif;
+  font-size: 1.1rem;
 }
 
 .option-icon {
