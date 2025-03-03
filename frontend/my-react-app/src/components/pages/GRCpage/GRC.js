@@ -1,318 +1,357 @@
-.grc-wizard-page {
-  position: relative;
-  min-height: 100vh;
-  background-image: url('./GRCbackground.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: flex;
-  justify-content: center; 
-  padding: 2rem;
-  box-sizing: border-box;
-  overflow: hidden; 
-}
+// GRC.js - Redesigned with gamified UI
+import React, { useState, useCallback, useEffect } from "react";
+import "./GRC.css";
+import { 
+  FaRandom, 
+  FaBalanceScale, 
+  FaClipboardCheck, 
+  FaSearch,
+  FaFileAlt, 
+  FaUsers, 
+  FaFileContract, 
+  FaUserSecret, 
+  FaShieldAlt,
+  FaUserTie, 
+  FaSyncAlt, 
+  FaBook,
+  FaLock,
+  FaCopy,
+  FaCheck,
+  FaTimes,
+  FaLightbulb,
+  FaSpinner,
+  FaTrophy,
+  FaRocket,
+  FaRegLightbulb
+} from "react-icons/fa";
 
-.grc-wizard-container {
-  max-width: 90vw;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem;
-  background-color: rgba(0, 0, 0, 0.8); 
-  border: 0.125rem solid #b30000;
-  border-radius: 0.75rem;
-  color: #fff;
-  font-family: "Courier New", monospace;
-  transition: all 0.1s ease;
-}
+const ENDPOINT = "/api";
 
-.grc-title {
-  font-size: 3rem;
-  color: #b30000;
-  text-align: center;
-  margin-bottom: 0.75rem;
-  word-wrap: break-word;
-}
+// Icon mapping for categories
+const categoryIcons = {
+  "Regulation": <FaBalanceScale />,
+  "Risk Management": <FaShieldAlt />,
+  "Compliance": <FaClipboardCheck />,
+  "Audit": <FaSearch />,
+  "Governance": <FaUsers />,
+  "Management": <FaUserTie />,
+  "Policy": <FaFileContract />,
+  "Ethics": <FaUserSecret />,
+  "Threat Assessment": <FaLock />,
+  "Leadership": <FaUserTie />,
+  "Business Continuity": <FaSyncAlt />,
+  "Random": <FaRandom />
+};
 
-.grc-subtitle {
-  font-size: 1.1rem;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 1.75rem;
-  word-wrap: break-word;
-}
+// Difficulty level icons and colors
+const difficultyIcons = {
+  "Easy": <FaRegLightbulb />,
+  "Medium": <FaRocket />,
+  "Hard": <FaTrophy />
+};
 
-.grc-wizard-controls {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 1.25rem;
-  margin-bottom: 2rem;
-}
+const difficultyColors = {
+  "Easy": "#2ebb77",
+  "Medium": "#ffc107",
+  "Hard": "#ff4c8b"
+};
 
-.grc-control {
-  flex: 1;
-  min-width: 9.375rem;
-}
+const GRC = () => {
+  const [category, setCategory] = useState("Random");
+  const [difficulty, setDifficulty] = useState("Easy");
+  const [loading, setLoading] = useState(false);
+  const [questionData, setQuestionData] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [feedback, setFeedback] = useState("");
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
 
-.grc-label {
-  display: block;
-  font-size: 1.2rem;
-  color: #e60000;
-  margin-bottom: 0.35rem;
-  text-transform: uppercase;
-}
+  const categories = [
+    "Regulation",
+    "Risk Management",
+    "Compliance",
+    "Audit",
+    "Governance",
+    "Management",
+    "Policy",
+    "Ethics",
+    "Threat Assessment",
+    "Leadership",
+    "Business Continuity",
+    "Random"
+  ];
+  
+  const difficulties = ["Easy", "Medium", "Hard"];
 
-.grc-select {
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #0d0d0d;
-  color: #e60000;
-  border: 0.125rem solid #fff;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
+  // Reset copy status after 2 seconds
+  useEffect(() => {
+    if (copiedToClipboard) {
+      const timer = setTimeout(() => {
+        setCopiedToClipboard(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copiedToClipboard]);
 
-.grc-select:hover,
-.grc-select:focus {
-  border-color: #cc0000;
-  background-color: #1a1a1a; 
-}
+  const fetchQuestion = useCallback(async () => {
+    setLoading(true);
+    setFeedback("");
+    setQuestionData(null);
+    setSelectedOption(null);
+    setShowExplanation(false);
 
-.grc-generate-btn {
-  flex: 1;
-  min-width: 6.25rem;
-  padding: 0.75rem 1.25rem;
-  background-color: #0d0d0d;
-  color: #fff;
-  border: 0.125rem solid #e60000;
-  border-radius: 1.25rem;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    try {
+      const response = await fetch(`${ENDPOINT}/grc/generate_question`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category, difficulty }),
+      });
 
-.grc-generate-btn:hover:not(:disabled) {
-  background-color: #fff;
-  color: #000;
-}
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || "Failed to fetch question");
+      }
 
-.grc-generate-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
+      const data = await response.json();
+      setQuestionData(data);
+    } catch (error) {
+      console.error("Error fetching question:", error);
+      setFeedback("Error fetching question. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [category, difficulty]);
 
+  const handleAnswer = useCallback(
+    (index) => {
+      if (!questionData) return;
+      setSelectedOption(index);
+      const correctIndex = questionData.correct_answer_index;
+      const isCorrect = index === correctIndex;
+      
+      setFeedback(isCorrect ? "Correct!" : "Incorrect");
+      setShowExplanation(true);
+    },
+    [questionData]
+  );
 
-.grc-button-loading-version1 {
-  display: inline-block;
-  position: relative;
-  font-family: "Courier New", monospace;
-  white-space: nowrap;
-  overflow: hidden;
-  border-right: 2px solid #e60000;
-  animation: terminalTyping 2s steps(14, end) infinite alternate;
-}
+  const handleCopy = useCallback(() => {
+    if (!questionData || !showExplanation) return;
+    
+    const correctIndex = questionData.correct_answer_index;
+    const correctExplanation = questionData.explanations[correctIndex.toString()];
+    const examTip = questionData.exam_tip;
+    
+    const textToCopy = `Question: ${questionData.question}\n\nOptions:\n${questionData.options.map((opt, i) => `${i + 1}. ${opt}`).join('\n')}\n\nCorrect Answer: ${questionData.options[correctIndex]}\n\nExplanation: ${correctExplanation}\n\nExam Tip: ${examTip}`;
+    
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        setCopiedToClipboard(true);
+      })
+      .catch((err) => console.error("Failed to copy:", err));
+  }, [questionData, showExplanation]);
 
+  const getNewQuestion = () => {
+    fetchQuestion();
+  };
 
-@keyframes terminalTyping {
-  0% {
-    width: 0ch;
-  }
-  50% {
-    width: 11ch; 
-  }
-  100% {
-    width: 11ch;
-    border-right-color: transparent;
-  }
-}
+  return (
+    <div className="grc-wizard-page">
+      <div className="grc-header">
+        <div className="grc-title-container">
+          <h1 className="grc-title">GRC Wizard</h1>
+          <p className="grc-subtitle">Master the art of Governance, Risk, and Compliance</p>
+        </div>
+      </div>
 
+      <div className="grc-content">
+        <div className="grc-wizard-card">
+          <div className="grc-card-header">
+            <h2>Generate a Question</h2>
+            <p>Select a category and difficulty level</p>
+          </div>
+          
+          <div className="grc-controls">
+            <div className="grc-control-group">
+              <label className="grc-label" htmlFor="category-select">
+                Category
+              </label>
+              <div className="grc-select-wrapper">
+                <select
+                  id="category-select"
+                  className="grc-select"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  disabled={loading}
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </select>
+                <span className="grc-select-icon">
+                  {categoryIcons[category] || <FaRandom />}
+                </span>
+              </div>
+            </div>
 
-.grc-question-container {
-  margin-bottom: 1.5rem;
-}
+            <div className="grc-control-group">
+              <label className="grc-label" htmlFor="difficulty-select">
+                Difficulty
+              </label>
+              <div className="grc-select-wrapper">
+                <select
+                  id="difficulty-select"
+                  className="grc-select"
+                  value={difficulty}
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  disabled={loading}
+                >
+                  {difficulties.map((level) => (
+                    <option key={level} value={level}>
+                      {level}
+                    </option>
+                  ))}
+                </select>
+                <span className="grc-select-icon" style={{ color: difficultyColors[difficulty] }}>
+                  {difficultyIcons[difficulty]}
+                </span>
+              </div>
+            </div>
 
-.grc-question {
-  font-size: 1.8rem;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 1rem;
-  word-wrap: break-word;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-}
+            <button
+              className="grc-generate-btn"
+              onClick={fetchQuestion}
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <FaSpinner className="grc-spinner" />
+                  <span>Generating</span>
+                </>
+              ) : questionData ? (
+                <>
+                  <FaSyncAlt />
+                  <span>New Question</span>
+                </>
+              ) : (
+                <>
+                  <FaBook />
+                  <span>Generate Question</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
 
-.grc-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 90%;
-  margin: 0 auto;
-}
+        {questionData && (
+          <div className="grc-question-card">
+            <div className="grc-question-header">
+              <div className="grc-question-meta">
+                <span className="grc-question-category">
+                  {categoryIcons[category]} {category}
+                </span>
+                <span className="grc-question-difficulty" style={{ color: difficultyColors[difficulty] }}>
+                  {difficultyIcons[difficulty]} {difficulty}
+                </span>
+              </div>
+              <h3 className="grc-question-title">Question</h3>
+            </div>
 
-.grc-option-btn {
-  padding: 0.75rem 1rem;
-  background-color: #0d0d0d;
-  color: #fff;
-  border: 0.125rem solid #b30000;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  text-align: center;
-  cursor: pointer;
-  word-wrap: break-word;
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
-}
+            <div className="grc-question-content">
+              <p className="grc-question-text">{questionData.question}</p>
+              
+              <div className="grc-options-container">
+                {questionData.options.map((option, index) => {
+                  const isCorrect = index === questionData.correct_answer_index;
+                  let optionClass = "grc-option";
+                  
+                  if (selectedOption !== null) {
+                    if (index === selectedOption) {
+                      optionClass += " selected";
+                    }
+                    if (showExplanation) {
+                      optionClass += isCorrect ? " correct" : " incorrect";
+                    }
+                  }
+                  
+                  return (
+                    <button
+                      key={index}
+                      className={optionClass}
+                      onClick={() => handleAnswer(index)}
+                      disabled={selectedOption !== null}
+                    >
+                      <span className="grc-option-letter">{String.fromCharCode(65 + index)}</span>
+                      <span className="grc-option-text">{option}</span>
+                      {showExplanation && isCorrect && (
+                        <span className="grc-option-status">
+                          <FaCheck className="grc-status-icon correct" />
+                        </span>
+                      )}
+                      {showExplanation && selectedOption === index && !isCorrect && (
+                        <span className="grc-option-status">
+                          <FaTimes className="grc-status-icon incorrect" />
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
 
-.grc-option-btn:hover:not(:disabled) {
-  background-color: #696969;
-  color: #000;
-  transform: translateY(-2px); 
-}
+            {showExplanation && (
+              <div className="grc-explanation-container">
+                <div className="grc-explanation-header">
+                  <h3>
+                    {selectedOption === questionData.correct_answer_index ? (
+                      <><FaCheck className="grc-header-icon correct" /> Correct Answer</>
+                    ) : (
+                      <><FaTimes className="grc-header-icon incorrect" /> Incorrect Answer</>
+                    )}
+                  </h3>
+                  <button 
+                    className={`grc-copy-btn ${copiedToClipboard ? 'copied' : ''}`}
+                    onClick={handleCopy}
+                  >
+                    {copiedToClipboard ? (
+                      <><FaCheck /> Copied</>
+                    ) : (
+                      <><FaCopy /> Copy</>
+                    )}
+                  </button>
+                </div>
+                
+                <div className="grc-explanation-content">
+                  <div className="grc-explanation-section">
+                    <h4>Explanation</h4>
+                    <p>{questionData.explanations[selectedOption.toString()]}</p>
+                  </div>
+                  
+                  <div className="grc-explanation-section">
+                    <h4><FaLightbulb className="grc-tip-icon" /> Exam Tip</h4>
+                    <p className="grc-tip-text">{questionData.exam_tip}</p>
+                  </div>
+                </div>
+                
+                <div className="grc-action-buttons">
+                  <button 
+                    className="grc-next-btn" 
+                    onClick={getNewQuestion}
+                  >
+                    <FaSyncAlt />
+                    <span>New Question</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
-.grc-option-btn:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.grc-option-btn.selected {
-  background-color: #000;
-  color: #fff;
-}
-
-.grc-feedback {
-  padding: 1rem;
-  margin-top: 1.5rem;
-  border-radius: 0.375rem;
-  font-size: 1.2rem;
-  text-align: center;
-  position: relative;
-  line-height: 1.5;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.grc-feedback.correct {
-  background-color: #4caf50; 
-  color: #fff;
-  border: 0.125rem solid #2e7d32;
-}
-
-.grc-feedback.incorrect {
-  background-color: #f44336; 
-  color: #fff;
-  border: 0.125rem solid #c62828;
-}
-
-.copy-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background-color: #696969;
-  color: #000;
-  border: 0.0625rem solid #000;
-  border-radius: 1.25rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.6rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.copy-btn:active {
-  transform: scale(0.95);
-  opacity: 0.8;
-}
-
-.copy-btn:hover {
-  background-color: #fff;
-  color: #000;
-}
-
-
-@media (min-width: 768px) {
-  .grc-wizard-container {
-    padding: 2rem;
-  }
-  .grc-title {
-    font-size: 3.5rem;
-  }
-  .grc-subtitle {
-    font-size: 1.2rem;
-  }
-  .grc-question-container {
-    margin-bottom: 1.75rem;
-  }
-  .grc-question {
-    font-size: 2rem;
-  }
-  .grc-option-btn {
-    font-size: 1.1rem;
-  }
-  .grc-feedback {
-    font-size: 1.3rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .grc-wizard-container {
-    padding: 2.5rem;
-  }
-  .grc-title {
-    font-size: 4rem;
-  }
-  .grc-subtitle {
-    font-size: 1.3rem;
-  }
-  .grc-question {
-    font-size: 2.2rem;
-  }
-  .grc-option-btn {
-    font-size: 1.2rem;
-  }
-  .grc-feedback {
-    font-size: 1.4rem;
-  }
-}
-
-@media (max-width: 767px) {
-  .grc-wizard-container {
-    padding: 1rem;
-  }
-  .grc-title {
-    font-size: 2.5rem;
-  }
-  .grc-subtitle {
-    font-size: 1rem;
-  }
-  .grc-wizard-controls {
-    flex-direction: column;
-  }
-  .grc-control {
-    min-width: 100%;
-  }
-  .grc-generate-btn {
-    width: 100%;
-    padding: 0.75rem 1rem;
-  }
-  .button-and-sphere {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .grc-question {
-    font-size: 1.6rem;
-  }
-  .grc-option-btn {
-    font-size: 1rem;
-  }
-  .grc-feedback {
-    font-size: 1.1rem;
-  }
-}
+export default GRC;
