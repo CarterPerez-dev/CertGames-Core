@@ -420,7 +420,7 @@ const securityFrameworks = [
   { name: 'SWIFT Customer Security Programme (CSP)', url: 'https://www.swift.com/myswift/customer-security-programme-csp' },
   { name: 'AI Risk Management Framework (AI RMF)', url: 'https://www.nist.gov/itl/ai-risk-management-framework' },
   { name: 'BSI IT-Grundschutz (German Federal Office for Information Security)', url: 'https://www.bsi.bund.de/EN/Topics/IT-Grundschutz/it-grundschutz_node.html' },
-  { name: 'Canadian Centre for Cyber Security's IT Security Guidance', url: 'https://cyber.gc.ca/en/guidance' },
+  { name: 'Canadian Centre for Cyber Securitys IT Security Guidance', url: 'https://cyber.gc.ca/en/guidance' },
   { name: 'TISAX (Trusted Information Security Assessment Exchange)', url: 'https://enx.com/tisax/' },
   { name: 'MARISSA (Maritime Cybersecurity Standards)', url: 'https://www.maritimecybersecurity.center/' },
   { name: 'ANSI/ISA-62443 (Cybersecurity Standards for Automation)', url: 'https://www.isa.org/standards-and-publications/isa-standards/isa-62443-series-of-standards' },
