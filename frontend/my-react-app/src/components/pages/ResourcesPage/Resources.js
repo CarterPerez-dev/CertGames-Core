@@ -1087,7 +1087,8 @@ function Resources() {
     return <FaLink className="resource-source-icon default" />;
   };
 
-  return (
+  
+return (
     <div className="resources-container">
       {/* Header Section */}
       <div className="resources-header">
@@ -1103,6 +1104,152 @@ function Resources() {
                 <span className="resources-stat-value">{cyberSecurityTools.length}</span>
                 <span className="resources-stat-label">Security Tools</span>
               </div>
+            </div>
+            <div className="resources-stat-item">
+              <FaGraduationCap className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{udemyCourses.length}</span>
+                <span className="resources-stat-label">Courses</span>
+              </div>
+            </div>
+            <div className="resources-stat-item">
+              <FaYoutube className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{youtubeVideos.length + youtubeChannels.length}</span>
+                <span className="resources-stat-label">YouTube Resources</span>
+              </div>
+            </div>
+            <div className="resources-stat-item">
+              <FaFileAlt className="resources-stat-icon" />
+              <div className="resources-stat-details">
+                <span className="resources-stat-value">{comptiaObjectives.length}</span>
+                <span className="resources-stat-label">CompTIA Objectives</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Controls Section */}
+      <div className="resources-controls">
+        <div className="resources-search-container">
+          <div className="resources-search">
+            <FaSearch className="resources-search-icon" />
+            <input
+              type="text"
+              placeholder="Search cybersecurity resources..."
+              value={searchTerm}
+              onChange={handleSearch}
+              className="resources-search-input"
+            />
+            {searchTerm && (
+              <button className="resources-search-clear" onClick={clearSearch}>
+                <FaTimes />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="resources-filter-container">
+          <div className="resources-category-select">
+            <div 
+              className="resources-selected-category"
+              onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+            >
+              <span className="resources-category-icon">
+                {getCategoryIcon(selectedCategory)}
+              </span>
+              <span className="resources-category-name">
+                {getCategoryName(selectedCategory)}
+              </span>
+              {showCategoryDropdown ? <FaChevronUp /> : <FaChevronDown />}
+            </div>
+            
+            {showCategoryDropdown && (
+              <div className="resources-category-dropdown">
+                <div className="resources-category-tabs">
+                  <button 
+                    className={`resources-category-tab ${!showCerts ? 'active' : ''}`}
+                    onClick={toggleCertCategories}
+                  >
+                    Resource Types
+                  </button>
+                  <button 
+                    className={`resources-category-tab ${showCerts ? 'active' : ''}`}
+                    onClick={toggleCertCategories}
+                  >
+                    Certifications
+                  </button>
+                </div>
+                
+                <div className="resources-category-list">
+                  {!showCerts ? (
+                    resourceCategories.map((category) => (
+                      <div
+                        key={category.id}
+                        className={`resources-category-item ${selectedCategory === category.id ? 'active' : ''}`}
+                        onClick={() => handleCategoryChange(category.id)}
+                      >
+                        <span className="resources-category-icon">{category.icon}</span>
+                        <span className="resources-category-name">{category.name}</span>
+                      </div>
+                    ))
+                  ) : (
+                    certCategories.map((category) => (
+                      <div
+                        key={category.id}
+                        className={`resources-category-item ${selectedCategory === category.id ? 'active' : ''}`}
+                        onClick={() => handleCategoryChange(category.id)}
+                      >
+                        <span className="resources-category-icon">{category.icon}</span>
+                        <span className="resources-category-name">{category.name}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="resources-actions">
+            <button 
+              className={`resources-action-btn ${sorted ? 'active' : ''}`}
+              onClick={handleToggleSort}
+              title={sorted ? "Unsort" : "Sort A-Z"}
+            >
+              {sorted ? <FaSortAlphaUp /> : <FaSortAlphaDown />}
+            </button>
+            
+            <button 
+              className="resources-action-btn"
+              onClick={toggleViewMode}
+              title={viewMode === 'grid' ? "List View" : "Grid View"}
+            >
+              {viewMode === 'grid' ? 
+                <FaList className="view-icon" /> : 
+                <FaTable className="view-icon" />
+              }
+            </button>
+            
+            <button 
+              className="resources-action-btn resources-random-btn"
+              onClick={handleRandomResource}
+              disabled={loading}
+              title="Random Resource"
+            >
+              {loading ? <FaSyncAlt className="loading-spinner" /> : <FaDice />}
+            </button>
+            
+            <button 
+              className="resources-action-btn"
+              onClick={handleReset}
+              title="Reset Filters"
+            >
+              <FaTimes />
+            </button>
+          </div>
+        </div>
+      </div>
       
       {/* Results Count */}
       <div className="resources-results-count">
@@ -1152,7 +1299,7 @@ function Resources() {
       </div>
       
       {/* Random Resource Modal */}
-      {showRandomModal && (
+      {showRandomModal && randomResource && (
         <div className={`resource-modal ${fadeOut ? 'fade-out' : ''}`}>
           <div className="resource-modal-content">
             <button className="resource-modal-close" onClick={closeRandomModal}>
@@ -1202,25 +1349,4 @@ function Resources() {
         </div>
       )}
     </div>
-            </div>
-            <div className="resources-stat-item">
-              <FaGraduationCap className="resources-stat-icon" />
-              <div className="resources-stat-details">
-                <span className="resources-stat-value">{udemyCourses.length}</span>
-                <span className="resources-stat-label">Courses</span>
-              </div>
-            </div>
-            <div className="resources-stat-item">
-              <FaYoutube className="resources-stat-icon" />
-              <div className="resources-stat-details">
-                <span className="resources-stat-value">{youtubeVideos.length + youtubeChannels.length}</span>
-                <span className="resources-stat-label">YouTube Resources</span>
-              </div>
-            </div>
-            <div className="resources-stat-item">
-              <FaFileAlt className="resources-stat-icon" />
-              <div className="resources-stat-details">
-                <span className="resources-stat-value">{comptiaObjectives.length}</span>
-                <span className="resources-stat-label">CompTIA Objectives</span>
-              </div>
-            </div>
+  );
