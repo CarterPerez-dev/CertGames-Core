@@ -198,7 +198,7 @@
   border-radius: 8px;
   padding: 12px;
   box-shadow: var(--test-shadow);
-  z-index: 9999;
+  z-index: 10;
   font-size: 14px;
   line-height: 1.5;
   color: var(--test-text);
