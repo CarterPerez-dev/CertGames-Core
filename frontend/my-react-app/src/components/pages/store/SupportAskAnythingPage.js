@@ -41,6 +41,7 @@ function SupportAskAnythingPage() {
   // Refs
   const chatEndRef = useRef(null);
   const messageInputRef = useRef(null);
+  const processedMessagesRef = useRef(new Set()); // Add this ref to track processed messages
   
   // Format timestamps
   const formatTimestamp = (ts) => {
@@ -73,6 +74,11 @@ function SupportAskAnythingPage() {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
+  
+  // Helper function to create a message signature for duplicate detection
+  const createMessageSignature = (message) => {
+    return `${message.sender}:${message.content}:${message.timestamp}`;
+  };
   
   //////////////////////////////////////////////////////////////////////////
   // SOCKET SETUP - Initialize once and handle real-time events
@@ -125,17 +131,17 @@ function SupportAskAnythingPage() {
       
       // Add message to current thread if it's selected
       if (threadId === selectedThreadId) {
-        setMessages((prev) => {
-          // Check if message already exists to prevent duplicates
-          if (!prev.some(m => 
-              m.content === message.content && 
-              m.sender === message.sender && 
-              m.timestamp === message.timestamp)) {
-            return [...prev, message];
-          }
-          return prev;
-        });
-        scrollToBottom();
+        const messageSignature = createMessageSignature(message);
+        
+        // Only add the message if we haven't processed it before
+        if (!processedMessagesRef.current.has(messageSignature)) {
+          processedMessagesRef.current.add(messageSignature);
+          
+          setMessages((prev) => [...prev, message]);
+          scrollToBottom();
+        } else {
+          console.log('Duplicate message detected and ignored:', messageSignature);
+        }
       }
       
       // Update thread's lastUpdated time
@@ -309,6 +315,9 @@ function SupportAskAnythingPage() {
     setLoadingMessages(true);
     setError(null);
     
+    // Clear the processed messages set when switching threads
+    processedMessagesRef.current.clear();
+    
     // Join new thread room
     if (socket && socket.connected) {
       socket.emit('join_thread', { threadId });
@@ -326,7 +335,13 @@ function SupportAskAnythingPage() {
         throw new Error(data.error || 'Failed to load messages');
       }
       
-      setMessages(data.messages || []);
+      // Add all loaded messages to the processed messages set
+      const loadedMessages = data.messages || [];
+      loadedMessages.forEach(msg => {
+        processedMessagesRef.current.add(createMessageSignature(msg));
+      });
+      
+      setMessages(loadedMessages);
       scrollToBottom();
       
       // Focus on message input
@@ -418,6 +433,14 @@ function SupportAskAnythingPage() {
       
       const data = await res.json();
       if (res.ok && data.messages) {
+        // Clear previous processed messages when explicitly reloading
+        processedMessagesRef.current.clear();
+        
+        // Add all loaded messages to the processed messages set
+        data.messages.forEach(msg => {
+          processedMessagesRef.current.add(createMessageSignature(msg));
+        });
+        
         setMessages(data.messages);
         scrollToBottom();
       }
