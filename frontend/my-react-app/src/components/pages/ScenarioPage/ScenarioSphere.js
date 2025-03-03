@@ -24,7 +24,8 @@ import {
   FaArrowRight,
   FaShieldAlt,
   FaLock,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaTimes
 } from 'react-icons/fa';
 
 const ENDPOINT = "/api";
