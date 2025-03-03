@@ -523,6 +523,20 @@ function CrackedAdminDashboard() {
   const handleReplyToThread = async () => {
     if (!currentThread || !currentThread._id) return;
     try {
+      // Create the message locally before sending to server
+      const replyMessage = {
+        sender: "admin",
+        content: adminReply,
+        timestamp: new Date().toISOString()
+      };
+
+      // Tell the user in real time we're no longer typing
+      if (adminSocket) {
+        adminSocket.emit("admin_stop_typing", {
+          threadId: currentThread._id
+        });
+      }
+
       const res = await fetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
         method: "POST",
         credentials: "include",
@@ -535,24 +549,33 @@ function CrackedAdminDashboard() {
         return;
       }
       alert("Reply sent!");
-      // Refresh the single thread from DB
-      handleViewThread(currentThread._id);
 
-      // Tell the user in real time
-      if (adminSocket) {
-        adminSocket.emit("admin_stop_typing", {
-          threadId: currentThread._id
-        });
-        adminSocket.emit("admin_new_message", {
-          threadId: currentThread._id,
-          message: {
-            sender: "admin",
-            content: adminReply,
-            timestamp: new Date().toISOString()
+      // Update the local thread data directly instead of refetching
+      setCurrentThread(prevThread => {
+        if (!prevThread) return null;
+        return {
+          ...prevThread,
+          messages: [...prevThread.messages, replyMessage]
+        };
+      });
+
+      // Update allThreadMap as well
+      setAllThreadMap(prev => {
+        const oldThread = prev[currentThread._id] || { messages: [] };
+        return {
+          ...prev,
+          [currentThread._id]: {
+            ...oldThread,
+            messages: [...oldThread.messages, replyMessage]
           }
-        });
-      }
+        };
+      });
+
+      // Clear the reply input
       setAdminReply("");
+      
+      // No need to emit admin_new_message here since the server already does it
+      // This was causing the duplication
     } catch (err) {
       console.error("Reply thread error:", err);
     }
@@ -635,7 +658,7 @@ function CrackedAdminDashboard() {
       alert("Error creating admin thread");
     }
   };
-
+  
   /*****************************************
    * ACTIVITY LOGS
    *****************************************/
