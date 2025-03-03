@@ -1,3 +1,5 @@
+ask which ones are duplciates
+
 db.shopItems.insertMany([
   {
     _id: ObjectId("67a5a208e33c3cfa4b544cac"),
