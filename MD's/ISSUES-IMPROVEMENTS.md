@@ -1,5 +1,7 @@
 # FIX
 ---
+fix achieemt levesl- draconic ruin is level 75000
+inferna, bastion is leevl 45000
 ---
 ## admin and support refinements [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md)
 ---
