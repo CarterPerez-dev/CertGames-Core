@@ -1350,3 +1350,6 @@ return (
       )}
     </div>
   );
+}
+
+export default Resources;
