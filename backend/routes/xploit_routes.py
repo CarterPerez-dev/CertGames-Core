@@ -1,6 +1,6 @@
 import logging
 from flask import Blueprint, request, Response, jsonify
-from helpers.xploits import Xploits
+from helpers.xploitcraft_helper import Xploits
 
 xploit_bp = Blueprint('xploit_bp', __name__)
 logger = logging.getLogger(__name__)
@@ -8,9 +8,10 @@ logger.setLevel(logging.DEBUG)
 
 # Create a single instance of Xploits to be used across requests
 xploits = Xploits()
+xploit_bp = Blueprint('xploit_bp', __name__)
 
-@xploit_bp.route('/stream_payload', methods=['POST'])
-def stream_payload_endpoint():
+@xploit_bp.route('/generate_payload', methods=['POST'])
+def generate_payload_endpoint():
     """
     Streams exploit payload in real time (token-by-token).
     Expects JSON with { vulnerability, evasion_technique }
@@ -62,32 +63,3 @@ def stream_payload_endpoint():
         logger.error(f"Error generating payload: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-@xploit_bp.route('/payload', methods=['POST'])
-def generate_payload_endpoint():
-    """
-    Generates a complete exploit payload (non-streaming).
-    Expects JSON with { vulnerability, evasion_technique }
-    Returns a JSON response with the full payload.
-    """
-    data = request.get_json() or {}
-    vulnerability = data.get("vulnerability", "")
-    evasion_technique = data.get("evasion_technique", "")
-
-    if not vulnerability and not evasion_technique:
-        logger.error("Missing required fields: either vulnerability or evasion_technique must be provided")
-        return jsonify({"error": "At least one of vulnerability or evasion_technique must be provided"}), 400
-
-    try:
-        logger.info(f"Generating non-streaming payload for vulnerability: '{vulnerability}', evasion: '{evasion_technique}'")
-        payload = xploits.generate_exploit_payload(
-            vulnerability=vulnerability,
-            evasion_technique=evasion_technique,
-            stream=False
-        )
-        
-        logger.info(f"Successfully generated payload of length: {len(payload)}")
-        return jsonify({"payload": payload})
-    
-    except Exception as e:
-        logger.error(f"Error generating payload: {str(e)}")
-        return jsonify({"error": str(e)}), 500
