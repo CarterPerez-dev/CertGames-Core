@@ -1,49 +1,11 @@
-# so i need to impleent all this if some of it is not already in my admin page
-# so ill give you all my files relavant to this and you have to implement the thinsg that are not already doing any of these and or enhance/upgrade the ones that are currently doing soem of this but need to add more/enhance
+ok so everything works amazing in this page, howwever whne clsing a thread on teh suers end (liek in the users support page) it says Unexpected token '<', "<!doctype "... is not valid JSON
 
 
-## option to clear closed threads
---
-## popup thing underneath support that say soemthing like "will respond within 1-24 hours"
---
-## add a description at the top of what the page does (e.g this is a page where you can ask us anything you would like about the exam, this website, any test qiestion your curious on, even life questions we will asnwer. just ask anything about anything you want adn we will get abck to you no more than 24 hours. average respone time is 3 hours.
---
-## make the containers a little bigger
---
-## chnage name of admin to soemthing cooler
---
-## create questions
---
-## Your questions
---
---
-# ADMIN SUPPORT PART
+here are some docker debug logs aswell
+ | 2025-03-03 17:02:49,895 - pymongo.connection - DEBUG - {"clientId": {"$oid": "67c5cea8ce87034b66ca328d"}, "message": "Connection checked in", "serverHost": "ac-75jlsm4-lb.nmo0cjq.mongodb.net", "serverPort": 27017, "driverConnectionId": 2}         backend_service      | 2025-03-03 17:02:49,895 - app - ERROR - Exception on /support/my-chat/67c5e0b1ce87034b66ca3315/close [POST]     backend_service      | Traceback (most recent call last):                                                                              backend_service      |   File "/venv/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app                                backend_service      |     response = self.full_dispatch_request()                                                                     backend_service      |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                     backend_service      |   File "/venv/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request                    backend_service      |     rv = self.handle_user_exception(e)                                                                          backend_service      |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                          backend_service      |   File "/venv/lib/python3.11/site-packages/flask_cors/extension.py", line 165, in wrapped_function              backend_service      |     return cors_after_request(app.make_response(f(*args, **kwargs)))                                            backend_service      |                                                 ^^^^^^^^^^^^^^^^^^                                              backend_service      |   File "/venv/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request                    backend_service      |     rv = self.dispatch_request()                                                                                backend_service      |          ^^^^^^^^^^^^^^^^^^^^^^^                                                                                backend_service      |   File "/venv/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request                         backend_service      |     return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]     backend_service      |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                    backend_service      |   File "/app/routes/support_routes.py", line 252, in user_close_specific_thread                                 backend_service      |     socketio.emit('new_message', {                                                                              backend_service      |     ^^^^^^^^                                                                                                    backend_service      | NameError: name 'socketio' is not defined        
+----
 
-## make avergae DB query time calculated/displayed in ms not Seconds.
+additonally- i need the create button for the create a thread (on tehusers edn) needs to be ina differetn spot of something becasue if you look at this image
+![image](https://github.com/user-attachments/assets/b53bc453-c708-4004-bb0b-73a8581c1c6c)
 
-## chnage time to EST not GMT
-
-## chnage title name of admin dashbaord
-
-## add an option in the user managemnt to message a user which creates a thread inisde there support page
-
-## add more data to show fro users (e.g how many questions answered, tests taken, achiveemtns, avatars etc etc etc)
-
-## easy way to do this - Graphs/charts (using libraries like Chart.js or Recharts) to visualize trends over time- dont make it overly complicated tho
-
-## alerts for suspicious activity (e.g. multiple failed login attempts)
-
-## Ability to reset passwords or adjust coin/xp balances manually through my admin page (because i know i can do this through the mongosh shell, but would be cool to do it theough the page
-
-## A section for viewing IP addresses, with audit logs so you can see if a user is doing anything unusual
-
-## A database query log view (if easily possible)
-
-## *Embedded Database Shell (Read-Only):**  
- *Provide a secure, read-only interface to view collection contents (with search and filter features)  
-- **API Health Checks:**  
-  - Regularly run checks to verify that your critical endpoints (e.g. daily bonus, tests, user data) are performing well and not spamming unnecessarily
-
-----##  Visual charts showing trends (daily/weekly/monthly active users, coins awarded, test completion rates)
-
-## caching for heavy queries (e.g., analytics data) to improve responsivene
+it its cutt off/ half hidden- so we need to find an alternaive palce to put it and it can be smaller aswell idk- dont chnag any ofther part of teh disgn- and also the error sesm to be backend wise so we just need to sllighly fix teh backedn BUT DO NOT EDIT ANY PART OF TEH FRONTNEND FUCNTION WISE- WE STRICTLY JUST NEED TO REARANGE/EDIT THE CREATE THREAD BUTTON WHICH IS A DESIGN THING NOT FUCNTIONLITY SO DONT EDIT ANY ACTUAL FUCNTIONLITY PLEASE.
