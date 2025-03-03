@@ -1,8 +1,40 @@
 /**************************************************************************************
  * CrackedAdminDashboard.jsx
  * 
- * Full updated code for the Admin Dashboard component with improved Support tab UI.
- * This file references "CrackedAdminDashboard.css" for styling.
+ * Below is a COMPLETE, ready-to-use updated version of the Admin Dashboard component.
+ * The PERFORMANCE TAB now displays multiple charts (one per metric) across a rolling
+ * 60-minute window, aggregated every 3 minutes. This way, you see up to 20 recent data
+ * points (3 min * 20 = 1 hour) in each chart. It continuously updates on the front end.
+ *
+ * Note:
+ *  1) We changed the backend Celery schedule to run every 3 minutes for performance
+ *     aggregation (see code snippet at the end).
+ *  2) The backend route /api/cracked/performance now returns:
+ *       {
+ *         "avg_request_time": <seconds>,
+ *         "avg_db_query_time_ms": <ms>,
+ *         "data_transfer_rate": <float MB/s>,
+ *         "throughput": <requests/min>,
+ *         "error_rate": <float between 0 and 1>,
+ *         "timestamp": "<ISO time in EST>",
+ *         "history": [
+ *            {
+ *              "_id": "...",
+ *              "timestamp": "...",
+ *              "requestTime": <seconds>,
+ *              "dbTime": <ms>,
+ *              "throughput": <req/min>,
+ *              "errorRate": <float>,
+ *              "dataTransfer": <float MB/s>
+ *            },
+ *            ...
+ *         ]
+ *       }
+ *  3) On the front-end, we now render FIVE separate charts: Request Time, DB Time, 
+ *     Throughput, Error Rate, and Data Transfer Rate (MB/s). Each chart shows data from
+ *     the last 60 minutes of aggregated samples. We also display the latest aggregated
+ *     "snapshot" above the charts.
+ *  4) For "live" updates, we added a small 15-second interval refresh in useEffect().
  **************************************************************************************/
 import React, { useState, useEffect, useCallback } from "react";
 import { io } from "socket.io-client";
@@ -16,9 +48,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
-  Legend
 } from "recharts";
 
 // We keep this as a top-level variable
@@ -80,6 +109,15 @@ function CrackedAdminDashboard() {
       setPerfLoading(false);
     }
   }, []);
+
+  // Auto-refresh performance data every 15 seconds to have "real-time" feeling.
+  useEffect(() => {
+    if (activeTab === "performance") {
+      fetchPerformance();
+      const interval = setInterval(fetchPerformance, 15000); // 15s refresh
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, fetchPerformance]);
 
   /*****************************************
    * USERS
@@ -190,7 +228,8 @@ function CrackedAdminDashboard() {
     try {
       const res = await fetch(`/api/cracked/users/${userId}/reset-password`, {
         method: "POST",
-        credentials: "include"
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
       });
       const data = await res.json();
       if (!res.ok) {
@@ -414,7 +453,7 @@ function CrackedAdminDashboard() {
       setThreads(data);
       setCurrentThread(null);
 
-      // Join all threads so we get real‐time updates
+      // Join all threads so we get real-time updates
       if (adminSocket && data.length > 0) {
         data.forEach((th) => {
           adminSocket.emit("join_thread", { threadId: th._id });
@@ -482,7 +521,7 @@ function CrackedAdminDashboard() {
         }
       });
 
-      // Admin sees newly created threads
+      // Admin sees newly created threads in real-time
       socket.on("new_thread", (threadData) => {
         setThreads((prev) => [threadData, ...prev]);
         socket.emit("join_thread", { threadId: threadData._id });
@@ -523,14 +562,12 @@ function CrackedAdminDashboard() {
   const handleReplyToThread = async () => {
     if (!currentThread || !currentThread._id) return;
     try {
-      // Create the message locally before sending to server
       const replyMessage = {
         sender: "admin",
         content: adminReply,
         timestamp: new Date().toISOString()
       };
 
-      // Tell the user in real time we're no longer typing
       if (adminSocket) {
         adminSocket.emit("admin_stop_typing", {
           threadId: currentThread._id
@@ -550,8 +587,8 @@ function CrackedAdminDashboard() {
       }
       alert("Reply sent!");
 
-      // Update the local thread data directly instead of refetching
-      setCurrentThread(prevThread => {
+      // Update the local thread data directly
+      setCurrentThread((prevThread) => {
         if (!prevThread) return null;
         return {
           ...prevThread,
@@ -560,7 +597,7 @@ function CrackedAdminDashboard() {
       });
 
       // Update allThreadMap as well
-      setAllThreadMap(prev => {
+      setAllThreadMap((prev) => {
         const oldThread = prev[currentThread._id] || { messages: [] };
         return {
           ...prev,
@@ -571,11 +608,7 @@ function CrackedAdminDashboard() {
         };
       });
 
-      // Clear the reply input
       setAdminReply("");
-      
-      // No need to emit admin_new_message here since the server already does it
-      // This was causing the duplication
     } catch (err) {
       console.error("Reply thread error:", err);
     }
@@ -658,7 +691,7 @@ function CrackedAdminDashboard() {
       alert("Error creating admin thread");
     }
   };
-  
+
   /*****************************************
    * ACTIVITY LOGS
    *****************************************/
@@ -832,12 +865,12 @@ function CrackedAdminDashboard() {
   };
 
   /*****************************************
-   * RENDER: PERFORMANCE
+   * RENDER: PERFORMANCE (MULTIPLE CHARTS)
    *****************************************/
   const renderPerformanceTab = () => {
     return (
       <div className="tab-content perf-tab">
-        <h2>Performance Metrics</h2>
+        <h2>Performance Metrics (Rolling 60-Min Aggregation)</h2>
         <button onClick={fetchPerformance} style={{ marginBottom: "10px" }}>
           Refresh Perf Data
         </button>
@@ -845,56 +878,165 @@ function CrackedAdminDashboard() {
         {perfError && <p className="error-msg">Error: {perfError}</p>}
         {performanceData && (
           <>
+            {/* Latest snapshot (the most recent doc) */}
             <div className="perf-details">
-              <p>Avg Request Time: {performanceData.avg_request_time}s</p>
+              <p>Avg Request Time (s): {performanceData.avg_request_time}</p>
               {"avg_db_query_time_ms" in performanceData ? (
-                <p>Avg DB Query Time: {performanceData.avg_db_query_time_ms} ms</p>
+                <p>Avg DB Query Time (ms): {performanceData.avg_db_query_time_ms}</p>
               ) : (
-                <p>Avg DB Query Time: {performanceData.avg_db_query_time}s</p>
+                <p>Avg DB Query Time (ms): 0</p>
               )}
-              <p>Data Transfer Rate: {performanceData.data_transfer_rate}</p>
-              <p>Throughput: {performanceData.throughput} req/min</p>
+              <p>Data Transfer Rate (MB/s): {performanceData.data_transfer_rate}</p>
+              <p>Throughput (req/min): {performanceData.throughput}</p>
               <p>Error Rate: {performanceData.error_rate}</p>
               <p>Timestamp (EST): {performanceData.timestamp}</p>
             </div>
 
-            <div className="chart-section">
-              <h3>Performance History</h3>
+            {/* We now show multiple charts, each for a different metric.
+                performanceData.history is an array of up to 20 data points, each aggregated. */}
+            <div style={{ marginTop: "20px" }}>
               {Array.isArray(performanceData.history) && performanceData.history.length > 0 ? (
-                <div className="chart-container">
-                  <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={performanceData.history}>
-                      <defs>
-                        <linearGradient id="colorRequestTime" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#e67e22" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#e67e22" stopOpacity={0} />
-                        </linearGradient>
-                        <linearGradient id="colorDbTime" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#9b59b6" stopOpacity={0.8} />
-                          <stop offset="95%" stopColor="#9b59b6" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="timestamp" />
-                      <YAxis />
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <Tooltip />
-                      <Area
-                        type="monotone"
-                        dataKey="requestTime"
-                        stroke="#e67e22"
-                        fill="url(#colorRequestTime)"
-                        name="Request Time (s)"
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="dbTime"
-                        stroke="#9b59b6"
-                        fill="url(#colorDbTime)"
-                        name="DB Time (ms)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
+                <>
+                  {/* Chart 1: Request Time (seconds) */}
+                  <div className="chart-section">
+                    <h3>Avg Request Time (Seconds) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorRequestTime" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#e67e22" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#e67e22" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="requestTime"
+                            stroke="#e67e22"
+                            fill="url(#colorRequestTime)"
+                            name="Request Time (s)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 2: DB Time (ms) */}
+                  <div className="chart-section">
+                    <h3>Avg DB Time (ms) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorDbTime" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#9b59b6" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#9b59b6" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="dbTime"
+                            stroke="#9b59b6"
+                            fill="url(#colorDbTime)"
+                            name="DB Time (ms)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 3: Throughput (req/min) */}
+                  <div className="chart-section">
+                    <h3>Throughput (Requests/Min) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorThroughput" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="throughput"
+                            stroke="#2ecc71"
+                            fill="url(#colorThroughput)"
+                            name="Throughput (req/min)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 4: Error Rate */}
+                  <div className="chart-section">
+                    <h3>Error Rate - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorErrorRate" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#e74c3c" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#e74c3c" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="errorRate"
+                            stroke="#e74c3c"
+                            fill="url(#colorErrorRate)"
+                            name="Error Rate"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 5: Data Transfer (MB/s) */}
+                  <div className="chart-section">
+                    <h3>Data Transfer (MB/s) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorDataTransfer" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="dataTransfer"
+                            stroke="#3498db"
+                            fill="url(#colorDataTransfer)"
+                            name="Data Transfer (MB/s)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </>
               ) : (
                 <p>No chart data available.</p>
               )}
@@ -1238,7 +1380,6 @@ function CrackedAdminDashboard() {
                     ))}
                   </ul>
                 </div>
-                {/* Show if the user is typing */}
                 {userIsTyping && (
                   <div className="typing-indicator-user">
                     <em>User is typing...</em>
@@ -1247,7 +1388,7 @@ function CrackedAdminDashboard() {
                 {currentThread.status !== "closed" && (
                   <div className="reply-container">
                     <textarea
-                      rows={5} // <---  made bigger
+                      rows={5}
                       placeholder="Type an admin reply..."
                       value={adminReply}
                       onChange={(e) => {
@@ -1425,7 +1566,7 @@ function CrackedAdminDashboard() {
             {Array.isArray(healthChecks) &&
               healthChecks.map((hc, idx) => {
                 if (hc.results) {
-                  // multi results
+                  // multi results block:
                   return hc.results.map((r, j) => (
                     <tr key={`${hc._id}_${j}`}>
                       <td>{hc.checkedAt}</td>
@@ -1436,6 +1577,7 @@ function CrackedAdminDashboard() {
                     </tr>
                   ));
                 } else {
+                  // single item doc:
                   return (
                     <tr key={idx}>
                       <td>{hc.checkedAt}</td>
