@@ -123,7 +123,7 @@ const redditPosts = [
   { title: 'How a dumdum like me passed sec+', url: 'https://www.reddit.com/r/CompTIA/comments/zkjs1d/how_a_dumdum_like_me_passed_sec/' },
   { title: 'How I passed COMPTIA A+ N+ S+', url: 'https://www.reddit.com/r/CompTIA/comments/1cra3cg/how_i_passed_comptia_a_n_s/' },
   { title: 'ChatGPT explained DHCP to me in gangsta terms', url: 'https://www.reddit.com/r/CompTIA/comments/11ytgbz/chatgpt_explained_dhcp_to_me_in_gangsta_terms/' },
-  { title: 'Don't Pay for Udemy Courses, Access them for Free, Legally and Ethically', url: 'https://www.reddit.com/r/CompTIA/comments/12aug8f/dont_pay_for_udemy_courses_access_them_for_free/' },
+  { title: 'Dont Pay for Udemy Courses, Access them for Free, Legally and Ethically', url: 'https://www.reddit.com/r/CompTIA/comments/12aug8f/dont_pay_for_udemy_courses_access_them_for_free/' },
   { title: 'For Those Of You Wondering if COMPTIA is Worth it; Just Do it', url: 'https://www.reddit.com/r/CompTIA/comments/1f11fbc/for_those_of_you_wondering_if_comptia_is_worth_it/' },
   { title: '[UPDATE] 34 years old, posted a month ago about passing the A+, no IT experience, no college degree -- just got hired today after 2 weeks of sending out resumes. Wanted to share my experience and tips.', url: 'https://www.reddit.com/r/CompTIA/comments/m38lb8/update_34_years_old_posted_a_month_ago_about/' },
   { title: 'Just passed Network+! How I did it...', url: 'https://www.reddit.com/r/CompTIA/comments/1gfmkqf/just_passed_network_how_i_did_it/' },
