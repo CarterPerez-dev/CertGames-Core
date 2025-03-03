@@ -1,197 +1,118 @@
-import json
 import logging
-import re
-from API.AI import client  
+import json  
+from flask import Blueprint, request, Response, jsonify
+from helpers.scenario_helper import (
+    generate_scenario,
+    generate_interactive_questions,
+    break_down_scenario
+)
 
+scenario_bp = Blueprint('scenario_bp', __name__)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
-def generate_scenario(industry, attack_type, skill_level, threat_intensity):
+@scenario_bp.route('/stream_scenario', methods=['POST'])
+def stream_scenario_endpoint():
     """
-    Generate a scenario using OpenAI based on the provided inputs,
-    returning a generator that yields partial text chunks as soon as they're generated.
+    Streams scenario text in real time (token-by-token).
+    Expects JSON with { industry, attack_type, skill_level, threat_intensity }
+    Returns a text/plain streaming response.
     """
-    try:
-        prompt = (
-            f"Imagine a cybersecurity incident involving the {industry} industry. "
-            f"The attack is of type {attack_type}, performed by someone with a skill level of {skill_level}, "
-            f"and the threat intensity is rated as {threat_intensity} on a scale from 1-100. "
-            "Provide enough details and a thorough story/scenario to explain the context/story as well as thoroughly "
-            "explain the attack in a technical way and how it works in 3 paragraphs with a minimum of 7 sentences each. "
-            "Then output actors in another paragraph (at least 5 sentences), then potential risks in another paragraph (at least 5 sentences), "
-            "then mitigation steps in another paragraph (at least 5 sentences). Use paragraph breaks (new lines '\\n') between each section, "
-            "so it is easy to read. Each section should be easy to understand but also in depth, technical, and educational."
-        )
+    data = request.get_json() or {}
+    required_fields = ["industry", "attack_type", "skill_level", "threat_intensity"]
+    missing = [f for f in required_fields if f not in data]
+    if missing:
+        logger.error(f"Missing required fields: {missing}")
+        return jsonify({"error": f"Missing required fields: {missing}"}), 400
 
-        response = client.chat.completions.create(
-            messages=[{"role": "user", "content": prompt}],
-            model="gpt-4o",
-            max_tokens=1200,
-            temperature=0.6,
-            stream=True
-        )
-
-        def generator():
-            try:
-                for chunk in response:
-                    if chunk.choices and chunk.choices[0].delta:
-                        content = getattr(chunk.choices[0].delta, "content", None)
-                        if content:
-                            yield content
-            except Exception as e:
-                logger.error(f"Error while streaming scenario: {str(e)}")
-                yield f"\n[Error occurred during streaming: {str(e)}]\n"
-
-        return generator()
-
-    except Exception as e:
-        logger.error(f"Error generating scenario: {str(e)}")
-        def err_gen():
-            yield f"[Error generating scenario: {str(e)}]"
-        return err_gen()
-
-def break_down_scenario(scenario_text):
-    """
-    Break down the generated scenario into structured components.
-    """
-    return {
-        "context": extract_context(scenario_text),
-        "actors": extract_actors(scenario_text),
-        "risks": extract_risks(scenario_text),
-        "mitigation_steps": extract_mitigation(scenario_text)
-    }
-
-def extract_context(scenario_text):
-    context_match = re.search(r"(.*?)(?:The attack|The adversary|The threat)", scenario_text, re.IGNORECASE)
-    return context_match.group(0).strip() if context_match else "Context not found."
-
-def extract_actors(scenario_text):
-    actors_match = re.findall(r"\b(?:threat actor|adversary|attacker|insider)\b.*?", scenario_text, re.IGNORECASE)
-    return actors_match if actors_match else ["Actors not found."]
-
-def extract_risks(scenario_text):
-    risks_match = re.findall(r"(risk of .*?)(\.|;|:)", scenario_text, re.IGNORECASE)
-    risks = [risk[0] for risk in risks_match]
-    return risks if risks else ["Risks not found."]
-
-def extract_mitigation(scenario_text):
-    mitigation_match = re.findall(r"(mitigation step|to mitigate|response step): (.*?)(\.|;|:)", scenario_text, re.IGNORECASE)
-    mitigations = [step[1] for step in mitigation_match]
-    return mitigations if mitigations else ["Mitigation steps not found."]
-
-def generate_interactive_questions(scenario_text, retry_count=0):
-    """
-    Generate interactive multiple-choice questions based on scenario_text, streaming by default.
-    Retries up to 2 times if the response doesn't meet the criteria.
-    """
-    system_instructions = (
-        "You are a highly intelligent cybersecurity tutor. You must follow formatting instructions exactly, "
-        "with no extra disclaimers or commentary."
-    )
-
-    user_prompt = f"""
-Below is a detailed cyberattack scenario:
-
-{scenario_text}
-
-Your task:
-1) Generate exactly THREE advanced, non-trivial multiple-choice questions based on the scenario, requiring critical thinking or specialized cybersecurity knowledge beyond merely re-reading the text.
-2) Each question must have four options labeled 'A', 'B', 'C', and 'D' (no extra letters or symbols).
-3) Indicate the correct answer with a key 'correct_answer' whose value is a single letter (e.g., 'B').
-4) Provide a concise 'explanation' focusing on why the correct answer is correct (and relevant to the scenario or cybersecurity concepts).
-5) Your output MUST be a valid JSON array with exactly three objects. No disclaimers, no extra text, and no surrounding characters.
-
-Example format:
-
-[
-  {{
-    "question": "Given the company's reliance on AI, which method best defends against membership inference?",
-    "options": {{
-      "A": "Basic encryption",
-      "B": "Differential privacy",
-      "C": "Physical access controls",
-      "D": "Frequent model re-training"
-    }},
-    "correct_answer": "B",
-    "explanation": "Differential privacy adds noise to the data, making it harder for attackers to infer membership."
-  }},
-  // ... two more questions
-]
-
-Nothing else.
-"""
+    industry = data["industry"]
+    attack_type = data["attack_type"]
+    skill_level = data["skill_level"]
+    threat_intensity = data["threat_intensity"]
 
     try:
-        response = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": system_instructions},
-                {"role": "user", "content": user_prompt},
-            ],
-            model="gpt-4o",
-            max_tokens=1200,
-            temperature=0.3,
-            stream=True
-        )
+        threat_intensity = int(threat_intensity)
+    except ValueError:
+        logger.error("Invalid threat_intensity value; must be an integer.")
+        return jsonify({"error": "threat_intensity must be an integer"}), 400
 
-        accumulated_response = ""
-        try:
-            for chunk in response:
-                if chunk.choices and chunk.choices[0].delta:
-                    content = getattr(chunk.choices[0].delta, "content", None)
-                    if content:
-                        accumulated_response += content
-        except Exception as e:
-            logger.error(f"Error streaming interactive questions: {str(e)}")
-            if retry_count < 2:
-                logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
-            else:
-                return [{"error": f"Error occurred: {str(e)}"}]
+    def generate_chunks():
+        scenario_generator = generate_scenario(industry, attack_type, skill_level, threat_intensity)
+        # Log the start of streaming
+        logger.info(f"Starting scenario stream for {industry}, {attack_type}")
+        for chunk in scenario_generator:
+            # Log chunk size for debugging
+            if isinstance(chunk, str) and len(chunk) > 0:
+                logger.debug(f"Streaming chunk of size: {len(chunk)}")
+            yield chunk
 
-
-        try:
-
-            cleaned_response = accumulated_response.strip()
-
-
-            if cleaned_response.startswith("```"):
-
-                closing_fence = cleaned_response.find("```", 3)
-                if closing_fence != -1:
-                    cleaned_response = cleaned_response[3:closing_fence].strip()
-                else:
-
-                    cleaned_response = cleaned_response[3:].strip()
+    # Create the streaming response with all necessary headers
+    response = Response(generate_chunks(), mimetype='text/plain')
+    
+    # Essential headers for preventing buffering
+    response.headers['X-Accel-Buffering'] = 'no'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+    
+    # Enable chunked transfer encoding
+    response.headers['Transfer-Encoding'] = 'chunked'
+    
+    # Keep connection alive for streaming
+    response.headers['Connection'] = 'keep-alive'
+    
+    logger.info("Returning streaming response with headers set")
+    return response
 
 
-            if cleaned_response.lower().startswith("json"):
-                cleaned_response = cleaned_response[4:].strip()
+@scenario_bp.route('/stream_questions', methods=['POST'])
+def stream_questions_endpoint():
+    """
+    Streams the interactive questions (in raw JSON form) in real time, token-by-token.
+    Expects JSON with { "scenario_text": "..." }
+    The front end can accumulate the text and parse once done.
+    """
+    data = request.get_json() or {}
+    scenario_text = data.get("scenario_text", "")
+    if not scenario_text:
+        logger.error("Missing scenario_text in the request.")
+        return jsonify({"error": "Missing scenario_text"}), 400
 
+    logger.debug(f"Received scenario_text: {scenario_text[:100]}...")  
 
-            parsed = json.loads(cleaned_response)
-            if isinstance(parsed, list) and len(parsed) == 3:
-                logger.debug("Successfully generated three interactive questions.")
-                return parsed
-            else:
-                logger.error("Model did not generate exactly three questions.")
-                if retry_count < 2:
-                    logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                    return generate_interactive_questions(scenario_text, retry_count + 1)
-                else:
-                    return [{"error": "Failed to generate exactly three questions."}]
-        except json.JSONDecodeError as je:
-            logger.error(f"JSON decode error: {je}")
-            logger.error(f"Content received: {accumulated_response}")
-            if retry_count < 2:
-                logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
-            else:
-                return [{"error": "JSON decoding failed."}]
-
-    except Exception as e:
-        logger.error(f"Error generating interactive questions: {e}")
-        if retry_count < 2:
-            logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-            return generate_interactive_questions(scenario_text, retry_count + 1)
+    def generate_json_chunks():
+        logger.info("Starting to generate questions")
+        questions = generate_interactive_questions(scenario_text)
+        if isinstance(questions, list):
+            logger.debug("Questions are a list. Serializing to JSON.")
+            json_data = json.dumps(questions)
+            logger.debug(f"Sending JSON data of size: {len(json_data)}")
+            yield json_data
+        elif callable(questions):
+            logger.debug("Questions are being streamed.")
+            for chunk in questions():
+                if chunk:
+                    logger.debug(f"Streaming question chunk of size: {len(chunk)}")
+                yield chunk
         else:
-            return [{"error": f"Error generating interactive questions: {str(e)}"}]
+            logger.error("Unexpected type for questions.")
+            yield json.dumps([{"error": "Failed to generate questions."}])
 
+    # Create the streaming response with all necessary headers
+    response = Response(generate_json_chunks(), mimetype='application/json')
+    
+    # Essential headers for preventing buffering
+    response.headers['X-Accel-Buffering'] = 'no'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    
+    # Enable chunked transfer encoding
+    response.headers['Transfer-Encoding'] = 'chunked'
+    
+    # Keep connection alive for streaming
+    response.headers['Connection'] = 'keep-alive'
+    
+    logger.info("Returning streaming questions response with headers set")
+    return response
