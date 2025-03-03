@@ -23,8 +23,28 @@ import {
   FaBook,
   FaBrain,
   FaCheckCircle,
-  FaRegSmile,
-  FaMagic
+  FaCoins,
+  FaFlagCheckered,
+  FaArrowLeft,
+  FaArrowRight,
+  FaRedoAlt,
+  FaStepForward,
+  FaExclamationTriangle,
+  FaPlay,
+  FaEye,
+  FaChevronLeft,
+  FaChevronRight,
+  FaTimes,
+  FaCheck,
+  FaFlag,
+  FaLevelUpAlt,
+  FaSpinner,
+  FaList,
+  FaClipboardList,
+  FaFilter,
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+  FaUser
 } from "react-icons/fa";
 
 // Helper functions
@@ -81,12 +101,20 @@ const QuestionDropdown = ({
   return (
     <div className="question-dropdown" ref={dropdownRef}>
       <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
-        Question {currentQuestionIndex + 1}
+        <FaList className="dropdown-icon" />
+        <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
       </button>
       {isOpen && (
         <div className="dropdown-content">
           {Array.from({ length: totalQuestions }, (_, i) => {
             const status = getQuestionStatus(i);
+            let statusClass = "";
+            if (status.isAnswered && !status.isSkipped) {
+              statusClass = status.isCorrect ? "correct" : "incorrect";
+            } else if (status.isSkipped) {
+              statusClass = "skipped";
+            }
+            
             return (
               <button
                 key={i}
@@ -94,7 +122,7 @@ const QuestionDropdown = ({
                   onQuestionSelect(i);
                   setIsOpen(false);
                 }}
-                className="dropdown-item"
+                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''} ${statusClass}`}
               >
                 <span>Question {i + 1}</span>
                 <div className="status-indicators">
@@ -171,7 +199,7 @@ const GlobalTestPage = ({
   // Exam mode
   const [examMode, setExamMode] = useState(false);
 
-  // New: Test length selection state
+  // Test length selection state
   const allowedTestLengths = [25, 50, 75, 100];
   const [selectedLength, setSelectedLength] = useState(100);
   const [activeTestLength, setActiveTestLength] = useState(null);
@@ -352,7 +380,7 @@ const GlobalTestPage = ({
     [userId, testId, testData, xpBoost, currentQuestionIndex]
   );
 
-  // UPDATED: In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
+  // In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
   const handleOptionClick = useCallback(
     async (displayOptionIndex) => {
       if (!questionObject) return;
@@ -474,7 +502,7 @@ const GlobalTestPage = ({
     }
     setIsFinished(true);
     setShowScoreOverlay(true);
-    setShowReviewMode(true);
+    setShowReviewMode(false);
   }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
 
   const handleNextQuestion = useCallback(() => {
@@ -635,10 +663,15 @@ const GlobalTestPage = ({
   const NextQuestionAlert = ({ message, onOk }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Attention</h3>
+        </div>
         <p>{message}</p>
         <div className="confirm-popup-buttons">
           <button className="confirm-popup-ok" onClick={onOk}>
-            OK
+            <FaCheck className="button-icon" />
+            <span>OK</span>
           </button>
         </div>
       </div>
@@ -649,7 +682,7 @@ const GlobalTestPage = ({
     if (!showNextPopup) return null;
     return (
       <NextQuestionAlert
-        message="You haven't answered. Please answer or skip question.🤪"
+        message="You haven't answered this question yet. Please select an answer or skip the question."
         onOk={() => {
           setShowNextPopup(false);
         }}
@@ -660,13 +693,19 @@ const GlobalTestPage = ({
   const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
     <div className="confirm-popup-overlay">
       <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Confirm Action</h3>
+        </div>
         <p>{message}</p>
         <div className="confirm-popup-buttons">
           <button className="confirm-popup-yes" onClick={onConfirm}>
-            Yes
+            <FaCheck className="button-icon" />
+            <span>Yes</span>
           </button>
           <button className="confirm-popup-no" onClick={onCancel}>
-            No
+            <FaTimes className="button-icon" />
+            <span>No</span>
           </button>
         </div>
       </div>
@@ -677,7 +716,7 @@ const GlobalTestPage = ({
     if (!showRestartPopup) return null;
     return (
       <ConfirmPopup
-        message="Are you sure you want to restart the test? All progress will be lost!😱"
+        message="Are you sure you want to restart the test? All progress will be lost and you'll start from the beginning."
         onConfirm={() => {
           handleRestartTest();
           setShowRestartPopup(false);
@@ -691,7 +730,7 @@ const GlobalTestPage = ({
     if (!showFinishPopup) return null;
     return (
       <ConfirmPopup
-        message="Are you sure you want to finish the test now?😥"
+        message="Are you sure you want to finish the test now? Any unanswered questions will be marked as skipped."
         onConfirm={() => {
           handleFinishTest();
           setShowFinishPopup(false);
@@ -701,48 +740,82 @@ const GlobalTestPage = ({
     );
   };
 
-  // -----
-  // MAIN FIX: We add a small block in the score overlay that allows the user
-  // to select a new test length if they've finished, before clicking Restart.
-  // -----
   const renderScoreOverlay = () => {
     if (!showScoreOverlay) return null;
     const percentage = effectiveTotal
       ? Math.round((score / effectiveTotal) * 100)
       : 0;
+      
+    // Determine grade based on percentage
+    let grade = "";
+    let gradeClass = "";
+    
+    if (percentage >= 90) {
+      grade = "Outstanding!";
+      gradeClass = "grade-a-plus";
+    } else if (percentage >= 80) {
+      grade = "Excellent!";
+      gradeClass = "grade-a";
+    } else if (percentage >= 70) {
+      grade = "Great Job!";
+      gradeClass = "grade-b";
+    } else if (percentage >= 60) {
+      grade = "Good Effort!";
+      gradeClass = "grade-c";
+    } else {
+      grade = "Keep Practicing!";
+      gradeClass = "grade-d";
+    }
+    
     return (
       <div className="score-overlay">
         <div className="score-content">
           <h2 className="score-title">Test Complete!</h2>
-          <p className="score-details">
-            Your score: <strong>{percentage}%</strong> ({score}/{effectiveTotal})
-          </p>
+          
+          <div className="score-grade-container">
+            <div className={`score-grade ${gradeClass}`}>
+              <div className="percentage-display">{percentage}%</div>
+              <div className="grade-label">{grade}</div>
+            </div>
+            
+            <div className="score-details-container">
+              <p className="score-details">
+                You answered <strong>{score}</strong> out of <strong>{effectiveTotal}</strong> questions correctly.
+              </p>
+              
+              {examMode && (
+                <div className="exam-mode-note">
+                  <FaTrophy className="exam-icon" />
+                  <p>You completed this test in exam mode!</p>
+                </div>
+              )}
+            </div>
+          </div>
 
-          {/* NEW: Test Length selection after finishing */}
-          <div className="length-selection" style={{ margin: "1rem 0" }}>
-            <p style={{ marginBottom: "0.5rem" }}>Select New Test Length:</p>
-            {allowedTestLengths.map((length) => (
-              <label
-                key={length}
-                style={{
-                  marginRight: "1rem",
-                  display: "inline-block"
-                }}
-              >
-                <input
-                  type="radio"
-                  name="finishedTestLength"
-                  value={length}
-                  checked={selectedLength === length}
-                  onChange={(e) => {
-                    const newLen = Number(e.target.value);
-                    setSelectedLength(newLen);
-                    setActiveTestLength(newLen);
-                  }}
-                />
-                {length}
-              </label>
-            ))}
+          {/* Test Length selection after finishing */}
+          <div className="length-selection">
+            <p>Select Length for Next Attempt:</p>
+            <div className="length-selector-options">
+              {allowedTestLengths.map((length) => (
+                <label
+                  key={length}
+                  className={`length-option ${selectedLength === length ? 'selected' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="finishedTestLength"
+                    value={length}
+                    checked={selectedLength === length}
+                    onChange={(e) => {
+                      const newLen = Number(e.target.value);
+                      setSelectedLength(newLen);
+                      setActiveTestLength(newLen);
+                    }}
+                  />
+                  <span>{length}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="overlay-buttons">
@@ -750,20 +823,33 @@ const GlobalTestPage = ({
               className="restart-button"
               onClick={() => setShowRestartPopup(true)}
             >
-              Restart Test
+              <FaRedoAlt className="button-icon" />
+              <span>Restart Test</span>
             </button>
-            <button className="review-button" onClick={handleReviewAnswers}>
-              View Review
+            
+            <button 
+              className="review-button" 
+              onClick={handleReviewAnswers}
+            >
+              <FaEye className="button-icon" />
+              <span>Review Answers</span>
             </button>
-            <button className="back-btn" onClick={() => navigate(backToListPath)}>
-              Back to Test List
+            
+            <button 
+              className="back-btn" 
+              onClick={() => navigate(backToListPath)}
+            >
+              <FaArrowLeft className="button-icon" />
+              <span>Back to List</span>
             </button>
+            
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
                 onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
               >
-                Next Test
+                <FaArrowRight className="button-icon" />
+                <span>Next Test</span>
               </button>
             )}
           </div>
@@ -782,11 +868,12 @@ const GlobalTestPage = ({
               className="back-to-list-btn"
               onClick={() => navigate(backToListPath)}
             >
-              Go Back to Test List
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
             </button>
           ) : (
             <button className="close-review-x" onClick={handleCloseReview}>
-              X
+              <FaTimes />
             </button>
           )}
           <h2 className="score-title">Review Mode</h2>
@@ -802,57 +889,67 @@ const GlobalTestPage = ({
               className={reviewFilter === "all" ? "active-filter" : ""}
               onClick={() => setReviewFilter("all")}
             >
-              All
+              <FaClipboardList className="filter-icon" />
+              <span>All</span>
             </button>
             <button
               className={reviewFilter === "skipped" ? "active-filter" : ""}
               onClick={() => setReviewFilter("skipped")}
             >
-              Skipped
+              <FaStepForward className="filter-icon" />
+              <span>Skipped</span>
             </button>
             <button
               className={reviewFilter === "flagged" ? "active-filter" : ""}
               onClick={() => setReviewFilter("flagged")}
             >
-              Flagged
+              <FaFlag className="filter-icon" />
+              <span>Flagged</span>
             </button>
             <button
               className={reviewFilter === "incorrect" ? "active-filter" : ""}
               onClick={() => setReviewFilter("incorrect")}
             >
-              Incorrect
+              <FaTimes className="filter-icon" />
+              <span>Incorrect</span>
             </button>
             <button
               className={reviewFilter === "correct" ? "active-filter" : ""}
               onClick={() => setReviewFilter("correct")}
             >
-              Correct
+              <FaCheck className="filter-icon" />
+              <span>Correct</span>
             </button>
           </div>
-          <p className="score-details">
-            Questions shown: {filteredQuestions.length}
+          <p className="review-filter-count">
+            Showing {filteredQuestions.length} questions
           </p>
           <div className="review-mode-container">
-            {filteredQuestions.map((q) => {
+            {filteredQuestions.map((q, idx) => {
               const userAns = answers.find((a) => a.questionId === q.id);
               const isFlagged = flaggedQuestions.includes(q.id);
 
               if (!userAns) {
                 return (
                   <div key={q.id} className="review-question-card">
-                    <h3>
-                      Q{q.id}: {q.question}{" "}
+                    <div className="review-question-header">
+                      <span className="question-number">Question {idx + 1}</span>
                       {isFlagged && <span className="flagged-icon">🚩</span>}
-                    </h3>
-                    <p>
-                      <strong>Your Answer:</strong> Unanswered
-                    </p>
-                    <p>
-                      <strong>Correct Answer:</strong>{" "}
-                      {q.options[q.correctAnswerIndex]}
-                    </p>
-                    <p style={{ color: "#F44336" }}>No Answer</p>
-                    <p>{q.explanation}</p>
+                    </div>
+                    <h3>{q.question}</h3>
+                    <div className="review-answer-section unanswered">
+                      <p className="review-status-label">
+                        <FaExclamationTriangle className="status-icon warning" />
+                        <span>Not Answered</span>
+                      </p>
+                      <p className="correct-answer">
+                        <strong>Correct Answer:</strong>{" "}
+                        {q.options[q.correctAnswerIndex]}
+                      </p>
+                    </div>
+                    <div className="review-explanation">
+                      <p>{q.explanation}</p>
+                    </div>
                   </div>
                 );
               }
@@ -861,33 +958,47 @@ const GlobalTestPage = ({
               const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
 
               return (
-                <div key={q.id} className="review-question-card">
-                  <h3>
-                    Q{q.id}: {q.question}{" "}
+                <div key={q.id} className={`review-question-card ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                  <div className="review-question-header">
+                    <span className="question-number">Question {idx + 1}</span>
                     {isFlagged && <span className="flagged-icon">🚩</span>}
-                  </h3>
-                  <p>
-                    <strong>Your Answer:</strong>{" "}
-                    {isSkipped ? (
-                      <span style={{ color: "orange" }}>Skipped</span>
-                    ) : (
-                      q.options[userAns.userAnswerIndex]
-                    )}
-                  </p>
-                  <p>
-                    <strong>Correct Answer:</strong>{" "}
-                    {q.options[q.correctAnswerIndex]}
-                  </p>
-                  {!isSkipped && (
-                    <p
-                      style={{
-                        color: isCorrect ? "#8BC34A" : "#F44336"
-                      }}
-                    >
-                      {isCorrect ? "Correct!" : "Incorrect!"}
+                  </div>
+                  <h3>{q.question}</h3>
+                  <div className={`review-answer-section ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                    <p className="review-status-label">
+                      {isSkipped ? (
+                        <>
+                          <FaStepForward className="status-icon skipped" />
+                          <span>Skipped</span>
+                        </>
+                      ) : isCorrect ? (
+                        <>
+                          <FaCheck className="status-icon correct" />
+                          <span>Correct!</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaTimes className="status-icon incorrect" />
+                          <span>Incorrect</span>
+                        </>
+                      )}
                     </p>
-                  )}
-                  <p>{q.explanation}</p>
+                    
+                    {!isSkipped && (
+                      <p className="your-answer">
+                        <strong>Your Answer:</strong>{" "}
+                        {q.options[userAns.userAnswerIndex]}
+                      </p>
+                    )}
+                    
+                    <p className="correct-answer">
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
+                    </p>
+                  </div>
+                  <div className="review-explanation">
+                    <p>{q.explanation}</p>
+                  </div>
                 </div>
               );
             })}
@@ -897,7 +1008,8 @@ const GlobalTestPage = ({
               className="review-button close-review-btn"
               onClick={handleCloseReview}
             >
-              Close Review
+              <FaTimes className="button-icon" />
+              <span>Close Review</span>
             </button>
           )}
         </div>
@@ -916,78 +1028,135 @@ const GlobalTestPage = ({
   // If no attempt doc was found (on first load), show test length UI:
   if (showTestLengthSelector) {
     return (
-      <div className="test-length-selector">
-        <h2>Select Test Length</h2>
-        <p>Please select how many questions you want to answer:</p>
-        <div className="test-length-options">
-          {allowedTestLengths.map((length) => (
-            <label key={length}>
-              <input
-                type="radio"
-                name="testLength"
-                value={length}
-                checked={selectedLength === length}
-                onChange={(e) => setSelectedLength(Number(e.target.value))}
-              />
-              {length}
-            </label>
-          ))}
-        </div>
-        <button
-          onClick={async () => {
-            setActiveTestLength(selectedLength);
-            if (testData) {
-              const totalQ = testData.questions.length;
-              const newQOrder = shuffleIndices(selectedLength);
-              setShuffleOrder(newQOrder);
-              const newAnswerOrder = testData.questions
-                .slice(0, selectedLength)
-                .map((q) => {
-                  const numOpts = q.options.length;
-                  return shuffleArray([...Array(numOpts).keys()]);
-                });
-              setAnswerOrder(newAnswerOrder);
-              try {
-                await fetch(`/api/test/attempts/${userId}/${testId}`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    answers: [],
-                    score: 0,
-                    totalQuestions: totalQ,
-                    selectedLength: selectedLength,
-                    category: testData.category || category,
-                    currentQuestionIndex: 0,
-                    shuffleOrder: newQOrder,
-                    answerOrder: newAnswerOrder,
-                    finished: false,
-                    examMode: location.state?.examMode || false
-                  })
-                });
-                setShowTestLengthSelector(false);
-                fetchTestAndAttempt();
-              } catch (err) {
-                console.error("Failed to start new attempt", err);
+      <div className="aplus-test-container">
+        <div className="test-length-selector">
+          <h2>Select Test Length</h2>
+          <div className="test-mode-indicator">
+            <span className={examMode ? 'exam-on' : 'exam-off'}>
+              {examMode ? 'Exam Mode: ON' : 'Practice Mode'}
+            </span>
+          </div>
+          <p>How many questions would you like to answer?</p>
+          <div className="test-length-options">
+            {allowedTestLengths.map((length) => (
+              <label 
+                key={length}
+                className={selectedLength === length ? 'selected' : ''}
+              >
+                <input
+                  type="radio"
+                  name="testLength"
+                  value={length}
+                  checked={selectedLength === length}
+                  onChange={(e) => setSelectedLength(Number(e.target.value))}
+                />
+                <span>{length}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            onClick={async () => {
+              setActiveTestLength(selectedLength);
+              if (testData) {
+                const totalQ = testData.questions.length;
+                const newQOrder = shuffleIndices(selectedLength);
+                setShuffleOrder(newQOrder);
+                const newAnswerOrder = testData.questions
+                  .slice(0, selectedLength)
+                  .map((q) => {
+                    const numOpts = q.options.length;
+                    return shuffleArray([...Array(numOpts).keys()]);
+                  });
+                setAnswerOrder(newAnswerOrder);
+                try {
+                  await fetch(`/api/test/attempts/${userId}/${testId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      answers: [],
+                      score: 0,
+                      totalQuestions: totalQ,
+                      selectedLength: selectedLength,
+                      category: testData.category || category,
+                      currentQuestionIndex: 0,
+                      shuffleOrder: newQOrder,
+                      answerOrder: newAnswerOrder,
+                      finished: false,
+                      examMode: location.state?.examMode || false
+                    })
+                  });
+                  setShowTestLengthSelector(false);
+                  fetchTestAndAttempt();
+                } catch (err) {
+                  console.error("Failed to start new attempt", err);
+                }
               }
-            }
-          }}
-        >
-          Start Test
-        </button>
+            }}
+          >
+            <FaPlay className="button-icon" />
+            <span>Start Test</span>
+          </button>
+          <button 
+            className="back-to-list-btn"
+            onClick={() => navigate(backToListPath)}
+          >
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
       </div>
     );
   }
 
   if (error) {
-    return <div style={{ color: "#fff" }}>Error: {error}</div>;
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>Error Loading Test</h2>
+          <p>{error}</p>
+          <div className="test-error-actions">
+            <button onClick={() => window.location.reload()}>
+              <FaRedoAlt className="button-icon" />
+              <span>Try Again</span>
+            </button>
+            <button onClick={() => navigate(backToListPath)}>
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   if (loadingTest) {
-    return <div style={{ color: "#fff" }}>Loading test...</div>;
+    return (
+      <div className="aplus-test-container">
+        <div className="test-loading-container">
+          <div className="test-loading-spinner">
+            <FaSpinner className="spinner-icon" />
+          </div>
+          <p>Loading test data...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!testData || !testData.questions || testData.questions.length === 0) {
-    return <div style={{ color: "#fff" }}>No questions found.</div>;
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>No Questions Found</h2>
+          <p>This test doesn't have any questions yet.</p>
+          <button onClick={() => navigate(backToListPath)}>
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
+      </div>
+    );
   }
 
   let avatarUrl = "https://via.placeholder.com/60";
@@ -1001,7 +1170,7 @@ const GlobalTestPage = ({
   const progressPercentage = effectiveTotal
     ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
     : 0;
-  const progressColorHue = (progressPercentage * 120) / 100;
+  const progressColorHue = (progressPercentage * 120) / 100; // from red to green
   const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
 
   let displayedOptions = [];
@@ -1022,11 +1191,15 @@ const GlobalTestPage = ({
       {renderReviewMode()}
 
       <div className="top-control-bar">
-        <button className="flag-btn" onClick={handleFlagQuestion}>
-          {questionObject && flaggedQuestions.includes(questionObject.id)
-            ? "Unflag"
-            : "Flag"}
+        <button 
+          className={`flag-btn ${questionObject && flaggedQuestions.includes(questionObject.id) ? 'active' : ''}`} 
+          onClick={handleFlagQuestion}
+          disabled={!questionObject}
+        >
+          <FaFlag className="button-icon" />
+          <span>{questionObject && flaggedQuestions.includes(questionObject.id) ? "Unflag" : "Flag"}</span>
         </button>
+        
         <QuestionDropdown
           totalQuestions={effectiveTotal}
           currentQuestionIndex={currentQuestionIndex}
@@ -1040,11 +1213,13 @@ const GlobalTestPage = ({
           shuffleOrder={shuffleOrder}
           examMode={examMode}
         />
+        
         <button
           className="finish-test-btn"
           onClick={() => setShowFinishPopup(true)}
         >
-          Finish Test
+          <FaFlagCheckered className="button-icon" />
+          <span>Finish Test</span>
         </button>
       </div>
 
@@ -1053,14 +1228,20 @@ const GlobalTestPage = ({
           className="restart-test-btn"
           onClick={() => setShowRestartPopup(true)}
         >
-          Restart Test
+          <FaRedoAlt className="button-icon" />
+          <span>Restart</span>
         </button>
-        <button className="back-btn" onClick={() => navigate(backToListPath)}>
-          Back to Test List
+        
+        <h1 className="aplus-title">{testData.testName}</h1>
+        
+        <button 
+          className="back-btn" 
+          onClick={() => navigate(backToListPath)}
+        >
+          <FaArrowLeft className="button-icon" />
+          <span>Back to List</span>
         </button>
       </div>
-
-      <h1 className="aplus-title">{testData.testName}</h1>
 
       <div className="top-bar">
         <div className="avatar-section">
@@ -1068,10 +1249,28 @@ const GlobalTestPage = ({
             className="avatar-image"
             style={{ backgroundImage: `url(${avatarUrl})` }}
           />
-          <div className="avatar-level">Lvl {level}</div>
+          <div className="avatar-level">
+            <FaLevelUpAlt className="level-icon" />
+            <span>{level}</span>
+          </div>
         </div>
-        <div className="xp-level-display">XP: {xp}</div>
-        <div className="coins-display">Coins: {coins}</div>
+        <div className="xp-level-display">
+          <FaStar className="xp-icon" />
+          <span>{xp} XP</span>
+        </div>
+        <div className="coins-display">
+          <FaCoins className="coins-icon" />
+          <span>{coins}</span>
+        </div>
+      </div>
+
+      <div className="exam-mode-indicator">
+        {examMode ? (
+          <div className="exam-badge">
+            <FaTrophy className="exam-icon" />
+            <span>EXAM MODE</span>
+          </div>
+        ) : null}
       </div>
 
       <div className="progress-container">
@@ -1120,7 +1319,8 @@ const GlobalTestPage = ({
                     onClick={() => handleOptionClick(displayIdx)}
                     disabled={examMode ? false : isAnswered}
                   >
-                    {option}
+                    <div className="option-letter">{String.fromCharCode(65 + displayIdx)}</div>
+                    <div className="option-text">{option}</div>
                   </button>
                 </li>
               );
@@ -1128,13 +1328,26 @@ const GlobalTestPage = ({
           </ul>
 
           {isAnswered && questionObject && !examMode && (
-            <div className="explanation">
+            <div className={`explanation ${selectedOptionIndex !== null &&
+              answerOrder[realIndex][selectedOptionIndex] ===
+                questionObject.correctAnswerIndex
+                ? "correct-explanation"
+                : "incorrect-explanation"}`}>
               <strong>
                 {selectedOptionIndex !== null &&
                 answerOrder[realIndex][selectedOptionIndex] ===
                   questionObject.correctAnswerIndex
-                  ? "Correct!"
-                  : "Incorrect!"}
+                  ? (
+                    <>
+                      <FaCheck className="explanation-icon" />
+                      <span>Correct!</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaTimes className="explanation-icon" />
+                      <span>Incorrect!</span>
+                    </>
+                  )}
               </strong>
               <p>{questionObject.explanation}</p>
             </div>
@@ -1147,28 +1360,36 @@ const GlobalTestPage = ({
                 onClick={handlePreviousQuestion}
                 disabled={currentQuestionIndex === 0}
               >
-                Previous Question
+                <FaChevronLeft className="button-icon" />
+                <span>Previous</span>
               </button>
+              
               {currentQuestionIndex === effectiveTotal - 1 ? (
                 <button
-                  className="next-question-btn"
+                  className="next-question-btn finish-btn"
                   onClick={handleNextQuestionButtonClick}
                 >
-                  Finish Test
+                  <FaFlagCheckered className="button-icon" />
+                  <span>Finish Test</span>
                 </button>
               ) : (
                 <button
                   className="next-question-btn"
                   onClick={handleNextQuestionButtonClick}
                 >
-                  Next Question
+                  <span>Next</span>
+                  <FaChevronRight className="button-icon" />
                 </button>
               )}
             </div>
 
             <div className="bottom-control-row skip-row">
-              <button className="skip-question-btn" onClick={handleSkipQuestion}>
-                Skip Question
+              <button 
+                className="skip-question-btn" 
+                onClick={handleSkipQuestion}
+              >
+                <FaStepForward className="button-icon" />
+                <span>Skip Question</span>
               </button>
             </div>
           </div>
