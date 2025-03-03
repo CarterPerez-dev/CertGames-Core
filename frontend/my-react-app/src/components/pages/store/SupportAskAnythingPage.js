@@ -10,7 +10,22 @@ import {
   FaInfoCircle,
   FaRegSmile,
   FaEnvelope,
-  FaHourglassHalf
+  FaHourglassHalf,
+  FaCommentDots,
+  FaCheck,
+  FaComments,
+  FaCircleNotch,
+  FaExclamationTriangle,
+  FaCircle,
+  FaArrowLeft,
+  FaEllipsisH,
+  FaUser,
+  FaHeadset,
+  FaRobot,
+  FaCrown,
+  FaSignal,
+  FaLock,
+  FaBolt
 } from 'react-icons/fa';
 
 // Keep a single socket instance at module level
@@ -31,6 +46,7 @@ function SupportAskAnythingPage() {
   const [isTyping, setIsTyping] = useState(false);
   const [adminIsTyping, setAdminIsTyping] = useState(false);
   const [showSupportInfoPopup, setShowSupportInfoPopup] = useState(true);
+  const [mobileThreadsVisible, setMobileThreadsVisible] = useState(true);
   
   // Loading and error states
   const [loadingThreads, setLoadingThreads] = useState(false);
@@ -41,7 +57,7 @@ function SupportAskAnythingPage() {
   // Refs
   const chatEndRef = useRef(null);
   const messageInputRef = useRef(null);
-  const processedMessagesRef = useRef(new Set()); // Add this ref to track processed messages
+  const processedMessagesRef = useRef(new Set()); // Track processed messages
   
   // Format timestamps
   const formatTimestamp = (ts) => {
@@ -58,14 +74,24 @@ function SupportAskAnythingPage() {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
   
-  // Get thread status icon
-  const getStatusIcon = (status = 'open') => {
+  // Get thread status icon and color
+  const getStatusInfo = (status = 'open') => {
     const s = status.toLowerCase();
-    if (s.includes('open')) return '🟢';
-    if (s.includes('pending')) return '🟡';
-    if (s.includes('resolved')) return '✅';
-    if (s.includes('closed')) return '⚪';
-    return '🟢';
+    
+    if (s.includes('open')) {
+      return { icon: <FaCircle />, label: 'Open', className: 'status-open' };
+    }
+    if (s.includes('pending')) {
+      return { icon: <FaHourglassHalf />, label: 'Pending', className: 'status-pending' };
+    }
+    if (s.includes('resolved')) {
+      return { icon: <FaCheck />, label: 'Resolved', className: 'status-resolved' };
+    }
+    if (s.includes('closed')) {
+      return { icon: <FaLock />, label: 'Closed', className: 'status-closed' };
+    }
+    
+    return { icon: <FaCircle />, label: 'Open', className: 'status-open' };
   };
   
   // Scroll to bottom of messages
@@ -286,6 +312,9 @@ function SupportAskAnythingPage() {
       setSelectedThreadId(data._id);
       setMessages([]);
       
+      // On mobile, show the messages panel after creating a thread
+      setMobileThreadsVisible(false);
+      
       // Join the thread room
       if (socket && socket.connected) {
         socket.emit('join_thread', { threadId: data._id });
@@ -302,7 +331,11 @@ function SupportAskAnythingPage() {
   //////////////////////////////////////////////////////////////////////////
   const selectThread = async (threadId) => {
     // Skip if already selected
-    if (threadId === selectedThreadId) return;
+    if (threadId === selectedThreadId) {
+      // On mobile, just toggle to messages view
+      setMobileThreadsVisible(false);
+      return;
+    }
     
     // Leave current thread room if any
     if (selectedThreadId && socket && socket.connected) {
@@ -314,6 +347,9 @@ function SupportAskAnythingPage() {
     setMessages([]);
     setLoadingMessages(true);
     setError(null);
+    
+    // On mobile, show the messages panel
+    setMobileThreadsVisible(false);
     
     // Clear the processed messages set when switching threads
     processedMessagesRef.current.clear();
@@ -519,23 +555,29 @@ function SupportAskAnythingPage() {
   const selectedThread = threads.find(t => t._id === selectedThreadId);
   const isThreadClosed = selectedThread?.status?.toLowerCase() === 'closed';
   
+  // Handle back button on mobile
+  const handleBackToThreads = () => {
+    setMobileThreadsVisible(true);
+  };
+  
   return (
     <div className="support-container">
       <div className="support-header">
         <h1 className="support-title">
-          <FaEnvelope className="support-title-icon" />
+          <FaHeadset className="support-title-icon" />
           Support / Ask Anything
         </h1>
         
         {showSupportInfoPopup && (
           <div className="support-info-banner">
             <div className="support-info-content">
-              <FaInfoCircle className="support-info-icon" />
+              <FaBolt className="support-info-icon" />
               <span>We typically respond within 1-24 hours (average ~3 hours)</span>
             </div>
             <button 
               className="support-info-close" 
               onClick={() => setShowSupportInfoPopup(false)}
+              aria-label="Close information banner"
             >
               <FaTimes />
             </button>
@@ -549,8 +591,15 @@ function SupportAskAnythingPage() {
       
       {error && (
         <div className="support-error-alert">
+          <FaExclamationTriangle className="support-error-icon" />
           <span>{error}</span>
-          <button onClick={() => setError(null)}><FaTimes /></button>
+          <button 
+            onClick={() => setError(null)}
+            aria-label="Dismiss error"
+            className="support-error-close"
+          >
+            <FaTimes />
+          </button>
         </div>
       )}
       
@@ -565,15 +614,16 @@ function SupportAskAnythingPage() {
         </span>
       </div>
       
-      <div className="support-layout">
+      <div className={`support-layout ${mobileThreadsVisible ? 'show-threads-mobile' : 'show-messages-mobile'}`}>
         {/* THREADS PANEL */}
         <div className="support-threads-panel">
           <div className="threads-header">
-            <h2>Your Conversations</h2>
+            <h2><FaComments className="threads-header-icon" /> Your Conversations</h2>
             <button 
               className="refresh-button" 
               onClick={fetchUserThreads} 
               title="Refresh threads"
+              aria-label="Refresh conversations"
             >
               <FaSync />
             </button>
@@ -586,11 +636,13 @@ function SupportAskAnythingPage() {
               value={newThreadSubject}
               onChange={(e) => setNewThreadSubject(e.target.value)}
               className="create-thread-input"
+              aria-label="New conversation subject"
             />
             <button 
               className="create-thread-button" 
               onClick={createNewThread}
               disabled={!newThreadSubject.trim()}
+              aria-label="Create new conversation"
             >
               <FaPlus />
               <span>Create</span>
@@ -600,7 +652,7 @@ function SupportAskAnythingPage() {
           <div className="threads-list-container">
             {loadingThreads ? (
               <div className="threads-loading">
-                <FaHourglassHalf className="loading-icon" />
+                <FaCircleNotch className="loading-icon spin" />
                 <span>Loading conversations...</span>
               </div>
             ) : threads.length === 0 ? (
@@ -611,28 +663,32 @@ function SupportAskAnythingPage() {
               </div>
             ) : (
               <ul className="threads-list">
-                {threads.map((thread) => (
-                  <li 
-                    key={thread._id}
-                    className={`thread-item ${selectedThreadId === thread._id ? 'thread-item-active' : ''} ${thread.status?.toLowerCase() === 'closed' ? 'thread-item-closed' : ''}`}
-                    onClick={() => selectThread(thread._id)}
-                  >
-                    <div className="thread-item-header">
-                      <span className="thread-status-indicator">
-                        {getStatusIcon(thread.status)}
-                      </span>
-                      <h3 className="thread-subject">{thread.subject}</h3>
-                    </div>
-                    <div className="thread-item-footer">
-                      <span className="thread-status">
-                        {thread.status || 'open'}
-                      </span>
-                      <span className="thread-timestamp">
-                        {thread.lastUpdated ? formatTimestamp(thread.lastUpdated) : 'New'}
-                      </span>
-                    </div>
-                  </li>
-                ))}
+                {threads.map((thread) => {
+                  const statusInfo = getStatusInfo(thread.status);
+                  
+                  return (
+                    <li 
+                      key={thread._id}
+                      className={`thread-item ${selectedThreadId === thread._id ? 'thread-item-active' : ''} ${thread.status?.toLowerCase() === 'closed' ? 'thread-item-closed' : ''}`}
+                      onClick={() => selectThread(thread._id)}
+                    >
+                      <div className="thread-item-header">
+                        <span className={`thread-status-indicator ${statusInfo.className}`}>
+                          {statusInfo.icon}
+                        </span>
+                        <h3 className="thread-subject">{thread.subject}</h3>
+                      </div>
+                      <div className="thread-item-footer">
+                        <span className={`thread-status ${statusInfo.className}`}>
+                          {statusInfo.label}
+                        </span>
+                        <span className="thread-timestamp">
+                          {thread.lastUpdated ? formatTimestamp(thread.lastUpdated) : 'New'}
+                        </span>
+                      </div>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
@@ -649,20 +705,35 @@ function SupportAskAnythingPage() {
           ) : (
             <>
               <div className="messages-header">
+                <button 
+                  className="messages-back-button"
+                  onClick={handleBackToThreads}
+                  aria-label="Back to conversations"
+                >
+                  <FaArrowLeft />
+                </button>
+                
                 <div className="selected-thread-info">
-                  <span className="selected-thread-status">
-                    {getStatusIcon(selectedThread?.status)}
-                  </span>
-                  <h2>{selectedThread?.subject}</h2>
+                  {selectedThread && (
+                    <>
+                      <span className={`selected-thread-status ${getStatusInfo(selectedThread.status).className}`}>
+                        {getStatusInfo(selectedThread.status).icon}
+                      </span>
+                      <h2>{selectedThread.subject}</h2>
+                    </>
+                  )}
                 </div>
+                
                 <div className="messages-actions">
-                  {!isThreadClosed && (
+                  {!isThreadClosed && selectedThread && (
                     <button 
                       className="close-thread-button" 
                       onClick={closeThread}
                       title="Close conversation"
+                      aria-label="Close conversation"
                     >
-                      Close Thread
+                      <FaLock />
+                      <span>Close</span>
                     </button>
                   )}
                 </div>
@@ -671,11 +742,12 @@ function SupportAskAnythingPage() {
               <div className="messages-container">
                 {loadingMessages ? (
                   <div className="messages-loading">
-                    <FaHourglassHalf className="loading-icon spin" />
+                    <FaCircleNotch className="loading-icon spin" />
                     <span>Loading messages...</span>
                   </div>
                 ) : messages.length === 0 ? (
                   <div className="messages-empty">
+                    <FaCommentDots className="empty-messages-icon" />
                     <p>No messages in this conversation yet</p>
                     <p className="empty-hint">Start the conversation by sending a message</p>
                   </div>
@@ -690,18 +762,30 @@ function SupportAskAnythingPage() {
                           key={index}
                           className={`message ${isUser ? 'message-user' : isSystem ? 'message-system' : 'message-admin'}`}
                         >
-                          {!isSystem && (
-                            <div className="message-sender">
-                              {isUser ? 'You' : 'Support Team'}
-                            </div>
-                          )}
-                          
-                          <div className="message-content">
-                            {message.content}
+                          <div className="message-avatar">
+                            {isUser ? (
+                              <FaUser className="avatar-icon user" />
+                            ) : isSystem ? (
+                              <FaRobot className="avatar-icon system" />
+                            ) : (
+                              <FaCrown className="avatar-icon admin" />
+                            )}
                           </div>
                           
-                          <div className="message-timestamp">
-                            {formatTimestamp(message.timestamp)}
+                          <div className="message-bubble">
+                            {!isSystem && (
+                              <div className="message-sender">
+                                {isUser ? 'You' : 'Support Team'}
+                              </div>
+                            )}
+                            
+                            <div className="message-content">
+                              {message.content}
+                            </div>
+                            
+                            <div className="message-timestamp">
+                              {formatTimestamp(message.timestamp)}
+                            </div>
                           </div>
                         </div>
                       );
@@ -709,12 +793,15 @@ function SupportAskAnythingPage() {
                     
                     {adminIsTyping && (
                       <div className="admin-typing-indicator">
-                        <div className="typing-dots">
-                          <span></span>
-                          <span></span>
-                          <span></span>
+                        <FaCrown className="avatar-icon admin" />
+                        <div className="typing-bubble">
+                          <div className="typing-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                          </div>
+                          <span className="typing-text">Support Team is typing...</span>
                         </div>
-                        <span>Support Team is typing...</span>
                       </div>
                     )}
                     
@@ -726,7 +813,8 @@ function SupportAskAnythingPage() {
               <div className="message-input-container">
                 {isThreadClosed ? (
                   <div className="thread-closed-notice">
-                    This conversation is closed. You can create a new one if needed.
+                    <FaLock className="thread-closed-icon" />
+                    <span>This conversation is closed. You can create a new one if needed.</span>
                   </div>
                 ) : (
                   <>
@@ -738,12 +826,15 @@ function SupportAskAnythingPage() {
                       onChange={handleTyping}
                       onKeyDown={handleKeyDown}
                       disabled={isThreadClosed}
+                      aria-label="Message input"
+                      rows={3}
                     />
                     
                     <button 
                       className="send-message-button" 
                       onClick={sendMessage}
                       disabled={!userMessage.trim() || isThreadClosed}
+                      aria-label="Send message"
                     >
                       <FaPaperPlane />
                     </button>
