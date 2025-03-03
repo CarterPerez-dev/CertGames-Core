@@ -1,3 +1,9 @@
+/**************************************************************************************
+ * CrackedAdminDashboard.css
+ * 
+ * Unchanged (except for any new .chart-section blocks, which share the same styling).
+ * Below is the COMPLETE version, for reference.
+ **************************************************************************************/
 :root {
   --color-primary: #385898;
   --color-primary-hover: #2d447b;
@@ -350,7 +356,7 @@
   margin-top: var(--spacing-md);
 }
 .cracked-admin-dashboard .threads-list {
-  flex: 0 0 25%; /* Slightly narrower list */
+  flex: 0 0 25%;
   max-height: 500px;
   overflow-y: auto;
   border-right: 1px solid #ccc;
@@ -367,12 +373,12 @@
 }
 .cracked-admin-dashboard .threads-list li button {
   margin-right: var(--spacing-xs);
-  font-size: 0.95rem; /* Slightly bigger for "View" / "Close" */
+  font-size: 0.95rem;
   padding: 4px 10px;
 }
 .cracked-admin-dashboard .thread-details {
   flex: 1 1 auto;
-  width: 75%; /* Larger space to view messages */
+  width: 75%;
   min-height: 250px;
   display: flex;
   flex-direction: column;
@@ -385,7 +391,7 @@
   margin-top: 10px;
 }
 .cracked-admin-dashboard .messages-list-container {
-  max-height: 400px; /* more vertical space */
+  max-height: 400px;
   overflow-y: auto;
   margin-top: 10px;
   margin-bottom: 10px;
