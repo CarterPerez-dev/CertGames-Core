@@ -3,19 +3,19 @@
 :root {
   --profile-bg-dark: #0c0e14;
   --profile-bg-card: #171a23;
-  --profile-accent: #b30000;
-  --profile-accent-glow: #990000;
-  --profile-accent-secondary: #990000;
-  --profile-border: #000;
+  --profile-accent: #6543cc;
+  --profile-accent-glow: #8a58fc;
+  --profile-accent-secondary: #ff4c8b;
+  --profile-border: #2a2c3d;
   --profile-text: #e2e2e2;
   --profile-text-secondary: #9da8b9;
   --profile-success: #2ebb77;
   --profile-error: #ff4e4e;
   --profile-warning: #ffc107;
-  --profile-gradient-primary: #990000;
+  --profile-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
   --profile-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
   --profile-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --profile-glow: 0 0 15px #990000;
+  --profile-glow: 0 0 15px rgba(134, 88, 252, 0.5);
 }
 
 /* Main container for the entire profile page */
