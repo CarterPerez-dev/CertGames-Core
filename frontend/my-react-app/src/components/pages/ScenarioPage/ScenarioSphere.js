@@ -2,74 +2,62 @@ import React, { useState, useRef, useEffect } from 'react';
 import './ScenarioSphere.css';
 import { ATTACK_TYPES } from './attacks';
 import { 
-  FaGlobeAmericas, 
-  FaSkull, 
+  FaRandom, 
+  FaDatabase, 
   FaUserNinja, 
-  FaThermometerHalf, 
-  FaPaperPlane,
-  FaCheck,
-  FaTimes,
+  FaFire, 
+  FaPlay,
+  FaCog, 
+  FaCheckCircle, 
+  FaTimesCircle, 
   FaLightbulb,
-  FaSpinner,
-  FaCaretDown,
-  FaSearch,
   FaChevronDown,
+  FaSearch,
+  FaBuilding,
+  FaSkull,
+  FaUserSecret,
+  FaThermometerHalf,
+  FaSpinner,
   FaChevronUp,
-  FaInfoCircle,
+  FaClipboardCheck,
   FaQuestionCircle,
+  FaArrowRight,
+  FaShieldAlt,
+  FaLock,
   FaExclamationTriangle
 } from 'react-icons/fa';
 
 const ENDPOINT = "/api";
 
 const ScenarioSphere = () => {
-  // Main state
   const [isGenerating, setIsGenerating] = useState(false);
   const [industry, setIndustry] = useState("Finance");
   const [attackType, setAttackType] = useState("");
   const [skillLevel, setSkillLevel] = useState("Script Kiddie");
   const [threatIntensity, setThreatIntensity] = useState(50);
 
-  // Output state
   const [scenarioText, setScenarioText] = useState("");
   const [interactiveQuestions, setInteractiveQuestions] = useState([]);
   const [userAnswers, setUserAnswers] = useState({});
   const [feedback, setFeedback] = useState({});
-  const [generationProgress, setGenerationProgress] = useState(0);
-  const [generationStage, setGenerationStage] = useState('');
 
-  // Suggestion system state
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeSuggestionIndex, setActiveSuggestionIndex] = useState(-1);
   const [showAllSuggestions, setShowAllSuggestions] = useState(false);
-  
-  // Visual state
-  const [showScenarioCard, setShowScenarioCard] = useState(false);
-  const [fadeInCard, setFadeInCard] = useState(false);
-  const [showQuestionsSection, setShowQuestionsSection] = useState(false);
-  const [expandedSections, setExpandedSections] = useState({});
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // Refs
   const suggestionsRef = useRef(null);
-  const outputRef = useRef(null);
-  const questionsRef = useRef(null);
+  const scenarioOutputRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [scoreCounter, setScoreCounter] = useState(0);
 
-  // Section management
-  const toggleSectionExpansion = (sectionName) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionName]: !prev[sectionName]
-    }));
-  };
+  // New state for UI enhancements
+  const [outputExpanded, setOutputExpanded] = useState(true);
+  const [questionsExpanded, setQuestionsExpanded] = useState(true);
+  const [generationComplete, setGenerationComplete] = useState(false);
+  const [scenarioGenerated, setScenarioGenerated] = useState(false);
 
-  const isSectionExpanded = (sectionName) => {
-    return expandedSections[sectionName] !== false;
-  };
-
-  // Handle clicks outside the suggestions dropdown
   useEffect(() => {
+    // Handle clicking outside the suggestions dropdown
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setShowSuggestions(false);
@@ -84,25 +72,18 @@ const ScenarioSphere = () => {
     };
   }, []);
 
-  // Scroll to output when generation starts
+  // Scroll to scenario output when it changes
   useEffect(() => {
-    if (isGenerating && outputRef.current) {
-      outputRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scenarioText && scenarioOutputRef.current && isGenerating) {
+      scenarioOutputRef.current.scrollTop = scenarioOutputRef.current.scrollHeight;
     }
-  }, [isGenerating]);
+  }, [scenarioText, isGenerating]);
 
-  // Scroll to questions when they appear
-  useEffect(() => {
-    if (interactiveQuestions.length > 0 && questionsRef.current) {
-      questionsRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [showQuestionsSection]);
-
-  // Handle attack type input changes and suggestions
   const handleAttackTypeChange = (e) => {
     const userInput = e.target.value;
     setAttackType(userInput);
     setShowAllSuggestions(false);
+    setErrorMessage("");
 
     if (userInput.length > 0) {
       const filteredSuggestions = ATTACK_TYPES.filter(
@@ -117,18 +98,19 @@ const ScenarioSphere = () => {
     setActiveSuggestionIndex(-1);
   };
 
-  // Show all suggestions
   const handleShowAllSuggestionsClick = () => {
     setShowAllSuggestions(true);
   };
 
-  // Handle keyboard navigation in suggestion dropdown
   const handleKeyDown = (e) => {
     if (showSuggestions) {
       if (e.key === 'ArrowDown') {
-        if (activeSuggestionIndex < (showAllSuggestions
-          ? suggestions.length - 1
-          : Math.min(suggestions.length, 10) - 1)) {
+        if (
+          activeSuggestionIndex <
+          (showAllSuggestions
+            ? suggestions.length - 1
+            : Math.min(suggestions.length, 10) - 1)
+        ) {
           setActiveSuggestionIndex(activeSuggestionIndex + 1);
         }
       } else if (e.key === 'ArrowUp') {
@@ -136,10 +118,13 @@ const ScenarioSphere = () => {
           setActiveSuggestionIndex(activeSuggestionIndex - 1);
         }
       } else if (e.key === 'Enter') {
-        if (activeSuggestionIndex >= 0 &&
-            activeSuggestionIndex < (showAllSuggestions
+        if (
+          activeSuggestionIndex >= 0 &&
+          activeSuggestionIndex <
+            (showAllSuggestions
               ? suggestions.length
-              : Math.min(suggestions.length, 10))) {
+              : Math.min(suggestions.length, 10))
+        ) {
           setAttackType(suggestions[activeSuggestionIndex]);
           setSuggestions([]);
           setShowSuggestions(false);
@@ -155,51 +140,22 @@ const ScenarioSphere = () => {
     }
   };
 
-  // Generate the scenario
   const handleGenerateScenario = () => {
-    // Input validation
     if (!attackType.trim()) {
-      setErrorMessage("Please enter an Attack Type before generating.");
-      setTimeout(() => setErrorMessage(""), 5000);
+      setErrorMessage("Please enter the Type of Attack");
       return;
     }
-    
-    // Reset state and start generation
+
+    setErrorMessage("");
     setIsGenerating(true);
     setScenarioText("");
     setInteractiveQuestions([]);
     setUserAnswers({});
     setFeedback({});
-    setGenerationProgress(0);
-    setGenerationStage('Initializing scenario...');
-    setShowQuestionsSection(false);
-    setErrorMessage("");
-    
-    // Show the output card immediately for streaming
-    setShowScenarioCard(true);
-    setFadeInCard(true);
-    
-    // Start the simulation of progress
-    const progressInterval = setInterval(() => {
-      setGenerationProgress(prev => {
-        const newProgress = prev + (Math.random() * 5);
-        
-        // Update status messages at different stages
-        if (newProgress > 15 && newProgress < 20) {
-          setGenerationStage('Analyzing threat vectors...');
-        } else if (newProgress > 40 && newProgress < 45) {
-          setGenerationStage('Constructing attack narrative...');
-        } else if (newProgress > 60 && newProgress < 65) {
-          setGenerationStage('Developing technical details...');
-        } else if (newProgress > 80 && newProgress < 85) {
-          setGenerationStage('Finalizing scenario...');
-        }
-        
-        return Math.min(newProgress, 95); // Cap at 95% until complete
-      });
-    }, 300);
+    setScoreCounter(0);
+    setScenarioGenerated(true);
+    setGenerationComplete(false);
 
-    // Prepare request data
     const data = {
       industry,
       attack_type: attackType,
@@ -207,7 +163,6 @@ const ScenarioSphere = () => {
       threat_intensity: threatIntensity,
     };
 
-    // Make the API request
     fetch(`${ENDPOINT}/scenario/stream_scenario`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -216,39 +171,24 @@ const ScenarioSphere = () => {
       .then((response) => {
         if (!response.ok) {
           setIsGenerating(false);
-          clearInterval(progressInterval);
           return response.text().then((text) => {
             setErrorMessage(`Error: ${text}`);
-            setTimeout(() => setErrorMessage(""), 7000);
           });
         }
-        
-        // Set up streaming
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+
         let scenarioAccumulator = "";
 
         function readChunk() {
           reader.read().then(({ done, value }) => {
             if (done) {
-              // Complete generation
-              clearInterval(progressInterval);
-              setGenerationProgress(100);
-              setGenerationStage('Scenario complete!');
               setIsGenerating(false);
+              setGenerationComplete(true);
               setScenarioText(scenarioAccumulator.trim());
-              
-              // Scroll to output if not already visible
-              if (outputRef.current) {
-                outputRef.current.scrollIntoView({ behavior: 'smooth' });
-              }
-              
-              // Fetch questions
               fetchQuestions(scenarioAccumulator.trim());
               return;
             }
-            
-            // Update with new chunk
             const chunk = decoder.decode(value, { stream: true });
             scenarioAccumulator += chunk;
             setScenarioText(scenarioAccumulator);
@@ -260,18 +200,13 @@ const ScenarioSphere = () => {
       })
       .catch((err) => {
         console.error(err);
-        setErrorMessage("An error occurred while generating the scenario. Please try again.");
-        setTimeout(() => setErrorMessage(""), 7000);
-        clearInterval(progressInterval);
+        setErrorMessage("An error occurred while streaming scenario");
         setIsGenerating(false);
       });
   };
 
-  // Fetch interactive questions
   const fetchQuestions = (finalScenarioText) => {
     if (!finalScenarioText) return;
-    
-    setGenerationStage('Generating interactive questions...');
 
     const data = { scenario_text: finalScenarioText };
 
@@ -283,8 +218,6 @@ const ScenarioSphere = () => {
       .then((response) => {
         if (!response.ok) {
           console.error("Error fetching questions.");
-          setErrorMessage("Failed to generate interactive questions. The scenario is still available.");
-          setTimeout(() => setErrorMessage(""), 7000);
           return response.text().then((t) => console.error(t));
         }
 
@@ -296,34 +229,29 @@ const ScenarioSphere = () => {
           reader.read().then(({ done, value }) => {
             if (done) {
               try {
+                console.log("Accumulated Questions JSON:", jsonAccumulator); 
+
                 const parsed = JSON.parse(jsonAccumulator);
+
                 if (Array.isArray(parsed)) {
                   const errorObj = parsed.find(q => q.error);
                   if (errorObj) {
                     console.error("Error in questions generation:", errorObj.error);
                     setErrorMessage(`Error generating questions: ${errorObj.error}`);
-                    setTimeout(() => setErrorMessage(""), 7000);
                   } else if (parsed.length === 3) {
                     setInteractiveQuestions(parsed);
-                    // Animate questions section appearance
-                    setTimeout(() => {
-                      setShowQuestionsSection(true);
-                    }, 1000);
                   } else {
                     console.error("Expected exactly 3 questions, but received:", parsed);
-                    setErrorMessage("Unexpected number of questions received.");
-                    setTimeout(() => setErrorMessage(""), 7000);
+                    setErrorMessage("Unexpected number of questions received");
                   }
                 } else {
                   console.error("Parsed questions are not in an array format.");
-                  setErrorMessage("Invalid format for interactive questions.");
-                  setTimeout(() => setErrorMessage(""), 7000);
+                  setErrorMessage("Invalid format for interactive questions");
                 }
               } catch (e) {
                 console.error("Failed to parse question JSON:", e);
                 console.error("Received text:", jsonAccumulator);
-                setErrorMessage("An error occurred while parsing the questions.");
-                setTimeout(() => setErrorMessage(""), 7000);
+                setErrorMessage("An error occurred while parsing interactive questions");
               }
               return;
             }
@@ -336,13 +264,15 @@ const ScenarioSphere = () => {
       })
       .catch((error) => {
         console.error("Error streaming questions:", error);
-        setErrorMessage("Failed to load interactive questions.");
-        setTimeout(() => setErrorMessage(""), 7000);
+        setErrorMessage("Error streaming questions");
       });
   };
 
-  // Handle answer selection
   const handleAnswerSelect = (questionIndex, selectedOption) => {
+    if (userAnswers.hasOwnProperty(questionIndex)) {
+      return; // Already answered
+    }
+    
     const question = interactiveQuestions[questionIndex];
     const isCorrect = selectedOption === question.correct_answer;
 
@@ -358,19 +288,24 @@ const ScenarioSphere = () => {
         explanation: question.explanation,
       },
     }));
+    
+    // Update score counter if correct
+    if (isCorrect) {
+      setScoreCounter(prev => prev + 1);
+    }
   };
 
-  // Render interactive questions
   const renderQuestions = () => {
-    if (!interactiveQuestions || interactiveQuestions.length === 0) return null;
-    
     return interactiveQuestions.map((question, index) => (
-      <div key={index} className="scenario-question-card">
+      <div key={index} className="question-card">
         <div className="question-header">
           <span className="question-number">Question {index + 1}</span>
           {feedback[index] && (
             <span className={`question-status ${feedback[index].isCorrect ? 'correct' : 'incorrect'}`}>
-              {feedback[index].isCorrect ? <FaCheck /> : <FaTimes />}
+              {feedback[index].isCorrect ? 
+                <><FaCheckCircle /> Correct</> : 
+                <><FaTimesCircle /> Incorrect</>
+              }
             </span>
           )}
         </div>
@@ -380,62 +315,32 @@ const ScenarioSphere = () => {
         <div className="options-container">
           {Object.entries(question.options).map(([optionLetter, optionText]) => {
             const isSelected = userAnswers[index] === optionLetter;
-            const showCorrectHighlight = feedback[index] && question.correct_answer === optionLetter;
-            const showIncorrectHighlight = feedback[index] && isSelected && !feedback[index].isCorrect;
+            const showCorrect = feedback[index] && question.correct_answer === optionLetter;
+            const showIncorrect = feedback[index] && isSelected && !feedback[index].isCorrect;
             
             return (
-              <label 
+              <button 
                 key={optionLetter} 
-                className={`option-label ${isSelected ? 'selected' : ''} 
-                           ${showCorrectHighlight ? 'correct' : ''} 
-                           ${showIncorrectHighlight ? 'incorrect' : ''}`}
+                className={`option-button ${isSelected ? 'selected' : ''} ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''}`}
+                onClick={() => handleAnswerSelect(index, optionLetter)}
+                disabled={userAnswers.hasOwnProperty(index)}
               >
-                <input
-                  type="radio"
-                  name={`question-${index}`}
-                  value={optionLetter}
-                  checked={isSelected}
-                  onChange={() => handleAnswerSelect(index, optionLetter)}
-                  disabled={userAnswers.hasOwnProperty(index)}
-                  className="option-radio"
-                />
-                <span className="option-marker">{optionLetter}</span>
+                <span className="option-letter">{optionLetter}</span>
                 <span className="option-text">{optionText}</span>
-                
-                {showCorrectHighlight && (
-                  <span className="option-icon correct">
-                    <FaCheck />
-                  </span>
-                )}
-                
-                {showIncorrectHighlight && (
-                  <span className="option-icon incorrect">
-                    <FaTimes />
-                  </span>
-                )}
-              </label>
+                {showCorrect && <FaCheckCircle className="option-icon correct" />}
+                {showIncorrect && <FaTimesCircle className="option-icon incorrect" />}
+              </button>
             );
           })}
         </div>
         
         {feedback[index] && (
-          <div className={`feedback-container ${feedback[index].isCorrect ? 'correct' : 'incorrect'}`}>
-            <div className="feedback-header">
-              {feedback[index].isCorrect ? (
-                <>
-                  <FaCheck className="feedback-icon" />
-                  <span>Correct Answer!</span>
-                </>
-              ) : (
-                <>
-                  <FaTimes className="feedback-icon" />
-                  <span>Incorrect Answer</span>
-                </>
-              )}
+          <div className="feedback-container">
+            <div className="feedback-icon">
+              <FaLightbulb />
             </div>
-            <div className="feedback-explanation">
-              <FaLightbulb className="explanation-icon" />
-              <p>{feedback[index].explanation}</p>
+            <div className="feedback-content">
+              <p className="feedback-explanation">{feedback[index].explanation}</p>
             </div>
           </div>
         )}
@@ -443,104 +348,99 @@ const ScenarioSphere = () => {
     ));
   };
 
-  // Get intensity color based on value
-  const getIntensityColor = (value) => {
-    if (value < 25) return 'low';
-    if (value < 50) return 'medium-low';
-    if (value < 75) return 'medium-high';
-    return 'high';
+  // Calculate progress based on number of paragraphs
+  const calculateStreamProgress = () => {
+    if (!scenarioText) return 0;
+    
+    // Roughly estimate progress by counting paragraphs
+    const paragraphs = scenarioText.split('\n\n').filter(p => p.trim().length > 0);
+    // Typical scenario has about 5 paragraphs
+    return Math.min(Math.ceil((paragraphs.length / 5) * 100), 90);
   };
 
-  // Score calculation
-  const calculateScore = () => {
-    if (Object.keys(feedback).length === 0) return null;
-    
-    const totalAnswered = Object.keys(feedback).length;
-    const correctCount = Object.values(feedback).filter(f => f.isCorrect).length;
-    const percentage = Math.round((correctCount / totalAnswered) * 100);
-    
-    return {
-      answered: totalAnswered,
-      correct: correctCount,
-      total: interactiveQuestions.length,
-      percentage
-    };
-  };
-
-  const score = calculateScore();
+  const streamProgress = calculateStreamProgress();
 
   return (
     <div className="scenario-container">
-      {/* Error message popup */}
-      {errorMessage && (
-        <div className="scenario-error-popup">
-          <FaExclamationTriangle className="error-icon" />
-          <span>{errorMessage}</span>
-          <button onClick={() => setErrorMessage("")}>
-            <FaTimes />
-          </button>
-        </div>
-      )}
-    
-      {/* Header section */}
       <div className="scenario-header">
-        <h1 className="scenario-title">Scenario Sphere</h1>
-        <p className="scenario-subtitle">Generate realistic cybersecurity attack scenarios and test your knowledge</p>
-      </div>
-      
-      {/* Generator controls card */}
-      <div className="scenario-generator-card">
-        <div className="scenario-card-header">
-          <h2 className="scenario-card-title">Scenario Generator</h2>
+        <div className="scenario-title-container">
+          <h1 className="scenario-title">
+            <FaShieldAlt className="scenario-title-icon" />
+            Scenario Sphere
+          </h1>
+          <p className="scenario-subtitle">Immerse yourself in realistic cybersecurity scenarios and test your knowledge</p>
         </div>
         
-        <div className="scenario-controls-grid">
-          {/* Industry selector */}
-          <div className="scenario-control">
-            <label htmlFor="industry-select" className="scenario-label">
-              <FaGlobeAmericas className="scenario-input-icon" />
-              <span>Industry</span>
-            </label>
-            <div className="scenario-select-wrapper">
-              <select
-                id="industry-select"
-                className="scenario-select"
-                value={industry}
-                onChange={(e) => setIndustry(e.target.value)}
-                disabled={isGenerating}
-              >
-                <option value="Finance">Finance</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Retail">Retail</option>
-                <option value="Technology">Technology</option>
-                <option value="Energy">Energy</option>
-                <option value="Education">Education</option>
-                <option value="Supply Chain">Supply Chain</option>
-                <option value="Telecommunications">Telecommunications</option>
-                <option value="Pharmaceutical">Pharmaceutical</option>
-                <option value="Transportation">Transportation</option>
-                <option value="Cybersecurity Company">Cybersecurity Company</option>
-                <option value="Manufacturing">Manufacturing</option>
-                <option value="CYBERPUNK2077">CYBERPUNK2077</option>
-              </select>
-              <FaCaretDown className="select-icon" />
+        {errorMessage && (
+          <div className="scenario-error">
+            <FaExclamationTriangle className="error-icon" />
+            <span>{errorMessage}</span>
+            <button 
+              className="error-close" 
+              onClick={() => setErrorMessage("")}
+            >
+              <FaTimes />
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="scenario-content">
+        <div className="scenario-params-card">
+          <div className="params-header">
+            <h2><FaCog className="params-icon" /> Generation Parameters</h2>
+            
+            <div className="scenario-score-display">
+              <div className="score-counter">
+                <span>{scoreCounter}</span>
+                <span>/3</span>
+              </div>
+              <span className="score-label">Correct</span>
             </div>
           </div>
           
-          {/* Attack type input with suggestions */}
-          <div className="scenario-control">
-            <label htmlFor="attack-type-input" className="scenario-label">
-              <FaSkull className="scenario-input-icon" />
-              <span>Attack Type</span>
-            </label>
-            <div className="scenario-input-wrapper" ref={suggestionsRef}>
-              <div className="scenario-search-wrapper">
-                <FaSearch className="search-icon" />
+          <div className="params-content">
+            <div className="param-group">
+              <label htmlFor="industry-select">
+                <FaBuilding className="param-icon" />
+                Industry
+              </label>
+              <div className="select-wrapper">
+                <select
+                  id="industry-select"
+                  value={industry}
+                  onChange={(e) => setIndustry(e.target.value)}
+                  disabled={isGenerating}
+                >
+                  <option value="Finance">Finance</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Retail">Retail</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Energy">Energy</option>
+                  <option value="Education">Education</option>
+                  <option value="Supply Chain">Supply Chain</option>
+                  <option value="Telecommunications">Telecommunications</option>
+                  <option value="Pharmaceutical">Pharmaceutical</option>
+                  <option value="Transportation">Transportation</option>
+                  <option value="Cybersecurity Company">Cybersecurity Company</option>
+                  <option value="Manufacturing">Manufacturing</option>
+                  <option value="CYBERPUNK2077">CYBERPUNK2077</option>
+                </select>
+                <FaChevronDown className="select-arrow" />
+              </div>
+            </div>
+
+            <div className="param-group" ref={suggestionsRef}>
+              <label htmlFor="attack-type-input">
+                <FaSkull className="param-icon" />
+                Attack Type
+              </label>
+              <div className="input-wrapper">
+                <FaSearch className="input-icon" />
                 <input
                   id="attack-type-input"
                   type="text"
-                  className="scenario-input"
-                  placeholder="Enter or select attack type..."
+                  placeholder="Search or enter attack type..."
                   value={attackType}
                   onChange={handleAttackTypeChange}
                   onKeyDown={handleKeyDown}
@@ -551,279 +451,193 @@ const ScenarioSphere = () => {
                   }}
                   disabled={isGenerating}
                 />
-              </div>
-              
-              {showSuggestions && suggestions.length > 0 && (
-                <ul className="scenario-suggestions-list">
-                  {(showAllSuggestions ? suggestions : suggestions.slice(0, 10)).map(
-                    (suggestion, index) => (
-                      <li
-                        key={suggestion}
-                        className={`suggestion-item ${index === activeSuggestionIndex ? 'suggestion-active' : ''}`}
-                        onClick={() => {
-                          setAttackType(suggestion);
-                          setSuggestions([]);
-                          setShowSuggestions(false);
-                          setActiveSuggestionIndex(-1);
-                          setShowAllSuggestions(false);
-                        }}
-                      >
-                        {suggestion}
-                      </li>
-                    )
-                  )}
-                  {!showAllSuggestions && suggestions.length > 10 && (
-                    <li className="suggestion-show-all" onClick={handleShowAllSuggestionsClick}>
-                      Show all {suggestions.length} options
-                    </li>
-                  )}
-                </ul>
-              )}
-            </div>
-          </div>
-          
-          {/* Skill level selector */}
-          <div className="scenario-control">
-            <label htmlFor="skill-level-select" className="scenario-label">
-              <FaUserNinja className="scenario-input-icon" />
-              <span>Attacker Skill Level</span>
-            </label>
-            <div className="scenario-select-wrapper">
-              <select
-                id="skill-level-select"
-                className="scenario-select"
-                value={skillLevel}
-                onChange={(e) => setSkillLevel(e.target.value)}
-                disabled={isGenerating}
-              >
-                <option value="Script Kiddie">Script Kiddie</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-                <option value="APT">APT (Advanced Persistent Threat)</option>
-              </select>
-              <FaCaretDown className="select-icon" />
-            </div>
-          </div>
-          
-          {/* Threat intensity slider */}
-          <div className="scenario-control">
-            <label htmlFor="threat-intensity-slider" className="scenario-label">
-              <FaThermometerHalf className="scenario-input-icon" />
-              <span>Threat Intensity</span>
-            </label>
-            <div className="scenario-slider-container">
-              <input
-                id="threat-intensity-slider"
-                type="range"
-                min="1"
-                max="100"
-                className={`scenario-slider scenario-slider-${getIntensityColor(threatIntensity)}`}
-                value={threatIntensity}
-                onChange={(e) => setThreatIntensity(e.target.value)}
-                disabled={isGenerating}
-              />
-              <div className="scenario-slider-labels">
-                <span>Low</span>
-                <span className="scenario-slider-value">{threatIntensity}</span>
-                <span>High</span>
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="suggestions-dropdown">
+                    <ul className="suggestions-list">
+                      {(showAllSuggestions ? suggestions : suggestions.slice(0, 10)).map(
+                        (suggestion, index) => (
+                          <li
+                            key={suggestion}
+                            className={index === activeSuggestionIndex ? 'active' : ''}
+                            onClick={() => {
+                              setAttackType(suggestion);
+                              setSuggestions([]);
+                              setShowSuggestions(false);
+                              setActiveSuggestionIndex(-1);
+                              setShowAllSuggestions(false);
+                            }}
+                          >
+                            {suggestion}
+                          </li>
+                        )
+                      )}
+                      {!showAllSuggestions && suggestions.length > 10 && (
+                        <li
+                          className="show-all-suggestions"
+                          onClick={handleShowAllSuggestionsClick}
+                        >
+                          <FaChevronDown /> Show all options ({suggestions.length})
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Generate button */}
-        <div className="scenario-generate-container">
-          <button
-            className="scenario-generate-button"
-            onClick={handleGenerateScenario}
-            disabled={isGenerating}
-          >
-            {isGenerating ? (
-              <>
-                <FaSpinner className="spin-icon" />
-                <span>Generating...</span>
-              </>
-            ) : (
-              <>
-                <FaPaperPlane />
-                <span>Generate Scenario</span>
-              </>
-            )}
-          </button>
-          
-          {/* Generation progress */}
-          {isGenerating && (
-            <div className="scenario-progress-container">
-              <div className="scenario-progress-bar">
-                <div 
-                  className="scenario-progress-fill" 
-                  style={{ width: `${generationProgress}%` }}
-                ></div>
-              </div>
-              <div className="scenario-progress-text">
-                <span>{generationStage}</span>
-                <span>{Math.round(generationProgress)}%</span>
+
+            <div className="param-group">
+              <label htmlFor="skill-level-select">
+                <FaUserSecret className="param-icon" />
+                Attacker Skill Level
+              </label>
+              <div className="select-wrapper">
+                <select
+                  id="skill-level-select"
+                  value={skillLevel}
+                  onChange={(e) => setSkillLevel(e.target.value)}
+                  disabled={isGenerating}
+                >
+                  <option value="Script Kiddie">Script Kiddie</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                  <option value="APT">APT</option>
+                </select>
+                <FaChevronDown className="select-arrow" />
               </div>
             </div>
-          )}
-        </div>
-      </div>
-      
-      {/* Scenario output section */}
-      <div 
-        ref={outputRef}
-        className={`scenario-output-card ${showScenarioCard ? 'visible' : ''} ${fadeInCard ? 'fade-in' : ''}`}
-      >
-        <div className="scenario-card-header scenario-output-header">
-          <h2 className="scenario-card-title">
-            <span>{isGenerating ? 'Generating Scenario...' : `Scenario: ${industry} + ${attackType}`}</span>
-          </h2>
-          <div className="scenario-card-actions">
-            <button 
-              className="scenario-section-toggle"
-              onClick={() => toggleSectionExpansion('scenario')}
-              aria-label={isSectionExpanded('scenario') ? 'Collapse scenario' : 'Expand scenario'}
+
+            <div className="param-group">
+              <label htmlFor="threat-intensity-slider">
+                <FaThermometerHalf className="param-icon" />
+                Threat Intensity: <span className="intensity-value">{threatIntensity}</span>
+              </label>
+              <div className="slider-wrapper">
+                <input
+                  id="threat-intensity-slider"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value={threatIntensity}
+                  onChange={(e) => setThreatIntensity(e.target.value)}
+                  disabled={isGenerating}
+                />
+                <div className="slider-markers">
+                  <span>Low</span>
+                  <span>Medium</span>
+                  <span>High</span>
+                </div>
+              </div>
+            </div>
+
+            <button
+              className="generate-button"
+              onClick={handleGenerateScenario}
+              disabled={isGenerating}
             >
-              {isSectionExpanded('scenario') ? <FaChevronUp /> : <FaChevronDown />}
+              {isGenerating ? (
+                <>
+                  <FaSpinner className="spinner-icon" />
+                  <span>Generating...</span>
+                </>
+              ) : (
+                <>
+                  <FaPlay className="play-icon" />
+                  <span>Generate Scenario</span>
+                </>
+              )}
             </button>
           </div>
         </div>
-        
-        {isSectionExpanded('scenario') !== false && (
-          <div className="scenario-output-content">
-            <div className="scenario-output-details">
-              <div className="scenario-detail">
-                <span className="detail-label">Industry:</span>
-                <span className="detail-value">{industry}</span>
-              </div>
-              <div className="scenario-detail">
-                <span className="detail-label">Attack:</span>
-                <span className="detail-value">{attackType}</span>
-              </div>
-              <div className="scenario-detail">
-                <span className="detail-label">Skill Level:</span>
-                <span className="detail-value">{skillLevel}</span>
-              </div>
-              <div className="scenario-detail">
-                <span className="detail-label">Intensity:</span>
-                <span className={`detail-value intensity-${getIntensityColor(threatIntensity)}`}>
-                  {threatIntensity}
-                </span>
-              </div>
-            </div>
-            
-            {isGenerating && (
-              <div className="scenario-streaming-indicator">
-                <FaSpinner className="spin-icon" />
-                <span>Streaming content in real-time...</span>
-              </div>
-            )}
-            
-            <div className="scenario-text-container">
-              {scenarioText ? (
-                scenarioText.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="scenario-paragraph">
-                    {paragraph}
-                  </p>
-                ))
-              ) : isGenerating ? (
-                <p className="scenario-paragraph scenario-placeholder">
-                  Waiting for content...
-                </p>
-              ) : (
-                <p className="scenario-paragraph scenario-placeholder">
-                  Select parameters and click "Generate Scenario" to create a custom cybersecurity scenario.
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-      
-      {/* Interactive questions section */}
-      {interactiveQuestions.length > 0 && (
-        <div 
-          ref={questionsRef}
-          className={`scenario-questions-card ${showQuestionsSection ? 'visible' : ''}`}
-        >
-          <div className="scenario-card-header scenario-questions-header">
-            <h2 className="scenario-card-title">Interactive Questions</h2>
-            <div className="scenario-card-actions">
-              <button 
-                className="scenario-section-toggle"
-                onClick={() => toggleSectionExpansion('questions')}
-                aria-label={isSectionExpanded('questions') ? 'Collapse questions' : 'Expand questions'}
+
+        {scenarioGenerated && (
+          <div className="scenario-results">
+            <div className="scenario-output-card">
+              <div 
+                className="output-header"
+                onClick={() => setOutputExpanded(!outputExpanded)}
               >
-                {isSectionExpanded('questions') ? <FaChevronUp /> : <FaChevronDown />}
-              </button>
-            </div>
-          </div>
-          
-          {isSectionExpanded('questions') !== false && (
-            <div className="scenario-questions-content">
-              <div className="scenario-questions-intro">
-                <FaQuestionCircle className="question-intro-icon" />
-                <p>Test your understanding of the scenario by answering these questions:</p>
+                <h2>
+                  <FaLock className="output-icon" />
+                  Generated Scenario
+                </h2>
+                <div className="output-controls">
+                  {!generationComplete && isGenerating && (
+                    <div className="generation-progress">
+                      <div className="progress-bar">
+                        <div 
+                          className="progress-fill" 
+                          style={{ width: `${streamProgress}%` }}
+                        ></div>
+                      </div>
+                      <span className="progress-label">Generating...</span>
+                    </div>
+                  )}
+                  <button className="toggle-button">
+                    {outputExpanded ? <FaChevronUp /> : <FaChevronDown />}
+                  </button>
+                </div>
               </div>
               
-              {/* Score display */}
-              {score && (
-                <div className="scenario-score-container">
-                  <div className="scenario-score-header">
-                    <span>Your Score</span>
-                    <span className="scenario-score-percentage">
-                      {score.percentage}%
-                    </span>
-                  </div>
-                  <div className="scenario-score-details">
-                    <div className="score-detail">
-                      <span>Answered:</span>
-                      <span>{score.answered} of {score.total}</span>
+              {outputExpanded && (
+                <div 
+                  className="output-content"
+                  ref={scenarioOutputRef}
+                >
+                  {scenarioText ? (
+                    <div className="scenario-text">
+                      {scenarioText}
+                      {isGenerating && (
+                        <span className="typing-cursor"></span>
+                      )}
                     </div>
-                    <div className="score-detail">
-                      <span>Correct:</span>
-                      <span>{score.correct} of {score.answered}</span>
+                  ) : (
+                    <div className="scenario-placeholder">
+                      <FaSpinner className={`placeholder-icon ${isGenerating ? 'spinning' : ''}`} />
+                      <p>Scenario will appear here...</p>
                     </div>
-                  </div>
-                  <div 
-                    className={`scenario-score-bar score-${
-                      score.percentage < 40 ? 'low' : 
-                      score.percentage < 70 ? 'medium' : 'high'
-                    }`}
-                  >
-                    <div 
-                      className="scenario-score-fill" 
-                      style={{ width: `${score.percentage}%` }}
-                    ></div>
-                  </div>
+                  )}
                 </div>
               )}
-              
-              <div className="scenario-questions-list">
-                {renderQuestions()}
-              </div>
             </div>
-          )}
-        </div>
-      )}
-      
-      {/* Info card section */}
-      <div className="scenario-info-card">
-        <div className="scenario-info-header">
-          <FaInfoCircle className="info-icon" />
-          <h3>About Scenario Sphere</h3>
-        </div>
-        <div className="scenario-info-content">
-          <p>
-            Scenario Sphere generates realistic cybersecurity attack scenarios based on your selected parameters. 
-            Each scenario includes technical details, actors, risks, and mitigation steps to help you understand 
-            real-world attack vectors and defensive strategies.
-          </p>
-          <p>
-            Answer the interactive questions to test your knowledge and understanding of the scenario.
-            The scenarios are generated using AI and are designed to be educational and thought-provoking.
-          </p>
-        </div>
+
+            {interactiveQuestions.length > 0 && (
+              <div className="scenario-questions-card">
+                <div 
+                  className="questions-header"
+                  onClick={() => setQuestionsExpanded(!questionsExpanded)}
+                >
+                  <h2>
+                    <FaQuestionCircle className="questions-icon" />
+                    Knowledge Assessment
+                  </h2>
+                  <button className="toggle-button">
+                    {questionsExpanded ? <FaChevronUp /> : <FaChevronDown />}
+                  </button>
+                </div>
+                
+                {questionsExpanded && (
+                  <div className="questions-content">
+                    {Object.keys(feedback).length === interactiveQuestions.length && (
+                      <div className="assessment-complete">
+                        <FaClipboardCheck className="complete-icon" />
+                        <div className="assessment-results">
+                          <p className="completion-message">Assessment Complete</p>
+                          <p className="score-message">
+                            You scored {scoreCounter} out of {interactiveQuestions.length} correct
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="questions-list">
+                      {renderQuestions()}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
