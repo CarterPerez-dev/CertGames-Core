@@ -3,16 +3,15 @@ FROM httpd:2.4
 COPY apache_server.conf /usr/local/apache2/conf/extra/
 COPY httpd.conf /usr/local/apache2/conf/httpd.conf
 
-RUN sed -i '/#LoadModule unixd_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
+# Enable modules you need for SetEnv, reverse proxy, etc.
+RUN sed -i '/#LoadModule env_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule proxy_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule proxy_http_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule proxy_wstunnel_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule authz_core_module/s/^#//' /usr/local/apache2/conf/httpd.conf
 
-RUN mkdir -p /usr/local/apache2/logs && chmod -R 777 /usr/local/apache2/logs
-
+RUN mkdir -p /usr/local/apache2/logs && \
+    chmod -R 777 /usr/local/apache2/logs
 
 EXPOSE 8080
-
 CMD ["httpd-foreground"]
-
