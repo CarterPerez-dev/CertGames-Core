@@ -866,7 +866,7 @@ function Home() {
       </div>
 
       <div className="button-container">
-        <button onClick={handleGeneratePayload} className="generate-button">
+        <button onClick={handleGeneratePayload} className="generate-button-xploit">
           Generate Payload
         </button>
         {loading && (
