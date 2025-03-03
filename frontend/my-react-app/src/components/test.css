@@ -1,6 +1,7 @@
 /* ==========================================
    GLOBAL TEST CSS - Modernized & Gamified
    ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 :root {
   --test-bg-dark: #0c0e14;
@@ -921,12 +922,13 @@
 }
 
 .question-text {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.5;
   margin-bottom: 25px;
   padding-bottom: 15px;
   border-bottom: 1px solid var(--test-border);
   color: var(--test-text);
+  font-family: 'Open Sans', sans-serif;
 }
 
 /* Options List */
@@ -992,13 +994,15 @@
   padding: 15px;
   margin-bottom: 25px;
   animation: fadeIn 0.3s ease;
+  font-family: 'Open Sans', sans-serif
 }
 
 .explanation strong {
   display: block;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 17px;
   color: var(--test-success);
+  font-family: 'Open Sans', sans-serif
 }
 
 .explanation strong:contains("Incorrect") {
@@ -1007,9 +1011,10 @@
 
 .explanation p {
   margin: 0;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1.6;
   color: var(--test-text-secondary);
+  font-family: 'Open Sans', sans-serif
 }
 
 /* Bottom Control Bar */
@@ -1404,6 +1409,7 @@
   border: 1px solid var(--test-border);
   border-radius: 10px;
   padding: 20px;
+  font-family: 'Open Sans', sans-serif
 }
 
 .review-question-card h3 {
@@ -1412,6 +1418,7 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
+  font-family: 'Open Sans', sans-serif
 }
 
 .flagged-icon {
@@ -1420,15 +1427,17 @@
 
 .review-question-card p {
   margin: 0 0 10px 0;
-  font-size: 14px;
+  font-size: 1rem;
   line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .review-question-card p:last-child {
   margin-bottom: 0;
   padding-top: 10px;
   border-top: 1px solid var(--test-border);
-  color: var(--test-text-secondary);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2rem;
 }
 
 .close-review-btn {
