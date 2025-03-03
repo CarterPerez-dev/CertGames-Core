@@ -1244,7 +1244,7 @@ const GlobalTestPage = ({
       </div>
 
       <div className="top-bar">
-        <div className="avatar-section">
+        <div className="avatar-section-test">
           <div
             className="avatar-image"
             style={{ backgroundImage: `url(${avatarUrl})` }}
