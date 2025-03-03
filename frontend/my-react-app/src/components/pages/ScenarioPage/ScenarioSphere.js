@@ -84,12 +84,12 @@ const ScenarioSphere = () => {
     };
   }, []);
 
-  // Scroll to output when scenario is generated
+  // Scroll to output when generation starts
   useEffect(() => {
-    if (scenarioText && outputRef.current) {
+    if (isGenerating && outputRef.current) {
       outputRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [showScenarioCard]);
+  }, [isGenerating]);
 
   // Scroll to questions when they appear
   useEffect(() => {
