@@ -1,4 +1,4 @@
-// SimpleLevelUpAnimation.js (Simplified)
+// lvl up animation.(Simplified)
 import React from "react";
 import "./test.css";
 
