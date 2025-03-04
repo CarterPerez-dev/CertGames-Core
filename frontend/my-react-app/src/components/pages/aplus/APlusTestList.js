@@ -175,7 +175,7 @@ const APlusTestList = () => {
     }
   };
 
-  const difficultyCategories10 = [
+  const difficultyCategories = [
     { label: "Normal", color: "#f4f4f4", textColor: "#222222" },             // Slightly off-white
     { label: "Very Easy", color: "#98ff98", textColor: "#003300" },          // Mint green
     { label: "Easy", color: "#d3adf7", textColor: "#301860" },               // Soft purple
