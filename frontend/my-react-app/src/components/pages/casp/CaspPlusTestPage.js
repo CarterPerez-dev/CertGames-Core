@@ -18,7 +18,7 @@ const CaspPlusTestPage = memo(() => {
       backToListPath="/practice-tests/casp-plus"
     />
   );
-};
+});
 
 export default CaspPlusTestPage;
 
