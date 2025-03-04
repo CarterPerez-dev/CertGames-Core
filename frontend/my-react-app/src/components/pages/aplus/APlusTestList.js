@@ -176,16 +176,16 @@ const APlusTestList = () => {
   };
 
   const difficultyCategories = [
-    { label: "Training Wheels", color: "#90ee90", textColor: "#1a1a1a" }, // Light green
-    { label: "Easy Going", color: "#3cb371", textColor: "#ffffff" }, // Medium green
-    { label: "Balanced", color: "#6543cc", textColor: "#ffffff" }, // Purple
-    { label: "Challenging", color: "#ff7950", textColor: "#ffffff" }, // Orange
-    { label: "Hard Core", color: "#cc4343", textColor: "#ffffff" }, // Red
-    { label: "Very Hard", color: "#990000", textColor: "#ffffff" }, // Dark red
-    { label: "Extreme", color: "#7a0099", textColor: "#ffffff" }, // Dark purple
-    { label: "Nightmare", color: "#4a0072", textColor: "#ffffff" }, // Deep purple
-    { label: "Insanity", color: "#2e004d", textColor: "#ffffff" }, // Very dark purple
-    { label: "Ultra Level", color: "#000000", textColor: "#ff3366" }  // Black with neon text
+    { label: "Normal", color: "#f0f0f0", textColor: "#333333" },              // Light grey
+    { label: "Very Easy", color: "#a2d5c6", textColor: "#000000" },          // Pastel teal
+    { label: "Easy", color: "#b19cd9", textColor: "#000000" },               // Pastel purple
+    { label: "Moderate", color: "#ffc107", textColor: "#000000" },           // Vibrant yellow
+    { label: "Intermediate", color: "#ff8c00", textColor: "#ffffff" },       // Dark orange
+    { label: "Formidable", color: "#d9534f", textColor: "#ffffff" },         // Medium red
+    { label: "Challenging", color: "#9c27b0", textColor: "#ffffff" },        // Vivid purple
+    { label: "Very Challenging", color: "#6a0080", textColor: "#ffffff" },   // Deep purple
+    { label: "Ruthless", color: "#660000", textColor: "#ffffff" },           // Dark crimson
+    { label: "Ultra Level", color: "#000000", textColor: "#ff00ff" }         // Black with neon magenta text
   ];
 
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
