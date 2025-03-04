@@ -18,7 +18,7 @@ const CisspTestPage = memo(() => {
       backToListPath="/practice-tests/cissp"
     />
   );
-};
+});
 
 export default CisspTestPage;
 
