@@ -20,7 +20,7 @@ const APlusCore2TestPage = memo(() => {
       backToListPath="/practice-tests/aplus-core2"
     />
   );
-};
+});
 
 export default APlusCore2TestPage;
 
