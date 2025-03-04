@@ -4,7 +4,7 @@ import CaspPlusTestList from "./CaspPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CaspPlusTestPage = () => {
+const CaspPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
