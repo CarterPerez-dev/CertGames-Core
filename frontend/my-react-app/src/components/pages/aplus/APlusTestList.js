@@ -175,17 +175,17 @@ const APlusTestList = () => {
     }
   };
 
-  const difficultyCategories2 = [
-    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             // Cream
-    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          // Soft green
-    { label: "Easy", color: "#87cefa", textColor: "#000000" },               // Light sky blue
-    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
-    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
-    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
-    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
-    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
-    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
-    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
+  const difficultyCategories10 = [
+    { label: "Normal", color: "#f4f4f4", textColor: "#222222" },             // Slightly off-white
+    { label: "Very Easy", color: "#98ff98", textColor: "#003300" },          // Mint green
+    { label: "Easy", color: "#d3adf7", textColor: "#301860" },               // Soft purple
+    { label: "Moderate", color: "#ffd384", textColor: "#4a3200" },           // Pale orange
+    { label: "Intermediate", color: "#f76c5e", textColor: "#ffffff" },       // Moderate red
+    { label: "Formidable", color: "#c62828", textColor: "#ffffff" },         // Dark red
+    { label: "Challenging", color: "#8e44ad", textColor: "#ffffff" },        // Purple
+    { label: "Very Challenging", color: "#5b2c6f", textColor: "#ffffff" },   // Deep plum
+    { label: "Ruthless", color: "#280000", textColor: "#ffffff" },           // Ultra dark red
+    { label: "Ultra Level", color: "#000000", textColor: "#dbff00" }         // Black with bright lime text
   ];
 
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
