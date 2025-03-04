@@ -18,7 +18,7 @@ const ServerPlusTestPage = memo(() => {
       backToListPath="/practice-tests/server-plus"
     />
   );
-};
+});
 
 export default ServerPlusTestPage;
 
