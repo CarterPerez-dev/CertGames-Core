@@ -18,7 +18,7 @@ const AWSCloudTestPage = memo(() => {
       backToListPath="/practice-tests/aws-cloud"
     />
   );
-};
+});
 
 export default AWSCloudTestPage;
 
