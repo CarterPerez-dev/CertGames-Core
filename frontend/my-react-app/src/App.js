@@ -26,7 +26,6 @@ import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
 import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
 import GRC from './components/pages/GRCpage/GRC';
-import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
 import Resources from './components/pages/ResourcesPage/Resources';
 
 // Gamified components and userprofile
@@ -155,7 +154,6 @@ function App() {
               <GRC />
             </ProtectedRoute>
           }/>
-          <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
           }/>
           <Route path="/practice-tests/a-plus" element={
