@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import React from "react";
 import { useParams } from "react-router-dom";
 import CaspPlusTestList from "./CaspPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
