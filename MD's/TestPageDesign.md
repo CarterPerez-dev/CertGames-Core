@@ -5615,3400 +5615,3890 @@ ok so the above text is what deisgned ravamping we are doing.
 
 so nwo is the a really complciated page
 
-so we haev 13 test categroies, so we have 13 test pages aswell. they all are gonan look and fucntion the same, however the tests are different obviolsy.
-
-sicne they all look and fcuntion the same we have a globabltestpage that has all the global fucntions and design and stuff, aswell as a global test css.
-
-so they each have their own unique testlist js file which is the saem fucntion and deisgn but it their won it defined teh category and what test categroy it is and stuff
-
-and then they al have their wown "testpage" file even tho its absicaly just getting teh test category aswell
-
-so the main revamp of design will be the compnents in the global testpage and their repsetive test lists. 
-so we will do the revamping of design weve been doing to the testlist and then just copy the contnets to all teh toehr ones then edit the unique parts in it for each
-and for the global test page i want to do the saem deisgn revamp weve been doing aswell inclduing teh review mode and testview
-
-
-however a very veyr veyr important thing is we MUST NOT alter teh fucnionality of any components/fcuntions or features, we must maintain all features and fcuntionlity whiel doing this though becaue it took me a very very long time to make it all work. you may add features but cannot remove any or alter any (on how they actually fucntion).
-
-ok so ill strat off with giving you the backedn routes just so you have some context, then ill give you the global test page, then ill give you one of teh testlist files, and alsofor context ill give you one of the unique "testpage" files.
-
-so give me the testlist file first updated and ill verify its good, then give me the full entire global test page updated in when i tell you too, when i tell you too- DO NOT OMITT OR REMOVE ANY FUCNTIONALITY AND MAKE SURE TEH UPDATED FILE IS IN FULL
-
-then after you give me the full entire global test page ill verify it adn ask for teh full test.css which encapuslates both testlist and globlatestpage compoenenst/design
-
-ok here are teh files
-
-starting with backedn routes fro conext, and il also give you my userslice file for context
-
-# ================================
-# test_routes.py
-# ================================
-
-from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
-from bson.objectid import ObjectId
-from datetime import datetime, timedelta
-import pytz
-import time
-from mongodb.database import db
-
-# Mongo collections
-from mongodb.database import (
-    mainusers_collection,
-    shop_collection,
-    achievements_collection,
-    tests_collection,
-    testAttempts_collection,
-    correctAnswers_collection,
-    dailyQuestions_collection,
-    dailyAnswers_collection
-)
-
-# Models
-from models.test import (
-    get_user_by_identifier,
-    create_user,
-    get_user_by_id,
-    update_user_coins,
-    update_user_xp,
-    apply_daily_bonus,
-    get_shop_items,
-    purchase_item,
-    get_achievements,
-    get_test_by_id_and_category,
-    validate_username,
-    validate_email,
-    validate_password,
-    update_user_fields,
-    get_user_by_id,
-    award_correct_answers_in_bulk
-)
-
-api_bp = Blueprint('test', __name__)
-
-#############################################
-# Leaderboard Caching Setup (15-second TTL)
-#############################################
-leaderboard_cache = []
-leaderboard_cache_timestamp = 0
-LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
-
-def serialize_user(user):
-    """Helper to convert _id, etc. to strings if needed."""
-    if not user:
-        return None
-    user['_id'] = str(user['_id'])
-    if 'currentAvatar' in user and user['currentAvatar']:
-        user['currentAvatar'] = str(user['currentAvatar'])
-    if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
-        user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
-    return user
-
-def serialize_datetime(dt):
-    """Helper: convert a datetime to an ISO string (or return None)."""
-    return dt.isoformat() if dt else None
-
-
-
-def check_and_unlock_achievements(user_id):
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return []
-
-    counters = user.get("achievement_counters", {})
-    unlocked = set(user.get("achievements", []))
-    newly_unlocked = []
-
-    start_db = time.time()
-    all_ach = list(achievements_collection.find({}))  # or get_achievements()
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    for ach in all_ach:
-        aid = ach["achievementId"]
-        # If already unlocked, skip
-        if aid in unlocked:
-            continue
-
-        crit = ach.get("criteria", {})
-
-        # 1) testCount => total_tests_completed
-        test_count_req = crit.get("testCount")
-        if test_count_req is not None:
-            if counters.get("total_tests_completed", 0) >= test_count_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 2) minScore => e.g. "accuracy_king" with 90
-        min_score_req = crit.get("minScore")
-        if min_score_req is not None:
-            if counters.get("highest_score_ever", 0) >= min_score_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
-        perfect_req = crit.get("perfectTests")
-        if perfect_req is not None:
-            if counters.get("perfect_tests_count", 0) >= perfect_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 4) coins => coin achievements
-        coin_req = crit.get("coins")
-        if coin_req is not None:
-            if user.get("coins", 0) >= coin_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 5) level => e.g. "level_up_5", "mid_tier_grinder_25", etc.
-        level_req = crit.get("level")
-        if level_req is not None:
-            if user.get("level", 1) >= level_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 6) totalQuestions => e.g. "answer_machine_1000"
-        total_q_req = crit.get("totalQuestions")
-        if total_q_req is not None:
-            if counters.get("total_questions_answered", 0) >= total_q_req:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 7) perfectTestsInCategory => "category_perfectionist"
-        perfect_in_cat_req = crit.get("perfectTestsInCategory")
-        if perfect_in_cat_req is not None:
-            perfect_by_cat = counters.get("perfect_tests_by_category", {})
-            for cat_name, cat_count in perfect_by_cat.items():
-                if cat_count >= perfect_in_cat_req:
-                    unlocked.add(aid)
-                    newly_unlocked.append(aid)
-                    break
-            continue
-
-        # 8) redemption_arc => minScoreBefore + minScoreAfter
-        min_before = crit.get("minScoreBefore")
-        min_after = crit.get("minScoreAfter")
-        if min_before is not None and min_after is not None:
-            if (counters.get("lowest_score_ever", 100) <= min_before and
-                counters.get("highest_score_ever", 0) >= min_after):
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-        # 9) testsCompletedInCategory => "subject_finisher"
-        cat_required = crit.get("testsCompletedInCategory")
-        if cat_required is not None:
-            tcbc = counters.get("tests_completed_by_category", {})
-            for cat_name, test_set in tcbc.items():
-                if len(test_set) >= cat_required:
-                    unlocked.add(aid)
-                    newly_unlocked.append(aid)
-                    break
-            continue
-
-        # 10) allTestsCompleted => "test_finisher"
-        if crit.get("allTestsCompleted"):
-            user_completed_tests = counters.get("tests_completed_set", set())
-            TOTAL_TESTS = 130
-            if len(user_completed_tests) >= TOTAL_TESTS:
-                unlocked.add(aid)
-                newly_unlocked.append(aid)
-                continue
-
-    if newly_unlocked:
-        start_db = time.time()
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"achievements": list(unlocked)}}
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    return newly_unlocked
-
-
-# -------------------------------------------------------------------
-# USER ROUTES
-# -------------------------------------------------------------------
-@api_bp.route('/user/<user_id>', methods=['GET'])
-def get_user(user_id):
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    user = serialize_user(user)
-    if "password" not in user:
-        user["password"] = user.get("password")
-    return jsonify(user), 200
-
-@api_bp.route('/user', methods=['POST'])
-def register_user():
-    """
-    Registration: /api/user
-    Expects {username, email, password, confirmPassword} in JSON
-    Calls create_user, returns {message, user_id} or error.
-    """
-    user_data = request.json or {}
-    try:
-        user_data.setdefault("achievement_counters", {
-            "total_tests_completed": 0,
-            "perfect_tests_count": 0,
-            "perfect_tests_by_category": {},
-            "highest_score_ever": 0.0,
-            "lowest_score_ever": 100.0,
-            "total_questions_answered": 0,
-        })
-
-        start_db = time.time()
-        user_id = create_user(user_data)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
-    except ValueError as ve:
-        return jsonify({"error": str(ve)}), 400
-    except Exception as e:
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
-
-@api_bp.route('/login', methods=['POST'])
-def login():
-    data = request.json
-    if not data:
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "No JSON data provided"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({"error": "No JSON data provided"}), 400
-
-    identifier = data.get("usernameOrEmail")
-    password = data.get("password")
-    if not identifier or not password:
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "Missing username/password"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({"error": "Username (or Email) and password are required"}), 400
-
-    start_db = time.time()
-    user = get_user_by_identifier(identifier)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user or user.get("password") != password:
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "Invalid username or password"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({"error": "Invalid username or password"}), 401
-
-    session['userId'] = str(user["_id"])
-
-    start_db = time.time()
-    db.auditLogs.insert_one({
-        "timestamp": datetime.utcnow(),
-        "userId": user["_id"],
-        "ip": request.remote_addr or "unknown",
-        "success": True
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    user = serialize_user(user)
-
-    return jsonify({
-        "user_id": user["_id"],
-        "username": user["username"],
-        "email": user.get("email", ""),
-        "coins": user.get("coins", 0),
-        "xp": user.get("xp", 0),
-        "level": user.get("level", 1),
-        "achievements": user.get("achievements", []),
-        "xpBoost": user.get("xpBoost", 1.0),
-        "currentAvatar": user.get("currentAvatar"),
-        "nameColor": user.get("nameColor"),
-        "purchasedItems": user.get("purchasedItems", []),
-        "subscriptionActive": user.get("subscriptionActive", False),
-        "password": user.get("password")
-    }), 200
-
-@api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
-def add_xp_route(user_id):
-    data = request.json or {}
-    xp_to_add = data.get("xp", 0)
-
-    start_db = time.time()
-    updated = update_user_xp(user_id, xp_to_add)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not updated:
-        return jsonify({"error": "User not found"}), 404
-
-    start_db = time.time()
-    new_achievements = check_and_unlock_achievements(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    updated["newAchievements"] = new_achievements
-    return jsonify(updated), 200
-
-@api_bp.route('/user/<user_id>/add-coins', methods=['POST'])
-def add_coins_route(user_id):
-    data = request.json or {}
-    coins_to_add = data.get("coins", 0)
-
-    start_db = time.time()
-    update_user_coins(user_id, coins_to_add)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    newly_unlocked = check_and_unlock_achievements(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({
-        "message": "Coins updated",
-        "newlyUnlocked": newly_unlocked
-    }), 200
-
-# -------------------------------------------------------------------
-# SHOP ROUTES
-# -------------------------------------------------------------------
-@api_bp.route('/shop', methods=['GET'])
-def fetch_shop():
-    start_db = time.time()
-    items = get_shop_items()
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    for item in items:
-        item["_id"] = str(item["_id"])
-    return jsonify(items), 200
-
-@api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
-def purchase_item_route(item_id):
-    data = request.json or {}
-    user_id = data.get("userId")
-    if not user_id:
-        return jsonify({"success": False, "message": "userId is required"}), 400
-
-    start_db = time.time()
-    result = purchase_item(user_id, item_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if result["success"]:
-        start_db = time.time()
-        newly_unlocked = check_and_unlock_achievements(user_id)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        result["newly_unlocked"] = newly_unlocked
-        return jsonify(result), 200
-    else:
-        return jsonify(result), 400
-
-@api_bp.route('/shop/equip', methods=['POST'])
-def equip_item_route():
-    data = request.json or {}
-    user_id = data.get("userId")
-    item_id = data.get("itemId")
-
-    if not user_id or not item_id:
-        return jsonify({"success": False, "message": "userId and itemId are required"}), 400
-
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return jsonify({"success": False, "message": "User not found"}), 404
-
-    try:
-        oid = ObjectId(item_id)
-    except Exception:
-        return jsonify({"success": False, "message": "Invalid item ID"}), 400
-
-    start_db = time.time()
-    item_doc = shop_collection.find_one({"_id": oid})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not item_doc:
-        return jsonify({"success": False, "message": "Item not found in shop"}), 404
-
-    if oid not in user.get("purchasedItems", []):
-        if user.get("level", 1) < item_doc.get("unlockLevel", 1):
-            return jsonify({"success": False, "message": "Item not unlocked"}), 400
-
-    start_db = time.time()
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$set": {"currentAvatar": oid}}
-    )
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({"success": True, "message": "Avatar equipped"}), 200
-
-# -------------------------------------------------------------------
-# TESTS ROUTES
-# -------------------------------------------------------------------
-@api_bp.route('/tests/<test_id>', methods=['GET'])
-def fetch_test_by_id_route(test_id):
-    start_db = time.time()
-    test_doc = get_test_by_id_and_category(test_id, None)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not test_doc:
-        return jsonify({"error": "Test not found"}), 404
-    test_doc["_id"] = str(test_doc["_id"])
-    return jsonify(test_doc), 200
-
-@api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
-def fetch_test_by_category_and_id(category, test_id):
-    try:
-        test_id_int = int(test_id)
-    except Exception:
-        return jsonify({"error": "Invalid test ID"}), 400
-
-    start_db = time.time()
-    test_doc = tests_collection.find_one({
-        "testId": test_id_int,
-        "category": category
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not test_doc:
-        return jsonify({"error": "Test not found"}), 404
-
-    test_doc["_id"] = str(test_doc["_id"])
-    return jsonify(test_doc), 200
-
-# -------------------------------------------------------------------
-# PROGRESS / ATTEMPTS ROUTES
-# -------------------------------------------------------------------
-@api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
-def get_test_attempt(user_id, test_id):
-    try:
-        user_oid = ObjectId(user_id)
-        try:
-            test_id_int = int(test_id)
-        except:
-            test_id_int = None
-    except:
-        return jsonify({"error": "Invalid user ID or test ID"}), 400
-
-    query = {"userId": user_oid, "finished": False}
-    if test_id_int is not None:
-        query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
-    else:
-        query["testId"] = test_id
-
-    start_db = time.time()
-    attempt = testAttempts_collection.find_one(query)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not attempt:
-        query_finished = {"userId": user_oid, "finished": True}
-        if test_id_int is not None:
-            query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
-        else:
-            query_finished["testId"] = test_id
-
-        start_db = time.time()
-        attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    if not attempt:
-        return jsonify({"attempt": None}), 200
-
-    attempt["_id"] = str(attempt["_id"])
-    attempt["userId"] = str(attempt["userId"])
-    return jsonify({"attempt": attempt}), 200
-
-@api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
-def update_test_attempt(user_id, test_id):
-    data = request.json or {}
-    try:
-        user_oid = ObjectId(user_id)
-        try:
-            test_id_int = int(test_id)
-        except:
-            test_id_int = test_id
-    except:
-        return jsonify({"error": "Invalid user ID or test ID"}), 400
-
-    exam_mode_val = data.get("examMode", False)
-    selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
-
-    filter_ = {
-        "userId": user_oid,
-        "$or": [{"testId": test_id_int}, {"testId": test_id}]
-    }
-    update_doc = {
-        "$set": {
-            "userId": user_oid,
-            "testId": test_id_int if isinstance(test_id_int, int) else test_id,
-            "category": data.get("category", "global"),
-            "answers": data.get("answers", []),
-            "score": data.get("score", 0),
-            "totalQuestions": data.get("totalQuestions", 0),
-            "selectedLength": selected_length,
-            "currentQuestionIndex": data.get("currentQuestionIndex", 0),
-            "shuffleOrder": data.get("shuffleOrder", []),
-            "answerOrder": data.get("answerOrder", []),
-            "finished": data.get("finished", False),
-            "examMode": exam_mode_val
-        }
-    }
-    if update_doc["$set"]["finished"] is True:
-        update_doc["$set"]["finishedAt"] = datetime.utcnow()
-
-    start_db = time.time()
-    testAttempts_collection.update_one(filter_, update_doc, upsert=True)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({
-        "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
-    }), 200
-
-@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
-def finish_test_attempt(user_id, test_id):
-    data = request.json or {}
-    try:
-        user_oid = ObjectId(user_id)
-        try:
-            test_id_int = int(test_id)
-        except:
-            test_id_int = test_id
-    except:
-        return jsonify({"error": "Invalid user ID or test ID"}), 400
-
-    filter_ = {
-        "userId": user_oid,
-        "finished": False,
-        "$or": [{"testId": test_id_int}, {"testId": test_id}]
-    }
-    update_doc = {
-        "$set": {
-            "finished": True,
-            "finishedAt": datetime.utcnow(),
-            "score": data.get("score", 0),
-            "totalQuestions": data.get("totalQuestions", 0)
-        }
-    }
-
-    start_db = time.time()
-    testAttempts_collection.update_one(filter_, update_doc)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    attempt_doc = testAttempts_collection.find_one({
-        "userId": user_oid,
-        "$or": [{"testId": test_id_int}, {"testId": test_id}],
-        "finished": True
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not attempt_doc:
-        return jsonify({"error": "Attempt not found after finishing."}), 404
-
-    exam_mode = attempt_doc.get("examMode", False)
-    selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
-    score = attempt_doc.get("score", 0)
-    total_questions = attempt_doc.get("totalQuestions", 0)
-    category = attempt_doc.get("category", "global")
-
-    if exam_mode:
-        start_db = time.time()
-        award_correct_answers_in_bulk(
-            user_id=user_id,
-            attempt_doc=attempt_doc,
-            xp_per_correct=10,
-            coins_per_correct=5
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    counters = user.get("achievement_counters", {})
-    percentage = 0
-    if total_questions > 0:
-        percentage = (score / total_questions) * 100
-
-    update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
-
-    if score == total_questions and total_questions > 0 and selected_length == 100:
-        update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
-        catKey = f"achievement_counters.perfect_tests_by_category.{category}"
-        update_ops["$inc"][catKey] = 1
-
-    if selected_length == 100:
-        highest_so_far = counters.get("highest_score_ever", 0.0)
-        lowest_so_far = counters.get("lowest_score_ever", 100.0)
-        set_ops = {}
-        if percentage > highest_so_far:
-            set_ops["achievement_counters.highest_score_ever"] = percentage
-        if percentage < lowest_so_far:
-            set_ops["achievement_counters.lowest_score_ever"] = percentage
-        if set_ops:
-            update_ops.setdefault("$set", {}).update(set_ops)
-
-    update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
-
-    start_db = time.time()
-    mainusers_collection.update_one({"_id": user_oid}, update_ops)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    newly_unlocked = check_and_unlock_achievements(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    updated_user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({
-        "message": "Test attempt finished",
-        "examMode": exam_mode,
-        "selectedLength": selected_length,
-        "newlyUnlocked": newly_unlocked,
-        "newXP": updated_user.get("xp", 0),
-        "newCoins": updated_user.get("coins", 0)
-    }), 200
-
-@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
-def list_test_attempts(user_id):
-    try:
-        user_oid = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user ID"}), 400
-
-    page = request.args.get("page", default=1, type=int)
-    page_size = request.args.get("page_size", default=50, type=int)
-    skip_count = (page - 1) * page_size
-
-    start_db = time.time()
-    cursor = testAttempts_collection.find(
-        {"userId": user_oid}
-    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    attempts = []
-    for doc in cursor:
-        doc["_id"] = str(doc["_id"])
-        doc["userId"] = str(doc["userId"])
-        attempts.append(doc)
-
-    return jsonify({
-        "page": page,
-        "page_size": page_size,
-        "attempts": attempts
-    }), 200
-
-# -------------------------------------------------------------------
-# FIRST-TIME-CORRECT ANSWERS
-# -------------------------------------------------------------------
-@api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
-def submit_answer(user_id):
-    data = request.json or {}
-    test_id = str(data.get("testId"))
-    question_id = data.get("questionId")
-    selected_index = data.get("selectedIndex")
-    correct_index = data.get("correctAnswerIndex")
-    xp_per_correct = data.get("xpPerCorrect", 10)
-    coins_per_correct = data.get("coinsPerCorrect", 5)
-
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    start_db = time.time()
-    attempt_doc = testAttempts_collection.find_one({
-        "userId": user["_id"],
-        "finished": False,
-        "$or": [
-            {"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
-            {"testId": test_id}
-        ]
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not attempt_doc:
-        return jsonify({"error": "No unfinished attempt doc found"}), 404
-
-    exam_mode = attempt_doc.get("examMode", False)
-    is_correct = (selected_index == correct_index)
-
-    existing_answer_index = None
-    for i, ans in enumerate(attempt_doc.get("answers", [])):
-        if ans.get("questionId") == question_id:
-            existing_answer_index = i
-            break
-
-    new_score = attempt_doc.get("score", 0)
-    if existing_answer_index is not None:
-        update_payload = {
-            "answers.$.userAnswerIndex": selected_index,
-            "answers.$.correctAnswerIndex": correct_index
-        }
-        if exam_mode is False and is_correct:
-            new_score += 1
-            update_payload["score"] = new_score
-
-        start_db = time.time()
-        testAttempts_collection.update_one(
-            {
-                "_id": attempt_doc["_id"],
-                "answers.questionId": question_id
-            },
-            {"$set": update_payload}
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    else:
-        new_answer_doc = {
-            "questionId": question_id,
-            "userAnswerIndex": selected_index,
-            "correctAnswerIndex": correct_index
-        }
-        if exam_mode is False and is_correct:
-            new_score += 1
-        push_update = {"$push": {"answers": new_answer_doc}}
-        if exam_mode is False and is_correct:
-            push_update["$set"] = {"score": new_score}
-
-        start_db = time.time()
-        testAttempts_collection.update_one(
-            {"_id": attempt_doc["_id"]},
-            push_update
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    awarded_xp = 0
-    awarded_coins = 0
-    if exam_mode is False:
-        start_db = time.time()
-        already_correct = correctAnswers_collection.find_one({
-            "userId": user["_id"],
-            "testId": test_id,
-            "questionId": question_id
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        if is_correct and not already_correct:
-            start_db = time.time()
-            correctAnswers_collection.insert_one({
-                "userId": user["_id"],
-                "testId": test_id,
-                "questionId": question_id
-            })
-            duration = time.time() - start_db
-            if not hasattr(g, 'db_time_accumulator'):
-                g.db_time_accumulator = 0.0
-            g.db_time_accumulator += duration
-
-            start_db = time.time()
-            update_user_xp(user_id, xp_per_correct)
-            duration2 = time.time() - start_db
-            if not hasattr(g, 'db_time_accumulator'):
-                g.db_time_accumulator = 0.0
-            g.db_time_accumulator += duration2
-
-            start_db = time.time()
-            update_user_coins(user_id, coins_per_correct)
-            duration3 = time.time() - start_db
-            if not hasattr(g, 'db_time_accumulator'):
-                g.db_time_accumulator = 0.0
-            g.db_time_accumulator += duration3
-
-            awarded_xp = xp_per_correct
-            awarded_coins = coins_per_correct
-
-        start_db = time.time()
-        updated_user = get_user_by_id(user_id)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({
-            "examMode": False,
-            "isCorrect": is_correct,
-            "alreadyCorrect": bool(already_correct),
-            "awardedXP": awarded_xp,
-            "awardedCoins": awarded_coins,
-            "newXP": updated_user.get("xp", 0),
-            "newCoins": updated_user.get("coins", 0)
-        }), 200
-    else:
-        return jsonify({
-            "examMode": True,
-            "message": "Answer stored. No immediate feedback in exam mode."
-        }), 200
-
-# -------------------------------------------------------------------
-# ACHIEVEMENTS
-# -------------------------------------------------------------------
-@api_bp.route('/achievements', methods=['GET'])
-def fetch_achievements_route():
-    start_db = time.time()
-    ach_list = list(achievements_collection.find({}))
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    for ach in ach_list:
-        ach["_id"] = str(ach["_id"])
-    return jsonify(ach_list), 200
-
-# -------------------------------------------------------------------
-# Leaderboard Route with Lazy Loading & Pagination
-# -------------------------------------------------------------------
-@api_bp.route('/leaderboard', methods=['GET'])
-def get_leaderboard():
-    global leaderboard_cache
-    global leaderboard_cache_timestamp
-
-    now_ms = int(time.time() * 1000)
-    if now_ms - leaderboard_cache_timestamp > LEADERBOARD_CACHE_DURATION_MS:
-        start_db = time.time()
-        cursor = mainusers_collection.find(
-            {},
-            {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
-        ).sort("level", -1).limit(1000)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        new_results = []
-        rank = 1
-        for user in cursor:
-            user_data = {
-                "username": user.get("username", "unknown"),
-                "level": user.get("level", 1),
-                "xp": user.get("xp", 0),
-                "rank": rank,
-                "avatarUrl": None
-            }
-            if user.get("currentAvatar"):
-                start_db = time.time()
-                avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
-                duration = time.time() - start_db
-                if not hasattr(g, 'db_time_accumulator'):
-                    g.db_time_accumulator = 0.0
-                g.db_time_accumulator += duration
-
-                if avatar_item and "imageUrl" in avatar_item:
-                    user_data["avatarUrl"] = avatar_item["imageUrl"]
-            new_results.append(user_data)
-            rank += 1
-
-        leaderboard_cache = new_results
-        leaderboard_cache_timestamp = now_ms
-
-    try:
-        skip = int(request.args.get("skip", 0))
-        limit = int(request.args.get("limit", 50))
-    except:
-        skip, limit = 0, 50
-
-    total_entries = len(leaderboard_cache)
-    end_index = skip + limit
-    if skip > total_entries:
-        sliced_data = []
-    else:
-        sliced_data = leaderboard_cache[skip:end_index]
-
-    return jsonify({
-        "data": sliced_data,
-        "total": total_entries
-    }), 200
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# USERNAME/EMAIL/PASSWORD CHANGES
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@api_bp.route('/user/change-username', methods=['POST'])
-def change_username():
-    data = request.json or {}
-    user_id = data.get("userId")
-    new_username = data.get("newUsername")
-    if not user_id or not new_username:
-        return jsonify({"error": "Missing userId or newUsername"}), 400
-
-    valid, errors = validate_username(new_username)
-    if not valid:
-        return jsonify({"error": "Invalid new username", "details": errors}), 400
-
-    start_db = time.time()
-    existing = mainusers_collection.find_one({"username": new_username})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if existing:
-        return jsonify({"error": "Username already taken"}), 400
-
-    start_db = time.time()
-    doc = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not doc:
-        return jsonify({"error": "User not found"}), 404
-
-    start_db = time.time()
-    update_user_fields(user_id, {"username": new_username})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({"message": "Username updated"}), 200
-
-@api_bp.route('/user/change-email', methods=['POST'])
-def change_email():
-    data = request.json or {}
-    user_id = data.get("userId")
-    new_email = data.get("newEmail")
-    if not user_id or not new_email:
-        return jsonify({"error": "Missing userId or newEmail"}), 400
-
-    valid, errors = validate_email(new_email)
-    if not valid:
-        return jsonify({"error": "Invalid email", "details": errors}), 400
-
-    start_db = time.time()
-    existing = mainusers_collection.find_one({"email": new_email})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if existing:
-        return jsonify({"error": "Email already in use"}), 400
-
-    start_db = time.time()
-    doc = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not doc:
-        return jsonify({"error": "User not found"}), 404
-
-    start_db = time.time()
-    update_user_fields(user_id, {"email": new_email})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({"message": "Email updated"}), 200
-
-@api_bp.route('/user/change-password', methods=['POST'])
-def change_password():
-    data = request.json or {}
-    user_id = data.get("userId")
-    old_password = data.get("oldPassword")
-    new_password = data.get("newPassword")
-    confirm = data.get("confirmPassword")
-
-    if not user_id or not old_password or not new_password or not confirm:
-        return jsonify({"error": "All fields are required"}), 400
-    if new_password != confirm:
-        return jsonify({"error": "New passwords do not match"}), 400
-
-    valid, errors = validate_password(new_password)
-    if not valid:
-        return jsonify({"error": "Invalid new password", "details": errors}), 400
-
-    start_db = time.time()
-    user_doc = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user_doc:
-        return jsonify({"error": "User not found"}), 404
-
-    if user_doc.get("password") != old_password:
-        return jsonify({"error": "Old password is incorrect"}), 401
-
-    start_db = time.time()
-    update_user_fields(user_id, {"password": new_password})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({"message": "Password updated"}), 200
-
-@api_bp.route('/subscription/cancel', methods=['POST'])
-def cancel_subscription():
-    return jsonify({"message": "Cancel subscription placeholder"}), 200
-
-# For single answer updates
-@api_bp.route('/attempts/<user_id>/<test_id>/answer', methods=['POST'])
-def update_single_answer(user_id, test_id):
-    data = request.json or {}
-    question_id = data.get("questionId")
-    user_answer_index = data.get("userAnswerIndex")
-    correct_answer_index = data.get("correctAnswerIndex")
-
-    try:
-        user_oid = ObjectId(user_id)
-        test_id_int = int(test_id) if test_id.isdigit() else test_id
-    except:
-        return jsonify({"error": "Invalid user ID or test ID"}), 400
-
-    start_db = time.time()
-    attempt = testAttempts_collection.find_one({
-        "userId": user_oid,
-        "finished": False,
-        "$or": [{"testId": test_id_int}, {"testId": test_id}]
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not attempt:
-        return jsonify({"error": "Attempt not found"}), 404
-
-    existing_answer_index = None
-    for i, ans in enumerate(attempt.get("answers", [])):
-        if ans.get("questionId") == question_id:
-            existing_answer_index = i
-            break
-
-    if existing_answer_index is not None:
-        start_db = time.time()
-        testAttempts_collection.update_one(
-            {
-                "userId": user_oid,
-                "finished": False,
-                "$or": [{"testId": test_id_int}, {"testId": test_id}],
-                "answers.questionId": question_id
-            },
-            {"$set": {
-                "answers.$.userAnswerIndex": user_answer_index,
-                "answers.$.correctAnswerIndex": correct_answer_index,
-                "score": data.get("score", 0)
-            }}
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    else:
-        start_db = time.time()
-        testAttempts_collection.update_one(
-            {
-                "userId": user_oid,
-                "finished": False,
-                "$or": [{"testId": test_id_int}, {"testId": test_id}]
-            },
-            {
-                "$push": {
-                    "answers": {
-                        "questionId": question_id,
-                        "userAnswerIndex": user_answer_index,
-                        "correctAnswerIndex": correct_answer_index
-                    }
-                },
-                "$set": {"score": data.get("score", 0)}
-            }
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-    return jsonify({"message": "Answer updated"}), 200
-
-# For updating the current question position only
-@api_bp.route('/attempts/<user_id>/<test_id>/position', methods=['POST'])
-def update_position(user_id, test_id):
-    data = request.json or {}
-    current_index = data.get("currentQuestionIndex", 0)
-
-    try:
-        user_oid = ObjectId(user_id)
-        test_id_int = int(test_id) if test_id.isdigit() else test_id
-    except:
-        return jsonify({"error": "Invalid user ID or test ID"}), 400
-
-    start_db = time.time()
-    testAttempts_collection.update_one(
-        {
-            "userId": user_oid,
-            "finished": False,
-            "$or": [{"testId": test_id_int}, {"testId": test_id}]
-        },
-        {"$set": {
-            "currentQuestionIndex": current_index,
-            "finished": data.get("finished", False)
-        }}
-    )
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({"message": "Position updated"}), 200
-
-##############################################
-# DAILY QUESTION ENDPOINTS
-##############################################
-@api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
-def daily_bonus(user_id):
-    user = None
-    start_db = time.time()
-    user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-
-    now = datetime.utcnow()
-    last_claim = user.get("lastDailyClaim")
-    if last_claim and (now - last_claim) < timedelta(hours=24):
-        seconds_left = int(24 * 3600 - (now - last_claim).total_seconds())
-        return jsonify({
-            "success": False,
-            "message": f"Already claimed. Next bonus in: {seconds_left} seconds",
-            "newCoins": user.get("coins", 0),
-            "newXP": user.get("xp", 0),
-            "newLastDailyClaim": serialize_datetime(last_claim)
-        }), 200
-    else:
-        start_db = time.time()
-        update_user_coins(user_id, 1000)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        start_db = time.time()
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"lastDailyClaim": now}}
-        )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        start_db = time.time()
-        updated_user = get_user_by_id(user_id)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        start_db = time.time()
-        newly_unlocked = check_and_unlock_achievements(user_id)
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return jsonify({
-            "success": True,
-            "message": "Daily bonus applied",
-            "newCoins": updated_user.get("coins", 0),
-            "newXP": updated_user.get("xp", 0),
-            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
-            "newlyUnlocked": newly_unlocked
-        }), 200
-
-@api_bp.route('/daily-question', methods=['GET'])
-def get_daily_question():
-    user_id = request.args.get("userId")
-    if not user_id:
-        return jsonify({"error": "No userId provided"}), 400
-
-    try:
-        user_oid = ObjectId(user_id)
-    except Exception:
-        return jsonify({"error": "Invalid user ID"}), 400
-
-    day_index = 0
-
-    start_db = time.time()
-    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not daily_doc:
-        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
-
-    start_db = time.time()
-    existing_answer = dailyAnswers_collection.find_one({
-        "userId": user_oid,
-        "dayIndex": day_index
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    response = {
-        "dayIndex": day_index,
-        "prompt": daily_doc.get("prompt"),
-        "options": daily_doc.get("options"),
-        "alreadyAnswered": bool(existing_answer)
-    }
-    return jsonify(response), 200
-
-@api_bp.route('/daily-question/answer', methods=['POST'])
-def submit_daily_question():
-    data = request.json or {}
-    user_id = data.get("userId")
-    day_index = data.get("dayIndex")
-    selected_index = data.get("selectedIndex")
-
-    if not user_id or day_index is None or selected_index is None:
-        return jsonify({"error": "Missing userId, dayIndex, or selectedIndex"}), 400
-
-    try:
-        user_oid = ObjectId(user_id)
-    except Exception:
-        return jsonify({"error": "Invalid user ID"}), 400
-
-    start_db = time.time()
-    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not daily_doc:
-        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
-
-    start_db = time.time()
-    existing = dailyAnswers_collection.find_one({
-        "userId": user_oid,
-        "dayIndex": day_index
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if existing:
-        return jsonify({"error": "You already answered today's question"}), 400
-
-    correct_index = daily_doc.get("correctIndex", 0)
-    is_correct = (selected_index == correct_index)
-    awarded_coins = 250 if is_correct else 50
-
-    start_db = time.time()
-    dailyAnswers_collection.insert_one({
-        "userId": user_oid,
-        "dayIndex": day_index,
-        "answeredAt": datetime.utcnow(),
-        "userAnswerIndex": selected_index,
-        "isCorrect": is_correct
-    })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    update_user_coins(str(user_oid), awarded_coins)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    updated_user = get_user_by_id(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    start_db = time.time()
-    newly_unlocked = check_and_unlock_achievements(user_id)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    return jsonify({
-        "message": "Answer submitted",
-        "correct": is_correct,
-        "awardedCoins": awarded_coins,
-        "newCoins": updated_user.get("coins", 0),
-        "newXP": updated_user.get("xp", 0),
-        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
-        "newlyUnlocked": newly_unlocked
-    }), 200
-
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAchievementToast } from './AchievementToast';
-import {
-  FaTrophy, FaMedal, FaStar, FaCrown, FaBolt, FaBook, FaBrain,
-  FaCheckCircle, FaRegSmile, FaMagic
-} from 'react-icons/fa';
-
-// Import the thunks to fetch achievements and shop items
-import { fetchAchievements } from './achievementsSlice';
-import { fetchShopItems } from './shopSlice';
-
-// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
-// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
-const iconMapping = {
-  test_rookie: FaTrophy,
-  accuracy_king: FaMedal,
-  bronze_grinder: FaBook,
-  silver_scholar: FaStar,
-  gold_god: FaCrown,
-  platinum_pro: FaMagic,
-  walking_encyclopedia: FaBrain,
-  redemption_arc: FaBolt,
-  coin_collector_5000: FaBook,
-  coin_hoarder_10000: FaBook,
-  coin_tycoon_50000: FaBook,
-  perfectionist_1: FaCheckCircle,
-  double_trouble_2: FaCheckCircle,
-  error404_failure_not_found: FaCheckCircle,
-  level_up_5: FaTrophy,
-  mid_tier_grinder_25: FaMedal,
-  elite_scholar_50: FaStar,
-  ultimate_master_100: FaCrown,
-  answer_machine_1000: FaBook,
-  knowledge_beast_5000: FaBrain,
-  question_terminator: FaBrain,
-  test_finisher: FaCheckCircle
-};
-
-// Matching color mapping (remove same IDs):
-const colorMapping = {
-  test_rookie: "#ff5555",
-  accuracy_king: "#ffa500",
-  bronze_grinder: "#cd7f32",
-  silver_scholar: "#c0c0c0",
-  gold_god: "#ffd700",
-  platinum_pro: "#e5e4e2",
-  walking_encyclopedia: "#00fa9a",
-  redemption_arc: "#ff4500",
-  coin_collector_5000: "#ff69b4",
-  coin_hoarder_10000: "#ff1493",
-  coin_tycoon_50000: "#ff0000",
-  perfectionist_1: "#adff2f",
-  double_trouble_2: "#7fff00",
-  error404_failure_not_found: "#00ffff",
-  level_up_5: "#f08080",
-  mid_tier_grinder_25: "#ff8c00",
-  elite_scholar_50: "#ffd700",
-  ultimate_master_100: "#ff4500",
-  answer_machine_1000: "#ff69b4",
-  knowledge_beast_5000: "#00fa9a",
-  question_terminator: "#ff1493",
-  test_finisher: "#adff2f"
-};
-
-// Utility function to show toast for newlyUnlocked achievements:
-function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
-  if (!newlyUnlocked || newlyUnlocked.length === 0) return;
-  newlyUnlocked.forEach((achId) => {
-    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
-    const color = colorMapping[achId] || "#fff";
-
-    const foundAch = allAchievements?.find(a => a.achievementId === achId);
-    const title = foundAch?.title || `Unlocked ${achId}`;
-    const desc = foundAch?.description || 'Achievement Unlocked!';
-
-    showAchievementToast({
-      title,
-      description: desc,
-      icon: Icon ? <Icon /> : null,
-      color
-    });
-  });
+i would liek to keep all fucntilioty and do not remove any chnaeg any fucnitloiuty ESPECIALLY THE SUPPORT SERCTION VCEAUE TAHT TOOK ME A LONG TIME OT GET RIGHT AND WORKING ESPACIALLY THE REAL TIME ASPECT SO DO NOT TOUCH THAT
+
+but now we must revamp the design fro this admin dashbaord page aswell as add a tab for my email newsletter wher ei write adn send the and see suurbibers for my newelstter, ill porvide you onctext such as the newletter page, teh routes, models etc etc, then ill give yiu my full admin dashbaord page adn then you will rvamp the deisgn (not cuntioility) do not rmoev any fcuntions or frwtures but you can add feautures if you woud like, adn then give me new css file aswell in full (make sure ot ouput the amdin dashbaord an dcss inf ull)
+
+here is alot fo conetxt for you
+
+// src/App.js
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserData } from './components/pages/store/userSlice';
+
+// Import ToastContainer from react-toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Public pages
+import InfoPage from './components/pages/Info/InfoPage';
+import Login from './components/pages/auth/Login';
+import Register from './components/pages/auth/Register';
+import ForgotPassword from './components/pages/auth/ForgotPassword';
+
+// Admin 
+import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
+import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard'; 
+
+// Protected pages
+import ProtectedRoute from './components/ProtectedRoute';
+import Sidebar from './components/Sidebar/Sidebar';
+
+import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
+import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
+import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
+import GRC from './components/pages/GRCpage/GRC';
+import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
+import Resources from './components/pages/ResourcesPage/Resources';
+
+// Gamified components and userprofile
+import DailyStationPage from './components/pages/store/DailyStationPage';
+import ShopPage from './components/pages/store/ShopPage';
+import UserProfile from './components/pages/store/UserProfile';
+import LeaderboardPage from './components/pages/store/LeaderboardPage';
+import AchievementPage from './components/pages/store/AchievementPage';
+import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
+
+// Unique Test Pages
+import APlusTestPage from './components/pages/aplus/APlusTestPage';
+import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
+import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
+import SecurityPlusTestPage from './components/pages/secplus/SecurityPlusTestPage';
+import CySAPlusTestPage from './components/pages/cysa/CySAPlusTestPage';
+import PenPlusTestPage from './components/pages/penplus/PenPlusTestPage';
+import CaspPlusTestPage from './components/pages/casp/CaspPlusTestPage';
+import LinuxPlusTestPage from './components/pages/linuxplus/LinuxPlusTestPage';
+import CloudPlusTestPage from './components/pages/cloudplus/CloudPlusTestPage';
+import DataPlusTestPage from './components/pages/dataplus/DataPlusTestPage';
+import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage';
+import CisspTestPage from './components/pages/cissp/CisspTestPage';
+import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
+
+// Global Test Page
+import GlobalTestPage from './components/GlobalTestPage';
+
+// Global CSS import
+import './components/pages/XploitcraftPage/global.css';
+
+/* 
+  HomeOrProfile Component
+  - If user data is still loading, shows a loading message.
+  - If user is logged in, redirects to /profile.
+  - Otherwise, renders the public InfoPage.
+*/
+function HomeOrProfile() {
+  const { userId, status } = useSelector((state) => state.user);
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+  if (userId) {
+    return <Navigate to="/profile" replace />;
+  }
+  return <InfoPage />;
 }
 
-const initialUserId = localStorage.getItem('userId');
+function App() {
+  const dispatch = useDispatch();
+  const { userId } = useSelector((state) => state.user);
 
-const initialState = {
-  userId: initialUserId ? initialUserId : null,
-  username: '',
-  email: '',
-  xp: 0,
-  level: 1,
-  coins: 0,
-  achievements: [],
-  xpBoost: 1.0,
-  currentAvatar: null,
-  nameColor: null,
-  purchasedItems: [],
-  subscriptionActive: false,
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  }, [dispatch, userId]);
 
-  status: 'idle',
-  loading: false,
-  error: null,
-};
+  return (
+    <div className="App">
+      {userId && <Sidebar />}
+      {/* React Toastify container for notifications */}
+      <ToastContainer 
+        position="top-right"
+        autoClose={7000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      <div className="main-content">
+        <Routes>
+          {/* The default route now depends on whether the user is logged in */}
+          <Route path="/" element={<HomeOrProfile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
+          <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
+          <Route path="/my-support" element={<SupportAskAnythingPage />} />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }/>
+          <Route path="/achievements" element={
+            <ProtectedRoute>
+              <AchievementPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/shop" element={
+            <ProtectedRoute>
+              <ShopPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/daily" element={
+            <ProtectedRoute>
+              <DailyStationPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/leaderboard" element={
+            <ProtectedRoute>
+              <LeaderboardPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/xploitcraft" element={
+            <ProtectedRoute>
+              <Xploitcraft />
+            </ProtectedRoute>
+          }/>
+          <Route path="/scenariosphere" element={
+            <ProtectedRoute>
+              <ScenarioSphere />
+            </ProtectedRoute>
+          }/>
+          <Route path="/analogyhub" element={
+            <ProtectedRoute>
+              <AnalogyHub />
+            </ProtectedRoute>
+          }/>
+          <Route path="/grc" element={
+            <ProtectedRoute>
+              <GRC />
+            </ProtectedRoute>
+          }/>
+          <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
+          <Route path="/resources" element={<Resources />} />
+          }/>
+          <Route path="/practice-tests/a-plus" element={
+            <ProtectedRoute>
+              <APlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/a-plus/:testId" element={
+            <ProtectedRoute>
+              <APlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aplus-core2" element={
+            <ProtectedRoute>
+              <APlusCore2TestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aplus-core2/:testId" element={
+            <ProtectedRoute>
+              <APlusCore2TestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/network-plus" element={
+            <ProtectedRoute>
+              <NetworkPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/network-plus/:testId" element={
+            <ProtectedRoute>
+              <NetworkPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/security-plus" element={
+            <ProtectedRoute>
+              <SecurityPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/security-plus/:testId" element={
+            <ProtectedRoute>
+              <SecurityPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cysa-plus" element={
+            <ProtectedRoute>
+              <CySAPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cysa-plus/:testId" element={
+            <ProtectedRoute>
+              <CySAPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/pen-plus" element={
+            <ProtectedRoute>
+              <PenPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/pen-plus/:testId" element={
+            <ProtectedRoute>
+              <PenPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/casp-plus" element={
+            <ProtectedRoute>
+              <CaspPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/casp-plus/:testId" element={
+            <ProtectedRoute>
+              <CaspPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/linux-plus" element={
+            <ProtectedRoute>
+              <LinuxPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/linux-plus/:testId" element={
+            <ProtectedRoute>
+              <LinuxPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cloud-plus" element={
+            <ProtectedRoute>
+              <CloudPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cloud-plus/:testId" element={
+            <ProtectedRoute>
+              <CloudPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/data-plus" element={
+            <ProtectedRoute>
+              <DataPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/data-plus/:testId" element={
+            <ProtectedRoute>
+              <DataPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/server-plus" element={
+            <ProtectedRoute>
+              <ServerPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/server-plus/:testId" element={
+            <ProtectedRoute>
+              <ServerPlusTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cissp" element={
+            <ProtectedRoute>
+              <CisspTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/cissp/:testId" element={
+            <ProtectedRoute>
+              <CisspTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aws-cloud" element={
+            <ProtectedRoute>
+              <AWSCloudTestPage />
+            </ProtectedRoute>
+          }/>
+          <Route path="/practice-tests/aws-cloud/:testId" element={
+            <ProtectedRoute>
+              <AWSCloudTestPage />
+            </ProtectedRoute>
+          }/>
 
-// REGISTER
-export const registerUser = createAsyncThunk(
-  'user/registerUser',
-  async (formData, { rejectWithValue, dispatch, getState }) => {
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default App;
+###############################################
+# routes/admin_newsletter_routes.py
+###############################################
+import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from flask import Blueprint, request, jsonify, current_app, session
+from datetime import datetime
+from bson.objectid import ObjectId
+
+# Import these so we can manage unsubscribe tokens right here in the route.
+from models.newsletter import (
+    create_campaign,
+    get_campaign_by_id,
+    mark_campaign_sent,
+    get_all_active_subscribers,
+    newsletter_subscribers_collection,
+    _generate_unsubscribe_token
+)
+
+########## EXAMPLE ADMIN BLUEPRINT ##########
+admin_news_bp = Blueprint('admin_news_bp', __name__)
+
+def require_cracked_admin(required_role=None):
+    """
+    Reuse your existing logic here or import from cracked_admin.
+    Minimal example below:
+    """
+    if not session.get('cracked_admin_logged_in'):
+        return False
+    if required_role:
+        current_role = session.get('cracked_admin_role', 'basic')
+        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
+        needed = priority_map.get(required_role, 1)
+        have = priority_map.get(current_role, 1)
+        return have >= needed
+    return True
+
+###############################
+# SMTP-based email sender
+###############################
+def send_email_smtp(to_email, subject, html_content):
+    """
+    Sends an email via raw SMTP using environment variables:
+      SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM
+
+    If you'd like to do something other than SendGrid, simply
+    specify your own SMTP provider credentials in .env.
+    """
+    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
+    smtp_port = int(os.getenv("SMTP_PORT", 587))
+    smtp_user = os.getenv("SMTP_USER", "")
+    smtp_password = os.getenv("SMTP_PASSWORD", "")
+    email_from = os.getenv("EMAIL_FROM", "no-reply@example.com")
+
+    # Compose
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = email_from
+    msg['To'] = to_email
+
+    part_html = MIMEText(html_content, 'html')
+    msg.attach(part_html)
+
+    # Send
+    with smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.ehlo()
+        server.starttls()
+        server.ehlo()
+        if smtp_user and smtp_password:
+            server.login(smtp_user, smtp_password)
+        server.sendmail(email_from, to_email, msg.as_string())
+
+
+################################
+# ADMIN: Create a new campaign
+################################
+@admin_news_bp.route('/newsletter/create', methods=['POST'])
+def admin_create_newsletter():
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    title = data.get("title", "").strip()
+    content_html = data.get("contentHtml", "").strip()
+
+    if not title or not content_html:
+        return jsonify({"error": "Missing title or contentHtml"}), 400
+
+    campaign_id = create_campaign(title, content_html)
+    return jsonify({"message": "Newsletter campaign created", "campaignId": campaign_id}), 201
+
+
+#################################
+# ADMIN: View a campaign by ID
+#################################
+@admin_news_bp.route('/newsletter/<campaign_id>', methods=['GET'])
+def admin_get_newsletter(campaign_id):
+    if not require_cracked_admin():
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    campaign = get_campaign_by_id(campaign_id)
+    if not campaign:
+        return jsonify({"error": "Campaign not found"}), 404
+
+    # Convert _id -> str
+    campaign["_id"] = str(campaign["_id"])
+    return jsonify(campaign), 200
+
+
+#################################
+# ADMIN: Send a campaign
+#################################
+@admin_news_bp.route('/newsletter/send/<campaign_id>', methods=['POST'])
+def admin_send_newsletter(campaign_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    campaign = get_campaign_by_id(campaign_id)
+    if not campaign:
+        return jsonify({"error": "Campaign not found"}), 404
+
+    if campaign.get("status") == "sent":
+        return jsonify({"error": "Campaign already sent"}), 400
+
+    subject_line = campaign["title"]
+    body_html_from_campaign = campaign["contentHtml"]
+
+    # Get all active subscribers
+    subscribers_cursor = get_all_active_subscribers()
+    count_sent = 0
+
+    ############################################
+    # EXCERPT: Personalized unsubscribe link
+    ############################################
+    for sub in subscribers_cursor:
+        recipient_email = sub["email"]
+
+        # Get the user's unsubscribe token (or generate if missing)
+        token = sub.get("unsubscribeToken")
+        if not token:
+            token = _generate_unsubscribe_token()
+            newsletter_subscribers_collection.update_one(
+                {"_id": sub["_id"]},
+                {"$set": {"unsubscribeToken": token}}
+            )
+
+        unsubscribe_link = f"https://yoursite.com/newsletter/unsubscribe/{token}"
+
+        # Build a custom HTML that includes campaign content + unsubscribe link
+        personal_html = f"""
+        <html>
+          <body>
+            {body_html_from_campaign}
+            <hr>
+            <p>To unsubscribe, click here:
+              <a href="{unsubscribe_link}">Unsubscribe</a>
+            </p>
+          </body>
+        </html>
+        """
+
+        # Send out the individualized email
+        try:
+            send_email_smtp(recipient_email, subject_line, personal_html)
+            count_sent += 1
+        except Exception as e:
+            # log or ignore the error per your preference
+            current_app.logger.warning(f"Failed to send to {recipient_email}: {str(e)}")
+
+    # Mark the campaign as sent in DB
+    mark_campaign_sent(campaign_id)
+
+    return jsonify({
+        "message": "Newsletter campaign sent",
+        "recipientsCount": count_sent
+    }), 200
+import os
+import logging
+import time
+import pytz
+import redis
+from datetime import datetime
+from flask import Flask, g, request, jsonify, current_app
+from flask_cors import CORS
+from flask_session import Session
+from flask_socketio import SocketIO, join_room, leave_room, emit
+from pymongo import MongoClient
+from dotenv import load_dotenv
+
+# routes
+from routes.xploit_routes import xploit_bp
+from routes.scenario_routes import scenario_bp
+from routes.analogy_routes import analogy_bp
+from routes.grc_routes import grc_bp
+from routes.test_routes import api_bp
+from routes.cracked_admin import cracked_bp
+from routes.support_routes import support_bp
+from routes.newsletter_routes import newsletter_bp
+from routes.admin_newsletter_routes import admin_news_bp
+from models.test import create_user, get_user_by_id, update_user_fields
+from mongodb.database import db
+
+load_dotenv()
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+mongo_uri = os.getenv("MONGO_URI")
+CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
+SECRET_KEY = os.getenv('SECRET_KEY', 'supersecret')
+
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+#######################################
+# Initialize Flask & Related
+#######################################
+app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+
+# Setup CORS
+CORS(app, supports_credentials=True)
+
+# Setup SocketIO
+socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
+
+# Setup Redis-based sessions
+app.config['SESSION_TYPE'] = 'redis'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_KEY_PREFIX'] = 'flask_session:'
+app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, password=REDIS_PASSWORD)
+
+Session(app)
+
+# Make socketio accessible from other files (avoids circular imports)
+# so in support_routes.py you can do:
+#   socketio = current_app.extensions['socketio']
+app.extensions['socketio'] = socketio
+
+@app.route('/health')
+def home():
+    return 'Backend is running'
+
+@app.before_request
+def log_request_info():
+    logger.info(f"Handling request to {request.path} with method {request.method}")
+
+# Register blueprints
+app.register_blueprint(xploit_bp, url_prefix='/payload')
+app.register_blueprint(scenario_bp, url_prefix='/scenario')
+app.register_blueprint(analogy_bp, url_prefix='/analogy')
+app.register_blueprint(grc_bp, url_prefix='/grc')
+app.register_blueprint(api_bp, url_prefix='/test')
+app.register_blueprint(cracked_bp, url_prefix="/cracked")
+app.register_blueprint(support_bp, url_prefix="/support")
+app.register_blueprint(newsletter_bp, url_prefix='/newsletter')
+app.register_blueprint(admin_news_bp, url_prefix="/cracked") 
+
+
+###########################
+# BEFORE REQUEST
+###########################
+@app.before_request
+def log_request_start():
+    g.request_start_time = time.time()
+    g.db_time_accumulator = 0.0
+
+###########################
+# AFTER REQUEST
+###########################
+@app.after_request
+def log_request_end(response):
+    try:
+        duration_sec = time.time() - g.request_start_time
+        db_time_sec = getattr(g, 'db_time_accumulator', 0.0)
+        response_size = 0
+        if not response.direct_passthrough and response.data:
+            response_size = len(response.data)
+        http_status = response.status_code
+
+        # Insert into perfSamples
+        doc = {
+            "route": request.path,
+            "method": request.method,
+            "duration_sec": duration_sec,
+            "db_time_sec": db_time_sec,
+            "response_bytes": response_size,
+            "http_status": http_status,
+            # Store in UTC
+            "timestamp": datetime.utcnow()
+        }
+        db.perfSamples.insert_one(doc)
+    except Exception as e:
+        logger.warning(f"Failed to insert perfSample: {e}")
+    return response
+
+########################################################################
+# Socket.IO event handlers
+########################################################################
+@socketio.on('connect')
+def handle_connect():
+    app.logger.info(f"Client connected: {request.sid}")
+    socketio.emit('message', {'data': 'Connected to server'})
+
+@socketio.on('join_thread')
+def on_join_thread(data):
+    thread_id = str(data.get('threadId'))  # Ensure string
+    join_room(thread_id)
+    app.logger.info(f"Client joined thread room: {thread_id}")
+
+@socketio.on('leave_thread')
+def on_leave_thread(data):
+    """
+    data = { "threadId": "abc123" }
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        leave_room(thread_id)
+        app.logger.info(f"Client left thread room: {thread_id}")
+
+@socketio.on('admin_typing')
+def on_admin_typing(data):
+    """
+    Broadcast to that thread's room that admin is typing
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"Admin started typing in thread room: {thread_id}")
+        socketio.emit('admin_typing', {"threadId": thread_id}, room=thread_id)
+
+@socketio.on('admin_stop_typing')
+def on_admin_stop_typing(data):
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"Admin stopped typing in thread room: {thread_id}")
+        socketio.emit('admin_stop_typing', {"threadId": thread_id}, room=thread_id)
+
+
+@socketio.on('admin_new_message')
+def on_admin_new_message(data):
+    thread_id = data.get('threadId')
+    message = data.get('message')
+    if thread_id and message:
+        thread_id = str(thread_id)  # Ensure string
+        app.logger.info(f"Admin sending message to thread room: {thread_id}")
+        socketio.emit('new_message', {
+            "threadId": thread_id,
+            "message": message
+        }, room=thread_id)
+
+@socketio.on('user_typing')
+def on_user_typing(data):
+    """
+    data = { "threadId": "..." }
+    Let the admin see "User is typing..."
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"User started typing in thread room: {thread_id}")
+        socketio.emit('user_typing', {"threadId": thread_id}, room=thread_id)
+
+@socketio.on('user_stop_typing')
+def on_user_stop_typing(data):
+    """
+    data = { "threadId": "..." }
+    Let the admin see the user is no longer typing
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"User stopped typing in thread room: {thread_id}")
+        socketio.emit('user_stop_typing', {"threadId": thread_id}, room=thread_id)
+
+@socketio.on('join_user_room')
+def handle_join_user_room(data):
+    user_id = data.get('userId')
+    if user_id:
+        room_name = f"user_{user_id}"
+        join_room(room_name)
+        app.logger.info(f"User {user_id} joined personal room: {room_name}")
+
+if __name__ == '__main__':
+    # For local dev, run the SocketIO server
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
+#######################################
+# routes/newsletter_routes.py
+#######################################
+from flask import Blueprint, request, jsonify, redirect
+from models.newsletter import (
+    subscribe_email,
+    unsubscribe_email,
+    unsubscribe_by_token
+)
+
+newsletter_bp = Blueprint('newsletter_bp', __name__)
+
+@newsletter_bp.route('/subscribe', methods=['POST'])
+def newsletter_subscribe():
+    data = request.json or {}
+    email = data.get("email", "").strip()
+    result = subscribe_email(email)
+    return jsonify(result), (200 if result["success"] else 400)
+
+@newsletter_bp.route('/unsubscribe', methods=['POST'])
+def newsletter_unsubscribe():
+    data = request.json or {}
+    email = data.get("email", "").strip()
+    result = unsubscribe_email(email)
+    return jsonify(result), (200 if result["success"] else 400)
+
+
+###############################
+# NEW: GET /newsletter/unsubscribe/<token>
+###############################
+@newsletter_bp.route('/unsubscribe/<token>', methods=['GET'])
+def newsletter_unsubscribe_token(token):
+    """
+    Allows one-click unsubscribe via GET.
+    e.g. 
+      <a href="https://yoursite.com/newsletter/unsubscribe/<token>">Unsubscribe</a>
+    
+    You can either:
+      (a) Return a JSON response 
+      (b) Or return an HTML "You have unsubscribed"
+      (c) Or redirect them to a 'success' page
+
+    For this example, we’ll do a simple JSON plus a 200 or 400 status.
+    """
+    result = unsubscribe_by_token(token)
+    if result["success"]:
+        # Optionally, you can redirect them to a 'Thank You' page
+        # return redirect("https://yoursite.com/unsubscribe-success.html")
+
+        # Or just return JSON
+        return jsonify({"message": result["message"]}), 200
+    else:
+        return jsonify({"error": result["message"]}), 400
+#######################################
+# models/newsletter.py
+#######################################
+import os
+import re
+import random
+import string
+from datetime import datetime
+from bson.objectid import ObjectId
+from mongodb.database import db
+
+newsletter_subscribers_collection = db.newsletterSubscribers
+newsletter_campaigns_collection = db.newsletterCampaigns
+
+def _generate_unsubscribe_token(length=32):
+    """
+    Generates a random token for unsubscribing.
+    """
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
+
+def subscribe_email(email: str):
+    email = email.strip().lower()
+    if not re.match(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        return {"success": False, "message": "Invalid email format."}
+
+    existing = newsletter_subscribers_collection.find_one({"email": email})
+    if existing:
+        if existing.get("unsubscribed", False) is True:
+            # Mark them re-subscribed
+            newsletter_subscribers_collection.update_one(
+                {"_id": existing["_id"]},
+                {
+                    "$set": {
+                        "unsubscribed": False,
+                        "resubscribedAt": datetime.utcnow()
+                    },
+                    # Ensure they have a token
+                    "$setOnInsert": {
+                        "unsubscribeToken": _generate_unsubscribe_token()
+                    }
+                },
+                upsert=True
+            )
+            return {"success": True, "message": "You have been re-subscribed."}
+        else:
+            return {"success": False, "message": "Already subscribed."}
+    else:
+        doc = {
+            "email": email,
+            "subscribedAt": datetime.utcnow(),
+            "unsubscribed": False,
+            "unsubscribeToken": _generate_unsubscribe_token()
+        }
+        newsletter_subscribers_collection.insert_one(doc)
+        return {"success": True, "message": "Subscription successful."}
+
+
+def unsubscribe_email(email: str):
+    """
+    If you still want to let them unsubscribe by email
+    (POST /newsletter/unsubscribe with JSON),
+    keep this approach for backwards compatibility.
+    """
+    email = email.strip().lower()
+    subscriber = newsletter_subscribers_collection.find_one({"email": email})
+    if not subscriber:
+        return {"success": False, "message": "Email not found in subscriber list."}
+
+    if subscriber.get("unsubscribed", False) is True:
+        return {"success": False, "message": "Already unsubscribed."}
+
+    newsletter_subscribers_collection.update_one(
+        {"_id": subscriber["_id"]},
+        {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
+    )
+    return {"success": True, "message": "You have been unsubscribed."}
+
+
+def unsubscribe_by_token(token: str):
+    """
+    Finds the subscriber by their token and unsubscribes them if possible.
+    Returns a dict { success: bool, message: str }.
+    """
+    subscriber = newsletter_subscribers_collection.find_one({"unsubscribeToken": token})
+    if not subscriber:
+        return {"success": False, "message": "Invalid unsubscribe token."}
+    if subscriber.get("unsubscribed", False):
+        return {"success": False, "message": "You have already unsubscribed."}
+
+    newsletter_subscribers_collection.update_one(
+        {"_id": subscriber["_id"]},
+        {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
+    )
+    return {"success": True, "message": "You have been unsubscribed."}
+
+
+def get_all_active_subscribers():
+    return newsletter_subscribers_collection.find({"unsubscribed": False})
+
+
+########################################
+# Newsletter Campaign Management
+########################################
+
+def create_campaign(title: str, content_html: str):
+    doc = {
+        "title": title,
+        "contentHtml": content_html,
+        "createdAt": datetime.utcnow(),
+        "sentAt": None,
+        "status": "draft"
+    }
+    result = newsletter_campaigns_collection.insert_one(doc)
+    return str(result.inserted_id)
+
+def get_campaign_by_id(campaign_id: str):
+    try:
+        oid = ObjectId(campaign_id)
+    except:
+        return None
+    return newsletter_campaigns_collection.find_one({"_id": oid})
+
+def mark_campaign_sent(campaign_id: str):
+    try:
+        oid = ObjectId(campaign_id)
+    except:
+        return
+    newsletter_campaigns_collection.update_one(
+        {"_id": oid},
+        {"$set": {
+            "sentAt": datetime.utcnow(),
+            "status": "sent"
+        }}
+    )
+import csv
+import io
+import random
+import string
+import pytz
+from datetime import datetime, timedelta
+from bson import ObjectId
+from flask import Blueprint, request, session, jsonify, make_response, current_app
+from pymongo import ReturnDocument
+import redis
+import os
+import time
+import pickle
+from dotenv import load_dotenv
+
+from mongodb.database import db
+
+cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
+ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
+
+load_dotenv()
+
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+cache_conn = redis.StrictRedis(host='redis', port=6379, db=1, password=REDIS_PASSWORD)
+
+def cache_set(key, value, ttl=60):
+    try:
+        serialized = pickle.dumps(value)
+        cache_conn.setex(key, ttl, serialized)
+    except:
+        pass
+
+def cache_get(key):
+    try:
+        data = cache_conn.get(key)
+        if data:
+            return pickle.loads(data)
+        return None
+    except:
+        return None
+
+def require_cracked_admin(required_role=None):
+    """
+    Checks if session['cracked_admin_logged_in'] is True.
+    Optionally enforces roles: basic=1, supervisor=2, superadmin=3.
+    """
+    if not session.get('cracked_admin_logged_in'):
+        return False
+    if required_role:
+        current_role = session.get('cracked_admin_role', 'basic')
+        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
+        needed = priority_map.get(required_role, 1)
+        have = priority_map.get(current_role, 1)
+        return have >= needed
+    return True
+
+
+##################################################################
+# ADMIN LOGIN / LOGOUT
+##################################################################
+@cracked_bp.route('/login', methods=['POST'])
+def cracked_admin_login():
+    data = request.json or {}
+    adminKey = data.get('adminKey', '')
+    input_role = data.get('role', 'basic')
+    if adminKey == ADMIN_PASS:
+        session['cracked_admin_logged_in'] = True
+        session['cracked_admin_role'] = input_role
+        return jsonify({"message": "Authorization successful"}), 200
+    else:
+        return jsonify({"error": "Invalid admin password"}), 403
+
+@cracked_bp.route('/logout', methods=['POST'])
+def cracked_admin_logout():
+    session.pop('cracked_admin_logged_in', None)
+    session.pop('cracked_admin_role', None)
+    return jsonify({"message": "admin logged out"}), 200
+
+
+##################################################################
+# ADMIN DASHBOARD
+##################################################################
+@cracked_bp.route('/dashboard', methods=['GET'])
+def admin_dashboard():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated as admin"}), 401
+
+    cache_key = 'admin_dashboard_data'
+    cached_data = cache_get(cache_key)
+    now_utc = datetime.utcnow()
+
+    if cached_data:
+        return jsonify(cached_data), 200
+
+    try:
+        # 1) Basic counts & stats
+        user_count = db.mainusers.count_documents({})
+        test_attempts_count = db.testAttempts.count_documents({})
+
+        start_of_day = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
+        daily_bonus_claims = db.mainusers.count_documents({
+            "lastDailyClaim": {"$gte": start_of_day}
+        })
+
+        pipeline = [
+            {"$match": {"finished": True}},
+            {"$group": {
+                "_id": None,
+                "avgScorePercent": {
+                    "$avg": {
+                        "$multiply": [
+                            {"$divide": ["$score", "$totalQuestions"]},
+                            100
+                        ]
+                    }
+                }
+            }}
+        ]
+        result = list(db.testAttempts.aggregate(pipeline))
+        avg_score = result[0]["avgScorePercent"] if result else 0.0
+
+        # 2) Performance metrics (the latest doc)
+        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
+        if not perf_metrics:
+            # Provide a fallback doc if none exist
+            perf_metrics = {
+                "avg_request_time": 0.123,
+                "avg_db_query_time_ms": 45.0,
+                "data_transfer_rate": "1.2MB/s",
+                "throughput": 50,
+                "error_rate": 0.02,
+                "timestamp": now_utc
+            }
+        else:
+            # Convert _id => str
+            if '_id' in perf_metrics:
+                perf_metrics['_id'] = str(perf_metrics['_id'])
+
+            # If there's a numeric 'avg_db_query_time', convert to ms
+            if 'avg_db_query_time' in perf_metrics:
+                ms_val = round(perf_metrics['avg_db_query_time'] * 1000, 2)
+                perf_metrics['avg_db_query_time_ms'] = ms_val
+                del perf_metrics['avg_db_query_time']
+
+            # Convert timestamp to EST
+            if 'timestamp' in perf_metrics and isinstance(perf_metrics['timestamp'], datetime):
+                import pytz
+                est_tz = pytz.timezone('America/New_York')
+                perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
+
+        # 3) Build "recentStats" for the last 7 days
+        import pytz
+        est_tz = pytz.timezone('America/New_York')
+        recentStats = []
+        for i in range(7):
+            day_start = start_of_day - timedelta(days=i)
+            day_end = day_start + timedelta(days=1)
+            label_str = day_start.strftime("%Y-%m-%d")
+
+            day_bonus_count = db.mainusers.count_documents({
+                "lastDailyClaim": {"$gte": day_start, "$lt": day_end}
+            })
+            day_test_attempts = db.testAttempts.count_documents({
+                "finished": True,
+                "finishedAt": {"$gte": day_start, "$lt": day_end}
+            })
+            recentStats.append({
+                "label": label_str,
+                "dailyBonus": day_bonus_count,
+                "testAttempts": day_test_attempts
+            })
+        # Reverse so oldest is first
+        recentStats.reverse()
+
+        now_est = now_utc.astimezone(est_tz).isoformat()
+
+        dashboard_data = {
+            "user_count": user_count,
+            "test_attempts_count": test_attempts_count,
+            "daily_bonus_claims": daily_bonus_claims,
+            "average_test_score_percent": round(avg_score, 2),
+            "timestamp_est": now_est,
+            "performance_metrics": perf_metrics,
+            "recentStats": recentStats
+        }
+
+        cache_set(cache_key, dashboard_data, ttl=60)
+        return jsonify(dashboard_data), 200
+
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve dashboard metrics", "details": str(e)}), 500
+
+##################################################################
+# USERS
+##################################################################
+@cracked_bp.route('/users', methods=['GET'])
+def admin_list_users():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    search = request.args.get('search', '').strip()
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 20))
+
+    # Optional: Cache page1 limit20 w/no search
+    if not search and page == 1 and limit == 20:
+        cache_key = "admin_users_list_page1_limit20"
+        cached_data = cache_get(cache_key)
+        if cached_data:
+            return jsonify(cached_data), 200
+
+    query = {}
+    if search:
+        query = {
+            "$or": [
+                {"username": {"$regex": search, "$options": "i"}},
+                {"email": {"$regex": search, "$options": "i"}}
+            ]
+        }
+    skip_count = (page - 1) * limit
+
+    projection = {
+        "_id": 1,
+        "username": 1,
+        "email": 1,
+        "coins": 1,
+        "xp": 1,
+        "level": 1,
+        "achievements": 1,
+        "subscriptionActive": 1,
+        "suspended": 1,
+        "achievement_counters": 1,
+        "currentAvatar": 1
+    }
+
+    cursor = db.mainusers.find(query, projection).skip(skip_count).limit(limit)
+    results = []
+    for u in cursor:
+        u['_id'] = str(u['_id'])
+        if 'currentAvatar' in u and isinstance(u['currentAvatar'], ObjectId):
+            u['currentAvatar'] = str(u['currentAvatar'])
+        if 'achievements' in u and isinstance(u['achievements'], list):
+            u['achievements'] = [str(a) for a in u['achievements']]
+
+        counters = u.get('achievement_counters', {})
+        u['totalQuestionsAnswered'] = counters.get('total_questions_answered', 0)
+        u['perfectTestsCount'] = counters.get('perfect_tests_count', 0)
+        results.append(u)
+
+    total_count = db.mainusers.count_documents(query)
+    resp_data = {
+        "users": results,
+        "total": total_count,
+        "page": page,
+        "limit": limit
+    }
+
+    if not search and page == 1 and limit == 20:
+        cache_set("admin_users_list_page1_limit20", resp_data, 60)
+
+    return jsonify(resp_data), 200
+
+@cracked_bp.route('/users/export', methods=['GET'])
+def admin_export_users_csv():
+    if not require_cracked_admin(required_role="superadmin"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    users = db.mainusers.find({}, {
+        "username": 1, "email": 1, "coins": 1, "xp": 1, "level": 1
+    })
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["username", "email", "coins", "xp", "level"])
+    for u in users:
+        writer.writerow([
+            u.get("username", ""),
+            u.get("email", ""),
+            u.get("coins", 0),
+            u.get("xp", 0),
+            u.get("level", 1)
+        ])
+    output.seek(0)
+
+    response = make_response(output.read())
+    response.headers["Content-Disposition"] = "attachment; filename=users_export.csv"
+    response.headers["Content-Type"] = "text/csv"
+    return response
+
+@cracked_bp.route('/users/<user_id>', methods=['PUT'])
+def admin_update_user(user_id):
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+    data = request.json or {}
+
+    try:
+        obj_id = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user id"}), 400
+
+    # We only allow editing certain fields
+    update_fields = {}
+    for field in ["username", "coins", "xp", "level", "subscriptionActive", "suspended"]:
+        if field in data:
+            update_fields[field] = data[field]
+
+    if update_fields:
+        db.mainusers.update_one({"_id": obj_id}, {"$set": update_fields})
+        return jsonify({"message": "User updated"}), 200
+    else:
+        return jsonify({"message": "No valid fields to update"}), 200
+
+@cracked_bp.route('/users/<user_id>', methods=['DELETE'])
+def admin_delete_user(user_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    try:
+        obj_id = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user id"}), 400
+
+    db.mainusers.delete_one({"_id": obj_id})
+    return jsonify({"message": "User deleted"}), 200
+
+@cracked_bp.route('/users/<user_id>/reset-password', methods=['POST'])
+def admin_reset_password(user_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    try:
+        obj_id = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user id"}), 400
+
+    import string, random
+    new_pass = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
+    result = db.mainusers.find_one_and_update(
+        {"_id": obj_id},
+        {"$set": {"password": new_pass}},
+        return_document=ReturnDocument.AFTER
+    )
+    if not result:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify({"message": "Password reset", "newPassword": new_pass}), 200
+
+
+##################################################################
+# SUPPORT THREADS (Admin)
+##################################################################
+@cracked_bp.route('/supportThreads', methods=['GET'])
+def admin_list_support_threads():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    status_filter = request.args.get('status', '')
+    query = {}
+    if status_filter:
+        query["status"] = status_filter
+
+    threads = db.supportThreads.find(query).sort("updatedAt", -1)
+    results = []
+    for t in threads:
+        t['_id'] = str(t['_id'])
+        t['userId'] = str(t['userId'])
+        for m in t.get('messages', []):
+            if isinstance(m.get('timestamp'), datetime):
+                m['timestamp'] = m['timestamp'].isoformat()
+        results.append(t)
+    return jsonify(results), 200
+
+@cracked_bp.route('/supportThreads/<thread_id>', methods=['GET'])
+def admin_get_support_thread(thread_id):
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread id"}), 400
+
+    thread = db.supportThreads.find_one({"_id": obj_id})
+    if not thread:
+        return jsonify({"error": "Thread not found"}), 404
+
+    thread['_id'] = str(thread['_id'])
+    thread['userId'] = str(thread['userId'])
+    for m in thread.get('messages', []):
+        if isinstance(m.get('timestamp'), datetime):
+            m['timestamp'] = m['timestamp'].isoformat()
+
+    return jsonify(thread), 200
+
+@cracked_bp.route('/supportThreads/<thread_id>/reply', methods=['POST'])
+def admin_reply_to_thread(thread_id):
+    """
+    Admin replies to an existing thread. 
+    Emits 'new_message' to that thread's room => room = thread_id
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread id"}), 400
+
+    data = request.json or {}
+    content = data.get('content', '').strip()
+    if not content:
+        return jsonify({"error": "No content provided"}), 400
+
+    now = datetime.utcnow()
+    update_result = db.supportThreads.update_one(
+        {"_id": obj_id},
+        {
+            "$push": {
+                "messages": {
+                    "sender": "admin",
+                    "content": content,
+                    "timestamp": now
+                }
+            },
+            "$set": {"updatedAt": now}
+        }
+    )
+    if update_result.matched_count == 0:
+        return jsonify({"error": "Thread not found"}), 404
+
+    socketio = current_app.extensions['socketio']
+    thread_id_str = str(thread_id)
+
+    socketio.emit('new_message', {
+        "threadId": thread_id_str,
+        "message": {
+            "sender": "admin",
+            "content": content,
+            "timestamp": now.isoformat()
+        }
+    }, room=thread_id_str)
+
+    return jsonify({"message": "Reply sent"}), 200
+
+@cracked_bp.route('/supportThreads/<thread_id>/close', methods=['POST'])
+def admin_close_thread(thread_id):
+    """
+    Admin closes a thread. Also pushes a "Thread closed" message
+    into 'messages' array and emits 'new_message'
+    so the user sees it in real time.
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread id"}), 400
+
+    data = request.json or {}
+    resolution = data.get('resolution', 'closed by admin')
+    now = datetime.utcnow()
+
+    # Update DB: set status to 'closed', push a closure message
+    update_result = db.supportThreads.update_one(
+        {"_id": obj_id},
+        {
+            "$push": {"messages": {
+                "sender": "admin",
+                "content": f"Thread closed. Reason: {resolution}",
+                "timestamp": now
+            }},
+            "$set": {
+                "status": "closed",
+                "updatedAt": now
+            }
+        }
+    )
+    if update_result.matched_count == 0:
+        return jsonify({"error": "Thread not found"}), 404
+
+    # Emit a 'new_message' event so the user sees
+    # "Thread closed..." message in real time
+    from flask import current_app
+    socketio = current_app.extensions['socketio']
+    socketio.emit(
+        'new_message',
+        {
+            "threadId": str(obj_id),
+            "message": {
+                "sender": "admin",
+                "content": f"Thread closed. Reason: {resolution}",
+                "timestamp": now.isoformat()
+            }
+        },
+        room=str(obj_id)  # The Socket.IO room is the thread's string ID
+    )
+
+    return jsonify({"message": "Thread closed"}), 200
+
+
+@cracked_bp.route('/supportThreads/clear-closed', methods=['DELETE'])
+def admin_clear_closed_threads():
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    result = db.supportThreads.delete_many({"status": "closed"})
+    return jsonify({"message": f"Deleted {result.deleted_count} closed threads"}), 200
+
+@cracked_bp.route('/supportThreads/createFromAdmin', methods=['POST'])
+def admin_create_thread_for_user():
+    """
+    JSON: { "userId": "...", "initialMessage": "Hello from admin" }
+    Creates a new support thread for the user with an admin-sent message.
+    Emits 'new_thread' to the user's personal room => "user_<userId>"
+    Returns the thread data in the response.
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    data = request.json or {}
+    user_id = data.get("userId")
+    initial_message = data.get("initialMessage", "").strip()
+    if not user_id:
+        return jsonify({"error": "Missing userId"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid userId"}), 400
+
+    now = datetime.utcnow()
+    thread_doc = {
+        "userId": user_oid,
+        "subject": "Admin-initiated conversation",
+        "messages": [],
+        "status": "open",
+        "createdAt": now,
+        "updatedAt": now
+    }
+    if initial_message:
+        thread_doc["messages"].append({
+            "sender": "admin",
+            "content": initial_message,
+            "timestamp": now
+        })
+
+    insert_result = db.supportThreads.insert_one(thread_doc)
+    if insert_result.inserted_id:
+        socketio = current_app.extensions['socketio']
+
+        thread_data = {
+            "_id": str(insert_result.inserted_id),
+            "userId": user_id,
+            "subject": "Admin-initiated conversation",
+            "status": "open",
+            "createdAt": now.isoformat(),
+            "updatedAt": now.isoformat(),
+            "messages": ([
+                {
+                    "sender": "admin",
+                    "content": initial_message,
+                    "timestamp": now.isoformat()
+                }
+            ] if initial_message else [])
+        }
+
+        # Emit to just that user's room => "user_<userId>"
+        socketio.emit('new_thread', thread_data, room=f"user_{user_id}")
+
+        return jsonify({"message": "Thread created", "thread": thread_data}), 201
+    else:
+        return jsonify({"error": "Failed to create thread"}), 500
+
+
+##################################################################
+# TESTS
+##################################################################
+@cracked_bp.route('/tests', methods=['GET'])
+def admin_list_tests():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    category = request.args.get('category', '').strip()
+    query = {}
+    if category:
+        query["category"] = category
+
+    tests_cursor = db.tests.find(query)
+    results = []
+    for t in tests_cursor:
+        t['_id'] = str(t['_id'])
+        results.append(t)
+    return jsonify(results), 200
+
+
+@cracked_bp.route('/tests', methods=['POST'])
+def admin_create_test():
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    # Must have "category", "testId", "questions"
+    if "category" not in data or "testId" not in data or "questions" not in data:
+        return jsonify({"error": "Missing required fields"}), 400
+
+    result = db.tests.insert_one(data)
+    return jsonify({"message": "Test created", "insertedId": str(result.inserted_id)}), 201
+
+
+@cracked_bp.route('/tests/<test_id>', methods=['PUT'])
+def admin_update_test(test_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    try:
+        obj_id = ObjectId(test_id)
+    except:
+        return jsonify({"error": "Invalid test id"}), 400
+
+    update_result = db.tests.update_one({"_id": obj_id}, {"$set": data})
+    if update_result.matched_count == 0:
+        return jsonify({"error": "Test not found"}), 404
+    return jsonify({"message": "Test updated"}), 200
+
+
+@cracked_bp.route('/tests/<test_id>', methods=['DELETE'])
+def admin_delete_test(test_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    try:
+        obj_id = ObjectId(test_id)
+    except:
+        return jsonify({"error": "Invalid test id"}), 400
+
+    delete_result = db.tests.delete_one({"_id": obj_id})
+    if delete_result.deleted_count == 0:
+        return jsonify({"error": "Test not found"}), 404
+    return jsonify({"message": "Test deleted"}), 200
+
+
+##################################################################
+# DAILY PBQs
+##################################################################
+@cracked_bp.route('/daily', methods=['GET'])
+def admin_list_daily_questions():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    docs = list(db.dailyQuestions.find({}))
+    for d in docs:
+        d['_id'] = str(d['_id'])
+    return jsonify(docs), 200
+
+@cracked_bp.route('/daily', methods=['POST'])
+def admin_create_daily_question():
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    if "prompt" not in data:
+        return jsonify({"error": "Missing prompt"}), 400
+
+    data["createdAt"] = datetime.utcnow()
+    db.dailyQuestions.insert_one(data)
+    return jsonify({"message": "Daily PBQ created"}), 201
+
+@cracked_bp.route('/daily/<obj_id>', methods=['PUT'])
+def admin_update_daily_question(obj_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    try:
+        doc_id = ObjectId(obj_id)
+    except:
+        return jsonify({"error": "Invalid daily PBQ id"}), 400
+
+    update_result = db.dailyQuestions.update_one({"_id": doc_id}, {"$set": data})
+    if update_result.matched_count == 0:
+        return jsonify({"error": "Daily PBQ not found"}), 404
+    return jsonify({"message": "Daily PBQ updated"}), 200
+
+@cracked_bp.route('/daily/<obj_id>', methods=['DELETE'])
+def admin_delete_daily_question(obj_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    try:
+        doc_id = ObjectId(obj_id)
+    except:
+        return jsonify({"error": "Invalid daily PBQ id"}), 400
+
+    delete_result = db.dailyQuestions.delete_one({"_id": doc_id})
+    if delete_result.deleted_count == 0:
+        return jsonify({"error": "Not found"}), 404
+    return jsonify({"message": "Daily PBQ deleted"}), 200
+
+
+
+
+
+##################################################################
+# PERFORMANCE
+##################################################################
+@cracked_bp.route('/performance', methods=['GET'])
+def admin_performance_metrics():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
+        if not perf_metrics:
+            # Return a dummy doc so front end won't break
+            perf_metrics = {
+                "_id": None,
+                "avg_request_time": 0.123,
+                "avg_db_query_time_ms": 45.0,
+                "data_transfer_rate": "1.2MB/s",
+                "throughput": 50,
+                "error_rate": 0.02,
+                "timestamp": datetime.utcnow()
+            }
+        else:
+            perf_metrics['_id'] = str(perf_metrics.get('_id', ''))
+
+            # Convert any 'avg_db_query_time' => ms
+            if 'avg_db_query_time' in perf_metrics:
+                ms_val = round(perf_metrics['avg_db_query_time'] * 1000, 2)
+                perf_metrics['avg_db_query_time_ms'] = ms_val
+                del perf_metrics['avg_db_query_time']
+
+        # Convert timestamp to EST
+        if 'timestamp' in perf_metrics and isinstance(perf_metrics['timestamp'], datetime):
+            est_tz = pytz.timezone('America/New_York')
+            perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
+
+        # Example: If you want a history array for charting:
+        # (pull last 10 performanceMetrics docs and transform them)
+        history_cursor = db.performanceMetrics.find().sort("timestamp", -1).limit(10)
+        history_list = []
+        est_tz = pytz.timezone('America/New_York')
+        for doc in history_cursor:
+            doc_id = str(doc['_id'])
+            doc_time = doc['timestamp'].astimezone(est_tz).isoformat() if isinstance(doc['timestamp'], datetime) else None
+            # convert numeric to ms
+            if 'avg_db_query_time' in doc:
+                doc['avg_db_query_time_ms'] = round(doc['avg_db_query_time'] * 1000, 2)
+                del doc['avg_db_query_time']
+
+            history_list.append({
+                "_id": doc_id,
+                "timestamp": doc_time,
+                "requestTime": doc.get("avg_request_time", 0),
+                "dbTime": doc.get("avg_db_query_time_ms", 0.0)
+            })
+        # Attach the reversed list so it's earliest to latest if you want:
+        perf_metrics['history'] = list(reversed(history_list))
+
+        return jsonify(perf_metrics), 200
+
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve performance metrics", "details": str(e)}), 500
+
+
+##################################################################
+# ACTIVITY / AUDIT LOGS
+##################################################################
+@cracked_bp.route('/activity-logs', methods=['GET'])
+def admin_activity_logs():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    logs = db.auditLogs.find().sort("timestamp", -1).limit(200)
+    results = []
+    est_tz = pytz.timezone('America/New_York')
+
+    for l in logs:
+        # Convert _id => str
+        l['_id'] = str(l['_id'])
+
+        # Also convert userId => str if it's an ObjectId
+        if 'userId' in l and isinstance(l['userId'], ObjectId):
+            l['userId'] = str(l['userId'])
+
+        # Convert timestamp => EST ISO
+        if isinstance(l.get('timestamp'), datetime):
+            l['timestamp'] = l['timestamp'].astimezone(est_tz).isoformat()
+
+        # The rest is unchanged
+        ip = l.get('ip', 'unknown')
+        success = l.get('success', True)
+
+        results.append(l)
+
+    # You already do suspicious IP checks if you want…
+    # (the main cause was the leftover ObjectId in userId)
+
+    return jsonify({"logs": results}), 200
+    
+##################################################################
+# DB QUERY LOGS (Reading perfSamples)
+##################################################################
+@cracked_bp.route('/db-logs', methods=['GET'])
+def admin_db_logs():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    limit = int(request.args.get("limit", 100))
+    try:
+        samples = db.perfSamples.find().sort("timestamp", -1).limit(limit)
+        data = []
+        est_tz = pytz.timezone('America/New_York')
+
+        for s in samples:
+            s['_id'] = str(s['_id'])
+            # convert db_time_sec -> ms
+            if 'db_time_sec' in s:
+                s['db_time_ms'] = round(s['db_time_sec'] * 1000.0, 2)
+                del s['db_time_sec']
+
+            # convert duration_sec -> ms
+            if 'duration_sec' in s:
+                s['duration_ms'] = round(s['duration_sec'] * 1000.0, 2)
+                del s['duration_sec']
+
+            if isinstance(s.get('timestamp'), datetime):
+                s['timestamp'] = s['timestamp'].astimezone(est_tz).isoformat()
+
+            data.append(s)
+
+        return jsonify(data), 200
+
+    except Exception as e:
+        return jsonify({"error": "Error retrieving DB logs", "details": str(e)}), 500
+
+
+##################################################################
+# READ-ONLY DB SHELL
+##################################################################
+@cracked_bp.route('/db-shell/read', methods=['POST'])
+def admin_db_shell_read():
+    """
+    Body: { "collection": "mainusers", "filter": {}, "limit": 5 }
+    Only performs a find() with a limit, returns JSON docs.
+    """
+    if not require_cracked_admin(required_role="superadmin"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    body = request.json or {}
+    coll_name = body.get("collection")
+    if not coll_name:
+        return jsonify({"error": "No collection specified"}), 400
+
+    if coll_name not in db.list_collection_names():
+        return jsonify({"error": f"Invalid or unknown collection: {coll_name}"}), 400
+
+    filt = body.get("filter", {})
+    limit_val = int(body.get("limit", 10))
+
+    try:
+        cursor = db[coll_name].find(filt).limit(limit_val)
+        results = []
+        for c in cursor:
+            c['_id'] = str(c['_id'])
+            results.append(c)
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+        
+        
+@cracked_bp.route('/health-checks', methods=['GET'])
+def admin_health_checks():
+    """
+    Returns the last ~50 health checks from the 'apiHealth' collection.
+    Celery 'check_api_endpoints' task inserts these docs:
+        { checkedAt: <datetime>, results: [ { endpoint, status, ok, ... } ] }
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+
+    try:
+        docs = db.apiHealth.find().sort("checkedAt", -1).limit(50)
+        results = []
+        est_tz = pytz.timezone('America/New_York')
+
+        for d in docs:
+            # Convert _id => str
+            d['_id'] = str(d['_id'])
+            # Convert checkedAt => EST
+            if 'checkedAt' in d and isinstance(d['checkedAt'], datetime):
+                d['checkedAt'] = d['checkedAt'].astimezone(est_tz).isoformat()
+            # d['results'] is typically an array of endpoint checks
+            # Each item is {endpoint, status, ok, error?}
+            # No special serialization is needed if they’re just strings/integers.
+            results.append(d)
+
+        return jsonify(results), 200
+    except Exception as e:
+        return jsonify({"error": "Error retrieving health checks", "details": str(e)}), 500
+     from flask import Blueprint, request, session, jsonify, g, current_app
+from datetime import datetime
+import time
+from bson import ObjectId
+from mongodb.database import db
+
+support_bp = Blueprint('support', __name__, url_prefix='/support')
+
+def require_user_logged_in():
+    return bool(session.get('userId'))
+
+@support_bp.route('/my-chat', methods=['GET'])
+def list_user_threads():
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+
+    start_db = time.time()
+    # Return newest first
+    threads_cursor = db.supportThreads.find({"userId": user_obj_id}).sort("updatedAt", -1)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    threads = []
+    for t in threads_cursor:
+        t_id = str(t['_id'])
+        subject = t.get("subject", "")
+        status = t.get("status", "open")
+        updated_at = t.get("updatedAt")
+        threads.append({
+            "_id": t_id,
+            "subject": subject if subject else "Untitled Thread",
+            "status": status,
+            "lastUpdated": updated_at.isoformat() if updated_at else None
+        })
+    return jsonify(threads), 200
+
+@support_bp.route('/my-chat', methods=['POST'])
+def create_user_thread():
+    """
+    User creates a new support thread.
+    Must return the FULL THREAD object to avoid parse errors on front end.
+    Emits 'new_thread' to admin room only.
+    """
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.json or {}
+    subject = data.get('subject', '').strip()
+    if not subject:
+        subject = "Untitled Thread"
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+    now = datetime.utcnow()
+
+    new_thread = {
+        "userId": user_obj_id,
+        "subject": subject,
+        "messages": [],
+        "status": "open",
+        "createdAt": now,
+        "updatedAt": now
+    }
+
+    start_db = time.time()
+    result = db.supportThreads.insert_one(new_thread)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if result.inserted_id:
+        socketio = current_app.extensions['socketio']
+
+        thread_data = {
+            "_id": str(result.inserted_id),
+            "userId": str(user_obj_id),
+            "subject": subject,
+            "status": "open",
+            "createdAt": now.isoformat(),
+            "updatedAt": now.isoformat(),
+            "messages": []
+        }
+
+        # Only emit to "admin" room so admins see new threads
+        socketio.emit('new_thread', thread_data, room='admin')
+
+        # Return full thread data to user
+        return jsonify(thread_data), 201
+    else:
+        return jsonify({"error": "Failed to create thread"}), 500
+
+@support_bp.route('/my-chat/<thread_id>', methods=['GET'])
+def get_single_thread(thread_id):
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    start_db = time.time()
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not thread:
+        return jsonify({"error": "Thread not found"}), 404
+
+    thread['_id'] = str(thread['_id'])
+    thread['userId'] = str(thread['userId'])
+    for m in thread.get("messages", []):
+        if "timestamp" in m and isinstance(m["timestamp"], datetime):
+            m["timestamp"] = m["timestamp"].isoformat()
+    return jsonify(thread), 200
+
+@support_bp.route('/my-chat/<thread_id>', methods=['POST'])
+def post_message_to_thread(thread_id):
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.json or {}
+    content = data.get('content', '').strip()
+    if not content:
+        return jsonify({"error": "No content"}), 400
+
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+    now = datetime.utcnow()
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    start_db = time.time()
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not thread:
+        return jsonify({"error": "Thread not found"}), 404
+
+    updated_status = thread.get("status", "open")
+    if updated_status == "closed":
+        # Re-open if user posts again
+        db.supportThreads.update_one(
+            {"_id": thread["_id"]},
+            {
+                "$push": {
+                    "messages": {
+                        "sender": "user",
+                        "content": content,
+                        "timestamp": now
+                    }
+                },
+                "$set": {
+                    "status": "open",
+                    "updatedAt": now
+                }
+            }
+        )
+        msg_response = "Thread was closed. Reopened with new message"
+    else:
+        db.supportThreads.update_one(
+            {"_id": thread["_id"]},
+            {
+                "$push": {
+                    "messages": {
+                        "sender": "user",
+                        "content": content,
+                        "timestamp": now
+                    }
+                },
+                "$set": {"updatedAt": now}
+            }
+        )
+        msg_response = "Message posted"
+
+    # Emit to the thread's room only
+    socketio = current_app.extensions['socketio']
+    socketio.emit('new_message', {
+        "threadId": str(thread["_id"]),
+        "message": {
+            "sender": "user",
+            "content": content,
+            "timestamp": now.isoformat()
+        }
+    }, room=str(thread["_id"]))
+
+    return jsonify({"message": msg_response}), 200
+
+@support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
+def user_close_specific_thread(thread_id):
+    if not require_user_logged_in():
+        return jsonify({"error": "Not logged in"}), 401
+
+    data = request.json or {}
+    content = data.get("content", "User closed the thread")
+    now = datetime.utcnow()
+    user_id = session['userId']
+    user_obj_id = ObjectId(user_id)
+
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    start_db = time.time()
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not thread:
+        return jsonify({"error": "Thread not found"}), 404
+
+    if thread.get("status") == "closed":
+        return jsonify({"message": "Thread is already closed"}), 200
+
+    db.supportThreads.update_one(
+        {"_id": thread["_id"]},
+        {
+            "$push": {
+                "messages": {
+                    "sender": "user",
+                    "content": content,
+                    "timestamp": now
+                }
+            },
+            "$set": {
+                "status": "closed",
+                "updatedAt": now
+            }
+        }
+    )
+
+    # Let admin know user closed
+    socketio.emit('new_message', {
+        "threadId": str(thread["_id"]),
+        "message": {
+            "sender": "system",
+            "content": "Thread closed by user",
+            "timestamp": now.isoformat()
+        }
+    }, room=str(thread["_id"]))
+
+    return jsonify({"message": "Thread closed"}), 200
+// dont use this as a deisgn exampl ebecasue its just apkacheolder essntially adn prety much just has teh fucniotokty an h i haevnrt deisgned it yet
+
+import React, { useState } from "react";
+import axios from "axios";
+import "./DailyCyberBrief.css";
+
+function DailyCyberBrief() {
+  const [email, setEmail] = useState("");
+  const [statusMsg, setStatusMsg] = useState("");
+  const [isError, setIsError] = useState(false);
+
+  async function handleSubscribe() {
     try {
-      const response = await fetch('/api/test/user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
-      return data;
+      const response = await axios.post("/api/newsletter/subscribe", { email });
+      setIsError(false);
+      setStatusMsg(response.data.message);
     } catch (err) {
-      return rejectWithValue(err.message);
+      setIsError(true);
+      const fallback = "Subscription failed.";
+      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
     }
   }
-);
 
-// LOGIN
-export const loginUser = createAsyncThunk(
-  'user/loginUser',
-  async (credentials, { rejectWithValue, dispatch, getState }) => {
+  async function handleUnsubscribe() {
     try {
-      const response = await fetch('/api/test/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-      // Immediately fetch achievements + shop data after successful login
-      dispatch(fetchAchievements());
-      dispatch(fetchShopItems());
-
-      return data;
+      const response = await axios.post("/api/newsletter/unsubscribe", { email });
+      setIsError(false);
+      setStatusMsg(response.data.message);
     } catch (err) {
-      return rejectWithValue(err.message);
+      setIsError(true);
+      const fallback = "Unsubscribe failed.";
+      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
     }
   }
-);
 
-// FETCH USER DATA
-export const fetchUserData = createAsyncThunk(
-  'user/fetchUserData',
-  async (userId, { rejectWithValue, dispatch }) => {
+  return (
+    <div className="daily-cyber-brief">
+      <h2>Daily Cyber Brief Newsletter</h2>
+      <p>
+        Stay updated on the latest cybersecurity news, best practices, and random jokes about 
+        hackers. (They had it coming!)
+      </p>
+
+      <div className="input-group">
+        <input
+          type="email"
+          value={email}
+          placeholder="Enter your email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button onClick={handleSubscribe}>Subscribe</button>
+        <button onClick={handleUnsubscribe}>Unsubscribe</button>
+      </div>
+
+      {statusMsg && (
+        <div className={`status-msg ${isError ? "error" : "success"}`}>
+          {statusMsg}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default DailyCyberBrief;
+  import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+// Make sure your CrackedAdminLogin.css is scoped to .cracked-admin-login-wrapper
+// and references .cracked-admin-login-container inside it.
+import "./CrackedAdminLogin.css";
+
+function CrackedAdminLoginPage() {
+  const navigate = useNavigate();
+
+  const [adminKey, setAdminKey] = useState("");
+  const [role, setRole] = useState("basic");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
     try {
-      const response = await fetch(`/api/test/user/${userId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      const data = await response.json();
-
-      // Also fetch achievements + shop items to ensure they're loaded
-      dispatch(fetchAchievements());
-      dispatch(fetchShopItems());
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-// Example of a daily bonus thunk:
-export const claimDailyBonus = createAsyncThunk(
-  'user/claimDailyBonus',
-  async (userId, { rejectWithValue, dispatch, getState }) => {
-    try {
-      const response = await fetch(`/api/test/user/${userId}/daily-bonus`, {
-        method: 'POST'
+      const response = await fetch("/api/cracked/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adminKey, role }),
+        credentials: "include",
       });
+
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message || data.error || 'Daily bonus error');
+        setError(data.error || "Unable to log in");
+      } else {
+        // On success, navigate to the admin dashboard
+        navigate("/cracked/dashboard");
       }
-      // If new achievements came back, display them
-      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-        const allAchs = getState().achievements.all;
-        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
-      }
-      return data; 
     } catch (err) {
-      return rejectWithValue(err.message);
+      console.error("Admin login error:", err);
+      setError("Network error or server unavailable");
+    } finally {
+      setLoading(false);
     }
-  }
-);
+  };
 
-// If you have an "addCoins" route, likewise
-export const addCoins = createAsyncThunk(
-  'user/addCoins',
-  async ({ userId, amount }, { rejectWithValue, dispatch, getState }) => {
+  return (
+    // Top-level wrapper for scoping:
+    <div className="cracked-admin-login-wrapper">
+      <div className="cracked-admin-login-container">
+        <div className="cracked-admin-login-card">
+          <h1 className="cracked-admin-login-title">Admin Login</h1>
+
+          <form className="cracked-admin-login-form" onSubmit={handleLogin}>
+            <div className="admin-input-row">
+              <label htmlFor="adminKey">Admin Key:</label>
+              <input
+                type="password"
+                id="adminKey"
+                value={adminKey}
+                onChange={(e) => setAdminKey(e.target.value)}
+                placeholder="Authenticate"
+              />
+            </div>
+
+            <div className="admin-input-row">
+              <label htmlFor="role">Role (optional):</label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="basic">Basic</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="superadmin">Superadmin</option>
+              </select>
+            </div>
+
+            {error && <p className="admin-error-message">{error}</p>}
+
+            <button
+              type="submit"
+              className="cracked-admin-login-button"
+              disabled={loading}
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CrackedAdminLoginPage;
+
+
+ok and finally here is teh admin dashbaord page 
+
+/**************************************************************************************
+ * CrackedAdminDashboard.jsx
+ * 
+ * Below is a COMPLETE, ready-to-use updated version of the Admin Dashboard component.
+ * The PERFORMANCE TAB now displays multiple charts (one per metric) across a rolling
+ * 60-minute window, aggregated every 3 minutes. This way, you see up to 20 recent data
+ * points (3 min * 20 = 1 hour) in each chart. It continuously updates on the front end.
+ *
+ * Note:
+ *  1) We changed the backend Celery schedule to run every 3 minutes for performance
+ *     aggregation (see code snippet at the end).
+ *  2) The backend route /api/cracked/performance now returns:
+ *       {
+ *         "avg_request_time": <seconds>,
+ *         "avg_db_query_time_ms": <ms>,
+ *         "data_transfer_rate": <float MB/s>,
+ *         "throughput": <requests/min>,
+ *         "error_rate": <float between 0 and 1>,
+ *         "timestamp": "<ISO time in EST>",
+ *         "history": [
+ *            {
+ *              "_id": "...",
+ *              "timestamp": "...",
+ *              "requestTime": <seconds>,
+ *              "dbTime": <ms>,
+ *              "throughput": <req/min>,
+ *              "errorRate": <float>,
+ *              "dataTransfer": <float MB/s>
+ *            },
+ *            ...
+ *         ]
+ *       }
+ *  3) On the front-end, we now render FIVE separate charts: Request Time, DB Time, 
+ *     Throughput, Error Rate, and Data Transfer Rate (MB/s). Each chart shows data from
+ *     the last 60 minutes of aggregated samples. We also display the latest aggregated
+ *     "snapshot" above the charts.
+ *  4) For "live" updates, we added a small 15-second interval refresh in useEffect().
+ **************************************************************************************/
+import React, { useState, useEffect, useCallback } from "react";
+import { io } from "socket.io-client";
+import "./CrackedAdminDashboard.css";
+
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+// We keep this as a top-level variable
+let adminSocket = null;
+
+function CrackedAdminDashboard() {
+  const [activeTab, setActiveTab] = useState("overview");
+
+  /*****************************************
+   * OVERVIEW
+   *****************************************/
+  const [overviewData, setOverviewData] = useState(null);
+  const [overviewLoading, setOverviewLoading] = useState(false);
+  const [overviewError, setOverviewError] = useState(null);
+
+  const fetchOverview = useCallback(async () => {
+    setOverviewLoading(true);
+    setOverviewError(null);
     try {
-      const res = await fetch(`/api/test/user/${userId}/add-coins`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ coins: amount })
+      const res = await fetch("/api/cracked/dashboard", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch dashboard");
+      }
+      setOverviewData(data);
+    } catch (err) {
+      setOverviewError(err.message);
+    } finally {
+      setOverviewLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "overview") {
+      fetchOverview();
+    }
+  }, [activeTab, fetchOverview]);
+
+  /*****************************************
+   * PERFORMANCE
+   *****************************************/
+  const [performanceData, setPerformanceData] = useState(null);
+  const [perfLoading, setPerfLoading] = useState(false);
+  const [perfError, setPerfError] = useState(null);
+
+  const fetchPerformance = useCallback(async () => {
+    setPerfLoading(true);
+    setPerfError(null);
+    try {
+      const res = await fetch("/api/cracked/performance", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch performance metrics");
+      }
+      setPerformanceData(data);
+    } catch (err) {
+      setPerfError(err.message);
+    } finally {
+      setPerfLoading(false);
+    }
+  }, []);
+
+  // Auto-refresh performance data every 15 seconds to have "real-time" feeling.
+  useEffect(() => {
+    if (activeTab === "performance") {
+      fetchPerformance();
+      const interval = setInterval(fetchPerformance, 15000); // 15s refresh
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, fetchPerformance]);
+
+  /*****************************************
+   * USERS
+   *****************************************/
+  const [users, setUsers] = useState([]);
+  const [userTotal, setUserTotal] = useState(0);
+  const [userSearch, setUserSearch] = useState("");
+  const [userPage, setUserPage] = useState(1);
+  const [userLimit] = useState(10);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [usersError, setUsersError] = useState(null);
+
+  const [editUserId, setEditUserId] = useState(null);
+  const [editUserData, setEditUserData] = useState({});
+
+  const fetchUsers = useCallback(async () => {
+    setUsersLoading(true);
+    setUsersError(null);
+    try {
+      const params = new URLSearchParams({
+        search: userSearch,
+        page: userPage.toString(),
+        limit: userLimit.toString()
+      });
+      const res = await fetch(`/api/cracked/users?${params.toString()}`, {
+        credentials: "include"
       });
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to add coins');
+        throw new Error(data.error || "Failed to fetch users");
       }
-      // Show newly unlocked achievements
-      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-        const allAchs = getState().achievements.all;
-        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
-      }
-      return data;
+      setUsers(data.users || []);
+      setUserTotal(data.total || 0);
     } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setCurrentUserId(state, action) {
-      state.userId = action.payload;
-    },
-    logout(state) {
-      state.userId = null;
-      state.username = '';
-      state.email = '';
-      state.xp = 0;
-      state.level = 1;
-      state.coins = 0;
-      state.achievements = [];
-      state.xpBoost = 1.0;
-      state.currentAvatar = null;
-      state.nameColor = null;
-      state.purchasedItems = [];
-      state.subscriptionActive = false;
-      state.status = 'idle';
-      localStorage.removeItem('userId');
-    },
-    setXPAndCoins(state, action) {
-      const { xp, coins } = action.payload;
-      state.xp = xp;
-      state.coins = coins;
-    }
-  },
-  extraReducers: (builder) => {
-    builder
-      // REGISTER
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // LOGIN
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-
-        const {
-          user_id,
-          username,
-          email,
-          coins,
-          xp,
-          level,
-          achievements,
-          xpBoost,
-          currentAvatar,
-          nameColor,
-          purchasedItems,
-          subscriptionActive,
-          password
-        } = action.payload;
-
-        state.userId = user_id;
-        state.username = username;
-        state.email = email || '';
-        state.coins = coins || 0;
-        state.xp = xp || 0;
-        state.level = level || 1;
-        state.achievements = achievements || [];
-        state.xpBoost = xpBoost !== undefined ? xpBoost : 1.0;
-        state.currentAvatar = currentAvatar || null;
-        state.nameColor = nameColor || null;
-        state.purchasedItems = purchasedItems || [];
-        state.subscriptionActive = subscriptionActive || false;
-
-        localStorage.setItem('userId', user_id);
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // FETCH USER DATA
-      .addCase(fetchUserData.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.error = null;
-        const userDoc = action.payload;
-
-        state.userId = userDoc._id;
-        state.username = userDoc.username;
-        state.email = userDoc.email || '';
-        state.xp = userDoc.xp || 0;
-        state.level = userDoc.level || 1;
-        state.coins = userDoc.coins || 0;
-        state.achievements = userDoc.achievements || [];
-        state.xpBoost = userDoc.xpBoost !== undefined ? userDoc.xpBoost : 1.0;
-        state.currentAvatar = userDoc.currentAvatar || null;
-        state.nameColor = userDoc.nameColor || null;
-        state.purchasedItems = userDoc.purchasedItems || [];
-        state.subscriptionActive = userDoc.subscriptionActive || false;
-      })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-
-      // DAILY BONUS
-      .addCase(claimDailyBonus.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(claimDailyBonus.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update local user coins/xp if success
-        if (action.payload.success) {
-          state.coins = action.payload.newCoins;
-          state.xp = action.payload.newXP;
-        }
-      })
-      .addCase(claimDailyBonus.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // ADD COINS
-      .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, you could do local updates here or re-fetch user
-        // For example:
-        // state.coins += ...
-      });
-  },
-});
-
-export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
-export default userSlice.reducer;
-
-
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef
-} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setXPAndCoins } from "./pages/store/userSlice";
-import { fetchShopItems } from "./pages/store/shopSlice";
-import ConfettiAnimation from "./ConfettiAnimation";
-import { showAchievementToast } from "./pages/store/AchievementToast";
-import "./test.css";
-import iconMapping from "./iconMapping";
-import colorMapping from "./colorMapping";
-import {
-  FaTrophy,
-  FaMedal,
-  FaStar,
-  FaCrown,
-  FaBolt,
-  FaBook,
-  FaBrain,
-  FaCheckCircle,
-  FaRegSmile,
-  FaMagic
-} from "react-icons/fa";
-
-// Helper functions
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function shuffleIndices(length) {
-  const indices = Array.from({ length }, (_, i) => i);
-  return shuffleArray(indices);
-}
-
-// Reusable QuestionDropdown component
-const QuestionDropdown = ({
-  totalQuestions,
-  currentQuestionIndex,
-  onQuestionSelect,
-  answers,
-  flaggedQuestions,
-  testData,
-  shuffleOrder,
-  examMode
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const getQuestionStatus = (index) => {
-    const realIndex = shuffleOrder[index];
-    const question = testData.questions[realIndex];
-    const answer = answers.find((a) => a.questionId === question.id);
-    const isFlagged = flaggedQuestions.includes(question.id);
-    const isAnswered = answer?.userAnswerIndex !== undefined;
-    const isSkipped = answer?.userAnswerIndex === null;
-    const isCorrect =
-      answer && answer.userAnswerIndex === question.correctAnswerIndex;
-    return { isAnswered, isSkipped, isCorrect, isFlagged };
-  };
-
-  return (
-    <div className="question-dropdown" ref={dropdownRef}>
-      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
-        Question {currentQuestionIndex + 1}
-      </button>
-      {isOpen && (
-        <div className="dropdown-content">
-          {Array.from({ length: totalQuestions }, (_, i) => {
-            const status = getQuestionStatus(i);
-            return (
-              <button
-                key={i}
-                onClick={() => {
-                  onQuestionSelect(i);
-                  setIsOpen(false);
-                }}
-                className="dropdown-item"
-              >
-                <span>Question {i + 1}</span>
-                <div className="status-indicators">
-                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
-                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
-                  {!examMode && status.isAnswered && !status.isSkipped && (
-                    <span
-                      className={
-                        status.isCorrect
-                          ? "answer-indicator correct"
-                          : "answer-indicator incorrect"
-                      }
-                    >
-                      {status.isCorrect ? "✓" : "✗"}
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const GlobalTestPage = ({
-  testId,
-  category,
-  backToListPath
-}) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  // Redux user data
-  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
-    (state) => state.user
-  );
-  const achievements = useSelector((state) => state.achievements.all);
-  const { items: shopItems, status: shopStatus } = useSelector(
-    (state) => state.shop
-  );
-
-  // Local states for test logic
-  const [testData, setTestData] = useState(null);
-  const [shuffleOrder, setShuffleOrder] = useState([]);
-  const [answerOrder, setAnswerOrder] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [score, setScore] = useState(0);
-  const [loadingTest, setLoadingTest] = useState(true);
-  const [error, setError] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
-  const [isFinished, setIsFinished] = useState(false);
-
-  // Overlays
-  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
-  const [showReviewMode, setShowReviewMode] = useState(false);
-
-  // Confetti on level-up
-  const [localLevel, setLocalLevel] = useState(level);
-  const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
-
-  // Flags
-  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
-
-  // Confirmation popups
-  const [showRestartPopup, setShowRestartPopup] = useState(false);
-  const [showFinishPopup, setShowFinishPopup] = useState(false);
-  const [showNextPopup, setShowNextPopup] = useState(false);
-
-  // Exam mode
-  const [examMode, setExamMode] = useState(false);
-
-  // New: Test length selection state
-  const allowedTestLengths = [25, 50, 75, 100];
-  const [selectedLength, setSelectedLength] = useState(100);
-  const [activeTestLength, setActiveTestLength] = useState(null);
-  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
-
-  useEffect(() => {
-    if (shopStatus === "idle") {
-      dispatch(fetchShopItems());
-    }
-  }, [shopStatus, dispatch]);
-
-  const fetchTestAndAttempt = async () => {
-    setLoadingTest(true);
-    try {
-      let attemptDoc = null;
-      if (userId) {
-        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
-        const attemptData = await attemptRes.json();
-        attemptDoc = attemptData.attempt || null;
-      }
-      const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
-      if (!testRes.ok) {
-        const errData = await testRes.json().catch(() => ({}));
-        throw new Error(errData.error || "Failed to fetch test data");
-      }
-      const testDoc = await testRes.json();
-      setTestData(testDoc);
-
-      const totalQ = testDoc.questions.length;
-
-      // Check if attempt exists
-      if (attemptDoc) {
-        // If the test is already finished, we keep the data but also mark isFinished
-        setAnswers(attemptDoc.answers || []);
-        setScore(attemptDoc.score || 0);
-        setIsFinished(attemptDoc.finished === true);
-
-        const attemptExam = attemptDoc.examMode || false;
-        setExamMode(attemptExam);
-
-        // Use the chosen length if available
-        const chosenLength = attemptDoc.selectedLength || totalQ;
-
-        if (
-          attemptDoc.shuffleOrder &&
-          attemptDoc.shuffleOrder.length === chosenLength
-        ) {
-          setShuffleOrder(attemptDoc.shuffleOrder);
-        } else {
-          const newQOrder = shuffleIndices(chosenLength);
-          setShuffleOrder(newQOrder);
-        }
-
-        if (
-          attemptDoc.answerOrder &&
-          attemptDoc.answerOrder.length === chosenLength
-        ) {
-          setAnswerOrder(attemptDoc.answerOrder);
-        } else {
-          const generatedAnswerOrder = testDoc.questions
-            .slice(0, chosenLength)
-            .map((q) => {
-              const numOptions = q.options.length;
-              return shuffleArray([...Array(numOptions).keys()]);
-            });
-          setAnswerOrder(generatedAnswerOrder);
-        }
-
-        setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
-        setActiveTestLength(chosenLength);
-      } else {
-        // No attempt doc exists: show the test length selector UI
-        setActiveTestLength(null);
-        setShowTestLengthSelector(true);
-      }
-    } catch (err) {
-      setError(err.message);
+      setUsersError(err.message);
     } finally {
-      setLoadingTest(false);
+      setUsersLoading(false);
     }
+  }, [userSearch, userPage, userLimit]);
+
+  useEffect(() => {
+    if (activeTab === "users") {
+      fetchUsers();
+    }
+  }, [activeTab, fetchUsers]);
+
+  const handleUpdateUserField = (field, value) => {
+    setEditUserData((prev) => ({ ...prev, [field]: value }));
   };
 
-  useEffect(() => {
-    fetchTestAndAttempt();
-  }, [testId, userId]);
-
-  useEffect(() => {
-    if (level > localLevel) {
-      setLocalLevel(level);
-      setShowLevelUpOverlay(true);
-      const t = setTimeout(() => setShowLevelUpOverlay(false), 3000);
-      return () => clearTimeout(t);
-    }
-  }, [level, localLevel]);
-
-  useEffect(() => {
-    if (location.state?.review && isFinished) {
-      setShowReviewMode(true);
-    }
-  }, [location.state, isFinished]);
-
-  const getShuffledIndex = useCallback(
-    (i) => {
-      if (!shuffleOrder || shuffleOrder.length === 0) return i;
-      return shuffleOrder[i];
-    },
-    [shuffleOrder]
-  );
-
-  const effectiveTotal =
-    activeTestLength || (testData ? testData.questions.length : 0);
-
-  const realIndex = getShuffledIndex(currentQuestionIndex);
-  const questionObject =
-    testData && testData.questions && testData.questions.length > 0
-      ? testData.questions[realIndex]
-      : null;
-
-  useEffect(() => {
-    if (!questionObject) return;
-    const existing = answers.find((a) => a.questionId === questionObject.id);
-    if (existing) {
-      setSelectedOptionIndex(null);
-      if (
-        existing.userAnswerIndex !== null &&
-        existing.userAnswerIndex !== undefined
-      ) {
-        const displayIndex = answerOrder[realIndex].indexOf(
-          existing.userAnswerIndex
-        );
-        if (displayIndex >= 0) {
-          setSelectedOptionIndex(displayIndex);
-          setIsAnswered(true);
-        } else {
-          setIsAnswered(false);
-        }
-      } else {
-        setIsAnswered(false);
-      }
-    } else {
-      setSelectedOptionIndex(null);
-      setIsAnswered(false);
-    }
-  }, [questionObject, answers, realIndex, answerOrder]);
-
-  const updateServerProgress = useCallback(
-    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
-      if (!userId) return;
-      try {
-        if (singleAnswer) {
-          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              testId,
-              questionId: singleAnswer.questionId,
-              correctAnswerIndex: singleAnswer.correctAnswerIndex,
-              selectedIndex: singleAnswer.userAnswerIndex,
-              xpPerCorrect: (testData?.xpPerCorrect || 10) * xpBoost,
-              coinsPerCorrect: 5
-            })
-          });
-          const data = await res.json();
-          return data;
-        }
-        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentQuestionIndex,
-            finished
-          })
-        });
-      } catch (err) {
-        console.error("Failed to update test attempt on backend", err);
-      }
-    },
-    [userId, testId, testData, xpBoost, currentQuestionIndex]
-  );
-
-  // UPDATED: In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
-  const handleOptionClick = useCallback(
-    async (displayOptionIndex) => {
-      if (!questionObject) return;
-      if (!examMode && isAnswered) return; // Only block if exam mode is off.
-      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
-      setSelectedOptionIndex(displayOptionIndex);
-
-      // For non–exam mode, lock the answer; for exam mode, allow changes.
-      if (!examMode) {
-        setIsAnswered(true);
-      }
-      try {
-        const newAnswerObj = {
-          questionId: questionObject.id,
-          userAnswerIndex: actualAnswerIndex,
-          correctAnswerIndex: questionObject.correctAnswerIndex
-        };
-        const updatedAnswers = [...answers];
-        const idx = updatedAnswers.findIndex(
-          (a) => a.questionId === questionObject.id
-        );
-        if (idx >= 0) {
-          updatedAnswers[idx] = newAnswerObj;
-        } else {
-          updatedAnswers.push(newAnswerObj);
-        }
-        setAnswers(updatedAnswers);
-
-        const awardData = await updateServerProgress(
-          updatedAnswers,
-          score,
-          false,
-          newAnswerObj
-        );
-        if (!examMode && awardData && awardData.examMode === false) {
-          if (awardData.isCorrect) {
-            setScore((prev) => prev + 1);
-          }
-          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
-            dispatch(
-              setXPAndCoins({
-                xp: awardData.newXP,
-                coins: awardData.newCoins
-              })
-            );
-          }
-        }
-      } catch (err) {
-        console.error("Failed to submit answer to backend", err);
-      }
-    },
-    [
-      isAnswered,
-      questionObject,
-      examMode,
-      testData,
-      xpBoost,
-      userId,
-      testId,
-      dispatch,
-      score,
-      answers,
-      updateServerProgress,
-      realIndex,
-      answerOrder
-    ]
-  );
-
-  const finishTestProcess = useCallback(async () => {
-    let finalScore = 0;
-    answers.forEach((ans) => {
-      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
-        finalScore++;
-      }
+  const handleUserEdit = (u) => {
+    setEditUserId(u._id);
+    setEditUserData({
+      username: u.username || "",
+      coins: u.coins || 0,
+      xp: u.xp || 0,
+      level: u.level || 1,
+      subscriptionActive: !!u.subscriptionActive,
+      suspended: !!u.suspended
     });
-    setScore(finalScore);
+  };
+
+  const handleUserUpdateSubmit = async () => {
+    if (!editUserId) return;
     try {
-      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
-        method: "POST",
+      const res = await fetch(`/api/cracked/users/${editUserId}`, {
+        method: "PUT",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          score: finalScore,
-          totalQuestions: effectiveTotal
-        })
+        body: JSON.stringify(editUserData)
       });
-      const finishData = await res.json();
-
-      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
-        finishData.newlyUnlocked.forEach((achievementId) => {
-          const achievement = achievements.find(
-            (a) => a.achievementId === achievementId
-          );
-          if (achievement) {
-            const IconComp = iconMapping[achievement.achievementId] || null;
-            const color = colorMapping[achievement.achievementId] || "#fff";
-            showAchievementToast({
-              title: achievement.title,
-              description: achievement.description,
-              icon: IconComp ? <IconComp /> : null,
-              color
-            });
-          }
-        });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to update user");
+        return;
       }
-
-      if (
-        typeof finishData.newXP !== "undefined" &&
-        typeof finishData.newCoins !== "undefined"
-      ) {
-        dispatch(
-          setXPAndCoins({
-            xp: finishData.newXP,
-            coins: finishData.newCoins
-          })
-        );
-      }
+      alert("User updated!");
+      fetchUsers();
     } catch (err) {
-      console.error("Failed to finish test attempt:", err);
-    }
-    setIsFinished(true);
-    setShowScoreOverlay(true);
-    setShowReviewMode(true);
-  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
-
-  const handleNextQuestion = useCallback(() => {
-    if (!isAnswered && !examMode) {
-      setShowNextPopup(true);
-      return;
-    }
-    if (currentQuestionIndex === effectiveTotal - 1) {
-      finishTestProcess();
-      return;
-    }
-    const nextIndex = currentQuestionIndex + 1;
-    setCurrentQuestionIndex(nextIndex);
-    updateServerProgress(answers, score, false);
-  }, [
-    isAnswered,
-    examMode,
-    currentQuestionIndex,
-    effectiveTotal,
-    finishTestProcess,
-    updateServerProgress,
-    answers,
-    score
-  ]);
-
-  const handlePreviousQuestion = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      const prevIndex = currentQuestionIndex - 1;
-      setCurrentQuestionIndex(prevIndex);
-      updateServerProgress(answers, score, false);
-    }
-  }, [currentQuestionIndex, updateServerProgress, answers, score]);
-
-  const handleSkipQuestion = () => {
-    if (!questionObject) return;
-    const updatedAnswers = [...answers];
-    const idx = updatedAnswers.findIndex(
-      (a) => a.questionId === questionObject.id
-    );
-    const skipObj = {
-      questionId: questionObject.id,
-      userAnswerIndex: null,
-      correctAnswerIndex: questionObject.correctAnswerIndex
-    };
-    if (idx >= 0) {
-      updatedAnswers[idx] = skipObj;
-    } else {
-      updatedAnswers.push(skipObj);
-    }
-    setAnswers(updatedAnswers);
-    setIsAnswered(false);
-    setSelectedOptionIndex(null);
-    updateServerProgress(updatedAnswers, score, false, skipObj);
-    if (currentQuestionIndex === effectiveTotal - 1) {
-      finishTestProcess();
-      return;
-    }
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
-  };
-
-  const handleFlagQuestion = () => {
-    if (!questionObject) return;
-    const qId = questionObject.id;
-    if (flaggedQuestions.includes(qId)) {
-      setFlaggedQuestions(flaggedQuestions.filter((x) => x !== qId));
-    } else {
-      setFlaggedQuestions([...flaggedQuestions, qId]);
+      console.error("User update error:", err);
+    } finally {
+      setEditUserId(null);
     }
   };
 
-  const handleRestartTest = useCallback(async () => {
-    setCurrentQuestionIndex(0);
-    setSelectedOptionIndex(null);
-    setIsAnswered(false);
-    setScore(0);
-    setAnswers([]);
-    setFlaggedQuestions([]);
-    setIsFinished(false);
-    setShowReviewMode(false);
-    setShowScoreOverlay(false);
-
-    if (testData?.questions?.length && activeTestLength) {
-      const newQOrder = shuffleIndices(activeTestLength);
-      setShuffleOrder(newQOrder);
-      const newAnswerOrder = testData.questions
-        .slice(0, activeTestLength)
-        .map((q) => {
-          const numOpts = q.options.length;
-          return shuffleArray([...Array(numOpts).keys()]);
-        });
-      setAnswerOrder(newAnswerOrder);
-
-      if (userId && testId) {
-        await fetch(`/api/test/attempts/${userId}/${testId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            answers: [],
-            score: 0,
-            totalQuestions: testData.questions.length,
-            selectedLength: activeTestLength,
-            category: testData.category || category,
-            currentQuestionIndex: 0,
-            shuffleOrder: newQOrder,
-            answerOrder: newAnswerOrder,
-            finished: false,
-            examMode
-          })
-        });
+  const handleUserDelete = async (userId) => {
+    if (!window.confirm("Are you sure you want to DELETE this user?")) return;
+    try {
+      const res = await fetch(`/api/cracked/users/${userId}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to delete user");
+        return;
       }
+      alert("User deleted successfully.");
+      fetchUsers();
+    } catch (err) {
+      console.error("User delete error:", err);
     }
-  }, [
-    testData,
-    userId,
-    testId,
-    category,
-    examMode,
-    activeTestLength
-  ]);
-
-  const handleFinishTest = () => {
-    finishTestProcess();
   };
 
-  const [reviewFilter, setReviewFilter] = useState("all");
-  const handleReviewAnswers = () => {
-    setShowReviewMode(true);
-    setReviewFilter("all");
-  };
-  const handleCloseReview = () => {
-    if (!isFinished) setShowReviewMode(false);
-  };
-
-  const filteredQuestions = useMemo(() => {
-    if (!testData || !testData.questions) return [];
-    return testData.questions.slice(0, effectiveTotal).filter((q) => {
-      const userAns = answers.find((a) => a.questionId === q.id);
-      const isFlagged = flaggedQuestions.includes(q.id);
-
-      if (!userAns) {
-        // Not answered => count it as "skipped" or "all"
-        return reviewFilter === "skipped" || reviewFilter === "all";
+  // EXTRA: Reset user password
+  const handleResetPassword = async (userId) => {
+    if (!window.confirm("Reset this user's password to a random token?")) return;
+    try {
+      const res = await fetch(`/api/cracked/users/${userId}/reset-password`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to reset password");
+        return;
       }
-
-      const isSkipped = userAns.userAnswerIndex === null;
-      const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
-
-      if (reviewFilter === "all") return true;
-      if (reviewFilter === "skipped" && isSkipped) return true;
-      if (reviewFilter === "flagged" && isFlagged) return true;
-      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
-      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
-
-      return false;
-    });
-  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
-
-  const NextQuestionAlert = ({ message, onOk }) => (
-    <div className="confirm-popup-overlay">
-      <div className="confirm-popup-content">
-        <p>{message}</p>
-        <div className="confirm-popup-buttons">
-          <button className="confirm-popup-ok" onClick={onOk}>
-            OK
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderNextPopup = () => {
-    if (!showNextPopup) return null;
-    return (
-      <NextQuestionAlert
-        message="You haven't answered. Please answer or skip question.🤪"
-        onOk={() => {
-          setShowNextPopup(false);
-        }}
-      />
-    );
-  };
-
-  const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
-    <div className="confirm-popup-overlay">
-      <div className="confirm-popup-content">
-        <p>{message}</p>
-        <div className="confirm-popup-buttons">
-          <button className="confirm-popup-yes" onClick={onConfirm}>
-            Yes
-          </button>
-          <button className="confirm-popup-no" onClick={onCancel}>
-            No
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderRestartPopup = () => {
-    if (!showRestartPopup) return null;
-    return (
-      <ConfirmPopup
-        message="Are you sure you want to restart the test? All progress will be lost!😱"
-        onConfirm={() => {
-          handleRestartTest();
-          setShowRestartPopup(false);
-        }}
-        onCancel={() => setShowRestartPopup(false)}
-      />
-    );
-  };
-
-  const renderFinishPopup = () => {
-    if (!showFinishPopup) return null;
-    return (
-      <ConfirmPopup
-        message="Are you sure you want to finish the test now?😥"
-        onConfirm={() => {
-          handleFinishTest();
-          setShowFinishPopup(false);
-        }}
-        onCancel={() => setShowFinishPopup(false)}
-      />
-    );
-  };
-
-  // -----
-  // MAIN FIX: We add a small block in the score overlay that allows the user
-  // to select a new test length if they've finished, before clicking Restart.
-  // -----
-  const renderScoreOverlay = () => {
-    if (!showScoreOverlay) return null;
-    const percentage = effectiveTotal
-      ? Math.round((score / effectiveTotal) * 100)
-      : 0;
-    return (
-      <div className="score-overlay">
-        <div className="score-content">
-          <h2 className="score-title">Test Complete!</h2>
-          <p className="score-details">
-            Your score: <strong>{percentage}%</strong> ({score}/{effectiveTotal})
-          </p>
-
-          {/* NEW: Test Length selection after finishing */}
-          <div className="length-selection" style={{ margin: "1rem 0" }}>
-            <p style={{ marginBottom: "0.5rem" }}>Select New Test Length:</p>
-            {allowedTestLengths.map((length) => (
-              <label
-                key={length}
-                style={{
-                  marginRight: "1rem",
-                  display: "inline-block"
-                }}
-              >
-                <input
-                  type="radio"
-                  name="finishedTestLength"
-                  value={length}
-                  checked={selectedLength === length}
-                  onChange={(e) => {
-                    const newLen = Number(e.target.value);
-                    setSelectedLength(newLen);
-                    setActiveTestLength(newLen);
-                  }}
-                />
-                {length}
-              </label>
-            ))}
-          </div>
-
-          <div className="overlay-buttons">
-            <button
-              className="restart-button"
-              onClick={() => setShowRestartPopup(true)}
-            >
-              Restart Test
-            </button>
-            <button className="review-button" onClick={handleReviewAnswers}>
-              View Review
-            </button>
-            <button className="back-btn" onClick={() => navigate(backToListPath)}>
-              Back to Test List
-            </button>
-            {Number(testId) < 9999 && (
-              <button
-                className="next-test-button"
-                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
-              >
-                Next Test
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderReviewMode = () => {
-    if (!showReviewMode) return null;
-    return (
-      <div className="score-overlay review-overlay">
-        <div className="score-content review-content">
-          {isFinished ? (
-            <button
-              className="back-to-list-btn"
-              onClick={() => navigate(backToListPath)}
-            >
-              Go Back to Test List
-            </button>
-          ) : (
-            <button className="close-review-x" onClick={handleCloseReview}>
-              X
-            </button>
-          )}
-          <h2 className="score-title">Review Mode</h2>
-          {isFinished && (
-            <p className="review-score-line">
-              Your final score: {score}/{effectiveTotal} (
-              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
-              %)
-            </p>
-          )}
-          <div className="review-filter-buttons">
-            <button
-              className={reviewFilter === "all" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("all")}
-            >
-              All
-            </button>
-            <button
-              className={reviewFilter === "skipped" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("skipped")}
-            >
-              Skipped
-            </button>
-            <button
-              className={reviewFilter === "flagged" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("flagged")}
-            >
-              Flagged
-            </button>
-            <button
-              className={reviewFilter === "incorrect" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("incorrect")}
-            >
-              Incorrect
-            </button>
-            <button
-              className={reviewFilter === "correct" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("correct")}
-            >
-              Correct
-            </button>
-          </div>
-          <p className="score-details">
-            Questions shown: {filteredQuestions.length}
-          </p>
-          <div className="review-mode-container">
-            {filteredQuestions.map((q) => {
-              const userAns = answers.find((a) => a.questionId === q.id);
-              const isFlagged = flaggedQuestions.includes(q.id);
-
-              if (!userAns) {
-                return (
-                  <div key={q.id} className="review-question-card">
-                    <h3>
-                      Q{q.id}: {q.question}{" "}
-                      {isFlagged && <span className="flagged-icon">🚩</span>}
-                    </h3>
-                    <p>
-                      <strong>Your Answer:</strong> Unanswered
-                    </p>
-                    <p>
-                      <strong>Correct Answer:</strong>{" "}
-                      {q.options[q.correctAnswerIndex]}
-                    </p>
-                    <p style={{ color: "#F44336" }}>No Answer</p>
-                    <p>{q.explanation}</p>
-                  </div>
-                );
-              }
-
-              const isSkipped = userAns.userAnswerIndex === null;
-              const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
-
-              return (
-                <div key={q.id} className="review-question-card">
-                  <h3>
-                    Q{q.id}: {q.question}{" "}
-                    {isFlagged && <span className="flagged-icon">🚩</span>}
-                  </h3>
-                  <p>
-                    <strong>Your Answer:</strong>{" "}
-                    {isSkipped ? (
-                      <span style={{ color: "orange" }}>Skipped</span>
-                    ) : (
-                      q.options[userAns.userAnswerIndex]
-                    )}
-                  </p>
-                  <p>
-                    <strong>Correct Answer:</strong>{" "}
-                    {q.options[q.correctAnswerIndex]}
-                  </p>
-                  {!isSkipped && (
-                    <p
-                      style={{
-                        color: isCorrect ? "#8BC34A" : "#F44336"
-                      }}
-                    >
-                      {isCorrect ? "Correct!" : "Incorrect!"}
-                    </p>
-                  )}
-                  <p>{q.explanation}</p>
-                </div>
-              );
-            })}
-          </div>
-          {!isFinished && (
-            <button
-              className="review-button close-review-btn"
-              onClick={handleCloseReview}
-            >
-              Close Review
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const handleNextQuestionButtonClick = () => {
-    if (!isAnswered && !examMode) {
-      setShowNextPopup(true);
-    } else {
-      handleNextQuestion();
+      alert(`Password reset success. New password: ${data.newPassword}`);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to reset password.");
     }
   };
 
-  // If no attempt doc was found (on first load), show test length UI:
-  if (showTestLengthSelector) {
-    return (
-      <div className="test-length-selector">
-        <h2>Select Test Length</h2>
-        <p>Please select how many questions you want to answer:</p>
-        <div className="test-length-options">
-          {allowedTestLengths.map((length) => (
-            <label key={length}>
-              <input
-                type="radio"
-                name="testLength"
-                value={length}
-                checked={selectedLength === length}
-                onChange={(e) => setSelectedLength(Number(e.target.value))}
-              />
-              {length}
-            </label>
-          ))}
-        </div>
-        <button
-          onClick={async () => {
-            setActiveTestLength(selectedLength);
-            if (testData) {
-              const totalQ = testData.questions.length;
-              const newQOrder = shuffleIndices(selectedLength);
-              setShuffleOrder(newQOrder);
-              const newAnswerOrder = testData.questions
-                .slice(0, selectedLength)
-                .map((q) => {
-                  const numOpts = q.options.length;
-                  return shuffleArray([...Array(numOpts).keys()]);
-                });
-              setAnswerOrder(newAnswerOrder);
-              try {
-                await fetch(`/api/test/attempts/${userId}/${testId}`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    answers: [],
-                    score: 0,
-                    totalQuestions: totalQ,
-                    selectedLength: selectedLength,
-                    category: testData.category || category,
-                    currentQuestionIndex: 0,
-                    shuffleOrder: newQOrder,
-                    answerOrder: newAnswerOrder,
-                    finished: false,
-                    examMode: location.state?.examMode || false
-                  })
-                });
-                setShowTestLengthSelector(false);
-                fetchTestAndAttempt();
-              } catch (err) {
-                console.error("Failed to start new attempt", err);
-              }
-            }
-          }}
-        >
-          Start Test
-        </button>
-      </div>
-    );
-  }
+  /*****************************************
+   * TEST MANAGEMENT
+   *****************************************/
+  const [tests, setTests] = useState([]);
+  const [testCategory, setTestCategory] = useState("");
+  const [testsLoading, setTestsLoading] = useState(false);
+  const [testsError, setTestsError] = useState(null);
 
-  if (error) {
-    return <div style={{ color: "#fff" }}>Error: {error}</div>;
-  }
-
-  if (loadingTest) {
-    return <div style={{ color: "#fff" }}>Loading test...</div>;
-  }
-
-  if (!testData || !testData.questions || testData.questions.length === 0) {
-    return <div style={{ color: "#fff" }}>No questions found.</div>;
-  }
-
-  let avatarUrl = "https://via.placeholder.com/60";
-  if (currentAvatar && shopItems && shopItems.length > 0) {
-    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
-    if (avatarItem && avatarItem.imageUrl) {
-      avatarUrl = avatarItem.imageUrl;
-    }
-  }
-
-  const progressPercentage = effectiveTotal
-    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
-    : 0;
-  const progressColorHue = (progressPercentage * 120) / 100;
-  const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
-
-  let displayedOptions = [];
-  if (questionObject && answerOrder[realIndex]) {
-    displayedOptions = answerOrder[realIndex].map(
-      (optionIdx) => questionObject.options[optionIdx]
-    );
-  }
-
-  return (
-    <div className="aplus-test-container">
-      <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
-
-      {renderRestartPopup()}
-      {renderFinishPopup()}
-      {renderNextPopup()}
-      {renderScoreOverlay()}
-      {renderReviewMode()}
-
-      <div className="top-control-bar">
-        <button className="flag-btn" onClick={handleFlagQuestion}>
-          {questionObject && flaggedQuestions.includes(questionObject.id)
-            ? "Unflag"
-            : "Flag"}
-        </button>
-        <QuestionDropdown
-          totalQuestions={effectiveTotal}
-          currentQuestionIndex={currentQuestionIndex}
-          onQuestionSelect={(index) => {
-            setCurrentQuestionIndex(index);
-            updateServerProgress(answers, score, false);
-          }}
-          answers={answers}
-          flaggedQuestions={flaggedQuestions}
-          testData={testData}
-          shuffleOrder={shuffleOrder}
-          examMode={examMode}
-        />
-        <button
-          className="finish-test-btn"
-          onClick={() => setShowFinishPopup(true)}
-        >
-          Finish Test
-        </button>
-      </div>
-
-      <div className="upper-control-bar">
-        <button
-          className="restart-test-btn"
-          onClick={() => setShowRestartPopup(true)}
-        >
-          Restart Test
-        </button>
-        <button className="back-btn" onClick={() => navigate(backToListPath)}>
-          Back to Test List
-        </button>
-      </div>
-
-      <h1 className="aplus-title">{testData.testName}</h1>
-
-      <div className="top-bar">
-        <div className="avatar-section">
-          <div
-            className="avatar-image"
-            style={{ backgroundImage: `url(${avatarUrl})` }}
-          />
-          <div className="avatar-level">Lvl {level}</div>
-        </div>
-        <div className="xp-level-display">XP: {xp}</div>
-        <div className="coins-display">Coins: {coins}</div>
-      </div>
-
-      <div className="progress-container">
-        <div
-          className="progress-fill"
-          style={{ width: `${progressPercentage}%`, background: progressColor }}
-        >
-          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
-        </div>
-      </div>
-
-      {!showScoreOverlay && !showReviewMode && !isFinished && (
-        <div className="question-card">
-          <div className="question-text">
-            {questionObject && questionObject.question}
-          </div>
-
-          <ul className="options-list">
-            {displayedOptions.map((option, displayIdx) => {
-              let optionClass = "option-button";
-
-              if (!examMode) {
-                if (isAnswered && questionObject) {
-                  const correctIndex = questionObject.correctAnswerIndex;
-                  const actualIndex = answerOrder[realIndex][displayIdx];
-
-                  if (actualIndex === correctIndex) {
-                    optionClass += " correct-option";
-                  } else if (
-                    displayIdx === selectedOptionIndex &&
-                    actualIndex !== correctIndex
-                  ) {
-                    optionClass += " incorrect-option";
-                  }
-                }
-              } else {
-                if (isAnswered && displayIdx === selectedOptionIndex) {
-                  optionClass += " chosen-option";
-                }
-              }
-
-              return (
-                <li className="option-item" key={displayIdx}>
-                  <button
-                    className={optionClass}
-                    onClick={() => handleOptionClick(displayIdx)}
-                    disabled={examMode ? false : isAnswered}
-                  >
-                    {option}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-
-          {isAnswered && questionObject && !examMode && (
-            <div className="explanation">
-              <strong>
-                {selectedOptionIndex !== null &&
-                answerOrder[realIndex][selectedOptionIndex] ===
-                  questionObject.correctAnswerIndex
-                  ? "Correct!"
-                  : "Incorrect!"}
-              </strong>
-              <p>{questionObject.explanation}</p>
-            </div>
-          )}
-
-          <div className="bottom-control-bar">
-            <div className="bottom-control-row">
-              <button
-                className="prev-question-btn"
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
-                Previous Question
-              </button>
-              {currentQuestionIndex === effectiveTotal - 1 ? (
-                <button
-                  className="next-question-btn"
-                  onClick={handleNextQuestionButtonClick}
-                >
-                  Finish Test
-                </button>
-              ) : (
-                <button
-                  className="next-question-btn"
-                  onClick={handleNextQuestionButtonClick}
-                >
-                  Next Question
-                </button>
-              )}
-            </div>
-
-            <div className="bottom-control-row skip-row">
-              <button className="skip-question-btn" onClick={handleSkipQuestion}>
-                Skip Question
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default GlobalTestPage;
-
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "../../test.css"; // Updated below, be sure to include our new styles
-
-const APlusTestList = () => {
-  const navigate = useNavigate();
-  const { userId } = useSelector((state) => state.user);
-  const totalQuestionsPerTest = 100;
-  const category = "aplus";
-
-  const [attemptData, setAttemptData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Persist examMode in localStorage
-  const [examMode, setExamMode] = useState(() => {
-    const stored = localStorage.getItem("examMode");
-    return stored === "true";
+  const [newTestData, setNewTestData] = useState({
+    category: "",
+    testId: "",
+    testName: "",
+    questions: []
   });
 
-  // Show/hide tooltip for the info icon
-  const [showExamInfo, setShowExamInfo] = useState(false);
-
-  // Restart popup on the test list page (holds test number)
-  const [restartPopupTest, setRestartPopupTest] = useState(null);
-
-  // Choose test length
-  const allowedTestLengths = [25, 50, 75, 100];
-  const [selectedLengths, setSelectedLengths] = useState({});
-
-  useEffect(() => {
-    if (!userId) return;
-    setLoading(true);
-
-    const fetchAttempts = async () => {
-      try {
-        const res = await fetch(`/api/test/attempts/${userId}/list`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch attempts for user");
-        }
-        const data = await res.json();
-        const attemptList = data.attempts || [];
-
-        // Filter attempts for this category
-        const relevant = attemptList.filter((a) => a.category === category);
-
-        // For each testId, pick the best attempt doc:
-        const bestAttempts = {};
-        for (let att of relevant) {
-          const testKey = att.testId;
-          if (!bestAttempts[testKey]) {
-            bestAttempts[testKey] = att;
-          } else {
-            const existing = bestAttempts[testKey];
-            // Prefer an unfinished attempt if it exists; otherwise latest finished
-            if (!existing.finished && att.finished) {
-              // Keep existing
-            } else if (existing.finished && !att.finished) {
-              bestAttempts[testKey] = att;
-            } else {
-              // Both finished or both unfinished => pick newest
-              const existingTime = new Date(existing.finishedAt || 0).getTime();
-              const newTime = new Date(att.finishedAt || 0).getTime();
-              if (newTime > existingTime) {
-                bestAttempts[testKey] = att;
-              }
-            }
-          }
-        }
-
-        setAttemptData(bestAttempts);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
+  const fetchTests = useCallback(async () => {
+    setTestsLoading(true);
+    setTestsError(null);
+    try {
+      const params = new URLSearchParams();
+      if (testCategory) {
+        params.set("category", testCategory);
       }
-    };
-
-    fetchAttempts();
-  }, [userId, category]);
-
-  // Save examMode to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("examMode", examMode ? "true" : "false");
-  }, [examMode]);
-
-  if (!userId) {
-    return <div className="tests-list-container">Please log in.</div>;
-  }
-
-  if (loading) {
-    return <div className="tests-list-container">Loading attempts...</div>;
-  }
-  if (error) {
-    return <div className="tests-list-container">Error: {error}</div>;
-  }
-
-  const getAttemptDoc = (testNumber) => {
-    return attemptData[testNumber] || null;
-  };
-
-  const getProgressDisplay = (attemptDoc) => {
-    if (!attemptDoc) return "No progress yet";
-    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
-    if (finished) {
-      const pct = Math.round(
-        (score / (totalQuestions || totalQuestionsPerTest)) * 100
-      );
-      return `Final Score: ${pct}% (${score}/${
-        totalQuestions || totalQuestionsPerTest
-      })`;
-    } else {
-      if (typeof currentQuestionIndex === "number") {
-        return `Progress: ${currentQuestionIndex + 1} / ${
-          totalQuestions || totalQuestionsPerTest
-        }`;
+      const res = await fetch(`/api/cracked/tests?${params.toString()}`, {
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch tests");
       }
-      return "No progress yet";
+      setTests(data);
+    } catch (err) {
+      setTestsError(err.message);
+    } finally {
+      setTestsLoading(false);
     }
-  };
+  }, [testCategory]);
 
-  const difficultyColors = [
-    { label: "Normal", color: "hsl(0, 0%, 100%)" },
-    { label: "Very Easy", color: "hsl(120, 100%, 80%)" },
-    { label: "Easy", color: "hsl(120, 100%, 70%)" },
-    { label: "Moderate", color: "hsl(120, 100%, 60%)" },
-    { label: "Intermediate", color: "hsl(120, 100%, 50%)" },
-    { label: "Formidable", color: "hsl(120, 100%, 40%)" },
-    { label: "Challenging", color: "hsl(120, 100%, 30%)" },
-    { label: "Very Challenging", color: "hsl(120, 100%, 20%)" },
-    { label: "Ruthless", color: "hsl(120, 100%, 10%)" },
-    { label: "Ultra Level", color: "#000" }
-  ];
+  useEffect(() => {
+    if (activeTab === "tests") {
+      fetchTests();
+    }
+  }, [activeTab, fetchTests]);
 
-  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
-    if (existingAttempt && !doRestart) {
-      // Resume test
-      navigate(`/practice-tests/a-plus/${testNumber}`);
-    } else {
-      // New or forced restart
-      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
-      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+  const handleCreateTest = async () => {
+    try {
+      const body = {
+        category: newTestData.category,
+        testId: Number(newTestData.testId),
+        testName: newTestData.testName,
+        questions: []
+      };
+      const res = await fetch("/api/cracked/tests", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          answers: [],
-          score: 0,
-          totalQuestions: totalQuestionsPerTest,
-          selectedLength: lengthToUse,
-          currentQuestionIndex: 0,
-          shuffleOrder: [],
-          answerOrder: [],
-          finished: false,
-          examMode
-        })
-      })
-        .then(() => {
-          navigate(`/practice-tests/a-plus/${testNumber}`, {
-            state: { examMode }
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to create new attempt doc:", err);
-        });
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to create test");
+        return;
+      }
+      alert("Test created!");
+      fetchTests();
+      setNewTestData({ category: "", testId: "", testName: "", questions: [] });
+    } catch (err) {
+      console.error("Create test error:", err);
     }
   };
 
-  const examInfoText = `Replicate a real exam experience—answers and explanations stay hidden until the test is completed🤪`;
+  const handleDeleteTest = async (testObj) => {
+    if (!window.confirm(`Delete test: ${testObj.testName}?`)) return;
+    try {
+      const res = await fetch(`/api/cracked/tests/${testObj._id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to delete test");
+        return;
+      }
+      alert("Test deleted successfully.");
+      fetchTests();
+    } catch (err) {
+      console.error("Delete test error:", err);
+    }
+  };
 
-  return (
-    <div className="tests-list-container">
-      <h1 className="tests-list-title">CompTIA A+ Core 1 Practice Tests</h1>
+  /*****************************************
+   * DAILY PBQs
+   *****************************************/
+  const [dailyList, setDailyList] = useState([]);
+  const [dailyLoading, setDailyLoading] = useState(false);
+  const [dailyError, setDailyError] = useState(null);
 
-      <div className="centered-toggle-container">
-        <div className="toggle-with-text">
-          <label className="toggle-switch">
-            <input
-              type="checkbox"
-              checked={examMode}
-              onChange={(e) => setExamMode(e.target.checked)}
-            />
-            <span className="slider">{examMode ? "ON" : "OFF"}</span>
-          </label>
-          <span className="toggle-label">Exam Mode</span>
-          <div
-            className="info-icon-container"
-            onMouseEnter={() => setShowExamInfo(true)}
-            onMouseLeave={() => setShowExamInfo(false)}
-            onClick={() => setShowExamInfo((prev) => !prev)}
+  const [newDaily, setNewDaily] = useState({
+    prompt: "",
+    dayIndex: "",
+    correctIndex: "",
+    explanation: ""
+  });
+
+  const fetchDailyPBQs = useCallback(async () => {
+    setDailyLoading(true);
+    setDailyError(null);
+    try {
+      const res = await fetch("/api/cracked/daily", { credentials: "include" });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch daily PBQs");
+      }
+      setDailyList(data);
+    } catch (err) {
+      setDailyError(err.message);
+    } finally {
+      setDailyLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (activeTab === "daily") {
+      fetchDailyPBQs();
+    }
+  }, [activeTab, fetchDailyPBQs]);
+
+  const handleCreateDaily = async () => {
+    try {
+      const body = {
+        prompt: newDaily.prompt,
+        dayIndex: Number(newDaily.dayIndex) || 0,
+        correctIndex: Number(newDaily.correctIndex) || 0,
+        explanation: newDaily.explanation
+      };
+      const res = await fetch("/api/cracked/daily", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to create daily PBQ");
+        return;
+      }
+      alert("Daily PBQ created!");
+      fetchDailyPBQs();
+      setNewDaily({ prompt: "", dayIndex: "", correctIndex: "", explanation: "" });
+    } catch (err) {
+      console.error("Create daily PBQ error:", err);
+    }
+  };
+
+  const handleDeleteDaily = async (pbq) => {
+    if (!window.confirm(`Delete daily PBQ: ${pbq.prompt}?`)) return;
+    try {
+      const res = await fetch(`/api/cracked/daily/${pbq._id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to delete daily PBQ");
+        return;
+      }
+      alert("Daily PBQ deleted successfully.");
+      fetchDailyPBQs();
+    } catch (err) {
+      console.error("Delete daily PBQ error:", err);
+    }
+  };
+
+  /*****************************************
+   * SUPPORT
+   *****************************************/
+  const [threads, setThreads] = useState([]);
+  const [threadsLoading, setThreadsLoading] = useState(false);
+  const [threadsError, setThreadsError] = useState(null);
+  const [threadStatusFilter, setThreadStatusFilter] = useState("");
+  const [currentThread, setCurrentThread] = useState(null);
+  const [adminReply, setAdminReply] = useState("");
+
+  // We store all threads (including messages) so we can do real‐time merges
+  const [allThreadMap, setAllThreadMap] = useState({});
+  // Show "user is typing" in real time
+  const [userIsTyping, setUserIsTyping] = useState(false);
+
+  // Admin create thread for user
+  const [adminTargetUserId, setAdminTargetUserId] = useState("");
+  const [adminInitialMsg, setAdminInitialMsg] = useState("");
+
+  const fetchThreads = useCallback(async () => {
+    setThreadsLoading(true);
+    setThreadsError(null);
+    try {
+      const params = new URLSearchParams();
+      if (threadStatusFilter) {
+        params.set("status", threadStatusFilter);
+      }
+      const res = await fetch(`/api/cracked/supportThreads?${params.toString()}`, {
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch support threads");
+      }
+      setThreads(data);
+      setCurrentThread(null);
+
+      // Join all threads so we get real-time updates
+      if (adminSocket && data.length > 0) {
+        data.forEach((th) => {
+          adminSocket.emit("join_thread", { threadId: th._id });
+        });
+      }
+    } catch (err) {
+      setThreadsError(err.message);
+    } finally {
+      setThreadsLoading(false);
+    }
+  }, [threadStatusFilter]);
+
+  // Initialize adminSocket once
+  useEffect(() => {
+    if (!adminSocket) {
+      const socket = io(window.location.origin, {
+        path: "/api/socket.io",
+        transports: ["websocket"]
+      });
+      adminSocket = socket;
+
+      socket.on("connect", () => {
+        console.log("Admin socket connected:", socket.id);
+      });
+
+      socket.on("disconnect", () => {
+        console.log("Admin socket disconnected");
+      });
+
+      // Listen for new messages across ANY thread
+      socket.on("new_message", (payload) => {
+        const { threadId, message } = payload;
+        setAllThreadMap((prev) => {
+          const oldThread = prev[threadId] || { messages: [] };
+          const oldMsgs = oldThread.messages;
+          return {
+            ...prev,
+            [threadId]: {
+              ...oldThread,
+              messages: [...oldMsgs, message]
+            }
+          };
+        });
+        // If the currentThread is the same, append
+        setCurrentThread((prev) => {
+          if (prev && prev._id === threadId) {
+            return {
+              ...prev,
+              messages: [...prev.messages, message]
+            };
+          }
+          return prev;
+        });
+      });
+
+      // user_typing / user_stop_typing
+      socket.on("user_typing", (data) => {
+        if (data.threadId && currentThread && currentThread._id === data.threadId) {
+          setUserIsTyping(true);
+        }
+      });
+      socket.on("user_stop_typing", (data) => {
+        if (data.threadId && currentThread && currentThread._id === data.threadId) {
+          setUserIsTyping(false);
+        }
+      });
+
+      // Admin sees newly created threads in real-time
+      socket.on("new_thread", (threadData) => {
+        setThreads((prev) => [threadData, ...prev]);
+        socket.emit("join_thread", { threadId: threadData._id });
+      });
+    }
+  }, [currentThread]);
+
+  useEffect(() => {
+    if (activeTab === "support") {
+      fetchThreads();
+    }
+  }, [activeTab, fetchThreads]);
+
+  const handleViewThread = async (threadId) => {
+    try {
+      const res = await fetch(`/api/cracked/supportThreads/${threadId}`, {
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to get thread");
+        return;
+      }
+      setCurrentThread(data);
+      setAdminReply("");
+      setUserIsTyping(false);
+
+      // Merge into allThreadMap
+      setAllThreadMap((prev) => ({
+        ...prev,
+        [threadId]: data
+      }));
+    } catch (err) {
+      console.error("View thread error:", err);
+    }
+  };
+
+  const handleReplyToThread = async () => {
+    if (!currentThread || !currentThread._id) return;
+    try {
+      const replyMessage = {
+        sender: "admin",
+        content: adminReply,
+        timestamp: new Date().toISOString()
+      };
+
+      if (adminSocket) {
+        adminSocket.emit("admin_stop_typing", {
+          threadId: currentThread._id
+        });
+      }
+
+      const res = await fetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: adminReply })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to reply");
+        return;
+      }
+      alert("Reply sent!");
+
+      // Update the local thread data directly
+      setCurrentThread((prevThread) => {
+        if (!prevThread) return null;
+        return {
+          ...prevThread,
+          messages: [...prevThread.messages, replyMessage]
+        };
+      });
+
+      // Update allThreadMap as well
+      setAllThreadMap((prev) => {
+        const oldThread = prev[currentThread._id] || { messages: [] };
+        return {
+          ...prev,
+          [currentThread._id]: {
+            ...oldThread,
+            messages: [...oldThread.messages, replyMessage]
+          }
+        };
+      });
+
+      setAdminReply("");
+    } catch (err) {
+      console.error("Reply thread error:", err);
+    }
+  };
+
+  const handleAdminReplyTyping = (threadId) => {
+    if (adminSocket && threadId) {
+      adminSocket.emit("admin_typing", { threadId });
+    }
+  };
+
+  const handleCloseThread = async (threadId) => {
+    const resolution = window.prompt("Enter a resolution note:", "Issue resolved.");
+    if (resolution === null) return;
+    try {
+      const res = await fetch(`/api/cracked/supportThreads/${threadId}/close`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resolution })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to close thread");
+        return;
+      }
+      alert("Thread closed!");
+      fetchThreads();
+    } catch (err) {
+      console.error("Close thread error:", err);
+    }
+  };
+
+  const handleClearClosedThreads = async () => {
+    if (!window.confirm("Are you sure you want to permanently delete all closed threads?")) return;
+    try {
+      const res = await fetch("/api/cracked/supportThreads/clear-closed", {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to clear closed threads");
+        return;
+      }
+      alert(data.message || "Closed threads cleared");
+      fetchThreads();
+    } catch (err) {
+      alert("Error clearing closed threads");
+    }
+  };
+
+  const handleAdminCreateThread = async () => {
+    if (!adminTargetUserId) {
+      alert("Please enter a valid userId");
+      return;
+    }
+    try {
+      const body = {
+        userId: adminTargetUserId,
+        initialMessage: adminInitialMsg
+      };
+      const res = await fetch("/api/cracked/supportThreads/createFromAdmin", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to create thread from admin");
+        return;
+      }
+      alert("Created new thread successfully!");
+      setAdminTargetUserId("");
+      setAdminInitialMsg("");
+      fetchThreads();
+    } catch (err) {
+      console.error(err);
+      alert("Error creating admin thread");
+    }
+  };
+
+  /*****************************************
+   * ACTIVITY LOGS
+   *****************************************/
+  const [activityLogs, setActivityLogs] = useState([]);
+  const fetchActivityLogs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/activity-logs", { credentials: "include" });
+      const data = await res.json();
+      if (data.logs) {
+        setActivityLogs(data.logs);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * DB LOGS
+   *****************************************/
+  const [dbLogs, setDbLogs] = useState([]);
+  const fetchDbLogs = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/db-logs", { credentials: "include" });
+      const data = await res.json();
+      setDbLogs(data);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * DB SHELL
+   *****************************************/
+  const [dbShellCollection, setDbShellCollection] = useState("");
+  const [dbShellFilter, setDbShellFilter] = useState("{}");
+  const [dbShellLimit, setDbShellLimit] = useState(5);
+  const [dbShellResults, setDbShellResults] = useState([]);
+
+  const handleDbShellRead = async () => {
+    try {
+      const parsedFilter = JSON.parse(dbShellFilter);
+      const body = {
+        collection: dbShellCollection,
+        filter: parsedFilter,
+        limit: dbShellLimit
+      };
+      const res = await fetch("/api/cracked/db-shell/read", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setDbShellResults(data);
+      } else {
+        alert(data.error || "Error reading DB");
+      }
+    } catch (err) {
+      alert("JSON filter is invalid or error occurred.");
+      console.error(err);
+    }
+  };
+
+  /*****************************************
+   * HEALTH CHECKS
+   *****************************************/
+  const [healthChecks, setHealthChecks] = useState([]);
+  const fetchHealthChecks = useCallback(async () => {
+    try {
+      const res = await fetch("/api/cracked/health-checks", { credentials: "include" });
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setHealthChecks(data);
+      } else if (data.results) {
+        setHealthChecks(data.results);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  /*****************************************
+   * TAB SWITCH
+   *****************************************/
+  const switchTab = (tabName) => {
+    setActiveTab(tabName);
+    if (tabName === "activity") {
+      fetchActivityLogs();
+    } else if (tabName === "dbLogs") {
+      fetchDbLogs();
+    } else if (tabName === "dbShell") {
+      setDbShellResults([]);
+    } else if (tabName === "healthChecks") {
+      fetchHealthChecks();
+    }
+  };
+
+  /*****************************************
+   * RENDER: OVERVIEW
+   *****************************************/
+  const renderOverviewTab = () => {
+    if (overviewLoading) {
+      return <div className="tab-content">Loading overview...</div>;
+    }
+    if (overviewError) {
+      return <div className="tab-content error-msg">Error: {overviewError}</div>;
+    }
+    if (!overviewData) {
+      return <div className="tab-content">No overview data yet.</div>;
+    }
+
+    const hasChartArray =
+      Array.isArray(overviewData.recentStats) && overviewData.recentStats.length > 0;
+
+    return (
+      <div className="tab-content overview-tab">
+        <h2>Overview Stats</h2>
+        <ul>
+          <li>User Count: {overviewData.user_count}</li>
+          <li>Test Attempts: {overviewData.test_attempts_count}</li>
+          <li>Daily Bonus Claims Today: {overviewData.daily_bonus_claims}</li>
+          <li>Avg Test Score (%): {overviewData.average_test_score_percent}</li>
+          <li>Timestamp (EST): {overviewData.timestamp_est}</li>
+        </ul>
+        <button onClick={fetchOverview}>Refresh Overview</button>
+
+        <div className="chart-section">
+          <h3>Recent Stats</h3>
+          {hasChartArray ? (
+            <div className="chart-container">
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={overviewData.recentStats}>
+                  <defs>
+                    <linearGradient id="colorDailyBonus" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorTestAttempts" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis dataKey="label" />
+                  <YAxis />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <Tooltip />
+                  <Area
+                    type="monotone"
+                    dataKey="dailyBonus"
+                    stroke="#2ecc71"
+                    fill="url(#colorDailyBonus)"
+                    name="Daily Bonus Claims"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="testAttempts"
+                    stroke="#3498db"
+                    fill="url(#colorTestAttempts)"
+                    name="Test Attempts"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p>No chart data available.</p>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: PERFORMANCE (MULTIPLE CHARTS)
+   *****************************************/
+  const renderPerformanceTab = () => {
+    return (
+      <div className="tab-content perf-tab">
+        <h2>Performance Metrics (Rolling 60-Min Aggregation)</h2>
+        <button onClick={fetchPerformance} style={{ marginBottom: "10px" }}>
+          Refresh Perf Data
+        </button>
+        {perfLoading && <p>Loading performance data...</p>}
+        {perfError && <p className="error-msg">Error: {perfError}</p>}
+        {performanceData && (
+          <>
+            {/* Latest snapshot (the most recent doc) */}
+            <div className="perf-details">
+              <p>Avg Request Time (s): {performanceData.avg_request_time}</p>
+              {"avg_db_query_time_ms" in performanceData ? (
+                <p>Avg DB Query Time (ms): {performanceData.avg_db_query_time_ms}</p>
+              ) : (
+                <p>Avg DB Query Time (ms): 0</p>
+              )}
+              <p>Data Transfer Rate (MB/s): {performanceData.data_transfer_rate}</p>
+              <p>Throughput (req/min): {performanceData.throughput}</p>
+              <p>Error Rate: {performanceData.error_rate}</p>
+              <p>Timestamp (EST): {performanceData.timestamp}</p>
+            </div>
+
+            {/* We now show multiple charts, each for a different metric.
+                performanceData.history is an array of up to 20 data points, each aggregated. */}
+            <div style={{ marginTop: "20px" }}>
+              {Array.isArray(performanceData.history) && performanceData.history.length > 0 ? (
+                <>
+                  {/* Chart 1: Request Time (seconds) */}
+                  <div className="chart-section">
+                    <h3>Avg Request Time (Seconds) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorRequestTime" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#e67e22" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#e67e22" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="requestTime"
+                            stroke="#e67e22"
+                            fill="url(#colorRequestTime)"
+                            name="Request Time (s)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 2: DB Time (ms) */}
+                  <div className="chart-section">
+                    <h3>Avg DB Time (ms) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorDbTime" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#9b59b6" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#9b59b6" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="dbTime"
+                            stroke="#9b59b6"
+                            fill="url(#colorDbTime)"
+                            name="DB Time (ms)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 3: Throughput (req/min) */}
+                  <div className="chart-section">
+                    <h3>Throughput (Requests/Min) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorThroughput" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="throughput"
+                            stroke="#2ecc71"
+                            fill="url(#colorThroughput)"
+                            name="Throughput (req/min)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 4: Error Rate */}
+                  <div className="chart-section">
+                    <h3>Error Rate - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorErrorRate" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#e74c3c" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#e74c3c" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="errorRate"
+                            stroke="#e74c3c"
+                            fill="url(#colorErrorRate)"
+                            name="Error Rate"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Chart 5: Data Transfer (MB/s) */}
+                  <div className="chart-section">
+                    <h3>Data Transfer (MB/s) - Last Hour</h3>
+                    <div className="chart-container">
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={performanceData.history}>
+                          <defs>
+                            <linearGradient id="colorDataTransfer" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
+                              <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="timestamp" />
+                          <YAxis />
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <Tooltip />
+                          <Area
+                            type="monotone"
+                            dataKey="dataTransfer"
+                            stroke="#3498db"
+                            fill="url(#colorDataTransfer)"
+                            name="Data Transfer (MB/s)"
+                          />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p>No chart data available.</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: USERS
+   *****************************************/
+  const renderUsersTab = () => {
+    return (
+      <div className="tab-content users-tab">
+        <h2>User Management</h2>
+        <div className="users-search-row">
+          <input
+            type="text"
+            value={userSearch}
+            placeholder="Search by username or email"
+            onChange={(e) => setUserSearch(e.target.value)}
+          />
+          <button
+            onClick={() => {
+              setUserPage(1);
+              fetchUsers();
+            }}
           >
-            <div className="info-icon">ⓘ</div>
-            {showExamInfo && (
-              <div className="info-tooltip">
-                {examInfoText}
+            Search
+          </button>
+        </div>
+        <div style={{ marginTop: "10px" }}>
+          <p>
+            Page: {userPage} / {Math.ceil(userTotal / userLimit)} (Total: {userTotal})
+          </p>
+          <button
+            disabled={userPage <= 1}
+            onClick={() => setUserPage((prev) => Math.max(1, prev - 1))}
+          >
+            Prev
+          </button>
+          <button
+            disabled={userPage >= Math.ceil(userTotal / userLimit)}
+            onClick={() => setUserPage((prev) => prev + 1)}
+          >
+            Next
+          </button>
+        </div>
+        {usersLoading && <div>Loading users...</div>}
+        {usersError && <div className="error-msg">Error: {usersError}</div>}
+
+        <table className="users-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Coins</th>
+              <th>XP</th>
+              <th>Level</th>
+              <th>Suspended</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => {
+              const isEditing = editUserId === u._id;
+              return (
+                <tr key={u._id}>
+                  <td>{u._id}</td>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editUserData.username}
+                        onChange={(e) => handleUpdateUserField("username", e.target.value)}
+                      />
+                    ) : (
+                      u.username
+                    )}
+                  </td>
+                  <td>{u.email}</td>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={editUserData.coins}
+                        onChange={(e) => handleUpdateUserField("coins", e.target.value)}
+                      />
+                    ) : (
+                      u.coins
+                    )}
+                  </td>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={editUserData.xp}
+                        onChange={(e) => handleUpdateUserField("xp", e.target.value)}
+                      />
+                    ) : (
+                      u.xp
+                    )}
+                  </td>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={editUserData.level}
+                        onChange={(e) => handleUpdateUserField("level", e.target.value)}
+                      />
+                    ) : (
+                      u.level
+                    )}
+                  </td>
+                  <td>
+                    {isEditing ? (
+                      <input
+                        type="checkbox"
+                        checked={!!editUserData.suspended}
+                        onChange={(e) => handleUpdateUserField("suspended", e.target.checked)}
+                      />
+                    ) : (
+                      u.suspended ? "Yes" : "No"
+                    )}
+                  </td>
+                  <td>
+                    {isEditing ? (
+                      <>
+                        <button onClick={handleUserUpdateSubmit}>Save</button>
+                        <button onClick={() => setEditUserId(null)}>Cancel</button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => handleUserEdit(u)}>Edit</button>
+                        <button onClick={() => handleResetPassword(u._id)}>Reset PW</button>
+                        <button onClick={() => handleUserDelete(u._id)}>Delete</button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: TESTS
+   *****************************************/
+  const renderTestsTab = () => {
+    return (
+      <div className="tab-content tests-tab">
+        <h2>Test Management</h2>
+        <div className="test-filter-row">
+          <label>Category Filter:</label>
+          <input
+            type="text"
+            placeholder="e.g. aplus"
+            value={testCategory}
+            onChange={(e) => setTestCategory(e.target.value)}
+          />
+          <button onClick={fetchTests}>Fetch Tests</button>
+        </div>
+        {testsLoading && <p>Loading tests...</p>}
+        {testsError && <p className="error-msg">Error: {testsError}</p>}
+
+        <div className="create-test-form">
+          <h4>Create a new Test</h4>
+          <input
+            type="text"
+            placeholder="Category"
+            value={newTestData.category}
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, category: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Test ID (number)"
+            value={newTestData.testId}
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, testId: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Test Name"
+            value={newTestData.testName}
+            onChange={(e) => setNewTestData((prev) => ({ ...prev, testName: e.target.value }))}
+          />
+          <button onClick={handleCreateTest}>Create Test</button>
+        </div>
+
+        <table className="tests-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category</th>
+              <th>TestId #</th>
+              <th>Test Name</th>
+              <th>Question Count</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tests.map((t) => (
+              <tr key={t._id}>
+                <td>{t._id}</td>
+                <td>{t.category}</td>
+                <td>{t.testId}</td>
+                <td>{t.testName || "(Unnamed)"} </td>
+                <td>{t.questions ? t.questions.length : 0}</td>
+                <td>
+                  <button onClick={() => handleDeleteTest(t)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: DAILY
+   *****************************************/
+  const renderDailyTab = () => {
+    return (
+      <div className="tab-content daily-tab">
+        <h2>Daily PBQ Management</h2>
+        {dailyLoading && <p>Loading daily PBQs...</p>}
+        {dailyError && <p className="error-msg">Error: {dailyError}</p>}
+
+        <div className="create-daily-form">
+          <h4>Create a new Daily PBQ</h4>
+          <input
+            type="text"
+            placeholder="Prompt"
+            value={newDaily.prompt}
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, prompt: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Day Index"
+            value={newDaily.dayIndex}
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, dayIndex: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Correct Index"
+            value={newDaily.correctIndex}
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, correctIndex: e.target.value }))}
+          />
+          <textarea
+            placeholder="Explanation"
+            value={newDaily.explanation}
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, explanation: e.target.value }))}
+          />
+          <button onClick={handleCreateDaily}>Create Daily PBQ</button>
+        </div>
+
+        <table className="daily-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Prompt</th>
+              <th>DayIndex</th>
+              <th>CorrectIndex</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dailyList.map((d) => (
+              <tr key={d._id}>
+                <td>{d._id}</td>
+                <td>{d.prompt}</td>
+                <td>{d.dayIndex}</td>
+                <td>{d.correctIndex}</td>
+                <td>
+                  <button onClick={() => handleDeleteDaily(d)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: SUPPORT
+   *****************************************/
+  const renderSupportTab = () => {
+    return (
+      <div className="tab-content support-tab">
+        <h2>Support Threads</h2>
+        <div className="thread-filter-row">
+          <label>Status Filter:</label>
+          <input
+            type="text"
+            placeholder="open / closed? etc."
+            value={threadStatusFilter}
+            onChange={(e) => setThreadStatusFilter(e.target.value)}
+          />
+          <button onClick={fetchThreads}>Fetch Threads</button>
+        </div>
+        {threadsLoading && <p>Loading threads...</p>}
+        {threadsError && <p className="error-msg">Error: {threadsError}</p>}
+
+        <div className="support-threads-container">
+          <div className="threads-list">
+            <ul>
+              {threads.map((th) => (
+                <li key={th._id}>
+                  <strong>{th._id}</strong> - {th.status} - &nbsp;
+                  <button onClick={() => handleViewThread(th._id)}>View</button>
+                  &nbsp;
+                  {th.status !== "closed" && (
+                    <button onClick={() => handleCloseThread(th._id)}>Close</button>
+                  )}
+                </li>
+              ))}
+            </ul>
+            <button style={{ marginTop: "10px" }} onClick={handleClearClosedThreads}>
+              Clear All Closed Threads
+            </button>
+          </div>
+
+          <div className="thread-details">
+            {currentThread ? (
+              <div className="current-thread-details">
+                <h4>Thread: {currentThread._id}</h4>
+                <p>Status: {currentThread.status}</p>
+                <div className="messages-list-container">
+                  <ul className="messages-list">
+                    {currentThread.messages.map((m, idx) => (
+                      <li key={idx}>
+                        <strong>{m.sender}:</strong> {m.content} ({m.timestamp || ""})
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                {userIsTyping && (
+                  <div className="typing-indicator-user">
+                    <em>User is typing...</em>
+                  </div>
+                )}
+                {currentThread.status !== "closed" && (
+                  <div className="reply-container">
+                    <textarea
+                      rows={5}
+                      placeholder="Type an admin reply..."
+                      value={adminReply}
+                      onChange={(e) => {
+                        setAdminReply(e.target.value);
+                        handleAdminReplyTyping(currentThread._id);
+                      }}
+                    />
+                    <button onClick={handleReplyToThread}>Send Reply</button>
+                  </div>
+                )}
               </div>
+            ) : (
+              <p>Select a thread to view details.</p>
             )}
           </div>
         </div>
-      </div>
 
-      <div className="tests-list-grid">
-        {Array.from({ length: 10 }, (_, i) => {
-          const testNumber = i + 1;
-          const attemptDoc = getAttemptDoc(testNumber);
-          const progressDisplay = getProgressDisplay(attemptDoc);
-          const difficulty = difficultyColors[i] || { label: "", color: "#fff" };
-
-          const isFinished = attemptDoc?.finished;
-          const noAttempt = !attemptDoc;
-
-          return (
-            <div key={testNumber} className="test-card">
-              <div className="test-badge">Test {testNumber}</div>
-              <div
-                className="difficulty-label"
-                style={{ color: difficulty.color }}
-              >
-                {difficulty.label}
-              </div>
-              <p className="test-progress">{progressDisplay}</p>
-
-              {/* If no attempt or finished => show length selector */}
-              {(noAttempt || isFinished) && (
-                <div className="test-length-selector-card">
-                  <p>Select Test Length:</p>
-                  <div className="test-length-options">
-                    {allowedTestLengths.map((length) => (
-                      <label key={length} className="test-length-option">
-                        <input
-                          type="radio"
-                          name={`testLength-${testNumber}`}
-                          value={length}
-                          checked={
-                            (selectedLengths[testNumber] ||
-                              totalQuestionsPerTest) === length
-                          }
-                          onChange={(e) =>
-                            setSelectedLengths((prev) => ({
-                              ...prev,
-                              [testNumber]: Number(e.target.value)
-                            }))
-                          }
-                        />
-                        <span>{length}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Start / Resume / Restart */}
-              {noAttempt && (
-                <button
-                  className="start-button"
-                  onClick={() => startTest(testNumber, false, null)}
-                >
-                  Start
-                </button>
-              )}
-              {attemptDoc && !attemptDoc.finished && (
-                <div className="test-card-buttons">
-                  <button
-                    className="resume-button"
-                    onClick={() => startTest(testNumber, false, attemptDoc)}
-                  >
-                    Resume
-                  </button>
-                  <button
-                    className="restart-button-testlist"
-                    onClick={() => setRestartPopupTest(testNumber)}
-                  >
-                    Restart
-                  </button>
-                </div>
-              )}
-              {attemptDoc && attemptDoc.finished && (
-                <div className="test-card-buttons">
-                  <button
-                    className="resume-button"
-                    onClick={() =>
-                      navigate(`/practice-tests/a-plus/${testNumber}`, {
-                        state: { review: true }
-                      })
-                    }
-                  >
-                    View Review
-                  </button>
-                  <button
-                    className="restart-button-testlist"
-                    onClick={() => startTest(testNumber, true, attemptDoc)}
-                  >
-                    Restart
-                  </button>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Popup for partial restarts */}
-      {restartPopupTest !== null && (
-        <div className="popup-overlay">
-          <div className="popup-content">
-            <p>
-              You are currently in progress on this test, are you sure you want to restart!?😱 
-              Also, if you want to change the test length, please finish your current attempt.
-              Restarting now will use your currently selected test length and reset your progress🧙‍♂️.
-            </p>
-            <div className="popup-buttons">
-              <button
-                onClick={() => {
-                  const attemptDoc = getAttemptDoc(restartPopupTest);
-                  startTest(restartPopupTest, true, attemptDoc);
-                  setRestartPopupTest(null);
-                }}
-              >
-                Yes, Restart!😎
-              </button>
-              <button onClick={() => setRestartPopupTest(null)}>Cancel</button>
-            </div>
+        <div style={{ marginTop: "20px" }}>
+          <h3>Create Thread on behalf of a user</h3>
+          <div
+            className="create-thread-row"
+            style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
+          >
+            <input
+              style={{ flex: "0 0 300px" }}
+              placeholder="Target UserId"
+              value={adminTargetUserId}
+              onChange={(e) => setAdminTargetUserId(e.target.value)}
+            />
+            <input
+              style={{ flex: "1" }}
+              placeholder="Initial admin message..."
+              value={adminInitialMsg}
+              onChange={(e) => setAdminInitialMsg(e.target.value)}
+            />
+            <button onClick={handleAdminCreateThread}>Create</button>
           </div>
         </div>
-      )}
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: ACTIVITY LOGS
+   *****************************************/
+  const renderActivityLogsTab = () => {
+    return (
+      <div className="tab-content activity-tab">
+        <h2>Activity & Audit Logs</h2>
+        <button onClick={fetchActivityLogs} style={{ marginBottom: "10px" }}>
+          Refresh Logs
+        </button>
+        <table className="activity-table">
+          <thead>
+            <tr>
+              <th>Timestamp (EST)</th>
+              <th>IP</th>
+              <th>UserId</th>
+              <th>Success</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody>
+            {activityLogs.map((log) => (
+              <tr key={log._id}>
+                <td>{log.timestamp}</td>
+                <td>{log.ip}</td>
+                <td>{log.userId || ""}</td>
+                <td>{log.success ? "Yes" : "No"}</td>
+                <td>{log.reason || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: DB LOGS
+   *****************************************/
+  const renderDbLogsTab = () => {
+    return (
+      <div className="tab-content db-logs-tab">
+        <h2>DB Query Logs</h2>
+        <button onClick={fetchDbLogs} style={{ marginBottom: "10px" }}>
+          Refresh
+        </button>
+        <table className="db-logs-table">
+          <thead>
+            <tr>
+              <th>Timestamp (EST)</th>
+              <th>Route</th>
+              <th>Method</th>
+              <th>Duration (ms)</th>
+              <th>DB Time (ms)</th>
+              <th>Status</th>
+              <th>Bytes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dbLogs.map((log) => (
+              <tr key={log._id}>
+                <td>{log.timestamp}</td>
+                <td>{log.route}</td>
+                <td>{log.method}</td>
+                <td>{log.duration_ms}</td>
+                <td>{log.db_time_ms}</td>
+                <td>{log.http_status}</td>
+                <td>{log.response_bytes}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: DB SHELL
+   *****************************************/
+  const renderDbShellTab = () => {
+    return (
+      <div className="tab-content db-shell-tab">
+        <h2>Read-Only DB Shell</h2>
+        <div className="db-shell-form">
+          <label>Collection:</label>
+          <input
+            type="text"
+            value={dbShellCollection}
+            onChange={(e) => setDbShellCollection(e.target.value)}
+          />
+          <label>Filter (JSON):</label>
+          <input
+            type="text"
+            value={dbShellFilter}
+            onChange={(e) => setDbShellFilter(e.target.value)}
+          />
+          <label>Limit:</label>
+          <input
+            type="number"
+            value={dbShellLimit}
+            onChange={(e) => setDbShellLimit(e.target.valueAsNumber)}
+          />
+          <button onClick={handleDbShellRead}>Execute Read</button>
+        </div>
+        <pre className="db-shell-results">
+          {JSON.stringify(dbShellResults, null, 2)}
+        </pre>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * RENDER: HEALTH CHECKS
+   *****************************************/
+  const renderHealthChecksTab = () => {
+    return (
+      <div className="tab-content health-checks-tab">
+        <h2>API Health Checks</h2>
+        <button onClick={fetchHealthChecks} style={{ marginBottom: "10px" }}>
+          Refresh Checks
+        </button>
+        <table className="health-checks-table">
+          <thead>
+            <tr>
+              <th>checkedAt (EST)</th>
+              <th>Endpoint</th>
+              <th>Status</th>
+              <th>OK</th>
+              <th>Error</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Array.isArray(healthChecks) &&
+              healthChecks.map((hc, idx) => {
+                if (hc.results) {
+                  // multi results block:
+                  return hc.results.map((r, j) => (
+                    <tr key={`${hc._id}_${j}`}>
+                      <td>{hc.checkedAt}</td>
+                      <td>{r.endpoint}</td>
+                      <td>{r.status}</td>
+                      <td>{r.ok ? "Yes" : "No"}</td>
+                      <td>{r.error || ""}</td>
+                    </tr>
+                  ));
+                } else {
+                  // single item doc:
+                  return (
+                    <tr key={idx}>
+                      <td>{hc.checkedAt}</td>
+                      <td>{hc.endpoint}</td>
+                      <td>{hc.status}</td>
+                      <td>{hc.ok ? "Yes" : "No"}</td>
+                      <td>{hc.error || ""}</td>
+                    </tr>
+                  );
+                }
+              })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  /*****************************************
+   * MAIN RETURN
+   *****************************************/
+  return (
+    <div className="cracked-admin-dashboard">
+      <div className="cracked-admin-dashboard-container">
+        <h1 className="admin-dashboard-title">Admin Dashboard</h1>
+
+        {/* Tabs */}
+        <div className="admin-tabs">
+          <button
+            className={activeTab === "overview" ? "active" : ""}
+            onClick={() => switchTab("overview")}
+          >
+            Overview
+          </button>
+          <button
+            className={activeTab === "users" ? "active" : ""}
+            onClick={() => switchTab("users")}
+          >
+            Users
+          </button>
+          <button
+            className={activeTab === "tests" ? "active" : ""}
+            onClick={() => switchTab("tests")}
+          >
+            Tests
+          </button>
+          <button
+            className={activeTab === "daily" ? "active" : ""}
+            onClick={() => switchTab("daily")}
+          >
+            Daily PBQs
+          </button>
+          <button
+            className={activeTab === "support" ? "active" : ""}
+            onClick={() => switchTab("support")}
+          >
+            Support
+          </button>
+          <button
+            className={activeTab === "performance" ? "active" : ""}
+            onClick={() => switchTab("performance")}
+          >
+            Performance
+          </button>
+          <button
+            className={activeTab === "activity" ? "active" : ""}
+            onClick={() => switchTab("activity")}
+          >
+            Activity
+          </button>
+          <button
+            className={activeTab === "dbLogs" ? "active" : ""}
+            onClick={() => switchTab("dbLogs")}
+          >
+            DB Logs
+          </button>
+          <button
+            className={activeTab === "dbShell" ? "active" : ""}
+            onClick={() => switchTab("dbShell")}
+          >
+            DB Shell
+          </button>
+          <button
+            className={activeTab === "healthChecks" ? "active" : ""}
+            onClick={() => switchTab("healthChecks")}
+          >
+            Health Checks
+          </button>
+        </div>
+
+        {/* Tabs' Content */}
+        {activeTab === "overview" && renderOverviewTab()}
+        {activeTab === "users" && renderUsersTab()}
+        {activeTab === "tests" && renderTestsTab()}
+        {activeTab === "daily" && renderDailyTab()}
+        {activeTab === "support" && renderSupportTab()}
+        {activeTab === "performance" && renderPerformanceTab()}
+        {activeTab === "activity" && renderActivityLogsTab()}
+        {activeTab === "dbLogs" && renderDbLogsTab()}
+        {activeTab === "dbShell" && renderDbShellTab()}
+        {activeTab === "healthChecks" && renderHealthChecksTab()}
+      </div>
     </div>
   );
-};
+}
 
-export default APlusTestList;
+export default CrackedAdminDashboard;
+ 
 
-// APlusTestPage.js
-import React from "react";
-import { useParams } from "react-router-dom";
-import APlusTestList from "./APlusTestList";  // your existing test list component
-import GlobalTestPage from "../../GlobalTestPage"; // the new universal logic
-import "../../test.css";
-
-const APlusTestPage = () => {
-  const { testId } = useParams();
-
-  // If no testId in URL, show the test list
-  if (!testId) {
-    return <APlusTestList />;
-  }
-
-  // Otherwise, show the universal test runner
-  return (
-    <GlobalTestPage
-      testId={testId}
-      category="aplus"
-      backToListPath="/practice-tests/a-plus"
-    />
-  );
-};
-
-export default APlusTestPage;
-
-ok go
