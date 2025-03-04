@@ -18,7 +18,7 @@ const CySAPlusTestPage = memo(() => {
       backToListPath="/practice-tests/cysa-plus"
     />
   );
-};
+});
 
 export default CySAPlusTestPage;
 
