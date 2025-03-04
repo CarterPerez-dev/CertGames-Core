@@ -15,8 +15,6 @@ from dotenv import load_dotenv
 from routes.xploit_routes import xploit_bp
 from routes.scenario_routes import scenario_bp
 from routes.analogy_routes import analogy_bp
-from routes.subscribe_routes import subscribe_bp
-from routes.unsubscribe_routes import unsubscribe_bp
 from routes.grc_routes import grc_bp
 from routes.test_routes import api_bp
 from routes.cracked_admin import cracked_bp
@@ -76,8 +74,6 @@ app.register_blueprint(xploit_bp, url_prefix='/payload')
 app.register_blueprint(scenario_bp, url_prefix='/scenario')
 app.register_blueprint(analogy_bp, url_prefix='/analogy')
 app.register_blueprint(grc_bp, url_prefix='/grc')
-app.register_blueprint(subscribe_bp, url_prefix='/subscribe')
-app.register_blueprint(unsubscribe_bp, url_prefix='/unsubscribe')
 app.register_blueprint(api_bp, url_prefix='/test')
 app.register_blueprint(cracked_bp, url_prefix="/cracked")
 app.register_blueprint(support_bp, url_prefix="/support")
