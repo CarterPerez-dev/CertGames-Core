@@ -4,7 +4,7 @@ import AWSCloudTestList from "./AWSCloudTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const AWSCloudTestPage = () => {
+const AWSCloudTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
