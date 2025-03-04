@@ -1,5 +1,3 @@
-**Aggregator Prompt**:
-
 1. **Input**: You have three separate sets of optimization/efficiency recommendations gathered from three different AIs. Each AI discusses potential improvements to the same codebase, but they may overlap or conflict.  
 
 2. **Task**:
