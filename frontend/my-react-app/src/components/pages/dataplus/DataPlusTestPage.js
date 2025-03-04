@@ -18,7 +18,7 @@ const DataPlusTestPage = memo(() => {
       backToListPath="/practice-tests/data-plus"
     />
   );
-};
+});
 
 export default DataPlusTestPage;
 
