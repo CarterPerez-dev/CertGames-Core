@@ -18,7 +18,7 @@ const CloudPlusTestPage = memo(() => {
       backToListPath="/practice-tests/cloud-plus"
     />
   );
-};
+});
 
 export default CloudPlusTestPage;
 
