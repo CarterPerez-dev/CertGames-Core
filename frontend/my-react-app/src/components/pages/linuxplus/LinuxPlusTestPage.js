@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import React from "react";
 import { useParams } from "react-router-dom";
 import LinuxPlusTestList from "./LinuxPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
