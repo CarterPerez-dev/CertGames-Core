@@ -18,7 +18,7 @@ const SecurityPlusTestPage = memo(() => {
       backToListPath="/practice-tests/security-plus"
     />
   );
-};
+});
 
 export default SecurityPlusTestPage;
 
