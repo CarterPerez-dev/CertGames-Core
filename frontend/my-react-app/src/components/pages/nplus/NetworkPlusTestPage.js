@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import React from "react";
 import { useParams } from "react-router-dom";
 import NPlusTestList from "./NPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
