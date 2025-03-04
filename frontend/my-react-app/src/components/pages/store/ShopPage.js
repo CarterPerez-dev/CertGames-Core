@@ -30,7 +30,6 @@ const ShopPage = () => {
     userId,
     coins,
     level,
-    xpBoost,
     currentAvatar,
     purchasedItems = []
   } = useSelector((state) => state.user);
