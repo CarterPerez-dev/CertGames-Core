@@ -4,7 +4,7 @@ import CisspTestList from "./CisspTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CisspTestPage = () => {
+const CisspTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
