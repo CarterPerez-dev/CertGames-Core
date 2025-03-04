@@ -1,7 +1,3 @@
-Here’s an example aggregator prompt you can feed to an AI that merges and refines multiple sets of suggestions into one cohesive set of recommendations:
-
----
-
 **Aggregator Prompt**:
 
 1. **Input**: You have three separate sets of optimization/efficiency recommendations gathered from three different AIs. Each AI discusses potential improvements to the same codebase, but they may overlap or conflict.  
