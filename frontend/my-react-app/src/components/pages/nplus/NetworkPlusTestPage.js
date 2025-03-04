@@ -18,7 +18,7 @@ const NetworkPlusTestPage = memo(() => {
       backToListPath="/practice-tests/network-plus"
     />
   );
-};
+});
 
 export default NetworkPlusTestPage;
 
