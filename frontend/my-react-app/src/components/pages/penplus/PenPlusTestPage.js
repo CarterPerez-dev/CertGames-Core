@@ -18,7 +18,7 @@ const PenPlusTestPage = memo(() => {
       backToListPath="/practice-tests/pen-plus"
     />
   );
-};
+});
 
 export default PenPlusTestPage;
 
