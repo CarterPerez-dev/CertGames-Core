@@ -4,7 +4,7 @@ import CySAPlusTestList from "./CySAPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CySAPlusTestPage = () => {
+const CySAPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
