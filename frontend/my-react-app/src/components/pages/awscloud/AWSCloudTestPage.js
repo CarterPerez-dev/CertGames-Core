@@ -1,5 +1,4 @@
 import React, { memo } from "react";
-import React from "react";
 import { useParams } from "react-router-dom";
 import AWSCloudTestList from "./AWSCloudTestList";
 import GlobalTestPage from "../../GlobalTestPage";
