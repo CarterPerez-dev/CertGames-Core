@@ -176,16 +176,16 @@ const APlusTestList = () => {
   };
 
   const difficultyCategories = [
-    { label: "Normal", color: "#e0e0eb", textColor: "#333333" },             // Soft grey-blue
-    { label: "Very Easy", color: "#b5e7a0", textColor: "#000000" },          // Light lime
-    { label: "Easy", color: "#c9b6e4", textColor: "#000000" },               // Soft lavender
-    { label: "Moderate", color: "#ffd966", textColor: "#4a3100" },           // Mustard
-    { label: "Intermediate", color: "#ff7043", textColor: "#ffffff" },       // Deep orange
-    { label: "Formidable", color: "#e53935", textColor: "#ffffff" },         // Fiery red
-    { label: "Challenging", color: "#8e24aa", textColor: "#ffffff" },        // Bold purple
-    { label: "Very Challenging", color: "#5e035c", textColor: "#ffffff" },   // Dark magenta
-    { label: "Ruthless", color: "#4c0000", textColor: "#ffffff" },           // Dark blood red
-    { label: "Ultra Level", color: "#000000", textColor: "#00ff00" }         // Black with neon green text
+    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             // Cream
+    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          // Soft green
+    { label: "Easy", color: "#87cefa", textColor: "#000000" },               // Light sky blue
+    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
+    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
+    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
+    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
+    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
+    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
+    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
   ];
 
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
