@@ -4,7 +4,7 @@ import LinuxPlusTestList from "./LinuxPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const LinuxPlusTestPage = () => {
+const LinuxPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
