@@ -18,7 +18,7 @@ const LinuxPlusTestPage = memo(() => {
       backToListPath="/practice-tests/linux-plus"
     />
   );
-};
+});
 
 export default LinuxPlusTestPage;
 
