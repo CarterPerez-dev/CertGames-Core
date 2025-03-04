@@ -35,6 +35,7 @@ const ShopPage = () => {
     purchasedItems = []
   } = useSelector((state) => state.user);
 
+  const xpBoost = ((item.effectValue - 1) * 100).toFixed(2);
   // Local state
   const [purchaseStatus, setPurchaseStatus] = useState(null);
   const [statusType, setStatusType] = useState(''); // 'success', 'error', 'info'
@@ -181,7 +182,7 @@ const ShopPage = () => {
     }
   };
   
-  const xpBoost = ((item.effectValue - 1) * 100).toFixed(2);
+  
   // Preview hover handler
   const handlePreviewEnter = (avatarUrl) => {
     setPreviewAvatar(avatarUrl);
