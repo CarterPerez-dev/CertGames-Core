@@ -24,7 +24,6 @@ const ShopPage = () => {
 
   // Grab shop data from Redux
   const { items, status, error } = useSelector((state) => state.shop);
-  const xpBoost = ((item.effectValue - 1) * 100).toFixed(2);
   // Grab user data from Redux
   const {
     userId,
