@@ -31,7 +31,7 @@ import './components/pages/XploitcraftPage/global.css';
 import './global.css';
 ```
 ---
-## completly revamp the email sender and integrate it into your admin page where you can send the emails and also write the emails (also have a test email component before you mass send it)- dont make it daily make it just say "Newsletter" and we will send it like 2-3 times a week
+## fix email sender/finish it
 ---
 ### ADD RATE LIMITER TO AI COMPONENTS
 -----
