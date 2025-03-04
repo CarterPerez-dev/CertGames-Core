@@ -176,16 +176,16 @@ const APlusTestList = () => {
   };
 
   const difficultyCategories = [
-    { label: "Normal", color: "#f4f4f4", textColor: "#222222" },             // Slightly off-white
-    { label: "Very Easy", color: "#98ff98", textColor: "#003300" },          // Mint green
-    { label: "Easy", color: "#d3adf7", textColor: "#301860" },               // Soft purple
-    { label: "Moderate", color: "#ffd384", textColor: "#4a3200" },           // Pale orange
-    { label: "Intermediate", color: "#f76c5e", textColor: "#ffffff" },       // Moderate red
-    { label: "Formidable", color: "#c62828", textColor: "#ffffff" },         // Dark red
-    { label: "Challenging", color: "#8e44ad", textColor: "#ffffff" },        // Purple
-    { label: "Very Challenging", color: "#5b2c6f", textColor: "#ffffff" },   // Deep plum
-    { label: "Ruthless", color: "#280000", textColor: "#ffffff" },           // Ultra dark red
-    { label: "Ultra Level", color: "#000000", textColor: "#dbff00" }         // Black with bright lime text
+    { label: "Normal", color: "#e0e0eb", textColor: "#333333" },             // Soft grey-blue
+    { label: "Very Easy", color: "#b5e7a0", textColor: "#000000" },          // Light lime
+    { label: "Easy", color: "#c9b6e4", textColor: "#000000" },               // Soft lavender
+    { label: "Moderate", color: "#ffd966", textColor: "#4a3100" },           // Mustard
+    { label: "Intermediate", color: "#ff7043", textColor: "#ffffff" },       // Deep orange
+    { label: "Formidable", color: "#e53935", textColor: "#ffffff" },         // Fiery red
+    { label: "Challenging", color: "#8e24aa", textColor: "#ffffff" },        // Bold purple
+    { label: "Very Challenging", color: "#5e035c", textColor: "#ffffff" },   // Dark magenta
+    { label: "Ruthless", color: "#4c0000", textColor: "#ffffff" },           // Dark blood red
+    { label: "Ultra Level", color: "#000000", textColor: "#00ff00" }         // Black with neon green text
   ];
 
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
