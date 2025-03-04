@@ -2,8 +2,7 @@
 ---
 fix achieemt levesl- draconic ruin is level 75000
 inferna, bastion is leevl 45000
----
-## admin and support refinements [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/admin-support.md)
+
 ---
 Floating-point arithmetic in JavaScript can sometimes produce such imprecise values. To fix this, rounding the result before displaying it is essential. Here's a complete example that rounds to two decimal places:
 
