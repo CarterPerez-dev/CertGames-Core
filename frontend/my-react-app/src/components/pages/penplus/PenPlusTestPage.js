@@ -4,7 +4,7 @@ import PenPlusTestList from "./PenPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const PenPlusTestPage = () => {
+const PenPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
