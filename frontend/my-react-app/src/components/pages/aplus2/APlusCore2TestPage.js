@@ -4,7 +4,7 @@ import AplusCore2TestList from "./AplusCore2TestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const APlusCore2TestPage = () => {
+const APlusCore2TestPage = memo(() => {
   const { testId } = useParams();
 
   // If no testId in URL, show the list
