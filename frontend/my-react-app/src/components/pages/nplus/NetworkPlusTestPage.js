@@ -4,7 +4,7 @@ import NPlusTestList from "./NPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const NetworkPlusTestPage = () => {
+const NetworkPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
