@@ -180,7 +180,8 @@ const ShopPage = () => {
       setActionInProgress(false);
     }
   };
-
+  
+  const xpBoost = ((item.effectValue - 1) * 100).toFixed(2);
   // Preview hover handler
   const handlePreviewEnter = (avatarUrl) => {
     setPreviewAvatar(avatarUrl);
