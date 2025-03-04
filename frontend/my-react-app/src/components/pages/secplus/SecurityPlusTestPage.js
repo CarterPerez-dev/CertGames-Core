@@ -4,7 +4,7 @@ import SecurityPlusTestList from "./SecurityPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const SecurityPlusTestPage = () => {
+const SecurityPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
