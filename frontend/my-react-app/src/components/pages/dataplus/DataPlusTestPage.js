@@ -4,7 +4,7 @@ import DataPlusTestList from "./DataPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const DataPlusTestPage = () => {
+const DataPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
