@@ -27,7 +27,6 @@ app = Celery(
     broker_connection_retry_on_startup=True,
     include=[
         'helpers.async_tasks',
-        'helpers.daily_newsletter_task'
     ]
 )
 
@@ -40,10 +39,6 @@ app.conf.update({
 })
 
 app.conf.beat_schedule = {
-    'send-daily-newsletter-midnight': {
-        'task': 'helpers.daily_newsletter_task.send_daily_newsletter',
-        'schedule': crontab(hour=0, minute=0),
-    },
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
         'schedule': 180.0,  # 3 minutes

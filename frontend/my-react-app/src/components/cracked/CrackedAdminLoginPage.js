@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// Make sure your CrackedAdminLogin.css is scoped to .cracked-admin-login-wrapper
-// and references .cracked-admin-login-container inside it.
 import "./CrackedAdminLogin.css";
 
 function CrackedAdminLoginPage() {
