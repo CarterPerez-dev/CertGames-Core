@@ -56,7 +56,7 @@ import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
 import GlobalTestPage from './components/GlobalTestPage';
 
 // Global CSS import
-import './components/pages/XploitcraftPage/global.css';
+import './global.css';
 
 /* 
   HomeOrProfile Component
