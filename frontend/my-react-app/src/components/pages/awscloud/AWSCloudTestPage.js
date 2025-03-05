@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import AWSCloudTestList from "./AWSCloudTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const AWSCloudTestPage = () => {
+const AWSCloudTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const AWSCloudTestPage = () => {
       backToListPath="/practice-tests/aws-cloud"
     />
   );
-};
+});
 
 export default AWSCloudTestPage;
 

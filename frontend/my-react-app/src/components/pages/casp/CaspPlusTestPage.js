@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import CaspPlusTestList from "./CaspPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CaspPlusTestPage = () => {
+const CaspPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const CaspPlusTestPage = () => {
       backToListPath="/practice-tests/casp-plus"
     />
   );
-};
+});
 
 export default CaspPlusTestPage;
 

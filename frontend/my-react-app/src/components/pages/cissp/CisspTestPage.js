@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import CisspTestList from "./CisspTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CisspTestPage = () => {
+const CisspTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const CisspTestPage = () => {
       backToListPath="/practice-tests/cissp"
     />
   );
-};
+});
 
 export default CisspTestPage;
 

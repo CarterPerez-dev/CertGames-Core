@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import ServerPlusTestList from "./ServerPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const ServerPlusTestPage = () => {
+const ServerPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const ServerPlusTestPage = () => {
       backToListPath="/practice-tests/server-plus"
     />
   );
-};
+});
 
 export default ServerPlusTestPage;
 

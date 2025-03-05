@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import CloudPlusTestList from "./CloudPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const CloudPlusTestPage = () => {
+const CloudPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const CloudPlusTestPage = () => {
       backToListPath="/practice-tests/cloud-plus"
     />
   );
-};
+});
 
 export default CloudPlusTestPage;
 

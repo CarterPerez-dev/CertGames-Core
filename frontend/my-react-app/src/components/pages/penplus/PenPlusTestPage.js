@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import PenPlusTestList from "./PenPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const PenPlusTestPage = () => {
+const PenPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const PenPlusTestPage = () => {
       backToListPath="/practice-tests/pen-plus"
     />
   );
-};
+});
 
 export default PenPlusTestPage;
 

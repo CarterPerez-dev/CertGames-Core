@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import DataPlusTestList from "./DataPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const DataPlusTestPage = () => {
+const DataPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const DataPlusTestPage = () => {
       backToListPath="/practice-tests/data-plus"
     />
   );
-};
+});
 
 export default DataPlusTestPage;
 

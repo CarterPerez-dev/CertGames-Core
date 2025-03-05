@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import AplusCore2TestList from "./AplusCore2TestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const APlusCore2TestPage = () => {
+const APlusCore2TestPage = memo(() => {
   const { testId } = useParams();
 
   // If no testId in URL, show the list
@@ -20,7 +20,7 @@ const APlusCore2TestPage = () => {
       backToListPath="/practice-tests/aplus-core2"
     />
   );
-};
+});
 
 export default APlusCore2TestPage;
 
