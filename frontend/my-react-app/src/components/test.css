@@ -12,8 +12,8 @@
   --test-success: #2ebb77;
   --test-error: #ff4e4e;
   --test-warning: #ffc107;
-  --test-text: #e2e2e2;
-  --test-text-secondary: #9da8b9;
+  --test-text: #fff;
+  --test-text-secondary: #fff;
   --test-border: #2a2c3d;
   --test-input-bg: rgba(0, 0, 0, 0.2);
   --test-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);

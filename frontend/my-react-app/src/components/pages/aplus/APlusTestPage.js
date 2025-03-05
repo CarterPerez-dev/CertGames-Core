@@ -1,11 +1,12 @@
 // APlusTestPage.js
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
-import APlusTestList from "./APlusTestList";  // your existing test list component
-import GlobalTestPage from "../../GlobalTestPage"; // the new universal logic
+import APlusTestList from "./APlusTestList";
+import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const APlusTestPage = () => {
+// Memoize component to prevent unnecessary re-renders
+const APlusTestPage = memo(() => {
   const { testId } = useParams();
 
   // If no testId in URL, show the test list
@@ -21,7 +22,6 @@ const APlusTestPage = () => {
       backToListPath="/practice-tests/a-plus"
     />
   );
-};
+});
 
 export default APlusTestPage;
-

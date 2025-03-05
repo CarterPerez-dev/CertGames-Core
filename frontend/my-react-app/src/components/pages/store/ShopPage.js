@@ -24,7 +24,6 @@ const ShopPage = () => {
 
   // Grab shop data from Redux
   const { items, status, error } = useSelector((state) => state.shop);
-
   // Grab user data from Redux
   const {
     userId,
@@ -180,7 +179,7 @@ const ShopPage = () => {
       setActionInProgress(false);
     }
   };
-
+  
   // Preview hover handler
   const handlePreviewEnter = (avatarUrl) => {
     setPreviewAvatar(avatarUrl);
@@ -333,7 +332,7 @@ const ShopPage = () => {
                     {itemType === 'xpboost' && (
                       <div className="shop-item-effect">
                         <FaRocket className="shop-icon" />
-                        <span>+{(item.effectValue - 1) * 100}% XP</span>
+                        <span>+{((item.effectValue - 1) * 100).toFixed(2)}% XP</span>
                       </div>
                     )}
                   </div>
@@ -467,7 +466,7 @@ const ShopPage = () => {
               <div className="shop-section-info">
                 <div className="current-boost">
                   <FaStar className="info-icon" />
-                  <span>Current Boost: {(xpBoost - 1) * 100}%</span>
+                  <span>Current Boost: {((xpBoost - 1) * 100).toFixed(2)}%</span>
                 </div>
               </div>
             </div>

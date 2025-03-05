@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import LinuxPlusTestList from "./LinuxPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const LinuxPlusTestPage = () => {
+const LinuxPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const LinuxPlusTestPage = () => {
       backToListPath="/practice-tests/linux-plus"
     />
   );
-};
+});
 
 export default LinuxPlusTestPage;
 

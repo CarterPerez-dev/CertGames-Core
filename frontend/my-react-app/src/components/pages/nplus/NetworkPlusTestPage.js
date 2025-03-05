@@ -1,10 +1,10 @@
-import React from "react";
+import React, { memo } from "react";
 import { useParams } from "react-router-dom";
 import NPlusTestList from "./NPlusTestList";
 import GlobalTestPage from "../../GlobalTestPage";
 import "../../test.css";
 
-const NetworkPlusTestPage = () => {
+const NetworkPlusTestPage = memo(() => {
   const { testId } = useParams();
 
   if (!testId) {
@@ -18,7 +18,7 @@ const NetworkPlusTestPage = () => {
       backToListPath="/practice-tests/network-plus"
     />
   );
-};
+});
 
 export default NetworkPlusTestPage;
 
