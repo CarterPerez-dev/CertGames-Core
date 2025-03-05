@@ -19,7 +19,6 @@
 ---
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ---
-### remove the achivemet icon thing and just have the test icon from the DB display on the user profile
 ---
 ### verify some more things and optimize design some more/ make everything look better, test test and test once more
 ----
