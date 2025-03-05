@@ -102,7 +102,14 @@ function disallowMixedScripts(str) {
 // ========================
 function frontValidateUsername(username) {
   const errors = [];
-  const name = username.normalize("NFC");
+  const trimmedName = username.trim();
+
+  // Disallow any internal spaces
+  if (/\s/.test(trimmedName)) {
+    errors.push("Username cannot contain spaces.");
+  }
+
+  const name = trimmedName.normalize("NFC");
 
   // 1) Length
   if (name.length < 3 || name.length > 30) {
@@ -161,6 +168,11 @@ function frontValidateEmail(email) {
   const errors = [];
   const e = email.normalize("NFC").trim();
 
+  // Disallow any internal spaces
+  if (/\s/.test(e)) {
+    errors.push("Email cannot contain spaces.");
+  }
+
   // 1) Length
   if (e.length < 5 || e.length > 128) {
     errors.push("Email length must be between 5 and 128 characters.");
@@ -189,7 +201,12 @@ function frontValidateEmail(email) {
 // ========================
 function frontValidatePassword(password, username, email) {
   const errors = [];
-  const pwd = password;
+  const pwd = password.trim();
+
+  // Disallow any internal spaces
+  if (/\s/.test(pwd)) {
+    errors.push("Spaces are not allowed in the password.");
+  }
 
   // 1) Length
   if (pwd.length < 6 || pwd.length > 64) {
@@ -425,7 +442,7 @@ const UserProfile = () => {
       const res = await fetch('/api/test/user/change-username', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, newUsername })
+        body: JSON.stringify({ userId, newUsername: newUsername.trim() })
       });
       const data = await res.json();
 
@@ -465,7 +482,7 @@ const UserProfile = () => {
       const res = await fetch('/api/test/user/change-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, newEmail })
+        body: JSON.stringify({ userId, newEmail: newEmail.trim() })
       });
       const data = await res.json();
 
@@ -518,9 +535,9 @@ const UserProfile = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
-          oldPassword,
-          newPassword,
-          confirmPassword
+          oldPassword: oldPassword.trim(),
+          newPassword: newPassword.trim(),
+          confirmPassword: confirmPassword.trim()
         })
       });
       const data = await res.json();
@@ -1180,3 +1197,4 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
+
