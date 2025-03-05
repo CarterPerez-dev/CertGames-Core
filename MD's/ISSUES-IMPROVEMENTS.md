@@ -3,23 +3,8 @@
 fix achieemt levesl- draconic ruin is level 75000
 inferna, bastion is leevl 45000
 
----
-Floating-point arithmetic in JavaScript can sometimes produce such imprecise values. To fix this, rounding the result before displaying it is essential. Here's a complete example that rounds to two decimal places:
 
 
----
-### add to username and passsword authenication where it omits spaces. so bascially any spaces are still not allowe dbut that wouldnt matte rbacsue spaces essentially dont even get logged as a charcer. so like if they try to do spaces it wil dissalow them lets say for if they do anything in the middle of charcters so lke "carter perez" or like "c dog" orand so on it dissallows them- however if they do any spaces before any charctaers or after any charcters it doesn teven get logged as any charcters its baical;y invisible/void. so if a user did " carterperez" it gets logged as "carterperez" even if they did " carterperez " it gets logged as "carterperez" or if they just did "carterperez " it gets logged as "carterperez" 
----
-### fix this import and see what happens because it hasnt been in affect this whole time since its the incorrect path LOLOL
-```js
-// Global CSS import
-import './components/pages/XploitcraftPage/global.css';
-```
-### correct is 
-```js
-import './global.css';
-```
----
 ## fix email sender/finish it
 ---
 ### ADD RATE LIMITER TO AI COMPONENTS
@@ -30,9 +15,6 @@ import './global.css';
 ---
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
-### update everyhing possible with the aplus testlist/page and globaltestpage--- THEN update the rest of your testlists/pages
----
-### create the verify email component
 ---
 ### create the forgot password fucntionality
 ---
