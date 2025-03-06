@@ -1,5 +1,5 @@
 db.tests.insertOne({
-  "category": "serverplus",
+  "category": "dataplus",
   "testId": 4,
   "testName": "CompTIA Data+ Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
