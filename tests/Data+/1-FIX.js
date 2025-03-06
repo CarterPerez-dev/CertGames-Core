@@ -1,9 +1,9 @@
 Q-21-23
 
 db.tests.insertOne({
-  "category": "CompTIA Data+",
+  "category": "dataplus",
   "testId": 1,
-  "testName": "Practice Test #1 (Real Exam Difficulty)",
+  "testName": "CompTIA Data+ Practice Test #1 (Real Exam Difficulty)",
   "xpPerCorrect": 10,
   "questions": [
     {
