@@ -1,5 +1,4 @@
 # FIX
-
 ## fix email sender/finish it
 ---
 ### ADD RATE LIMITER TO AI COMPONENTS
@@ -11,7 +10,6 @@
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
 ---
-### create the forgot password fucntionality
 ---
 ### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
 ----
