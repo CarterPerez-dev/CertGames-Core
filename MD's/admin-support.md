@@ -3157,3 +3157,9 @@ export default SupportAskAnythingPage;
 
 
 
+also one last thing i need to do is so for iphone when you click teh input box ot message, it zooms in on teh box wehn typing- i need teh message box input to be like static- liek its in place when you type (its in place tehcicnlaly but its hsould zoom in wehn typing) becasue then it feels off for the user and they have to liek zoom back out manaully wehn done- so id rathe rit jutt not zoom in when typing/ clicking any input boxes for this page. cool?
+
+
+i would liek to do that gloablly if possible for all my oterh pages- so could i do that in my global css possibly or index.js or soemthing??
+
+
