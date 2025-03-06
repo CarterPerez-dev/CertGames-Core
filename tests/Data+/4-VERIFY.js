@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "dataplus",
   "testId": 4,
-  "testName": "CompTIA Data+ Practice Test #4 (Moderate)",
+  "testName": "CompTIA Data+ (DAO-001) Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
   "questions": [
     {
