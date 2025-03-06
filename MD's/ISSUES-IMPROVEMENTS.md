@@ -1,7 +1,5 @@
 # FIX
 ## fix email sender/finish it
----
-### ADD RATE LIMITER TO AI COMPONENTS
 -----
 ## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
 ---
@@ -9,8 +7,6 @@
 ---
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
----
----
 ### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
 ----
 #### also consider a backup sever in case soemthing happens to the production one we can easily go to cloudfare and chnage IP address A record and upkeep 99% uptime---- conisder wasy to automate that somehow (prolly very very hard- essentially would haev to know- IF server donw = replace A record automcially somehow-- actually prolly easy tbh)
