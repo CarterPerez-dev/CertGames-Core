@@ -1,7 +1,7 @@
 db.tests.insertOne({
-  "category": "CompTIA Data+",
+  "category": "dataplus",
   "testId": 2,
-  "testName": "Practice Test #2 (Very Easy)",
+  "testName": "CompTIA Data+ Practice Test #2 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
