@@ -19,6 +19,7 @@ from routes.grc_routes import grc_bp
 from routes.test_routes import api_bp
 from routes.cracked_admin import cracked_bp
 from routes.support_routes import support_bp
+from routes.admin_newsletter_routes import admin_news_bp
 
 from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
@@ -77,7 +78,7 @@ app.register_blueprint(grc_bp, url_prefix='/grc')
 app.register_blueprint(api_bp, url_prefix='/test')
 app.register_blueprint(cracked_bp, url_prefix="/cracked")
 app.register_blueprint(support_bp, url_prefix="/support")
-
+app.register_blueprint(admin_news_bp, url_prefix="/cracked")
 ###########################
 # BEFORE REQUEST
 ###########################
