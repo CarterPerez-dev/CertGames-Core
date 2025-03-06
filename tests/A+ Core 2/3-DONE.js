@@ -49,7 +49,7 @@ db.tests.insertOne({
       "options": [
         "Reinstall the laptop's operating system from scratch",
         "Stop applying all future Windows Updates to that laptop",
-        "Identify and apply a compatible VPN client or patch for the new system update",
+        "Identify and apply a compatible VPN client",
         "Disable the hardware firewall at the user’s home router"
       ],
       "correctAnswerIndex": 2,
@@ -178,7 +178,7 @@ db.tests.insertOne({
       "question": "You are called to a user’s workstation that fails to power on. The user mentions there was a brief power outage earlier. What should you check FIRST?",
       "options": [
         "Replace the motherboard battery",
-        "Test the power supply unit with a known-good PSU tester",
+        "Test the power supply unit with a PSU tester",
         "Reinstall the operating system",
         "Update all device drivers"
       ],
@@ -218,7 +218,7 @@ db.tests.insertOne({
       "options": [
         "Performing an SMC reset on the laptop",
         "Deleting the entire user profile from the system",
-        "Updating or resetting the local Keychain to match the new Apple ID password",
+        "Updating the local Keychain to match the new Apple ID password",
         "Reformatting the laptop with a new partition scheme"
       ],
       "correctAnswerIndex": 2,
