@@ -251,11 +251,26 @@ def apple_login():
     base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
     redirect_uri = f"{base_url}/api/oauth/auth/apple"
     
-    # Custom Apple authorization parameters
-    return apple.authorize_redirect(
-        redirect_uri=redirect_uri,
-        state=state
-    )
+    # Manual authorize redirect with state parameter
+    params = {
+        'client_id': apple.client_id,
+        'redirect_uri': redirect_uri,
+        'scope': 'name email',
+        'state': state,
+        'response_type': 'code id_token',
+        'response_mode': 'form_post'
+    }
+    
+    auth_url = apple.authorize_url
+    separator = '?' if '?' not in auth_url else '&'
+    
+    # Build the query string
+    query = '&'.join([f"{key}={value}" for key, value in params.items()])
+    
+    # Full authorization URL
+    full_url = f"{auth_url}{separator}{query}"
+    
+    return redirect(full_url)
 
 @oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
 def apple_auth():
@@ -280,13 +295,22 @@ def apple_auth():
         if not code:
             return jsonify({"error": "No authorization code received from Apple"}), 400
         
+        # Manual token exchange
+        client_secret = generate_apple_client_secret()
+        token_params = {
+            'client_id': apple.client_id,
+            'client_secret': client_secret,
+            'code': code,
+            'grant_type': 'authorization_code',
+            'redirect_uri': redirect_uri
+        }
+        
         # Exchange code for token
-        token_data = apple.fetch_access_token(code=code, redirect_uri=redirect_uri)
+        token_data = apple.fetch_access_token(**token_params)
         if not token_data or 'id_token' not in token_data:
             return jsonify({"error": "Failed to obtain tokens from Apple"}), 400
         
         # Parse the ID token for user info
-        id_token = token_data.get('id_token')
         user_info = apple.parse_id_token(token_data)
         
         email = user_info.get('email')
