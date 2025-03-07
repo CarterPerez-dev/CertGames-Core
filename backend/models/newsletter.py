@@ -239,7 +239,7 @@ def send_campaign_to_subscriber(campaign, subscriber):
         g.db_time_accumulator += duration
     
     # Get the frontend URL from environment variable or use a default
-    frontend_url = os.getenv('FRONTEND_URL', 'https://yourdomain.com')
+    frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
     unsubscribe_link = f"{frontend_url}/newsletter/unsubscribe/{token}"
     
     # Get the campaign content and title
