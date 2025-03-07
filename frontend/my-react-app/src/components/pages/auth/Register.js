@@ -19,6 +19,7 @@ import {
   FaTimes
 } from 'react-icons/fa';
 import PasswordRequirements from './PasswordRequirements';
+import Footer from '../Footer';
 import './Register.css';
 
 const Register = () => {
@@ -358,7 +359,7 @@ const Register = () => {
                 disabled={loading}
               />
               <label htmlFor="agreeTerms">
-                I agree to the <a href="/terms" target="_blank">Terms and Conditions</a>
+                I agree to the <Link to="/terms">Terms and Conditions</Link>
               </label>
             </div>
             
@@ -413,6 +414,8 @@ const Register = () => {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
