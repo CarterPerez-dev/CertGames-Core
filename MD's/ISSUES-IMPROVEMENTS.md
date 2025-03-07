@@ -1,10 +1,11 @@
 # FIX
-## fix email sender/finish it
+## fix email sender/verify it
 -----
 ## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
 ---
-# Input most files (slices, globaltestpage, unique testlists/pages, routes, app.py, dockerfiles etc etc) into claude 3.7, grok 3, deepseek R1, ChatGPT deep research and o1 Pro and ask for efficiency improvements then combine all data they gave you into one document and look for the best imporvements.
----
+--- ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
+ ## Input leaderboard route and leaderboard page specifcually
+
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
 ### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
