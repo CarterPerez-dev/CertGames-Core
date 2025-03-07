@@ -83,6 +83,7 @@
   max-width: 450px;
   z-index: 2;
   padding: 20px;
+  margin-top: 4rem;
 }
 
 .login-card {
