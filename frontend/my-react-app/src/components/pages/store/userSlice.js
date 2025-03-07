@@ -97,6 +97,7 @@ const initialState = {
   nameColor: null,
   purchasedItems: [],
   subscriptionActive: false,
+  oauth_provider: null,
 
   status: 'idle',
   loading: false,
@@ -292,7 +293,8 @@ const userSlice = createSlice({
           nameColor,
           purchasedItems,
           subscriptionActive,
-          password
+          password,
+          oauth_provider
         } = action.payload;
 
         state.userId = user_id;
@@ -307,6 +309,7 @@ const userSlice = createSlice({
         state.nameColor = nameColor || null;
         state.purchasedItems = purchasedItems || [];
         state.subscriptionActive = subscriptionActive || false;
+        state.oauth_provider = oauth_provider || null;
 
         localStorage.setItem('userId', user_id);
       })
@@ -336,6 +339,7 @@ const userSlice = createSlice({
         state.nameColor = userDoc.nameColor || null;
         state.purchasedItems = userDoc.purchasedItems || [];
         state.subscriptionActive = userDoc.subscriptionActive || false;
+        state.oauth_provider = userDoc.oauth_provider || null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed';
