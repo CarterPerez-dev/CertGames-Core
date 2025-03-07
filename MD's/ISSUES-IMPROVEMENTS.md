@@ -1,5 +1,5 @@
 # FIX
-## fix email sender/verify it
+## fix email sender/verify it, make reset password link/email not image based or whatver so it doesnt have that warning in uses email- also mak it look aliitle better.
 ##
 ## chnag important fonts to sans serif instead of orbitron
 -----
