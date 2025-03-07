@@ -12,6 +12,7 @@ import {
   FaEnvelopeOpenText,
   FaDesktop
 } from 'react-icons/fa';
+import Footer from '../Footer';
 import './InfoPage.css';
 
 const InfoPage = () => {
@@ -129,12 +130,9 @@ const InfoPage = () => {
         </div>
       </section>
 
-      <footer className="info-footer">
-        <p>&copy; {new Date().getFullYear()} Certgames.com. All rights reserved.</p>
-      </footer>
+      <Footer />
     </div>
   );
 };
 
 export default InfoPage;
-
