@@ -5,6 +5,7 @@ import os
 import time
 import jwt
 import secrets
+import requests
 from datetime import datetime, timedelta
 from authlib.integrations.flask_client import OAuth
 from models.test import create_user, get_user_by_id, update_user_fields
@@ -26,6 +27,8 @@ google = oauth.register(
     authorize_params=None,
     api_base_url='https://www.googleapis.com/oauth2/v1/',
     client_kwargs={'scope': 'openid email profile'},
+    # Skip the need for jwks_uri metadata by disabling JWT validation
+    server_metadata_url=None
 )
 
 # Function to generate Apple client secret JWT
@@ -189,56 +192,68 @@ def google_login():
 
 @oauth_bp.route('/auth/google')
 def google_auth():
-    # Check state parameter to prevent CSRF
-    expected_state = session.pop('oauth_state', None)
-    received_state = request.args.get('state')
-    
-    if not expected_state or expected_state != received_state:
-        current_app.logger.error(f"State mismatch: expected={expected_state}, received={received_state}")
-        return jsonify({"error": "Invalid state parameter"}), 400
-    
-    # Use the external URL with /api prefix for your reverse proxy
-    base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
-    redirect_uri = f"{base_url}/api/oauth/auth/google"
-    
-    # Manual token exchange
-    code = request.args.get('code')
-    if not code:
-        return jsonify({"error": "No authorization code received"}), 400
-    
-    # Exchange code for token
-    token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
-    if not token_data or 'access_token' not in token_data:
-        return jsonify({"error": "Failed to obtain access token"}), 400
-    
-    # Get user info
-    resp = google.get('userinfo', token=token_data)
-    user_info = resp.json()
-    
-    email = user_info.get('email')
-    name = user_info.get('name', '')
-    google_id = user_info.get('id')
-    
-    if not email:
-        return jsonify({"error": "Email not provided by Google"}), 400
-    
-    user_id = process_oauth_user(email, name, 'google', google_id)
-    
-    # Store in session
-    session['userId'] = user_id
-    
-    # Log the login
-    db.auditLogs.insert_one({
-        "timestamp": datetime.utcnow(),
-        "userId": ObjectId(user_id),
-        "ip": request.remote_addr or "unknown",
-        "success": True,
-        "provider": "google"
-    })
-    
-    # Redirect to frontend with success token
-    frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-    return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
+    try:
+        # Check state parameter to prevent CSRF
+        expected_state = session.pop('oauth_state', None)
+        received_state = request.args.get('state')
+        
+        if not expected_state or expected_state != received_state:
+            current_app.logger.error(f"State mismatch: expected={expected_state}, received={received_state}")
+            return jsonify({"error": "Invalid state parameter"}), 400
+        
+        # Use the external URL with /api prefix for your reverse proxy
+        base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
+        redirect_uri = f"{base_url}/api/oauth/auth/google"
+        
+        # Manual token exchange
+        code = request.args.get('code')
+        if not code:
+            return jsonify({"error": "No authorization code received"}), 400
+        
+        # Exchange code for token
+        token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+        if not token_data or 'access_token' not in token_data:
+            return jsonify({"error": "Failed to obtain access token"}), 400
+        
+        # SIMPLIFIED: Instead of using parse_id_token, just get user info directly
+        userinfo_response = requests.get(
+            'https://www.googleapis.com/oauth2/v1/userinfo',
+            headers={'Authorization': f"Bearer {token_data['access_token']}"}
+        )
+        
+        if not userinfo_response.ok:
+            return jsonify({"error": "Failed to get user info from Google"}), 400
+            
+        user_info = userinfo_response.json()
+        
+        email = user_info.get('email')
+        name = user_info.get('name', '')
+        google_id = user_info.get('id')
+        
+        if not email:
+            return jsonify({"error": "Email not provided by Google"}), 400
+        
+        user_id = process_oauth_user(email, name, 'google', google_id)
+        
+        # Store in session
+        session['userId'] = user_id
+        
+        # Log the login
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "ip": request.remote_addr or "unknown",
+            "success": True,
+            "provider": "google"
+        })
+        
+        # Redirect to frontend with success token
+        frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+        return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
+        
+    except Exception as e:
+        current_app.logger.error(f"Error in Google auth: {str(e)}")
+        return jsonify({"error": f"Authentication error: {str(e)}"}), 500
 
 # Apple OAuth routes
 @oauth_bp.route('/login/apple')
