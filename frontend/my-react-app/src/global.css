@@ -1,3 +1,22 @@
+<style>
+  /* Prevent font-size adjustments on orientation changes */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  
+ input, textarea, select {
+    font-size: 14px !important; /* iOS won't zoom if font size is 16px or larger */
+  }
+  
+  /* Alternative approach using transform scale for input fields */
+  @media screen and (max-width: 480px) {
+    input, textarea, select {
+      transform: scale(1); /* Forces hardware acceleration */
+      font-size: 16px !important;
+    }
+  }
+</style>  
+
 .main-content {
   /* no margin-left at all */
   transition: all 0.1s ease;  /* optional if you want smoothness */

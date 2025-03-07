@@ -1,5 +1,5 @@
 // components/xploitcraft.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 import logo from './logo5.png';
 import loadingIcon from './loading3.png';
@@ -699,12 +699,16 @@ function Home() {
   const [evasionTechnique, setEvasionTechnique] = useState("");
   const [payload, setPayload] = useState("");
   const [loading, setLoading] = useState(false);
+  const [codeBlocks, setCodeBlocks] = useState([]);
+  const [explanations, setExplanations] = useState([]);
+  const outputRef = useRef(null);
 
   useEffect(() => {
     const socket = socketIOClient(ENDPOINT);
 
     socket.on('payload_response', (data) => {
       setPayload(data.payload);
+      parsePayload(data.payload);
       setLoading(false);
     });
 
@@ -717,6 +721,66 @@ function Home() {
       socket.disconnect();
     };
   }, []);
+
+  // Scroll to results when content is loaded
+  useEffect(() => {
+    if ((codeBlocks.length > 0 || explanations.length > 0) && outputRef.current) {
+      outputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [codeBlocks, explanations]);
+
+  // Parse the payload to separate code blocks from explanations
+  const parsePayload = (text) => {
+    const codeRegex = /Example \d+:?\s*```python([\s\S]*?)```/g;
+    const extractedCode = [];
+    let match;
+    
+    // Extract all code blocks
+    while ((match = codeRegex.exec(text)) !== null) {
+      const codeIndex = extractedCode.length + 1;
+      extractedCode.push({
+        title: `Example ${codeIndex}`,
+        code: match[1].trim()
+      });
+    }
+    
+    // Extract explanations section
+    let explanationsText = "";
+    const explanationsIndex = text.indexOf("EXPLANATIONS:");
+    
+    if (explanationsIndex !== -1) {
+      explanationsText = text.substring(explanationsIndex);
+    } else {
+      // Try to find explanations after the last code block
+      const lastCodeEnd = text.lastIndexOf("```");
+      if (lastCodeEnd !== -1) {
+        explanationsText = text.substring(lastCodeEnd + 3).trim();
+      }
+    }
+    
+    // Extract individual explanations
+    const explanationBlocks = [];
+    if (explanationsText) {
+      const explRegex = /Explanation for Example \d+:?\s*([\s\S]*?)(?=Explanation for Example \d+:|$)/g;
+      let explMatch;
+      
+      while ((explMatch = explRegex.exec(explanationsText)) !== null) {
+        explanationBlocks.push({
+          text: explMatch[1].trim()
+        });
+      }
+      
+      // If no matches, just use the whole explanations text
+      if (explanationBlocks.length === 0 && explanationsText) {
+        explanationBlocks.push({
+          text: explanationsText.replace("EXPLANATIONS:", "").trim()
+        });
+      }
+    }
+    
+    setCodeBlocks(extractedCode);
+    setExplanations(explanationBlocks);
+  };
 
   const sanitizeInput = (input) => {
     const map = {
@@ -736,8 +800,9 @@ function Home() {
   const handleGeneratePayload = () => {
     if (vulnerability || evasionTechnique) {
       setLoading(true);
-
       setPayload("");
+      setCodeBlocks([]);
+      setExplanations([]);
 
       const sanitizedVulnerability = vulnerability ? sanitizeInput(vulnerability) : "";
       const sanitizedEvasionTechnique = evasionTechnique ? sanitizeInput(evasionTechnique) : "";
@@ -761,22 +826,24 @@ function Home() {
             });
           }
 
-
           const reader = response.body.getReader();
           const decoder = new TextDecoder();
+          let accumulatedText = "";
 
           function readChunk() {
             reader.read().then(({ done, value }) => {
               if (done) {
                 setLoading(false);
+                parsePayload(accumulatedText); // Parse the final accumulated text
                 return;
               }
               let chunk = decoder.decode(value, { stream: true });
-
               chunk = chunk.replace(/undefined/g, "");
-
-              setPayload((prev) => prev + chunk);
-
+              accumulatedText += chunk;
+              
+              setPayload(accumulatedText);
+              parsePayload(accumulatedText); // Update parsing as we go
+              
               readChunk();
             });
           }
@@ -792,13 +859,13 @@ function Home() {
     }
   };
 
-  const handleCopyClick = () => {
-    if (payload) {
-      navigator.clipboard.writeText(payload)
+  const handleCopyClick = (text) => {
+    if (text) {
+      navigator.clipboard.writeText(text)
         .then(() => {
-          console.log('Payload copied to clipboard.');
+          console.log('Content copied to clipboard.');
         })
-        .catch(err => console.error('Could not copy payload:', err));
+        .catch(err => console.error('Could not copy content:', err));
     }
   };
 
@@ -874,21 +941,60 @@ function Home() {
         )}
       </div>
 
-      {payload && (
-        <div className="payload-wrapper">
-          <button className="copy-button-payload" onClick={handleCopyClick}>Copy</button>
-          <h2 className="generated-payload-title">Generated Payload</h2>
-
-          <div className="payload-content">
-            {/* Using highlight.js flavor, language = "python", with pojoaque theme and line wrap */}
-            <SyntaxHighlighter
-              language="python"
-              style={pojoaque}
-              wrapLongLines={true}
-            >
-              {payload}
-            </SyntaxHighlighter>
+      {(codeBlocks.length > 0 || explanations.length > 0) && (
+        <div className="results-container" ref={outputRef}>
+          <h2 className="generated-payload-title">Generated Output</h2>
+          
+          {/* Code Examples Section */}
+          <div className="code-examples-section">
+            <h3 className="section-title">Code Examples</h3>
+            {codeBlocks.map((block, index) => (
+              <div key={index} className="code-block-wrapper">
+                <div className="code-block-header">
+                  <h4>{block.title}</h4>
+                  <button 
+                    className="copy-button-code" 
+                    onClick={() => handleCopyClick(block.code)}
+                  >
+                    Copy
+                  </button>
+                </div>
+                <div className="code-block-content">
+                  <SyntaxHighlighter
+                    language="python"
+                    style={pojoaque}
+                    wrapLongLines={true}
+                  >
+                    {block.code}
+                  </SyntaxHighlighter>
+                </div>
+              </div>
+            ))}
           </div>
+          
+          {/* Explanations Section */}
+          {explanations.length > 0 && (
+            <div className="explanations-section">
+              <h3 className="section-title">Explanations</h3>
+              {explanations.map((explanation, index) => (
+                <div key={index} className="explanation-block">
+                  <h4>Explanation for Example {index + 1}</h4>
+                  <div className="explanation-text">
+                    {explanation.text.split('\n').map((paragraph, pIndex) => (
+                      <p key={pIndex}>{paragraph}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <button 
+            className="copy-all-button" 
+            onClick={() => handleCopyClick(payload)}
+          >
+            Copy All Content
+          </button>
         </div>
       )}
     </header>

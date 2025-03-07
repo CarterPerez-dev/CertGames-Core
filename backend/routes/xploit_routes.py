@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, Response
 from helpers.xploitcraft_helper import Xploits
+from helpers.rate_limiter import rate_limit
 import logging
 
 logger = logging.getLogger(__name__)
@@ -8,6 +9,7 @@ xploit = Xploits()
 xploit_bp = Blueprint('xploit_bp', __name__)
 
 @xploit_bp.route('/generate_payload', methods=['POST'])
+@rate_limit('xploit')  # Add rate limiting to protect API usage
 def generate_payload_endpoint():
     data = request.get_json()
     logger.debug(f"Received data: {data}")

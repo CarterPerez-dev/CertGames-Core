@@ -1,17 +1,19 @@
 import logging
 import json  
-from flask import Blueprint, request, Response, jsonify
+from flask import Blueprint, request, Response, jsonify, g
 from helpers.scenario_helper import (
     generate_scenario,
     generate_interactive_questions,
     break_down_scenario
 )
+from helpers.rate_limiter import rate_limit
 
 scenario_bp = Blueprint('scenario_bp', __name__)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 @scenario_bp.route('/stream_scenario', methods=['POST'])
+@rate_limit('scenario')
 def stream_scenario_endpoint():
     """
     Streams scenario text in real time (token-by-token).
@@ -41,10 +43,15 @@ def stream_scenario_endpoint():
         for chunk in scenario_generator:
             yield chunk
 
-    return Response(generate_chunks(), mimetype='text/plain')
+    response = Response(generate_chunks(), mimetype='text/plain')
+    # Add rate limit headers
+    if hasattr(g, 'rate_limit_remaining'):
+        response.headers['X-RateLimit-Remaining'] = g.rate_limit_remaining
+    return response
 
 
 @scenario_bp.route('/stream_questions', methods=['POST'])
+@rate_limit('scenario')
 def stream_questions_endpoint():
     """
     Streams the interactive questions (in raw JSON form) in real time, token-by-token.
@@ -64,12 +71,13 @@ def stream_questions_endpoint():
         if isinstance(questions, list):
             logger.debug("Questions are a list. Serializing to JSON.")
             yield json.dumps(questions)
-        elif callable(questions):
-            logger.debug("Questions are being streamed.")
-            for chunk in questions():
-                yield chunk
         else:
-            logger.error("Unexpected type for questions.")
-            yield json.dumps([{"error": "Failed to generate questions."}])
+            logger.debug("Questions are being streamed.")
+            for chunk in questions:
+                yield chunk
 
-    return Response(generate_json_chunks(), mimetype='application/json')
+    response = Response(generate_json_chunks(), mimetype='application/json')
+    # Add rate limit headers
+    if hasattr(g, 'rate_limit_remaining'):
+        response.headers['X-RateLimit-Remaining'] = g.rate_limit_remaining
+    return response

@@ -924,6 +924,10 @@
   color: var(--profile-text);
 }
 
+
+
+
+
 /* =================== */
 /* SUBSCRIPTION STATUS */
 /* =================== */
@@ -938,7 +942,513 @@
   font-weight: 600;
 }
 
-/* =================== */
+
+
+/* Add these theme options to your UserProfile.css file */
+
+/* Theme styles for the selector UI */
+.profile-theme-options {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.profile-theme-option {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--profile-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-right: 1px;
+}
+
+.profile-theme-option:hover {
+  transform: scale(1.1);
+}
+
+.profile-theme-option.active {
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.profile-theme-check {
+  color: white;
+  font-size: 14px;
+}
+
+/* Overview tab theme switcher */
+.profile-overview-theme-switcher {
+  margin-bottom: 20px;
+  background: var(--profile-bg-card);
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: var(--profile-shadow);
+  border: 1px solid var(--profile-border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-theme-switcher-title {
+  font-size: 16px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Global theme variables - Add this to the top of your CSS file, before or after your existing :root styles */
+
+/* Default theme (purple) - This is already your current theme */
+:root {
+  --theme-accent: #6543cc;
+  --theme-accent-glow: #8a58fc;
+  --theme-accent-secondary: #ff4c8b;
+  --theme-bg-dark: #0c0e14;
+  --theme-bg-card: #171a23;
+  --theme-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
+  --theme-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
+  --theme-accent-rgb: 101, 67, 204;
+}
+
+/* Blue theme */
+:root[data-theme="blue"] {
+  --theme-accent: #2563eb;
+  --theme-accent-glow: #3b82f6;
+  --theme-accent-secondary: #f472b6;
+  --theme-bg-dark: #0c1220;
+  --theme-bg-card: #172032;
+  --theme-gradient-primary: linear-gradient(135deg, #2563eb, #3b82f6);
+  --theme-gradient-secondary: linear-gradient(135deg, #f472b6, #ec4899);
+  --theme-accent-rgb: 37, 99, 235;
+}
+
+/* Green theme */
+:root[data-theme="green"] {
+  --theme-accent: #059669;
+  --theme-accent-glow: #10b981;
+  --theme-accent-secondary: #f97316;
+  --theme-bg-dark: #0c1a14;
+  --theme-bg-card: #172823;
+  --theme-gradient-primary: linear-gradient(135deg, #059669, #10b981);
+  --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
+  --theme-accent-rgb: 5, 150, 105;
+}
+
+/* Red theme */
+:root[data-theme="red"] {
+  --theme-accent: #dc2626;
+  --theme-accent-glow: #ef4444;
+  --theme-accent-secondary: #8b5cf6;
+  --theme-bg-dark: #1c0e0e;
+  --theme-bg-card: #2c1919;
+  --theme-gradient-primary: linear-gradient(135deg, #dc2626, #ef4444);
+  --theme-gradient-secondary: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  --theme-accent-rgb: 220, 38, 38;
+}
+
+/* Teal theme */
+:root[data-theme="teal"] {
+  --theme-accent: #0891b2;
+  --theme-accent-glow: #06b6d4;
+  --theme-accent-secondary: #f59e0b;
+  --theme-bg-dark: #0c1819;
+  --theme-bg-card: #17282a;
+  --theme-gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+  --theme-gradient-secondary: linear-gradient(135deg, #f59e0b, #fbbf24);
+  --theme-accent-rgb: 8, 145, 178;
+}
+
+/* Dark theme */
+:root[data-theme="dark"] {
+  --theme-accent: #334155;
+  --theme-accent-glow: #64748b;
+  --theme-accent-secondary: #f43f5e;
+  --theme-bg-dark: #0f1117;
+  --theme-bg-card: #1a1e29;
+  --theme-gradient-primary: linear-gradient(135deg, #334155, #64748b);
+  --theme-gradient-secondary: linear-gradient(135deg, #f43f5e, #fb7185);
+  --theme-accent-rgb: 51, 65, 85;
+}
+
+/* ====== ADDITIONAL 5 COLOR THEMES ====== */
+
+/* Orange theme */
+:root[data-theme="orange"] {
+  --theme-accent: #ea580c;
+  --theme-accent-glow: #f97316;
+  --theme-accent-secondary: #0ea5e9;
+  --theme-bg-dark: #1a0f05;
+  --theme-bg-card: #291a10;
+  --theme-gradient-primary: linear-gradient(135deg, #ea580c, #f97316);
+  --theme-gradient-secondary: linear-gradient(135deg, #0ea5e9, #38bdf8);
+  --theme-accent-rgb: 234, 88, 12;
+}
+
+/* Pink theme */
+:root[data-theme="pink"] {
+  --theme-accent: #db2777;
+  --theme-accent-glow: #ec4899;
+  --theme-accent-secondary: #6366f1;
+  --theme-bg-dark: #1a0a17;
+  --theme-bg-card: #2e1a29;
+  --theme-gradient-primary: linear-gradient(135deg, #db2777, #ec4899);
+  --theme-gradient-secondary: linear-gradient(135deg, #6366f1, #818cf8);
+  --theme-accent-rgb: 219, 39, 119;
+}
+
+/* Gold theme */
+:root[data-theme="gold"] {
+  --theme-accent: #ca8a04;
+  --theme-accent-glow: #eab308;
+  --theme-accent-secondary: #0369a1;
+  --theme-bg-dark: #19150a;
+  --theme-bg-card: #262013;
+  --theme-gradient-primary: linear-gradient(135deg, #ca8a04, #eab308);
+  --theme-gradient-secondary: linear-gradient(135deg, #0369a1, #0ea5e9);
+  --theme-accent-rgb: 202, 138, 4;
+}
+
+/* Cyan theme */
+:root[data-theme="cyan"] {
+  --theme-accent: #0891b2;
+  --theme-accent-glow: #06b6d4;
+  --theme-accent-secondary: #e11d48;
+  --theme-bg-dark: #0c1819;
+  --theme-bg-card: #17282a;
+  --theme-gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
+  --theme-gradient-secondary: linear-gradient(135deg, #e11d48, #f43f5e);
+  --theme-accent-rgb: 8, 145, 178;
+}
+
+/* Neon theme */
+:root[data-theme="neon"] {
+  --theme-accent: #10b981;
+  --theme-accent-glow: #34d399;
+  --theme-accent-secondary: #f472b6;
+  --theme-bg-dark: #0f1613;
+  --theme-bg-card: #192720;
+  --theme-gradient-primary: linear-gradient(135deg, #10b981, #34d399);
+  --theme-gradient-secondary: linear-gradient(135deg, #f472b6, #fb7185);
+  --theme-accent-rgb: 16, 185, 129;
+}
+
+/* ====== 10 NEW COLOR THEMES ====== */
+
+/* Navy theme */
+:root[data-theme="navy"] {
+  --theme-accent: #1e3a8a;
+  --theme-accent-glow: #2563eb;
+  --theme-accent-secondary: #f97316;
+  --theme-bg-dark: #0c1425;
+  --theme-bg-card: #15213b;
+  --theme-gradient-primary: linear-gradient(135deg, #1e3a8a, #2563eb);
+  --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
+  --theme-accent-rgb: 30, 58, 138;
+}
+
+/* Indigo theme */
+:root[data-theme="indigo"] {
+  --theme-accent: #4f46e5;
+  --theme-accent-glow: #6366f1;
+  --theme-accent-secondary: #f59e0b;
+  --theme-bg-dark: #0c0d1f;
+  --theme-bg-card: #1a1933;
+  --theme-gradient-primary: linear-gradient(135deg, #4f46e5, #6366f1);
+  --theme-gradient-secondary: linear-gradient(135deg, #f59e0b, #fbbf24);
+  --theme-accent-rgb: 79, 70, 229;
+}
+
+/* Violet theme */
+:root[data-theme="violet"] {
+  --theme-accent: #7c3aed;
+  --theme-accent-glow: #8b5cf6;
+  --theme-accent-secondary: #ec4899;
+  --theme-bg-dark: #100d1a;
+  --theme-bg-card: #231a2e;
+  --theme-gradient-primary: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  --theme-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
+  --theme-accent-rgb: 124, 58, 237;
+}
+
+/* Magenta theme */
+:root[data-theme="magenta"] {
+  --theme-accent: #c026d3;
+  --theme-accent-glow: #d946ef;
+  --theme-accent-secondary: #3b82f6;
+  --theme-bg-dark: #140a15;
+  --theme-bg-card: #2a1428;
+  --theme-gradient-primary: linear-gradient(135deg, #c026d3, #d946ef);
+  --theme-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
+  --theme-accent-rgb: 192, 38, 211;
+}
+
+/* Crimson theme */
+:root[data-theme="crimson"] {
+  --theme-accent: #be123c;
+  --theme-accent-glow: #e11d48;
+  --theme-accent-secondary: #6366f1;
+  --theme-bg-dark: #180a11;
+  --theme-bg-card: #2e121e;
+  --theme-gradient-primary: linear-gradient(135deg, #be123c, #e11d48);
+  --theme-gradient-secondary: linear-gradient(135deg, #6366f1, #818cf8);
+  --theme-accent-rgb: 190, 18, 60;
+}
+
+/* Amber theme */
+:root[data-theme="amber"] {
+  --theme-accent: #d97706;
+  --theme-accent-glow: #f59e0b;
+  --theme-accent-secondary: #0284c7;
+  --theme-bg-dark: #191207;
+  --theme-bg-card: #2b2011;
+  --theme-gradient-primary: linear-gradient(135deg, #d97706, #f59e0b);
+  --theme-gradient-secondary: linear-gradient(135deg, #0284c7, #0ea5e9);
+  --theme-accent-rgb: 217, 119, 6;
+}
+
+/* Lime theme */
+:root[data-theme="lime"] {
+  --theme-accent: #65a30d;
+  --theme-accent-glow: #84cc16;
+  --theme-accent-secondary: #7c3aed;
+  --theme-bg-dark: #10150a;
+  --theme-bg-card: #222a14;
+  --theme-gradient-primary: linear-gradient(135deg, #65a30d, #84cc16);
+  --theme-gradient-secondary: linear-gradient(135deg, #7c3aed, #8b5cf6);
+  --theme-accent-rgb: 101, 163, 13;
+}
+
+/* Emerald theme */
+:root[data-theme="emerald"] {
+  --theme-accent: #047857;
+  --theme-accent-glow: #10b981;
+  --theme-accent-secondary: #e11d48;
+  --theme-bg-dark: #0a1511;
+  --theme-bg-card: #122922;
+  --theme-gradient-primary: linear-gradient(135deg, #047857, #10b981);
+  --theme-gradient-secondary: linear-gradient(135deg, #e11d48, #f43f5e);
+  --theme-accent-rgb: 4, 120, 87;
+}
+
+/* Turquoise theme */
+:root[data-theme="turquoise"] {
+  --theme-accent: #0d9488;
+  --theme-accent-glow: #14b8a6;
+  --theme-accent-secondary: #f43f5e;
+  --theme-bg-dark: #0a1515;
+  --theme-bg-card: #152a28;
+  --theme-gradient-primary: linear-gradient(135deg, #0d9488, #14b8a6);
+  --theme-gradient-secondary: linear-gradient(135deg, #f43f5e, #fb7185);
+  --theme-accent-rgb: 13, 148, 136;
+}
+
+/* Sky theme */
+:root[data-theme="midnight"],
+:root[data-theme="chocolate"],
+:root[data-theme="silver"],
+:root[data-theme="sky"] {
+  --theme-accent: #0284c7;
+  --theme-accent-glow: #0ea5e9;
+  --theme-accent-secondary: #f97316;
+  --theme-bg-dark: #0a141a;
+  --theme-bg-card: #142832;
+  --theme-gradient-primary: linear-gradient(135deg, #0284c7, #0ea5e9);
+  --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
+  --theme-accent-rgb: 2, 132, 199;
+}
+
+/* Midnight theme */
+:root[data-theme="midnight"] {
+  --theme-accent: #312e81;
+  --theme-accent-glow: #4338ca;
+  --theme-accent-secondary: #ec4899;
+  --theme-bg-dark: #0c0b1a;
+  --theme-bg-card: #1a1836;
+  --theme-gradient-primary: linear-gradient(135deg, #312e81, #4338ca);
+  --theme-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
+  --theme-accent-rgb: 49, 46, 129;
+}
+
+/* Chocolate theme */
+:root[data-theme="chocolate"] {
+  --theme-accent: #854d0e;
+  --theme-accent-glow: #a16207;
+  --theme-accent-secondary: #3b82f6;
+  --theme-bg-dark: #14100a;
+  --theme-bg-card: #261e13;
+  --theme-gradient-primary: linear-gradient(135deg, #854d0e, #a16207);
+  --theme-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
+  --theme-accent-rgb: 133, 77, 14;
+}
+
+/* Silver theme */
+:root[data-theme="silver"] {
+  --theme-accent: #71717a;
+  --theme-accent-glow: #94a3b8;
+  --theme-accent-secondary: #db2777;
+  --theme-bg-dark: #121215;
+  --theme-bg-card: #22222a;
+  --theme-gradient-primary: linear-gradient(135deg, #71717a, #94a3b8);
+  --theme-gradient-secondary: linear-gradient(135deg, #db2777, #ec4899);
+  --theme-accent-rgb: 113, 113, 122;
+}
+
+/* Global theme mapping for all prefixes used across your application */
+:root,
+:root[data-theme="default"],
+:root[data-theme="blue"],
+:root[data-theme="green"],
+:root[data-theme="red"],
+:root[data-theme="teal"],
+:root[data-theme="dark"],
+:root[data-theme="orange"],
+:root[data-theme="pink"],
+:root[data-theme="gold"],
+:root[data-theme="cyan"],
+:root[data-theme="neon"],
+:root[data-theme="navy"],
+:root[data-theme="indigo"],
+:root[data-theme="violet"],
+:root[data-theme="magenta"],
+:root[data-theme="crimson"],
+:root[data-theme="amber"],
+:root[data-theme="lime"],
+:root[data-theme="emerald"],
+:root[data-theme="turquoise"],
+:root[data-theme="sky"] {
+  /* Profile page variables */
+  --profile-accent: var(--theme-accent);
+  --profile-accent-glow: var(--theme-accent-glow);
+  --profile-accent-secondary: var(--theme-accent-secondary);
+  --profile-bg-dark: var(--theme-bg-dark);
+  --profile-bg-card: var(--theme-bg-card);
+  --profile-gradient-primary: var(--theme-gradient-primary);
+  --profile-gradient-secondary: var(--theme-gradient-secondary);
+
+  /* Support page variables */
+  --support-accent: var(--theme-accent);
+  --support-accent-hover: var(--theme-accent-glow);
+  --support-accent-glow: var(--theme-accent-glow);
+  --support-accent-secondary: var(--theme-accent-secondary);
+  --support-bg-dark: var(--theme-bg-dark);
+  --support-bg-card: var(--theme-bg-card);
+  --support-gradient-primary: var(--theme-gradient-primary);
+  --support-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Shop page variables */
+  --shop-accent: var(--theme-accent);
+  --shop-accent-glow: var(--theme-accent-glow);
+  --shop-accent-secondary: var(--theme-accent-secondary);
+  --shop-bg-dark: var(--theme-bg-dark);
+  --shop-bg-card: var(--theme-bg-card);
+  --shop-gradient-primary: var(--theme-gradient-primary);
+  --shop-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Leaderboard page variables */
+  --leaderboard-accent: var(--theme-accent);
+  --leaderboard-accent-glow: var(--theme-accent-glow);
+  --leaderboard-accent-secondary: var(--theme-accent-secondary);
+  --leaderboard-bg-dark: var(--theme-bg-dark);
+  --leaderboard-bg-card: var(--theme-bg-card);
+  --leaderboard-gradient-primary: var(--theme-gradient-primary);
+  --leaderboard-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Daily station variables */
+  --daily-accent: var(--theme-accent);
+  --daily-accent-glow: var(--theme-accent-glow);
+  --daily-accent-secondary: var(--theme-accent-secondary);
+  --daily-bg-dark: var(--theme-bg-dark);
+  --daily-bg-card: var(--theme-bg-card);
+  --daily-gradient-primary: var(--theme-gradient-primary);
+  --daily-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Achievement page variables */
+  --achievement-accent: var(--theme-accent);
+  --achievement-accent-glow: var(--theme-accent-glow);
+  --achievement-accent-secondary: var(--theme-accent-secondary);
+  --achievement-bg-dark: var(--theme-bg-dark);
+  --achievement-bg-card: var(--theme-bg-card);
+  --achievement-gradient-primary: var(--theme-gradient-primary);
+  --achievement-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Scenario variables */
+  --scenario-accent: var(--theme-accent);
+  --scenario-accent-hover: var(--theme-accent-glow);
+  --scenario-accent-glow: var(--theme-accent-glow);
+  --scenario-accent-secondary: var(--theme-accent-secondary);
+  --scenario-bg-dark: var(--theme-bg-dark);
+  --scenario-bg-card: var(--theme-bg-card);
+  --scenario-gradient-primary: var(--theme-gradient-primary);
+  --scenario-gradient-secondary: var(--theme-gradient-secondary);
+  --slider-fill: var(--theme-accent);
+  
+  /* Brief variables */
+  --brief-accent: var(--theme-accent);
+  --brief-accent-glow: var(--theme-accent-glow);
+  --brief-accent-secondary: var(--theme-accent-secondary);
+  --brief-bg-dark: var(--theme-bg-dark);
+  --brief-bg-card: var(--theme-bg-card);
+  --brief-gradient-primary: var(--theme-gradient-primary);
+  --brief-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* GRC variables */
+  --grc-accent: var(--theme-accent);
+  --grc-accent-glow: var(--theme-accent-glow);
+  --grc-accent-secondary: var(--theme-accent-secondary);
+  --grc-bg-dark: var(--theme-bg-dark);
+  --grc-bg-card: var(--theme-bg-card);
+  --grc-gradient-primary: var(--theme-gradient-primary);
+  --grc-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Resources variables - ADDED NEW */
+  --resources-accent: var(--theme-accent);
+  --resources-accent-glow: var(--theme-accent-glow);
+  --resources-accent-secondary: var(--theme-accent-secondary);
+  --resources-bg-dark: var(--theme-bg-dark);
+  --resources-bg-card: var(--theme-bg-card);
+  --resources-gradient-primary: var(--theme-gradient-primary);
+  --resources-gradient-secondary: var(--theme-gradient-secondary);
+  
+  /* Sidebar variables */
+  --sidebar-accent: var(--theme-accent);
+  --sidebar-accent-hover: var(--theme-accent-glow);
+  --sidebar-active-bg: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1);
+  
+  /* Test page variables */
+  --test-accent: var(--theme-accent);
+  --test-accent-glow: var(--theme-accent-glow);
+  --test-accent-secondary: var(--theme-accent-secondary);
+  --test-bg-dark: var(--theme-bg-dark);
+  --test-bg-card: var(--theme-bg-card);
+  --test-gradient-primary: var(--theme-gradient-primary);
+  --test-gradient-secondary: var(--theme-gradient-secondary);
+}
+
+/* Update the background image patterns to use theme variables */
+.user-profile-container,
+.support-container,
+.shop-page-container,
+.leaderboard-container,
+.daily-station-container,
+.achievement-page-container,
+.scenario-container,
+.dcb-container,
+.grc-wizard-page,
+.testlist-container,
+.aplus-test-container,
+.resources-container {
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(var(--theme-accent-rgb), 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(var(--theme-accent-rgb), 0.15) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
+}
+/*=================== */
 /* RESPONSIVE STYLES   */
 /* =================== */
 

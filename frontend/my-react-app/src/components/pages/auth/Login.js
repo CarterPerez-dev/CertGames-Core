@@ -1,8 +1,8 @@
 // src/components/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../store/userSlice';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { loginUser, clearAuthErrors } from '../store/userSlice';
 import { 
   FaUser, 
   FaLock, 
@@ -13,7 +13,8 @@ import {
   FaEye, 
   FaEyeSlash,
   FaExclamationCircle,
-  FaFingerprint
+  FaShieldAlt,
+  FaCheckCircle
 } from 'react-icons/fa';
 import './Login.css';
 
@@ -23,11 +24,29 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   
   const { loading, error, userId } = useSelector((state) => state.user);
+  
+  // Clear errors when component mounts or unmounts
+  useEffect(() => {
+    dispatch(clearAuthErrors());
+    
+    // Check for success message from registration
+    if (location.state && location.state.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the location state after reading
+      window.history.replaceState({}, document.title);
+    }
+    
+    return () => {
+      dispatch(clearAuthErrors());
+    };
+  }, [dispatch, location]);
   
   useEffect(() => {
     // If already logged in, redirect to profile
@@ -39,6 +58,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
+    setSuccessMessage('');
     
     // Basic validation
     if (!usernameOrEmail || !password) {
@@ -61,6 +81,7 @@ const Login = () => {
   
   const handleSocialLogin = (provider) => {
     setFormError('');
+    setSuccessMessage('');
     // This would be implemented with actual OAuth providers
     setFormError(`${provider} login will be implemented soon`);
   };
@@ -76,11 +97,18 @@ const Login = () => {
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">
-              <FaFingerprint className="login-logo-icon" />
+              <FaShieldAlt className="login-logo-icon" />
             </div>
             <h1 className="login-title">Welcome Back</h1>
             <p className="login-subtitle">Sign in to continue your journey</p>
           </div>
+          
+          {successMessage && (
+            <div className="login-success-message">
+              <FaCheckCircle />
+              <span>{successMessage}</span>
+            </div>
+          )}
           
           {(formError || error) && (
             <div className="login-error-message">

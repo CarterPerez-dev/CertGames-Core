@@ -13,6 +13,7 @@ import InfoPage from './components/pages/Info/InfoPage';
 import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
+import ResetPassword from './components/pages/auth/ResetPassword';
 
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
@@ -58,12 +59,13 @@ import GlobalTestPage from './components/GlobalTestPage';
 // Global CSS import
 import './global.css';
 
+
 /* 
-  HomeOrProfile Component
   - If user data is still loading, shows a loading message.
   - If user is logged in, redirects to /profile.
   - Otherwise, renders the public InfoPage.
 */
+
 function HomeOrProfile() {
   const { userId, status } = useSelector((state) => state.user);
   if (status === 'loading') {
@@ -79,6 +81,18 @@ function App() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user);
 
+
+  useEffect(() => {
+    const initializeTheme = () => {
+      const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    };
+
+
+    initializeTheme();
+  }, []); 
+  
+  
   useEffect(() => {
     if (userId) {
       dispatch(fetchUserData(userId));
@@ -102,11 +116,12 @@ function App() {
       />
       <div className="main-content">
         <Routes>
-          {/* The default route now depends on whether the user is logged in */}
+          {/* The default route depends on whether the user is logged in */}
           <Route path="/" element={<HomeOrProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/my-support" element={<SupportAskAnythingPage />} />

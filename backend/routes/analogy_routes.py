@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, Response
+from flask import Blueprint, request, jsonify, Response, g
 import logging
 from helpers.async_tasks import (
     generate_single_analogy_task,
@@ -7,12 +7,15 @@ from helpers.async_tasks import (
 )
 # New streaming helper
 from helpers.analogy_stream_helper import generate_analogy_stream
+# Import rate limiter
+from helpers.rate_limiter import rate_limit
 
 analogy_bp = Blueprint('analogy_bp', __name__)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 @analogy_bp.route('/generate_analogy', methods=['POST'])
+@rate_limit('analogy')
 def generate_analogy():
     """
     OLD route that uses Celery tasks. We keep it so async_tasks or older code won't break,
@@ -54,6 +57,7 @@ def generate_analogy():
 
 
 @analogy_bp.route('/stream_analogy', methods=['POST'])
+@rate_limit('analogy')
 def stream_analogy():
     """
     NEW route that streams analogy text. Only used by front-end now.
@@ -71,9 +75,12 @@ def stream_analogy():
             for chunk in stream_gen:
                 yield chunk
 
-        return Response(generate(), mimetype='text/plain')
+        response = Response(generate(), mimetype='text/plain')
+        # Add rate limit headers
+        if hasattr(g, 'rate_limit_remaining'):
+            response.headers['X-RateLimit-Remaining'] = g.rate_limit_remaining
+        return response
 
     except Exception as e:
         logger.error(f"Error streaming analogy: {e}")
         return jsonify({"error": "An internal error occurred while streaming the analogy."}), 500
-

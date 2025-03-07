@@ -292,10 +292,12 @@
   border-bottom: 1px solid var(--support-border);
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .create-thread-input {
   flex: 1;
+  min-width: 150px;
   background: var(--support-input-bg);
   border: 1px solid var(--support-border);
   border-radius: 8px;
@@ -327,7 +329,9 @@
   align-items: center;
   gap: 6px;
   min-width: 85px;
+  height: 42px;
   justify-content: center;
+  white-space: nowrap
 }
 
 .create-thread-button:hover:not(:disabled) {
@@ -1033,6 +1037,8 @@
   .create-thread-button {
     font-size: 13px;
     padding: 0 10px;
+    width: 100%;
+    margin-left: 0;
   }
   
   .thread-item {

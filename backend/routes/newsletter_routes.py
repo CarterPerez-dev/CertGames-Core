@@ -1,6 +1,3 @@
-#######################################
-# routes/newsletter_routes.py
-#######################################
 from flask import Blueprint, request, jsonify, redirect
 from models.newsletter import (
     subscribe_email,
@@ -24,10 +21,6 @@ def newsletter_unsubscribe():
     result = unsubscribe_email(email)
     return jsonify(result), (200 if result["success"] else 400)
 
-
-###############################
-# NEW: GET /newsletter/unsubscribe/<token>
-###############################
 @newsletter_bp.route('/unsubscribe/<token>', methods=['GET'])
 def newsletter_unsubscribe_token(token):
     """
@@ -39,16 +32,13 @@ def newsletter_unsubscribe_token(token):
       (a) Return a JSON response 
       (b) Or return an HTML "You have unsubscribed"
       (c) Or redirect them to a 'success' page
-
-    For this example, we’ll do a simple JSON plus a 200 or 400 status.
+    For this example, we'll do a simple JSON plus a 200 or 400 status.
     """
     result = unsubscribe_by_token(token)
     if result["success"]:
         # Optionally, you can redirect them to a 'Thank You' page
         # return redirect("https://yoursite.com/unsubscribe-success.html")
-
         # Or just return JSON
         return jsonify({"message": result["message"]}), 200
     else:
         return jsonify({"error": result["message"]}), 400
-

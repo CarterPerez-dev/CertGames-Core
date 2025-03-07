@@ -1,25 +1,19 @@
-###############################################
-# routes/admin_newsletter_routes.py
-###############################################
-import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 from flask import Blueprint, request, jsonify, current_app, session
 from datetime import datetime
 from bson.objectid import ObjectId
 
-# Import these so we can manage unsubscribe tokens right here in the route.
+# Import newsletter functions
 from models.newsletter import (
     create_campaign,
     get_campaign_by_id,
     mark_campaign_sent,
     get_all_active_subscribers,
     newsletter_subscribers_collection,
-    _generate_unsubscribe_token
+    _generate_unsubscribe_token,
+    send_campaign_to_all
 )
 
-########## EXAMPLE ADMIN BLUEPRINT ##########
+########## ADMIN BLUEPRINT ##########
 admin_news_bp = Blueprint('admin_news_bp', __name__)
 
 def require_cracked_admin(required_role=None):
@@ -36,42 +30,6 @@ def require_cracked_admin(required_role=None):
         have = priority_map.get(current_role, 1)
         return have >= needed
     return True
-
-###############################
-# SMTP-based email sender
-###############################
-def send_email_smtp(to_email, subject, html_content):
-    """
-    Sends an email via raw SMTP using environment variables:
-      SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM
-
-    If you'd like to do something other than SendGrid, simply
-    specify your own SMTP provider credentials in .env.
-    """
-    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-    smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_password = os.getenv("SMTP_PASSWORD", "")
-    email_from = os.getenv("EMAIL_FROM", "no-reply@example.com")
-
-    # Compose
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = email_from
-    msg['To'] = to_email
-
-    part_html = MIMEText(html_content, 'html')
-    msg.attach(part_html)
-
-    # Send
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        if smtp_user and smtp_password:
-            server.login(smtp_user, smtp_password)
-        server.sendmail(email_from, to_email, msg.as_string())
-
 
 ################################
 # ADMIN: Create a new campaign
@@ -91,7 +49,6 @@ def admin_create_newsletter():
     campaign_id = create_campaign(title, content_html)
     return jsonify({"message": "Newsletter campaign created", "campaignId": campaign_id}), 201
 
-
 #################################
 # ADMIN: View a campaign by ID
 #################################
@@ -108,7 +65,6 @@ def admin_get_newsletter(campaign_id):
     campaign["_id"] = str(campaign["_id"])
     return jsonify(campaign), 200
 
-
 #################################
 # ADMIN: Send a campaign
 #################################
@@ -124,56 +80,14 @@ def admin_send_newsletter(campaign_id):
     if campaign.get("status") == "sent":
         return jsonify({"error": "Campaign already sent"}), 400
 
-    subject_line = campaign["title"]
-    body_html_from_campaign = campaign["contentHtml"]
-
-    # Get all active subscribers
-    subscribers_cursor = get_all_active_subscribers()
-    count_sent = 0
-
-    ############################################
-    # EXCERPT: Personalized unsubscribe link
-    ############################################
-    for sub in subscribers_cursor:
-        recipient_email = sub["email"]
-
-        # Get the user's unsubscribe token (or generate if missing)
-        token = sub.get("unsubscribeToken")
-        if not token:
-            token = _generate_unsubscribe_token()
-            newsletter_subscribers_collection.update_one(
-                {"_id": sub["_id"]},
-                {"$set": {"unsubscribeToken": token}}
-            )
-
-        unsubscribe_link = f"https://yoursite.com/newsletter/unsubscribe/{token}"
-
-        # Build a custom HTML that includes campaign content + unsubscribe link
-        personal_html = f"""
-        <html>
-          <body>
-            {body_html_from_campaign}
-            <hr>
-            <p>To unsubscribe, click here:
-              <a href="{unsubscribe_link}">Unsubscribe</a>
-            </p>
-          </body>
-        </html>
-        """
-
-        # Send out the individualized email
-        try:
-            send_email_smtp(recipient_email, subject_line, personal_html)
-            count_sent += 1
-        except Exception as e:
-            # log or ignore the error per your preference
-            current_app.logger.warning(f"Failed to send to {recipient_email}: {str(e)}")
-
-    # Mark the campaign as sent in DB
-    mark_campaign_sent(campaign_id)
-
-    return jsonify({
-        "message": "Newsletter campaign sent",
-        "recipientsCount": count_sent
-    }), 200
-
+    # Send the campaign to all subscribers using SendGrid
+    result = send_campaign_to_all(campaign_id)
+    
+    if result["success"]:
+        return jsonify({
+            "message": result["message"]
+        }), 200
+    else:
+        return jsonify({
+            "error": result["message"]
+        }), 400

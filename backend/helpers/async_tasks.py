@@ -1,6 +1,3 @@
-###############################
-# helpers/async_tasks.py (UPDATED)
-###############################
 from celery import shared_task
 from datetime import datetime, timedelta
 import math
@@ -10,23 +7,20 @@ from helpers.celery_app import app
 from mongodb.database import db
 
 # ---------  AI Generation Imports -----------
-from helpers.analogy_helper import (
-    generate_single_analogy as _generate_single_analogy,
-    generate_comparison_analogy as _generate_comparison_analogy,
-    generate_triple_comparison_analogy as _generate_triple_comparison_analogy
-)
-
+from helpers.analogy_stream_helper import generate_analogy_stream
 from helpers.scenario_helper import (
-    generate_scenario as _generate_scenario,
-    break_down_scenario as _break_down_scenario,
-    generate_interactive_questions as _generate_interactive_questions
+    generate_scenario,
+    break_down_scenario,
+    generate_interactive_questions
 )
-
-from helpers.xploitcraft_helper import Xploits as _Xploits
-from helpers.grc_helper import generate_grc_question as _generate_grc_question
+from helpers.xploitcraft_helper import Xploits
+from helpers.grc_stream_helper import generate_grc_question, generate_grc_questions_stream
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+# Initialize Xploits
+_xploit = Xploits()
 
 # -----------------------------
 # Celery tasks for analogy
@@ -34,8 +28,15 @@ logger.setLevel(logging.DEBUG)
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_single_analogy_task(self, concept, category):
+    """
+    Generate a single analogy for the given concept and category.
+    Uses the unified analogy_stream_helper for generation.
+    """
     try:
-        return _generate_single_analogy(concept, category)
+        # Use the streaming generator but join the results into a single string
+        stream_gen = generate_analogy_stream("single", concept, category=category)
+        analogy_text = "".join(stream_gen)
+        return analogy_text
     except Exception as e:
         logger.error(f"Celery generate_single_analogy_task error: {e}")
         self.retry(exc=e)
@@ -43,8 +44,15 @@ def generate_single_analogy_task(self, concept, category):
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_comparison_analogy_task(self, concept1, concept2, category):
+    """
+    Generate a comparison analogy between two concepts using the given category.
+    Uses the unified analogy_stream_helper for generation.
+    """
     try:
-        return _generate_comparison_analogy(concept1, concept2, category)
+        # Use the streaming generator but join the results into a single string
+        stream_gen = generate_analogy_stream("comparison", concept1, concept2, category=category)
+        analogy_text = "".join(stream_gen)
+        return analogy_text
     except Exception as e:
         logger.error(f"Celery generate_comparison_analogy_task error: {e}")
         self.retry(exc=e)
@@ -52,8 +60,15 @@ def generate_comparison_analogy_task(self, concept1, concept2, category):
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, category):
+    """
+    Generate a triple comparison analogy among three concepts using the given category.
+    Uses the unified analogy_stream_helper for generation.
+    """
     try:
-        return _generate_triple_comparison_analogy(concept1, concept2, concept3, category)
+        # Use the streaming generator but join the results into a single string
+        stream_gen = generate_analogy_stream("triple", concept1, concept2, concept3, category=category)
+        analogy_text = "".join(stream_gen)
+        return analogy_text
     except Exception as e:
         logger.error(f"Celery generate_triple_comparison_analogy_task error: {e}")
         self.retry(exc=e)
@@ -66,11 +81,11 @@ def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_scenario_task(self, industry, attack_type, skill_level, threat_intensity):
     """
-    If _generate_scenario returns a streaming generator, we join it into one string 
+    If generate_scenario returns a streaming generator, we join it into one string 
     so that Celery can store/return that as the task result.
     """
     try:
-        scenario_gen = _generate_scenario(industry, attack_type, skill_level, threat_intensity)
+        scenario_gen = generate_scenario(industry, attack_type, skill_level, threat_intensity)
         scenario_text = "".join(scenario_gen)  # Convert generator of strings into a single string
         return scenario_text
     except Exception as e:
@@ -84,7 +99,7 @@ def break_down_scenario_task(self, scenario_text):
     Takes a scenario and 'breaks it down' into context, actors, timeline, etc.
     """
     try:
-        return _break_down_scenario(scenario_text)
+        return break_down_scenario(scenario_text)
     except Exception as e:
         logger.error(f"Celery break_down_scenario_task error: {e}")
         self.retry(exc=e)
@@ -96,7 +111,7 @@ def generate_interactive_questions_task(self, scenario_text):
     Gathers the chunked question output into a final string or JSON object.
     """
     try:
-        questions_gen = _generate_interactive_questions(scenario_text)
+        questions_gen = generate_interactive_questions(scenario_text)
         questions_text = "".join(questions_gen)
         return questions_text
     except Exception as e:
@@ -107,8 +122,6 @@ def generate_interactive_questions_task(self, scenario_text):
 # -----------------------------
 # Celery tasks for Xploitcraft
 # -----------------------------
-_xploit = _Xploits()
-
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_exploit_payload_task(self, vulnerability, evasion_technique):
     try:
@@ -124,7 +137,7 @@ def generate_exploit_payload_task(self, vulnerability, evasion_technique):
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
 def generate_grc_question_task(self, category, difficulty):
     try:
-        return _generate_grc_question(category, difficulty)
+        return generate_grc_question(category, difficulty)
     except Exception as e:
         logger.error(f"Celery generate_grc_question_task error: {e}")
         self.retry(exc=e)
@@ -225,25 +238,21 @@ def check_api_endpoints(self):
     return True
 
 # -----------------------------
-# NEW: Cleanup logs for auditLogs & apiHealth
+# Cleanup logs for auditLogs & apiHealth
 # -----------------------------
 @shared_task
 def cleanup_logs():
     """
-    Removes old audit logs and apiHealth docs older than 30 days.
+    Removes old audit logs and apiHealth docs older than 3 days.
     Runs daily (per the schedule in celery_app).
     """
     now = datetime.utcnow()
     cutoff = now - timedelta(days=3)
 
-
     deleted_audit = db.auditLogs.delete_many({"timestamp": {"$lt": cutoff}})
-
-
     deleted_health = db.apiHealth.delete_many({"checkedAt": {"$lt": cutoff}})
 
-    logger.info(f"Cleaned logs older than 30 days => auditLogs: {deleted_audit.deleted_count}, "
+    logger.info(f"Cleaned logs older than 3 days => auditLogs: {deleted_audit.deleted_count}, "
                 f"apiHealth: {deleted_health.deleted_count}")
 
     return f"Cleanup complete: auditLogs={deleted_audit.deleted_count}, apiHealth={deleted_health.deleted_count}"
-
