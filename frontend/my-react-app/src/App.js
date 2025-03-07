@@ -14,7 +14,8 @@ import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
 import ResetPassword from './components/pages/auth/ResetPassword';
-
+import PrivacyPolicy from './components/pages/PrivacyPolicy';
+import TermsOfService from './components/pages/TermsOfService';
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
 import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard'; 
@@ -125,6 +126,8 @@ function App() {
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/my-support" element={<SupportAskAnythingPage />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<TermsOfService />} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />
