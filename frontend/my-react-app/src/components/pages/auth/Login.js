@@ -84,14 +84,10 @@ const Login = () => {
     setFormError('');
     setSuccessMessage('');
     
-    // Show loading state
-    setLoading(true);
-    
     try {
       // Redirect to the backend OAuth route
       window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
     } catch (err) {
-      setLoading(false);
       setFormError(`${provider} login failed. Please try again.`);
     }
   };
