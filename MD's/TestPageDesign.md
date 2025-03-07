@@ -5613,3892 +5613,460 @@ We created each component with:
 
 ok so the above text is what deisgned ravamping we are doing.
 
-so nwo is the a really complciated page
+So i need you to revamp my policy pages such as the tems of service and privacy policy pages (keep the text and add globally gerneric extra stuff (that applies to all web apps) and obvilsy ravam teh deisgn
 
-i would liek to keep all fucntilioty and do not remove any chnaeg any fucnitloiuty ESPECIALLY THE SUPPORT SERCTION VCEAUE TAHT TOOK ME A LONG TIME OT GET RIGHT AND WORKING ESPACIALLY THE REAL TIME ASPECT SO DO NOT TOUCH THAT
+so i have both of the js files using one css file which is what ill still do
 
-but now we must revamp the design fro this admin dashbaord page aswell as add a tab for my email newsletter wher ei write adn send the and see suurbibers for my newelstter, ill porvide you onctext such as the newletter page, teh routes, models etc etc, then ill give yiu my full admin dashbaord page adn then you will rvamp the deisgn (not cuntioility) do not rmoev any fcuntions or frwtures but you can add feautures if you woud like, adn then give me new css file aswell in full (make sure ot ouput the amdin dashbaord an dcss inf ull)
+so ouput updated js files in full for terms of service page and privacy policy page and new css file
+(make sure to use unique css classes for eveyrhting because i dont wan tnaything overiding anything in my other pages or other eay around)
 
-here is alot fo conetxt for you
 
-// src/App.js
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserData } from './components/pages/store/userSlice';
 
-// Import ToastContainer from react-toastify
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-// Public pages
-import InfoPage from './components/pages/Info/InfoPage';
-import Login from './components/pages/auth/Login';
-import Register from './components/pages/auth/Register';
-import ForgotPassword from './components/pages/auth/ForgotPassword';
+here are the files
 
-// Admin 
-import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
-import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard'; 
+// src/components/pages/TermsOfService.js
+import React, { useState, useEffect } from 'react';
+import Footer from '../Footer';
+import './PolicyPages.css';
 
-// Protected pages
-import ProtectedRoute from './components/ProtectedRoute';
-import Sidebar from './components/Sidebar/Sidebar';
+const TermsOfService = () => {
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
-import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
-import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
-import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
-import GRC from './components/pages/GRCpage/GRC';
-import DailyCyberBrief from './components/pages/DailyPage/DailyCyberBrief';
-import Resources from './components/pages/ResourcesPage/Resources';
+  // Function to handle printing
+  const handlePrint = () => {
+    window.print();
+  };
 
-// Gamified components and userprofile
-import DailyStationPage from './components/pages/store/DailyStationPage';
-import ShopPage from './components/pages/store/ShopPage';
-import UserProfile from './components/pages/store/UserProfile';
-import LeaderboardPage from './components/pages/store/LeaderboardPage';
-import AchievementPage from './components/pages/store/AchievementPage';
-import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
-
-// Unique Test Pages
-import APlusTestPage from './components/pages/aplus/APlusTestPage';
-import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
-import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
-import SecurityPlusTestPage from './components/pages/secplus/SecurityPlusTestPage';
-import CySAPlusTestPage from './components/pages/cysa/CySAPlusTestPage';
-import PenPlusTestPage from './components/pages/penplus/PenPlusTestPage';
-import CaspPlusTestPage from './components/pages/casp/CaspPlusTestPage';
-import LinuxPlusTestPage from './components/pages/linuxplus/LinuxPlusTestPage';
-import CloudPlusTestPage from './components/pages/cloudplus/CloudPlusTestPage';
-import DataPlusTestPage from './components/pages/dataplus/DataPlusTestPage';
-import ServerPlusTestPage from './components/pages/serverplus/ServerPlusTestPage';
-import CisspTestPage from './components/pages/cissp/CisspTestPage';
-import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
-
-// Global Test Page
-import GlobalTestPage from './components/GlobalTestPage';
-
-// Global CSS import
-import './components/pages/XploitcraftPage/global.css';
-
-/* 
-  HomeOrProfile Component
-  - If user data is still loading, shows a loading message.
-  - If user is logged in, redirects to /profile.
-  - Otherwise, renders the public InfoPage.
-*/
-function HomeOrProfile() {
-  const { userId, status } = useSelector((state) => state.user);
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
-  if (userId) {
-    return <Navigate to="/profile" replace />;
-  }
-  return <InfoPage />;
-}
-
-function App() {
-  const dispatch = useDispatch();
-  const { userId } = useSelector((state) => state.user);
-
+  // Show/hide back to top button based on scroll position
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserData(userId));
-    }
-  }, [dispatch, userId]);
-
-  return (
-    <div className="App">
-      {userId && <Sidebar />}
-      {/* React Toastify container for notifications */}
-      <ToastContainer 
-        position="top-right"
-        autoClose={7000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      <div className="main-content">
-        <Routes>
-          {/* The default route now depends on whether the user is logged in */}
-          <Route path="/" element={<HomeOrProfile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
-          <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
-          <Route path="/my-support" element={<SupportAskAnythingPage />} />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <UserProfile />
-            </ProtectedRoute>
-          }/>
-          <Route path="/achievements" element={
-            <ProtectedRoute>
-              <AchievementPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/shop" element={
-            <ProtectedRoute>
-              <ShopPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/daily" element={
-            <ProtectedRoute>
-              <DailyStationPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/leaderboard" element={
-            <ProtectedRoute>
-              <LeaderboardPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/xploitcraft" element={
-            <ProtectedRoute>
-              <Xploitcraft />
-            </ProtectedRoute>
-          }/>
-          <Route path="/scenariosphere" element={
-            <ProtectedRoute>
-              <ScenarioSphere />
-            </ProtectedRoute>
-          }/>
-          <Route path="/analogyhub" element={
-            <ProtectedRoute>
-              <AnalogyHub />
-            </ProtectedRoute>
-          }/>
-          <Route path="/grc" element={
-            <ProtectedRoute>
-              <GRC />
-            </ProtectedRoute>
-          }/>
-          <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
-          <Route path="/resources" element={<Resources />} />
-          }/>
-          <Route path="/practice-tests/a-plus" element={
-            <ProtectedRoute>
-              <APlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/a-plus/:testId" element={
-            <ProtectedRoute>
-              <APlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/aplus-core2" element={
-            <ProtectedRoute>
-              <APlusCore2TestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/aplus-core2/:testId" element={
-            <ProtectedRoute>
-              <APlusCore2TestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/network-plus" element={
-            <ProtectedRoute>
-              <NetworkPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/network-plus/:testId" element={
-            <ProtectedRoute>
-              <NetworkPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/security-plus" element={
-            <ProtectedRoute>
-              <SecurityPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/security-plus/:testId" element={
-            <ProtectedRoute>
-              <SecurityPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cysa-plus" element={
-            <ProtectedRoute>
-              <CySAPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cysa-plus/:testId" element={
-            <ProtectedRoute>
-              <CySAPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/pen-plus" element={
-            <ProtectedRoute>
-              <PenPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/pen-plus/:testId" element={
-            <ProtectedRoute>
-              <PenPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/casp-plus" element={
-            <ProtectedRoute>
-              <CaspPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/casp-plus/:testId" element={
-            <ProtectedRoute>
-              <CaspPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/linux-plus" element={
-            <ProtectedRoute>
-              <LinuxPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/linux-plus/:testId" element={
-            <ProtectedRoute>
-              <LinuxPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cloud-plus" element={
-            <ProtectedRoute>
-              <CloudPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cloud-plus/:testId" element={
-            <ProtectedRoute>
-              <CloudPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/data-plus" element={
-            <ProtectedRoute>
-              <DataPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/data-plus/:testId" element={
-            <ProtectedRoute>
-              <DataPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/server-plus" element={
-            <ProtectedRoute>
-              <ServerPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/server-plus/:testId" element={
-            <ProtectedRoute>
-              <ServerPlusTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cissp" element={
-            <ProtectedRoute>
-              <CisspTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/cissp/:testId" element={
-            <ProtectedRoute>
-              <CisspTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/aws-cloud" element={
-            <ProtectedRoute>
-              <AWSCloudTestPage />
-            </ProtectedRoute>
-          }/>
-          <Route path="/practice-tests/aws-cloud/:testId" element={
-            <ProtectedRoute>
-              <AWSCloudTestPage />
-            </ProtectedRoute>
-          }/>
-
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-    </div>
-  );
-}
-
-export default App;
-###############################################
-# routes/admin_newsletter_routes.py
-###############################################
-import os
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from flask import Blueprint, request, jsonify, current_app, session
-from datetime import datetime
-from bson.objectid import ObjectId
-
-# Import these so we can manage unsubscribe tokens right here in the route.
-from models.newsletter import (
-    create_campaign,
-    get_campaign_by_id,
-    mark_campaign_sent,
-    get_all_active_subscribers,
-    newsletter_subscribers_collection,
-    _generate_unsubscribe_token
-)
-
-########## EXAMPLE ADMIN BLUEPRINT ##########
-admin_news_bp = Blueprint('admin_news_bp', __name__)
-
-def require_cracked_admin(required_role=None):
-    """
-    Reuse your existing logic here or import from cracked_admin.
-    Minimal example below:
-    """
-    if not session.get('cracked_admin_logged_in'):
-        return False
-    if required_role:
-        current_role = session.get('cracked_admin_role', 'basic')
-        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
-        needed = priority_map.get(required_role, 1)
-        have = priority_map.get(current_role, 1)
-        return have >= needed
-    return True
-
-###############################
-# SMTP-based email sender
-###############################
-def send_email_smtp(to_email, subject, html_content):
-    """
-    Sends an email via raw SMTP using environment variables:
-      SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM
-
-    If you'd like to do something other than SendGrid, simply
-    specify your own SMTP provider credentials in .env.
-    """
-    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-    smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_user = os.getenv("SMTP_USER", "")
-    smtp_password = os.getenv("SMTP_PASSWORD", "")
-    email_from = os.getenv("EMAIL_FROM", "no-reply@example.com")
-
-    # Compose
-    msg = MIMEMultipart('alternative')
-    msg['Subject'] = subject
-    msg['From'] = email_from
-    msg['To'] = to_email
-
-    part_html = MIMEText(html_content, 'html')
-    msg.attach(part_html)
-
-    # Send
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.ehlo()
-        server.starttls()
-        server.ehlo()
-        if smtp_user and smtp_password:
-            server.login(smtp_user, smtp_password)
-        server.sendmail(email_from, to_email, msg.as_string())
-
-
-################################
-# ADMIN: Create a new campaign
-################################
-@admin_news_bp.route('/newsletter/create', methods=['POST'])
-def admin_create_newsletter():
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    data = request.json or {}
-    title = data.get("title", "").strip()
-    content_html = data.get("contentHtml", "").strip()
-
-    if not title or not content_html:
-        return jsonify({"error": "Missing title or contentHtml"}), 400
-
-    campaign_id = create_campaign(title, content_html)
-    return jsonify({"message": "Newsletter campaign created", "campaignId": campaign_id}), 201
-
-
-#################################
-# ADMIN: View a campaign by ID
-#################################
-@admin_news_bp.route('/newsletter/<campaign_id>', methods=['GET'])
-def admin_get_newsletter(campaign_id):
-    if not require_cracked_admin():
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    campaign = get_campaign_by_id(campaign_id)
-    if not campaign:
-        return jsonify({"error": "Campaign not found"}), 404
-
-    # Convert _id -> str
-    campaign["_id"] = str(campaign["_id"])
-    return jsonify(campaign), 200
-
-
-#################################
-# ADMIN: Send a campaign
-#################################
-@admin_news_bp.route('/newsletter/send/<campaign_id>', methods=['POST'])
-def admin_send_newsletter(campaign_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    campaign = get_campaign_by_id(campaign_id)
-    if not campaign:
-        return jsonify({"error": "Campaign not found"}), 404
-
-    if campaign.get("status") == "sent":
-        return jsonify({"error": "Campaign already sent"}), 400
-
-    subject_line = campaign["title"]
-    body_html_from_campaign = campaign["contentHtml"]
-
-    # Get all active subscribers
-    subscribers_cursor = get_all_active_subscribers()
-    count_sent = 0
-
-    ############################################
-    # EXCERPT: Personalized unsubscribe link
-    ############################################
-    for sub in subscribers_cursor:
-        recipient_email = sub["email"]
-
-        # Get the user's unsubscribe token (or generate if missing)
-        token = sub.get("unsubscribeToken")
-        if not token:
-            token = _generate_unsubscribe_token()
-            newsletter_subscribers_collection.update_one(
-                {"_id": sub["_id"]},
-                {"$set": {"unsubscribeToken": token}}
-            )
-
-        unsubscribe_link = f"https://yoursite.com/newsletter/unsubscribe/{token}"
-
-        # Build a custom HTML that includes campaign content + unsubscribe link
-        personal_html = f"""
-        <html>
-          <body>
-            {body_html_from_campaign}
-            <hr>
-            <p>To unsubscribe, click here:
-              <a href="{unsubscribe_link}">Unsubscribe</a>
-            </p>
-          </body>
-        </html>
-        """
-
-        # Send out the individualized email
-        try:
-            send_email_smtp(recipient_email, subject_line, personal_html)
-            count_sent += 1
-        except Exception as e:
-            # log or ignore the error per your preference
-            current_app.logger.warning(f"Failed to send to {recipient_email}: {str(e)}")
-
-    # Mark the campaign as sent in DB
-    mark_campaign_sent(campaign_id)
-
-    return jsonify({
-        "message": "Newsletter campaign sent",
-        "recipientsCount": count_sent
-    }), 200
-import os
-import logging
-import time
-import pytz
-import redis
-from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app
-from flask_cors import CORS
-from flask_session import Session
-from flask_socketio import SocketIO, join_room, leave_room, emit
-from pymongo import MongoClient
-from dotenv import load_dotenv
-
-# routes
-from routes.xploit_routes import xploit_bp
-from routes.scenario_routes import scenario_bp
-from routes.analogy_routes import analogy_bp
-from routes.grc_routes import grc_bp
-from routes.test_routes import api_bp
-from routes.cracked_admin import cracked_bp
-from routes.support_routes import support_bp
-from routes.newsletter_routes import newsletter_bp
-from routes.admin_newsletter_routes import admin_news_bp
-from models.test import create_user, get_user_by_id, update_user_fields
-from mongodb.database import db
-
-load_dotenv()
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-mongo_uri = os.getenv("MONGO_URI")
-CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
-REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
-SECRET_KEY = os.getenv('SECRET_KEY', 'supersecret')
-
-# Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-#######################################
-# Initialize Flask & Related
-#######################################
-app = Flask(__name__)
-app.config['SECRET_KEY'] = SECRET_KEY
-
-# Setup CORS
-CORS(app, supports_credentials=True)
-
-# Setup SocketIO
-socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
-
-# Setup Redis-based sessions
-app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_PERMANENT'] = False
-app.config['SESSION_USE_SIGNER'] = True
-app.config['SESSION_KEY_PREFIX'] = 'flask_session:'
-app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, password=REDIS_PASSWORD)
-
-Session(app)
-
-# Make socketio accessible from other files (avoids circular imports)
-# so in support_routes.py you can do:
-#   socketio = current_app.extensions['socketio']
-app.extensions['socketio'] = socketio
-
-@app.route('/health')
-def home():
-    return 'Backend is running'
-
-@app.before_request
-def log_request_info():
-    logger.info(f"Handling request to {request.path} with method {request.method}")
-
-# Register blueprints
-app.register_blueprint(xploit_bp, url_prefix='/payload')
-app.register_blueprint(scenario_bp, url_prefix='/scenario')
-app.register_blueprint(analogy_bp, url_prefix='/analogy')
-app.register_blueprint(grc_bp, url_prefix='/grc')
-app.register_blueprint(api_bp, url_prefix='/test')
-app.register_blueprint(cracked_bp, url_prefix="/cracked")
-app.register_blueprint(support_bp, url_prefix="/support")
-app.register_blueprint(newsletter_bp, url_prefix='/newsletter')
-app.register_blueprint(admin_news_bp, url_prefix="/cracked") 
-
-
-###########################
-# BEFORE REQUEST
-###########################
-@app.before_request
-def log_request_start():
-    g.request_start_time = time.time()
-    g.db_time_accumulator = 0.0
-
-###########################
-# AFTER REQUEST
-###########################
-@app.after_request
-def log_request_end(response):
-    try:
-        duration_sec = time.time() - g.request_start_time
-        db_time_sec = getattr(g, 'db_time_accumulator', 0.0)
-        response_size = 0
-        if not response.direct_passthrough and response.data:
-            response_size = len(response.data)
-        http_status = response.status_code
-
-        # Insert into perfSamples
-        doc = {
-            "route": request.path,
-            "method": request.method,
-            "duration_sec": duration_sec,
-            "db_time_sec": db_time_sec,
-            "response_bytes": response_size,
-            "http_status": http_status,
-            # Store in UTC
-            "timestamp": datetime.utcnow()
-        }
-        db.perfSamples.insert_one(doc)
-    except Exception as e:
-        logger.warning(f"Failed to insert perfSample: {e}")
-    return response
-
-########################################################################
-# Socket.IO event handlers
-########################################################################
-@socketio.on('connect')
-def handle_connect():
-    app.logger.info(f"Client connected: {request.sid}")
-    socketio.emit('message', {'data': 'Connected to server'})
-
-@socketio.on('join_thread')
-def on_join_thread(data):
-    thread_id = str(data.get('threadId'))  # Ensure string
-    join_room(thread_id)
-    app.logger.info(f"Client joined thread room: {thread_id}")
-
-@socketio.on('leave_thread')
-def on_leave_thread(data):
-    """
-    data = { "threadId": "abc123" }
-    """
-    thread_id = data.get('threadId')
-    if thread_id:
-        leave_room(thread_id)
-        app.logger.info(f"Client left thread room: {thread_id}")
-
-@socketio.on('admin_typing')
-def on_admin_typing(data):
-    """
-    Broadcast to that thread's room that admin is typing
-    """
-    thread_id = data.get('threadId')
-    if thread_id:
-        app.logger.info(f"Admin started typing in thread room: {thread_id}")
-        socketio.emit('admin_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('admin_stop_typing')
-def on_admin_stop_typing(data):
-    thread_id = data.get('threadId')
-    if thread_id:
-        app.logger.info(f"Admin stopped typing in thread room: {thread_id}")
-        socketio.emit('admin_stop_typing', {"threadId": thread_id}, room=thread_id)
-
-
-@socketio.on('admin_new_message')
-def on_admin_new_message(data):
-    thread_id = data.get('threadId')
-    message = data.get('message')
-    if thread_id and message:
-        thread_id = str(thread_id)  # Ensure string
-        app.logger.info(f"Admin sending message to thread room: {thread_id}")
-        socketio.emit('new_message', {
-            "threadId": thread_id,
-            "message": message
-        }, room=thread_id)
-
-@socketio.on('user_typing')
-def on_user_typing(data):
-    """
-    data = { "threadId": "..." }
-    Let the admin see "User is typing..."
-    """
-    thread_id = data.get('threadId')
-    if thread_id:
-        app.logger.info(f"User started typing in thread room: {thread_id}")
-        socketio.emit('user_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('user_stop_typing')
-def on_user_stop_typing(data):
-    """
-    data = { "threadId": "..." }
-    Let the admin see the user is no longer typing
-    """
-    thread_id = data.get('threadId')
-    if thread_id:
-        app.logger.info(f"User stopped typing in thread room: {thread_id}")
-        socketio.emit('user_stop_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('join_user_room')
-def handle_join_user_room(data):
-    user_id = data.get('userId')
-    if user_id:
-        room_name = f"user_{user_id}"
-        join_room(room_name)
-        app.logger.info(f"User {user_id} joined personal room: {room_name}")
-
-if __name__ == '__main__':
-    # For local dev, run the SocketIO server
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
-#######################################
-# routes/newsletter_routes.py
-#######################################
-from flask import Blueprint, request, jsonify, redirect
-from models.newsletter import (
-    subscribe_email,
-    unsubscribe_email,
-    unsubscribe_by_token
-)
-
-newsletter_bp = Blueprint('newsletter_bp', __name__)
-
-@newsletter_bp.route('/subscribe', methods=['POST'])
-def newsletter_subscribe():
-    data = request.json or {}
-    email = data.get("email", "").strip()
-    result = subscribe_email(email)
-    return jsonify(result), (200 if result["success"] else 400)
-
-@newsletter_bp.route('/unsubscribe', methods=['POST'])
-def newsletter_unsubscribe():
-    data = request.json or {}
-    email = data.get("email", "").strip()
-    result = unsubscribe_email(email)
-    return jsonify(result), (200 if result["success"] else 400)
-
-
-###############################
-# NEW: GET /newsletter/unsubscribe/<token>
-###############################
-@newsletter_bp.route('/unsubscribe/<token>', methods=['GET'])
-def newsletter_unsubscribe_token(token):
-    """
-    Allows one-click unsubscribe via GET.
-    e.g. 
-      <a href="https://yoursite.com/newsletter/unsubscribe/<token>">Unsubscribe</a>
-    
-    You can either:
-      (a) Return a JSON response 
-      (b) Or return an HTML "You have unsubscribed"
-      (c) Or redirect them to a 'success' page
-
-    For this example, we’ll do a simple JSON plus a 200 or 400 status.
-    """
-    result = unsubscribe_by_token(token)
-    if result["success"]:
-        # Optionally, you can redirect them to a 'Thank You' page
-        # return redirect("https://yoursite.com/unsubscribe-success.html")
-
-        # Or just return JSON
-        return jsonify({"message": result["message"]}), 200
-    else:
-        return jsonify({"error": result["message"]}), 400
-#######################################
-# models/newsletter.py
-#######################################
-import os
-import re
-import random
-import string
-from datetime import datetime
-from bson.objectid import ObjectId
-from mongodb.database import db
-
-newsletter_subscribers_collection = db.newsletterSubscribers
-newsletter_campaigns_collection = db.newsletterCampaigns
-
-def _generate_unsubscribe_token(length=32):
-    """
-    Generates a random token for unsubscribing.
-    """
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
-
-def subscribe_email(email: str):
-    email = email.strip().lower()
-    if not re.match(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
-        return {"success": False, "message": "Invalid email format."}
-
-    existing = newsletter_subscribers_collection.find_one({"email": email})
-    if existing:
-        if existing.get("unsubscribed", False) is True:
-            # Mark them re-subscribed
-            newsletter_subscribers_collection.update_one(
-                {"_id": existing["_id"]},
-                {
-                    "$set": {
-                        "unsubscribed": False,
-                        "resubscribedAt": datetime.utcnow()
-                    },
-                    # Ensure they have a token
-                    "$setOnInsert": {
-                        "unsubscribeToken": _generate_unsubscribe_token()
-                    }
-                },
-                upsert=True
-            )
-            return {"success": True, "message": "You have been re-subscribed."}
-        else:
-            return {"success": False, "message": "Already subscribed."}
-    else:
-        doc = {
-            "email": email,
-            "subscribedAt": datetime.utcnow(),
-            "unsubscribed": False,
-            "unsubscribeToken": _generate_unsubscribe_token()
-        }
-        newsletter_subscribers_collection.insert_one(doc)
-        return {"success": True, "message": "Subscription successful."}
-
-
-def unsubscribe_email(email: str):
-    """
-    If you still want to let them unsubscribe by email
-    (POST /newsletter/unsubscribe with JSON),
-    keep this approach for backwards compatibility.
-    """
-    email = email.strip().lower()
-    subscriber = newsletter_subscribers_collection.find_one({"email": email})
-    if not subscriber:
-        return {"success": False, "message": "Email not found in subscriber list."}
-
-    if subscriber.get("unsubscribed", False) is True:
-        return {"success": False, "message": "Already unsubscribed."}
-
-    newsletter_subscribers_collection.update_one(
-        {"_id": subscriber["_id"]},
-        {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
-    )
-    return {"success": True, "message": "You have been unsubscribed."}
-
-
-def unsubscribe_by_token(token: str):
-    """
-    Finds the subscriber by their token and unsubscribes them if possible.
-    Returns a dict { success: bool, message: str }.
-    """
-    subscriber = newsletter_subscribers_collection.find_one({"unsubscribeToken": token})
-    if not subscriber:
-        return {"success": False, "message": "Invalid unsubscribe token."}
-    if subscriber.get("unsubscribed", False):
-        return {"success": False, "message": "You have already unsubscribed."}
-
-    newsletter_subscribers_collection.update_one(
-        {"_id": subscriber["_id"]},
-        {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
-    )
-    return {"success": True, "message": "You have been unsubscribed."}
-
-
-def get_all_active_subscribers():
-    return newsletter_subscribers_collection.find({"unsubscribed": False})
-
-
-########################################
-# Newsletter Campaign Management
-########################################
-
-def create_campaign(title: str, content_html: str):
-    doc = {
-        "title": title,
-        "contentHtml": content_html,
-        "createdAt": datetime.utcnow(),
-        "sentAt": None,
-        "status": "draft"
-    }
-    result = newsletter_campaigns_collection.insert_one(doc)
-    return str(result.inserted_id)
-
-def get_campaign_by_id(campaign_id: str):
-    try:
-        oid = ObjectId(campaign_id)
-    except:
-        return None
-    return newsletter_campaigns_collection.find_one({"_id": oid})
-
-def mark_campaign_sent(campaign_id: str):
-    try:
-        oid = ObjectId(campaign_id)
-    except:
-        return
-    newsletter_campaigns_collection.update_one(
-        {"_id": oid},
-        {"$set": {
-            "sentAt": datetime.utcnow(),
-            "status": "sent"
-        }}
-    )
-import csv
-import io
-import random
-import string
-import pytz
-from datetime import datetime, timedelta
-from bson import ObjectId
-from flask import Blueprint, request, session, jsonify, make_response, current_app
-from pymongo import ReturnDocument
-import redis
-import os
-import time
-import pickle
-from dotenv import load_dotenv
-
-from mongodb.database import db
-
-cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
-ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
-
-load_dotenv()
-
-REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
-cache_conn = redis.StrictRedis(host='redis', port=6379, db=1, password=REDIS_PASSWORD)
-
-def cache_set(key, value, ttl=60):
-    try:
-        serialized = pickle.dumps(value)
-        cache_conn.setex(key, ttl, serialized)
-    except:
-        pass
-
-def cache_get(key):
-    try:
-        data = cache_conn.get(key)
-        if data:
-            return pickle.loads(data)
-        return None
-    except:
-        return None
-
-def require_cracked_admin(required_role=None):
-    """
-    Checks if session['cracked_admin_logged_in'] is True.
-    Optionally enforces roles: basic=1, supervisor=2, superadmin=3.
-    """
-    if not session.get('cracked_admin_logged_in'):
-        return False
-    if required_role:
-        current_role = session.get('cracked_admin_role', 'basic')
-        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
-        needed = priority_map.get(required_role, 1)
-        have = priority_map.get(current_role, 1)
-        return have >= needed
-    return True
-
-
-##################################################################
-# ADMIN LOGIN / LOGOUT
-##################################################################
-@cracked_bp.route('/login', methods=['POST'])
-def cracked_admin_login():
-    data = request.json or {}
-    adminKey = data.get('adminKey', '')
-    input_role = data.get('role', 'basic')
-    if adminKey == ADMIN_PASS:
-        session['cracked_admin_logged_in'] = True
-        session['cracked_admin_role'] = input_role
-        return jsonify({"message": "Authorization successful"}), 200
-    else:
-        return jsonify({"error": "Invalid admin password"}), 403
-
-@cracked_bp.route('/logout', methods=['POST'])
-def cracked_admin_logout():
-    session.pop('cracked_admin_logged_in', None)
-    session.pop('cracked_admin_role', None)
-    return jsonify({"message": "admin logged out"}), 200
-
-
-##################################################################
-# ADMIN DASHBOARD
-##################################################################
-@cracked_bp.route('/dashboard', methods=['GET'])
-def admin_dashboard():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated as admin"}), 401
-
-    cache_key = 'admin_dashboard_data'
-    cached_data = cache_get(cache_key)
-    now_utc = datetime.utcnow()
-
-    if cached_data:
-        return jsonify(cached_data), 200
-
-    try:
-        # 1) Basic counts & stats
-        user_count = db.mainusers.count_documents({})
-        test_attempts_count = db.testAttempts.count_documents({})
-
-        start_of_day = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
-        daily_bonus_claims = db.mainusers.count_documents({
-            "lastDailyClaim": {"$gte": start_of_day}
-        })
-
-        pipeline = [
-            {"$match": {"finished": True}},
-            {"$group": {
-                "_id": None,
-                "avgScorePercent": {
-                    "$avg": {
-                        "$multiply": [
-                            {"$divide": ["$score", "$totalQuestions"]},
-                            100
-                        ]
-                    }
-                }
-            }}
-        ]
-        result = list(db.testAttempts.aggregate(pipeline))
-        avg_score = result[0]["avgScorePercent"] if result else 0.0
-
-        # 2) Performance metrics (the latest doc)
-        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
-        if not perf_metrics:
-            # Provide a fallback doc if none exist
-            perf_metrics = {
-                "avg_request_time": 0.123,
-                "avg_db_query_time_ms": 45.0,
-                "data_transfer_rate": "1.2MB/s",
-                "throughput": 50,
-                "error_rate": 0.02,
-                "timestamp": now_utc
-            }
-        else:
-            # Convert _id => str
-            if '_id' in perf_metrics:
-                perf_metrics['_id'] = str(perf_metrics['_id'])
-
-            # If there's a numeric 'avg_db_query_time', convert to ms
-            if 'avg_db_query_time' in perf_metrics:
-                ms_val = round(perf_metrics['avg_db_query_time'] * 1000, 2)
-                perf_metrics['avg_db_query_time_ms'] = ms_val
-                del perf_metrics['avg_db_query_time']
-
-            # Convert timestamp to EST
-            if 'timestamp' in perf_metrics and isinstance(perf_metrics['timestamp'], datetime):
-                import pytz
-                est_tz = pytz.timezone('America/New_York')
-                perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
-
-        # 3) Build "recentStats" for the last 7 days
-        import pytz
-        est_tz = pytz.timezone('America/New_York')
-        recentStats = []
-        for i in range(7):
-            day_start = start_of_day - timedelta(days=i)
-            day_end = day_start + timedelta(days=1)
-            label_str = day_start.strftime("%Y-%m-%d")
-
-            day_bonus_count = db.mainusers.count_documents({
-                "lastDailyClaim": {"$gte": day_start, "$lt": day_end}
-            })
-            day_test_attempts = db.testAttempts.count_documents({
-                "finished": True,
-                "finishedAt": {"$gte": day_start, "$lt": day_end}
-            })
-            recentStats.append({
-                "label": label_str,
-                "dailyBonus": day_bonus_count,
-                "testAttempts": day_test_attempts
-            })
-        # Reverse so oldest is first
-        recentStats.reverse()
-
-        now_est = now_utc.astimezone(est_tz).isoformat()
-
-        dashboard_data = {
-            "user_count": user_count,
-            "test_attempts_count": test_attempts_count,
-            "daily_bonus_claims": daily_bonus_claims,
-            "average_test_score_percent": round(avg_score, 2),
-            "timestamp_est": now_est,
-            "performance_metrics": perf_metrics,
-            "recentStats": recentStats
-        }
-
-        cache_set(cache_key, dashboard_data, ttl=60)
-        return jsonify(dashboard_data), 200
-
-    except Exception as e:
-        return jsonify({"error": "Failed to retrieve dashboard metrics", "details": str(e)}), 500
-
-##################################################################
-# USERS
-##################################################################
-@cracked_bp.route('/users', methods=['GET'])
-def admin_list_users():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    search = request.args.get('search', '').strip()
-    page = int(request.args.get('page', 1))
-    limit = int(request.args.get('limit', 20))
-
-    # Optional: Cache page1 limit20 w/no search
-    if not search and page == 1 and limit == 20:
-        cache_key = "admin_users_list_page1_limit20"
-        cached_data = cache_get(cache_key)
-        if cached_data:
-            return jsonify(cached_data), 200
-
-    query = {}
-    if search:
-        query = {
-            "$or": [
-                {"username": {"$regex": search, "$options": "i"}},
-                {"email": {"$regex": search, "$options": "i"}}
-            ]
-        }
-    skip_count = (page - 1) * limit
-
-    projection = {
-        "_id": 1,
-        "username": 1,
-        "email": 1,
-        "coins": 1,
-        "xp": 1,
-        "level": 1,
-        "achievements": 1,
-        "subscriptionActive": 1,
-        "suspended": 1,
-        "achievement_counters": 1,
-        "currentAvatar": 1
-    }
-
-    cursor = db.mainusers.find(query, projection).skip(skip_count).limit(limit)
-    results = []
-    for u in cursor:
-        u['_id'] = str(u['_id'])
-        if 'currentAvatar' in u and isinstance(u['currentAvatar'], ObjectId):
-            u['currentAvatar'] = str(u['currentAvatar'])
-        if 'achievements' in u and isinstance(u['achievements'], list):
-            u['achievements'] = [str(a) for a in u['achievements']]
-
-        counters = u.get('achievement_counters', {})
-        u['totalQuestionsAnswered'] = counters.get('total_questions_answered', 0)
-        u['perfectTestsCount'] = counters.get('perfect_tests_count', 0)
-        results.append(u)
-
-    total_count = db.mainusers.count_documents(query)
-    resp_data = {
-        "users": results,
-        "total": total_count,
-        "page": page,
-        "limit": limit
-    }
-
-    if not search and page == 1 and limit == 20:
-        cache_set("admin_users_list_page1_limit20", resp_data, 60)
-
-    return jsonify(resp_data), 200
-
-@cracked_bp.route('/users/export', methods=['GET'])
-def admin_export_users_csv():
-    if not require_cracked_admin(required_role="superadmin"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    users = db.mainusers.find({}, {
-        "username": 1, "email": 1, "coins": 1, "xp": 1, "level": 1
-    })
-
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(["username", "email", "coins", "xp", "level"])
-    for u in users:
-        writer.writerow([
-            u.get("username", ""),
-            u.get("email", ""),
-            u.get("coins", 0),
-            u.get("xp", 0),
-            u.get("level", 1)
-        ])
-    output.seek(0)
-
-    response = make_response(output.read())
-    response.headers["Content-Disposition"] = "attachment; filename=users_export.csv"
-    response.headers["Content-Type"] = "text/csv"
-    return response
-
-@cracked_bp.route('/users/<user_id>', methods=['PUT'])
-def admin_update_user(user_id):
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-    data = request.json or {}
-
-    try:
-        obj_id = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user id"}), 400
-
-    # We only allow editing certain fields
-    update_fields = {}
-    for field in ["username", "coins", "xp", "level", "subscriptionActive", "suspended"]:
-        if field in data:
-            update_fields[field] = data[field]
-
-    if update_fields:
-        db.mainusers.update_one({"_id": obj_id}, {"$set": update_fields})
-        return jsonify({"message": "User updated"}), 200
-    else:
-        return jsonify({"message": "No valid fields to update"}), 200
-
-@cracked_bp.route('/users/<user_id>', methods=['DELETE'])
-def admin_delete_user(user_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    try:
-        obj_id = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user id"}), 400
-
-    db.mainusers.delete_one({"_id": obj_id})
-    return jsonify({"message": "User deleted"}), 200
-
-@cracked_bp.route('/users/<user_id>/reset-password', methods=['POST'])
-def admin_reset_password(user_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    try:
-        obj_id = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid user id"}), 400
-
-    import string, random
-    new_pass = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
-    result = db.mainusers.find_one_and_update(
-        {"_id": obj_id},
-        {"$set": {"password": new_pass}},
-        return_document=ReturnDocument.AFTER
-    )
-    if not result:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify({"message": "Password reset", "newPassword": new_pass}), 200
-
-
-##################################################################
-# SUPPORT THREADS (Admin)
-##################################################################
-@cracked_bp.route('/supportThreads', methods=['GET'])
-def admin_list_support_threads():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    status_filter = request.args.get('status', '')
-    query = {}
-    if status_filter:
-        query["status"] = status_filter
-
-    threads = db.supportThreads.find(query).sort("updatedAt", -1)
-    results = []
-    for t in threads:
-        t['_id'] = str(t['_id'])
-        t['userId'] = str(t['userId'])
-        for m in t.get('messages', []):
-            if isinstance(m.get('timestamp'), datetime):
-                m['timestamp'] = m['timestamp'].isoformat()
-        results.append(t)
-    return jsonify(results), 200
-
-@cracked_bp.route('/supportThreads/<thread_id>', methods=['GET'])
-def admin_get_support_thread(thread_id):
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread id"}), 400
-
-    thread = db.supportThreads.find_one({"_id": obj_id})
-    if not thread:
-        return jsonify({"error": "Thread not found"}), 404
-
-    thread['_id'] = str(thread['_id'])
-    thread['userId'] = str(thread['userId'])
-    for m in thread.get('messages', []):
-        if isinstance(m.get('timestamp'), datetime):
-            m['timestamp'] = m['timestamp'].isoformat()
-
-    return jsonify(thread), 200
-
-@cracked_bp.route('/supportThreads/<thread_id>/reply', methods=['POST'])
-def admin_reply_to_thread(thread_id):
-    """
-    Admin replies to an existing thread. 
-    Emits 'new_message' to that thread's room => room = thread_id
-    """
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread id"}), 400
-
-    data = request.json or {}
-    content = data.get('content', '').strip()
-    if not content:
-        return jsonify({"error": "No content provided"}), 400
-
-    now = datetime.utcnow()
-    update_result = db.supportThreads.update_one(
-        {"_id": obj_id},
-        {
-            "$push": {
-                "messages": {
-                    "sender": "admin",
-                    "content": content,
-                    "timestamp": now
-                }
-            },
-            "$set": {"updatedAt": now}
-        }
-    )
-    if update_result.matched_count == 0:
-        return jsonify({"error": "Thread not found"}), 404
-
-    socketio = current_app.extensions['socketio']
-    thread_id_str = str(thread_id)
-
-    socketio.emit('new_message', {
-        "threadId": thread_id_str,
-        "message": {
-            "sender": "admin",
-            "content": content,
-            "timestamp": now.isoformat()
-        }
-    }, room=thread_id_str)
-
-    return jsonify({"message": "Reply sent"}), 200
-
-@cracked_bp.route('/supportThreads/<thread_id>/close', methods=['POST'])
-def admin_close_thread(thread_id):
-    """
-    Admin closes a thread. Also pushes a "Thread closed" message
-    into 'messages' array and emits 'new_message'
-    so the user sees it in real time.
-    """
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread id"}), 400
-
-    data = request.json or {}
-    resolution = data.get('resolution', 'closed by admin')
-    now = datetime.utcnow()
-
-    # Update DB: set status to 'closed', push a closure message
-    update_result = db.supportThreads.update_one(
-        {"_id": obj_id},
-        {
-            "$push": {"messages": {
-                "sender": "admin",
-                "content": f"Thread closed. Reason: {resolution}",
-                "timestamp": now
-            }},
-            "$set": {
-                "status": "closed",
-                "updatedAt": now
-            }
-        }
-    )
-    if update_result.matched_count == 0:
-        return jsonify({"error": "Thread not found"}), 404
-
-    # Emit a 'new_message' event so the user sees
-    # "Thread closed..." message in real time
-    from flask import current_app
-    socketio = current_app.extensions['socketio']
-    socketio.emit(
-        'new_message',
-        {
-            "threadId": str(obj_id),
-            "message": {
-                "sender": "admin",
-                "content": f"Thread closed. Reason: {resolution}",
-                "timestamp": now.isoformat()
-            }
-        },
-        room=str(obj_id)  # The Socket.IO room is the thread's string ID
-    )
-
-    return jsonify({"message": "Thread closed"}), 200
-
-
-@cracked_bp.route('/supportThreads/clear-closed', methods=['DELETE'])
-def admin_clear_closed_threads():
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    result = db.supportThreads.delete_many({"status": "closed"})
-    return jsonify({"message": f"Deleted {result.deleted_count} closed threads"}), 200
-
-@cracked_bp.route('/supportThreads/createFromAdmin', methods=['POST'])
-def admin_create_thread_for_user():
-    """
-    JSON: { "userId": "...", "initialMessage": "Hello from admin" }
-    Creates a new support thread for the user with an admin-sent message.
-    Emits 'new_thread' to the user's personal room => "user_<userId>"
-    Returns the thread data in the response.
-    """
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    data = request.json or {}
-    user_id = data.get("userId")
-    initial_message = data.get("initialMessage", "").strip()
-    if not user_id:
-        return jsonify({"error": "Missing userId"}), 400
-
-    try:
-        user_oid = ObjectId(user_id)
-    except:
-        return jsonify({"error": "Invalid userId"}), 400
-
-    now = datetime.utcnow()
-    thread_doc = {
-        "userId": user_oid,
-        "subject": "Admin-initiated conversation",
-        "messages": [],
-        "status": "open",
-        "createdAt": now,
-        "updatedAt": now
-    }
-    if initial_message:
-        thread_doc["messages"].append({
-            "sender": "admin",
-            "content": initial_message,
-            "timestamp": now
-        })
-
-    insert_result = db.supportThreads.insert_one(thread_doc)
-    if insert_result.inserted_id:
-        socketio = current_app.extensions['socketio']
-
-        thread_data = {
-            "_id": str(insert_result.inserted_id),
-            "userId": user_id,
-            "subject": "Admin-initiated conversation",
-            "status": "open",
-            "createdAt": now.isoformat(),
-            "updatedAt": now.isoformat(),
-            "messages": ([
-                {
-                    "sender": "admin",
-                    "content": initial_message,
-                    "timestamp": now.isoformat()
-                }
-            ] if initial_message else [])
-        }
-
-        # Emit to just that user's room => "user_<userId>"
-        socketio.emit('new_thread', thread_data, room=f"user_{user_id}")
-
-        return jsonify({"message": "Thread created", "thread": thread_data}), 201
-    else:
-        return jsonify({"error": "Failed to create thread"}), 500
-
-
-##################################################################
-# TESTS
-##################################################################
-@cracked_bp.route('/tests', methods=['GET'])
-def admin_list_tests():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    category = request.args.get('category', '').strip()
-    query = {}
-    if category:
-        query["category"] = category
-
-    tests_cursor = db.tests.find(query)
-    results = []
-    for t in tests_cursor:
-        t['_id'] = str(t['_id'])
-        results.append(t)
-    return jsonify(results), 200
-
-
-@cracked_bp.route('/tests', methods=['POST'])
-def admin_create_test():
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    data = request.json or {}
-    # Must have "category", "testId", "questions"
-    if "category" not in data or "testId" not in data or "questions" not in data:
-        return jsonify({"error": "Missing required fields"}), 400
-
-    result = db.tests.insert_one(data)
-    return jsonify({"message": "Test created", "insertedId": str(result.inserted_id)}), 201
-
-
-@cracked_bp.route('/tests/<test_id>', methods=['PUT'])
-def admin_update_test(test_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    data = request.json or {}
-    try:
-        obj_id = ObjectId(test_id)
-    except:
-        return jsonify({"error": "Invalid test id"}), 400
-
-    update_result = db.tests.update_one({"_id": obj_id}, {"$set": data})
-    if update_result.matched_count == 0:
-        return jsonify({"error": "Test not found"}), 404
-    return jsonify({"message": "Test updated"}), 200
-
-
-@cracked_bp.route('/tests/<test_id>', methods=['DELETE'])
-def admin_delete_test(test_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    try:
-        obj_id = ObjectId(test_id)
-    except:
-        return jsonify({"error": "Invalid test id"}), 400
-
-    delete_result = db.tests.delete_one({"_id": obj_id})
-    if delete_result.deleted_count == 0:
-        return jsonify({"error": "Test not found"}), 404
-    return jsonify({"message": "Test deleted"}), 200
-
-
-##################################################################
-# DAILY PBQs
-##################################################################
-@cracked_bp.route('/daily', methods=['GET'])
-def admin_list_daily_questions():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    docs = list(db.dailyQuestions.find({}))
-    for d in docs:
-        d['_id'] = str(d['_id'])
-    return jsonify(docs), 200
-
-@cracked_bp.route('/daily', methods=['POST'])
-def admin_create_daily_question():
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    data = request.json or {}
-    if "prompt" not in data:
-        return jsonify({"error": "Missing prompt"}), 400
-
-    data["createdAt"] = datetime.utcnow()
-    db.dailyQuestions.insert_one(data)
-    return jsonify({"message": "Daily PBQ created"}), 201
-
-@cracked_bp.route('/daily/<obj_id>', methods=['PUT'])
-def admin_update_daily_question(obj_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    data = request.json or {}
-    try:
-        doc_id = ObjectId(obj_id)
-    except:
-        return jsonify({"error": "Invalid daily PBQ id"}), 400
-
-    update_result = db.dailyQuestions.update_one({"_id": doc_id}, {"$set": data})
-    if update_result.matched_count == 0:
-        return jsonify({"error": "Daily PBQ not found"}), 404
-    return jsonify({"message": "Daily PBQ updated"}), 200
-
-@cracked_bp.route('/daily/<obj_id>', methods=['DELETE'])
-def admin_delete_daily_question(obj_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    try:
-        doc_id = ObjectId(obj_id)
-    except:
-        return jsonify({"error": "Invalid daily PBQ id"}), 400
-
-    delete_result = db.dailyQuestions.delete_one({"_id": doc_id})
-    if delete_result.deleted_count == 0:
-        return jsonify({"error": "Not found"}), 404
-    return jsonify({"message": "Daily PBQ deleted"}), 200
-
-
-
-
-
-##################################################################
-# PERFORMANCE
-##################################################################
-@cracked_bp.route('/performance', methods=['GET'])
-def admin_performance_metrics():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    try:
-        perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
-        if not perf_metrics:
-            # Return a dummy doc so front end won't break
-            perf_metrics = {
-                "_id": None,
-                "avg_request_time": 0.123,
-                "avg_db_query_time_ms": 45.0,
-                "data_transfer_rate": "1.2MB/s",
-                "throughput": 50,
-                "error_rate": 0.02,
-                "timestamp": datetime.utcnow()
-            }
-        else:
-            perf_metrics['_id'] = str(perf_metrics.get('_id', ''))
-
-            # Convert any 'avg_db_query_time' => ms
-            if 'avg_db_query_time' in perf_metrics:
-                ms_val = round(perf_metrics['avg_db_query_time'] * 1000, 2)
-                perf_metrics['avg_db_query_time_ms'] = ms_val
-                del perf_metrics['avg_db_query_time']
-
-        # Convert timestamp to EST
-        if 'timestamp' in perf_metrics and isinstance(perf_metrics['timestamp'], datetime):
-            est_tz = pytz.timezone('America/New_York')
-            perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
-
-        # Example: If you want a history array for charting:
-        # (pull last 10 performanceMetrics docs and transform them)
-        history_cursor = db.performanceMetrics.find().sort("timestamp", -1).limit(10)
-        history_list = []
-        est_tz = pytz.timezone('America/New_York')
-        for doc in history_cursor:
-            doc_id = str(doc['_id'])
-            doc_time = doc['timestamp'].astimezone(est_tz).isoformat() if isinstance(doc['timestamp'], datetime) else None
-            # convert numeric to ms
-            if 'avg_db_query_time' in doc:
-                doc['avg_db_query_time_ms'] = round(doc['avg_db_query_time'] * 1000, 2)
-                del doc['avg_db_query_time']
-
-            history_list.append({
-                "_id": doc_id,
-                "timestamp": doc_time,
-                "requestTime": doc.get("avg_request_time", 0),
-                "dbTime": doc.get("avg_db_query_time_ms", 0.0)
-            })
-        # Attach the reversed list so it's earliest to latest if you want:
-        perf_metrics['history'] = list(reversed(history_list))
-
-        return jsonify(perf_metrics), 200
-
-    except Exception as e:
-        return jsonify({"error": "Failed to retrieve performance metrics", "details": str(e)}), 500
-
-
-##################################################################
-# ACTIVITY / AUDIT LOGS
-##################################################################
-@cracked_bp.route('/activity-logs', methods=['GET'])
-def admin_activity_logs():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    logs = db.auditLogs.find().sort("timestamp", -1).limit(200)
-    results = []
-    est_tz = pytz.timezone('America/New_York')
-
-    for l in logs:
-        # Convert _id => str
-        l['_id'] = str(l['_id'])
-
-        # Also convert userId => str if it's an ObjectId
-        if 'userId' in l and isinstance(l['userId'], ObjectId):
-            l['userId'] = str(l['userId'])
-
-        # Convert timestamp => EST ISO
-        if isinstance(l.get('timestamp'), datetime):
-            l['timestamp'] = l['timestamp'].astimezone(est_tz).isoformat()
-
-        # The rest is unchanged
-        ip = l.get('ip', 'unknown')
-        success = l.get('success', True)
-
-        results.append(l)
-
-    # You already do suspicious IP checks if you want…
-    # (the main cause was the leftover ObjectId in userId)
-
-    return jsonify({"logs": results}), 200
-    
-##################################################################
-# DB QUERY LOGS (Reading perfSamples)
-##################################################################
-@cracked_bp.route('/db-logs', methods=['GET'])
-def admin_db_logs():
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    limit = int(request.args.get("limit", 100))
-    try:
-        samples = db.perfSamples.find().sort("timestamp", -1).limit(limit)
-        data = []
-        est_tz = pytz.timezone('America/New_York')
-
-        for s in samples:
-            s['_id'] = str(s['_id'])
-            # convert db_time_sec -> ms
-            if 'db_time_sec' in s:
-                s['db_time_ms'] = round(s['db_time_sec'] * 1000.0, 2)
-                del s['db_time_sec']
-
-            # convert duration_sec -> ms
-            if 'duration_sec' in s:
-                s['duration_ms'] = round(s['duration_sec'] * 1000.0, 2)
-                del s['duration_sec']
-
-            if isinstance(s.get('timestamp'), datetime):
-                s['timestamp'] = s['timestamp'].astimezone(est_tz).isoformat()
-
-            data.append(s)
-
-        return jsonify(data), 200
-
-    except Exception as e:
-        return jsonify({"error": "Error retrieving DB logs", "details": str(e)}), 500
-
-
-##################################################################
-# READ-ONLY DB SHELL
-##################################################################
-@cracked_bp.route('/db-shell/read', methods=['POST'])
-def admin_db_shell_read():
-    """
-    Body: { "collection": "mainusers", "filter": {}, "limit": 5 }
-    Only performs a find() with a limit, returns JSON docs.
-    """
-    if not require_cracked_admin(required_role="superadmin"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    body = request.json or {}
-    coll_name = body.get("collection")
-    if not coll_name:
-        return jsonify({"error": "No collection specified"}), 400
-
-    if coll_name not in db.list_collection_names():
-        return jsonify({"error": f"Invalid or unknown collection: {coll_name}"}), 400
-
-    filt = body.get("filter", {})
-    limit_val = int(body.get("limit", 10))
-
-    try:
-        cursor = db[coll_name].find(filt).limit(limit_val)
-        results = []
-        for c in cursor:
-            c['_id'] = str(c['_id'])
-            results.append(c)
-        return jsonify(results), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-        
-        
-@cracked_bp.route('/health-checks', methods=['GET'])
-def admin_health_checks():
-    """
-    Returns the last ~50 health checks from the 'apiHealth' collection.
-    Celery 'check_api_endpoints' task inserts these docs:
-        { checkedAt: <datetime>, results: [ { endpoint, status, ok, ... } ] }
-    """
-    if not require_cracked_admin():
-        return jsonify({"error": "Not authenticated"}), 401
-
-    try:
-        docs = db.apiHealth.find().sort("checkedAt", -1).limit(50)
-        results = []
-        est_tz = pytz.timezone('America/New_York')
-
-        for d in docs:
-            # Convert _id => str
-            d['_id'] = str(d['_id'])
-            # Convert checkedAt => EST
-            if 'checkedAt' in d and isinstance(d['checkedAt'], datetime):
-                d['checkedAt'] = d['checkedAt'].astimezone(est_tz).isoformat()
-            # d['results'] is typically an array of endpoint checks
-            # Each item is {endpoint, status, ok, error?}
-            # No special serialization is needed if they’re just strings/integers.
-            results.append(d)
-
-        return jsonify(results), 200
-    except Exception as e:
-        return jsonify({"error": "Error retrieving health checks", "details": str(e)}), 500
-     from flask import Blueprint, request, session, jsonify, g, current_app
-from datetime import datetime
-import time
-from bson import ObjectId
-from mongodb.database import db
-
-support_bp = Blueprint('support', __name__, url_prefix='/support')
-
-def require_user_logged_in():
-    return bool(session.get('userId'))
-
-@support_bp.route('/my-chat', methods=['GET'])
-def list_user_threads():
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
-
-    start_db = time.time()
-    # Return newest first
-    threads_cursor = db.supportThreads.find({"userId": user_obj_id}).sort("updatedAt", -1)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    threads = []
-    for t in threads_cursor:
-        t_id = str(t['_id'])
-        subject = t.get("subject", "")
-        status = t.get("status", "open")
-        updated_at = t.get("updatedAt")
-        threads.append({
-            "_id": t_id,
-            "subject": subject if subject else "Untitled Thread",
-            "status": status,
-            "lastUpdated": updated_at.isoformat() if updated_at else None
-        })
-    return jsonify(threads), 200
-
-@support_bp.route('/my-chat', methods=['POST'])
-def create_user_thread():
-    """
-    User creates a new support thread.
-    Must return the FULL THREAD object to avoid parse errors on front end.
-    Emits 'new_thread' to admin room only.
-    """
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    data = request.json or {}
-    subject = data.get('subject', '').strip()
-    if not subject:
-        subject = "Untitled Thread"
-
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
-    now = datetime.utcnow()
-
-    new_thread = {
-        "userId": user_obj_id,
-        "subject": subject,
-        "messages": [],
-        "status": "open",
-        "createdAt": now,
-        "updatedAt": now
-    }
-
-    start_db = time.time()
-    result = db.supportThreads.insert_one(new_thread)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if result.inserted_id:
-        socketio = current_app.extensions['socketio']
-
-        thread_data = {
-            "_id": str(result.inserted_id),
-            "userId": str(user_obj_id),
-            "subject": subject,
-            "status": "open",
-            "createdAt": now.isoformat(),
-            "updatedAt": now.isoformat(),
-            "messages": []
-        }
-
-        # Only emit to "admin" room so admins see new threads
-        socketio.emit('new_thread', thread_data, room='admin')
-
-        # Return full thread data to user
-        return jsonify(thread_data), 201
-    else:
-        return jsonify({"error": "Failed to create thread"}), 500
-
-@support_bp.route('/my-chat/<thread_id>', methods=['GET'])
-def get_single_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread ID"}), 400
-
-    start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not thread:
-        return jsonify({"error": "Thread not found"}), 404
-
-    thread['_id'] = str(thread['_id'])
-    thread['userId'] = str(thread['userId'])
-    for m in thread.get("messages", []):
-        if "timestamp" in m and isinstance(m["timestamp"], datetime):
-            m["timestamp"] = m["timestamp"].isoformat()
-    return jsonify(thread), 200
-
-@support_bp.route('/my-chat/<thread_id>', methods=['POST'])
-def post_message_to_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    data = request.json or {}
-    content = data.get('content', '').strip()
-    if not content:
-        return jsonify({"error": "No content"}), 400
-
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
-    now = datetime.utcnow()
-
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread ID"}), 400
-
-    start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not thread:
-        return jsonify({"error": "Thread not found"}), 404
-
-    updated_status = thread.get("status", "open")
-    if updated_status == "closed":
-        # Re-open if user posts again
-        db.supportThreads.update_one(
-            {"_id": thread["_id"]},
-            {
-                "$push": {
-                    "messages": {
-                        "sender": "user",
-                        "content": content,
-                        "timestamp": now
-                    }
-                },
-                "$set": {
-                    "status": "open",
-                    "updatedAt": now
-                }
-            }
-        )
-        msg_response = "Thread was closed. Reopened with new message"
-    else:
-        db.supportThreads.update_one(
-            {"_id": thread["_id"]},
-            {
-                "$push": {
-                    "messages": {
-                        "sender": "user",
-                        "content": content,
-                        "timestamp": now
-                    }
-                },
-                "$set": {"updatedAt": now}
-            }
-        )
-        msg_response = "Message posted"
-
-    # Emit to the thread's room only
-    socketio = current_app.extensions['socketio']
-    socketio.emit('new_message', {
-        "threadId": str(thread["_id"]),
-        "message": {
-            "sender": "user",
-            "content": content,
-            "timestamp": now.isoformat()
-        }
-    }, room=str(thread["_id"]))
-
-    return jsonify({"message": msg_response}), 200
-
-@support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
-def user_close_specific_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    data = request.json or {}
-    content = data.get("content", "User closed the thread")
-    now = datetime.utcnow()
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
-
-    try:
-        obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread ID"}), 400
-
-    start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if not thread:
-        return jsonify({"error": "Thread not found"}), 404
-
-    if thread.get("status") == "closed":
-        return jsonify({"message": "Thread is already closed"}), 200
-
-    db.supportThreads.update_one(
-        {"_id": thread["_id"]},
-        {
-            "$push": {
-                "messages": {
-                    "sender": "user",
-                    "content": content,
-                    "timestamp": now
-                }
-            },
-            "$set": {
-                "status": "closed",
-                "updatedAt": now
-            }
-        }
-    )
-
-    # Let admin know user closed
-    socketio.emit('new_message', {
-        "threadId": str(thread["_id"]),
-        "message": {
-            "sender": "system",
-            "content": "Thread closed by user",
-            "timestamp": now.isoformat()
-        }
-    }, room=str(thread["_id"]))
-
-    return jsonify({"message": "Thread closed"}), 200
-// dont use this as a deisgn exampl ebecasue its just apkacheolder essntially adn prety much just has teh fucniotokty an h i haevnrt deisgned it yet
-
-import React, { useState } from "react";
-import axios from "axios";
-import "./DailyCyberBrief.css";
-
-function DailyCyberBrief() {
-  const [email, setEmail] = useState("");
-  const [statusMsg, setStatusMsg] = useState("");
-  const [isError, setIsError] = useState(false);
-
-  async function handleSubscribe() {
-    try {
-      const response = await axios.post("/api/newsletter/subscribe", { email });
-      setIsError(false);
-      setStatusMsg(response.data.message);
-    } catch (err) {
-      setIsError(true);
-      const fallback = "Subscription failed.";
-      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
-    }
-  }
-
-  async function handleUnsubscribe() {
-    try {
-      const response = await axios.post("/api/newsletter/unsubscribe", { email });
-      setIsError(false);
-      setStatusMsg(response.data.message);
-    } catch (err) {
-      setIsError(true);
-      const fallback = "Unsubscribe failed.";
-      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
-    }
-  }
-
-  return (
-    <div className="daily-cyber-brief">
-      <h2>Daily Cyber Brief Newsletter</h2>
-      <p>
-        Stay updated on the latest cybersecurity news, best practices, and random jokes about 
-        hackers. (They had it coming!)
-      </p>
-
-      <div className="input-group">
-        <input
-          type="email"
-          value={email}
-          placeholder="Enter your email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <button onClick={handleSubscribe}>Subscribe</button>
-        <button onClick={handleUnsubscribe}>Unsubscribe</button>
-      </div>
-
-      {statusMsg && (
-        <div className={`status-msg ${isError ? "error" : "success"}`}>
-          {statusMsg}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default DailyCyberBrief;
-  import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-// Make sure your CrackedAdminLogin.css is scoped to .cracked-admin-login-wrapper
-// and references .cracked-admin-login-container inside it.
-import "./CrackedAdminLogin.css";
-
-function CrackedAdminLoginPage() {
-  const navigate = useNavigate();
-
-  const [adminKey, setAdminKey] = useState("");
-  const [role, setRole] = useState("basic");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const response = await fetch("/api/cracked/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ adminKey, role }),
-        credentials: "include",
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.error || "Unable to log in");
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) {
+        setShowBackToTop(true);
       } else {
-        // On success, navigate to the admin dashboard
-        navigate("/cracked/dashboard");
+        setShowBackToTop(false);
       }
-    } catch (err) {
-      console.error("Admin login error:", err);
-      setError("Network error or server unavailable");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  return (
-    // Top-level wrapper for scoping:
-    <div className="cracked-admin-login-wrapper">
-      <div className="cracked-admin-login-container">
-        <div className="cracked-admin-login-card">
-          <h1 className="cracked-admin-login-title">Admin Login</h1>
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
-          <form className="cracked-admin-login-form" onSubmit={handleLogin}>
-            <div className="admin-input-row">
-              <label htmlFor="adminKey">Admin Key:</label>
-              <input
-                type="password"
-                id="adminKey"
-                value={adminKey}
-                onChange={(e) => setAdminKey(e.target.value)}
-                placeholder="Authenticate"
-              />
-            </div>
-
-            <div className="admin-input-row">
-              <label htmlFor="role">Role (optional):</label>
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="basic">Basic</option>
-                <option value="supervisor">Supervisor</option>
-                <option value="superadmin">Superadmin</option>
-              </select>
-            </div>
-
-            {error && <p className="admin-error-message">{error}</p>}
-
-            <button
-              type="submit"
-              className="cracked-admin-login-button"
-              disabled={loading}
-            >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default CrackedAdminLoginPage;
-
-
-ok and finally here is teh admin dashbaord page 
-
-/**************************************************************************************
- * CrackedAdminDashboard.jsx
- * 
- * Below is a COMPLETE, ready-to-use updated version of the Admin Dashboard component.
- * The PERFORMANCE TAB now displays multiple charts (one per metric) across a rolling
- * 60-minute window, aggregated every 3 minutes. This way, you see up to 20 recent data
- * points (3 min * 20 = 1 hour) in each chart. It continuously updates on the front end.
- *
- * Note:
- *  1) We changed the backend Celery schedule to run every 3 minutes for performance
- *     aggregation (see code snippet at the end).
- *  2) The backend route /api/cracked/performance now returns:
- *       {
- *         "avg_request_time": <seconds>,
- *         "avg_db_query_time_ms": <ms>,
- *         "data_transfer_rate": <float MB/s>,
- *         "throughput": <requests/min>,
- *         "error_rate": <float between 0 and 1>,
- *         "timestamp": "<ISO time in EST>",
- *         "history": [
- *            {
- *              "_id": "...",
- *              "timestamp": "...",
- *              "requestTime": <seconds>,
- *              "dbTime": <ms>,
- *              "throughput": <req/min>,
- *              "errorRate": <float>,
- *              "dataTransfer": <float MB/s>
- *            },
- *            ...
- *         ]
- *       }
- *  3) On the front-end, we now render FIVE separate charts: Request Time, DB Time, 
- *     Throughput, Error Rate, and Data Transfer Rate (MB/s). Each chart shows data from
- *     the last 60 minutes of aggregated samples. We also display the latest aggregated
- *     "snapshot" above the charts.
- *  4) For "live" updates, we added a small 15-second interval refresh in useEffect().
- **************************************************************************************/
-import React, { useState, useEffect, useCallback } from "react";
-import { io } from "socket.io-client";
-import "./CrackedAdminDashboard.css";
-
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
-// We keep this as a top-level variable
-let adminSocket = null;
-
-function CrackedAdminDashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
-
-  /*****************************************
-   * OVERVIEW
-   *****************************************/
-  const [overviewData, setOverviewData] = useState(null);
-  const [overviewLoading, setOverviewLoading] = useState(false);
-  const [overviewError, setOverviewError] = useState(null);
-
-  const fetchOverview = useCallback(async () => {
-    setOverviewLoading(true);
-    setOverviewError(null);
-    try {
-      const res = await fetch("/api/cracked/dashboard", { credentials: "include" });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch dashboard");
+  // Auto-scroll to section if hash is present in URL
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
       }
-      setOverviewData(data);
-    } catch (err) {
-      setOverviewError(err.message);
-    } finally {
-      setOverviewLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    if (activeTab === "overview") {
-      fetchOverview();
-    }
-  }, [activeTab, fetchOverview]);
-
-  /*****************************************
-   * PERFORMANCE
-   *****************************************/
-  const [performanceData, setPerformanceData] = useState(null);
-  const [perfLoading, setPerfLoading] = useState(false);
-  const [perfError, setPerfError] = useState(null);
-
-  const fetchPerformance = useCallback(async () => {
-    setPerfLoading(true);
-    setPerfError(null);
-    try {
-      const res = await fetch("/api/cracked/performance", { credentials: "include" });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch performance metrics");
-      }
-      setPerformanceData(data);
-    } catch (err) {
-      setPerfError(err.message);
-    } finally {
-      setPerfLoading(false);
-    }
-  }, []);
-
-  // Auto-refresh performance data every 15 seconds to have "real-time" feeling.
-  useEffect(() => {
-    if (activeTab === "performance") {
-      fetchPerformance();
-      const interval = setInterval(fetchPerformance, 15000); // 15s refresh
-      return () => clearInterval(interval);
-    }
-  }, [activeTab, fetchPerformance]);
-
-  /*****************************************
-   * USERS
-   *****************************************/
-  const [users, setUsers] = useState([]);
-  const [userTotal, setUserTotal] = useState(0);
-  const [userSearch, setUserSearch] = useState("");
-  const [userPage, setUserPage] = useState(1);
-  const [userLimit] = useState(10);
-  const [usersLoading, setUsersLoading] = useState(false);
-  const [usersError, setUsersError] = useState(null);
-
-  const [editUserId, setEditUserId] = useState(null);
-  const [editUserData, setEditUserData] = useState({});
-
-  const fetchUsers = useCallback(async () => {
-    setUsersLoading(true);
-    setUsersError(null);
-    try {
-      const params = new URLSearchParams({
-        search: userSearch,
-        page: userPage.toString(),
-        limit: userLimit.toString()
-      });
-      const res = await fetch(`/api/cracked/users?${params.toString()}`, {
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch users");
-      }
-      setUsers(data.users || []);
-      setUserTotal(data.total || 0);
-    } catch (err) {
-      setUsersError(err.message);
-    } finally {
-      setUsersLoading(false);
-    }
-  }, [userSearch, userPage, userLimit]);
-
-  useEffect(() => {
-    if (activeTab === "users") {
-      fetchUsers();
-    }
-  }, [activeTab, fetchUsers]);
-
-  const handleUpdateUserField = (field, value) => {
-    setEditUserData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleUserEdit = (u) => {
-    setEditUserId(u._id);
-    setEditUserData({
-      username: u.username || "",
-      coins: u.coins || 0,
-      xp: u.xp || 0,
-      level: u.level || 1,
-      subscriptionActive: !!u.subscriptionActive,
-      suspended: !!u.suspended
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
     });
   };
 
-  const handleUserUpdateSubmit = async () => {
-    if (!editUserId) return;
-    try {
-      const res = await fetch(`/api/cracked/users/${editUserId}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editUserData)
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to update user");
-        return;
-      }
-      alert("User updated!");
-      fetchUsers();
-    } catch (err) {
-      console.error("User update error:", err);
-    } finally {
-      setEditUserId(null);
-    }
-  };
+  // Sections for table of contents
+  const sections = [
+    { id: 'acceptance', title: '1. Acceptance of Terms' },
+    { id: 'changes', title: '2. Changes to Terms' },
+    { id: 'registration', title: '3. Account Registration' },
+    { id: 'subscription', title: '4. Subscription and Payment' },
+    { id: 'conduct', title: '5. User Conduct' },
+    { id: 'ip', title: '6. Intellectual Property' },
+    { id: 'third-party', title: '7. Third-Party Services' },
+    { id: 'disclaimer', title: '8. Disclaimer of Warranties' },
+    { id: 'liability', title: '9. Limitation of Liability' },
+    { id: 'termination', title: '10. Termination' },
+    { id: 'governing-law', title: '11. Governing Law' },
+    { id: 'contact', title: '12. Contact Us' },
+  ];
 
-  const handleUserDelete = async (userId) => {
-    if (!window.confirm("Are you sure you want to DELETE this user?")) return;
-    try {
-      const res = await fetch(`/api/cracked/users/${userId}`, {
-        method: "DELETE",
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to delete user");
-        return;
-      }
-      alert("User deleted successfully.");
-      fetchUsers();
-    } catch (err) {
-      console.error("User delete error:", err);
-    }
-  };
-
-  // EXTRA: Reset user password
-  const handleResetPassword = async (userId) => {
-    if (!window.confirm("Reset this user's password to a random token?")) return;
-    try {
-      const res = await fetch(`/api/cracked/users/${userId}/reset-password`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" }
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to reset password");
-        return;
-      }
-      alert(`Password reset success. New password: ${data.newPassword}`);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to reset password.");
-    }
-  };
-
-  /*****************************************
-   * TEST MANAGEMENT
-   *****************************************/
-  const [tests, setTests] = useState([]);
-  const [testCategory, setTestCategory] = useState("");
-  const [testsLoading, setTestsLoading] = useState(false);
-  const [testsError, setTestsError] = useState(null);
-
-  const [newTestData, setNewTestData] = useState({
-    category: "",
-    testId: "",
-    testName: "",
-    questions: []
-  });
-
-  const fetchTests = useCallback(async () => {
-    setTestsLoading(true);
-    setTestsError(null);
-    try {
-      const params = new URLSearchParams();
-      if (testCategory) {
-        params.set("category", testCategory);
-      }
-      const res = await fetch(`/api/cracked/tests?${params.toString()}`, {
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch tests");
-      }
-      setTests(data);
-    } catch (err) {
-      setTestsError(err.message);
-    } finally {
-      setTestsLoading(false);
-    }
-  }, [testCategory]);
-
-  useEffect(() => {
-    if (activeTab === "tests") {
-      fetchTests();
-    }
-  }, [activeTab, fetchTests]);
-
-  const handleCreateTest = async () => {
-    try {
-      const body = {
-        category: newTestData.category,
-        testId: Number(newTestData.testId),
-        testName: newTestData.testName,
-        questions: []
-      };
-      const res = await fetch("/api/cracked/tests", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to create test");
-        return;
-      }
-      alert("Test created!");
-      fetchTests();
-      setNewTestData({ category: "", testId: "", testName: "", questions: [] });
-    } catch (err) {
-      console.error("Create test error:", err);
-    }
-  };
-
-  const handleDeleteTest = async (testObj) => {
-    if (!window.confirm(`Delete test: ${testObj.testName}?`)) return;
-    try {
-      const res = await fetch(`/api/cracked/tests/${testObj._id}`, {
-        method: "DELETE",
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to delete test");
-        return;
-      }
-      alert("Test deleted successfully.");
-      fetchTests();
-    } catch (err) {
-      console.error("Delete test error:", err);
-    }
-  };
-
-  /*****************************************
-   * DAILY PBQs
-   *****************************************/
-  const [dailyList, setDailyList] = useState([]);
-  const [dailyLoading, setDailyLoading] = useState(false);
-  const [dailyError, setDailyError] = useState(null);
-
-  const [newDaily, setNewDaily] = useState({
-    prompt: "",
-    dayIndex: "",
-    correctIndex: "",
-    explanation: ""
-  });
-
-  const fetchDailyPBQs = useCallback(async () => {
-    setDailyLoading(true);
-    setDailyError(null);
-    try {
-      const res = await fetch("/api/cracked/daily", { credentials: "include" });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch daily PBQs");
-      }
-      setDailyList(data);
-    } catch (err) {
-      setDailyError(err.message);
-    } finally {
-      setDailyLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (activeTab === "daily") {
-      fetchDailyPBQs();
-    }
-  }, [activeTab, fetchDailyPBQs]);
-
-  const handleCreateDaily = async () => {
-    try {
-      const body = {
-        prompt: newDaily.prompt,
-        dayIndex: Number(newDaily.dayIndex) || 0,
-        correctIndex: Number(newDaily.correctIndex) || 0,
-        explanation: newDaily.explanation
-      };
-      const res = await fetch("/api/cracked/daily", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to create daily PBQ");
-        return;
-      }
-      alert("Daily PBQ created!");
-      fetchDailyPBQs();
-      setNewDaily({ prompt: "", dayIndex: "", correctIndex: "", explanation: "" });
-    } catch (err) {
-      console.error("Create daily PBQ error:", err);
-    }
-  };
-
-  const handleDeleteDaily = async (pbq) => {
-    if (!window.confirm(`Delete daily PBQ: ${pbq.prompt}?`)) return;
-    try {
-      const res = await fetch(`/api/cracked/daily/${pbq._id}`, {
-        method: "DELETE",
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to delete daily PBQ");
-        return;
-      }
-      alert("Daily PBQ deleted successfully.");
-      fetchDailyPBQs();
-    } catch (err) {
-      console.error("Delete daily PBQ error:", err);
-    }
-  };
-
-  /*****************************************
-   * SUPPORT
-   *****************************************/
-  const [threads, setThreads] = useState([]);
-  const [threadsLoading, setThreadsLoading] = useState(false);
-  const [threadsError, setThreadsError] = useState(null);
-  const [threadStatusFilter, setThreadStatusFilter] = useState("");
-  const [currentThread, setCurrentThread] = useState(null);
-  const [adminReply, setAdminReply] = useState("");
-
-  // We store all threads (including messages) so we can do real‐time merges
-  const [allThreadMap, setAllThreadMap] = useState({});
-  // Show "user is typing" in real time
-  const [userIsTyping, setUserIsTyping] = useState(false);
-
-  // Admin create thread for user
-  const [adminTargetUserId, setAdminTargetUserId] = useState("");
-  const [adminInitialMsg, setAdminInitialMsg] = useState("");
-
-  const fetchThreads = useCallback(async () => {
-    setThreadsLoading(true);
-    setThreadsError(null);
-    try {
-      const params = new URLSearchParams();
-      if (threadStatusFilter) {
-        params.set("status", threadStatusFilter);
-      }
-      const res = await fetch(`/api/cracked/supportThreads?${params.toString()}`, {
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch support threads");
-      }
-      setThreads(data);
-      setCurrentThread(null);
-
-      // Join all threads so we get real-time updates
-      if (adminSocket && data.length > 0) {
-        data.forEach((th) => {
-          adminSocket.emit("join_thread", { threadId: th._id });
-        });
-      }
-    } catch (err) {
-      setThreadsError(err.message);
-    } finally {
-      setThreadsLoading(false);
-    }
-  }, [threadStatusFilter]);
-
-  // Initialize adminSocket once
-  useEffect(() => {
-    if (!adminSocket) {
-      const socket = io(window.location.origin, {
-        path: "/api/socket.io",
-        transports: ["websocket"]
-      });
-      adminSocket = socket;
-
-      socket.on("connect", () => {
-        console.log("Admin socket connected:", socket.id);
-      });
-
-      socket.on("disconnect", () => {
-        console.log("Admin socket disconnected");
-      });
-
-      // Listen for new messages across ANY thread
-      socket.on("new_message", (payload) => {
-        const { threadId, message } = payload;
-        setAllThreadMap((prev) => {
-          const oldThread = prev[threadId] || { messages: [] };
-          const oldMsgs = oldThread.messages;
-          return {
-            ...prev,
-            [threadId]: {
-              ...oldThread,
-              messages: [...oldMsgs, message]
-            }
-          };
-        });
-        // If the currentThread is the same, append
-        setCurrentThread((prev) => {
-          if (prev && prev._id === threadId) {
-            return {
-              ...prev,
-              messages: [...prev.messages, message]
-            };
-          }
-          return prev;
-        });
-      });
-
-      // user_typing / user_stop_typing
-      socket.on("user_typing", (data) => {
-        if (data.threadId && currentThread && currentThread._id === data.threadId) {
-          setUserIsTyping(true);
-        }
-      });
-      socket.on("user_stop_typing", (data) => {
-        if (data.threadId && currentThread && currentThread._id === data.threadId) {
-          setUserIsTyping(false);
-        }
-      });
-
-      // Admin sees newly created threads in real-time
-      socket.on("new_thread", (threadData) => {
-        setThreads((prev) => [threadData, ...prev]);
-        socket.emit("join_thread", { threadId: threadData._id });
-      });
-    }
-  }, [currentThread]);
-
-  useEffect(() => {
-    if (activeTab === "support") {
-      fetchThreads();
-    }
-  }, [activeTab, fetchThreads]);
-
-  const handleViewThread = async (threadId) => {
-    try {
-      const res = await fetch(`/api/cracked/supportThreads/${threadId}`, {
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to get thread");
-        return;
-      }
-      setCurrentThread(data);
-      setAdminReply("");
-      setUserIsTyping(false);
-
-      // Merge into allThreadMap
-      setAllThreadMap((prev) => ({
-        ...prev,
-        [threadId]: data
-      }));
-    } catch (err) {
-      console.error("View thread error:", err);
-    }
-  };
-
-  const handleReplyToThread = async () => {
-    if (!currentThread || !currentThread._id) return;
-    try {
-      const replyMessage = {
-        sender: "admin",
-        content: adminReply,
-        timestamp: new Date().toISOString()
-      };
-
-      if (adminSocket) {
-        adminSocket.emit("admin_stop_typing", {
-          threadId: currentThread._id
-        });
-      }
-
-      const res = await fetch(`/api/cracked/supportThreads/${currentThread._id}/reply`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: adminReply })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to reply");
-        return;
-      }
-      alert("Reply sent!");
-
-      // Update the local thread data directly
-      setCurrentThread((prevThread) => {
-        if (!prevThread) return null;
-        return {
-          ...prevThread,
-          messages: [...prevThread.messages, replyMessage]
-        };
-      });
-
-      // Update allThreadMap as well
-      setAllThreadMap((prev) => {
-        const oldThread = prev[currentThread._id] || { messages: [] };
-        return {
-          ...prev,
-          [currentThread._id]: {
-            ...oldThread,
-            messages: [...oldThread.messages, replyMessage]
-          }
-        };
-      });
-
-      setAdminReply("");
-    } catch (err) {
-      console.error("Reply thread error:", err);
-    }
-  };
-
-  const handleAdminReplyTyping = (threadId) => {
-    if (adminSocket && threadId) {
-      adminSocket.emit("admin_typing", { threadId });
-    }
-  };
-
-  const handleCloseThread = async (threadId) => {
-    const resolution = window.prompt("Enter a resolution note:", "Issue resolved.");
-    if (resolution === null) return;
-    try {
-      const res = await fetch(`/api/cracked/supportThreads/${threadId}/close`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resolution })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to close thread");
-        return;
-      }
-      alert("Thread closed!");
-      fetchThreads();
-    } catch (err) {
-      console.error("Close thread error:", err);
-    }
-  };
-
-  const handleClearClosedThreads = async () => {
-    if (!window.confirm("Are you sure you want to permanently delete all closed threads?")) return;
-    try {
-      const res = await fetch("/api/cracked/supportThreads/clear-closed", {
-        method: "DELETE",
-        credentials: "include"
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to clear closed threads");
-        return;
-      }
-      alert(data.message || "Closed threads cleared");
-      fetchThreads();
-    } catch (err) {
-      alert("Error clearing closed threads");
-    }
-  };
-
-  const handleAdminCreateThread = async () => {
-    if (!adminTargetUserId) {
-      alert("Please enter a valid userId");
-      return;
-    }
-    try {
-      const body = {
-        userId: adminTargetUserId,
-        initialMessage: adminInitialMsg
-      };
-      const res = await fetch("/api/cracked/supportThreads/createFromAdmin", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        alert(data.error || "Failed to create thread from admin");
-        return;
-      }
-      alert("Created new thread successfully!");
-      setAdminTargetUserId("");
-      setAdminInitialMsg("");
-      fetchThreads();
-    } catch (err) {
-      console.error(err);
-      alert("Error creating admin thread");
-    }
-  };
-
-  /*****************************************
-   * ACTIVITY LOGS
-   *****************************************/
-  const [activityLogs, setActivityLogs] = useState([]);
-  const fetchActivityLogs = useCallback(async () => {
-    try {
-      const res = await fetch("/api/cracked/activity-logs", { credentials: "include" });
-      const data = await res.json();
-      if (data.logs) {
-        setActivityLogs(data.logs);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  /*****************************************
-   * DB LOGS
-   *****************************************/
-  const [dbLogs, setDbLogs] = useState([]);
-  const fetchDbLogs = useCallback(async () => {
-    try {
-      const res = await fetch("/api/cracked/db-logs", { credentials: "include" });
-      const data = await res.json();
-      setDbLogs(data);
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  /*****************************************
-   * DB SHELL
-   *****************************************/
-  const [dbShellCollection, setDbShellCollection] = useState("");
-  const [dbShellFilter, setDbShellFilter] = useState("{}");
-  const [dbShellLimit, setDbShellLimit] = useState(5);
-  const [dbShellResults, setDbShellResults] = useState([]);
-
-  const handleDbShellRead = async () => {
-    try {
-      const parsedFilter = JSON.parse(dbShellFilter);
-      const body = {
-        collection: dbShellCollection,
-        filter: parsedFilter,
-        limit: dbShellLimit
-      };
-      const res = await fetch("/api/cracked/db-shell/read", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setDbShellResults(data);
-      } else {
-        alert(data.error || "Error reading DB");
-      }
-    } catch (err) {
-      alert("JSON filter is invalid or error occurred.");
-      console.error(err);
-    }
-  };
-
-  /*****************************************
-   * HEALTH CHECKS
-   *****************************************/
-  const [healthChecks, setHealthChecks] = useState([]);
-  const fetchHealthChecks = useCallback(async () => {
-    try {
-      const res = await fetch("/api/cracked/health-checks", { credentials: "include" });
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        setHealthChecks(data);
-      } else if (data.results) {
-        setHealthChecks(data.results);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  /*****************************************
-   * TAB SWITCH
-   *****************************************/
-  const switchTab = (tabName) => {
-    setActiveTab(tabName);
-    if (tabName === "activity") {
-      fetchActivityLogs();
-    } else if (tabName === "dbLogs") {
-      fetchDbLogs();
-    } else if (tabName === "dbShell") {
-      setDbShellResults([]);
-    } else if (tabName === "healthChecks") {
-      fetchHealthChecks();
-    }
-  };
-
-  /*****************************************
-   * RENDER: OVERVIEW
-   *****************************************/
-  const renderOverviewTab = () => {
-    if (overviewLoading) {
-      return <div className="tab-content">Loading overview...</div>;
-    }
-    if (overviewError) {
-      return <div className="tab-content error-msg">Error: {overviewError}</div>;
-    }
-    if (!overviewData) {
-      return <div className="tab-content">No overview data yet.</div>;
-    }
-
-    const hasChartArray =
-      Array.isArray(overviewData.recentStats) && overviewData.recentStats.length > 0;
-
-    return (
-      <div className="tab-content overview-tab">
-        <h2>Overview Stats</h2>
-        <ul>
-          <li>User Count: {overviewData.user_count}</li>
-          <li>Test Attempts: {overviewData.test_attempts_count}</li>
-          <li>Daily Bonus Claims Today: {overviewData.daily_bonus_claims}</li>
-          <li>Avg Test Score (%): {overviewData.average_test_score_percent}</li>
-          <li>Timestamp (EST): {overviewData.timestamp_est}</li>
-        </ul>
-        <button onClick={fetchOverview}>Refresh Overview</button>
-
-        <div className="chart-section">
-          <h3>Recent Stats</h3>
-          {hasChartArray ? (
-            <div className="chart-container">
-              <ResponsiveContainer width="100%" height={300}>
-                <AreaChart data={overviewData.recentStats}>
-                  <defs>
-                    <linearGradient id="colorDailyBonus" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorTestAttempts" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="label" />
-                  <YAxis />
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="dailyBonus"
-                    stroke="#2ecc71"
-                    fill="url(#colorDailyBonus)"
-                    name="Daily Bonus Claims"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="testAttempts"
-                    stroke="#3498db"
-                    fill="url(#colorTestAttempts)"
-                    name="Test Attempts"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          ) : (
-            <p>No chart data available.</p>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: PERFORMANCE (MULTIPLE CHARTS)
-   *****************************************/
-  const renderPerformanceTab = () => {
-    return (
-      <div className="tab-content perf-tab">
-        <h2>Performance Metrics (Rolling 60-Min Aggregation)</h2>
-        <button onClick={fetchPerformance} style={{ marginBottom: "10px" }}>
-          Refresh Perf Data
-        </button>
-        {perfLoading && <p>Loading performance data...</p>}
-        {perfError && <p className="error-msg">Error: {perfError}</p>}
-        {performanceData && (
-          <>
-            {/* Latest snapshot (the most recent doc) */}
-            <div className="perf-details">
-              <p>Avg Request Time (s): {performanceData.avg_request_time}</p>
-              {"avg_db_query_time_ms" in performanceData ? (
-                <p>Avg DB Query Time (ms): {performanceData.avg_db_query_time_ms}</p>
-              ) : (
-                <p>Avg DB Query Time (ms): 0</p>
-              )}
-              <p>Data Transfer Rate (MB/s): {performanceData.data_transfer_rate}</p>
-              <p>Throughput (req/min): {performanceData.throughput}</p>
-              <p>Error Rate: {performanceData.error_rate}</p>
-              <p>Timestamp (EST): {performanceData.timestamp}</p>
-            </div>
-
-            {/* We now show multiple charts, each for a different metric.
-                performanceData.history is an array of up to 20 data points, each aggregated. */}
-            <div style={{ marginTop: "20px" }}>
-              {Array.isArray(performanceData.history) && performanceData.history.length > 0 ? (
-                <>
-                  {/* Chart 1: Request Time (seconds) */}
-                  <div className="chart-section">
-                    <h3>Avg Request Time (Seconds) - Last Hour</h3>
-                    <div className="chart-container">
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={performanceData.history}>
-                          <defs>
-                            <linearGradient id="colorRequestTime" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#e67e22" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="#e67e22" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="timestamp" />
-                          <YAxis />
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="requestTime"
-                            stroke="#e67e22"
-                            fill="url(#colorRequestTime)"
-                            name="Request Time (s)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  {/* Chart 2: DB Time (ms) */}
-                  <div className="chart-section">
-                    <h3>Avg DB Time (ms) - Last Hour</h3>
-                    <div className="chart-container">
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={performanceData.history}>
-                          <defs>
-                            <linearGradient id="colorDbTime" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#9b59b6" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="#9b59b6" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="timestamp" />
-                          <YAxis />
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="dbTime"
-                            stroke="#9b59b6"
-                            fill="url(#colorDbTime)"
-                            name="DB Time (ms)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  {/* Chart 3: Throughput (req/min) */}
-                  <div className="chart-section">
-                    <h3>Throughput (Requests/Min) - Last Hour</h3>
-                    <div className="chart-container">
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={performanceData.history}>
-                          <defs>
-                            <linearGradient id="colorThroughput" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#2ecc71" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="#2ecc71" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="timestamp" />
-                          <YAxis />
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="throughput"
-                            stroke="#2ecc71"
-                            fill="url(#colorThroughput)"
-                            name="Throughput (req/min)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  {/* Chart 4: Error Rate */}
-                  <div className="chart-section">
-                    <h3>Error Rate - Last Hour</h3>
-                    <div className="chart-container">
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={performanceData.history}>
-                          <defs>
-                            <linearGradient id="colorErrorRate" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#e74c3c" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="#e74c3c" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="timestamp" />
-                          <YAxis />
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="errorRate"
-                            stroke="#e74c3c"
-                            fill="url(#colorErrorRate)"
-                            name="Error Rate"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-
-                  {/* Chart 5: Data Transfer (MB/s) */}
-                  <div className="chart-section">
-                    <h3>Data Transfer (MB/s) - Last Hour</h3>
-                    <div className="chart-container">
-                      <ResponsiveContainer width="100%" height={300}>
-                        <AreaChart data={performanceData.history}>
-                          <defs>
-                            <linearGradient id="colorDataTransfer" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#3498db" stopOpacity={0.8} />
-                              <stop offset="95%" stopColor="#3498db" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <XAxis dataKey="timestamp" />
-                          <YAxis />
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <Tooltip />
-                          <Area
-                            type="monotone"
-                            dataKey="dataTransfer"
-                            stroke="#3498db"
-                            fill="url(#colorDataTransfer)"
-                            name="Data Transfer (MB/s)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p>No chart data available.</p>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: USERS
-   *****************************************/
-  const renderUsersTab = () => {
-    return (
-      <div className="tab-content users-tab">
-        <h2>User Management</h2>
-        <div className="users-search-row">
-          <input
-            type="text"
-            value={userSearch}
-            placeholder="Search by username or email"
-            onChange={(e) => setUserSearch(e.target.value)}
-          />
-          <button
-            onClick={() => {
-              setUserPage(1);
-              fetchUsers();
-            }}
-          >
-            Search
-          </button>
-        </div>
-        <div style={{ marginTop: "10px" }}>
-          <p>
-            Page: {userPage} / {Math.ceil(userTotal / userLimit)} (Total: {userTotal})
-          </p>
-          <button
-            disabled={userPage <= 1}
-            onClick={() => setUserPage((prev) => Math.max(1, prev - 1))}
-          >
-            Prev
-          </button>
-          <button
-            disabled={userPage >= Math.ceil(userTotal / userLimit)}
-            onClick={() => setUserPage((prev) => prev + 1)}
-          >
-            Next
-          </button>
-        </div>
-        {usersLoading && <div>Loading users...</div>}
-        {usersError && <div className="error-msg">Error: {usersError}</div>}
-
-        <table className="users-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Coins</th>
-              <th>XP</th>
-              <th>Level</th>
-              <th>Suspended</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => {
-              const isEditing = editUserId === u._id;
-              return (
-                <tr key={u._id}>
-                  <td>{u._id}</td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={editUserData.username}
-                        onChange={(e) => handleUpdateUserField("username", e.target.value)}
-                      />
-                    ) : (
-                      u.username
-                    )}
-                  </td>
-                  <td>{u.email}</td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="number"
-                        value={editUserData.coins}
-                        onChange={(e) => handleUpdateUserField("coins", e.target.value)}
-                      />
-                    ) : (
-                      u.coins
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="number"
-                        value={editUserData.xp}
-                        onChange={(e) => handleUpdateUserField("xp", e.target.value)}
-                      />
-                    ) : (
-                      u.xp
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="number"
-                        value={editUserData.level}
-                        onChange={(e) => handleUpdateUserField("level", e.target.value)}
-                      />
-                    ) : (
-                      u.level
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="checkbox"
-                        checked={!!editUserData.suspended}
-                        onChange={(e) => handleUpdateUserField("suspended", e.target.checked)}
-                      />
-                    ) : (
-                      u.suspended ? "Yes" : "No"
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <>
-                        <button onClick={handleUserUpdateSubmit}>Save</button>
-                        <button onClick={() => setEditUserId(null)}>Cancel</button>
-                      </>
-                    ) : (
-                      <>
-                        <button onClick={() => handleUserEdit(u)}>Edit</button>
-                        <button onClick={() => handleResetPassword(u._id)}>Reset PW</button>
-                        <button onClick={() => handleUserDelete(u._id)}>Delete</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: TESTS
-   *****************************************/
-  const renderTestsTab = () => {
-    return (
-      <div className="tab-content tests-tab">
-        <h2>Test Management</h2>
-        <div className="test-filter-row">
-          <label>Category Filter:</label>
-          <input
-            type="text"
-            placeholder="e.g. aplus"
-            value={testCategory}
-            onChange={(e) => setTestCategory(e.target.value)}
-          />
-          <button onClick={fetchTests}>Fetch Tests</button>
-        </div>
-        {testsLoading && <p>Loading tests...</p>}
-        {testsError && <p className="error-msg">Error: {testsError}</p>}
-
-        <div className="create-test-form">
-          <h4>Create a new Test</h4>
-          <input
-            type="text"
-            placeholder="Category"
-            value={newTestData.category}
-            onChange={(e) => setNewTestData((prev) => ({ ...prev, category: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder="Test ID (number)"
-            value={newTestData.testId}
-            onChange={(e) => setNewTestData((prev) => ({ ...prev, testId: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder="Test Name"
-            value={newTestData.testName}
-            onChange={(e) => setNewTestData((prev) => ({ ...prev, testName: e.target.value }))}
-          />
-          <button onClick={handleCreateTest}>Create Test</button>
-        </div>
-
-        <table className="tests-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Category</th>
-              <th>TestId #</th>
-              <th>Test Name</th>
-              <th>Question Count</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tests.map((t) => (
-              <tr key={t._id}>
-                <td>{t._id}</td>
-                <td>{t.category}</td>
-                <td>{t.testId}</td>
-                <td>{t.testName || "(Unnamed)"} </td>
-                <td>{t.questions ? t.questions.length : 0}</td>
-                <td>
-                  <button onClick={() => handleDeleteTest(t)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: DAILY
-   *****************************************/
-  const renderDailyTab = () => {
-    return (
-      <div className="tab-content daily-tab">
-        <h2>Daily PBQ Management</h2>
-        {dailyLoading && <p>Loading daily PBQs...</p>}
-        {dailyError && <p className="error-msg">Error: {dailyError}</p>}
-
-        <div className="create-daily-form">
-          <h4>Create a new Daily PBQ</h4>
-          <input
-            type="text"
-            placeholder="Prompt"
-            value={newDaily.prompt}
-            onChange={(e) => setNewDaily((prev) => ({ ...prev, prompt: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder="Day Index"
-            value={newDaily.dayIndex}
-            onChange={(e) => setNewDaily((prev) => ({ ...prev, dayIndex: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder="Correct Index"
-            value={newDaily.correctIndex}
-            onChange={(e) => setNewDaily((prev) => ({ ...prev, correctIndex: e.target.value }))}
-          />
-          <textarea
-            placeholder="Explanation"
-            value={newDaily.explanation}
-            onChange={(e) => setNewDaily((prev) => ({ ...prev, explanation: e.target.value }))}
-          />
-          <button onClick={handleCreateDaily}>Create Daily PBQ</button>
-        </div>
-
-        <table className="daily-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Prompt</th>
-              <th>DayIndex</th>
-              <th>CorrectIndex</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dailyList.map((d) => (
-              <tr key={d._id}>
-                <td>{d._id}</td>
-                <td>{d.prompt}</td>
-                <td>{d.dayIndex}</td>
-                <td>{d.correctIndex}</td>
-                <td>
-                  <button onClick={() => handleDeleteDaily(d)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: SUPPORT
-   *****************************************/
-  const renderSupportTab = () => {
-    return (
-      <div className="tab-content support-tab">
-        <h2>Support Threads</h2>
-        <div className="thread-filter-row">
-          <label>Status Filter:</label>
-          <input
-            type="text"
-            placeholder="open / closed? etc."
-            value={threadStatusFilter}
-            onChange={(e) => setThreadStatusFilter(e.target.value)}
-          />
-          <button onClick={fetchThreads}>Fetch Threads</button>
-        </div>
-        {threadsLoading && <p>Loading threads...</p>}
-        {threadsError && <p className="error-msg">Error: {threadsError}</p>}
-
-        <div className="support-threads-container">
-          <div className="threads-list">
-            <ul>
-              {threads.map((th) => (
-                <li key={th._id}>
-                  <strong>{th._id}</strong> - {th.status} - &nbsp;
-                  <button onClick={() => handleViewThread(th._id)}>View</button>
-                  &nbsp;
-                  {th.status !== "closed" && (
-                    <button onClick={() => handleCloseThread(th._id)}>Close</button>
-                  )}
-                </li>
-              ))}
-            </ul>
-            <button style={{ marginTop: "10px" }} onClick={handleClearClosedThreads}>
-              Clear All Closed Threads
-            </button>
-          </div>
-
-          <div className="thread-details">
-            {currentThread ? (
-              <div className="current-thread-details">
-                <h4>Thread: {currentThread._id}</h4>
-                <p>Status: {currentThread.status}</p>
-                <div className="messages-list-container">
-                  <ul className="messages-list">
-                    {currentThread.messages.map((m, idx) => (
-                      <li key={idx}>
-                        <strong>{m.sender}:</strong> {m.content} ({m.timestamp || ""})
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                {userIsTyping && (
-                  <div className="typing-indicator-user">
-                    <em>User is typing...</em>
-                  </div>
-                )}
-                {currentThread.status !== "closed" && (
-                  <div className="reply-container">
-                    <textarea
-                      rows={5}
-                      placeholder="Type an admin reply..."
-                      value={adminReply}
-                      onChange={(e) => {
-                        setAdminReply(e.target.value);
-                        handleAdminReplyTyping(currentThread._id);
-                      }}
-                    />
-                    <button onClick={handleReplyToThread}>Send Reply</button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p>Select a thread to view details.</p>
-            )}
-          </div>
-        </div>
-
-        <div style={{ marginTop: "20px" }}>
-          <h3>Create Thread on behalf of a user</h3>
-          <div
-            className="create-thread-row"
-            style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}
-          >
-            <input
-              style={{ flex: "0 0 300px" }}
-              placeholder="Target UserId"
-              value={adminTargetUserId}
-              onChange={(e) => setAdminTargetUserId(e.target.value)}
-            />
-            <input
-              style={{ flex: "1" }}
-              placeholder="Initial admin message..."
-              value={adminInitialMsg}
-              onChange={(e) => setAdminInitialMsg(e.target.value)}
-            />
-            <button onClick={handleAdminCreateThread}>Create</button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: ACTIVITY LOGS
-   *****************************************/
-  const renderActivityLogsTab = () => {
-    return (
-      <div className="tab-content activity-tab">
-        <h2>Activity & Audit Logs</h2>
-        <button onClick={fetchActivityLogs} style={{ marginBottom: "10px" }}>
-          Refresh Logs
-        </button>
-        <table className="activity-table">
-          <thead>
-            <tr>
-              <th>Timestamp (EST)</th>
-              <th>IP</th>
-              <th>UserId</th>
-              <th>Success</th>
-              <th>Reason</th>
-            </tr>
-          </thead>
-          <tbody>
-            {activityLogs.map((log) => (
-              <tr key={log._id}>
-                <td>{log.timestamp}</td>
-                <td>{log.ip}</td>
-                <td>{log.userId || ""}</td>
-                <td>{log.success ? "Yes" : "No"}</td>
-                <td>{log.reason || ""}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: DB LOGS
-   *****************************************/
-  const renderDbLogsTab = () => {
-    return (
-      <div className="tab-content db-logs-tab">
-        <h2>DB Query Logs</h2>
-        <button onClick={fetchDbLogs} style={{ marginBottom: "10px" }}>
-          Refresh
-        </button>
-        <table className="db-logs-table">
-          <thead>
-            <tr>
-              <th>Timestamp (EST)</th>
-              <th>Route</th>
-              <th>Method</th>
-              <th>Duration (ms)</th>
-              <th>DB Time (ms)</th>
-              <th>Status</th>
-              <th>Bytes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dbLogs.map((log) => (
-              <tr key={log._id}>
-                <td>{log.timestamp}</td>
-                <td>{log.route}</td>
-                <td>{log.method}</td>
-                <td>{log.duration_ms}</td>
-                <td>{log.db_time_ms}</td>
-                <td>{log.http_status}</td>
-                <td>{log.response_bytes}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: DB SHELL
-   *****************************************/
-  const renderDbShellTab = () => {
-    return (
-      <div className="tab-content db-shell-tab">
-        <h2>Read-Only DB Shell</h2>
-        <div className="db-shell-form">
-          <label>Collection:</label>
-          <input
-            type="text"
-            value={dbShellCollection}
-            onChange={(e) => setDbShellCollection(e.target.value)}
-          />
-          <label>Filter (JSON):</label>
-          <input
-            type="text"
-            value={dbShellFilter}
-            onChange={(e) => setDbShellFilter(e.target.value)}
-          />
-          <label>Limit:</label>
-          <input
-            type="number"
-            value={dbShellLimit}
-            onChange={(e) => setDbShellLimit(e.target.valueAsNumber)}
-          />
-          <button onClick={handleDbShellRead}>Execute Read</button>
-        </div>
-        <pre className="db-shell-results">
-          {JSON.stringify(dbShellResults, null, 2)}
-        </pre>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * RENDER: HEALTH CHECKS
-   *****************************************/
-  const renderHealthChecksTab = () => {
-    return (
-      <div className="tab-content health-checks-tab">
-        <h2>API Health Checks</h2>
-        <button onClick={fetchHealthChecks} style={{ marginBottom: "10px" }}>
-          Refresh Checks
-        </button>
-        <table className="health-checks-table">
-          <thead>
-            <tr>
-              <th>checkedAt (EST)</th>
-              <th>Endpoint</th>
-              <th>Status</th>
-              <th>OK</th>
-              <th>Error</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.isArray(healthChecks) &&
-              healthChecks.map((hc, idx) => {
-                if (hc.results) {
-                  // multi results block:
-                  return hc.results.map((r, j) => (
-                    <tr key={`${hc._id}_${j}`}>
-                      <td>{hc.checkedAt}</td>
-                      <td>{r.endpoint}</td>
-                      <td>{r.status}</td>
-                      <td>{r.ok ? "Yes" : "No"}</td>
-                      <td>{r.error || ""}</td>
-                    </tr>
-                  ));
-                } else {
-                  // single item doc:
-                  return (
-                    <tr key={idx}>
-                      <td>{hc.checkedAt}</td>
-                      <td>{hc.endpoint}</td>
-                      <td>{hc.status}</td>
-                      <td>{hc.ok ? "Yes" : "No"}</td>
-                      <td>{hc.error || ""}</td>
-                    </tr>
-                  );
-                }
-              })}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
-  /*****************************************
-   * MAIN RETURN
-   *****************************************/
   return (
-    <div className="cracked-admin-dashboard">
-      <div className="cracked-admin-dashboard-container">
-        <h1 className="admin-dashboard-title">Admin Dashboard</h1>
-
-        {/* Tabs */}
-        <div className="admin-tabs">
-          <button
-            className={activeTab === "overview" ? "active" : ""}
-            onClick={() => switchTab("overview")}
-          >
-            Overview
-          </button>
-          <button
-            className={activeTab === "users" ? "active" : ""}
-            onClick={() => switchTab("users")}
-          >
-            Users
-          </button>
-          <button
-            className={activeTab === "tests" ? "active" : ""}
-            onClick={() => switchTab("tests")}
-          >
-            Tests
-          </button>
-          <button
-            className={activeTab === "daily" ? "active" : ""}
-            onClick={() => switchTab("daily")}
-          >
-            Daily PBQs
-          </button>
-          <button
-            className={activeTab === "support" ? "active" : ""}
-            onClick={() => switchTab("support")}
-          >
-            Support
-          </button>
-          <button
-            className={activeTab === "performance" ? "active" : ""}
-            onClick={() => switchTab("performance")}
-          >
-            Performance
-          </button>
-          <button
-            className={activeTab === "activity" ? "active" : ""}
-            onClick={() => switchTab("activity")}
-          >
-            Activity
-          </button>
-          <button
-            className={activeTab === "dbLogs" ? "active" : ""}
-            onClick={() => switchTab("dbLogs")}
-          >
-            DB Logs
-          </button>
-          <button
-            className={activeTab === "dbShell" ? "active" : ""}
-            onClick={() => switchTab("dbShell")}
-          >
-            DB Shell
-          </button>
-          <button
-            className={activeTab === "healthChecks" ? "active" : ""}
-            onClick={() => switchTab("healthChecks")}
-          >
-            Health Checks
+    <div className="policy-container">
+      <div className="policy-content">
+        <h1>Terms of Service</h1>
+        <p className="policy-date">Last updated: March 7, 2025</p>
+        
+        {/* Table of Contents */}
+        <div className="policy-toc">
+          <div className="policy-toc-title">Table of Contents</div>
+          <ul className="policy-toc-list">
+            {sections.map((section) => (
+              <li key={section.id}>
+                <a href={`#${section.id}`}>{section.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <section id="acceptance" className="policy-section">
+          <h2>1. Acceptance of Terms</h2>
+          <p>
+            Welcome to Cert Games! These Terms of Service ("Terms") govern your access to and use of certgames.com and all related services (collectively, the "Services"). By accessing or using our Services, you agree to be bound by these Terms. If you do not agree to these Terms, you may not access or use the Services.
+          </p>
+        </section>
+        
+        <section id="changes" className="policy-section">
+          <h2>2. Changes to Terms</h2>
+          <p>
+            We may modify these Terms at any time. We will provide notice of any material changes by posting the updated Terms on our website and updating the "Last updated" date. Your continued use of the Services after any such changes constitutes your acceptance of the new Terms.
+          </p>
+        </section>
+        
+        <section id="registration" className="policy-section">
+          <h2>3. Account Registration</h2>
+          <p>
+            To access certain features of our Services, you must register for an account. You may register directly or through Google or Apple authentication services. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.
+          </p>
+          <p>
+            You are responsible for safeguarding your account credentials and for all activities that occur under your account. You agree to notify us immediately of any unauthorized use of your account.
+          </p>
+        </section>
+        
+        <section id="subscription" className="policy-section">
+          <h2>4. Subscription and Payment</h2>
+          <p>
+            Some aspects of our Services are available on a subscription basis. By subscribing, you agree to pay the applicable fees. Subscriptions automatically renew unless canceled before the renewal date.
+          </p>
+          <p>
+            All payments are processed through third-party payment processors. Your use of their services is subject to their terms and conditions.
+          </p>
+        </section>
+        
+        <section id="conduct" className="policy-section">
+          <h2>5. User Conduct</h2>
+          <p>
+            You agree not to:
+          </p>
+          <ul>
+            <li>Use the Services in any manner that could disable, overburden, damage, or impair the Services</li>
+            <li>Use any robot, spider, or other automatic device to access the Services</li>
+            <li>Introduce any viruses, trojan horses, worms, or other malicious code</li>
+            <li>Attempt to gain unauthorized access to any part of the Services</li>
+            <li>Interfere with any other user's use of the Services</li>
+            <li>Use the Services for any illegal or unauthorized purpose</li>
+          </ul>
+        </section>
+        
+        <section id="ip" className="policy-section">
+          <h2>6. Intellectual Property</h2>
+          <p>
+            The Services and all content, features, and functionality (including but not limited to text, graphics, software, images, videos, and audio) are owned by Cert Games or its licensors and are protected by copyright, trademark, and other intellectual property laws.
+          </p>
+          <p>
+            We grant you a limited, non-exclusive, non-transferable, and revocable license to use the Services for your personal, non-commercial use only.
+          </p>
+        </section>
+        
+        <section id="third-party" className="policy-section">
+          <h2>7. Third-Party Services</h2>
+          <p>
+            Our Services may contain links to third-party websites or services that are not owned or controlled by Cert Games. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third-party websites or services.
+          </p>
+          <p>
+            When you use Google or Apple authentication, your use is subject to their terms of service and privacy policies:
+          </p>
+          <ul>
+            <li><a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer">Google Terms of Service</a></li>
+            <li><a href="https://www.apple.com/legal/internet-services/itunes/us/terms.html" target="_blank" rel="noopener noreferrer">Apple Terms of Service</a></li>
+          </ul>
+        </section>
+        
+        <section id="disclaimer" className="policy-section">
+          <h2>8. Disclaimer of Warranties</h2>
+          <p>
+            THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMISSIBLE UNDER APPLICABLE LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+          </p>
+        </section>
+        
+        <section id="liability" className="policy-section">
+          <h2>9. Limitation of Liability</h2>
+          <p>
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL CERT GAMES BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES.
+          </p>
+        </section>
+        
+        <section id="termination" className="policy-section">
+          <h2>10. Termination</h2>
+          <p>
+            We may terminate or suspend your account and access to the Services immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach these Terms.
+          </p>
+          <p>
+            Upon termination, your right to use the Services will immediately cease. All provisions of the Terms which by their nature should survive termination shall survive termination.
+          </p>
+        </section>
+        
+        <section id="governing-law" className="policy-section">
+          <h2>11. Governing Law</h2>
+          <p>
+            These Terms shall be governed by and construed in accordance with the laws of the United States, without regard to its conflict of law provisions.
+          </p>
+        </section>
+        
+        <section id="contact" className="policy-section">
+          <h2>12. Contact Us</h2>
+          <p>
+            If you have any questions about these Terms, please contact us at:
+          </p>
+          <p>
+            Email: <a href="mailto:support@certgames.com">support@certgames.com</a>
+          </p>
+        </section>
+        
+        {/* Print button */}
+        <div className="policy-actions">
+          <button onClick={handlePrint} className="policy-print-btn">
+            <span role="img" aria-label="print">🖨️</span> Print this document
           </button>
         </div>
-
-        {/* Tabs' Content */}
-        {activeTab === "overview" && renderOverviewTab()}
-        {activeTab === "users" && renderUsersTab()}
-        {activeTab === "tests" && renderTestsTab()}
-        {activeTab === "daily" && renderDailyTab()}
-        {activeTab === "support" && renderSupportTab()}
-        {activeTab === "performance" && renderPerformanceTab()}
-        {activeTab === "activity" && renderActivityLogsTab()}
-        {activeTab === "dbLogs" && renderDbLogsTab()}
-        {activeTab === "dbShell" && renderDbShellTab()}
-        {activeTab === "healthChecks" && renderHealthChecksTab()}
       </div>
+      
+      {/* Back to top button */}
+      {showBackToTop && (
+        <button
+          className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
+          onClick={scrollToTop}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      )}
+      
+      <Footer />
     </div>
   );
-}
+};
 
-export default CrackedAdminDashboard;
+export default TermsOfService;
+
+// src/components/pages/PrivacyPolicy.js
+import React, { useState, useEffect } from 'react';
+import Footer from '../Footer';
+import './PolicyPages.css';
+
+const PrivacyPolicy = () => {
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Function to handle printing
+  const handlePrint = () => {
+    window.print();
+  };
+
+  // Show/hide back to top button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.pageYOffset > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Auto-scroll to section if hash is present in URL
+  useEffect(() => {
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // Sections for table of contents
+  const sections = [
+    { id: 'introduction', title: '1. Introduction' },
+    { id: 'information', title: '2. Information We Collect' },
+    { id: 'use', title: '3. How We Use Your Information' },
+    { id: 'share', title: '4. How We Share Your Information' },
+    { id: 'security', title: '5. Data Security' },
+    { id: 'rights', title: '6. Your Data Rights' },
+    { id: 'cookies', title: '7. Cookies and Similar Technologies' },
+    { id: 'authentication', title: '8. Third-Party Authentication' },
+    { id: 'children', title: '9. Children\'s Privacy' },
+    { id: 'changes', title: '10. Changes to This Privacy Policy' },
+    { id: 'contact', title: '11. Contact Us' },
+  ];
+
+  return (
+    <div className="policy-container">
+      <div className="policy-content">
+        <h1>Privacy Policy</h1>
+        <p className="policy-date">Last updated: March 7, 2025</p>
+        
+        {/* Table of Contents */}
+        <div className="policy-toc">
+          <div className="policy-toc-title">Table of Contents</div>
+          <ul className="policy-toc-list">
+            {sections.map((section) => (
+              <li key={section.id}>
+                <a href={`#${section.id}`}>{section.title}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <section id="introduction" className="policy-section">
+          <h2>1. Introduction</h2>
+          <p>
+            This Privacy Policy explains how Cert Games ("we", "us", or "our") collects, uses, and shares your information when you use our website and services at certgames.com.
+          </p>
+          <p>
+            We take your privacy seriously and are committed to protecting your personal information. Please read this policy carefully to understand our practices regarding your data.
+          </p>
+        </section>
+        
+        <section id="information" className="policy-section">
+          <h2>2. Information We Collect</h2>
+          <p>We collect several types of information from and about users of our website, including:</p>
+          <ul>
+            <li><strong>Personal Information:</strong> This includes your name, email address, and username when you register for an account.</li>
+            <li><strong>Authentication Information:</strong> When you sign in using Google or Apple authentication services, we receive basic profile information such as your name and email address.</li>
+            <li><strong>Usage Data:</strong> Information about how you interact with our website, including tests taken, scores, achievements, and usage patterns.</li>
+            <li><strong>Payment Information:</strong> When you purchase a subscription, payment information is processed by our payment provider. We do not store complete payment details on our servers.</li>
+          </ul>
+        </section>
+        
+        <section id="use" className="policy-section">
+          <h2>3. How We Use Your Information</h2>
+          <p>We use the information we collect to:</p>
+          <ul>
+            <li>Provide, maintain, and improve our services</li>
+            <li>Process your account registration and maintain your account</li>
+            <li>Track your progress, achievements, and leaderboard status</li>
+            <li>Communicate with you about your account, updates, or support requests</li>
+            <li>Personalize your experience and deliver relevant content</li>
+          </ul>
+        </section>
+        
+        <section id="share" className="policy-section">
+          <h2>4. How We Share Your Information</h2>
+          <p>We do not sell your personal information to third parties. We may share your information in the following circumstances:</p>
+          <ul>
+            <li>With service providers who perform services on our behalf (such as hosting providers and payment processors)</li>
+            <li>To comply with legal obligations</li>
+            <li>To protect and defend our rights and property</li>
+            <li>With your consent or at your direction</li>
+          </ul>
+        </section>
+        
+        <section id="security" className="policy-section">
+          <h2>5. Data Security</h2>
+          <p>
+            We implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.
+          </p>
+        </section>
+        
+        <section id="rights" className="policy-section">
+          <h2>6. Your Data Rights</h2>
+          <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+          <ul>
+            <li>Accessing your personal information</li>
+            <li>Correcting inaccurate information</li>
+            <li>Deleting your information</li>
+            <li>Restricting or objecting to certain processing</li>
+            <li>Requesting portability of your information</li>
+          </ul>
+          <p>To exercise these rights, please contact us using the information provided in the "Contact Us" section.</p>
+        </section>
+        
+        <section id="cookies" className="policy-section">
+          <h2>7. Cookies and Similar Technologies</h2>
+          <p>
+            We use cookies and similar tracking technologies to track activity on our website and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
+          </p>
+        </section>
+        
+        <section id="authentication" className="policy-section">
+          <h2>8. Third-Party Authentication</h2>
+          <p>
+            Our service offers sign-in through Google and Apple authentication services. When you choose to sign in using these services:
+          </p>
+          <ul>
+            <li>We receive basic profile information including your name and email address</li>
+            <li>We do not receive your password or account details</li>
+            <li>We store a unique identifier to recognize your account</li>
+          </ul>
+          <p>
+            Your use of Google or Apple sign-in is also subject to their respective privacy policies:
+          </p>
+          <ul>
+            <li><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a></li>
+            <li><a href="https://www.apple.com/legal/privacy/" target="_blank" rel="noopener noreferrer">Apple Privacy Policy</a></li>
+          </ul>
+        </section>
+        
+        <section id="children" className="policy-section">
+          <h2>9. Children's Privacy</h2>
+          <p>
+            Our services are not intended for children under 13, and we do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe that your child has provided us with personal information, please contact us.
+          </p>
+        </section>
+        
+        <section id="changes" className="policy-section">
+          <h2>10. Changes to This Privacy Policy</h2>
+          <p>
+            We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+          </p>
+        </section>
+        
+        <section id="contact" className="policy-section">
+          <h2>11. Contact Us</h2>
+          <p>
+            If you have any questions about this Privacy Policy, please contact us at:
+          </p>
+          <p>
+            Email: <a href="mailto:support@certgames.com">support@certgames.com</a>
+          </p>
+        </section>
+        
+        {/* Print button */}
+        <div className="policy-actions">
+          <button onClick={handlePrint} className="policy-print-btn">
+            <span role="img" aria-label="print">🖨️</span> Print this document
+          </button>
+        </div>
+      </div>
+      
+      {/* Back to top button */}
+      {showBackToTop && (
+        <button
+          className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
+          onClick={scrollToTop}
+          aria-label="Back to top"
+        >
+          ↑
+        </button>
+      )}
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default PrivacyPolicy;
+
+
+
  
 
