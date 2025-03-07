@@ -3,7 +3,8 @@ from flask import Blueprint, request, redirect, session, jsonify, current_app, u
 from bson.objectid import ObjectId
 import os
 import time
-from datetime import datetime
+import jwt
+from datetime import datetime, timedelta
 from authlib.integrations.flask_client import OAuth
 from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db, mainusers_collection
@@ -26,11 +27,60 @@ google = oauth.register(
     client_kwargs={'scope': 'openid email profile'},
 )
 
-# Configure Apple OAuth
+# Function to generate Apple client secret JWT
+def generate_apple_client_secret():
+    team_id = os.getenv('APPLE_TEAM_ID')
+    client_id = os.getenv('APPLE_CLIENT_ID')
+    key_id = os.getenv('APPLE_KEY_ID')
+    
+    # Get private key - check if it's content or path
+    private_key_path_or_content = os.getenv('APPLE_PRIVATE_KEY')
+    
+    # If it looks like key content
+    if private_key_path_or_content and private_key_path_or_content.startswith('-----BEGIN PRIVATE KEY-----'):
+        private_key = private_key_path_or_content
+    else:
+        # It's a file path
+        try:
+            with open(private_key_path_or_content, 'r') as key_file:
+                private_key = key_file.read()
+        except FileNotFoundError:
+            current_app.logger.error(f"Error: Apple private key file not found at {private_key_path_or_content}")
+            current_app.logger.error(f"Current working directory: {os.getcwd()}")
+            raise
+    
+    # JWT headers
+    headers = {
+        'kid': key_id
+    }
+    
+    # JWT payload
+    payload = {
+        'iss': team_id,
+        'iat': int(time.time()),
+        'exp': int(time.time() + 86400 * 180),  # 180 days (Apple allows up to 6 months)
+        'aud': 'https://appleid.apple.com',
+        'sub': client_id
+    }
+    
+    # Create and return the JWT token
+    token = jwt.encode(
+        payload,
+        private_key,
+        algorithm='ES256',
+        headers=headers
+    )
+    
+    # PyJWT >= 2.0.0 returns string instead of bytes
+    if isinstance(token, bytes):
+        return token.decode('utf-8')
+    return token
+
+# Configure Apple OAuth with dynamic client secret
 apple = oauth.register(
     name='apple',
     client_id=os.getenv('APPLE_CLIENT_ID'),
-    client_secret=os.getenv('APPLE_PRIVATE_KEY'),
+    client_secret=generate_apple_client_secret,  # Pass the function, not the result
     authorize_url='https://appleid.apple.com/auth/authorize',
     access_token_url='https://appleid.apple.com/auth/token',
     api_base_url='https://appleid.apple.com/',
@@ -139,7 +189,7 @@ def google_auth():
     })
     
     # Redirect to frontend with success token
-    frontend_url = os.getenv('FRONTEND_URL', 'http://certgames.com')
+    frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
     return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
 
 # Apple OAuth routes
@@ -153,32 +203,37 @@ def apple_auth():
     if request.method == 'GET':
         return redirect(url_for('oauth.apple_login'))
     
-    # Handle POST from Apple
-    token = apple.authorize_access_token()
-    user_info = apple.parse_id_token(token)
+    try:
+        # Handle POST from Apple
+        token = apple.authorize_access_token()
+        user_info = apple.parse_id_token(token)
+        
+        email = user_info.get('email')
+        name = user_info.get('name', {})
+        full_name = f"{name.get('firstName', '')} {name.get('lastName', '')}".strip()
+        apple_id = user_info.get('sub')  # Apple's unique user ID
+        
+        if not email:
+            return jsonify({"error": "Email not provided by Apple"}), 400
+        
+        user_id = process_oauth_user(email, full_name, 'apple', apple_id)
+        
+        # Store in session
+        session['userId'] = user_id
+        
+        # Log the login
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "ip": request.remote_addr or "unknown",
+            "success": True,
+            "provider": "apple"
+        })
+        
+        # Redirect to frontend with success token
+        frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+        return redirect(f"{frontend_url}/oauth/success?provider=apple&userId={user_id}")
     
-    email = user_info.get('email')
-    name = user_info.get('name', {})
-    full_name = f"{name.get('firstName', '')} {name.get('lastName', '')}".strip()
-    apple_id = user_info.get('sub')  # Apple's unique user ID
-    
-    if not email:
-        return jsonify({"error": "Email not provided by Apple"}), 400
-    
-    user_id = process_oauth_user(email, full_name, 'apple', apple_id)
-    
-    # Store in session
-    session['userId'] = user_id
-    
-    # Log the login
-    db.auditLogs.insert_one({
-        "timestamp": datetime.utcnow(),
-        "userId": ObjectId(user_id),
-        "ip": request.remote_addr or "unknown",
-        "success": True,
-        "provider": "apple"
-    })
-    
-    # Redirect to frontend with success token
-    frontend_url = os.getenv('FRONTEND_URL', 'http://certgames.com')
-    return redirect(f"{frontend_url}/oauth/success?provider=apple&userId={user_id}")
+    except Exception as e:
+        current_app.logger.error(f"Error in Apple auth: {str(e)}")
+        return jsonify({"error": f"Authentication error: {str(e)}"}), 500
