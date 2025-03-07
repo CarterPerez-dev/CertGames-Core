@@ -12,7 +12,7 @@ input, button {
   font-family: inherit;  /* Use the same font as the body */
 }
 
-/* Add a universal box-sizing property for better layout consistency */
+/* universal box-sizing property for better layout consistency */
 *,
 *::before,
 *::after {
