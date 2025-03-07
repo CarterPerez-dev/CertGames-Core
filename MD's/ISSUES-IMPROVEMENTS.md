@@ -23,8 +23,8 @@
 ### refer to [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/IOS.MD)
 ### and refer to [refer to][https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/MD's/IOS.APP.MD)
 
-
-Sitemaps are special files (often in XML format) that list all the important pages on a website. They serve as a guide for search engines (like Google, Bing, etc.) to crawl and index your site more intelligently. Submitting a sitemap in Google Search Console (as shown in your screenshot) helps Google discover new or updated pages faster. Below is a quick overview and a sample code snippet for generating a simple XML sitemap.
+# [sitemap](https://search.google.com/search-console/sitemaps?resource_id=sc-domain%3Acertgames.com)
+# Sitemaps are special files (often in XML format) that list all the important pages on a website. They serve as a guide for search engines (like Google, Bing, etc.) to crawl and index your site more intelligently. Submitting a sitemap in Google Search Console (as shown in your screenshot) helps Google discover new or updated pages faster. Below is a quick overview and a sample code snippet for generating a simple XML sitemap.
 
 ## What Sitemaps Do
 1. **Guide Search Engines**: They show search engines where to find key content on your website.  
