@@ -1,4 +1,4 @@
-ok so everything works amazing in this page, howwever whne clsing a thread on teh suers end (liek in the users support page) it says Unexpected token '<', "<!doctype "... is not valid JSON
+ok so everything works amazing in this page, howwever whne clsing a thread on teh suers end (DO NOT CHNAGE THE UI EXCEP TOR THE BUTTON) (liek in the users support page) it says Unexpected token '<', "<!doctype "... is not valid JSON
 
 
 here are some docker debug logs aswell
