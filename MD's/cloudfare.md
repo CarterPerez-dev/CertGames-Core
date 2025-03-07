@@ -1,3 +1,19 @@
+input code base into ai and ask how si should go about this in cloudfare etc etc
+
+Using page rules to bypass caching for dynamic routes like your /api endpoints is a very effective approach. It lets you clearly define which parts of your site should always fetch fresh data, without relying on more complex header logic. For example:
+
+- **Dynamic Endpoints (e.g., /api, /leaderboard):**  
+  Create a page rule that matches these URLs and sets “Cache Level: Bypass” to ensure that requests always go to your origin server for the most current data.
+
+- **Static Assets (e.g., /assets, /static):**  
+  Set up separate page rules to “Cache Everything” and assign a long Edge Cache TTL. This keeps your images, CSS, and JavaScript fast and reduces load on your origin.
+
+While page rules alone can solve the problem for clearly defined dynamic endpoints, it’s still a good idea to configure your origin headers too—especially as a backup measure and to maintain consistency. If you set proper Cache-Control headers on your server, you’re adding an extra layer of control. But if you can accurately segment your URLs (like /api for dynamic content), page rules might be all you need.
+
+In short, if your site structure is clearly divided into dynamic and static parts, using page rules to bypass caching on dynamic routes (like /api) is a clean and effective solution.
+
+
+
 Below is a **practical Cloudflare caching strategy** for a highly dynamic site (e.g., leaderboards, exams, user progress). The main goal is to **cache static resources aggressively** while **bypassing or lightly caching** real-time, database-driven endpoints.
 
 ---
