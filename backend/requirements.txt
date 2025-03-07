@@ -41,3 +41,4 @@ pytz
 requests
 Authlib
 itsdangerous>=2.0.0
+PyJWT
