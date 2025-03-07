@@ -1,3 +1,4 @@
+#scenario_helper.py
 import json
 import logging
 import re
@@ -139,58 +140,46 @@ Nothing else.
                     content = getattr(chunk.choices[0].delta, "content", None)
                     if content:
                         accumulated_response += content
+                        yield content  # Stream chunks as they arrive
         except Exception as e:
             logger.error(f"Error streaming interactive questions: {str(e)}")
             if retry_count < 2:
                 logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
+                for chunk in generate_interactive_questions(scenario_text, retry_count + 1):
+                    yield chunk
+                return
             else:
-                return [{"error": f"Error occurred: {str(e)}"}]
+                yield json.dumps([{"error": f"Error occurred: {str(e)}"}])
+                return
 
-
+        # Validation happens after completion and doesn't affect streaming
+        # This is just to log if the generated content is valid
         try:
-
             cleaned_response = accumulated_response.strip()
-
-
             if cleaned_response.startswith("```"):
-
                 closing_fence = cleaned_response.find("```", 3)
                 if closing_fence != -1:
                     cleaned_response = cleaned_response[3:closing_fence].strip()
                 else:
-
                     cleaned_response = cleaned_response[3:].strip()
-
 
             if cleaned_response.lower().startswith("json"):
                 cleaned_response = cleaned_response[4:].strip()
 
-
             parsed = json.loads(cleaned_response)
             if isinstance(parsed, list) and len(parsed) == 3:
                 logger.debug("Successfully generated three interactive questions.")
-                return parsed
             else:
                 logger.error("Model did not generate exactly three questions.")
-                if retry_count < 2:
-                    logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                    return generate_interactive_questions(scenario_text, retry_count + 1)
-                else:
-                    return [{"error": "Failed to generate exactly three questions."}]
         except json.JSONDecodeError as je:
             logger.error(f"JSON decode error: {je}")
             logger.error(f"Content received: {accumulated_response}")
-            if retry_count < 2:
-                logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
-            else:
-                return [{"error": "JSON decoding failed."}]
 
     except Exception as e:
         logger.error(f"Error generating interactive questions: {e}")
         if retry_count < 2:
             logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-            return generate_interactive_questions(scenario_text, retry_count + 1)
+            for chunk in generate_interactive_questions(scenario_text, retry_count + 1):
+                yield chunk
         else:
-            return [{"error": f"Error generating interactive questions: {str(e)}"}]
+            yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])

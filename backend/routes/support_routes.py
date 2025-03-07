@@ -11,10 +11,12 @@ def require_user_logged_in():
 
 @support_bp.route('/my-chat', methods=['GET'])
 def list_user_threads():
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    user_id = session['userId']
+    # Remove the login check to make it public
+    # Get user_id from session if available, otherwise use None
+    user_id = session.get('userId')
+    if not user_id:
+        return jsonify([]), 200  # Return empty list for non-logged in users
+        
     user_obj_id = ObjectId(user_id)
 
     start_db = time.time()
@@ -45,21 +47,22 @@ def create_user_thread():
     User creates a new support thread.
     Must return the FULL THREAD object to avoid parse errors on front end.
     Emits 'new_thread' to admin room only.
+    
+    For non-logged in users, we'll create anonymous threads.
     """
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
+    # Get user_id from session if available
+    user_id = session.get('userId')
+    user_obj_id = ObjectId(user_id) if user_id else None
+    
     data = request.json or {}
     subject = data.get('subject', '').strip()
     if not subject:
         subject = "Untitled Thread"
 
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
     now = datetime.utcnow()
 
     new_thread = {
-        "userId": user_obj_id,
+        "userId": user_obj_id,  # Will be None for anonymous users
         "subject": subject,
         "messages": [],
         "status": "open",
@@ -79,7 +82,7 @@ def create_user_thread():
 
         thread_data = {
             "_id": str(result.inserted_id),
-            "userId": str(user_obj_id),
+            "userId": str(user_obj_id) if user_obj_id else None,
             "subject": subject,
             "status": "open",
             "createdAt": now.isoformat(),
@@ -97,18 +100,22 @@ def create_user_thread():
 
 @support_bp.route('/my-chat/<thread_id>', methods=['GET'])
 def get_single_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
+    user_id = session.get('userId')
+    
     try:
         obj_id = ObjectId(thread_id)
     except:
         return jsonify({"error": "Invalid thread ID"}), 400
 
     start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    # If user is logged in, only show their threads
+    if user_id:
+        user_obj_id = ObjectId(user_id)
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    else:
+        # For non-logged in users, check if it's an anonymous thread
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
+        
     duration = time.time() - start_db
     if not hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator = 0.0
@@ -118,7 +125,8 @@ def get_single_thread(thread_id):
         return jsonify({"error": "Thread not found"}), 404
 
     thread['_id'] = str(thread['_id'])
-    thread['userId'] = str(thread['userId'])
+    if thread.get('userId'):
+        thread['userId'] = str(thread['userId'])
     for m in thread.get("messages", []):
         if "timestamp" in m and isinstance(m["timestamp"], datetime):
             m["timestamp"] = m["timestamp"].isoformat()
@@ -126,16 +134,13 @@ def get_single_thread(thread_id):
 
 @support_bp.route('/my-chat/<thread_id>', methods=['POST'])
 def post_message_to_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
+    user_id = session.get('userId')
+    
     data = request.json or {}
     content = data.get('content', '').strip()
     if not content:
         return jsonify({"error": "No content"}), 400
 
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
     now = datetime.utcnow()
 
     try:
@@ -144,7 +149,13 @@ def post_message_to_thread(thread_id):
         return jsonify({"error": "Invalid thread ID"}), 400
 
     start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    # Query based on whether user is logged in
+    if user_id:
+        user_obj_id = ObjectId(user_id)
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    else:
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
+        
     duration = time.time() - start_db
     if not hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator = 0.0
@@ -204,14 +215,11 @@ def post_message_to_thread(thread_id):
 
 @support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
 def user_close_specific_thread(thread_id):
-    if not require_user_logged_in():
-        return jsonify({"error": "Not logged in"}), 401
-
+    user_id = session.get('userId')
+    
     data = request.json or {}
     content = data.get("content", "User closed the thread")
     now = datetime.utcnow()
-    user_id = session['userId']
-    user_obj_id = ObjectId(user_id)
 
     try:
         obj_id = ObjectId(thread_id)
@@ -219,7 +227,13 @@ def user_close_specific_thread(thread_id):
         return jsonify({"error": "Invalid thread ID"}), 400
 
     start_db = time.time()
-    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    # Query based on whether user is logged in
+    if user_id:
+        user_obj_id = ObjectId(user_id)
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    else:
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
+        
     duration = time.time() - start_db
     if not hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator = 0.0
@@ -248,6 +262,9 @@ def user_close_specific_thread(thread_id):
         }
     )
 
+    # Get socketio from the current app's extensions
+    socketio = current_app.extensions['socketio']
+
     # Let admin know user closed
     socketio.emit('new_message', {
         "threadId": str(thread["_id"]),
@@ -259,4 +276,3 @@ def user_close_specific_thread(thread_id):
     }, room=str(thread["_id"]))
 
     return jsonify({"message": "Thread closed"}), 200
-

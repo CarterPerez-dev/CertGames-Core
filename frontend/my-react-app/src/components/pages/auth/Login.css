@@ -155,6 +155,28 @@
   margin: 0;
 }
 
+/* Add this to your Login.css file */
+
+/* Success Message */
+.login-success-message {
+  background: rgba(46, 187, 119, 0.1);
+  border: 1px solid var(--login-success);
+  color: var(--login-success);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Error Message */
 .login-error-message {
   background: rgba(255, 78, 78, 0.1);

@@ -226,6 +226,14 @@
   box-shadow: var(--register-glow);
 }
 
+.register-input-wrapper input.register-input-error {
+  border-color: var(--register-error);
+}
+
+.register-input-wrapper input.register-input-error:focus {
+  box-shadow: 0 0 0 2px rgba(255, 78, 78, 0.2);
+}
+
 .register-input-wrapper input::placeholder {
   color: var(--register-text-secondary);
   opacity: 0.7;
@@ -271,6 +279,72 @@
   margin-top: 10px;
   border: 1px solid var(--register-border);
   animation: fadeIn 0.3s ease-out;
+}
+
+.register-requirements-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.register-requirements-header h4 {
+  font-size: 14px;
+  margin: 0;
+  color: var(--register-primary);
+}
+
+.register-requirements-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.register-requirements-status.valid {
+  background: rgba(46, 187, 119, 0.1);
+  color: var(--register-success);
+}
+
+.register-requirements-status.invalid {
+  background: rgba(255, 78, 78, 0.1);
+  color: var(--register-error);
+}
+
+.register-requirements-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.register-requirements-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  transition: color 0.2s;
+}
+
+.register-requirements-list li.valid {
+  color: var(--register-success);
+}
+
+.register-requirements-list li.invalid {
+  color: var(--register-text-secondary);
+}
+
+.icon-check {
+  color: var(--register-success);
+}
+
+.icon-times {
+  color: var(--register-error);
 }
 
 @keyframes fadeIn {

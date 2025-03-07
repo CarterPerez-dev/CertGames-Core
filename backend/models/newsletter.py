@@ -1,14 +1,15 @@
-#######################################
-# models/newsletter.py
-#######################################
+from datetime import datetime
 import os
 import re
 import random
 import string
-from datetime import datetime
+import time
 from bson.objectid import ObjectId
+from flask import g, current_app
+from utils.email_sender import email_sender
 from mongodb.database import db
 
+# Newsletter collections
 newsletter_subscribers_collection = db.newsletterSubscribers
 newsletter_campaigns_collection = db.newsletterCampaigns
 
@@ -19,14 +20,25 @@ def _generate_unsubscribe_token(length=32):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 def subscribe_email(email: str):
+    """
+    Subscribe an email to the newsletter.
+    Returns a dict {"success": bool, "message": str}
+    """
     email = email.strip().lower()
     if not re.match(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
         return {"success": False, "message": "Invalid email format."}
 
+    start_db = time.time()
     existing = newsletter_subscribers_collection.find_one({"email": email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
     if existing:
         if existing.get("unsubscribed", False) is True:
             # Mark them re-subscribed
+            start_db = time.time()
             newsletter_subscribers_collection.update_one(
                 {"_id": existing["_id"]},
                 {
@@ -41,6 +53,10 @@ def subscribe_email(email: str):
                 },
                 upsert=True
             )
+            duration = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration
             return {"success": True, "message": "You have been re-subscribed."}
         else:
             return {"success": False, "message": "Already subscribed."}
@@ -51,58 +67,97 @@ def subscribe_email(email: str):
             "unsubscribed": False,
             "unsubscribeToken": _generate_unsubscribe_token()
         }
+        start_db = time.time()
         newsletter_subscribers_collection.insert_one(doc)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
         return {"success": True, "message": "Subscription successful."}
-
 
 def unsubscribe_email(email: str):
     """
-    If you still want to let them unsubscribe by email
-    (POST /newsletter/unsubscribe with JSON),
-    keep this approach for backwards compatibility.
+    Unsubscribe an email from the newsletter using the email address.
+    Returns a dict {"success": bool, "message": str}
     """
     email = email.strip().lower()
+    
+    start_db = time.time()
     subscriber = newsletter_subscribers_collection.find_one({"email": email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
     if not subscriber:
         return {"success": False, "message": "Email not found in subscriber list."}
 
     if subscriber.get("unsubscribed", False) is True:
         return {"success": False, "message": "Already unsubscribed."}
 
+    start_db = time.time()
     newsletter_subscribers_collection.update_one(
         {"_id": subscriber["_id"]},
         {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
     )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
     return {"success": True, "message": "You have been unsubscribed."}
-
 
 def unsubscribe_by_token(token: str):
     """
     Finds the subscriber by their token and unsubscribes them if possible.
     Returns a dict { success: bool, message: str }.
     """
+    start_db = time.time()
     subscriber = newsletter_subscribers_collection.find_one({"unsubscribeToken": token})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
     if not subscriber:
         return {"success": False, "message": "Invalid unsubscribe token."}
+    
     if subscriber.get("unsubscribed", False):
         return {"success": False, "message": "You have already unsubscribed."}
 
+    start_db = time.time()
     newsletter_subscribers_collection.update_one(
         {"_id": subscriber["_id"]},
         {"$set": {"unsubscribed": True, "unsubscribedAt": datetime.utcnow()}}
     )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
     return {"success": True, "message": "You have been unsubscribed."}
 
-
 def get_all_active_subscribers():
-    return newsletter_subscribers_collection.find({"unsubscribed": False})
-
+    """
+    Get all active (not unsubscribed) newsletter subscribers
+    """
+    start_db = time.time()
+    subscribers = newsletter_subscribers_collection.find({"unsubscribed": False})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
+    return subscribers
 
 ########################################
 # Newsletter Campaign Management
 ########################################
 
 def create_campaign(title: str, content_html: str):
+    """
+    Create a new newsletter campaign
+    """
     doc = {
         "title": title,
         "contentHtml": content_html,
@@ -110,21 +165,44 @@ def create_campaign(title: str, content_html: str):
         "sentAt": None,
         "status": "draft"
     }
+    
+    start_db = time.time()
     result = newsletter_campaigns_collection.insert_one(doc)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
     return str(result.inserted_id)
 
 def get_campaign_by_id(campaign_id: str):
+    """
+    Get a newsletter campaign by ID
+    """
     try:
         oid = ObjectId(campaign_id)
     except:
         return None
-    return newsletter_campaigns_collection.find_one({"_id": oid})
+    
+    start_db = time.time()
+    campaign = newsletter_campaigns_collection.find_one({"_id": oid})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+    
+    return campaign
 
 def mark_campaign_sent(campaign_id: str):
+    """
+    Mark a newsletter campaign as sent
+    """
     try:
         oid = ObjectId(campaign_id)
     except:
         return
+    
+    start_db = time.time()
     newsletter_campaigns_collection.update_one(
         {"_id": oid},
         {"$set": {
@@ -132,4 +210,97 @@ def mark_campaign_sent(campaign_id: str):
             "status": "sent"
         }}
     )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
+def send_campaign_to_subscriber(campaign, subscriber):
+    """
+    Send a campaign to a specific subscriber with personalized unsubscribe link
+    """
+    if not campaign or not subscriber:
+        return False
+    
+    recipient_email = subscriber["email"]
+    
+    # Get the user's unsubscribe token (or generate if missing)
+    token = subscriber.get("unsubscribeToken")
+    if not token:
+        token = _generate_unsubscribe_token()
+        start_db = time.time()
+        newsletter_subscribers_collection.update_one(
+            {"_id": subscriber["_id"]},
+            {"$set": {"unsubscribeToken": token}}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+    
+    # Get the frontend URL from environment variable or use a default
+    frontend_url = os.getenv('FRONTEND_URL', 'https://yourdomain.com')
+    unsubscribe_link = f"{frontend_url}/newsletter/unsubscribe/{token}"
+    
+    # Get the campaign content and title
+    subject_line = campaign["title"]
+    body_html_from_campaign = campaign["contentHtml"]
+    
+    # Build a custom HTML that includes campaign content + unsubscribe link
+    personal_html = f"""
+    <html>
+      <body>
+        {body_html_from_campaign}
+        <hr>
+        <p>To unsubscribe, click here:
+          <a href="{unsubscribe_link}">Unsubscribe</a>
+        </p>
+      </body>
+    </html>
+    """
+    
+    # Send the email using SendGrid
+    return email_sender.send_email(
+        to_email=recipient_email,
+        subject=subject_line,
+        html_content=personal_html,
+        email_type='newsletter'
+    )
+
+def send_campaign_to_all(campaign_id):
+    """
+    Send a campaign to all active subscribers
+    """
+    campaign = get_campaign_by_id(campaign_id)
+    if not campaign:
+        return {"success": False, "message": "Campaign not found"}
+    
+    if campaign.get("status") == "sent":
+        return {"success": False, "message": "Campaign already sent"}
+    
+    # Get all active subscribers
+    subscribers_cursor = get_all_active_subscribers()
+    subscribers_list = list(subscribers_cursor)
+    
+    if not subscribers_list:
+        return {"success": False, "message": "No active subscribers found"}
+    
+    success_count = 0
+    fail_count = 0
+    
+    for subscriber in subscribers_list:
+        # Send the campaign to this subscriber
+        sent = send_campaign_to_subscriber(campaign, subscriber)
+        
+        if sent:
+            success_count += 1
+        else:
+            fail_count += 1
+    
+    # Mark the campaign as sent
+    mark_campaign_sent(campaign_id)
+    
+    return {
+        "success": True, 
+        "message": f"Newsletter sent to {success_count} subscribers ({fail_count} failed)"
+    }

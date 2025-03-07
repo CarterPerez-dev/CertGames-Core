@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser } from '../store/userSlice';
+import { registerUser, clearAuthErrors } from '../store/userSlice';
 import {
   FaUser,
   FaLock,
@@ -13,9 +13,10 @@ import {
   FaEye,
   FaEyeSlash,
   FaExclamationCircle,
-  FaUserSecret,
+  FaShieldAlt,
   FaCheck,
-  FaInfoCircle
+  FaInfoCircle,
+  FaTimes
 } from 'react-icons/fa';
 import PasswordRequirements from './PasswordRequirements';
 import './Register.css';
@@ -30,11 +31,27 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formError, setFormError] = useState('');
   const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [passwordValidation, setPasswordValidation] = useState({
+    hasMinimumLength: false,
+    hasUpperCase: false,
+    hasLowerCase: false,
+    hasNumber: false,
+    hasSpecialChar: false
+  });
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
   const { loading, error, userId } = useSelector((state) => state.user);
+  
+  // Clear errors when component mounts or unmounts
+  useEffect(() => {
+    dispatch(clearAuthErrors());
+    
+    return () => {
+      dispatch(clearAuthErrors());
+    };
+  }, [dispatch]);
   
   useEffect(() => {
     // If already logged in, redirect to profile
@@ -43,10 +60,32 @@ const Register = () => {
     }
   }, [userId, navigate]);
   
+  // Update password validation whenever password changes
+  useEffect(() => {
+    setPasswordValidation({
+      hasMinimumLength: password.length >= 6,
+      hasUpperCase: /[A-Z]/.test(password),
+      hasLowerCase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*()\-_=+[\]{}|;:'",<.>/?`~\\]/.test(password)
+    });
+  }, [password]);
+
+  const passwordIsValid = () => {
+    return Object.values(passwordValidation).every(val => val === true);
+  };
+  
   const validateForm = () => {
     // Check if all fields are filled
     if (!username || !email || !password || !confirmPassword) {
       setFormError('All fields are required');
+      return false;
+    }
+    
+    // Check if password meets requirements
+    if (!passwordIsValid()) {
+      setFormError('Password does not meet all requirements');
+      setShowPasswordRequirements(true);
       return false;
     }
     
@@ -86,10 +125,30 @@ const Register = () => {
         navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
       } else {
         // Handle error from the action
-        setFormError(resultAction.payload || 'Registration failed. Please try again.');
+        const errorMessage = resultAction.payload || resultAction.error?.message;
+        
+        // Check for email already taken message
+        if (errorMessage && (
+            errorMessage.includes("Email is already taken") || 
+            errorMessage.includes("Username or email is already taken") ||
+            errorMessage.includes("already taken")
+        )) {
+          setFormError('Email address is already registered. Please use a different email or login.');
+        } else {
+          setFormError(errorMessage || 'Registration failed. Please try again.');
+        }
       }
     } catch (err) {
-      setFormError('An error occurred. Please try again.');
+      // Handle other errors
+      if (err.message && (
+          err.message.includes("Email is already taken") ||
+          err.message.includes("Username or email is already taken") ||
+          err.message.includes("already taken")
+      )) {
+        setFormError('Email address is already registered. Please use a different email or login.');
+      } else {
+        setFormError('An error occurred. Please try again.');
+      }
     }
   };
   
@@ -110,7 +169,7 @@ const Register = () => {
         <div className="register-card">
           <div className="register-header">
             <div className="register-logo">
-              <FaUserSecret className="register-logo-icon" />
+              <FaShieldAlt className="register-logo-icon" />
             </div>
             <h1 className="register-title">Create Account</h1>
             <p className="register-subtitle">Join and start your learning journey</p>
@@ -168,8 +227,15 @@ const Register = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onFocus={() => setShowPasswordRequirements(true)}
+                  onBlur={() => {
+                    // Keep requirements visible if there's text or error
+                    if (!password) {
+                      setShowPasswordRequirements(false);
+                    }
+                  }}
                   placeholder="Create a strong password"
                   disabled={loading}
+                  className={password && !passwordIsValid() ? "register-input-error" : ""}
                 />
                 <button
                   type="button"
@@ -183,7 +249,54 @@ const Register = () => {
               
               {showPasswordRequirements && (
                 <div className="register-password-requirements">
-                  <PasswordRequirements password={password} />
+                  <div className="register-requirements-header">
+                    <h4>Password Requirements:</h4>
+                    {passwordIsValid() ? (
+                      <div className="register-requirements-status valid">
+                        <FaCheck /> Valid
+                      </div>
+                    ) : (
+                      <div className="register-requirements-status invalid">
+                        <FaTimes /> Invalid
+                      </div>
+                    )}
+                  </div>
+                  <ul className="register-requirements-list">
+                    <li className={passwordValidation.hasMinimumLength ? 'valid' : 'invalid'}>
+                      {passwordValidation.hasMinimumLength ? 
+                        <FaCheck className="icon-check" /> : 
+                        <FaTimes className="icon-times" />}
+                      <span>At least 6 characters long</span>
+                    </li>
+                    
+                    <li className={passwordValidation.hasUpperCase ? 'valid' : 'invalid'}>
+                      {passwordValidation.hasUpperCase ? 
+                        <FaCheck className="icon-check" /> : 
+                        <FaTimes className="icon-times" />}
+                      <span>At least one uppercase letter</span>
+                    </li>
+                    
+                    <li className={passwordValidation.hasLowerCase ? 'valid' : 'invalid'}>
+                      {passwordValidation.hasLowerCase ? 
+                        <FaCheck className="icon-check" /> : 
+                        <FaTimes className="icon-times" />}
+                      <span>At least one lowercase letter</span>
+                    </li>
+                    
+                    <li className={passwordValidation.hasNumber ? 'valid' : 'invalid'}>
+                      {passwordValidation.hasNumber ? 
+                        <FaCheck className="icon-check" /> : 
+                        <FaTimes className="icon-times" />}
+                      <span>At least one number</span>
+                    </li>
+                    
+                    <li className={passwordValidation.hasSpecialChar ? 'valid' : 'invalid'}>
+                      {passwordValidation.hasSpecialChar ? 
+                        <FaCheck className="icon-check" /> : 
+                        <FaTimes className="icon-times" />}
+                      <span>At least one special character</span>
+                    </li>
+                  </ul>
                 </div>
               )}
             </div>

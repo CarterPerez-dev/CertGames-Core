@@ -248,6 +248,10 @@ const userSlice = createSlice({
       const { xp, coins } = action.payload;
       state.xp = xp;
       state.coins = coins;
+    },
+    // Add this new action:
+    clearAuthErrors(state) {
+      state.error = null;
     }
   },
   extraReducers: (builder) => {
@@ -364,6 +368,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
+export const { setCurrentUserId, logout, setXPAndCoins, clearAuthErrors } = userSlice.actions;
 export default userSlice.reducer;
-

@@ -32,12 +32,51 @@ import {
   FaTimes,
   FaCheck,
   FaUserCircle,
-  FaLevelUpAlt
+  FaLevelUpAlt,
+  FaPalette
 } from 'react-icons/fa';
 
 // Requirements component for password validation
 import PasswordRequirements from '../auth/PasswordRequirements';
 
+// Theme options for the application
+const themeOptions = [
+
+  // Neutral/Grays
+  { id: 'silver', name: 'Silver', color: '#71717a' },
+  { id: 'dark', name: 'Dark', color: '#334155' },
+  // Reds/Pinks
+  { id: 'red', name: 'Red', color: '#dc2626' },
+  { id: 'crimson', name: 'Crimson', color: '#be123c' },
+  { id: 'pink', name: 'Pink', color: '#db2777' },
+  { id: 'magenta', name: 'Magenta', color: '#c026d3' },
+  
+  // Purples
+  { id: 'violet', name: 'Violet', color: '#7c3aed' },
+  { id: 'default', name: 'Purple (Default)', color: '#6543cc' },
+  { id: 'indigo', name: 'Indigo', color: '#4f46e5' },
+  { id: 'midnight', name: 'Midnight', color: '#312e81' },
+  
+  // Blues
+  { id: 'blue', name: 'Blue', color: '#2563eb' },
+  { id: 'navy', name: 'Navy', color: '#1e3a8a' },
+  { id: 'sky', name: 'Sky', color: '#0284c7' },
+  { id: 'cyan', name: 'Cyan', color: '#0891b2' },
+  
+  // Teals/Greens
+  { id: 'teal', name: 'Teal', color: '#0891b2' },
+  { id: 'turquoise', name: 'Turquoise', color: '#0d9488' },
+  { id: 'emerald', name: 'Emerald', color: '#047857' },
+  { id: 'green', name: 'Green', color: '#059669' },
+  { id: 'neon', name: 'Neon', color: '#10b981' },
+  { id: 'lime', name: 'Lime', color: '#65a30d' },
+  
+  // Browns/Yellows/Oranges
+  { id: 'chocolate', name: 'Chocolate', color: '#854d0e' },
+  { id: 'gold', name: 'Gold', color: '#ca8a04' },
+  { id: 'amber', name: 'Amber', color: '#d97706' },
+  { id: 'orange', name: 'Orange', color: '#ea580c' },
+];
 // ==========================
 // FRONTEND VALIDATION HELPERS
 // ==========================
@@ -377,6 +416,11 @@ const UserProfile = () => {
   const [showMoreAchievements, setShowMoreAchievements] = useState(false);
   const [showMoreItems, setShowMoreItems] = useState(false);
 
+  // Theme state
+  const [currentTheme, setCurrentTheme] = useState(() => {
+    return localStorage.getItem('selectedTheme') || 'default';
+  });
+
   // Calculate the percentage of XP to next level (just a visual approximation)
   const calculateXpPercentage = () => {
     const baseXpPerLevel = 1000; // Assuming 1000 XP per level
@@ -423,6 +467,27 @@ const UserProfile = () => {
       return () => clearTimeout(timer);
     }
   }, [statusMessage]);
+
+  // Apply the theme on component mount
+  useEffect(() => {
+    // Apply the current theme when component mounts
+    const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    setCurrentTheme(savedTheme);
+  }, []);
+
+  // Handle theme change
+  const handleThemeChange = (themeId) => {
+    // Save to localStorage
+    localStorage.setItem('selectedTheme', themeId);
+    // Update state
+    setCurrentTheme(themeId);
+    // Apply the theme to the document
+    document.documentElement.setAttribute('data-theme', themeId);
+    
+    setStatusMessage(`Theme changed to ${themeOptions.find(t => t.id === themeId).name}`);
+    setStatusType('success');
+  };
 
   // =======================
   // CHANGE USERNAME
@@ -692,6 +757,27 @@ const UserProfile = () => {
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="profile-overview-tab">
+              {/* Theme Switcher in Overview Tab */}
+              <div className="profile-overview-theme-switcher">
+                <h3 className="profile-theme-switcher-title">
+                  <FaPalette className="profile-setting-icon" />
+                  Change Theme
+                </h3>
+                <div className="profile-theme-options">
+                  {themeOptions.map(theme => (
+                    <button
+                      key={theme.id}
+                      className={`profile-theme-option ${currentTheme === theme.id ? 'active' : ''}`}
+                      style={{ backgroundColor: theme.color }}
+                      onClick={() => handleThemeChange(theme.id)}
+                      aria-label={`Select ${theme.name} theme`}
+                    >
+                      {currentTheme === theme.id && <FaCheck className="profile-theme-check" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
               <div className="profile-overview-cards">
                 <div className="profile-card">
                   <h2 className="profile-card-title">
@@ -1197,4 +1283,3 @@ const UserProfile = () => {
 };
 
 export default UserProfile;
-

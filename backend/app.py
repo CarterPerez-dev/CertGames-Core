@@ -23,6 +23,7 @@ from routes.newsletter_routes import newsletter_bp
 from routes.admin_newsletter_routes import admin_news_bp
 from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
+from routes.password_reset_routes import password_reset_bp
 
 load_dotenv()
 
@@ -80,6 +81,7 @@ app.register_blueprint(cracked_bp, url_prefix="/cracked")
 app.register_blueprint(support_bp, url_prefix="/support")
 app.register_blueprint(newsletter_bp, url_prefix='/newsletter')
 app.register_blueprint(admin_news_bp, url_prefix="/cracked") 
+app.register_blueprint(password_reset_bp, url_prefix='/password-reset')
 
 
 ###########################

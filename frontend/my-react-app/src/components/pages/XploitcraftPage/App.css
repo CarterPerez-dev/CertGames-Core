@@ -11,6 +11,7 @@
   text-align: center;
   color: #00ff00;
   position: relative;
+  overflow-x: hidden; /* Prevent horizontal scrolling on mobile */
 }
 
 .loading-icon {
@@ -19,6 +20,12 @@
   margin-top: -1rem;
   object-fit: contain;        
   color: #660000;
+  animation: spin 2s linear infinite; /* Added animation for loading icon */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .header-title {
@@ -37,6 +44,8 @@
   margin-bottom: 1.25rem;
   font-family: 'Roboto', sans-serif;
   flex-wrap: wrap; 
+  width: 100%;
+  padding: 0 1rem;
 }
 
 .input-field {
@@ -46,7 +55,7 @@
   padding: 0.5rem;
   font-size: 1rem;
   color: #ffffff;
-  background-color: #333;
+  background-color: rgba(51, 51, 51, 0.8); /* Semi-transparent background */
   border: 0.125rem solid #660000;
   border-radius: 0.5rem;
   outline: none;
@@ -54,7 +63,8 @@
 }
 
 .input-field:focus {
-  border-color: #fff;
+  border-color: #ff0000;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
 .button-container {
@@ -75,51 +85,157 @@
   cursor: pointer;
   font-weight: bold;
   font-family: 'Orbitron', sans-serif;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
   margin-bottom: 1rem;
   font-size: 1rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
-.generate-button:hover {
+.generate-button-xploit:hover {
   background-color: #8b0000;
   transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
 .generated-payload-title {
-  color: #660000;  
+  color: #ff0000;  
   font-family: 'Orbitron', sans-serif;  
   text-shadow: 0.125rem 0.125rem 0.25rem #000000;  
   margin-bottom: 0.625rem;  
   font-weight: bold;
   border-bottom: 0.125rem solid #ffffff;
   font-size: 1.5rem;
+  padding-bottom: 0.5rem;
+  width: 100%;
+  text-align: center;
 }
 
-.payload-wrapper {
-  position: relative;
+/* New styles for the separated code and explanations */
+.results-container {
   max-width: 72rem;
   width: 90vw;
   margin: 1.25rem auto;  
-  text-align: left;  
-  background: linear-gradient(145deg, #282c34, #1e1e1e);  
-  padding: 1.25rem;
+  background: rgba(30, 30, 30, 0.92);
+  padding: 1.5rem;
   border-radius: 0.5rem;
   border: 0.1875rem solid #660000;  
-  opacity: 0.97;
+  color: #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.payload-content {
+.section-title {
+  color: #ff0000;
+  font-family: 'Orbitron', sans-serif;
+  margin: 0 0 1rem 0;
+  font-size: 1.3rem;
+  border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+  padding-bottom: 0.5rem;
+}
+
+.code-examples-section, 
+.explanations-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.code-block-wrapper {
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 0.5rem;
-  max-height: 37.5rem;
-  font-size: 1rem;
-  overflow-x: hidden;
+  overflow: hidden;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.code-block-header {
+  background: rgba(102, 0, 0, 0.7);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.code-block-header h4 {
+  margin: 0;
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.code-block-content {
+  max-height: 25rem;
   overflow-y: auto;
-  word-wrap: break-word;
-  overflow-wrap: anywhere;
-  line-height: 1.3;
+  border-top: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.code-block-content pre {
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+.explanation-block {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
   padding: 1rem;
-  box-sizing: border-box;
-  max-width: 100%;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.explanation-block h4 {
+  color: #ff6666;
+  margin-top: 0;
+  font-family: 'Orbitron', sans-serif;
+  border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.explanation-text {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.explanation-text p {
+  margin-bottom: 1rem;
+}
+
+.copy-button-code {
+  background: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.25rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.copy-button-code:hover {
+  background: rgba(102, 0, 0, 0.7);
+  border-color: #ff0000;
+}
+
+.copy-all-button {
+  align-self: center;
+  background-color: #660000;
+  color: #ffffff;
+  padding: 0.75rem 1.875rem;
+  border-radius: 0.5rem;
+  border: 0.1875rem solid #000000;
+  cursor: pointer;
+  font-weight: bold;
+  font-family: 'Orbitron', sans-serif;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.copy-all-button:hover {
+  background-color: #8b0000;
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
 .App-logo {
@@ -128,6 +244,7 @@
   pointer-events: none;
   animation: App-logo-spin infinite 20s linear;
   margin-bottom: -1.875rem;
+  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.7));
 }
 
 @keyframes App-logo-spin {
@@ -142,36 +259,43 @@
   }
 }
 
-
 ::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-.copy-button-payload {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background-color: #660000;
-  color: #000;
-  border: 1px solid #000;
-  border-radius: 0.5rem;
-  padding: 0.3rem 0.7rem;
-  font-size: 0.8rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
+/* Scrollbar styling for better UI */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-.copy-button-payload:active {
-  transform: scale(0.95);
-  opacity: 0.8;
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
 }
 
-.copy-button-payload:hover {
-  background-color: #00CED1;
-  color: #000;
+::-webkit-scrollbar-thumb {
+  background: #660000;
+  border-radius: 4px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: #8b0000;
+}
+
+/*******************************************/
+/* iPhone and Mobile Compatibility */
+/*******************************************/
+
+/* Fix for iPhone notch and safe areas */
+@supports (padding: max(0px)) {
+  .App-header {
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+    padding-left: max(0px, env(safe-area-inset-left));
+  }
+}
 
 /*******************************************/
 /* 1) Extra-Small Devices: max-width 320px */
@@ -196,7 +320,9 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    padding: 0 0.5rem;
   }
+  
   .input-field {
     width: 95vw;
     max-width: none; 
@@ -207,27 +333,25 @@
   .button-container {
     margin-left: 0;
   }
-  .generate-button {
+  
+  .generate-button-xploit {
     font-size: 0.85rem;
     padding: 0.5rem 1.2rem;
   }
 
-  /* Payload wrapper scaling */
-  .payload-wrapper {
+  /* Results container */
+  .results-container {
     width: 95vw;
     margin: 1rem auto;
-    padding: 1rem;
+    padding: 1rem 0.75rem;
   }
-  .payload-content {
-    max-height: 20rem;
-    font-size: 0.9rem;
-    line-height: 1.2;
+  
+  .section-title {
+    font-size: 1.1rem;
   }
 
-  /* Copy button scaled down */
-  .copy-button-payload {
-    font-size: 0.7rem;
-    padding: 0.25rem 0.5rem;
+  .code-block-content {
+    max-height: 15rem;
   }
 
   /* Logo and loading icon adjustments */
@@ -235,6 +359,7 @@
     max-width: 10rem;
     max-height: 10rem;
   }
+  
   .loading-icon {
     width: 2rem;
     height: 2rem;
@@ -262,30 +387,33 @@
   .input-container-horizontal {
     gap: 0.75rem;
   }
+  
   .input-field {
     width: 90vw;
     max-width: none;
     font-size: 1rem;
   }
-  .generate-button {
+  
+  .generate-button-xploit {
     font-size: 0.9rem;
     padding: 0.6rem 1.5rem;
   }
 
-  /* Payload area */
-  .payload-wrapper {
+  /* Results area */
+  .results-container {
     width: 90vw;
     margin: 1rem auto;
+    padding: 1.25rem;
   }
-  .payload-content {
-    max-height: 24rem; /* Slightly taller if needed */
-    font-size: 0.95rem;
-    line-height: 1.25;
+  
+  .code-block-header h4,
+  .explanation-block h4 {
+    font-size: 1rem;
   }
 
-  .copy-button-payload {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.6rem;
+  .copy-button-code {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
   }
 
   /* Logo size */
@@ -293,6 +421,7 @@
     max-width: 12rem;
     max-height: 12rem;
   }
+  
   .loading-icon {
     width: 2.2rem;
     height: 2.2rem;
@@ -318,37 +447,35 @@
     flex-wrap: wrap;
     gap: 1rem;
   }
+  
   .input-field {
     font-size: 1rem;
     width: 80vw;
     max-width: 20rem;
   }
-  .generate-button {
+  
+  .generate-button-xploit {
     font-size: 0.95rem;
     padding: 0.6rem 1.6rem;
   }
 
-  /* Payload area */
-  .payload-wrapper {
-    width: 80vw;
+  /* Results area */
+  .results-container {
+    width: 85vw;
     max-width: 36rem;
     margin: 1.2rem auto;
   }
-  .payload-content {
-    max-height: 26rem;
-    font-size: 1rem;
-    line-height: 1.3;
-  }
 
-  .copy-button-payload {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.7rem;
+  .copy-all-button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
   }
 
   .App-logo {
     max-width: 13rem;
     max-height: 13rem;
   }
+  
   .loading-icon {
     width: 2.3rem;
     height: 2.3rem;
@@ -356,53 +483,39 @@
 }
 
 /*******************************************/
-/* 4) Tablets / Larger Mobiles: max-width 768px */
+/* 4) iPhones with Notch/Dynamic Island    */
 /*******************************************/
-@media (max-width: 768px) {
+@media (max-width: 428px) and (-webkit-device-pixel-ratio: 3) {
   .App-header {
-    padding: 1.5rem;
-    font-size: 1rem;
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
-
-  .header-title {
-    font-size: 2.3rem;
+  
+  .App-logo {
+    max-width: 11rem;
+    max-height: 11rem;
     margin-top: 1rem;
   }
+}
 
-  .input-container-horizontal {
-    gap: 1rem;
+/* iPhone specific padding for the bottom area */
+@supports (padding: max(0px)) {
+  .results-container {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .App-header {
+    background-color: #000; /* Fallback if image doesn't load */
+  }
+  
   .input-field {
-    width: 70vw;
-    max-width: 25rem;
+    background-color: rgba(51, 51, 51, 0.8);
   }
-  .generate-button {
-    font-size: 1rem;
-    padding: 0.7rem 1.7rem;
-  }
-
-  .payload-wrapper {
-    width: 70vw;
-    max-width: 42rem;
-    margin: 1.5rem auto;
-  }
-  .payload-content {
-    max-height: 28rem;
-    font-size: 1rem;
-    line-height: 1.3;
-  }
-
-  .copy-button-payload {
-    font-size: 0.85rem;
-    padding: 0.35rem 0.75rem;
-  }
-
-  .App-logo {
-    max-width: 14rem;
-    max-height: 14rem;
-  }
-  .loading-icon {
-    width: 2.4rem;
-    height: 2.4rem;
+  
+  .results-container {
+    background: rgba(20, 20, 20, 0.95);
   }
 }

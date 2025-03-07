@@ -1,4 +1,3 @@
-// src/components/auth/ForgotPassword.js
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
@@ -19,8 +18,9 @@ const ForgotPassword = () => {
   
   const navigate = useNavigate();
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     
     if (!email) {
       setError('Please enter your email address.');
@@ -29,16 +29,31 @@ const ForgotPassword = () => {
     
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setSent(true);
-      setLoading(false);
+    try {
+      const response = await fetch('/api/password-reset/request-reset', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
       
-      // Redirect after showing success message
-      setTimeout(() => {
-        navigate('/login');
-      }, 5000);
-    }, 1500);
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send reset link');
+      }
+      
+      // Always show success even if email doesn't exist (security best practice)
+      setSent(true);
+      
+      // Don't redirect automatically for better UX
+      // Let the user read the message and decide when to go back to login
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (
@@ -74,8 +89,8 @@ const ForgotPassword = () => {
                 We've sent instructions to reset your password to <strong>{email}</strong>. 
                 Please check your inbox and follow the link to complete the process.
               </p>
-              <p className="forgot-redirect-notice">
-                Redirecting to login page in a few seconds...
+              <p className="forgot-email-note">
+                If you don't see the email, please check your spam folder.
               </p>
             </div>
           ) : (
