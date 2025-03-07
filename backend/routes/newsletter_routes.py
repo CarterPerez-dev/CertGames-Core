@@ -26,7 +26,7 @@ def newsletter_unsubscribe_token(token):
     """
     Allows one-click unsubscribe via GET.
     e.g. 
-      <a href="https://yoursite.com/newsletter/unsubscribe/<token>">Unsubscribe</a>
+      <a href="https://certgames.com/newsletter/unsubscribe/<token>">Unsubscribe</a>
     
     You can either:
       (a) Return a JSON response 
