@@ -158,7 +158,9 @@ def process_oauth_user(email, name, oauth_provider, oauth_id):
 # Google OAuth routes
 @oauth_bp.route('/login/google')
 def google_login():
-    redirect_uri = url_for('oauth.google_auth', _external=True)
+    # Use the external URL with /api prefix for your reverse proxy
+    base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
+    redirect_uri = f"{base_url}/api/oauth/auth/google"
     return google.authorize_redirect(redirect_uri)
 
 @oauth_bp.route('/auth/google')
@@ -195,7 +197,9 @@ def google_auth():
 # Apple OAuth routes
 @oauth_bp.route('/login/apple')
 def apple_login():
-    redirect_uri = url_for('oauth.apple_auth', _external=True)
+    # Use the external URL with /api prefix for your reverse proxy
+    base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
+    redirect_uri = f"{base_url}/api/oauth/auth/apple"
     return apple.authorize_redirect(redirect_uri)
 
 @oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
