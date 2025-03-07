@@ -12,7 +12,7 @@ import {
   FaEnvelopeOpenText,
   FaDesktop
 } from 'react-icons/fa';
-import Footer from '../Footer';
+import Footer from '../../Footer';
 import './InfoPage.css';
 
 const InfoPage = () => {
