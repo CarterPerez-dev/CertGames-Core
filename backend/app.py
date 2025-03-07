@@ -24,6 +24,8 @@ from routes.admin_newsletter_routes import admin_news_bp
 from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
 from routes.password_reset_routes import password_reset_bp
+from routes.oauth_routes import oauth_bp, oauth
+
 
 load_dotenv()
 
@@ -58,6 +60,8 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, p
 
 Session(app)
 
+oauth.init_app(app) #CHECK -is this the correct location/order of where I put this?
+
 # Make socketio accessible from other files (avoids circular imports)
 # so in support_routes.py you can do:
 #   socketio = current_app.extensions['socketio']
@@ -82,6 +86,8 @@ app.register_blueprint(support_bp, url_prefix="/support")
 app.register_blueprint(newsletter_bp, url_prefix='/newsletter')
 app.register_blueprint(admin_news_bp, url_prefix="/cracked") 
 app.register_blueprint(password_reset_bp, url_prefix='/password-reset')
+app.register_blueprint(oauth_bp, url_prefix='/oauth')
+
 
 
 ###########################
