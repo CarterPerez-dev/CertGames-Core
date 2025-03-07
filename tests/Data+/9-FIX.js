@@ -1,10 +1,9 @@
 db.tests.insertOne({
-  "category": "CompTIA Data+",
+  "category": "dataplus",
   "testId": 9,
-  "testName": "Expert-Level Practice Test",
-  "xpPerCorrect": 30,
+  "testName": "CompTIA Data+ (DA0-001)Practice Test",
+  "xpPerCorrect": 10,
   "questions": [
-    // DOMAIN 1: Data Concepts and Environments (15%)
     {
       "id": 1,
       "question": "A data analyst needs to store historical data that tracks changes to customer information over time, including address changes, name changes, and account status updates. The team needs to maintain a complete history while ensuring query performance on the current state of each record. Which schema approach provides the optimal solution for this requirement?",
@@ -70,8 +69,6 @@ db.tests.insertOne({
       "explanation": "The correct matching pairs Parquet with columnar storage optimized for analytical queries (its column-oriented format allows for efficient compression and query performance), JSON with document-oriented data with nested structures (its flexible schema supports hierarchical data), Avro with streaming data integration with evolving schemas (its schema evolution capabilities make it ideal for streaming use cases), CSV with simple data exchange with limited parsing capabilities (its universal compatibility makes it ideal for basic data exchange), and HDF5 with hierarchical scientific data (its design specifically addresses scientific data storage needs with internal compression and complex data structures).",
       "examTip": "Understanding the strengths and appropriate use cases for different data formats is crucial for designing effective data pipelines and storage strategies that balance performance, flexibility, and compatibility requirements."
     },
-
-    // DOMAIN 2: Data Mining (25%)
     {
       "id": 6,
       "question": "A financial analyst needs to combine transaction data from multiple sources for analysis. Source A contains customer identifiers and transaction amounts, while Source B contains transaction timestamps and merchant categories. Both sources use different, proprietary transaction identifiers. Which data integration technique would most effectively combine these datasets while maintaining data integrity?",
@@ -202,8 +199,6 @@ db.tests.insertOne({
       "explanation": "A dual-layer approach that separates syntactic validation (format, type, range) during ingestion from semantic validation (business rules, historical comparisons) in scheduled processes provides the most efficient and comprehensive coverage. This approach addresses immediate structural issues at ingestion time without delaying the pipeline, while more complex business rule validations and pattern detections are handled in scheduled processes. Automated profiling alone (option A) might miss specific business rule violations. A separate data quality database (option B) introduces additional complexity and may work with outdated samples. Embedding quality checks in ETL processes (option C) can cause performance issues and doesn't separate fast syntactic checks from more intensive semantic validations.",
       "examTip": "When designing data quality monitoring systems, consider separating fast structural checks from more intensive semantic validations to balance comprehensiveness with performance, and implement appropriate monitoring for different data velocity patterns."
     },
-
-    // DOMAIN 3: Data Analysis (23%)
     {
       "id": 16,
       "question": "A retail analyst is examining sales patterns and wants to determine whether the average purchase amounts differ significantly between weekdays and weekends. The dataset contains 18 months of transaction data with highly variable purchase amounts that do not follow a normal distribution. Which statistical approach would be most appropriate for this analysis?",
@@ -334,8 +329,6 @@ db.tests.insertOne({
       "explanation": "Interrupted time series analysis with segmented regression is specifically designed for evaluating interventions implemented at a specific point in time without a control group. It models both immediate level changes and gradual slope changes following the intervention while controlling for pre-existing trends and seasonality. This approach directly addresses the time-series nature of conversion rate data and can account for seasonal patterns. A simple before-after comparison (option A) wouldn't account for trends or time-varying confounders. Propensity score matching (option C) is designed for cross-sectional data rather than time series. The synthetic control method (option D) would require data from comparable companies that isn't mentioned as available.",
       "examTip": "When evaluating the impact of interventions implemented at a specific point in time without a formal control group, interrupted time series analysis can provide credible causal estimates by modeling changes in both level and trend while accounting for pre-existing patterns."
     },
-
-    // DOMAIN 4: Visualization (23%)
     {
       "id": 26,
       "question": "A financial analyst is preparing a quarterly performance dashboard for executive leadership that needs to display revenue trends, expense categories, profitability margins, and regional comparisons. The executives have requested a dashboard that shows high-level KPIs with the ability to investigate anomalies. Which visualization approach would most effectively meet these requirements?",
@@ -466,8 +459,6 @@ db.tests.insertOne({
       "explanation": "A parallel coordinates plot is specifically designed for visualizing multivariate data and identifying patterns across multiple dimensions, making it ideal for comparing facilities across several performance metrics simultaneously. Interactive brushing allows the analyst to select facilities that underperform on specific combinations of metrics, addressing the need to identify facilities struggling across multiple dimensions. The balanced scorecard approach (option A) would make cross-facility comparison more difficult. Radar charts (option B) can be visually misleading and make precise comparison difficult. Treemaps and sunburst charts (option C) are better for hierarchical part-to-whole relationships rather than multivariate comparison.",
       "examTip": "When analyzing performance across multiple units (facilities, teams, products) on several metrics simultaneously, consider parallel coordinates plots that enable identification of units that underperform across multiple dimensions, with interactive selection to focus on specific performance patterns."
     },
-
-    // DOMAIN 5: Data Governance, Quality, and Controls (14%)
     {
       "id": 36,
       "question": "A global financial services organization is implementing a data governance framework to ensure compliance with regulations across multiple jurisdictions, including GDPR in Europe, CCPA in California, and industry-specific requirements. Which governance approach would most effectively address these complex compliance requirements while supporting analytical capabilities?",
@@ -533,5 +524,4 @@ db.tests.insertOne({
       "explanation": "A federated lineage approach where each system maintains its own lineage information with a centralized aggregation service provides the most practical and maintainable solution for complex environments with diverse systems. This approach acknowledges that different systems have different capabilities for generating lineage information while still providing a comprehensive view through the centralized aggregation service. It balances completeness with maintainability by placing responsibility for lineage at the system level where the knowledge exists. Automated extraction (option A) would miss important context and semantics. Real-time lineage agents (option B) would be technically challenging to implement across diverse systems and potentially create performance issues. A business glossary-centric approach (option D) focuses too much on business terms at the expense of technical accuracy.",
       "examTip": "When implementing data lineage in diverse technical environments, consider federated approaches that allow each system to maintain its own lineage details according to its capabilities, with centralized services that aggregate and connect lineage across system boundaries to provide end-to-end visibility."
     }
-  ]
-})
+
