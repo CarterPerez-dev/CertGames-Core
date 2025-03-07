@@ -1303,7 +1303,6 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Rolling updates gradually replace instances to reduce downtime. A blue-green switch replaces environments completely, and ephemeral storage use is unrelated here.",
       "examTip": "Rolling updates are incremental, helping maintain service availability throughout the deployment process."
-    }
+    },
   ]
 });
-
