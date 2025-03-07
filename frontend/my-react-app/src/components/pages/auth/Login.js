@@ -16,7 +16,7 @@ import {
   FaShieldAlt,
   FaCheckCircle
 } from 'react-icons/fa';
-import Footer from '../Footer';
+import Footer from '../../Footer';
 import './Login.css';
 
 const Login = () => {
