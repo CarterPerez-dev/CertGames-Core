@@ -16,6 +16,7 @@ import {
   FaShieldAlt,
   FaCheckCircle
 } from 'react-icons/fa';
+import Footer from '../Footer';
 import './Login.css';
 
 const Login = () => {
@@ -233,6 +234,8 @@ const Login = () => {
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
