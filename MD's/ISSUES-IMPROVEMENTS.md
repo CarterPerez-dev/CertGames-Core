@@ -6,6 +6,8 @@
 --- ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
  ## Input leaderboard route and leaderboard page specifcually
 
+## configure cloud fare settings
+
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
 ### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
