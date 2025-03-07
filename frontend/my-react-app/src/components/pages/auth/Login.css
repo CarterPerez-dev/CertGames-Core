@@ -504,6 +504,48 @@
   text-decoration: underline;
 }
 
+
+.oauth-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.oauth-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.oauth-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(148, 130, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.oauth-error {
+  color: #e53e3e;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+
 /* Responsive Styles */
 @media (max-width: 576px) {
   .login-content {
