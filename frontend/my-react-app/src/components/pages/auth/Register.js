@@ -154,8 +154,17 @@ const Register = () => {
   
   const handleSocialSignUp = (provider) => {
     setFormError('');
-    // This would be implemented with actual OAuth providers
-    setFormError(`${provider} registration will be implemented soon`);
+    
+    // Show loading state
+    setLoading(true);
+    
+    try {
+      // Redirect to the backend OAuth route
+      window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
+    } catch (err) {
+      setLoading(false);
+      setFormError(`${provider} sign up failed. Please try again.`);
+    }
   };
   
   return (
