@@ -19,7 +19,7 @@ import {
   FaTimes
 } from 'react-icons/fa';
 import PasswordRequirements from './PasswordRequirements';
-import Footer from '../Footer';
+import Footer from '../../Footer';
 import './Register.css';
 
 const Register = () => {
