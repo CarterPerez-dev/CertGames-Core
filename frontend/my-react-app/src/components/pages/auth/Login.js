@@ -82,8 +82,17 @@ const Login = () => {
   const handleSocialLogin = (provider) => {
     setFormError('');
     setSuccessMessage('');
-    // This would be implemented with actual OAuth providers
-    setFormError(`${provider} login will be implemented soon`);
+    
+    // Show loading state
+    setLoading(true);
+    
+    try {
+      // Redirect to the backend OAuth route
+      window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
+    } catch (err) {
+      setLoading(false);
+      setFormError(`${provider} login failed. Please try again.`);
+    }
   };
   
   return (
