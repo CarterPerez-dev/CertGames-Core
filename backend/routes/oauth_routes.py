@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 import os
 import time
 import jwt
+import secrets
 from datetime import datetime, timedelta
 from authlib.integrations.flask_client import OAuth
 from models.test import create_user, get_user_by_id, update_user_fields
@@ -158,15 +159,60 @@ def process_oauth_user(email, name, oauth_provider, oauth_id):
 # Google OAuth routes
 @oauth_bp.route('/login/google')
 def google_login():
+    # Generate and store a state parameter
+    state = secrets.token_urlsafe(16)
+    session['oauth_state'] = state
+    
     # Use the external URL with /api prefix for your reverse proxy
     base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
     redirect_uri = f"{base_url}/api/oauth/auth/google"
-    return google.authorize_redirect(redirect_uri)
+    
+    # Manual authorize redirect with state parameter
+    params = {
+        'client_id': google.client_id,
+        'redirect_uri': redirect_uri,
+        'scope': 'openid email profile',
+        'state': state,
+        'response_type': 'code'
+    }
+    
+    auth_url = google.authorize_url
+    separator = '?' if '?' not in auth_url else '&'
+    
+    # Build the query string
+    query = '&'.join([f"{key}={value}" for key, value in params.items()])
+    
+    # Full authorization URL
+    full_url = f"{auth_url}{separator}{query}"
+    
+    return redirect(full_url)
 
 @oauth_bp.route('/auth/google')
 def google_auth():
-    token = google.authorize_access_token()
-    resp = google.get('userinfo')
+    # Check state parameter to prevent CSRF
+    expected_state = session.pop('oauth_state', None)
+    received_state = request.args.get('state')
+    
+    if not expected_state or expected_state != received_state:
+        current_app.logger.error(f"State mismatch: expected={expected_state}, received={received_state}")
+        return jsonify({"error": "Invalid state parameter"}), 400
+    
+    # Use the external URL with /api prefix for your reverse proxy
+    base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
+    redirect_uri = f"{base_url}/api/oauth/auth/google"
+    
+    # Manual token exchange
+    code = request.args.get('code')
+    if not code:
+        return jsonify({"error": "No authorization code received"}), 400
+    
+    # Exchange code for token
+    token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+    if not token_data or 'access_token' not in token_data:
+        return jsonify({"error": "Failed to obtain access token"}), 400
+    
+    # Get user info
+    resp = google.get('userinfo', token=token_data)
     user_info = resp.json()
     
     email = user_info.get('email')
@@ -197,10 +243,19 @@ def google_auth():
 # Apple OAuth routes
 @oauth_bp.route('/login/apple')
 def apple_login():
+    # Generate and store a state parameter
+    state = secrets.token_urlsafe(16)
+    session['apple_oauth_state'] = state
+    
     # Use the external URL with /api prefix for your reverse proxy
     base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
     redirect_uri = f"{base_url}/api/oauth/auth/apple"
-    return apple.authorize_redirect(redirect_uri)
+    
+    # Custom Apple authorization parameters
+    return apple.authorize_redirect(
+        redirect_uri=redirect_uri,
+        state=state
+    )
 
 @oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
 def apple_auth():
@@ -208,9 +263,31 @@ def apple_auth():
         return redirect(url_for('oauth.apple_login'))
     
     try:
-        # Handle POST from Apple
-        token = apple.authorize_access_token()
-        user_info = apple.parse_id_token(token)
+        # Check state parameter
+        expected_state = session.pop('apple_oauth_state', None)
+        received_state = request.form.get('state') or request.args.get('state')
+        
+        if not expected_state or expected_state != received_state:
+            current_app.logger.error(f"Apple state mismatch: expected={expected_state}, received={received_state}")
+            return jsonify({"error": "Invalid state parameter"}), 400
+        
+        # Use the external URL with /api prefix for your reverse proxy
+        base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
+        redirect_uri = f"{base_url}/api/oauth/auth/apple"
+        
+        # Get the authorization code
+        code = request.form.get('code') or request.args.get('code')
+        if not code:
+            return jsonify({"error": "No authorization code received from Apple"}), 400
+        
+        # Exchange code for token
+        token_data = apple.fetch_access_token(code=code, redirect_uri=redirect_uri)
+        if not token_data or 'id_token' not in token_data:
+            return jsonify({"error": "Failed to obtain tokens from Apple"}), 400
+        
+        # Parse the ID token for user info
+        id_token = token_data.get('id_token')
+        user_info = apple.parse_id_token(token_data)
         
         email = user_info.get('email')
         name = user_info.get('name', {})
