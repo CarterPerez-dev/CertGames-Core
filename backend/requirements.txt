@@ -39,3 +39,5 @@ pymongo[srv]
 Flask-Pymongo
 pytz
 requests
+Authlib
+itsdangerous>=2.0.0
