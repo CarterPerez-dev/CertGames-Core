@@ -30,7 +30,7 @@ google = oauth.register(
 apple = oauth.register(
     name='apple',
     client_id=os.getenv('APPLE_CLIENT_ID'),
-    client_secret=os.getenv('APPLE_CLIENT_SECRET'),
+    client_secret=os.getenv('APPLE_PRIVATE_KEY'),
     authorize_url='https://appleid.apple.com/auth/authorize',
     access_token_url='https://appleid.apple.com/auth/token',
     api_base_url='https://appleid.apple.com/',
@@ -139,7 +139,7 @@ def google_auth():
     })
     
     # Redirect to frontend with success token
-    frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+    frontend_url = os.getenv('FRONTEND_URL', 'http://certgames.com')
     return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
 
 # Apple OAuth routes
@@ -180,5 +180,5 @@ def apple_auth():
     })
     
     # Redirect to frontend with success token
-    frontend_url = os.getenv('FRONTEND_URL', 'http://localhost:3000')
+    frontend_url = os.getenv('FRONTEND_URL', 'http://certgames.com')
     return redirect(f"{frontend_url}/oauth/success?provider=apple&userId={user_id}")
