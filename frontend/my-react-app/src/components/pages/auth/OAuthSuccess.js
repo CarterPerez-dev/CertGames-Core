@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setCurrentUserId, fetchUserData } from '../store/userSlice';
-import { FaShieldAlt } from 'react-icons/fa';
+import { FaShieldAlt, FaSpinner } from 'react-icons/fa';
 import './Login.css';
 
 const OAuthSuccess = () => {
@@ -11,6 +11,7 @@ const OAuthSuccess = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     // Parse query parameters
@@ -20,6 +21,7 @@ const OAuthSuccess = () => {
     
     if (!userId) {
       setError('Authentication failed. Please try again.');
+      setLoading(false);
       return;
     }
     
@@ -44,6 +46,7 @@ const OAuthSuccess = () => {
       } catch (err) {
         console.error('Error during OAuth completion:', err);
         setError('Failed to complete authentication. Please try again.');
+        setLoading(false);
       }
     };
     
