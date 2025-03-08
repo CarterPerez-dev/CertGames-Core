@@ -16,6 +16,8 @@ import ForgotPassword from './components/pages/auth/ForgotPassword';
 import ResetPassword from './components/pages/auth/ResetPassword';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
+import CreateUsernameForm from './components/pages/auth/CreateUsernameForm'; // Add this line
+
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
 import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard'; 
@@ -56,6 +58,9 @@ import AWSCloudTestPage from './components/pages/awscloud/AWSCloudTestPage';
 
 // Global Test Page
 import GlobalTestPage from './components/GlobalTestPage';
+
+// OAuth Success Page
+import OAuthSuccess from './components/pages/auth/OAuthSuccess';
 
 // Global CSS import
 import './global.css';
@@ -123,6 +128,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/create-username" element={<CreateUsernameForm />} />
+          <Route path="/oauth/success" element={<OAuthSuccess />} />
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
           <Route path="/my-support" element={<SupportAskAnythingPage />} />
@@ -175,7 +182,7 @@ function App() {
           }/>
           <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
-          }/>
+          
           <Route path="/practice-tests/a-plus" element={
             <ProtectedRoute>
               <APlusTestPage />
