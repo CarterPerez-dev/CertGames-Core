@@ -1,12 +1,3 @@
-/* 
-  src/components/pages/analogy/AnalogyHub.css 
-  Same look, but removed the "body" style block. 
-  Moved font/color defaults into .analogy-hub-container so it remains visually identical.
-*/
-
-/* Removed body { ... } entirely. */
-/* Combined its styles into .analogy-hub-container to maintain the same look. */
-
 .analogy-hub-container {
   /* Inherited from removed body styles */
   color: #00ffea; 
