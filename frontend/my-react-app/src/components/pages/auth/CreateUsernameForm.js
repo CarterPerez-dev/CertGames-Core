@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchUserData } from '../store/userSlice';
+import { fetchUserData, setCurrentUserId } from '../store/userSlice';
 import { FaUser, FaCheck, FaTimes, FaShieldAlt, FaInfoCircle, FaExclamationCircle } from 'react-icons/fa';
 import './CreateUsernameForm.css';
 
@@ -89,6 +89,12 @@ const CreateUsernameForm = () => {
       
       // Success! Mark as submitted
       setSubmitted(true);
+      
+      // Save userId to localStorage
+      localStorage.setItem('userId', userId);
+      
+      // Update Redux state
+      dispatch(setCurrentUserId(userId));
       
       // Fetch the updated user data
       await dispatch(fetchUserData(userId));
