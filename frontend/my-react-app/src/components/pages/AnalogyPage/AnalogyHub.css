@@ -1,16 +1,17 @@
-/* src/components/pages/analogy/AnalogyHub.css */
+/* 
+  src/components/pages/analogy/AnalogyHub.css 
+  Same look, but removed the "body" style block. 
+  Moved font/color defaults into .analogy-hub-container so it remains visually identical.
+*/
 
-body {
-  background-color: #0c0c0c; 
-  color: #00ffea; 
-  font-family: 'Courier New', Courier, monospace;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden; 
-  box-sizing: border-box; 
-}
+/* Removed body { ... } entirely. */
+/* Combined its styles into .analogy-hub-container to maintain the same look. */
 
 .analogy-hub-container {
+  /* Inherited from removed body styles */
+  color: #00ffea; 
+  font-family: 'Courier New', Courier, monospace;
+  /* Already existing styles */
   width: 100vw; 
   max-width: 100%;
   margin: 0 auto;
@@ -62,7 +63,8 @@ body {
   overflow-x: hidden;
 }
 
-.analogy-type-section, .analogy-category-section {
+.analogy-type-section,
+.analogy-category-section {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -185,7 +187,6 @@ AnalogyHub’s own input styling.
 .analogy-hub-container input.analogy-hub-input[type="text"],
 .analogy-hub-container select.analogy-hub-input,
 .analogy-hub-container textarea.analogy-hub-input {
-  /* Re-assert your desired styling, optionally use !important if needed. */
   background-color: #222;
   color: #00ffea;
   border: 0.125rem solid #8B0000;
