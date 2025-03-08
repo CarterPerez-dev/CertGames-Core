@@ -506,29 +506,36 @@
 }
 
 
+/* Add these to your Login.css */
+
 .oauth-loading-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   padding: 2rem;
-  text-align: center;
+  min-height: 150px;
 }
 
 .oauth-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  text-align: center;
 }
 
 .oauth-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid rgba(148, 130, 255, 0.2);
+  border: 3px solid var(--primary-color-light);
   border-radius: 50%;
   border-top-color: var(--primary-color);
-  animation: spin 1s ease-in-out infinite;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.oauth-error {
+  text-align: center;
+  color: var(--error-color);
 }
 
 @keyframes spin {
@@ -537,14 +544,6 @@
   }
 }
 
-.oauth-error {
-  color: #e53e3e;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
 
 
 /* Responsive Styles */
