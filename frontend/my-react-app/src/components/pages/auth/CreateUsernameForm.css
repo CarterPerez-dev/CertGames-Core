@@ -1,0 +1,290 @@
+/* src/components/auth/CreateUsernameForm.css */
+.create-username-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.create-username-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  z-index: -2;
+}
+
+.create-username-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.15;
+  z-index: -1;
+}
+
+.create-username-glow {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, var(--primary-color-faded) 0%, transparent 60%);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.create-username-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.create-username-card {
+  background-color: var(--card-bg);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+}
+
+.create-username-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.create-username-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--primary-color-light);
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.create-username-logo-icon {
+  font-size: 32px;
+  color: var(--primary-color);
+}
+
+.create-username-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.create-username-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.create-username-error {
+  display: flex;
+  align-items: center;
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.create-username-error svg {
+  min-width: 20px;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.create-username-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-username-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.create-username-input-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.create-username-input-wrapper {
+  position: relative;
+}
+
+.create-username-input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.create-username-input-wrapper input {
+  width: 100%;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  font-size: 1rem;
+  background-color: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.create-username-input-wrapper input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-faded);
+  outline: none;
+}
+
+.create-username-input-wrapper input::placeholder {
+  color: var(--text-muted);
+}
+
+.create-username-input-hint {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.create-username-hint-icon {
+  min-width: 14px;
+  margin-right: 0.375rem;
+}
+
+.create-username-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.create-username-button:hover {
+  background-color: var(--primary-color-dark);
+}
+
+.create-username-button:disabled {
+  background-color: var(--disabled-color);
+  cursor: not-allowed;
+}
+
+.create-username-button-loading {
+  display: flex;
+  align-items: center;
+}
+
+.create-username-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.create-username-note {
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.create-username-note svg {
+  min-width: 14px;
+  margin-right: 0.375rem;
+}
+
+.create-username-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.create-username-success svg {
+  font-size: 3rem;
+  color: var(--success-color);
+  margin-bottom: 1rem;
+}
+
+.create-username-success h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.create-username-success p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.create-username-success .create-username-spinner {
+  margin-right: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .create-username-card {
+    padding: 1.5rem;
+  }
+  
+  .create-username-title {
+    font-size: 1.5rem;
+  }
+  
+  .create-username-logo {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .create-username-logo-icon {
+    font-size: 28px;
+  }
+}
