@@ -107,15 +107,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "**Composite indexes** optimize searches involving multiple filtering criteria, such as product category and price range.",
       "examTip": "Use **composite indexes for optimizing multi-column searches**—partitioning improves performance for large datasets."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 9,
       "question": "A company is conducting an analysis to determine if **customer age impacts purchasing preferences** for different product categories.\n\nWhich statistical method is MOST appropriate?",
@@ -219,13 +211,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 3,
       "explanation": "**NLP is used to analyze customer support interactions, extracting common themes and complaints that lead to escalations.**",
       "examTip": "Use **NLP for analyzing textual data in customer service interactions**—clustering segments customer behavior."
-    }
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 17,
       "question": "A company is analyzing **product return rates** to identify patterns that could indicate quality issues. The dataset includes product category, price, and return reason.\n\nWhich type of analysis is MOST appropriate?",
@@ -329,15 +315,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "**Data lakes** allow for flexible storage of raw, structured, and unstructured data, making them ideal for cloud-based big data processing.",
       "examTip": "Use **data lakes for storing diverse data types, while data warehouses enforce predefined schemas.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 25,
       "question": "A data analyst is evaluating **quarterly revenue growth** across multiple product categories and wants to identify which category is growing the fastest.\n\nWhich statistical method is MOST appropriate?",
@@ -441,15 +419,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "**Data lakes** allow for flexible storage of raw, structured, and unstructured data, making them ideal for cloud-based big data processing.",
       "examTip": "Use **data lakes for storing diverse data types, while data warehouses enforce predefined schemas.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 33,
       "question": "A company is analyzing **customer retention trends** and wants to determine whether loyalty program members have significantly higher retention rates than non-members.\n\nWhich statistical test is MOST appropriate?",
@@ -553,15 +523,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "**Time series analysis** helps track how sentiment changes over time, making it useful for long-term sentiment trend monitoring.",
       "examTip": "Use **time series for sentiment trend tracking over time**—clustering groups similar sentiment patterns."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 41,
       "question": "A company is tracking **customer spending habits** to determine whether customers who purchase high-margin products also have higher average transaction values.\n\nWhich statistical method is MOST appropriate?",
@@ -665,15 +627,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "**Regression analysis** evaluates relationships between customer engagement metrics and churn probability.",
       "examTip": "Use **regression for churn prediction based on multiple influencing factors.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 49,
       "question": "A company is analyzing **customer purchase frequency** to determine the likelihood of customers making repeat purchases within 90 days.\n\nWhich statistical method is MOST appropriate?",
@@ -777,15 +731,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "**Stream processing** enables continuous fraud detection by analyzing transactions in real time.",
       "examTip": "Use **stream processing for real-time fraud monitoring**—batch processing is for scheduled analysis."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 57,
       "question": "A company is analyzing **customer purchase behavior** to identify spending patterns that predict high-value customers.\n\nWhich type of analysis is MOST appropriate?",
@@ -889,15 +835,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "**Stacked bar charts** allow for side-by-side comparisons of multiple product lines over time.",
       "examTip": "Use **stacked bar charts for multi-category comparisons over time**—line charts track trends across all products."
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 65,
       "question": "A company wants to determine if a **new product pricing strategy** has led to an increase in total revenue compared to the previous strategy.\n\nWhich statistical method is MOST appropriate?",
@@ -1001,15 +939,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "**Path analysis** helps businesses understand how customers navigate through a website to optimize conversions.",
       "examTip": "Use **path analysis for tracking user navigation flows and purchase behaviors.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 73,
       "question": "A company wants to analyze customer purchase behavior to determine whether there is a **correlation between discount percentage and total transaction value**.\n\nWhich statistical method is MOST appropriate?",
@@ -1113,15 +1043,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "**Regression analysis** evaluates the impact of engagement levels on customer churn likelihood.",
       "examTip": "Use **regression for predictive modeling based on historical data.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
-  "questions": [
+    },
     {
       "id": 81,
       "question": "A company is tracking **monthly revenue fluctuations** across different product lines and wants to determine if certain categories show more volatility than others.\n\nWhich statistical method is MOST appropriate?",
@@ -1225,7 +1147,162 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "**Path analysis** tracks how users navigate through a website, identifying the most common paths leading to conversions.",
       "examTip": "Use **path analysis for tracking user navigation flows and optimizing conversion rates.**"
+    },
+    {
+      "id": 89,
+      "question": "A company is monitoring **customer retention rates** to determine whether recent improvements to their loyalty program have had a measurable impact.\n\nWhich statistical test is MOST appropriate?",
+      "options": [
+        "Chi-squared test to compare retention rates before and after the program changes.",
+        "T-test to assess whether the average customer retention period has changed significantly.",
+        "Regression analysis to model the impact of the loyalty program improvements on retention.",
+        "Z-score analysis to identify extreme fluctuations in customer retention trends."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "**T-tests** compare means before and after an event, making them ideal for evaluating retention period changes.",
+      "examTip": "Use **T-tests to assess statistical significance between two time periods.**"
+    },
+    {
+      "id": 90,
+      "question": "A database administrator is optimizing a **high-volume sales database** where queries frequently filter by **customer ID and order amount**.\n\nWhich indexing strategy is MOST effective?",
+      "options": [
+        "Creating a composite index on customer ID and order amount.",
+        "Partitioning the table by product category instead of customer ID.",
+        "Removing all indexes to improve transaction write speeds.",
+        "Using full table scans to ensure every query retrieves the latest data."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "**Composite indexes** optimize queries that involve filtering by multiple columns, such as customer ID and order amount.",
+      "examTip": "Use **composite indexes to speed up multi-column search queries.**"
+    },
+    {
+      "id": 91,
+      "question": "A financial institution is tracking **loan repayment behaviors** to identify patterns that indicate a higher risk of default.\n\nWhich type of analysis is MOST appropriate?",
+      "options": [
+        "Clustering analysis to segment borrowers based on repayment history.",
+        "Time series analysis to monitor repayment trends over time.",
+        "Regression analysis to determine the relationship between borrower attributes and default probability.",
+        "Chi-squared test to assess whether default rates vary significantly by loan type."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "**Regression analysis** models how borrower attributes affect default risk, helping predict which loans may go unpaid.",
+      "examTip": "Use **regression to determine how multiple variables impact an outcome.**"
+    },
+    {
+      "id": 92,
+      "question": "A company wants to compare **the percentage of returning customers** across multiple store locations to determine whether store layout changes have influenced repeat visits.\n\nWhich statistical test is MOST appropriate?",
+      "options": [
+        "Chi-squared test to compare categorical differences in customer retention between stores.",
+        "T-test to compare average transaction values between returning and non-returning customers.",
+        "Regression analysis to model how store layout changes affect overall retention.",
+        "Z-score analysis to identify stores with unusually high or low retention rates."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "**Chi-squared tests** compare categorical data, making them ideal for analyzing return customer percentages across locations.",
+      "examTip": "Use **Chi-squared tests for analyzing relationships between categorical variables.**"
+    },
+    {
+      "id": 93,
+      "question": "Match the **data processing method** on the left with its correct function on the right.\n\n**Data Processing Method:**\nA. Batch Processing\nB. Stream Processing\nC. ETL (Extract, Transform, Load)\nD. ELT (Extract, Load, Transform)\n\n**Function:**\n1. Continuously processes data as it arrives in real-time.\n2. Loads raw data first, allowing transformations to occur later.\n3. Processes data in scheduled intervals for large datasets.\n4. Transforms data before loading it into structured storage.",
+      "options": [
+        "A → 3, B → 1, C → 4, D → 2",
+        "A → 1, B → 3, C → 2, D → 4",
+        "A → 4, B → 1, C → 3, D → 2",
+        "A → 2, B → 4, C → 1, D → 3"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "**Batch processing** handles data in scheduled intervals, **stream processing** processes it continuously, **ETL transforms data before loading**, and **ELT loads raw data first for later transformation.",
+      "examTip": "Use **ETL for structured transformations and ELT for scalable cloud-based storage.**"
+    },
+    {
+      "id": 94,
+      "question": "A company is analyzing **customer complaints** to determine the most frequent issues mentioned across different product categories.\n\nWhich type of analysis is MOST appropriate?",
+      "options": [
+        "Market basket analysis to determine if certain complaints co-occur in customer reports.",
+        "Time series analysis to track complaint trends over multiple years.",
+        "Clustering analysis to group customer complaints based on product category.",
+        "Natural language processing (NLP) to extract common themes from complaint text data."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "**NLP** helps analyze customer complaints by extracting key themes and identifying frequently mentioned issues.",
+      "examTip": "Use **NLP to process and categorize text-based customer feedback.**"
+    },
+    {
+      "id": 95,
+      "question": "A company wants to determine whether its **mobile app redesign** has improved user engagement, as measured by session duration and interactions per session.\n\nWhich statistical method is MOST appropriate?",
+      "options": [
+        "Regression analysis to measure the relationship between app design changes and session engagement.",
+        "Chi-squared test to compare user behavior distributions before and after the redesign.",
+        "T-test to compare average session durations before and after the redesign.",
+        "Z-score analysis to detect unusual spikes or declines in engagement rates."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "**T-tests** compare means before and after a change, making them ideal for evaluating engagement improvements.",
+      "examTip": "Use **T-tests to assess statistical significance between two time periods.**"
+    },
+    {
+      "id": 96,
+      "question": "A data engineer is designing a **real-time fraud detection system** that needs to flag transactions based on predefined risk parameters.\n\nWhich data processing method is MOST appropriate?",
+      "options": [
+        "Batch processing to analyze flagged transactions at the end of the business day.",
+        "Stream processing to continuously monitor and flag transactions as they occur.",
+        "ETL (Extract, Transform, Load) to preprocess transaction data before storage.",
+        "Data warehousing to store past fraud cases for forensic investigations."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "**Stream processing** allows for continuous fraud monitoring, ensuring immediate responses to suspicious transactions.",
+      "examTip": "Use **stream processing for real-time fraud monitoring**—batch processing is for scheduled analysis."
+    },
+    {
+      "id": 97,
+      "question": "A retail company is evaluating whether customer spending **significantly increased** after launching a new personalized discount program.\n\nWhich statistical method is MOST appropriate?",
+      "options": [
+        "Chi-squared test to assess whether the proportion of high-spending customers has changed.",
+        "T-test to compare the average customer spending before and after the discount program.",
+        "Regression analysis to measure the impact of discounts on total sales revenue.",
+        "Z-score analysis to detect extreme fluctuations in spending after the program launch."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "**T-tests** compare the means of two datasets, making them ideal for determining whether spending changed significantly post-program.",
+      "examTip": "Use **T-tests for comparing numerical means across different time periods.**"
+    },
+    {
+      "id": 98,
+      "question": "A database administrator is **optimizing query performance** for a large customer orders table where searches frequently filter by **customer region and order date**.\n\nWhich strategy is MOST effective?",
+      "options": [
+        "Creating a composite index on customer region and order date.",
+        "Partitioning the table by product category instead of customer region.",
+        "Removing all indexes to improve database write speed.",
+        "Using full table scans for all queries to retrieve the most complete results."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "**Composite indexes** optimize queries that involve filtering by multiple columns, such as customer region and order date.",
+      "examTip": "Use **composite indexes to optimize multi-column search queries.**"
+    },
+    {
+      "id": 99,
+      "question": "A financial institution is monitoring **credit card transactions** for fraudulent activity. The fraud detection model must continuously evaluate new transactions as they occur.\n\nWhich data processing method is MOST appropriate?",
+      "options": [
+        "Batch processing to review transactions at the end of the business day.",
+        "Stream processing to analyze transactions in real-time and flag anomalies.",
+        "ETL (Extract, Transform, Load) to process and clean transactions before fraud detection.",
+        "Data warehousing to store all transactions for later fraud analysis."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "**Stream processing** allows for continuous fraud monitoring and real-time anomaly detection.",
+      "examTip": "Use **stream processing for real-time fraud detection and risk assessment.**"
+    },
+    {
+      "id": 100,
+      "question": "A business intelligence team is designing a dashboard to track **customer engagement trends** and predict churn risk.\n\nWhich statistical method is MOST appropriate?",
+      "options": [
+        "Regression analysis to model how engagement levels impact churn probability.",
+        "Market basket analysis to find common behaviors among churned customers.",
+        "Time series analysis to observe how engagement trends change over time.",
+        "Clustering analysis to segment customers based on engagement scores."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "**Regression analysis** evaluates how engagement levels influence churn likelihood, making it useful for predictive modeling.",
+      "examTip": "Use **regression to determine how behavioral factors contribute to churn risk.**"
     }
   ]
 });
-
