@@ -3,7 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { fetchUserData, setCurrentUserId } from '../store/userSlice';
-import { FaUser, FaCheck, FaTimes, FaShieldAlt, FaInfoCircle, FaExclamationCircle } from 'react-icons/fa';
+import { 
+  FaUser, 
+  FaCheck, 
+  FaTimes, 
+  FaShieldAlt, 
+  FaInfoCircle, 
+  FaExclamationCircle, 
+  FaGamepad,
+  FaTrophy 
+} from 'react-icons/fa';
 import './CreateUsernameForm.css';
 
 const CreateUsernameForm = () => {
@@ -121,18 +130,26 @@ const CreateUsernameForm = () => {
     <div className="create-username-container">
       <div className="create-username-background">
         <div className="create-username-grid"></div>
+        <div className="create-username-particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="create-username-particle"></div>
+          ))}
+        </div>
         <div className="create-username-glow"></div>
       </div>
       
       <div className="create-username-content">
         <div className="create-username-card">
+          <div className="create-username-card-accent"></div>
+          
           <div className="create-username-header">
             <div className="create-username-logo">
-              <FaShieldAlt className="create-username-logo-icon" />
+              <FaGamepad className="create-username-logo-icon-secondary" />
+              <FaShieldAlt className="create-username-logo-icon-primary" />
             </div>
-            <h1 className="create-username-title">Create Your Username</h1>
+            <h1 className="create-username-title">Choose Your Gamer Tag</h1>
             <p className="create-username-subtitle">
-              Choose a unique username for your account
+              Pick a unique username for your journey
             </p>
           </div>
           
@@ -145,15 +162,22 @@ const CreateUsernameForm = () => {
           
           {submitted ? (
             <div className="create-username-success">
-              <FaCheck />
+              <div className="create-username-success-icon">
+                <FaCheck />
+              </div>
               <h3>Username Set Successfully!</h3>
-              <p>Redirecting you to your profile...</p>
-              <div className="create-username-spinner"></div>
+              <p>Preparing your dashboard...</p>
+              <div className="create-username-progress">
+                <div className="create-username-progress-bar"></div>
+              </div>
             </div>
           ) : (
             <form className="create-username-form" onSubmit={handleSubmit}>
               <div className="create-username-input-group">
-                <label htmlFor="username">Username</label>
+                <label htmlFor="username">
+                  <span>Username</span>
+                  <div className="create-username-label-badge">Required</div>
+                </label>
                 <div className="create-username-input-wrapper">
                   <FaUser className="create-username-input-icon" />
                   <input
@@ -164,7 +188,11 @@ const CreateUsernameForm = () => {
                     placeholder="Choose a unique username"
                     disabled={loading}
                     required
+                    autoFocus
                   />
+                  {username && !validateUsername(username) && (
+                    <FaCheck className="create-username-input-valid" />
+                  )}
                 </div>
                 <div className="create-username-input-hint">
                   <FaInfoCircle className="create-username-hint-icon" />
@@ -179,20 +207,21 @@ const CreateUsernameForm = () => {
               >
                 {loading ? (
                   <span className="create-username-button-loading">
-                    <span className="create-username-spinner"></span>
-                    Setting Username...
+                    <div className="create-username-spinner"></div>
+                    <span>Setting Username...</span>
                   </span>
                 ) : (
                   <span className="create-username-button-text">
-                    Set Username & Continue
+                    <FaTrophy className="create-username-button-icon" />
+                    <span>Set Username & Continue</span>
                   </span>
                 )}
               </button>
               
-              <p className="create-username-note">
+              <div className="create-username-note">
                 <FaInfoCircle />
-                <span>You can always change your username later from your profile settings</span>
-              </p>
+                <span>You can change your username later from your profile settings</span>
+              </div>
             </form>
           )}
         </div>
