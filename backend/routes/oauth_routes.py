@@ -151,16 +151,18 @@ def process_oauth_user(email, name, oauth_provider, oauth_id):
                     'oauth_provider': oauth_provider
                 }}
             )
-        return str(user['_id'])
+        
+        # Return user_id and is_new_user flag
+        return str(user['_id']), False
     
     # Create a new user
-    # Generate username from email or name
+    # Generate temporary username from email or name (will be changed by user)
     base_name = name.split()[0].lower() if name else email.split('@')[0]
-    username = generate_unique_username(base_name)
+    temp_username = generate_unique_username(base_name)
     
     # Prepare user data
     user_data = {
-        'username': username,
+        'username': temp_username,  # Temporary username
         'email': email,
         'oauth_provider': oauth_provider,
         f"{oauth_provider}_id": oauth_id,
@@ -180,12 +182,15 @@ def process_oauth_user(email, name, oauth_provider, oauth_id):
             'highest_score_ever': 0.0,
             'lowest_score_ever': 100.0,
             'total_questions_answered': 0,
-        }
+        },
+        'needs_username': True  # Flag indicating this user needs to set a username
     }
     
     # Insert the new user
     user_id = create_user(user_data)
-    return str(user_id)
+    
+    # Return user_id and is_new_user flag
+    return str(user_id), True
 
 # Google OAuth routes
 @oauth_bp.route('/login/google')
@@ -261,7 +266,8 @@ def google_auth():
         if not email:
             return jsonify({"error": "Email not provided by Google"}), 400
         
-        user_id = process_oauth_user(email, name, 'google', google_id)
+        # Process OAuth user and get user_id and is_new_user flag
+        user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
         
         # Store in session
         session['userId'] = user_id
@@ -275,9 +281,15 @@ def google_auth():
             "provider": "google"
         })
         
-        # Redirect to frontend with success token
+        # Redirect based on whether this is a new user or existing user
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-        return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
+        
+        if is_new_user:
+            # New user needs to set a username
+            return redirect(f"{frontend_url}/create-username?provider=google&userId={user_id}")
+        else:
+            # Existing user can go directly to profile or OAuth success page
+            return redirect(f"{frontend_url}/oauth/success?provider=google&userId={user_id}")
         
     except Exception as e:
         current_app.logger.error(f"Error in Google auth: {str(e)}")
@@ -385,7 +397,8 @@ def apple_auth():
         if not email:
             return jsonify({"error": "Email not provided by Apple"}), 400
         
-        user_id = process_oauth_user(email, full_name, 'apple', apple_id)
+        # Process OAuth user and get user_id and is_new_user flag
+        user_id, is_new_user = process_oauth_user(email, full_name, 'apple', apple_id)
         
         # Store in session
         session['userId'] = user_id
@@ -399,9 +412,15 @@ def apple_auth():
             "provider": "apple"
         })
         
-        # Redirect to frontend with success token
+        # Redirect based on whether this is a new user or existing user
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-        return redirect(f"{frontend_url}/oauth/success?provider=apple&userId={user_id}")
+        
+        if is_new_user:
+            # New user needs to set a username
+            return redirect(f"{frontend_url}/create-username?provider=apple&userId={user_id}")
+        else:
+            # Existing user can go directly to profile or OAuth success page
+            return redirect(f"{frontend_url}/oauth/success?provider=apple&userId={user_id}")
     
     except Exception as e:
         current_app.logger.error(f"Error in Apple auth: {str(e)}")
