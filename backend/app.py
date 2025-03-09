@@ -25,6 +25,7 @@ from models.test import create_user, get_user_by_id, update_user_fields
 from mongodb.database import db
 from routes.password_reset_routes import password_reset_bp
 from routes.oauth_routes import oauth_bp, oauth
+from routes.test_routes import public_leaderboard_bp 
 
 
 load_dotenv()
@@ -87,6 +88,7 @@ app.register_blueprint(newsletter_bp, url_prefix='/newsletter')
 app.register_blueprint(admin_news_bp, url_prefix="/cracked") 
 app.register_blueprint(password_reset_bp, url_prefix='/password-reset')
 app.register_blueprint(oauth_bp, url_prefix='/oauth')
+app.register_blueprint(public_leaderboard_bp, url_prefix='/public-leaderboard')
 
 
 
