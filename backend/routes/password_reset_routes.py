@@ -42,7 +42,7 @@ def request_password_reset():
         }), 200
     
     # Send the password reset email
-    email_sent = send_password_reset_email(email, token)
+    email_sent = send_password_reset_email(email, token, FRONTEND_URL)
     
     if not email_sent:
         return jsonify({
