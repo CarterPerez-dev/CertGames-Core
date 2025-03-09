@@ -1352,6 +1352,234 @@
   color: #43cea2;
 }
 
+.info-quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.info-quick-link {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.info-quick-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Feature links section */
+.info-feature-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.info-feature-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(100, 100, 255, 0.1);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.info-feature-link:hover {
+  background: rgba(100, 100, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.info-link-icon {
+  transition: transform 0.3s ease;
+}
+
+.info-feature-link:hover .info-link-icon {
+  transform: translateX(3px);
+}
+
+/* Support section links */
+.info-support-links {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.info-support-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: rgba(0, 208, 132, 0.1);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.info-support-link:hover {
+  background: rgba(0, 208, 132, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Demo preview styling */
+.info-demo-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 1.5rem;
+  background: rgba(25, 25, 50, 0.8);
+}
+
+.info-demo-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.info-demo-link:hover {
+  transform: scale(1.05);
+}
+
+.info-demo-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 208, 132, 0.2), rgba(0, 184, 212, 0.2));
+  border-radius: 50%;
+  color: white;
+  padding: 1rem;
+}
+
+.info-demo-link span {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* FAQ more questions link */
+.info-more-questions {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.info-more-questions-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(100, 100, 255, 0.1);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.info-more-questions-link:hover {
+  background: rgba(100, 100, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.info-question-icon {
+  font-size: 1.2rem;
+  color: rgba(100, 100, 255, 0.8);
+}
+
+/* Updated styles for cards to make the flip effect smoother */
+.info-feature-card,
+.info-tool-card,
+.info-daily-card,
+.info-support-preview {
+  perspective: 1000px;
+  position: relative;
+}
+
+.info-card-flip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+  visibility: hidden;
+  opacity: 0;
+  transition: transform 0.6s ease-out, opacity 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.info-flipped .info-card-flip {
+  transform: rotateY(0);
+  visibility: visible;
+  opacity: 1;
+  z-index: 2;
+}
+
+.info-flipped {
+  transform: rotateY(180deg);
+}
+
+.info-feature-card > *:not(.info-card-flip),
+.info-tool-card > *:not(.info-card-flip),
+.info-daily-card > *:not(.info-card-flip),
+.info-support-preview > *:not(.info-card-flip) {
+  backface-visibility: hidden;
+  transition: transform 0.6s ease-out;
+}
+
+.info-flipped > *:not(.info-card-flip) {
+  transform: rotateY(180deg);
+}
+
+/* Make cards more obviously clickable */
+.info-clickable-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.info-clickable-card::after {
+  content: "Click to view demo";
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.info-clickable-card:hover::after {
+  opacity: 1;
+}
+
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .info-hero-title {
@@ -1407,7 +1635,35 @@
   .info-cta-content h2 {
     font-size: 2rem;
   }
+  
+  .info-quick-links {
+    flex-wrap: wrap;
+  }
+  
+  .info-feature-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .info-feature-link,
+  .info-support-link,
+  .info-more-questions-link {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .info-demo-preview {
+    padding: 1rem;
+  }
+  
+  .info-demo-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+  }
 }
+
 
 @media (max-width: 480px) {
   .info-hero-title {
@@ -1460,4 +1716,14 @@
   .info-cta-content p {
     font-size: 1rem;
   }
+  .info-quick-links {
+    width: 100%;
+  }
+  
+  .info-quick-link {
+    flex: 1;
+    min-width: calc(50% - 0.8rem);
+    text-align: center;
+  }
 }
+
