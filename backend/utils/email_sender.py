@@ -71,18 +71,21 @@ class EmailSender:
             current_app.logger.error(f"Error sending email: {str(e)}")
             return False
     
-    def send_password_reset_email(self, to_email, reset_token):
+    def send_password_reset_email(self, to_email, reset_token, frontend_url=None):
         """
         Send a password reset email with a reset link.
         
         Args:
             to_email (str): Recipient email address
             reset_token (str): Password reset token
+            frontend_url (str, optional): Optional override for the frontend URL
             
         Returns:
             bool: True if the email was sent successfully, False otherwise
         """
-        reset_link = f"{self.frontend_url}/reset-password/{reset_token}"
+        # Use provided frontend_url if available, otherwise use the default
+        url = frontend_url or self.frontend_url
+        reset_link = f"{url}/reset-password/{reset_token}"
         
         subject = 'Password Reset Request - CertGames'
         
