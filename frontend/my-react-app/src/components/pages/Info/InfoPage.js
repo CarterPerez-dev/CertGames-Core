@@ -5,6 +5,21 @@ import Footer from '../../Footer';
 import './InfoPage.css';
 
 const InfoPage = () => {
+  // For tab switching functionality
+  const [activeTab, setActiveTab] = useState('comptia');
+  
+  // Functions to handle card flipping
+  const handleCardClick = (event) => {
+    const card = event.currentTarget;
+    card.classList.toggle('info-flipped');
+    
+    // Reset other flipped cards
+    document.querySelectorAll('.info-flipped').forEach(flippedCard => {
+      if (flippedCard !== card) {
+        flippedCard.classList.remove('info-flipped');
+      }
+    });
+  };
   // For the typing animation effect in hero section
   const [displayText, setDisplayText] = useState('');
   const fullText = 'Level up your cybersecurity skills';
@@ -136,7 +151,10 @@ const InfoPage = () => {
           <p>Level up your skills while having fun</p>
         </div>
         <div className="info-feature-grid">
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-exp-icon">XP</i>
             </div>
@@ -148,7 +166,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card" 
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-coins-icon">💰</i>
             </div>
@@ -160,7 +181,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-trophy-icon">🏆</i>
             </div>
@@ -172,7 +196,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-leaderboard-icon">📊</i>
             </div>
@@ -184,7 +211,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-theme-icon">🎨</i>
             </div>
@@ -196,7 +226,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-feature-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-feature-icon">
               <i className="info-mobile-icon">📱</i>
             </div>
@@ -262,13 +295,28 @@ const InfoPage = () => {
           </div>
           <div className="info-test-selector">
             <div className="info-test-tabs">
-              <button className="info-test-tab info-active" onClick={() => {}}>CompTIA</button>
-              <button className="info-test-tab" onClick={() => {}}>ISC2</button>
-              <button className="info-test-tab" onClick={() => {}}>AWS</button>
+              <button 
+                className={`info-test-tab ${activeTab === 'comptia' ? 'info-active' : ''}`} 
+                onClick={() => setActiveTab('comptia')}
+              >
+                CompTIA
+              </button>
+              <button 
+                className={`info-test-tab ${activeTab === 'isc2' ? 'info-active' : ''}`} 
+                onClick={() => setActiveTab('isc2')}
+              >
+                ISC2
+              </button>
+              <button 
+                className={`info-test-tab ${activeTab === 'aws' ? 'info-active' : ''}`} 
+                onClick={() => setActiveTab('aws')}
+              >
+                AWS
+              </button>
             </div>
             
             {/* CompTIA Tab Content */}
-            <div className="info-cert-list" id="comptia-certs">
+            <div className={`info-cert-list ${activeTab !== 'comptia' ? 'info-hidden' : ''}`}>
               <div className="info-cert-item">
                 <span className="info-cert-badge">A+</span>
                 <span className="info-cert-name">A+ Core 1 & Core 2</span>
@@ -295,7 +343,7 @@ const InfoPage = () => {
                 <span className="info-cert-count">1,000 questions</span>
               </div>
               <div className="info-cert-dropdown">
-                <div className="info-show-more" onClick={() => {}}>
+                <div className="info-show-more">
                   <span>+7 more certifications</span>
                 </div>
                 <div className="info-dropdown-content">
@@ -328,8 +376,8 @@ const InfoPage = () => {
               </div>
             </div>
             
-            {/* ISC2 Tab Content (Hidden by default) */}
-            <div className="info-cert-list info-hidden" id="isc2-certs">
+            {/* ISC2 Tab Content */}
+            <div className={`info-cert-list ${activeTab !== 'isc2' ? 'info-hidden' : ''}`}>
               <div className="info-cert-item">
                 <span className="info-cert-badge">CISSP</span>
                 <span className="info-cert-name">CISSP</span>
@@ -337,8 +385,8 @@ const InfoPage = () => {
               </div>
             </div>
             
-            {/* AWS Tab Content (Hidden by default) */}
-            <div className="info-cert-list info-hidden" id="aws-certs">
+            {/* AWS Tab Content */}
+            <div className={`info-cert-list ${activeTab !== 'aws' ? 'info-hidden' : ''}`}>
               <div className="info-cert-item">
                 <span className="info-cert-badge">CCP</span>
                 <span className="info-cert-name">Cloud Practitioner</span>
@@ -359,7 +407,10 @@ const InfoPage = () => {
           <p>Unique tools to boost your cybersecurity understanding</p>
         </div>
         <div className="info-tools-grid">
-          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-tool-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <h3>
               <span className="info-tool-icon">🔎</span>
               ScenarioSphere
@@ -371,7 +422,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-tool-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <h3>
               <span className="info-tool-icon">🔄</span>
               Analogy Hub
@@ -383,7 +437,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-tool-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <h3>
               <span className="info-tool-icon">📋</span>
               GRC Wizard
@@ -395,7 +452,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
+          <div 
+            className="info-tool-card info-animate-on-scroll info-clickable-card"
+            onClick={handleCardClick}
+          >
             <h3>
               <span className="info-tool-icon">⚔️</span>
               XploitCraft
@@ -458,7 +518,10 @@ const InfoPage = () => {
           <p>Get help whenever you need it</p>
         </div>
         <div className="info-support-content info-animate-on-scroll">
-          <div className="info-support-preview info-clickable-card">
+          <div 
+            className="info-support-preview info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-support-chat">
               <div className="info-chat-header">
                 <h4>Support / Ask Anything</h4>
@@ -524,7 +587,10 @@ const InfoPage = () => {
           <p>Keep the momentum going with daily incentives</p>
         </div>
         <div className="info-daily-content info-animate-on-scroll">
-          <div className="info-daily-card info-clickable-card">
+          <div 
+            className="info-daily-card info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-daily-icon">🪙</div>
             <h3>Daily Bonus</h3>
             <p>Claim free coins every 24 hours to spend in the shop</p>
@@ -534,7 +600,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-daily-card info-clickable-card">
+          <div 
+            className="info-daily-card info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-daily-icon">🧩</div>
             <h3>Daily PBQ Challenge</h3>
             <p>Tackle a new performance-based question each day to earn bonus coins</p>
@@ -544,7 +613,10 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div className="info-daily-card info-clickable-card">
+          <div 
+            className="info-daily-card info-clickable-card"
+            onClick={handleCardClick}
+          >
             <div className="info-daily-icon">📰</div>
             <h3>Cyber Brief</h3>
             <p>Stay informed with curated cybersecurity news and study tips</p>
