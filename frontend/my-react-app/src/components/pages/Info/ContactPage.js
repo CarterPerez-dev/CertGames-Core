@@ -60,25 +60,38 @@ const ContactPage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ // Updated handleSubmit function for ContactPage.js
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Validate form
+  const errors = validateForm();
+  if (Object.keys(errors).length > 0) {
+    setFormErrors(errors);
+    return;
+  }
+  
+  setIsSubmitting(true);
+  setSubmitStatus(null);
+  
+  try {
+    // Call the actual API endpoint
+    const response = await fetch('/api/contact-form/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        message: formData.message
+      })
+    });
     
-    // Validate form
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
+    const data = await response.json();
     
-    setIsSubmitting(true);
-    setSubmitStatus(null);
-    
-    try {
-      // This would be replaced with your actual API call
-      // For now, we'll simulate a successful API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Simulate successful submission
+    if (response.ok && data.success) {
+      // Success case
       setSubmitStatus('success');
       
       // Reset form
@@ -91,13 +104,18 @@ const ContactPage = () => {
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+    } else {
+      // API returned an error
+      console.error('Error submitting form:', data.error);
       setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
     }
-  };
+  } catch (error) {
+    console.error('Network error submitting form:', error);
+    setSubmitStatus('error');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <div className="contact-container">
