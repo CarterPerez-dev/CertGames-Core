@@ -142,7 +142,7 @@
 }
 
 .info-hero-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -283,7 +283,7 @@
 }
 
 .info-mouse::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 10px;
   left: 50%;
@@ -313,7 +313,7 @@
 }
 
 .info-gamified-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -410,7 +410,7 @@
 }
 
 .info-preview-placeholder::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -447,7 +447,7 @@
 }
 
 .info-tests-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -686,7 +686,7 @@
 }
 
 .info-resources-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -755,7 +755,7 @@
 }
 
 .info-support-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -919,7 +919,7 @@
 }
 
 .info-daily-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -980,7 +980,7 @@
 }
 
 .info-pricing-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -1069,7 +1069,7 @@
 }
 
 .info-testimonials-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -1097,7 +1097,7 @@
 }
 
 .info-testimonial-card::before {
-  content: """;
+  content: " ";
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -1149,7 +1149,7 @@
 }
 
 .info-faq-section::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -1203,7 +1203,7 @@
 }
 
 .info-final-cta::before {
-  content: "";
+  content: " ";
   position: absolute;
   top: 0;
   left: 0;
@@ -1298,7 +1298,7 @@
 }
 
 .info-oauth-button::before {
-  content: "";
+  content: " ";
   display: inline-block;
   width: 18px;
   height: 18px;
