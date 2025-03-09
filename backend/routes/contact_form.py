@@ -1,7 +1,3 @@
-"""
-Contact form routes for CertGames using existing SendGrid setup
-"""
-
 from flask import Blueprint, request, jsonify, current_app
 import re
 from datetime import datetime
@@ -35,6 +31,8 @@ def submit_contact_form():
     if len(message) < 10:
         return jsonify({"success": False, "error": "Message must be at least 10 characters"}), 400
     
+    formatted_message = message.replace('\n', '<br>')
+
     try:
         # Create HTML content for the email
         html_content = f"""
@@ -43,7 +41,7 @@ def submit_contact_form():
         <p><strong>Time:</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
         <hr>
         <h3>Message:</h3>
-        <p>{message.replace('\\n', '<br>')}</p>
+        <p>{formatted_message}</p>
         """
         
         # Send email using your existing email_sender
