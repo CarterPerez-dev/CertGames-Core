@@ -136,33 +136,77 @@ const InfoPage = () => {
           <p>Level up your skills while having fun</p>
         </div>
         <div className="info-feature-grid">
-          <div className="info-feature-card info-animate-on-scroll">
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
             <div className="info-feature-icon">
               <i className="info-exp-icon">XP</i>
             </div>
             <h3>Earn XP & Level Up</h3>
             <p>Answer questions correctly to gain experience points and climb the ranks from rookie to elite hacker.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>XP System Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll">
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
             <div className="info-feature-icon">
               <i className="info-coins-icon">💰</i>
             </div>
             <h3>Collect Coins</h3>
             <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and bonuses.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Coins System Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll">
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
             <div className="info-feature-icon">
               <i className="info-trophy-icon">🏆</i>
             </div>
             <h3>Unlock Achievements</h3>
             <p>Complete special tasks to earn badges and trophies that showcase your growing expertise.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Achievements Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-feature-card info-animate-on-scroll">
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
             <div className="info-feature-icon">
               <i className="info-leaderboard-icon">📊</i>
             </div>
             <h3>Compete on Leaderboards</h3>
             <p>See how you rank against other cybersecurity enthusiasts and strive to climb to the top.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Leaderboard Demo</p>
+              </div>
+            </div>
+          </div>
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+            <div className="info-feature-icon">
+              <i className="info-theme-icon">🎨</i>
+            </div>
+            <h3>Customize Your Experience</h3>
+            <p>Choose from multiple themes and personalize your learning environment to suit your style.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Theme Customization Demo</p>
+              </div>
+            </div>
+          </div>
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
+            <div className="info-feature-icon">
+              <i className="info-mobile-icon">📱</i>
+            </div>
+            <h3>Learn Anywhere</h3>
+            <p>Access all features on desktop, mobile browsers, and our dedicated iOS app for learning on the go.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Mobile App Demo</p>
+              </div>
+            </div>
           </div>
         </div>
         <div className="info-preview-placeholder info-animate-on-scroll">
@@ -207,14 +251,24 @@ const InfoPage = () => {
               <span className="info-check-icon">✓</span>
               <span>Memorable Exam Tips</span>
             </div>
+            <div className="info-test-feature">
+              <span className="info-check-icon">✓</span>
+              <span>Progress Tracking & Analytics</span>
+            </div>
+            <div className="info-test-feature">
+              <span className="info-check-icon">✓</span>
+              <span>Exam Mode with Timed Sessions</span>
+            </div>
           </div>
           <div className="info-test-selector">
             <div className="info-test-tabs">
-              <button className="info-test-tab info-active">CompTIA</button>
-              <button className="info-test-tab">ISC2</button>
-              <button className="info-test-tab">AWS</button>
+              <button className="info-test-tab info-active" onClick={() => {}}>CompTIA</button>
+              <button className="info-test-tab" onClick={() => {}}>ISC2</button>
+              <button className="info-test-tab" onClick={() => {}}>AWS</button>
             </div>
-            <div className="info-cert-list">
+            
+            {/* CompTIA Tab Content */}
+            <div className="info-cert-list" id="comptia-certs">
               <div className="info-cert-item">
                 <span className="info-cert-badge">A+</span>
                 <span className="info-cert-name">A+ Core 1 & Core 2</span>
@@ -240,8 +294,55 @@ const InfoPage = () => {
                 <span className="info-cert-name">PenTest+</span>
                 <span className="info-cert-count">1,000 questions</span>
               </div>
-              <div className="info-show-more">
-                <span>+7 more certifications</span>
+              <div className="info-cert-dropdown">
+                <div className="info-show-more" onClick={() => {}}>
+                  <span>+7 more certifications</span>
+                </div>
+                <div className="info-dropdown-content">
+                  <div className="info-cert-item">
+                    <span className="info-cert-badge">CASP+</span>
+                    <span className="info-cert-name">CASP+</span>
+                    <span className="info-cert-count">1,000 questions</span>
+                  </div>
+                  <div className="info-cert-item">
+                    <span className="info-cert-badge">Linux+</span>
+                    <span className="info-cert-name">Linux+</span>
+                    <span className="info-cert-count">1,000 questions</span>
+                  </div>
+                  <div className="info-cert-item">
+                    <span className="info-cert-badge">Data+</span>
+                    <span className="info-cert-name">Data+</span>
+                    <span className="info-cert-count">1,000 questions</span>
+                  </div>
+                  <div className="info-cert-item">
+                    <span className="info-cert-badge">Server+</span>
+                    <span className="info-cert-name">Server+</span>
+                    <span className="info-cert-count">1,000 questions</span>
+                  </div>
+                  <div className="info-cert-item">
+                    <span className="info-cert-badge">Cloud+</span>
+                    <span className="info-cert-name">Cloud+</span>
+                    <span className="info-cert-count">1,000 questions</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* ISC2 Tab Content (Hidden by default) */}
+            <div className="info-cert-list info-hidden" id="isc2-certs">
+              <div className="info-cert-item">
+                <span className="info-cert-badge">CISSP</span>
+                <span className="info-cert-name">CISSP</span>
+                <span className="info-cert-count">1,000 questions</span>
+              </div>
+            </div>
+            
+            {/* AWS Tab Content (Hidden by default) */}
+            <div className="info-cert-list info-hidden" id="aws-certs">
+              <div className="info-cert-item">
+                <span className="info-cert-badge">CCP</span>
+                <span className="info-cert-name">Cloud Practitioner</span>
+                <span className="info-cert-count">1,000 questions</span>
               </div>
             </div>
           </div>
@@ -258,33 +359,53 @@ const InfoPage = () => {
           <p>Unique tools to boost your cybersecurity understanding</p>
         </div>
         <div className="info-tools-grid">
-          <div className="info-tool-card info-animate-on-scroll">
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">🔎</span>
               ScenarioSphere
             </h3>
             <p>Immerse yourself in realistic security scenarios with detailed storylines. Tackle simulated cyberattacks to build your incident response skills.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>ScenarioSphere Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll">
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">🔄</span>
               Analogy Hub
             </h3>
             <p>Complex concepts made simple through custom analogies. Compare security concepts using memorable examples to reinforce your learning.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Analogy Hub Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll">
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">📋</span>
               GRC Wizard
             </h3>
             <p>Master governance, risk, and compliance topics with custom generated questions across multiple categories and difficulty levels.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>GRC Wizard Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-tool-card info-animate-on-scroll">
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">⚔️</span>
               XploitCraft
             </h3>
             <p>Learn about exploitation techniques through educational code examples with detailed explanations for ethical understanding.</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>XploitCraft Demo</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -303,27 +424,22 @@ const InfoPage = () => {
             <div className="info-resource-category">
               <span className="info-category-icon">🔧</span>
               <span>Security Tools</span>
-              <span className="info-category-count">51</span>
             </div>
             <div className="info-resource-category">
               <span className="info-category-icon">🎓</span>
               <span>Courses</span>
-              <span className="info-category-count">47</span>
             </div>
             <div className="info-resource-category">
               <span className="info-category-icon">📹</span>
               <span>YouTube Resources</span>
-              <span className="info-category-count">58</span>
             </div>
             <div className="info-resource-category">
               <span className="info-category-icon">📜</span>
               <span>Certification Guides</span>
-              <span className="info-category-count">18</span>
             </div>
             <div className="info-resource-category">
               <span className="info-category-icon">🛡️</span>
               <span>Security Frameworks</span>
-              <span className="info-category-count">25</span>
             </div>
             <div className="info-resource-category">
               <span className="info-resource-more">+400 more</span>
@@ -342,7 +458,7 @@ const InfoPage = () => {
           <p>Get help whenever you need it</p>
         </div>
         <div className="info-support-content info-animate-on-scroll">
-          <div className="info-support-preview">
+          <div className="info-support-preview info-clickable-card">
             <div className="info-support-chat">
               <div className="info-chat-header">
                 <h4>Support / Ask Anything</h4>
@@ -362,6 +478,11 @@ const InfoPage = () => {
               <div className="info-chat-input">
                 <input type="text" placeholder="Type your message here..." disabled />
                 <button className="info-send-button" disabled></button>
+              </div>
+            </div>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Support System Demo</p>
               </div>
             </div>
           </div>
@@ -403,20 +524,35 @@ const InfoPage = () => {
           <p>Keep the momentum going with daily incentives</p>
         </div>
         <div className="info-daily-content info-animate-on-scroll">
-          <div className="info-daily-card">
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">🪙</div>
             <h3>Daily Bonus</h3>
             <p>Claim free coins every 24 hours to spend in the shop</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Daily Bonus Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-daily-card">
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">🧩</div>
             <h3>Daily PBQ Challenge</h3>
             <p>Tackle a new performance-based question each day to earn bonus coins</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Daily PBQ Demo</p>
+              </div>
+            </div>
           </div>
-          <div className="info-daily-card">
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">📰</div>
             <h3>Cyber Brief</h3>
             <p>Stay informed with curated cybersecurity news and study tips</p>
+            <div className="info-card-flip">
+              <div className="info-video-placeholder">
+                <p>Cyber Brief Demo</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -432,8 +568,7 @@ const InfoPage = () => {
         </div>
         
         <div className="info-pricing-card info-animate-on-scroll">
-          <div className="info-pricing-badge">Best Value</div>
-          <h3 className="info-plan-name">Premium Access</h3>
+          <h3 className="info-plan-name">Access</h3>
           <div className="info-price">
             <span className="info-currency">$</span>
             <span className="info-amount">14</span>
@@ -581,6 +716,23 @@ const InfoPage = () => {
             <Link to="/login" className="info-button info-secondary-button">
               Log In
             </Link>
+          </div>
+          <div className="info-oauth-options">
+            <span>Quick sign-in with:</span>
+            <div className="info-oauth-buttons">
+              <button className="info-oauth-button info-google">
+                Google
+              </button>
+              <button className="info-oauth-button info-apple">
+                Apple ID
+              </button>
+            </div>
+          </div>
+          <div className="info-app-download">
+            <a href="#" className="info-app-link">
+              <span className="info-app-icon">📱</span>
+              <span>Download on the App Store</span>
+            </a>
           </div>
         </div>
         <div className="info-cta-graphic">
