@@ -1,139 +1,44 @@
-from flask import Blueprint, request, jsonify, current_app, session
-from datetime import datetime
-from bson.objectid import ObjectId
-
-# Import newsletter functions
+from flask import Blueprint, request, jsonify, redirect
 from models.newsletter import (
-    create_campaign,
-    get_campaign_by_id,
-    mark_campaign_sent,
-    get_all_active_subscribers,
-    newsletter_subscribers_collection,
-    newsletter_campaigns_collection,
-    _generate_unsubscribe_token,
-    send_campaign_to_all
+    subscribe_email,
+    unsubscribe_email,
+    unsubscribe_by_token
 )
 
-########## ADMIN BLUEPRINT ##########
-admin_news_bp = Blueprint('admin_news_bp', __name__)  # Fixed the __name__ parameter
+newsletter_bp = Blueprint('newsletter_bp', __name__)  # Fixed the __name__ parameter
 
-def require_cracked_admin(required_role=None):
-    """
-    Reuse your existing logic here or import from cracked_admin.
-    Minimal example below:
-    """
-    if not session.get('cracked_admin_logged_in'):
-        return False
-    if required_role:
-        current_role = session.get('cracked_admin_role', 'basic')
-        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
-        needed = priority_map.get(required_role, 1)
-        have = priority_map.get(current_role, 1)
-        return have >= needed
-    return True
-
-################################
-# ADMIN: Create a new campaign
-################################
-@admin_news_bp.route('/newsletter/create', methods=['POST'])
-def admin_create_newsletter():
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
+@newsletter_bp.route('/subscribe', methods=['POST'])
+def newsletter_subscribe():
     data = request.json or {}
-    title = data.get("title", "").strip()
-    content_html = data.get("contentHtml", "").strip()
+    email = data.get("email", "").strip()
+    result = subscribe_email(email)
+    return jsonify(result), (200 if result["success"] else 400)
 
-    if not title or not content_html:
-        return jsonify({"error": "Missing title or contentHtml"}), 400
+@newsletter_bp.route('/unsubscribe', methods=['POST'])
+def newsletter_unsubscribe():
+    data = request.json or {}
+    email = data.get("email", "").strip()
+    result = unsubscribe_email(email)
+    return jsonify(result), (200 if result["success"] else 400)
 
-    campaign_id = create_campaign(title, content_html)
-    return jsonify({"message": "Newsletter campaign created", "campaignId": campaign_id}), 201
-
-#################################
-# ADMIN: View a campaign by ID
-#################################
-@admin_news_bp.route('/newsletter/<campaign_id>', methods=['GET'])
-def admin_get_newsletter(campaign_id):
-    if not require_cracked_admin():
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    campaign = get_campaign_by_id(campaign_id)
-    if not campaign:
-        return jsonify({"error": "Campaign not found"}), 404
-
-    # Convert _id -> str
-    campaign["_id"] = str(campaign["_id"])
-    return jsonify(campaign), 200
-
-#################################
-# ADMIN: Send a campaign
-#################################
-@admin_news_bp.route('/newsletter/send/<campaign_id>', methods=['POST'])
-def admin_send_newsletter(campaign_id):
-    if not require_cracked_admin(required_role="supervisor"):
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-
-    campaign = get_campaign_by_id(campaign_id)
-    if not campaign:
-        current_app.logger.error(f"Campaign not found for ID: {campaign_id}")
-        return jsonify({"error": "Campaign not found"}), 404
-
-    if campaign.get("status") == "sent":
-        return jsonify({"error": "Campaign already sent"}), 400
-
-    # Send the campaign to all subscribers using SendGrid
-    current_app.logger.info(f"Attempting to send campaign {campaign_id}")
-    result = send_campaign_to_all(campaign_id)
+@newsletter_bp.route('/unsubscribe/<token>', methods=['GET'])
+def newsletter_unsubscribe_token(token):
+    """
+    Allows one-click unsubscribe via GET.
+    e.g. 
+      <a href="https://certgames.com/newsletter/unsubscribe/<token>">Unsubscribe</a>
     
+    You can either:
+      (a) Return a JSON response 
+      (b) Or return an HTML "You have unsubscribed"
+      (c) Or redirect them to a 'success' page
+    For this example, we'll do a simple JSON plus a 200 or 400 status.
+    """
+    result = unsubscribe_by_token(token)
     if result["success"]:
-        return jsonify({
-            "message": result["message"]
-        }), 200
+        # Optionally, you can redirect them to a 'Thank You' page
+        # return redirect("https://yoursite.com/unsubscribe-success.html")
+        # Or just return JSON
+        return jsonify({"message": result["message"]}), 200
     else:
-        current_app.logger.error(f"Failed to send campaign: {result['message']}")
-        return jsonify({
-            "error": result["message"]
-        }), 400
-
-#################################
-# ADMIN: Get all subscribers
-#################################
-@admin_news_bp.route('/newsletter/subscribers', methods=['GET'])
-def get_subscribers():
-    if not require_cracked_admin():
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-    
-    try:
-        # Get all subscribers (both active and unsubscribed)
-        subscribers = list(newsletter_subscribers_collection.find())
-        
-        # Convert ObjectIds to strings for JSON serialization
-        for sub in subscribers:
-            sub['_id'] = str(sub['_id'])
-        
-        return jsonify({"subscribers": subscribers}), 200
-    except Exception as e:
-        current_app.logger.exception(f"Failed to fetch subscribers: {str(e)}")
-        return jsonify({"error": f"Failed to fetch subscribers: {str(e)}"}), 500
-
-#################################
-# ADMIN: Get all campaigns
-#################################
-@admin_news_bp.route('/newsletter/campaigns', methods=['GET'])
-def get_campaigns():
-    if not require_cracked_admin():
-        return jsonify({"error": "Insufficient admin privileges"}), 403
-    
-    try:
-        # Get all campaigns
-        campaigns = list(newsletter_campaigns_collection.find())
-        
-        # Convert ObjectIds to strings for JSON serialization
-        for campaign in campaigns:
-            campaign['_id'] = str(campaign['_id'])
-        
-        return jsonify({"campaigns": campaigns}), 200
-    except Exception as e:
-        current_app.logger.exception(f"Failed to fetch campaigns: {str(e)}")
-        return jsonify({"error": f"Failed to fetch campaigns: {str(e)}"}), 500
+        return jsonify({"error": result["message"]}), 400
