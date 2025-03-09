@@ -12,9 +12,6 @@ const InfoPage = () => {
   // For the typing animation effect in hero section
   const [displayText, setDisplayText] = useState('');
   const fullText = 'Level up your cybersecurity skills';
-  // For the typing animation effect in hero section
-  const [displayText, setDisplayText] = useState('');
-  const fullText = 'Level up your cybersecurity skills';
   
   // For counting animation
   const [questionCount, setQuestionCount] = useState(0);
