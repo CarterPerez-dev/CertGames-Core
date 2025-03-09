@@ -9,18 +9,9 @@ const InfoPage = () => {
   // For tab switching functionality
   const [activeTab, setActiveTab] = useState('comptia');
   
-  // Functions to handle card flipping
-  const handleCardClick = (event) => {
-    const card = event.currentTarget;
-    card.classList.toggle('info-flipped');
-    
-    // Reset other flipped cards
-    document.querySelectorAll('.info-flipped').forEach(flippedCard => {
-      if (flippedCard !== card) {
-        flippedCard.classList.remove('info-flipped');
-      }
-    });
-  };
+  // For the typing animation effect in hero section
+  const [displayText, setDisplayText] = useState('');
+  const fullText = 'Level up your cybersecurity skills';
   // For the typing animation effect in hero section
   const [displayText, setDisplayText] = useState('');
   const fullText = 'Level up your cybersecurity skills';
@@ -152,10 +143,7 @@ const InfoPage = () => {
           <p>Level up your skills while having fun</p>
         </div>
         <div className="info-feature-grid">
-          <div 
-            className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-feature-card info-animate-on-scroll info-clickable-card">
             <div className="info-feature-icon">
               <i className="info-exp-icon">XP</i>
             </div>
@@ -408,10 +396,7 @@ const InfoPage = () => {
           <p>Unique tools to boost your cybersecurity understanding</p>
         </div>
         <div className="info-tools-grid">
-          <div 
-            className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">🔎</span>
               ScenarioSphere
@@ -423,10 +408,7 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div 
-            className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">🔄</span>
               Analogy Hub
@@ -438,10 +420,7 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div 
-            className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">📋</span>
               GRC Wizard
@@ -453,10 +432,7 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div 
-            className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-tool-card info-animate-on-scroll info-clickable-card">
             <h3>
               <span className="info-tool-icon">⚔️</span>
               XploitCraft
@@ -519,10 +495,7 @@ const InfoPage = () => {
           <p>Get help whenever you need it</p>
         </div>
         <div className="info-support-content info-animate-on-scroll">
-          <div 
-            className="info-support-preview info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-support-preview info-clickable-card">
             <div className="info-support-chat">
               <div className="info-chat-header">
                 <h4>Support / Ask Anything</h4>
@@ -588,10 +561,7 @@ const InfoPage = () => {
           <p>Keep the momentum going with daily incentives</p>
         </div>
         <div className="info-daily-content info-animate-on-scroll">
-          <div 
-            className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">🪙</div>
             <h3>Daily Bonus</h3>
             <p>Claim free coins every 24 hours to spend in the shop</p>
@@ -601,10 +571,7 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div 
-            className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">🧩</div>
             <h3>Daily PBQ Challenge</h3>
             <p>Tackle a new performance-based question each day to earn bonus coins</p>
@@ -614,10 +581,7 @@ const InfoPage = () => {
               </div>
             </div>
           </div>
-          <div 
-            className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
-          >
+          <div className="info-daily-card info-clickable-card">
             <div className="info-daily-icon">📰</div>
             <h3>Cyber Brief</h3>
             <p>Stay informed with curated cybersecurity news and study tips</p>
