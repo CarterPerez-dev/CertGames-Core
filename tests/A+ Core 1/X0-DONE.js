@@ -1018,3 +1018,291 @@ db.tests.insertOne({
       "explanation": "Connection request resource exhaustion (SYN Flood Denial-of-Service Attack) is most likely indicated by the described traffic pattern. In a SYN flood, attackers send a large volume of TCP SYN packets from spoofed source IP addresses without completing the three-way handshake, leaving the server with many half-open connections that consume connection table resources until legitimate connections are blocked. The pattern of numerous SYN packets from different IPs without corresponding ACKs is a telltale sign of this attack. DNS spoofing would involve manipulating name resolution rather than connection requests, ARP poisoning would involve link-layer address manipulation rather than transport-layer connections, and session hijacking would typically occur after authentication rather than during connection establishment.",
       "examTip": "Excessive SYN packets without ACK responses are classic signs of a SYN flood attack."
     },
+    {
+      "id": 79,
+      "question": "Which of the following is a key operational benefit of 'Public Cloud' deployment model in terms of disaster recovery and business continuity?",
+      "options": [
+        "Reduced network dependency for recovery processes",
+        "Enhanced regulatory compliance capabilities",
+        "Provider-managed redundancy with geographic distribution",
+        "Elimination of business continuity planning requirements"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Provider-managed redundancy with geographic distribution (automated disaster recovery and high availability capabilities provided by the cloud provider's infrastructure) is a key operational benefit of public cloud for disaster recovery. Public cloud providers typically maintain multiple geographically dispersed data centers with built-in replication and failover capabilities, which can be leveraged for disaster recovery without significant additional infrastructure investment by the customer. Public cloud actually increases rather than reduces network dependency, doesn't inherently enhance regulatory compliance (which often requires additional configuration), and doesn't eliminate the need for business continuity planning but rather changes its focus.",
+      "examTip": "Leveraging the public cloud for DR can greatly simplify recovery procedures and ensure continuity through geographic redundancy."
+    },
+    {
+      "id": 80,
+      "question": "A technician is tasked with implementing a 'Zero Trust' security model. Which of the following practices is LEAST aligned with Zero Trust?",
+      "options": [
+        "Multifactor identity validation requirements",
+        "Network boundary protection prioritization",
+        "Microsegmentation enforcement techniques",
+        "Continuous activity monitoring implementation"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Network boundary protection prioritization (relying primarily on perimeter firewalls) is least aligned with Zero Trust principles. Traditional security models focus on creating a strong perimeter with implicit trust for entities inside that perimeter. Zero Trust explicitly rejects this approach, instead requiring strict verification of every access request regardless of source location. Focusing primarily on perimeter defenses contradicts the Zero Trust principle that no access should be trusted based on network location. MFA, microsegmentation, and continuous monitoring are all fundamental components of a Zero Trust architecture as they enforce the 'never trust, always verify' approach.",
+      "examTip": "Zero Trust requires strict verification at every access point, not just relying on perimeter defenses."
+    },
+    {
+      "id": 81,
+      "question": "A technician is troubleshooting a laptop whose integrated microphone is not working, while an external USB microphone works fine. The built-in microphone is not muted and drivers are up to date. Which component is MOST likely at fault?",
+      "options": [
+        "Audio signal processor circuitry",
+        "Internal microphone connection mechanism",
+        "Expansion audio interface component",
+        "System firmware audio configuration"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Internal microphone connection mechanism (loose or disconnected internal microphone cable) is most likely at fault. Since external USB microphones function correctly, the core audio processing system including the audio codec, drivers, and operating system configuration are working properly. This points to a physical issue specific to the internal microphone, with the most common cause being a loose, damaged, or disconnected cable between the microphone and the motherboard. These cables can be dislodged during laptop maintenance or develop issues at the connection points. Audio codec chip issues would typically affect all audio input devices, sound card problems wouldn't apply if external mics work, and BIOS settings would usually affect audio subsystem functionality broadly rather than just the internal microphone.",
+      "examTip": "When the external mic works but the internal one doesn't, physical connection issues are the first thing to check."
+    },
+    {
+      "id": 82,
+      "question": "Which of the following network security concepts BEST describes the practice of monitoring network traffic for suspicious patterns and anomalies, and automatically triggering alerts or security responses when malicious activity is detected?",
+      "options": [
+        "Traffic filtering rule enforcement",
+        "Network activity analysis and response",
+        "Security weakness identification",
+        "Security event documentation"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Network activity analysis and response (Intrusion Detection and Prevention Systems) best describes the practice of monitoring for suspicious patterns and automatically responding to detected threats. These systems continuously analyze network traffic for signatures of known attacks or anomalous behavior patterns that might indicate security incidents. Upon detection, they can automatically alert security teams or take defensive actions to block or mitigate the threat. Traffic filtering (firewalls) primarily controls network access rather than detecting attacks in progress, vulnerability management identifies security weaknesses before they're exploited rather than detecting active exploitation, and security logging documents events but typically lacks the real-time analysis and automated response capabilities described.",
+      "examTip": "IDPS act as a real-time security watchdog, detecting and often blocking threats as they occur."
+    },
+    {
+      "id": 83,
+      "question": "Which of the following RAID levels offers the BEST balance of high performance, good fault tolerance (tolerating up to two drive failures), and efficient storage capacity utilization, making it suitable for large databases and enterprise storage arrays?",
+      "options": [
+        "Distributed parity single-redundancy array",
+        "Distributed parity dual-redundancy array",
+        "Striped mirroring with distributed allocation",
+        "Nested parity array with distributed striping"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Distributed parity dual-redundancy array (RAID 6) provides the best balance for enterprise storage needs. RAID 6 implements dual parity, allowing it to tolerate simultaneous failure of any two drives in the array without data loss. It offers good read performance (though write performance is reduced due to parity calculations) and storage efficiency, utilizing typically N-2 of the total drive capacity for data storage (where N is the total number of drives). RAID 5 only tolerates a single drive failure, RAID 10 requires double the drives for the same usable capacity (lower efficiency), and RAID 60 (a nested RAID level combining RAID 6 and 0) focuses more on performance at the expense of capacity efficiency.",
+      "examTip": "RAID 6 is popular in enterprise storage because it balances fault tolerance and storage efficiency well."
+    },
+    {
+      "id": 84,
+      "question": "A technician needs to implement secure boot on a new Windows 11 workstation to protect against boot-level malware and rootkits. Which components and configurations are REQUIRED to enable Secure Boot effectively?",
+      "options": [
+        "Legacy firmware with protective boot sector",
+        "Extensible firmware with modern partition scheme and verified boot components",
+        "Hardware security module with operating system verification",
+        "Administrative access controls with boot password protection"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Extensible firmware with modern partition scheme and verified boot components (UEFI firmware, GPT partition scheme, and a digitally signed Windows Boot Manager) are required for implementing Secure Boot. Secure Boot is a UEFI feature that verifies the digital signatures of boot loaders and other early boot components before allowing them to execute, preventing unauthorized or malicious code from running during the boot process. This requires UEFI firmware (not legacy BIOS), a GPT partition scheme that supports UEFI, and properly signed boot components. Legacy BIOS with MBR cannot support Secure Boot, TPM enhances security but isn't strictly required for basic Secure Boot functionality, and boot passwords alone don't verify the integrity of boot components.",
+      "examTip": "Remember: UEFI, GPT, and a signed bootloader are the essentials for enabling Secure Boot."
+    },
+    {
+      "id": 85,
+      "question": "Which of the following cloud deployment models is MOST suitable for organizations that need to meet strict industry-specific compliance requirements (e.g., HIPAA, PCI DSS) and require a high degree of control over data and infrastructure security?",
+      "options": [
+        "Multi-tenant shared infrastructure",
+        "Single-tenant dedicated infrastructure",
+        "Hybrid shared-dedicated infrastructure",
+        "Community shared restricted infrastructure"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Single-tenant dedicated infrastructure (Private Cloud) is most suitable for organizations with strict compliance requirements and security control needs. Private cloud provides maximum control over infrastructure, data placement, security configurations, and access controls, allowing organizations to implement and verify specific compliance measures. Public cloud (multi-tenant shared infrastructure) may introduce compliance challenges due to shared resources and potentially less visibility. Hybrid cloud combines benefits but introduces complexity for consistent compliance. Community cloud (shared restricted infrastructure) may be suitable for organizations with identical compliance needs but typically offers less individualized control than private cloud.",
+      "examTip": "For regulated industries, private clouds provide the control needed to satisfy compliance mandates."
+    },
+    {
+      "id": 86,
+      "question": "A technician is troubleshooting a laptop whose built-in webcam is not working, and Device Manager shows a driver error for the webcam device. Which troubleshooting step should be performed FIRST?",
+      "options": [
+        "Display assembly replacement procedure",
+        "Device driver rollback operation",
+        "Privacy and permissions verification",
+        "Internal connector reseating process"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Privacy and permissions verification (checking webcam privacy settings in the operating system and BIOS/UEFI) should be performed first. Many modern laptops have built-in privacy features that can disable the webcam at the hardware or firmware level, which would appear as a driver error in Device Manager. These settings can include physical privacy shutters, keyboard function keys, dedicated privacy applications from the manufacturer, BIOS/UEFI settings, or operating system permissions. Checking these simple settings first follows the troubleshooting principle of starting with the least invasive and most likely solutions. Driver rollbacks or physical repairs should only be attempted after confirming that privacy settings aren't causing the issue.",
+      "examTip": "Many laptops have privacy settings that can disable the webcam. Always verify these settings first."
+    },
+    {
+      "id": 87,
+      "question": "Which of the following network protocols is used for secure, encrypted remote access to network devices, providing both command-line interface (CLI) and graphical user interface (GUI) access?",
+      "options": [
+        "Remote terminal emulation protocol",
+        "File transfer protocol with security extensions",
+        "Encrypted shell communication protocol",
+        "Secure hypertext transfer protocol"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Encrypted shell communication protocol (SSH - Secure Shell) is used for secure, encrypted remote access to network devices. SSH provides encrypted communications over an unsecured network, most commonly for remote command-line login and command execution, but it can also tunnel other protocols to provide secure GUI access through X11 forwarding or port forwarding. Telnet (remote terminal emulation) provides unencrypted access and is considered insecure. FTP with security extensions might refer to FTPS or SFTP (the latter uses SSH), but neither is primarily for device management. HTTPS provides secure web access but isn't specifically designed for network device management, although web interfaces may use it.",
+      "examTip": "SSH is the industry standard for secure remote administration—always use it over unencrypted protocols like Telnet."
+    },
+    {
+      "id": 88,
+      "question": "Which of the following RAID levels provides the HIGHEST read and write performance by striping data across all drives, but offers NO fault tolerance or data redundancy?",
+      "options": [
+        "Block-level striping with no redundancy",
+        "Mirroring with duplicate data copies",
+        "Distributed parity with data redundancy",
+        "Nested striping with distributed parity"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Block-level striping with no redundancy (RAID 0) provides the highest raw performance by distributing data blocks across multiple drives, allowing parallel read/write operations that significantly increase throughput. However, it offers absolutely no fault tolerance; if any drive in the array fails, all data in the entire array is lost. RAID 1 (mirroring) duplicates data for redundancy but doesn't match RAID 0's performance potential. RAID 5 (distributed parity) offers redundancy but includes parity calculation overhead that reduces write performance. RAID 10 (nested RAID 1+0) provides both performance and redundancy but doesn't quite match the raw performance of RAID 0 due to the mirroring component.",
+      "examTip": "RAID 0 is best for performance when data loss is not a concern. Use it only in non-critical applications."
+    },
+    {
+      "id": 89,
+      "question": "A technician needs to dispose of several old smartphones and tablets containing sensitive user data. Which method is MOST secure and environmentally responsible for data sanitization and device disposal?",
+      "options": [
+        "Default restoration with standard waste disposal",
+        "Memory overwriting with charitable redistribution",
+        "Physical storage destruction with component recycling",
+        "Account removal with commercial resale"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Physical storage destruction with component recycling (physically destroying the storage media and recycling the device components at a certified e-waste facility) is both the most secure and environmentally responsible approach. Physical destruction of storage (through shredding, crushing, or degaussing) ensures data cannot be recovered even with advanced forensic techniques. Properly recycling the remaining components through certified e-waste facilities ensures hazardous materials are handled appropriately. Factory resets can sometimes leave recoverable data, single-pass overwriting may not fully sanitize modern storage, and simply deleting user accounts leaves considerable recoverable data on the device.",
+      "examTip": "For sensitive data, physical destruction combined with certified e-waste recycling is the best practice."
+    },
+    {
+      "id": 90,
+      "question": "Which of the following cloud computing concepts refers to the pooling of resources to serve multiple consumers using a multi-tenant model, where resources are dynamically allocated based on demand?",
+      "options": [
+        "Scaling capacity dynamically",
+        "Pay-per-use billing model",
+        "Shared infrastructure utilization",
+        "Self-service provisioning capability"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Shared infrastructure utilization (Resource Pooling) refers to the cloud computing practice of aggregating computing resources to serve multiple consumers through a multi-tenant model. With resource pooling, physical and virtual resources are dynamically assigned and reassigned according to consumer demand, creating economies of scale and efficient resource utilization. The customer generally has no control over the exact location of provided resources but may specify location at a higher level (e.g., country, state, or datacenter). Rapid elasticity refers to quickly scaling resources, measured service refers to pay-per-use billing, and on-demand self-service refers to automated provisioning without provider interaction.",
+      "examTip": "Resource pooling underlies cloud computing efficiency by sharing resources dynamically among many users."
+    },
+    {
+      "id": 91,
+      "question": "A technician is troubleshooting a thermal printer that is producing faded receipts, even after replacing the thermal paper roll. Which component is MOST likely causing the faded printing?",
+      "options": [
+        "Thermal resistive element deterioration",
+        "Print controller circuit malfunction",
+        "Print configuration parameter settings",
+        "Media contact pressure mechanism"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Thermal resistive element deterioration (depleted printhead heating element) is most likely causing the faded printing. Thermal printers create images by selectively heating special thermal paper, and over time, the printhead's heating elements wear out or become less efficient. When this occurs, the elements cannot generate sufficient heat to fully activate the thermal paper, resulting in faded or light printing. Since replacing the paper didn't resolve the issue, the problem must be with the printer itself. Logic board issues would typically cause more erratic problems rather than consistent fading, driver settings wouldn't likely cause gradual degradation over time, and platen roller issues would cause inconsistent pressure and irregularly faded areas rather than overall lightness.",
+      "examTip": "Thermal printers rely on consistent heat; a failing printhead will result in faded output."
+    },
+    {
+      "id": 92,
+      "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for authentication requests using UDP protocol?",
+      "options": [
+        "Port 88",
+        "Port 464",
+        "Port 749",
+        "Port 3268"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Port 88 is used by the Kerberos Key Distribution Center (KDC) for authentication requests over both TCP and UDP protocols. In Active Directory environments, the KDC is responsible for issuing tickets that are used for authentication, and it communicates on port 88 by default. UDP is often preferred for Kerberos authentication due to its lower overhead compared to TCP. Port 464 is used for Kerberos password changes (kpasswd), port 749 is sometimes used for Kerberos administration (kadmin), and port 3268 is used for Global Catalog LDAP queries, not for Kerberos authentication.",
+      "examTip": "Keep in mind that Kerberos typically operates on port 88 using both UDP and TCP as needed."
+    },
+    {
+      "id": 93,
+      "question": "A mobile device user is in an area with weak cellular signal and experiences poor battery life and intermittent connectivity. Which of the following actions will most significantly improve battery life?",
+      "options": [
+        "Maximum screen luminance for visibility enhancement",
+        "Persistent peripheral connectivity enablement",
+        "Mobile data connectivity deactivation",
+        "Network scanning frequency increase"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Mobile data connectivity deactivation (disabling cellular data and using Wi-Fi when available) will most significantly improve battery life in weak signal areas. When a mobile device detects weak cellular signal, it increases transmission power and continuously attempts to maintain or reestablish connections to cell towers, dramatically increasing battery consumption. Disabling cellular data prevents this high-energy process. Maximizing screen brightness would substantially increase power consumption, keeping Bluetooth constantly active would drain additional power, and increasing network scanning frequency would create even more battery drain rather than conserving power.",
+      "examTip": "When cellular signals are weak, turning off cellular data can greatly conserve battery power."
+    },
+    {
+      "id": 94,
+      "question": "Which of the following BEST describes the 'Private Cloud' deployment model in terms of resource sharing and access control?",
+      "options": [
+        "Multi-organizational resource sharing with public network access",
+        "Single-organization resource dedication with controlled access",
+        "Internal multi-user resource allocation with operational similarity",
+        "Geographic resource isolation with physical access limitations"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Single-organization resource dedication with controlled access best describes the private cloud model. In a private cloud, computing resources are exclusively used by a single organization, typically accessed through a private network or secure connection rather than the public internet. This provides greater control over the infrastructure, data security, and compliance compared to public cloud options. The resources may be located on-premises or hosted by a third party but are logically isolated and dedicated to the organization. This differs from public cloud (shared among multiple organizations), community cloud (shared among specific organizations with common concerns), and hybrid cloud (combination of private and public).",
+      "examTip": "A private cloud offers exclusive use and enhanced control, which is critical for organizations with sensitive data."
+    },
+    {
+      "id": 95,
+      "question": "A laser printer is producing prints with a consistent 'smudge' or 'blur' that is offset and to the side of the main image, almost like a shadow but consistently displaced. Which printer component is MOST likely causing this offset smudge defect?",
+      "options": [
+        "Toner distribution mechanism with uneven dispensing",
+        "Heat application component with pressure irregularity",
+        "Image formation drum with alignment inconsistency",
+        "Image transfer mechanism with positioning deviation"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Image transfer mechanism with positioning deviation (misalignment or slippage in the transfer belt or roller) is most likely causing the offset smudge defect. During the transfer process, the toner image is moved from the drum to the paper. If the transfer component is misaligned or slipping, it can cause the toner to transfer slightly offset from the intended position, creating a shadow-like effect that appears consistently in the same position relative to the main image. Toner distribution issues would typically affect overall print density rather than creating offset shadows, fuser problems would usually cause smearing or poor adhesion rather than offset duplication, and drum registration problems would more commonly affect the entire image alignment rather than creating a specific shadow effect.",
+      "examTip": "Offset smudging often points to transfer mechanism issues. Check the alignment and tension of the transfer belt/roller."
+    },
+    {
+      "id": 96,
+      "question": "Which of the following security principles is BEST represented by implementing 'regular security audits' and 'vulnerability assessments' to identify and address security weaknesses proactively?",
+      "options": [
+        "Preventative security mechanism",
+        "Detective security control",
+        "Remedial security measure",
+        "Security verification methodology"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Security verification methodology (Security Assessment and Testing) is best represented by implementing regular security audits and vulnerability assessments. This principle focuses on systematically testing and evaluating security controls, configurations, and potential vulnerabilities to identify weaknesses before they can be exploited. This approach is inherently proactive, aiming to find and address security issues before an attack occurs. Preventative controls aim to stop incidents from occurring, detective controls identify incidents as they happen, and corrective measures address issues after they've been identified, but the security assessment principle specifically refers to the systematic and regular testing process itself.",
+      "examTip": "Proactive security testing helps you stay ahead of threats by regularly assessing your security posture."
+    },
+    {
+      "id": 97,
+      "question": "Performance-Based Question: A user complains that their Windows 10 computer is intermittently freezing, particularly when running memory-intensive applications. You suspect possible issues related to RAM. Put the following steps in the MOST efficient order for diagnosing and fixing memory-related problems.",
+      "options": [
+        "Operating system diagnostic mode, memory verification test, hardware reconfiguration, component substitution test, firmware optimization",
+        "Firmware update implementation, peripheral device removal, system memory diagnostics, operating system reinstallation, processor verification",
+        "Operating system reinstallation, driver update application, vendor service provision, power supply replacement, firmware optimization",
+        "Hardware reconfiguration, memory verification test, operating system diagnostic mode, component substitution test, firmware optimization"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The most efficient diagnostic sequence is: operating system diagnostic mode (booting into Safe Mode to see if the issue persists with minimal drivers and services), memory verification test (running Windows Memory Diagnostic or similar tool to check for errors), hardware reconfiguration (reseating RAM modules or moving them to different slots), component substitution test (testing with known-good RAM if problems are detected), and firmware optimization (updating BIOS/UEFI if memory compatibility issues persist). This approach follows a logical progression from simple software isolation to increasingly complex hardware troubleshooting, with each step building on the information gathered from the previous steps.",
+      "examTip": "Start with the simplest tests—Safe Mode and memory diagnostics—before you invest time in hardware swaps or BIOS updates. Always rule out easy software conflicts and known bugs first."
+    },
+    {
+      "id": 98,
+      "question": "Which of the following memory technologies is often used in embedded systems and mobile devices due to its low power consumption, non-volatility, and compact size, storing firmware, boot code, or small amounts of persistent data?",
+      "options": [
+        "Double data rate synchronous dynamic memory",
+        "Graphics-optimized dynamic random access memory",
+        "Static charge-maintained transistor-based memory",
+        "Non-volatile serially accessible memory"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Non-volatile serially accessible memory (NOR Flash Memory) is commonly used in embedded systems and mobile devices for firmware and boot code storage. NOR Flash offers non-volatility (retaining data without power), relatively fast read speeds, byte-level addressability, and execute-in-place (XIP) capability, making it ideal for storing and directly executing boot code and firmware. DDR5 SDRAM and GDDR6 are volatile memory technologies that lose data when powered off, primarily used for main system memory and graphics memory respectively. SRAM is faster but more expensive than flash memory and typically used for cache memory rather than firmware storage.",
+      "examTip": "NOR Flash is the standard for firmware storage in embedded and mobile devices."
+    },
+    {
+      "id": 99,
+      "question": "A technician is analyzing network traffic and observes a pattern of repeated SYN packets being sent to a web server from numerous distinct source IP addresses, but no corresponding ACK or data packets are observed in response. Which type of network attack is MOST likely indicated by this traffic pattern?",
+      "options": [
+        "Domain name resolution falsification",
+        "Initial connection request flooding",
+        "Link layer addressing manipulation",
+        "Authentication state manipulation"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Initial connection request flooding (SYN Flood Denial-of-Service Attack) is most likely indicated by the observed traffic pattern. In a SYN flood attack, attackers send numerous TCP SYN packets from spoofed source addresses to initiate connections with the target server. Since the source addresses are invalid or spoofed, the server never receives the final ACK packet to complete the three-way handshake. This leaves many half-open connections that consume server resources until connection tables are filled and legitimate connections are blocked. DNS spoofing (domain name resolution falsification) involves manipulating DNS responses, ARP poisoning (link layer addressing manipulation) involves falsifying MAC addresses, and session hijacking (authentication state manipulation) occurs after connections are established.",
+      "examTip": "SYN floods overwhelm the connection queue. High volumes of SYN packets without completing the handshake indicate this type of attack."
+    },
+    {
+      "id": 100,
+      "question": "A technician needs to implement secure remote access to a Windows server's graphical user interface (GUI). Which protocol and port combination is BEST to use?",
+      "options": [
+        "Terminal communication protocol on port 23",
+        "File transmission protocol on port 21",
+        "Encrypted connectivity tunneling on port 22",
+        "Remote display protocol on port 3389"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Remote display protocol on port 3389 (RDP - Remote Desktop Protocol) is best for secure GUI access to Windows servers. RDP is specifically designed for providing graphical user interface access to Windows systems and includes capabilities for encryption, authentication, and transmission of display, keyboard, and mouse inputs. Telnet (port 23) provides unencrypted terminal access and is highly insecure. FTP (port 21) is for file transfers, not interactive GUI sessions. SSH (port 22) can provide secure command-line access and can tunnel other protocols, but isn't natively designed for Windows GUI access without additional configuration.",
+      "examTip": "For Windows GUI remote access, always use RDP over port 3389 with proper security measures."
+    } 
+  ]
+});
