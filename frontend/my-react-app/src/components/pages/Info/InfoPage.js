@@ -1,16 +1,40 @@
 // src/components/pages/Info/InfoPage.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
-import { FaApple, FaGoogle, FaAppStore } from 'react-icons/fa';
+import { 
+  FaApple, 
+  FaGoogle, 
+  FaAppStore, 
+  FaPlay, 
+  FaArrowRight, 
+  FaInfoCircle, 
+  FaExternalLinkAlt 
+} from 'react-icons/fa';
 import './InfoPage.css';
 
 const InfoPage = () => {
   // For tab switching functionality
   const [activeTab, setActiveTab] = useState('comptia');
   
-  // Functions to handle card flipping
-  const handleCardClick = (event) => {
+  // For the typing animation effect in hero section
+  const [displayText, setDisplayText] = useState('');
+  const fullText = 'Level up your cybersecurity skills';
+  
+  // For counting animation
+  const [questionCount, setQuestionCount] = useState(0);
+  const [certCount, setCertCount] = useState(0);
+  const [resourceCount, setResourceCount] = useState(0);
+  
+  // Refs for scroll sections
+  const featuresRef = useRef(null);
+  const toolsRef = useRef(null);
+  const testsRef = useRef(null);
+  const pricingRef = useRef(null);
+  
+  // Functions to handle card flipping and demo views
+  const handleCardClick = (event, demoId = null) => {
     const card = event.currentTarget;
     card.classList.toggle('info-flipped');
     
@@ -20,15 +44,19 @@ const InfoPage = () => {
         flippedCard.classList.remove('info-flipped');
       }
     });
+    
+    // If demoId is provided, store it for navigation
+    if (demoId) {
+      localStorage.setItem('lastViewedDemo', demoId);
+    }
   };
-  // For the typing animation effect in hero section
-  const [displayText, setDisplayText] = useState('');
-  const fullText = 'Level up your cybersecurity skills';
   
-  // For counting animation
-  const [questionCount, setQuestionCount] = useState(0);
-  const [certCount, setCertCount] = useState(0);
-  const [resourceCount, setResourceCount] = useState(0);
+  // Scroll to section function
+  const scrollToSection = (ref) => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   // For parallax effect on scroll
   useEffect(() => {
@@ -99,6 +127,9 @@ const InfoPage = () => {
 
   return (
     <div className="info-container">
+      {/* Navbar */}
+      <InfoNavbar />
+      
       {/* Hero Section */}
       <section className="info-hero-section">
         <div className="info-overlay"></div>
@@ -113,11 +144,25 @@ const InfoPage = () => {
             </p>
             <div className="info-hero-cta">
               <Link to="/register" className="info-button info-primary-button">
-                Start Your Journey <i className="info-icon">→</i>
+                Start Your Journey <FaArrowRight className="info-icon" />
               </Link>
               <Link to="/login" className="info-button info-secondary-button">
                 Log In
               </Link>
+            </div>
+            <div className="info-quick-links">
+              <button onClick={() => scrollToSection(featuresRef)} className="info-quick-link">
+                <span>Features</span>
+              </button>
+              <button onClick={() => scrollToSection(toolsRef)} className="info-quick-link">
+                <span>Learning Tools</span>
+              </button>
+              <button onClick={() => scrollToSection(testsRef)} className="info-quick-link">
+                <span>Certification Tests</span>
+              </button>
+              <button onClick={() => scrollToSection(pricingRef)} className="info-quick-link">
+                <span>Pricing</span>
+              </button>
             </div>
           </div>
 
@@ -143,7 +188,7 @@ const InfoPage = () => {
       </section>
 
       {/* Gamified Experience Section */}
-      <section className="info-feature-section info-gamified-section">
+      <section ref={featuresRef} className="info-feature-section info-gamified-section">
         <div className="info-section-header info-animate-on-scroll">
           <h2>
             <span className="info-section-icon">🎮</span>
@@ -154,7 +199,7 @@ const InfoPage = () => {
         <div className="info-feature-grid">
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'xp-system')}
           >
             <div className="info-feature-icon">
               <i className="info-exp-icon">XP</i>
@@ -162,29 +207,35 @@ const InfoPage = () => {
             <h3>Earn XP & Level Up</h3>
             <p>Answer questions correctly to gain experience points and climb the ranks from rookie to elite hacker.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>XP System Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch XP System Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card" 
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'coins-system')}
           >
             <div className="info-feature-icon">
               <i className="info-coins-icon">💰</i>
             </div>
             <h3>Collect Coins</h3>
-            <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and bonuses.</p>
+            <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and boosts.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Coins System Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Coins System Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'achievements')}
           >
             <div className="info-feature-icon">
               <i className="info-trophy-icon">🏆</i>
@@ -192,14 +243,17 @@ const InfoPage = () => {
             <h3>Unlock Achievements</h3>
             <p>Complete special tasks to earn badges and trophies that showcase your growing expertise.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Achievements Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Achievements Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'leaderboards')}
           >
             <div className="info-feature-icon">
               <i className="info-leaderboard-icon">📊</i>
@@ -207,14 +261,17 @@ const InfoPage = () => {
             <h3>Compete on Leaderboards</h3>
             <p>See how you rank against other cybersecurity enthusiasts and strive to climb to the top.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Leaderboard Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/public-leaderboard" className="info-demo-link">
+                  <FaExternalLinkAlt className="info-demo-icon" />
+                  <span>View Current Leaderboard</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'themes')}
           >
             <div className="info-feature-icon">
               <i className="info-theme-icon">🎨</i>
@@ -222,14 +279,17 @@ const InfoPage = () => {
             <h3>Customize Your Experience</h3>
             <p>Choose from multiple themes and personalize your learning environment to suit your style.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Theme Customization Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Theme Customization Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-feature-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'mobile')}
           >
             <div className="info-feature-icon">
               <i className="info-mobile-icon">📱</i>
@@ -237,12 +297,27 @@ const InfoPage = () => {
             <h3>Learn Anywhere</h3>
             <p>Access all features on desktop, mobile browsers, and our dedicated iOS app for learning on the go.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Mobile App Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Mobile App Demo</span>
+                </Link>
               </div>
             </div>
           </div>
         </div>
+        
+        <div className="info-feature-links info-animate-on-scroll">
+          <Link to="/demos" className="info-feature-link">
+            <span>View All Feature Demos</span>
+            <FaArrowRight className="info-link-icon" />
+          </Link>
+          <Link to="/public-leaderboard" className="info-feature-link">
+            <span>Browse Leaderboard</span>
+            <FaArrowRight className="info-link-icon" />
+          </Link>
+        </div>
+        
         <div className="info-preview-placeholder info-animate-on-scroll">
           <div className="info-preview-overlay">
             <p>Leaderboard & Achievement Preview</p>
@@ -251,7 +326,7 @@ const InfoPage = () => {
       </section>
 
       {/* Certification Tests Section */}
-      <section className="info-feature-section info-tests-section">
+      <section ref={testsRef} className="info-feature-section info-tests-section">
         <div className="info-section-header info-animate-on-scroll">
           <h2>
             <span className="info-section-icon">📝</span>
@@ -396,10 +471,17 @@ const InfoPage = () => {
             </div>
           </div>
         </div>
+        
+        <div className="info-feature-links info-animate-on-scroll">
+          <Link to="/exams" className="info-feature-link">
+            <span>View All Certification Exams</span>
+            <FaArrowRight className="info-link-icon" />
+          </Link>
+        </div>
       </section>
 
       {/* Interactive Tools Section */}
-      <section className="info-feature-section info-tools-section">
+      <section ref={toolsRef} className="info-feature-section info-tools-section">
         <div className="info-section-header info-animate-on-scroll">
           <h2>
             <span className="info-section-icon">🛠️</span>
@@ -410,7 +492,7 @@ const InfoPage = () => {
         <div className="info-tools-grid">
           <div 
             className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'scenario-sphere')}
           >
             <h3>
               <span className="info-tool-icon">🔎</span>
@@ -418,14 +500,17 @@ const InfoPage = () => {
             </h3>
             <p>Immerse yourself in realistic security scenarios with detailed storylines. Tackle simulated cyberattacks to build your incident response skills.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>ScenarioSphere Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch ScenarioSphere Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'analogy-hub')}
           >
             <h3>
               <span className="info-tool-icon">🔄</span>
@@ -433,14 +518,17 @@ const InfoPage = () => {
             </h3>
             <p>Complex concepts made simple through custom analogies. Compare security concepts using memorable examples to reinforce your learning.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Analogy Hub Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Analogy Hub Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'grc-wizard')}
           >
             <h3>
               <span className="info-tool-icon">📋</span>
@@ -448,14 +536,17 @@ const InfoPage = () => {
             </h3>
             <p>Master governance, risk, and compliance topics with custom generated questions across multiple categories and difficulty levels.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>GRC Wizard Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch GRC Wizard Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-tool-card info-animate-on-scroll info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'xploitcraft')}
           >
             <h3>
               <span className="info-tool-icon">⚔️</span>
@@ -463,11 +554,21 @@ const InfoPage = () => {
             </h3>
             <p>Learn about exploitation techniques through educational code examples with detailed explanations for ethical understanding.</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>XploitCraft Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch XploitCraft Demo</span>
+                </Link>
               </div>
             </div>
           </div>
+        </div>
+        
+        <div className="info-feature-links info-animate-on-scroll">
+          <Link to="/demos" className="info-feature-link">
+            <span>View All Tool Demos</span>
+            <FaArrowRight className="info-link-icon" />
+          </Link>
         </div>
       </section>
 
@@ -521,7 +622,7 @@ const InfoPage = () => {
         <div className="info-support-content info-animate-on-scroll">
           <div 
             className="info-support-preview info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'support')}
           >
             <div className="info-support-chat">
               <div className="info-chat-header">
@@ -545,8 +646,11 @@ const InfoPage = () => {
               </div>
             </div>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Support System Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Support System Demo</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -574,6 +678,13 @@ const InfoPage = () => {
                 <span>Technical assistance with platform features</span>
               </li>
             </ul>
+            
+            <div className="info-support-links">
+              <Link to="/contact" className="info-support-link">
+                <span>Contact Support</span>
+                <FaArrowRight className="info-link-icon" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -590,40 +701,49 @@ const InfoPage = () => {
         <div className="info-daily-content info-animate-on-scroll">
           <div 
             className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'daily-bonus')}
           >
             <div className="info-daily-icon">🪙</div>
             <h3>Daily Bonus</h3>
             <p>Claim free coins every 24 hours to spend in the shop</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Daily Bonus Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Daily Bonus Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'daily-pbq')}
           >
             <div className="info-daily-icon">🧩</div>
             <h3>Daily PBQ Challenge</h3>
             <p>Tackle a new performance-based question each day to earn bonus coins</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Daily PBQ Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Daily PBQ Demo</span>
+                </Link>
               </div>
             </div>
           </div>
           <div 
             className="info-daily-card info-clickable-card"
-            onClick={handleCardClick}
+            onClick={(e) => handleCardClick(e, 'cyber-brief')}
           >
             <div className="info-daily-icon">📰</div>
             <h3>Cyber Brief</h3>
             <p>Stay informed with curated cybersecurity news and study tips</p>
             <div className="info-card-flip">
-              <div className="info-video-placeholder">
-                <p>Cyber Brief Demo</p>
+              <div className="info-demo-preview">
+                <Link to="/demos" className="info-demo-link">
+                  <FaPlay className="info-demo-icon" />
+                  <span>Watch Cyber Brief Demo</span>
+                </Link>
               </div>
             </div>
           </div>
@@ -631,7 +751,7 @@ const InfoPage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="info-pricing-section">
+      <section ref={pricingRef} className="info-pricing-section">
         <div className="info-section-header info-animate-on-scroll">
           <h2>
             <span className="info-section-icon">💎</span>
@@ -774,6 +894,13 @@ const InfoPage = () => {
             <h3 className="info-faq-question">What if I need help with a specific concept?</h3>
             <p className="info-faq-answer">Our 24/7 "Ask Anything" support feature allows you to ask any certification-related question and receive a thorough, personalized answer from our expert team, typically within 3 hours.</p>
           </div>
+          
+          <div className="info-more-questions">
+            <Link to="/contact" className="info-more-questions-link">
+              <FaInfoCircle className="info-question-icon" />
+              <span>Have more questions? Contact us</span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -793,10 +920,10 @@ const InfoPage = () => {
           <div className="info-oauth-options">
             <span>Quick sign-in with:</span>
             <div className="info-oauth-buttons">
-              <button className="info-oauth-button info-google">
+              <button className="info-oauth-button info-google" onClick={() => window.location.href = "/api/oauth/login/google"}>
                 <FaGoogle className="info-oauth-icon" /> Google
               </button>
-              <button className="info-oauth-button info-apple">
+              <button className="info-oauth-button info-apple" onClick={() => window.location.href = "/api/oauth/login/apple"}>
                 <FaApple className="info-oauth-icon" /> Apple ID
               </button>
             </div>
