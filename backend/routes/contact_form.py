@@ -53,12 +53,13 @@ def submit_contact_form():
         )
         
         if success:
-              db.contacts.insert_one({
-                  "email": email,
-                  "message": message,
-                  "timestamp": datetime.utcnow()
-              })
-            
+            # Insert the contact form submission into the database
+            db.contacts.insert_one({
+                "email": email,
+                "message": message,
+                "timestamp": datetime.utcnow()
+            })
+
             return jsonify({
                 "success": True,
                 "message": "Your message has been sent successfully. We'll get back to you soon!"
@@ -68,7 +69,6 @@ def submit_contact_form():
                 "success": False,
                 "error": "There was an error sending your message. Please try again later."
             }), 500
-            
     except Exception as e:
         current_app.logger.error(f"Error sending contact form email: {str(e)}")
         return jsonify({
