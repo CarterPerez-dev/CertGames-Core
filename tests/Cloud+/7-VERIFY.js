@@ -1,8 +1,8 @@
 db.tests.insertOne({
-  "category": "exam",
+  "category": "cloudplus",
   "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 35,
+  "testName": "CompTIA Cloud+ (CV0-004) Practice Test #7 (Challenging)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
