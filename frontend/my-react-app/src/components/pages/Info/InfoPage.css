@@ -525,7 +525,7 @@
 }
 
 .info-test-tab.info-active::after {
-  content: " ";
+  content: "";
   position: absolute;
   bottom: -1px;
   left: 0;
@@ -628,7 +628,7 @@
 }
 
 .info-tools-section::before {
-  content: " ";
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -1097,7 +1097,7 @@
 }
 
 .info-testimonial-card::before {
-  content: """;
+  content: " ";
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -1298,15 +1298,22 @@
 }
 
 .info-oauth-button::before {
+  content: " ";
   display: inline-block;
   width: 18px;
   height: 18px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  margin-right: 8px;
 }
 
+.info-google::before {
+  background-color: #4285F4;
+  border-radius: 50%;
+}
 
+.info-apple::before {
+  background-color: white;
+  border-radius: 0;
+}
 
 .info-oauth-button:hover {
   background: rgba(60, 60, 100, 0.7);
