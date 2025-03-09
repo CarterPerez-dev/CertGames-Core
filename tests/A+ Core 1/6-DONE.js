@@ -88,7 +88,7 @@ db.tests.insertOne({
       "options": [
         "RAM",
         "Power Supply",
-        "Hard Disk Drive (HDD)",
+        "Hard Disk Drive",
         "CPU fan"
       ],
       "correctAnswerIndex": 2,
@@ -100,7 +100,7 @@ db.tests.insertOne({
       "question": "A technician needs to configure an iOS device to securely retrieve corporate email. Which protocol is MOST likely used for secure email downloading?",
       "options": [
         "POP3",
-        "IMAP over SSL (IMAPS)",
+        "IMAP over SSL",
         "SMTP",
         "Telnet"
       ],
@@ -257,7 +257,7 @@ db.tests.insertOne({
       "options": [
         "HDMI 2.0 with Ethernet channel",
         "DisplayPort 1.2 without MST",
-        "Thunderbolt 4 (USB-C) with full 40 Gbps bandwidth",
+        "Thunderbolt 4 with 40 Gbps bandwidth",
         "USB 3.1 Gen 1 Type-A"
       ],
       "correctAnswerIndex": 2,
@@ -296,7 +296,7 @@ db.tests.insertOne({
       "options": [
         "USB network",
         "Bluetooth network",
-        "Local Area Network (LAN)",
+        "Local Area Network",
         "Powerline network"
       ],
       "correctAnswerIndex": 2,
