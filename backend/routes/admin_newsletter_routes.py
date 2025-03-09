@@ -9,12 +9,13 @@ from models.newsletter import (
     mark_campaign_sent,
     get_all_active_subscribers,
     newsletter_subscribers_collection,
+    newsletter_campaigns_collection,
     _generate_unsubscribe_token,
     send_campaign_to_all
 )
 
 ########## ADMIN BLUEPRINT ##########
-admin_news_bp = Blueprint('admin_news_bp', __name__)
+admin_news_bp = Blueprint('admin_news_bp', __name__)  # Fixed the __name__ parameter
 
 def require_cracked_admin(required_role=None):
     """
@@ -75,12 +76,14 @@ def admin_send_newsletter(campaign_id):
 
     campaign = get_campaign_by_id(campaign_id)
     if not campaign:
+        current_app.logger.error(f"Campaign not found for ID: {campaign_id}")
         return jsonify({"error": "Campaign not found"}), 404
 
     if campaign.get("status") == "sent":
         return jsonify({"error": "Campaign already sent"}), 400
 
     # Send the campaign to all subscribers using SendGrid
+    current_app.logger.info(f"Attempting to send campaign {campaign_id}")
     result = send_campaign_to_all(campaign_id)
     
     if result["success"]:
@@ -88,6 +91,49 @@ def admin_send_newsletter(campaign_id):
             "message": result["message"]
         }), 200
     else:
+        current_app.logger.error(f"Failed to send campaign: {result['message']}")
         return jsonify({
             "error": result["message"]
         }), 400
+
+#################################
+# ADMIN: Get all subscribers
+#################################
+@admin_news_bp.route('/newsletter/subscribers', methods=['GET'])
+def get_subscribers():
+    if not require_cracked_admin():
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+    
+    try:
+        # Get all subscribers (both active and unsubscribed)
+        subscribers = list(newsletter_subscribers_collection.find())
+        
+        # Convert ObjectIds to strings for JSON serialization
+        for sub in subscribers:
+            sub['_id'] = str(sub['_id'])
+        
+        return jsonify({"subscribers": subscribers}), 200
+    except Exception as e:
+        current_app.logger.exception(f"Failed to fetch subscribers: {str(e)}")
+        return jsonify({"error": f"Failed to fetch subscribers: {str(e)}"}), 500
+
+#################################
+# ADMIN: Get all campaigns
+#################################
+@admin_news_bp.route('/newsletter/campaigns', methods=['GET'])
+def get_campaigns():
+    if not require_cracked_admin():
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+    
+    try:
+        # Get all campaigns
+        campaigns = list(newsletter_campaigns_collection.find())
+        
+        # Convert ObjectIds to strings for JSON serialization
+        for campaign in campaigns:
+            campaign['_id'] = str(campaign['_id'])
+        
+        return jsonify({"campaigns": campaigns}), 200
+    except Exception as e:
+        current_app.logger.exception(f"Failed to fetch campaigns: {str(e)}")
+        return jsonify({"error": f"Failed to fetch campaigns: {str(e)}"}), 500
