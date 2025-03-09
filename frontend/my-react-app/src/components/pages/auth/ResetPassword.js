@@ -105,7 +105,7 @@ const ResetPassword = () => {
     
     try {
       console.log("Submitting new password...");
-      const response = await fetch('http://localhost:5000/password-reset/reset-password', {
+      const response = await fetch('/api/password-reset/reset-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
