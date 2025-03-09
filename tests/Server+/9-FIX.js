@@ -1,4 +1,12 @@
-  [
+somehwre theres duplciate number
+
+
+db.tests.insertOne({
+  "category": "serverplus",
+  "testId": 9,
+  "testName": "CompTIA Server+ Practice Test #9 (Ruthless)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "A rack-mounted server with redundant power supplies randomly reboots during peak usage periods. Event logs show no explicit power-related errors, and power metrics are within normal operating range. What is the most likely root cause?",
