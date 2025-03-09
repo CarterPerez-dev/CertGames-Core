@@ -17,7 +17,7 @@ class EmailSender:
         # Default sender addresses
         self.default_addresses = {
             'password_reset': os.getenv('SENDGRID_PASSWORD_RESET_EMAIL', 'passwordreset@certgames.com'),
-            'newsletter': os.getenv('SENDGRID_NEWSLETTER_EMAIL', 'dailycyberbrief@certgames.com'),
+            'newsletter': os.getenv('SENDGRID_NEWSLETTER_EMAIL', 'cyberbrief@certgames.com'),
             'support': os.getenv('SENDGRID_SUPPORT_EMAIL', 'support@certgames.com.com'),
             # Add more as needed
         }
