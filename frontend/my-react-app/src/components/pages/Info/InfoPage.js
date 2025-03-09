@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from '../../Footer';
+import { FaApple, FaGoogle, FaAppStore } from 'react-icons/fa';
 import './InfoPage.css';
 
 const InfoPage = () => {
@@ -106,7 +107,7 @@ const InfoPage = () => {
             <h1 className="info-hero-title">
               <span className="info-logo-text">Cert<span className="info-highlight">Games</span></span>
             </h1>
-            <h2 className="info-hero-subtitle">{displayText}<span className="info-cursor">|</span></h2>
+            <h2 className="info-hero-subtitle">{displayText}<span className="info-cursor"></span></h2>
             <p className="info-hero-description">
               The ultimate gamified cybersecurity training platform that makes learning fun, effective, and addictive.
             </p>
@@ -793,16 +794,16 @@ const InfoPage = () => {
             <span>Quick sign-in with:</span>
             <div className="info-oauth-buttons">
               <button className="info-oauth-button info-google">
-                Google
+                <FaGoogle className="info-oauth-icon" /> Google
               </button>
               <button className="info-oauth-button info-apple">
-                Apple ID
+                <FaApple className="info-oauth-icon" /> Apple ID
               </button>
             </div>
           </div>
           <div className="info-app-download">
             <a href="#" className="info-app-link">
-              <span className="info-app-icon">📱</span>
+              <FaAppStore className="info-app-icon" />
               <span>Download on the App Store</span>
             </a>
           </div>
