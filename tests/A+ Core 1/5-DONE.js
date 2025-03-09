@@ -491,7 +491,7 @@ db.tests.insertOne({
       "options": [
         "Disk Cleanup",
         "System Restore",
-        "Memory Diagnostics Tool (mdsched.exe)",
+        "Memory Diagnostics Tool",
         "Device Manager"
       ],
       "correctAnswerIndex": 3,
@@ -505,7 +505,7 @@ db.tests.insertOne({
         "Molex connector",
         "Berg connector",
         "PCIe power connector",
-        "SATA power connector (15-pin)"
+        "SATA power connector"
       ],
       "correctAnswerIndex": 3,
       "explanation": "SATA power connectors (15-pin) are specifically designed and commonly used for internal power connections to SATA hard drives and SSDs. Molex and Berg connectors are older power types, and PCIe power is for GPUs.",
@@ -606,7 +606,7 @@ db.tests.insertOne({
       "id": 47,
       "question": "What is the purpose of 'Secure Boot' in UEFI firmware?",
       "options": [
-        "To encrypt the entire hard drive.",
+        "To encrypt the entire hard drive during boot.",
         "To speed up the system boot process.",
         "To ensure only digitally signed and trusted operating systems can boot.",
         "To set a BIOS administrator password."
@@ -635,7 +635,7 @@ db.tests.insertOne({
         "SATA power connector",
         "PCIe power connector",
         "Molex connector",
-        "Berg connector (4-pin floppy connector)"
+        "Berg connector"
       ],
       "correctAnswerIndex": 3,
       "explanation": "Berg connectors (4-pin floppy drive power connectors) are commonly used for internal power connections to case fans and smaller peripherals that require less power. While Molex can also power fans, Berg connectors are often smaller and more appropriate for low-power devices like fans. SATA power is for drives, and PCIe power for GPUs.",
@@ -686,7 +686,7 @@ db.tests.insertOne({
       "options": [
         "To improve read/write performance by striping data.",
         "To provide data redundancy by mirroring.",
-        "To provide fault tolerance with dual parity, allowing for up to two drive failures.",
+        "To provide fault tolerance with dual parity.",
         "To combine multiple drives into a single large volume without redundancy."
       ],
       "correctAnswerIndex": 2,
@@ -713,7 +713,7 @@ db.tests.insertOne({
         "Application Virtualization",
         "Containerization",
         "Operating System Virtualization",
-        "Hardware Virtualization (using Hypervisors)"
+        "Hardware Virtualization"
       ],
       "correctAnswerIndex": 3,
       "explanation": "Hardware Virtualization (using Hypervisors) allows multiple operating systems to run concurrently on a single physical machine by abstracting hardware resources. Hypervisors create virtual machines, each with its own OS and resources, sharing the underlying physical hardware. Application virtualization virtualizes apps, and containerization virtualizes at the OS level, but hardware virtualization with hypervisors provides full OS virtualization.",
@@ -725,7 +725,7 @@ db.tests.insertOne({
       "options": [
         "PCIe x16",
         "PCIe x1",
-        "PCI (Conventional PCI)",
+        "PCI",
         "AGP"
       ],
       "correctAnswerIndex": 2,
@@ -764,7 +764,7 @@ db.tests.insertOne({
       "options": [
         "USB Type-A",
         "PS/2",
-        "Centronics (36-pin Parallel)",
+        "Centronics",
         "DB9 Serial"
       ],
       "correctAnswerIndex": 2,
@@ -997,7 +997,7 @@ db.tests.insertOne({
       "question": "What is the purpose of 'Secure Shell' (SSH) protocol?",
       "options": [
         "To transfer files securely over the internet.",
-        "To provide secure, encrypted command-line access to remote systems.",
+        "encrypted command-line access to remote systems.",
         "To secure web browsing sessions.",
         "To encrypt email communications."
       ],
@@ -1012,7 +1012,7 @@ db.tests.insertOne({
         "Hub",
         "Switch",
         "Router",
-        "Next-Generation Firewall (NGFW)"
+        "NGFW"
       ],
       "correctAnswerIndex": 3,
       "explanation": "Next-Generation Firewalls (NGFWs) operate at the Application Layer (Layer 7) of the OSI model. NGFWs can perform deep packet inspection (DPI) and application-level filtering, allowing them to understand and control network traffic based on applications and content, not just ports and protocols. Hubs are Layer 1, Switches Layer 2, and Routers Layer 3.",
@@ -1025,7 +1025,7 @@ db.tests.insertOne({
         "SATA data connector",
         "IDE (PATA) connector",
         "Berg connector",
-        "Floppy Disk Controller (FDC) connector (34-pin ribbon)"
+        "Floppy Disk Controller"
       ],
       "correctAnswerIndex": 3,
       "explanation": "Floppy Disk Controller (FDC) connectors, which are 34-pin ribbon connectors, are used for older floppy disk data connections on motherboards. SATA data is for SATA drives, IDE (PATA) for older hard drives/optical drives, and Berg connectors are for floppy drive power.",
@@ -1089,7 +1089,7 @@ db.tests.insertOne({
       "options": [
         "Cable tester",
         "Bandwidth tester",
-        "Network analyzer or protocol analyzer (like Wireshark)",
+        "Network analyzer",
         "Toner probe"
       ],
       "correctAnswerIndex": 2,
@@ -1127,7 +1127,7 @@ db.tests.insertOne({
       "question": "What is the purpose of 'Trusted Platform Module' (TPM) in computer security?",
       "options": [
         "To manage network firewall rules.",
-        "To securely store cryptographic keys and enable hardware-based encryption.",
+        "To securely store cryptographic keys.",
         "To provide antivirus protection.",
         "To manage user authentication and authorization."
       ],
@@ -1295,10 +1295,10 @@ db.tests.insertOne({
       "id": 100,
       "question": "A laser printer is producing prints with a light gray background or 'fog' across the entire page, even in areas that should be white. Which printer consumable or component is MOST likely causing this background fog issue?",
       "options": [
-        "Toner Cartridge (if toner is incompatible or low quality)",
+        "Toner Cartridge",
         "Fuser Assembly",
-        "Discharge Lamp or Erase Lamp (failing to neutralize drum charge)",
-        "Paper Type Setting (incorrect paper type)"
+        "Discharge Lamp or Erase Lamp",
+        "Paper Type Setting"
       ],
       "correctAnswerIndex": 2,
       "explanation": "A failing Discharge Lamp or Erase Lamp is MOST likely causing a light gray background or 'fog' across the entire page in a laser printer. If the discharge lamp is not effectively neutralizing the charge on the drum, residual charge attracts toner even in non-image areas, resulting in background fog. Toner cartridge, fuser assembly, and paper settings are less likely to cause uniform background fog.",
