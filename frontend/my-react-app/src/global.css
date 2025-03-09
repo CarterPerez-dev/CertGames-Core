@@ -18,3 +18,26 @@ input, textarea, select {
   transition: all 0.1s ease; /* for a little smoothness */
 }
 
+/* Hide scrollbars globally while preserving vertical scrolling and disabling horizontal scrolling */
+
+/* Firefox */
+* {
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+/* IE 10+ and Edge */
+* {
+  -ms-overflow-style: none; /* Hides scrollbar in IE/Edge */
+}
+
+/* Chrome, Safari, and Opera */
+*::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in WebKit browsers */
+}
+
+/* Global settings for scrolling behavior */
+html,
+body {
+  overflow-y: auto;    /* Enable vertical scrolling when necessary */
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
+}
