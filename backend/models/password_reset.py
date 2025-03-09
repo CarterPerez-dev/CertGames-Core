@@ -180,5 +180,8 @@ def send_password_reset_email(email, reset_token, frontend_url=None):
     if not email or not reset_token:
         return False
     
-    # Use the email_sender utility to send the password reset email
-    return email_sender.send_password_reset_email(email, reset_token)
+    # Use the frontend_url if provided, otherwise use the environment variable
+    frontend_url = frontend_url or os.getenv('FRONTEND_URL', 'https://certgames.com')
+    
+    # Pass the frontend_url to the email_sender utility
+    return email_sender.send_password_reset_email(email, reset_token, frontend_url)
