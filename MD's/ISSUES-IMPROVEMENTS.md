@@ -10,12 +10,6 @@
 
 ## configure cloud fare settings
 
-# EMAIL- reset link Attackers might be trying to steal your information from url638.certgames.com (for example, passwords, messages, or credit cards). Learn more about this warning
-net::ERR_CERT_COMMON_NAME_INVALID
-Turn on enhanced protection to get Chrome's highest level of security
-url638.certgames.com normally uses encryption to protect your information. When Chrome tried to connect to url638.certgames.com this time, the website sent back unusual and incorrect credentials. This may happen when an attacker is trying to pretend to be url638.certgames.com, or a Wi-Fi sign-in screen has interrupted the connection. Your information is still secure because Chrome stopped the connection before any data was exchanged.
-
-You cannot visit url638.certgames.com right now because the website uses HSTS. Network errors and attacks are usually temporary, so this page will probably work later.
 ### ADD MORE RESOURCES TO RESOURCE PAGE
 ----
 ### close to release we need a Dev Database and paired with that a Dev server. so we can push DB changes and or code chnages and see teh effects before we do it in production. 
