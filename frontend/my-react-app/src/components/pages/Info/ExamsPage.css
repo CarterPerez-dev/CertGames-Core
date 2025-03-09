@@ -1,0 +1,706 @@
+/* src/components/pages/Info/ExamsPage.css */
+.exams-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0a0a14;
+  color: rgba(255, 255, 255, 0.9);
+  overflow-x: hidden;
+}
+
+.exams-content {
+  padding-top: 100px; /* Space for fixed navbar */
+  flex: 1;
+}
+
+.exams-header {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  position: relative;
+}
+
+.exams-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.exams-icon {
+  margin-right: 0.75rem;
+  font-size: 2rem;
+}
+
+.exams-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.8;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+
+.exams-access-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  background: rgba(0, 208, 132, 0.15);
+  border: 1px solid rgba(0, 208, 132, 0.3);
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.notice-icon {
+  color: #00d084;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.exams-access-notice p {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Search and Filters */
+.exams-search-filters {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.exams-search {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border-radius: 8px;
+  background: rgba(25, 25, 50, 0.4);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: rgba(100, 100, 255, 0.4);
+  box-shadow: 0 0 10px rgba(100, 100, 255, 0.2);
+}
+
+.exams-filters {
+  position: relative;
+}
+
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  background: rgba(25, 25, 50, 0.4);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filters-toggle:hover {
+  background: rgba(25, 25, 50, 0.6);
+  border-color: rgba(100, 100, 255, 0.3);
+}
+
+.filter-icon {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.filters-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 260px;
+  background: rgba(25, 25, 50, 0.95);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.2rem;
+  z-index: 10;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.filter-group {
+  margin-bottom: 1.2rem;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-group h4 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  color: white;
+  font-weight: 500;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-option {
+  padding: 0.5rem 0.8rem;
+  background: rgba(100, 100, 255, 0.1);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-option.active {
+  background: rgba(100, 100, 255, 0.2);
+  border-color: rgba(100, 100, 255, 0.4);
+  color: white;
+}
+
+.filter-option:hover {
+  background: rgba(100, 100, 255, 0.15);
+  color: white;
+}
+
+/* Certifications Grid */
+.exams-grid {
+  max-width: 1200px;
+  margin: 0 auto 4rem;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cert-card {
+  background: rgba(25, 25, 50, 0.3);
+  border: 1px solid rgba(100, 100, 255, 0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.cert-card:hover {
+  border-color: rgba(100, 100, 255, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.cert-card.expanded {
+  border-color: rgba(100, 100, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.popular-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #ff5f6d, #ffc371);
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  z-index: 1;
+}
+
+.cert-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(100, 100, 255, 0.1);
+  gap: 1.2rem;
+}
+
+.cert-logo {
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cert-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.cert-title-info {
+  flex: 1;
+}
+
+.cert-title-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.4rem;
+  color: white;
+}
+
+.cert-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cert-code {
+  font-size: 0.9rem;
+  background: rgba(100, 100, 255, 0.15);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cert-level {
+  font-size: 0.9rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.cert-level.beginner {
+  background: rgba(0, 184, 212, 0.15);
+  color: #00b8d4;
+}
+
+.cert-level.intermediate {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
+
+.cert-level.advanced {
+  background: rgba(255, 87, 34, 0.15);
+  color: #ff5722;
+}
+
+.cert-level.expert {
+  background: rgba(156, 39, 176, 0.15);
+  color: #9c27b0;
+}
+
+.expand-button {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expand-button:hover {
+  color: white;
+}
+
+.cert-content {
+  padding: 1.5rem;
+}
+
+.cert-description {
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cert-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.cert-stat {
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.3rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.cert-details {
+  background: rgba(100, 100, 255, 0.05);
+  border: 1px solid rgba(100, 100, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cert-skills {
+  margin-bottom: 1.5rem;
+}
+
+.cert-skills h4 {
+  margin: 0 0 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.skill-tag {
+  background: rgba(0, 208, 132, 0.1);
+  border: 1px solid rgba(0, 208, 132, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.cert-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.feature-icon {
+  color: #00d084;
+  font-size: 1rem;
+}
+
+.cert-actions {
+  text-align: center;
+}
+
+.try-cert-button {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, #00d084, #00b8d4);
+  color: #0a0a14;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 208, 132, 0.2);
+}
+
+.try-cert-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 208, 132, 0.3);
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(25, 25, 50, 0.3);
+  border: 1px solid rgba(100, 100, 255, 0.15);
+  border-radius: 12px;
+}
+
+.no-results h3 {
+  margin: 0 0 0.5rem;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.no-results p {
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.reset-button {
+  padding: 0.6rem 1.2rem;
+  background: rgba(100, 100, 255, 0.15);
+  border: 1px solid rgba(100, 100, 255, 0.3);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reset-button:hover {
+  background: rgba(100, 100, 255, 0.25);
+}
+
+/* Subscribe CTA */
+.exams-subscribe-cta {
+  padding: 2rem 1.5rem 4rem;
+  background: linear-gradient(135deg, rgba(109, 72, 170, 0.1), rgba(157, 80, 187, 0.1));
+}
+
+.subscribe-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: rgba(25, 25, 50, 0.5);
+  border: 1px solid rgba(100, 100, 255, 0.2);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.subscribe-content {
+  flex: 1;
+  min-width: 300px;
+  padding: 2.5rem;
+  text-align: center;
+}
+
+.subscribe-content h2 {
+  margin: 0 0 1rem;
+  font-size: 2rem;
+  color: white;
+}
+
+.subscribe-content p {
+  margin: 0 0 2rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.price-section {
+  margin-bottom: 2rem;
+}
+
+.price {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.currency {
+  font-size: 1.8rem;
+  margin-right: 0.2rem;
+  vertical-align: top;
+}
+
+.amount {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.decimal {
+  font-size: 1.8rem;
+  margin-right: 0.5rem;
+}
+
+.period {
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.price-note {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+.subscribe-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #6e48aa, #9d50bb);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(109, 72, 170, 0.3);
+}
+
+.subscribe-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(109, 72, 170, 0.5);
+}
+
+.subscribe-features {
+  flex: 1;
+  min-width: 300px;
+  background: rgba(100, 100, 255, 0.05);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.feature:last-child {
+  margin-bottom: 0;
+}
+
+.feature-icon {
+  color: #00d084;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.feature span {
+  font-size: 1.1rem;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .cert-card.expanded .cert-features {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .exams-title {
+    font-size: 2rem;
+  }
+  
+  .exams-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .cert-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+  
+  .cert-logo {
+    margin: 0 auto 1rem;
+  }
+  
+  .cert-title-info {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .cert-meta {
+    justify-content: center;
+  }
+  
+  .expand-button {
+    margin: 1rem auto 0;
+  }
+  
+  .cert-stats {
+    justify-content: center;
+  }
+  
+  .subscribe-content h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .exams-search-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .exams-filters {
+    width: 100%;
+  }
+  
+  .filters-toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .filters-dropdown {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+  
+  .cert-card.expanded .cert-features {
+    grid-template-columns: 1fr;
+  }
+  
+  .subscribe-card {
+    flex-direction: column;
+  }
+  
+  .subscribe-content,
+  .subscribe-features {
+    padding: 1.5rem;
+  }
+  
+  .subscribe-content h2 {
+    font-size: 1.5rem;
+  }
+  
+  .subscribe-content p {
+    font-size: 1rem;
+  }
+  
+  .amount {
+    font-size: 3rem;
+  }
+}
