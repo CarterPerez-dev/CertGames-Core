@@ -10,13 +10,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Public pages
 import InfoPage from './components/pages/Info/InfoPage';
+import DemosPage from './components/pages/Info/DemosPage';
+import ExamsPage from './components/pages/Info/ExamsPage';
+import PublicLeaderboardPage from './components/pages/Info/PublicLeaderboardPage';
+import ContactPage from './components/pages/Info/ContactPage';
 import Login from './components/pages/auth/Login';
 import Register from './components/pages/auth/Register';
 import ForgotPassword from './components/pages/auth/ForgotPassword';
 import ResetPassword from './components/pages/auth/ResetPassword';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
-import CreateUsernameForm from './components/pages/auth/CreateUsernameForm'; // Add this line
+import CreateUsernameForm from './components/pages/auth/CreateUsernameForm';
 
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
@@ -65,12 +69,6 @@ import OAuthSuccess from './components/pages/auth/OAuthSuccess';
 // Global CSS import
 import './global.css';
 
-
-/* 
-  - If user data is still loading, shows a loading message.
-  - If user is logged in, redirects to /profile.
-  - Otherwise, renders the public InfoPage.
-*/
 
 function HomeOrProfile() {
   const { userId, status } = useSelector((state) => state.user);
@@ -124,17 +122,33 @@ function App() {
         <Routes>
           {/* The default route depends on whether the user is logged in */}
           <Route path="/" element={<HomeOrProfile />} />
+          
+          {/* New public marketing routes */}
+          <Route path="/demos" element={<DemosPage />} />
+          <Route path="/exams" element={<ExamsPage />} />
+          <Route path="/public-leaderboard" element={<PublicLeaderboardPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          
+          {/* Authentication routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/create-username" element={<CreateUsernameForm />} />
           <Route path="/oauth/success" element={<OAuthSuccess />} />
+          
+          {/* Admin routes */}
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
-          <Route path="/my-support" element={<SupportAskAnythingPage />} />
+          
+          {/* Legal pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          
+          {/* Support route */}
+          <Route path="/my-support" element={<SupportAskAnythingPage />} />
+          
+          {/* Protected routes - require login */}
           <Route path="/profile" element={
             <ProtectedRoute>
               <UserProfile />
@@ -183,6 +197,7 @@ function App() {
           <Route path="/dailycyberbrief" element={<DailyCyberBrief />} />
           <Route path="/resources" element={<Resources />} />
           
+          {/* Practice test routes */}
           <Route path="/practice-tests/a-plus" element={
             <ProtectedRoute>
               <APlusTestPage />
