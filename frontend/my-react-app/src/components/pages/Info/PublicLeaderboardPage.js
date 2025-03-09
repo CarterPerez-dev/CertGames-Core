@@ -124,8 +124,8 @@ const PublicLeaderboardPage = () => {
     setError(null);
     
     try {
-      // Longer cache time for public leaderboard compared to in-app leaderboard
-      const response = await fetch('/api/test/leaderboard?skip=0&limit=50&cache=1800');
+      // Using the new public leaderboard endpoint with longer cache time
+      const response = await fetch('/api/public-leaderboard/board?skip=0&limit=50');
       
       if (!response.ok) {
         throw new Error('Failed to fetch leaderboard data');
@@ -147,7 +147,7 @@ const PublicLeaderboardPage = () => {
     setIsLoadingMore(true);
     
     try {
-      const response = await fetch(`/api/test/leaderboard?skip=${leaders.length}&limit=20&cache=1800`);
+      const response = await fetch(`/api/public-leaderboard/board?skip=${leaders.length}&limit=20`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch more leaderboard data');
@@ -387,6 +387,33 @@ const PublicLeaderboardPage = () => {
                   <div className="code-snippet">
                     <pre>
                       <code>
+{`// XP System Example
+function awardXP(user, correctAnswer) {
+  // Base XP for correct answer
+  const baseXP = 10;
+  
+  // Apply any XP boosts the user might have
+  const xpMultiplier = user.xpBoost || 1.0;
+  const xpAwarded = baseXP * xpMultiplier;
+  
+  // Update user's total XP
+  user.xp += xpAwarded;
+  
+  // Check if user leveled up
+  const newLevel = calculateLevel(user.xp);
+  if (newLevel > user.level) {
+    user.level = newLevel;
+    console.log(\`Level up! You are now level \${newLevel}\`);
+  }
+  
+  return xpAwarded;
+}
+
+// Calculate level based on total XP
+function calculateLevel(totalXP) {
+  // Simple level calculation - each level requires more XP
+  return Math.floor(Math.sqrt(totalXP / 100)) + 1;
+}`}
                       </code>
                     </pre>
                   </div>
@@ -395,7 +422,8 @@ const PublicLeaderboardPage = () => {
             </div>
           </>
         )}
-      </div>      
+      </div>
+      
       <Footer />
     </div>
   );
