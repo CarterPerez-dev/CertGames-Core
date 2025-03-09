@@ -1,1308 +1,1308 @@
 db.tests.insertOne({
-  "category": "aplus",
+  "category": "aplus2",
   "testId": 10,
-  "testName": "CompTIA A+ Core 1 (1101) Practice Test #10 (Ultra Level)",
+  "testName": "CompTIA A+ Core 2 (1102) Practice Test #10 (Ultra Level)",
   "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
-      "question": "A technician is troubleshooting a system with intermittent 'blue screen of death' (BSOD) errors. After extensive diagnostics, the technician suspects a hardware issue related to the memory subsystem. However, standard memory tests show no errors. Which of the following tools or techniques is MOST likely to reveal subtle memory errors that might be missed by conventional tests?",
+      "question": "A Windows 11 system intermittently freezes after waking from hibernation. Kernel-Power errors appear in Event Viewer. What is the MOST likely cause?",
       "options": [
-        "Advanced disk maintenance utility with deep sector verification",
-        "System integrity verification tool with protected resource scanning",
-        "Hardware diagnostic suite with extended execution parameters",
-        "Event monitoring application with detailed session recording"
+        "Outdated chipset drivers impacting power management.",
+        "Corrupted hibernation file preventing proper resume.",
+        "Insufficient virtual memory allocation after wake.",
+        "Faulty RAM modules causing wake-up instability."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A hardware diagnostic suite with extended execution parameters (like Memtest86+ in multi-pass mode) is most effective for detecting subtle memory errors. While standard memory tests might pass, more rigorous testing with multiple passes, varied test patterns, and extended stress testing can uncover intermittent memory errors that manifest only under specific conditions or after prolonged operation. Disk utilities focus on storage rather than memory issues, system integrity tools primarily check OS files, and event monitoring applications only record issues after they occur rather than proactively testing.",
-      "examTip": "For elusive memory errors, go beyond basic tests. Memtest86+ in extended mode with multiple passes is your best bet for uncovering subtle RAM issues that can cause intermittent system instability."
+      "correctAnswerIndex": 0,
+      "explanation": "Kernel-Power errors following wake events commonly indicate outdated chipset drivers responsible for managing power states. Corrupted hibernation files typically prevent resumption altogether. Insufficient virtual memory would cause application crashes rather than system freezes. Faulty RAM results in random crashes rather than consistent freeze patterns post-hibernation.",
+      "examTip": "Update chipset drivers when troubleshooting Kernel-Power errors related to sleep and hibernation issues."
     },
     {
       "id": 2,
-      "question": "A user reports that their laptop screen intermittently flickers and displays horizontal lines, but only when the laptop lid is moved to certain angles. The issue is not observed when connected to an external monitor. Which of the following is the MOST likely cause?",
+      "question": "A Linux server's SSH sessions drop after a few minutes of inactivity. The network is stable. What configuration change is required to maintain persistent connections?",
       "options": [
-        "Integrated graphics processor thermal throttling",
-        "Display interface connection intermittency",
-        "Panel controller firmware corruption",
-        "Signal driver amplification malfunction"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive intervals in kernel parameters.",
+        "Configure iptables to allow persistent SSH connections.",
+        "Enable compression for SSH sessions to reduce timeouts."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Display interface connection intermittency (a loose or damaged LVDS/eDP cable) is the most likely cause. The symptoms occurring only at specific lid angles strongly indicates a physical connection issue with the display cable that runs through the laptop hinge, which can become worn, pinched, or damaged over time. This would not affect an external display since it uses a different connection. GPU throttling would likely affect both internal and external displays, firmware corruption would cause consistent rather than position-dependent issues, and driver issues would not typically change with physical movement of the display.",
-      "examTip": "Intermittent display issues that change with lid movement often point to a loose or damaged LVDS/eDP cable. Physical stress on these cables can cause temporary signal disruptions."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' ensure the SSH server sends keepalive messages, preventing idle session drops. Kernel TCP keepalive adjustments affect all connections system-wide and may not resolve the specific SSH issue. iptables rules control access but do not influence session persistence. Compression optimizes bandwidth usage but does not prevent timeouts.",
+      "examTip": "Adjust 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config to maintain persistent SSH sessions."
     },
     {
       "id": 3,
-      "question": "A technician is troubleshooting a network connectivity issue where a workstation can access resources on the local subnet but cannot reach any external websites. Pinging the default gateway and local DNS server succeeds. Which of the following is the MOST likely cause?",
+      "question": "A macOS user reports that external USB drives are no longer recognized. The drives function on other systems. What is the FIRST action a technician should take?",
       "options": [
-        "Addressing protocol configuration mismatch",
-        "Egress traffic filtering implementation",
-        "Host resolution service malfunction",
-        "Media access translation error"
+        "Verify Finder preferences for external drive visibility.",
+        "Reset the System Management Controller (SMC).",
+        "Run Disk Utility First Aid to repair disk permissions.",
+        "Check system logs for hardware detection errors."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Egress traffic filtering implementation (firewall blocking outbound traffic on ports 80 and 443) is the most likely cause. Since the workstation can access local resources and successfully ping both the gateway and DNS server, basic connectivity and addressing are functioning correctly. The inability to reach external websites despite functional DNS suggests that web traffic specifically is being blocked by firewall rules. A subnet mask issue would prevent local subnet communication, DNS problems would cause name resolution failures rather than connection blocking, and addressing misconfigurations would typically cause more fundamental connectivity issues.",
-      "examTip": "If local network access works but external websites don't, suspect a firewall blocking outbound HTTP/HTTPS traffic. Check firewall rules on both the workstation and network perimeter."
+      "correctAnswerIndex": 0,
+      "explanation": "If the external drives function elsewhere but not on the macOS system, checking Finder preferences for external drive visibility is the quickest initial step. Resetting the SMC addresses power and hardware management but is a broader solution. Disk Utility repairs disk-related issues but won't make invisible drives appear. Reviewing logs is informative but less immediate.",
+      "examTip": "Always check Finder preferences first when external drives fail to appear on macOS."
     },
     {
       "id": 4,
-      "question": "A company wants to implement a security solution that provides secure remote access to the corporate network for employees, while also offering granular control over access to specific internal resources based on user roles and context. Which solution is MOST appropriate?",
+      "question": "A Windows 10 laptop with BitLocker enabled requests the recovery key after hardware upgrades. How can future prompts during upgrades be avoided?",
       "options": [
-        "Dedicated site-to-site encrypted tunnel with integrated traffic filtering",
-        "Web-based authentication portal with contextual access management",
-        "Split-path network connection with application-specific exclusions",
-        "Terminal services gateway with multifactor verification"
+        "Suspend BitLocker before performing hardware upgrades.",
+        "Disable TPM from BIOS before hardware changes.",
+        "Export and store the recovery key on external storage.",
+        "Reset Secure Boot settings to factory defaults."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "A web-based authentication portal with contextual access management (clientless SSL VPN with role-based access control) is most appropriate. This solution provides secure access through a web browser without requiring a dedicated VPN client, making it convenient for remote access. The role-based access control aspect allows for the granular control requested, limiting users to specific resources based on their role and other contextual factors. Site-to-site tunnels typically lack granular user-level controls, split-path solutions don't necessarily include role-based restrictions, and terminal services are primarily for remote desktop access rather than broader network resource access.",
-      "examTip": "For secure, granular, and often agentless remote access, SSL VPNs with role-based access control are a powerful solution. They offer flexibility and control over user access to specific resources."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures TPM does not detect unauthorized changes during hardware upgrades, preventing recovery key prompts. Disabling TPM affects system security more broadly. Exporting the recovery key aids recovery but does not prevent prompts. Secure Boot settings ensure firmware integrity but are unrelated to BitLocker triggers.",
+      "examTip": "Always suspend BitLocker before hardware upgrades to avoid unnecessary recovery key prompts."
     },
     {
       "id": 5,
-      "question": "A technician is designing a storage solution for a database server that requires extremely high I/O performance, low latency, and fault tolerance. Cost is a secondary concern. Which RAID configuration is MOST suitable?",
+      "question": "A Linux administrator notices high I/O wait times on a server while CPU and memory usage remain normal. What is the MOST likely cause?",
       "options": [
-        "Distributed parity array with single redundancy",
-        "Distributed parity array with dual redundancy",
-        "Striped mirror array with segmented distribution",
-        "Striped array with integrated parity blocks"
+        "A failing disk causing slow read/write operations.",
+        "Swap partition being overutilized due to insufficient RAM.",
+        "High network traffic leading to storage bottlenecks.",
+        "Improper filesystem mounting options reducing throughput."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A striped mirror array with segmented distribution (RAID 10) is most suitable for high-performance database servers. RAID 10 combines striping for performance with mirroring for redundancy, providing the best balance of speed and fault tolerance. It offers excellent read/write performance and can survive multiple drive failures (as long as no mirror pair loses both drives). The distributed parity approaches (RAID 5 and 6) offer good capacity efficiency but have write performance penalties due to parity calculations, making them less ideal for write-intensive database workloads. The performance benefit of RAID 10 outweighs its higher cost in this scenario where performance is prioritized over cost considerations.",
-      "examTip": "For databases and other I/O-intensive applications where performance and fault tolerance are critical, RAID 10 is often the best choice, despite its higher cost due to mirroring."
+      "correctAnswerIndex": 0,
+      "explanation": "High I/O wait times with normal CPU and memory usage often indicate disk issues, such as a failing drive. Swap overutilization would correlate with high memory usage. Network traffic affects bandwidth, not local disk I/O. Mounting options influence performance but typically cause consistent, not intermittent, slowness.",
+      "examTip": "Check disk health using 'smartctl' or 'iostat' when encountering elevated I/O wait times on Linux systems."
     },
     {
       "id": 6,
-      "question": "A user reports that their wireless mouse exhibits erratic cursor movement and occasional unresponsiveness, despite having a fresh battery. The issue persists even when the mouse is close to the receiver. Which of the following is the MOST likely cause?",
+      "question": "A user’s Windows 10 machine cannot access any HTTPS websites, though HTTP works fine. DNS and firewall settings are correct. What is the MOST likely cause?",
       "options": [
-        "Power management circuitry degradation",
-        "Radio frequency spectrum congestion",
-        "Driver implementation incompatibility",
-        "Input device controller malfunction"
+        "Corrupted or missing root certificates on the system.",
+        "Disabled TLS protocols in browser settings.",
+        "Expired SSL certificates on accessed websites.",
+        "Network driver issues affecting secure traffic."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Radio frequency spectrum congestion (interference from other wireless devices operating on the same frequency) is most likely causing the erratic behavior. Wireless mice, especially those using the 2.4 GHz band, are susceptible to interference from Wi-Fi networks, Bluetooth devices, cordless phones, and even microwave ovens. This interference can cause unpredictable cursor movement and connection dropouts even with fresh batteries and when the mouse is close to its receiver. Power management issues would typically cause consistent performance degradation rather than erratic behavior, driver incompatibilities would likely cause more persistent issues, and controller malfunctions would typically affect all connected devices, not just the mouse.",
-      "examTip": "Erratic wireless mouse behavior, especially in environments with many wireless devices, often points to radio frequency interference. Try changing the wireless channel or relocating potential interference sources."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates validate HTTPS connections; missing or corrupted certificates prevent access. TLS protocol settings would cause browser-specific warnings. Expired site certificates would affect only specific sites, not all HTTPS connections. Network driver issues typically cause broader connectivity problems.",
+      "examTip": "Validate the integrity of root certificates when HTTPS access fails but HTTP remains functional."
     },
     {
       "id": 7,
-      "question": "Which of the following security attack types involves an attacker manipulating a user into performing actions or divulging confidential information, often through deception and psychological manipulation?",
+      "question": "A Linux administrator needs to ensure log files older than 30 days are automatically deleted. Which tool should be used?",
       "options": [
-        "Distributed service interruption",
-        "Connection interception technique",
-        "Human manipulation methodology",
-        "Database injection exploitation"
+        "logrotate with proper configuration settings.",
+        "cron jobs utilizing find and rm commands.",
+        "rsyslog with custom retention policies.",
+        "systemd-journald with persistent storage limits."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Human manipulation methodology (Social Engineering) involves manipulating users into performing actions or divulging information through psychological tactics rather than technical vulnerabilities. These attacks exploit human trust, curiosity, fear, or other emotions to bypass security controls. Examples include phishing, pretexting, baiting, and tailgating. Distributed service interruption (DoS) attacks aim to make resources unavailable, connection interception (MITM) involves intercepting communications between parties, and database injection targets vulnerabilities in database query processing.",
-      "examTip": "Social engineering preys on human nature, not technical flaws. Be wary of unexpected requests for information or actions, especially from unknown or untrusted sources."
+      "correctAnswerIndex": 0,
+      "explanation": "'logrotate' handles automated log management, including rotation and deletion based on retention periods. Cron jobs provide flexibility but require custom scripts. rsyslog focuses on log forwarding, not deletion. systemd-journald manages journal logs but not traditional log files.",
+      "examTip": "Configure 'logrotate' for automated log file retention and deletion based on organizational requirements."
     },
     {
       "id": 8,
-      "question": "A technician is troubleshooting a Windows workstation that is experiencing slow boot times and frequent application crashes. Upon investigation, the technician notices high disk utilization and numerous disk I/O errors in the Event Viewer. Which of the following tools is MOST appropriate for diagnosing potential hard drive issues?",
+      "question": "A Windows 11 machine prompts for a BitLocker recovery key after every reboot. TPM is enabled and operational. What could prevent this prompt in the future?",
       "options": [
-        "File system optimization utility",
-        "System file integrity verifier",
-        "Storage media diagnostic application with recovery parameters",
-        "Disk cleanup management tool"
+        "Suspending BitLocker before firmware updates.",
+        "Manually clearing TPM keys after each update.",
+        "Resetting Secure Boot configurations before reboots.",
+        "Changing boot order priorities to encrypted drives first."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A storage media diagnostic application with recovery parameters (Chkdsk with the /r parameter) is most appropriate for diagnosing hard drive issues. This tool scans the disk for physical errors, bad sectors, and file system integrity problems, and attempts to recover readable information from problematic sectors. Given the symptoms of high disk utilization, I/O errors, slow boots, and application crashes, this points to potential physical disk problems rather than just file fragmentation or system file corruption. File system optimization (Disk Defragmenter) addresses fragmentation but not physical errors, system file integrity tools (SFC) check Windows files but not the disk itself, and disk cleanup tools simply remove unnecessary files without diagnosing hardware issues.",
-      "examTip": "Chkdsk /r is your go-to tool for diagnosing and repairing hard drive errors. It's essential for checking disk integrity and recovering data from bad sectors."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures TPM measurement changes during firmware updates do not trigger recovery prompts. Clearing TPM keys removes essential decryption data. Secure Boot changes address firmware validation, not BitLocker operations. Boot order changes are unrelated unless the OS partition is inaccessible.",
+      "examTip": "Suspend BitLocker encryption before firmware changes to avoid recurring recovery key prompts."
     },
     {
       "id": 9,
-      "question": "A company is implementing a 'Zero Trust' security model. Which of the following is a CORE principle of Zero Trust architecture?",
+      "question": "A macOS user reports kernel panics after installing third-party software. Safe Mode boots successfully. What is the MOST probable cause?",
       "options": [
-        "Perimeter-based security with internal trust zones",
-        "Identity-based verification for all resource requests",
-        "Layer-3 filtering with stateful packet inspection",
-        "Minimal control implementation for user convenience"
+        "Third-party kernel extensions (kexts) causing system instability.",
+        "Insufficient system RAM for new software requirements.",
+        "Corrupted system preference files affecting kernel operations.",
+        "Outdated firmware requiring updates for compatibility."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Identity-based verification for all resource requests is a core principle of Zero Trust architecture. This model requires strict verification of every access request regardless of its origin, treating all users, devices, and network connections as potentially hostile. Zero Trust eliminates the concept of a trusted internal network, requiring continuous verification rather than assuming trustworthiness based on network location. Perimeter-based security with trusted internal zones directly contradicts Zero Trust principles. Layer-3 filtering, while important, is insufficient for Zero Trust which operates at multiple layers. Minimal controls for user convenience would compromise the security focus of Zero Trust.",
-      "examTip": "Zero Trust is about 'never trust, always verify'. It's a paradigm shift in security, assuming no implicit trust based solely on network location and requiring strict verification for every access attempt."
+      "correctAnswerIndex": 0,
+      "explanation": "Third-party kernel extensions are common causes of kernel panics, especially if incompatible with the current macOS version. RAM shortages lead to performance issues, not panics. Preference file corruption typically affects user interface operations. Firmware issues would prevent booting altogether.",
+      "examTip": "Remove or update third-party kernel extensions when diagnosing kernel panics on macOS."
     },
     {
       "id": 10,
-      "question": "Which of the following display technologies offers the FASTEST response times and highest refresh rates, making it ideal for competitive gaming, but often comes with trade-offs in color accuracy and viewing angles?",
+      "question": "A Windows 10 machine shows a 'BOOTMGR is missing' error after adding a new hard drive. What is the MOST likely cause?",
       "options": [
-        "Liquid crystal alignment with in-plane electrode configuration",
-        "Liquid crystal alignment with vertical field application",
-        "Liquid crystal alignment with twisted molecular orientation",
-        "Diode-based pixel illumination with organic compounds"
+        "BIOS boot order prioritizing the new drive lacking an OS.",
+        "Corrupted boot sector on the primary drive requiring repair.",
+        "Disconnected SATA cables preventing drive detection.",
+        "Damaged boot partition necessitating recovery operations."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Liquid crystal alignment with twisted molecular orientation (TN - Twisted Nematic panels) offers the fastest response times and highest refresh rates, making them preferred for competitive gaming where millisecond advantages matter. However, TN panels have significant drawbacks in color reproduction accuracy and narrow viewing angles compared to other panel types. IPS (In-Plane Switching) panels provide superior color accuracy and wide viewing angles but typically have slower response times. VA (Vertical Alignment) panels offer better contrast ratios but slower response times than TN. OLED (Organic Light Emitting Diode) displays have excellent contrast and decent response times but are less common in gaming monitors due to burn-in concerns and cost.",
-      "examTip": "TN panels are the 'speed demons' of display technology. They prioritize fast response times and high refresh rates, making them ideal for competitive gaming, but often at the cost of color accuracy and viewing angles."
+      "correctAnswerIndex": 0,
+      "explanation": "Adding a new drive can cause BIOS to default to it, resulting in the 'BOOTMGR is missing' error if the drive lacks an OS. Corrupted boot sectors and disconnected cables would cause different, more critical errors. A damaged boot partition would prevent OS detection altogether.",
+      "examTip": "Always verify and correct BIOS boot order after adding new hardware to prevent boot errors."
     },
     {
       "id": 11,
-      "question": "A user reports that their laptop is experiencing intermittent Wi-Fi disconnections, but only when multiple Bluetooth devices are actively in use. Other laptops in the same area do not experience this issue. Which of the following is the MOST likely cause?",
+      "question": "A Linux server’s web service returns a '503 Service Unavailable' error. The web server is running. What should the administrator check NEXT?",
       "options": [
-        "Network infrastructure equipment malfunction",
-        "Shared spectrum frequency contention",
-        "Wireless adapter firmware corruption",
-        "Dynamic address allocation conflict"
+        "Status of the backend application server.",
+        "Server's available disk space for logs and temporary files.",
+        "Firewall configurations for blocked application ports.",
+        "Web server configuration files for syntax errors."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Shared spectrum frequency contention (interference between the 2.4 GHz Wi-Fi band and Bluetooth devices) is most likely causing the intermittent disconnections. Both Wi-Fi (especially on the 2.4 GHz band) and Bluetooth operate in the same frequency range, and when multiple Bluetooth devices are active, they can create interference that disrupts Wi-Fi connectivity. The fact that other laptops don't experience the issue suggests it's specific to this device, possibly due to poor internal antenna isolation or chipset limitations. A faulty router would likely affect multiple users, firmware corruption would cause more general wireless issues, and DHCP conflicts would typically cause IP-related problems rather than connection disruptions specifically when Bluetooth is active.",
-      "examTip": "Bluetooth and 2.4 GHz Wi-Fi can interfere with each other. If you experience Wi-Fi issues when using multiple Bluetooth devices, consider switching to the 5 GHz Wi-Fi band or reducing Bluetooth usage."
+      "correctAnswerIndex": 0,
+      "explanation": "A '503 Service Unavailable' error typically indicates that the backend application server is down or unreachable, despite the web server running. Disk space shortages or firewall issues would cause broader service failures. Configuration errors generally prevent the web server from starting at all.",
+      "examTip": "Always confirm backend service availability when '503 Service Unavailable' errors occur in multi-tier environments."
     },
     {
       "id": 12,
-      "question": "Which of the following is a key security consideration when configuring a 'Guest Wi-Fi' network in a corporate environment?",
+      "question": "A Windows system reports 'The trust relationship between this workstation and the primary domain failed.' What is the FASTEST resolution?",
       "options": [
-        "Resource sharing configuration with primary network",
-        "Administrative credential standardization",
-        "Network segregation with access restrictions",
-        "Encryption protocol simplification"
+        "Rejoin the workstation to the domain using admin credentials.",
+        "Reset the computer account in Active Directory Users and Computers.",
+        "Flush DNS cache to resolve hostname trust issues.",
+        "Restart the Netlogon service to reestablish domain communication."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Network segregation with access restrictions (isolating the Guest Wi-Fi network from the internal corporate network) is a key security consideration. This typically involves implementing a separate VLAN for guest traffic, applying strict access controls that prevent guests from accessing internal resources, and ensuring that guest traffic is appropriately filtered and monitored. This separation is crucial for protecting sensitive internal systems from potentially malicious users on the guest network. Sharing resources with the primary network would create significant security risks, standardizing credentials across networks reduces security, and simplifying encryption (or worse, disabling it) would leave guest traffic vulnerable to interception.",
-      "examTip": "Always isolate your Guest Wi-Fi network from your internal corporate network using VLANs and strict access controls. Treat guest access as untrusted."
+      "correctAnswerIndex": 0,
+      "explanation": "Rejoining the workstation to the domain resets the secure channel between the client and domain controller. Resetting the computer account also works but takes more time. DNS flushing and Netlogon restarts address different authentication issues, not trust relationships.",
+      "examTip": "Rejoin domain membership when encountering trust relationship errors for the fastest resolution."
     },
     {
       "id": 13,
-      "question": "A technician is troubleshooting a desktop PC that intermittently fails to boot, and the BIOS/UEFI settings are frequently reset to default values. Which of the following is the MOST likely cause?",
+      "question": "A Windows 10 laptop fails to connect to any VPN using L2TP/IPSec, displaying 'Negotiation failed.' What is the MOST likely cause?",
       "options": [
-        "Memory module timing inconsistency",
-        "Storage subsystem interface corruption",
-        "System configuration retention component failure",
-        "Processor thermal regulation anomaly"
+        "UDP ports 500 and 4500 are blocked by firewall settings.",
+        "VPN client configuration file is corrupted.",
+        "VPN server certificate has expired, preventing authentication.",
+        "Outdated network adapter drivers causing VPN negotiation failure."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "System configuration retention component failure (failing CMOS battery) is most likely causing the issues. The CMOS battery provides power to maintain BIOS/UEFI settings and system time when the computer is powered off. As this battery deteriorates, it can no longer hold sufficient charge to maintain these settings, resulting in defaults being loaded upon boot and potential boot failures if critical settings are lost. Memory timing issues may cause system instability but rarely reset BIOS settings, storage interface issues would typically cause failures after POST, and processor thermal problems would more commonly cause shutdowns during operation rather than boot failures with reset settings.",
-      "examTip": "Frequent BIOS/UEFI setting resets, especially with incorrect system time, often indicate a failing CMOS battery."
+      "correctAnswerIndex": 0,
+      "explanation": "L2TP/IPSec requires UDP ports 500 and 4500 for key exchange. Blocking these ports leads to negotiation failures. Corrupted configuration files would cause immediate errors during connection attempts. Expired certificates produce authentication errors. Network driver issues would affect broader connectivity, not solely VPN negotiation.",
+      "examTip": "Ensure firewall configurations allow UDP ports 500 and 4500 for successful L2TP/IPSec VPN negotiations."
     },
     {
       "id": 14,
-      "question": "Which of the following cloud computing characteristics BEST describes the 'On-demand Self-service' capability?",
+      "question": "A Linux server's SSH service is running, but users report 'Connection refused' errors. What is the MOST likely cause?",
       "options": [
-        "Multi-location access through standardized mechanisms",
-        "Dynamic resource scaling based on workload requirements",
-        "Automated provisioning without service provider intervention",
-        "Measured allocation with consumption-based billing"
+        "Firewall rules blocking port 22 on the server.",
+        "SSH daemon configuration errors preventing connections.",
+        "SELinux contexts blocking SSH access after updates.",
+        "Host-based access controls in /etc/hosts.deny denying user access."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Automated provisioning without service provider intervention best describes the 'On-demand Self-service' characteristic of cloud computing. This capability allows users to provision computing resources (such as server time, network storage, or applications) as needed, automatically, without requiring human interaction from the service provider. This self-service aspect enables users to quickly scale resources up or down as their needs change. Multi-location access refers to broad network access, dynamic resource scaling describes rapid elasticity, and measured allocation with billing refers to measured service - all different cloud characteristics.",
-      "examTip": "On-demand self-service lets you provision resources instantly and independently – a key benefit of cloud computing."
+      "correctAnswerIndex": 0,
+      "explanation": "'Connection refused' typically indicates that port 22 is blocked by a firewall, even if the SSH service is running. Configuration errors would prevent the SSH daemon from running entirely. SELinux issues generally log access denials rather than outright connection refusals. /etc/hosts.deny restrictions result in 'Permission denied' errors, not connection refusals.",
+      "examTip": "Always confirm firewall access on port 22 when SSH services are active but connections are refused."
     },
     {
       "id": 15,
-      "question": "A user reports that their thermal printer is printing faded and light receipts, and the print quality has degraded over time. After replacing the thermal paper roll, the issue persists. Which component is MOST likely causing this faded thermal printing?",
+      "question": "A Windows 11 user reports slow logins when disconnected from the corporate network. The user has a domain account. What is the MOST likely cause?",
       "options": [
-        "Thermal element with degraded resistive coating",
-        "System logic component with output signal degradation",
-        "Paper transport mechanism with irregular contact pressure",
-        "Print controller with improper temperature regulation"
+        "The user profile is configured as a roaming profile dependent on network availability.",
+        "Group Policy Objects (GPOs) are failing to apply due to network unavailability.",
+        "The user’s DNS settings are incorrect, preventing domain controller lookups.",
+        "Network drive mappings are timing out during login attempts."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A thermal element with degraded resistive coating (depleted printhead heating element) is most likely causing the faded printing. Thermal printers create images by selectively heating special paper, and over time, the printhead's heating elements wear out or become less effective. This degradation leads to insufficient heat generation to properly activate the thermal paper, resulting in progressively lighter printing. Since replacing the paper didn't resolve the issue, the problem lies in the printer's ability to generate sufficient heat. Logic board issues would likely cause more erratic problems, pressure problems would cause inconsistent rather than uniformly faded printing, and temperature regulation issues would typically fluctuate rather than consistently degrade over time.",
-      "examTip": "Faded thermal prints that worsen over time typically indicate a degrading printhead heating element."
+      "explanation": "Roaming profiles rely on network access; slow logins occur when the profile cannot be downloaded. GPO failures affect applied settings, not login speed. DNS issues prevent domain logins but not slow them. Network drive mapping timeouts may cause delays but are secondary to roaming profile dependencies.",
+      "examTip": "Convert roaming profiles to local profiles when users require frequent offline access to reduce login delays."
     },
     {
       "id": 16,
-      "question": "Which of the following TCP ports is used by the SMB (Server Message Block) protocol DIRECTLY over TCP, without NetBIOS encapsulation, for file sharing in modern Windows environments?",
+      "question": "A Windows 10 machine cannot access internal resources by hostname but can by IP address. What is the MOST likely cause?",
       "options": [
-        "Port 137",
-        "Port 138",
-        "Port 139",
-        "Port 445"
+        "Incorrect DNS server settings on the client machine.",
+        "Corrupted local DNS cache preventing proper hostname resolution.",
+        "DHCP scope misconfigurations causing incorrect DNS suffix assignments.",
+        "Windows Firewall blocking outbound DNS traffic from the client."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Port 445 is used by SMB directly over TCP, without NetBIOS encapsulation, for file sharing in modern Windows environments. This implementation (sometimes called 'Direct Host SMB') eliminates the need for the NetBIOS layer that was required in older Windows networking. Ports 137 (NetBIOS name service), 138 (NetBIOS datagram service), and 139 (NetBIOS session service) are all associated with NetBIOS over TCP/IP (NBT), which is largely obsolete in modern Windows networking.",
-      "examTip": "Remember that modern Windows file sharing uses SMB over TCP port 445."
+      "correctAnswerIndex": 0,
+      "explanation": "Incorrect DNS server settings prevent hostname resolution, while IP access remains functional. DNS cache corruption would cause intermittent issues rather than consistent hostname resolution failures. DHCP misconfigurations would affect multiple clients. Firewall issues would block DNS lookups entirely, including external ones.",
+      "examTip": "Always validate DNS server settings on client devices when internal hostname resolution fails."
     },
     {
       "id": 17,
-      "question": "A user reports their mobile device is overheating and the battery is draining rapidly, even when idle. The device is a few years old and has been heavily used. Which combination of factors is MOST likely contributing to this issue?",
+      "question": "A Linux server experiences frequent SSH session drops during file transfers. The network connection is stable. What configuration change could prevent this?",
       "options": [
-        "System optimization failures with hardware connectivity degradation",
-        "Background process proliferation with power cell deterioration",
-        "Physical sensor anomalies with system resource misallocation",
-        "Network protocol inconsistencies with display controller inefficiency"
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' values in sshd_config.",
+        "Switch from SSH to SFTP for file transfers to maintain session stability.",
+        "Enable compression in SSH sessions to reduce data transfer times.",
+        "Adjust TCP keepalive settings in the server's kernel configuration."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Background process proliferation with power cell deterioration (malware infection and a worn-out battery) is most likely causing the symptoms. Malware can run excessive CPU processes in the background, consuming resources and generating heat even when the device appears idle. Simultaneously, lithium-ion batteries naturally degrade with age and usage cycles, leading to reduced capacity, increased internal resistance, and potentially generating more heat during charging and discharging. These factors combined would explain both the overheating and rapid battery drain on an older, heavily used device. The other options describe technically plausible but less common combinations that don't align as well with the specific symptoms described.",
-      "examTip": "Consider combined factors for complex mobile issues. Malware and battery degradation are common culprits for overheating and rapid drain in older devices."
+      "correctAnswerIndex": 0,
+      "explanation": "Increasing 'ClientAliveInterval' and 'ClientAliveCountMax' sends keepalive packets that prevent session timeouts during long transfers. SFTP uses SSH and wouldn’t resolve session drops. Compression improves speed but doesn’t maintain sessions. Kernel TCP keepalive settings affect all connections and are not SSH-specific solutions.",
+      "examTip": "Modify SSH keepalive settings in sshd_config to maintain persistent connections during long file transfers."
     },
     {
       "id": 18,
-      "question": "A network administrator is implementing VLANs on a managed switch to segment network traffic. After configuring VLANs and assigning ports, hosts on different VLANs are still able to communicate with each other without routing. Which of the following is the MOST likely misconfiguration?",
+      "question": "A user’s Android device shows increased data usage, even when connected to Wi-Fi. What setting should be checked FIRST?",
       "options": [
-        "Virtual network identifier mapping error",
-        "Trunk port designation inconsistency",
-        "Layer-3 boundary traversal implementation",
-        "Protocol encapsulation mismatch"
+        "'Wi-Fi Assist' or similar feature that uses mobile data when Wi-Fi is weak.",
+        "App background data settings allowing cellular data usage.",
+        "DNS configuration issues causing fallback to mobile networks.",
+        "Carrier network preferences overriding device data settings."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Layer-3 boundary traversal implementation (inter-VLAN routing enabled on the switch or a connected router) is most likely allowing communication between VLANs. VLANs isolate traffic at Layer 2, but if routing is enabled at Layer 3, traffic can be forwarded between VLANs. This could happen if the switch has Layer 3 capabilities that are enabled, or if a router is configured to route between the VLANs. VLAN ID mapping errors would typically cause VLAN assignment issues rather than inter-VLAN communication, trunk port inconsistencies would more likely cause connectivity problems rather than unexpected communication, and protocol encapsulation mismatches would typically cause general communication failures rather than allowing traffic between VLANs.",
-      "examTip": "If VLANs aren't isolating traffic, check whether inter-VLAN routing is enabled on your switches or routers."
+      "correctAnswerIndex": 0,
+      "explanation": "'Wi-Fi Assist' allows devices to switch to mobile data when Wi-Fi signal strength weakens, increasing data consumption. Background data settings generally prioritize Wi-Fi by default. DNS configuration affects resolution times, not network choice. Carrier preferences would not override device network settings for Wi-Fi connectivity.",
+      "examTip": "Disable 'Wi-Fi Assist' to prevent unintended mobile data consumption when Wi-Fi connectivity fluctuates."
     },
     {
       "id": 19,
-      "question": "A technician is tasked with selecting a CPU cooler for a high-end gaming PC that will be overclocked and generate significant heat. Which type of CPU cooler is generally MOST effective for dissipating very high thermal loads and maintaining stable CPU temperatures under extreme conditions?",
+      "question": "A macOS user reports that Spotlight cannot find recently saved files. Indexing appears incomplete. What is the correct command to rebuild the Spotlight index?",
       "options": [
-        "Down-draft air cooling solution with aluminum heat dissipation",
-        "Tower-style air cooling with copper heat pipe technology",
-        "Closed-loop liquid cooling with 120mm thermal exchange surface",
-        "Custom liquid cooling with multiple radiator configuration"
+        "sudo mdutil -E /",
+        "sudo diskutil repairVolume /",
+        "sudo fsck -fy /dev/disk1",
+        "sudo launchctl load /System/Library/LaunchDaemons/com.apple.metadata.mds.plist"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "A custom liquid cooling system with multiple radiator configuration offers the highest thermal dissipation capacity for extreme overclocking scenarios. These systems can be designed with multiple large radiators, high-flow pumps, and precisely optimized coolant paths to handle the significant heat produced by heavily overclocked high-end CPUs. They provide superior heat transfer efficiency compared to air cooling and greater customization and capacity than closed-loop (AIO) solutions. Basic air coolers lack sufficient thermal mass and efficiency for extreme overclocking, mid-range tower coolers may be adequate for moderate overclocking but not extreme cases, and smaller 120mm AIO liquid coolers typically don't provide enough cooling capacity for heavily overclocked high-end CPUs.",
-      "examTip": "For extreme overclocking, custom loop liquid cooling offers the best thermal performance, though at a higher cost and complexity."
+      "correctAnswerIndex": 0,
+      "explanation": "'sudo mdutil -E /' erases and rebuilds the Spotlight index, resolving search issues. 'diskutil repairVolume' and 'fsck' address disk corruption, not search indexing. 'launchctl load' restarts the indexing daemon but does not rebuild indexes.",
+      "examTip": "Use 'mdutil -E /' to reset and rebuild Spotlight indexes when search fails to locate recent files."
     },
     {
       "id": 20,
-      "question": "A technician is troubleshooting a workstation that intermittently fails to boot, and the BIOS/UEFI settings are frequently reset to default values. Which of the following is the MOST likely cause?",
+      "question": "A Linux administrator must configure a cron job to run a script at 1 AM on the first day of each month. What is the correct crontab entry?",
       "options": [
-        "Memory module inconsistency or defect",
-        "Storage device controller failure",
-        "Configuration persistence energy source depletion",
-        "Central processing unit thermal throttling"
+        "0 1 1 * * /path/to/script.sh",
+        "0 1 * * 1 /path/to/script.sh",
+        "0 1 1 1 * /path/to/script.sh",
+        "0 1 */1 * * /path/to/script.sh"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Configuration persistence energy source depletion (failing CMOS battery) is most likely causing the system to lose BIOS/UEFI settings. The CMOS battery maintains these settings when the computer is powered off, and when it fails, the settings revert to factory defaults upon each boot. This can cause boot failures if critical settings for hardware are lost. Memory issues would typically cause system crashes or failed POST rather than settings resets, storage controller failures would more likely cause OS boot failures after POST, and CPU thermal throttling would cause performance issues during operation rather than boot failures with settings resets.",
-      "examTip": "Frequent BIOS resets are a classic sign of a failing CMOS battery. Replace it to stabilize BIOS settings."
+      "correctAnswerIndex": 0,
+      "explanation": "'0 1 1 * *' runs the script at 1 AM on the first day of every month. '0 1 * * 1' runs weekly on Mondays. '0 1 1 1 *' runs only on January 1. '*/1' denotes daily execution rather than monthly scheduling.",
+      "examTip": "Always confirm crontab fields for correct scheduling when configuring recurring automated tasks."
     },
     {
       "id": 21,
-      "question": "Which of the following cloud computing characteristics BEST describes the 'On-demand Self-service' capability?",
+      "question": "A Linux administrator finds that after a recent kernel update, a critical application fails to load due to missing kernel modules. What is the BEST way to resolve this issue while keeping the new kernel?",
       "options": [
-        "Location-independent resource accessibility",
-        "Elasticity of resource allocation procedures",
-        "User-initiated resource provisioning automation",
-        "Performance-based resource utilization measurement"
+        "Rebuild kernel modules for the updated kernel version.",
+        "Roll back to the previous kernel until modules are updated.",
+        "Reinstall the critical application to restore dependencies.",
+        "Compile the kernel from source with all necessary modules."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "User-initiated resource provisioning automation (cloud consumers can provision computing resources as needed automatically without requiring human interaction with the service provider) best describes 'On-demand Self-service.' This capability allows users to independently allocate or release resources like compute power, storage, or network services through automated interfaces without requiring manual intervention from the cloud provider's staff. Location-independent accessibility refers to broad network access, elasticity of resources describes rapid elasticity, and utilization measurement relates to the measured service aspect of cloud computing.",
-      "examTip": "On-demand self-service lets you provision resources instantly and independently – a core feature of cloud computing."
+      "correctAnswerIndex": 0,
+      "explanation": "Rebuilding kernel modules ensures compatibility with the updated kernel without rolling back or recompiling. Rolling back loses the benefits of the latest kernel. Reinstalling the application doesn't resolve kernel module dependencies. Compiling from source is time-consuming and unnecessary for module issues.",
+      "examTip": "Use 'dkms' or relevant build tools to rebuild kernel modules after kernel upgrades to maintain application compatibility."
     },
     {
       "id": 22,
-      "question": "A technician is troubleshooting a printer that intermittently fails to print with consistent quality. The printer produces prints with alternating bands of dark and light areas. Which component is MOST likely causing this issue?",
+      "question": "A Windows 11 user reports that after joining a domain, the system displays 'User profile service failed the sign-in.' What is the MOST likely cause?",
       "options": [
-        "Inconsistent ink delivery mechanism",
-        "Print head positioning mechanism irregularity",
-        "Media transport system slippage",
-        "Print driver rendering inconsistency"
+        "Corrupt default user profile on the domain controller.",
+        "DNS misconfiguration preventing domain authentication.",
+        "Disabled user account in Active Directory.",
+        "Corrupt local user profile on the workstation."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Inconsistent ink delivery mechanism (partially clogged printhead nozzles) is most likely causing the alternating bands of dark and light print. When some nozzles are partially blocked, ink flow becomes inconsistent, resulting in these banding patterns where ink density varies across the page. This is a common issue in inkjet printers where dried ink, air bubbles, or debris can partially obstruct the tiny nozzles. Print head positioning issues would typically cause misalignment or skewed printing rather than banding, media transport problems would cause irregular spacing or paper feeding issues, and driver rendering issues would more commonly affect specific elements of print jobs rather than creating consistent physical banding patterns.",
-      "examTip": "Persistent banding in prints after cleaning cycles usually points to stubborn clogs in the printhead nozzles."
+      "explanation": "A corrupt default user profile on the domain controller prevents new domain profiles from being created. DNS misconfiguration would block domain authentication altogether. Disabled accounts prevent login, not profile creation. Local profile corruption affects only existing profiles, not new ones from the domain.",
+      "examTip": "Replace or repair the default user profile on the domain controller when domain-joined systems fail to create profiles."
     },
     {
       "id": 23,
-      "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for authentication requests using UDP protocol?",
+      "question": "A Windows 10 system shows 'The trust relationship between this workstation and the primary domain failed' after restoring from a backup. What is the FASTEST fix?",
       "options": [
-        "Port 88 (standard authentication service)",
-        "Port 464 (credential modification service)",
-        "Port 749 (administrative service)",
-        "Port 3268 (directory service)"
+        "Rejoin the workstation to the domain using administrator credentials.",
+        "Reset the computer object in Active Directory.",
+        "Manually update the machine password using PowerShell.",
+        "Restore the system from a more recent backup."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Port 88 is used by the Kerberos Key Distribution Center (KDC) for authentication requests over both TCP and UDP protocols. The UDP protocol is often preferred for Kerberos authentication due to its lower overhead, making authentication processes more efficient. Port 464 is used for Kerberos password changes (kpasswd), port 749 is used for Kerberos administration (kadmin), and port 3268 is used for Global Catalog LDAP queries rather than Kerberos authentication.",
-      "examTip": "Kerberos commonly uses port 88. While it supports both protocols, UDP is often preferred for efficiency."
+      "explanation": "Rejoining the domain resets the secure channel efficiently. Resetting the computer object may cause profile mismatches. PowerShell commands are more complex and time-consuming. Restoring from another backup doesn't guarantee the trust relationship will be fixed.",
+      "examTip": "When restoring domain-joined systems, rejoin the domain if trust relationship errors occur."
     },
     {
       "id": 24,
-      "question": "A company is implementing a 'Zero Trust' security model. Which of the following practices is LEAST aligned with the principles of Zero Trust?",
+      "question": "An Android device shows high battery usage from 'Google Play Services.' What should the technician check FIRST?",
       "options": [
-        "Multi-factor authentication implementation",
-        "Network boundary protection focus",
-        "Microsegmentation strategy deployment",
-        "Continuous monitoring and verification"
+        "Pending system updates affecting background services.",
+        "Outdated apps dependent on Google Play Services APIs.",
+        "Malware disguised as legitimate Google services.",
+        "Battery optimization settings disabled for critical apps."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network boundary protection focus (relying primarily on perimeter firewalls) is least aligned with Zero Trust principles. Traditional security models enforce a strong perimeter with the assumption that everything inside that perimeter can be trusted. Zero Trust, by contrast, eliminates the concept of implicit trust based on network location, requiring verification of every access request regardless of where it originates. Multi-factor authentication, microsegmentation, and continuous monitoring are all fundamental Zero Trust practices that support the 'never trust, always verify' approach by enforcing granular access controls and persistent verification.",
-      "examTip": "Zero Trust is not about defending the perimeter but about verifying every access attempt continuously."
+      "correctAnswerIndex": 0,
+      "explanation": "Pending system updates can cause Google Play Services to consume more battery due to background syncing. Outdated apps cause issues but generally not excessive battery drain. Malware disguised as Play Services would exhibit additional suspicious behaviors. Battery optimization settings don’t usually cause such high drain from system services.",
+      "examTip": "Always check for pending system updates when core services like Google Play Services consume excessive battery."
     },
     {
       "id": 25,
-      "question": "A technician is setting up link aggregation (LAG) on a managed switch for a server with two 10 Gbps NICs. After configuring LACP on both the switch and the server, the aggregated link is only showing 10 Gbps throughput instead of the expected 20 Gbps. Which of the following is the MOST likely reason for this suboptimal performance?",
+      "question": "A Linux server fails to boot after an unexpected power outage, showing 'GRUB rescue>' prompt. What is the FIRST step to recover?",
       "options": [
-        "VLAN configuration incompatibility with aggregation",
-        "Load balancing algorithm distribution inefficiency",
-        "Protocol negotiation failure between interfaces",
-        "Media type mismatch between connected ports"
+        "Identify and set the correct boot partition using GRUB commands.",
+        "Reinstall GRUB from a live CD environment.",
+        "Check disk integrity using fsck from a rescue shell.",
+        "Restore the master boot record from a recent backup."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Load balancing algorithm distribution inefficiency (hash algorithm mismatch in LACP configuration) is most likely causing the suboptimal performance. Link aggregation relies on appropriate traffic distribution across multiple links, which is determined by the hash algorithm used. If this algorithm is not properly configured or is unsuitable for the traffic pattern, most traffic may be directed to a single link, limiting the effective bandwidth to that of a single connection (10 Gbps) despite having two physical links. VLAN misconfiguration would typically cause connectivity issues rather than bandwidth limitations, protocol negotiation failures would usually prevent the LAG from forming at all, and media type mismatches would cause link establishment problems rather than bandwidth underutilization.",
-      "examTip": "LACP relies on a proper hash algorithm to balance traffic. Misconfiguration can prevent full utilization of aggregated links."
+      "correctAnswerIndex": 0,
+      "explanation": "Setting the correct boot partition using GRUB commands allows quick recovery if GRUB cannot find its files. Reinstalling GRUB or running fsck should follow if partition correction fails. MBR restoration is a last resort if the MBR is actually damaged.",
+      "examTip": "Use 'set prefix' and 'set root' commands at the GRUB rescue prompt to recover from missing or misconfigured boot paths."
     },
     {
       "id": 26,
-      "question": "A technician is troubleshooting a Linux workstation that is experiencing frequent kernel panics and system freezes, especially when running virtual machines or containerized applications. Which hardware component is the MOST likely source of these kernel-level stability issues?",
+      "question": "A user reports that after enabling BitLocker on their Windows 11 laptop, boot times have significantly increased. The device uses a traditional HDD. What is the MOST likely reason?",
       "options": [
-        "Storage subsystem with intermittent I/O errors",
-        "Memory modules with address mapping inconsistencies",
-        "Motherboard chipset with thermal regulation problems",
-        "Paging file configuration with allocation conflicts"
+        "Full-disk encryption overhead on HDDs impacts read/write performance.",
+        "BitLocker is waiting for user PIN input, delaying automatic startup.",
+        "TPM misconfigurations are causing extended authentication times.",
+        "Secure Boot conflicts are slowing down the boot process."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Memory modules with address mapping inconsistencies (incompatible or failing RAM) are most likely causing kernel panics and system freezes under virtualization workloads. Virtualization and containerization place significant demands on system memory, which can expose latent RAM issues that might not appear during regular usage. Even subtle memory errors can cause kernel-level failures when memory is heavily utilized or accessed in specific patterns. Storage I/O errors would typically cause I/O wait periods or filesystem corruption rather than kernel panics, chipset thermal issues would more commonly cause throttling or shutdown rather than panic, and swap/paging file problems would normally result in performance degradation or out-of-memory errors rather than kernel-level crashes.",
-      "examTip": "Memory issues are a common cause of kernel panics in virtualized environments. Thoroughly test the RAM with extended diagnostics."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption adds overhead, especially noticeable on HDDs. TPM issues usually prompt for recovery keys rather than slowing boots. Secure Boot conflicts result in different boot errors. PIN prompts delay boot only if configured explicitly.",
+      "examTip": "Use SSDs for systems with BitLocker enabled to minimize encryption-related boot delays."
     },
     {
       "id": 27,
-      "question": "An organization is implementing a 'Zero Trust Network Access' (ZTNA) solution to secure remote access for its employees. Which of the following BEST describes the core principle of ZTNA in contrast to traditional VPN-based remote access?",
+      "question": "A Windows 10 machine fails to install cumulative updates, returning '0x800f0922' error. What is the MOST likely cause?",
       "options": [
-        "Internal network accessibility following authentication verification",
-        "Application-specific accessibility with continuous validation",
-        "Traffic encryption prioritization over identity confirmation",
-        "Infrastructure-based security using dedicated appliances"
+        "Insufficient space in the system-reserved partition.",
+        "Corrupted Windows Update components.",
+        "Active third-party antivirus software blocking updates.",
+        "Faulty network connectivity to update servers."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Application-specific accessibility with continuous validation best describes ZTNA's core principle in contrast to traditional VPNs. ZTNA grants precise access to specific applications based on user identity and device posture, rather than providing broad network-level access as traditional VPNs typically do. This approach follows the principle of least privilege by limiting access to only what is necessary. Traditional VPNs often grant users access to large network segments once authenticated, while ZTNA continuously verifies each access attempt to individual applications. ZTNA and VPNs both prioritize encryption, but ZTNA's focus is on granular application access. Both solutions can use various infrastructure implementations, including software or hardware-based approaches.",
-      "examTip": "Zero Trust Network Access focuses on granular, application-level access control rather than giving full network access like VPNs."
+      "correctAnswerIndex": 0,
+      "explanation": "Error '0x800f0922' is commonly due to lack of space in the system-reserved partition. Corrupted components cause different error codes. Antivirus software issues typically produce rollback errors. Network connectivity issues would lead to download failures, not installation errors.",
+      "examTip": "Expand the system-reserved partition when encountering '0x800f0922' Windows Update errors."
     },
     {
       "id": 28,
-      "question": "Which of the following display panel technologies is MOST suitable for professional photo editing that requires exceptional color accuracy, wide color gamut coverage (Adobe RGB, DCI-P3), and consistent color reproduction across wide viewing angles?",
+      "question": "A Linux system shows 'Permission denied' errors when running a script, even though the user has execute permissions. What is the MOST likely cause?",
       "options": [
-        "Twisted molecular orientation with high refresh capability",
-        "Vertical field application with enhanced contrast ratio",
-        "Horizontal field alignment with uniform color reproduction",
-        "Direct emission pixel technology with infinite contrast"
+        "Incorrect shebang (#!) line specifying a non-existent interpreter.",
+        "SELinux is enforcing policies that prevent execution.",
+        "Filesystem mount options disallowing script execution.",
+        "User lacks permissions for required dependencies."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Horizontal field alignment with uniform color reproduction (IPS - In-Plane Switching) panels are most suitable for professional photo editing. IPS technology aligns liquid crystals horizontally, providing superior color accuracy, wide color gamut coverage, and consistent viewing angles compared to other LCD technologies. These qualities make IPS displays the preferred choice for color-critical work like photo editing. TN (Twisted Nematic) panels offer faster refresh rates but poor color accuracy and narrow viewing angles. VA (Vertical Alignment) panels provide better contrast ratios but less color consistency across viewing angles. OLED technology offers perfect blacks and wide color gamut but may have color shifting, brightness limitations, and burn-in concerns that make it less ideal for prolonged professional photo editing.",
-      "examTip": "For color-critical work, IPS panels are the gold standard for color accuracy and consistency."
+      "correctAnswerIndex": 0,
+      "explanation": "An incorrect shebang line prevents the OS from finding the script interpreter, resulting in 'Permission denied' despite correct file permissions. SELinux denials would be logged explicitly. Mount options would block all script execution, not just one. Missing dependencies usually yield different runtime errors.",
+      "examTip": "Verify the shebang line points to the correct interpreter when scripts fail with 'Permission denied' despite execute permissions."
     },
     {
       "id": 29,
-      "question": "In a security context, which of the following BEST describes the purpose of 'Threat Intelligence' feeds and services?",
+      "question": "A Windows user reports slow network drive access after a hostname change. Pings by IP address work fine, but hostname pings fail. What is the MOST likely cause?",
       "options": [
-        "Automated perimeter protection implementation",
-        "Contextual security information dissemination",
-        "System vulnerability assessment execution",
-        "Data transmission protection enforcement"
+        "DNS records were not updated to reflect the new hostname.",
+        "DHCP server is associating the old hostname with the current IP.",
+        "WINS server entries were not refreshed post-hostname change.",
+        "Local DNS resolver cache needs to be flushed on the client."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Contextual security information dissemination best describes the purpose of threat intelligence feeds and services. These solutions provide organizations with actionable, contextual information about current and emerging threats, adversary tactics, indicators of compromise (IOCs), and vulnerabilities affecting their environment. This intelligence helps security teams anticipate and proactively address potential threats rather than merely reacting to attacks. Threat intelligence is not primarily for automated blocking (though it can inform such systems), vulnerability assessment (though it complements it), or encryption (which is a different security control entirely).",
-      "examTip": "Think of threat intelligence as your early warning system, helping you to understand and prepare for potential attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "DNS records must be updated after a hostname change; otherwise, clients cannot resolve the new name. DHCP typically doesn’t handle DNS registrations directly. WINS is deprecated in most environments. Flushing the DNS cache helps only after DNS records are correctly updated.",
+      "examTip": "Update DNS records following hostname changes to ensure proper network resource resolution."
     },
     {
       "id": 30,
-      "question": "Which of the following is a key operational benefit of 'Public Cloud' deployment model in terms of disaster recovery and business continuity?",
+      "question": "A Linux administrator finds that a critical web service restarts automatically after failure but doesn’t stay running. What systemd directive ensures repeated restarts do not occur indefinitely?",
       "options": [
-        "Reduced internet dependency for recovery processes",
-        "Enhanced data sovereignty control mechanisms",
-        "Integrated failover capabilities with geographic distribution",
-        "Eliminated hardware redundancy requirements"
+        "RestartSec=5",
+        "Restart=on-failure",
+        "StartLimitBurst=3",
+        "TimeoutStartSec=10"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Integrated failover capabilities with geographic distribution (automated disaster recovery and high availability provided by the cloud provider's infrastructure) is a key operational benefit of public cloud for disaster recovery. Public cloud providers typically offer built-in capabilities for replicating workloads across multiple geographically dispersed data centers, providing resilience against regional disasters. Public cloud actually increases internet dependency rather than reducing it, offers less data sovereignty control compared to private infrastructure, and while it reduces the need for customer-owned redundant hardware, it doesn't eliminate the requirement for redundancy (which is simply provided by the cloud provider instead).",
-      "examTip": "Leveraging the public cloud for DR can greatly simplify recovery procedures and ensure continuity through geographic redundancy."
+      "explanation": "'StartLimitBurst' limits the number of restarts in a given time period, preventing endless loops. 'Restart=on-failure' ensures restarts but without limits. 'RestartSec' sets the delay between restarts. 'TimeoutStartSec' defines the maximum time to consider the service started, unrelated to restart limits.",
+      "examTip": "Set 'StartLimitBurst' in systemd service files to prevent endless restart loops after repeated service failures."
     },
     {
       "id": 31,
-      "question": "A technician is troubleshooting a workstation that intermittently locks up and becomes unresponsive, forcing a hard reboot. The issue occurs randomly, even when the system is idle. Which of the following is the MOST likely cause?",
+      "question": "A macOS user reports that Spotlight cannot locate newly saved documents. Indexing seems stuck. Which command rebuilds the Spotlight index for the entire disk?",
       "options": [
-        "Memory subsystem inconsistency",
-        "Storage media sector corruption",
-        "Thermal regulation malfunction",
-        "System file integrity corruption"
+        "sudo mdutil -E /",
+        "sudo diskutil verifyVolume /",
+        "sudo fsck_apfs -n /dev/disk1",
+        "sudo launchctl kickstart -k system/com.apple.metadata.mds"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Memory subsystem inconsistency (faulty or incompatible RAM modules) is most likely causing the random system lockups. Memory errors can occur unpredictably, even during periods of low activity, as background processes continue to use system memory. When critical memory locations are affected, the entire system can freeze without warning. Hard drive issues typically cause slowdowns or application errors before complete system lockups, overheating usually correlates with system load or environmental factors rather than occurring randomly during idle periods, and corrupted system files more commonly cause application errors or boot failures rather than sudden complete lockups at idle.",
-      "examTip": "Random system lockups often point to memory issues. Test the RAM thoroughly with extended diagnostics."
+      "explanation": "'sudo mdutil -E /' erases and rebuilds the Spotlight index, resolving indexing issues. 'diskutil verifyVolume' checks disk integrity. 'fsck_apfs' checks APFS volumes for errors. 'launchctl kickstart' restarts services but doesn’t rebuild indexes.",
+      "examTip": "Use 'mdutil -E /' to force a full Spotlight reindex when search issues persist on macOS."
     },
     {
       "id": 32,
-      "question": "Which of the following security attack types is BEST mitigated by implementing 'Content Security Policy' (CSP) headers in web applications?",
+      "question": "A Windows 11 system with full-disk BitLocker encryption repeatedly asks for the recovery key after firmware updates. TPM is functioning. How can future prompts be prevented?",
       "options": [
-        "Database query manipulation",
-        "Cross-site request forgery",
-        "Client-side script injection",
-        "Session token interception"
+        "Suspend BitLocker protection before performing firmware updates.",
+        "Reset TPM ownership after updates complete.",
+        "Disable Secure Boot during firmware updates.",
+        "Move recovery keys to a hardware security module (HSM)."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Client-side script injection (Cross-Site Scripting or XSS) is best mitigated by Content Security Policy (CSP) headers. CSP is a security mechanism that allows web application administrators to control which resources can be loaded and executed by the browser. By specifying allowed sources for scripts, styles, images, and other content, CSP can prevent the execution of malicious scripts injected into the page, effectively mitigating XSS attacks. Database query manipulation (SQL Injection) is addressed through input validation and parameterized queries, CSRF requires different protections like anti-CSRF tokens, and session token interception would be addressed through proper cookie security attributes and HTTPS rather than CSP.",
-      "examTip": "CSP is an effective tool to mitigate XSS by controlling which sources the browser can load scripts from."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker ensures that TPM measurement changes during firmware updates don’t trigger recovery prompts. Resetting TPM ownership affects all encrypted data. Secure Boot changes don’t impact BitLocker’s TPM integration. HSMs store keys securely but don’t prevent prompts related to TPM measurement changes.",
+      "examTip": "Always suspend BitLocker before firmware updates to maintain TPM measurement consistency and avoid recovery key prompts."
     },
     {
       "id": 33,
-      "question": "A technician is building a virtualized server environment and needs to choose a hypervisor type that offers maximum performance and direct hardware access for virtual machines. Which hypervisor type is MOST suitable?",
+      "question": "A Linux system’s SSH connections drop after short idle periods. The network is stable. How can this be prevented?",
       "options": [
-        "Host-based virtualization platform",
-        "User-level virtualization solution",
-        "Native hardware virtualization",
-        "Application-level virtualization"
+        "Configure 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalives globally via sysctl parameters.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Use 'screen' or 'tmux' to maintain session persistence."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Native hardware virtualization (Type 1 or Bare-Metal Hypervisor) is most suitable for maximum performance in a virtualized server environment. Type 1 hypervisors run directly on the host's hardware without an underlying operating system, providing more efficient and direct access to hardware resources. This architecture eliminates the overhead associated with running through a host OS, resulting in better performance, lower latency, and improved resource management for virtual machines. Host-based virtualization (Type 2) adds the overhead of a host OS, user-level virtualization typically refers to application containers rather than full virtual machines, and application-level virtualization usually refers to virtualizing specific applications rather than entire servers.",
-      "examTip": "For high-performance virtualization, choose a Type 1 hypervisor to minimize overhead."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' ensure the server sends keepalive messages, preventing timeouts. TCP keepalives apply system-wide, not just SSH. Mosh requires client and server configuration changes. 'screen' and 'tmux' maintain sessions but don’t prevent connection drops.",
+      "examTip": "Adjust SSH server keepalive settings for persistent connections during idle periods on Linux systems."
     },
     {
       "id": 34,
-      "question": "Which of the following mobile device connection methods provides the FASTEST data transfer speeds for synchronizing large files between a smartphone and a computer?",
+      "question": "A Windows 10 system shows 'Operating System not found' after adding a second drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "Personal area network protocol version 5.0",
-        "Wireless local area network protocol ax standard",
-        "Universal serial bus protocol version 2.0",
-        "Near field communication protocol"
+        "Incorrect boot order prioritizing the new, non-bootable drive.",
+        "Corrupted master boot record (MBR) on the primary drive.",
+        "Disconnected SATA cables on the primary drive.",
+        "Damaged boot partition requiring repair."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Wireless local area network protocol ax standard (Wi-Fi 6 / 802.11ax) provides the fastest data transfer speeds among the options listed. Wi-Fi 6 can deliver theoretical speeds up to 9.6 Gbps (though real-world speeds are lower), far exceeding the capabilities of Bluetooth 5.0 (2 Mbps), USB 2.0 (480 Mbps), or NFC (424 kbps). For synchronizing large files between devices, Wi-Fi 6's high bandwidth makes it the most efficient option, though the specific implementation and environmental factors will affect actual performance.",
-      "examTip": "For high-speed file transfers, Wi-Fi 6 is the best wireless option compared to Bluetooth or USB 2.0."
+      "correctAnswerIndex": 0,
+      "explanation": "New drive installations can cause BIOS to prioritize the wrong drive, leading to boot errors. MBR corruption and partition damage would prevent detection or prompt different errors. Disconnected cables would result in the drive being undetected in BIOS.",
+      "examTip": "Verify BIOS boot order after hardware changes to ensure the correct boot drive is prioritized."
     },
     {
       "id": 35,
-      "question": "Performance-Based Question: A technician needs to configure a new virtualization host that will run multiple critical virtual machines. The host's performance must remain stable, and VMs should have sufficient resources without over-allocation. Select the MOST logical order of operations for ensuring a properly configured hypervisor environment.",
+      "question": "A Linux administrator needs to ensure a critical service automatically restarts on failure but stops attempting after three failures in ten minutes. What is the correct systemd configuration?",
       "options": [
-        "Software installation, user authentication setup, virtual machine creation, storage array configuration, patch management implementation",
-        "Storage subsystem implementation, firmware optimization, hypervisor deployment, security update application, resource allocation",
-        "Virtual machine creation, firmware optimization, virtualization platform installation, compute resource allocation, storage configuration",
-        "Operating system deployment, virtualization layer installation, network device decommissioning, virtual machine deployment, software licensing acquisition"
+        "Restart=on-failure, StartLimitIntervalSec=600, StartLimitBurst=3",
+        "Restart=always, RestartSec=5, TimeoutStartSec=600",
+        "Restart=on-abort, StartLimitBurst=3, RestartSec=10",
+        "Restart=on-failure, TimeoutStartSec=600, RestartSec=5"
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The most logical order for configuring a virtualization host begins with implementing the storage subsystem (configuring RAID) to ensure reliable data storage, then optimizing firmware (updating BIOS/UEFI) for hardware stability and compatibility. Next comes hypervisor deployment (installing the virtualization platform) on the properly prepared hardware. After installation, applying security updates ensures the system is protected before hosting VMs. Finally, resource allocation (creating VMs and assigning appropriate resources) should occur once the foundation is stable and secure. This approach addresses the hardware foundation first, then the virtualization layer, and finally the virtual machines themselves, providing the most stable and secure environment.",
-      "examTip": "Setting up a stable foundation is crucial for virtualization. Properly configured RAID and up-to-date firmware reduce the risk of data loss and hardware incompatibilities. Only then should you layer on the hypervisor and create the virtual machines."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration ensures restarts on failure but limits attempts to three within ten minutes. 'Restart=always' doesn’t differentiate failure causes. 'Restart=on-abort' is for abnormal terminations. 'TimeoutStartSec' controls startup timing, not restart frequency.",
+      "examTip": "Combine 'Restart=on-failure' with 'StartLimitBurst' and 'StartLimitIntervalSec' for controlled restart attempts in systemd."
     },
     {
       "id": 36,
-      "question": "Which of the following security principles is BEST represented by granting users only the minimum level of access necessary to perform their job functions, and no more?",
+      "question": "A user reports that after changing their Windows password, mapped network drives fail to reconnect. What is the MOST likely cause?",
       "options": [
-        "Layered security implementation",
-        "Minimal permissions principle",
-        "Segregation of responsibilities",
-        "Default denial architecture"
+        "Cached credentials no longer match the updated password.",
+        "Group Policy Objects (GPOs) blocking drive mappings after password changes.",
+        "DNS resolution failures preventing server access.",
+        "Network adapter driver corruption affecting SMB traffic."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Minimal permissions principle (Least Privilege) is the security concept represented by granting users only the minimum access necessary to perform their job functions. This principle limits the potential damage from compromised accounts or insider threats by ensuring users have access only to the specific resources and functions required for their roles. Layered security (Defense in Depth) involves using multiple security controls in layers, segregation of responsibilities (Separation of Duties) requires multiple people to complete sensitive tasks, and default denial architecture (implicit deny) is a related but distinct concept focusing on denying access by default unless explicitly permitted.",
-      "examTip": "Least Privilege is a foundational security concept. Only give users the access they absolutely need."
+      "correctAnswerIndex": 0,
+      "explanation": "Password changes invalidate cached credentials, preventing drive reconnections. GPOs typically enforce, not block, mappings. DNS issues would affect all network access. Driver corruption would impact overall connectivity, not just drive mappings.",
+      "examTip": "Update cached credentials in Credential Manager after password changes to restore mapped drive access."
     },
     {
       "id": 37,
-      "question": "A technician needs to capture network traffic for forensic analysis at a remote branch office where installing a dedicated network tap is not feasible. Which of the following methods is MOST suitable for capturing network traffic in this scenario?",
+      "question": "A Windows 11 laptop has slow startup times after enabling full-disk encryption. The device uses a mechanical hard drive. What is the MOST likely cause?",
       "options": [
-        "Shared media connection device deployment",
-        "Switch monitoring port configuration",
-        "Physical cable signal duplication",
-        "Endpoint packet capture installation"
+        "BitLocker encryption overhead affecting HDD performance.",
+        "TPM authentication delays during the pre-boot phase.",
+        "BIOS boot order scanning non-bootable devices first.",
+        "Corrupted bootloader requiring repair."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Switch monitoring port configuration (Port Mirroring or SPAN - Switched Port Analyzer) is the most suitable method for capturing network traffic in this scenario. This technique configures a managed switch to copy traffic from specific ports to a designated monitoring port where analysis tools can be connected. It requires no additional hardware beyond the existing managed switch and a computer running packet capture software. Hub deployment would degrade network performance by forcing half-duplex operations, basic cable splitters don't work for modern Ethernet, and endpoint-based capture only sees traffic to/from that specific device rather than broader network traffic needed for comprehensive forensic analysis.",
-      "examTip": "Port mirroring with a network analyzer (like Wireshark) is key for capturing and analyzing network traffic in detail."
+      "correctAnswerIndex": 0,
+      "explanation": "Full-disk encryption adds processing overhead that is more pronounced on HDDs compared to SSDs. TPM delays usually involve recovery prompts. BIOS scanning delays affect all boot processes. Bootloader corruption prevents booting entirely.",
+      "examTip": "Upgrade to SSD storage when using full-disk encryption on Windows systems to reduce boot times."
     },
     {
       "id": 38,
-      "question": "Which of the following memory technologies is Non-Volatile, byte-addressable, and offers performance characteristics that bridge the gap between DRAM and NAND flash, often used in persistent memory modules for servers?",
+      "question": "A Linux administrator needs to monitor real-time CPU usage per process. Which command is BEST suited?",
       "options": [
-        "Synchronous dynamic random-access memory (DDR5)",
-        "Graphics-optimized dynamic memory (GDDR6)",
-        "Static semiconductor memory array (SRAM)",
-        "Non-volatile express persistent memory (NVMe-PM)"
+        "top",
+        "htop",
+        "ps aux --sort=-%cpu",
+        "vmstat 1"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Non-volatile express persistent memory (NVMe Persistent Memory) bridges the gap between volatile DRAM and slower NAND flash storage. This technology provides byte-addressable memory that retains data when power is removed (non-volatile) while offering performance closer to DRAM than traditional storage. It's particularly valuable in server environments where data persistence is critical but performance cannot be sacrificed. DDR5 and GDDR6 are both volatile memory technologies that lose data when powered off, while SRAM is volatile and typically used for cache memory rather than persistent storage in servers.",
-      "examTip": "NVMe Persistent Memory is ideal for scenarios requiring high-speed, persistent memory that retains data after power loss."
+      "correctAnswerIndex": 0,
+      "explanation": "'top' provides real-time per-process CPU usage and is universally available. 'htop' offers enhanced visualization but may not be installed by default. 'ps aux' provides snapshots, not continuous monitoring. 'vmstat' focuses on system-wide metrics, not per-process details.",
+      "examTip": "Use 'top' for immediate, real-time insights into per-process CPU usage on Linux systems."
     },
     {
       "id": 39,
-      "question": "A user reports that their mobile device's GPS location services are inaccurate and slow to update, especially indoors or in urban canyons. Which factor is LEAST likely to contribute to poor GPS performance in these environments?",
+      "question": "A macOS user reports persistent prompts for iCloud password after an OS update. What is the MOST likely cause?",
       "options": [
-        "Satellite signal obstruction by building materials",
-        "Supplemental positioning service deactivation",
-        "Device positioning firmware version",
-        "Background application processor utilization"
+        "Keychain corruption preventing iCloud authentication.",
+        "Expired Apple ID credentials requiring reset.",
+        "Firewall settings blocking iCloud services.",
+        "Corrupted iCloud preference files in the user library."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Device positioning firmware version (outdated GPS receiver firmware) is least likely to be the primary cause of poor GPS performance indoors or in urban environments. While firmware can affect GPS performance, the dominant factors in these specific environments are physical signal obstruction and lack of assisted positioning services. GPS relies on line-of-sight to satellites, which is severely limited by buildings. Modern devices overcome this by using Wi-Fi and Bluetooth signals (A-GPS) to supplement positioning, so disabling these features significantly impacts indoor location accuracy. Processor load can affect positioning responsiveness but is secondary to signal availability in challenging environments.",
-      "examTip": "Indoor and urban canyon GPS issues are mainly due to weak satellite signals; ensure that Wi-Fi and Bluetooth-based location assistance (A-GPS) are enabled."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption is a common cause of repeated iCloud authentication prompts. Expired Apple ID credentials would prevent login across all Apple services. Firewall issues would block access rather than cause repeated prompts. Corrupted preference files typically affect only the iCloud UI, not authentication.",
+      "examTip": "Reset or repair Keychain Access when encountering repeated iCloud authentication prompts on macOS."
     },
     {
       "id": 40,
-      "question": "Which of the following network topologies is characterized by having a central connection point where all devices connect, and a failure of this central point results in the entire network going down?",
+      "question": "A Windows 10 system shows 'NTLDR is missing' after changing BIOS settings. What is the FIRST troubleshooting step?",
       "options": [
-        "Linear connectivity architecture",
-        "Circular connectivity architecture",
-        "Centralized distribution architecture",
-        "Interconnected grid architecture"
+        "Check and correct the BIOS boot order.",
+        "Repair the master boot record using recovery tools.",
+        "Restore BIOS settings to default configuration.",
+        "Reinstall Windows bootloader from installation media."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Centralized distribution architecture (Star Topology) features a central connection point (typically a switch or hub) to which all network devices connect directly. This creates a point of dependency where failure of the central device will cause the entire network to lose connectivity, even though individual connections between devices and the central point remain intact. Linear connectivity (Bus Topology) uses a single cable with multiple connection points, circular connectivity (Ring Topology) connects each device to two neighbors forming a circle, and interconnected grid (Mesh Topology) creates multiple redundant connections between devices for fault tolerance.",
-      "examTip": "Star topology is simple and common, but its central point of failure is a critical weakness."
+      "correctAnswerIndex": 0,
+      "explanation": "The 'NTLDR is missing' error typically occurs when the BIOS boot order points to a non-bootable device. Repairing the MBR or bootloader is secondary. Restoring BIOS defaults may not address the specific boot order issue. Reinstallation is a last-resort step.",
+      "examTip": "Verify BIOS boot sequence after configuration changes when encountering boot errors like 'NTLDR is missing.'"
     },
     {
       "id": 41,
-      "question": "A technician needs to configure a new workstation to use a static IP address outside the DHCP scope. Which of the following parameters is NOT required to be manually configured on the workstation?",
+      "question": "A Linux web server running Apache is returning a '403 Forbidden' error after a configuration change. The website files have correct permissions. What is the MOST likely cause?",
       "options": [
-        "Network node identifier",
-        "Subnet segmentation mask",
-        "Default routing gateway",
-        "Address allocation server"
+        "SELinux is enforcing policies blocking access to web content.",
+        "The Apache service lacks proper read permissions on the web directory.",
+        "The firewall is blocking inbound HTTP requests on port 80.",
+        "The .htaccess file has incorrect directives preventing access."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Address allocation server (DHCP Server Address) is not required when configuring a static IP address. Since static IP configuration means the address is manually assigned rather than dynamically obtained, there's no need to specify a DHCP server. The essential parameters for static IP configuration include the IP address (network node identifier), subnet mask (subnet segmentation mask), and default gateway (default routing gateway). Additional optional settings might include DNS server addresses, but the DHCP server address is irrelevant for a static configuration.",
-      "examTip": "Static IP configuration requires only IP address, subnet mask, and default gateway."
+      "correctAnswerIndex": 0,
+      "explanation": "SELinux commonly causes '403 Forbidden' errors if proper contexts are not set, even when file permissions are correct. Apache read permission issues would present as '403' but typically show explicit permission errors. Firewall misconfigurations would block requests entirely, resulting in connection errors, not '403.' Misconfigured .htaccess files cause '403' errors but would not coincide directly with a known SELinux-enforced environment unless explicitly modified.",
+      "examTip": "Use 'ls -Z' to check SELinux contexts and 'restorecon -R /var/www/html' to correct them for Apache web directories."
     },
     {
       "id": 42,
-      "question": "Which of the following BEST describes the function of a 'firewall' in a network security context?",
+      "question": "A user reports that their Windows 11 system boots into BitLocker recovery mode after a BIOS update. TPM is enabled and operational. How can future recovery prompts after such updates be prevented?",
       "options": [
-        "Network utilization monitoring and regulation",
-        "Traffic policy enforcement and control",
-        "Wireless connectivity provisioning and management",
-        "Address assignment automation and distribution"
+        "Suspend BitLocker encryption before performing BIOS updates.",
+        "Clear the TPM and reinitialize it after the update.",
+        "Disable Secure Boot before updating the BIOS.",
+        "Manually export and import the BitLocker recovery key after each update."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Traffic policy enforcement and control best describes a firewall's function. Firewalls monitor and control incoming and outgoing network traffic based on predetermined security rules, determining which traffic should be allowed or blocked. This boundary protection mechanism helps prevent unauthorized access while permitting legitimate communications. Network utilization monitoring describes bandwidth management tools, wireless connectivity provisioning refers to wireless access points or controllers, and address assignment automation describes DHCP functionality - all distinct from a firewall's primary purpose.",
-      "examTip": "Think of a firewall as a gatekeeper that inspects incoming and outgoing traffic and enforces security policies."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before BIOS updates ensures TPM measurements remain consistent, preventing recovery prompts. Clearing TPM can lead to data loss if not properly managed. Secure Boot is unrelated to BitLocker TPM measurements. Exporting the recovery key helps in recovery but does not prevent future prompts.",
+      "examTip": "Always suspend BitLocker before firmware or BIOS updates to avoid unnecessary recovery key prompts."
     },
     {
       "id": 43,
-      "question": "A user reports that their computer is randomly restarting without warning, and the frequency of the restarts increases when running resource-intensive applications. Which of the following components is MOST likely causing these random restarts?",
+      "question": "A macOS user reports slow performance and frequent beachball icons after upgrading to the latest version. The system shows high disk activity. What is the MOST likely cause?",
       "options": [
-        "Storage medium with sector allocation errors",
-        "Processing unit with thermal regulation issues",
-        "Operating system with integrity verification failures",
-        "Memory module with address mapping inconsistencies"
+        "Spotlight is reindexing the file system after the upgrade.",
+        "The file system is corrupted and requires First Aid via Disk Utility.",
+        "The macOS upgrade failed to complete, leaving temporary files.",
+        "A third-party kernel extension is causing resource contention."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Processing unit with thermal regulation issues (overheating CPU or GPU) is most likely causing the random restarts, especially given the correlation with resource-intensive applications. As components like CPUs and GPUs work harder, they generate more heat. If cooling is inadequate or failing, the system may reach critical temperatures and trigger an automatic shutdown to prevent hardware damage. These shutdowns appear as unexpected restarts to the user. Storage issues typically cause system hangs or data corruption rather than restarts, OS integrity problems usually cause blue screens or boot failures rather than clean restarts, and memory issues more commonly cause freezes, crashes, or blue screens rather than immediate restarts.",
-      "examTip": "Check system temperatures; overheating is a common cause of sudden reboots during intensive tasks."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight reindexing after macOS upgrades causes high disk activity and temporary slow performance. File system corruption would show mounting errors. Failed upgrades typically result in missing features or boot loops. Third-party kernel extensions cause instability rather than persistent disk activity.",
+      "examTip": "Allow Spotlight to complete reindexing post-upgrade; performance typically normalizes afterward."
     },
     {
       "id": 44,
-      "question": "Which of the following cloud service models offers the LEAST level of control to the user over the underlying infrastructure and operating systems?",
+      "question": "A Linux administrator needs to ensure that a critical service restarts automatically on failure but stops trying after three failures within five minutes. What is the correct systemd configuration?",
       "options": [
-        "Virtual infrastructure provisioning",
-        "Development environment provisioning",
-        "Application functionality provisioning",
-        "Container environment provisioning"
+        "Restart=on-failure\nStartLimitIntervalSec=300\nStartLimitBurst=3",
+        "Restart=always\nRestartSec=60\nTimeoutStartSec=300",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=10",
+        "Restart=on-failure\nTimeoutStopSec=300\nRestartSec=5"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Application functionality provisioning (Software as a Service - SaaS) offers the least control over infrastructure and operating systems. In the SaaS model, users simply access and use applications delivered over the internet, with virtually all aspects of the underlying infrastructure, platform, and application managed by the provider. Users typically can only configure application-specific settings. Infrastructure as a Service (IaaS) provides the most control, allowing management of operating systems and applications while the provider manages physical hardware. Platform as a Service (PaaS) allows application deployment and configuration but not OS management. Container as a Service (CaaS) falls between IaaS and PaaS, offering more control than PaaS but less than IaaS.",
-      "examTip": "SaaS is a hands-off model for the user—everything is managed by the provider."
+      "correctAnswerIndex": 0,
+      "explanation": "This combination ensures the service restarts on failure but stops after three attempts in five minutes. 'Restart=always' doesn’t consider failure types. 'on-abort' applies only to abnormal exits. 'TimeoutStopSec' and 'RestartSec' manage timing but not restart limits.",
+      "examTip": "Set 'StartLimitBurst' and 'StartLimitIntervalSec' together with 'Restart=on-failure' for controlled automatic restarts."
     },
     {
       "id": 45,
-      "question": "A laser printer is producing prints with a repeating 'smudge' or 'blur' that is offset and to the side of the main image, almost like a shadow but consistently displaced. Which printer component is MOST likely causing this offset smudge defect?",
+      "question": "A Windows 10 machine shows a 'BOOTMGR is missing' error after connecting an external USB drive. What is the MOST likely cause?",
       "options": [
-        "Toner distribution mechanism with uneven dispensing",
-        "Heat application component with irregular pressure",
-        "Image formation system with registration anomaly",
-        "Image transfer mechanism with alignment deviation"
+        "The BIOS boot order prioritizes the external USB drive.",
+        "The master boot record on the internal drive is corrupted.",
+        "The external drive contains an incomplete boot sector.",
+        "The boot partition on the internal drive has been deleted."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Image transfer mechanism with alignment deviation (misalignment or slippage in the Transfer Belt or Roller) is most likely causing the offset smudge. During the transfer process, toner is moved from the drum to the paper. If the transfer component is misaligned or slipping, it can cause some toner to be transferred slightly offset from the intended position, creating a shadow-like effect consistent across prints. Toner distribution issues would typically cause uneven print density rather than consistent offset patterns, fuser problems would cause smearing or poor adhesion rather than offset images, and drum registration issues would more commonly affect the entire image alignment rather than creating a shadow effect.",
-      "examTip": "Offset smudging often points to transfer mechanism issues. Check the alignment and tension of the transfer belt/roller."
+      "correctAnswerIndex": 0,
+      "explanation": "External drives can change the BIOS boot priority. If the external drive lacks a bootable OS, a 'BOOTMGR is missing' error appears. MBR corruption or partition deletion would cause persistent boot issues regardless of external drives. Incomplete boot sectors on external drives wouldn’t affect internal boot orders unless prioritized by BIOS.",
+      "examTip": "Check and correct BIOS boot priorities after adding new storage devices to avoid boot errors."
     },
     {
       "id": 46,
-      "question": "Which of the following security principles is BEST represented by implementing 'regular security audits' and 'vulnerability assessments' to identify and address security weaknesses proactively?",
+      "question": "A Linux administrator is troubleshooting SSH session drops after several minutes of inactivity. Network connectivity is stable. What configuration should be adjusted?",
       "options": [
-        "Preventative control implementation",
-        "Detective control deployment",
-        "Corrective measure application",
-        "Security evaluation methodology"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive timeouts in kernel settings.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Implement 'PermitRootLogin' to maintain administrative sessions."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Security evaluation methodology (Security Assessment and Testing) is best represented by implementing regular security audits and vulnerability assessments. This principle focuses on proactively identifying and addressing security weaknesses before they can be exploited, through systematic evaluation of security controls, configurations, and potential vulnerabilities. While preventative controls aim to stop incidents before they occur and detective controls identify incidents as they happen, the security assessment principle specifically addresses the systematic and regular testing process itself. Corrective measures are applied after issues are identified rather than representing the assessment process.",
-      "examTip": "Regular security assessments help you stay ahead of potential threats by finding vulnerabilities before attackers do."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' prevent SSH timeouts by sending periodic keepalives. Kernel TCP settings affect all connections, which may not be desirable. Mosh can maintain sessions but requires additional software. 'PermitRootLogin' is a security risk and unrelated to session persistence.",
+      "examTip": "Modify SSH keepalive settings to maintain idle connections without relying on broader network-level changes."
     },
     {
       "id": 47,
-      "question": "A technician needs to implement 'port security' on a managed switch to automatically learn and allow only the first device that connects to each port, and immediately disable the port if any other device attempts to connect. Which port security feature is MOST appropriate?",
+      "question": "A user reports that after updating their Android OS, the device experiences rapid battery drain. What is the MOST likely reason?",
       "options": [
-        "Manual address filtering with explicit port configuration",
-        "Adaptive address acquisition with violation response",
-        "Authentication-based access with device verification fallback",
-        "Connection monitoring with source validation"
+        "Background app optimization settings were reset during the update.",
+        "The battery has reached end-of-life and cannot hold charge efficiently.",
+        "A rogue application is bypassing system battery optimization policies.",
+        "The update included enhanced encryption increasing CPU cycles."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Adaptive address acquisition with violation response (Dynamic MAC Address Learning with limited MAC address count and violation shutdown mode) is most appropriate for this requirement. This feature allows the switch to automatically learn the MAC address of the first device connecting to each port, limit the number of allowed addresses to one, and take an action (port shutdown) if a different MAC address is detected. This approach requires minimal configuration while meeting the security requirement. Static filtering would require manual entry of allowed MAC addresses, authentication-based approaches typically require additional infrastructure like RADIUS servers, and connection monitoring generally focuses on traffic patterns rather than the specific device access control needed here.",
-      "examTip": "This dynamic mode is an efficient way to enforce a single-device rule per port while alerting on violations."
+      "correctAnswerIndex": 0,
+      "explanation": "Android updates can reset app optimization settings, causing apps to run persistently. Battery end-of-life would result in poor charging behavior, not just drain. Rogue apps would need to be confirmed with resource usage tools. Encryption upgrades would have minimal impact on idle battery performance.",
+      "examTip": "Review and reapply battery optimization settings after OS updates to restore normal power consumption."
     },
     {
       "id": 48,
-      "question": "Which of the following memory technologies offers the HIGHEST bandwidth and is often used in high-performance computing (HPC) and server environments, utilizing stacked memory dies and advanced packaging techniques?",
+      "question": "A Windows 11 device connected to a VPN shows successful connection but cannot access internal resources by hostname. What should the technician check FIRST?",
       "options": [
-        "Double data rate synchronized dynamic memory",
-        "Graphics accelerated double data rate memory",
-        "Static rapid access memory architecture",
-        "Stacked silicon vertically integrated memory"
+        "DNS settings to ensure internal hostnames are routed through the VPN.",
+        "Split-tunneling configurations that may route traffic incorrectly.",
+        "Active Directory permissions for resource access authorization.",
+        "Firewall rules that may block internal DNS requests."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Stacked silicon vertically integrated memory (HBM - High Bandwidth Memory) offers the highest bandwidth among the listed technologies. HBM uses 3D stacking of multiple memory dies connected by through-silicon vias (TSVs) and placed on the same substrate as the processor or GPU, creating extremely wide memory buses with short interconnects. This design enables dramatically higher bandwidth compared to traditional memory architectures. DDR5 offers high bandwidth for general computing but less than HBM, GDDR6 is optimized for graphics applications but with lower bandwidth than HBM, and SRAM is used primarily for cache memory rather than main memory in HPC environments.",
-      "examTip": "HBM uses advanced stacking and packaging to achieve very high bandwidth—ideal for demanding compute tasks."
+      "correctAnswerIndex": 0,
+      "explanation": "DNS misconfigurations are a common reason internal hostnames fail while IP-based access remains functional. Split-tunneling issues affect all traffic types, not just DNS resolution. Active Directory permissions govern resource access but wouldn’t prevent name resolution. Firewall rules would impact both hostname and IP resolution.",
+      "examTip": "Verify DNS routing settings when VPN connections allow IP traffic but fail for hostname resolutions."
     },
     {
       "id": 49,
-      "question": "A user reports that their laptop display is showing 'color distortion' and 'artifacts', with random pixels displaying incorrect colors or patterns, and the artifacts seem to worsen when the laptop is warm. Which component is the MOST likely cause?",
+      "question": "A macOS user reports that after connecting to public Wi-Fi, all network traffic is being redirected to a suspicious login page. What is the MOST likely cause?",
       "options": [
-        "Display illumination system",
-        "LCD panel structure",
-        "Graphics processing component",
-        "Display driver implementation"
+        "An 'Evil Twin' access point is mimicking a legitimate network.",
+        "The ISP's captive portal requires authentication before internet access.",
+        "The user’s DNS settings have been altered to redirect traffic.",
+        "The firewall has been disabled, allowing unsolicited traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Graphics processing component (overheating and failing GPU) is most likely causing the color distortion and artifacts, especially given that the issues worsen when the laptop is warm. GPUs contain millions of transistors that can develop faults when they overheat, leading to incorrect pixel rendering, artifacts, and color distortions. The heat correlation strongly suggests a thermal-related GPU issue. Backlight problems would typically cause brightness or uniformity issues rather than artifacts, physical LCD panel damage would usually create consistent patterns rather than random artifacts that vary with temperature, and driver issues would not typically show a strong correlation with system temperature.",
-      "examTip": "When display artifacts correlate with heat, the GPU is a likely suspect. Monitor temperatures and consider reseating or replacing the GPU."
+      "correctAnswerIndex": 0,
+      "explanation": "An 'Evil Twin' access point is designed to capture user credentials by mimicking legitimate networks. ISPs typically display branded captive portals. DNS changes wouldn’t redirect all traffic, especially HTTPS. Firewalls affect inbound traffic, not initial redirects.",
+      "examTip": "Verify SSID authenticity and avoid unsecured networks to mitigate risks from 'Evil Twin' attacks."
     },
     {
       "id": 50,
-      "question": "Which of the following network security concepts BEST represents a security model where no user or device is implicitly trusted, and every access request is strictly verified, regardless of whether it originates from inside or outside the network perimeter?",
+      "question": "A Windows 10 system fails to apply Group Policy settings after a recent domain migration. What is the MOST likely cause?",
       "options": [
-        "Boundary-based protection model",
-        "Layered defense architecture",
-        "Security through obscurity implementation",
-        "Universal verification framework"
+        "The client’s secure channel with the new domain controller is broken.",
+        "The SYSVOL folder on the domain controller is inaccessible.",
+        "DNS entries for the domain controller are incorrect.",
+        "The user lacks permissions to apply specific GPO settings."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Universal verification framework (Zero Trust) best represents the described security model. Zero Trust operates on the principle that no user, device, or network traffic should be inherently trusted, regardless of its origin. Every access request must be strictly authenticated, authorized, and encrypted before access is granted, eliminating the concept of a trusted internal network. This approach contrasts with traditional security models that establish a secure perimeter and trust internal traffic. Boundary-based protection focuses on perimeter security, layered defense (Defense in Depth) uses multiple security controls at different layers but may still incorporate trust zones, and security through obscurity relies on hiding information rather than comprehensive verification.",
-      "examTip": "Zero Trust means 'never trust, always verify.' It eliminates assumptions based on network location."
+      "correctAnswerIndex": 0,
+      "explanation": "A broken secure channel prevents Group Policy from applying because authentication to the domain controller fails. SYSVOL inaccessibility impacts all GPO distribution, not just selective failure. DNS issues would prevent domain controller detection entirely. Permissions issues would cause partial GPO failures, not a complete absence of policy applications.",
+      "examTip": "Use the 'Test-ComputerSecureChannel' PowerShell cmdlet to validate secure channel status after domain migrations."
     },
     {
       "id": 51,
-      "question": "Performance-Based Question: A company user complains that their email client frequently times out when sending or receiving large attachments, and multiple users in the same office have begun experiencing similar symptoms. Which sequence of steps should be taken FIRST to pinpoint and resolve the underlying cause?",
+      "question": "A Linux server is configured with fail2ban but is still experiencing brute-force SSH attacks. What configuration adjustment will MOST effectively reduce attack success?",
       "options": [
-        "Examine client-side security configuration, disable protection mechanisms, update mail application, review network equipment logs, replace physical connectivity components",
-        "Confirm messaging server status, examine network equipment logs, perform connectivity performance tests, restart client application, test alternative connection method",
-        "Inspect physical network infrastructure, check system memory configuration, perform system maintenance, modify name resolution configuration, disable security measures",
-        "Increase server storage allocation, modify transmission port configuration, upgrade network interface hardware, reset system firmware, disable update mechanisms"
+        "Lower the 'maxretry' value in the fail2ban SSH filter settings.",
+        "Increase the 'bantime' duration in the fail2ban jail configuration.",
+        "Change the default SSH port from 22 to a non-standard port.",
+        "Disable password authentication in favor of SSH key-based authentication."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "The most logical troubleshooting sequence begins with confirming the messaging server status to rule out server-side issues affecting multiple users. Next, examining network equipment logs can identify potential bottlenecks, congestion, or hardware errors. Performing connectivity performance tests helps quantify the issue and localize it to specific network segments. Restarting the email client eliminates temporary application issues, and testing an alternative connection (like switching from wireless to wired) can help determine if the problem is related to a specific connection type. This methodical approach follows the troubleshooting principle of starting with broader system checks before focusing on individual client fixes.",
-      "examTip": "Always begin by verifying the health of the email server and the network infrastructure. Collecting logs from routers or switches can reveal real-time errors or high utilization causing timeouts."
+      "correctAnswerIndex": 3,
+      "explanation": "Disabling password authentication entirely eliminates brute-force attack vectors regardless of fail2ban configurations. Lowering 'maxretry' or increasing 'bantime' delays attackers but doesn’t prevent attempts. Changing the default SSH port provides security through obscurity, which isn’t a robust solution.",
+      "examTip": "Use SSH key-based authentication and disable passwords to render brute-force attempts ineffective."
     },
     {
       "id": 52,
-      "question": "Which of the following is a key operational challenge associated with 'Hybrid Cloud' deployment models in terms of network management and integration?",
+      "question": "A Windows 11 user reports frequent 'Credential Manager' errors after changing Active Directory passwords. What is the FIRST step to resolve this?",
       "options": [
-        "Simplified management through infrastructure consolidation",
-        "Seamless integration with minimal configuration requirements",
-        "Complex management across heterogeneous environments",
-        "Reduced latency through proximity optimization"
+        "Clear cached credentials in Windows Credential Manager.",
+        "Rejoin the computer to the domain to reset secure channels.",
+        "Run 'gpupdate /force' to refresh domain policies.",
+        "Delete and recreate the user profile locally."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Complex management across heterogeneous environments best describes the key challenge of hybrid cloud networking. Hybrid clouds require integrating and managing connectivity between disparate environments with different architectures, security models, management interfaces, and operational characteristics. This complexity includes establishing secure connectivity, ensuring consistent security policies, managing data transfer between environments, and maintaining visibility across the hybrid landscape. Hybrid clouds typically increase rather than simplify management requirements, rarely offer seamless integration without significant configuration work, and may actually increase latency due to the physical distance between on-premises and cloud resources.",
-      "examTip": "Hybrid cloud networking is challenging. Expect to manage varied architectures and ensure secure, seamless data flow."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager retains passwords for network resources. After AD password changes, outdated credentials cause authentication errors. Rejoining domains or recreating profiles is excessive. 'gpupdate' affects policy settings, not cached credentials.",
+      "examTip": "Always clear cached credentials after AD password changes to prevent authentication errors."
     },
     {
       "id": 53,
-      "question": "A laser printer is producing prints with a consistent 'gray background' or 'shadowing' in non-image areas, and the background density seems to increase towards the edges of the page. Which printer component is MOST likely causing this edge-heavy background shading?",
+      "question": "A Linux administrator discovers high CPU usage from the 'journald' process. Log files are consuming most of the available disk space. How can this be mitigated?",
       "options": [
-        "Toner density parameter configuration",
-        "Thermal application system calibration",
-        "Light-sensitive component electrical characteristics",
-        "Toner transfer mechanism contamination"
+        "Set 'SystemMaxUse' in journald.conf to limit disk usage.",
+        "Manually clear logs in '/var/log/journal/'.",
+        "Switch to rsyslog for all system logging needs.",
+        "Disable persistent logging in journald."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Light-sensitive component electrical characteristics (imaging drum with edge degradation or charge leakage) is most likely causing the edge-heavy gray background. The photosensitive drum must maintain proper electrical charge to correctly attract toner only to the intended image areas. When the drum's edges develop electrical problems like charge leakage or degradation of the photosensitive coating, they cannot properly repel toner in non-image areas, resulting in increased background toner adhesion especially at the edges. Toner density settings would typically affect the entire page uniformly, fuser issues would cause toner adhesion problems rather than unwanted toner application, and transfer component contamination would more commonly cause spots or streaks rather than a gradual increase in background shading toward the edges.",
-      "examTip": "Examine the imaging drum's edges for signs of wear or charge issues if you notice edge-heavy background shading."
+      "correctAnswerIndex": 0,
+      "explanation": "Setting 'SystemMaxUse' in 'journald.conf' enforces automatic disk usage limits, preventing logs from consuming excessive space. Manual deletion is temporary. rsyslog can supplement but doesn’t resolve journald issues. Disabling persistent logging sacrifices valuable audit trails.",
+      "examTip": "Configure disk usage limits for journald to prevent uncontrolled log growth on Linux systems."
     },
     {
       "id": 54,
-      "question": "Which of the following security attack types is BEST mitigated by implementing 'HTTP Strict Transport Security' (HSTS) headers in web applications?",
+      "question": "A Windows 10 system shows 'No Boot Device Found' after adding a secondary SSD. BIOS detects both drives. What should the technician check FIRST?",
       "options": [
-        "Database query manipulation",
-        "Cross-site request impersonation",
-        "Authentication session interception",
-        "Protocol security level reduction"
+        "BIOS boot order to ensure the primary OS drive is prioritized.",
+        "UEFI Secure Boot settings for compatibility with the boot drive.",
+        "SATA mode settings (AHCI vs. RAID) affecting drive recognition.",
+        "Corruption of the EFI system partition on the primary drive."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Protocol security level reduction (Protocol Downgrade Attacks like SSL Stripping) is best mitigated by HSTS headers. HSTS forces browsers to only connect to the website over HTTPS, even if the user tries to use HTTP, and prevents users from bypassing certificate warnings. This protects against attacks where an attacker attempts to downgrade a connection from HTTPS to HTTP to intercept traffic. HSTS doesn't directly prevent SQL injection (database query manipulation), which requires input validation and parameterized queries. It doesn't specifically target CSRF (cross-site request impersonation), which is addressed by anti-CSRF tokens. While HSTS can help protect against some session hijacking scenarios by ensuring encrypted connections, this isn't its primary purpose.",
-      "examTip": "HSTS is key to ensuring that browsers always use secure connections, preventing downgrade attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS may default to booting from the new drive if prioritized incorrectly, causing 'No Boot Device Found' errors. Secure Boot or SATA mode issues produce more specific errors. EFI partition corruption would prevent booting but wouldn’t impact drive detection in BIOS.",
+      "examTip": "After adding new storage, always verify BIOS boot priorities to prevent boot path disruptions."
     },
     {
       "id": 55,
-      "question": "A technician is building a high-performance workstation for 3D rendering and simulations, requiring extremely fast memory access and bandwidth, and is considering using high-bandwidth memory. Which memory type is MOST appropriate?",
+      "question": "A user complains that their Windows 11 device is unable to connect to any HTTPS websites, but HTTP works fine. The system date and time are correct. What is the MOST likely cause?",
       "options": [
-        "Fifth-generation synchronous dynamic memory",
-        "Graphics-optimized sixth-generation memory",
-        "Error-correcting registered memory modules",
-        "Three-dimensional vertically stacked memory"
+        "Corrupted or outdated root certificates on the local machine.",
+        "Browser TLS settings misconfigured after recent updates.",
+        "Network firewall blocking port 443 specifically.",
+        "DNS resolution failures causing secure connections to time out."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Three-dimensional vertically stacked memory (HBM3 - High Bandwidth Memory) is most appropriate for extremely demanding 3D rendering and simulation workloads. HBM3 uses 3D stacking of memory dies with thousands of interconnections, providing far greater bandwidth than traditional memory architectures. This makes it ideal for applications requiring massive data throughput, like complex 3D rendering and scientific simulations. DDR5 SDRAM offers high performance for general computing but can't match HBM3's bandwidth. GDDR6 is optimized for graphics but still offers lower bandwidth than HBM3. ECC Registered DDR5 focuses on error correction and reliability rather than maximum bandwidth, making it more suitable for servers requiring stability over peak performance.",
-      "examTip": "For cutting-edge performance in 3D rendering, HBM3 is the top choice despite its cost and complexity."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates are essential for validating HTTPS connections. If they’re corrupted or outdated, secure websites fail to load. TLS settings misconfigurations would produce explicit browser warnings. Firewall port blocking would affect all secure traffic regardless of certificate status. DNS failures would affect both HTTP and HTTPS.",
+      "examTip": "Check and update root certificates if HTTPS traffic fails despite functional HTTP connectivity and correct system time."
     },
     {
       "id": 56,
-      "question": "A technician is troubleshooting a workstation that intermittently fails to boot, and the BIOS/UEFI settings are frequently reset to default values. Which of the following is the MOST likely cause?",
+      "question": "A Linux administrator wants to enforce a restart of a service after failure but avoid infinite restarts. Which systemd directive achieves this?",
       "options": [
-        "Memory timing synchronization inconsistency",
-        "Processor temperature regulation failure",
-        "Power delivery capacity insufficiency",
-        "Storage controller compatibility limitation"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=on-abort\nRestartSec=5\nStartLimitBurst=5",
+        "Restart=always\nTimeoutStopSec=120\nRestartSec=15"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Power delivery capacity insufficiency (PSU unable to provide sufficient power) is most likely causing the symptoms. An inadequate or failing power supply may be unable to maintain stable voltage during periods of increased demand, such as during system startup or when new components increase the load. This instability can cause various components to malfunction, including the CMOS memory that stores BIOS settings, resulting in settings being reset to defaults and intermittent boot failures. Memory timing issues would typically cause stability problems during operation rather than BIOS resets, CPU thermal problems would more commonly cause shutdowns during high load rather than boot issues, and storage controller issues would affect OS loading rather than BIOS configuration retention.",
-      "examTip": "After hardware upgrades, ensure the PSU is adequately rated for the new components to avoid instability."
+      "correctAnswerIndex": 0,
+      "explanation": "This combination ensures services restart on failure but stop after three attempts within ten minutes, preventing infinite loops. 'Restart=always' forces restarts regardless of exit reasons. 'on-abort' applies only to abnormal terminations. Timeout directives regulate timing, not restart limitations.",
+      "examTip": "Combine 'Restart=on-failure' with 'StartLimit' directives for controlled restart behavior in systemd-managed services."
     },
     {
       "id": 57,
-      "question": "An organization is implementing a 'Zero Trust' security model. Which of the following security measures is MOST consistent with Zero Trust principles?",
+      "question": "A user’s macOS device fails to connect to Wi-Fi networks after an OS update. Other devices connect without issues. What is the MOST likely cause?",
       "options": [
-        "Perimeter-focused security with internal trust zones",
-        "Authentication exception handling for internal resources",
-        "Continuous identity verification for all resource requests",
-        "Minimal security controls for user experience optimization"
+        "Corrupted network preference files requiring reset.",
+        "Outdated wireless adapter firmware incompatible with the new OS.",
+        "Router incompatibility with updated macOS security protocols.",
+        "Keychain corruption affecting Wi-Fi password storage."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Continuous identity verification for all resource requests (implementing multi-factor authentication for all users and continuously verifying access requests) is most consistent with Zero Trust principles. Zero Trust requires strict authentication and authorization for every access attempt, regardless of the user's location or network origin. Using MFA for all users helps ensure proper identity verification, and continuously validating access requests maintains security throughout a session, not just at initial login. Perimeter-focused security with trusted zones directly contradicts Zero Trust principles. Authentication exceptions for internal resources would violate the 'never trust, always verify' principle. Minimizing security controls for user experience would compromise the security focus of Zero Trust.",
-      "examTip": "Zero Trust means no implicit trust. Always enforce MFA and continuous verification, regardless of where the user is connecting from."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted network preference files often prevent Wi-Fi reconnections post-update. Firmware incompatibility would prevent the adapter from appearing entirely. Router incompatibility would affect all connected devices. Keychain issues would impact password authentication, not network detection.",
+      "examTip": "Reset network preferences on macOS if Wi-Fi issues persist after system updates."
     },
     {
       "id": 58,
-      "question": "Which of the following Wi-Fi security protocols provides the STRONGEST level of encryption and authentication, utilizing the Dragonfly handshake and protection against dictionary attacks, and is considered the most secure option currently available?",
+      "question": "A Windows user reports that mapped network drives fail to reconnect after a password change. What is the MOST likely cause?",
       "options": [
-        "Wired privacy protocol with RC4 encryption",
-        "Protected access protocol with TKIP algorithm",
-        "Protected access 2 protocol with pre-shared key",
-        "Protected access 3 protocol with enterprise authentication"
+        "Cached credentials in Credential Manager no longer match the new password.",
+        "Group Policy mappings are not refreshing after credential updates.",
+        "DNS entries for the file server are outdated or incorrect.",
+        "SMB protocol mismatches between the client and file server."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Protected access 3 protocol with enterprise authentication (WPA3-Enterprise with 802.1X authentication and SAE) provides the strongest Wi-Fi security currently available. WPA3 implements the Simultaneous Authentication of Equals (SAE) handshake (also known as Dragonfly), which prevents offline dictionary attacks and provides forward secrecy. Enterprise mode adds 802.1X authentication with individual user credentials and typically uses a RADIUS server for authentication, adding another layer of security beyond pre-shared keys. WEP is fundamentally broken, WPA-TKIP has known vulnerabilities, and WPA2-PSK is vulnerable to offline dictionary attacks if a weak passphrase is used, making WPA3-Enterprise superior to all these options.",
-      "examTip": "WPA3-Enterprise is the current gold standard for enterprise Wi-Fi security, offering robust protection against modern attacks."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager caches passwords for network resources. After password changes, outdated credentials prevent reconnection. GPO issues would affect all users equally. DNS mismatches would prevent all access, not just mapped drives. SMB protocol issues typically cause connection rejections, not authentication failures.",
+      "examTip": "Clear and update Credential Manager entries after password changes to restore network drive mappings."
     },
     {
       "id": 59,
-      "question": "A technician is using a power supply tester and notices that the -12V rail is consistently reading -11.5V, while other voltage rails are within acceptable tolerances. According to ATX specifications, which of the following is the MOST accurate assessment of the PSU's condition?",
+      "question": "A Linux server’s SSH connections drop after short idle periods. The administrator confirms stable network connectivity. What configuration change prevents this?",
       "options": [
-        "Normal operation within specified voltage range",
-        "Minor deviation without operational impact",
-        "Marginal performance with efficiency reduction",
-        "Out-of-specification operation with potential reliability issues"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive settings globally in sysctl.conf.",
+        "Switch from SSH to Mosh for persistent remote sessions.",
+        "Use 'screen' or 'tmux' to maintain session persistence."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Out-of-specification operation with potential reliability issues is the most accurate assessment of the PSU's condition. ATX specifications typically require power supply voltage rails to remain within ±5% of their rated values, and a reading of -11.5V on the -12V rail represents approximately a 4.2% deviation (outside the ±5% tolerance). While this deviation may not cause immediate system failure, it indicates the PSU is operating outside specifications and could be deteriorating, potentially leading to system instability or component damage over time, especially under load. The other options incorrectly suggest the reading is acceptable or insignificant, which is not the case when interpreting power supply specifications.",
-      "examTip": "Even small deviations outside the ±5% range can indicate PSU issues. Monitor such voltage discrepancies closely."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic keepalive packets, preventing session drops. Kernel TCP keepalive adjustments affect all network traffic. Mosh offers persistent sessions but requires additional software. 'screen' and 'tmux' maintain session states but don’t prevent connection drops.",
+      "examTip": "Configure SSH server keepalive settings for stable, persistent connections during idle periods."
     },
     {
       "id": 60,
-      "question": "Which of the following BEST describes the 'On-demand Self-service' characteristic of cloud computing?",
+      "question": "A Windows 10 system fails to boot, displaying 'NTLDR is missing' after a firmware update. What is the FIRST troubleshooting step?",
       "options": [
-        "Global access through standardized protocols",
-        "Dynamic resource scaling based on demand",
-        "Automated provisioning without provider interaction",
-        "Usage-based billing with detailed metrics"
+        "Check and correct BIOS boot order settings.",
+        "Reinstall the Windows bootloader using recovery media.",
+        "Restore default BIOS settings to correct boot mode changes.",
+        "Repair the master boot record using 'bootrec /fixmbr'."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Automated provisioning without provider interaction best describes the 'On-demand Self-service' characteristic of cloud computing. This capability allows users to provision computing resources (such as server instances, storage, or network resources) automatically as needed without requiring human interaction from the service provider. This self-service aspect enables organizations to quickly scale resources based on their requirements through automation and self-service portals. Global access refers to broad network access, dynamic resource scaling describes rapid elasticity, and usage-based billing refers to measured service - all different essential characteristics of cloud computing.",
-      "examTip": "This feature enables instant resource provisioning, letting you scale up or down without waiting for manual intervention."
+      "correctAnswerIndex": 0,
+      "explanation": "Firmware updates can reset boot priorities, causing 'NTLDR is missing' errors when the BIOS attempts to boot from non-bootable devices. Reinstalling bootloaders or repairing MBRs are subsequent actions if boot order adjustments fail. Restoring default BIOS settings may not address specific boot order issues.",
+      "examTip": "Always verify BIOS boot order after firmware updates to ensure the correct drive is prioritized for booting."
     },
     {
       "id": 61,
-      "question": "A technician is troubleshooting a thermal printer that is producing faded receipts. After replacing the thermal paper roll, the issue persists. Which component is MOST likely causing the faded thermal printing?",
+      "question": "A Linux administrator needs to limit the disk space used by system logs without disabling persistent logging. What is the MOST effective method?",
       "options": [
-        "Thermal element degradation",
-        "Logic board signal processing",
-        "Print driver configuration",
-        "Media pressure mechanism"
+        "Set 'SystemMaxUse' in journald.conf to cap log size.",
+        "Manually delete logs from /var/log directory weekly.",
+        "Disable persistent logging in journald to limit disk usage.",
+        "Configure rsyslog to overwrite logs after a set period."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Thermal element degradation (depleted printhead heating element) is most likely causing the faded thermal printing. Thermal printers work by applying heat to special thermal paper, and over time, the heating elements in the printhead wear out, resulting in insufficient heat to properly activate the thermal paper and create dark prints. Since changing the paper roll didn't solve the issue, the problem is with the printer's ability to generate sufficient heat. Logic board issues would typically cause erratic problems rather than consistent fading, driver settings would affect specific aspects of print jobs rather than overall print density, and pressure roller issues would cause inconsistent contact rather than uniform fading.",
-      "examTip": "Thermal printers rely on a strong heating element. Over time, wear can lead to inadequate heat, causing faded output."
+      "explanation": "Setting 'SystemMaxUse' in 'journald.conf' limits the disk space used by logs automatically, providing a scalable and persistent solution. Manual deletion is prone to human error. Disabling persistent logging sacrifices essential logs. rsyslog overwriting can complement but doesn't control journald usage directly.",
+      "examTip": "Set 'SystemMaxUse' in journald for automatic disk usage management without losing critical logs."
     },
     {
       "id": 62,
-      "question": "Which of the following TCP ports is used by Microsoft Active Directory Global Catalog LDAP for secure and encrypted queries over SSL/TLS to retrieve objects from the entire forest?",
+      "question": "A Windows 11 machine fails to access HTTPS websites, while HTTP works fine. The system clock is accurate, and the firewall is disabled. What is the MOST likely cause?",
       "options": [
-        "Port 389",
-        "Port 636",
-        "Port 3268",
-        "Port 3269"
+        "Corrupted or outdated root certificates on the system.",
+        "Browser cache corruption preventing secure site loading.",
+        "Malware intercepting HTTPS traffic for man-in-the-middle attacks.",
+        "Network router firmware blocking TLS traffic."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Port 3269 is used for secure Global Catalog LDAP queries over SSL/TLS. This port combines the functionality of the Global Catalog (which allows queries across an entire Active Directory forest) with SSL/TLS encryption for secure communication. Port 389 is used for standard unencrypted LDAP queries within a domain, port 636 is used for secure LDAP (LDAPS) within a domain, and port 3268 is for standard (unencrypted) Global Catalog queries. When security of directory queries across the forest is required, port 3269 is the appropriate choice.",
-      "examTip": "For secure, encrypted LDAP queries to the Global Catalog, use port 3269."
+      "correctAnswerIndex": 0,
+      "explanation": "HTTPS relies on valid root certificates for encryption. Corrupted or outdated certificates prevent secure site access. Cache corruption affects browsing generally but not specifically HTTPS. Malware would exhibit additional suspicious activity. Router issues typically impact all network traffic, not just secure connections.",
+      "examTip": "Check and update root certificates when HTTPS traffic fails while HTTP remains unaffected."
     },
     {
       "id": 63,
-      "question": "A technician suspects a workstation is infected with a rootkit. Which method is MOST reliable for detecting and removing a kernel-level rootkit?",
+      "question": "A macOS user notices significantly slower performance after upgrading the OS. Disk activity is unusually high. What is the MOST likely cause?",
       "options": [
-        "Host-based security software scan",
-        "External media-based security scan",
-        "System process activity monitoring",
-        "System configuration verification"
+        "Spotlight reindexing files after the upgrade.",
+        "FileVault encryption process running in the background.",
+        "Corrupted system caches slowing down performance.",
+        "Outdated kernel extensions causing kernel task spikes."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "External media-based security scan (using a bootable anti-malware scanner from external media) is most reliable for detecting kernel-level rootkits. Advanced rootkits operate at the kernel level and can hide themselves from security software running within the infected operating system by intercepting and modifying system calls. By booting from clean external media, the scanner can examine the system without the rootkit being active, significantly improving detection capabilities. Host-based scanning from within the infected OS may miss rootkits that actively hide themselves, process monitoring tools can be subverted by kernel-level rootkits, and system configuration checks may not reveal sophisticated rootkits that manipulate the system's view of itself.",
-      "examTip": "For rootkit detection, scanning from a bootable, clean environment is essential."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight indexing causes high disk activity after an OS upgrade as it rebuilds its database. FileVault encryption affects CPU usage differently. Corrupted caches cause specific application issues. Kernel extension issues would trigger kernel panics, not just slow performance.",
+      "examTip": "Allow Spotlight indexing to complete after macOS upgrades; performance typically improves afterward."
     },
     {
       "id": 64,
-      "question": "An organization is implementing a 'Zero Trust Network Access' (ZTNA) solution to secure remote access for its employees. Which of the following BEST describes the core principle of ZTNA in contrast to traditional VPN-based remote access?",
+      "question": "A Linux administrator observes repeated 'Permission denied' errors while executing a shell script, despite having execute permissions. What is the MOST likely cause?",
       "options": [
-        "Internal network access after authentication verification",
-        "Specific application access with continuous verification",
-        "Network traffic encryption with minimal authentication",
-        "Hardware-based security with dedicated infrastructure"
+        "The shebang line references a non-existent interpreter.",
+        "The script lacks the correct SELinux context for execution.",
+        "Filesystem mount options prevent execution of scripts.",
+        "User lacks permissions for dependent system binaries."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Specific application access with continuous verification best describes the core principle of ZTNA in contrast to traditional VPNs. While traditional VPNs typically grant users broad access to network segments after authentication, ZTNA provides granular access only to specific applications based on user identity, device health, and other contextual factors. ZTNA continuously verifies each access request rather than providing extended access after initial authentication. Both ZTNA and VPNs encrypt traffic, but ZTNA's focus is on application-specific access rather than network-level access. ZTNA can be implemented through various approaches (software or hardware-based), making infrastructure implementation a less defining characteristic compared to its access model.",
-      "examTip": "ZTNA provides minimal, need-to-know access rather than blanket network access, aligning with Zero Trust principles."
+      "correctAnswerIndex": 0,
+      "explanation": "An incorrect shebang line prevents the system from finding the interpreter, resulting in 'Permission denied.' SELinux context issues would be logged separately. Mount options typically prevent execution entirely, not selectively. Missing binary permissions would yield 'command not found' or similar errors.",
+      "examTip": "Verify the shebang (#!) line to ensure it points to a valid interpreter when execution permissions are present but errors persist."
     },
     {
       "id": 65,
-      "question": "A technician is building a virtualized server environment and needs to choose a hypervisor type that offers maximum performance and direct hardware access for virtual machines. Which hypervisor type is MOST suitable?",
+      "question": "A Windows 10 device connected to a VPN reports successful connection but cannot access internal resources by hostname. IP-based access works fine. What should be checked FIRST?",
       "options": [
-        "Host-dependent virtualization platform",
-        "Client-side virtualization solution",
-        "Hardware-level virtualization architecture",
-        "Application-focused virtualization system"
+        "VPN DNS settings to ensure proper internal resolution.",
+        "Split-tunneling configurations that may bypass DNS requests.",
+        "Firewall rules potentially blocking internal DNS traffic.",
+        "Network adapter binding order affecting DNS prioritization."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Hardware-level virtualization architecture (Type 1 or Bare-Metal Hypervisor) is most suitable for maximum performance in server virtualization. Type 1 hypervisors run directly on server hardware without requiring an underlying operating system, providing direct access to hardware resources and eliminating the overhead and potential bottlenecks of a host OS layer. This results in better performance, lower latency, and more efficient resource utilization compared to other approaches. Host-dependent virtualization (Type 2) adds the overhead of a host OS, client-side virtualization typically refers to desktop virtualization solutions, and application-focused virtualization usually involves virtualizing specific applications rather than entire server environments.",
-      "examTip": "For performance-critical virtualization, a bare-metal (Type 1) hypervisor is the best option."
+      "correctAnswerIndex": 0,
+      "explanation": "If IP access works but hostname resolution fails, VPN DNS settings are likely misconfigured. Split-tunneling issues typically affect all internal access, not just DNS. Firewall rules blocking DNS would prevent all DNS lookups. Adapter binding issues would affect all network resolution processes, not just VPN-specific ones.",
+      "examTip": "Confirm VPN DNS settings to ensure internal hostname resolution functions correctly after establishing connections."
     },
     {
       "id": 66,
-      "question": "A technician is troubleshooting a mobile device with poor battery life in an area with weak cellular signal. Which action will likely have the MOST significant positive impact on battery drain in this scenario?",
+      "question": "A Windows 11 laptop boots into BitLocker recovery mode after a firmware update. TPM is enabled and functional. How can future recovery prompts be avoided?",
       "options": [
-        "Maximum screen brightness for optimal visibility",
-        "Persistent wireless peripheral connectivity",
-        "Wireless wide area network deactivation",
-        "Continuous wireless local network scanning"
+        "Suspend BitLocker protection before firmware updates.",
+        "Disable Secure Boot prior to updating firmware.",
+        "Clear TPM and restore it after completing updates.",
+        "Store recovery keys on a hardware security module (HSM)."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Wireless wide area network deactivation (disabling cellular data) will have the most significant positive impact on battery life in an area with weak cellular signal. When signal strength is poor, mobile devices increase transmission power and repeatedly attempt to maintain or reestablish connections, dramatically increasing power consumption. Disabling cellular data prevents this energy-intensive process. Maximizing screen brightness would significantly increase power consumption, keeping Bluetooth constantly active would drain additional power, and continuous Wi-Fi scanning would also consume extra power rather than conserving it.",
-      "examTip": "In weak cellular areas, switching off cellular data (and using Wi-Fi when possible) can save battery life significantly."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before firmware updates maintains TPM measurement consistency, preventing recovery prompts. Disabling Secure Boot affects firmware integrity checks, not TPM. Clearing TPM risks data loss if not handled properly. Storing keys externally doesn’t prevent recovery prompts caused by TPM measurement changes.",
+      "examTip": "Always suspend BitLocker before firmware updates to maintain TPM measurement consistency and avoid recovery key prompts."
     },
     {
       "id": 67,
-      "question": "Which of the following is a key security consideration when configuring a 'cloud-based' email service for an organization, in terms of data privacy and regulatory compliance?",
+      "question": "A Linux administrator discovers that SSH sessions terminate after a few minutes of inactivity. Network connectivity is stable. What configuration change prevents this?",
       "options": [
-        "Data center geographic location requirements",
-        "Message encryption protocol implementation",
-        "Provider data handling policy verification",
-        "Authentication simplification for usability"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Increase TCP keepalive intervals at the kernel level.",
+        "Switch to Mosh for maintaining persistent sessions.",
+        "Enable compression in SSH to reduce idle disconnections."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Provider data handling policy verification (understanding the cloud provider's data retention, deletion, and access policies) is a key security consideration for cloud-based email services. Organizations must ensure their provider's policies comply with relevant regulations like GDPR, HIPAA, or industry-specific requirements that may govern how email data is stored, accessed, protected, and deleted. While data center location can matter for some regulations, it's only one factor in compliance. Message encryption is important for security but doesn't address the full range of compliance concerns. Simplifying authentication would typically reduce security rather than enhance compliance.",
-      "examTip": "Compliance with regulations like GDPR and HIPAA requires careful scrutiny of your provider's data policies."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic keepalives from the server, maintaining SSH sessions during idle periods. Kernel TCP keepalive adjustments affect all connections. Mosh requires separate client and server configuration. SSH compression improves transfer speeds, not session persistence.",
+      "examTip": "Configure SSH keepalive settings in sshd_config to maintain persistent SSH sessions during periods of inactivity."
     },
     {
       "id": 68,
-      "question": "A technician is troubleshooting a desktop PC that intermittently fails to boot, and the BIOS/UEFI settings are frequently reset to default values. Which of the following is the MOST likely cause?",
+      "question": "A user’s Windows 10 machine fails to reconnect mapped network drives after changing their Active Directory password. What is the MOST likely cause?",
       "options": [
-        "Memory timing configuration instability",
-        "Storage controller firmware corruption",
-        "Configuration retention component failure",
-        "Processor thermal throttling mechanism"
+        "Outdated cached credentials stored in Windows Credential Manager.",
+        "Group Policy settings preventing automatic network drive reconnections.",
+        "DNS resolution issues preventing access to file servers by hostname.",
+        "SMB protocol version mismatches between the client and server."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Configuration retention component failure (failing CMOS battery) is most likely causing the BIOS/UEFI settings to reset and the intermittent boot failures. The CMOS battery maintains BIOS settings when the computer is powered off, and when it fails, settings revert to defaults upon each boot. This can cause boot problems if the default settings are incompatible with the system's hardware configuration. Memory timing issues would typically cause system instability during operation rather than settings resets, storage controller issues would more commonly affect OS loading rather than BIOS settings, and CPU thermal throttling would affect performance during operation rather than causing settings resets or boot failures.",
-      "examTip": "CMOS battery failure is a common cause of BIOS resets. Check and replace if necessary."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager caches old credentials. After a password change, reconnection fails unless the cache is updated. GPO issues typically affect all users. DNS issues would impact hostname access regardless of authentication. SMB mismatches would result in access denial errors, not authentication failures.",
+      "examTip": "Clear and update cached credentials in Credential Manager following password changes to restore network drive access."
     },
     {
       "id": 69,
-      "question": "Which of the following BEST describes the 'Hybrid Cloud' deployment model in terms of security and compliance management complexity?",
+      "question": "A Windows 10 laptop connected to a VPN can access internal resources by IP but not by hostname. What should be the technician's FIRST troubleshooting step?",
       "options": [
-        "Simplified security through standardized controls",
-        "Reduced compliance overhead through provider management",
-        "Increased complexity through environment heterogeneity",
-        "Inherent security through infrastructure diversity"
+        "Verify that the VPN client is correctly pushing DNS settings.",
+        "Flush the local DNS resolver cache on the laptop.",
+        "Manually set DNS server addresses provided by the network administrator.",
+        "Restart the DNS Client service on the local machine."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Increased complexity through environment heterogeneity best describes the security and compliance management challenges of hybrid cloud. Organizations must manage security and compliance across disparate environments with different security models, control capabilities, management interfaces, and potentially different regulatory implications. This creates complexity in ensuring consistent policy enforcement, maintaining compliance visibility, and coordinating security across the combined environment. Hybrid clouds do not inherently simplify security through standardization - they often require bridging different security approaches. They don't reduce compliance overhead, as organizations retain responsibility for compliance across all environments. Diversity of infrastructure doesn't inherently improve security without proper integration and management.",
-      "examTip": "Hybrid cloud integration requires careful planning to maintain consistent security and compliance across different platforms."
+      "correctAnswerIndex": 0,
+      "explanation": "VPN clients often push DNS settings required for internal name resolution. If these settings aren’t applied, hostname resolution fails despite IP access. Flushing DNS resolves cached issues, not misconfigurations. Manually setting DNS addresses is secondary. Restarting DNS services clears temporary issues, not configuration ones.",
+      "examTip": "Always verify VPN DNS configurations first when hostname resolution issues arise despite successful VPN connections."
     },
     {
       "id": 70,
-      "question": "A technician is troubleshooting a performance issue on a virtualized server host running multiple virtual machines. CPU utilization is consistently high, but individual VM resource monitoring shows normal CPU usage within each VM. Which of the following is the MOST likely bottleneck?",
+      "question": "A macOS user cannot unlock their encrypted external drive with FileVault. The correct password returns an authentication error. What is the MOST likely cause?",
       "options": [
-        "Virtual memory allocation insufficiency",
-        "Virtual processor allocation oversubscription",
-        "Virtual network interface congestion",
-        "Virtual storage throughput limitation"
+        "The encryption key file on the drive has been corrupted.",
+        "The macOS Keychain has lost synchronization with FileVault.",
+        "The drive's file system is damaged, preventing decryption.",
+        "FileVault is disabled on the system, preventing access to encrypted drives."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Virtual processor allocation oversubscription (over-provisioning of vCPUs across VMs exceeding physical CPU capacity) is most likely causing the high host CPU utilization despite normal per-VM metrics. When the total number of virtual CPUs assigned across all VMs exceeds the physical CPU cores available, the hypervisor must time-slice and schedule VM access to physical CPU resources. This scheduling overhead can create a bottleneck at the host level while individual VMs appear to be operating normally within their allocated resources. RAM insufficiency would typically show high memory utilization on the host, network congestion would manifest as network throughput or latency issues rather than CPU bottlenecks, and storage limitations would be visible as I/O wait time rather than pure CPU utilization.",
-      "examTip": "When the host CPU is overburdened but VMs appear normal, consider vCPU over-provisioning as the likely bottleneck."
+      "correctAnswerIndex": 0,
+      "explanation": "Corruption of the encryption key file prevents successful decryption even with the correct password. Keychain issues impact login credentials, not drive encryption. File system damage affects data access after decryption. FileVault being disabled on the host system does not affect previously encrypted drives.",
+      "examTip": "Always back up FileVault recovery keys and regularly check external drives for integrity to prevent permanent data loss."
     },
     {
       "id": 71,
-      "question": "Which of the following security attack types is BEST mitigated by implementing 'Content Security Policy' (CSP) headers in web applications?",
+      "question": "A Linux administrator must ensure a critical service restarts automatically after failure but limits restart attempts to three times within 10 minutes. What systemd configuration is correct?",
       "options": [
-        "Database query parameter manipulation",
-        "Cross-origin request submission",
-        "Client-side code injection",
-        "Authentication token interception"
+        "Restart=on-failure\nStartLimitIntervalSec=600\nStartLimitBurst=3",
+        "Restart=always\nRestartSec=5\nTimeoutStartSec=600",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=10",
+        "Restart=on-failure\nRestartSec=5\nTimeoutStopSec=300"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Client-side code injection (Cross-Site Scripting or XSS) is best mitigated by Content Security Policy headers. CSP allows web administrators to control which resources (scripts, styles, images, etc.) can be loaded and executed by the browser, effectively preventing the execution of injected malicious scripts. By specifying allowed content sources and disallowing inline scripts, CSP creates a powerful defense against XSS attacks. Database query manipulation (SQL Injection) is addressed through input validation and parameterized queries, cross-origin request submission (CSRF) requires anti-CSRF tokens, and authentication token interception is mitigated through proper token handling, encryption, and secure cookie attributes.",
-      "examTip": "Implementing a strong CSP is a very effective measure to mitigate XSS vulnerabilities."
+      "correctAnswerIndex": 0,
+      "explanation": "The specified configuration ensures the service restarts on failure but halts after three failures within ten minutes. 'Restart=always' would restart the service regardless of the reason. 'on-abort' applies to abnormal exits. Timeout directives impact start/stop timing but not restart limits.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' in systemd service units to prevent uncontrolled restart loops."
     },
     {
       "id": 72,
-      "question": "A technician is building a virtualized server environment and needs to choose a hypervisor type that offers maximum performance and direct hardware access for virtual machines. Which hypervisor type is MOST suitable?",
+      "question": "A Windows 11 user reports frequent 'NTLDR is missing' errors after adding a secondary hard drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "Operating system-hosted virtualization",
-        "Desktop application virtualization",
-        "Direct hardware virtualization",
-        "Process isolation virtualization"
+        "The BIOS boot order prioritizes the new, non-bootable drive.",
+        "The system partition on the primary drive was accidentally deleted.",
+        "The master boot record on the primary drive is corrupted.",
+        "Secure Boot settings were reset, causing boot validation failures."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Direct hardware virtualization (Type 1 or Bare-Metal Hypervisor) offers maximum performance for virtual machines by running directly on server hardware without an underlying operating system. This architecture eliminates the overhead of a host OS layer, providing more efficient hardware access and resource allocation for virtual machines. Operating system-hosted virtualization (Type 2) introduces additional overhead through the host OS layer, desktop application virtualization typically refers to virtualizing individual applications rather than server environments, and process isolation virtualization generally refers to container technologies which share the host kernel rather than providing full hardware virtualization.",
-      "examTip": "For optimal virtualization performance, choose a Type 1 (bare-metal) hypervisor."
+      "correctAnswerIndex": 0,
+      "explanation": "Adding a new drive may shift BIOS boot order. If the new drive is prioritized but lacks a bootloader, 'NTLDR is missing' errors occur. Partition deletion or MBR corruption would prevent drive detection or produce different errors. Secure Boot issues affect signature validations, not NTLDR errors.",
+      "examTip": "Always verify BIOS boot order after hardware changes to ensure the correct drive boots first."
     },
     {
       "id": 73,
-      "question": "A technician is troubleshooting a performance issue on a virtualized server host running multiple virtual machines. CPU utilization is consistently high, but individual VM resource monitoring shows normal CPU usage within each VM. Which of the following is the MOST likely bottleneck?",
+      "question": "A Windows system repeatedly prompts for a BitLocker recovery key after every reboot. TPM is functional, and firmware updates were recently performed. How can this be resolved?",
       "options": [
-        "RAM allocation and paging activity",
-        "Virtual CPU scheduling contention",
-        "Network throughput saturation",
-        "Storage input/output operations"
+        "Suspend BitLocker before future firmware updates.",
+        "Reset the TPM and re-enable BitLocker encryption.",
+        "Disable Secure Boot to prevent recovery key prompts.",
+        "Reinstall Windows Boot Manager using recovery tools."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Virtual CPU scheduling contention (over-provisioning of vCPUs across virtual machines) is most likely causing the performance issue. When the total number of vCPUs allocated across all VMs exceeds the physical CPU cores available, the hypervisor must time-slice access to the physical processors. This creates significant scheduling overhead and contention as VMs wait for CPU time, resulting in high host CPU utilization that may not be visible within individual VM metrics. Memory constraints would typically manifest as high memory utilization or increased paging, network saturation would show high network utilization rather than CPU contention, and storage I/O bottlenecks would typically appear as disk queue length issues or I/O wait time rather than pure CPU utilization.",
-      "examTip": "High host CPU usage with normal VM metrics is a sign of over-provisioned vCPUs."
+      "correctAnswerIndex": 0,
+      "explanation": "Suspending BitLocker before firmware updates maintains TPM measurements, preventing recovery prompts. Resetting TPM risks data loss. Secure Boot disables firmware security checks but doesn’t affect BitLocker. Reinstalling the boot manager is unnecessary unless corruption is detected.",
+      "examTip": "Always suspend BitLocker before firmware upgrades to avoid repeated recovery key prompts after reboot."
     },
     {
       "id": 74,
-      "question": "In a high-security environment, a technician needs to implement multifactor authentication (MFA) for all user logins to critical servers. Which combination of authentication factors would provide the HIGHEST level of security and resistance to common MFA bypass techniques?",
+      "question": "A Linux system's SSH sessions frequently disconnect during long file transfers. Network connectivity tests show no issues. What configuration should be adjusted?",
       "options": [
-        "Knowledge factor combined with SMS verification",
-        "Knowledge factor combined with security question verification",
-        "Biometric factor combined with physical security key",
-        "Knowledge factor combined with software-based verification"
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive globally via sysctl configurations.",
+        "Switch to SFTP for more stable file transfers.",
+        "Use SCP with compression enabled for faster transfers."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A biometric factor combined with physical security key (biometric fingerprint scan and Hardware Security Key with FIDO2/WebAuthn) provides the highest security for MFA. This combination uses a true biometric factor (something you are) with a cryptographically secure hardware device (something you have). Hardware security keys with FIDO2/WebAuthn are highly resistant to phishing because they verify the legitimacy of the destination site. Biometrics are difficult to duplicate, especially when implemented with proper liveness detection. SMS-based verification is vulnerable to SIM swapping attacks, security questions are considered a weak second factor (and are still knowledge-based), and software-based authenticator apps, while better than SMS, can still be compromised if the device is infected.",
-      "examTip": "For maximum MFA security, prioritize biometrics and hardware security keys."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' send periodic messages that keep SSH connections alive during extended operations. Kernel-level TCP keepalives affect all traffic. SFTP and SCP changes may optimize performance but won’t prevent session drops without proper keepalive configurations.",
+      "examTip": "Modify SSH server keepalive settings to prevent idle disconnects during long file transfers."
     },
     {
       "id": 75,
-      "question": "A technician is optimizing a database server's storage subsystem for a transactional database with a very high volume of small, random read/write operations (high IOPS requirement). Which storage configuration would be MOST appropriate for maximizing IOPS and minimizing latency?",
+      "question": "A macOS user reports their device is prompting repeatedly for iCloud password after an OS update. What is the MOST likely cause?",
       "options": [
-        "Large capacity parity-protected disk array",
-        "High-speed mechanical disk mirrored configuration",
-        "Fault-tolerant high-speed solid-state solution",
-        "Striped array of mid-tier solid-state drives"
+        "Keychain corruption preventing iCloud credential retrieval.",
+        "Expired iCloud credentials requiring reauthentication.",
+        "iCloud servers experiencing temporary outages.",
+        "Firewall settings blocking authentication traffic."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "A fault-tolerant high-speed solid-state solution (mirrored NVMe SSDs with PCIe Gen4 interface) is most appropriate for transactional databases requiring high IOPS and low latency. NVMe SSDs connected via PCIe Gen4 offer substantially higher IOPS and lower latency than any traditional storage solution, with mirroring (RAID 1) providing the fault tolerance required for critical database workloads without the write penalty associated with parity-based RAID. Large RAID 6 arrays of HDDs offer capacity but extremely limited IOPS for small random operations, mechanical RAID 10 configurations provide better performance than RAID 6 but still fall far short of NVMe capabilities, and RAID 0 provides performance but lacks the fault tolerance required for database workloads.",
-      "examTip": "For high IOPS and low latency, NVMe SSDs are unmatched. RAID 1 mirroring also adds redundancy."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption after system updates can cause persistent authentication prompts. Expired credentials would block access across all devices. Server outages would impact all users globally. Firewall issues would block all network access, not just iCloud authentication.",
+      "examTip": "Reset or repair Keychain Access when experiencing repeated iCloud authentication prompts post-macOS updates."
     },
     {
       "id": 76,
-      "question": "A technician is configuring a new high-end graphics workstation and needs to select a cooling solution for a CPU with a very high Thermal Design Power (TDP) and potential for overclocking. Which cooling method would provide the MOST effective heat dissipation and allow for stable overclocking?",
+      "question": "A Linux administrator notices that the SSH service restarts infinitely after failure. What systemd configuration prevents infinite restart loops?",
       "options": [
-        "Single-fan aluminum heat dissipation solution",
-        "Dual-fan copper heat pipe cooling system",
-        "Self-contained liquid circulation with 240mm heat exchange surface",
-        "Custom liquid cooling with expanded heat exchange capacity"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=5\nTimeoutStopSec=120",
+        "Restart=on-abort\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=always\nTimeoutStartSec=600\nRestartSec=15"
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Custom liquid cooling with expanded heat exchange capacity (open-loop liquid cooling system with a large radiator) provides the most effective cooling for high-TDP, overclocked CPUs. These systems offer superior thermal dissipation through customizable components - larger radiators, higher flow pumps, and optimized coolant paths - resulting in significantly better cooling performance than other options. Basic air coolers lack sufficient thermal mass and dissipation capability for extreme heat loads, even high-performance air coolers have inherent limitations in heat transfer efficiency, and 240mm AIO liquid coolers, while effective for moderate overclocking, typically cannot match the cooling capacity of a properly designed custom loop for extreme thermal loads.",
-      "examTip": "For extreme cooling needs, custom liquid cooling provides superior performance, albeit with higher cost and complexity."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration limits restart attempts to three within ten minutes, preventing endless loops. 'Restart=always' restarts services regardless of exit status. 'on-abort' applies only to abnormal exits. Timeout directives control timing, not restart frequencies.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' together in systemd units to cap restart attempts after service failures."
     },
     {
       "id": 77,
-      "question": "An organization is implementing a 'Zero Trust Network Access' (ZTNA) solution to secure remote access for its employees. Which of the following BEST describes the core principle of ZTNA in contrast to traditional VPN-based remote access?",
+      "question": "A Windows 10 machine is unable to connect to any HTTPS websites after installing new security updates. HTTP access works fine. What is the MOST likely cause?",
       "options": [
-        "Network perimeter access following credential verification",
-        "Resource-specific access based on continuous authorization",
-        "Traffic encryption emphasis over user authentication",
-        "Physical security device dependency for connectivity"
+        "Corrupted root certificates following the security update.",
+        "TLS protocol settings disabled during the update process.",
+        "ISP restrictions impacting secure web traffic.",
+        "DNS misconfigurations causing secure connection failures."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Resource-specific access based on continuous authorization best describes ZTNA's core principle versus traditional VPNs. ZTNA provides precise access to specific applications or resources based on continuous verification of identity, device posture, and context, rather than broad network access after a single authentication. Traditional VPNs typically authenticate users once and then grant wide access to network segments, while ZTNA applies least-privilege principles by making each resource invisible and inaccessible by default until specific authorization is granted. Both technologies encrypt traffic, but VPNs focus on network-level access while ZTNA focuses on application-level access. Neither approach inherently depends on specific hardware, as both can be implemented through various software or hardware solutions.",
-      "examTip": "ZTNA is about granular, application-level access control rather than blanket network access."
+      "correctAnswerIndex": 0,
+      "explanation": "Root certificates ensure HTTPS validation. Corruption or removal during updates prevents secure site access. TLS settings misconfigurations would display explicit protocol errors. ISP restrictions rarely target HTTPS specifically. DNS issues affect both HTTP and HTTPS traffic.",
+      "examTip": "Check and restore root certificates when HTTPS traffic fails after applying security updates."
     },
     {
       "id": 78,
-      "question": "A technician is analyzing network traffic and observes a pattern of repeated SYN packets being sent to a web server from numerous distinct source IP addresses, but no corresponding ACK or data packets are observed in response. Which type of network attack is MOST likely indicated by this traffic pattern?",
+      "question": "A Windows 11 device experiences long boot times after enabling full-disk BitLocker encryption. The system uses a traditional HDD. What is the MOST likely cause?",
       "options": [
-        "Name resolution cache poisoning",
-        "Connection request resource exhaustion",
-        "Address resolution table manipulation",
-        "Authentication session state exploitation"
+        "Encryption overhead impacting HDD read/write speeds during boot.",
+        "TPM misconfiguration delaying authentication during the boot process.",
+        "Secure Boot interfering with the BitLocker encryption process.",
+        "Boot partition misalignment causing slow OS loading times."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Connection request resource exhaustion (SYN Flood Denial-of-Service Attack) is most likely indicated by the described traffic pattern. In a SYN flood, attackers send a large volume of TCP SYN packets from spoofed source IP addresses without completing the three-way handshake, leaving the server with many half-open connections that consume connection table resources until legitimate connections are blocked. The pattern of numerous SYN packets from different IPs without corresponding ACKs is a telltale sign of this attack. DNS spoofing would involve manipulating name resolution rather than connection requests, ARP poisoning would involve link-layer address manipulation rather than transport-layer connections, and session hijacking would typically occur after authentication rather than during connection establishment.",
-      "examTip": "Excessive SYN packets without ACK responses are classic signs of a SYN flood attack."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker encryption adds performance overhead during startup, more pronounced on HDDs than SSDs. TPM misconfigurations usually prompt for recovery keys. Secure Boot ensures firmware integrity but doesn’t slow down encryption processes. Partition misalignment affects performance but is less likely after encryption.",
+      "examTip": "Use SSD storage when enabling full-disk encryption on Windows devices to minimize boot delays."
     },
     {
       "id": 79,
-      "question": "Which of the following is a key operational benefit of 'Public Cloud' deployment model in terms of disaster recovery and business continuity?",
+      "question": "A Linux server reports repeated '503 Service Unavailable' errors for a web application. The web server is running without issues. What is the MOST likely cause?",
       "options": [
-        "Reduced network dependency for recovery processes",
-        "Enhanced regulatory compliance capabilities",
-        "Provider-managed redundancy with geographic distribution",
-        "Elimination of business continuity planning requirements"
+        "The backend application server is down or unreachable.",
+        "Firewall settings are blocking backend server communication.",
+        "Incorrect proxy configurations in the web server settings.",
+        "Insufficient permissions for the web server to access backend APIs."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Provider-managed redundancy with geographic distribution (automated disaster recovery and high availability capabilities provided by the cloud provider's infrastructure) is a key operational benefit of public cloud for disaster recovery. Public cloud providers typically maintain multiple geographically dispersed data centers with built-in replication and failover capabilities, which can be leveraged for disaster recovery without significant additional infrastructure investment by the customer. Public cloud actually increases rather than reduces network dependency, doesn't inherently enhance regulatory compliance (which often requires additional configuration), and doesn't eliminate the need for business continuity planning but rather changes its focus.",
-      "examTip": "Leveraging the public cloud for DR can greatly simplify recovery procedures and ensure continuity through geographic redundancy."
+      "correctAnswerIndex": 0,
+      "explanation": "'503 Service Unavailable' indicates that the web server cannot connect to the upstream server. Firewall settings would block traffic entirely. Proxy misconfigurations would result in connection errors. Permission issues typically produce '403' or '401' errors instead.",
+      "examTip": "Check backend server health first when encountering '503' errors from reverse proxy setups."
     },
     {
       "id": 80,
-      "question": "A technician is tasked with implementing a 'Zero Trust' security model. Which of the following practices is LEAST aligned with Zero Trust?",
+      "question": "A user reports that their Windows 10 laptop fails to boot after a recent BIOS update, showing a 'No Boot Device Found' error. What should the technician check FIRST?",
       "options": [
-        "Multifactor identity validation requirements",
-        "Network boundary protection prioritization",
-        "Microsegmentation enforcement techniques",
-        "Continuous activity monitoring implementation"
+        "BIOS boot order settings to ensure the correct drive is prioritized.",
+        "SATA mode configurations (AHCI vs. RAID) in BIOS settings.",
+        "UEFI Secure Boot settings conflicting with boot loader signatures.",
+        "Potential corruption of the EFI system partition on the boot drive."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network boundary protection prioritization (relying primarily on perimeter firewalls) is least aligned with Zero Trust principles. Traditional security models focus on creating a strong perimeter with implicit trust for entities inside that perimeter. Zero Trust explicitly rejects this approach, instead requiring strict verification of every access request regardless of source location. Focusing primarily on perimeter defenses contradicts the Zero Trust principle that no access should be trusted based on network location. MFA, microsegmentation, and continuous monitoring are all fundamental components of a Zero Trust architecture as they enforce the 'never trust, always verify' approach.",
-      "examTip": "Zero Trust requires strict verification at every access point, not just relying on perimeter defenses."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS updates can reset boot order priorities, causing the system to attempt booting from non-bootable devices. SATA mode changes affect OS recognition but not initial drive detection. Secure Boot errors typically display signature-related warnings. EFI partition corruption would produce different boot error messages.",
+      "examTip": "Always verify BIOS boot priorities after firmware updates to ensure the correct drive boots first."
     },
     {
       "id": 81,
-      "question": "A technician is troubleshooting a laptop whose integrated microphone is not working, while an external USB microphone works fine. The built-in microphone is not muted and drivers are up to date. Which component is MOST likely at fault?",
+      "question": "A Linux server’s Apache web service is running, but users receive a '403 Forbidden' error when accessing the website. File permissions are correct. What is the MOST likely cause?",
       "options": [
-        "Audio signal processor circuitry",
-        "Internal microphone connection mechanism",
-        "Expansion audio interface component",
-        "System firmware audio configuration"
+        "SELinux is enforcing security policies blocking access.",
+        "Apache’s configuration file has incorrect directory indexes.",
+        "The web server firewall is blocking HTTP traffic.",
+        "The document root directory is missing an index file."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Internal microphone connection mechanism (loose or disconnected internal microphone cable) is most likely at fault. Since external USB microphones function correctly, the core audio processing system including the audio codec, drivers, and operating system configuration are working properly. This points to a physical issue specific to the internal microphone, with the most common cause being a loose, damaged, or disconnected cable between the microphone and the motherboard. These cables can be dislodged during laptop maintenance or develop issues at the connection points. Audio codec chip issues would typically affect all audio input devices, sound card problems wouldn't apply if external mics work, and BIOS settings would usually affect audio subsystem functionality broadly rather than just the internal microphone.",
-      "examTip": "When the external mic works but the internal one doesn't, physical connection issues are the first thing to check."
+      "correctAnswerIndex": 0,
+      "explanation": "SELinux contexts can prevent web access even with correct file permissions. Apache directory index issues typically show a directory listing error. Firewall blocks cause connection failures, not '403' errors. Missing index files return listing errors, not permission-related messages.",
+      "examTip": "Use 'ls -Z' to check SELinux contexts and 'restorecon' if necessary for Apache web directories."
     },
     {
       "id": 82,
-      "question": "Which of the following network security concepts BEST describes the practice of monitoring network traffic for suspicious patterns and anomalies, and automatically triggering alerts or security responses when malicious activity is detected?",
+      "question": "A Windows 11 user reports that after enabling BitLocker, the system takes significantly longer to boot. The device uses a traditional HDD. What is the MOST likely reason?",
       "options": [
-        "Traffic filtering rule enforcement",
-        "Network activity analysis and response",
-        "Security weakness identification",
-        "Security event documentation"
+        "Full-disk encryption overhead on HDDs slows read/write operations.",
+        "BitLocker is waiting for a user-entered PIN at each startup.",
+        "The Trusted Platform Module (TPM) is misconfigured, delaying authentication.",
+        "The Secure Boot configuration is conflicting with BitLocker settings."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Network activity analysis and response (Intrusion Detection and Prevention Systems) best describes the practice of monitoring for suspicious patterns and automatically responding to detected threats. These systems continuously analyze network traffic for signatures of known attacks or anomalous behavior patterns that might indicate security incidents. Upon detection, they can automatically alert security teams or take defensive actions to block or mitigate the threat. Traffic filtering (firewalls) primarily controls network access rather than detecting attacks in progress, vulnerability management identifies security weaknesses before they're exploited rather than detecting active exploitation, and security logging documents events but typically lacks the real-time analysis and automated response capabilities described.",
-      "examTip": "IDPS act as a real-time security watchdog, detecting and often blocking threats as they occur."
+      "correctAnswerIndex": 0,
+      "explanation": "BitLocker encryption imposes additional read/write demands, significantly affecting HDD performance. TPM misconfigurations would typically result in recovery prompts. Secure Boot conflicts manifest as boot failures, not slowdowns. PIN prompts delay startup only if configured, not by default.",
+      "examTip": "For better performance with BitLocker, use SSDs instead of HDDs to minimize encryption overhead."
     },
     {
       "id": 83,
-      "question": "Which of the following RAID levels offers the BEST balance of high performance, good fault tolerance (tolerating up to two drive failures), and efficient storage capacity utilization, making it suitable for large databases and enterprise storage arrays?",
+      "question": "A user reports that their Android device uses excessive mobile data even when connected to Wi-Fi. What setting should be checked FIRST?",
       "options": [
-        "Distributed parity single-redundancy array",
-        "Distributed parity dual-redundancy array",
-        "Striped mirroring with distributed allocation",
-        "Nested parity array with distributed striping"
+        "Wi-Fi Assist, which may use mobile data when Wi-Fi signals are weak.",
+        "Background data permissions for specific applications.",
+        "Carrier-specific data management settings overriding Wi-Fi preferences.",
+        "VPN configurations that could force mobile data routing."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Distributed parity dual-redundancy array (RAID 6) provides the best balance for enterprise storage needs. RAID 6 implements dual parity, allowing it to tolerate simultaneous failure of any two drives in the array without data loss. It offers good read performance (though write performance is reduced due to parity calculations) and storage efficiency, utilizing typically N-2 of the total drive capacity for data storage (where N is the total number of drives). RAID 5 only tolerates a single drive failure, RAID 10 requires double the drives for the same usable capacity (lower efficiency), and RAID 60 (a nested RAID level combining RAID 6 and 0) focuses more on performance at the expense of capacity efficiency.",
-      "examTip": "RAID 6 is popular in enterprise storage because it balances fault tolerance and storage efficiency well."
+      "correctAnswerIndex": 0,
+      "explanation": "Wi-Fi Assist allows mobile data use when Wi-Fi is weak, leading to unexpected data usage. Background data settings generally prioritize Wi-Fi. Carrier management settings rarely override active Wi-Fi. VPN configurations impact routing but don’t default to mobile data unless specified.",
+      "examTip": "Disable Wi-Fi Assist on Android devices to prevent mobile data usage when Wi-Fi connections are weak."
     },
     {
       "id": 84,
-      "question": "A technician needs to implement secure boot on a new Windows 11 workstation to protect against boot-level malware and rootkits. Which components and configurations are REQUIRED to enable Secure Boot effectively?",
+      "question": "A Linux administrator observes that SSH sessions drop after several minutes of inactivity, despite stable network connectivity. What configuration prevents this?",
       "options": [
-        "Legacy firmware with protective boot sector",
-        "Extensible firmware with modern partition scheme and verified boot components",
-        "Hardware security module with operating system verification",
-        "Administrative access controls with boot password protection"
+        "Set 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive globally via sysctl settings.",
+        "Switch from SSH to Mosh for persistent session management.",
+        "Use 'screen' or 'tmux' to maintain active sessions."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Extensible firmware with modern partition scheme and verified boot components (UEFI firmware, GPT partition scheme, and a digitally signed Windows Boot Manager) are required for implementing Secure Boot. Secure Boot is a UEFI feature that verifies the digital signatures of boot loaders and other early boot components before allowing them to execute, preventing unauthorized or malicious code from running during the boot process. This requires UEFI firmware (not legacy BIOS), a GPT partition scheme that supports UEFI, and properly signed boot components. Legacy BIOS with MBR cannot support Secure Boot, TPM enhances security but isn't strictly required for basic Secure Boot functionality, and boot passwords alone don't verify the integrity of boot components.",
-      "examTip": "Remember: UEFI, GPT, and a signed bootloader are the essentials for enabling Secure Boot."
+      "correctAnswerIndex": 0,
+      "explanation": "'ClientAliveInterval' and 'ClientAliveCountMax' settings ensure the SSH server keeps idle connections alive. Kernel TCP keepalives affect all network connections and may not be appropriate. Mosh requires additional installations. 'screen' and 'tmux' manage session persistence locally, not connection drops.",
+      "examTip": "Adjust SSH keepalive parameters to maintain stable connections during periods of inactivity."
     },
     {
       "id": 85,
-      "question": "Which of the following cloud deployment models is MOST suitable for organizations that need to meet strict industry-specific compliance requirements (e.g., HIPAA, PCI DSS) and require a high degree of control over data and infrastructure security?",
+      "question": "A Windows 10 system shows 'NTLDR is missing' after adding a new hard drive. BIOS detects both drives. What is the MOST likely cause?",
       "options": [
-        "Multi-tenant shared infrastructure",
-        "Single-tenant dedicated infrastructure",
-        "Hybrid shared-dedicated infrastructure",
-        "Community shared restricted infrastructure"
+        "The BIOS boot order prioritizes the non-bootable new drive.",
+        "The master boot record (MBR) on the primary drive is corrupted.",
+        "The new drive's partition table conflicts with the system partition.",
+        "The boot partition was deleted during the new drive's installation."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Single-tenant dedicated infrastructure (Private Cloud) is most suitable for organizations with strict compliance requirements and security control needs. Private cloud provides maximum control over infrastructure, data placement, security configurations, and access controls, allowing organizations to implement and verify specific compliance measures. Public cloud (multi-tenant shared infrastructure) may introduce compliance challenges due to shared resources and potentially less visibility. Hybrid cloud combines benefits but introduces complexity for consistent compliance. Community cloud (shared restricted infrastructure) may be suitable for organizations with identical compliance needs but typically offers less individualized control than private cloud.",
-      "examTip": "For regulated industries, private clouds provide the control needed to satisfy compliance mandates."
+      "correctAnswerIndex": 0,
+      "explanation": "BIOS may prioritize the new drive after hardware changes, leading to the 'NTLDR is missing' error if that drive lacks a bootloader. MBR corruption results in different boot failures. Partition table conflicts wouldn’t cause this specific error. Deleting the boot partition would prevent BIOS from detecting any OS.",
+      "examTip": "Check BIOS boot order after adding drives to ensure the correct drive is selected as the primary boot device."
     },
     {
       "id": 86,
-      "question": "A technician is troubleshooting a laptop whose built-in webcam is not working, and Device Manager shows a driver error for the webcam device. Which troubleshooting step should be performed FIRST?",
+      "question": "A macOS user reports that Spotlight cannot find recently added files. Indexing seems stuck. What is the correct command to rebuild the Spotlight index?",
       "options": [
-        "Display assembly replacement procedure",
-        "Device driver rollback operation",
-        "Privacy and permissions verification",
-        "Internal connector reseating process"
+        "sudo mdutil -E /",
+        "sudo diskutil repairVolume /",
+        "sudo fsck -fy /dev/disk1",
+        "sudo launchctl load /System/Library/LaunchDaemons/com.apple.metadata.mds.plist"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Privacy and permissions verification (checking webcam privacy settings in the operating system and BIOS/UEFI) should be performed first. Many modern laptops have built-in privacy features that can disable the webcam at the hardware or firmware level, which would appear as a driver error in Device Manager. These settings can include physical privacy shutters, keyboard function keys, dedicated privacy applications from the manufacturer, BIOS/UEFI settings, or operating system permissions. Checking these simple settings first follows the troubleshooting principle of starting with the least invasive and most likely solutions. Driver rollbacks or physical repairs should only be attempted after confirming that privacy settings aren't causing the issue.",
-      "examTip": "Many laptops have privacy settings that can disable the webcam. Always verify these settings first."
+      "correctAnswerIndex": 0,
+      "explanation": "'sudo mdutil -E /' forces Spotlight to erase and rebuild its index, resolving search issues. 'diskutil repairVolume' and 'fsck' check disk integrity but don’t affect indexing. 'launchctl load' restarts indexing services but won’t rebuild the index.",
+      "examTip": "Use 'mdutil -E /' on macOS to rebuild Spotlight indexes when search issues persist."
     },
     {
       "id": 87,
-      "question": "Which of the following network protocols is used for secure, encrypted remote access to network devices, providing both command-line interface (CLI) and graphical user interface (GUI) access?",
+      "question": "A Linux administrator must ensure a web application restarts automatically but stops attempting after three failures within 10 minutes. What systemd configuration is correct?",
       "options": [
-        "Remote terminal emulation protocol",
-        "File transfer protocol with security extensions",
-        "Encrypted shell communication protocol",
-        "Secure hypertext transfer protocol"
+        "Restart=on-failure\nStartLimitBurst=3\nStartLimitIntervalSec=600",
+        "Restart=always\nRestartSec=10\nTimeoutStartSec=300",
+        "Restart=on-abort\nStartLimitBurst=3\nRestartSec=5",
+        "Restart=on-failure\nTimeoutStopSec=300\nRestartSec=5"
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Encrypted shell communication protocol (SSH - Secure Shell) is used for secure, encrypted remote access to network devices. SSH provides encrypted communications over an unsecured network, most commonly for remote command-line login and command execution, but it can also tunnel other protocols to provide secure GUI access through X11 forwarding or port forwarding. Telnet (remote terminal emulation) provides unencrypted access and is considered insecure. FTP with security extensions might refer to FTPS or SFTP (the latter uses SSH), but neither is primarily for device management. HTTPS provides secure web access but isn't specifically designed for network device management, although web interfaces may use it.",
-      "examTip": "SSH is the industry standard for secure remote administration—always use it over unencrypted protocols like Telnet."
+      "correctAnswerIndex": 0,
+      "explanation": "This configuration ensures automatic restarts but prevents endless loops by limiting attempts to three within ten minutes. 'Restart=always' ignores failure types. 'on-abort' applies only to abnormal terminations. Timeout settings affect start/stop timing, not restart control.",
+      "examTip": "Use 'StartLimitBurst' and 'StartLimitIntervalSec' to manage controlled service restarts with systemd."
     },
     {
       "id": 88,
-      "question": "Which of the following RAID levels provides the HIGHEST read and write performance by striping data across all drives, but offers NO fault tolerance or data redundancy?",
+      "question": "A Windows 11 system connected to a VPN can access internal resources via IP but not by hostname. What is the FIRST step to resolve this?",
       "options": [
-        "Block-level striping with no redundancy",
-        "Mirroring with duplicate data copies",
-        "Distributed parity with data redundancy",
-        "Nested striping with distributed parity"
+        "Verify VPN DNS settings to ensure proper hostname resolution.",
+        "Restart the DNS Client service on the machine.",
+        "Flush the local DNS resolver cache using ipconfig.",
+        "Manually add host entries to the local hosts file."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Block-level striping with no redundancy (RAID 0) provides the highest raw performance by distributing data blocks across multiple drives, allowing parallel read/write operations that significantly increase throughput. However, it offers absolutely no fault tolerance; if any drive in the array fails, all data in the entire array is lost. RAID 1 (mirroring) duplicates data for redundancy but doesn't match RAID 0's performance potential. RAID 5 (distributed parity) offers redundancy but includes parity calculation overhead that reduces write performance. RAID 10 (nested RAID 1+0) provides both performance and redundancy but doesn't quite match the raw performance of RAID 0 due to the mirroring component.",
-      "examTip": "RAID 0 is best for performance when data loss is not a concern. Use it only in non-critical applications."
+      "explanation": "VPN DNS misconfigurations commonly cause hostname resolution failures despite IP connectivity. Restarting DNS services and flushing caches address temporary issues, not configuration problems. Manually editing host files is a last resort for persistent issues.",
+      "examTip": "Always verify that VPN-provided DNS settings are applied correctly when hostname resolution fails."
     },
     {
       "id": 89,
-      "question": "A technician needs to dispose of several old smartphones and tablets containing sensitive user data. Which method is MOST secure and environmentally responsible for data sanitization and device disposal?",
+      "question": "A user reports that their macOS device repeatedly prompts for an iCloud password after a macOS update. What is the MOST likely cause?",
       "options": [
-        "Default restoration with standard waste disposal",
-        "Memory overwriting with charitable redistribution",
-        "Physical storage destruction with component recycling",
-        "Account removal with commercial resale"
+        "Keychain corruption preventing iCloud credential retrieval.",
+        "Outdated Apple ID requiring re-authentication after updates.",
+        "Firewall rules blocking iCloud authentication requests.",
+        "Incorrect iCloud server configurations after the update."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Physical storage destruction with component recycling (physically destroying the storage media and recycling the device components at a certified e-waste facility) is both the most secure and environmentally responsible approach. Physical destruction of storage (through shredding, crushing, or degaussing) ensures data cannot be recovered even with advanced forensic techniques. Properly recycling the remaining components through certified e-waste facilities ensures hazardous materials are handled appropriately. Factory resets can sometimes leave recoverable data, single-pass overwriting may not fully sanitize modern storage, and simply deleting user accounts leaves considerable recoverable data on the device.",
-      "examTip": "For sensitive data, physical destruction combined with certified e-waste recycling is the best practice."
+      "correctAnswerIndex": 0,
+      "explanation": "Keychain corruption is a common cause of repeated authentication prompts after macOS updates. Outdated Apple IDs affect all Apple services, not just iCloud. Firewall rules would block all traffic, not cause repeated prompts. Server configurations are managed by Apple and rarely affect individual devices.",
+      "examTip": "Reset or repair Keychain Access when encountering repeated iCloud password prompts after macOS updates."
     },
     {
       "id": 90,
-      "question": "Which of the following cloud computing concepts refers to the pooling of resources to serve multiple consumers using a multi-tenant model, where resources are dynamically allocated based on demand?",
+      "question": "A Windows 10 laptop connected to a VPN fails to reconnect mapped network drives after a password change. What is the MOST likely cause?",
       "options": [
-        "Scaling capacity dynamically",
-        "Pay-per-use billing model",
-        "Shared infrastructure utilization",
-        "Self-service provisioning capability"
+        "Outdated cached credentials in Windows Credential Manager.",
+        "DNS resolution failures preventing hostname mapping.",
+        "SMB protocol version mismatches between client and server.",
+        "Group Policy Object (GPO) restrictions blocking reconnections."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Shared infrastructure utilization (Resource Pooling) refers to the cloud computing practice of aggregating computing resources to serve multiple consumers through a multi-tenant model. With resource pooling, physical and virtual resources are dynamically assigned and reassigned according to consumer demand, creating economies of scale and efficient resource utilization. The customer generally has no control over the exact location of provided resources but may specify location at a higher level (e.g., country, state, or datacenter). Rapid elasticity refers to quickly scaling resources, measured service refers to pay-per-use billing, and on-demand self-service refers to automated provisioning without provider interaction.",
-      "examTip": "Resource pooling underlies cloud computing efficiency by sharing resources dynamically among many users."
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager retains old passwords. After a change, reconnections fail unless updated. DNS issues prevent hostname resolution entirely. SMB mismatches cause connection refusals but would provide specific protocol errors. GPO restrictions typically affect all users, not just one after a password change.",
+      "examTip": "Clear and update cached credentials in Credential Manager after password changes to restore network drive access."
     },
     {
       "id": 91,
-      "question": "A technician is troubleshooting a thermal printer that is producing faded receipts, even after replacing the thermal paper roll. Which component is MOST likely causing the faded printing?",
+      "question": "A Linux administrator notices SSH connections dropping after several minutes of inactivity, despite stable network conditions. What should be adjusted to fix this?",
       "options": [
-        "Thermal resistive element deterioration",
-        "Print controller circuit malfunction",
-        "Print configuration parameter settings",
-        "Media contact pressure mechanism"
+        "Configure 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable TCP keepalive settings in /etc/sysctl.conf.",
+        "Switch from SSH to Mosh for more robust session management.",
+        "Use 'screen' or 'tmux' to maintain persistent session environments."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Thermal resistive element deterioration (depleted printhead heating element) is most likely causing the faded printing. Thermal printers create images by selectively heating special thermal paper, and over time, the printhead's heating elements wear out or become less efficient. When this occurs, the elements cannot generate sufficient heat to fully activate the thermal paper, resulting in faded or light printing. Since replacing the paper didn't resolve the issue, the problem must be with the printer itself. Logic board issues would typically cause more erratic problems rather than consistent fading, driver settings wouldn't likely cause gradual degradation over time, and platen roller issues would cause inconsistent pressure and irregularly faded areas rather than overall lightness.",
-      "examTip": "Thermal printers rely on consistent heat; a failing printhead will result in faded output."
+      "explanation": "Configuring 'ClientAliveInterval' and 'ClientAliveCountMax' ensures SSH sends periodic keepalive signals, preventing timeouts. Kernel TCP keepalives affect all traffic and may have unintended effects. Mosh is an alternative but requires additional configuration. 'screen' and 'tmux' manage terminal sessions, not underlying connection drops.",
+      "examTip": "Set SSH keepalive parameters in sshd_config to prevent connection drops due to inactivity."
     },
     {
       "id": 92,
-      "question": "Which of the following TCP ports is used by Microsoft Active Directory Kerberos Key Distribution Center (KDC) for authentication requests using UDP protocol?",
+      "question": "A Windows 11 machine shows 'No Boot Device Found' after a firmware update. BIOS detects all drives. What is the MOST likely cause?",
       "options": [
-        "Port 88",
-        "Port 464",
-        "Port 749",
-        "Port 3268"
+        "BIOS boot order reset to prioritize a non-bootable device.",
+        "Secure Boot settings conflict with the OS bootloader signature.",
+        "SATA mode settings changed from AHCI to RAID, affecting boot.",
+        "EFI system partition corruption on the boot drive."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Port 88 is used by the Kerberos Key Distribution Center (KDC) for authentication requests over both TCP and UDP protocols. In Active Directory environments, the KDC is responsible for issuing tickets that are used for authentication, and it communicates on port 88 by default. UDP is often preferred for Kerberos authentication due to its lower overhead compared to TCP. Port 464 is used for Kerberos password changes (kpasswd), port 749 is sometimes used for Kerberos administration (kadmin), and port 3268 is used for Global Catalog LDAP queries, not for Kerberos authentication.",
-      "examTip": "Keep in mind that Kerberos typically operates on port 88 using both UDP and TCP as needed."
+      "explanation": "Firmware updates often reset BIOS settings, including boot order. If the primary drive isn’t prioritized, boot failures occur. Secure Boot issues generate signature-related errors. SATA mode changes lead to blue screens rather than missing boot device messages. EFI partition corruption prevents bootloader detection, showing different errors.",
+      "examTip": "Always check and correct BIOS boot order after firmware updates to ensure proper boot sequencing."
     },
     {
       "id": 93,
-      "question": "A mobile device user is in an area with weak cellular signal and experiences poor battery life and intermittent connectivity. Which of the following actions will most significantly improve battery life?",
+      "question": "A Linux server's SSH sessions frequently disconnect during large file transfers. Network connectivity tests pass without issues. What configuration should be adjusted?",
       "options": [
-        "Maximum screen luminance for visibility enhancement",
-        "Persistent peripheral connectivity enablement",
-        "Mobile data connectivity deactivation",
-        "Network scanning frequency increase"
+        "Increase 'ClientAliveInterval' and 'ClientAliveCountMax' in sshd_config.",
+        "Enable compression in SSH connections for faster transfers.",
+        "Switch to SFTP instead of SCP for more stable file transfers.",
+        "Implement TCP keepalive adjustments at the kernel level."
       ],
-      "correctAnswerIndex": 2,
-      "explanation": "Mobile data connectivity deactivation (disabling cellular data and using Wi-Fi when available) will most significantly improve battery life in weak signal areas. When a mobile device detects weak cellular signal, it increases transmission power and continuously attempts to maintain or reestablish connections to cell towers, dramatically increasing battery consumption. Disabling cellular data prevents this high-energy process. Maximizing screen brightness would substantially increase power consumption, keeping Bluetooth constantly active would drain additional power, and increasing network scanning frequency would create even more battery drain rather than conserving power.",
-      "examTip": "When cellular signals are weak, turning off cellular data can greatly conserve battery power."
+      "correctAnswerIndex": 0,
+      "explanation": "SSH keepalive settings ensure active sessions during lengthy operations like file transfers. Compression improves transfer speeds but doesn’t prevent disconnections. SFTP provides reliability but doesn’t inherently fix connection drops. Kernel TCP keepalive adjustments impact all traffic, not just SSH.",
+      "examTip": "Configure SSH server keepalive settings to maintain stable connections during long-running file transfers."
     },
     {
       "id": 94,
-      "question": "Which of the following BEST describes the 'Private Cloud' deployment model in terms of resource sharing and access control?",
+      "question": "A macOS user reports slow performance and frequent beachball icons after a recent OS update. Disk usage appears unusually high. What is the MOST likely cause?",
       "options": [
-        "Multi-organizational resource sharing with public network access",
-        "Single-organization resource dedication with controlled access",
-        "Internal multi-user resource allocation with operational similarity",
-        "Geographic resource isolation with physical access limitations"
+        "Spotlight indexing is rebuilding the search database post-update.",
+        "The file system requires repair via Disk Utility's First Aid feature.",
+        "Third-party kernel extensions are causing kernel task spikes.",
+        "A background Time Machine backup is consuming system resources."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Single-organization resource dedication with controlled access best describes the private cloud model. In a private cloud, computing resources are exclusively used by a single organization, typically accessed through a private network or secure connection rather than the public internet. This provides greater control over the infrastructure, data security, and compliance compared to public cloud options. The resources may be located on-premises or hosted by a third party but are logically isolated and dedicated to the organization. This differs from public cloud (shared among multiple organizations), community cloud (shared among specific organizations with common concerns), and hybrid cloud (combination of private and public).",
-      "examTip": "A private cloud offers exclusive use and enhanced control, which is critical for organizations with sensitive data."
+      "correctAnswerIndex": 0,
+      "explanation": "Spotlight reindexing is common after macOS updates, causing high disk activity and temporary slowness. File system corruption would show mounting errors. Kernel extension issues lead to kernel panics, not consistent slowdowns. Time Machine backups impact network traffic more than disk performance.",
+      "examTip": "Allow Spotlight indexing to complete after macOS updates; performance typically improves once indexing is done."
     },
     {
       "id": 95,
-      "question": "A laser printer is producing prints with a consistent 'smudge' or 'blur' that is offset and to the side of the main image, almost like a shadow but consistently displaced. Which printer component is MOST likely causing this offset smudge defect?",
+      "question": "A Windows 10 user reports inability to connect to HTTPS websites, though HTTP sites load fine. The system clock is correct. What is the MOST likely cause?",
       "options": [
-        "Toner distribution mechanism with uneven dispensing",
-        "Heat application component with pressure irregularity",
-        "Image formation drum with alignment inconsistency",
-        "Image transfer mechanism with positioning deviation"
+        "Corrupted root certificates on the local machine.",
+        "TLS protocols disabled in browser security settings.",
+        "Firewall rules blocking secure port 443 traffic.",
+        "DNS issues preventing secure name resolutions."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Image transfer mechanism with positioning deviation (misalignment or slippage in the transfer belt or roller) is most likely causing the offset smudge defect. During the transfer process, the toner image is moved from the drum to the paper. If the transfer component is misaligned or slipping, it can cause the toner to transfer slightly offset from the intended position, creating a shadow-like effect that appears consistently in the same position relative to the main image. Toner distribution issues would typically affect overall print density rather than creating offset shadows, fuser problems would usually cause smearing or poor adhesion rather than offset duplication, and drum registration problems would more commonly affect the entire image alignment rather than creating a specific shadow effect.",
-      "examTip": "Offset smudging often points to transfer mechanism issues. Check the alignment and tension of the transfer belt/roller."
+      "correctAnswerIndex": 0,
+      "explanation": "HTTPS relies on valid root certificates. If these are corrupted, secure sites will fail while HTTP works. TLS misconfigurations would produce browser protocol errors. Firewall issues would block port 443 entirely, affecting all secure traffic. DNS issues affect both HTTP and HTTPS traffic equally.",
+      "examTip": "Validate and restore root certificates when HTTPS access fails but HTTP connectivity remains unaffected."
     },
     {
       "id": 96,
-      "question": "Which of the following security principles is BEST represented by implementing 'regular security audits' and 'vulnerability assessments' to identify and address security weaknesses proactively?",
+      "question": "A Linux server’s web application returns a '503 Service Unavailable' error. The web server is running without issues. What is the MOST likely cause?",
       "options": [
-        "Preventative security mechanism",
-        "Detective security control",
-        "Remedial security measure",
-        "Security verification methodology"
+        "The backend application server is down or unreachable.",
+        "Firewall configurations are blocking traffic to backend services.",
+        "The web server lacks permissions to access backend resources.",
+        "DNS resolution issues prevent the web server from reaching the backend."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Security verification methodology (Security Assessment and Testing) is best represented by implementing regular security audits and vulnerability assessments. This principle focuses on systematically testing and evaluating security controls, configurations, and potential vulnerabilities to identify weaknesses before they can be exploited. This approach is inherently proactive, aiming to find and address security issues before an attack occurs. Preventative controls aim to stop incidents from occurring, detective controls identify incidents as they happen, and corrective measures address issues after they've been identified, but the security assessment principle specifically refers to the systematic and regular testing process itself.",
-      "examTip": "Proactive security testing helps you stay ahead of threats by regularly assessing your security posture."
+      "correctAnswerIndex": 0,
+      "explanation": "'503 Service Unavailable' typically indicates that the web server cannot connect to its backend services. Firewall issues would cause connection errors. Permission issues would result in '403 Forbidden' errors. DNS resolution problems would display hostname-related errors, not service unavailability messages.",
+      "examTip": "Check backend application server health first when '503' errors occur on web front-end systems."
     },
     {
       "id": 97,
-      "question": "Performance-Based Question: A user complains that their Windows 10 computer is intermittently freezing, particularly when running memory-intensive applications. You suspect possible issues related to RAM. Put the following steps in the MOST efficient order for diagnosing and fixing memory-related problems.",
+      "question": "A Windows 11 user reports slow boot times after enabling full-disk encryption with BitLocker. The system uses an HDD. What is the MOST likely reason?",
       "options": [
-        "Operating system diagnostic mode, memory verification test, hardware reconfiguration, component substitution test, firmware optimization",
-        "Firmware update implementation, peripheral device removal, system memory diagnostics, operating system reinstallation, processor verification",
-        "Operating system reinstallation, driver update application, vendor service provision, power supply replacement, firmware optimization",
-        "Hardware reconfiguration, memory verification test, operating system diagnostic mode, component substitution test, firmware optimization"
+        "Encryption overhead during startup slows HDD performance.",
+        "TPM authentication delays are extending pre-boot phases.",
+        "Secure Boot conflicts with BitLocker encryption processes.",
+        "Boot partition misalignment is causing prolonged loading times."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The most efficient diagnostic sequence is: operating system diagnostic mode (booting into Safe Mode to see if the issue persists with minimal drivers and services), memory verification test (running Windows Memory Diagnostic or similar tool to check for errors), hardware reconfiguration (reseating RAM modules or moving them to different slots), component substitution test (testing with known-good RAM if problems are detected), and firmware optimization (updating BIOS/UEFI if memory compatibility issues persist). This approach follows a logical progression from simple software isolation to increasingly complex hardware troubleshooting, with each step building on the information gathered from the previous steps.",
-      "examTip": "Start with the simplest tests—Safe Mode and memory diagnostics—before you invest time in hardware swaps or BIOS updates. Always rule out easy software conflicts and known bugs first."
+      "explanation": "Full-disk encryption imposes processing overhead that is more noticeable on HDDs than SSDs. TPM delays typically manifest as recovery key prompts. Secure Boot ensures firmware integrity and doesn’t slow down boot times. Partition misalignment affects overall performance but is less likely after BitLocker implementation.",
+      "examTip": "Use SSDs for systems with BitLocker to minimize encryption-related boot slowdowns."
     },
     {
       "id": 98,
-      "question": "Which of the following memory technologies is often used in embedded systems and mobile devices due to its low power consumption, non-volatility, and compact size, storing firmware, boot code, or small amounts of persistent data?",
+      "question": "A Linux administrator finds that fail2ban is enabled but SSH brute-force attempts continue. What action will BEST mitigate these attacks?",
       "options": [
-        "Double data rate synchronous dynamic memory",
-        "Graphics-optimized dynamic random access memory",
-        "Static charge-maintained transistor-based memory",
-        "Non-volatile serially accessible memory"
+        "Disable password authentication and use SSH key pairs exclusively.",
+        "Change the default SSH port from 22 to a non-standard port.",
+        "Lower the 'maxretry' value in fail2ban configuration.",
+        "Increase 'bantime' in fail2ban jail settings to extend block duration."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Non-volatile serially accessible memory (NOR Flash Memory) is commonly used in embedded systems and mobile devices for firmware and boot code storage. NOR Flash offers non-volatility (retaining data without power), relatively fast read speeds, byte-level addressability, and execute-in-place (XIP) capability, making it ideal for storing and directly executing boot code and firmware. DDR5 SDRAM and GDDR6 are volatile memory technologies that lose data when powered off, primarily used for main system memory and graphics memory respectively. SRAM is faster but more expensive than flash memory and typically used for cache memory rather than firmware storage.",
-      "examTip": "NOR Flash is the standard for firmware storage in embedded and mobile devices."
+      "correctAnswerIndex": 0,
+      "explanation": "Disabling password authentication eliminates brute-force vectors. Changing ports provides only obscurity, not security. Adjusting fail2ban parameters delays attackers but doesn’t prevent them. SSH keys provide robust protection against brute-force attempts.",
+      "examTip": "Implement SSH key-based authentication and disable password login to eliminate brute-force SSH vulnerabilities."
     },
     {
       "id": 99,
-      "question": "A technician is analyzing network traffic and observes a pattern of repeated SYN packets being sent to a web server from numerous distinct source IP addresses, but no corresponding ACK or data packets are observed in response. Which type of network attack is MOST likely indicated by this traffic pattern?",
+      "question": "A user reports their macOS device fails to connect to Wi-Fi networks after an OS update. Other devices connect without issues. What is the MOST likely cause?",
       "options": [
-        "Domain name resolution falsification",
-        "Initial connection request flooding",
-        "Link layer addressing manipulation",
-        "Authentication state manipulation"
+        "Corrupted network preference files requiring reset.",
+        "Outdated wireless adapter firmware incompatible with the update.",
+        "Router incompatibility with the latest macOS security protocols.",
+        "Keychain corruption affecting Wi-Fi password storage."
       ],
-      "correctAnswerIndex": 1,
-      "explanation": "Initial connection request flooding (SYN Flood Denial-of-Service Attack) is most likely indicated by the observed traffic pattern. In a SYN flood attack, attackers send numerous TCP SYN packets from spoofed source addresses to initiate connections with the target server. Since the source addresses are invalid or spoofed, the server never receives the final ACK packet to complete the three-way handshake. This leaves many half-open connections that consume server resources until connection tables are filled and legitimate connections are blocked. DNS spoofing (domain name resolution falsification) involves manipulating DNS responses, ARP poisoning (link layer addressing manipulation) involves falsifying MAC addresses, and session hijacking (authentication state manipulation) occurs after connections are established.",
-      "examTip": "SYN floods overwhelm the connection queue. High volumes of SYN packets without completing the handshake indicate this type of attack."
+      "correctAnswerIndex": 0,
+      "explanation": "Corrupted network preferences prevent Wi-Fi reconnections after macOS updates. Firmware incompatibility affects hardware detection entirely. Router incompatibility would affect all devices. Keychain issues impact saved passwords, not Wi-Fi detection.",
+      "examTip": "Reset network preferences in macOS when Wi-Fi issues persist after system updates."
     },
     {
       "id": 100,
-      "question": "A technician needs to implement secure remote access to a Windows server's graphical user interface (GUI). Which protocol and port combination is BEST to use?",
+      "question": "A Windows 10 user reports that mapped network drives no longer reconnect automatically after a password change. What is the MOST likely cause?",
       "options": [
-        "Terminal communication protocol on port 23",
-        "File transmission protocol on port 21",
-        "Encrypted connectivity tunneling on port 22",
-        "Remote display protocol on port 3389"
+        "Cached credentials in Credential Manager no longer match the new password.",
+        "DNS resolution failures preventing drive access by hostname.",
+        "Group Policy restrictions preventing automatic drive mapping.",
+        "SMB protocol version mismatches between the client and server."
       ],
-      "correctAnswerIndex": 3,
-      "explanation": "Remote display protocol on port 3389 (RDP - Remote Desktop Protocol) is best for secure GUI access to Windows servers. RDP is specifically designed for providing graphical user interface access to Windows systems and includes capabilities for encryption, authentication, and transmission of display, keyboard, and mouse inputs. Telnet (port 23) provides unencrypted terminal access and is highly insecure. FTP (port 21) is for file transfers, not interactive GUI sessions. SSH (port 22) can provide secure command-line access and can tunnel other protocols, but isn't natively designed for Windows GUI access without additional configuration.",
-      "examTip": "For Windows GUI remote access, always use RDP over port 3389 with proper security measures."
-    } 
+      "correctAnswerIndex": 0,
+      "explanation": "Credential Manager stores network credentials. After a password change, reconnections fail unless the cache is updated. DNS issues would prevent all hostname resolutions. GPO restrictions typically affect all users. SMB mismatches would show protocol errors, not authentication issues.",
+      "examTip": "Clear and update Credential Manager after password changes to restore mapped drive connectivity."
+    }
   ]
 });
