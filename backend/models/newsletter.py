@@ -222,50 +222,65 @@ def send_campaign_to_subscriber(campaign, subscriber):
     if not campaign or not subscriber:
         return False
     
-    recipient_email = subscriber["email"]
-    
-    # Get the user's unsubscribe token (or generate if missing)
-    token = subscriber.get("unsubscribeToken")
-    if not token:
-        token = _generate_unsubscribe_token()
-        start_db = time.time()
-        newsletter_subscribers_collection.update_one(
-            {"_id": subscriber["_id"]},
-            {"$set": {"unsubscribeToken": token}}
+    try:
+        recipient_email = subscriber["email"]
+        
+        # Get the user's unsubscribe token (or generate if missing)
+        token = subscriber.get("unsubscribeToken")
+        if not token:
+            token = _generate_unsubscribe_token()
+            start_db = time.time()
+            newsletter_subscribers_collection.update_one(
+                {"_id": subscriber["_id"]},
+                {"$set": {"unsubscribeToken": token}}
+            )
+            duration = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration
+        
+        # Get the frontend URL from environment variable or use a default
+        frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+        unsubscribe_link = f"{frontend_url}/newsletter/unsubscribe/{token}"
+        
+        # Get the campaign content and title
+        subject_line = campaign["title"]
+        body_html_from_campaign = campaign["contentHtml"]
+        
+        # Create simple HTML that includes campaign content + unsubscribe link
+        personal_html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>{subject_line}</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; color: #333333; line-height: 1.6; margin: 0; padding: 0;">
+            {body_html_from_campaign}
+            <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;">
+            <p style="font-size: 12px; color: #999;">
+                To unsubscribe, click here: <a href="{unsubscribe_link}">Unsubscribe</a>
+            </p>
+        </body>
+        </html>
+        """
+        
+        # Log for debugging
+        if hasattr(current_app, 'logger'):
+            current_app.logger.info(f"Sending campaign to: {recipient_email}")
+        
+        # Send the email using SendGrid
+        return email_sender.send_email(
+            to_email=recipient_email,
+            subject=subject_line,
+            html_content=personal_html,
+            email_type='newsletter'
         )
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-    
-    # Get the frontend URL from environment variable or use a default
-    frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-    unsubscribe_link = f"{frontend_url}/newsletter/unsubscribe/{token}"
-    
-    # Get the campaign content and title
-    subject_line = campaign["title"]
-    body_html_from_campaign = campaign["contentHtml"]
-    
-    # Build a custom HTML that includes campaign content + unsubscribe link
-    personal_html = f"""
-    <html>
-      <body>
-        {body_html_from_campaign}
-        <hr>
-        <p>To unsubscribe, click here:
-          <a href="{unsubscribe_link}">Unsubscribe</a>
-        </p>
-      </body>
-    </html>
-    """
-    
-    # Send the email using SendGrid
-    return email_sender.send_email(
-        to_email=recipient_email,
-        subject=subject_line,
-        html_content=personal_html,
-        email_type='newsletter'
-    )
+    except Exception as e:
+        if hasattr(current_app, 'logger'):
+            current_app.logger.exception(f"Error sending to subscriber: {str(e)}")
+        return False
 
 def send_campaign_to_all(campaign_id):
     """
@@ -273,34 +288,54 @@ def send_campaign_to_all(campaign_id):
     """
     campaign = get_campaign_by_id(campaign_id)
     if not campaign:
+        if hasattr(current_app, 'logger'):
+            current_app.logger.error(f"Campaign not found with ID: {campaign_id}")
         return {"success": False, "message": "Campaign not found"}
     
     if campaign.get("status") == "sent":
         return {"success": False, "message": "Campaign already sent"}
     
-    # Get all active subscribers
-    subscribers_cursor = get_all_active_subscribers()
-    subscribers_list = list(subscribers_cursor)
-    
-    if not subscribers_list:
-        return {"success": False, "message": "No active subscribers found"}
-    
-    success_count = 0
-    fail_count = 0
-    
-    for subscriber in subscribers_list:
-        # Send the campaign to this subscriber
-        sent = send_campaign_to_subscriber(campaign, subscriber)
+    try:
+        # Get all active subscribers
+        subscribers_cursor = get_all_active_subscribers()
+        subscribers_list = list(subscribers_cursor)
         
-        if sent:
-            success_count += 1
-        else:
-            fail_count += 1
-    
-    # Mark the campaign as sent
-    mark_campaign_sent(campaign_id)
-    
-    return {
-        "success": True, 
-        "message": f"Newsletter sent to {success_count} subscribers ({fail_count} failed)"
-    }
+        if hasattr(current_app, 'logger'):
+            current_app.logger.info(f"Found {len(subscribers_list)} active subscribers")
+        
+        if not subscribers_list:
+            if hasattr(current_app, 'logger'):
+                current_app.logger.warning("No active subscribers found when sending campaign")
+            return {"success": False, "message": "No active subscribers found"}
+        
+        success_count = 0
+        fail_count = 0
+        
+        for subscriber in subscribers_list:
+            # Log subscriber info for debugging
+            if hasattr(current_app, 'logger'):
+                current_app.logger.info(f"Attempting to send to subscriber: {subscriber.get('email')}")
+            
+            # Send the campaign to this subscriber
+            sent = send_campaign_to_subscriber(campaign, subscriber)
+            
+            if sent:
+                success_count += 1
+                if hasattr(current_app, 'logger'):
+                    current_app.logger.info(f"Successfully sent to {subscriber.get('email')}")
+            else:
+                fail_count += 1
+                if hasattr(current_app, 'logger'):
+                    current_app.logger.error(f"Failed to send to {subscriber.get('email')}")
+        
+        # Mark the campaign as sent
+        mark_campaign_sent(campaign_id)
+        
+        return {
+            "success": True, 
+            "message": f"Newsletter sent to {success_count} subscribers ({fail_count} failed)"
+        }
+    except Exception as e:
+        if hasattr(current_app, 'logger'):
+            current_app.logger.exception(f"Error sending campaign: {str(e)}")
+        return {"success": False, "message": f"Error sending campaign: {str(e)}"}
