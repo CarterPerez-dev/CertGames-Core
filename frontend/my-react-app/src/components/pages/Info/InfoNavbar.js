@@ -1,14 +1,17 @@
 // src/components/pages/Info/InfoNavbar.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { setupScrollListener } from './navbarScrollUtils';
 import './InfoNavbar.css';
 
 const InfoNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const location = useLocation();
 
+  // Handle scroll effects for navbar appearance
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 50;
@@ -22,6 +25,34 @@ const InfoNavbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrolled]);
+
+  // Set active tab based on current route when component mounts
+  useEffect(() => {
+    const path = location.pathname;
+    if (path === '/') {
+      setActiveTab('home');
+    } else if (path === '/demos') {
+      setActiveTab('demos');
+    } else if (path === '/exams') {
+      setActiveTab('exams');
+    } else if (path === '/public-leaderboard') {
+      setActiveTab('leaderboard');
+    } else if (path === '/contact') {
+      setActiveTab('contact');
+    } else if (path === '/register') {
+      setActiveTab('register');
+    } else if (path === '/login') {
+      setActiveTab('login');
+    }
+  }, [location]);
+
+  // Set up scroll-based active tab highlighting, but only on the home page
+  useEffect(() => {
+    if (location.pathname === '/') {
+      const cleanup = setupScrollListener(setActiveTab);
+      return cleanup;
+    }
+  }, [location.pathname]);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
