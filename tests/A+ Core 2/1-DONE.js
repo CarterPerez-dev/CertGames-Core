@@ -347,7 +347,7 @@ db.tests.insertOne({
       "question": "A user reports they are receiving an error message stating 'Operating System Not Found'.  What is a likely cause?",
       "options": [
         "The computer's display adapter is malfunctioning.",
-        "The boot order in the BIOS/UEFI is incorrect, or the boot drive is failing.",
+        "The boot order in the BIOS/UEFI is incorrect.",
         "The computer's RAM is faulty.",
         "The power supply is not providing enough power."
       ],
