@@ -523,5 +523,786 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "A federated lineage approach where each system maintains its own lineage information with a centralized aggregation service provides the most practical and maintainable solution for complex environments with diverse systems. This approach acknowledges that different systems have different capabilities for generating lineage information while still providing a comprehensive view through the centralized aggregation service. It balances completeness with maintainability by placing responsibility for lineage at the system level where the knowledge exists. Automated extraction (option A) would miss important context and semantics. Real-time lineage agents (option B) would be technically challenging to implement across diverse systems and potentially create performance issues. A business glossary-centric approach (option D) focuses too much on business terms at the expense of technical accuracy.",
       "examTip": "When implementing data lineage in diverse technical environments, consider federated approaches that allow each system to maintain its own lineage details according to its capabilities, with centralized services that aggregate and connect lineage across system boundaries to provide end-to-end visibility."
+    },
+    {
+      "id": 41,
+      "question": "A data scientist needs to optimize a machine learning pipeline processing large volumes of high-dimensional data for a classification problem. Initial training is very slow and the model shows signs of overfitting. Which combination of techniques would most effectively address both the performance and accuracy concerns?",
+      "options": [
+        "Apply principal component analysis for dimensionality reduction, implement cross-validation with early stopping, and use distributed processing for parallel model training.",
+        "Use recursive feature elimination to select the most important features, apply L1 regularization to reduce model complexity, and implement data caching between pipeline stages.",
+        "Implement feature hashing to reduce dimensionality, apply ensemble methods with bagging to reduce overfitting, and use mini-batch processing for faster training.",
+        "Apply autoencoder neural networks for nonlinear dimensionality reduction, use dropout regularization to prevent overfitting, and implement GPU acceleration for matrix operations."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Principal component analysis directly addresses high-dimensional data by reducing dimensions while preserving variance, cross-validation with early stopping prevents overfitting by stopping training when validation performance deteriorates, and distributed processing tackles the slow training issue by parallelizing computations across multiple nodes. This combination comprehensively addresses both the performance bottlenecks and the overfitting problem.",
+      "examTip": "When optimizing ML pipelines, remember that dimensionality reduction techniques like PCA can simultaneously improve performance and reduce overfitting by removing noise dimensions."
+    },
+    {
+      "id": 42,
+      "question": "A data engineer is designing a data quality monitoring system for a real-time streaming analytics platform that processes IoT sensor data. The system needs to detect anomalies and data quality issues without introducing significant latency. Which approach would be most effective for real-time data quality monitoring?",
+      "options": [
+        "Implement a lambda architecture with a batch layer for comprehensive quality checks and a speed layer for real-time approximate checks, reconciling results periodically.",
+        "Use statistical process control techniques to establish control limits for key metrics, flagging outliers in real-time with sliding window calculations.",
+        "Apply a machine learning model trained on historical data patterns to predict expected values, generating alerts when incoming data significantly deviates from predictions.",
+        "Implement rule-based validation on a sample of the streaming data, with dynamic adjustment of sampling rate based on detected error frequency."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Statistical process control (SPC) techniques are specifically designed for real-time monitoring of processes, establishing control limits based on historical patterns and detecting outliers as they occur. Sliding window calculations allow the system to maintain context while processing streaming data without introducing significant latency, making this approach ideal for real-time quality monitoring of IoT sensor data.",
+      "examTip": "For real-time data quality monitoring, statistical process control with sliding windows offers the optimal balance between detection accuracy and low latency processing."
+    },
+    {
+      "id": 43,
+      "question": "A data architect is designing a solution for a financial institution that needs to analyze customer transaction patterns for fraud detection. The system must process millions of transactions daily, identify suspicious patterns in near real-time, and maintain a complete audit trail. Which architectural approach would best meet these requirements?",
+      "options": [
+        "Implement a data lake architecture with raw transaction storage, batch processing for historical pattern analysis, and a separate real-time processing engine for current transactions.",
+        "Use a kappa architecture with Apache Kafka as the central log, processing all data through streaming analytics with persistent storage of results in a time-series database.",
+        "Deploy a lambda architecture with stream processing for real-time alerts, batch processing for comprehensive model training, and a serving layer that combines insights from both paths.",
+        "Implement an HTAP (Hybrid Transactional/Analytical Processing) architecture that allows simultaneous transaction processing and analytical queries on the same data store."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A lambda architecture provides the optimal solution by combining stream processing for real-time fraud detection with batch processing for more comprehensive pattern analysis and model training. The serving layer unifies insights from both paths, allowing the system to balance immediate detection needs with deeper analysis while maintaining a complete audit trail through the batch layer.",
+      "examTip": "When designing systems that require both real-time alerting and comprehensive historical analysis, consider lambda architectures that process data through parallel paths optimized for different requirements."
+    },
+    {
+      "id": 44,
+      "question": "A data analyst is examining website user behavior to optimize conversion paths. The dataset includes user sessions with timestamps, page views, events, and conversion flags. The analyst needs to understand typical user journeys and identify points of friction. Which analytical method would be most appropriate for this task?",
+      "options": [
+        "Apply clickstream analysis with Markov chains to model user navigation patterns and calculate transition probabilities between pages.",
+        "Use cohort analysis to group users by acquisition date and compare conversion rates over time across different segments.",
+        "Implement association rule mining to identify common co-occurring page views and events that lead to conversions.",
+        "Apply k-means clustering to group similar user sessions based on behavioral features and compare cluster characteristics."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Clickstream analysis with Markov chains is specifically designed for modeling user navigation patterns, calculating the probability of transitions between pages and identifying the most common paths. This approach directly addresses the need to understand user journeys and identify friction points by revealing where users commonly deviate from conversion paths.",
+      "examTip": "For analyzing user navigation patterns and optimizing conversion paths, Markov chain models offer valuable insights by quantifying transition probabilities between pages and revealing common drop-off points."
+    },
+    {
+      "id": 45,
+      "question": "An analyst needs to evaluate the effectiveness of a marketing campaign that was gradually rolled out across different geographic regions over a six-month period. The dataset includes daily sales, marketing spend, competitive activities, and regional economic indicators. Which analytical approach would provide the most reliable estimate of the campaign's causal impact?",
+      "options": [
+        "Implement difference-in-differences analysis comparing regions with and without the campaign during overlapping time periods, controlling for regional fixed effects.",
+        "Apply a synthetic control method that creates a weighted combination of unexposed regions to serve as a counterfactual for each treated region.",
+        "Use a regression discontinuity design analyzing sales patterns just before and after campaign implementation in each region.",
+        "Perform a staggered adoption analysis using fixed effects panel regression with time-varying treatment indicators for each region."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Staggered adoption analysis with fixed effects panel regression is specifically designed for scenarios where an intervention is implemented across different units at different times. By using time-varying treatment indicators, this approach leverages the variation in implementation timing across regions to identify the campaign's causal effect while controlling for time-invariant regional characteristics and temporal trends.",
+      "examTip": "When analyzing interventions rolled out gradually across different units, staggered adoption analysis with fixed effects provides the most robust causal inference by utilizing the natural variation in implementation timing."
+    },
+    {
+      "id": 46,
+      "question": "A company is implementing a new customer data platform (CDP) that will integrate data from multiple sources including CRM, website interactions, mobile app usage, and purchase history. The system needs to create a unified customer profile while handling identity resolution across channels. Which approach to customer identity resolution would be most effective?",
+      "options": [
+        "Implement a deterministic matching system using authenticated identifiers like email addresses and account IDs as primary keys, with exact matching rules.",
+        "Use a probabilistic matching approach that calculates match likelihood scores based on multiple attributes, setting confidence thresholds for automatic and manual resolution.",
+        "Apply a hybrid approach that uses deterministic matching for authenticated interactions and probabilistic matching for anonymous sessions, with progressive profile enrichment.",
+        "Deploy a machine learning-based entity resolution system that continuously learns from confirmed matches to improve matching accuracy over time."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A hybrid approach combining deterministic matching for authenticated interactions with probabilistic matching for anonymous sessions provides the most comprehensive solution. This approach maximizes accuracy by using exact matches when reliable identifiers are available, while still capturing anonymous interactions through probabilistic methods, enabling progressive profile enrichment as users authenticate.",
+      "examTip": "For customer identity resolution across multiple channels, hybrid approaches that combine deterministic and probabilistic matching techniques provide the best balance between accuracy and coverage."
+    },
+    {
+      "id": 47,
+      "question": "A data engineer is designing a data pipeline that needs to process sensitive healthcare information from multiple sources. The pipeline must ensure data quality, maintain patient privacy, and provide an audit trail of all transformations. Which combination of data engineering practices would best address these requirements?",
+      "options": [
+        "Implement data validation at ingestion with schema enforcement, apply data masking for PHI fields, and use immutable logging of all transformation operations with timestamps and user identifiers.",
+        "Use homomorphic encryption to process data without decryption, implement automated data quality scoring, and maintain separate processing pipelines for identified and de-identified data.",
+        "Apply attribute-based access control at each pipeline stage, use checksums to verify data integrity, and implement differential privacy for aggregate outputs.",
+        "Deploy an end-to-end data encryption system, use AI-based data quality detection, and implement container isolation for each transformation step."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of data validation at ingestion, data masking for PHI, and immutable logging provides comprehensive protection for healthcare data. Validation at ingestion catches quality issues early, data masking protects patient privacy while allowing necessary processing, and immutable logging creates a complete audit trail of all transformations as required by healthcare compliance frameworks.",
+      "examTip": "When processing sensitive healthcare data, implement controls at each stage: validation during ingestion, masking/anonymization during processing, and immutable logging for audit trails."
+    },
+    {
+      "id": 48,
+      "question": "A data analyst is working with a dataset containing customer support interactions, including chat transcripts, call recordings, and ticket resolutions. The analyst needs to extract key themes and sentiment trends to improve customer service. Which text analytics approach would be most appropriate for this unstructured data?",
+      "options": [
+        "Apply named entity recognition to identify product and issue types, use sentiment analysis to score emotional content, and implement topic modeling to identify common themes.",
+        "Use word frequency analysis with TF-IDF weighting, apply hierarchical clustering to group similar documents, and create word clouds for visual representation.",
+        "Implement full-text search indexing with faceted navigation, apply manual coding of a sample for training data, and use supervised classification for remaining documents.",
+        "Apply word embeddings to convert text to vector representations, use dimensionality reduction for visualization, and implement k-means clustering to identify common patterns."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of named entity recognition, sentiment analysis, and topic modeling provides the most comprehensive approach for customer support interaction analysis. NER identifies specific products and issues mentioned, sentiment analysis captures customer emotions and satisfaction levels, and topic modeling reveals underlying themes across interactions without requiring predefined categories.",
+      "examTip": "When analyzing customer support data, combine named entity recognition to extract specific elements, sentiment analysis to understand emotional content, and topic modeling to discover emerging themes."
+    },
+    {
+      "id": 49,
+      "question": "A data analyst is tasked with creating a classification model to predict which customers are likely to respond to a marketing campaign. The dataset is imbalanced with only 5% positive responses in historical data. Which approach would most effectively handle this class imbalance while maintaining model reliability?",
+      "options": [
+        "Use random undersampling of the majority class combined with SMOTE (Synthetic Minority Over-sampling Technique) for the minority class, then apply ensemble methods.",
+        "Implement cost-sensitive learning by assigning higher misclassification costs to the minority class, then use a gradient boosting algorithm.",
+        "Apply one-class classification to model the minority class distribution, using anomaly detection techniques to identify likely responders.",
+        "Use stratified sampling to maintain class distributions in train/test splits, then implement bagging with thresholded decision rules optimized for F1-score."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Combining random undersampling of the majority class with SMOTE for the minority class effectively balances the dataset while preserving information and creating synthetic examples that improve generalization. Following this with ensemble methods further improves robustness by combining multiple balanced models, addressing both the statistical challenges of rare events and the algorithmic bias toward majority classes.",
+      "examTip": "For highly imbalanced datasets, hybrid resampling approaches that combine undersampling the majority class with synthetic oversampling of the minority class generally outperform single-strategy approaches."
+    },
+    {
+      "id": 50,
+      "question": "A retail company is analyzing its product assortment to optimize inventory across multiple store locations. The dataset includes historical sales, product attributes, store information, and regional demographics. Which analytical approach would be most effective for determining optimal product assortment by location?",
+      "options": [
+        "Implement market basket analysis to identify product affinities, then use location clustering to group similar stores for targeted assortment strategies.",
+        "Apply random forest regression to predict sales volume for each product-location combination, using feature importance to identify key drivers.",
+        "Use a two-stage approach with gradient boosting to predict baseline demand and a separate model to estimate cannibalization and halo effects between products.",
+        "Implement hierarchical Bayesian modeling that accounts for store-level variations while pooling information across similar stores and products."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Hierarchical Bayesian modeling is ideally suited for retail assortment optimization as it explicitly models the nested structure of products within stores within regions. This approach accounts for store-level variations while borrowing statistical strength across similar stores, providing robust estimates even for new or low-volume products and locations.",
+      "examTip": "When optimizing decisions across multiple locations with varying characteristics, hierarchical models provide the best balance between local customization and statistical reliability by partially pooling information across similar units."
+    },
+    {
+      "id": 51,
+      "question": "A data engineer is designing a disaster recovery strategy for a critical data platform that supports business operations. The system includes relational databases, data warehouses, and unstructured data stores. The organization requires minimal data loss and rapid recovery capabilities. Which combination of disaster recovery techniques would best meet these requirements?",
+      "options": [
+        "Implement synchronous database mirroring for relational data, continuous backup with transaction logs for the data warehouse, and geo-replicated object storage for unstructured data.",
+        "Use database replication with a 15-minute lag, daily full backups with hourly differentials, and RAID storage for all systems with hot spare drives.",
+        "Deploy an active-active configuration with load balancing across multiple regions, continuous data validation, and automated failover testing.",
+        "Implement snapshot-based backups every 30 minutes, offsite tape storage for long-term retention, and documented manual recovery procedures."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of synchronous database mirroring, continuous backup with transaction logs, and geo-replicated object storage provides comprehensive protection with minimal data loss. Synchronous mirroring ensures zero data loss for relational databases, transaction logs enable point-in-time recovery for the data warehouse, and geo-replication provides durability for unstructured data across geographic regions.",
+      "examTip": "Match disaster recovery techniques to data types and criticality: synchronous methods for transactional systems requiring zero data loss, continuous backup with logs for analytical systems, and geo-replication for unstructured data."
+    },
+    {
+      "id": 52,
+      "question": "A data scientist is analyzing customer churn for a subscription service and needs to explain the model results to business stakeholders. The model includes complex interactions between features like usage patterns, billing history, customer service interactions, and demographic information. Which approach to model interpretation would be most effective for communicating actionable insights to non-technical stakeholders?",
+      "options": [
+        "Generate SHAP (SHapley Additive exPlanations) values to show the contribution of each feature to individual predictions, visualized as force plots for representative customer examples.",
+        "Create partial dependence plots showing the marginal effect of each feature on the predicted outcome, highlighting thresholds where churn probability significantly changes.",
+        "Implement a surrogate model using a decision tree to approximate the complex model's behavior, visualizing the simplified rules for stakeholder understanding.",
+        "Use counterfactual explanations that show specific changes in customer features that would alter the prediction from 'likely to churn' to 'likely to retain'."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Counterfactual explanations provide the most actionable insights for business stakeholders by directly showing what changes would alter a prediction outcome. Rather than focusing on model mechanics, this approach translates complex model behavior into concrete actions the business can take to retain specific customers or customer segments, bridging the gap between statistical analysis and business strategy.",
+      "examTip": "When explaining predictive models to business stakeholders, focus on actionable insights using counterfactual explanations that translate model predictions into specific intervention opportunities."
+    },
+    {
+      "id": 53,
+      "question": "A data engineer is designing a data pipeline for a financial services company that needs to generate daily risk reports by aggregating data from multiple transaction systems. The pipeline must handle late-arriving data, ensure consistency across reports, and maintain historical versions. Which data engineering pattern would best address these requirements?",
+      "options": [
+        "Implement a medallion architecture with bronze/silver/gold layers, using delta lakes for ACID transactions and time travel capabilities.",
+        "Use a Kappa architecture with Apache Kafka for event sourcing, maintaining a complete log of all transactions that can be reprocessed from any point in time.",
+        "Deploy a batch processing pipeline with a staging area for late-arriving data, implementing slowly changing dimensions for consistency and versioning.",
+        "Implement a lambda architecture with a serving layer that merges results from both batch and speed layers, prioritizing batch results for consistency."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A medallion architecture with delta lakes provides the optimal solution for financial reporting with late-arriving data. The bronze layer captures all raw data, the silver layer standardizes and validates it, and the gold layer produces consistent aggregations. Delta lake's ACID transactions ensure consistency while time travel capabilities maintain historical versions and allow reprocessing when late data arrives.",
+      "examTip": "For financial reporting pipelines that must handle late-arriving data while maintaining consistency and versioning, delta-based medallion architectures provide built-in capabilities for time travel and ACID transactions."
+    },
+    {
+      "id": 54,
+      "question": "A data governance team needs to establish a framework for managing reference data (such as product categories, geographic regions, and status codes) across multiple systems. The current environment has inconsistent reference data leading to reporting discrepancies. Which reference data management approach would most effectively address these issues?",
+      "options": [
+        "Implement a centralized reference data repository with a formal request process for changes, approval workflows, and automated distribution to consuming systems.",
+        "Create a federated approach where each department maintains their reference data locally but publishes it to a central catalog with mapping tables between different versions.",
+        "Use a master data management system to maintain reference data alongside master data, applying the same governance processes to both data types.",
+        "Establish a data mesh architecture where reference data is treated as a product, with dedicated domain teams responsible for specific reference data domains."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A centralized reference data repository with formal governance processes provides the most effective solution for ensuring consistency. The formal request and approval workflows ensure proper vetting of changes, while automated distribution to consuming systems prevents drift and manual error. This approach directly addresses the current issue of inconsistent reference data by establishing a single authoritative source.",
+      "examTip": "Unlike transactional or master data, reference data changes infrequently and requires enterprise-wide consistency, making centralized management with controlled distribution the most effective approach."
+    },
+    {
+      "id": 55,
+      "question": "A data architect is designing a solution to support both real-time analytics on current data and historical analysis over multiple years of data. The system needs to handle high query volumes during business hours while running complex analytical jobs overnight. Which data platform architecture would best meet these requirements?",
+      "options": [
+        "Implement a dual-layer architecture with a columnar analytical store for historical data and an in-memory database for real-time data, with an orchestration layer to route queries appropriately.",
+        "Use a unified data warehouse with partitioning strategies that separate hot and cold data, with resource governance to prioritize real-time queries during business hours.",
+        "Deploy a data lake for historical storage combined with a streaming analytics platform for real-time processing, using query federation to unify results when needed.",
+        "Implement an HTAP (Hybrid Transactional/Analytical Processing) database that uses in-memory processing for hot data with intelligent tiering to disk for historical data."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A dual-layer architecture with specialized systems for real-time and historical data provides the optimal solution. The columnar store efficiently handles complex analytical queries on large historical datasets, while the in-memory database provides the low latency required for real-time analytics. The orchestration layer intelligently routes queries to the appropriate system based on data age and query requirements.",
+      "examTip": "When designing systems with dramatically different workload characteristics (real-time vs. historical, simple vs. complex queries), purpose-built storage systems with intelligent query routing often outperform unified approaches."
+    },
+    {
+      "id": 56,
+      "question": "A data analyst is preparing a dataset for machine learning that contains features with different scales and distributions. Some numeric features have extreme outliers, while others show significant skewness. Which combination of preprocessing techniques would most effectively prepare this data for algorithms sensitive to feature scaling?",
+      "options": [
+        "Apply robust scaling (using median and IQR) for features with outliers, quantile transformation for highly skewed features, and standard scaling for normally distributed features.",
+        "Use min-max scaling for all numeric features, with binning strategies to handle outliers by placing them in edge bins.",
+        "Apply log transformation to all features followed by z-score normalization to achieve approximately normal distributions.",
+        "Use principal component analysis to create orthogonal features, then apply min-max scaling to the principal components."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A targeted approach using different scaling techniques based on data characteristics provides the most effective preprocessing. Robust scaling handles outliers without being influenced by extreme values, quantile transformation addresses skewness by creating uniform or normal distributions, and standard scaling works well for already normally distributed features. This combination preserves the relative information in each feature while making them comparable.",
+      "examTip": "Effective feature preprocessing requires analyzing each feature's distribution and applying appropriate transformations based on specific characteristics rather than using a one-size-fits-all approach."
+    },
+    {
+      "id": 57,
+      "question": "An organization is implementing a data catalog to improve data discovery and understanding across multiple data platforms. The environment includes structured databases, data warehouses, data lakes, and business intelligence systems. Which approach to metadata management would provide the most comprehensive and maintainable catalog?",
+      "options": [
+        "Implement automated metadata harvesting from system sources combined with human curation for business context, with APIs for bidirectional integration with data tools.",
+        "Deploy a centralized metadata repository with manual documentation processes and dedicated data stewards responsible for keeping information current.",
+        "Use a machine learning approach that analyzes data content and query patterns to automatically generate and maintain metadata without human intervention.",
+        "Implement a federated catalog architecture where each platform maintains its own metadata repository with a central search index that aggregates across sources."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Combining automated harvesting with human curation provides the most effective metadata management approach. Automation efficiently captures technical metadata at scale from system sources, while human curation adds critical business context and knowledge that can't be automatically derived. Bidirectional APIs enable integration with data tools, creating a virtuous cycle where metadata usage improves its quality.",
+      "examTip": "Effective data catalogs balance automation for technical metadata with human curation for business context, using APIs to integrate with tools and create self-reinforcing metadata ecosystems."
+    },
+    {
+      "id": 58,
+      "question": "A data science team needs to develop a predictive maintenance model for manufacturing equipment based on sensor data. The data includes continuous measurements of temperature, pressure, vibration, and operational parameters, but very few historical examples of actual failures. Which modeling approach would be most effective given the limited failure examples?",
+      "options": [
+        "Implement an unsupervised anomaly detection approach using autoencoders to learn normal operating patterns, flagging deviations as potential failure indicators.",
+        "Use transfer learning with a pre-trained model from similar equipment, fine-tuning with the limited failure examples available.",
+        "Apply a semi-supervised learning approach that leverages abundant unlabeled data with limited labeled failure examples to improve classification performance.",
+        "Implement a physics-informed neural network that incorporates domain knowledge about failure mechanisms alongside data-driven learning."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Unsupervised anomaly detection with autoencoders is ideally suited for predictive maintenance with limited failure examples. This approach learns to represent normal operating patterns from abundant healthy-state data, then identifies potential failures by detecting deviations from these patterns, effectively turning the problem from a rare-event classification task to an anomaly detection task.",
+      "examTip": "When building predictive models for rare events like equipment failures, unsupervised anomaly detection approaches often outperform traditional supervised methods by learning from normal operations rather than requiring numerous failure examples."
+    },
+    {
+      "id": 59,
+      "question": "A data analyst is investigating the effectiveness of a new training program implemented across different departments in a large organization. The program was rolled out at different times over a year, with some departments not implementing it at all. Which analytical approach would provide the most rigorous evaluation of the training program's impact on performance metrics?",
+      "options": [
+        "Use a difference-in-differences framework with fixed effects to compare performance changes between departments that implemented the training and those that didn't.",
+        "Apply a CUSUM (cumulative sum) analysis to identify significant changes in performance metrics following training implementation for each department.",
+        "Implement a regression discontinuity design analyzing performance metrics just before and after training implementation in each department.",
+        "Use an interrupted time series analysis with segmented regression for each department, aggregating results with meta-analysis techniques."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A difference-in-differences framework with fixed effects provides the most rigorous approach for evaluating the training program's causal impact. This method explicitly compares the changes in departments that implemented training (treatment group) to those that didn't (control group), while fixed effects control for time-invariant differences between departments and common temporal factors affecting all departments.",
+      "examTip": "When evaluating interventions with staggered implementation and natural control groups, difference-in-differences designs provide powerful causal inference by comparing changes between treated and untreated groups over time."
+    },
+    {
+      "id": 60,
+      "question": "A business intelligence team is developing a dashboard for executive leadership that needs to present complex financial and operational metrics in an accessible way. The executives have varying levels of data literacy and limited time to interpret detailed visualizations. Which dashboard design approach would most effectively communicate key insights to this audience?",
+      "options": [
+        "Implement a narrative-based dashboard that combines targeted visualizations with automated natural language insights explaining key trends, anomalies, and their business implications.",
+        "Create a highly interactive dashboard with multiple drill-down levels, allowing executives to explore data from high-level summaries to granular details based on their interests.",
+        "Design a minimalist dashboard focused exclusively on KPI metrics with conditional formatting and trend indicators, eliminating detailed visualizations entirely.",
+        "Use advanced visualization techniques like parallel coordinates and network diagrams to display complex relationships between multiple business dimensions simultaneously."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A narrative-based dashboard with automated natural language insights best serves executives with varying data literacy and limited time. This approach explicitly translates complex data patterns into business implications through natural language, while still providing targeted visualizations for context. It respects executives' time constraints by highlighting what's important and why, rather than requiring manual exploration or interpretation.",
+      "examTip": "For executive audiences, narrative-based dashboards with automated insights often provide better outcomes than either highly interactive or extremely simplified approaches by directly communicating business implications without requiring interpretation."
+    },
+    {
+      "id": 61,
+      "question": "A manufacturing company has implemented sensors on production equipment that capture temperature, pressure, and vibration data every minute. Over time, several sensors have begun to fail in different ways. Match each sensor failure pattern with the most likely type of failure described.",
+      "options": [
+        "Sensor A: Readings gradually drift upward over days until reaching a plateau 15% above normal | Sensor B: Readings suddenly drop to zero and remain there | Sensor C: Readings fluctuate rapidly between normal values and impossibly high values | Sensor D: Readings remain exactly the same value for extended periods despite changing conditions",
+        "Sensor A: Readings remain exactly the same value for extended periods despite changing conditions | Sensor B: Readings gradually drift upward over days until reaching a plateau 15% above normal | Sensor C: Readings suddenly drop to zero and remain there | Sensor D: Readings fluctuate rapidly between normal values and impossibly high values",
+        "Sensor A: Readings suddenly drop to zero and remain there | Sensor B: Readings fluctuate rapidly between normal values and impossibly high values | Sensor C: Readings gradually drift upward over days until reaching a plateau 15% above normal | Sensor D: Readings remain exactly the same value for extended periods despite changing conditions",
+        "Sensor A: Readings fluctuate rapidly between normal values and impossibly high values | Sensor B: Readings remain exactly the same value for extended periods despite changing conditions | Sensor C: Readings suddenly drop to zero and remain there | Sensor D: Readings gradually drift upward over days until reaching a plateau 15% above normal"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct matching identifies Sensor A's gradual drift as calibration error, Sensor B's sudden drop to zero as complete failure or disconnection, Sensor C's rapid fluctuations as electrical interference or loose connection, and Sensor D's static readings as a frozen or stuck sensor. Each pattern represents a distinct failure mode commonly seen in industrial sensors.",
+      "examTip": "When analyzing sensor data quality, recognize characteristic failure patterns: gradual drifts indicate calibration issues, sudden zeros suggest complete failures, rapid fluctuations point to electrical problems, and static values despite changing conditions reveal frozen sensors."
+    },
+    {
+      "id": 62,
+      "question": "You're analyzing a dataset containing customer purchase history and notice inconsistencies in how purchase dates are formatted. Which of the following SQL queries would correctly standardize all date formats to YYYY-MM-DD while identifying records with invalid dates?",
+      "options": [
+        "SELECT customer_id, purchase_id, CASE WHEN ISDATE(purchase_date) = 1 THEN CONVERT(date, purchase_date) ELSE NULL END AS standardized_date, CASE WHEN ISDATE(purchase_date) = 0 THEN 'Invalid date format' ELSE NULL END AS data_issue FROM customer_purchases;",
+        "SELECT customer_id, purchase_id, TO_DATE(purchase_date, 'YYYY-MM-DD') AS standardized_date, CASE WHEN TO_DATE(purchase_date, 'YYYY-MM-DD') IS NULL THEN 'Invalid date format' END AS data_issue FROM customer_purchases;",
+        "SELECT customer_id, purchase_id, TRY_CAST(purchase_date AS date) AS standardized_date, CASE WHEN TRY_CAST(purchase_date AS date) IS NULL THEN 'Invalid date format' ELSE 'Valid date' END AS data_issue FROM customer_purchases;",
+        "SELECT customer_id, purchase_id, DATE_FORMAT(purchase_date, '%Y-%m-%d') AS standardized_date, IF(purchase_date IS NULL, 'Missing date', 'Valid date') AS data_issue FROM customer_purchases;"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The correct query uses TRY_CAST to attempt conversion to date format, which returns NULL when conversion fails without causing query errors. The CASE statement then identifies records with invalid dates by checking for NULL values in the standardized_date column, properly separating valid conversions from invalid date formats.",
+      "examTip": "When standardizing date formats in SQL, TRY_CAST or similar safe conversion functions prevent query failures when encountering invalid formats while enabling simultaneous identification of problematic records."
+    },
+    {
+      "id": 63,
+      "question": "Your team has created a random forest model to predict customer churn with 85% accuracy. The product manager wants to understand why specific customers are predicted to churn before implementing retention strategies. After examining the model diagnostics shown below, which conclusion about model interpretability is correct?",
+      "options": [
+        "The model provides clear directional relationships between features and outcomes but cannot explain predictions for individual customers without additional techniques.",
+        "Feature importance rankings alone provide sufficient explanation for why individual customers are flagged as likely to churn.",
+        "The low feature correlation values indicate that the model is not reliable enough for business decision-making.",
+        "The high number of trees in the random forest ensures that prediction explanations will be consistent across all customers."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Random forests provide feature importance rankings that show which variables generally influence predictions across all customers, but they don't explain how these features interact for individual predictions or the direction of impact. Additional techniques like SHAP values or partial dependence plots are needed to understand why specific customers are predicted to churn.",
+      "examTip": "Global feature importance from tree ensemble models shows which variables matter overall but doesn't explain individual predictions; for customer-specific explanations, additional interpretability techniques are required."
+    },
+    {
+      "id": 64,
+      "question": "Arrange the following data validation steps in the correct sequence according to data processing best practices, from earliest to latest in the pipeline.",
+      "options": [
+        "1. Check for conformance to schema/data types | 2. Validate referential integrity across tables | 3. Apply domain-specific business rules | 4. Verify statistical distribution patterns | 5. Validate derived metrics against historical aggregates",
+        "1. Apply domain-specific business rules | 2. Check for conformance to schema/data types | 3. Validate referential integrity across tables | 4. Verify statistical distribution patterns | 5. Validate derived metrics against historical aggregates",
+        "1. Verify statistical distribution patterns | 2. Check for conformance to schema/data types | 3. Validate referential integrity across tables | 4. Apply domain-specific business rules | 5. Validate derived metrics against historical aggregates",
+        "1. Validate derived metrics against historical aggregates | 2. Apply domain-specific business rules | 3. Check for conformance to schema/data types | 4. Validate referential integrity across tables | 5. Verify statistical distribution patterns"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct sequence follows data validation best practices: first validating basic structure (schema/data types), then relationships between data elements (referential integrity), followed by business rules, statistical patterns, and finally comparing derived metrics to historical values. This progression moves from fundamental technical validation to increasingly complex analytical validation.",
+      "examTip": "Structure data validation in order of dependency: technical validations (schema, data types) first, then relational validations, business rules, statistical patterns, and finally aggregate comparisons."
+    },
+    {
+      "id": 65,
+      "question": "You're analyzing customer feedback data and need to identify emerging issues. The text pre-processing steps below have been implemented, but one critical step contains an error. Identify the step with the error and why it's problematic.",
+      "options": [
+        "Converting all text to lowercase is problematic because it removes important named entity information that could be vital for identifying product or feature-specific issues.",
+        "Removing stop words using a standard English list is problematic because it might eliminate domain-specific terms that are important in customer feedback analysis.",
+        "Applying stemming to reduce words to their root form is problematic because it can combine distinct technical terms that should remain separate for accurate issue identification.",
+        "Tokenizing text by splitting on whitespace is problematic because it fails to properly handle compound terms, hyphenated words, and punctuation that may change meaning."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Tokenizing by simply splitting on whitespace is an inadequate approach for customer feedback analysis. This method fails to properly handle compound terms, hyphenated words, punctuation that changes meaning, and other complex linguistic features. Proper tokenization should account for these elements to maintain semantic integrity.",
+      "examTip": "Simple whitespace tokenization often breaks down with real-world text; use specialized NLP tokenizers that handle punctuation, compound terms, and contextual language patterns."
+    },
+    {
+      "id": 66,
+      "question": "Your organization is preparing for a regulatory audit of data handling practices. Which of the following findings from a pre-audit assessment would represent the MOST serious compliance risk?",
+      "options": [
+        "Production data containing personally identifiable information is used in the development environment without anonymization or pseudonymization.",
+        "Some data lineage documentation is outdated, showing previous rather than current data transformation processes.",
+        "User access reviews for data systems are conducted annually rather than quarterly as recommended in internal policies.",
+        "The data retention policy exists but implementation is inconsistent across different database systems."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using production data with PII in development environments without anonymization creates serious compliance risk under regulations like GDPR and CCPA, potentially exposing sensitive data to unauthorized personnel. While the other issues represent compliance weaknesses, they generally don't involve direct exposure of protected data and would typically result in less severe regulatory consequences.",
+      "examTip": "Data protection regulations prioritize actual exposure risks of sensitive data; using production data with PII in non-production environments without protection is a critical compliance violation."
+    },
+    {
+      "id": 67,
+      "question": "A retail chain is analyzing store performance across 200 locations. The visualization below shows weekly sales against customer traffic for each store, with colors indicating geographical region. Which of the following statements represents a valid analytical conclusion based on this visualization?",
+      "options": [
+        "The correlation between customer traffic and sales is stronger in the Eastern region than in other regions.",
+        "Stores with higher than average customer traffic consistently show proportionally higher sales across all regions.",
+        "Western region stores show greater variability in the sales-to-traffic ratio than stores in other regions.",
+        "Northern region stores achieve the highest sales efficiency, generating more revenue per customer than other regions."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The visualization shows that Western region stores (indicated by their distinct color) have more scattered data points around the trend line, demonstrating greater variability in the relationship between traffic and sales. This variability indicates inconsistent sales-to-traffic ratios across Western stores compared to other regions that show tighter clustering.",
+      "examTip": "When analyzing scatter plots with grouped data points, look beyond simple correlations to examine the variability within each group - greater scatter indicates more inconsistent relationships between variables."
+    },
+    {
+      "id": 68,
+      "question": "You receive the dataset below containing historical equipment failure records. The maintenance manager needs to know which combination of factors most consistently predicts equipment failures. What is the key data quality issue that must be addressed before reliable predictive analysis can be performed?",
+      "options": [
+        "The dataset exhibits significant class imbalance with normal operations vastly outnumbering failure events, requiring rebalancing techniques before modeling.",
+        "Temperature and pressure readings show multicollinearity, making it difficult to isolate their individual contributions to failure prediction.",
+        "The timestamp data shows irregular sampling intervals, creating gaps in the time series that will bias temporal pattern detection.",
+        "The failure_type field contains inconsistent categorization with similar failures labeled differently, requiring standardization before analysis."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The key issue is class imbalance, where normal operations greatly outnumber failure events in the dataset. This imbalance would cause most predictive models to default to predicting "no failure" in almost all cases, achieving high accuracy but failing to identify actual failures. Rebalancing techniques such as oversampling, undersampling, or synthetic sample generation are needed before modeling.",
+      "examTip": "When building predictive models for rare events like equipment failures, address class imbalance first; even a model with high overall accuracy will be ineffective if it rarely predicts the minority class."
+    },
+    {
+      "id": 69,
+      "question": "You need to create a data pipeline that extracts timesheet data from multiple HR systems, standardizes the format, validates against business rules, and loads it into a central database for reporting. Which of the following represents the correct sequence of steps with appropriate validation checks?",
+      "options": [
+        "Extract data from each system using authenticated API calls, apply schema validation for each source format, transform time formats to UTC and standardize employee IDs, validate against business rules, reconcile total hours against source systems, load validated data to central database, archive extraction files for audit purposes.",
+        "Extract data from each system using authenticated API calls, load raw data to central database, transform time formats to UTC and standardize employee IDs, apply schema validation for the combined dataset, validate against business rules, reconcile total hours against source systems, archive transformation logs for audit purposes.",
+        "Extract data from each system using authenticated API calls, transform time formats to UTC and standardize employee IDs, load transformed data to central database, apply schema validation in the database, validate against business rules, generate exception reports for invalid entries, archive only failed records for audit purposes.",
+        "Extract sample data from each system to validate formats, design standardized schema for all sources, extract full data from each system, transform and load data to central database, apply business rules as database constraints, generate reports from successfully loaded data, delete extraction files after successful processing."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct sequence follows ETL best practices by validating data early in the process (schema validation for each source), standardizing formats (UTC time conversion), checking business rules before loading, reconciling totals for verification, and maintaining audit files. This approach catches errors before data reaches the central database and maintains traceability through the entire pipeline.",
+      "examTip": "Effective data pipelines validate early and often: after extraction (schema validation), during transformation (standardization), before loading (business rules), and after processing (reconciliation)."
+    },
+    {
+      "id": 70,
+      "question": "A marketing analyst has built the linear regression model shown below to predict customer lifetime value (CLV) based on initial purchase value, acquisition channel, and demographic factors. What flaw in the analysis undermines the validity of the model?",
+      "options": [
+        "The model violates the assumption of independence by using time-series data without accounting for temporal autocorrelation.",
+        "The R-squared value of 0.92 indicates overfitting, suggesting the model will perform poorly on new data despite good performance on training data.",
+        "The inclusion of acquisition channel as a categorical variable with 30+ levels introduces sparse data problems and unreliable coefficient estimates.",
+        "The analysis fails to address heteroscedasticity evident in the residual plot, which shows increasing variance at higher predicted values."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The residual plot shows a clear pattern of increasing variance (heteroscedasticity) at higher predicted values, violating a key assumption of linear regression. This pattern indicates that the model's prediction error grows larger for high-value customers, making confidence intervals and significance tests unreliable, particularly for the customer segment the business likely cares most about.",
+      "examTip": "Always examine residual plots for patterns; fan-shaped residuals with increasing variance at higher predicted values indicate heteroscedasticity that invalidates standard error estimates in regression models."
+    },
+    {
+      "id": 71,
+      "question": "Your team must select a database solution for a new IoT application that will collect sensor readings from manufacturing equipment. The system needs to handle 1,000 sensors reporting 10 metrics each at 1-second intervals, with real-time dashboards and 24-month retention for historical analysis. Calculate the approximate storage required per year and select the most appropriate database architecture.",
+      "options": [
+        "Storage requirement: ~3.15 TB per year. Appropriate solution: A time-series database with automatic downsampling for older data and a hot-cold storage architecture.",
+        "Storage requirement: ~315 GB per year. Appropriate solution: A columnar database with partitioning by sensor ID and time period to optimize query performance.",
+        "Storage requirement: ~31.5 TB per year. Appropriate solution: A distributed NoSQL database with horizontal scaling to handle the write-intensive workload.",
+        "Storage requirement: ~31.5 GB per year. Appropriate solution: A relational database with materialized views for real-time dashboard aggregations."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The calculation is: 1,000 sensors × 10 metrics × 86,400 seconds/day × 365 days × ~100 bytes per reading = ~3.15 TB per year. A time-series database is most appropriate as it's specifically designed for this workload, with automatic downsampling to efficiently store historical data while maintaining granular recent data for real-time dashboards.",
+      "examTip": "For IoT applications, calculate storage needs based on sensors × metrics × frequency × time period × record size, then select databases optimized for time-series data with features that balance storage efficiency with query performance."
+    },
+    {
+      "id": 72,
+      "question": "A data analyst has created the dashboard shown in the question. Which of the following visualization issues creates the MOST significant risk of misinterpretation by business users?",
+      "options": [
+        "The dual-axis chart combines revenue (bar) and profit margin (line) on different scales without clear visual distinction, potentially causing users to misinterpret relative changes.",
+        "The pie chart uses similar colors for adjacent categories, making it difficult to distinguish between segments with similar values.",
+        "The geographic heat map uses a sequential color scheme for categorical data, creating a false impression of ordered relationships between regions.",
+        "The trend line on the scatter plot extrapolates beyond the data range, suggesting future predictions without indicating prediction uncertainty."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Dual-axis charts with different scales create significant misinterpretation risks because viewers naturally compare the visual elements (bars and lines) directly. Without clear visual differentiation, users can misinterpret relative changes between metrics or incorrectly conclude that points where lines cross bars have special significance, when this may be merely an artifact of arbitrary scale choices.",
+      "examTip": "Dual-axis charts with different scales create serious misinterpretation risks; either use clearly differentiated visual encodings, separate the charts, or normalize metrics to a common scale."
+    },
+    {
+      "id": 73,
+      "question": "You're analyzing abnormal transaction patterns for fraud detection. The data includes flags for various anomaly types, but the primary flag shows an unusual pattern. What inference can be correctly drawn from the crosstab below showing the relationship between transaction amount ranges and the abnormal_flag field?",
+      "options": [
+        "There's a systematic bias in the abnormal detection algorithm that fails to flag small transactions regardless of their actual characteristics.",
+        "The proportion of flagged transactions increases consistently with transaction amount, suggesting amount is the primary factor in the flagging algorithm.",
+        "Data quality issues are present in the mid-range transactions ($100-$999) where the flagging pattern contradicts expected fraud distribution.",
+        "The flagging system appears to use different criteria for different amount ranges rather than a consistent set of rules across all transactions."
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The crosstab reveals distinct flagging patterns across amount ranges that don't follow a consistent trend: very low rates in small transactions (0.1%), a significant jump in mid-range transactions (3.2%), then a drop in larger transactions (1.8%), followed by another increase in very large transactions (5.7%). This inconsistent pattern suggests different detection criteria are applied across amount ranges rather than a single consistent algorithm.",
+      "examTip": "When analyzing classification patterns across subgroups, look for inconsistent rates that may indicate segmented rulsets or algorithms rather than a uniform approach across the entire dataset."
+    },
+    {
+      "id": 74,
+      "question": "An e-commerce company wants to implement A/B testing for their website. What is the correct order of steps for conducting a statistically valid A/B test?",
+      "options": [
+        "Define the primary metric and minimum detectable effect, calculate required sample size and test duration, randomly assign visitors to control and treatment groups, run the test until reaching the predetermined sample size, analyze results using appropriate statistical tests, document findings and implement winning variation if significant.",
+        "Implement multiple variations simultaneously, run tests until finding a statistically significant result, stop the test as soon as any metric shows improvement, implement changes based on the most improved metric, document the successful variations for future reference, continue testing new variations against the winner.",
+        "Define multiple metrics to measure test success, create control and treatment variations, run the test for a standard two-week period, compare all metrics between variations, implement the variation that improved the most metrics, document all metrics for executive reporting.",
+        "Define the hypothesis and expected improvement, create treatment variation based on best practices, run test during highest traffic period for faster results, compare conversion rates between variations, stop test when statistical significance is reached, document test parameters and results."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct sequence follows proper experimental design: defining metrics and effect size first, calculating required sample size before starting, using randomization to create comparable groups, running the test for the predetermined duration regardless of interim results, analyzing with appropriate statistical tests, and implementing only if results are significant.",
+      "examTip": "Valid A/B tests require predefined metrics, sample size calculations, randomization, complete predetermined runs, appropriate statistical analysis, and implementation only if results are significant."
+    },
+    {
+      "id": 75,
+      "question": "Your team is implementing version control for analytics projects. Which of the following scenarios represents an INCORRECT use of version control that could lead to problems?",
+      "options": [
+        "Storing large binary data files directly in the repository instead of using pointer files with external storage locations.",
+        "Creating a new branch for each analytical question and merging back to main after peer review.",
+        "Including configuration files with environment-specific parameters committed to the repository.",
+        "Automating test runs of notebooks and scripts when changes are pushed to the development branch."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Storing large binary data files directly in the repository is problematic because it bloats repository size, slows clone/pull operations, and creates version history issues since binary files can't be differentially compared or merged. The correct approach is storing pointers to external data locations (like S3 URLs) or using git extensions like Git LFS specifically designed for large files.",
+      "examTip": "Version control systems are optimized for text files (code, configuration); store large binary data files externally with pointers in the repository to maintain performance and usability."
+    },
+    {
+      "id": 76,
+      "question": "A data engineer notices slow query performance in a data warehouse. The execution plan for a typical report query is shown below. Which performance optimization would address the MOST significant issue revealed in the execution plan?",
+      "options": [
+        "Implement partitioning on the fact table by date to eliminate the full table scan that's consuming 70% of query execution time.",
+        "Create a composite index on the dimension table columns used in join conditions to replace the current index scan operation.",
+        "Increase the database query optimizer's memory allocation to improve the execution plan generation process.",
+        "Rewrite the query to use EXISTS instead of IN clauses for subqueries to improve filter operation efficiency."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The execution plan shows a full table scan of the fact table consuming 70% of execution time, which is the most significant performance bottleneck. Implementing partitioning by date would allow the query to scan only relevant date partitions instead of the entire fact table, dramatically reducing the most expensive operation in the query execution plan.",
+      "examTip": "When optimizing data warehouse queries, focus first on eliminating full table scans of fact tables by implementing appropriate partitioning strategies aligned with common query patterns."
+    },
+    {
+      "id": 77,
+      "question": "Your team is designing a dimensional model for retail sales analysis. Below are four design options for handling product categories that change over time. Which approach introduces a data quality problem that would lead to incorrect historical analysis?",
+      "options": [
+        "Using a Type 0 dimension for product categories, where changes overwrite the previous values without maintaining history.",
+        "Implementing a Type 2 slowly changing dimension that creates new product records with updated category values and effective date ranges.",
+        "Creating a Type 1 slowly changing dimension with separate effective date attributes to track when category changes occurred.",
+        "Designing a junk dimension that combines product and category attributes with chronology flags to track changes."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A Type 0 dimension that overwrites previous category values without maintaining history creates a critical data quality problem for historical analysis. This approach applies current categories to historical data, making it impossible to analyze sales by the categories that were actually in effect at the time of sale, leading to historically inaccurate analysis results.",
+      "examTip": "Never use Type 0 dimensions (overwrite without history) for attributes that both change over time AND are used for historical analysis, as this approach rewrites history and invalidates trend analysis."
+    },
+    {
+      "id": 78,
+      "question": "An analyst has created a visualization of customer segmentation based on purchase behavior. Which statement identifies a visualization design flaw that violates data visualization best practices?",
+      "options": [
+        "The visualization uses a 3D pie chart with similar color shades to represent eight customer segments, making segment comparison difficult.",
+        "The bar chart comparing segment sizes uses a consistent scale with clearly labeled axes and segment names.",
+        "The heat map showing segment characteristics uses a diverging color palette to highlight values above and below the average.",
+        "The scatter plot reveals the relationship between two key segment variables with appropriately sized data points representing segment size."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using a 3D pie chart with similar color shades violates multiple visualization best practices: 3D effects distort the actual proportions, pie charts are already difficult for comparing values, and similar color shades make segment identification even more challenging. This combination creates a visualization that obscures rather than clarifies the segment distribution.",
+      "examTip": "Avoid 3D pie charts for segmentation analysis - the 3D effect distorts proportions, pie slices are difficult to compare accurately, and similar colors make identification nearly impossible."
+    },
+    {
+      "id": 79,
+      "question": "You're analyzing the impact of a pricing change using the interrupted time series data shown below. Which of the following is a valid conclusion based on the data pattern?",
+      "options": [
+        "The pricing change caused a temporary drop in sales followed by a recovery to a new trend line with a steeper growth rate than before the change.",
+        "The pricing change had no statistically significant impact on sales as the post-change trend falls within the prediction intervals of the pre-change trend.",
+        "The pricing change created a permanent downward shift in the sales level while maintaining the same growth rate as before the change.",
+        "The data shows a seasonal pattern unrelated to the pricing change that explains most of the observed variation in the time series."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The interrupted time series graph shows a clear downward shift in the sales level immediately following the pricing change (a drop in the intercept), but the slope of the trend line before and after the change remains approximately the same (similar growth rate). This pattern indicates a permanent negative impact on sales levels without affecting the underlying growth trajectory.",
+      "examTip": "When interpreting interrupted time series, distinguish between level changes (shifts in the intercept) and slope changes (differences in the trend angle) - they represent different types of intervention effects."
+    },
+    {
+      "id": 80,
+      "question": "A healthcare organization is implementing data access controls for patient records. Which of the following control implementations does NOT align with healthcare data protection best practices?",
+      "options": [
+        "Implementing role-based access based on job functions alone, without considering the specific patient relationships to care providers.",
+        "Applying record-level security that allows providers to access only records of patients under their care except in emergency break-glass scenarios.",
+        "Creating time-bound access that automatically expires when a patient is discharged from a particular care unit.",
+        "Implementing attribute-based access that considers provider role, patient-provider relationship, and purpose of access when making authorization decisions."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Role-based access based solely on job functions violates healthcare best practices because it fails to consider the patient-provider relationship, potentially allowing access to records of patients not under a provider's care. This approach is too broad and violates the principle of minimum necessary access, creating compliance risks under regulations like HIPAA that require limiting access to the minimum necessary for job functions.",
+      "examTip": "Healthcare data access controls must consider both role AND relationship; role-based access alone creates compliance risks by potentially allowing access to patients not under a provider's care."
+    },
+    {
+      "id": 81,
+      "question": "Your team is developing a natural language processing solution to analyze customer support tickets. The solution preprocesses text, extracts features, and classifies tickets by department and urgency. Which step in the current implementation creates the MOST significant risk of bias in the classification results?",
+      "options": [
+        "The training data consists only of tickets from the previous quarter, when the company experienced unusual support volume due to a product release.",
+        "The text normalization process converts all text to lowercase and removes special characters and punctuation before analysis.",
+        "The feature extraction uses TF-IDF vectorization with a minimum document frequency threshold of 5% to remove rare terms.",
+        "The classification algorithm uses a random forest model with default hyperparameters and 100 decision trees."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using training data exclusively from an unusual period (previous quarter with abnormal support volume due to a product release) creates significant bias risk. This temporally limited sample likely contains atypical distribution of issues, severity levels, and language patterns compared to normal operations, causing the model to learn patterns specific to that unusual period rather than general patterns.",
+      "examTip": "Training data that comes from a single, atypical time period creates a temporal bias that can seriously impact model generalization; always ensure training data represents the full range of conditions the model will encounter."
+    },
+    {
+      "id": 82,
+      "question": "A data governance team is implementing metadata management practices. Which of the following requirements does NOT belong in a comprehensive metadata management policy?",
+      "options": [
+        "All database columns containing customer data must be encrypted at rest and in transit with AES-256 encryption.",
+        "Business definitions must be provided for all data elements used in executive dashboards and regulatory reports.",
+        "Data lineage must be documented for all fields used in financial calculations, showing original sources and transformations.",
+        "Each dataset must have a designated data steward responsible for metadata accuracy and completeness."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Encryption requirements for customer data columns are data security policy elements, not metadata management requirements. While encryption status might be recorded as metadata, the encryption requirement itself belongs in security policies, not metadata management policies, which should focus on documentation, governance, and understanding of data rather than its technical protection mechanisms.",
+      "examTip": "Distinguish between metadata management policies (focusing on documentation, definitions, lineage, and stewardship) and data security policies (addressing encryption, access controls, and protection mechanisms)."
+    },
+    {
+      "id": 83,
+      "question": "Based on the correlation matrix below showing relationships between customer metrics, which pair of metrics would be LEAST useful to include together in a predictive model due to potential multicollinearity issues?",
+      "options": [
+        "Purchase frequency and Average order value",
+        "Days since last purchase and Purchase frequency",
+        "Customer tenure and Total lifetime purchases",
+        "Email open rate and Website visit frequency"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The correlation matrix shows a very high correlation (0.92) between customer tenure and total lifetime purchases, indicating strong multicollinearity. This strong linear relationship means these variables contain redundant information, and including both in a predictive model would not add significant predictive power while potentially causing estimation problems and reducing model interpretability.",
+      "examTip": "When selecting features for predictive models, identify variable pairs with correlations above 0.8-0.9 as candidates for elimination or transformation to avoid multicollinearity problems."
+    },
+    {
+      "id": 84,
+      "question": "A financial services company is implementing data masking for a test environment. Which of the following data elements requires the MOST stringent masking approach to maintain both privacy compliance and referential integrity?",
+      "options": [
+        "Customer tax identification numbers that appear in multiple tables and are used as secondary keys in several processes.",
+        "Transaction timestamps that include date and time information for all customer activities.",
+        "Free-text notes fields entered by customer service representatives that may contain personal information.",
+        "Product codes that identify specific financial products purchased by customers."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Tax identification numbers require the most stringent masking approach because they are both highly sensitive personal identifiers (requiring strong protection for privacy compliance) and used as secondary keys across multiple tables (requiring preservation of referential integrity). This combination demands consistent tokenization or format-preserving encryption rather than simple randomization or nulling.",
+      "examTip": "For sensitive identifiers used as keys across multiple tables, implement consistent tokenization or format-preserving encryption that maintains referential integrity while providing strong privacy protection."
+    },
+    {
+      "id": 85,
+      "question": "You're analyzing A/B test results for a website redesign and have the conversion data shown below. Which statement accurately describes the statistical validity of the results?",
+      "options": [
+        "The results are not statistically valid because the observed lift of 12% is smaller than the minimum detectable effect of 15% that was established before the test.",
+        "The results are statistically valid because the p-value of 0.03 is below the standard threshold of 0.05, indicating the difference is unlikely to be due to random chance.",
+        "The results are not statistically valid because the sample size is insufficient; the test should continue until reaching at least 10,000 visitors per variation.",
+        "The results are statistically valid because the confidence intervals for the two conversion rates do not overlap, confirming a significant difference."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The p-value of 0.03 is below the standard significance threshold of 0.05, indicating that the observed difference between variations has only a 3% probability of occurring by random chance if there were truly no difference. This meets the standard criteria for statistical significance, making the results statistically valid regardless of whether the lift meets the minimum detectable effect.",
+      "examTip": "Statistical validity depends on the p-value (probability of observing the result by chance), not whether the observed effect meets the minimum detectable effect, which is a planning parameter for sample size calculation."
+    },
+    {
+      "id": 86,
+      "question": "Your database team has provided the entity-relationship diagram below for a new customer analytics database. What design flaw would create problems for analytical queries about customer purchases?",
+      "options": [
+        "The many-to-many relationship between customers and products lacks a proper junction table with transaction details and timestamps.",
+        "The customer entity includes both normalized attributes and denormalized address fields in the same table.",
+        "The product hierarchy uses a self-referencing relationship rather than separate tables for categories and subcategories.",
+        "The customer activity log stores JSON documents rather than using a properly normalized relational structure."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The many-to-many relationship between customers and products lacks a proper junction table containing essential transaction information such as purchase dates, quantities, and prices. Without this junction table, it's impossible to analyze when purchases occurred, their values, or how many items were purchased - critical dimensions for customer purchase analysis.",
+      "examTip": "Many-to-many relationships in analytical databases must be implemented with junction tables containing business-relevant attributes (like dates, quantities, amounts) - not just foreign keys - to support time-based analysis and aggregations."
+    },
+    {
+      "id": 87,
+      "question": "You receive the anonymized patient dataset below for healthcare utilization analysis. Which of the following represents a re-identification risk that violates proper de-identification practices?",
+      "options": [
+        "The combination of ZIP code, birth year, and admission dates creates unique patterns that could be linked with public records to identify specific individuals.",
+        "The diagnosis codes are only partially masked, showing the main category but hiding specific conditions within that category.",
+        "The dataset includes derived metrics like length of stay and readmission flags rather than raw admission and discharge timestamps.",
+        "Patient age is provided in 5-year ranges rather than exact ages to prevent exact matching with known individuals."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The combination of ZIP code (geographic identifier), birth year (demographic), and exact admission dates (temporal data) creates unique patterns that can be linked with public records to re-identify individuals. Research has shown that these three types of information together can uniquely identify a large percentage of the population, violating proper de-identification practices like HIPAA's Safe Harbor.",
+      "examTip": "Proper de-identification requires removing or generalizing combinations of quasi-identifiers (geographic, demographic, and temporal data) that could enable linkage attacks, not just removing direct identifiers."
+    },
+    {
+      "id": 88,
+      "question": "An analyst created the forecast shown below using historical sales data. Which statement correctly identifies a methodological flaw in the forecast approach?",
+      "options": [
+        "The forecast fails to account for seasonality evident in the historical data, missing recurring patterns that appear at regular intervals.",
+        "The confidence interval narrows as the forecast extends further into the future, incorrectly suggesting increasing certainty over time.",
+        "The forecast uses an inappropriate smoothing parameter that creates excessive lag in responding to recent trend changes.",
+        "The baseline for the forecast calculation includes an anomalous period that should have been excluded for more accurate results."
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The confidence interval in the forecast incorrectly narrows as it extends further into the future, which violates a fundamental principle of forecasting - uncertainty should increase with forecast horizon. This indicates a methodological error in how prediction intervals were calculated, likely by failing to account for cumulative error growth in multi-step forecasts.",
+      "examTip": "Valid forecasts should always show widening confidence intervals as the prediction extends further into the future, reflecting the increasing uncertainty associated with longer forecast horizons."
+    },
+    {
+      "id": 89,
+      "question": "Your team needs to choose appropriate big data technologies for a new data processing pipeline. Match each requirement with the MOST suitable technology choice.",
+      "options": [
+        "Stream processing of sensor data with sub-second latency: Apache Kafka Streams | Batch processing of daily log files: Apache Spark | Interactive SQL queries on petabyte-scale data: Presto | Machine learning model training on distributed datasets: Apache Spark MLlib",
+        "Stream processing of sensor data with sub-second latency: Apache Hadoop | Batch processing of daily log files: Apache Storm | Interactive SQL queries on petabyte-scale data: MongoDB | Machine learning model training on distributed datasets: Apache Cassandra",
+        "Stream processing of sensor data with sub-second latency: Apache Spark Streaming | Batch processing of daily log files: Apache Kafka | Interactive SQL queries on petabyte-scale data: Apache HBase | Machine learning model training on distributed datasets: Redis ML",
+        "Stream processing of sensor data with sub-second latency: Apache Flink | Batch processing of daily log files: Apache Hive | Interactive SQL queries on petabyte-scale data: ClickHouse | Machine learning model training on distributed datasets: TensorFlow on HDFS"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct matching pairs each requirement with technologies specifically designed for those use cases: Kafka Streams for low-latency stream processing, Spark for batch processing of logs, Presto for interactive SQL on petabyte-scale data, and Spark MLlib for distributed machine learning. Each technology has architectural advantages for its matched requirement.",
+      "examTip": "Match big data technologies to use cases based on their architectural strengths: stream processing frameworks for real-time data, batch processing systems for large periodic workloads, columnar engines for interactive queries, and distributed ML frameworks for model training."
+    },
+    {
+      "id": 90,
+      "question": "A healthcare analytics team is developing a model to predict patient readmission risk. The dataset includes demographics, diagnoses, procedures, medications, and lab values from the electronic health record system. During the analysis, which of the following data issues would MOST significantly impact the ethical use of the model in clinical settings?",
+      "options": [
+        "The training data contains significantly fewer records for certain racial and ethnic groups, leading to higher error rates when the model is applied to patients from these groups.",
+        "Some lab values and vital signs contain outliers due to measurement errors that were not completely removed during data preprocessing.",
+        "Medication information is incomplete for some patients who filled prescriptions at pharmacies not connected to the hospital's information system.",
+        "The model uses ICD-10 diagnosis codes that were introduced three years ago, replacing the previously used ICD-9 coding system."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Underrepresentation of certain racial and ethnic groups in the training data creates a significant ethical issue as it leads to disparate error rates across demographic groups. This disparity could result in clinical decisions that systematically disadvantage minority patients, raising serious ethical concerns about fairness and potentially leading to amplification of existing healthcare disparities.",
+      "examTip": "Models with differential performance across demographic groups raise serious ethical concerns, especially in healthcare; always evaluate error rates across key demographic categories and address representation imbalances during model development."
+    },
+    {
+      "id": 91,
+      "question": "A retail company has database tables tracking customer purchases, product details, and store information. You need to calculate year-over-year sales growth by product category and identify categories with declining sales. Which SQL query correctly performs this analysis?",
+      "options": [
+        "SELECT p.category, EXTRACT(YEAR FROM s.sale_date) AS sale_year, SUM(s.quantity * s.unit_price) AS total_sales, 100 * (SUM(s.quantity * s.unit_price) - LAG(SUM(s.quantity * s.unit_price), 1) OVER (PARTITION BY p.category ORDER BY EXTRACT(YEAR FROM s.sale_date))) / LAG(SUM(s.quantity * s.unit_price), 1) OVER (PARTITION BY p.category ORDER BY EXTRACT(YEAR FROM s.sale_date)) AS yoy_growth FROM sales s JOIN products p ON s.product_id = p.product_id WHERE s.sale_date >= DATE_SUB(CURRENT_DATE, INTERVAL 3 YEAR) GROUP BY p.category, EXTRACT(YEAR FROM s.sale_date) HAVING yoy_growth < 0 AND sale_year = EXTRACT(YEAR FROM CURRENT_DATE) - 1 ORDER BY yoy_growth ASC;",
+        "SELECT p.category, YEAR(s.sale_date) AS sale_year, SUM(s.quantity * s.unit_price) AS total_sales, (SUM(s.quantity * s.unit_price) / (SELECT SUM(s2.quantity * s2.unit_price) FROM sales s2 JOIN products p2 ON s2.product_id = p2.product_id WHERE p2.category = p.category AND YEAR(s2.sale_date) = YEAR(s.sale_date) - 1)) * 100 - 100 AS yoy_growth FROM sales s JOIN products p ON s.product_id = p.product_id GROUP BY p.category, YEAR(s.sale_date) HAVING yoy_growth < 0 ORDER BY yoy_growth ASC;",
+        "SELECT p.category, EXTRACT(YEAR FROM s.sale_date) AS sale_year, SUM(s.quantity * s.unit_price) AS total_sales, (SUM(CASE WHEN EXTRACT(YEAR FROM s.sale_date) = EXTRACT(YEAR FROM CURRENT_DATE) - 1 THEN s.quantity * s.unit_price ELSE 0 END) - SUM(CASE WHEN EXTRACT(YEAR FROM s.sale_date) = EXTRACT(YEAR FROM CURRENT_DATE) - 2 THEN s.quantity * s.unit_price ELSE 0 END)) / SUM(CASE WHEN EXTRACT(YEAR FROM s.sale_date) = EXTRACT(YEAR FROM CURRENT_DATE) - 2 THEN s.quantity * s.unit_price ELSE 0 END) * 100 AS yoy_growth FROM sales s JOIN products p ON s.product_id = p.product_id WHERE s.sale_date BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 2 YEAR) AND CURRENT_DATE GROUP BY p.category HAVING yoy_growth < 0 ORDER BY yoy_growth ASC;",
+        "SELECT p.category, YEAR(CURRENT_DATE) - 1 AS sale_year, SUM(CASE WHEN YEAR(s.sale_date) = YEAR(CURRENT_DATE) - 1 THEN s.quantity * s.unit_price END) AS current_year_sales, SUM(CASE WHEN YEAR(s.sale_date) = YEAR(CURRENT_DATE) - 2 THEN s.quantity * s.unit_price END) AS previous_year_sales, (current_year_sales - previous_year_sales) / previous_year_sales * 100 AS yoy_growth FROM sales s JOIN products p ON s.product_id = p.product_id WHERE s.sale_date >= DATE_SUB(CURRENT_DATE, INTERVAL 2 YEAR) GROUP BY p.category HAVING current_year_sales < previous_year_sales ORDER BY yoy_growth ASC;"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The correct query uses window functions (LAG) to calculate year-over-year growth, properly partitioning by category and ordering by year to compute the difference between each year and the previous year. It correctly filters for declining sales (growth < 0) and focuses on the most recent complete year. The percentage calculation formula is also correct, using the previous year as the denominator.",
+      "examTip": "For time-based comparisons like year-over-year analysis in SQL, window functions (particularly LAG or LEAD) provide the most efficient and readable approach by avoiding self-joins or complex case statements."
+    },
+    {
+      "id": 92,
+      "question": "Your team has developed a machine learning model to predict equipment failures. The initial model shows promising performance, but the maintenance team is hesitant to trust the predictions. Which of the following approaches would be MOST effective for increasing trust and adoption of the model among maintenance staff?",
+      "options": [
+        "Implement a transparent model explanation system that shows the top factors contributing to each high-risk prediction, using domain-relevant terminology familiar to maintenance staff.",
+        "Improve model accuracy by adding more features and using more complex algorithms to reduce the false positive rate from 15% to under 10%.",
+        "Create an automated alert system that notifies maintenance staff about high-risk equipment without requiring them to interact with the prediction system directly.",
+        "Develop a comprehensive technical document explaining the model architecture, feature engineering process, and validation methodology."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Implementing transparent model explanations using domain-relevant terminology directly addresses the trust issue by making predictions interpretable to maintenance staff in terms they understand. This approach bridges the gap between statistical predictions and practical knowledge, enabling staff to evaluate whether the identified risk factors align with their expertise and experience with the equipment.",
+      "examTip": "For successful adoption of predictive models by domain experts, prioritize explainability in domain-relevant terms over pure accuracy improvements or technical documentation - users must understand WHY a prediction was made, not just WHAT was predicted."
+    },
+    {
+      "id": 93,
+      "question": "A data governance committee is establishing data security classifications for a financial services organization. Which of the following classification approaches would be MOST effective for balancing security requirements with analytical accessibility?",
+      "options": [
+        "Implement column-level classification with four tiers: Public, Internal, Confidential, and Restricted, with corresponding security controls and access requirements for each tier.",
+        "Classify entire datasets based on the most sensitive data element they contain, applying uniform security controls to all fields within each dataset.",
+        "Create binary classification (Sensitive/Non-sensitive) with additional handling requirements encoded in metadata rather than in the classification system itself.",
+        "Implement dynamic classification based on data usage patterns, automatically increasing security requirements for frequently accessed or queried fields."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Column-level classification with multiple tiers provides the optimal balance between security and accessibility by applying controls proportional to the sensitivity of each specific data element. This granular approach prevents over-protecting less sensitive data while ensuring appropriate safeguards for truly sensitive elements, enabling broader analytical access to lower-tier data while maintaining strict controls on high-risk fields.",
+      "examTip": "Column-level security classifications with multiple tiers optimize the security-usability balance by applying proportional controls to each data element rather than restricting entire datasets based on their most sensitive components."
+    },
+    {
+      "id": 94,
+      "question": "As part of a data quality initiative, you need to establish metrics to measure data quality improvement over time. Which set of metrics would provide the MOST comprehensive view of data quality across multiple dimensions?",
+      "options": [
+        "Completeness: Percentage of required fields populated | Accuracy: Match rate against authoritative sources | Timeliness: Average lag between event occurrence and data availability | Consistency: Count of cross-field validation rule violations | Uniqueness: Number of duplicate records identified",
+        "Volume: Total record count by system | Velocity: Records processed per second | Variety: Count of distinct data types | Validity: Percentage of records passing all validation rules | Value: Business impact score based on data issues",
+        "Conformity: Percentage of fields matching data standards | Redundancy: Storage space consumed by repeated values | Readability: Average character count per text field | Relevance: Usage frequency in reports and analyses | Reliability: System uptime percentage",
+        "Accessibility: Average query response time | Interpretability: Percentage of fields with business definitions | Actionability: Number of decisions supported per dataset | Auditability: Percentage of fields with complete lineage | Augmentability: Ease of schema modification score"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The first option provides metrics covering the fundamental dimensions of data quality: completeness (required fields populated), accuracy (match rate to authoritative sources), timeliness (lag between event and availability), consistency (cross-field validation), and uniqueness (duplicate detection). These dimensions address the core aspects of data quality recognized by industry frameworks and directly impact analytical reliability.",
+      "examTip": "Comprehensive data quality measurement requires metrics spanning at least these five dimensions: completeness, accuracy, timeliness, consistency, and uniqueness - together these address both technical validity and business utility."
+    },
+    {
+      "id": 95,
+      "question": "An analyst working with sales transaction data notices inconsistencies in product categorization across different tables. After investigation, they identify four common data quality issues as shown below. Which issue represents the MOST significant threat to accurate sales analysis by product category?",
+      "options": [
+        "Category field contains 15% NULL values in the transactions table, with no default categorization logic applied during reporting.",
+        "Product categories have been updated over time, but historical transactions retain the category assignments that were active at the time of sale.",
+        "Some specialty products are assigned to multiple categories with a primary category flag, but this flag is inconsistently used across systems.",
+        "There are minor spelling variations in category names (e.g., 'Accessories' vs 'Accessory') that are handled through a standardization lookup during reporting."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The presence of 15% NULL values in the category field with no default categorization logic represents the most significant threat to accurate analysis. Unlike the other issues which have workarounds or reflect intentional design choices, this issue means that 15% of transactions will be completely missing from any category-based analysis, creating substantial under-reporting across all categories without clear visibility into the bias this introduces.",
+      "examTip": "Missing categorical values without default handling logic present the greatest threat to analytical accuracy, as they silently exclude significant data portions from category-based analyses with no clear indication of the bias introduced."
+    },
+    {
+      "id": 96,
+      "question": "Your healthcare organization needs to combine patient data from multiple electronic health record systems for population health analysis. Given the extract from System A and System B shown below, which key challenge must be addressed first to create an integrated patient view?",
+      "options": [
+        "The systems use different patient identifier formats and lack a common reliable identifier, requiring a probabilistic matching strategy.",
+        "Date formats differ between systems (MM/DD/YYYY vs. YYYY-MM-DD), requiring standardization before integration.",
+        "Demographic fields have different levels of granularity, with System B collecting more detailed ethnicity information than System A.",
+        "System A contains nullable diagnosis fields while System B requires primary diagnosis, creating structural differences in the data models."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The fundamental challenge is the lack of a common reliable identifier between systems, requiring probabilistic matching (record linkage) to determine which records represent the same patient. Without solving this entity resolution problem first, any other standardization efforts would still result in duplicate patient records or mismatched information. This is a prerequisite for creating an integrated patient view.",
+      "examTip": "When integrating healthcare data from disparate systems, entity resolution (matching records that represent the same patient) is the foundational challenge that must be solved before addressing format standardization or model differences."
+    },
+    {
+      "id": 97,
+      "question": "In a predictive modeling project, the graphic below shows model performance metrics across different threshold values. What is the MOST accurate interpretation of this visualization?",
+      "options": [
+        "The optimal decision threshold depends on the relative cost of false positives versus false negatives; the business context should determine whether to prioritize precision or recall.",
+        "The model performs best at a threshold of 0.5, which represents the standard cutoff value that balances precision and recall most effectively.",
+        "The AUC of 0.82 indicates good model performance regardless of threshold, so the specific threshold value has minimal impact on business outcomes.",
+        "The precision-recall tradeoff shows the model has serious performance issues that should be addressed through additional feature engineering before deployment."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The visualization shows the classic precision-recall tradeoff across different threshold values, where increasing the threshold improves precision (fewer false positives) but reduces recall (more false negatives). The optimal threshold depends entirely on the business context and the relative costs associated with each type of error, not on a standardized "best" threshold.",
+      "examTip": "The optimal threshold for a predictive model should be determined by business context and the relative costs of different error types, not by mathematical optimization alone or standard values like 0.5."
+    },
+    {
+      "id": 98,
+      "question": "A retail company is analyzing their customer loyalty program data. Which of the following insights would be MOST valuable for improving the program's effectiveness?",
+      "options": [
+        "Analysis showing that customers who redeem at least one reward per quarter have 35% higher retention rates and 28% higher annual spend than those who earn but don't redeem points.",
+        "Demographic breakdown revealing that program members are predominantly age 35-54 (68%) with higher-than-average household incomes (median $85,000).",
+        "Point accumulation statistics showing that the average member earns 4,500 points annually, with 30% of points earned during promotional double-point events.",
+        "Enrollment trend analysis demonstrating consistent growth of 8-10% new members per quarter for the past two years across all store locations."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The insight about reward redemption directly connects program engagement (redeeming rewards) to key business outcomes (retention and spend), revealing an actionable opportunity to improve the program's effectiveness. This finding suggests specific interventions (encouraging reward redemption) that could significantly impact business metrics, making it substantially more valuable than descriptive statistics about demographics, point accumulation, or enrollment trends.",
+      "examTip": "The most valuable business insights connect specific behaviors to key performance outcomes and suggest clear actions; prioritize analyses that reveal these connections over purely descriptive statistics."
+    },
+    {
+      "id": 99,
+      "question": "Your organization is implementing a data lake to support diverse analytical workloads. The technical team has provided four storage configuration options shown below. Which option provides the MOST appropriate balance of performance, cost, and flexibility for a typical enterprise data lake?",
+      "options": [
+        "Landing Zone: Object storage (hot tier) | Raw Data Zone: Object storage (cool tier) | Curated Zone: Object storage (hot tier) with partition pruning | Consumption Zone: Combination of object storage and columnar database",
+        "Landing Zone: High-performance SSD | Raw Data Zone: Object storage (hot tier) | Curated Zone: Relational database | Consumption Zone: In-memory analytics database",
+        "Landing Zone: Object storage (cool tier) | Raw Data Zone: Object storage (archive tier) | Curated Zone: Object storage (cool tier) | Consumption Zone: Object storage (hot tier)",
+        "Landing Zone: Distributed file system | Raw Data Zone: Distributed file system | Curated Zone: Columnar database | Consumption Zone: In-memory data grid"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The first option provides the optimal storage configuration for a data lake: object storage with appropriate tiering (hot for high-access zones, cool for archival), partition pruning for performance in the curated zone, and a hybrid approach in the consumption zone combining the cost benefits of object storage with the performance advantages of columnar databases for frequently accessed data. This balances cost efficiency, performance, and flexibility across the data lifecycle.",
+      "examTip": "Effective data lake storage design uses tiered object storage for most zones, with appropriate hot/cool designations based on access patterns, and strategic use of performance-optimized storage only for high-access analytical workloads."
+    },
+    {
+      "id": 100,
+      "question": "An analyst needs to evaluate the performance of a classification model against business requirements for a customer targeting campaign. Given the confusion matrix and cost-benefit structure below, which of the following metrics would MOST appropriately align model evaluation with business objectives?",
+      "options": [
+        "Expected Value Per Customer = (TP × $150 - FP × $30 - FN × $80 - TN × $0) ÷ Total Customers",
+        "F1 Score = 2 × (Precision × Recall) ÷ (Precision + Recall)",
+        "Accuracy = (TP + TN) ÷ (TP + TN + FP + FN)",
+        "Area Under the ROC Curve (AUC) = Integral of True Positive Rate with respect to False Positive Rate"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The Expected Value Per Customer metric directly incorporates the business value and costs associated with each prediction outcome: true positives generate $150 revenue, false positives cost $30 in wasted marketing, false negatives represent $80 in missed opportunity, and true negatives have no cost. This aligns the model evaluation directly with business impact rather than using a statistical metric that doesn't account for these different business values.",
+      "examTip": "When classification outcomes have different business values/costs, use expected value calculations incorporating these specific business impacts rather than standard statistical metrics that treat all errors equally."
     }
-
+  ]
+});
