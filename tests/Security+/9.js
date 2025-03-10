@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "secplus",
   "testId": 9,
-  "testName": "Security+ Practice Test #9 (Ruthless)",
+  "testName": "CompTIA Security+ (SY0-701) Practice Test #9 (Ruthless)",
   "xpPerCorrect": 10,
   "questions": [
     {
