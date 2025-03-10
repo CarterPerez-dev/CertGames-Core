@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 8,
-  "testName": "CySa+ Practice Test #8 (Very Challenging)",
+  "testName": "CompTIA CySa+ (CS0-003) Practice Test #8 (Very Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
