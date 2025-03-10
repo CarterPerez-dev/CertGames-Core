@@ -911,7 +911,7 @@ const InfoPage = () => {
           <p>Join thousands of security professionals who've transformed their careers with CertGames</p>
           <div className="info-cta-buttons">
             <Link to="/register" className="info-button info-primary-button">
-              Create Free Account
+              Create Your Account
             </Link>
             <Link to="/login" className="info-button info-secondary-button">
               Log In

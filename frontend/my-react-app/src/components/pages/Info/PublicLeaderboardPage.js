@@ -364,7 +364,7 @@ const PublicLeaderboardPage = () => {
             <div className="join-cta">
               <div className="cta-content">
                 <h2>Want to be on this leaderboard?</h2>
-                <p>Create your free account today and start climbing the ranks!</p>
+                <p>Create your account today and start climbing the ranks!</p>
                 <div className="cta-buttons">
                   <Link to="/register" className="register-button">
                     Register Now
