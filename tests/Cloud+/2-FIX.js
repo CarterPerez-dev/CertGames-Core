@@ -523,13 +523,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "An Intrusion Detection System (IDS) monitors cloud environments in real time, identifying suspicious activities and unauthorized access attempts. Unlike firewalls, which primarily control incoming and outgoing traffic, IDS provides continuous monitoring and alerting. This makes it an essential security measure for identifying threats before they escalate.",
       "examTip": "If the question involves detecting and monitoring unauthorized access in real time, the answer is IDS."
-    }
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 2,
-  "testName": "Practice Test #2 (Very Easy)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 41,
       "question": "Which of the following best describes a benefit of using serverless computing?",
@@ -1049,14 +1043,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Whitelisting is a security measure that allows only pre-approved applications and services to run within an environment, blocking unauthorized software. This reduces the risk of malware infections and ensures compliance with security policies. Unlike least privilege, which focuses on user permissions, whitelisting is specifically about controlling application execution.",
       "examTip": "If the question is about restricting execution to approved applications only, it's Whitelisting."
-    }
-
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 2,
-  "testName": "Practice Test #2 (Very Easy)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 81,
       "question": "Which cloud computing feature ensures that resources are provisioned automatically based on predefined conditions?",
@@ -1160,8 +1147,162 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "VPC Peering enables private, low-latency communication between two Virtual Private Clouds (VPCs) without sending traffic over the public internet. This improves security and reduces latency compared to VPN-based solutions. Unlike a load balancer, which distributes traffic between instances, VPC Peering directly connects entire cloud networks.",
       "examTip": "If the question is about private communication between two VPCs without using the public internet, the answer is VPC Peering."
+    },
+    {
+      "id": 89,
+      "question": "Which storage solution is best suited for data that must remain intact even after a cloud instance is stopped or terminated?",
+      "options": [
+        "Ephemeral Storage",
+        "Persistent Block Storage",
+        "Temporary RAM Disk",
+        "Ephemeral File Share"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Persistent block storage remains available across instance reboots and terminations, unlike ephemeral storage or RAM disks which are wiped when an instance stops. This ensures critical data is retained for later use. Ephemeral file shares also lose data once the instance is restarted.",
+      "examTip": "If the question involves retaining data after shutdown, persistent block storage is typically the correct choice."
+    },
+    {
+      "id": 90,
+      "question": "Which type of storage is ideal for storing massive amounts of unstructured data such as images, videos, and log files?",
+      "options": [
+        "Local File System",
+        "Block Storage",
+        "Object Storage",
+        "Shared Network Drive"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Object storage is designed for scalability and easy management of unstructured data, offering virtually limitless capacity. Block storage is more commonly used for high-performance databases and local file system needs. A shared network drive does not scale as efficiently for large unstructured datasets.",
+      "examTip": "When you see large, unstructured data at scale, object storage is typically the right choice."
+    },
+    {
+      "id": 91,
+      "question": "Which scaling method automatically adds or removes resources based on current workload metrics, minimizing manual intervention?",
+      "options": [
+        "Manual Scaling",
+        "Scheduled Scaling",
+        "Dynamic Auto-Scaling",
+        "Container Orchestration"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Dynamic auto-scaling responds to real-time metrics like CPU usage or network traffic to adjust capacity automatically. Scheduled scaling requires predefined time-based triggers, and manual scaling relies on administrators. Container orchestration manages containers rather than load adjustments directly.",
+      "examTip": "Look for real-time adjustment of resources when you see 'automatic' or 'elastic' scaling."
+    },
+    {
+      "id": 92,
+      "question": "Which open-source platform is most commonly used to automate deployment, scaling, and management of containerized applications in the cloud?",
+      "options": [
+        "Puppet",
+        "Kubernetes",
+        "Helm",
+        "Chef"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Kubernetes provides the orchestration framework needed for deploying and managing containers at scale. Puppet and Chef are more aligned with configuration management, while Helm is a package manager for Kubernetes rather than a full orchestration tool by itself. Kubernetes helps simplify rolling updates, scaling, and service discovery.",
+      "examTip": "When you hear container orchestration at scale, Kubernetes is the likely go-to solution."
+    },
+    {
+      "id": 93,
+      "question": "Which approach allows you to define and manage your cloud infrastructure using machine-readable template files instead of manual configuration?",
+      "options": [
+        "Infrastructure as Code (IaC)",
+        "Infrastructure as a Service (IaaS)",
+        "Cloud Orchestration",
+        "Script-Based Deployment"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Infrastructure as Code (IaC) lets you define infrastructure in files that can be version-controlled and automatically deployed. IaaS refers to the provisioning of virtualized hardware over the internet, while cloud orchestration focuses on automating complex tasks. Script-based deployment is less standardized and can be prone to inconsistencies.",
+      "examTip": "If the question involves templates or definitions that build and configure servers automatically, think IaC."
+    },
+    {
+      "id": 94,
+      "question": "Which backup method ensures critical data is hosted offsite, allowing you to restore services if your primary region becomes unavailable?",
+      "options": [
+        "Local Offline Backups",
+        "Snapshot-Based Backups",
+        "Incremental Patching",
+        "Cross-Region Replication"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Cross-region replication places a copy of your data in a different geographical region, providing a quick fallback in case the primary site fails. Local offline backups can be lost in a regional disaster, and snapshot-based backups still reside in the same region unless replicated. Incremental patching does not guarantee data availability.",
+      "examTip": "Disaster recovery and resilience often hinge on having data in multiple geographic locations."
+    },
+    {
+      "id": 95,
+      "question": "Which practice helps automatically reduce cloud expenses by shutting down or deallocating unused instances during low traffic periods?",
+      "options": [
+        "Using Spot Instances",
+        "Autoscaling Down Policies",
+        "Purchasing Reserved Instances",
+        "Resource Tagging"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Autoscaling down policies scale resources based on low demand, releasing unused capacity. Spot Instances can be cost-effective, but they don't automatically respond to low-usage scenarios in the same way. Reserved Instances can save money but require committed usage, and tagging aids in cost tracking, not necessarily reducing it.",
+      "examTip": "If you want to reduce costs in real time based on demand, autoscaling strategies are key."
+    },
+    {
+      "id": 96,
+      "question": "Which service continuously collects performance metrics and logs from cloud resources to provide real-time insights for troubleshooting and optimization?",
+      "options": [
+        "Code Commit",
+        "Continuous Integration (CI)",
+        "Cloud Monitoring Service",
+        "Cloud Directory"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A cloud monitoring service gathers metrics like CPU usage, disk I/O, and network activity, enabling proactive problem detection and optimization. Code Commit is a source control service, and Continuous Integration focuses on automating builds and tests. Cloud Directory manages hierarchical data structures rather than performance data.",
+      "examTip": "Monitoring services are crucial for identifying bottlenecks and detecting anomalies before they impact users."
+    },
+    {
+      "id": 97,
+      "question": "Which high availability design principle involves distributing the application workload across multiple active instances to maintain uptime even if one fails?",
+      "options": [
+        "Multi-Tenancy",
+        "Load Balancing with Active-Active Architecture",
+        "Warm Standby Disaster Recovery",
+        "In-Memory Caching"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Active-active load balancing ensures multiple instances are available simultaneously, so failure of any instance won't halt the entire service. Warm standby DR typically keeps a secondary environment partially running, which isn't an active load scenario. In-memory caching doesn't address overall uptime. Multi-tenancy deals with multiple customer environments.",
+      "examTip": "When you see multiple nodes handling traffic simultaneously, you're dealing with active-active load balancing."
+    },
+    {
+      "id": 98,
+      "question": "Which service or solution allows you to run and manage Docker containers in a fully managed environment without manually handling underlying servers?",
+      "options": [
+        "Serverless Computing",
+        "Elastic Container Service (ECS)",
+        "Hadoop Cluster",
+        "Virtual Machine Orchestration"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Elastic Container Service (ECS) manages Docker containers, abstracts infrastructure details, and simplifies scaling. Serverless computing uses event-driven execution without containers, and Hadoop Clusters target big data processing. VM orchestration deals with managing VMs rather than containerized environments.",
+      "examTip": "If the question mentions container management with minimal underlying server handling, look for a managed container service."
+    },
+    {
+      "id": 99,
+      "question": "Which method is best for transferring large-scale datasets to a cloud provider when network bandwidth is limited or slow?",
+      "options": [
+        "Direct Connect Link",
+        "Offline Data Transfer Appliances",
+        "Incremental Sync over VPN",
+        "SFTP Uploads"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Offline data transfer appliances let you physically ship massive data to the cloud provider, bypassing network bottlenecks. Direct Connect links can be costly or not feasible in every region, and incremental sync or SFTP can be too slow for multi-terabyte data sets. This method accelerates migration timeframes significantly.",
+      "examTip": "When bandwidth is insufficient for large data transfers, physical shipment via secure appliances is often the solution."
+    },
+    {
+      "id": 100,
+      "question": "Which framework ensures your cloud resources adhere to compliance and security best practices by automatically enforcing and checking policies against deployed infrastructure?",
+      "options": [
+        "Cloud Compliance Scanning",
+        "Resource Tagging",
+        "Policy as Code",
+        "Identity and Access Management"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Policy as Code embeds compliance rules into automated checks, ensuring configurations remain consistent with governance standards. Resource tagging is useful for organization and cost tracking, while compliance scanning typically happens post-deployment. IAM focuses on authentication and authorization, not direct policy enforcement across resources.",
+      "examTip": "If the question involves automatically enforcing governance rules, 'Policy as Code' is a likely answer."
     }
   ]
-});
-
-
+});  
