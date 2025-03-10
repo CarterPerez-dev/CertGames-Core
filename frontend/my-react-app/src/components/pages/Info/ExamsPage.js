@@ -5,6 +5,19 @@ import { FaSearch, FaFilter, FaChevronDown, FaChevronUp, FaCheckCircle } from 'r
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import './ExamsPage.css';
+import aplusLogo from './images/aplus.webp';
+import awscloudLogo from './images/awscloud.webp';
+import cisspLogo from './images/cissp.webp';
+import cloudLogo from './images/cloud.webp';
+import cyssaLogo from './images/cysa.webp';
+import dataLogo from './images/data.webp';
+import linuxLogo from './images/linux.webp';
+import networkLogo from './images/network.webp';
+import pentestLogo from './images/pentest.webp';
+import securityLogo from './images/security.webp';
+import securityxLogo from './images/securityx.webp';
+import serverLogo from './images/server.webp';
+
 
 const ExamsPage = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -18,7 +31,7 @@ const ExamsPage = () => {
       id: 'aplus-core1',
       title: 'CompTIA A+ Core 1',
       code: '220-1101',
-      logo: 'https://via.placeholder.com/150?text=A+',
+      logo: aplusLogo,
       category: 'comptia',
       level: 'beginner',
       questionCount: 1000,
@@ -30,7 +43,7 @@ const ExamsPage = () => {
       id: 'aplus-core2',
       title: 'CompTIA A+ Core 2',
       code: '220-1102',
-      logo: 'https://via.placeholder.com/150?text=A+',
+      logo: aplusLogo,
       category: 'comptia',
       level: 'beginner',
       questionCount: 1000,
@@ -41,8 +54,8 @@ const ExamsPage = () => {
     {
       id: 'network-plus',
       title: 'CompTIA Network+',
-      code: 'N10-008',
-      logo: 'https://via.placeholder.com/150?text=N+',
+      code: 'N10-009',
+      logo: networkLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -53,8 +66,8 @@ const ExamsPage = () => {
     {
       id: 'security-plus',
       title: 'CompTIA Security+',
-      code: 'SY0-601',
-      logo: 'https://via.placeholder.com/150?text=S+',
+      code: 'SY0-701',
+      logo: securityLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -65,8 +78,8 @@ const ExamsPage = () => {
     {
       id: 'cysa-plus',
       title: 'CompTIA CySA+',
-      code: 'CS0-002',
-      logo: 'https://via.placeholder.com/150?text=CySA+',
+      code: 'CS0-003',
+      logo: cyssaLogo,
       category: 'comptia',
       level: 'advanced',
       questionCount: 1000,
@@ -77,8 +90,8 @@ const ExamsPage = () => {
     {
       id: 'pentest-plus',
       title: 'CompTIA PenTest+',
-      code: 'PT0-002',
-      logo: 'https://via.placeholder.com/150?text=PenTest+',
+      code: 'PT0-003',
+      logo: pentestLogo,
       category: 'comptia',
       level: 'advanced',
       questionCount: 1000,
@@ -89,8 +102,8 @@ const ExamsPage = () => {
     {
       id: 'security-x',
       title: 'CompTIA Security X (formerly CASP+)',
-      code: 'CAS-004',
-      logo: 'https://via.placeholder.com/150?text=Security+X',
+      code: 'CAS-005',
+      logo: securityxLogo,
       category: 'comptia',
       level: 'expert',
       questionCount: 1000,
@@ -101,8 +114,8 @@ const ExamsPage = () => {
     {
       id: 'linux-plus',
       title: 'CompTIA Linux+',
-      code: 'XK0-004',
-      logo: 'https://via.placeholder.com/150?text=Linux+',
+      code: 'XK0-005',
+      logo: linuxLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -114,7 +127,7 @@ const ExamsPage = () => {
       id: 'data-plus',
       title: 'CompTIA Data+',
       code: 'DA0-001',
-      logo: 'https://via.placeholder.com/150?text=Data+',
+      logo: dataLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -125,8 +138,8 @@ const ExamsPage = () => {
     {
       id: 'server-plus',
       title: 'CompTIA Server+',
-      code: 'SK0-004',
-      logo: 'https://via.placeholder.com/150?text=Server+',
+      code: 'SK0-005',
+      logo: serverLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -137,8 +150,8 @@ const ExamsPage = () => {
     {
       id: 'cloud-plus',
       title: 'CompTIA Cloud+',
-      code: 'CV0-002',
-      logo: 'https://via.placeholder.com/150?text=Cloud+',
+      code: 'CV0-004',
+      logo: cloudLogo,
       category: 'comptia',
       level: 'intermediate',
       questionCount: 1000,
@@ -150,7 +163,7 @@ const ExamsPage = () => {
       id: 'cissp',
       title: 'ISC2 CISSP',
       code: 'CISSP',
-      logo: 'https://via.placeholder.com/150?text=CISSP',
+      logo: cisspLogo,
       category: 'isc2',
       level: 'expert',
       questionCount: 1000,
@@ -161,8 +174,8 @@ const ExamsPage = () => {
     {
       id: 'aws-cloud',
       title: 'AWS Cloud Practitioner',
-      code: 'CLF-C01',
-      logo: 'https://via.placeholder.com/150?text=AWS+CP',
+      code: 'CLF-C02',
+      logo: awscloudLogo,
       category: 'aws',
       level: 'beginner',
       questionCount: 1000,

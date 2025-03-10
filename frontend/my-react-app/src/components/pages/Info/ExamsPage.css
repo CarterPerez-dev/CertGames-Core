@@ -249,8 +249,12 @@
 }
 
 .cert-logo {
-  width: 80px;
-  height: 80px;
+  /* Remove fixed dimensions */
+  min-width: 70px; /* Minimum size for consistency */
+  min-height: 60px;
+  max-width: 100px; /* Maximum size to maintain layout */
+  max-height: 100px;
+  
   overflow: hidden;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.1);
@@ -261,7 +265,9 @@
 }
 
 .cert-logo img {
-  max-width: 100%;
+  width: auto; /* Allow natural width */
+  height: auto; /* Allow natural height */
+  max-width: 100%; /* Still constrain to container */
   max-height: 100%;
   object-fit: contain;
 }
