@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cloudplus",
   "testId": 2,
-  "testName": "CompTIA Cloud+ (DA0-001) Practice Test #2 (Very Easy)",
+  "testName": "CompTIA Cloud+ (CV0-004) Practice Test #2 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
