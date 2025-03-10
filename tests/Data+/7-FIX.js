@@ -1,8 +1,11 @@
+more in depth explanantions
+
+
 db.tests.insertOne({
-  "category": "CompTIA Data+",
+  "category": "dataplus",
   "testId": 7,
-  "testName": "Practice Test #7 (Challenging)",
-  "xpPerCorrect": 20,
+  "testName": "CompTIA Data+ (DA0-001) Practice Test #7 (Challenging)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
