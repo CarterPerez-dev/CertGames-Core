@@ -238,19 +238,19 @@ const handleSubmit = async (e) => {
               <div className="social-links">
                 <h3>Connect With Us</h3>
                 <div className="social-icons">
-                  <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon linkedin">
+                  <a href="https://www.linkedin.com/company/certgames/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="social-icon linkedin">
                     <FaLinkedin />
                   </a>
-                  <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon twitter">
+                  <a href="https://x.com/CertsGamified" target="_blank" rel="noopener noreferrer" className="social-icon twitter">
                     <FaTwitter />
                   </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
+                  <a href="https://www.instagram.com/certsgamified/" target="_blank" rel="noopener noreferrer" className="social-icon instagram">
                     <FaInstagram />
                   </a>
-                  <a href="https://reddit.com" target="_blank" rel="noopener noreferrer" className="social-icon reddit">
+                  <a href="https://www.reddit.com/user/Hopeful_Beat7161/" target="_blank" rel="noopener noreferrer" className="social-icon reddit">
                     <FaReddit />
                   </a>
-                  <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
+                  <a href="https://www.facebook.com/people/CertGames/61574087485497/" target="_blank" rel="noopener noreferrer" className="social-icon facebook">
                     <FaFacebook />
                   </a>
                 </div>
