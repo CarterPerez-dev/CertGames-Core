@@ -1305,3 +1305,4 @@ db.tests.insertOne({
       "examTip": "When sizing virtualization hosts for maximum VM density, prioritize memory capacity - unlike CPU resources that can be effectively shared among VMs, memory allocations are largely dedicated, making physical RAM the most common limiting factor in how many VMs can run simultaneously on a single host."
     }
   ]
+});
