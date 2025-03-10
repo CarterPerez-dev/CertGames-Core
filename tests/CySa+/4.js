@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 4,
-  "testName": "CySa+ Practice Test #4 (Moderate)",
+  "testName": "CompTIA CySa+ (CS0-003) Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
   "questions": [
     {
