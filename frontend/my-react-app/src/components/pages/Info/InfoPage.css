@@ -1652,6 +1652,9 @@
     height: 50px;
     font-size: 1.5rem;
   }
+  .info-stat-value {
+    font-size: 1.8rem;
+  }
 }
 
 
@@ -1714,6 +1717,10 @@
     flex: 1;
     min-width: calc(50% - 0.8rem);
     text-align: center;
+  }
+
+  .info-stat-value {
+    font-size: 1.8rem;
   }
 }
 
