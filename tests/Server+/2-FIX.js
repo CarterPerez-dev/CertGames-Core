@@ -1,3 +1,13 @@
+few things- first fix this You jump from 20 directly to 31.
+So 21–30 never appear. If you meant to have a continuous sequence, those are missing.
+42 appears three times in a row.
+44 appears twice in a row.
+You skip 46. You jump from 45 to 47.
+
+
+then make the explantions more in depth
+
+
 db.tests.insertOne({
   "category": "serverplus",
   "testId": 2,
