@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "linuxplus",
   "testId": 5,
-  "testName": "Linux+ Practice Test #5 (Intermediate)",
+  "testName": "CompTIA Linux+ (XK0-005) Practice Test #5 (Intermediate)",
   "xpPerCorrect": 10,
   "questions": [
     {
