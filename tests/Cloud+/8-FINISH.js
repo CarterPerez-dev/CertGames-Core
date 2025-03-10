@@ -835,6 +835,217 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Outbound firewall rules prevent unauthorized outbound traffic from an application, enforcing security policies. A WAF filters web requests but does not control outbound traffic broadly. An IPS detects threats but does not block traffic directly. IAM policies restrict API calls but do not govern general outbound network traffic.",
       "examTip": "For **controlling outbound traffic in cloud environments**, configure **firewall egress rules.**"
+    },
+    {
+      "id": 65,
+      "question": "A cloud engineer needs to verify whether a Linux-based virtual machine is experiencing disk I/O bottlenecks. Which command provides the most relevant data?",
+      "options": [
+        "`iostat -x`",
+        "`df -h`",
+        "`vmstat 1`",
+        "`lsblk`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`iostat -x` provides detailed disk I/O statistics, including read/write latency, which helps diagnose disk bottlenecks. `df -h` shows disk space usage but not performance metrics. `vmstat 1` provides overall system performance but lacks detailed I/O statistics. `lsblk` displays block device information but does not measure disk activity.",
+      "examTip": "For **checking disk I/O bottlenecks**, use **`iostat -x`.**"
+    },
+    {
+      "id": 66,
+      "question": "A cloud security engineer needs to ensure that cloud-based virtual machines automatically receive critical security updates. Which method should be configured?",
+      "options": [
+        "A patch management service with automated update policies.",
+        "A role-based access control (RBAC) policy restricting package installations.",
+        "A Web Application Firewall (WAF) to monitor incoming threats.",
+        "An intrusion detection system (IDS) to detect malware infections."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A patch management service automates the deployment of security updates, ensuring virtual machines stay protected. RBAC controls user access but does not enforce updates. A WAF secures web applications but does not update operating systems. An IDS detects intrusions but does not install patches.",
+      "examTip": "For **automating security updates**, configure **a patch management service.**"
+    },
+    {
+      "id": 67,
+      "question": "A Kubernetes administrator needs to troubleshoot why a service is not accessible externally. The service type is set to `LoadBalancer`. Which command should be run first?",
+      "options": [
+        "`kubectl get svc <service-name>`",
+        "`kubectl logs <service-name>`",
+        "`kubectl get pods -o wide`",
+        "`kubectl describe deployment <deployment-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl get svc <service-name>` displays the external IP and port mapping for a LoadBalancer service, confirming whether it is properly exposed. `kubectl logs` retrieves logs but does not show network configuration. `kubectl get pods -o wide` lists pods but does not verify service exposure. `kubectl describe deployment` provides deployment details but does not check service accessibility.",
+      "examTip": "For **troubleshooting external Kubernetes services**, use **`kubectl get svc`.**"
+    },
+    {
+      "id": 68,
+      "question": "A DevOps engineer is investigating why a CI/CD pipeline is failing during the deployment phase. The logs show 'insufficient permissions' errors when creating cloud resources. What should be checked first?",
+      "options": [
+        "The IAM role assigned to the CI/CD pipeline execution.",
+        "The availability of compute resources in the cloud region.",
+        "The network security group rules for outbound connections.",
+        "The version of the CI/CD tool being used."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "An 'insufficient permissions' error indicates that the IAM role assigned to the CI/CD pipeline lacks the required permissions to create resources. Checking resource availability, security groups, or tool versions does not address permission issues.",
+      "examTip": "For **CI/CD pipeline 'insufficient permissions' errors**, check **IAM role permissions first.**"
+    },
+    {
+      "id": 69,
+      "question": "A cloud networking engineer needs to inspect all open network connections on a Linux-based cloud instance. Which command should be used?",
+      "options": [
+        "`netstat -tunapl`",
+        "`ss -s`",
+        "`ip a`",
+        "`tcpdump -i eth0`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`netstat -tunapl` lists all open TCP and UDP network connections along with associated processes. `ss -s` summarizes socket statistics but does not display specific connections. `ip a` shows network interfaces and addresses but not connections. `tcpdump` captures packets but does not list active connections.",
+      "examTip": "For **listing open network connections on a Linux instance**, use **`netstat -tunapl`.**"
+    },
+    {
+      "id": 70,
+      "question": "A cloud administrator needs to verify whether a cloud-based relational database is experiencing connection saturation. Which metric should be analyzed first?",
+      "options": [
+        "Active database connections.",
+        "CPU utilization of the database server.",
+        "Disk IOPS for database storage performance.",
+        "Network latency between the application and database."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Active database connections determine if the database has reached its connection limit, causing failures. CPU utilization impacts performance but does not indicate connection saturation. Disk IOPS affects storage speed but does not diagnose connection limits. Network latency affects response time but does not explain connection saturation.",
+      "examTip": "For **troubleshooting database connection issues**, check **active database connections first.**"
+    },
+    {
+      "id": 71,
+      "question": "A cloud security team needs to enforce network segmentation in a virtual private cloud (VPC) while allowing controlled communication between specific workloads. What should be implemented?",
+      "options": [
+        "Network ACLs with explicit allow and deny rules.",
+        "A Web Application Firewall (WAF) to filter traffic.",
+        "Role-based access control (RBAC) for user permissions.",
+        "A load balancer to distribute traffic across instances."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Network ACLs enforce network segmentation by explicitly allowing or denying traffic between subnets. A WAF protects applications but does not enforce VPC segmentation. RBAC controls user permissions but does not manage network traffic. A load balancer optimizes traffic flow but does not restrict access between workloads.",
+      "examTip": "For **network segmentation in a VPC**, use **Network ACLs.**"
+    },
+    {
+      "id": 72,
+      "question": "A Kubernetes administrator needs to determine if a specific pod is experiencing CPU throttling. Which command should be used?",
+      "options": [
+        "`kubectl top pod <pod-name>`",
+        "`kubectl get nodes -o wide`",
+        "`kubectl describe deployment <deployment-name>`",
+        "`kubectl logs <pod-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl top pod <pod-name>` displays real-time CPU and memory usage for pods, helping diagnose CPU throttling issues. `kubectl get nodes -o wide` provides node details but does not show pod resource usage. `kubectl describe deployment` gives deployment details but does not display real-time CPU stats. `kubectl logs` retrieves application logs but does not track CPU usage.",
+      "examTip": "For **checking CPU throttling in Kubernetes pods**, use **`kubectl top pod`.**"
+    },
+    {
+      "id": 73,
+      "question": "A cloud administrator is troubleshooting why a newly created object storage bucket is not accessible from external networks. The bucket has public access enabled. What should be checked first?",
+      "options": [
+        "The bucket’s policy to ensure it allows public read access.",
+        "The DNS resolution for the bucket’s public endpoint.",
+        "The network ACL rules for the storage service.",
+        "The IAM role assigned to the bucket for external users."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Even if public access is enabled, the bucket policy must explicitly allow public read access. DNS resolution ensures name resolution but does not control access. Network ACLs apply at the VPC level and typically do not impact cloud storage. IAM roles govern user permissions but do not control public access settings.",
+      "examTip": "For **troubleshooting public access to storage buckets**, check **the bucket policy first.**"
+    },
+    {
+      "id": 74,
+      "question": "A Kubernetes pod is failing to start due to a missing environment variable. Which command provides the most useful information to diagnose the issue?",
+      "options": [
+        "`kubectl describe pod <pod-name>`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl get events`",
+        "`kubectl get pods -o wide`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl describe pod <pod-name>` provides detailed information on pod failures, including missing environment variables. `kubectl logs` retrieves application logs but does not show environment configuration errors. `kubectl get events` lists cluster events but may not indicate environment variable issues. `kubectl get pods -o wide` provides pod details but not error messages.",
+      "examTip": "For **debugging missing environment variables in Kubernetes**, use **`kubectl describe pod`.**"
+    },
+    {
+      "id": 75,
+      "question": "A security team needs to ensure that all cloud-hosted virtual machines are using an approved operating system image. What should be implemented?",
+      "options": [
+        "An image policy enforcement mechanism using a cloud-native security tool.",
+        "A Web Application Firewall (WAF) to monitor OS-level configurations.",
+        "A Network ACL to restrict non-compliant VMs from network access.",
+        "An intrusion detection system (IDS) to detect unauthorized VM images."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "An image policy enforcement mechanism ensures that only approved OS images are used when launching virtual machines. A WAF protects applications but does not enforce image policies. Network ACLs control traffic but do not enforce image compliance. IDS detects intrusions but does not prevent unauthorized images from being used.",
+      "examTip": "For **enforcing OS image compliance in cloud VMs**, use **image policy enforcement tools.**"
+    },
+    {
+      "id": 76,
+      "question": "A cloud networking team is troubleshooting a site-to-site VPN connection between an on-premises data center and a cloud provider. The tunnel is established, but no traffic is passing through. What should be checked first?",
+      "options": [
+        "The encryption settings to ensure they match on both sides.",
+        "The DNS configuration of the on-premises and cloud resources.",
+        "The API request logs for any blocked traffic attempts.",
+        "The auto-scaling policies for virtual appliances in the cloud."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "If the VPN tunnel is established but no traffic passes through, a mismatch in encryption settings (e.g., Phase 2 settings) can cause dropped packets. DNS configuration affects name resolution but does not block VPN traffic. API logs track API calls but do not diagnose VPN traffic flow. Auto-scaling policies impact availability but not VPN traffic.",
+      "examTip": "For **VPN tunnels that are up but not passing traffic**, check **encryption settings first.**"
+    },
+    {
+      "id": 77,
+      "question": "A cloud administrator needs to verify that a newly created database instance is accessible only from specific application servers. What should be checked?",
+      "options": [
+        "The database security group rules allowing only specific IP addresses.",
+        "The IAM policies assigned to the application servers.",
+        "The CPU and memory allocation of the database instance.",
+        "The TLS encryption settings for database connections."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Security group rules control which IP addresses and resources can access a database instance. IAM policies define who can manage the database but do not control network access. CPU and memory allocation affect performance but not connectivity. TLS encryption secures data but does not restrict access.",
+      "examTip": "For **restricting database access to specific sources**, check **security group rules.**"
+    },
+    {
+      "id": 78,
+      "question": "A DevOps engineer is investigating why a Terraform apply operation is failing with a ‘dependency cycle’ error. What is the most likely cause?",
+      "options": [
+        "A resource is referencing itself in a dependency chain.",
+        "The Terraform backend is unreachable due to a network issue.",
+        "The Terraform provider plugin is outdated.",
+        "An IAM role is missing permissions for resource creation."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A ‘dependency cycle’ error occurs when a resource depends on itself or creates an infinite loop in the dependency chain. Network issues affect state storage but do not cause dependency errors. Outdated provider plugins may cause other issues but do not create dependency cycles. IAM role permissions impact access but do not cause circular dependencies.",
+      "examTip": "For **Terraform dependency cycle errors**, check **for self-referencing resources.**"
+    },
+    {
+      "id": 79,
+      "question": "A cloud networking engineer needs to confirm if a specific route is being advertised from an on-premises router to a cloud provider using BGP. Which command should be used?",
+      "options": [
+        "`show ip bgp neighbors`",
+        "`traceroute <cloud-gateway>`",
+        "`netstat -rn`",
+        "`ping <cloud-gateway>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`show ip bgp neighbors` displays BGP route advertisements and confirms if specific routes are being shared with the cloud provider. `traceroute` maps network paths but does not show BGP route advertisements. `netstat -rn` lists local routing tables but does not confirm BGP route advertisements. `ping` tests connectivity but does not analyze BGP route sharing.",
+      "examTip": "For **verifying BGP route advertisements**, use **`show ip bgp neighbors`.**"
+    },
+    {
+      "id": 80,
+      "question": "A Kubernetes administrator needs to verify that a pod is allowed to communicate with another pod based on network policies. Which command should be used?",
+      "options": [
+        "`kubectl get networkpolicy`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl describe node <node-name>`",
+        "`kubectl get services`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl get networkpolicy` lists all network policies that control pod-to-pod communication. `kubectl logs` retrieves logs but does not verify network rules. `kubectl describe node` provides node-level details but not pod communication rules. `kubectl get services` lists service endpoints but does not check network policies.",
+      "examTip": "For **verifying Kubernetes network policies**, use **`kubectl get networkpolicy`.**"
     }
+  ]
+});
+
 
 
