@@ -292,7 +292,7 @@ const DemosPage = () => {
             <h2>Ready to experience all these features?</h2>
             <p>Create your free account today and start your cybersecurity journey with CertGames!</p>
             <Link to="/register" className="cta-button">
-              Create Free Account
+              Create Your Account
             </Link>
           </div>
         </div>
