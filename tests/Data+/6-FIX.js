@@ -1,4 +1,4 @@
-Q-16
+more in depth explanantions
 
 
 db.tests.insertOne({
@@ -202,10 +202,19 @@ db.tests.insertOne({
       "explanation": "**Regression analysis** helps identify how different factors, such as subscription plans, influence customer churn likelihood.",
       "examTip": "Use **regression for understanding relationships between numerical variables**—clustering segments similar groups."
     },
-
-
-
-    
+    {
+      "id": 16,
+      "question": "A healthcare organization is implementing a data masking strategy to protect patient data during analytics and development processes. The masking must be applied consistently across multiple systems while preserving the analytical value of the data. Some reports require aggregated patient demographic information, while individual patient details must remain protected.\n\nWhich data masking technique is MOST appropriate for this scenario?",
+      "options": [
+        "Substitution masking with random values for all personal identifiers.",
+        "Format-preserving encryption that maintains data type and format.",
+        "Dynamic masking that varies protection based on user authorization level.",
+        "Nullification of all sensitive fields in non-production environments."
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Dynamic masking applies different levels of data protection based on the user's role and authorization level. This approach allows analysts to view aggregated demographic information for reporting purposes while restricting access to personally identifiable information (PII) for unauthorized users. It maintains the analytical value of the data while enforcing appropriate privacy protections. Substitution masking with random values would disrupt potential correlations in the data, reducing its analytical value. Format-preserving encryption would protect the data but wouldn't allow flexible access based on user roles. Nullification of sensitive fields would eliminate the ability to perform meaningful demographic analysis altogether, failing to meet the analytical requirements.",
+      "examTip": "When balancing data privacy requirements with analytical needs, consider dynamic masking to provide appropriate levels of data access based on user roles rather than applying a single masking strategy across all use cases."
+    },
     {
       "id": 17,
       "question": "A company is analyzing **employee productivity metrics** to determine which factors influence overall work efficiency.\n\nWhich statistical method is MOST appropriate?",
