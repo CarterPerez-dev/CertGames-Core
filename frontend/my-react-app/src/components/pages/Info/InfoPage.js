@@ -552,7 +552,7 @@ const InfoPage = () => {
               <span className="info-tool-icon">⚔️</span>
               XploitCraft
             </h3>
-            <p>Learn about exploitation techniques through educational code examples with detailed explanations for ethical understanding.</p>
+            <p>Learn about exploitation techniques through educational code examples with detailed explanations for real world understanding.</p>
             <div className="info-card-flip">
               <div className="info-demo-preview">
                 <Link to="/demos" className="info-demo-link">
@@ -812,20 +812,20 @@ const InfoPage = () => {
         <div className="info-section-header info-animate-on-scroll">
           <h2>
             <span className="info-section-icon">💬</span>
-            Success Stories
+            Testimonials
           </h2>
-          <p>Join thousands who have leveled up their careers</p>
+          <p>Join other IT enthusiasts who have leveled up their studying!</p>
         </div>
         
         <div className="info-testimonials-grid">
           <div className="info-testimonial-card info-animate-on-scroll">
             <div className="info-testimonial-content">
-              <p>"I passed my Security+ on the first try after using CertGames for just two months. The gamification made studying actually enjoyable for once!"</p>
+              <p>"I never thought I'd say this about a study site, but it's genuinely fun. The gamified aspect takes the monotomy out of studying, and having a that centralized resource hub is brilliant. My browser bookmarks are thanking me."</p>
             </div>
             <div className="info-testimonial-author">
               <div className="info-author-avatar" style={{ backgroundColor: '#4e54c8' }}></div>
               <div className="info-author-info">
-                <p className="info-author-name">Alex T.</p>
+                <p className="info-author-name">Connor B.</p>
                 <p className="info-author-title">Security Analyst</p>
               </div>
             </div>
@@ -833,7 +833,7 @@ const InfoPage = () => {
           
           <div className="info-testimonial-card info-animate-on-scroll">
             <div className="info-testimonial-content">
-              <p>"The interactive scenarios and analogies helped me understand complex concepts that I'd been struggling with for weeks. I'm now CISSP certified!"</p>
+              <p>"This site hits that sweet spot between education and entertainment. Studying for CompTIA certs feels rewarding instead of tedious. Big thumbs-up for the gamification, because I always tried to study like that myself, but now there is finally a dedicated webiste I can use."</p>
             </div>
             <div className="info-testimonial-author">
               <div className="info-author-avatar" style={{ backgroundColor: '#43cea2' }}></div>
@@ -846,12 +846,12 @@ const InfoPage = () => {
           
           <div className="info-testimonial-card info-animate-on-scroll">
             <div className="info-testimonial-content">
-              <p>"The 24/7 support feature is amazing! Whenever I get stuck on a concept, I get personalized help within hours. Worth every penny."</p>
+              <p>"I appreciate how this website doesn't feel like a lecture—more like playing a game that just happens to teach certifications. I also think the question page helped me alot when I needed to ask questions regarding my upcoming exam."</p>
             </div>
             <div className="info-testimonial-author">
               <div className="info-author-avatar" style={{ backgroundColor: '#ff9966' }}></div>
               <div className="info-author-info">
-                <p className="info-author-name">Marcus J.</p>
+                <p className="info-author-name">Leon T.</p>
                 <p className="info-author-title">IT Student</p>
               </div>
             </div>
@@ -877,7 +877,7 @@ const InfoPage = () => {
           
           <div className="info-faq-item info-animate-on-scroll">
             <h3 className="info-faq-question">Can I access CertGames on my mobile device?</h3>
-            <p className="info-faq-answer">Absolutely! CertGames is fully responsive and works on all devices including desktop, tablet, and mobile phones. Your progress syncs across all platforms automatically.</p>
+            <p className="info-faq-answer">Absolutely! CertGames is fully responsive and works on all devices including desktop, tablet, and mobile phones. We also have a dedicated IOS app you can donwload in the App Store. Your progress syncs across all platforms automatically.</p>
           </div>
           
           <div className="info-faq-item info-animate-on-scroll">
@@ -887,12 +887,12 @@ const InfoPage = () => {
           
           <div className="info-faq-item info-animate-on-scroll">
             <h3 className="info-faq-question">Is there a guarantee I'll pass my certification exam?</h3>
-            <p className="info-faq-answer">While we can't guarantee passing (no one ethically can), our success rates are extremely high. Users who complete all practice tests for their target certification and maintain a score of 85% or higher have a passing rate of over 95% on their actual exams.</p>
+            <p className="info-faq-answer">While we can't guarantee passing, our success rates are extremely high. Users who complete just half of our practice tests for their target certification and maintain a score of 75% or higher have a passing rate of over 95% on their actual exams.</p>
           </div>
           
           <div className="info-faq-item info-animate-on-scroll">
             <h3 className="info-faq-question">What if I need help with a specific concept?</h3>
-            <p className="info-faq-answer">Our 24/7 "Ask Anything" support feature allows you to ask any certification-related question and receive a thorough, personalized answer from our expert team, typically within 3 hours.</p>
+            <p className="info-faq-answer">Our 24/7 "Ask Anything" support feature allows you to ask any certification-related question, test question, exam questions, study advice, and whatever you might need help with, you will receive a thorough, personalized answer from our expert team who have passed all certifications listed, typically within 3 hours.</p>
           </div>
           
           <div className="info-more-questions">
@@ -908,7 +908,7 @@ const InfoPage = () => {
       <section className="info-final-cta">
         <div className="info-cta-content info-animate-on-scroll">
           <h2>Ready to Begin Your Cybersecurity Journey?</h2>
-          <p>Join thousands of security professionals who've transformed their careers with CertGames</p>
+          <p>Join oter security professionals and IT enthusiasts who've transformed their careers/study prep with CertGames</p>
           <div className="info-cta-buttons">
             <Link to="/register" className="info-button info-primary-button">
               Create Your Account
@@ -918,7 +918,7 @@ const InfoPage = () => {
             </Link>
           </div>
           <div className="info-oauth-options">
-            <span>Quick sign-in with:</span>
+            <span>Quick sign-up with:</span>
             <div className="info-oauth-buttons">
               <button className="info-oauth-button info-google" onClick={() => window.location.href = "/api/oauth/login/google"}>
                 <FaGoogle className="info-oauth-icon" /> Google
