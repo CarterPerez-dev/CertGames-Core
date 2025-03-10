@@ -731,5 +731,110 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "A restart policy in the pod specification ensures that Kubernetes automatically restarts a pod if it crashes. A CronJob schedules jobs but does not manage pod restarts. A StatefulSet is used for stateful applications but does not handle automatic restarts. An Ingress resource routes traffic but does not restart failed pods.",
       "examTip": "For **automatic pod restarts in Kubernetes**, configure **a restart policy in the pod spec.**"
+    },
+    {
+      "id": 57,
+      "question": "A cloud administrator needs to verify which IAM policies allow a specific user to perform an action on a storage bucket. Which command should be used?",
+      "options": [
+        "`aws iam simulate-principal-policy --policy-source-arn <user-arn> --action s3:PutObject`",
+        "`aws s3 ls s3://<bucket-name>`",
+        "`aws iam list-attached-user-policies --user-name <username>`",
+        "`aws s3api get-bucket-policy --bucket <bucket-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`aws iam simulate-principal-policy` tests if a user has permissions for a specific action, such as `s3:PutObject`. `aws s3 ls` lists available buckets but does not verify permissions. `aws iam list-attached-user-policies` lists assigned policies but does not confirm effective permissions. `aws s3api get-bucket-policy` retrieves the bucket’s policy but does not validate user permissions.",
+      "examTip": "For **checking IAM permissions for a specific action**, use **`aws iam simulate-principal-policy`.**"
+    },
+    {
+      "id": 58,
+      "question": "A Kubernetes administrator notices that a pod is stuck in the `Terminating` state for an extended period. What is the most likely cause?",
+      "options": [
+        "A finalizer attached to the pod is preventing deletion.",
+        "The pod is using too much CPU and cannot terminate.",
+        "The cluster has reached its maximum pod limit.",
+        "The pod’s readiness probe is failing."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Finalizers prevent pod deletion until specific cleanup actions are completed. High CPU usage does not cause termination delays. A full cluster prevents new pods from being scheduled but does not affect termination. Readiness probes determine pod availability but do not prevent deletion.",
+      "examTip": "For **Kubernetes pods stuck in `Terminating`**, check **finalizers first.**"
+    },
+    {
+      "id": 59,
+      "question": "A security engineer needs to enforce encryption for all outbound emails sent from a cloud-hosted mail server. What should be implemented?",
+      "options": [
+        "Transport Layer Security (TLS) for email transmission.",
+        "Multi-factor authentication (MFA) for email users.",
+        "Network ACLs to restrict outgoing SMTP traffic.",
+        "Role-based access control (RBAC) for mail server access."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "TLS encrypts email transmissions, ensuring secure outbound communication. MFA secures logins but does not encrypt emails. Network ACLs control traffic but do not enforce encryption. RBAC manages access permissions but does not secure email transmission.",
+      "examTip": "For **enforcing email encryption**, use **TLS for SMTP traffic.**"
+    },
+    {
+      "id": 60,
+      "question": "A DevOps team is troubleshooting why a Terraform apply operation is failing due to a state lock. What is the first step to resolve this issue?",
+      "options": [
+        "Check for an active Terraform process that is holding the lock.",
+        "Manually delete the Terraform state lock file from the backend.",
+        "Restart the Terraform execution environment.",
+        "Increase the timeout value for Terraform state operations."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Terraform locks the state file to prevent concurrent modifications. If the lock persists, checking for an active Terraform process holding the lock is the first step. Deleting the lock file manually can cause corruption. Restarting the environment may not resolve the issue. Increasing the timeout affects operations but does not fix locked states.",
+      "examTip": "For **Terraform state lock issues**, check **for active processes first.**"
+    },
+    {
+      "id": 61,
+      "question": "A cloud administrator needs to verify if an instance has sufficient disk throughput for a high-performance database workload. Which metric should be analyzed first?",
+      "options": [
+        "Disk IOPS.",
+        "CPU utilization.",
+        "Memory consumption.",
+        "Network bandwidth usage."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Disk IOPS (Input/Output Operations Per Second) is the primary metric for analyzing storage performance, especially for high-performance databases. CPU utilization impacts processing speed but not storage performance. Memory consumption affects application efficiency but does not determine disk speed. Network bandwidth affects external communication but does not measure disk performance.",
+      "examTip": "For **analyzing database disk performance**, check **Disk IOPS first.**"
+    },
+    {
+      "id": 62,
+      "question": "A cloud networking team needs to determine why a VPN tunnel between an on-premises data center and a cloud provider keeps disconnecting. What should be checked first?",
+      "options": [
+        "The VPN keepalive settings on both endpoints.",
+        "The firewall rules allowing IPsec traffic.",
+        "The cloud provider’s service health dashboard.",
+        "The latency between the on-premises and cloud networks."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "VPN tunnels require keepalive packets to maintain an active connection. If these packets are not sent or received, the tunnel may disconnect. Firewall rules control traffic but do not prevent timeouts. Cloud service health dashboards track outages but do not diagnose VPN-specific settings. Latency affects performance but does not directly cause disconnects.",
+      "examTip": "For **troubleshooting VPN disconnects**, check **keepalive settings first.**"
+    },
+    {
+      "id": 63,
+      "question": "A Kubernetes administrator needs to confirm that a persistent volume (PV) is correctly mounted to a pod. Which command should be used?",
+      "options": [
+        "`kubectl get pvc`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl describe pod <pod-name>`",
+        "`kubectl get nodes`"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "`kubectl describe pod <pod-name>` provides details about volume mounts, confirming if a persistent volume is correctly attached. `kubectl get pvc` shows persistent volume claims but does not confirm mounting. `kubectl logs` retrieves logs but does not check storage. `kubectl get nodes` lists nodes but does not display pod storage details.",
+      "examTip": "For **verifying persistent volume mounts in Kubernetes**, use **`kubectl describe pod`.**"
+    },
+    {
+      "id": 64,
+      "question": "A cloud security team needs to prevent unauthorized outbound traffic from a cloud-hosted application. What should be implemented?",
+      "options": [
+        "Outbound firewall rules restricting egress traffic.",
+        "A Web Application Firewall (WAF) to filter outgoing API calls.",
+        "A network-based Intrusion Prevention System (IPS).",
+        "An IAM policy restricting external API access."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Outbound firewall rules prevent unauthorized outbound traffic from an application, enforcing security policies. A WAF filters web requests but does not control outbound traffic broadly. An IPS detects threats but does not block traffic directly. IAM policies restrict API calls but do not govern general outbound network traffic.",
+      "examTip": "For **controlling outbound traffic in cloud environments**, configure **firewall egress rules.**"
     }
+
 
