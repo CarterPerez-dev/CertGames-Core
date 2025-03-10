@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "dataplus",
   "testId": 9,
-  "testName": "CompTIA Data+ (DA0-001) Practice Test (Ruthless)",
+  "testName": "CompTIA Data+ (DA0-001) Practice Test #9 (Ruthless)",
   "xpPerCorrect": 10,
   "questions": [
     {
