@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "caspplus",
   "testId": 7,
-  "testName": "SecurityX Practice Test #7 (Challenging)",
+  "testName": "CompTIA Security-X (CAS-005) Practice Test #7 (Challenging)",
   "xpPerCorrect": 10,
   "questions": [
     {
