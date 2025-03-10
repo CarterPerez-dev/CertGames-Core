@@ -180,7 +180,7 @@ db.tests.insertOne({
         "WEP",
         "WPA",
         "WPA2/WPA3",
-        "Open (no password)"
+        "Open"
       ],
       "correctAnswerIndex": 2,
       "explanation": "WPA2/WPA3 is correct because they provide modern, robust encryption. WEP is wrong because it's obsolete and easily cracked. WPA is better than WEP but still weaker than WPA2/WPA3. An open network provides no encryption. Exam tip: Always use the strongest encryption supported by both access point and client devices.",
@@ -309,7 +309,7 @@ db.tests.insertOne({
       "options": [
         "Secure Boot",
         "Boot from USB",
-        "Virtualization support (VT-x/AMD-V)",
+        "Virtualization support",
         "CPU fan control"
       ],
       "correctAnswerIndex": 2,
@@ -569,7 +569,7 @@ db.tests.insertOne({
       "options": [
         "GPU driver not installed",
         "Insufficient PSU wattage",
-        "Incorrect SATA port configuration in BIOS/UEFI",
+        "Incorrect SATA port configuration",
         "Low disk partition size"
       ],
       "correctAnswerIndex": 2,
