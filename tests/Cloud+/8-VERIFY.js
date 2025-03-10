@@ -1,8 +1,8 @@
 db.tests.insertOne({
-  "category": "exam",
+  "category": "cloudplus",
   "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
+  "testName": "CompTIA Cloud+ (CV0-004) Practice Test #8 (Very Challenging)",
+  "xpPerCorrect": 10,
   "questions": [
     {
       "id": 1,
@@ -107,15 +107,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`terraform refresh` updates the state file with the actual current state of deployed resources, ensuring synchronization. `terraform validate` checks configuration syntax but does not sync state. `terraform destroy` removes resources but does not verify state consistency. `terraform state list` shows managed resources but does not refresh state.",
       "examTip": "For **verifying Terraform state synchronization**, use **`terraform refresh`.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 9,
       "question": "A cloud engineer needs to check the available CPU and memory resources on a Kubernetes worker node. Which command should be used?",
@@ -219,15 +211,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Firewall logs reveal which rules are blocking traffic, providing direct insights into denied connection attempts. `ping` confirms connectivity but does not diagnose blocked ports. DNS resolution checks name resolution but does not affect firewall rules. Packet captures provide raw data but are less efficient for rule troubleshooting.",
       "examTip": "For **checking which firewall rule is blocking traffic**, analyze **firewall logs first.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 17,
       "question": "A cloud engineer needs to verify if an instance’s network interface is dropping packets due to excessive traffic. Which command should be used?",
@@ -331,15 +315,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Backup logs provide confirmation of successful completion, as well as any errors encountered. Querying the database for a timestamp may not indicate backup integrity. Billing records show charges but do not confirm backup success. CPU and memory usage metrics indicate backup activity but do not confirm completion.",
       "examTip": "For **verifying successful database backups**, check **backup logs first.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 25,
       "question": "A cloud engineer needs to verify that a virtual machine is correctly advertising its IP routes in a BGP-enabled network. Which command should be used?",
@@ -443,15 +419,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Egress traffic volume reveals if the instance is sending large amounts of data, which could indicate excessive bandwidth usage. CPU utilization affects processing but not network bandwidth. SSH sessions impact security but do not typically consume large amounts of bandwidth. Disk IOPS measures storage activity but does not indicate network consumption.",
       "examTip": "For **analyzing high bandwidth usage on a cloud VM**, check **egress traffic volume first.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 33,
       "question": "A cloud engineer needs to verify whether a Linux-based virtual machine is experiencing network congestion. Which command provides the most relevant data?",
@@ -555,15 +523,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Instances in public subnets require a NAT gateway for outbound internet access if they lack a public IP. Security group rules allow traffic but do not control outbound routing. DNS settings affect hostname resolution but do not impact connectivity. IAM policies manage permissions but do not control network traffic.",
       "examTip": "For **outbound internet issues in a public subnet**, check **NAT gateway configuration first.**"
-    }
-  ]
-});
-db.tests.insertOne({
-  "category": "exam",
-  "testId": 8,
-  "testName": "Practice Test #8 (Very Challenging)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 41,
       "question": "A cloud networking team is troubleshooting packet loss between two regions. Logs show high retransmissions and inconsistent latency. Which factor should be analyzed first?",
@@ -667,6 +627,109 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "A cloud storage analytics service provides insights into storage consumption trends and excessive usage. OS disk usage reports help for local storage but do not track cloud usage. Network bandwidth monitoring tools track traffic, not storage. An IPS detects threats but does not monitor storage utilization.",
       "examTip": "For **analyzing cloud storage consumption**, use **cloud storage analytics tools.**"
+    },
+    {
+      "id": 49,
+      "question": "A cloud networking engineer needs to determine if an instance is experiencing high TCP retransmissions. Which command should be used?",
+      "options": [
+        "`netstat -s | grep 'segments retransmitted'`",
+        "`tcpdump -i eth0 port 443`",
+        "`ping -c 10 <destination-IP>`",
+        "`traceroute <destination-IP>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`netstat -s | grep 'segments retransmitted'` provides statistics on TCP retransmissions, indicating potential packet loss or congestion. `tcpdump` captures network traffic but does not summarize retransmissions. `ping` tests connectivity but does not track TCP retransmissions. `traceroute` maps network paths but does not diagnose TCP-specific issues.",
+      "examTip": "For **checking TCP retransmissions**, use **`netstat -s | grep 'segments retransmitted'`.**"
+    },
+    {
+      "id": 50,
+      "question": "A DevOps engineer is troubleshooting Terraform execution failures. The error log indicates 'state file lock is held by another process.' What is the first step to resolve this?",
+      "options": [
+        "Check if another Terraform process is currently running.",
+        "Manually delete the Terraform state lock file.",
+        "Reset the Terraform provider plugin cache.",
+        "Increase API request limits for the Terraform backend."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Terraform locks the state file during execution to prevent concurrent changes. The first step is to check if another Terraform process is running and terminating it properly. Deleting the lock file manually can cause corruption. Resetting the provider cache helps with plugin issues but not state locks. API limits do not affect state locking.",
+      "examTip": "For **Terraform state lock issues**, check **if another process is running first.**"
+    },
+    {
+      "id": 51,
+      "question": "A Kubernetes administrator needs to determine why a pod is failing to reach an external service despite having an active network connection. Which command should be used?",
+      "options": [
+        "`kubectl exec -it <pod-name> -- curl <external-service>`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl get svc <service-name>`",
+        "`kubectl describe node <node-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl exec -it <pod-name> -- curl <external-service>` tests network connectivity directly from the pod, verifying if it can reach the external service. `kubectl logs` retrieves logs but does not test connectivity. `kubectl get svc` lists services but does not check external reachability. `kubectl describe node` provides node details but does not diagnose networking issues.",
+      "examTip": "For **testing external connectivity from a Kubernetes pod**, use **`kubectl exec -it -- curl`.**"
+    },
+    {
+      "id": 52,
+      "question": "A cloud security team is investigating a suspected insider threat where an employee accessed sensitive data outside of normal work hours. Which log source should be analyzed first?",
+      "options": [
+        "Cloud provider’s identity and access management (IAM) logs.",
+        "Network flow logs to track outbound data transfers.",
+        "Database query logs to detect unauthorized access patterns.",
+        "Intrusion Detection System (IDS) alerts for unusual user activity."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "IAM logs provide detailed records of authentication events, including access outside of normal work hours. Network flow logs track data transfers but do not show authentication history. Database query logs reveal unauthorized queries but do not track login attempts. IDS alerts detect anomalies but do not specifically focus on user authentication.",
+      "examTip": "For **detecting unauthorized access attempts**, analyze **IAM logs first.**"
+    },
+    {
+      "id": 53,
+      "question": "A cloud administrator needs to verify if a Linux-based instance has exhausted its available file descriptors. Which command should be used?",
+      "options": [
+        "`ulimit -n`",
+        "`df -h`",
+        "`free -m`",
+        "`ps aux`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ulimit -n` displays the maximum number of open file descriptors for the system. `df -h` shows disk usage but does not monitor file descriptors. `free -m` checks memory usage, not file descriptors. `ps aux` lists running processes but does not track open files.",
+      "examTip": "For **checking available file descriptors in Linux**, use **`ulimit -n`.**"
+    },
+    {
+      "id": 54,
+      "question": "A cloud networking team needs to analyze packet loss between cloud regions. Which tool provides real-time visibility into packet loss and network latency?",
+      "options": [
+        "`mtr`",
+        "`ping`",
+        "`dig`",
+        "`netstat -i`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`mtr` provides real-time analysis of network paths, including packet loss and latency. `ping` tests connectivity but does not track per-hop latency. `dig` resolves domain names but does not analyze network performance. `netstat -i` shows interface statistics but does not measure end-to-end latency.",
+      "examTip": "For **real-time packet loss and latency analysis**, use **`mtr`.**"
+    },
+    {
+      "id": 55,
+      "question": "A cloud security engineer needs to prevent unauthorized API access while ensuring that service-to-service communication remains functional. What should be implemented?",
+      "options": [
+        "OAuth 2.0 with token expiration and refresh mechanisms.",
+        "A Web Application Firewall (WAF) to inspect API requests.",
+        "Multi-factor authentication (MFA) for all API calls.",
+        "Role-based access control (RBAC) with strict API permissions."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "OAuth 2.0 with token expiration and refresh mechanisms ensures that API access remains secure while allowing service-to-service authentication. A WAF filters API requests but does not handle authentication. MFA is impractical for automated API calls. RBAC restricts access but does not authenticate requests.",
+      "examTip": "For **secure API authentication while allowing service-to-service communication**, use **OAuth 2.0 tokens.**"
+    },
+    {
+      "id": 56,
+      "question": "A cloud engineer needs to ensure that a Kubernetes pod automatically restarts if it crashes. What should be configured?",
+      "options": [
+        "A restart policy in the pod specification.",
+        "A Kubernetes CronJob to restart the pod periodically.",
+        "A StatefulSet to manage pod lifecycle restarts.",
+        "An Ingress resource to reroute traffic to healthy pods."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A restart policy in the pod specification ensures that Kubernetes automatically restarts a pod if it crashes. A CronJob schedules jobs but does not manage pod restarts. A StatefulSet is used for stateful applications but does not handle automatic restarts. An Ingress resource routes traffic but does not restart failed pods.",
+      "examTip": "For **automatic pod restarts in Kubernetes**, configure **a restart policy in the pod spec.**"
     }
-  ]
-});
+
