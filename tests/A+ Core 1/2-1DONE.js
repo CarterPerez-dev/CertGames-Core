@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "aplus",
-  "testId": 3,
-  "testName": "CompTIA A+ Core 1 (1101) Practice Test #3 (Easy)",
+  "testId": 2,
+  "testName": "CompTIA A+ Core 1 (1101) Practice Test #2 (Very Easy)",
   "xpPerCorrect": 10,
   "questions": [
     {
