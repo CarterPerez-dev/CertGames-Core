@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "serverplus",
   "testId": 1,
-  "testName": "Server+ Practice Test #1 (Normal)",
+  "testName": "CompTIA Server+ (SK0-005) Practice Test #1 (Normal)",
   "xpPerCorrect": 10,
   "questions": [
     {
