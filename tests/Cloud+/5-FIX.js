@@ -1,5 +1,3 @@
-#i think -12 exrrea questions in here
-
 db.tests.insertOne({
   "category": "cloudplus",
   "testId": 5,
@@ -304,19 +302,6 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Just-in-time (JIT) access ensures that privileges are granted only when necessary, reducing risk while allowing flexibility. RBAC enforces structured access but does not minimize overprivileged accounts. Network ACLs control access locations but not user privileges. MFA secures authentication but does not limit resource access post-login.",
       "examTip": "For **access control with flexibility**, use **Just-in-Time (JIT) access.**"
-    },
-    {
-      "id": 24,
-      "question": "Which method best ensures compliance with data sovereignty laws in a multi-cloud deployment?",
-      "options": [
-        "Encrypting all data at rest and in transit using cloud provider keys.",
-        "Using hybrid cloud to keep regulated data on-premises while leveraging cloud resources.",
-        "Applying IAM policies to restrict access to sensitive data across clouds.",
-        "Configuring a cloud-native firewall to control cross-region data transfers."
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "A hybrid cloud model allows organizations to retain control over sensitive data on-premises while leveraging cloud scalability, ensuring compliance with sovereignty laws. Encryption secures data but does not enforce location restrictions. IAM policies control access but do not prevent unauthorized data movement. Firewalls filter traffic but do not ensure data residency.",
-      "examTip": "For **compliance with data sovereignty laws**, use **a hybrid cloud approach.**"
     },
     {
       "id": 24,
