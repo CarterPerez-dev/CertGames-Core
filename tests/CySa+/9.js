@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cysa",
   "testId": 9,
-  "testName": "CySa+ Practice Test #9 (Ruthless)",
+  "testName": "CompTIA CySa+ (CS0-003) Practice Test #9 (Ruthless)",
   "xpPerCorrect": 10,
   "questions": [
     {
