@@ -23,7 +23,7 @@ db.tests.insertOne({
       "options": [
         "Defense in Depth, involving the layering of technical and administrative controls to ensure the provider takes sole responsibility for physical security, while the client remains accountable for network segmentation and user security.",
         "Zero Trust, mandating that each party in the service architecture operates under a framework that treats no endpoint, internal or external, as inherently safe, thus equally distributing responsibilities for all security tasks.",
-        "The Shared Responsibility Model, dictating which aspects of security the cloud vendor manages (like data center infrastructure) versus which responsibilities the customer retains (like access controls and data governance).",
+        "The Shared Responsibility Model, dictating which aspects of security the cloud vendor manages (like data center infrastructure) versus which responsibilities the customer retains.",
         "The CIA Triad, describing how the cloud provider must guarantee confidentiality, integrity, and availability of all tenant resources by delegating physical security and virtualization oversight to the client."
       ],
       "correctAnswerIndex": 2,
