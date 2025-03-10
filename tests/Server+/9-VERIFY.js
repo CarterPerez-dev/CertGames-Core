@@ -1,10 +1,7 @@
-somehwre theres duplciate number
-
-
 db.tests.insertOne({
   "category": "serverplus",
   "testId": 9,
-  "testName": "CompTIA Server+ Practice Test #9 (Ruthless)",
+  "testName": "CompTIA Server+ (SK0-005) Practice Test #9 (Ruthless)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -58,19 +55,6 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Kernel panics following RAID controller firmware updates typically indicate firmware-driver incompatibility issues. RAID controller firmware updates often introduce API changes incompatible with current OS-level drivers. Subtle hardware issues would show consistently rather than intermittently. Memory addressing and bootloader issues typically cause consistent boot failures rather than intermittent kernel panics after normal booting.",
       "examTip": "Kernel panics post firmware updates often reflect driver-firmware mismatches. Always match firmware updates with compatible drivers."
-    },
-    {
-      "id": 5,
-      "question": "A high-density blade server enclosure regularly triggers thermal shutdowns during peak operational hours, despite proper airflow management practices being followed. Which underlying issue is most likely causing these shutdowns?",
-      "options": [
-        "Marginally insufficient chilled-water flow rate in cooling loops",
-        "Underpowered enclosure fans due to faulty power distribution circuitry",
-        "Excessive localized heat spots from poorly optimized blade load distribution",
-        "Intermittent faults in enclosure management firmware temperature thresholds"
-      ],
-      "correctAnswerIndex": 0,
-      "explanation": "Marginally insufficient chilled-water flow rate, especially under peak loads, can cause temperature spikes severe enough to trigger enclosure thermal shutdowns, even when general airflow seems sufficient. Blade servers are extremely sensitive to subtle cooling inefficiencies. Underpowered fans due to circuitry issues typically cause consistent overheating rather than peak-hour-only incidents. Firmware-related thermal monitoring usually generates erroneous temperature readings consistently, not exclusively during high load.",
-      "examTip": "Thermal shutdowns during peak load conditions point towards subtle inadequacies in cooling infrastructure rather than static hardware faults."
     },
     {
       "id": 5,
