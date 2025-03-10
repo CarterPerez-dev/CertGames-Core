@@ -1,7 +1,4 @@
 # FIX
-## fix email sender/verify it, make reset password link/email not image based or whatver so it doesnt have that warning in uses email- also mak it look aliitle better.
-## Less amrgin between footer and login/regsiter container (padding/margin botom)
-## chnag important fonts to sans serif instead of orbitron
 -----
 ## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
 ---
