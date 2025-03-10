@@ -22,7 +22,6 @@ import {
   FaClipboardCheck,
   FaQuestionCircle,
   FaArrowRight,
-  FaShieldAlt,
   FaLock,
   FaExclamationTriangle,
   FaTimes
@@ -51,14 +50,13 @@ const ScenarioSphere = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [scoreCounter, setScoreCounter] = useState(0);
 
-  // New state for UI enhancements
   const [outputExpanded, setOutputExpanded] = useState(true);
   const [questionsExpanded, setQuestionsExpanded] = useState(true);
   const [generationComplete, setGenerationComplete] = useState(false);
   const [scenarioGenerated, setScenarioGenerated] = useState(false);
 
+  // Handle clicking outside suggestions
   useEffect(() => {
-    // Handle clicking outside the suggestions dropdown
     const handleClickOutside = (event) => {
       if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
         setShowSuggestions(false);
@@ -66,14 +64,13 @@ const ScenarioSphere = () => {
         setShowAllSuggestions(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
-  // Scroll to scenario output when it changes
+  // Auto-scroll scenario output
   useEffect(() => {
     if (scenarioText && scenarioOutputRef.current && isGenerating) {
       scenarioOutputRef.current.scrollTop = scenarioOutputRef.current.scrollHeight;
@@ -104,40 +101,37 @@ const ScenarioSphere = () => {
   };
 
   const handleKeyDown = (e) => {
-    if (showSuggestions) {
-      if (e.key === 'ArrowDown') {
-        if (
-          activeSuggestionIndex <
-          (showAllSuggestions
-            ? suggestions.length - 1
-            : Math.min(suggestions.length, 10) - 1)
-        ) {
-          setActiveSuggestionIndex(activeSuggestionIndex + 1);
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (activeSuggestionIndex > 0) {
-          setActiveSuggestionIndex(activeSuggestionIndex - 1);
-        }
-      } else if (e.key === 'Enter') {
-        if (
-          activeSuggestionIndex >= 0 &&
-          activeSuggestionIndex <
-            (showAllSuggestions
-              ? suggestions.length
-              : Math.min(suggestions.length, 10))
-        ) {
-          setAttackType(suggestions[activeSuggestionIndex]);
+    if (!showSuggestions) return;
+    if (e.key === 'ArrowDown') {
+      if (
+        activeSuggestionIndex <
+        (showAllSuggestions ? suggestions.length - 1 : Math.min(suggestions.length, 10) - 1)
+      ) {
+        setActiveSuggestionIndex((prev) => prev + 1);
+      }
+    } else if (e.key === 'ArrowUp') {
+      if (activeSuggestionIndex > 0) {
+        setActiveSuggestionIndex((prev) => prev - 1);
+      }
+    } else if (e.key === 'Enter') {
+      // If user presses Enter on a suggestion
+      if (activeSuggestionIndex >= 0) {
+        const chosen = showAllSuggestions 
+          ? suggestions[activeSuggestionIndex]
+          : suggestions.slice(0,10)[activeSuggestionIndex];
+        if (chosen) {
+          setAttackType(chosen);
           setSuggestions([]);
           setShowSuggestions(false);
           setActiveSuggestionIndex(-1);
           setShowAllSuggestions(false);
           e.preventDefault();
         }
-      } else if (e.key === 'Escape') {
-        setShowSuggestions(false);
-        setActiveSuggestionIndex(-1);
-        setShowAllSuggestions(false);
       }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setActiveSuggestionIndex(-1);
+      setShowAllSuggestions(false);
     }
   };
 
@@ -196,7 +190,6 @@ const ScenarioSphere = () => {
             readChunk();
           });
         }
-
         readChunk();
       })
       .catch((err) => {
@@ -206,6 +199,10 @@ const ScenarioSphere = () => {
       });
   };
 
+  /**
+   * Once the scenario is done streaming, we fetch the interactive questions.
+   * We'll also read them in chunk by chunk, appending to a JSON accumulator.
+   */
   const fetchQuestions = (finalScenarioText) => {
     if (!finalScenarioText) return;
 
@@ -229,11 +226,10 @@ const ScenarioSphere = () => {
         function readChunk() {
           reader.read().then(({ done, value }) => {
             if (done) {
+              // done reading. Attempt parse
               try {
-                console.log("Accumulated Questions JSON:", jsonAccumulator); 
-
+                // Attempt to parse the final content
                 const parsed = JSON.parse(jsonAccumulator);
-
                 if (Array.isArray(parsed)) {
                   const errorObj = parsed.find(q => q.error);
                   if (errorObj) {
@@ -270,10 +266,10 @@ const ScenarioSphere = () => {
   };
 
   const handleAnswerSelect = (questionIndex, selectedOption) => {
-    if (userAnswers.hasOwnProperty(questionIndex)) {
-      return; // Already answered
+    // Already answered? do nothing
+    if (Object.prototype.hasOwnProperty.call(userAnswers, questionIndex)) {
+      return;
     }
-    
     const question = interactiveQuestions[questionIndex];
     const isCorrect = selectedOption === question.correct_answer;
 
@@ -290,72 +286,75 @@ const ScenarioSphere = () => {
       },
     }));
     
-    // Update score counter if correct
     if (isCorrect) {
       setScoreCounter(prev => prev + 1);
     }
   };
 
   const renderQuestions = () => {
-    return interactiveQuestions.map((question, index) => (
-      <div key={index} className="question-card">
-        <div className="question-header">
-          <span className="question-number">Question {index + 1}</span>
-          {feedback[index] && (
-            <span className={`question-status ${feedback[index].isCorrect ? 'correct' : 'incorrect'}`}>
-              {feedback[index].isCorrect ? 
-                <><FaCheckCircle /> Correct</> : 
-                <><FaTimesCircle /> Incorrect</>
-              }
-            </span>
+    return interactiveQuestions.map((question, index) => {
+      const questionFeedback = feedback[index];
+      const isCorrect = questionFeedback?.isCorrect;
+      return (
+        <div key={index} className="question-card">
+          <div className="question-header">
+            <span className="question-number">Question {index + 1}</span>
+            {questionFeedback && (
+              <span className={`question-status ${isCorrect ? 'correct' : 'incorrect'}`}>
+                {isCorrect ? <><FaCheckCircle /> Correct</> : <><FaTimesCircle /> Incorrect</>}
+              </span>
+            )}
+          </div>
+
+          <p className="question-text">{question.question}</p>
+
+          <div className="options-container">
+            {Object.entries(question.options).map(([optionLetter, optionText]) => {
+              const isSelected = userAnswers[index] === optionLetter;
+              const showCorrect = questionFeedback && question.correct_answer === optionLetter;
+              const showIncorrect = questionFeedback && isSelected && !isCorrect;
+
+              return (
+                <button
+                  key={optionLetter}
+                  className={
+                    "option-button" +
+                    (isSelected ? " selected" : "") +
+                    (showCorrect ? " correct" : "") +
+                    (showIncorrect ? " incorrect" : "")
+                  }
+                  onClick={() => handleAnswerSelect(index, optionLetter)}
+                  disabled={Object.prototype.hasOwnProperty.call(userAnswers, index)}
+                >
+                  <span className="option-letter">{optionLetter}</span>
+                  <span className="option-text">{optionText}</span>
+                  {showCorrect && <FaCheckCircle className="option-icon correct" />}
+                  {showIncorrect && <FaTimesCircle className="option-icon incorrect" />}
+                </button>
+              );
+            })}
+          </div>
+
+          {questionFeedback && (
+            <div className="feedback-container">
+              <div className="feedback-icon">
+                <FaLightbulb />
+              </div>
+              <div className="feedback-content">
+                <p className="feedback-explanation">{questionFeedback.explanation}</p>
+              </div>
+            </div>
           )}
         </div>
-        
-        <p className="question-text">{question.question}</p>
-        
-        <div className="options-container">
-          {Object.entries(question.options).map(([optionLetter, optionText]) => {
-            const isSelected = userAnswers[index] === optionLetter;
-            const showCorrect = feedback[index] && question.correct_answer === optionLetter;
-            const showIncorrect = feedback[index] && isSelected && !feedback[index].isCorrect;
-            
-            return (
-              <button 
-                key={optionLetter} 
-                className={`option-button ${isSelected ? 'selected' : ''} ${showCorrect ? 'correct' : ''} ${showIncorrect ? 'incorrect' : ''}`}
-                onClick={() => handleAnswerSelect(index, optionLetter)}
-                disabled={userAnswers.hasOwnProperty(index)}
-              >
-                <span className="option-letter">{optionLetter}</span>
-                <span className="option-text">{optionText}</span>
-                {showCorrect && <FaCheckCircle className="option-icon correct" />}
-                {showIncorrect && <FaTimesCircle className="option-icon incorrect" />}
-              </button>
-            );
-          })}
-        </div>
-        
-        {feedback[index] && (
-          <div className="feedback-container">
-            <div className="feedback-icon">
-              <FaLightbulb />
-            </div>
-            <div className="feedback-content">
-              <p className="feedback-explanation">{feedback[index].explanation}</p>
-            </div>
-          </div>
-        )}
-      </div>
-    ));
+      );
+    });
   };
 
-  // Calculate progress based on number of paragraphs
+  // Just a rough measure of progress for the scenario streaming
   const calculateStreamProgress = () => {
     if (!scenarioText) return 0;
-    
-    // Roughly estimate progress by counting paragraphs
     const paragraphs = scenarioText.split('\n\n').filter(p => p.trim().length > 0);
-    // Typical scenario has about 5 paragraphs
+    // Typically ~5 paragraphs => 100% if we see 5
     return Math.min(Math.ceil((paragraphs.length / 5) * 100), 90);
   };
 
@@ -366,20 +365,19 @@ const ScenarioSphere = () => {
       <div className="scenario-header">
         <div className="scenario-title-container">
           <h1 className="scenario-title">
-            <FaShieldAlt className="scenario-title-icon" />
+            <FaUserSecret className="scenario-title-icon" />
             Scenario Sphere
           </h1>
-          <p className="scenario-subtitle">Immerse yourself in realistic cybersecurity scenarios and test your knowledge</p>
+          <p className="scenario-subtitle">
+            Immerse yourself in realistic cybersecurity scenarios and test your knowledge
+          </p>
         </div>
-        
+
         {errorMessage && (
           <div className="scenario-error">
             <FaExclamationTriangle className="error-icon" />
             <span>{errorMessage}</span>
-            <button 
-              className="error-close" 
-              onClick={() => setErrorMessage("")}
-            >
+            <button className="error-close" onClick={() => setErrorMessage("")}>
               <FaTimes />
             </button>
           </div>
@@ -399,7 +397,7 @@ const ScenarioSphere = () => {
               <span className="score-label">Correct</span>
             </div>
           </div>
-          
+
           <div className="params-content">
             <div className="param-group">
               <label htmlFor="industry-select">
@@ -578,7 +576,7 @@ const ScenarioSphere = () => {
                   </button>
                 </div>
               </div>
-              
+
               {outputExpanded && (
                 <div 
                   className="output-content"
@@ -629,7 +627,7 @@ const ScenarioSphere = () => {
                         </div>
                       </div>
                     )}
-                    
+
                     <div className="questions-list">
                       {renderQuestions()}
                     </div>
@@ -645,3 +643,4 @@ const ScenarioSphere = () => {
 };
 
 export default ScenarioSphere;
+

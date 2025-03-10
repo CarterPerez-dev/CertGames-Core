@@ -1348,7 +1348,7 @@
   --shop-bg-dark: var(--theme-bg-dark);
   --shop-bg-card: var(--theme-bg-card);
   --shop-gradient-primary: var(--theme-gradient-primary);
-  --shop-gradient-secondary: var(--theme-gradient-secondary);
+  --shop-gradient-secondary: var(--theme-gradient-primary);
   
   /* Leaderboard page variables */
   --leaderboard-accent: var(--theme-accent);
@@ -1366,7 +1366,7 @@
   --daily-bg-dark: var(--theme-bg-dark);
   --daily-bg-card: var(--theme-bg-card);
   --daily-gradient-primary: var(--theme-gradient-primary);
-  --daily-gradient-secondary: var(--theme-gradient-secondary);
+  --daily-gradient-secondary: var(--theme-gradient-primary);
   
   /* Achievement page variables */
   --achievement-accent: var(--theme-accent);

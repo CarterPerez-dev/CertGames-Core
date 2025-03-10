@@ -605,6 +605,7 @@
   padding: 20px;
   scrollbar-width: thin;
   scrollbar-color: var(--support-accent) var(--support-bg-dark);
+  font-family: 'Trebuchet MS';
 }
 
 .messages-container::-webkit-scrollbar {
@@ -827,6 +828,7 @@
   display: flex;
   gap: 12px;
   background: rgba(0, 0, 0, 0.1);
+  font-family: 'Trebuchet MS';
 }
 
 .message-input {

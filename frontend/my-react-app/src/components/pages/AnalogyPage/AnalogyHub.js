@@ -52,35 +52,36 @@ const AnalogyHub = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     })
-    .then((res) => {
-      if (!res.ok) {
-        setIsStreaming(false);
-        return res.text().then((text) => {
-          console.error('Error from server: ', text);
-          setGeneratedAnalogy('An error occurred streaming the analogy.');
-        });
-      }
+      .then((res) => {
+        if (!res.ok) {
+          setIsStreaming(false);
+          return res.text().then((text) => {
+            console.error('Error from server: ', text);
+            setGeneratedAnalogy('An error occurred streaming the analogy.');
+          });
+        }
 
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      function readChunk() {
-        reader.read().then(({ done, value }) => {
-          if (done) {
-            setIsStreaming(false);
-            return;
-          }
-          const chunk = decoder.decode(value, { stream: true });
-          setGeneratedAnalogy((prev) => prev + chunk);
-          readChunk();
-        });
-      }
-      readChunk();
-    })
-    .catch((err) => {
-      console.error('Streaming error:', err);
-      setGeneratedAnalogy('An error occurred streaming the analogy.');
-      setIsStreaming(false);
-    });
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+
+        function readChunk() {
+          reader.read().then(({ done, value }) => {
+            if (done) {
+              setIsStreaming(false);
+              return;
+            }
+            const chunk = decoder.decode(value, { stream: true });
+            setGeneratedAnalogy((prev) => prev + chunk); // CHANGED: append chunk
+            readChunk();
+          });
+        }
+        readChunk();
+      })
+      .catch((err) => {
+        console.error('Streaming error:', err);
+        setGeneratedAnalogy('An error occurred streaming the analogy.');
+        setIsStreaming(false);
+      });
   };
 
   const handleCopyClick = () => {
@@ -102,7 +103,11 @@ const AnalogyHub = () => {
 
       <div className="analogy-hub-form">
         <div className="analogy-type-section">
-          <select value={analogyType} onChange={(e) => handleTypeChange(e)} className="analogy-hub-input">
+          <select 
+            value={analogyType} 
+            onChange={handleTypeChange}
+            className="analogy-hub-input"
+          >
             <option value="single">Single</option>
             <option value="comparison">Comparison</option>
             <option value="triple">Triple Comparison</option>
@@ -177,7 +182,9 @@ const AnalogyHub = () => {
 
       {generatedAnalogy && (
         <div className="analogy-output-container" ref={analogyRef}>
-          <button className="copy-button" onClick={handleCopyClick}>Copy</button>
+          <button className="copy-button" onClick={handleCopyClick}>
+            Copy
+          </button>
           <p className="generated-analogy">{generatedAnalogy}</p>
         </div>
       )}

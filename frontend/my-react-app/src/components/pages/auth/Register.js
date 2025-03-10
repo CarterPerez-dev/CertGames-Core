@@ -13,7 +13,7 @@ import {
   FaEye,
   FaEyeSlash,
   FaExclamationCircle,
-  FaShieldAlt,
+  FaUserSecret,
   FaCheck,
   FaInfoCircle,
   FaTimes
@@ -175,7 +175,7 @@ const Register = () => {
         <div className="register-card">
           <div className="register-header">
             <div className="register-logo">
-              <FaShieldAlt className="register-logo-icon" />
+              <FaUserSecret className="register-logo-icon" />
             </div>
             <h1 className="register-title">Create Account</h1>
             <p className="register-subtitle">Join and start your learning journey</p>

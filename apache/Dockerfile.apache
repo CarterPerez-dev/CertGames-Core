@@ -3,7 +3,7 @@ FROM httpd:2.4
 COPY apache_server.conf /usr/local/apache2/conf/extra/
 COPY httpd.conf /usr/local/apache2/conf/httpd.conf
 
-# Uncomment or load the required modules, including the event MPM:
+
 RUN sed -i '/#LoadModule mpm_event_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule env_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \
     sed -i '/#LoadModule proxy_module/s/^#//' /usr/local/apache2/conf/httpd.conf && \

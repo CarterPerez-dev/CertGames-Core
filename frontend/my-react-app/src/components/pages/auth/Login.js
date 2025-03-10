@@ -13,7 +13,7 @@ import {
   FaEye, 
   FaEyeSlash,
   FaExclamationCircle,
-  FaShieldAlt,
+  FaFingerprint,
   FaCheckCircle
 } from 'react-icons/fa';
 import Footer from '../../Footer';
@@ -103,7 +103,7 @@ const Login = () => {
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">
-              <FaShieldAlt className="login-logo-icon" />
+              <FaFingerprint className="login-logo-icon" />
             </div>
             <h1 className="login-title">Welcome Back</h1>
             <p className="login-subtitle">Sign in to continue your journey</p>
