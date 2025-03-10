@@ -668,8 +668,8 @@ db.tests.insertOne({
       "examTip": "Use `sudo -i` for a full root session if multiple privileged commands are needed."
     },
     {
-      "id": 51,
-      "question": "You are tasked with recovering log data from a compromised Linux server. You discover that the /var/log/secure file is corrupted. The file system is intact, and no recent backups are available. Which approach should you perform FIRST to attempt to recover partial log data?",
+      "id": 52,
+      "queston": "You are tasked with recovering log data from a compromised Linux server. You discover that the /var/log/secure file is corrupted. The file system is intact, and no recent backups are available. Which approach should you perform FIRST to attempt to recover partial log data?",
       "options": [
         "Immediately restore the entire /var partition from a backup image created six months ago.",
         "Run debugfs on the underlying file system to examine and possibly extract the corrupted log contents.",
