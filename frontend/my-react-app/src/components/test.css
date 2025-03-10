@@ -1531,6 +1531,43 @@
   }
 }
 
+
+/* Exam Tip Section */
+.exam-tip {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid var(--test-border);
+  border-left: 4px solid var(--test-warning);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  animation: fadeIn 0.3s ease;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.exam-tip strong {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 17px;
+  color: var(--test-warning);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.exam-tip-icon {
+  margin-right: 8px;
+}
+
+.exam-tip p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--test-text-secondary);
+  font-family: 'Open Sans', sans-serif;
+  font-style: italic;
+}
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .aplus-test-container {
