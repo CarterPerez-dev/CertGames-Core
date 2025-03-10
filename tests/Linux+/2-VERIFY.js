@@ -1199,7 +1199,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "The tar parameters are typically: -x (extract), -c (create), -z (use gzip), -t (list contents). Thus, the correct mapping is [A->2, B->4, C->1, D->3].",
       "examTip": "In tar usage, remember: c = create, x = extract, t = list, z = gzip compression. Others like -j exist for bzip2."
-    }
+    },
     {
       "id": 93,
       "question": "Which of the following commands lists open files that are currently being accessed by a specific process?",
