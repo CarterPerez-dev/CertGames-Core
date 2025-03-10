@@ -722,14 +722,15 @@ function Home() {
     };
   }, []);
 
-  // Scroll to results when content is loaded
   useEffect(() => {
+    // Scroll to results when content is loaded
     if ((codeBlocks.length > 0 || explanations.length > 0) && outputRef.current) {
       outputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [codeBlocks, explanations]);
 
-  // Parse the payload to separate code blocks from explanations
+  // CHANGED: For truly incremental updates, we keep a function parsePayload
+  // but be aware that frequent calls can be expensive. It's okay, though.
   const parsePayload = (text) => {
     const codeRegex = /Example \d+:?\s*```python([\s\S]*?)```/g;
     const extractedCode = [];
@@ -747,11 +748,10 @@ function Home() {
     // Extract explanations section
     let explanationsText = "";
     const explanationsIndex = text.indexOf("EXPLANATIONS:");
-    
     if (explanationsIndex !== -1) {
       explanationsText = text.substring(explanationsIndex);
     } else {
-      // Try to find explanations after the last code block
+      // If there's no explicit "EXPLANATIONS:", try after the last code block
       const lastCodeEnd = text.lastIndexOf("```");
       if (lastCodeEnd !== -1) {
         explanationsText = text.substring(lastCodeEnd + 3).trim();
@@ -770,7 +770,6 @@ function Home() {
         });
       }
       
-      // If no matches, just use the whole explanations text
       if (explanationBlocks.length === 0 && explanationsText) {
         explanationBlocks.push({
           text: explanationsText.replace("EXPLANATIONS:", "").trim()
@@ -798,95 +797,93 @@ function Home() {
   };
 
   const handleGeneratePayload = () => {
-    if (vulnerability || evasionTechnique) {
-      setLoading(true);
-      setPayload("");
-      setCodeBlocks([]);
-      setExplanations([]);
-
-      const sanitizedVulnerability = vulnerability ? sanitizeInput(vulnerability) : "";
-      const sanitizedEvasionTechnique = evasionTechnique ? sanitizeInput(evasionTechnique) : "";
-
-      const requestData = { stream: true };
-      if (sanitizedVulnerability) requestData.vulnerability = sanitizedVulnerability;
-      if (sanitizedEvasionTechnique) requestData.evasion_technique = sanitizedEvasionTechnique;
-
-      fetch(`${ENDPOINT}/payload/generate_payload`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestData),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            setLoading(false);
-            return response.text().then((text) => {
-              alert(`Error: ${text}`);
-            });
-          }
-
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let accumulatedText = "";
-
-          function readChunk() {
-            reader.read().then(({ done, value }) => {
-              if (done) {
-                setLoading(false);
-                parsePayload(accumulatedText); // Parse the final accumulated text
-                return;
-              }
-              let chunk = decoder.decode(value, { stream: true });
-              chunk = chunk.replace(/undefined/g, "");
-              accumulatedText += chunk;
-              
-              setPayload(accumulatedText);
-              parsePayload(accumulatedText); // Update parsing as we go
-              
-              readChunk();
-            });
-          }
-          readChunk();
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('Failed to connect to the backend server. Please check the server connection.');
-          setLoading(false);
-        });
-    } else {
+    if (!vulnerability && !evasionTechnique) {
       alert("Please enter at least one of vulnerability or evasion technique");
+      return;
     }
+
+    setLoading(true);
+    setPayload("");
+    setCodeBlocks([]);
+    setExplanations([]);
+
+    const sanitizedVulnerability = vulnerability ? sanitizeInput(vulnerability) : "";
+    const sanitizedEvasionTechnique = evasionTechnique ? sanitizeInput(evasionTechnique) : "";
+
+    const requestData = { stream: true };
+    if (sanitizedVulnerability) requestData.vulnerability = sanitizedVulnerability;
+    if (sanitizedEvasionTechnique) requestData.evasion_technique = sanitizedEvasionTechnique;
+
+    fetch(`${ENDPOINT}/payload/generate_payload`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestData),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          setLoading(false);
+          return response.text().then((text) => {
+            alert(`Error: ${text}`);
+          });
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        let accumulatedText = "";
+
+        function readChunk() {
+          reader.read().then(({ done, value }) => {
+            if (done) {
+              setLoading(false);
+              parsePayload(accumulatedText);
+              return;
+            }
+            // CHANGED: decode partial chunk
+            const chunk = decoder.decode(value, { stream: true });
+
+            // Sometimes chunk might contain 'undefined' from the backend
+            const sanitizedChunk = chunk.replace(/undefined/g, "");
+
+            accumulatedText += sanitizedChunk;
+            // Update final text as we go (for a "GPT-style" drip):
+            setPayload((prev) => prev + sanitizedChunk);
+
+            // Re-run parse logic on partial text if you want dynamic code blocks
+            parsePayload(accumulatedText);
+
+            // Keep reading
+            readChunk();
+          });
+        }
+        readChunk();
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert('Failed to connect to the backend server. Please check the server connection.');
+        setLoading(false);
+      });
   };
 
   const handleCopyClick = (text) => {
-    if (text) {
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          console.log('Content copied to clipboard.');
-        })
-        .catch(err => console.error('Could not copy content:', err));
-    }
+    if (!text) return;
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log('Content copied to clipboard.');
+      })
+      .catch(err => console.error('Could not copy content:', err));
   };
 
   const handleVulnerabilityChange = (e) => {
     const chosenValue = e.target.value;
     const found = vulnerabilitiesList.find((v) => v === chosenValue);
-    if (found) {
-      setVulnerability(found);
-    } else {
-      setVulnerability(chosenValue);
-    }
+    setVulnerability(found ? found : chosenValue);
   };
 
   const handleEvasionTechniqueChange = (e) => {
     const chosenValue = e.target.value;
     const found = evasionTechniquesList.find((t) => t === chosenValue);
-    if (found) {
-      setEvasionTechnique(found);
-    } else {
-      setEvasionTechnique(chosenValue);
-    }
+    setEvasionTechnique(found ? found : chosenValue);
   };
 
   return (
@@ -944,7 +941,7 @@ function Home() {
       {(codeBlocks.length > 0 || explanations.length > 0) && (
         <div className="results-container" ref={outputRef}>
           <h2 className="generated-payload-title">Generated Output</h2>
-          
+
           {/* Code Examples Section */}
           <div className="code-examples-section">
             <h3 className="section-title">Code Examples</h3>
@@ -988,7 +985,7 @@ function Home() {
               ))}
             </div>
           )}
-          
+
           <button 
             className="copy-all-button" 
             onClick={() => handleCopyClick(payload)}

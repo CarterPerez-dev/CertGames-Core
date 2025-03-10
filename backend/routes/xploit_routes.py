@@ -37,3 +37,4 @@ def generate_payload_endpoint():
     except Exception as e:
         logger.error(f"Error while generating payload: {str(e)}")
         return jsonify({'error': 'Failed to generate payload'}), 500
+

@@ -218,6 +218,7 @@
   font-family: inherit;
   font-size: 15px;
   transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: 'Arial';
 }
 
 .register-input-wrapper input:focus {
@@ -268,7 +269,7 @@
 
 .register-hint-icon {
   font-size: 12px;
-  color: var(--register-secondary);
+  color: #00b300;
 }
 
 /* Password Requirements */
@@ -279,6 +280,7 @@
   margin-top: 10px;
   border: 1px solid var(--register-border);
   animation: fadeIn 0.3s ease-out;
+  font-family: 'Arial';
 }
 
 .register-requirements-header {
@@ -289,7 +291,7 @@
 }
 
 .register-requirements-header h4 {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0;
   color: var(--register-primary);
 }
@@ -298,7 +300,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 4px;
@@ -327,7 +329,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: 15px;
   transition: color 0.2s;
 }
 
@@ -359,6 +361,7 @@
   font-size: 12px;
   margin-top: 8px;
   animation: fadeIn 0.3s ease-out;
+  font-family: 'Arial';
 }
 
 .register-password-match.match {

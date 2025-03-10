@@ -9,7 +9,7 @@
   --brief-success: #2ebb77;
   --brief-error: #ff4e4e;
   --brief-warning: #ffc107;
-  --brief-text: #e2e2e2;
+  --brief-text: #fff;
   --brief-text-secondary: #9da8b9;
   --brief-border: #2a2c3d;
   --brief-input-bg: rgba(0, 0, 0, 0.2);
@@ -21,7 +21,7 @@
 
 /* Main Container */
 .dcb-container {
-  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-family: 'Trebuchet MS', sans-serif;
   color: var(--brief-text);
   margin: 0;
   padding: 0;
@@ -115,6 +115,7 @@
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   font-weight: 700;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .dcb-title p {
@@ -180,6 +181,7 @@
   display: flex;
   align-items: center;
   gap: 15px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .dcb-card-icon {

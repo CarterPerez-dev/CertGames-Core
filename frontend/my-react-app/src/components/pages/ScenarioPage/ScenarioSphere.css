@@ -25,7 +25,7 @@
 
 /* Main Container */
 .scenario-container {
-  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-family: 'Trebuchet MS';
   color: var(--scenario-text);
   background-color: var(--scenario-bg-dark);
   background-image: 
@@ -43,11 +43,13 @@
   background: var(--scenario-bg-card);
   border-radius: 15px;
   margin-bottom: 20px;
+  margin-top: 10px;
   padding: 25px;
   box-shadow: var(--scenario-shadow);
   border: 1px solid var(--scenario-border);
   position: relative;
   overflow: hidden;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .scenario-header::before {
@@ -160,6 +162,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .params-header h2 {
@@ -431,14 +434,14 @@
   border: none;
   border-radius: 8px;
   color: white;
-  padding: 14px 20px;
-  font-family: inherit;
-  font-size: 16px;
+  padding: 12px 20px;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(134, 88, 252, 0.3);
   margin-top: 10px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .generate-button:hover:not(:disabled) {
@@ -488,6 +491,7 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .output-header h2 {
@@ -577,7 +581,7 @@
 .scenario-text {
   white-space: pre-wrap;
   line-height: 1.6;
-  font-size: 15px;
+  font-size: 1rem;
   color: var(--scenario-text);
 }
 

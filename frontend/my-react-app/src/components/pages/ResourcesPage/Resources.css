@@ -31,7 +31,7 @@
 
 /* Main Container */
 .resources-container {
-  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-family: 'Trebuchet MS', sans-serif;
   color: var(--resources-text);
   margin: 0;
   padding: 20px;
@@ -87,6 +87,7 @@
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   font-weight: 700;
+  font-family:'Orbitron', 'Roboto', sans-serif;
 }
 
 .resources-subtitle {
