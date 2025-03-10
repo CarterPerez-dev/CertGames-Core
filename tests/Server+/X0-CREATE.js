@@ -653,9 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "Online P2V (Physical to Virtual) conversion with synchronized final state transfer minimizes downtime for a business-critical application. This approach performs most of the migration while the source system continues running, copying disk blocks and system state without interrupting services. Only the final synchronization and cutover require brief downtime, typically minutes rather than hours. Cold migration using backup and restore would require taking the server offline for the entire backup and restore process, resulting in extended downtime. Manual migration to a new VM involves significant downtime for application reinstallation, configuration, and data migration. Clustering physical and virtual servers would require application support for clustering and complex configuration changes, which isn't practical for many applications and would likely require more downtime than a specialized P2V migration tool.",
       "examTip": "For migrating business-critical servers to virtual environments, use online P2V conversion tools that support volume block-level replication while the source system runs, minimizing downtime by requiring only a brief outage for the final synchronization and cutover."
-    }
-  ]
-  [
+    },
     {
       "id": 51,
       "question": "A system administrator is implementing security hardening for a Linux server that will process credit card transactions. Which combination of settings provides the strongest security posture?",
@@ -1307,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "For virtualized environments, host-level backups with application awareness provide the optimal balance of backup efficiency, recovery flexibility, and application consistency compared to in-guest agents or storage-only approaches."
     }
   ]
-  
+});  
