@@ -1328,29 +1328,41 @@ const GlobalTestPage = ({
           </ul>
 
           {isAnswered && questionObject && !examMode && (
-            <div className={`explanation ${selectedOptionIndex !== null &&
-              answerOrder[realIndex][selectedOptionIndex] ===
-                questionObject.correctAnswerIndex
-                ? "correct-explanation"
-                : "incorrect-explanation"}`}>
-              <strong>
-                {selectedOptionIndex !== null &&
+            <>
+              <div className={`explanation ${selectedOptionIndex !== null &&
                 answerOrder[realIndex][selectedOptionIndex] ===
                   questionObject.correctAnswerIndex
-                  ? (
-                    <>
-                      <FaCheck className="explanation-icon" />
-                      <span>Correct!</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaTimes className="explanation-icon" />
-                      <span>Incorrect!</span>
-                    </>
-                  )}
-              </strong>
-              <p>{questionObject.explanation}</p>
-            </div>
+                  ? "correct-explanation"
+                  : "incorrect-explanation"}`}>
+                <strong>
+                  {selectedOptionIndex !== null &&
+                  answerOrder[realIndex][selectedOptionIndex] ===
+                    questionObject.correctAnswerIndex
+                    ? (
+                      <>
+                        <FaCheck className="explanation-icon" />
+                        <span>Correct!</span>
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes className="explanation-icon" />
+                        <span>Incorrect!</span>
+                      </>
+                    )}
+                </strong>
+                <p>{questionObject.explanation}</p>
+              </div>
+              
+              {questionObject.examTip && (
+                <div className="exam-tip">
+                  <strong>
+                    <FaBolt className="exam-tip-icon" />
+                    <span>Exam Tip</span>
+                  </strong>
+                  <p>{questionObject.examTip}</p>
+                </div>
+              )}
+            </>
           )}
 
           <div className="bottom-control-bar">
