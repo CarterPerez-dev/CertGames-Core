@@ -1,5 +1,3 @@
-Q-21-23
-
 db.tests.insertOne({
   "category": "dataplus",
   "testId": 1,
@@ -213,12 +211,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "A Master Data Management (MDM) system ensures that customer records remain unique and consistent across multiple systems.",
       "examTip": "MDM is essential for maintaining consistency in multi-source data environments."
-    }
-
-
-
-
-
+    },
     {
       "id": 17,
       "question": "Which of the following techniques is commonly used in exploratory data analysis (EDA) to detect outliers in a dataset?",
@@ -271,6 +264,45 @@ db.tests.insertOne({
       "explanation": "Data completeness ensures all necessary fields exist, accuracy verifies correctness, consistency maintains uniformity, and integrity preserves relationships between records.",
       "examTip": "Master data quality dimensions to ensure clean and reliable datasets."
     },
+    {
+      "id": 21,
+      "question": "A data scientist is examining a dataset with significant outliers that are skewing the analysis results. The dataset contains customer purchase amounts that follow a normal distribution except for a few extremely high-value transactions. The analyst wants to identify the central tendency without being affected by these extreme values.\n\nWhich measure of central tendency is MOST appropriate for this scenario?",
+      "options": [
+        "Mean with standard deviation",
+        "Median with interquartile range",
+        "Mode with range calculation",
+        "Geometric mean with variance"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The median is resistant to outliers since it represents the middle value in a dataset when arranged in order. When combined with the interquartile range (IQR), which measures the spread between the 25th and 75th percentiles, it provides a robust measure of central tendency and dispersion that is not significantly affected by extreme values. The mean, in contrast, is heavily influenced by outliers since it calculates the average of all values. The mode only identifies the most frequent value and doesn't necessarily represent central tendency in continuous data, while the geometric mean is useful for growth rates but not for handling outliers.",
+      "examTip": "When dealing with datasets containing outliers, prefer robust statistics like median and IQR over measures that are easily skewed by extreme values."
+    },
+    {
+      "id": 22,
+      "question": "A company is implementing a data integration solution to combine customer information from multiple sources. The data sources update at different frequencies: the CRM system updates in real-time, the e-commerce platform processes transactions hourly, and the marketing database refreshes daily. The solution must maintain data consistency while minimizing processing overhead.\n\nWhich integration pattern is MOST appropriate for this scenario?",
+      "options": [
+        "Full batch ETL processing at the end of each day",
+        "Change Data Capture (CDC) with event-based processing",
+        "Real-time data replication across all systems",
+        "Data virtualization with federated queries"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Change Data Capture (CDC) with event-based processing identifies and captures only the changes made to source systems and processes them as they occur. This approach respects the varying update frequencies of different systems while ensuring data consistency without the processing overhead of full batch ETL. Real-time replication would create unnecessary overhead for systems that don't require immediate updates. Full batch ETL would lose the real-time aspect of the CRM data. Data virtualization might provide a unified view but doesn't address the underlying data synchronization requirements across systems with different update frequencies.",
+      "examTip": "When integrating data from sources with different update frequencies, CDC provides an efficient balance between real-time requirements and processing optimization."
+    },
+    {
+      "id": 23,
+      "question": "A data architect is designing a data warehouse schema for a financial institution. The warehouse will store historical transaction data and must be optimized for complex analytical queries that aggregate data across multiple dimensions such as time, customer segment, product type, and geographic location.\n\nWhich schema design is MOST efficient for this requirement?",
+      "options": [
+        "3NF (Third Normal Form) schema with fully normalized tables",
+        "Star schema with one fact table and multiple dimension tables",
+        "Document-oriented schema with nested JSON structures",
+        "Entity-Attribute-Value (EAV) schema for maximum flexibility"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A star schema is optimized for analytical queries in a data warehouse environment. It consists of a central fact table (containing transaction data and foreign keys) surrounded by dimension tables (time, customer, product, location). This design reduces the number of joins required for multi-dimensional analysis and improves query performance through simplified relationships. A 3NF schema would require more complex joins that decrease analytical query performance. Document-oriented schemas are better suited for semi-structured data and don't optimize relational analytical queries. EAV schemas offer flexibility but significantly impact query performance for analytical workloads due to their generic structure.",
+      "examTip": "For data warehouses requiring multidimensional analysis, star schemas offer the best balance of query performance and analytical capabilities compared to fully normalized or NoSQL alternatives."
+    },  
     {
       "id": 24,
       "question": "A company is building a data pipeline to integrate data from multiple sources, including databases, APIs, and streaming services. The team wants to ensure that data is transformed into a consistent format before being loaded into the data warehouse.\n\nWhich of the following is the MOST appropriate approach?",
@@ -478,13 +510,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Creating an index on frequently queried columns allows the database to retrieve data efficiently without scanning the entire table.",
       "examTip": "Indexing is one of the most effective ways to improve query performance in large datasets."
-    }
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 1,
-  "testName": "Practice Test #1 (Real Exam Difficulty)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 40,
       "question": "A business analyst is evaluating different statistical methods for understanding variations in sales performance across multiple regions. The analyst wants to measure how **widely sales figures deviate from the average** in each region.\n\nWhich statistical measure is MOST appropriate for this analysis?",
@@ -900,13 +926,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "ELT defers transformations until after data is loaded, **leveraging the storage system’s processing power** for flexible and scalable transformations.",
       "examTip": "Use **ELT for big data processing** in cloud-based architectures—ETL is better for traditional structured transformations."
-    }
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 1,
-  "testName": "Practice Test #1 (Real Exam Difficulty)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 72,
       "question": "A data analyst needs to compare the effectiveness of two different marketing campaigns in increasing customer sign-ups. The analyst collects data on the number of sign-ups before and after each campaign.\n\nWhich statistical test would be MOST appropriate to determine if there is a significant difference in sign-ups between the two campaigns?",
@@ -1114,14 +1134,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 2,
       "explanation": "**Fuzzy matching** detects similar but slightly different records (e.g., name variations, typos), making it ideal for identifying duplicate customer entries.",
       "examTip": "Use **fuzzy matching for deduplication** when exact matches won’t work due to slight variations."
-    }
-
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 1,
-  "testName": "Practice Test #1 (Real Exam Difficulty)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 88,
       "question": "A data analyst needs to determine if customer age has a **significant effect** on the average amount spent per transaction. The dataset includes customer ages and purchase amounts.\n\nWhich statistical method is MOST appropriate for this analysis?",
@@ -1293,9 +1306,3 @@ db.tests.insertOne({
     }
   ]
 });
-
-    
-
-
-
-
