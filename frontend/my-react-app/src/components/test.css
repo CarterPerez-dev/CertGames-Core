@@ -1638,6 +1638,22 @@
   .review-filter-buttons::-webkit-scrollbar {
     display: none;
   }
+   
+  .exam-tip {
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .exam-tip strong {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .exam-tip p {
+    font-size: 15px;
+    line-height: 1.5;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1697,8 +1713,23 @@
     font-size: 11px;
     padding: 3px 8px;
   }
+   
+  .exam-tip {
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .exam-tip strong {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .exam-tip p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
-
 /* Special Fixes for very small screens */
 @media (max-width: 360px) {
   .aplus-title {
