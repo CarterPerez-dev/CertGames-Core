@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "serverplus",
   "testId": 4,
-  "testName": "Server+ Practice Test #4 (Moderate)",
+  "testName": "CompTIA Server+ (SK0-005) Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
   "questions": [
     {
@@ -655,7 +655,7 @@ db.tests.insertOne({
       "examTip": "NTP needs port 123 open—firewall is the first stop."
     },
     {
-      "id": 1,
+      "id": 51,
       "question": "A server with dual power supplies experiences intermittent shutdowns despite both PSUs being connected. What is the most likely issue?",
       "options": [
         "Both PSUs are connected to the same circuit",
@@ -668,7 +668,7 @@ db.tests.insertOne({
       "examTip": "Ensure redundant PSUs use separate circuits to avoid single-point failures."
     },
     {
-      "id": 2,
+      "id": 52,
       "question": "Which RAID configuration offers the best write performance for a database server while maintaining fault tolerance?",
       "options": [
         "RAID 5 with a hardware controller",
@@ -681,7 +681,7 @@ db.tests.insertOne({
       "examTip": "RAID 10 shines for performance-critical apps like databases—speed and safety."
     },
     {
-      "id": 3,
+      "id": 53,
       "question": "A technician notices a server’s SSD performance degrades over time. What factor is most likely responsible?",
       "options": [
         "High read-intensive workloads",
@@ -694,7 +694,7 @@ db.tests.insertOne({
       "examTip": "Monitor SSD write endurance for long-term performance planning."
     },
     {
-      "id": 4,
+      "id": 54,
       "question": "Which network configuration ensures uninterrupted connectivity if a single switch fails in a server rack?",
       "options": [
         "NIC teaming with failover",
@@ -707,7 +707,7 @@ db.tests.insertOne({
       "examTip": "NIC teaming boosts network resilience—key for high availability."
     },
     {
-      "id": 5,
+      "id": 55,
       "question": "During a server audit, you find sensitive data unencrypted on a SAN. Which mitigation directly secures this data at rest?",
       "options": [
         "Enable SAN Fibre Channel zoning",
@@ -720,7 +720,7 @@ db.tests.insertOne({
       "examTip": "Encryption is the ultimate safeguard for data at rest—prioritize it."
     },
     {
-      "id": 6,
+      "id": 56,
       "question": "A server running multiple VMs experiences high CPU utilization. What should be adjusted first to alleviate this?",
       "options": [
         "Increase VM memory allocation",
@@ -733,7 +733,7 @@ db.tests.insertOne({
       "examTip": "Overcommitted CPUs slow everything—balance resource allocation."
     },
     {
-      "id": 7,
+      "id": 57,
       "question": "Which backup strategy minimizes RPO for a critical server with frequent data changes?",
       "options": [
         "Daily full backups",
@@ -746,7 +746,7 @@ db.tests.insertOne({
       "examTip": "Frequent backups shrink RPO—time matters for critical data."
     },
     {
-      "id": 8,
+      "id": 58,
       "question": "A server’s BIOS fails to detect a new RAID controller. What should you check first?",
       "options": [
         "RAID controller firmware version",
@@ -759,7 +759,7 @@ db.tests.insertOne({
       "examTip": "Hardware recognition starts with physical compatibility—check the slot first."
     },
     {
-      "id": 9,
+      "id": 59,
       "question": "Which physical security measure most effectively prevents unauthorized access to a server rack during maintenance?",
       "options": [
         "CCTV monitoring with motion alerts",
@@ -772,7 +772,7 @@ db.tests.insertOne({
       "examTip": "Layered security is key, but focus on the closest control point."
     },
     {
-      "id": 10,
+      "id": 60,
       "question": "A server’s network latency spikes during peak hours. What should you investigate first?",
       "options": [
         "CPU utilization on the server",
@@ -785,7 +785,7 @@ db.tests.insertOne({
       "examTip": "Network issues often stem from infrastructure—start with the switch."
     },
     {
-      "id": 11,
+      "id": 61,
       "question": "Which file system supports snapshots and data integrity checks for a Linux server?",
       "options": [
         "NTFS",
@@ -798,7 +798,7 @@ db.tests.insertOne({
       "examTip": "ZFS stands out for advanced features—know its strengths."
     },
     {
-      "id": 12,
+      "id": 62,
       "question": "A server fails to boot after a power outage, displaying a CMOS error. What should you replace?",
       "options": [
         "RAID controller battery",
@@ -811,7 +811,7 @@ db.tests.insertOne({
       "examTip": "CMOS errors point to the battery—quick fix for boot issues."
     },
     {
-      "id": 13,
+      "id": 63,
       "question": "Which high-availability feature ensures automatic failover between two servers?",
       "options": [
         "Load balancing with round-robin",
@@ -824,7 +824,7 @@ db.tests.insertOne({
       "examTip": "Clustering ensures uptime—active-passive is failover-ready."
     },
     {
-      "id": 14,
+      "id": 64,
       "question": "A server’s iSCSI SAN connection drops intermittently. What should you check first?",
       "options": [
         "RAID controller firmware",
@@ -837,7 +837,7 @@ db.tests.insertOne({
       "examTip": "iSCSI issues often trace back to network config—start there."
     },
     {
-      "id": 15,
+      "id": 65,
       "question": "Which disaster recovery site type requires the longest setup time after a failure?",
       "options": [
         "Hot site",
@@ -850,7 +850,7 @@ db.tests.insertOne({
       "examTip": "Cold sites are cheap but slow—know recovery tradeoffs."
     },
     {
-      "id": 16,
+      "id": 66,
       "question": "A server’s application hangs, but the OS remains responsive. Where should you look first for clues?",
       "options": [
         "System event logs",
@@ -863,7 +863,7 @@ db.tests.insertOne({
       "examTip": "Application hangs mean app logs first—target the problem source."
     },
     {
-      "id": 17,
+      "id": 67,
       "question": "Which storage interface supports higher bandwidth and is commonly used in enterprise SANs?",
       "options": [
         "SATA",
@@ -876,7 +876,7 @@ db.tests.insertOne({
       "examTip": "Fibre Channel rules SANs—high speed for enterprise needs."
     },
     {
-      "id": 18,
+      "id": 68,
       "question": "A server’s NIC fails, but connectivity persists. What configuration is likely in place?",
       "options": [
         "VLAN tagging on a single NIC",
@@ -889,7 +889,7 @@ db.tests.insertOne({
       "examTip": "Failover in NIC teaming keeps you connected—redundancy rules."
     },
     {
-      "id": 19,
+      "id": 69,
       "question": "Which scripting language is native to Windows for automating server administration tasks?",
       "options": [
         "Bash",
@@ -902,7 +902,7 @@ db.tests.insertOne({
       "examTip": "PowerShell is Windows’ automation king—learn its commands."
     },
     {
-      "id": 20,
+      "id": 70,
       "question": "A server’s RAID 5 array reports slow write performance. What is the most likely cause?",
       "options": [
         "Insufficient CPU resources",
@@ -915,7 +915,7 @@ db.tests.insertOne({
       "examTip": "RAID 5 trades write speed for redundancy—parity is the culprit."
     },
     {
-      "id": 21,
+      "id": 71,
       "question": "Which security practice ensures only necessary ports are open on a server?",
       "options": [
         "Applying OS patches",
@@ -928,7 +928,7 @@ db.tests.insertOne({
       "examTip": "Firewalls lock down ports—tighten them up."
     },
     {
-      "id": 22,
+      "id": 72,
       "question": "A server’s memory errors cause random crashes. What should you do first?",
       "options": [
         "Update the BIOS firmware",
@@ -941,7 +941,7 @@ db.tests.insertOne({
       "examTip": "Memory issues? Reseat first—simple fixes save time."
     },
     {
-      "id": 23,
+      "id": 73,
       "question": "Which virtualization networking mode assigns VMs their own IP addresses on the physical network?",
       "options": [
         "NAT",
@@ -954,7 +954,7 @@ db.tests.insertOne({
       "examTip": "Bridged VMs act like physical devices—full network integration."
     },
     {
-      "id": 24,
+      "id": 74,
       "question": "A server’s backup fails due to insufficient space. What should you adjust?",
       "options": [
         "Increase RAID array capacity",
@@ -967,7 +967,7 @@ db.tests.insertOne({
       "examTip": "Backup space issues? Trim retention—quick and effective."
     },
     {
-      "id": 25,
+      "id": 75,
       "question": "Which command verifies network connectivity to a remote server?",
       "options": [
         "ipconfig",
@@ -980,7 +980,7 @@ db.tests.insertOne({
       "examTip": "Ping is your first network test—simple and fast."
     },
     {
-      "id": 26,
+      "id": 76,
       "question": "A server’s disk IOPS are consistently maxed out. What should you upgrade first?",
       "options": [
         "CPU clock speed",
@@ -993,7 +993,7 @@ db.tests.insertOne({
       "examTip": "IOPS bottlenecks need storage speed—SSDs are the fix."
     },
     {
-      "id": 27,
+      "id": 77,
       "question": "Which physical control best prevents tailgating into a server room?",
       "options": [
         "Security cameras",
@@ -1006,7 +1006,7 @@ db.tests.insertOne({
       "examTip": "Mantraps enforce single entry—anti-tailgating champs."
     },
     {
-      "id": 28,
+      "id": 78,
       "question": "A server’s RAID 6 array loses two drives. What is the operational impact?",
       "options": [
         "Array fails, data is lost",
@@ -1019,7 +1019,7 @@ db.tests.insertOne({
       "examTip": "RAID 6 handles two failures—redundancy at its best."
     },
     {
-      "id": 29,
+      "id": 79,
       "question": "Which protocol secures data in transit between a server and a client?",
       "options": [
         "HTTP",
@@ -1032,7 +1032,7 @@ db.tests.insertOne({
       "examTip": "HTTPS means secure transit—look for the ‘S’."
     },
     {
-      "id": 30,
+      "id": 80,
       "question": "A server’s fans run at maximum speed unexpectedly. What should you check first?",
       "options": [
         "RAID controller status",
@@ -1045,7 +1045,7 @@ db.tests.insertOne({
       "examTip": "Fan spikes often mean sensor trouble—check temps first."
     },
     {
-      "id": 31,
+      "id": 81,
       "question": "Which licensing model suits a server hosting multiple VMs with varying workloads?",
       "options": [
         "Per-core licensing",
@@ -1058,7 +1058,7 @@ db.tests.insertOne({
       "examTip": "Per-core licensing flexes with virtualization—ideal for VMs."
     },
     {
-      "id": 32,
+      "id": 82,
       "question": "A server’s OS installation fails due to hardware incompatibility. Where should you verify compatibility?",
       "options": [
         "RAID controller logs",
@@ -1071,7 +1071,7 @@ db.tests.insertOne({
       "examTip": "HCL is your pre-install checklist—avoid compatibility woes."
     },
     {
-      "id": 33,
+      "id": 83,
       "question": "Which replication method ensures zero data loss between two sites?",
       "options": [
         "Asynchronous replication",
@@ -1084,7 +1084,7 @@ db.tests.insertOne({
       "examTip": "Synchronous means no lag—no loss."
     },
     {
-      "id": 34,
+      "id": 84,
       "question": "A server’s virtual switch fails to pass traffic. What should you check first?",
       "options": [
         "Physical NIC link status",
@@ -1097,7 +1097,7 @@ db.tests.insertOne({
       "examTip": "Virtual networking starts with physical links—check NICs first."
     },
     {
-      "id": 35,
+      "id": 85,
       "question": "Which decommissioning step ensures data cannot be recovered from a server’s drives?",
       "options": [
         "Formatting the drives",
@@ -1110,7 +1110,7 @@ db.tests.insertOne({
       "examTip": "Wipe drives thoroughly—security demands it."
     },
     {
-      "id": 36,
+      "id": 86,
       "question": "A server’s application performance drops after a patch. What should you do first?",
       "options": [
         "Roll back the patch",
@@ -1123,7 +1123,7 @@ db.tests.insertOne({
       "examTip": "Logs are your first clue post-patch—diagnose before acting."
     },
     {
-      "id": 37,
+      "id": 87,
       "question": "Which network cable type supports 10GbE over 100 meters?",
       "options": [
         "Cat5e",
@@ -1136,7 +1136,7 @@ db.tests.insertOne({
       "examTip": "Cat6a is the sweet spot for 10GbE—range and speed."
     },
     {
-      "id": 38,
+      "id": 88,
       "question": "A server’s RAID controller battery fails. What is the immediate impact?",
       "options": [
         "Array goes offline",
@@ -1149,7 +1149,7 @@ db.tests.insertOne({
       "examTip": "Battery failure hits write speed—cache matters."
     },
     {
-      "id": 39,
+      "id": 89,
       "question": "Which access control model assigns permissions based on job roles?",
       "options": [
         "DAC",
@@ -1162,7 +1162,7 @@ db.tests.insertOne({
       "examTip": "RBAC aligns with jobs—streamlines permissions."
     },
     {
-      "id": 40,
+      "id": 90,
       "question": "A server’s SAN performance drops. What should you check first?",
       "options": [
         "RAID parity settings",
@@ -1175,7 +1175,7 @@ db.tests.insertOne({
       "examTip": "SAN issues? Check the HBA—your SAN lifeline."
     },
     {
-      "id": 41,
+      "id": 91,
       "question": "Which backup method combines incremental backups into a single file for faster restores?",
       "options": [
         "Differential",
@@ -1188,7 +1188,7 @@ db.tests.insertOne({
       "examTip": "Synthetic full speeds restores—efficiency in action."
     },
     {
-      "id": 42,
+      "id": 92,
       "question": "A server’s disk fails in a RAID 1 array. What should you do first?",
       "options": [
         "Rebuild the array immediately",
@@ -1201,7 +1201,7 @@ db.tests.insertOne({
       "examTip": "Backup first in RAID failures—safety over speed."
     },
     {
-      "id": 43,
+      "id": 93,
       "question": "Which network troubleshooting tool traces the path packets take to a destination?",
       "options": [
         "ping",
@@ -1214,7 +1214,7 @@ db.tests.insertOne({
       "examTip": "tracert finds the route—great for pinpointing network issues."
     },
     {
-      "id": 44,
+      "id": 94,
       "question": "A server’s VM fails to start after a hypervisor update. What should you check first?",
       "options": [
         "VM guest OS patches",
@@ -1227,7 +1227,7 @@ db.tests.insertOne({
       "examTip": "Post-update VM issues? Check hypervisor compatibility first."
     },
     {
-      "id": 45,
+      "id": 95,
       "question": "Which physical security feature protects against electromagnetic interference (EMI) in a server room?",
       "options": [
         "Biometric locks",
@@ -1240,7 +1240,7 @@ db.tests.insertOne({
       "examTip": "EMI needs shielding—Faraday is your friend."
     },
     {
-      "id": 46,
+      "id": 96,
       "question": "A server’s RAID 10 array loses one drive. What is the operational status?",
       "options": [
         "Array fails completely",
@@ -1253,7 +1253,7 @@ db.tests.insertOne({
       "examTip": "RAID 10 survives single failures—mirrors save the day."
     },
     {
-      "id": 47,
+      "id": 97,
       "question": "Which protocol ensures secure management of network devices with encryption?",
       "options": [
         "SNMPv1",
@@ -1266,7 +1266,7 @@ db.tests.insertOne({
       "examTip": "SNMPv3 secures device management—v3 is the key."
     },
     {
-      "id": 48,
+      "id": 98,
       "question": "A server’s performance degrades during backups. What should you adjust?",
       "options": [
         "Increase CPU cores",
@@ -1279,7 +1279,7 @@ db.tests.insertOne({
       "examTip": "Timing backups avoids peak load—plan wisely."
     },
     {
-      "id": 49,
+      "id": 99,
       "question": "Which documentation type tracks server hardware lifecycle and warranty details?",
       "options": [
         "Network diagrams",
@@ -1292,7 +1292,7 @@ db.tests.insertOne({
       "examTip": "Asset inventory is your hardware ledger—track everything."
     },
     {
-      "id": 50,
+      "id": 100,
       "question": "A server’s NTP sync fails, causing log timestamp issues. What should you check first?",
       "options": [
         "Firewall port 123 status",
