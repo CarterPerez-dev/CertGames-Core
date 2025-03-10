@@ -44,7 +44,9 @@ import {
   FaFilter,
   FaAngleDoubleRight,
   FaAngleDoubleLeft,
-  FaUser
+  FaUser,
+  FaPause,
+  FaClock
 } from "react-icons/fa";
 
 // Helper functions
@@ -60,6 +62,13 @@ function shuffleArray(arr) {
 function shuffleIndices(length) {
   const indices = Array.from({ length }, (_, i) => i);
   return shuffleArray(indices);
+}
+
+// Format seconds into MM:SS display
+function formatTime(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 // Reusable QuestionDropdown component
@@ -180,6 +189,11 @@ const GlobalTestPage = ({
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
 
+  // Timer states
+  const [examTimer, setExamTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const timerIntervalRef = useRef(null);
+
   // Overlays
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [showReviewMode, setShowReviewMode] = useState(false);
@@ -211,6 +225,70 @@ const GlobalTestPage = ({
     }
   }, [shopStatus, dispatch]);
 
+  // Timer functions
+  const startTimer = useCallback(() => {
+    if (timerIntervalRef.current) return;
+    
+    setIsTimerRunning(true);
+    timerIntervalRef.current = setInterval(() => {
+      setExamTimer(prev => prev + 1);
+    }, 1000);
+  }, []);
+
+  const pauseTimer = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+      setIsTimerRunning(false);
+    }
+  }, []);
+
+  const resetTimer = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    setExamTimer(0);
+    setIsTimerRunning(false);
+  }, []);
+
+  const updateTimerInDB = useCallback(async () => {
+    if (!userId || !testId) return;
+    
+    try {
+      await fetch(`/api/test/attempts/${userId}/${testId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          examTimerSeconds: examTimer
+        })
+      });
+    } catch (err) {
+      console.error("Failed to update timer in database", err);
+    }
+  }, [userId, testId, examTimer]);
+
+  // Save timer value to database every 10 seconds
+  useEffect(() => {
+    if (examMode && isTimerRunning && examTimer % 10 === 0 && examTimer > 0) {
+      updateTimerInDB();
+    }
+  }, [examMode, isTimerRunning, examTimer, updateTimerInDB]);
+
+  // Clean up timer interval on unmount
+  useEffect(() => {
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+      
+      // Save timer when leaving the component
+      if (examMode && examTimer > 0 && !isFinished) {
+        updateTimerInDB();
+      }
+    };
+  }, [examMode, examTimer, isFinished, updateTimerInDB]);
+
   const fetchTestAndAttempt = async () => {
     setLoadingTest(true);
     try {
@@ -239,6 +317,15 @@ const GlobalTestPage = ({
 
         const attemptExam = attemptDoc.examMode || false;
         setExamMode(attemptExam);
+
+        // Load exam timer if available
+        if (attemptExam && attemptDoc.examTimerSeconds) {
+          setExamTimer(attemptDoc.examTimerSeconds);
+          if (!attemptDoc.finished) {
+            // Only start the timer if the test is not finished
+            startTimer();
+          }
+        }
 
         // Use the chosen length if available
         const chosenLength = attemptDoc.selectedLength || totalQ;
@@ -286,6 +373,13 @@ const GlobalTestPage = ({
     fetchTestAndAttempt();
   }, [testId, userId]);
 
+  // Start the timer if in exam mode and not finished
+  useEffect(() => {
+    if (examMode && !isFinished && !loadingTest && activeTestLength) {
+      startTimer();
+    }
+  }, [examMode, isFinished, loadingTest, activeTestLength, startTimer]);
+
   useEffect(() => {
     if (level > localLevel) {
       setLocalLevel(level);
@@ -296,10 +390,20 @@ const GlobalTestPage = ({
   }, [level, localLevel]);
 
   useEffect(() => {
-    if (location.state?.review && isFinished) {
+    // Fix for the "Next Test" button issue: check if we're coming from a test completion
+    // and ensure we don't immediately show the score overlay for the new test
+    const isFromNextTestButton = location.state?.fromNextTest;
+    
+    if (isFromNextTestButton) {
+      // Reset these states to ensure we don't show the completion overlay
+      setShowScoreOverlay(false);
+      setIsFinished(false);
+      // Clean up the location state
+      navigate(location.pathname, { replace: true, state: {} });
+    } else if (location.state?.review && isFinished) {
       setShowReviewMode(true);
     }
-  }, [location.state, isFinished]);
+  }, [location.state, isFinished, navigate, location.pathname]);
 
   const getShuffledIndex = useCallback(
     (i) => {
@@ -365,19 +469,21 @@ const GlobalTestPage = ({
           const data = await res.json();
           return data;
         }
+        
         await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             currentQuestionIndex,
-            finished
+            finished,
+            examTimerSeconds: examTimer // Include timer in updates
           })
         });
       } catch (err) {
         console.error("Failed to update test attempt on backend", err);
       }
     },
-    [userId, testId, testData, xpBoost, currentQuestionIndex]
+    [userId, testId, testData, xpBoost, currentQuestionIndex, examTimer]
   );
 
   // In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
@@ -450,6 +556,10 @@ const GlobalTestPage = ({
   );
 
   const finishTestProcess = useCallback(async () => {
+    if (examMode) {
+      pauseTimer(); // Stop the timer when finishing the test
+    }
+    
     let finalScore = 0;
     answers.forEach((ans) => {
       if (ans.userAnswerIndex === ans.correctAnswerIndex) {
@@ -463,7 +573,8 @@ const GlobalTestPage = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           score: finalScore,
-          totalQuestions: effectiveTotal
+          totalQuestions: effectiveTotal,
+          examTimerSeconds: examTimer // Include timer value when finishing
         })
       });
       const finishData = await res.json();
@@ -503,7 +614,7 @@ const GlobalTestPage = ({
     setIsFinished(true);
     setShowScoreOverlay(true);
     setShowReviewMode(false);
-  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, examMode, pauseTimer, examTimer]);
 
   const handleNextQuestion = useCallback(() => {
     if (!isAnswered && !examMode) {
@@ -583,6 +694,14 @@ const GlobalTestPage = ({
     setIsFinished(false);
     setShowReviewMode(false);
     setShowScoreOverlay(false);
+    
+    // Reset the timer for exam mode
+    if (examMode) {
+      resetTimer();
+      if (!isFinished) {
+        startTimer();
+      }
+    }
 
     if (testData?.questions?.length && activeTestLength) {
       const newQOrder = shuffleIndices(activeTestLength);
@@ -609,7 +728,8 @@ const GlobalTestPage = ({
             shuffleOrder: newQOrder,
             answerOrder: newAnswerOrder,
             finished: false,
-            examMode
+            examMode,
+            examTimerSeconds: 0 // Reset timer on restart
           })
         });
       }
@@ -620,7 +740,10 @@ const GlobalTestPage = ({
     testId,
     category,
     examMode,
-    activeTestLength
+    activeTestLength,
+    resetTimer,
+    startTimer,
+    isFinished
   ]);
 
   const handleFinishTest = () => {
@@ -659,6 +782,14 @@ const GlobalTestPage = ({
       return false;
     });
   }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
+
+  const handleTimerToggle = () => {
+    if (isTimerRunning) {
+      pauseTimer();
+    } else {
+      startTimer();
+    }
+  };
 
   const NextQuestionAlert = ({ message, onOk }) => (
     <div className="confirm-popup-overlay">
@@ -787,6 +918,10 @@ const GlobalTestPage = ({
                 <div className="exam-mode-note">
                   <FaTrophy className="exam-icon" />
                   <p>You completed this test in exam mode!</p>
+                  <div className="exam-timer-result">
+                    <FaClock className="timer-icon" />
+                    <span>Time: {formatTime(examTimer)}</span>
+                  </div>
                 </div>
               )}
             </div>
@@ -846,7 +981,12 @@ const GlobalTestPage = ({
             {Number(testId) < 9999 && (
               <button
                 className="next-test-button"
-                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
+                onClick={() => {
+                  // Set a flag in the navigation state to prevent showing the score overlay on the next test
+                  navigate(`${backToListPath}/${Number(testId) + 1}`, {
+                    state: { fromNextTest: true, selectedLength }
+                  });
+                }}
               >
                 <FaArrowRight className="button-icon" />
                 <span>Next Test</span>
@@ -878,11 +1018,19 @@ const GlobalTestPage = ({
           )}
           <h2 className="score-title">Review Mode</h2>
           {isFinished && (
-            <p className="review-score-line">
-              Your final score: {score}/{effectiveTotal} (
-              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
-              %)
-            </p>
+            <div className="review-header-info">
+              <p className="review-score-line">
+                Your final score: {score}/{effectiveTotal} (
+                {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
+                %)
+              </p>
+              {examMode && (
+                <div className="review-timer">
+                  <FaClock className="timer-icon" />
+                  <span>Time taken: {formatTime(examTimer)}</span>
+                </div>
+              )}
+            </div>
           )}
           <div className="review-filter-buttons">
             <button
@@ -1082,7 +1230,8 @@ const GlobalTestPage = ({
                       shuffleOrder: newQOrder,
                       answerOrder: newAnswerOrder,
                       finished: false,
-                      examMode: location.state?.examMode || false
+                      examMode: location.state?.examMode || false,
+                      examTimerSeconds: 0 // Initialize timer at 0
                     })
                   });
                   setShowTestLengthSelector(false);
@@ -1262,6 +1411,22 @@ const GlobalTestPage = ({
           <FaCoins className="coins-icon" />
           <span>{coins}</span>
         </div>
+        
+        {/* Exam Mode Timer */}
+        {examMode && (
+          <div className="exam-timer">
+            <div className="timer-display">
+              <FaClock className="timer-icon" />
+              <span>{formatTime(examTimer)}</span>
+            </div>
+            <button 
+              className="timer-toggle-btn"
+              onClick={handleTimerToggle}
+            >
+              {isTimerRunning ? <FaPause /> : <FaPlay />}
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="exam-mode-indicator">
