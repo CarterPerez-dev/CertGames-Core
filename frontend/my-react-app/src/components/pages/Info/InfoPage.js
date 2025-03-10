@@ -320,7 +320,7 @@ const InfoPage = () => {
         
         <div className="info-preview-placeholder info-animate-on-scroll">
           <div className="info-preview-overlay">
-            <p>Leaderboard & Achievement Preview</p>
+            <p>Leaderboard Preview</p>
           </div>
         </div>
       </section>
