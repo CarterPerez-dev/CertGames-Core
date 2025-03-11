@@ -1,6 +1,0 @@
-# Add to .env file
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-APPLE_CLIENT_ID=your_apple_client_id
-APPLE_CLIENT_SECRET=your_apple_client_secret
-FRONTEND_URL=http://localhost:3000
