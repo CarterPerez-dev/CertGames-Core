@@ -137,6 +137,11 @@ const DailyStationPage = () => {
     setLoadingBonus(true);
     setBonusError(null);
     
+    // Immediately update UI to show countdown - don't wait for API response
+    setCanClaim(false);
+    setLocalLastDailyClaim(new Date().toISOString());
+    setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
+    
     try {
       const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
         method: 'POST'
@@ -146,14 +151,11 @@ const DailyStationPage = () => {
       if (!res.ok) {
         // Hard error, e.g. 404 user not found
         setBonusError(data.error || 'Error claiming daily bonus');
+        // Revert UI if there was an error
+        setCanClaim(true);
         setLoadingBonus(false);
         return;
       }
-      
-      // Always update the lastDailyClaim and show countdown immediately
-      setLocalLastDailyClaim(data.newLastDailyClaim || new Date().toISOString());
-      setCanClaim(false);
-      setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
       
       if (data.success) {
         // Claimed successfully
@@ -161,12 +163,26 @@ const DailyStationPage = () => {
         setTimeout(() => setShowBonusAnimation(false), 3000);
         setBonusSuccess(true);
         
+        // Update with the actual timestamp from server
+        if (data.newLastDailyClaim) {
+          setLocalLastDailyClaim(data.newLastDailyClaim);
+        }
+        
         // Refresh user data to update coins/xp
         dispatch(fetchUserData(userId));
       } else {
-        // Already claimed case - only set error if not about "already claimed"
+        // Already claimed case
         if (!data.message || !data.message.includes("Already claimed")) {
           setBonusError(data.message);
+        }
+        
+        // If we get "already claimed" message with seconds left info, update the countdown
+        const match = data.message && data.message.match(/(\d+)/);
+        if (match) {
+          const secondsLeft = parseInt(match[1], 10);
+          if (!isNaN(secondsLeft) && secondsLeft > 0) {
+            setBonusCountdown(secondsLeft);
+          }
         }
       }
       
@@ -174,6 +190,8 @@ const DailyStationPage = () => {
     } catch (err) {
       setBonusError('Error: ' + err.message);
       setLoadingBonus(false);
+      // On error, revert UI
+      setCanClaim(true);
     }
   };
 
