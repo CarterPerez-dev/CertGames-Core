@@ -182,3324 +182,8 @@ db.achievements.insertMany([
   }
 ])
 
-so ill provide you some context files some of which are frontedn (id rather not have to edit the frontend tho)
-so here is my userslice file
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { showAchievementToast } from './AchievementToast';
-import {
-  FaTrophy, FaMedal, FaStar, FaCrown, FaBolt, FaBook, FaBrain,
-  FaCheckCircle, FaRegSmile, FaMagic
-} from 'react-icons/fa';
 
-// Import the thunks to fetch achievements and shop items
-import { fetchAchievements } from './achievementsSlice';
-import { fetchShopItems } from './shopSlice';
-
-// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
-// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
-const iconMapping = {
-  test_rookie: FaTrophy,
-  accuracy_king: FaMedal,
-  bronze_grinder: FaBook,
-  silver_scholar: FaStar,
-  gold_god: FaCrown,
-  platinum_pro: FaMagic,
-  walking_encyclopedia: FaBrain,
-  redemption_arc: FaBolt,
-  coin_collector_5000: FaBook,
-  coin_hoarder_10000: FaBook,
-  coin_tycoon_50000: FaBook,
-  perfectionist_1: FaCheckCircle,
-  double_trouble_2: FaCheckCircle,
-  error404_failure_not_found: FaCheckCircle,
-  level_up_5: FaTrophy,
-  mid_tier_grinder_25: FaMedal,
-  elite_scholar_50: FaStar,
-  ultimate_master_100: FaCrown,
-  answer_machine_1000: FaBook,
-  knowledge_beast_5000: FaBrain,
-  question_terminator: FaBrain,
-  test_finisher: FaCheckCircle
-};
-
-// Matching color mapping (remove same IDs):
-const colorMapping = {
-  test_rookie: "#ff5555",
-  accuracy_king: "#ffa500",
-  bronze_grinder: "#cd7f32",
-  silver_scholar: "#c0c0c0",
-  gold_god: "#ffd700",
-  platinum_pro: "#e5e4e2",
-  walking_encyclopedia: "#00fa9a",
-  redemption_arc: "#ff4500",
-  coin_collector_5000: "#ff69b4",
-  coin_hoarder_10000: "#ff1493",
-  coin_tycoon_50000: "#ff0000",
-  perfectionist_1: "#adff2f",
-  double_trouble_2: "#7fff00",
-  error404_failure_not_found: "#00ffff",
-  level_up_5: "#f08080",
-  mid_tier_grinder_25: "#ff8c00",
-  elite_scholar_50: "#ffd700",
-  ultimate_master_100: "#ff4500",
-  answer_machine_1000: "#ff69b4",
-  knowledge_beast_5000: "#00fa9a",
-  question_terminator: "#ff1493",
-  test_finisher: "#adff2f"
-};
-
-// Utility function to show toast for newlyUnlocked achievements:
-function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
-  if (!newlyUnlocked || newlyUnlocked.length === 0) return;
-  newlyUnlocked.forEach((achId) => {
-    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
-    const color = colorMapping[achId] || "#fff";
-
-    const foundAch = allAchievements?.find(a => a.achievementId === achId);
-    const title = foundAch?.title || `Unlocked ${achId}`;
-    const desc = foundAch?.description || 'Achievement Unlocked!';
-
-    showAchievementToast({
-      title,
-      description: desc,
-      icon: Icon ? <Icon /> : null,
-      color
-    });
-  });
-}
-
-const initialUserId = localStorage.getItem('userId');
-
-const initialState = {
-  userId: initialUserId ? initialUserId : null,
-  username: '',
-  email: '',
-  xp: 0,
-  level: 1,
-  coins: 0,
-  achievements: [],
-  xpBoost: 1.0,
-  currentAvatar: null,
-  nameColor: null,
-  purchasedItems: [],
-  subscriptionActive: false,
-
-  status: 'idle',
-  loading: false,
-  error: null,
-};
-
-// REGISTER
-export const registerUser = createAsyncThunk(
-  'user/registerUser',
-  async (formData, { rejectWithValue, dispatch, getState }) => {
-    try {
-      const response = await fetch('/api/test/user', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
-      }
-      return data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-// LOGIN
-export const loginUser = createAsyncThunk(
-  'user/loginUser',
-  async (credentials, { rejectWithValue, dispatch, getState }) => {
-    try {
-      const response = await fetch('/api/test/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
-      }
-      // Immediately fetch achievements + shop data after successful login
-      dispatch(fetchAchievements());
-      dispatch(fetchShopItems());
-
-      return data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-// FETCH USER DATA
-export const fetchUserData = createAsyncThunk(
-  'user/fetchUserData',
-  async (userId, { rejectWithValue, dispatch }) => {
-    try {
-      const response = await fetch(`/api/test/user/${userId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch user data');
-      }
-      const data = await response.json();
-
-      // Also fetch achievements + shop items to ensure they're loaded
-      dispatch(fetchAchievements());
-      dispatch(fetchShopItems());
-
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-// Example of a daily bonus thunk:
-export const claimDailyBonus = createAsyncThunk(
-  'user/claimDailyBonus',
-  async (userId, { rejectWithValue, dispatch, getState }) => {
-    try {
-      const response = await fetch(`/api/test/user/${userId}/daily-bonus`, {
-        method: 'POST'
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || data.error || 'Daily bonus error');
-      }
-      // If new achievements came back, display them
-      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-        const allAchs = getState().achievements.all;
-        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
-      }
-      return data; 
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-// If you have an "addCoins" route, likewise
-export const addCoins = createAsyncThunk(
-  'user/addCoins',
-  async ({ userId, amount }, { rejectWithValue, dispatch, getState }) => {
-    try {
-      const res = await fetch(`/api/test/user/${userId}/add-coins`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ coins: amount })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to add coins');
-      }
-      // Show newly unlocked achievements
-      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
-        const allAchs = getState().achievements.all;
-        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
-      }
-      return data;
-    } catch (err) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setCurrentUserId(state, action) {
-      state.userId = action.payload;
-    },
-    logout(state) {
-      state.userId = null;
-      state.username = '';
-      state.email = '';
-      state.xp = 0;
-      state.level = 1;
-      state.coins = 0;
-      state.achievements = [];
-      state.xpBoost = 1.0;
-      state.currentAvatar = null;
-      state.nameColor = null;
-      state.purchasedItems = [];
-      state.subscriptionActive = false;
-      state.status = 'idle';
-      localStorage.removeItem('userId');
-    },
-    setXPAndCoins(state, action) {
-      const { xp, coins } = action.payload;
-      state.xp = xp;
-      state.coins = coins;
-    }
-  },
-  extraReducers: (builder) => {
-    builder
-      // REGISTER
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // LOGIN
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-
-        const {
-          user_id,
-          username,
-          email,
-          coins,
-          xp,
-          level,
-          achievements,
-          xpBoost,
-          currentAvatar,
-          nameColor,
-          purchasedItems,
-          subscriptionActive,
-          password
-        } = action.payload;
-
-        state.userId = user_id;
-        state.username = username;
-        state.email = email || '';
-        state.coins = coins || 0;
-        state.xp = xp || 0;
-        state.level = level || 1;
-        state.achievements = achievements || [];
-        state.xpBoost = xpBoost !== undefined ? xpBoost : 1.0;
-        state.currentAvatar = currentAvatar || null;
-        state.nameColor = nameColor || null;
-        state.purchasedItems = purchasedItems || [];
-        state.subscriptionActive = subscriptionActive || false;
-
-        localStorage.setItem('userId', user_id);
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // FETCH USER DATA
-      .addCase(fetchUserData.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.error = null;
-        const userDoc = action.payload;
-
-        state.userId = userDoc._id;
-        state.username = userDoc.username;
-        state.email = userDoc.email || '';
-        state.xp = userDoc.xp || 0;
-        state.level = userDoc.level || 1;
-        state.coins = userDoc.coins || 0;
-        state.achievements = userDoc.achievements || [];
-        state.xpBoost = userDoc.xpBoost !== undefined ? userDoc.xpBoost : 1.0;
-        state.currentAvatar = userDoc.currentAvatar || null;
-        state.nameColor = userDoc.nameColor || null;
-        state.purchasedItems = userDoc.purchasedItems || [];
-        state.subscriptionActive = userDoc.subscriptionActive || false;
-      })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      })
-
-      // DAILY BONUS
-      .addCase(claimDailyBonus.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(claimDailyBonus.fulfilled, (state, action) => {
-        state.loading = false;
-        // Update local user coins/xp if success
-        if (action.payload.success) {
-          state.coins = action.payload.newCoins;
-          state.xp = action.payload.newXP;
-        }
-      })
-      .addCase(claimDailyBonus.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // ADD COINS
-      .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, you could do local updates here or re-fetch user
-        // For example:
-        // state.coins += ...
-      });
-  },
-});
-
-export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
-export default userSlice.reducer;
-
-
-
-here si teh achivemtn page and achivemnt slice (even tho all ahcivemetn sapply gloablly throught the webpage and tsuff but this just provides good context)
-// src/components/pages/store/AchievementPage.js
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchAchievements } from '../store/achievementsSlice';
-import { 
-  FaTrophy, 
-  FaMedal, 
-  FaStar, 
-  FaCrown, 
-  FaBolt, 
-  FaBook, 
-  FaBrain, 
-  FaCheckCircle, 
-  FaMagic,
-  FaFilter,
-  FaTimes,
-  FaCoins,
-  FaLevelUpAlt,
-  FaCheck,
-  FaLock,
-  FaInfoCircle,
-  FaChevronDown,
-  FaChevronUp,
-  FaSearch,
-  FaSyncAlt
-} from 'react-icons/fa';
-import { showAchievementToast } from './AchievementToast';
-import './AchievementPage.css';
-
-// Mapping achievement IDs to icon components.
-const iconMapping = {
-  "test_rookie": FaTrophy,
-  "accuracy_king": FaMedal,
-  "bronze_grinder": FaBook,
-  "silver_scholar": FaStar,
-  "gold_god": FaCrown,
-  "platinum_pro": FaMagic,
-  "walking_encyclopedia": FaBrain,
-  "redemption_arc": FaBolt,
-  "coin_collector_5000": FaBook,
-  "coin_hoarder_10000": FaBook,
-  "coin_tycoon_50000": FaBook,
-  "perfectionist_1": FaCheckCircle,
-  "double_trouble_2": FaCheckCircle,
-  "error404_failure_not_found": FaCheckCircle,
-  "level_up_5": FaTrophy,
-  "mid_tier_grinder_25": FaMedal,
-  "elite_scholar_50": FaStar,
-  "ultimate_master_100": FaCrown,
-  "answer_machine_1000": FaBook,
-  "knowledge_beast_5000": FaBrain,
-  "question_terminator": FaBrain,
-  "test_finisher": FaCheckCircle,
-};
-
-// Mapping achievement IDs to colors.
-const colorMapping = {
-  "test_rookie": "#ff5555",
-  "accuracy_king": "#ffa500",
-  "bronze_grinder": "#cd7f32",
-  "silver_scholar": "#c0c0c0",
-  "gold_god": "#ffd700",
-  "platinum_pro": "#e5e4e2",
-  "walking_encyclopedia": "#00fa9a",
-  "redemption_arc": "#ff4500",
-  "coin_collector_5000": "#ff69b4",
-  "coin_hoarder_10000": "#ff1493",
-  "coin_tycoon_50000": "#ff0000",
-  "perfectionist_1": "#adff2f",
-  "double_trouble_2": "#7fff00",
-  "error404_failure_not_found": "#00ffff",
-  "level_up_5": "#f08080",
-  "mid_tier_grinder_25": "#ff8c00",
-  "elite_scholar_50": "#ffd700",
-  "ultimate_master_100": "#ff4500",
-  "answer_machine_1000": "#ff69b4",
-  "knowledge_beast_5000": "#00fa9a",
-  "question_terminator": "#ff1493",
-  "test_finisher": "#adff2f",
-};
-
-// Achievement categories
-const categories = {
-  "test": "Test Completion",
-  "score": "Score & Accuracy",
-  "coins": "Coin Collection",
-  "level": "Leveling Up",
-  "questions": "Question Mastery",
-  "all": "All Achievements"
-};
-
-// Function to determine the category of an achievement
-const getAchievementCategory = (achievementId) => {
-  if (achievementId.includes('level') || achievementId.includes('grinder') || 
-      achievementId.includes('scholar') || achievementId.includes('master')) {
-    return "level";
-  } else if (achievementId.includes('coin')) {
-    return "coins";
-  } else if (achievementId.includes('accuracy') || achievementId.includes('perfectionist') || 
-             achievementId.includes('redemption')) {
-    return "score";
-  } else if (achievementId.includes('answer') || achievementId.includes('question') || 
-             achievementId.includes('encyclopedia')) {
-    return "questions";
-  } else if (achievementId.includes('rookie') || achievementId.includes('test') || 
-             achievementId.includes('trouble')) {
-    return "test";
-  }
-  return "all";
-};
-
-const AchievementPage = () => {
-  const dispatch = useDispatch();
-  const achievements = useSelector((state) => state.achievements.all);
-  const userAchievements = useSelector((state) => state.user.achievements) || [];
-  const { username, level, xp } = useSelector((state) => state.user);
-  const loadingStatus = useSelector((state) => state.achievements.status);
-
-  // State for filtering and sorting
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(false);
-  const [showOnlyLocked, setShowOnlyLocked] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState({});
-  const [sortBy, setSortBy] = useState('default'); // default, name, unlocked
-  
-  // State for tracking achievement stats
-  const [totalAchievements, setTotalAchievements] = useState(0);
-  const [unlockedAchievements, setUnlockedAchievements] = useState(0);
-  const [percentComplete, setPercentComplete] = useState(0);
-
-  useEffect(() => {
-    if (!achievements || achievements.length === 0) {
-      dispatch(fetchAchievements());
-    }
-  }, [dispatch, achievements]);
-
-  useEffect(() => {
-    if (achievements && achievements.length > 0) {
-      setTotalAchievements(achievements.length);
-      setUnlockedAchievements(userAchievements.length);
-      setPercentComplete((userAchievements.length / achievements.length) * 100);
-    }
-  }, [achievements, userAchievements]);
-
-  // Filter achievements based on selected criteria
-  const filteredAchievements = achievements.filter(achievement => {
-    // Category filter
-    const categoryMatch = activeCategory === 'all' || 
-                        getAchievementCategory(achievement.achievementId) === activeCategory;
-    
-    // Unlock status filter
-    const isUnlocked = userAchievements.includes(achievement.achievementId);
-    const statusMatch = (showOnlyUnlocked && isUnlocked) || 
-                      (showOnlyLocked && !isUnlocked) || 
-                      (!showOnlyUnlocked && !showOnlyLocked);
-    
-    // Search filter
-    const searchMatch = !searchTerm || 
-                      achievement.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                      achievement.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return categoryMatch && statusMatch && searchMatch;
-  });
-
-  // Sort achievements
-  const sortedAchievements = [...filteredAchievements].sort((a, b) => {
-    const aUnlocked = userAchievements.includes(a.achievementId);
-    const bUnlocked = userAchievements.includes(b.achievementId);
-    
-    if (sortBy === 'name') {
-      return a.title.localeCompare(b.title);
-    } else if (sortBy === 'unlocked') {
-      return bUnlocked - aUnlocked; // Show unlocked first
-    } else if (sortBy === 'locked') {
-      return aUnlocked - bUnlocked; // Show locked first
-    }
-    
-    // Default sorting
-    return 0;
-  });
-
-  const toggleDetails = (achievementId) => {
-    setDetailsOpen(prev => ({
-      ...prev,
-      [achievementId]: !prev[achievementId]
-    }));
-  };
-
-  // Reset all filters
-  const resetFilters = () => {
-    setActiveCategory('all');
-    setSearchTerm('');
-    setShowOnlyUnlocked(false);
-    setShowOnlyLocked(false);
-    setSortBy('default');
-  };
-
-  // This function remains if you ever want to trigger a test popup programmatically
-  const testPopup = (achievementId) => {
-    const achievement = achievements.find((ach) => ach.achievementId === achievementId);
-    if (achievement) {
-      const IconComponent = iconMapping[achievement.achievementId] || null;
-      const color = colorMapping[achievement.achievementId] || "#fff";
-      showAchievementToast({
-        title: achievement.title,
-        description: achievement.description,
-        icon: IconComponent ? <IconComponent /> : null,
-        color: color
-      });
-    }
-  };
-
-  return (
-    <div className="achievement-page-container">
-      {/* Header Section with Stats */}
-      <div className="achievement-header">
-        <div className="achievement-header-content">
-          <div className="achievement-header-titles">
-            <h1>Achievement Gallery</h1>
-            <p>Track your progress and unlock achievements as you master the platform!</p>
-          </div>
-          
-          {username && (
-            <div className="achievement-player-stats">
-              <div className="achievement-player-name">
-                <span>{username}'s Progress</span>
-              </div>
-              <div className="achievement-progress-container">
-                <div className="achievement-progress-stats">
-                  <div className="achievement-stat">
-                    <FaTrophy className="achievement-stat-icon" />
-                    <div className="achievement-stat-numbers">
-                      <span className="achievement-stat-value">{unlockedAchievements} / {totalAchievements}</span>
-                      <span className="achievement-stat-label">Achievements</span>
-                    </div>
-                  </div>
-                  <div className="achievement-stat">
-                    <FaLevelUpAlt className="achievement-stat-icon" />
-                    <div className="achievement-stat-numbers">
-                      <span className="achievement-stat-value">{level}</span>
-                      <span className="achievement-stat-label">Level</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="achievement-progress-bar-container">
-                  <div className="achievement-progress-bar">
-                    <div 
-                      className="achievement-progress-fill" 
-                      style={{ width: `${percentComplete}%` }}
-                    ></div>
-                  </div>
-                  <span className="achievement-progress-percent">{Math.round(percentComplete)}% Complete</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Filter and Search Section */}
-      <div className="achievement-controls">
-        <div className="achievement-categories">
-          {Object.entries(categories).map(([key, value]) => (
-            <button
-              key={key}
-              className={`achievement-category-btn ${activeCategory === key ? 'active' : ''}`}
-              onClick={() => setActiveCategory(key)}
-            >
-              {value}
-            </button>
-          ))}
-        </div>
-        
-        <div className="achievement-filters">
-          <div className="achievement-search">
-            <FaSearch className="achievement-search-icon" />
-            <input
-              type="text"
-              placeholder="Search achievements..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="achievement-search-input"
-            />
-            {searchTerm && (
-              <button 
-                className="achievement-search-clear" 
-                onClick={() => setSearchTerm('')}
-              >
-                <FaTimes />
-              </button>
-            )}
-          </div>
-          
-          <div className="achievement-filter-options">
-            <button 
-              className={`achievement-filter-btn ${showOnlyUnlocked ? 'active' : ''}`}
-              onClick={() => {
-                setShowOnlyUnlocked(!showOnlyUnlocked);
-                setShowOnlyLocked(false);
-              }}
-            >
-              <FaCheck />
-              <span>Unlocked</span>
-            </button>
-            
-            <button 
-              className={`achievement-filter-btn ${showOnlyLocked ? 'active' : ''}`}
-              onClick={() => {
-                setShowOnlyLocked(!showOnlyLocked);
-                setShowOnlyUnlocked(false);
-              }}
-            >
-              <FaLock />
-              <span>Locked</span>
-            </button>
-            
-            <div className="achievement-sort-dropdown">
-              <select 
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="achievement-sort-select"
-              >
-                <option value="default">Default Sort</option>
-                <option value="name">Sort by Name</option>
-                <option value="unlocked">Unlocked First</option>
-                <option value="locked">Locked First</option>
-              </select>
-            </div>
-            
-            <button 
-              className="achievement-filter-reset" 
-              onClick={resetFilters}
-              title="Reset all filters"
-            >
-              <FaSyncAlt />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Achievement Grid */}
-      {loadingStatus === 'loading' ? (
-        <div className="achievement-loading">
-          <FaSyncAlt className="achievement-loading-icon" />
-          <p>Loading achievements...</p>
-        </div>
-      ) : sortedAchievements.length > 0 ? (
-        <div className="achievement-grid">
-          {sortedAchievements.map((ach) => {
-            const isUnlocked = userAchievements.includes(ach.achievementId);
-            const IconComponent = iconMapping[ach.achievementId] || FaTrophy;
-            const iconColor = colorMapping[ach.achievementId] || "#ffffff";
-            const isDetailsOpen = detailsOpen[ach.achievementId] || false;
-            
-            return (
-              <div
-                key={ach.achievementId}
-                className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`}
-                onClick={() => toggleDetails(ach.achievementId)}
-              >
-                <div className="achievement-card-content">
-                  <div className="achievement-icon-container">
-                    <div className="achievement-icon" style={{ color: iconColor }}>
-                      <IconComponent />
-                    </div>
-                    {isUnlocked && <div className="achievement-completed-badge"><FaCheck /></div>}
-                  </div>
-                  
-                  <div className="achievement-info">
-                    <h3 className="achievement-title">{ach.title}</h3>
-                    <p className="achievement-description">{ach.description}</p>
-                  </div>
-                  
-                  <button 
-                    className="achievement-details-toggle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleDetails(ach.achievementId);
-                    }}
-                  >
-                    {isDetailsOpen ? <FaChevronUp /> : <FaChevronDown />}
-                  </button>
-                </div>
-                
-                {isDetailsOpen && (
-                  <div className="achievement-details">
-                    <div className="achievement-details-content">
-                      <div className="achievement-details-header">
-                        <FaInfoCircle className="achievement-details-icon" />
-                        <h4>Achievement Details</h4>
-                      </div>
-                      
-                      <div className="achievement-details-info">
-                        <div className="achievement-details-item">
-                          <span className="achievement-details-label">Category:</span>
-                          <span className="achievement-details-value">
-                            {categories[getAchievementCategory(ach.achievementId)]}
-                          </span>
-                        </div>
-                        
-                        <div className="achievement-details-item">
-                          <span className="achievement-details-label">Status:</span>
-                          <span className={`achievement-details-value ${isUnlocked ? 'unlocked' : 'locked'}`}>
-                            {isUnlocked ? 'Unlocked' : 'Locked'}
-                          </span>
-                        </div>
-                        
-                        {/* Add more achievement details as needed */}
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {!isUnlocked && (
-                  <div className="achievement-locked-overlay">
-                    <FaLock className="achievement-locked-icon" />
-                    <span>Locked</span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <div className="achievement-empty">
-          <FaFilter className="achievement-empty-icon" />
-          <p>No achievements match your current filters.</p>
-          <button className="achievement-reset-btn" onClick={resetFilters}>
-            Reset Filters
-          </button>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default AchievementPage;
-// src/store/achievementsSlice.js
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { registerUser, loginUser, dailyLoginBonus, addXP, addCoins, fetchUserData, logout, setCurrentUserId } from '../store/userSlice';
-
-
-export const fetchAchievements = createAsyncThunk(
-  'achievements/fetchAchievements',
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await fetch('/api/test/achievements');
-      if (!response.ok) throw new Error('Failed to fetch achievements');
-      return await response.json();
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-const achievementsSlice = createSlice({
-  name: 'achievements',
-  initialState: {
-    all: [],
-    status: 'idle',
-    error: null,
-    popups: []  // This can be used for temporary popup notifications
-  },
-  reducers: {
-    // If you want to push a new achievement popup (for example, after unlocking an achievement)
-    addPopup: (state, action) => {
-      state.popups.push(action.payload);
-    },
-    removePopup: (state) => {
-      state.popups.shift();
-    }
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchAchievements.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAchievements.fulfilled, (state, action) => {
-        state.all = action.payload;
-        state.status = 'succeeded';
-      })
-      .addCase(fetchAchievements.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload;
-      });
-  }
-});
-
-export const { addPopup, removePopup } = achievementsSlice.actions;
-export default achievementsSlice.reducer;
-
-
-
-here is the two test pages files (one is gloal and one is indivisual per exam categoyr)
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef
-} from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setXPAndCoins } from "./pages/store/userSlice";
-import { fetchShopItems } from "./pages/store/shopSlice";
-import ConfettiAnimation from "./ConfettiAnimation";
-import { showAchievementToast } from "./pages/store/AchievementToast";
-import "./test.css";
-import iconMapping from "./iconMapping";
-import colorMapping from "./colorMapping";
-import {
-  FaTrophy,
-  FaMedal,
-  FaStar,
-  FaCrown,
-  FaBolt,
-  FaBook,
-  FaBrain,
-  FaCheckCircle,
-  FaCoins,
-  FaFlagCheckered,
-  FaArrowLeft,
-  FaArrowRight,
-  FaRedoAlt,
-  FaStepForward,
-  FaExclamationTriangle,
-  FaPlay,
-  FaEye,
-  FaChevronLeft,
-  FaChevronRight,
-  FaTimes,
-  FaCheck,
-  FaFlag,
-  FaLevelUpAlt,
-  FaSpinner,
-  FaList,
-  FaClipboardList,
-  FaFilter,
-  FaAngleDoubleRight,
-  FaAngleDoubleLeft,
-  FaUser
-} from "react-icons/fa";
-
-// Helper functions
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-function shuffleIndices(length) {
-  const indices = Array.from({ length }, (_, i) => i);
-  return shuffleArray(indices);
-}
-
-// Reusable QuestionDropdown component
-const QuestionDropdown = ({
-  totalQuestions,
-  currentQuestionIndex,
-  onQuestionSelect,
-  answers,
-  flaggedQuestions,
-  testData,
-  shuffleOrder,
-  examMode
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const getQuestionStatus = (index) => {
-    const realIndex = shuffleOrder[index];
-    const question = testData.questions[realIndex];
-    const answer = answers.find((a) => a.questionId === question.id);
-    const isFlagged = flaggedQuestions.includes(question.id);
-    const isAnswered = answer?.userAnswerIndex !== undefined;
-    const isSkipped = answer?.userAnswerIndex === null;
-    const isCorrect =
-      answer && answer.userAnswerIndex === question.correctAnswerIndex;
-    return { isAnswered, isSkipped, isCorrect, isFlagged };
-  };
-
-  return (
-    <div className="question-dropdown" ref={dropdownRef}>
-      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
-        <FaList className="dropdown-icon" />
-        <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
-      </button>
-      {isOpen && (
-        <div className="dropdown-content">
-          {Array.from({ length: totalQuestions }, (_, i) => {
-            const status = getQuestionStatus(i);
-            let statusClass = "";
-            if (status.isAnswered && !status.isSkipped) {
-              statusClass = status.isCorrect ? "correct" : "incorrect";
-            } else if (status.isSkipped) {
-              statusClass = "skipped";
-            }
-            
-            return (
-              <button
-                key={i}
-                onClick={() => {
-                  onQuestionSelect(i);
-                  setIsOpen(false);
-                }}
-                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''} ${statusClass}`}
-              >
-                <span>Question {i + 1}</span>
-                <div className="status-indicators">
-                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
-                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
-                  {!examMode && status.isAnswered && !status.isSkipped && (
-                    <span
-                      className={
-                        status.isCorrect
-                          ? "answer-indicator correct"
-                          : "answer-indicator incorrect"
-                      }
-                    >
-                      {status.isCorrect ? "✓" : "✗"}
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const GlobalTestPage = ({
-  testId,
-  category,
-  backToListPath
-}) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  // Redux user data
-  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
-    (state) => state.user
-  );
-  const achievements = useSelector((state) => state.achievements.all);
-  const { items: shopItems, status: shopStatus } = useSelector(
-    (state) => state.shop
-  );
-
-  // Local states for test logic
-  const [testData, setTestData] = useState(null);
-  const [shuffleOrder, setShuffleOrder] = useState([]);
-  const [answerOrder, setAnswerOrder] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [score, setScore] = useState(0);
-  const [loadingTest, setLoadingTest] = useState(true);
-  const [error, setError] = useState(null);
-  const [isAnswered, setIsAnswered] = useState(false);
-  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
-  const [isFinished, setIsFinished] = useState(false);
-
-  // Overlays
-  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
-  const [showReviewMode, setShowReviewMode] = useState(false);
-
-  // Confetti on level-up
-  const [localLevel, setLocalLevel] = useState(level);
-  const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
-
-  // Flags
-  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
-
-  // Confirmation popups
-  const [showRestartPopup, setShowRestartPopup] = useState(false);
-  const [showFinishPopup, setShowFinishPopup] = useState(false);
-  const [showNextPopup, setShowNextPopup] = useState(false);
-
-  // Exam mode
-  const [examMode, setExamMode] = useState(false);
-
-  // Test length selection state
-  const allowedTestLengths = [25, 50, 75, 100];
-  const [selectedLength, setSelectedLength] = useState(100);
-  const [activeTestLength, setActiveTestLength] = useState(null);
-  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
-
-  useEffect(() => {
-    if (shopStatus === "idle") {
-      dispatch(fetchShopItems());
-    }
-  }, [shopStatus, dispatch]);
-
-  const fetchTestAndAttempt = async () => {
-    setLoadingTest(true);
-    try {
-      let attemptDoc = null;
-      if (userId) {
-        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
-        const attemptData = await attemptRes.json();
-        attemptDoc = attemptData.attempt || null;
-      }
-      const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
-      if (!testRes.ok) {
-        const errData = await testRes.json().catch(() => ({}));
-        throw new Error(errData.error || "Failed to fetch test data");
-      }
-      const testDoc = await testRes.json();
-      setTestData(testDoc);
-
-      const totalQ = testDoc.questions.length;
-
-      // Check if attempt exists
-      if (attemptDoc) {
-        // If the test is already finished, we keep the data but also mark isFinished
-        setAnswers(attemptDoc.answers || []);
-        setScore(attemptDoc.score || 0);
-        setIsFinished(attemptDoc.finished === true);
-
-        const attemptExam = attemptDoc.examMode || false;
-        setExamMode(attemptExam);
-
-        // Use the chosen length if available
-        const chosenLength = attemptDoc.selectedLength || totalQ;
-
-        if (
-          attemptDoc.shuffleOrder &&
-          attemptDoc.shuffleOrder.length === chosenLength
-        ) {
-          setShuffleOrder(attemptDoc.shuffleOrder);
-        } else {
-          const newQOrder = shuffleIndices(chosenLength);
-          setShuffleOrder(newQOrder);
-        }
-
-        if (
-          attemptDoc.answerOrder &&
-          attemptDoc.answerOrder.length === chosenLength
-        ) {
-          setAnswerOrder(attemptDoc.answerOrder);
-        } else {
-          const generatedAnswerOrder = testDoc.questions
-            .slice(0, chosenLength)
-            .map((q) => {
-              const numOptions = q.options.length;
-              return shuffleArray([...Array(numOptions).keys()]);
-            });
-          setAnswerOrder(generatedAnswerOrder);
-        }
-
-        setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
-        setActiveTestLength(chosenLength);
-      } else {
-        // No attempt doc exists: show the test length selector UI
-        setActiveTestLength(null);
-        setShowTestLengthSelector(true);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoadingTest(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchTestAndAttempt();
-  }, [testId, userId]);
-
-  useEffect(() => {
-    if (level > localLevel) {
-      setLocalLevel(level);
-      setShowLevelUpOverlay(true);
-      const t = setTimeout(() => setShowLevelUpOverlay(false), 3000);
-      return () => clearTimeout(t);
-    }
-  }, [level, localLevel]);
-
-  useEffect(() => {
-    if (location.state?.review && isFinished) {
-      setShowReviewMode(true);
-    }
-  }, [location.state, isFinished]);
-
-  const getShuffledIndex = useCallback(
-    (i) => {
-      if (!shuffleOrder || shuffleOrder.length === 0) return i;
-      return shuffleOrder[i];
-    },
-    [shuffleOrder]
-  );
-
-  const effectiveTotal =
-    activeTestLength || (testData ? testData.questions.length : 0);
-
-  const realIndex = getShuffledIndex(currentQuestionIndex);
-  const questionObject =
-    testData && testData.questions && testData.questions.length > 0
-      ? testData.questions[realIndex]
-      : null;
-
-  useEffect(() => {
-    if (!questionObject) return;
-    const existing = answers.find((a) => a.questionId === questionObject.id);
-    if (existing) {
-      setSelectedOptionIndex(null);
-      if (
-        existing.userAnswerIndex !== null &&
-        existing.userAnswerIndex !== undefined
-      ) {
-        const displayIndex = answerOrder[realIndex].indexOf(
-          existing.userAnswerIndex
-        );
-        if (displayIndex >= 0) {
-          setSelectedOptionIndex(displayIndex);
-          setIsAnswered(true);
-        } else {
-          setIsAnswered(false);
-        }
-      } else {
-        setIsAnswered(false);
-      }
-    } else {
-      setSelectedOptionIndex(null);
-      setIsAnswered(false);
-    }
-  }, [questionObject, answers, realIndex, answerOrder]);
-
-  const updateServerProgress = useCallback(
-    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
-      if (!userId) return;
-      try {
-        if (singleAnswer) {
-          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              testId,
-              questionId: singleAnswer.questionId,
-              correctAnswerIndex: singleAnswer.correctAnswerIndex,
-              selectedIndex: singleAnswer.userAnswerIndex,
-              xpPerCorrect: (testData?.xpPerCorrect || 10) * xpBoost,
-              coinsPerCorrect: 5
-            })
-          });
-          const data = await res.json();
-          return data;
-        }
-        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            currentQuestionIndex,
-            finished
-          })
-        });
-      } catch (err) {
-        console.error("Failed to update test attempt on backend", err);
-      }
-    },
-    [userId, testId, testData, xpBoost, currentQuestionIndex]
-  );
-
-  // In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
-  const handleOptionClick = useCallback(
-    async (displayOptionIndex) => {
-      if (!questionObject) return;
-      if (!examMode && isAnswered) return; // Only block if exam mode is off.
-      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
-      setSelectedOptionIndex(displayOptionIndex);
-
-      // For non–exam mode, lock the answer; for exam mode, allow changes.
-      if (!examMode) {
-        setIsAnswered(true);
-      }
-      try {
-        const newAnswerObj = {
-          questionId: questionObject.id,
-          userAnswerIndex: actualAnswerIndex,
-          correctAnswerIndex: questionObject.correctAnswerIndex
-        };
-        const updatedAnswers = [...answers];
-        const idx = updatedAnswers.findIndex(
-          (a) => a.questionId === questionObject.id
-        );
-        if (idx >= 0) {
-          updatedAnswers[idx] = newAnswerObj;
-        } else {
-          updatedAnswers.push(newAnswerObj);
-        }
-        setAnswers(updatedAnswers);
-
-        const awardData = await updateServerProgress(
-          updatedAnswers,
-          score,
-          false,
-          newAnswerObj
-        );
-        if (!examMode && awardData && awardData.examMode === false) {
-          if (awardData.isCorrect) {
-            setScore((prev) => prev + 1);
-          }
-          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
-            dispatch(
-              setXPAndCoins({
-                xp: awardData.newXP,
-                coins: awardData.newCoins
-              })
-            );
-          }
-        }
-      } catch (err) {
-        console.error("Failed to submit answer to backend", err);
-      }
-    },
-    [
-      isAnswered,
-      questionObject,
-      examMode,
-      testData,
-      xpBoost,
-      userId,
-      testId,
-      dispatch,
-      score,
-      answers,
-      updateServerProgress,
-      realIndex,
-      answerOrder
-    ]
-  );
-
-  const finishTestProcess = useCallback(async () => {
-    let finalScore = 0;
-    answers.forEach((ans) => {
-      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
-        finalScore++;
-      }
-    });
-    setScore(finalScore);
-    try {
-      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          score: finalScore,
-          totalQuestions: effectiveTotal
-        })
-      });
-      const finishData = await res.json();
-
-      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
-        finishData.newlyUnlocked.forEach((achievementId) => {
-          const achievement = achievements.find(
-            (a) => a.achievementId === achievementId
-          );
-          if (achievement) {
-            const IconComp = iconMapping[achievement.achievementId] || null;
-            const color = colorMapping[achievement.achievementId] || "#fff";
-            showAchievementToast({
-              title: achievement.title,
-              description: achievement.description,
-              icon: IconComp ? <IconComp /> : null,
-              color
-            });
-          }
-        });
-      }
-
-      if (
-        typeof finishData.newXP !== "undefined" &&
-        typeof finishData.newCoins !== "undefined"
-      ) {
-        dispatch(
-          setXPAndCoins({
-            xp: finishData.newXP,
-            coins: finishData.newCoins
-          })
-        );
-      }
-    } catch (err) {
-      console.error("Failed to finish test attempt:", err);
-    }
-    setIsFinished(true);
-    setShowScoreOverlay(true);
-    setShowReviewMode(false);
-  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
-
-  const handleNextQuestion = useCallback(() => {
-    if (!isAnswered && !examMode) {
-      setShowNextPopup(true);
-      return;
-    }
-    if (currentQuestionIndex === effectiveTotal - 1) {
-      finishTestProcess();
-      return;
-    }
-    const nextIndex = currentQuestionIndex + 1;
-    setCurrentQuestionIndex(nextIndex);
-    updateServerProgress(answers, score, false);
-  }, [
-    isAnswered,
-    examMode,
-    currentQuestionIndex,
-    effectiveTotal,
-    finishTestProcess,
-    updateServerProgress,
-    answers,
-    score
-  ]);
-
-  const handlePreviousQuestion = useCallback(() => {
-    if (currentQuestionIndex > 0) {
-      const prevIndex = currentQuestionIndex - 1;
-      setCurrentQuestionIndex(prevIndex);
-      updateServerProgress(answers, score, false);
-    }
-  }, [currentQuestionIndex, updateServerProgress, answers, score]);
-
-  const handleSkipQuestion = () => {
-    if (!questionObject) return;
-    const updatedAnswers = [...answers];
-    const idx = updatedAnswers.findIndex(
-      (a) => a.questionId === questionObject.id
-    );
-    const skipObj = {
-      questionId: questionObject.id,
-      userAnswerIndex: null,
-      correctAnswerIndex: questionObject.correctAnswerIndex
-    };
-    if (idx >= 0) {
-      updatedAnswers[idx] = skipObj;
-    } else {
-      updatedAnswers.push(skipObj);
-    }
-    setAnswers(updatedAnswers);
-    setIsAnswered(false);
-    setSelectedOptionIndex(null);
-    updateServerProgress(updatedAnswers, score, false, skipObj);
-    if (currentQuestionIndex === effectiveTotal - 1) {
-      finishTestProcess();
-      return;
-    }
-    setCurrentQuestionIndex(currentQuestionIndex + 1);
-  };
-
-  const handleFlagQuestion = () => {
-    if (!questionObject) return;
-    const qId = questionObject.id;
-    if (flaggedQuestions.includes(qId)) {
-      setFlaggedQuestions(flaggedQuestions.filter((x) => x !== qId));
-    } else {
-      setFlaggedQuestions([...flaggedQuestions, qId]);
-    }
-  };
-
-  const handleRestartTest = useCallback(async () => {
-    setCurrentQuestionIndex(0);
-    setSelectedOptionIndex(null);
-    setIsAnswered(false);
-    setScore(0);
-    setAnswers([]);
-    setFlaggedQuestions([]);
-    setIsFinished(false);
-    setShowReviewMode(false);
-    setShowScoreOverlay(false);
-
-    if (testData?.questions?.length && activeTestLength) {
-      const newQOrder = shuffleIndices(activeTestLength);
-      setShuffleOrder(newQOrder);
-      const newAnswerOrder = testData.questions
-        .slice(0, activeTestLength)
-        .map((q) => {
-          const numOpts = q.options.length;
-          return shuffleArray([...Array(numOpts).keys()]);
-        });
-      setAnswerOrder(newAnswerOrder);
-
-      if (userId && testId) {
-        await fetch(`/api/test/attempts/${userId}/${testId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            answers: [],
-            score: 0,
-            totalQuestions: testData.questions.length,
-            selectedLength: activeTestLength,
-            category: testData.category || category,
-            currentQuestionIndex: 0,
-            shuffleOrder: newQOrder,
-            answerOrder: newAnswerOrder,
-            finished: false,
-            examMode
-          })
-        });
-      }
-    }
-  }, [
-    testData,
-    userId,
-    testId,
-    category,
-    examMode,
-    activeTestLength
-  ]);
-
-  const handleFinishTest = () => {
-    finishTestProcess();
-  };
-
-  const [reviewFilter, setReviewFilter] = useState("all");
-  const handleReviewAnswers = () => {
-    setShowReviewMode(true);
-    setReviewFilter("all");
-  };
-  const handleCloseReview = () => {
-    if (!isFinished) setShowReviewMode(false);
-  };
-
-  const filteredQuestions = useMemo(() => {
-    if (!testData || !testData.questions) return [];
-    return testData.questions.slice(0, effectiveTotal).filter((q) => {
-      const userAns = answers.find((a) => a.questionId === q.id);
-      const isFlagged = flaggedQuestions.includes(q.id);
-
-      if (!userAns) {
-        // Not answered => count it as "skipped" or "all"
-        return reviewFilter === "skipped" || reviewFilter === "all";
-      }
-
-      const isSkipped = userAns.userAnswerIndex === null;
-      const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
-
-      if (reviewFilter === "all") return true;
-      if (reviewFilter === "skipped" && isSkipped) return true;
-      if (reviewFilter === "flagged" && isFlagged) return true;
-      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
-      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
-
-      return false;
-    });
-  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
-
-  const NextQuestionAlert = ({ message, onOk }) => (
-    <div className="confirm-popup-overlay">
-      <div className="confirm-popup-content">
-        <div className="alert-header">
-          <FaExclamationTriangle className="alert-icon" />
-          <h3>Attention</h3>
-        </div>
-        <p>{message}</p>
-        <div className="confirm-popup-buttons">
-          <button className="confirm-popup-ok" onClick={onOk}>
-            <FaCheck className="button-icon" />
-            <span>OK</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderNextPopup = () => {
-    if (!showNextPopup) return null;
-    return (
-      <NextQuestionAlert
-        message="You haven't answered this question yet. Please select an answer or skip the question."
-        onOk={() => {
-          setShowNextPopup(false);
-        }}
-      />
-    );
-  };
-
-  const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
-    <div className="confirm-popup-overlay">
-      <div className="confirm-popup-content">
-        <div className="alert-header">
-          <FaExclamationTriangle className="alert-icon" />
-          <h3>Confirm Action</h3>
-        </div>
-        <p>{message}</p>
-        <div className="confirm-popup-buttons">
-          <button className="confirm-popup-yes" onClick={onConfirm}>
-            <FaCheck className="button-icon" />
-            <span>Yes</span>
-          </button>
-          <button className="confirm-popup-no" onClick={onCancel}>
-            <FaTimes className="button-icon" />
-            <span>No</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderRestartPopup = () => {
-    if (!showRestartPopup) return null;
-    return (
-      <ConfirmPopup
-        message="Are you sure you want to restart the test? All progress will be lost and you'll start from the beginning."
-        onConfirm={() => {
-          handleRestartTest();
-          setShowRestartPopup(false);
-        }}
-        onCancel={() => setShowRestartPopup(false)}
-      />
-    );
-  };
-
-  const renderFinishPopup = () => {
-    if (!showFinishPopup) return null;
-    return (
-      <ConfirmPopup
-        message="Are you sure you want to finish the test now? Any unanswered questions will be marked as skipped."
-        onConfirm={() => {
-          handleFinishTest();
-          setShowFinishPopup(false);
-        }}
-        onCancel={() => setShowFinishPopup(false)}
-      />
-    );
-  };
-
-  const renderScoreOverlay = () => {
-    if (!showScoreOverlay) return null;
-    const percentage = effectiveTotal
-      ? Math.round((score / effectiveTotal) * 100)
-      : 0;
-      
-    // Determine grade based on percentage
-    let grade = "";
-    let gradeClass = "";
-    
-    if (percentage >= 90) {
-      grade = "Outstanding!";
-      gradeClass = "grade-a-plus";
-    } else if (percentage >= 80) {
-      grade = "Excellent!";
-      gradeClass = "grade-a";
-    } else if (percentage >= 70) {
-      grade = "Great Job!";
-      gradeClass = "grade-b";
-    } else if (percentage >= 60) {
-      grade = "Good Effort!";
-      gradeClass = "grade-c";
-    } else {
-      grade = "Keep Practicing!";
-      gradeClass = "grade-d";
-    }
-    
-    return (
-      <div className="score-overlay">
-        <div className="score-content">
-          <h2 className="score-title">Test Complete!</h2>
-          
-          <div className="score-grade-container">
-            <div className={`score-grade ${gradeClass}`}>
-              <div className="percentage-display">{percentage}%</div>
-              <div className="grade-label">{grade}</div>
-            </div>
-            
-            <div className="score-details-container">
-              <p className="score-details">
-                You answered <strong>{score}</strong> out of <strong>{effectiveTotal}</strong> questions correctly.
-              </p>
-              
-              {examMode && (
-                <div className="exam-mode-note">
-                  <FaTrophy className="exam-icon" />
-                  <p>You completed this test in exam mode!</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Test Length selection after finishing */}
-          <div className="length-selection">
-            <p>Select Length for Next Attempt:</p>
-            <div className="length-selector-options">
-              {allowedTestLengths.map((length) => (
-                <label
-                  key={length}
-                  className={`length-option ${selectedLength === length ? 'selected' : ''}`}
-                >
-                  <input
-                    type="radio"
-                    name="finishedTestLength"
-                    value={length}
-                    checked={selectedLength === length}
-                    onChange={(e) => {
-                      const newLen = Number(e.target.value);
-                      setSelectedLength(newLen);
-                      setActiveTestLength(newLen);
-                    }}
-                  />
-                  <span>{length}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div className="overlay-buttons">
-            <button
-              className="restart-button"
-              onClick={() => setShowRestartPopup(true)}
-            >
-              <FaRedoAlt className="button-icon" />
-              <span>Restart Test</span>
-            </button>
-            
-            <button 
-              className="review-button" 
-              onClick={handleReviewAnswers}
-            >
-              <FaEye className="button-icon" />
-              <span>Review Answers</span>
-            </button>
-            
-            <button 
-              className="back-btn" 
-              onClick={() => navigate(backToListPath)}
-            >
-              <FaArrowLeft className="button-icon" />
-              <span>Back to List</span>
-            </button>
-            
-            {Number(testId) < 9999 && (
-              <button
-                className="next-test-button"
-                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
-              >
-                <FaArrowRight className="button-icon" />
-                <span>Next Test</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderReviewMode = () => {
-    if (!showReviewMode) return null;
-    return (
-      <div className="score-overlay review-overlay">
-        <div className="score-content review-content">
-          {isFinished ? (
-            <button
-              className="back-to-list-btn"
-              onClick={() => navigate(backToListPath)}
-            >
-              <FaArrowLeft className="button-icon" />
-              <span>Back to Test List</span>
-            </button>
-          ) : (
-            <button className="close-review-x" onClick={handleCloseReview}>
-              <FaTimes />
-            </button>
-          )}
-          <h2 className="score-title">Review Mode</h2>
-          {isFinished && (
-            <p className="review-score-line">
-              Your final score: {score}/{effectiveTotal} (
-              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
-              %)
-            </p>
-          )}
-          <div className="review-filter-buttons">
-            <button
-              className={reviewFilter === "all" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("all")}
-            >
-              <FaClipboardList className="filter-icon" />
-              <span>All</span>
-            </button>
-            <button
-              className={reviewFilter === "skipped" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("skipped")}
-            >
-              <FaStepForward className="filter-icon" />
-              <span>Skipped</span>
-            </button>
-            <button
-              className={reviewFilter === "flagged" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("flagged")}
-            >
-              <FaFlag className="filter-icon" />
-              <span>Flagged</span>
-            </button>
-            <button
-              className={reviewFilter === "incorrect" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("incorrect")}
-            >
-              <FaTimes className="filter-icon" />
-              <span>Incorrect</span>
-            </button>
-            <button
-              className={reviewFilter === "correct" ? "active-filter" : ""}
-              onClick={() => setReviewFilter("correct")}
-            >
-              <FaCheck className="filter-icon" />
-              <span>Correct</span>
-            </button>
-          </div>
-          <p className="review-filter-count">
-            Showing {filteredQuestions.length} questions
-          </p>
-          <div className="review-mode-container">
-            {filteredQuestions.map((q, idx) => {
-              const userAns = answers.find((a) => a.questionId === q.id);
-              const isFlagged = flaggedQuestions.includes(q.id);
-
-              if (!userAns) {
-                return (
-                  <div key={q.id} className="review-question-card">
-                    <div className="review-question-header">
-                      <span className="question-number">Question {idx + 1}</span>
-                      {isFlagged && <span className="flagged-icon">🚩</span>}
-                    </div>
-                    <h3>{q.question}</h3>
-                    <div className="review-answer-section unanswered">
-                      <p className="review-status-label">
-                        <FaExclamationTriangle className="status-icon warning" />
-                        <span>Not Answered</span>
-                      </p>
-                      <p className="correct-answer">
-                        <strong>Correct Answer:</strong>{" "}
-                        {q.options[q.correctAnswerIndex]}
-                      </p>
-                    </div>
-                    <div className="review-explanation">
-                      <p>{q.explanation}</p>
-                    </div>
-                  </div>
-                );
-              }
-
-              const isSkipped = userAns.userAnswerIndex === null;
-              const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
-
-              return (
-                <div key={q.id} className={`review-question-card ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
-                  <div className="review-question-header">
-                    <span className="question-number">Question {idx + 1}</span>
-                    {isFlagged && <span className="flagged-icon">🚩</span>}
-                  </div>
-                  <h3>{q.question}</h3>
-                  <div className={`review-answer-section ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
-                    <p className="review-status-label">
-                      {isSkipped ? (
-                        <>
-                          <FaStepForward className="status-icon skipped" />
-                          <span>Skipped</span>
-                        </>
-                      ) : isCorrect ? (
-                        <>
-                          <FaCheck className="status-icon correct" />
-                          <span>Correct!</span>
-                        </>
-                      ) : (
-                        <>
-                          <FaTimes className="status-icon incorrect" />
-                          <span>Incorrect</span>
-                        </>
-                      )}
-                    </p>
-                    
-                    {!isSkipped && (
-                      <p className="your-answer">
-                        <strong>Your Answer:</strong>{" "}
-                        {q.options[userAns.userAnswerIndex]}
-                      </p>
-                    )}
-                    
-                    <p className="correct-answer">
-                      <strong>Correct Answer:</strong>{" "}
-                      {q.options[q.correctAnswerIndex]}
-                    </p>
-                  </div>
-                  <div className="review-explanation">
-                    <p>{q.explanation}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          {!isFinished && (
-            <button
-              className="review-button close-review-btn"
-              onClick={handleCloseReview}
-            >
-              <FaTimes className="button-icon" />
-              <span>Close Review</span>
-            </button>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const handleNextQuestionButtonClick = () => {
-    if (!isAnswered && !examMode) {
-      setShowNextPopup(true);
-    } else {
-      handleNextQuestion();
-    }
-  };
-
-  // If no attempt doc was found (on first load), show test length UI:
-  if (showTestLengthSelector) {
-    return (
-      <div className="aplus-test-container">
-        <div className="test-length-selector">
-          <h2>Select Test Length</h2>
-          <div className="test-mode-indicator">
-            <span className={examMode ? 'exam-on' : 'exam-off'}>
-              {examMode ? 'Exam Mode: ON' : 'Practice Mode'}
-            </span>
-          </div>
-          <p>How many questions would you like to answer?</p>
-          <div className="test-length-options">
-            {allowedTestLengths.map((length) => (
-              <label 
-                key={length}
-                className={selectedLength === length ? 'selected' : ''}
-              >
-                <input
-                  type="radio"
-                  name="testLength"
-                  value={length}
-                  checked={selectedLength === length}
-                  onChange={(e) => setSelectedLength(Number(e.target.value))}
-                />
-                <span>{length}</span>
-              </label>
-            ))}
-          </div>
-          <button
-            onClick={async () => {
-              setActiveTestLength(selectedLength);
-              if (testData) {
-                const totalQ = testData.questions.length;
-                const newQOrder = shuffleIndices(selectedLength);
-                setShuffleOrder(newQOrder);
-                const newAnswerOrder = testData.questions
-                  .slice(0, selectedLength)
-                  .map((q) => {
-                    const numOpts = q.options.length;
-                    return shuffleArray([...Array(numOpts).keys()]);
-                  });
-                setAnswerOrder(newAnswerOrder);
-                try {
-                  await fetch(`/api/test/attempts/${userId}/${testId}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      answers: [],
-                      score: 0,
-                      totalQuestions: totalQ,
-                      selectedLength: selectedLength,
-                      category: testData.category || category,
-                      currentQuestionIndex: 0,
-                      shuffleOrder: newQOrder,
-                      answerOrder: newAnswerOrder,
-                      finished: false,
-                      examMode: location.state?.examMode || false
-                    })
-                  });
-                  setShowTestLengthSelector(false);
-                  fetchTestAndAttempt();
-                } catch (err) {
-                  console.error("Failed to start new attempt", err);
-                }
-              }
-            }}
-          >
-            <FaPlay className="button-icon" />
-            <span>Start Test</span>
-          </button>
-          <button 
-            className="back-to-list-btn"
-            onClick={() => navigate(backToListPath)}
-          >
-            <FaArrowLeft className="button-icon" />
-            <span>Back to Test List</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="aplus-test-container">
-        <div className="test-error-container">
-          <FaExclamationTriangle className="test-error-icon" />
-          <h2>Error Loading Test</h2>
-          <p>{error}</p>
-          <div className="test-error-actions">
-            <button onClick={() => window.location.reload()}>
-              <FaRedoAlt className="button-icon" />
-              <span>Try Again</span>
-            </button>
-            <button onClick={() => navigate(backToListPath)}>
-              <FaArrowLeft className="button-icon" />
-              <span>Back to Test List</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (loadingTest) {
-    return (
-      <div className="aplus-test-container">
-        <div className="test-loading-container">
-          <div className="test-loading-spinner">
-            <FaSpinner className="spinner-icon" />
-          </div>
-          <p>Loading test data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!testData || !testData.questions || testData.questions.length === 0) {
-    return (
-      <div className="aplus-test-container">
-        <div className="test-error-container">
-          <FaExclamationTriangle className="test-error-icon" />
-          <h2>No Questions Found</h2>
-          <p>This test doesn't have any questions yet.</p>
-          <button onClick={() => navigate(backToListPath)}>
-            <FaArrowLeft className="button-icon" />
-            <span>Back to Test List</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  let avatarUrl = "https://via.placeholder.com/60";
-  if (currentAvatar && shopItems && shopItems.length > 0) {
-    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
-    if (avatarItem && avatarItem.imageUrl) {
-      avatarUrl = avatarItem.imageUrl;
-    }
-  }
-
-  const progressPercentage = effectiveTotal
-    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
-    : 0;
-  const progressColorHue = (progressPercentage * 120) / 100; // from red to green
-  const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
-
-  let displayedOptions = [];
-  if (questionObject && answerOrder[realIndex]) {
-    displayedOptions = answerOrder[realIndex].map(
-      (optionIdx) => questionObject.options[optionIdx]
-    );
-  }
-
-  return (
-    <div className="aplus-test-container">
-      <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
-
-      {renderRestartPopup()}
-      {renderFinishPopup()}
-      {renderNextPopup()}
-      {renderScoreOverlay()}
-      {renderReviewMode()}
-
-      <div className="top-control-bar">
-        <button 
-          className={`flag-btn ${questionObject && flaggedQuestions.includes(questionObject.id) ? 'active' : ''}`} 
-          onClick={handleFlagQuestion}
-          disabled={!questionObject}
-        >
-          <FaFlag className="button-icon" />
-          <span>{questionObject && flaggedQuestions.includes(questionObject.id) ? "Unflag" : "Flag"}</span>
-        </button>
-        
-        <QuestionDropdown
-          totalQuestions={effectiveTotal}
-          currentQuestionIndex={currentQuestionIndex}
-          onQuestionSelect={(index) => {
-            setCurrentQuestionIndex(index);
-            updateServerProgress(answers, score, false);
-          }}
-          answers={answers}
-          flaggedQuestions={flaggedQuestions}
-          testData={testData}
-          shuffleOrder={shuffleOrder}
-          examMode={examMode}
-        />
-        
-        <button
-          className="finish-test-btn"
-          onClick={() => setShowFinishPopup(true)}
-        >
-          <FaFlagCheckered className="button-icon" />
-          <span>Finish Test</span>
-        </button>
-      </div>
-
-      <div className="upper-control-bar">
-        <button
-          className="restart-test-btn"
-          onClick={() => setShowRestartPopup(true)}
-        >
-          <FaRedoAlt className="button-icon" />
-          <span>Restart</span>
-        </button>
-        
-        <h1 className="aplus-title">{testData.testName}</h1>
-        
-        <button 
-          className="back-btn" 
-          onClick={() => navigate(backToListPath)}
-        >
-          <FaArrowLeft className="button-icon" />
-          <span>Back to List</span>
-        </button>
-      </div>
-
-      <div className="top-bar">
-        <div className="avatar-section-test">
-          <div
-            className="avatar-image"
-            style={{ backgroundImage: `url(${avatarUrl})` }}
-          />
-          <div className="avatar-level">
-            <FaLevelUpAlt className="level-icon" />
-            <span>{level}</span>
-          </div>
-        </div>
-        <div className="xp-level-display">
-          <FaStar className="xp-icon" />
-          <span>{xp} XP</span>
-        </div>
-        <div className="coins-display">
-          <FaCoins className="coins-icon" />
-          <span>{coins}</span>
-        </div>
-      </div>
-
-      <div className="exam-mode-indicator">
-        {examMode ? (
-          <div className="exam-badge">
-            <FaTrophy className="exam-icon" />
-            <span>EXAM MODE</span>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="progress-container">
-        <div
-          className="progress-fill"
-          style={{ width: `${progressPercentage}%`, background: progressColor }}
-        >
-          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
-        </div>
-      </div>
-
-      {!showScoreOverlay && !showReviewMode && !isFinished && (
-        <div className="question-card">
-          <div className="question-text">
-            {questionObject && questionObject.question}
-          </div>
-
-          <ul className="options-list">
-            {displayedOptions.map((option, displayIdx) => {
-              let optionClass = "option-button";
-
-              if (!examMode) {
-                if (isAnswered && questionObject) {
-                  const correctIndex = questionObject.correctAnswerIndex;
-                  const actualIndex = answerOrder[realIndex][displayIdx];
-
-                  if (actualIndex === correctIndex) {
-                    optionClass += " correct-option";
-                  } else if (
-                    displayIdx === selectedOptionIndex &&
-                    actualIndex !== correctIndex
-                  ) {
-                    optionClass += " incorrect-option";
-                  }
-                }
-              } else {
-                if (isAnswered && displayIdx === selectedOptionIndex) {
-                  optionClass += " chosen-option";
-                }
-              }
-
-              return (
-                <li className="option-item" key={displayIdx}>
-                  <button
-                    className={optionClass}
-                    onClick={() => handleOptionClick(displayIdx)}
-                    disabled={examMode ? false : isAnswered}
-                  >
-                    <div className="option-letter">{String.fromCharCode(65 + displayIdx)}</div>
-                    <div className="option-text">{option}</div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-
-          {isAnswered && questionObject && !examMode && (
-            <div className={`explanation ${selectedOptionIndex !== null &&
-              answerOrder[realIndex][selectedOptionIndex] ===
-                questionObject.correctAnswerIndex
-                ? "correct-explanation"
-                : "incorrect-explanation"}`}>
-              <strong>
-                {selectedOptionIndex !== null &&
-                answerOrder[realIndex][selectedOptionIndex] ===
-                  questionObject.correctAnswerIndex
-                  ? (
-                    <>
-                      <FaCheck className="explanation-icon" />
-                      <span>Correct!</span>
-                    </>
-                  ) : (
-                    <>
-                      <FaTimes className="explanation-icon" />
-                      <span>Incorrect!</span>
-                    </>
-                  )}
-              </strong>
-              <p>{questionObject.explanation}</p>
-            </div>
-          )}
-
-          <div className="bottom-control-bar">
-            <div className="bottom-control-row">
-              <button
-                className="prev-question-btn"
-                onClick={handlePreviousQuestion}
-                disabled={currentQuestionIndex === 0}
-              >
-                <FaChevronLeft className="button-icon" />
-                <span>Previous</span>
-              </button>
-              
-              {currentQuestionIndex === effectiveTotal - 1 ? (
-                <button
-                  className="next-question-btn finish-btn"
-                  onClick={handleNextQuestionButtonClick}
-                >
-                  <FaFlagCheckered className="button-icon" />
-                  <span>Finish Test</span>
-                </button>
-              ) : (
-                <button
-                  className="next-question-btn"
-                  onClick={handleNextQuestionButtonClick}
-                >
-                  <span>Next</span>
-                  <FaChevronRight className="button-icon" />
-                </button>
-              )}
-            </div>
-
-            <div className="bottom-control-row skip-row">
-              <button 
-                className="skip-question-btn" 
-                onClick={handleSkipQuestion}
-              >
-                <FaStepForward className="button-icon" />
-                <span>Skip Question</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default GlobalTestPage;
-
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import "../../test.css";
-import {
-  FaPlay,
-  FaPause,
-  FaRedo,
-  FaEye,
-  FaInfoCircle,
-  FaChevronRight,
-  FaLock,
-  FaTrophy,
-  FaCog,
-  FaCheck,
-  FaTimes,
-  FaExclamationTriangle
-} from "react-icons/fa";
-
-const APlusTestList = () => {
-  const navigate = useNavigate();
-  const { userId } = useSelector((state) => state.user);
-  const totalQuestionsPerTest = 100;
-  const category = "aplus";
-
-  const [attemptData, setAttemptData] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  // Persist examMode in localStorage
-  const [examMode, setExamMode] = useState(() => {
-    const stored = localStorage.getItem("examMode");
-    return stored === "true";
-  });
-
-  // Show/hide tooltip for the info icon
-  const [showExamInfo, setShowExamInfo] = useState(false);
-
-  // Restart popup on the test list page (holds test number)
-  const [restartPopupTest, setRestartPopupTest] = useState(null);
-
-  // Choose test length
-  const allowedTestLengths = [25, 50, 75, 100];
-  const [selectedLengths, setSelectedLengths] = useState({});
-
-  useEffect(() => {
-    if (!userId) return;
-    setLoading(true);
-
-    const fetchAttempts = async () => {
-      try {
-        const res = await fetch(`/api/test/attempts/${userId}/list`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch attempts for user");
-        }
-        const data = await res.json();
-        const attemptList = data.attempts || [];
-
-        // Filter attempts for this category
-        const relevant = attemptList.filter((a) => a.category === category);
-
-        // For each testId, pick the best attempt doc:
-        const bestAttempts = {};
-        for (let att of relevant) {
-          const testKey = att.testId;
-          if (!bestAttempts[testKey]) {
-            bestAttempts[testKey] = att;
-          } else {
-            const existing = bestAttempts[testKey];
-            // Prefer an unfinished attempt if it exists; otherwise latest finished
-            if (!existing.finished && att.finished) {
-              // Keep existing
-            } else if (existing.finished && !att.finished) {
-              bestAttempts[testKey] = att;
-            } else {
-              // Both finished or both unfinished => pick newest
-              const existingTime = new Date(existing.finishedAt || 0).getTime();
-              const newTime = new Date(att.finishedAt || 0).getTime();
-              if (newTime > existingTime) {
-                bestAttempts[testKey] = att;
-              }
-            }
-          }
-        }
-
-        setAttemptData(bestAttempts);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
-      }
-    };
-
-    fetchAttempts();
-  }, [userId, category]);
-
-  // Save examMode to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("examMode", examMode ? "true" : "false");
-  }, [examMode]);
-
-  if (!userId) {
-    return (
-      <div className="testlist-container">
-        <div className="testlist-auth-message">
-          <FaLock className="testlist-auth-icon" />
-          <h2>Please log in to access the practice tests</h2>
-          <button 
-            className="testlist-login-button"
-            onClick={() => navigate('/login')}
-          >
-            Go to Login
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="testlist-container">
-        <div className="testlist-loading">
-          <div className="testlist-loading-spinner"></div>
-          <p>Loading your test progress...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="testlist-container">
-        <div className="testlist-error">
-          <FaExclamationTriangle className="testlist-error-icon" />
-          <h2>Error Loading Tests</h2>
-          <p>{error}</p>
-          <button 
-            className="testlist-retry-button"
-            onClick={() => window.location.reload()}
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const getAttemptDoc = (testNumber) => {
-    return attemptData[testNumber] || null;
-  };
-
-  const getProgressDisplay = (attemptDoc) => {
-    if (!attemptDoc) return { text: "Not started", percentage: 0 };
-    
-    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
-    
-    if (finished) {
-      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
-      return { 
-        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)`, 
-        percentage: pct,
-        isFinished: true
-      };
-    } else {
-      if (typeof currentQuestionIndex === "number") {
-        const progressPct = Math.round(((currentQuestionIndex + 1) / (totalQuestions || totalQuestionsPerTest)) * 100);
-        return { 
-          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}`, 
-          percentage: progressPct,
-          isFinished: false
-        };
-      }
-      return { text: "Not started", percentage: 0 };
-    }
-  };
-
-  const difficultyCategories = [
-    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             // Cream
-    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          // Soft green
-    { label: "Easy", color: "#87cefa", textColor: "#000000" },               // Light sky blue
-    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
-    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
-    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
-    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
-    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
-    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
-    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
-  ];
-
-  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
-    if (existingAttempt && !doRestart) {
-      // Resume test
-      navigate(`/practice-tests/a-plus/${testNumber}`);
-    } else {
-      // New or forced restart
-      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
-      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          answers: [],
-          score: 0,
-          totalQuestions: totalQuestionsPerTest,
-          selectedLength: lengthToUse,
-          currentQuestionIndex: 0,
-          shuffleOrder: [],
-          answerOrder: [],
-          finished: false,
-          examMode
-        })
-      })
-        .then(() => {
-          navigate(`/practice-tests/a-plus/${testNumber}`, {
-            state: { examMode }
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to create new attempt doc:", err);
-        });
-    }
-  };
-
-  const examInfoText = "Exam Mode simulates a real certification exam environment by hiding answer feedback and explanations until after you complete the entire test. This helps you prepare for the pressure and pace of an actual exam.";
-
-  return (
-    <div className="testlist-container">
-      <div className="testlist-header">
-        <div className="testlist-title-section">
-          <h1 className="testlist-title">CompTIA A+ Core 1</h1>
-          <p className="testlist-subtitle">Practice Test Collection</p>
-        </div>
-        
-        <div className="testlist-mode-toggle">
-          <div className="testlist-mode-label">
-            <FaCog className="testlist-mode-icon" />
-            <span>Exam Mode</span>
-            
-            <div className="testlist-info-container">
-              <FaInfoCircle 
-                className="testlist-info-icon"
-                onMouseEnter={() => setShowExamInfo(true)}
-                onMouseLeave={() => setShowExamInfo(false)}
-                onClick={() => setShowExamInfo(!showExamInfo)}
-              />
-              
-              {showExamInfo && (
-                <div className="testlist-info-tooltip">
-                  {examInfoText}
-                </div>
-              )}
-            </div>
-          </div>
-          
-          <label className="testlist-toggle">
-            <input
-              type="checkbox"
-              checked={examMode}
-              onChange={(e) => setExamMode(e.target.checked)}
-            />
-            <span className="testlist-toggle-slider">
-              <span className="testlist-toggle-text">
-                {examMode ? "ON" : "OFF"}
-              </span>
-            </span>
-          </label>
-        </div>
-      </div>
-
-      <div className="testlist-grid">
-        {Array.from({ length: 10 }, (_, i) => {
-          const testNumber = i + 1;
-          const attemptDoc = getAttemptDoc(testNumber);
-          const progress = getProgressDisplay(attemptDoc);
-          const difficulty = difficultyCategories[i] || difficultyCategories[0];
-
-          const isFinished = attemptDoc?.finished;
-          const noAttempt = !attemptDoc;
-          const inProgress = attemptDoc && !isFinished;
-
-          return (
-            <div key={testNumber} className={`testlist-card ${isFinished ? 'testlist-card-completed' : inProgress ? 'testlist-card-progress' : ''}`}>
-              <div className="testlist-card-header">
-                <div className="testlist-card-number">Test {testNumber}</div>
-                <div 
-                  className="testlist-difficulty" 
-                  style={{ backgroundColor: difficulty.color, color: difficulty.textColor }}
-                >
-                  {difficulty.label}
-                </div>
-              </div>
-              
-              <div className="testlist-card-content">
-                <div className="testlist-progress-section">
-                  <div className="testlist-progress-text">{progress.text}</div>
-                  <div className="testlist-progress-bar-container">
-                    <div 
-                      className={`testlist-progress-bar ${isFinished ? 'testlist-progress-complete' : ''}`}
-                      style={{ width: `${progress.percentage}%` }}
-                    ></div>
-                  </div>
-                </div>
-                
-                {/* Length Selector */}
-                {(noAttempt || isFinished) && (
-                  <div className="testlist-length-selector">
-                    <div className="testlist-length-label">Select question count:</div>
-                    <div className="testlist-length-options">
-                      {allowedTestLengths.map((length) => (
-                        <label 
-                          key={length} 
-                          className={`testlist-length-option ${(selectedLengths[testNumber] || totalQuestionsPerTest) === length ? 'selected' : ''}`}
-                        >
-                          <input
-                            type="radio"
-                            name={`testLength-${testNumber}`}
-                            value={length}
-                            checked={(selectedLengths[testNumber] || totalQuestionsPerTest) === length}
-                            onChange={(e) => 
-                              setSelectedLengths((prev) => ({
-                                ...prev,
-                                [testNumber]: Number(e.target.value)
-                              }))
-                            }
-                          />
-                          <span>{length}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Action Buttons */}
-                <div className={`testlist-card-actions ${inProgress ? 'two-buttons' : ''}`}>
-                  {noAttempt && (
-                    <button
-                      className="testlist-action-button testlist-start-button"
-                      onClick={() => startTest(testNumber, false, null)}
-                    >
-                      <FaPlay className="testlist-action-icon" />
-                      <span>Start Test</span>
-                    </button>
-                  )}
-                  
-                  {inProgress && (
-                    <>
-                      <button
-                        className="testlist-action-button testlist-resume-button"
-                        onClick={() => startTest(testNumber, false, attemptDoc)}
-                      >
-                        <FaPlay className="testlist-action-icon" />
-                        <span>Resume</span>
-                      </button>
-                      
-                      <button
-                        className="testlist-action-button testlist-restart-button"
-                        onClick={() => setRestartPopupTest(testNumber)}
-                      >
-                        <FaRedo className="testlist-action-icon" />
-                        <span>Restart</span>
-                      </button>
-                    </>
-                  )}
-                  
-                  {isFinished && (
-                    <>
-                      <button
-                        className="testlist-action-button testlist-review-button"
-                        onClick={() => 
-                          navigate(`/practice-tests/a-plus/${testNumber}`, {
-                            state: { review: true }
-                          })
-                        }
-                      >
-                        <FaEye className="testlist-action-icon" />
-                        <span>View Results</span>
-                      </button>
-                      
-                      <button
-                        className="testlist-action-button testlist-restart-button"
-                        onClick={() => startTest(testNumber, true, attemptDoc)}
-                      >
-                        <FaRedo className="testlist-action-icon" />
-                        <span>Restart</span>
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-              
-              {isFinished && progress.percentage >= 80 && (
-                <div className="testlist-achievement-badge">
-                  <FaTrophy className="testlist-achievement-icon" />
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Restart Confirmation Popup */}
-      {restartPopupTest !== null && (
-        <div className="testlist-popup-overlay">
-          <div className="testlist-popup">
-            <div className="testlist-popup-header">
-              <FaExclamationTriangle className="testlist-popup-icon" />
-              <h3>Confirm Restart</h3>
-            </div>
-            
-            <div className="testlist-popup-content">
-              <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
-              <p>All current progress will be lost, and your test will begin with your selected length.</p>
-            </div>
-            
-            <div className="testlist-popup-actions">
-              <button
-                className="testlist-popup-button testlist-popup-confirm"
-                onClick={() => {
-                  const attemptDoc = getAttemptDoc(restartPopupTest);
-                  startTest(restartPopupTest, true, attemptDoc);
-                  setRestartPopupTest(null);
-                }}
-              >
-                <FaCheck className="testlist-popup-button-icon" />
-                <span>Yes, Restart</span>
-              </button>
-              
-              <button 
-                className="testlist-popup-button testlist-popup-cancel"
-                onClick={() => setRestartPopupTest(null)}
-              >
-                <FaTimes className="testlist-popup-button-icon" />
-                <span>Cancel</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default APlusTestList;
-
-now heres backend files
-
-from bson.objectid import ObjectId
-from datetime import datetime, timedelta
-from collections import defaultdict
-import math
-import re
-import unicodedata
-import time
-from flask import g
-from functools import wraps
-
-# Import the new collections from database
-from mongodb.database import (
-    mainusers_collection,
-    shop_collection,
-    achievements_collection,
-    tests_collection,
-    testAttempts_collection,
-    correctAnswers_collection
-)
-
-##############################################
-# very complex Input Sanitization Helpers
-##############################################
-
-import re
-import unicodedata
-
-# Example small dictionary of very common passwords
-COMMON_PASSWORDS = {
-    "password", "123456", "12345678", "qwerty", "letmein", "welcome"
-}
-
-def has_forbidden_unicode_scripts(s):
-    """
-    Disallow characters from certain Unicode blocks 
-    (private use areas, surrogates, etc.).
-    """
-    private_use_ranges = [
-        (0xE000, 0xF8FF),
-        (0xF0000, 0xFFFFD),
-        (0x100000, 0x10FFFD)
-    ]
-    surrogates_range = (0xD800, 0xDFFF)
-
-    for ch in s:
-        code_point = ord(ch)
-        # Surrogates
-        if surrogates_range[0] <= code_point <= surrogates_range[1]:
-            return True
-        # Private use ranges
-        for start, end in private_use_ranges:
-            if start <= code_point <= end:
-                return True
-    return False
-
-def disallow_mixed_scripts(s):
-    """
-    Example check for mixing major scripts (Latin + Cyrillic, etc.).
-    Returns True if it detects more than one script in the string.
-    """
-    script_sets = set()
-
-    for ch in s:
-        cp = ord(ch)
-        # Basic Latin and extended ranges:
-        if 0x0041 <= cp <= 0x024F:
-            script_sets.add("Latin")
-        # Greek
-        elif 0x0370 <= cp <= 0x03FF:
-            script_sets.add("Greek")
-        # Cyrillic
-        elif 0x0400 <= cp <= 0x04FF:
-            script_sets.add("Cyrillic")
-
-        # If more than one distinct script is found
-        if len(script_sets) > 1:
-            return True
-
-    return False
-
-def validate_username(username):
-    """
-    Validates a username with very strict rules:
-      1. Normalize (NFC).
-      2. Length 3..30.
-      3. No control chars, no private-use/surrogates, no mixing scripts.
-      4. Only [A-Za-z0-9._-], no triple repeats, no leading/trailing punctuation.
-    Returns: (True, []) if valid, else (False, [list of error messages]).
-    """
-    errors = []
-    username_nfc = unicodedata.normalize("NFC", username)
-
-    # 1) Check length
-    if not (3 <= len(username_nfc) <= 30):
-        errors.append("Username must be between 3 and 30 characters long.")
-
-    # 2) Forbidden Unicode script checks
-    if has_forbidden_unicode_scripts(username_nfc):
-        errors.append("Username contains forbidden Unicode blocks (private use or surrogates).")
-
-    # 3) Disallow mixing multiple major scripts
-    if disallow_mixed_scripts(username_nfc):
-        errors.append("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).")
-
-    # 4) Forbid control chars [0..31, 127] + suspicious punctuation
-    forbidden_ranges = [(0, 31), (127, 127)]
-    forbidden_chars = set(['<', '>', '\\', '/', '"', "'", ';', '`',
-                           ' ', '\t', '\r', '\n'])
-    for ch in username_nfc:
-        cp = ord(ch)
-        if any(start <= cp <= end for (start, end) in forbidden_ranges):
-            errors.append("Username contains forbidden control characters (ASCII 0-31 or 127).")
-            break
-        if ch in forbidden_chars:
-            errors.append("Username contains forbidden characters like <, >, or whitespace.")
-            break
-
-    # 5) Strict allowlist pattern
-    pattern = r'^[A-Za-z0-9._-]+$'
-    if not re.match(pattern, username_nfc):
-        errors.append("Username can only contain letters, digits, underscores, dashes, or dots.")
-
-    # 6) Disallow triple identical consecutive characters
-    if re.search(r'(.)\1{2,}', username_nfc):
-        errors.append("Username cannot contain three identical consecutive characters.")
-
-    # 7) Disallow leading or trailing punctuation
-    if re.match(r'^[._-]|[._-]$', username_nfc):
-        errors.append("Username cannot start or end with . - or _.")
-
-    if errors:
-        return False, errors
-    return True, []
-
-def validate_password(password, username=None, email=None):
-    """
-    Validates a password with very strict rules:
-      1. 12..128 length.
-      2. Disallow whitespace, <, >.
-      3. Require uppercase, lowercase, digit, special char.
-      4. Disallow triple repeats.
-      5. Check common/breached password list.
-      6. Disallow 'password', 'qwerty', etc.
-      7. Disallow if username or email local part is in the password.
-    Returns: (True, []) if valid, else (False, [list of error messages]).
-    """
-    errors = []
-    length = len(password)
-
-    # 1) Length
-    if not (6 <= length <= 69):
-        errors.append("Password must be between 6 and 69 characters long.")
-
-    # 2) Disallowed whitespace or < >
-    if any(ch in password for ch in [' ', '<', '>', '\t', '\r', '\n']):
-        errors.append("Password cannot contain whitespace or < or > characters.")
-
-    # 3) Complexity checks
-    if not re.search(r'[A-Z]', password):
-        errors.append("Password must contain at least one uppercase letter.")
-    if not re.search(r'[a-z]', password):
-        errors.append("Password must contain at least one lowercase letter.")
-    if not re.search(r'\d', password):
-        errors.append("Password must contain at least one digit.")
-
-    # We define a broad set of allowed special chars
-    special_pattern = r'[!@#$%^&*()\-_=+\[\]{}|;:\'",<.>/?`~\\]'
-    if not re.search(special_pattern, password):
-        errors.append("Password must contain at least one special character.")
-
-    # 4) Disallow triple identical consecutive characters
-    if re.search(r'(.)\1{2,}', password):
-        errors.append("Password must not contain three identical consecutive characters.")
-
-    # 5) Convert to lowercase for simplified checks
-    password_lower = password.lower()
-
-    # Check against common password list
-    if password_lower in COMMON_PASSWORDS:
-        errors.append("Password is too common. Please choose a stronger password.")
-
-    # 6) Disallow certain dictionary words
-    dictionary_patterns = ['password', 'qwerty', 'abcdef', 'letmein', 'welcome', 'admin']
-    for pat in dictionary_patterns:
-        if pat in password_lower:
-            errors.append(f"Password must not contain the word '{pat}'.")
-
-    # 7) Disallow if password contains username or email local-part
-    if username:
-        if username.lower() in password_lower:
-            errors.append("Password must not contain your username.")
-
-    if email:
-        email_local_part = email.split('@')[0].lower()
-        if email_local_part in password_lower:
-            errors.append("Password must not contain the local part of your email address.")
-
-    if errors:
-        return False, errors
-    return True, []
-
-def validate_email(email):
-    """
-    Validates an email with strict rules:
-      1. Normalize (NFC), strip whitespace.
-      2. 5..69 length.
-      3. No control chars, <, >, etc.
-      4. Exactly one @.
-    Returns: (True, []) if valid, else (False, [list of error messages]).
-    """
-    errors = []
-    email_nfc = unicodedata.normalize("NFC", email.strip())
-
-    # 1) Length check
-    if not (5 <= len(email_nfc) <= 69):
-        errors.append("Email length must be between 6 and 69 characters.")
-
-    # 3) Forbid suspicious ASCII
-    forbidden_ascii = set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\'])
-    for ch in email_nfc:
-        if ch in forbidden_ascii:
-            errors.append("Email contains forbidden characters like <, >, or whitespace.")
-            break
-
-    # 4) Must have exactly one @
-    if email_nfc.count('@') != 1:
-        errors.append("Email must contain exactly one '@' symbol.")
-
-    if errors:
-        return False, errors
-    return True, []
-
-##############################################
-# User Retrieval Helpers
-##############################################
-
-def get_user_by_username(username):
-    return mainusers_collection.find_one({"username": username})
-
-def get_user_by_identifier(identifier):
-    if "@" in identifier:
-        return mainusers_collection.find_one({"email": identifier})
-    else:
-        return get_user_by_username(identifier)
-
-def get_user_by_id(user_id):
-    """
-    Retrieves a user by ID. Returns None if invalid or not found.
-    """
-    try:
-        oid = ObjectId(user_id)
-    except Exception:
-        return None
-    return mainusers_collection.find_one({"_id": oid})
-
-##############################################
-# Create User
-##############################################
-
-def create_user(user_data):
-    existing_user = mainusers_collection.find_one({
-        "$or": [
-            {"username": user_data["username"]},
-            {"email": user_data["email"]}
-        ]
-    })
-    if existing_user:
-        raise ValueError("Username or email is already taken")
-
-    # Default fields
-    user_data.setdefault("coins", 0)
-    user_data.setdefault("xp", 0)
-    user_data.setdefault("level", 1)
-    user_data.setdefault("achievements", [])
-    user_data.setdefault("subscriptionActive", False)
-    user_data.setdefault("subscriptionPlan", None)
-    user_data.setdefault("lastDailyClaim", None)
-    user_data.setdefault("purchasedItems", [])
-    user_data.setdefault("xpBoost", 1.0)
-    user_data.setdefault("currentAvatar", None)
-    user_data.setdefault("nameColor", None)
-
-    # If you want to ensure new users have the 'achievement_counters'
-    # from Day 1, do it here:
-    user_data.setdefault("achievement_counters", {
-        "total_tests_completed": 0,
-        "perfect_tests_count": 0,
-        "perfect_tests_by_category": {},
-        # "consecutive_perfect_streak": 0, # removing memory_master
-        "highest_score_ever": 0.0,
-        "lowest_score_ever": 100.0,
-        "total_questions_answered": 0,
-        # "tests_completed_by_category": {}, # optional
-        # "tests_completed_set": set()       # optional
-    })
-
-    # Auto-equip default avatar if cost=None
-    default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
-    if default_avatar:
-        user_data["currentAvatar"] = default_avatar["_id"]
-        if default_avatar["_id"] not in user_data["purchasedItems"]:
-            user_data["purchasedItems"].append(default_avatar["_id"])
-
-    result = mainusers_collection.insert_one(user_data)
-    return result.inserted_id
-
-##############################################
-# Update User Fields (CRITICAL)
-##############################################
-
-def update_user_fields(user_id, fields):
-    """
-    Generic helper to update given `fields` (dict) in mainusers_collection.
-    """
-    try:
-        oid = ObjectId(user_id)
-    except:
-        return None
-    mainusers_collection.update_one(
-        {"_id": oid},
-        {"$set": fields}
-    )
-    return True
-
-##############################################
-# Update User Coins
-##############################################
-
-def update_user_coins(user_id, amount):
-    try:
-        oid = ObjectId(user_id)
-    except Exception:
-        return None
-    mainusers_collection.update_one({"_id": oid}, {"$inc": {"coins": amount}})
-
-##############################################
-# Leveling System
-##############################################
-# Levels 2–30: +500 XP each
-# Levels 31–60: +750 XP each
-# Levels 61–100: +1000 XP each
-# Above 100: +1500 XP each
-
-def xp_required_for_level(level):
-    """
-    Returns total XP required to be at `level`.
-    Level 1 starts at 0 XP.
-    """
-    if level < 1:
-        return 0
-    if level == 1:
-        return 0
-    if level <= 30:
-        return 500 * (level - 1)
-    elif level <= 60:
-        base = 500 * 29  # up to level 30
-        return base + 750 * (level - 30)
-    elif level <= 100:
-        base = 500 * 29 + 750 * 30  # up to level 60
-        return base + 1000 * (level - 60)
-    else:
-        base = 500 * 29 + 750 * 30 + 1000 * 40  # up to level 100
-        return base + 1500 * (level - 100)
-
-def update_user_xp(user_id, xp_to_add):
-    """
-    Adds xp_to_add to the user's XP. Then, while the new XP total
-    is >= XP required for the next level, increments the level.
-    """
-    user = get_user_by_id(user_id)
-    if not user:
-        return None
-
-    old_xp = user.get("xp", 0)
-    old_level = user.get("level", 1)
-    new_xp = old_xp + xp_to_add
-    new_level = old_level
-
-    while new_xp >= xp_required_for_level(new_level + 1):
-        new_level += 1
-
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$set": {"xp": new_xp, "level": new_level}}
-    )
-    return {"xp": new_xp, "level": new_level}
-
-
-
-##############################################
-# Shop Logic
-##############################################
-
-def get_shop_items():
-    """
-    Returns all shop items from shop_collection,
-    in ascending order by title (or another field),
-    to ensure stable ordering.
-    """
-    return list(shop_collection.find({}).sort("title", 1))
-
-def purchase_item(user_id, item_id):
-    """
-    Purchase an item from the shop:
-      1) Check user has enough coins
-      2) Ensure item not already purchased
-      3) Deduct cost, add to purchasedItems
-      4) If xpBoost, set user's xpBoost
-      5) If avatar or nameColor, optionally set that field
-    """
-    user = get_user_by_id(user_id)
-    if not user:
-        return {"success": False, "message": "User not found"}
-
-    try:
-        oid = ObjectId(item_id)
-    except Exception:
-        return {"success": False, "message": "Invalid item ID"}
-
-    item = shop_collection.find_one({"_id": oid})
-    if not item:
-        return {"success": False, "message": "Item not found"}
-
-    user_coins = user.get("coins", 0)
-    cost = item.get("cost", 0) if item.get("cost") is not None else 0
-    if user_coins < cost:
-        return {"success": False, "message": "Not enough coins"}
-
-    purchased = user.get("purchasedItems", [])
-    if oid in purchased:
-        return {"success": False, "message": "Item already purchased"}
-
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$inc": {"coins": -cost}}
-    )
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$addToSet": {"purchasedItems": oid}}
-    )
-
-    item_type = item.get("type")
-    if item_type == "xpBoost":
-        new_boost = item.get("effectValue", 1.0)
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"xpBoost": new_boost}}
-        )
-    elif item_type == "avatar":
-        pass
-    elif item_type == "nameColor":
-        new_color = item.get("effectValue", None)
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {"$set": {"nameColor": new_color}}
-        )
-
-    return {"success": True, "message": "Purchase successful"}
-
-##############################################
-# Achievements
-##############################################
-
-def get_achievements():
-    return list(achievements_collection.find({}))
-    
-
-    
-    
-
-def get_test_by_id_and_category(test_id, category):
-    """
-    Fetch a single test doc by integer testId field and category field.
-    """
-    try:
-        test_id_int = int(test_id)
-    except:
-        return None
-    return tests_collection.find_one({
-        "testId": test_id_int,
-        "category": category
-    })
-
-
-    
-   
-
-def apply_daily_bonus(user_id):
-    user = get_user_by_id(user_id)
-    if not user:
-        return None
-
-    now = datetime.utcnow()
-    last_claim = user.get("lastDailyClaim")
-    if not last_claim or (now - last_claim) > timedelta(hours=24):
-        mainusers_collection.update_one(
-            {"_id": user["_id"]},
-            {
-                "$inc": {"coins": 1000},
-                "$set": {"lastDailyClaim": now}
-            }
-        )
-        return {"success": True, "message": "Daily bonus applied"}
-    else:
-        return {"success": False, "message": "Already claimed daily bonus."}
-
-def award_correct_answers_in_bulk(user_id, attempt_doc, xp_per_correct=10, coins_per_correct=5):
-    """
-    For examMode attempts, no XP was awarded during question-by-question.
-    So at 'finish', we do the awarding for each newly-correct question that
-    the user has never gotten correct before (per correctAnswers_collection).
-    """
-    user = get_user_by_id(user_id)
-    if not user:
-        return
-
-    test_id = attempt_doc.get("testId")
-    answers = attempt_doc.get("answers", [])
-
-    # Tally how many new first-time correct answers the user got in this attempt
-    newly_correct_count = 0
-    for ans in answers:
-        if ans.get("userAnswerIndex") == ans.get("correctAnswerIndex"):
-            # it's correct
-            qid = ans.get("questionId")
-            already_correct = correctAnswers_collection.find_one({
-                "userId": user["_id"],
-                "testId": str(test_id),
-                "questionId": qid
-            })
-            if not already_correct:
-                # Insert it and increment counters
-                correctAnswers_collection.insert_one({
-                    "userId": user["_id"],
-                    "testId": str(test_id),
-                    "questionId": qid
-                })
-                newly_correct_count += 1
-
-    if newly_correct_count > 0:
-        # apply xp, coins
-        total_xp = xp_per_correct * newly_correct_count
-        total_coins = coins_per_correct * newly_correct_count
-        update_user_xp(user_id, total_xp)
-        update_user_coins(user_id, total_coins)    
-
-
-
-
-# helpers/db_timing.py
-
-
-def measure_db_operation(func):
-    """
-    Decorator to measure time of a single DB operation.
-    Usage: decorate your typical DB calls or your function that does the operation.
-    """
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        start = time.time()
-        result = func(*args, **kwargs)
-        duration = time.time() - start
-
-        # If we have a 'db_time_accumulator' in Flask g, accumulate:
-        if not hasattr(g, "db_time_accumulator"):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
-        return result
-    return wrapper
-
-##################################
-# mongodb/database.py (mostly same)
-##################################
-from flask import Flask
-from flask_pymongo import PyMongo
-import os
-
-app = Flask(__name__)
-app.config["MONGO_URI"] = os.getenv("MONGO_URI")
-mongo = PyMongo(app)
-db = mongo.db
-
-mainusers_collection = db.mainusers
-shop_collection = db.shopItems
-achievements_collection = db.achievements
-tests_collection = db.tests
-testAttempts_collection = db.testAttempts
-correctAnswers_collection = db.correctAnswers
-dailyQuestions_collection = db.dailyQuestions
-dailyAnswers_collection = db.dailyAnswers
-supportThreads_collection = db.supportThreads
-# For suspicious activity
-auditLogs_collection = db.auditLogs
-# For caching if needed, but we used Redis above
-
-
-
-and here is teh important file with how i calculate achivemnts
+starting with backend
 
 # ================================
 # test_routes.py
@@ -4961,47 +1645,3322 @@ def submit_daily_question():
     }), 200
 
 
+from bson.objectid import ObjectId
+from datetime import datetime, timedelta
+from collections import defaultdict
+import math
+import re
+import unicodedata
+import time
+from flask import g
+from functools import wraps
+
+# Import the new collections from database
+from mongodb.database import (
+    mainusers_collection,
+    shop_collection,
+    achievements_collection,
+    tests_collection,
+    testAttempts_collection,
+    correctAnswers_collection
+)
+
+##############################################
+# very complex Input Sanitization Helpers
+##############################################
+
+import re
+import unicodedata
+
+# Example small dictionary of very common passwords
+COMMON_PASSWORDS = {
+    "password", "123456", "12345678", "qwerty", "letmein", "welcome"
+}
+
+def has_forbidden_unicode_scripts(s):
+    """
+    Disallow characters from certain Unicode blocks 
+    (private use areas, surrogates, etc.).
+    """
+    private_use_ranges = [
+        (0xE000, 0xF8FF),
+        (0xF0000, 0xFFFFD),
+        (0x100000, 0x10FFFD)
+    ]
+    surrogates_range = (0xD800, 0xDFFF)
+
+    for ch in s:
+        code_point = ord(ch)
+        # Surrogates
+        if surrogates_range[0] <= code_point <= surrogates_range[1]:
+            return True
+        # Private use ranges
+        for start, end in private_use_ranges:
+            if start <= code_point <= end:
+                return True
+    return False
+
+def disallow_mixed_scripts(s):
+    """
+    Example check for mixing major scripts (Latin + Cyrillic, etc.).
+    Returns True if it detects more than one script in the string.
+    """
+    script_sets = set()
+
+    for ch in s:
+        cp = ord(ch)
+        # Basic Latin and extended ranges:
+        if 0x0041 <= cp <= 0x024F:
+            script_sets.add("Latin")
+        # Greek
+        elif 0x0370 <= cp <= 0x03FF:
+            script_sets.add("Greek")
+        # Cyrillic
+        elif 0x0400 <= cp <= 0x04FF:
+            script_sets.add("Cyrillic")
+
+        # If more than one distinct script is found
+        if len(script_sets) > 1:
+            return True
+
+    return False
+
+def validate_username(username):
+    """
+    Validates a username with very strict rules:
+      1. Normalize (NFC).
+      2. Length 3..30.
+      3. No control chars, no private-use/surrogates, no mixing scripts.
+      4. Only [A-Za-z0-9._-], no triple repeats, no leading/trailing punctuation.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    username_nfc = unicodedata.normalize("NFC", username)
+
+    # 1) Check length
+    if not (3 <= len(username_nfc) <= 30):
+        errors.append("Username must be between 3 and 30 characters long.")
+
+    # 2) Forbidden Unicode script checks
+    if has_forbidden_unicode_scripts(username_nfc):
+        errors.append("Username contains forbidden Unicode blocks (private use or surrogates).")
+
+    # 3) Disallow mixing multiple major scripts
+    if disallow_mixed_scripts(username_nfc):
+        errors.append("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).")
+
+    # 4) Forbid control chars [0..31, 127] + suspicious punctuation
+    forbidden_ranges = [(0, 31), (127, 127)]
+    forbidden_chars = set(['<', '>', '\\', '/', '"', "'", ';', '`',
+                           ' ', '\t', '\r', '\n'])
+    for ch in username_nfc:
+        cp = ord(ch)
+        if any(start <= cp <= end for (start, end) in forbidden_ranges):
+            errors.append("Username contains forbidden control characters (ASCII 0-31 or 127).")
+            break
+        if ch in forbidden_chars:
+            errors.append("Username contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 5) Strict allowlist pattern
+    pattern = r'^[A-Za-z0-9._-]+$'
+    if not re.match(pattern, username_nfc):
+        errors.append("Username can only contain letters, digits, underscores, dashes, or dots.")
+
+    # 6) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', username_nfc):
+        errors.append("Username cannot contain three identical consecutive characters.")
+
+    # 7) Disallow leading or trailing punctuation
+    if re.match(r'^[._-]|[._-]$', username_nfc):
+        errors.append("Username cannot start or end with . - or _.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+def validate_password(password, username=None, email=None):
+    """
+    Validates a password with very strict rules:
+      1. 12..128 length.
+      2. Disallow whitespace, <, >.
+      3. Require uppercase, lowercase, digit, special char.
+      4. Disallow triple repeats.
+      5. Check common/breached password list.
+      6. Disallow 'password', 'qwerty', etc.
+      7. Disallow if username or email local part is in the password.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    length = len(password)
+
+    # 1) Length
+    if not (6 <= length <= 69):
+        errors.append("Password must be between 6 and 69 characters long.")
+
+    # 2) Disallowed whitespace or < >
+    if any(ch in password for ch in [' ', '<', '>', '\t', '\r', '\n']):
+        errors.append("Password cannot contain whitespace or < or > characters.")
+
+    # 3) Complexity checks
+    if not re.search(r'[A-Z]', password):
+        errors.append("Password must contain at least one uppercase letter.")
+    if not re.search(r'[a-z]', password):
+        errors.append("Password must contain at least one lowercase letter.")
+    if not re.search(r'\d', password):
+        errors.append("Password must contain at least one digit.")
+
+    # We define a broad set of allowed special chars
+    special_pattern = r'[!@#$%^&*()\-_=+\[\]{}|;:\'",<.>/?`~\\]'
+    if not re.search(special_pattern, password):
+        errors.append("Password must contain at least one special character.")
+
+    # 4) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', password):
+        errors.append("Password must not contain three identical consecutive characters.")
+
+    # 5) Convert to lowercase for simplified checks
+    password_lower = password.lower()
+
+    # Check against common password list
+    if password_lower in COMMON_PASSWORDS:
+        errors.append("Password is too common. Please choose a stronger password.")
+
+    # 6) Disallow certain dictionary words
+    dictionary_patterns = ['password', 'qwerty', 'abcdef', 'letmein', 'welcome', 'admin']
+    for pat in dictionary_patterns:
+        if pat in password_lower:
+            errors.append(f"Password must not contain the word '{pat}'.")
+
+    # 7) Disallow if password contains username or email local-part
+    if username:
+        if username.lower() in password_lower:
+            errors.append("Password must not contain your username.")
+
+    if email:
+        email_local_part = email.split('@')[0].lower()
+        if email_local_part in password_lower:
+            errors.append("Password must not contain the local part of your email address.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+def validate_email(email):
+    """
+    Validates an email with strict rules:
+      1. Normalize (NFC), strip whitespace.
+      2. 5..69 length.
+      3. No control chars, <, >, etc.
+      4. Exactly one @.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    email_nfc = unicodedata.normalize("NFC", email.strip())
+
+    # 1) Length check
+    if not (5 <= len(email_nfc) <= 69):
+        errors.append("Email length must be between 6 and 69 characters.")
+
+    # 3) Forbid suspicious ASCII
+    forbidden_ascii = set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\'])
+    for ch in email_nfc:
+        if ch in forbidden_ascii:
+            errors.append("Email contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 4) Must have exactly one @
+    if email_nfc.count('@') != 1:
+        errors.append("Email must contain exactly one '@' symbol.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+##############################################
+# User Retrieval Helpers
+##############################################
+
+def get_user_by_username(username):
+    return mainusers_collection.find_one({"username": username})
+
+def get_user_by_identifier(identifier):
+    if "@" in identifier:
+        return mainusers_collection.find_one({"email": identifier})
+    else:
+        return get_user_by_username(identifier)
+
+def get_user_by_id(user_id):
+    """
+    Retrieves a user by ID. Returns None if invalid or not found.
+    """
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+    return mainusers_collection.find_one({"_id": oid})
+
+##############################################
+# Create User
+##############################################
+
+def create_user(user_data):
+    existing_user = mainusers_collection.find_one({
+        "$or": [
+            {"username": user_data["username"]},
+            {"email": user_data["email"]}
+        ]
+    })
+    if existing_user:
+        raise ValueError("Username or email is already taken")
+
+    # Default fields
+    user_data.setdefault("coins", 0)
+    user_data.setdefault("xp", 0)
+    user_data.setdefault("level", 1)
+    user_data.setdefault("achievements", [])
+    user_data.setdefault("subscriptionActive", False)
+    user_data.setdefault("subscriptionPlan", None)
+    user_data.setdefault("lastDailyClaim", None)
+    user_data.setdefault("purchasedItems", [])
+    user_data.setdefault("xpBoost", 1.0)
+    user_data.setdefault("currentAvatar", None)
+    user_data.setdefault("nameColor", None)
+
+    # If you want to ensure new users have the 'achievement_counters'
+    # from Day 1, do it here:
+    user_data.setdefault("achievement_counters", {
+        "total_tests_completed": 0,
+        "perfect_tests_count": 0,
+        "perfect_tests_by_category": {},
+        # "consecutive_perfect_streak": 0, # removing memory_master
+        "highest_score_ever": 0.0,
+        "lowest_score_ever": 100.0,
+        "total_questions_answered": 0,
+        # "tests_completed_by_category": {}, # optional
+        # "tests_completed_set": set()       # optional
+    })
+
+    # Auto-equip default avatar if cost=None
+    default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
+    if default_avatar:
+        user_data["currentAvatar"] = default_avatar["_id"]
+        if default_avatar["_id"] not in user_data["purchasedItems"]:
+            user_data["purchasedItems"].append(default_avatar["_id"])
+
+    result = mainusers_collection.insert_one(user_data)
+    return result.inserted_id
+
+##############################################
+# Update User Fields (CRITICAL)
+##############################################
+
+def update_user_fields(user_id, fields):
+    """
+    Generic helper to update given `fields` (dict) in mainusers_collection.
+    """
+    try:
+        oid = ObjectId(user_id)
+    except:
+        return None
+    mainusers_collection.update_one(
+        {"_id": oid},
+        {"$set": fields}
+    )
+    return True
+
+##############################################
+# Update User Coins
+##############################################
+
+def update_user_coins(user_id, amount):
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+    mainusers_collection.update_one({"_id": oid}, {"$inc": {"coins": amount}})
+
+##############################################
+# Leveling System
+##############################################
+# Levels 2–30: +500 XP each
+# Levels 31–60: +750 XP each
+# Levels 61–100: +1000 XP each
+# Above 100: +1500 XP each
+
+def xp_required_for_level(level):
+    """
+    Returns total XP required to be at `level`.
+    Level 1 starts at 0 XP.
+    """
+    if level < 1:
+        return 0
+    if level == 1:
+        return 0
+    if level <= 30:
+        return 500 * (level - 1)
+    elif level <= 60:
+        base = 500 * 29  # up to level 30
+        return base + 750 * (level - 30)
+    elif level <= 100:
+        base = 500 * 29 + 750 * 30  # up to level 60
+        return base + 1000 * (level - 60)
+    else:
+        base = 500 * 29 + 750 * 30 + 1000 * 40  # up to level 100
+        return base + 1500 * (level - 100)
+
+def update_user_xp(user_id, xp_to_add):
+    """
+    Adds xp_to_add to the user's XP. Then, while the new XP total
+    is >= XP required for the next level, increments the level.
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    old_xp = user.get("xp", 0)
+    old_level = user.get("level", 1)
+    new_xp = old_xp + xp_to_add
+    new_level = old_level
+
+    while new_xp >= xp_required_for_level(new_level + 1):
+        new_level += 1
+
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"xp": new_xp, "level": new_level}}
+    )
+    return {"xp": new_xp, "level": new_level}
 
 
-ok so thats pretyy much all teh context you need- oh and well last thing that might help is an example of how i input some of my test questions in my databse
 
-thsi is an example of a couple of my questions and teh insert command i do
-db.tests.insertOne({
-  "category": "CompTIA Data+",
-  "testId": 5,
-  "testName": "Practice Test #5 (Intermediate)",
-  "xpPerCorrect": 10,
-  "questions": [
-    {
-      "id": 65,
-      "question": "A company is implementing **role-based access control (RBAC)** to improve data security. What is the PRIMARY purpose of RBAC?",
-      "options": [
-        "To encrypt sensitive data before storage",
-        "To restrict user access based on job roles",
-        "To mask customer data in reports",
-        "To improve query performance in databases"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "**RBAC (Role-Based Access Control)** ensures that employees only have access to the data necessary for their job roles, improving security and compliance.",
-      "examTip": "Use **RBAC to manage data access at different user levels**—encryption protects stored data but does not limit access."
+##############################################
+# Shop Logic
+##############################################
+
+def get_shop_items():
+    """
+    Returns all shop items from shop_collection,
+    in ascending order by title (or another field),
+    to ensure stable ordering.
+    """
+    return list(shop_collection.find({}).sort("title", 1))
+
+def purchase_item(user_id, item_id):
+    """
+    Purchase an item from the shop:
+      1) Check user has enough coins
+      2) Ensure item not already purchased
+      3) Deduct cost, add to purchasedItems
+      4) If xpBoost, set user's xpBoost
+      5) If avatar or nameColor, optionally set that field
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "message": "User not found"}
+
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        return {"success": False, "message": "Invalid item ID"}
+
+    item = shop_collection.find_one({"_id": oid})
+    if not item:
+        return {"success": False, "message": "Item not found"}
+
+    user_coins = user.get("coins", 0)
+    cost = item.get("cost", 0) if item.get("cost") is not None else 0
+    if user_coins < cost:
+        return {"success": False, "message": "Not enough coins"}
+
+    purchased = user.get("purchasedItems", [])
+    if oid in purchased:
+        return {"success": False, "message": "Item already purchased"}
+
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$inc": {"coins": -cost}}
+    )
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$addToSet": {"purchasedItems": oid}}
+    )
+
+    item_type = item.get("type")
+    if item_type == "xpBoost":
+        new_boost = item.get("effectValue", 1.0)
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"xpBoost": new_boost}}
+        )
+    elif item_type == "avatar":
+        pass
+    elif item_type == "nameColor":
+        new_color = item.get("effectValue", None)
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"nameColor": new_color}}
+        )
+
+    return {"success": True, "message": "Purchase successful"}
+
+##############################################
+# Achievements
+##############################################
+
+def get_achievements():
+    return list(achievements_collection.find({}))
+    
+
+    
+    
+
+def get_test_by_id_and_category(test_id, category):
+    """
+    Fetch a single test doc by integer testId field and category field.
+    """
+    try:
+        test_id_int = int(test_id)
+    except:
+        return None
+    return tests_collection.find_one({
+        "testId": test_id_int,
+        "category": category
+    })
+
+
+    
+   
+
+def apply_daily_bonus(user_id):
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if not last_claim or (now - last_claim) > timedelta(hours=24):
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {
+                "$inc": {"coins": 1000},
+                "$set": {"lastDailyClaim": now}
+            }
+        )
+        return {"success": True, "message": "Daily bonus applied"}
+    else:
+        return {"success": False, "message": "Already claimed daily bonus."}
+
+def award_correct_answers_in_bulk(user_id, attempt_doc, xp_per_correct=10, coins_per_correct=5):
+    """
+    For examMode attempts, no XP was awarded during question-by-question.
+    So at 'finish', we do the awarding for each newly-correct question that
+    the user has never gotten correct before (per correctAnswers_collection).
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return
+
+    test_id = attempt_doc.get("testId")
+    answers = attempt_doc.get("answers", [])
+
+    # Tally how many new first-time correct answers the user got in this attempt
+    newly_correct_count = 0
+    for ans in answers:
+        if ans.get("userAnswerIndex") == ans.get("correctAnswerIndex"):
+            # it's correct
+            qid = ans.get("questionId")
+            already_correct = correctAnswers_collection.find_one({
+                "userId": user["_id"],
+                "testId": str(test_id),
+                "questionId": qid
+            })
+            if not already_correct:
+                # Insert it and increment counters
+                correctAnswers_collection.insert_one({
+                    "userId": user["_id"],
+                    "testId": str(test_id),
+                    "questionId": qid
+                })
+                newly_correct_count += 1
+
+    if newly_correct_count > 0:
+        # apply xp, coins
+        total_xp = xp_per_correct * newly_correct_count
+        total_coins = coins_per_correct * newly_correct_count
+        update_user_xp(user_id, total_xp)
+        update_user_coins(user_id, total_coins)    
+
+
+
+
+# helpers/db_timing.py
+
+
+def measure_db_operation(func):
+    """
+    Decorator to measure time of a single DB operation.
+    Usage: decorate your typical DB calls or your function that does the operation.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        duration = time.time() - start
+
+        # If we have a 'db_time_accumulator' in Flask g, accumulate:
+        if not hasattr(g, "db_time_accumulator"):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return result
+    return wrapper
+
+
+##################################
+# mongodb/database.py (mostly same)
+##################################
+from flask import Flask
+from flask_pymongo import PyMongo
+import os
+
+app = Flask(__name__)
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+mongo = PyMongo(app)
+db = mongo.db
+
+mainusers_collection = db.mainusers
+shop_collection = db.shopItems
+achievements_collection = db.achievements
+tests_collection = db.tests
+testAttempts_collection = db.testAttempts
+correctAnswers_collection = db.correctAnswers
+dailyQuestions_collection = db.dailyQuestions
+dailyAnswers_collection = db.dailyAnswers
+supportThreads_collection = db.supportThreads
+# For suspicious activity
+auditLogs_collection = db.auditLogs
+# For caching if needed, but we used Redis above
+
+
+
+now frotnend
+
+// src/components/pages/store/AchievementPage.js
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchAchievements } from '../store/achievementsSlice';
+import { 
+  FaTrophy, 
+  FaMedal, 
+  FaStar, 
+  FaCrown, 
+  FaBolt, 
+  FaBook, 
+  FaBrain, 
+  FaCheckCircle, 
+  FaMagic,
+  FaFilter,
+  FaTimes,
+  FaCoins,
+  FaLevelUpAlt,
+  FaCheck,
+  FaLock,
+  FaInfoCircle,
+  FaChevronDown,
+  FaChevronUp,
+  FaSearch,
+  FaSyncAlt
+} from 'react-icons/fa';
+import { showAchievementToast } from './AchievementToast';
+import './AchievementPage.css';
+
+// Mapping achievement IDs to icon components.
+const iconMapping = {
+  "test_rookie": FaTrophy,
+  "accuracy_king": FaMedal,
+  "bronze_grinder": FaBook,
+  "silver_scholar": FaStar,
+  "gold_god": FaCrown,
+  "platinum_pro": FaMagic,
+  "walking_encyclopedia": FaBrain,
+  "redemption_arc": FaBolt,
+  "coin_collector_5000": FaBook,
+  "coin_hoarder_10000": FaBook,
+  "coin_tycoon_50000": FaBook,
+  "perfectionist_1": FaCheckCircle,
+  "double_trouble_2": FaCheckCircle,
+  "error404_failure_not_found": FaCheckCircle,
+  "level_up_5": FaTrophy,
+  "mid_tier_grinder_25": FaMedal,
+  "elite_scholar_50": FaStar,
+  "ultimate_master_100": FaCrown,
+  "answer_machine_1000": FaBook,
+  "knowledge_beast_5000": FaBrain,
+  "question_terminator": FaBrain,
+  "test_finisher": FaCheckCircle,
+};
+
+// Mapping achievement IDs to colors.
+const colorMapping = {
+  "test_rookie": "#ff5555",
+  "accuracy_king": "#ffa500",
+  "bronze_grinder": "#cd7f32",
+  "silver_scholar": "#c0c0c0",
+  "gold_god": "#ffd700",
+  "platinum_pro": "#e5e4e2",
+  "walking_encyclopedia": "#00fa9a",
+  "redemption_arc": "#ff4500",
+  "coin_collector_5000": "#ff69b4",
+  "coin_hoarder_10000": "#ff1493",
+  "coin_tycoon_50000": "#ff0000",
+  "perfectionist_1": "#adff2f",
+  "double_trouble_2": "#7fff00",
+  "error404_failure_not_found": "#00ffff",
+  "level_up_5": "#f08080",
+  "mid_tier_grinder_25": "#ff8c00",
+  "elite_scholar_50": "#ffd700",
+  "ultimate_master_100": "#ff4500",
+  "answer_machine_1000": "#ff69b4",
+  "knowledge_beast_5000": "#00fa9a",
+  "question_terminator": "#ff1493",
+  "test_finisher": "#adff2f",
+};
+
+// Achievement categories
+const categories = {
+  "test": "Test Completion",
+  "score": "Score & Accuracy",
+  "coins": "Coin Collection",
+  "level": "Leveling Up",
+  "questions": "Question Mastery",
+  "all": "All Achievements"
+};
+
+// Function to determine the category of an achievement
+const getAchievementCategory = (achievementId) => {
+  if (achievementId.includes('level') || achievementId.includes('grinder') || 
+      achievementId.includes('scholar') || achievementId.includes('master')) {
+    return "level";
+  } else if (achievementId.includes('coin')) {
+    return "coins";
+  } else if (achievementId.includes('accuracy') || achievementId.includes('perfectionist') || 
+             achievementId.includes('redemption')) {
+    return "score";
+  } else if (achievementId.includes('answer') || achievementId.includes('question') || 
+             achievementId.includes('encyclopedia')) {
+    return "questions";
+  } else if (achievementId.includes('rookie') || achievementId.includes('test') || 
+             achievementId.includes('trouble')) {
+    return "test";
+  }
+  return "all";
+};
+
+const AchievementPage = () => {
+  const dispatch = useDispatch();
+  const achievements = useSelector((state) => state.achievements.all);
+  const userAchievements = useSelector((state) => state.user.achievements) || [];
+  const { username, level, xp } = useSelector((state) => state.user);
+  const loadingStatus = useSelector((state) => state.achievements.status);
+
+  // State for filtering and sorting
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showOnlyUnlocked, setShowOnlyUnlocked] = useState(false);
+  const [showOnlyLocked, setShowOnlyLocked] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState({});
+  const [sortBy, setSortBy] = useState('default'); // default, name, unlocked
+  
+  // State for tracking achievement stats
+  const [totalAchievements, setTotalAchievements] = useState(0);
+  const [unlockedAchievements, setUnlockedAchievements] = useState(0);
+  const [percentComplete, setPercentComplete] = useState(0);
+
+  useEffect(() => {
+    if (!achievements || achievements.length === 0) {
+      dispatch(fetchAchievements());
+    }
+  }, [dispatch, achievements]);
+
+  useEffect(() => {
+    if (achievements && achievements.length > 0) {
+      setTotalAchievements(achievements.length);
+      setUnlockedAchievements(userAchievements.length);
+      setPercentComplete((userAchievements.length / achievements.length) * 100);
+    }
+  }, [achievements, userAchievements]);
+
+  // Filter achievements based on selected criteria
+  const filteredAchievements = achievements.filter(achievement => {
+    // Category filter
+    const categoryMatch = activeCategory === 'all' || 
+                        getAchievementCategory(achievement.achievementId) === activeCategory;
+    
+    // Unlock status filter
+    const isUnlocked = userAchievements.includes(achievement.achievementId);
+    const statusMatch = (showOnlyUnlocked && isUnlocked) || 
+                      (showOnlyLocked && !isUnlocked) || 
+                      (!showOnlyUnlocked && !showOnlyLocked);
+    
+    // Search filter
+    const searchMatch = !searchTerm || 
+                      achievement.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                      achievement.description.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return categoryMatch && statusMatch && searchMatch;
+  });
+
+  // Sort achievements
+  const sortedAchievements = [...filteredAchievements].sort((a, b) => {
+    const aUnlocked = userAchievements.includes(a.achievementId);
+    const bUnlocked = userAchievements.includes(b.achievementId);
+    
+    if (sortBy === 'name') {
+      return a.title.localeCompare(b.title);
+    } else if (sortBy === 'unlocked') {
+      return bUnlocked - aUnlocked; // Show unlocked first
+    } else if (sortBy === 'locked') {
+      return aUnlocked - bUnlocked; // Show locked first
+    }
+    
+    // Default sorting
+    return 0;
+  });
+
+  const toggleDetails = (achievementId) => {
+    setDetailsOpen(prev => ({
+      ...prev,
+      [achievementId]: !prev[achievementId]
+    }));
+  };
+
+  // Reset all filters
+  const resetFilters = () => {
+    setActiveCategory('all');
+    setSearchTerm('');
+    setShowOnlyUnlocked(false);
+    setShowOnlyLocked(false);
+    setSortBy('default');
+  };
+
+  // This function remains if you ever want to trigger a test popup programmatically
+  const testPopup = (achievementId) => {
+    const achievement = achievements.find((ach) => ach.achievementId === achievementId);
+    if (achievement) {
+      const IconComponent = iconMapping[achievement.achievementId] || null;
+      const color = colorMapping[achievement.achievementId] || "#fff";
+      showAchievementToast({
+        title: achievement.title,
+        description: achievement.description,
+        icon: IconComponent ? <IconComponent /> : null,
+        color: color
+      });
+    }
+  };
+
+  return (
+    <div className="achievement-page-container">
+      {/* Header Section with Stats */}
+      <div className="achievement-header">
+        <div className="achievement-header-content">
+          <div className="achievement-header-titles">
+            <h1>Achievement Gallery</h1>
+            <p>Track your progress and unlock achievements as you master the platform!</p>
+          </div>
+          
+          {username && (
+            <div className="achievement-player-stats">
+              <div className="achievement-player-name">
+                <span>{username}'s Progress</span>
+              </div>
+              <div className="achievement-progress-container">
+                <div className="achievement-progress-stats">
+                  <div className="achievement-stat">
+                    <FaTrophy className="achievement-stat-icon" />
+                    <div className="achievement-stat-numbers">
+                      <span className="achievement-stat-value">{unlockedAchievements} / {totalAchievements}</span>
+                      <span className="achievement-stat-label">Achievements</span>
+                    </div>
+                  </div>
+                  <div className="achievement-stat">
+                    <FaLevelUpAlt className="achievement-stat-icon" />
+                    <div className="achievement-stat-numbers">
+                      <span className="achievement-stat-value">{level}</span>
+                      <span className="achievement-stat-label">Level</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="achievement-progress-bar-container">
+                  <div className="achievement-progress-bar">
+                    <div 
+                      className="achievement-progress-fill" 
+                      style={{ width: `${percentComplete}%` }}
+                    ></div>
+                  </div>
+                  <span className="achievement-progress-percent">{Math.round(percentComplete)}% Complete</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Filter and Search Section */}
+      <div className="achievement-controls">
+        <div className="achievement-categories">
+          {Object.entries(categories).map(([key, value]) => (
+            <button
+              key={key}
+              className={`achievement-category-btn ${activeCategory === key ? 'active' : ''}`}
+              onClick={() => setActiveCategory(key)}
+            >
+              {value}
+            </button>
+          ))}
+        </div>
+        
+        <div className="achievement-filters">
+          <div className="achievement-search">
+            <FaSearch className="achievement-search-icon" />
+            <input
+              type="text"
+              placeholder="Search achievements..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="achievement-search-input"
+            />
+            {searchTerm && (
+              <button 
+                className="achievement-search-clear" 
+                onClick={() => setSearchTerm('')}
+              >
+                <FaTimes />
+              </button>
+            )}
+          </div>
+          
+          <div className="achievement-filter-options">
+            <button 
+              className={`achievement-filter-btn ${showOnlyUnlocked ? 'active' : ''}`}
+              onClick={() => {
+                setShowOnlyUnlocked(!showOnlyUnlocked);
+                setShowOnlyLocked(false);
+              }}
+            >
+              <FaCheck />
+              <span>Unlocked</span>
+            </button>
+            
+            <button 
+              className={`achievement-filter-btn ${showOnlyLocked ? 'active' : ''}`}
+              onClick={() => {
+                setShowOnlyLocked(!showOnlyLocked);
+                setShowOnlyUnlocked(false);
+              }}
+            >
+              <FaLock />
+              <span>Locked</span>
+            </button>
+            
+            <div className="achievement-sort-dropdown">
+              <select 
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="achievement-sort-select"
+              >
+                <option value="default">Default Sort</option>
+                <option value="name">Sort by Name</option>
+                <option value="unlocked">Unlocked First</option>
+                <option value="locked">Locked First</option>
+              </select>
+            </div>
+            
+            <button 
+              className="achievement-filter-reset" 
+              onClick={resetFilters}
+              title="Reset all filters"
+            >
+              <FaSyncAlt />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Achievement Grid */}
+      {loadingStatus === 'loading' ? (
+        <div className="achievement-loading">
+          <FaSyncAlt className="achievement-loading-icon" />
+          <p>Loading achievements...</p>
+        </div>
+      ) : sortedAchievements.length > 0 ? (
+        <div className="achievement-grid">
+          {sortedAchievements.map((ach) => {
+            const isUnlocked = userAchievements.includes(ach.achievementId);
+            const IconComponent = iconMapping[ach.achievementId] || FaTrophy;
+            const iconColor = colorMapping[ach.achievementId] || "#ffffff";
+            const isDetailsOpen = detailsOpen[ach.achievementId] || false;
+            
+            return (
+              <div
+                key={ach.achievementId}
+                className={`achievement-card ${isUnlocked ? 'unlocked' : 'locked'}`}
+                onClick={() => toggleDetails(ach.achievementId)}
+              >
+                <div className="achievement-card-content">
+                  <div className="achievement-icon-container">
+                    <div className="achievement-icon" style={{ color: iconColor }}>
+                      <IconComponent />
+                    </div>
+                    {isUnlocked && <div className="achievement-completed-badge"><FaCheck /></div>}
+                  </div>
+                  
+                  <div className="achievement-info">
+                    <h3 className="achievement-title">{ach.title}</h3>
+                    <p className="achievement-description">{ach.description}</p>
+                  </div>
+                  
+                  <button 
+                    className="achievement-details-toggle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleDetails(ach.achievementId);
+                    }}
+                  >
+                    {isDetailsOpen ? <FaChevronUp /> : <FaChevronDown />}
+                  </button>
+                </div>
+                
+                {isDetailsOpen && (
+                  <div className="achievement-details">
+                    <div className="achievement-details-content">
+                      <div className="achievement-details-header">
+                        <FaInfoCircle className="achievement-details-icon" />
+                        <h4>Achievement Details</h4>
+                      </div>
+                      
+                      <div className="achievement-details-info">
+                        <div className="achievement-details-item">
+                          <span className="achievement-details-label">Category:</span>
+                          <span className="achievement-details-value">
+                            {categories[getAchievementCategory(ach.achievementId)]}
+                          </span>
+                        </div>
+                        
+                        <div className="achievement-details-item">
+                          <span className="achievement-details-label">Status:</span>
+                          <span className={`achievement-details-value ${isUnlocked ? 'unlocked' : 'locked'}`}>
+                            {isUnlocked ? 'Unlocked' : 'Locked'}
+                          </span>
+                        </div>
+                        
+                        {/* Add more achievement details as needed */}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {!isUnlocked && (
+                  <div className="achievement-locked-overlay">
+                    <FaLock className="achievement-locked-icon" />
+                    <span>Locked</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="achievement-empty">
+          <FaFilter className="achievement-empty-icon" />
+          <p>No achievements match your current filters.</p>
+          <button className="achievement-reset-btn" onClick={resetFilters}>
+            Reset Filters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AchievementPage;
+
+// src/store/achievementsSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { registerUser, loginUser, dailyLoginBonus, addXP, addCoins, fetchUserData, logout, setCurrentUserId } from '../store/userSlice';
+
+
+export const fetchAchievements = createAsyncThunk(
+  'achievements/fetchAchievements',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await fetch('/api/test/achievements');
+      if (!response.ok) throw new Error('Failed to fetch achievements');
+      return await response.json();
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const achievementsSlice = createSlice({
+  name: 'achievements',
+  initialState: {
+    all: [],
+    status: 'idle',
+    error: null,
+    popups: []  // This can be used for temporary popup notifications
+  },
+  reducers: {
+    // If you want to push a new achievement popup (for example, after unlocking an achievement)
+    addPopup: (state, action) => {
+      state.popups.push(action.payload);
     },
-    {
-      "id": 66,
-      "question": "A business intelligence team is designing a dashboard to compare **monthly revenue performance across multiple store locations**.\n\nWhich visualization type is MOST appropriate?",
-      "options": [
-        "Pie chart",
-        "Stacked bar chart",
-        "Line chart",
-        "Histogram"
-      ],
-      "correctAnswerIndex": 1,
-      "explanation": "**Stacked bar charts** allow for easy comparison of revenue across multiple locations over time.",
-      "examTip": "Use **stacked bar charts for category comparisons over time**—line charts track overall trends."
+    removePopup: (state) => {
+      state.popups.shift();
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAchievements.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAchievements.fulfilled, (state, action) => {
+        state.all = action.payload;
+        state.status = 'succeeded';
+      })
+      .addCase(fetchAchievements.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      });
+  }
+});
+
+export const { addPopup, removePopup } = achievementsSlice.actions;
+export default achievementsSlice.reducer;
+
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { showAchievementToast } from './AchievementToast';
+import {
+  FaTrophy, FaMedal, FaStar, FaCrown, FaBolt, FaBook, FaBrain,
+  FaCheckCircle, FaRegSmile, FaMagic
+} from 'react-icons/fa';
+
+// Import the thunks to fetch achievements and shop items
+import { fetchAchievements } from './achievementsSlice';
+import { fetchShopItems } from './shopSlice';
+
+// Updated icon mapping: removed memory_master, category_perfectionist, subject_specialist,
+// subject_finisher, absolute_perfectionist, exam_conqueror. Keep only those we still have:
+const iconMapping = {
+  test_rookie: FaTrophy,
+  accuracy_king: FaMedal,
+  bronze_grinder: FaBook,
+  silver_scholar: FaStar,
+  gold_god: FaCrown,
+  platinum_pro: FaMagic,
+  walking_encyclopedia: FaBrain,
+  redemption_arc: FaBolt,
+  coin_collector_5000: FaBook,
+  coin_hoarder_10000: FaBook,
+  coin_tycoon_50000: FaBook,
+  perfectionist_1: FaCheckCircle,
+  double_trouble_2: FaCheckCircle,
+  error404_failure_not_found: FaCheckCircle,
+  level_up_5: FaTrophy,
+  mid_tier_grinder_25: FaMedal,
+  elite_scholar_50: FaStar,
+  ultimate_master_100: FaCrown,
+  answer_machine_1000: FaBook,
+  knowledge_beast_5000: FaBrain,
+  question_terminator: FaBrain,
+  test_finisher: FaCheckCircle
+};
+
+// Matching color mapping (remove same IDs):
+const colorMapping = {
+  test_rookie: "#ff5555",
+  accuracy_king: "#ffa500",
+  bronze_grinder: "#cd7f32",
+  silver_scholar: "#c0c0c0",
+  gold_god: "#ffd700",
+  platinum_pro: "#e5e4e2",
+  walking_encyclopedia: "#00fa9a",
+  redemption_arc: "#ff4500",
+  coin_collector_5000: "#ff69b4",
+  coin_hoarder_10000: "#ff1493",
+  coin_tycoon_50000: "#ff0000",
+  perfectionist_1: "#adff2f",
+  double_trouble_2: "#7fff00",
+  error404_failure_not_found: "#00ffff",
+  level_up_5: "#f08080",
+  mid_tier_grinder_25: "#ff8c00",
+  elite_scholar_50: "#ffd700",
+  ultimate_master_100: "#ff4500",
+  answer_machine_1000: "#ff69b4",
+  knowledge_beast_5000: "#00fa9a",
+  question_terminator: "#ff1493",
+  test_finisher: "#adff2f"
+};
+
+// Utility function to show toast for newlyUnlocked achievements:
+function showNewlyUnlockedAchievements(newlyUnlocked, allAchievements) {
+  if (!newlyUnlocked || newlyUnlocked.length === 0) return;
+  newlyUnlocked.forEach((achId) => {
+    const Icon = iconMapping[achId] ? iconMapping[achId] : FaTrophy;
+    const color = colorMapping[achId] || "#fff";
+
+    const foundAch = allAchievements?.find(a => a.achievementId === achId);
+    const title = foundAch?.title || `Unlocked ${achId}`;
+    const desc = foundAch?.description || 'Achievement Unlocked!';
+
+    showAchievementToast({
+      title,
+      description: desc,
+      icon: Icon ? <Icon /> : null,
+      color
+    });
+  });
+}
+
+const initialUserId = localStorage.getItem('userId');
+
+const initialState = {
+  userId: initialUserId ? initialUserId : null,
+  username: '',
+  email: '',
+  xp: 0,
+  level: 1,
+  coins: 0,
+  achievements: [],
+  xpBoost: 1.0,
+  currentAvatar: null,
+  nameColor: null,
+  purchasedItems: [],
+  subscriptionActive: false,
+
+  status: 'idle',
+  loading: false,
+  error: null,
+};
+
+// REGISTER
+export const registerUser = createAsyncThunk(
+  'user/registerUser',
+  async (formData, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch('/api/test/user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// LOGIN
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (credentials, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch('/api/test/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+      // Immediately fetch achievements + shop data after successful login
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// FETCH USER DATA
+export const fetchUserData = createAsyncThunk(
+  'user/fetchUserData',
+  async (userId, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await fetch(`/api/test/user/${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const data = await response.json();
+
+      // Also fetch achievements + shop items to ensure they're loaded
+      dispatch(fetchAchievements());
+      dispatch(fetchShopItems());
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Example of a daily bonus thunk:
+export const claimDailyBonus = createAsyncThunk(
+  'user/claimDailyBonus',
+  async (userId, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const response = await fetch(`/api/test/user/${userId}/daily-bonus`, {
+        method: 'POST'
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || data.error || 'Daily bonus error');
+      }
+      // If new achievements came back, display them
+      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
+        const allAchs = getState().achievements.all;
+        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
+      }
+      return data; 
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// If you have an "addCoins" route, likewise
+export const addCoins = createAsyncThunk(
+  'user/addCoins',
+  async ({ userId, amount }, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const res = await fetch(`/api/test/user/${userId}/add-coins`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ coins: amount })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to add coins');
+      }
+      // Show newly unlocked achievements
+      if (data.newlyUnlocked && data.newlyUnlocked.length > 0) {
+        const allAchs = getState().achievements.all;
+        showNewlyUnlockedAchievements(data.newlyUnlocked, allAchs);
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    setCurrentUserId(state, action) {
+      state.userId = action.payload;
     },
+    logout(state) {
+      state.userId = null;
+      state.username = '';
+      state.email = '';
+      state.xp = 0;
+      state.level = 1;
+      state.coins = 0;
+      state.achievements = [];
+      state.xpBoost = 1.0;
+      state.currentAvatar = null;
+      state.nameColor = null;
+      state.purchasedItems = [];
+      state.subscriptionActive = false;
+      state.status = 'idle';
+      localStorage.removeItem('userId');
+    },
+    setXPAndCoins(state, action) {
+      const { xp, coins } = action.payload;
+      state.xp = xp;
+      state.coins = coins;
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // REGISTER
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-(keep in mind i have multiple categors o fexams and stuff and each test goes from 1-100, however all the feilds areteh same liek test id, quesion, examtip, explantion) etc etc etc.
+      // LOGIN
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+
+        const {
+          user_id,
+          username,
+          email,
+          coins,
+          xp,
+          level,
+          achievements,
+          xpBoost,
+          currentAvatar,
+          nameColor,
+          purchasedItems,
+          subscriptionActive,
+          password
+        } = action.payload;
+
+        state.userId = user_id;
+        state.username = username;
+        state.email = email || '';
+        state.coins = coins || 0;
+        state.xp = xp || 0;
+        state.level = level || 1;
+        state.achievements = achievements || [];
+        state.xpBoost = xpBoost !== undefined ? xpBoost : 1.0;
+        state.currentAvatar = currentAvatar || null;
+        state.nameColor = nameColor || null;
+        state.purchasedItems = purchasedItems || [];
+        state.subscriptionActive = subscriptionActive || false;
+
+        localStorage.setItem('userId', user_id);
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // FETCH USER DATA
+      .addCase(fetchUserData.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.error = null;
+        const userDoc = action.payload;
+
+        state.userId = userDoc._id;
+        state.username = userDoc.username;
+        state.email = userDoc.email || '';
+        state.xp = userDoc.xp || 0;
+        state.level = userDoc.level || 1;
+        state.coins = userDoc.coins || 0;
+        state.achievements = userDoc.achievements || [];
+        state.xpBoost = userDoc.xpBoost !== undefined ? userDoc.xpBoost : 1.0;
+        state.currentAvatar = userDoc.currentAvatar || null;
+        state.nameColor = userDoc.nameColor || null;
+        state.purchasedItems = userDoc.purchasedItems || [];
+        state.subscriptionActive = userDoc.subscriptionActive || false;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
+      // DAILY BONUS
+      .addCase(claimDailyBonus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(claimDailyBonus.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update local user coins/xp if success
+        if (action.payload.success) {
+          state.coins = action.payload.newCoins;
+          state.xp = action.payload.newXP;
+        }
+      })
+      .addCase(claimDailyBonus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // ADD COINS
+      .addCase(addCoins.fulfilled, (state, action) => {
+        // If route succeeded, you could do local updates here or re-fetch user
+        // For example:
+        // state.coins += ...
+      });
+  },
+});
+
+export const { setCurrentUserId, logout, setXPAndCoins } = userSlice.actions;
+export default userSlice.reducer;
 
 
-ok so that is definly enough context fro you to determine teh fix for teh questions ansered achiveents and fix it (onlu fix those achivements and make it efficnetly count for each user but then- also beriefly look for any otehr achivemnt that might calculate worng and do not fix it btu isntead just let mem now and explain why
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "../../test.css";
+import {
+  FaPlay,
+  FaPause,
+  FaRedo,
+  FaEye,
+  FaInfoCircle,
+  FaChevronRight,
+  FaLock,
+  FaTrophy,
+  FaCog,
+  FaCheck,
+  FaTimes,
+  FaExclamationTriangle
+} from "react-icons/fa";
+
+const APlusTestList = () => {
+  const navigate = useNavigate();
+  const { userId } = useSelector((state) => state.user);
+  const totalQuestionsPerTest = 100;
+  const category = "aplus";
+
+  const [attemptData, setAttemptData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Persist examMode in localStorage
+  const [examMode, setExamMode] = useState(() => {
+    const stored = localStorage.getItem("examMode");
+    return stored === "true";
+  });
+
+  // Show/hide tooltip for the info icon
+  const [showExamInfo, setShowExamInfo] = useState(false);
+
+  // Restart popup on the test list page (holds test number)
+  const [restartPopupTest, setRestartPopupTest] = useState(null);
+
+  // Choose test length
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLengths, setSelectedLengths] = useState({});
+
+  useEffect(() => {
+    if (!userId) return;
+    setLoading(true);
+
+    const fetchAttempts = async () => {
+      try {
+        const res = await fetch(`/api/test/attempts/${userId}/list`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch attempts for user");
+        }
+        const data = await res.json();
+        const attemptList = data.attempts || [];
+
+        // Filter attempts for this category
+        const relevant = attemptList.filter((a) => a.category === category);
+
+        // For each testId, pick the best attempt doc:
+        const bestAttempts = {};
+        for (let att of relevant) {
+          const testKey = att.testId;
+          if (!bestAttempts[testKey]) {
+            bestAttempts[testKey] = att;
+          } else {
+            const existing = bestAttempts[testKey];
+            // Prefer an unfinished attempt if it exists; otherwise latest finished
+            if (!existing.finished && att.finished) {
+              // Keep existing
+            } else if (existing.finished && !att.finished) {
+              bestAttempts[testKey] = att;
+            } else {
+              // Both finished or both unfinished => pick newest
+              const existingTime = new Date(existing.finishedAt || 0).getTime();
+              const newTime = new Date(att.finishedAt || 0).getTime();
+              if (newTime > existingTime) {
+                bestAttempts[testKey] = att;
+              }
+            }
+          }
+        }
+
+        setAttemptData(bestAttempts);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchAttempts();
+  }, [userId, category]);
+
+  // Save examMode to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("examMode", examMode ? "true" : "false");
+  }, [examMode]);
+
+  if (!userId) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-auth-message">
+          <FaLock className="testlist-auth-icon" />
+          <h2>Please log in to access the practice tests</h2>
+          <button 
+            className="testlist-login-button"
+            onClick={() => navigate('/login')}
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-loading">
+          <div className="testlist-loading-spinner"></div>
+          <p>Loading your test progress...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-error">
+          <FaExclamationTriangle className="testlist-error-icon" />
+          <h2>Error Loading Tests</h2>
+          <p>{error}</p>
+          <button 
+            className="testlist-retry-button"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const getAttemptDoc = (testNumber) => {
+    return attemptData[testNumber] || null;
+  };
+
+  const getProgressDisplay = (attemptDoc) => {
+    if (!attemptDoc) return { text: "Not started", percentage: 0 };
+    
+    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    
+    if (finished) {
+      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
+      return { 
+        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)`, 
+        percentage: pct,
+        isFinished: true
+      };
+    } else {
+      if (typeof currentQuestionIndex === "number") {
+        const progressPct = Math.round(((currentQuestionIndex + 1) / (totalQuestions || totalQuestionsPerTest)) * 100);
+        return { 
+          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}`, 
+          percentage: progressPct,
+          isFinished: false
+        };
+      }
+      return { text: "Not started", percentage: 0 };
+    }
+  };
+
+  const difficultyCategories = [
+    { label: "Training Wheels", color: "#90ee90", textColor: "#1a1a1a" }, // Light green
+    { label: "Easy Going", color: "#3cb371", textColor: "#ffffff" }, // Medium green
+    { label: "Balanced", color: "#6543cc", textColor: "#ffffff" }, // Purple
+    { label: "Challenging", color: "#ff7950", textColor: "#ffffff" }, // Orange
+    { label: "Hard Core", color: "#cc4343", textColor: "#ffffff" }, // Red
+    { label: "Very Hard", color: "#990000", textColor: "#ffffff" }, // Dark red
+    { label: "Extreme", color: "#7a0099", textColor: "#ffffff" }, // Dark purple
+    { label: "Nightmare", color: "#4a0072", textColor: "#ffffff" }, // Deep purple
+    { label: "Insanity", color: "#2e004d", textColor: "#ffffff" }, // Very dark purple
+    { label: "Ultra Level", color: "#000000", textColor: "#ff3366" }  // Black with neon text
+  ];
+
+  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
+    if (existingAttempt && !doRestart) {
+      // Resume test
+      navigate(`/practice-tests/a-plus/${testNumber}`);
+    } else {
+      // New or forced restart
+      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
+      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          answers: [],
+          score: 0,
+          totalQuestions: totalQuestionsPerTest,
+          selectedLength: lengthToUse,
+          currentQuestionIndex: 0,
+          shuffleOrder: [],
+          answerOrder: [],
+          finished: false,
+          examMode
+        })
+      })
+        .then(() => {
+          navigate(`/practice-tests/a-plus/${testNumber}`, {
+            state: { examMode }
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to create new attempt doc:", err);
+        });
+    }
+  };
+
+  const examInfoText = "Exam Mode simulates a real certification exam environment by hiding answer feedback and explanations until after you complete the entire test. This helps you prepare for the pressure and pace of an actual exam.";
+
+  return (
+    <div className="testlist-container">
+      <div className="testlist-header">
+        <div className="testlist-title-section">
+          <h1 className="testlist-title">CompTIA A+ Core 1</h1>
+          <p className="testlist-subtitle">Practice Test Collection</p>
+        </div>
+        
+        <div className="testlist-mode-toggle">
+          <div className="testlist-mode-label">
+            <FaCog className="testlist-mode-icon" />
+            <span>Exam Mode</span>
+            
+            <div className="testlist-info-container">
+              <FaInfoCircle 
+                className="testlist-info-icon"
+                onMouseEnter={() => setShowExamInfo(true)}
+                onMouseLeave={() => setShowExamInfo(false)}
+                onClick={() => setShowExamInfo(!showExamInfo)}
+              />
+              
+              {showExamInfo && (
+                <div className="testlist-info-tooltip">
+                  {examInfoText}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <label className="testlist-toggle">
+            <input
+              type="checkbox"
+              checked={examMode}
+              onChange={(e) => setExamMode(e.target.checked)}
+            />
+            <span className="testlist-toggle-slider">
+              <span className="testlist-toggle-text">
+                {examMode ? "ON" : "OFF"}
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="testlist-grid">
+        {Array.from({ length: 10 }, (_, i) => {
+          const testNumber = i + 1;
+          const attemptDoc = getAttemptDoc(testNumber);
+          const progress = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyCategories[i] || difficultyCategories[0];
+
+          const isFinished = attemptDoc?.finished;
+          const noAttempt = !attemptDoc;
+          const inProgress = attemptDoc && !isFinished;
+
+          return (
+            <div key={testNumber} className={`testlist-card ${isFinished ? 'testlist-card-completed' : inProgress ? 'testlist-card-progress' : ''}`}>
+              <div className="testlist-card-header">
+                <div className="testlist-card-number">Test {testNumber}</div>
+                <div 
+                  className="testlist-difficulty" 
+                  style={{ backgroundColor: difficulty.color, color: difficulty.textColor }}
+                >
+                  {difficulty.label}
+                </div>
+              </div>
+              
+              <div className="testlist-card-content">
+                <div className="testlist-progress-section">
+                  <div className="testlist-progress-text">{progress.text}</div>
+                  <div className="testlist-progress-bar-container">
+                    <div 
+                      className={`testlist-progress-bar ${isFinished ? 'testlist-progress-complete' : ''}`}
+                      style={{ width: `${progress.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                {/* Length Selector */}
+                {(noAttempt || isFinished) && (
+                  <div className="testlist-length-selector">
+                    <div className="testlist-length-label">Select question count:</div>
+                    <div className="testlist-length-options">
+                      {allowedTestLengths.map((length) => (
+                        <label 
+                          key={length} 
+                          className={`testlist-length-option ${(selectedLengths[testNumber] || totalQuestionsPerTest) === length ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="radio"
+                            name={`testLength-${testNumber}`}
+                            value={length}
+                            checked={(selectedLengths[testNumber] || totalQuestionsPerTest) === length}
+                            onChange={(e) => 
+                              setSelectedLengths((prev) => ({
+                                ...prev,
+                                [testNumber]: Number(e.target.value)
+                              }))
+                            }
+                          />
+                          <span>{length}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className={`testlist-card-actions ${inProgress ? 'two-buttons' : ''}`}>
+                  {noAttempt && (
+                    <button
+                      className="testlist-action-button testlist-start-button"
+                      onClick={() => startTest(testNumber, false, null)}
+                    >
+                      <FaPlay className="testlist-action-icon" />
+                      <span>Start Test</span>
+                    </button>
+                  )}
+                  
+                  {inProgress && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-resume-button"
+                        onClick={() => startTest(testNumber, false, attemptDoc)}
+                      >
+                        <FaPlay className="testlist-action-icon" />
+                        <span>Resume</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => setRestartPopupTest(testNumber)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
+                  
+                  {isFinished && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-review-button"
+                        onClick={() => 
+                          navigate(`/practice-tests/a-plus/${testNumber}`, {
+                            state: { review: true }
+                          })
+                        }
+                      >
+                        <FaEye className="testlist-action-icon" />
+                        <span>View Results</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => startTest(testNumber, true, attemptDoc)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              {isFinished && progress.percentage >= 80 && (
+                <div className="testlist-achievement-badge">
+                  <FaTrophy className="testlist-achievement-icon" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Restart Confirmation Popup */}
+      {restartPopupTest !== null && (
+        <div className="testlist-popup-overlay">
+          <div className="testlist-popup">
+            <div className="testlist-popup-header">
+              <FaExclamationTriangle className="testlist-popup-icon" />
+              <h3>Confirm Restart</h3>
+            </div>
+            
+            <div className="testlist-popup-content">
+              <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
+              <p>All current progress will be lost, and your test will begin with your selected length.</p>
+            </div>
+            
+            <div className="testlist-popup-actions">
+              <button
+                className="testlist-popup-button testlist-popup-confirm"
+                onClick={() => {
+                  const attemptDoc = getAttemptDoc(restartPopupTest);
+                  startTest(restartPopupTest, true, attemptDoc);
+                  setRestartPopupTest(null);
+                }}
+              >
+                <FaCheck className="testlist-popup-button-icon" />
+                <span>Yes, Restart</span>
+              </button>
+              
+              <button 
+                className="testlist-popup-button testlist-popup-cancel"
+                onClick={() => setRestartPopupTest(null)}
+              >
+                <FaTimes className="testlist-popup-button-icon" />
+                <span>Cancel</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default APlusTestList;
+
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setXPAndCoins } from "./pages/store/userSlice";
+import { fetchShopItems } from "./pages/store/shopSlice";
+import ConfettiAnimation from "./ConfettiAnimation";
+import { showAchievementToast } from "./pages/store/AchievementToast";
+import "./test.css";
+import iconMapping from "./iconMapping";
+import colorMapping from "./colorMapping";
+import {
+  FaTrophy,
+  FaMedal,
+  FaStar,
+  FaCrown,
+  FaBolt,
+  FaBook,
+  FaBrain,
+  FaCheckCircle,
+  FaCoins,
+  FaFlagCheckered,
+  FaArrowLeft,
+  FaArrowRight,
+  FaRedoAlt,
+  FaStepForward,
+  FaExclamationTriangle,
+  FaPlay,
+  FaEye,
+  FaChevronLeft,
+  FaChevronRight,
+  FaTimes,
+  FaCheck,
+  FaFlag,
+  FaLevelUpAlt,
+  FaSpinner,
+  FaList,
+  FaClipboardList,
+  FaFilter,
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+  FaUser
+} from "react-icons/fa";
+
+// Helper functions
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleIndices(length) {
+  const indices = Array.from({ length }, (_, i) => i);
+  return shuffleArray(indices);
+}
+
+// Reusable QuestionDropdown component
+const QuestionDropdown = ({
+  totalQuestions,
+  currentQuestionIndex,
+  onQuestionSelect,
+  answers,
+  flaggedQuestions,
+  testData,
+  shuffleOrder,
+  examMode
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const getQuestionStatus = (index) => {
+    const realIndex = shuffleOrder[index];
+    const question = testData.questions[realIndex];
+    const answer = answers.find((a) => a.questionId === question.id);
+    const isFlagged = flaggedQuestions.includes(question.id);
+    const isAnswered = answer?.userAnswerIndex !== undefined;
+    const isSkipped = answer?.userAnswerIndex === null;
+    const isCorrect =
+      answer && answer.userAnswerIndex === question.correctAnswerIndex;
+    return { isAnswered, isSkipped, isCorrect, isFlagged };
+  };
+
+  return (
+    <div className="question-dropdown" ref={dropdownRef}>
+      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
+        <FaList className="dropdown-icon" />
+        <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
+      </button>
+      {isOpen && (
+        <div className="dropdown-content">
+          {Array.from({ length: totalQuestions }, (_, i) => {
+            const status = getQuestionStatus(i);
+            let statusClass = "";
+            if (status.isAnswered && !status.isSkipped) {
+              statusClass = status.isCorrect ? "correct" : "incorrect";
+            } else if (status.isSkipped) {
+              statusClass = "skipped";
+            }
+            
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  onQuestionSelect(i);
+                  setIsOpen(false);
+                }}
+                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''} ${statusClass}`}
+              >
+                <span>Question {i + 1}</span>
+                <div className="status-indicators">
+                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
+                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
+                  {!examMode && status.isAnswered && !status.isSkipped && (
+                    <span
+                      className={
+                        status.isCorrect
+                          ? "answer-indicator correct"
+                          : "answer-indicator incorrect"
+                      }
+                    >
+                      {status.isCorrect ? "✓" : "✗"}
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const GlobalTestPage = ({
+  testId,
+  category,
+  backToListPath
+}) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux user data
+  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
+    (state) => state.user
+  );
+  const achievements = useSelector((state) => state.achievements.all);
+  const { items: shopItems, status: shopStatus } = useSelector(
+    (state) => state.shop
+  );
+
+  // Local states for test logic
+  const [testData, setTestData] = useState(null);
+  const [shuffleOrder, setShuffleOrder] = useState([]);
+  const [answerOrder, setAnswerOrder] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [score, setScore] = useState(0);
+  const [loadingTest, setLoadingTest] = useState(true);
+  const [error, setError] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  // Overlays
+  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
+  const [showReviewMode, setShowReviewMode] = useState(false);
+
+  // Confetti on level-up
+  const [localLevel, setLocalLevel] = useState(level);
+  const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
+
+  // Flags
+  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
+
+  // Confirmation popups
+  const [showRestartPopup, setShowRestartPopup] = useState(false);
+  const [showFinishPopup, setShowFinishPopup] = useState(false);
+  const [showNextPopup, setShowNextPopup] = useState(false);
+
+  // Exam mode
+  const [examMode, setExamMode] = useState(false);
+
+  // Test length selection state
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLength, setSelectedLength] = useState(100);
+  const [activeTestLength, setActiveTestLength] = useState(null);
+  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
+
+  useEffect(() => {
+    if (shopStatus === "idle") {
+      dispatch(fetchShopItems());
+    }
+  }, [shopStatus, dispatch]);
+
+  const fetchTestAndAttempt = async () => {
+    setLoadingTest(true);
+    try {
+      let attemptDoc = null;
+      if (userId) {
+        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
+        const attemptData = await attemptRes.json();
+        attemptDoc = attemptData.attempt || null;
+      }
+      const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
+      if (!testRes.ok) {
+        const errData = await testRes.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to fetch test data");
+      }
+      const testDoc = await testRes.json();
+      setTestData(testDoc);
+
+      const totalQ = testDoc.questions.length;
+
+      // Check if attempt exists
+      if (attemptDoc) {
+        // If the test is already finished, we keep the data but also mark isFinished
+        setAnswers(attemptDoc.answers || []);
+        setScore(attemptDoc.score || 0);
+        setIsFinished(attemptDoc.finished === true);
+
+        const attemptExam = attemptDoc.examMode || false;
+        setExamMode(attemptExam);
+
+        // Use the chosen length if available
+        const chosenLength = attemptDoc.selectedLength || totalQ;
+
+        if (
+          attemptDoc.shuffleOrder &&
+          attemptDoc.shuffleOrder.length === chosenLength
+        ) {
+          setShuffleOrder(attemptDoc.shuffleOrder);
+        } else {
+          const newQOrder = shuffleIndices(chosenLength);
+          setShuffleOrder(newQOrder);
+        }
+
+        if (
+          attemptDoc.answerOrder &&
+          attemptDoc.answerOrder.length === chosenLength
+        ) {
+          setAnswerOrder(attemptDoc.answerOrder);
+        } else {
+          const generatedAnswerOrder = testDoc.questions
+            .slice(0, chosenLength)
+            .map((q) => {
+              const numOptions = q.options.length;
+              return shuffleArray([...Array(numOptions).keys()]);
+            });
+          setAnswerOrder(generatedAnswerOrder);
+        }
+
+        setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
+        setActiveTestLength(chosenLength);
+      } else {
+        // No attempt doc exists: show the test length selector UI
+        setActiveTestLength(null);
+        setShowTestLengthSelector(true);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoadingTest(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestAndAttempt();
+  }, [testId, userId]);
+
+  useEffect(() => {
+    if (level > localLevel) {
+      setLocalLevel(level);
+      setShowLevelUpOverlay(true);
+      const t = setTimeout(() => setShowLevelUpOverlay(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [level, localLevel]);
+
+  useEffect(() => {
+    if (location.state?.review && isFinished) {
+      setShowReviewMode(true);
+    }
+  }, [location.state, isFinished]);
+
+  const getShuffledIndex = useCallback(
+    (i) => {
+      if (!shuffleOrder || shuffleOrder.length === 0) return i;
+      return shuffleOrder[i];
+    },
+    [shuffleOrder]
+  );
+
+  const effectiveTotal =
+    activeTestLength || (testData ? testData.questions.length : 0);
+
+  const realIndex = getShuffledIndex(currentQuestionIndex);
+  const questionObject =
+    testData && testData.questions && testData.questions.length > 0
+      ? testData.questions[realIndex]
+      : null;
+
+  useEffect(() => {
+    if (!questionObject) return;
+    const existing = answers.find((a) => a.questionId === questionObject.id);
+    if (existing) {
+      setSelectedOptionIndex(null);
+      if (
+        existing.userAnswerIndex !== null &&
+        existing.userAnswerIndex !== undefined
+      ) {
+        const displayIndex = answerOrder[realIndex].indexOf(
+          existing.userAnswerIndex
+        );
+        if (displayIndex >= 0) {
+          setSelectedOptionIndex(displayIndex);
+          setIsAnswered(true);
+        } else {
+          setIsAnswered(false);
+        }
+      } else {
+        setIsAnswered(false);
+      }
+    } else {
+      setSelectedOptionIndex(null);
+      setIsAnswered(false);
+    }
+  }, [questionObject, answers, realIndex, answerOrder]);
+
+  const updateServerProgress = useCallback(
+    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
+      if (!userId) return;
+      try {
+        if (singleAnswer) {
+          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              testId,
+              questionId: singleAnswer.questionId,
+              correctAnswerIndex: singleAnswer.correctAnswerIndex,
+              selectedIndex: singleAnswer.userAnswerIndex,
+              xpPerCorrect: (testData?.xpPerCorrect || 10) * xpBoost,
+              coinsPerCorrect: 5
+            })
+          });
+          const data = await res.json();
+          return data;
+        }
+        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentQuestionIndex,
+            finished
+          })
+        });
+      } catch (err) {
+        console.error("Failed to update test attempt on backend", err);
+      }
+    },
+    [userId, testId, testData, xpBoost, currentQuestionIndex]
+  );
+
+  // In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
+  const handleOptionClick = useCallback(
+    async (displayOptionIndex) => {
+      if (!questionObject) return;
+      if (!examMode && isAnswered) return; // Only block if exam mode is off.
+      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
+      setSelectedOptionIndex(displayOptionIndex);
+
+      // For non–exam mode, lock the answer; for exam mode, allow changes.
+      if (!examMode) {
+        setIsAnswered(true);
+      }
+      try {
+        const newAnswerObj = {
+          questionId: questionObject.id,
+          userAnswerIndex: actualAnswerIndex,
+          correctAnswerIndex: questionObject.correctAnswerIndex
+        };
+        const updatedAnswers = [...answers];
+        const idx = updatedAnswers.findIndex(
+          (a) => a.questionId === questionObject.id
+        );
+        if (idx >= 0) {
+          updatedAnswers[idx] = newAnswerObj;
+        } else {
+          updatedAnswers.push(newAnswerObj);
+        }
+        setAnswers(updatedAnswers);
+
+        const awardData = await updateServerProgress(
+          updatedAnswers,
+          score,
+          false,
+          newAnswerObj
+        );
+        if (!examMode && awardData && awardData.examMode === false) {
+          if (awardData.isCorrect) {
+            setScore((prev) => prev + 1);
+          }
+          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
+            dispatch(
+              setXPAndCoins({
+                xp: awardData.newXP,
+                coins: awardData.newCoins
+              })
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Failed to submit answer to backend", err);
+      }
+    },
+    [
+      isAnswered,
+      questionObject,
+      examMode,
+      testData,
+      xpBoost,
+      userId,
+      testId,
+      dispatch,
+      score,
+      answers,
+      updateServerProgress,
+      realIndex,
+      answerOrder
+    ]
+  );
+
+  const finishTestProcess = useCallback(async () => {
+    let finalScore = 0;
+    answers.forEach((ans) => {
+      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
+        finalScore++;
+      }
+    });
+    setScore(finalScore);
+    try {
+      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          score: finalScore,
+          totalQuestions: effectiveTotal
+        })
+      });
+      const finishData = await res.json();
+
+      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
+        finishData.newlyUnlocked.forEach((achievementId) => {
+          const achievement = achievements.find(
+            (a) => a.achievementId === achievementId
+          );
+          if (achievement) {
+            const IconComp = iconMapping[achievement.achievementId] || null;
+            const color = colorMapping[achievement.achievementId] || "#fff";
+            showAchievementToast({
+              title: achievement.title,
+              description: achievement.description,
+              icon: IconComp ? <IconComp /> : null,
+              color
+            });
+          }
+        });
+      }
+
+      if (
+        typeof finishData.newXP !== "undefined" &&
+        typeof finishData.newCoins !== "undefined"
+      ) {
+        dispatch(
+          setXPAndCoins({
+            xp: finishData.newXP,
+            coins: finishData.newCoins
+          })
+        );
+      }
+    } catch (err) {
+      console.error("Failed to finish test attempt:", err);
+    }
+    setIsFinished(true);
+    setShowScoreOverlay(true);
+    setShowReviewMode(false);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch]);
+
+  const handleNextQuestion = useCallback(() => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+      return;
+    }
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    const nextIndex = currentQuestionIndex + 1;
+    setCurrentQuestionIndex(nextIndex);
+    updateServerProgress(answers, score, false);
+  }, [
+    isAnswered,
+    examMode,
+    currentQuestionIndex,
+    effectiveTotal,
+    finishTestProcess,
+    updateServerProgress,
+    answers,
+    score
+  ]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      const prevIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(prevIndex);
+      updateServerProgress(answers, score, false);
+    }
+  }, [currentQuestionIndex, updateServerProgress, answers, score]);
+
+  const handleSkipQuestion = () => {
+    if (!questionObject) return;
+    const updatedAnswers = [...answers];
+    const idx = updatedAnswers.findIndex(
+      (a) => a.questionId === questionObject.id
+    );
+    const skipObj = {
+      questionId: questionObject.id,
+      userAnswerIndex: null,
+      correctAnswerIndex: questionObject.correctAnswerIndex
+    };
+    if (idx >= 0) {
+      updatedAnswers[idx] = skipObj;
+    } else {
+      updatedAnswers.push(skipObj);
+    }
+    setAnswers(updatedAnswers);
+    setIsAnswered(false);
+    setSelectedOptionIndex(null);
+    updateServerProgress(updatedAnswers, score, false, skipObj);
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handleFlagQuestion = () => {
+    if (!questionObject) return;
+    const qId = questionObject.id;
+    if (flaggedQuestions.includes(qId)) {
+      setFlaggedQuestions(flaggedQuestions.filter((x) => x !== qId));
+    } else {
+      setFlaggedQuestions([...flaggedQuestions, qId]);
+    }
+  };
+
+  const handleRestartTest = useCallback(async () => {
+    setCurrentQuestionIndex(0);
+    setSelectedOptionIndex(null);
+    setIsAnswered(false);
+    setScore(0);
+    setAnswers([]);
+    setFlaggedQuestions([]);
+    setIsFinished(false);
+    setShowReviewMode(false);
+    setShowScoreOverlay(false);
+
+    if (testData?.questions?.length && activeTestLength) {
+      const newQOrder = shuffleIndices(activeTestLength);
+      setShuffleOrder(newQOrder);
+      const newAnswerOrder = testData.questions
+        .slice(0, activeTestLength)
+        .map((q) => {
+          const numOpts = q.options.length;
+          return shuffleArray([...Array(numOpts).keys()]);
+        });
+      setAnswerOrder(newAnswerOrder);
+
+      if (userId && testId) {
+        await fetch(`/api/test/attempts/${userId}/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            answers: [],
+            score: 0,
+            totalQuestions: testData.questions.length,
+            selectedLength: activeTestLength,
+            category: testData.category || category,
+            currentQuestionIndex: 0,
+            shuffleOrder: newQOrder,
+            answerOrder: newAnswerOrder,
+            finished: false,
+            examMode
+          })
+        });
+      }
+    }
+  }, [
+    testData,
+    userId,
+    testId,
+    category,
+    examMode,
+    activeTestLength
+  ]);
+
+  const handleFinishTest = () => {
+    finishTestProcess();
+  };
+
+  const [reviewFilter, setReviewFilter] = useState("all");
+  const handleReviewAnswers = () => {
+    setShowReviewMode(true);
+    setReviewFilter("all");
+  };
+  const handleCloseReview = () => {
+    if (!isFinished) setShowReviewMode(false);
+  };
+
+  const filteredQuestions = useMemo(() => {
+    if (!testData || !testData.questions) return [];
+    return testData.questions.slice(0, effectiveTotal).filter((q) => {
+      const userAns = answers.find((a) => a.questionId === q.id);
+      const isFlagged = flaggedQuestions.includes(q.id);
+
+      if (!userAns) {
+        // Not answered => count it as "skipped" or "all"
+        return reviewFilter === "skipped" || reviewFilter === "all";
+      }
+
+      const isSkipped = userAns.userAnswerIndex === null;
+      const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+      if (reviewFilter === "all") return true;
+      if (reviewFilter === "skipped" && isSkipped) return true;
+      if (reviewFilter === "flagged" && isFlagged) return true;
+      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
+      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
+
+      return false;
+    });
+  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
+
+  const NextQuestionAlert = ({ message, onOk }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Attention</h3>
+        </div>
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-ok" onClick={onOk}>
+            <FaCheck className="button-icon" />
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNextPopup = () => {
+    if (!showNextPopup) return null;
+    return (
+      <NextQuestionAlert
+        message="You haven't answered this question yet. Please select an answer or skip the question."
+        onOk={() => {
+          setShowNextPopup(false);
+        }}
+      />
+    );
+  };
+
+  const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Confirm Action</h3>
+        </div>
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-yes" onClick={onConfirm}>
+            <FaCheck className="button-icon" />
+            <span>Yes</span>
+          </button>
+          <button className="confirm-popup-no" onClick={onCancel}>
+            <FaTimes className="button-icon" />
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRestartPopup = () => {
+    if (!showRestartPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to restart the test? All progress will be lost and you'll start from the beginning."
+        onConfirm={() => {
+          handleRestartTest();
+          setShowRestartPopup(false);
+        }}
+        onCancel={() => setShowRestartPopup(false)}
+      />
+    );
+  };
+
+  const renderFinishPopup = () => {
+    if (!showFinishPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to finish the test now? Any unanswered questions will be marked as skipped."
+        onConfirm={() => {
+          handleFinishTest();
+          setShowFinishPopup(false);
+        }}
+        onCancel={() => setShowFinishPopup(false)}
+      />
+    );
+  };
+
+  const renderScoreOverlay = () => {
+    if (!showScoreOverlay) return null;
+    const percentage = effectiveTotal
+      ? Math.round((score / effectiveTotal) * 100)
+      : 0;
+      
+    // Determine grade based on percentage
+    let grade = "";
+    let gradeClass = "";
+    
+    if (percentage >= 90) {
+      grade = "Outstanding!";
+      gradeClass = "grade-a-plus";
+    } else if (percentage >= 80) {
+      grade = "Excellent!";
+      gradeClass = "grade-a";
+    } else if (percentage >= 70) {
+      grade = "Great Job!";
+      gradeClass = "grade-b";
+    } else if (percentage >= 60) {
+      grade = "Good Effort!";
+      gradeClass = "grade-c";
+    } else {
+      grade = "Keep Practicing!";
+      gradeClass = "grade-d";
+    }
+    
+    return (
+      <div className="score-overlay">
+        <div className="score-content">
+          <h2 className="score-title">Test Complete!</h2>
+          
+          <div className="score-grade-container">
+            <div className={`score-grade ${gradeClass}`}>
+              <div className="percentage-display">{percentage}%</div>
+              <div className="grade-label">{grade}</div>
+            </div>
+            
+            <div className="score-details-container">
+              <p className="score-details">
+                You answered <strong>{score}</strong> out of <strong>{effectiveTotal}</strong> questions correctly.
+              </p>
+              
+              {examMode && (
+                <div className="exam-mode-note">
+                  <FaTrophy className="exam-icon" />
+                  <p>You completed this test in exam mode!</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Test Length selection after finishing */}
+          <div className="length-selection">
+            <p>Select Length for Next Attempt:</p>
+            <div className="length-selector-options">
+              {allowedTestLengths.map((length) => (
+                <label
+                  key={length}
+                  className={`length-option ${selectedLength === length ? 'selected' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="finishedTestLength"
+                    value={length}
+                    checked={selectedLength === length}
+                    onChange={(e) => {
+                      const newLen = Number(e.target.value);
+                      setSelectedLength(newLen);
+                      setActiveTestLength(newLen);
+                    }}
+                  />
+                  <span>{length}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="overlay-buttons">
+            <button
+              className="restart-button"
+              onClick={() => setShowRestartPopup(true)}
+            >
+              <FaRedoAlt className="button-icon" />
+              <span>Restart Test</span>
+            </button>
+            
+            <button 
+              className="review-button" 
+              onClick={handleReviewAnswers}
+            >
+              <FaEye className="button-icon" />
+              <span>Review Answers</span>
+            </button>
+            
+            <button 
+              className="back-btn" 
+              onClick={() => navigate(backToListPath)}
+            >
+              <FaArrowLeft className="button-icon" />
+              <span>Back to List</span>
+            </button>
+            
+            {Number(testId) < 9999 && (
+              <button
+                className="next-test-button"
+                onClick={() => navigate(`${backToListPath}/${Number(testId) + 1}`)}
+              >
+                <FaArrowRight className="button-icon" />
+                <span>Next Test</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderReviewMode = () => {
+    if (!showReviewMode) return null;
+    return (
+      <div className="score-overlay review-overlay">
+        <div className="score-content review-content">
+          {isFinished ? (
+            <button
+              className="back-to-list-btn"
+              onClick={() => navigate(backToListPath)}
+            >
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
+            </button>
+          ) : (
+            <button className="close-review-x" onClick={handleCloseReview}>
+              <FaTimes />
+            </button>
+          )}
+          <h2 className="score-title">Review Mode</h2>
+          {isFinished && (
+            <p className="review-score-line">
+              Your final score: {score}/{effectiveTotal} (
+              {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
+              %)
+            </p>
+          )}
+          <div className="review-filter-buttons">
+            <button
+              className={reviewFilter === "all" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("all")}
+            >
+              <FaClipboardList className="filter-icon" />
+              <span>All</span>
+            </button>
+            <button
+              className={reviewFilter === "skipped" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("skipped")}
+            >
+              <FaStepForward className="filter-icon" />
+              <span>Skipped</span>
+            </button>
+            <button
+              className={reviewFilter === "flagged" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("flagged")}
+            >
+              <FaFlag className="filter-icon" />
+              <span>Flagged</span>
+            </button>
+            <button
+              className={reviewFilter === "incorrect" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("incorrect")}
+            >
+              <FaTimes className="filter-icon" />
+              <span>Incorrect</span>
+            </button>
+            <button
+              className={reviewFilter === "correct" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("correct")}
+            >
+              <FaCheck className="filter-icon" />
+              <span>Correct</span>
+            </button>
+          </div>
+          <p className="review-filter-count">
+            Showing {filteredQuestions.length} questions
+          </p>
+          <div className="review-mode-container">
+            {filteredQuestions.map((q, idx) => {
+              const userAns = answers.find((a) => a.questionId === q.id);
+              const isFlagged = flaggedQuestions.includes(q.id);
+
+              if (!userAns) {
+                return (
+                  <div key={q.id} className="review-question-card">
+                    <div className="review-question-header">
+                      <span className="question-number">Question {idx + 1}</span>
+                      {isFlagged && <span className="flagged-icon">🚩</span>}
+                    </div>
+                    <h3>{q.question}</h3>
+                    <div className="review-answer-section unanswered">
+                      <p className="review-status-label">
+                        <FaExclamationTriangle className="status-icon warning" />
+                        <span>Not Answered</span>
+                      </p>
+                      <p className="correct-answer">
+                        <strong>Correct Answer:</strong>{" "}
+                        {q.options[q.correctAnswerIndex]}
+                      </p>
+                    </div>
+                    <div className="review-explanation">
+                      <p>{q.explanation}</p>
+                    </div>
+                  </div>
+                );
+              }
+
+              const isSkipped = userAns.userAnswerIndex === null;
+              const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+              return (
+                <div key={q.id} className={`review-question-card ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                  <div className="review-question-header">
+                    <span className="question-number">Question {idx + 1}</span>
+                    {isFlagged && <span className="flagged-icon">🚩</span>}
+                  </div>
+                  <h3>{q.question}</h3>
+                  <div className={`review-answer-section ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                    <p className="review-status-label">
+                      {isSkipped ? (
+                        <>
+                          <FaStepForward className="status-icon skipped" />
+                          <span>Skipped</span>
+                        </>
+                      ) : isCorrect ? (
+                        <>
+                          <FaCheck className="status-icon correct" />
+                          <span>Correct!</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaTimes className="status-icon incorrect" />
+                          <span>Incorrect</span>
+                        </>
+                      )}
+                    </p>
+                    
+                    {!isSkipped && (
+                      <p className="your-answer">
+                        <strong>Your Answer:</strong>{" "}
+                        {q.options[userAns.userAnswerIndex]}
+                      </p>
+                    )}
+                    
+                    <p className="correct-answer">
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
+                    </p>
+                  </div>
+                  <div className="review-explanation">
+                    <p>{q.explanation}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {!isFinished && (
+            <button
+              className="review-button close-review-btn"
+              onClick={handleCloseReview}
+            >
+              <FaTimes className="button-icon" />
+              <span>Close Review</span>
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const handleNextQuestionButtonClick = () => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+    } else {
+      handleNextQuestion();
+    }
+  };
+
+  // If no attempt doc was found (on first load), show test length UI:
+  if (showTestLengthSelector) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-length-selector">
+          <h2>Select Test Length</h2>
+          <div className="test-mode-indicator">
+            <span className={examMode ? 'exam-on' : 'exam-off'}>
+              {examMode ? 'Exam Mode: ON' : 'Practice Mode'}
+            </span>
+          </div>
+          <p>How many questions would you like to answer?</p>
+          <div className="test-length-options">
+            {allowedTestLengths.map((length) => (
+              <label 
+                key={length}
+                className={selectedLength === length ? 'selected' : ''}
+              >
+                <input
+                  type="radio"
+                  name="testLength"
+                  value={length}
+                  checked={selectedLength === length}
+                  onChange={(e) => setSelectedLength(Number(e.target.value))}
+                />
+                <span>{length}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            onClick={async () => {
+              setActiveTestLength(selectedLength);
+              if (testData) {
+                const totalQ = testData.questions.length;
+                const newQOrder = shuffleIndices(selectedLength);
+                setShuffleOrder(newQOrder);
+                const newAnswerOrder = testData.questions
+                  .slice(0, selectedLength)
+                  .map((q) => {
+                    const numOpts = q.options.length;
+                    return shuffleArray([...Array(numOpts).keys()]);
+                  });
+                setAnswerOrder(newAnswerOrder);
+                try {
+                  await fetch(`/api/test/attempts/${userId}/${testId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      answers: [],
+                      score: 0,
+                      totalQuestions: totalQ,
+                      selectedLength: selectedLength,
+                      category: testData.category || category,
+                      currentQuestionIndex: 0,
+                      shuffleOrder: newQOrder,
+                      answerOrder: newAnswerOrder,
+                      finished: false,
+                      examMode: location.state?.examMode || false
+                    })
+                  });
+                  setShowTestLengthSelector(false);
+                  fetchTestAndAttempt();
+                } catch (err) {
+                  console.error("Failed to start new attempt", err);
+                }
+              }
+            }}
+          >
+            <FaPlay className="button-icon" />
+            <span>Start Test</span>
+          </button>
+          <button 
+            className="back-to-list-btn"
+            onClick={() => navigate(backToListPath)}
+          >
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>Error Loading Test</h2>
+          <p>{error}</p>
+          <div className="test-error-actions">
+            <button onClick={() => window.location.reload()}>
+              <FaRedoAlt className="button-icon" />
+              <span>Try Again</span>
+            </button>
+            <button onClick={() => navigate(backToListPath)}>
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadingTest) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-loading-container">
+          <div className="test-loading-spinner">
+            <FaSpinner className="spinner-icon" />
+          </div>
+          <p>Loading test data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!testData || !testData.questions || testData.questions.length === 0) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>No Questions Found</h2>
+          <p>This test doesn't have any questions yet.</p>
+          <button onClick={() => navigate(backToListPath)}>
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  let avatarUrl = "https://via.placeholder.com/60";
+  if (currentAvatar && shopItems && shopItems.length > 0) {
+    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
+    if (avatarItem && avatarItem.imageUrl) {
+      avatarUrl = avatarItem.imageUrl;
+    }
+  }
+
+  const progressPercentage = effectiveTotal
+    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
+    : 0;
+  const progressColorHue = (progressPercentage * 120) / 100; // from red to green
+  const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
+
+  let displayedOptions = [];
+  if (questionObject && answerOrder[realIndex]) {
+    displayedOptions = answerOrder[realIndex].map(
+      (optionIdx) => questionObject.options[optionIdx]
+    );
+  }
+
+  return (
+    <div className="aplus-test-container">
+      <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
+      {renderRestartPopup()}
+      {renderFinishPopup()}
+      {renderNextPopup()}
+      {renderScoreOverlay()}
+      {renderReviewMode()}
+
+      <div className="top-control-bar">
+        <button 
+          className={`flag-btn ${questionObject && flaggedQuestions.includes(questionObject.id) ? 'active' : ''}`} 
+          onClick={handleFlagQuestion}
+          disabled={!questionObject}
+        >
+          <FaFlag className="button-icon" />
+          <span>{questionObject && flaggedQuestions.includes(questionObject.id) ? "Unflag" : "Flag"}</span>
+        </button>
+        
+        <QuestionDropdown
+          totalQuestions={effectiveTotal}
+          currentQuestionIndex={currentQuestionIndex}
+          onQuestionSelect={(index) => {
+            setCurrentQuestionIndex(index);
+            updateServerProgress(answers, score, false);
+          }}
+          answers={answers}
+          flaggedQuestions={flaggedQuestions}
+          testData={testData}
+          shuffleOrder={shuffleOrder}
+          examMode={examMode}
+        />
+        
+        <button
+          className="finish-test-btn"
+          onClick={() => setShowFinishPopup(true)}
+        >
+          <FaFlagCheckered className="button-icon" />
+          <span>Finish Test</span>
+        </button>
+      </div>
+
+      <div className="upper-control-bar">
+        <button
+          className="restart-test-btn"
+          onClick={() => setShowRestartPopup(true)}
+        >
+          <FaRedoAlt className="button-icon" />
+          <span>Restart</span>
+        </button>
+        
+        <h1 className="aplus-title">{testData.testName}</h1>
+        
+        <button 
+          className="back-btn" 
+          onClick={() => navigate(backToListPath)}
+        >
+          <FaArrowLeft className="button-icon" />
+          <span>Back to List</span>
+        </button>
+      </div>
+
+      <div className="top-bar">
+        <div className="avatar-section-test">
+          <div
+            className="avatar-image"
+            style={{ backgroundImage: `url(${avatarUrl})` }}
+          />
+          <div className="avatar-level">
+            <FaLevelUpAlt className="level-icon" />
+            <span>{level}</span>
+          </div>
+        </div>
+        <div className="xp-level-display">
+          <FaStar className="xp-icon" />
+          <span>{xp} XP</span>
+        </div>
+        <div className="coins-display">
+          <FaCoins className="coins-icon" />
+          <span>{coins}</span>
+        </div>
+      </div>
+
+      <div className="exam-mode-indicator">
+        {examMode ? (
+          <div className="exam-badge">
+            <FaTrophy className="exam-icon" />
+            <span>EXAM MODE</span>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="progress-container">
+        <div
+          className="progress-fill"
+          style={{ width: `${progressPercentage}%`, background: progressColor }}
+        >
+          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
+        </div>
+      </div>
+
+      {!showScoreOverlay && !showReviewMode && !isFinished && (
+        <div className="question-card">
+          <div className="question-text">
+            {questionObject && questionObject.question}
+          </div>
+
+          <ul className="options-list">
+            {displayedOptions.map((option, displayIdx) => {
+              let optionClass = "option-button";
+
+              if (!examMode) {
+                if (isAnswered && questionObject) {
+                  const correctIndex = questionObject.correctAnswerIndex;
+                  const actualIndex = answerOrder[realIndex][displayIdx];
+
+                  if (actualIndex === correctIndex) {
+                    optionClass += " correct-option";
+                  } else if (
+                    displayIdx === selectedOptionIndex &&
+                    actualIndex !== correctIndex
+                  ) {
+                    optionClass += " incorrect-option";
+                  }
+                }
+              } else {
+                if (isAnswered && displayIdx === selectedOptionIndex) {
+                  optionClass += " chosen-option";
+                }
+              }
+
+              return (
+                <li className="option-item" key={displayIdx}>
+                  <button
+                    className={optionClass}
+                    onClick={() => handleOptionClick(displayIdx)}
+                    disabled={examMode ? false : isAnswered}
+                  >
+                    <div className="option-letter">{String.fromCharCode(65 + displayIdx)}</div>
+                    <div className="option-text">{option}</div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          {isAnswered && questionObject && !examMode && (
+            <div className={`explanation ${selectedOptionIndex !== null &&
+              answerOrder[realIndex][selectedOptionIndex] ===
+                questionObject.correctAnswerIndex
+                ? "correct-explanation"
+                : "incorrect-explanation"}`}>
+              <strong>
+                {selectedOptionIndex !== null &&
+                answerOrder[realIndex][selectedOptionIndex] ===
+                  questionObject.correctAnswerIndex
+                  ? (
+                    <>
+                      <FaCheck className="explanation-icon" />
+                      <span>Correct!</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaTimes className="explanation-icon" />
+                      <span>Incorrect!</span>
+                    </>
+                  )}
+              </strong>
+              <p>{questionObject.explanation}</p>
+            </div>
+          )}
+
+          <div className="bottom-control-bar">
+            <div className="bottom-control-row">
+              <button
+                className="prev-question-btn"
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+              >
+                <FaChevronLeft className="button-icon" />
+                <span>Previous</span>
+              </button>
+              
+              {currentQuestionIndex === effectiveTotal - 1 ? (
+                <button
+                  className="next-question-btn finish-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  <FaFlagCheckered className="button-icon" />
+                  <span>Finish Test</span>
+                </button>
+              ) : (
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  <span>Next</span>
+                  <FaChevronRight className="button-icon" />
+                </button>
+              )}
+            </div>
+
+            <div className="bottom-control-row skip-row">
+              <button 
+                className="skip-question-btn" 
+                onClick={handleSkipQuestion}
+              >
+                <FaStepForward className="button-icon" />
+                <span>Skip Question</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GlobalTestPage;
+
+
+
+
+ok so that is definly enough context fro you to determine teh fix for teh questions ansered achiveents and fix it (onlu fix those achivements and make it efficnetly count for each user but then- also beriefly look for any otehr achivemnt that might calculate worng and do not fix it btu isntead just let mem now and explain why- also id rather just have to tweak the backend if possible- if its impossible to fix eith just tweaking the backend asnd we need to edit frontend just a little thats fine but just fwi
 
 ok go
