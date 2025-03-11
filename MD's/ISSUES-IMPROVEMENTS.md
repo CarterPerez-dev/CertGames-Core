@@ -14,7 +14,6 @@
 #### also consider a backup sever in case soemthing happens to the production one we can easily go to cloudfare and chnage IP address A record and upkeep 99% uptime---- conisder wasy to automate that somehow (prolly very very hard- essentially would haev to know- IF server donw = replace A record automcially somehow-- actually prolly easy tbh)
 ------
 ---
-### verify some more things and optimize design some more/ make everything look better, test test and test once more
 ----
 # THEN THE IOS APP GRIND STARTS
 ### refer to [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/IOS.MD)
