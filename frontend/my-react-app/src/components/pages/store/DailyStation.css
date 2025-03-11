@@ -645,6 +645,31 @@
   color: var(--daily-text);
 }
 
+
+/* Explanation styling */
+.daily-station-explanation {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--daily-input-bg);
+  border-radius: 12px;
+  border: 1px solid var(--daily-border);
+  border-left: 4px solid var(--daily-accent);
+}
+
+.daily-station-explanation h4 {
+  font-size: 16px;
+  margin: 0 0 10px 0;
+  color: var(--daily-accent);
+}
+
+.daily-station-explanation p {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--daily-text);
+  margin: 0;
+}
+
+
 /* =================== */
 /* RESPONSIVE STYLES   */
 /* =================== */
