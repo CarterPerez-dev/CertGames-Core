@@ -704,15 +704,13 @@ Direct and conceptual (~40%)
 *******Ok so we have 10 tests with 100 questiosn each, they range in diffuclty and test 1 isnt on tyeh ficculty sca;e- its suypposed to exactly on par witht eh actual real life exam. so its labeled "normal", then test 2 starts at "very easy" and then increases in diffculty until teh hardest ets which is test 10 labeled "ultra level". so im gonna provide you the most receent 2 tests so you know not to duplciate any questions exactly (it can be some of teh saem domains but try not to have liek too simialr of a qwuwtsion/options- so liek id say dont make a qquestions higher than 80% of the same abscially and just bacially have variety of style of questions and objective/domain coverage)
 
 
-so i need you to do test *************REPLACE THIS******************* labeled *************REPLACE THIS*******************
+so i need you to do test 10 labeled "Ultra Level"
 
-here are teh most recent tests before this oen so you know how difcult this test should be sicne they get slighly harder (ive only done test 1 and 2 but since test 1 is not on teh diffculty range thing then im just gonna give you test 2 so you know to not duplicate any questions aswell as you know the diffculty test 3 should be (a tiny bit harder than test 2)
-
-*********2 MOST RECENT TESTS HERE*************************
+here are teh most recent tests before this oen so you know how difcult this test should be sicne they get slighly harder and dont duplciaet from any previous
 
 
--
 
+-here are the past 2 tests
 
 
 
@@ -722,6 +720,7 @@ here are teh most recent tests before this oen so you know how difcult this test
 
 
 
-so with all that said 
 
-Now give me 5 example questions and ill maek adjustments from there
+so with all that said lets do questions 1-50 for test 10
+
+
