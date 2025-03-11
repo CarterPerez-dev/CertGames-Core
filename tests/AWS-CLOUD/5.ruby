@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "awscloud",
-  "testId": 4,
-  "testName": "AWS Certified Cloud Practitioner (CLF-C02) Practice Test #4 (Moderate)",
+  "testId": 5,
+  "testName": "AWS Certified Cloud Practitioner (CLF-C02) Practice Test #5 (Intermediate)",
   "xpPerCorrect": 10,
   "questions": [
     {
