@@ -33,11 +33,11 @@ const DailyStationPage = () => {
 
   // Local states
   const [bonusError, setBonusError] = useState(null);
-  const [bonusSuccess, setBonusSuccess] = useState(false);
-  const [loadingBonus, setLoadingBonus] = useState(false);
-  const [canClaim, setCanClaim] = useState(false);
-  const [bonusCountdown, setBonusCountdown] = useState(0);
-  const [localLastDailyClaim, setLocalLastDailyClaim] = useState(lastDailyClaim);
+  const [claimInProgress, setClaimInProgress] = useState(false);
+  const [claimed, setClaimed] = useState(false);
+  const [bonusCountdown, setBonusCountdown] = useState(24 * 3600); // 24 hours in seconds
+  const [showButton, setShowButton] = useState(true);
+  const [localLastClaim, setLocalLastClaim] = useState(null);
 
   const [loadingQ, setLoadingQ] = useState(true);
   const [qError, setQError] = useState(null);
@@ -52,59 +52,68 @@ const DailyStationPage = () => {
   const [showCorrectAnimation, setShowCorrectAnimation] = useState(false);
   const [showWrongAnimation, setShowWrongAnimation] = useState(false);
 
-  // Sync local lastDailyClaim whenever Redux store changes
-  useEffect(() => {
-    if (lastDailyClaim) {
-      setLocalLastDailyClaim(lastDailyClaim);
-    }
-  }, [lastDailyClaim]);
-
   // Check if user can claim bonus on initial load
   useEffect(() => {
-    if (!localLastDailyClaim) {
-      setCanClaim(true);
-    } else {
-      const lastClaimTime = new Date(localLastDailyClaim).getTime();
-      const now = Date.now();
-      const diff = lastClaimTime + 24 * 3600 * 1000 - now; // 24h window
-      if (diff <= 0) {
-        setCanClaim(true);
+    if (userId) {
+      // Check if there's a recent claim from the server or localStorage
+      const storedLastClaim = localStorage.getItem(`lastClaim_${userId}`);
+      const serverLastClaim = lastDailyClaim;
+      
+      const lastClaimDate = serverLastClaim || (storedLastClaim ? new Date(storedLastClaim) : null);
+      
+      if (lastClaimDate) {
+        setLocalLastClaim(lastClaimDate);
+        checkClaimStatus(lastClaimDate);
       } else {
-        setCanClaim(false);
-        setBonusCountdown(Math.floor(diff / 1000));
+        // No previous claim found, so show button
+        setShowButton(true);
       }
     }
-  }, [localLastDailyClaim]);
+  }, [userId, lastDailyClaim]);
+
+  // Check claim status helper function
+  function checkClaimStatus(lastClaimDate) {
+    const now = new Date();
+    const lastClaimTime = new Date(lastClaimDate).getTime();
+    const diffMs = now - lastClaimTime;
+    
+    if (diffMs >= 24 * 60 * 60 * 1000) {
+      // It's been 24 hours, show button
+      setShowButton(true);
+    } else {
+      // Less than 24 hours, show countdown
+      setShowButton(false);
+      const secondsRemaining = Math.floor((24 * 60 * 60 * 1000 - diffMs) / 1000);
+      setBonusCountdown(secondsRemaining);
+    }
+  }
 
   // Bonus countdown logic (runs every second)
   useEffect(() => {
-    if (!localLastDailyClaim) {
-      // If we have no known claim, show "canClaim" right away
-      setBonusCountdown(0);
-      setCanClaim(true);
-      return;
-    }
-
-    const lastClaimTime = new Date(localLastDailyClaim).getTime();
-    
-    function tickBonus() {
-      const now = Date.now();
-      const diff = lastClaimTime + 24 * 3600 * 1000 - now; // 24h window
-      if (diff <= 0) {
-        setBonusCountdown(0);
-        setCanClaim(true);
-      } else {
-        setBonusCountdown(Math.floor(diff / 1000));
-        setCanClaim(false);
+    if (!showButton && localLastClaim) {
+      function tickBonus() {
+        const now = new Date();
+        const lastClaimTime = new Date(localLastClaim).getTime();
+        const diffMs = now - lastClaimTime;
+        
+        if (diffMs >= 24 * 60 * 60 * 1000) {
+          // It's been 24 hours, show button
+          setShowButton(true);
+          setBonusCountdown(0);
+        } else {
+          // Less than 24 hours, update countdown
+          const secondsRemaining = Math.floor((24 * 60 * 60 * 1000 - diffMs) / 1000);
+          setBonusCountdown(secondsRemaining);
+        }
       }
+      
+      tickBonus(); // Run immediately
+      const bonusInterval = setInterval(tickBonus, 1000);
+      return () => clearInterval(bonusInterval);
     }
-    
-    tickBonus(); // Run immediately
-    const bonusInterval = setInterval(tickBonus, 1000);
-    return () => clearInterval(bonusInterval);
-  }, [localLastDailyClaim]);
+  }, [localLastClaim, showButton]);
 
-  // Daily question refresh countdown logic (resets at midnight UTC)
+  // Daily question refresh countdown logic
   useEffect(() => {
     function tickQuestion() {
       const now = new Date();
@@ -127,72 +136,52 @@ const DailyStationPage = () => {
     }
   }, [userId]);
 
-  // Claim daily bonus
+  // Claim daily bonus - THIS IS THE KEY FUNCTION WE'RE FIXING
   const handleClaimDailyBonus = async () => {
     if (!userId) {
       setBonusError('Please log in first.');
       return;
     }
     
-    setLoadingBonus(true);
+    // IMMEDIATELY hide button and show countdown - this is the key fix
+    setShowButton(false);
+    setClaimInProgress(true);
     setBonusError(null);
     
-    // Immediately set canClaim to false and start the countdown
-    // This makes the button disappear on the first click
-    setCanClaim(false);
+    // Set last claim time to now and store it both in state and localStorage
     const now = new Date();
-    setLocalLastDailyClaim(now.toISOString());
-    setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
+    setLocalLastClaim(now);
+    localStorage.setItem(`lastClaim_${userId}`, now.toISOString());
+    
+    // Start the countdown immediately
+    setBonusCountdown(24 * 60 * 60); // 24 hours in seconds
     
     try {
+      // Now we make the API call
       const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
         method: 'POST'
       });
       const data = await res.json();
       
-      if (!res.ok) {
-        // Hard error, e.g. 404 user not found
-        setBonusError(data.error || 'Error claiming daily bonus');
-        // Revert the state changes if there was an error
-        setCanClaim(true);
-        setLocalLastDailyClaim(lastDailyClaim);
-        setLoadingBonus(false);
-        return;
-      }
+      setClaimInProgress(false);
       
       if (data.success) {
-        // Claimed successfully
+        // Show success animation
         setShowBonusAnimation(true);
         setTimeout(() => setShowBonusAnimation(false), 3000);
-        setBonusSuccess(true);
+        setClaimed(true);
         
-        // Refresh user data to update coins/xp
+        // Update the user data in Redux
         dispatch(fetchUserData(userId));
       } else {
-        // Already claimed case - set the error but keep showing countdown
+        // Server says already claimed
         setBonusError(data.message);
-        
-        // Parse seconds left from message if available
-        const match = data.message && data.message.match(/(\d+)/);
-        if (match) {
-          const secondsLeft = parseInt(match[1], 10);
-          if (!isNaN(secondsLeft) && secondsLeft > 0) {
-            // Calculate the last claim time based on seconds left
-            const nowMs = Date.now();
-            const msLeft = secondsLeft * 1000;
-            const lastClaimTime = nowMs - (86400000 - msLeft);
-            setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
-          }
-        }
+        // Don't change UI state - keep showing countdown
       }
-      
-      setLoadingBonus(false);
     } catch (err) {
       setBonusError('Error: ' + err.message);
-      // Revert the state changes if there was an error
-      setCanClaim(true);
-      setLocalLastDailyClaim(lastDailyClaim);
-      setLoadingBonus(false);
+      setClaimInProgress(false);
+      // Even if there's an error, keep showing the countdown
     }
   };
 
@@ -335,15 +324,15 @@ const DailyStationPage = () => {
                   </div>
                 )}
                 
-                {/* Claim Button or Countdown */}
+                {/* Claim Button or Countdown - THIS IS THE KEY UI PART */}
                 <div className="daily-station-bonus-action">
-                  {canClaim ? (
+                  {showButton ? (
                     <button 
                       className="daily-station-claim-btn"
                       onClick={handleClaimDailyBonus}
-                      disabled={loadingBonus}
+                      disabled={claimInProgress}
                     >
-                      {loadingBonus ? (
+                      {claimInProgress ? (
                         <>
                           <FaSyncAlt className="loading-icon" />
                           <span>Claiming...</span>
