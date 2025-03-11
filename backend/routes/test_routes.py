@@ -720,7 +720,9 @@ def finish_test_attempt(user_id, test_id):
         if set_ops:
             update_ops.setdefault("$set", {}).update(set_ops)
 
-    update_ops["$inc"]["achievement_counters.total_questions_answered"] = selected_length
+    actual_answered_count = sum(1 for ans in attempt_doc.get("answers", []) 
+                              if ans.get("userAnswerIndex") is not None)
+    update_ops["$inc"]["achievement_counters.total_questions_answered"] = actual_answered_count
 
     start_db = time.time()
     mainusers_collection.update_one({"_id": user_oid}, update_ops)
