@@ -6,7 +6,7 @@ db.mainusers.insertMany([
   {
     username: "UserTestRookie",
     email: "rookie@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -24,7 +24,7 @@ db.mainusers.insertMany([
   {
     username: "UserAccuracyKing",
     email: "accuracy@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -42,7 +42,7 @@ db.mainusers.insertMany([
   {
     username: "UserBronzeGrinder",
     email: "bronze@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -60,7 +60,7 @@ db.mainusers.insertMany([
   {
     username: "UserSilverScholar",
     email: "silver@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -78,7 +78,7 @@ db.mainusers.insertMany([
   {
     username: "UserGoldGod",
     email: "gold@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -96,7 +96,7 @@ db.mainusers.insertMany([
   {
     username: "UserPlatinumPro",
     email: "platinum@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -114,7 +114,7 @@ db.mainusers.insertMany([
   {
     username: "UserEncyclopedia",
     email: "encyclo@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -132,7 +132,7 @@ db.mainusers.insertMany([
   {
     username: "UserRedeemer",
     email: "redeem@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -150,7 +150,7 @@ db.mainusers.insertMany([
   {
     username: "UserCoin5k",
     email: "coins5k@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 5000, // This triggers coin_collector_5000
@@ -168,7 +168,7 @@ db.mainusers.insertMany([
   {
     username: "UserCoin10k",
     email: "coins10k@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 10000,
@@ -186,7 +186,7 @@ db.mainusers.insertMany([
   {
     username: "UserCoin50k",
     email: "coins50k@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 50000,
@@ -204,7 +204,7 @@ db.mainusers.insertMany([
   {
     username: "UserPerf1",
     email: "perf1@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -222,7 +222,7 @@ db.mainusers.insertMany([
   {
     username: "UserPerf2",
     email: "perf2@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -240,7 +240,7 @@ db.mainusers.insertMany([
   {
     username: "UserPerf3",
     email: "perf3@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 1,
     xp: 0,
     coins: 0,
@@ -258,7 +258,7 @@ db.mainusers.insertMany([
   {
     username: "UserLevel5",
     email: "level5@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 5,  // triggers level_up_5
     xp: 2000,  // whatever
     coins: 0,
@@ -276,7 +276,7 @@ db.mainusers.insertMany([
   {
     username: "UserLevel25",
     email: "level25@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 25,
     xp: 20000,
     coins: 0,
@@ -294,7 +294,7 @@ db.mainusers.insertMany([
   {
     username: "UserLevel50",
     email: "level50@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 50,
     xp: 60000,
     coins: 0,
@@ -312,7 +312,7 @@ db.mainusers.insertMany([
   {
     username: "UserLevel100",
     email: "level100@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 100,
     xp: 300000,
     coins: 0,
@@ -330,7 +330,7 @@ db.mainusers.insertMany([
   {
     username: "UserAnswerMachine",
     email: "answers1000@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 10,
     xp: 5000,
     coins: 0,
@@ -348,7 +348,7 @@ db.mainusers.insertMany([
   {
     username: "UserKnowledgeBeast",
     email: "answers5000@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 15,
     xp: 8000,
     coins: 0,
@@ -366,7 +366,7 @@ db.mainusers.insertMany([
   {
     username: "UserQTerminator",
     email: "answers10000@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 20,
     xp: 10000,
     coins: 0,
@@ -385,7 +385,7 @@ db.mainusers.insertMany([
   {
     username: "UserTestFinisher",
     email: "testfinisher@example.com",
-    password: "test123",
+    password: "Test123!",
     level: 10,
     xp: 5000,
     coins: 0,
