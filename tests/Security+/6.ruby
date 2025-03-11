@@ -14,7 +14,7 @@ db.tests.insertOne({
         "Persistent lateral movement using credential theft"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "C2 communication is characterized by periodic, encrypted data transfers to external addresses, which indicates an infected system awaiting or executing commands from an attacker.",
+      "explanation": "C2 communication is characterized by periodic, encrypted data transfers to external addresses, which indicates an infected system awaiting or executing commands from an attacker. Attackers often use these channels to stealthily maintain control over compromised hosts.",
       "examTip": "Focus on the pattern of external communication; consistent, encrypted traffic is a strong C2 indicator."
     },
     {
@@ -27,7 +27,7 @@ db.tests.insertOne({
         "File-level encryption using ECC"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Database-level encryption with AES-128 balances strong security and minimal performance overhead, making it optimal for rapid retrieval requirements.",
+      "explanation": "Database-level encryption with AES-128 balances strong security and minimal performance overhead, making it optimal for rapid retrieval requirements. The shorter key length still provides robust encryption while improving speed in high-volume applications.",
       "examTip": "When performance is critical, AES-128 is often chosen over AES-256 due to its lower computational cost."
     },
     {
@@ -40,7 +40,7 @@ db.tests.insertOne({
         "Time-based one-time passwords combined with smartcards"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "MFA using biometrics and hardware tokens provides robust protection against credential compromise while ensuring user-friendly access.",
+      "explanation": "MFA using biometrics and hardware tokens provides robust protection against credential compromise while ensuring user-friendly access. This method combines something you are (biometric factor) with something you have (token) to significantly reduce the odds of unauthorized logins.",
       "examTip": "Biometric factors combined with physical tokens drastically reduce the likelihood of credential-based breaches."
     },
     {
@@ -53,7 +53,7 @@ db.tests.insertOne({
         "Utilizing steganography to hide sensitive files"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Strict ACLs serve as a compensating control by restricting data access, thereby mitigating risks associated with unencrypted data at rest.",
+      "explanation": "Strict ACLs serve as a compensating control by restricting data access, thereby mitigating risks associated with unencrypted data at rest. These controls minimize unauthorized exposure even without encryption.",
       "examTip": "When primary controls (like encryption) aren't viable, compensating controls like robust access restrictions come into play."
     },
     {
@@ -66,7 +66,7 @@ db.tests.insertOne({
         "Command injection"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Improper input validation allows SQL injection, where attackers manipulate database queries to access or modify data.",
+      "explanation": "Improper input validation allows SQL injection, where attackers manipulate database queries to access or modify data. Such attacks often occur when user-provided fields are inserted directly into SQL statements without sanitization.",
       "examTip": "Always think SQLi when poor input validation is mentioned, especially if the system interacts with databases."
     },
     {
@@ -79,7 +79,7 @@ db.tests.insertOne({
         "Quarterly penetration testing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Application whitelisting prevents unauthorized applications (including those exploiting zero-day vulnerabilities) from running, offering proactive defense.",
+      "explanation": "Application whitelisting prevents unauthorized applications (including those exploiting zero-day vulnerabilities) from running, offering proactive defense. By only allowing approved software, this measure blocks unknown or malicious binaries.",
       "examTip": "Zero-day defenses focus on behavior control rather than signature reliance—whitelisting fits perfectly here."
     },
     {
@@ -92,7 +92,7 @@ db.tests.insertOne({
         "Hashing the entire message with MD5"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Digital signatures using SHA-256 ensure both the integrity of the message and non-repudiation, as they are tied to the sender's private key.",
+      "explanation": "Digital signatures using SHA-256 ensure both the integrity of the message and non-repudiation, as they are tied to the sender's private key. This cryptographic binding establishes proof that only the legitimate sender could have originated the message.",
       "examTip": "Non-repudiation is always linked to digital signatures in cryptography-related questions."
     },
     {
@@ -105,7 +105,7 @@ db.tests.insertOne({
         "Using cloud provider-specific backup solutions"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Multi-cloud active-active configurations ensure continuous availability even if one cloud provider experiences an outage.",
+      "explanation": "Multi-cloud active-active configurations ensure continuous availability even if one cloud provider experiences an outage. This strategy also allows resource load balancing and geographic redundancy.",
       "examTip": "For ultimate availability and redundancy, multi-cloud active-active strategies trump single-provider solutions."
     },
     {
@@ -118,7 +118,7 @@ db.tests.insertOne({
         "HTTPS enforcement for all web traffic"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Input sanitization directly prevents cross-site scripting (XSS) attacks by ensuring user inputs cannot inject malicious scripts.",
+      "explanation": "Input sanitization directly prevents cross-site scripting (XSS) attacks by ensuring user inputs cannot inject malicious scripts. This means stripping or encoding harmful characters before they are processed by the server.",
       "examTip": "When dealing with unauthorized scripts, input sanitization is your front-line defense."
     },
     {
@@ -131,7 +131,7 @@ db.tests.insertOne({
         "Function as a Service (FaaS)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IaaS provides direct control over virtualized infrastructure components while benefiting from cloud scalability.",
+      "explanation": "IaaS provides direct control over virtualized infrastructure components while benefiting from cloud scalability. Users can configure operating systems, storage, and networking as if they own the hardware.",
       "examTip": "More control = IaaS; less control = SaaS. Always scale answers by control level."
     },
     {
@@ -144,7 +144,7 @@ db.tests.insertOne({
         "Using static code analysis tools during development"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Locking mechanisms prevent simultaneous access to shared resources, eliminating race conditions.",
+      "explanation": "Locking mechanisms prevent simultaneous access to shared resources, eliminating race conditions. This ensures that processes must finish critical operations before another can initiate them.",
       "examTip": "Race conditions = concurrency issues; solution = locking mechanisms or thread safety."
     },
     {
@@ -157,7 +157,7 @@ db.tests.insertOne({
         "Intrusive network sniffers"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Non-intrusive vulnerability scanners identify weaknesses without disrupting network operations, making them ideal for regular assessments.",
+      "explanation": "Non-intrusive vulnerability scanners identify weaknesses without disrupting network operations, making them ideal for regular assessments. They typically run with minimal privileges or focus on publicly available information.",
       "examTip": "When minimal operational impact is required, non-intrusive scanning is the best option."
     },
     {
@@ -170,7 +170,7 @@ db.tests.insertOne({
         "Challenge-response authentication using nonces"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Challenge-response mechanisms with nonces ensure each authentication attempt is unique, rendering replay attacks ineffective.",
+      "explanation": "Challenge-response mechanisms with nonces ensure each authentication attempt is unique, rendering replay attacks ineffective. This approach forces a new cryptographic challenge for every login request.",
       "examTip": "Replay prevention = unique session data like nonces in challenge-response authentication."
     },
     {
@@ -183,7 +183,7 @@ db.tests.insertOne({
         "DNS spoofing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MitM attacks involve real-time interception and potential modification of communication between two parties.",
+      "explanation": "MitM attacks involve real-time interception and potential modification of communication between two parties. Attackers can eavesdrop or inject false data into the conversation if encryption or authentication is weak.",
       "examTip": "If real-time interception and alteration are involved, it's most likely a MitM attack."
     },
     {
@@ -196,7 +196,7 @@ db.tests.insertOne({
         "Using application-layer firewalls for all cloud-hosted applications"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Federated identity management with MFA provides secure, consistent access control across hybrid cloud environments, mitigating unauthorized access risks.",
+      "explanation": "Federated identity management with MFA provides secure, consistent access control across hybrid cloud environments, mitigating unauthorized access risks. This ensures users authenticate through a trusted provider with added multi-factor checks.",
       "examTip": "Hybrid cloud access control demands identity federation paired with robust authentication methods like MFA."
     },
     {
@@ -209,7 +209,7 @@ db.tests.insertOne({
         "Deploy mutual TLS to validate client-server communications each request."
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Regenerating session IDs after each authentication prevents session fixation attacks without adding processing overhead like mutual TLS would.",
+      "explanation": "Regenerating session IDs after each authentication prevents session fixation attacks without adding processing overhead like mutual TLS would. This ensures a new session token is issued upon login, reducing the chance of token reuse.",
       "examTip": "Focus on controlling session fixation with minimal complexity—ID regeneration is a subtle yet crucial control."
     },
     {
@@ -222,7 +222,7 @@ db.tests.insertOne({
         "Elliptic Curve Digital Signature Algorithm (ECDSA)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ECDHE offers forward secrecy with lower computational requirements than standard DH, ensuring low latency for real-time communications.",
+      "explanation": "ECDHE offers forward secrecy with lower computational requirements than standard DH, ensuring low latency for real-time communications. This ephemeral key exchange ensures that past sessions can't be decrypted if a key is compromised later.",
       "examTip": "ECDHE = Forward secrecy + Performance. It's ideal for real-time scenarios like VoIP."
     },
     {
@@ -235,7 +235,7 @@ db.tests.insertOne({
         "Insider threat leveraging knowledge of network topologies"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "APT actors typically exhibit coordinated credential theft, lateral movement, and privilege escalation over extended periods to achieve strategic objectives.",
+      "explanation": "APT actors typically exhibit coordinated credential theft, lateral movement, and privilege escalation over extended periods to achieve strategic objectives. These threats often involve sophisticated, stealthy tactics that evade simple defenses.",
       "examTip": "Look for patterns: Long-term, stealthy, and strategic attacks scream 'APT.'"
     },
     {
@@ -248,7 +248,7 @@ db.tests.insertOne({
         "The traffic will be allowed because the firewall defaults to permit after a specific allow rule."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Firewalls process rules in order; the first matching rule applies. Since Rule 1 denies all TCP 22 traffic from 10.0.0.0/8, subsequent allows are irrelevant.",
+      "explanation": "Firewalls process rules in order; the first matching rule applies. Since Rule 1 denies all TCP 22 traffic from 10.0.0.0/8, subsequent allows are irrelevant, leading to a deny.",
       "examTip": "Always check rule order. Firewalls execute the first applicable rule—later matches don't matter."
     },
     {
@@ -261,7 +261,7 @@ db.tests.insertOne({
         "A user elevates privileges by injecting commands into an insecure API during input validation processes."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TOC/TOU vulnerabilities occur when conditions change between validation (check) and execution (use). The first scenario fits this pattern perfectly.",
+      "explanation": "TOC/TOU vulnerabilities occur when conditions change between validation (check) and execution (use). This discrepancy allows an attacker to alter data after it is validated but before it's used.",
       "examTip": "TOC/TOU issues are about timing gaps—think 'checked but changed before use.'"
     },
     {
@@ -274,7 +274,7 @@ db.tests.insertOne({
         "Using blockchain-based storage with distributed ledger technology"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Geolocation-aware KMS ensures encryption keys remain in specific jurisdictions while allowing authorized rapid decryption within that region.",
+      "explanation": "Geolocation-aware KMS ensures encryption keys remain in specific jurisdictions while allowing authorized rapid decryption within that region. This approach addresses data sovereignty concerns and meets compliance requirements.",
       "examTip": "Data sovereignty = Key stays local. Geolocation-aware KMS hits both compliance and performance targets."
     },
     {
@@ -287,7 +287,7 @@ db.tests.insertOne({
         "Typosquatting"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DNS cache poisoning corrupts DNS resolver caches, redirecting traffic without altering user devices.",
+      "explanation": "DNS cache poisoning corrupts DNS resolver caches, redirecting traffic without altering user devices. Attackers insert false address mappings into a DNS cache, causing legitimate domain queries to resolve to malicious IPs.",
       "examTip": "Poisoned caches lead to invisible redirection—no client-side changes required."
     },
     {
@@ -300,7 +300,7 @@ db.tests.insertOne({
         "Performing forensic imaging of compromised systems"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "The 'Preparation' phase focuses on creating policies, playbooks, and training to handle future incidents efficiently.",
+      "explanation": "The 'Preparation' phase focuses on creating policies, playbooks, and training to handle future incidents efficiently. It also includes establishing clear roles, responsibilities, and communication plans.",
       "examTip": "If it happens before an incident occurs, it’s likely part of the 'Preparation' phase."
     },
     {
@@ -313,7 +313,7 @@ db.tests.insertOne({
         "Susceptibility to brute force attacks due to federated access points"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SAML-based federation centralizes authentication through an IdP. If compromised, all connected services are at risk, representing a critical single point of failure.",
+      "explanation": "SAML-based federation centralizes authentication through an IdP. If compromised, all connected services are at risk, representing a critical single point of failure that can be exploited by attackers.",
       "examTip": "Federation boosts convenience but makes the IdP a crown jewel—protect it well!"
     },
     {
@@ -326,7 +326,7 @@ db.tests.insertOne({
         "Deploying Content Security Policies (CSP) for all pages"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Same-site cookies in strict mode prevent cross-origin requests from being sent automatically, which is essential in CSRF mitigation.",
+      "explanation": "Same-site cookies in strict mode prevent cross-origin requests from being sent automatically, which is essential in CSRF mitigation. This helps ensure that only requests from the same site can use the stored cookies.",
       "examTip": "CSRF attacks ride on authenticated sessions—same-site cookies break that chain."
     },
     {
@@ -339,7 +339,7 @@ db.tests.insertOne({
         "Running automated static code analysis on updated code"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Rescanning verifies that previously detected vulnerabilities no longer exist, confirming remediation effectiveness.",
+      "explanation": "Rescanning verifies that previously detected vulnerabilities no longer exist, confirming remediation effectiveness. If the vulnerabilities persist, it indicates incomplete or ineffective fixes.",
       "examTip": "If it’s about 'proof of fix,' think 'rescan'—it’s the final verification step."
     },
     {
@@ -352,7 +352,7 @@ db.tests.insertOne({
         "LDAP over SSL (LDAPS)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Kerberos uses ticket-granting tickets and encrypted timestamps, enabling mutual authentication by design.",
+      "explanation": "Kerberos uses ticket-granting tickets and encrypted timestamps, enabling mutual authentication by design. Both client and server verify each other before establishing a session.",
       "examTip": "Mutual trust? Kerberos always steps up with its time-sensitive, ticket-based system."
     },
     {
@@ -365,7 +365,7 @@ db.tests.insertOne({
         "Perfect forward secrecy"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "KDFs generate unique keys from a master key, ensuring that compromising one key doesn’t affect others.",
+      "explanation": "KDFs generate unique keys from a master key, ensuring that compromising one key doesn’t affect others. This design prevents a single point of failure from unlocking multiple protected files.",
       "examTip": "Unique keys per file = KDF in action. It breaks the 'one key to rule them all' weakness."
     },
     {
@@ -378,7 +378,7 @@ db.tests.insertOne({
         "Utilizing perimeter firewalls with deep packet inspection for network isolation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ZTA emphasizes continuous verification and adaptive access policies that respond to real-time risk assessments.",
+      "explanation": "ZTA emphasizes continuous verification and adaptive access policies that respond to real-time risk assessments. This principle demands strict identity checks and micro-segmentation at all times.",
       "examTip": "Zero Trust = 'Never trust, always verify'—continuous context checks are key."
     },
     {
@@ -391,7 +391,7 @@ db.tests.insertOne({
         "Configure port knocking to obscure the SSH port"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Fail2ban with appropriate thresholds blocks brute-force attempts after multiple failures while minimizing disruptions to legitimate users.",
+      "explanation": "Fail2ban with appropriate thresholds blocks brute-force attempts after multiple failures while minimizing disruptions to legitimate users. It updates firewall rules or local configurations to ban the offending IP for a set duration.",
       "examTip": "Balancing security and usability for SSH often starts with fail2ban—simple, adaptive, and effective."
     },
     {
@@ -404,7 +404,7 @@ db.tests.insertOne({
         "Utilizing IPsec transport mode for all external data transmissions"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Source NAT in a stateful firewall masks internal IP addresses without the latency overhead introduced by proxies or VPN encryption.",
+      "explanation": "Source NAT in a stateful firewall masks internal IP addresses without the latency overhead introduced by proxies or VPN encryption. As a result, external entities see only the firewall's IP.",
       "examTip": "NAT is your go-to for hiding internal IPs—fast, efficient, and widely supported."
     },
     {
@@ -417,7 +417,7 @@ db.tests.insertOne({
         "Transport Layer Security (TLS) with PSK"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Kerberos uses time-sensitive tickets for mutual authentication, inherently preventing replay attacks and MitM by validating both endpoints.",
+      "explanation": "Kerberos uses time-sensitive tickets for mutual authentication, inherently preventing replay attacks and MitM by validating both endpoints. This allows secure communication without external certificates.",
       "examTip": "Kerberos = Built-in time checks + mutual trust = No replay or MitM surprises."
     },
     {
@@ -430,7 +430,7 @@ db.tests.insertOne({
         "Cross-site scripting (XSS)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Command injection exploits improper input validation, allowing OS-level command execution. RCE often results from command injection but can occur via other mechanisms.",
+      "explanation": "Command injection exploits improper input validation, allowing OS-level command execution. RCE often arises from command injection but can also occur from other programming flaws.",
       "examTip": "If user input directly executes OS commands, you’re looking at command injection, not just generic RCE."
     },
     {
@@ -443,7 +443,7 @@ db.tests.insertOne({
         "Cross-site scripting (XSS)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IDOR occurs when applications fail to properly enforce authorization checks, allowing users to access unauthorized resources.",
+      "explanation": "IDOR occurs when applications fail to properly enforce authorization checks, allowing users to access unauthorized resources. This might appear as a user changing an ID in the URL or form field to see another user's data.",
       "examTip": "Think 'Who should see this?' If role-based access is weak, it’s an IDOR scenario."
     },
     {
@@ -456,7 +456,7 @@ db.tests.insertOne({
         "An attacker replaying authentication packets to bypass session expiration controls."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Birthday attacks exploit the probability of hash collisions. Finding two distinct inputs with the same hash breaks digital signature integrity.",
+      "explanation": "Birthday attacks exploit the probability of hash collisions. Finding two distinct inputs with the same hash undermines the reliability of digital signatures or checksums.",
       "examTip": "Hash collisions + probability theory = Classic birthday attack scenario."
     },
     {
@@ -469,7 +469,7 @@ db.tests.insertOne({
         "Role-based access control (RBAC) for critical applications"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ZTA mandates continuous verification, ensuring that trust is never implicit—even after initial authentication.",
+      "explanation": "ZTA mandates continuous verification, ensuring that trust is never implicit—even after initial authentication. Systems regularly reassess user and device context to maintain robust security.",
       "examTip": "ZTA mindset: Trust nothing without constant validation—user, device, and context."
     },
     {
@@ -482,7 +482,7 @@ db.tests.insertOne({
         "Disconnect the system from the network to prevent further compromise."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Volatile data, such as running processes and encryption keys, resides in memory. Capturing a memory dump preserves this critical evidence before it's lost.",
+      "explanation": "Volatile data, such as running processes and encryption keys, resides in memory. Capturing a memory dump preserves this critical evidence before it's lost, crucial for thorough forensic analysis.",
       "examTip": "Volatile data first—once the system shuts down, it’s gone forever."
     },
     {
@@ -495,7 +495,7 @@ db.tests.insertOne({
         "Warm standby with hourly incremental backups"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Active-active replication ensures continuous availability with no downtime or data loss, meeting the most stringent RTO and RPO requirements.",
+      "explanation": "Active-active replication ensures continuous availability with no downtime or data loss, meeting the most stringent RTO and RPO requirements. Data is instantly replicated across multiple regions.",
       "examTip": "Zero downtime + zero data loss = Active-active is your gold standard."
     },
     {
@@ -508,7 +508,7 @@ db.tests.insertOne({
         "Implementing input sanitation on all user inputs"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Validating object types ensures only expected, safe objects are deserialized, preventing arbitrary code execution from malicious inputs.",
+      "explanation": "Validating object types ensures only expected, safe objects are deserialized, preventing arbitrary code execution from malicious inputs. This control blocks attackers from leveraging untrusted data to manipulate the system.",
       "examTip": "Serialization issues? Validate what you deserialize—never trust unchecked objects."
     },
     {
@@ -521,7 +521,7 @@ db.tests.insertOne({
         "Diffie-Hellman key exchange"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "HMACs provide integrity and authentication, ensuring data hasn’t been altered and confirming the sender’s identity, without encrypting the data itself.",
+      "explanation": "HMACs provide integrity and authentication, ensuring data hasn’t been altered and confirming the sender’s identity, without encrypting the data itself. This allows verification of message authenticity without confidentiality.",
       "examTip": "Integrity + authentication = HMAC. No confidentiality here—data remains visible."
     },
     {
@@ -534,7 +534,7 @@ db.tests.insertOne({
         "Geolocation-based adaptive authentication"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Impossible travel analysis detects anomalies where login patterns defy physical plausibility, such as rapid logins from distant locations.",
+      "explanation": "Impossible travel analysis detects anomalies where login patterns defy physical plausibility, such as rapid logins from distant locations. It flags potential credential compromise or location-based spoofing.",
       "examTip": "If no one can fly that fast—it's impossible travel detection."
     },
     {
@@ -547,7 +547,7 @@ db.tests.insertOne({
         "Rule-Based Access Control"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MAC enforces access based on classification levels and policies set by the organization, often seen in military contexts.",
+      "explanation": "MAC enforces access based on classification levels and policies set by the organization, often seen in military contexts. This ensures no user can read up or write down beyond their assigned level.",
       "examTip": "Clearance levels = MAC. No exceptions, no owner discretion—policies rule here."
     },
     {
@@ -560,7 +560,7 @@ db.tests.insertOne({
         "Implementing cloud-native encryption with zero-knowledge proofs"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Client-side encryption ensures data is encrypted before it reaches the cloud, preventing the provider from accessing the data without client-managed keys.",
+      "explanation": "Client-side encryption ensures data is encrypted before it reaches the cloud, preventing the provider from accessing the data without client-managed keys. This approach is crucial for meeting stringent privacy regulations.",
       "examTip": "Don’t trust the cloud? Encrypt before upload—keys stay with you."
     },
     {
@@ -573,7 +573,7 @@ db.tests.insertOne({
         "Business Email Compromise (BEC)"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "BEC attacks exploit trust by impersonating senior executives or known internal contacts to trick employees into unauthorized actions, such as transferring funds.",
+      "explanation": "BEC attacks exploit trust by impersonating senior executives or known internal contacts to trick employees into unauthorized actions, such as transferring funds. The communications often appear urgent or high-priority.",
       "examTip": "BEC = Impersonating insiders for high-value targets—think CEO fraud schemes."
     },
     {
@@ -586,7 +586,7 @@ db.tests.insertOne({
         "Endpoint Detection and Response (EDR)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SOAR platforms combine intelligence, automation, and workflow orchestration to automate incident response and lower MTTR.",
+      "explanation": "SOAR platforms combine intelligence, automation, and workflow orchestration to automate incident response and lower MTTR. This reduces the workload on security teams and helps coordinate faster, standardized actions.",
       "examTip": "SOAR = Automation + Orchestration + Intelligence = Rapid, coordinated responses."
     },
     {
@@ -599,7 +599,7 @@ db.tests.insertOne({
         "Apply homomorphic encryption to enable computation on encrypted data"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Client-side encryption with region-specific key management ensures data remains encrypted under the organization's control, satisfying sovereignty requirements while reducing latency caused by cross-region key retrieval.",
+      "explanation": "Client-side encryption with region-specific key management ensures data remains encrypted under the organization's control, satisfying sovereignty requirements while reducing latency caused by cross-region key retrieval. Only authorized local processes can decrypt data.",
       "examTip": "Control your keys, control your compliance—client-side encryption locks down data sovereignty."
     },
     {
@@ -612,7 +612,7 @@ db.tests.insertOne({
         "IPsec in transport mode with AES-256 encryption"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Time-sensitive nonces in challenge-response authentication ensure each authentication session is unique, rendering replayed packets useless.",
+      "explanation": "Time-sensitive nonces in challenge-response authentication ensure each authentication session is unique, rendering replayed packets useless. Attackers cannot simply replay the same data to gain access.",
       "examTip": "Replay attacks thrive on repetition—nonces disrupt predictability by enforcing uniqueness."
     },
     {
@@ -625,7 +625,7 @@ db.tests.insertOne({
         "Enabling strict transport security headers (HSTS)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A WAF can immediately filter and block malicious HTTP requests without altering the server’s code, providing rapid mitigation for web application vulnerabilities.",
+      "explanation": "A WAF can immediately filter and block malicious HTTP requests without altering the server’s code, providing rapid mitigation for web application vulnerabilities. This is especially useful for zero-day threats or unpatched systems.",
       "examTip": "WAF = Web application bodyguard—filters bad HTTP requests when you can’t change the code fast enough."
     },
     {
@@ -638,7 +638,7 @@ db.tests.insertOne({
         "Notifying regulatory authorities about data breach impacts"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Containment focuses on stopping the spread of an incident. Isolating compromised systems prevents further exploitation and limits damage.",
+      "explanation": "Containment focuses on stopping the spread of an incident. Isolating compromised systems prevents further exploitation and limits damage, buying time to assess the extent of the breach.",
       "examTip": "Containment = Stop the bleeding. Think 'segregate now, investigate later.'"
     },
     {
@@ -651,7 +651,7 @@ db.tests.insertOne({
         "Tokenization with provider-managed encryption keys"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Client-side encryption ensures that only the customer holds the decryption keys, preventing the cloud provider from accessing sensitive data, even if the storage is compromised.",
+      "explanation": "Client-side encryption ensures that only the customer holds the decryption keys, preventing the cloud provider from accessing sensitive data, even if the storage is compromised. This method also helps maintain compliance with strict privacy laws.",
       "examTip": "Trust no one with your keys—encrypt on the client side if confidentiality is your top priority."
     },
     {
@@ -664,7 +664,7 @@ db.tests.insertOne({
         "Client-server architecture with dedicated firewalls"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Microservices with API gateways support granular scaling and isolate components, reducing the attack surface by controlling inter-service communications through secure gateways.",
+      "explanation": "Microservices with API gateways support granular scaling and isolate components, reducing the attack surface by controlling inter-service communications through secure gateways. Each microservice can be secured independently.",
       "examTip": "Scalability + isolation = Microservices + API gateway for tight control and minimal exposure."
     },
     {
@@ -677,7 +677,7 @@ db.tests.insertOne({
         "Replay attack"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Traffic analysis focuses on observing patterns in encrypted communication, potentially exposing encryption keys or metadata without altering the data.",
+      "explanation": "Traffic analysis focuses on observing patterns in encrypted communication, potentially exposing encryption keys or metadata without altering the data. Attackers might glean enough information about traffic flows to later break the encryption.",
       "examTip": "Not touching the data, just watching? That’s traffic analysis—metadata can reveal more than you think."
     },
     {
@@ -690,7 +690,7 @@ db.tests.insertOne({
         "Segmenting the wireless network using virtual LANs (VLANs)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "802.1X provides port-based authentication, ensuring only authorized devices connect without impacting legitimate users.",
+      "explanation": "802.1X provides port-based authentication, ensuring only authorized devices connect without impacting legitimate users. This approach verifies a device’s credentials before granting network access.",
       "examTip": "802.1X = Wireless gatekeeper—authenticate first, access later."
     },
     {
@@ -703,7 +703,7 @@ db.tests.insertOne({
         "A known vulnerability is exploited after security advisories are published."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A zero-day occurs when attackers exploit a flaw unknown to the vendor or public, with no patch available at the time of exploitation.",
+      "explanation": "A zero-day occurs when attackers exploit a flaw unknown to the vendor or public, with no patch available at the time of exploitation. The attacker capitalizes on the lack of awareness and immediate fixes.",
       "examTip": "Zero-day = No patch, no warning. Attackers strike before anyone knows it’s vulnerable."
     },
     {
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "Prevents lateral movement by isolating privileged sessions"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "JIT access minimizes the time privileged accounts are active, reducing the window of opportunity for attackers to exploit them.",
+      "explanation": "JIT access minimizes the time privileged accounts are active, reducing the window of opportunity for attackers to exploit them. This principle ensures administrators get elevated privileges only when needed and for a limited duration.",
       "examTip": "JIT = Privileges on demand. No standing access means fewer chances for attackers to exploit them."
     },
     {
@@ -729,7 +729,7 @@ db.tests.insertOne({
         "Cross-site request forgery (CSRF)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Command injection during authentication can manipulate the process, granting unauthorized access by executing arbitrary commands on the server.",
+      "explanation": "Command injection during authentication can manipulate the process, granting unauthorized access by executing arbitrary commands on the server. Attackers can piggyback on the authentication flow to bypass normal credential checks.",
       "examTip": "Authentication + command execution = Command injection exploit, not just XSS or SQLi."
     },
     {
@@ -742,7 +742,7 @@ db.tests.insertOne({
         "Utilizing key stretching techniques for key generation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Longer hash outputs increase the complexity required for finding hash collisions, effectively mitigating birthday attacks.",
+      "explanation": "Longer hash outputs increase the complexity required for finding hash collisions, effectively mitigating birthday attacks. Using algorithms like SHA-512 significantly raises collision resistance.",
       "examTip": "Hash collisions get harder as the hash length grows—SHA-512 over SHA-256 for stronger protection."
     },
     {
@@ -755,7 +755,7 @@ db.tests.insertOne({
         "Establishing VPN connections using SSL/TLS protocols"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "TLS with mutual authentication ensures encrypted communication channels while verifying both endpoints, protecting data in transit from eavesdropping and tampering.",
+      "explanation": "TLS with mutual authentication ensures encrypted communication channels while verifying both endpoints, protecting data in transit from eavesdropping and tampering. This approach also confirms the identity of both client and server.",
       "examTip": "TLS is king for secure transit—mutual auth seals the deal with endpoint verification."
     },
     {
@@ -768,7 +768,7 @@ db.tests.insertOne({
         "Applying firmware updates immediately after device deployment"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Unique credentials eliminate the effectiveness of default credentials—a common IoT security flaw.",
+      "explanation": "Unique credentials eliminate the effectiveness of default credentials—a common IoT security flaw. Requiring a custom password at setup is one of the first lines of defense for new devices.",
       "examTip": "Default passwords are an open door—make unique credentials the first line of defense."
     },
     {
@@ -781,7 +781,7 @@ db.tests.insertOne({
         "Implementing jump servers for all privileged access sessions"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Granular, time-limited permissions ensure that even if administrative credentials are compromised, their access scope and duration remain minimal.",
+      "explanation": "Granular, time-limited permissions ensure that even if administrative credentials are compromised, their access scope and duration remain minimal. This approach drastically reduces potential impact.",
       "examTip": "Least privilege done right: precise, time-boxed access. No excess, no lingering permissions."
     },
     {
@@ -794,7 +794,7 @@ db.tests.insertOne({
         "Counter Mode (CTR)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "GCM provides encryption (confidentiality) and includes a cryptographic hash (integrity), eliminating the need for separate authentication steps.",
+      "explanation": "GCM provides encryption (confidentiality) and includes a cryptographic hash (integrity), eliminating the need for separate authentication steps. It's widely used in secure communication protocols for both performance and security.",
       "examTip": "If integrity + confidentiality together without extra tools is the goal, GCM is the answer."
     },
     {
@@ -807,7 +807,7 @@ db.tests.insertOne({
         "Supply chain attack leveraging trusted software for covert exfiltration"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Regular, periodic traffic patterns typically indicate beaconing, where compromised systems check in with attacker-controlled infrastructure.",
+      "explanation": "Regular, periodic traffic patterns typically indicate beaconing, where compromised systems check in with attacker-controlled infrastructure. Attackers can issue commands or retrieve exfiltrated data during these check-ins.",
       "examTip": "Consistent intervals = beaconing. C2 might come later, but beaconing starts the communication."
     },
     {
@@ -820,7 +820,7 @@ db.tests.insertOne({
         "Reviewing access logs for abnormal time-of-day activities"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Privilege escalation typically results in the creation of processes running with higher permissions, making process tracking essential for detection.",
+      "explanation": "Privilege escalation typically results in the creation of processes running with higher permissions, making process tracking essential for detection. Monitoring system logs for such events can quickly reveal malicious activity.",
       "examTip": "New processes running as admin/root? That’s your privilege escalation red flag."
     },
     {
@@ -833,7 +833,7 @@ db.tests.insertOne({
         "Parameter tampering that bypasses authentication checks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IDOR vulnerabilities occur when applications expose references to internal objects (e.g., files, database entries) without proper access control.",
+      "explanation": "IDOR vulnerabilities occur when applications fail to properly enforce authorization checks, allowing users to access unauthorized resources. Attackers manipulate references like object IDs or filenames to gain elevated access.",
       "examTip": "If changing a URL ID lets you access someone else’s data—classic IDOR."
     },
     {
@@ -846,7 +846,7 @@ db.tests.insertOne({
         "Elliptic Curve Digital Signature Algorithm (ECDSA)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Ephemeral key exchanges (like ECDHE) generate unique session keys for each session, ensuring that compromising a single key doesn’t affect previous sessions.",
+      "explanation": "Ephemeral key exchanges (like ECDHE) generate unique session keys for each session, ensuring that compromising one key doesn’t affect previous sessions. This is crucial for maintaining privacy against future key exposure.",
       "examTip": "Forward secrecy = No key reuse. Ephemeral = one-time keys, one-time trust."
     },
     {
@@ -859,7 +859,7 @@ db.tests.insertOne({
         "Protocol fuzzing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Packet sniffing involves passively observing network traffic to gather intelligence without sending traffic to the target systems.",
+      "explanation": "Packet sniffing involves passively observing network traffic to gather intelligence without sending traffic to the target systems. It can reveal data such as unencrypted passwords, session IDs, or network structure.",
       "examTip": "Passive data collection = packet sniffing. Scanning sends probes, sniffing just listens."
     },
     {
@@ -872,7 +872,7 @@ db.tests.insertOne({
         "Conducting regular penetration tests on legacy application components"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Network segmentation isolates vulnerable legacy systems, limiting potential lateral movement if they are exploited.",
+      "explanation": "Network segmentation isolates vulnerable legacy systems, limiting potential lateral movement if they are exploited. By placing these systems in separate zones, you reduce the threat to the rest of the network.",
       "examTip": "Can’t patch it? Box it in. Segmentation buys time by isolating risk."
     },
     {
@@ -885,7 +885,7 @@ db.tests.insertOne({
         "Stateful packet inspection"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Behavioral anomaly detection monitors for deviations from established baselines, detecting previously unknown threats that lack known signatures.",
+      "explanation": "Behavioral anomaly detection monitors for deviations from established baselines, detecting previously unknown threats that lack known signatures. It's particularly effective for zero-day or stealthy attacks.",
       "examTip": "Anomaly = deviation from normal. Behavior-based = learns what's usual, flags what's not."
     },
     {
@@ -898,7 +898,7 @@ db.tests.insertOne({
         "Certificate pinning for endpoint validation"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Flow-based monitoring tools analyze traffic patterns and metadata (such as connection duration, size, and frequency) without needing to decrypt the traffic itself.",
+      "explanation": "Flow-based monitoring tools analyze traffic patterns and metadata (such as connection duration, size, and frequency) without needing to decrypt the traffic itself. This method can reveal abnormal or malicious connections.",
       "examTip": "Need visibility without touching encryption? Analyze the flow, not the content."
     },
     {
@@ -911,7 +911,7 @@ db.tests.insertOne({
         "Mandatory Access Control (MAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ABAC uses dynamic attributes like location and device posture to determine access, making it ideal for real-time adaptive security requirements.",
+      "explanation": "ABAC uses dynamic attributes like location and device posture to determine access, making it ideal for real-time adaptive security requirements. This flexibility is superior to static roles in rapidly changing environments.",
       "examTip": "Dynamic conditions = ABAC. Context-driven access beats static roles every time."
     },
     {
@@ -924,7 +924,7 @@ db.tests.insertOne({
         "Advanced Encryption Standard (AES-256)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Lattice-based cryptography is considered a strong candidate for post-quantum cryptography due to its resistance to known quantum algorithms like Shor’s algorithm.",
+      "explanation": "Lattice-based cryptography is considered a strong candidate for post-quantum cryptography due to its resistance to known quantum algorithms like Shor’s algorithm. Researchers see it as a promising approach for future-proof encryption.",
       "examTip": "Quantum threats? Think lattice-based—designed for a quantum future."
     },
     {
@@ -937,7 +937,7 @@ db.tests.insertOne({
         "Reviewing vendor release notes for known issues"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Rescanning verifies that previously identified vulnerabilities have been fixed and that no new vulnerabilities were introduced during remediation.",
+      "explanation": "Rescanning verifies that previously identified vulnerabilities have been fixed and that no new vulnerabilities were introduced during remediation. This step closes the loop in the vulnerability management lifecycle.",
       "examTip": "If you haven’t rescanned, you don’t know it’s fixed. Verification closes the loop."
     },
     {
@@ -950,7 +950,7 @@ db.tests.insertOne({
         "Adware"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Trojan horses appear to be legitimate software but deliver malicious payloads, often including backdoors for remote access.",
+      "explanation": "Trojan horses appear to be legitimate software but deliver malicious payloads, often including backdoors for remote access. Users unknowingly install the Trojan, giving attackers a foothold.",
       "examTip": "Looks safe, acts malicious? Trojan all the way—trust is its weapon."
     },
     {
@@ -963,7 +963,7 @@ db.tests.insertOne({
         "Conducting static code analysis on all API endpoints"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "API gateways with rate limiting prevent abuse by restricting how often APIs can be called, mitigating denial-of-service attacks and other abuse patterns.",
+      "explanation": "API gateways with rate limiting prevent abuse by restricting how often APIs can be called, mitigating denial-of-service attacks and other abuse patterns. They can also require authentication or apply traffic throttling.",
       "examTip": "API security starts at the gate—limit what comes in and how often."
     },
     {
@@ -976,7 +976,7 @@ db.tests.insertOne({
         "Geofencing with cloud-native encryption tools"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Homomorphic encryption allows computations to be performed on encrypted data without decrypting it, ensuring sensitive data remains secure during processing.",
+      "explanation": "Homomorphic encryption allows computations to be performed on encrypted data without decrypting it, ensuring sensitive data remains secure during processing. It's still emerging technology with evolving performance considerations.",
       "examTip": "Need to compute without decrypting? Homomorphic encryption has your back—math stays encrypted."
     },
     {
@@ -989,7 +989,7 @@ db.tests.insertOne({
         "TCP reset attack"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A SYN flood attack overwhelms a server with half-open connections by sending numerous SYN requests without finalizing the handshake.",
+      "explanation": "A SYN flood attack overwhelms a server with half-open connections by sending numerous SYN requests without finalizing the handshake. This eventually exhausts the server's available connection queue.",
       "examTip": "Half-open connections piling up? Classic SYN flood disrupting TCP handshakes."
     },
     {
@@ -1002,7 +1002,7 @@ db.tests.insertOne({
         "Brewer-Nash Model"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The Bell-LaPadula model enforces 'no read up, no write down' principles, focusing on maintaining data confidentiality based on clearance levels.",
+      "explanation": "The Bell-LaPadula model enforces 'no read up, no write down' principles, focusing on maintaining data confidentiality based on clearance levels. It's widely used in military and government contexts.",
       "examTip": "Confidentiality through clearance control? Bell-LaPadula is the gold standard."
     },
     {
@@ -1015,7 +1015,7 @@ db.tests.insertOne({
         "Key Derivation Function (KDF)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "An HSM provides tamper-resistant hardware specifically for generating, storing, and managing cryptographic keys securely.",
+      "explanation": "An HSM provides tamper-resistant hardware specifically for generating, storing, and managing cryptographic keys securely. This ensures that keys are both protected from unauthorized access and safe from exfiltration.",
       "examTip": "Key management + tamper resistance? HSM keeps critical keys locked down."
     },
     {
@@ -1028,7 +1028,7 @@ db.tests.insertOne({
         "Side-channel attack"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The 'harvest-now, decrypt-later' strategy targets future weaknesses in encryption, especially concerning quantum computing threats.",
+      "explanation": "The 'harvest-now, decrypt-later' strategy targets future weaknesses in encryption, especially concerning quantum computing threats. Attackers collect encrypted data, hoping to decrypt it once they have more advanced computational power.",
       "examTip": "Store now, break later—watch for quantum readiness in encryption discussions."
     },
     {
@@ -1041,7 +1041,7 @@ db.tests.insertOne({
         "Virtual Private Cloud (VPC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ZTNA enforces identity-based access controls, allowing connections only from authenticated users and compliant devices, adhering to Zero Trust principles.",
+      "explanation": "ZTNA enforces identity-based access controls, allowing connections only from authenticated users and compliant devices, adhering to Zero Trust principles. It verifies user and device posture before granting resource access.",
       "examTip": "ZTNA = Trust nothing by default, verify everything continuously—especially in the cloud."
     },
     {
@@ -1054,7 +1054,7 @@ db.tests.insertOne({
         "Encrypting with longer key lengths (e.g., AES-256)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "PFS ensures that each session uses a unique key, so compromising one key does not expose past communications.",
+      "explanation": "PFS ensures that each session uses a unique key, so compromising one key does not expose past communications. This mitigates the risk of historical data decryption if the session key is uncovered.",
       "examTip": "One key per session = no retroactive breaches. Forward secrecy keeps history safe."
     },
     {
@@ -1067,7 +1067,7 @@ db.tests.insertOne({
         "DNSSEC validation failures"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DNS tunneling uses DNS queries to bypass network controls, often for covert data exfiltration or command and control communication.",
+      "explanation": "DNS tunneling uses DNS queries to bypass network controls, often for covert data exfiltration or command and control communication. Attackers hide malicious traffic within seemingly legitimate DNS requests.",
       "examTip": "Encrypted DNS traffic with no reason? Someone’s tunneling out—time to investigate."
     },
     {
@@ -1080,7 +1080,7 @@ db.tests.insertOne({
         "Multifactor authentication (MFA)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Federated identity management allows users to authenticate across different systems using one trusted identity provider, reducing the need for multiple credentials.",
+      "explanation": "Federated identity management allows users to authenticate across different systems using one trusted identity provider, reducing the need for multiple credentials. This improves security by centralizing and standardizing authentication.",
       "examTip": "Federation = One ID to rule multiple systems securely. Broader than SSO alone."
     },
     {
@@ -1093,7 +1093,7 @@ db.tests.insertOne({
         "Key Escrow Services"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "OCSP provides real-time certificate status checks without requiring clients to download entire CRLs, enhancing efficiency and security.",
+      "explanation": "OCSP provides real-time certificate status checks without requiring clients to download entire CRLs, enhancing efficiency and security. It queries a trusted responder to validate a certificate's revocation status.",
       "examTip": "Real-time cert verification? OCSP beats bulky CRLs every time."
     },
     {
@@ -1106,7 +1106,7 @@ db.tests.insertOne({
         "Remote code execution (RCE)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Command injection occurs when unvalidated data from an external source allows attackers to execute arbitrary commands on the server.",
+      "explanation": "Command injection occurs when unvalidated data from an external source allows attackers to execute arbitrary commands on the server. Ensuring data is sanitized before execution is vital to prevent this exploit.",
       "examTip": "If external data triggers unintended server commands, command injection is likely at play."
     },
     {
@@ -1119,7 +1119,7 @@ db.tests.insertOne({
         "Using secure log aggregation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The chain of custody documents each step of evidence handling, ensuring integrity and admissibility in court.",
+      "explanation": "The chain of custody documents each step of evidence handling, ensuring integrity and admissibility in court. Any breach in this chain can invalidate the evidence.",
       "examTip": "Evidence integrity in court? Chain of custody is the unbroken trail you need."
     },
     {
@@ -1132,7 +1132,7 @@ db.tests.insertOne({
         "SAML with single sign-on (SSO)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Kerberos uses time-stamped tickets for mutual authentication, ensuring credentials are never transmitted in plaintext.",
+      "explanation": "Kerberos uses time-stamped tickets for mutual authentication, ensuring credentials are never transmitted in plaintext. Each party must prove its identity, reducing the risk of on-path attacks.",
       "examTip": "Tickets + time-stamps + no plaintext passwords = Kerberos magic."
     },
     {
@@ -1145,7 +1145,7 @@ db.tests.insertOne({
         "Role-based access controls (RBAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Full disk encryption ensures all data on a physical medium remains unreadable without proper decryption keys, protecting against physical theft.",
+      "explanation": "Full disk encryption ensures all data on a physical medium remains unreadable without proper decryption keys, protecting against physical theft. Even if the device is stolen, the contents remain secure.",
       "examTip": "Stolen drive? Without the key, FDE keeps data off-limits."
     },
     {
@@ -1158,7 +1158,7 @@ db.tests.insertOne({
         "Vishing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Whaling targets high-value individuals like executives, often through tailored phishing schemes designed to compromise critical assets.",
+      "explanation": "Whaling targets high-value individuals like executives, often through tailored phishing schemes designed to compromise critical assets. Attackers craft their messages with personal details to increase credibility.",
       "examTip": "Phishing the CEO? That’s whaling—big fish, big impact."
     },
     {
@@ -1171,7 +1171,7 @@ db.tests.insertOne({
         "Centralized visibility across the entire network perimeter"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "HIPS operates at the endpoint level, detecting and preventing malicious activity that never reaches the network, such as local privilege escalation attempts.",
+      "explanation": "HIPS operates at the endpoint level, detecting and preventing malicious activity that never reaches the network, such as local privilege escalation attempts. This offers a layer of protection beyond network perimeter defenses.",
       "examTip": "Local threats need local defenses—HIPS watches what network sensors can’t see."
     },
     {
@@ -1184,7 +1184,7 @@ db.tests.insertOne({
         "Race condition exploitation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Timing attacks exploit variations in system response times to deduce sensitive data like encryption keys, especially in cryptographic implementations.",
+      "explanation": "Timing attacks exploit variations in system response times to deduce sensitive data like encryption keys, especially in cryptographic implementations. By measuring how long operations take, attackers infer partial key information.",
       "examTip": "If timing differences leak secrets, it's a timing attack—precision matters."
     },
     {
@@ -1197,7 +1197,7 @@ db.tests.insertOne({
         "PGP (Pretty Good Privacy)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "STARTTLS upgrades an existing plaintext SMTP connection to a secure one using TLS, ensuring encryption while preserving backward compatibility.",
+      "explanation": "STARTTLS upgrades an existing plaintext SMTP connection to a secure one using TLS, ensuring encryption while preserving backward compatibility. This approach avoids the need for separate ports for unencrypted vs. encrypted sessions.",
       "examTip": "Upgrade without breaking legacy systems? STARTTLS makes old protocols secure again."
     },
     {
@@ -1210,7 +1210,7 @@ db.tests.insertOne({
         "Command injection"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SSRF tricks a server into making unauthorized requests to internal or external resources, potentially exposing sensitive information or services.",
+      "explanation": "SSRF tricks a server into making unauthorized requests to internal or external resources, potentially exposing sensitive information or services. Attackers craft requests that the server itself executes on behalf of the adversary.",
       "examTip": "Server making unexpected calls? SSRF is likely—especially when accessing internal resources."
     },
     {
@@ -1223,7 +1223,7 @@ db.tests.insertOne({
         "Key derivation function (KDF)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Secure enclaves provide isolated execution environments within a processor, ensuring that encryption keys remain inaccessible to the host system or external attackers.",
+      "explanation": "Secure enclaves provide isolated execution environments within a processor, ensuring that encryption keys remain inaccessible to the host system or external attackers. This hardware-level protection is often found in modern CPUs.",
       "examTip": "If keys must never leave the processor, secure enclaves provide hardware-level isolation."
     },
     {
@@ -1236,7 +1236,7 @@ db.tests.insertOne({
         "Fuzz testing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DAST analyzes running applications in real-time, identifying vulnerabilities that occur during execution, such as runtime misconfigurations and injection flaws.",
+      "explanation": "DAST analyzes running applications in real-time, identifying vulnerabilities that occur during execution, such as runtime misconfigurations and injection flaws. It simulates external attacks to find weaknesses in the app’s operational state.",
       "examTip": "Runtime testing? DAST observes the app in action—dynamic behavior, dynamic testing."
     },
     {
@@ -1249,7 +1249,7 @@ db.tests.insertOne({
         "Spyware"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Rootkits operate at the system level, modifying OS components to conceal their presence and maintain persistent access.",
+      "explanation": "Rootkits operate at the system level, modifying OS components to conceal their presence and maintain persistent access. Traditional antivirus may not detect them because the rootkit hides its processes from the OS itself.",
       "examTip": "If it hides by altering the system itself, it's a rootkit—stealth is its main weapon."
     },
     {
@@ -1262,7 +1262,7 @@ db.tests.insertOne({
         "Residual risk"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A false positive occurs when a scanner flags a vulnerability that is effectively mitigated or not actually exploitable in the environment.",
+      "explanation": "A false positive occurs when a scanner flags a vulnerability that is effectively mitigated or not actually exploitable in the environment. This can happen if the scanner's database or detection logic isn't context-aware.",
       "examTip": "Scanner says 'vulnerable,' but you’re safe? Classic false positive scenario."
     },
     {
@@ -1275,7 +1275,7 @@ db.tests.insertOne({
         "Stored procedures"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Parameterized queries separate SQL code from user input, ensuring the database treats input strictly as data, effectively preventing SQL injection.",
+      "explanation": "Parameterized queries separate SQL code from user input, ensuring the database treats input strictly as data, effectively preventing SQL injection. By binding parameters to placeholders, they avoid direct string concatenation.",
       "examTip": "Separate code from data. Parameterized queries = SQL injection prevention 101."
     },
     {
@@ -1288,7 +1288,7 @@ db.tests.insertOne({
         "Idle resource reclamation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Session timeouts automatically terminate inactive sessions, mitigating risks of unauthorized access from unattended systems.",
+      "explanation": "Session timeouts automatically terminate inactive sessions, mitigating risks of unauthorized access from unattended systems. This approach forces re-authentication after a period of user inactivity.",
       "examTip": "Inactive session = expired session. Session timeouts protect unattended user environments."
     },
     {
@@ -1301,7 +1301,7 @@ db.tests.insertOne({
         "Network Segmentation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "NAC enforces security policies by allowing network access only to devices that meet predefined security requirements, ensuring compliance before granting access.",
+      "explanation": "NAC enforces security policies by allowing network access only to devices that meet predefined security requirements, ensuring compliance before granting access. Devices with outdated patches or lacking antivirus are quarantined until remediated.",
       "examTip": "Pre-access device checks? NAC verifies compliance before letting anyone in."
     }
   ]
