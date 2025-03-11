@@ -128,71 +128,65 @@ const DailyStationPage = () => {
   }, [userId]);
 
   // Claim daily bonus
-  const handleClaimDailyBonus = async () => {
+  const handleClaimDailyBonus = () => {
     if (!userId) {
       setBonusError('Please log in first.');
       return;
     }
     
+    // FIRST - Force the button to disappear immediately
+    setCanClaim(false);
     setLoadingBonus(true);
     setBonusError(null);
-    
-    // Immediately update UI to show countdown - don't wait for API response
-    setCanClaim(false);
     setLocalLastDailyClaim(new Date().toISOString());
     setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
     
-    try {
-      const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
-        method: 'POST'
-      });
-      const data = await res.json();
-      
-      if (!res.ok) {
-        // Hard error, e.g. 404 user not found
-        setBonusError(data.error || 'Error claiming daily bonus');
-        // Revert UI if there was an error
-        setCanClaim(true);
-        setLoadingBonus(false);
-        return;
-      }
-      
-      if (data.success) {
-        // Claimed successfully
-        setShowBonusAnimation(true);
-        setTimeout(() => setShowBonusAnimation(false), 3000);
-        setBonusSuccess(true);
-        
-        // Update with the actual timestamp from server
-        if (data.newLastDailyClaim) {
-          setLocalLastDailyClaim(data.newLastDailyClaim);
+    // THEN - Make the API call
+    fetch(`/api/test/user/${userId}/daily-bonus`, {
+      method: 'POST'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!res.ok) {
+          throw new Error(data.error || 'Error claiming daily bonus');
         }
         
-        // Refresh user data to update coins/xp
-        dispatch(fetchUserData(userId));
-      } else {
-        // Already claimed case
-        if (!data.message || !data.message.includes("Already claimed")) {
-          setBonusError(data.message);
-        }
-        
-        // If we get "already claimed" message with seconds left info, update the countdown
-        const match = data.message && data.message.match(/(\d+)/);
-        if (match) {
-          const secondsLeft = parseInt(match[1], 10);
-          if (!isNaN(secondsLeft) && secondsLeft > 0) {
-            setBonusCountdown(secondsLeft);
+        if (data.success) {
+          // Claimed successfully
+          setShowBonusAnimation(true);
+          setTimeout(() => setShowBonusAnimation(false), 3000);
+          setBonusSuccess(true);
+          
+          // Update with the actual timestamp from server
+          if (data.newLastDailyClaim) {
+            setLocalLastDailyClaim(data.newLastDailyClaim);
+          }
+          
+          // Refresh user data to update coins/xp
+          dispatch(fetchUserData(userId));
+        } else {
+          // Already claimed case
+          if (!data.message || !data.message.includes("Already claimed")) {
+            setBonusError(data.message);
+          }
+          
+          // If we get "already claimed" message with seconds left info, update the countdown
+          const match = data.message && data.message.match(/(\d+)/);
+          if (match) {
+            const secondsLeft = parseInt(match[1], 10);
+            if (!isNaN(secondsLeft) && secondsLeft > 0) {
+              setBonusCountdown(secondsLeft);
+            }
           }
         }
-      }
-      
-      setLoadingBonus(false);
-    } catch (err) {
-      setBonusError('Error: ' + err.message);
-      setLoadingBonus(false);
-      // On error, revert UI
-      setCanClaim(true);
-    }
+      })
+      .catch(err => {
+        setBonusError('Error: ' + err.message);
+        // We'll keep the countdown visible even on errors
+      })
+      .finally(() => {
+        setLoadingBonus(false);
+      });
   };
 
   // Fetch daily question
@@ -336,24 +330,19 @@ const DailyStationPage = () => {
                 
                 {/* Claim Button or Countdown */}
                 <div className="daily-station-bonus-action">
-                  {canClaim ? (
+                  {canClaim && !loadingBonus ? (
                     <button 
                       className="daily-station-claim-btn"
                       onClick={handleClaimDailyBonus}
-                      disabled={loadingBonus}
                     >
-                      {loadingBonus ? (
-                        <>
-                          <FaSyncAlt className="loading-icon" />
-                          <span>Claiming...</span>
-                        </>
-                      ) : (
-                        <>
-                          <FaCoins />
-                          <span>Claim Bonus</span>
-                        </>
-                      )}
+                      <FaCoins />
+                      <span>Claim Bonus</span>
                     </button>
+                  ) : loadingBonus ? (
+                    <div className="daily-station-countdown">
+                      <FaSyncAlt className="loading-icon" />
+                      <span>Claiming your bonus...</span>
+                    </div>
                   ) : (
                     <div className="daily-station-countdown">
                       <FaHourglassHalf className="daily-station-countdown-icon" />
