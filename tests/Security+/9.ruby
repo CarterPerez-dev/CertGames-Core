@@ -14,7 +14,7 @@ db.tests.insertOne({
         "RSA-4096 with symmetric key wrapping for scalable key distribution"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Lattice-based cryptography offers strong resistance to quantum attacks, unlike RSA and ECC. Combined with hierarchical key management, it supports efficient, scalable key control for large backup systems without compromising performance.",
+      "explanation": "Lattice-based cryptography offers strong resistance to quantum attacks, unlike RSA and ECC. Combined with hierarchical key management, it supports efficient, scalable key control for large backup systems without compromising performance. It also ensures data remains secure in the long term even if current cryptographic methods are compromised.",
       "examTip": "Think post-quantum: Lattice-based crypto is designed to survive quantum decryption attempts."
     },
     {
@@ -27,7 +27,7 @@ db.tests.insertOne({
         "Manipulation of infrastructure-as-code (IaC) deployment pipelines"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "By assuming roles with temporary credentials, attackers can maintain persistent access without leaving obvious traces in static credential repositories, especially in dynamic cloud environments.",
+      "explanation": "By assuming roles with temporary credentials, attackers can maintain persistent access without leaving obvious traces in static credential repositories, especially in dynamic cloud environments. This approach allows them to abuse the cloud's ephemeral nature to evade detection.",
       "examTip": "Temporary credentials from assumed roles often bypass long-term key rotation—watch for subtle persistence techniques in cloud environments."
     },
     {
@@ -40,7 +40,7 @@ db.tests.insertOne({
         "Credential stuffing susceptibility due to predictable responses"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Different error responses based on user existence allow attackers to enumerate valid usernames, which is a common precursor to brute-force and phishing attacks.",
+      "explanation": "Different error responses based on user existence allow attackers to enumerate valid usernames, which is a common precursor to brute-force and phishing attacks. This user enumeration vulnerability significantly weakens authentication safeguards.",
       "examTip": "Consistent error messaging is key. Variable responses give attackers a user list on a silver platter."
     },
     {
@@ -53,7 +53,7 @@ db.tests.insertOne({
         "Applying forward secrecy through DHE key exchanges without fallback"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Allowing only TLS 1.3 and TLS 1.2 with strong ciphers mitigates downgrade risks while ensuring compatibility with modern clients. The fallback is secure because TLS 1.2, with strong ciphers, remains resilient against known downgrade exploits.",
+      "explanation": "Allowing only TLS 1.3 and TLS 1.2 with strong ciphers mitigates downgrade risks while ensuring compatibility with modern clients. The fallback is secure because TLS 1.2, with strong ciphers, remains resilient against known downgrade exploits. This configuration maintains a high security baseline across various client versions.",
       "examTip": "Downgrade protection needs minimal, secure fallback—TLS 1.3 > TLS 1.2 with robust ciphers hits the sweet spot."
     },
     {
@@ -66,7 +66,7 @@ db.tests.insertOne({
         "Rate-limiting failed authentication attempts per IP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Constant-time cryptographic operations prevent attackers from discerning authentication outcomes based on processing time, effectively mitigating timing attacks.",
+      "explanation": "Constant-time cryptographic operations prevent attackers from discerning authentication outcomes based on processing time, effectively mitigating timing attacks. This uniformity in response time removes the covert channel attackers rely on to guess tokens.",
       "examTip": "Timing attacks thrive on microsecond differences. Uniform processing time shuts them down."
     },
     {
@@ -79,7 +79,7 @@ db.tests.insertOne({
         "Lateral movement leveraging encrypted SSH tunnels"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Beaconing behavior is characterized by periodic, low-profile connections often used by malware to await further instructions from a C2 server. The use of uncommon ports supports stealthy operations.",
+      "explanation": "Beaconing behavior is characterized by periodic, low-profile connections often used by malware to await further instructions from a C2 server. The use of uncommon ports supports stealthy operations. These short, intermittent callbacks are a hallmark of advanced persistent threats.",
       "examTip": "Stealthy check-ins at odd intervals? It’s beaconing—C2 activity comes after initial validation."
     },
     {
@@ -92,7 +92,7 @@ db.tests.insertOne({
         "Session prediction attack"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Session prediction attacks exploit weak or predictable session IDs to hijack user sessions without requiring additional vulnerabilities.",
+      "explanation": "Session prediction attacks exploit weak or predictable session IDs to hijack user sessions without requiring additional vulnerabilities. They often rely on analyzing patterns in session tokens or IDs to replicate valid sessions.",
       "examTip": "Session IDs that are guessable? Predictability equals vulnerability—session prediction is the culprit."
     },
     {
@@ -105,7 +105,7 @@ db.tests.insertOne({
         "Hardware Security Module (HSM) integrated encryption"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Homomorphic encryption allows computations on encrypted data without decryption, ensuring the cloud provider never accesses plaintext data or keys.",
+      "explanation": "Homomorphic encryption allows computations on encrypted data without decryption, ensuring the cloud provider never accesses plaintext data or keys. This preserves data confidentiality even during processing. It is especially valuable for privacy-preserving analytics.",
       "examTip": "Need processing without decryption? Homomorphic encryption is the cutting-edge solution."
     },
     {
@@ -118,7 +118,7 @@ db.tests.insertOne({
         "Heuristic anomaly detection"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Impossible travel analysis detects logins from geographically distant locations in improbable timeframes, indicating credential compromise.",
+      "explanation": "Impossible travel analysis detects logins from geographically distant locations in improbable timeframes, indicating credential compromise. This type of alert typically suggests an automated or scripted attack using stolen credentials.",
       "examTip": "Login from London and Tokyo in 60 seconds? No teleportation—impossible travel detection triggers."
     },
     {
@@ -131,7 +131,7 @@ db.tests.insertOne({
         "Security Information and Event Management (SIEM)"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "The Policy Decision Point (PDP) evaluates access requests based on identity, context, and policy adherence before allowing or continuing access in Zero Trust frameworks.",
+      "explanation": "The Policy Decision Point (PDP) evaluates access requests based on identity, context, and policy adherence before allowing or continuing access in Zero Trust frameworks. It continuously verifies user and device attributes to adapt permissions. This ensures every request is rigorously checked before access is granted.",
       "examTip": "ZTA = continuous evaluation. The PDP decides access based on real-time verification."
     },
     {
@@ -144,7 +144,7 @@ db.tests.insertOne({
         "Rainbow table attack"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Birthday attacks exploit the mathematical principle that finding two inputs with the same hash is easier than expected, challenging hash function integrity.",
+      "explanation": "Birthday attacks exploit the mathematical principle that finding two inputs with the same hash is easier than expected, challenging hash function integrity. The probability of collision grows quickly as more inputs are tested.",
       "examTip": "Hash collisions appearing sooner than expected? The birthday paradox is the underlying math."
     },
     {
@@ -157,7 +157,7 @@ db.tests.insertOne({
         "Privilege escalation through JWT payload tampering"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "If the 'none' algorithm is accepted, JWTs can be forged without signature verification, allowing attackers to craft arbitrary tokens with elevated privileges.",
+      "explanation": "If the 'none' algorithm is accepted, JWTs can be forged without signature verification, allowing attackers to craft arbitrary tokens with elevated privileges. This effectively bypasses authentication and trust mechanisms.",
       "examTip": "JWT 'none' = no signature = full trust in untrusted tokens—never accept 'none' in production."
     },
     {
@@ -170,7 +170,7 @@ db.tests.insertOne({
         "Privileged Identity Management (PIM)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "JIT access grants privileges temporarily, reducing the attack window for potential escalation by ensuring elevated permissions aren't persistently available.",
+      "explanation": "JIT access grants privileges temporarily, reducing the attack window for potential escalation by ensuring elevated permissions aren't persistently available. This approach aligns with the principle of least privilege by removing rights as soon as they're no longer needed.",
       "examTip": "Privileged access only when needed = JIT. No standing permissions means fewer escalation opportunities."
     },
     {
@@ -183,7 +183,7 @@ db.tests.insertOne({
         "Heap spraying to influence resource allocation timing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TOC/TOU vulnerabilities arise when a system checks a condition (e.g., file permissions) but doesn’t re-validate it before use, allowing changes in between.",
+      "explanation": "TOC/TOU vulnerabilities arise when a system checks a condition (e.g., file permissions) but doesn’t re-validate it before use, allowing changes in between. Attackers exploit this gap to modify resources after they pass initial checks.",
       "examTip": "Validated too early? TOC/TOU means an attacker slips in changes after checks but before action."
     },
     {
@@ -196,7 +196,7 @@ db.tests.insertOne({
         "Endpoint data loss prevention (DLP) agent deployment"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Flow-based anomaly detection analyzes traffic patterns (e.g., frequency, size, timing) to detect abnormalities without decrypting the content, ideal for identifying covert data exfiltration attempts.",
+      "explanation": "Flow-based anomaly detection analyzes traffic patterns (e.g., frequency, size, timing) to detect abnormalities without decrypting the content, ideal for identifying covert data exfiltration attempts. This method leverages statistical profiling to spot irregular behavior indicative of hidden channels.",
       "examTip": "Covert channels in encrypted streams? Flow analysis reveals suspicious patterns without touching encryption."
     },
     {
@@ -209,7 +209,7 @@ db.tests.insertOne({
         "Code obfuscation with runtime decryption"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Fileless malware operates entirely in memory, leaving no file-based artifacts, thus bypassing traditional file integrity checks.",
+      "explanation": "Fileless malware operates entirely in memory, leaving no file-based artifacts, thus bypassing traditional file integrity checks. These attacks often exploit legitimate system processes to remain hidden.",
       "examTip": "Memory-only, no file footprint? Classic fileless malware behavior—hard to detect, harder to stop."
     },
     {
@@ -222,7 +222,7 @@ db.tests.insertOne({
         "Kerberos with pre-authentication encryption"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TLS 1.3 with ECDHE ensures forward secrecy by generating a new ephemeral key for each session, preventing retrospective decryption of past sessions if long-term keys are compromised.",
+      "explanation": "TLS 1.3 with ECDHE ensures forward secrecy by generating a new ephemeral key for each session, preventing retrospective decryption of past sessions if long-term keys are compromised. This mutual authentication also protects against impersonation and man-in-the-middle attacks.",
       "examTip": "Forward secrecy = new keys every session. TLS 1.3 + ECDHE is the modern gold standard."
     },
     {
@@ -235,7 +235,7 @@ db.tests.insertOne({
         "Using stateless tokens for session management"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Strict allow-lists for deserialization ensure only expected object types are processed, preventing attackers from injecting malicious payloads.",
+      "explanation": "Strict allow-lists for deserialization ensure only expected object types are processed, preventing attackers from injecting malicious payloads. This validation step is crucial to block arbitrary code execution through untrusted serialized objects.",
       "examTip": "Serialization bugs? Always control what you deserialize—type validation saves systems."
     },
     {
@@ -248,7 +248,7 @@ db.tests.insertOne({
         "Data exfiltration over covert encrypted channels"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Beaconing involves initial, low-frequency communications to attacker-controlled infrastructure, typically following initial compromise (e.g., phishing).",
+      "explanation": "Beaconing involves initial, low-frequency communications to attacker-controlled infrastructure, typically following initial compromise (e.g., phishing). These short bursts of activity enable attackers to quietly maintain a foothold.",
       "examTip": "Short, periodic pings post-compromise? Beaconing sets the stage for C2 instructions."
     },
     {
@@ -261,7 +261,7 @@ db.tests.insertOne({
         "Regression testing in production environments"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Rescanning after remediation confirms that vulnerabilities are resolved and no new issues were introduced by the applied patches.",
+      "explanation": "Rescanning after remediation confirms that vulnerabilities are resolved and no new issues were introduced by the applied patches. This step validates the effectiveness of the fix and ensures ongoing security.",
       "examTip": "Fix it? Prove it. Rescan after patching to confirm all vulnerabilities are truly closed."
     },
     {
@@ -274,7 +274,7 @@ db.tests.insertOne({
         "TLSA records in DANE configurations"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DNSSEC authenticates DNS data using cryptographic signatures, preventing tampering and ensuring responses originate from legitimate sources.",
+      "explanation": "DNSSEC authenticates DNS data using cryptographic signatures, preventing tampering and ensuring responses originate from legitimate sources. It protects against spoofed DNS entries that could redirect users to malicious sites.",
       "examTip": "Trust DNS? Verify it cryptographically—DNSSEC signs, so you don’t get spoofed."
     },
     {
@@ -287,7 +287,7 @@ db.tests.insertOne({
         "Hardware-backed key storage for firmware integrity checks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Code signing ensures that firmware is verified against a trusted signature before installation, preventing tampered updates from being applied.",
+      "explanation": "Code signing ensures that firmware is verified against a trusted signature before installation, preventing tampered updates from being applied. This cryptographic check helps maintain the integrity of device software.",
       "examTip": "No signed code = no trust. Firmware signing prevents malicious updates from sliding through."
     },
     {
@@ -300,7 +300,7 @@ db.tests.insertOne({
         "Lateral movement via trusted relationships"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Supply chain compromises exploit trust in external vendors or third-party providers to insert malicious components or gain unauthorized access.",
+      "explanation": "Supply chain compromises exploit trust in external vendors or third-party providers to insert malicious components or gain unauthorized access. These attacks can be especially devastating as they exploit legitimate channels to breach an organization.",
       "examTip": "Third-party trust turned toxic? Supply chain attacks hit weakest links with strongest impact."
     },
     {
@@ -313,7 +313,7 @@ db.tests.insertOne({
         "Implementing account lockout policies after failed logins"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Salts ensure each hash is unique, even for identical passwords, rendering precomputed rainbow tables ineffective.",
+      "explanation": "Salts ensure each hash is unique, even for identical passwords, rendering precomputed rainbow tables ineffective. This additional random data greatly increases the computational effort required for attackers.",
       "examTip": "Same passwords, different hashes? Salts break rainbow tables—unique hashes, unique protection."
     },
     {
@@ -326,7 +326,7 @@ db.tests.insertOne({
         "Discretionary Access Control (DAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ABAC allows dynamic access decisions based on contextual attributes, enabling real-time policy enforcement aligned with Zero Trust principles.",
+      "explanation": "ABAC allows dynamic access decisions based on contextual attributes, enabling real-time policy enforcement aligned with Zero Trust principles. By factoring user, device, and environmental attributes, ABAC ensures more granular and adaptive security controls.",
       "examTip": "Context changes, so do permissions—ABAC flexes with risk levels in real-time."
     },
     {
@@ -339,7 +339,7 @@ db.tests.insertOne({
         "Outbound DDoS traffic leveraging internal systems"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Consistent encrypted traffic following sensitive file access strongly suggests data exfiltration via covert encrypted channels.",
+      "explanation": "Consistent encrypted traffic following sensitive file access strongly suggests data exfiltration via covert encrypted channels. Attackers often automate these transfers to avoid detection by pattern-based monitoring.",
       "examTip": "Sensitive file triggers = suspicious traffic. Encrypted exfiltration often follows predictable internal events."
     },
     {
@@ -352,7 +352,7 @@ db.tests.insertOne({
         "Code obfuscation with signed binaries"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Application allow-listing restricts execution to explicitly trusted applications and code, preventing unauthorized or malicious code from running.",
+      "explanation": "Application allow-listing restricts execution to explicitly trusted applications and code, preventing unauthorized or malicious code from running. This approach minimizes the attack surface by blocking unknown software.",
       "examTip": "If it’s not on the list, it doesn’t run—allow-listing locks down execution paths."
     },
     {
@@ -365,7 +365,7 @@ db.tests.insertOne({
         "Multi-factor authentication (MFA) for user accounts"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DNS filtering using reputation-based services blocks access to malicious domains, including those used for typosquatting.",
+      "explanation": "DNS filtering using reputation-based services blocks access to malicious domains, including those used for typosquatting. This proactive approach stops users from reaching deceptive sites that mimic legitimate domains.",
       "examTip": "Wrong URL? DNS filters spot shady lookalikes—typosquatting stops at the DNS gate."
     },
     {
@@ -378,7 +378,7 @@ db.tests.insertOne({
         "Session hijacking"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "On-path (MitM) attacks intercept and potentially alter communication streams, deceiving both parties into believing they are communicating directly.",
+      "explanation": "On-path (MitM) attacks intercept and potentially alter communication streams, deceiving both parties into believing they are communicating directly. The attacker can read or modify data in transit without detection.",
       "examTip": "Invisible eavesdropper? MitM means attackers stand in the communication line—unseen but impactful."
     },
     {
@@ -391,7 +391,7 @@ db.tests.insertOne({
         "Multi-cloud key federation with centralized orchestration"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BYOK ensures encryption keys are generated and managed by the customer, keeping them out of the provider's control while supporting scalable cloud operations.",
+      "explanation": "BYOK ensures encryption keys are generated and managed by the customer, keeping them out of the provider's control while supporting scalable cloud operations. It helps maintain data sovereignty and compliance in regulated industries.",
       "examTip": "Keys you bring, keys you control—BYOK means the cloud holds data, but never your secrets."
     },
     {
@@ -404,7 +404,7 @@ db.tests.insertOne({
         "Timing-based covert channel communication"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Timing-based covert channels manipulate the timing of packet transmissions to encode data, making it difficult to detect even when the traffic is encrypted and otherwise normal.",
+      "explanation": "Timing-based covert channels manipulate the timing of packet transmissions to encode data, making it difficult to detect even when the traffic is encrypted and otherwise normal. Attackers leverage subtle timing variations to slip information past security tools.",
       "examTip": "If the only anomaly is timing patterns, it's likely a timing-based covert channel—subtle but powerful."
     },
     {
@@ -417,7 +417,7 @@ db.tests.insertOne({
         "SHA-512 with HMAC for integrity checks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Lattice-based cryptography is a leading candidate for post-quantum encryption, offering resistance to quantum decryption methods like Shor’s algorithm.",
+      "explanation": "Lattice-based cryptography is a leading candidate for post-quantum encryption, offering resistance to quantum decryption methods like Shor’s algorithm. Its underlying hard problems remain intractable even with powerful quantum computers.",
       "examTip": "Quantum safety? Think lattice-based—designed to survive future quantum threats."
     },
     {
@@ -430,7 +430,7 @@ db.tests.insertOne({
         "Cross-site request forgery (CSRF)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "DOM-based XSS occurs when malicious scripts execute solely in the client-side browser through manipulation of the DOM, without affecting server-side data or responses.",
+      "explanation": "DOM-based XSS occurs when malicious scripts execute solely in the client-side browser through manipulation of the DOM, without affecting server-side data or responses. The attack relies on client-side JavaScript execution, which can be triggered by crafted URLs or inputs.",
       "examTip": "If the attack lives entirely in the browser’s DOM, you’re dealing with DOM-based XSS—subtle but dangerous."
     },
     {
@@ -443,7 +443,7 @@ db.tests.insertOne({
         "Frequent key rotation with timestamp validation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PFS ensures that each session uses a unique ephemeral key, meaning the compromise of one key does not affect past sessions' confidentiality.",
+      "explanation": "PFS ensures that each session uses a unique ephemeral key, meaning the compromise of one key does not affect past sessions' confidentiality. This approach helps safeguard historical data, even if an adversary obtains long-term credentials later.",
       "examTip": "History-proof encryption? PFS guarantees old sessions remain locked, even after key leaks."
     },
     {
@@ -456,7 +456,7 @@ db.tests.insertOne({
         "Insecure direct object reference (IDOR) vulnerabilities"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Client-side validation can be bypassed, allowing attackers to submit malicious inputs directly to the server, potentially enabling SQL injection attacks.",
+      "explanation": "Client-side validation can be bypassed, allowing attackers to submit malicious inputs directly to the server, potentially enabling SQL injection attacks. Proper server-side validation is necessary to maintain data integrity and prevent exploitation.",
       "examTip": "Client-side checks = no checks at all for attackers. Server-side validation is non-negotiable."
     },
     {
@@ -469,7 +469,7 @@ db.tests.insertOne({
         "Downgrade attack with future cipher cracking"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Harvest-now, decrypt-later strategies involve capturing encrypted data today with the intent of decrypting it when advanced computing (e.g., quantum) can break current encryption.",
+      "explanation": "Harvest-now, decrypt-later strategies involve capturing encrypted data today with the intent of decrypting it when advanced computing (e.g., quantum) can break current encryption. This is why adopting post-quantum cryptography is a forward-looking defense.",
       "examTip": "Quantum concerns? Assume attackers are already harvesting—future-proof your encryption now."
     },
     {
@@ -482,7 +482,7 @@ db.tests.insertOne({
         "Insecure API integrations exposing sensitive endpoints"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Exposing secrets in environment variables—especially through logs—can allow attackers to escalate privileges or access sensitive systems.",
+      "explanation": "Exposing secrets in environment variables—especially through logs—can allow attackers to escalate privileges or access sensitive systems. Securing these credentials is essential to prevent unauthorized access to critical resources.",
       "examTip": "Secrets in logs = secrets exposed. Use dedicated secret management solutions, never environment variables alone."
     },
     {
@@ -495,7 +495,7 @@ db.tests.insertOne({
         "Zero Trust Key Federation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BYOK models enable customers to retain control over encryption keys, ensuring that the cloud provider cannot access the encrypted data without customer consent.",
+      "explanation": "BYOK models enable customers to retain control over encryption keys, ensuring that the cloud provider cannot access the encrypted data without customer consent. This isolates key management from cloud infrastructure for added security.",
       "examTip": "Control your keys, control your data. BYOK means encryption keys never leave your hands."
     },
     {
@@ -508,7 +508,7 @@ db.tests.insertOne({
         "Improper input validation leading to injection flaws"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IDOR occurs when applications fail to properly enforce authorization on object references in the URL, allowing unauthorized data access without authentication flaws.",
+      "explanation": "IDOR occurs when applications fail to properly enforce authorization on object references in the URL, allowing unauthorized data access without authentication flaws. Attackers simply tweak identifiers to view or modify data they shouldn’t have.",
       "examTip": "Changing a number in a URL shouldn’t expose data—if it does, IDOR is the culprit."
     },
     {
@@ -521,7 +521,7 @@ db.tests.insertOne({
         "Public key encryption combined with HMAC"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Digital signatures provide integrity and authentication by combining the signer's private key with a hash of the document—any alteration invalidates the signature.",
+      "explanation": "Digital signatures provide integrity and authentication by combining the signer's private key with a hash of the document—any alteration invalidates the signature. This ensures both the identity of the signer and the authenticity of the document.",
       "examTip": "Integrity + authenticity = digital signature. Hash mismatches = tampering detected."
     },
     {
@@ -534,7 +534,7 @@ db.tests.insertOne({
         "Community cloud with shared resource models"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A multi-cloud approach distributes workloads across multiple providers, reducing dependency on a single vendor and enhancing availability.",
+      "explanation": "A multi-cloud approach distributes workloads across multiple providers, reducing dependency on a single vendor and enhancing availability. This also mitigates the risk of a single point of failure in the event of downtime or service disruption.",
       "examTip": "Avoid lock-in? Multi-cloud spreads risk—multiple clouds, fewer provider surprises."
     },
     {
@@ -547,7 +547,7 @@ db.tests.insertOne({
         "Trigger endpoint detection and response (EDR) scans"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Blocking outbound traffic halts potential communication with attacker infrastructure immediately, mitigating further damage while investigation continues.",
+      "explanation": "Blocking outbound traffic halts potential communication with attacker infrastructure immediately, mitigating further damage while investigation continues. This containment measure buys time to assess and remediate the compromised systems.",
       "examTip": "Cut the line first—block exfiltration paths before analyzing details."
     },
     {
@@ -560,7 +560,7 @@ db.tests.insertOne({
         "Configuring tamper-evident logs with digital signature chains"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "WORM storage prevents log modifications after writing, ensuring integrity even if attackers compromise administrative access to the log system.",
+      "explanation": "WORM storage prevents log modifications after writing, ensuring integrity even if attackers compromise administrative access to the log system. Once data is written, it cannot be altered, making logs reliable for forensic analysis.",
       "examTip": "Logs you can’t rewrite? WORM storage ensures evidence remains untouched."
     },
     {
@@ -573,7 +573,7 @@ db.tests.insertOne({
         "Auditing API access logs for unusual patterns"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Enforcing least privilege on API keys limits the damage an attacker can do if the key is compromised, restricting access to only what’s necessary for normal operations.",
+      "explanation": "Enforcing least privilege on API keys limits the damage an attacker can do if the key is compromised, restricting access to only what’s necessary for normal operations. This principle drastically reduces the blast radius of a security breach.",
       "examTip": "Minimal privileges mean minimal damage—keys can’t unlock what they’re not allowed to."
     },
     {
@@ -586,7 +586,7 @@ db.tests.insertOne({
         "Enables scalable key distribution by supporting asymmetric encryption"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Forward secrecy ensures that each session uses unique ephemeral keys, preventing attackers from decrypting previous sessions even if long-term keys are later compromised.",
+      "explanation": "Forward secrecy ensures that each session uses unique ephemeral keys, preventing attackers from decrypting previous sessions even if long-term keys are later compromised. This helps protect the confidentiality of historical data.",
       "examTip": "Forward secrecy = future-proof security. Past sessions stay private—even after key leaks."
     },
     {
@@ -599,7 +599,7 @@ db.tests.insertOne({
         "Dynamic payload injection through CI/CD pipelines"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "A Man-in-the-Application (MitA) attack occurs when malicious code is injected at runtime, affecting application behavior without altering source code or binaries.",
+      "explanation": "A Man-in-the-Application (MitA) attack occurs when malicious code is injected at runtime, affecting application behavior without altering source code or binaries. Attackers modify application flow dynamically, making detection more challenging.",
       "examTip": "If runtime behavior changes without code modifications, MitA attacks are likely at play."
     },
     {
@@ -612,7 +612,7 @@ db.tests.insertOne({
         "Downgrade protection with TLS_FALLBACK_SCSV implementation"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "TLS_FALLBACK_SCSV prevents attackers from forcing protocol downgrades by signaling intentional fallbacks, ensuring secure versions are maintained during negotiation.",
+      "explanation": "TLS_FALLBACK_SCSV prevents attackers from forcing protocol downgrades by signaling intentional fallbacks, ensuring secure versions are maintained during negotiation. This mechanism maintains the integrity of the TLS handshake.",
       "examTip": "To block forced downgrades, TLS_FALLBACK_SCSV ensures handshake integrity stays strong."
     },
     {
@@ -625,7 +625,7 @@ db.tests.insertOne({
         "Key wrapping with asymmetric encryption for storage security"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Homomorphic encryption allows computations on encrypted data without revealing plaintext or keys to the cloud provider, ensuring complete confidentiality during processing.",
+      "explanation": "Homomorphic encryption allows computations on encrypted data without revealing plaintext or keys to the cloud provider, ensuring complete confidentiality during processing. It preserves data privacy even when leveraging cloud compute resources.",
       "examTip": "Need processing without exposure? Homomorphic encryption keeps everything encrypted—even during use."
     },
     {
@@ -638,7 +638,7 @@ db.tests.insertOne({
         "Geolocation-based adaptive access control"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Impossible travel analysis detects logins from geographically distant locations within impossible timeframes, indicating potential credential compromise.",
+      "explanation": "Impossible travel analysis detects logins from geographically distant locations within impossible timeframes, indicating potential credential compromise. It relies on location-based logic to flag suspicious or automated login attempts.",
       "examTip": "No one can be in two places at once—impossible travel detection spots these anomalies."
     },
     {
@@ -651,7 +651,7 @@ db.tests.insertOne({
         "TLS session establishment with mutual authentication"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Digital signatures provide integrity and authentication by using the sender's private key to sign a hash of the message, ensuring non-repudiation.",
+      "explanation": "Digital signatures provide integrity and authentication by using the sender's private key to sign a hash of the message, ensuring non-repudiation. If the message is altered in transit, the signature will no longer validate.",
       "examTip": "Integrity + authentication + no denial? Digital signatures deliver all three in one package."
     },
     {
@@ -664,7 +664,7 @@ db.tests.insertOne({
         "Hypervisor-level malware bypassing OS-level defenses"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Bootkits infect the bootloader, enabling persistent control before the operating system loads, making them difficult to detect and remove.",
+      "explanation": "Bootkits infect the bootloader, enabling persistent control before the operating system loads, making them difficult to detect and remove. They specifically manipulate or replace the code that runs prior to the OS, achieving a deeper level of infiltration.",
       "examTip": "If malware survives OS reinstallations, the bootloader’s likely compromised—bootkits own the boot."
     },
     {
@@ -677,7 +677,7 @@ db.tests.insertOne({
         "Fuzz testing with mutation-based inputs"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DAST examines applications during runtime, identifying vulnerabilities like injection flaws without requiring access to source code.",
+      "explanation": "DAST examines applications during runtime, identifying vulnerabilities like injection flaws without requiring access to source code. By simulating real-world attacks, it can uncover security issues that only arise under operational conditions.",
       "examTip": "Runtime issues need runtime analysis—DAST spots them where they happen, safely outside production."
     },
     {
@@ -690,7 +690,7 @@ db.tests.insertOne({
         "Reuse of nonces leading to ciphertext compromise"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Without forward secrecy, compromising a long-term key enables attackers to decrypt all previously recorded sessions, jeopardizing historical confidentiality.",
+      "explanation": "Without forward secrecy, compromising a long-term key enables attackers to decrypt all previously recorded sessions, jeopardizing historical confidentiality. This can lead to serious privacy breaches when adversaries gain access to older encrypted data.",
       "examTip": "Forward secrecy = no retroactive decryption. Without it, past sessions are fair game after key leaks."
     },
     {
@@ -703,7 +703,7 @@ db.tests.insertOne({
         "Using RSA-4096 certificates with extended validity periods"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Lattice-based cryptography provides post-quantum resilience, safeguarding key exchanges from quantum decryption algorithms like Shor’s algorithm.",
+      "explanation": "Lattice-based cryptography provides post-quantum resilience, safeguarding key exchanges from quantum decryption algorithms like Shor’s algorithm. By relying on the complexity of lattice problems, it remains secure even against future quantum computers.",
       "examTip": "Future-proofing against quantum? Lattice-based encryption is the emerging gold standard."
     },
     {
@@ -716,7 +716,7 @@ db.tests.insertOne({
         "Ping of death attack"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Teardrop attacks exploit vulnerabilities in packet reassembly processes, causing memory buffer overflows that crash systems like firewalls and routers.",
+      "explanation": "Teardrop attacks exploit vulnerabilities in packet reassembly processes, causing memory buffer overflows that crash systems like firewalls and routers. They often target older or unpatched systems that mishandle fragmented IP packets.",
       "examTip": "Fragmented packets causing memory chaos? It’s a teardrop attack—classic crash method."
     },
     {
@@ -729,7 +729,7 @@ db.tests.insertOne({
         "Proxy servers enforcing Zero Trust Network Access (ZTNA)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "A service mesh provides secure communication and microsegmentation between services, reducing the attack surface and improving security in scalable cloud architectures.",
+      "explanation": "A service mesh provides secure communication and microsegmentation between services, reducing the attack surface and improving security in scalable cloud architectures. It uses sidecar proxies or similar mechanisms to enforce traffic policies and monitor communications.",
       "examTip": "Cloud scaling + traffic control? Service mesh with microsegmentation manages east-west flows securely."
     },
     {
@@ -742,7 +742,7 @@ db.tests.insertOne({
         "Applying code signing to ensure file integrity during execution"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Re-validating access checks immediately before resource use ensures no changes occur between validation and execution, mitigating TOC/TOU race conditions.",
+      "explanation": "Re-validating access checks immediately before resource use ensures no changes occur between validation and execution, mitigating TOC/TOU race conditions. This best practice closes the window of opportunity for attackers to exploit timing gaps.",
       "examTip": "Check right before you act—TOC/TOU attacks sneak in between outdated validations."
     },
     {
@@ -755,7 +755,7 @@ db.tests.insertOne({
         "Auditing storage configurations regularly through manual reviews"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "CSPM tools continuously monitor cloud configurations, detecting and remediating insecure settings like default open storage buckets.",
+      "explanation": "CSPM tools continuously monitor cloud configurations, detecting and remediating insecure settings like default open storage buckets. They automate compliance checks, helping organizations maintain secure configurations in evolving environments.",
       "examTip": "Cloud storage misconfigurations? CSPM automates detection—continuous vigilance beats manual checks."
     },
     {
@@ -768,7 +768,7 @@ db.tests.insertOne({
         "Client-side encryption with bring-your-own-key (BYOK) model"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hardware-enforced enclaves provide physical isolation at the processor level, preventing data leakage or inference between tenants in multi-tenant cloud environments.",
+      "explanation": "Hardware-enforced enclaves provide physical isolation at the processor level, preventing data leakage or inference between tenants in multi-tenant cloud environments. This approach ensures each tenant's data is handled in a secure compartment that is cryptographically protected.",
       "examTip": "Multi-tenant cloud risks? Hardware enclaves ensure no cross-tenant peeking—physical barriers matter."
     },
     {
@@ -781,7 +781,7 @@ db.tests.insertOne({
         "Network Access Control (NAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "UEBA solutions use machine learning and advanced analytics to detect unusual behavior that may indicate insider threats, often missed by traditional security tools.",
+      "explanation": "UEBA solutions use machine learning and advanced analytics to detect unusual behavior that may indicate insider threats, often missed by traditional security tools. They also help distinguish legitimate anomalies from malicious ones by establishing normal user patterns.",
       "examTip": "Insider threats hide in plain sight—UEBA catches subtle behavioral shifts traditional tools miss."
     },
     {
@@ -794,7 +794,7 @@ db.tests.insertOne({
         "Mandatory Access Control (MAC)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "JIT access grants privileges only when needed and revokes them automatically, reducing persistent attack surfaces caused by lingering permissions.",
+      "explanation": "JIT access grants privileges only when needed and revokes them automatically, reducing persistent attack surfaces caused by lingering permissions. This ensures users do not retain elevated rights beyond the moment of necessity.",
       "examTip": "No permanent privileges = fewer targets. JIT ensures permissions disappear after use."
     },
     {
@@ -807,7 +807,7 @@ db.tests.insertOne({
         "Cross-site request forgery (CSRF)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SSRF vulnerabilities occur when servers trust and process user-supplied headers, enabling attackers to force servers to make unauthorized internal or external requests.",
+      "explanation": "SSRF vulnerabilities occur when servers trust and process user-supplied headers, enabling attackers to force servers to make unauthorized internal or external requests. Proper validation of incoming requests and strict allowlisting can mitigate this vulnerability.",
       "examTip": "Server blindly trusting header tweaks? SSRF leads to dangerous internal access."
     },
     {
@@ -820,7 +820,7 @@ db.tests.insertOne({
         "Enabling OCSP stapling for real-time certificate status checks"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TLS_FALLBACK_SCSV prevents downgrade attacks by signaling intentional fallbacks during TLS handshakes, maintaining strong encryption standards even with legacy clients.",
+      "explanation": "TLS_FALLBACK_SCSV prevents downgrade attacks by signaling intentional fallbacks during TLS handshakes, maintaining strong encryption standards even with legacy clients. This is critical for ensuring that older clients cannot force the server into using weaker protocols.",
       "examTip": "Stop protocol backsliding—TLS_FALLBACK_SCSV enforces handshake integrity at all times."
     },
     {
@@ -833,7 +833,7 @@ db.tests.insertOne({
         "Steganography embedded in network payloads"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Timing-based covert channels rely on packet timing and size patterns rather than payload anomalies, making them difficult to detect without behavioral analysis.",
+      "explanation": "Timing-based covert channels rely on packet timing and size patterns rather than payload anomalies, making them difficult to detect without behavioral analysis. Attackers carefully manipulate transmission intervals to convey data surreptitiously.",
       "examTip": "Weird timing, no payload issues? Timing-based covert channels hide in traffic patterns, not data."
     },
     {
@@ -846,7 +846,7 @@ db.tests.insertOne({
         "Tokenization with secure random generation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hashing combined with salting and key stretching ensures that stored passwords are non-reversible and resistant to brute-force and rainbow table attacks.",
+      "explanation": "Hashing combined with salting and key stretching ensures that stored passwords are non-reversible and resistant to brute-force and rainbow table attacks. This layered approach remains the industry best practice for secure credential storage.",
       "examTip": "Uncrackable passwords? Hash + salt + stretch = irreversible, even after breaches."
     },
     {
@@ -859,7 +859,7 @@ db.tests.insertOne({
         "Configuring network ACLs to restrict external access"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Enforcing least privilege ensures users and services have only the permissions they need, limiting the impact of compromised credentials or excessive rights.",
+      "explanation": "Enforcing least privilege ensures users and services have only the permissions they need, limiting the impact of compromised credentials or excessive rights. Regularly auditing and adjusting privileges further reduces the risk exposure.",
       "examTip": "Fewer permissions = fewer attack paths. Least privilege trims risks at the source."
     },
     {
@@ -872,7 +872,7 @@ db.tests.insertOne({
         "Distributed denial-of-service (DDoS) preconditioning"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Port scanning systematically checks various ports to discover services running on a host, forming the first stage of network reconnaissance.",
+      "explanation": "Port scanning systematically checks various ports to discover services running on a host, forming the first stage of network reconnaissance. Attackers often follow up by probing detected services for vulnerabilities.",
       "examTip": "Sequential port poking? It’s port scanning—probing the network’s surface for weaknesses."
     },
     {
@@ -885,7 +885,7 @@ db.tests.insertOne({
         "Transport encryption using AES-GCM mode"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "AEAD simultaneously ensures confidentiality, integrity, and authenticity. Any modification to the ciphertext results in decryption failure, preventing silent tampering.",
+      "explanation": "AEAD simultaneously ensures confidentiality, integrity, and authenticity. Any modification to the ciphertext results in decryption failure, preventing silent tampering. This prevents attackers from altering data without detection, thus preserving trust in the communication.",
       "examTip": "Encryption + integrity in one? AEAD ensures tampered data fails decryption outright."
     },
     {
@@ -898,7 +898,7 @@ db.tests.insertOne({
         "Role-Based Access Control (RBAC) integrated per provider"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "BYOI allows organizations to use a single, consistent identity provider across multiple cloud environments, reducing lock-in and simplifying access management.",
+      "explanation": "BYOI allows organizations to use a single, consistent identity provider across multiple cloud environments, reducing lock-in and simplifying access management. It also streamlines user lifecycle management by unifying authentication policies.",
       "examTip": "Multi-cloud, single identity? BYOI with OIDC unifies access without provider lock-in risks."
     },
     {
@@ -911,7 +911,7 @@ db.tests.insertOne({
         "Cross-site request forgery (CSRF)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "On-path (MitM) attacks intercept and potentially alter communication between two parties without their knowledge, maintaining the appearance of a legitimate connection.",
+      "explanation": "On-path (MitM) attacks intercept and potentially alter communication between two parties without their knowledge, maintaining the appearance of a legitimate connection. They often rely on the attacker positioning themselves within the communication flow or spoofing endpoints.",
       "examTip": "Silent interference + trust intact? Classic MitM—the invisible manipulator."
     },
     {
@@ -924,7 +924,7 @@ db.tests.insertOne({
         "Key Management as a Service (KMaaS) with provider oversight"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BYOK with client-side encryption ensures that encryption keys remain under the customer's control at all times, keeping them inaccessible to the provider.",
+      "explanation": "BYOK with client-side encryption ensures that encryption keys remain under the customer's control at all times, keeping them inaccessible to the provider. This maintains strict data privacy and compliance by preventing unauthorized key use.",
       "examTip": "Control your keys, control your data. BYOK ensures providers stay locked out—always."
     },
     {
@@ -937,7 +937,7 @@ db.tests.insertOne({
         "Security Information and Event Management (SIEM)"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "XDR integrates telemetry across multiple security layers, providing real-time threat detection and response in hybrid and multi-cloud environments.",
+      "explanation": "XDR integrates telemetry across multiple security layers, providing real-time threat detection and response in hybrid and multi-cloud environments. This unified view helps security teams correlate events and quickly mitigate complex attacks.",
       "examTip": "Cross-layer detection + real-time response? XDR ties it all together seamlessly."
     },
     {
@@ -950,7 +950,7 @@ db.tests.insertOne({
         "Privilege escalation via token payload manipulation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Accepting the 'none' algorithm means the server does not verify JWT signatures, enabling attackers to forge tokens and gain unauthorized access.",
+      "explanation": "Accepting the 'none' algorithm means the server does not verify JWT signatures, enabling attackers to forge tokens and gain unauthorized access. Always specifying a secure algorithm and verifying token signatures is crucial for JWT integrity.",
       "examTip": "JWT 'none' means no verification—attackers sign their own passes with full trust."
     },
     {
@@ -963,7 +963,7 @@ db.tests.insertOne({
         "AES-256 encryption with symmetric key wrapping"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DHE key exchanges provide forward secrecy by generating ephemeral session keys for each connection, preventing retroactive decryption if long-term keys are compromised.",
+      "explanation": "DHE key exchanges provide forward secrecy by generating ephemeral session keys for each connection, preventing retroactive decryption if long-term keys are compromised. This protects past communications even if attackers later obtain private keys.",
       "examTip": "Forward secrecy = session-specific keys. DHE ensures past data stays encrypted—even after key leaks."
     },
     {
@@ -976,7 +976,7 @@ db.tests.insertOne({
         "Ephemeral compute instances with rapid scaling policies"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Hardware-enforced secure enclaves isolate data and computations at the processor level, preventing side-channel attacks in shared cloud environments.",
+      "explanation": "Hardware-enforced secure enclaves isolate data and computations at the processor level, preventing side-channel attacks in shared cloud environments. They create a trusted execution environment that ensures confidentiality and integrity of sensitive workloads.",
       "examTip": "Processor-level isolation = side-channel resilience. Enclaves ensure tenant data stays private, always."
     },
     {
@@ -989,7 +989,7 @@ db.tests.insertOne({
         "AES-256 in Galois/Counter Mode (GCM)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Lattice-based cryptography, like Kyber, is part of the NIST post-quantum cryptography standardization effort, providing resilience against quantum computing attacks.",
+      "explanation": "Lattice-based cryptography, like Kyber, is part of the NIST post-quantum cryptography standardization effort, providing resilience against quantum computing attacks. Such algorithms leverage hard mathematical problems that remain secure even for foreseeable quantum capabilities.",
       "examTip": "Future-proof encryption? Lattice-based methods like Kyber resist quantum threats."
     },
     {
@@ -1002,7 +1002,7 @@ db.tests.insertOne({
         "Immutable infrastructure deployment models"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RASP operates within the application runtime environment, detecting and blocking malicious activity like runtime code injection without external dependencies.",
+      "explanation": "RASP operates within the application runtime environment, detecting and blocking malicious activity like runtime code injection without external dependencies. It effectively defends against zero-day exploits by continuously monitoring app behavior.",
       "examTip": "Runtime protection? RASP shields applications from runtime exploits as they happen."
     },
     {
@@ -1015,7 +1015,7 @@ db.tests.insertOne({
         "Disk-level encryption with HSM integration"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Fully Homomorphic Encryption allows computations on encrypted data without decryption, enabling analytics while keeping data inaccessible to the provider.",
+      "explanation": "Fully Homomorphic Encryption allows computations on encrypted data without decryption, enabling analytics while keeping data inaccessible to the provider. This advanced cryptographic technique preserves privacy by never exposing plaintext during processing.",
       "examTip": "Compute without exposure? FHE runs analytics securely—no plaintext, no leaks."
     },
     {
@@ -1028,7 +1028,7 @@ db.tests.insertOne({
         "SSL stripping for man-in-the-middle exploitation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Beaconing behavior indicates malware establishing regular communication with C2 servers, awaiting further instructions or payloads.",
+      "explanation": "Beaconing behavior indicates malware establishing regular communication with C2 servers, awaiting further instructions or payloads. Security teams often look for these periodic callbacks as an indicator of compromised systems.",
       "examTip": "Low-frequency, predictable pings? Beaconing = malware checking in with C2 servers."
     },
     {
@@ -1041,7 +1041,7 @@ db.tests.insertOne({
         "Least privilege IAM policies with auto-expiration keys"
       ],
       "correctAnswerIndex": 3,
-      "explanation": "Auto-expiring API keys combined with least privilege policies prevent long-term persistence by ensuring that even compromised keys have limited utility over time.",
+      "explanation": "Auto-expiring API keys combined with least privilege policies prevent long-term persistence by ensuring that even compromised keys have limited utility over time. Regularly rotating keys further reduces exposure to unauthorized resource deployment.",
       "examTip": "Keys that expire can't persist—auto-expiration combined with minimal privileges is key security."
     },
     {
@@ -1054,7 +1054,7 @@ db.tests.insertOne({
         "Rootkit installation at the hypervisor level"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "VM escape attacks occur when a malicious VM breaks isolation, interacting with the hypervisor and potentially compromising other guest VMs.",
+      "explanation": "VM escape attacks occur when a malicious VM breaks isolation, interacting with the hypervisor and potentially compromising other guest VMs. Keeping hypervisors patched and strictly configuring virtual environments helps mitigate such threats.",
       "examTip": "If a VM breaks its sandbox to touch the hypervisor, it's a VM escape—serious isolation failure."
     },
     {
@@ -1067,7 +1067,7 @@ db.tests.insertOne({
         "On-path (MitM) exploitation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Supply chain attacks exploit trust in third-party providers or partners to infiltrate systems, often bypassing perimeter defenses via indirect entry points.",
+      "explanation": "Supply chain attacks exploit trust in third-party providers or partners to infiltrate systems, often bypassing perimeter defenses via indirect entry points. Regular vetting and monitoring of partners can help detect and prevent these types of breaches.",
       "examTip": "Trusted partner, untrusted outcome? Supply chain attacks exploit weakest trusted links."
     },
     {
@@ -1080,7 +1080,7 @@ db.tests.insertOne({
         "Dedicated virtual private cloud (VPC) instances"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TEEs isolate workloads at the processor level, ensuring that even co-located workloads in multi-tenant environments cannot infer or access each other's data.",
+      "explanation": "TEEs isolate workloads at the processor level, ensuring that even co-located workloads in multi-tenant environments cannot infer or access each other's data. This hardware-based isolation is designed to thwart side-channel attacks and maintain strict boundaries.",
       "examTip": "Side-channel safe? TEEs lock data at the hardware level—deep isolation guaranteed."
     },
     {
@@ -1093,7 +1093,7 @@ db.tests.insertOne({
         "Kerberos ticket-granting with cross-realm trust"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Federated SSO allows users to authenticate once via a central identity provider and access multiple cloud services seamlessly without repeated logins.",
+      "explanation": "Federated SSO allows users to authenticate once via a central identity provider and access multiple cloud services seamlessly without repeated logins. This unified approach improves user experience and reduces password fatigue.",
       "examTip": "Single login, multi-cloud access? Federated SSO streamlines authentication across providers."
     },
     {
@@ -1106,7 +1106,7 @@ db.tests.insertOne({
         "Cross-site scripting (XSS) through malicious token injection"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Failing to validate the 'alg' field allows attackers to specify 'none,' effectively bypassing signature verification and forging valid tokens.",
+      "explanation": "Failing to validate the 'alg' field allows attackers to specify 'none,' effectively bypassing signature verification and forging valid tokens. Ensuring a strict whitelist of supported algorithms is essential to prevent such exploitation.",
       "examTip": "If 'alg: none' is accepted, signatures don’t matter—attackers gain unchecked access."
     },
     {
@@ -1119,7 +1119,7 @@ db.tests.insertOne({
         "Elastic compute hijacking"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Denial of Wallet attacks exploit cloud auto-scaling, causing increased resource consumption and costs without necessarily degrading performance.",
+      "explanation": "Denial of Wallet attacks exploit cloud auto-scaling, causing increased resource consumption and costs without necessarily degrading performance. Attackers might use this technique to run cryptocurrency miners or other resource-intensive workloads at the victim's expense.",
       "examTip": "Auto-scaling spikes without reason? DoW drains budgets instead of crashing systems."
     },
     {
@@ -1132,7 +1132,7 @@ db.tests.insertOne({
         "Replay attack using captured encrypted data"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Timing-based covert channels exploit variations in traffic patterns to leak information, bypassing encryption without direct payload access.",
+      "explanation": "Timing-based covert channels exploit variations in traffic patterns to leak information, bypassing encryption without direct payload access. Even minor differences in latency or frequency can encode data if not carefully controlled.",
       "examTip": "No payload tampering, just timing tricks? Covert timing channels reveal more than expected."
     },
     {
@@ -1145,7 +1145,7 @@ db.tests.insertOne({
         "Cloud-native KMS with hardware backing"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Secure enclaves ensure that encryption keys never leave the processor during computation, providing in-use data protection at the hardware level.",
+      "explanation": "Secure enclaves ensure that encryption keys never leave the processor during computation, providing in-use data protection at the hardware level. This approach is vital for scenarios where the threat model includes privileged insiders or compromised hypervisors.",
       "examTip": "Keys never leave hardware? Secure enclaves ensure in-use data remains safe—even during processing."
     },
     {
@@ -1158,7 +1158,7 @@ db.tests.insertOne({
         "Improper error handling during transactional processes"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TOC/TOU vulnerabilities arise when systems fail to re-validate resource states immediately before use, allowing malicious modifications after initial validation.",
+      "explanation": "TOC/TOU vulnerabilities arise when systems fail to re-validate resource states immediately before use, allowing malicious modifications after initial validation. Developers can mitigate this by performing checks as close to the actual resource operation as possible.",
       "examTip": "Validation too early, usage too late? TOC/TOU lets attackers slip in changes between the two."
     },
     {
@@ -1171,7 +1171,7 @@ db.tests.insertOne({
         "Adaptive authentication based on geofencing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Impossible travel analysis detects authentication events from geographically distant locations within unrealistic timeframes, signaling potential credential compromise.",
+      "explanation": "Impossible travel analysis detects authentication events from geographically distant locations within unrealistic timeframes, signaling potential credential compromise. This automated check often flags suspicious logins that conventional IP-based security might miss.",
       "examTip": "Global logins in minutes? Impossible travel analysis catches the physically impossible attempts."
     },
     {
@@ -1184,7 +1184,7 @@ db.tests.insertOne({
         "SHA-3 with HMAC for key derivation"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Kyber, a lattice-based key encapsulation mechanism, is part of the NIST post-quantum cryptography recommendations and is designed to withstand quantum decryption attempts.",
+      "explanation": "Kyber, a lattice-based key encapsulation mechanism, is part of the NIST post-quantum cryptography recommendations and is designed to withstand quantum decryption attempts. Its security is based on hard lattice problems that quantum computers are not expected to solve efficiently.",
       "examTip": "Quantum-resilient? Kyber’s lattice structure keeps encryption strong in a post-quantum world."
     },
     {
@@ -1197,7 +1197,7 @@ db.tests.insertOne({
         "Mutual TLS authentication between cluster nodes"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RBAC enforces strict permissions, preventing unauthorized access to Kubernetes APIs and reducing the risk of attackers gaining control over clusters.",
+      "explanation": "RBAC enforces strict permissions, preventing unauthorized access to Kubernetes APIs and reducing the risk of attackers gaining control over clusters. It allows administrators to define roles and assign only necessary privileges to users or services.",
       "examTip": "API control = RBAC control. Least privilege stops attackers at the door."
     },
     {
@@ -1210,7 +1210,7 @@ db.tests.insertOne({
         "Full Memory Encryption (FME)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Secure enclaves provide hardware-level isolation, ensuring that sensitive data in memory remains inaccessible even to system administrators and hypervisors.",
+      "explanation": "Secure enclaves provide hardware-level isolation, ensuring that sensitive data in memory remains inaccessible even to system administrators and hypervisors. They enable confidential computing by protecting in-use data from unauthorized viewing or tampering.",
       "examTip": "Processing data safely in memory? Secure enclaves lock data where it’s used."
     },
     {
@@ -1223,7 +1223,7 @@ db.tests.insertOne({
         "Adaptive resource throttling based on behavioral baselines"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "TEEs ensure workload isolation at the processor level, preventing side-channel attacks that exploit shared hardware resource patterns.",
+      "explanation": "TEEs ensure workload isolation at the processor level, preventing side-channel attacks that exploit shared hardware resource patterns. This design makes it much harder for attackers to infer sensitive data by observing resource usage.",
       "examTip": "Multi-tenant workloads need deep isolation—TEEs block side-channel inference at the hardware level."
     },
     {
@@ -1236,7 +1236,7 @@ db.tests.insertOne({
         "HMAC-based message authentication"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PFS ensures that session keys are ephemeral; compromising a long-term private key does not expose past session data to decryption.",
+      "explanation": "PFS ensures that session keys are ephemeral; compromising a long-term private key does not expose past session data to decryption. Ephemeral Diffie-Hellman exchanges are often used to achieve this robust secrecy property.",
       "examTip": "Harvest now, decrypt later? PFS keeps yesterday’s data safe tomorrow."
     },
     {
@@ -1249,7 +1249,7 @@ db.tests.insertOne({
         "SSL stripping attack in progress"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Beaconing is characterized by regular communication attempts to remote infrastructure, commonly used by malware to check in with C2 servers.",
+      "explanation": "Beaconing is characterized by regular communication attempts to remote infrastructure, commonly used by malware to check in with C2 servers. These consistent intervals can be a strong indicator of compromised hosts reaching out for instructions.",
       "examTip": "Regular, rhythmic outbound calls? Malware’s beaconing to its controller."
     },
     {
@@ -1262,7 +1262,7 @@ db.tests.insertOne({
         "Non-repudiation through asymmetric key signing"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "ECDHE provides forward secrecy by generating unique ephemeral keys for each session, ensuring that previous sessions cannot be decrypted if long-term keys are compromised.",
+      "explanation": "ECDHE provides forward secrecy by generating unique ephemeral keys for each session, ensuring that previous sessions cannot be decrypted if long-term keys are compromised. This is crucial for safeguarding historical data from future key compromises.",
       "examTip": "Forward secrecy? ECDHE rotates keys per session—past sessions remain locked."
     },
     {
@@ -1275,7 +1275,7 @@ db.tests.insertOne({
         "Applying role-based permissions to API endpoints"
       ],
       "correctAnswerIndex": 1,
-      "explanation": "Randomizing transaction IDs prevents attackers from guessing valid identifiers, mitigating unauthorized access via predictable patterns (IDOR vulnerabilities).",
+      "explanation": "Randomizing transaction IDs prevents attackers from guessing valid identifiers, mitigating unauthorized access via predictable patterns (IDOR vulnerabilities). This effectively reduces the risk of enumerating or manipulating resource identifiers in URLs.",
       "examTip": "Predictable IDs equal predictable breaches—randomize for resilience."
     },
     {
@@ -1288,7 +1288,7 @@ db.tests.insertOne({
         "Cloud Security Posture Management (CSPM)"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "UEBA solutions analyze user behavior patterns, detecting deviations that may signal insider threats, making them ideal for real-time hybrid cloud monitoring.",
+      "explanation": "UEBA solutions analyze user behavior patterns, detecting deviations that may signal insider threats, making them ideal for real-time hybrid cloud monitoring. By correlating events across systems, these tools can catch subtle signs of malicious intent.",
       "examTip": "Insider threats hide in habits—UEBA finds behavior that breaks the norm."
     },
     {
@@ -1301,7 +1301,7 @@ db.tests.insertOne({
         "Using immutable file systems for critical data"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TOC/TOU vulnerabilities occur when validation happens too early. Re-validating permissions immediately before execution ensures no changes occurred in the interim.",
+      "explanation": "TOC/TOU vulnerabilities occur when validation happens too early. Re-validating permissions immediately before execution ensures no changes occurred in the interim. Implementing atomic operations or using robust synchronization methods also helps to avoid these exploit windows.",
       "examTip": "Check again before you run—TOC/TOU exploits live in that gap."
     }
   ]
