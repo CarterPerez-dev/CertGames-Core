@@ -1305,4 +1305,4 @@ db.tests.insertOne({
       "examTip": "Shield provides two tiers of protection: Shield Standard is free for all AWS customers and protects against common network and transport layer attacks, while Shield Advanced offers enhanced protection and expert support for higher-risk environments."
     }
   ]
-  
+});  
