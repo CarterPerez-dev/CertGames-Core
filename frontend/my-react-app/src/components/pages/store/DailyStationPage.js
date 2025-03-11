@@ -157,8 +157,10 @@ const DailyStationPage = () => {
         setBonusSuccess(true);
         
         // Update state immediately to show countdown
-        setLocalLastDailyClaim(new Date().toISOString());
+        const now = new Date();
+        setLocalLastDailyClaim(now.toISOString());
         setCanClaim(false);
+        setBonusCountdown(86400); // Initialize with 24 hours in seconds
         
         // Refresh user data to update coins/xp
         dispatch(fetchUserData(userId));
@@ -177,6 +179,7 @@ const DailyStationPage = () => {
             const lastClaimTime = nowMs - (86400000 - msLeft);
             setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
             setCanClaim(false);
+            setBonusCountdown(secondsLeft); // Set countdown to exactly what the server returned
           }
         }
       }
