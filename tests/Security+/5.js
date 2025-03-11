@@ -136,7 +136,7 @@ db.tests.insertOne({
     },
     {
       "id": 11,
-      "question": "**(PBQ)** — **Firewall Rule Analysis:**  
+      "question": "**Firewall Rule Analysis:**  
       A firewall has the following rules (processed top to bottom, first match wins):  
       1. Allow TCP 80 from ANY to 10.0.0.5  
       2. Deny TCP ANY from ANY to 10.0.0.5  
@@ -336,7 +336,7 @@ db.tests.insertOne({
     },
     {
       "id": 26,
-      "question": "**(PBQ)** — **SIEM Log Analysis:**  
+      "question": "**SIEM Log Analysis:**  
       You observe the following SIEM log entry:  
       ```
       Source IP: 192.168.5.10  
@@ -513,7 +513,7 @@ db.tests.insertOne({
     },
     {
       "id": 39,
-      "question": "**(PBQ)** — **Access Control Decision:**  
+      "question": "**Access Control Decision:**  
       An organization wants to limit access to financial data based on department, job role, and project assignment. Which access control model BEST meets these requirements?",
       "options": [
         "Attribute-Based Access Control (ABAC)",
@@ -618,7 +618,7 @@ db.tests.insertOne({
     },
     {
       "id": 47,
-      "question": "**(PBQ)** — **Encryption Decision:**  
+      "question": "**Encryption Decision:**  
       A company needs to encrypt sensitive emails so that only intended recipients can read them. Which solution BEST meets this requirement?",
       "options": [
         "S/MIME with user-specific public/private key pairs",
@@ -684,7 +684,7 @@ db.tests.insertOne({
     },
     {
       "id": 52,
-      "question": "**(PBQ)** — **SIEM Log Correlation:**  
+      "question": "**SIEM Log Correlation:**  
       A SIEM displays the following alerts:  
       ```
       Alert 1: Multiple failed login attempts (user: admin) from 203.0.113.5  
@@ -795,7 +795,7 @@ db.tests.insertOne({
     },
     {
       "id": 60,
-      "question": "**(PBQ)** — **Backup Strategy Decision:**  
+      "question": "**Backup Strategy Decision:**  
       An organization requires a backup strategy that minimizes storage usage while allowing for rapid recovery. Which backup approach BEST meets this requirement?",
       "options": [
         "Full backup weekly with incremental backups daily",
@@ -887,7 +887,7 @@ db.tests.insertOne({
     },
     {
       "id": 67,
-      "question": "**(PBQ)** — **SIEM Alert Prioritization:**  
+      "question": "**SIEM Alert Prioritization:**  
       A SIEM generates the following alerts:\n\n1. Multiple failed login attempts from a single external IP.\n2. Malware detected on a non-critical endpoint.\n3. Unauthorized database query from a privileged account.\n\n**Which alert should be addressed FIRST?**",
       "options": [
         "Unauthorized database query from a privileged account",
@@ -992,7 +992,7 @@ db.tests.insertOne({
     },
     {
       "id": 75,
-      "question": "**(PBQ)** — **Vulnerability Management Decision:**  
+      "question": "**Vulnerability Management Decision:**  
       A vulnerability scan identifies the following:\n\n- Critical vulnerability in a public-facing web application.\n- Medium vulnerability in internal file-sharing services.\n- High vulnerability in a legacy database supporting non-critical applications.\n\n**Which vulnerability should be remediated FIRST?**",
       "options": [
         "Critical vulnerability in the public-facing web application",
@@ -1084,7 +1084,7 @@ db.tests.insertOne({
     },
     {
       "id": 82,
-      "question": "**(PBQ)** — **Firewall Configuration Analysis:**  
+      "question": "**Firewall Configuration Analysis:**  
       A firewall processes rules in order. Analyze the following:\n\n1. Allow TCP 80 from ANY\n2. Deny TCP 443 from ANY\n3. Allow TCP 443 from 10.0.0.0/24\n\n**Users from 10.0.0.0/24 report issues accessing HTTPS services. What configuration change resolves this?**",
       "options": [
         "Move rule 3 above rule 2",
@@ -1150,7 +1150,7 @@ db.tests.insertOne({
     },
     {
       "id": 87,
-      "question": "**(PBQ)** — **SIEM Log Analysis:**  
+      "question": "**SIEM Log Analysis:**  
       Review the following SIEM entries:\n\n- Multiple failed login attempts for user 'admin' from 203.0.113.50\n- Successful login from 203.0.113.50\n- Large outbound data transfer initiated to 203.0.113.50\n\n**What action should be taken FIRST?**",
       "options": [
         "Isolate the affected system from the network for forensic analysis",
@@ -1281,7 +1281,7 @@ db.tests.insertOne({
     },
     {
       "id": 97,
-      "question": "**(PBQ)** — **Risk Management Framework Alignment:**  
+      "question": "**Risk Management Framework Alignment:**  
       A company needs a risk management approach focusing on continuous monitoring, risk assessment, and implementing necessary controls.  
       **Match each framework to its primary focus:**\n\n- NIST 800-53\n- ISO 27001\n- COBIT\n- MITRE ATT&CK\n\n**Options:**\nA. Control selection and implementation for federal systems\nB. Information security management system (ISMS) standard\nC. Operational governance and management for IT\nD. Mapping adversarial tactics, techniques, and procedures (TTPs)",
       "options": [
