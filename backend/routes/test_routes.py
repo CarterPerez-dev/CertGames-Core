@@ -1371,7 +1371,7 @@ def get_daily_question():
         "dayIndex": day_index,
         "prompt": daily_doc.get("prompt"),
         "options": daily_doc.get("options"),
-        "explanation": daily_doc.get("explanation")
+        "explanation": daily_doc.get("explanation"),
         "alreadyAnswered": bool(existing_answer)
     }
     return jsonify(response), 200
@@ -1461,7 +1461,7 @@ def submit_daily_question():
         "newCoins": updated_user.get("coins", 0),
         "newXP": updated_user.get("xp", 0),
         "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
-        "newlyUnlocked": newly_unlocked
+        "newlyUnlocked": newly_unlocked,
         "explanation": daily_doc.get("explanation")
     }), 200
 
