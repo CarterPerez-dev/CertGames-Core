@@ -882,7 +882,7 @@ const InfoPage = () => {
           
           <div className="info-faq-item info-animate-on-scroll">
             <h3 className="info-faq-question">How does the subscription work?</h3>
-            <p className="info-faq-answer">For $14.99 per month, you gain unlimited access to all practice tests, tools, resources, and features. You can cancel your subscription at any time with no questions asked.</p>
+            <p className="info-faq-answer">For $9.99 per month, you gain unlimited access to all practice tests, tools, resources, and features. You can cancel your subscription at any time with no questions asked.</p>
           </div>
           
           <div className="info-faq-item info-animate-on-scroll">
