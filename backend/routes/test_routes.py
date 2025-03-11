@@ -1343,7 +1343,9 @@ def get_daily_question():
     except Exception:
         return jsonify({"error": "Invalid user ID"}), 400
 
-    day_index = 0
+    current_date = datetime.utcnow()
+    reference_date = datetime(2025, 3, 11)  # Or any starting date you prefer
+    day_index = (current_date - reference_date).days % 300  # This will cycle through 0-29
 
     start_db = time.time()
     daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
@@ -1369,6 +1371,7 @@ def get_daily_question():
         "dayIndex": day_index,
         "prompt": daily_doc.get("prompt"),
         "options": daily_doc.get("options"),
+        "explanation": daily_doc.get("explanation")
         "alreadyAnswered": bool(existing_answer)
     }
     return jsonify(response), 200
@@ -1377,7 +1380,9 @@ def get_daily_question():
 def submit_daily_question():
     data = request.json or {}
     user_id = data.get("userId")
-    day_index = data.get("dayIndex")
+    current_date = datetime.utcnow()
+    reference_date = datetime(2025, 3, 11)  # Keep your reference date consistent
+    day_index = (current_date - reference_date).days % 300
     selected_index = data.get("selectedIndex")
 
     if not user_id or day_index is None or selected_index is None:
@@ -1457,6 +1462,7 @@ def submit_daily_question():
         "newXP": updated_user.get("xp", 0),
         "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
         "newlyUnlocked": newly_unlocked
+        "explanation": daily_doc.get("explanation")
     }), 200
 
 
