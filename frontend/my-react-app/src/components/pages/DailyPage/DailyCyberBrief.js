@@ -1,490 +1,299 @@
-// src/components/pages/store/DailyStationPage.js
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { claimDailyBonus, setXPAndCoins, fetchUserData } from './userSlice';
-import './DailyStation.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./DailyCyberBrief.css";
+import { 
+  FaEnvelope, 
+  FaShieldAlt, 
+  FaCheck, 
+  FaTimes, 
+  FaInfoCircle, 
+  FaExclamationTriangle,
+  FaSpinner,
+  FaLock,
+  FaNewspaper,
+  FaChartLine,
+  FaToolbox,
+  FaRegLightbulb,
+  FaRocket,
+  FaBell
+} from "react-icons/fa";
 
-// Icon imports
-import {
-  FaCoins,
-  FaStar,
-  FaTrophy,
-  FaCalendarCheck,
-  FaHourglassHalf,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaLightbulb,
-  FaChevronRight,
-  FaSyncAlt,
-  FaGift
-} from 'react-icons/fa';
+function DailyCyberBrief() {
+  const [email, setEmail] = useState("");
+  const [statusMsg, setStatusMsg] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activeSection, setActiveSection] = useState("subscribe");
+  const [showStatusMsg, setShowStatusMsg] = useState(false);
+  const [formFocused, setFormFocused] = useState(false);
 
-// Helper to format seconds as HH:MM:SS
-function formatCountdown(seconds) {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-  return [h, m, s].map((x) => String(x).padStart(2, '0')).join(':');
-}
-
-const DailyStationPage = () => {
-  const dispatch = useDispatch();
-  const { userId, username, coins, xp, lastDailyClaim, loading: userLoading } = useSelector((state) => state.user);
-
-  // Local states
-  const [bonusError, setBonusError] = useState(null);
-  const [claimInProgress, setClaimInProgress] = useState(false);
-  const [claimed, setClaimed] = useState(false);
-  const [bonusCountdown, setBonusCountdown] = useState(24 * 3600); // 24 hours in seconds
-  const [showButton, setShowButton] = useState(true);
-  const [localLastClaim, setLocalLastClaim] = useState(null);
-
-  const [loadingQ, setLoadingQ] = useState(true);
-  const [qError, setQError] = useState(null);
-  const [questionData, setQuestionData] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [submitResult, setSubmitResult] = useState(null);
-
-  const [questionCountdown, setQuestionCountdown] = useState(0);
-
-  // Animations
-  const [showBonusAnimation, setShowBonusAnimation] = useState(false);
-  const [showCorrectAnimation, setShowCorrectAnimation] = useState(false);
-  const [showWrongAnimation, setShowWrongAnimation] = useState(false);
-
-  // Check if user can claim bonus on initial load
+  // Clear status message after 5 seconds
   useEffect(() => {
-    if (userId) {
-      // Check if there's a recent claim from the server or localStorage
-      const storedLastClaim = localStorage.getItem(`lastClaim_${userId}`);
-      const serverLastClaim = lastDailyClaim;
-      
-      const lastClaimDate = serverLastClaim || (storedLastClaim ? new Date(storedLastClaim) : null);
-      
-      if (lastClaimDate) {
-        setLocalLastClaim(lastClaimDate);
-        checkClaimStatus(lastClaimDate);
-      } else {
-        // No previous claim found, so show button
-        setShowButton(true);
-      }
+    if (statusMsg) {
+      setShowStatusMsg(true);
+      const timer = setTimeout(() => {
+        setShowStatusMsg(false);
+        setTimeout(() => setStatusMsg(""), 300); // Clear message after fade-out animation
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  }, [userId, lastDailyClaim]);
+  }, [statusMsg]);
 
-  // Check claim status helper function
-  function checkClaimStatus(lastClaimDate) {
-    const now = new Date();
-    const lastClaimTime = new Date(lastClaimDate).getTime();
-    const diffMs = now - lastClaimTime;
+  // Animation delay for cards
+  useEffect(() => {
+    // Add different animation delays to cards
+    const cards = document.querySelectorAll('.dcb-card');
+    cards.forEach((card, index) => {
+      card.style.animationDelay = `${0.1 + (index * 0.1)}s`;
+    });
+  }, []);
+
+  // Email validation
+  const isValidEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  async function handleSubscribe() {
+    if (!email) {
+      setIsError(true);
+      setStatusMsg("Please enter your email address.");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setIsError(true);
+      setStatusMsg("Please enter a valid email address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setStatusMsg("");
     
-    if (diffMs >= 24 * 60 * 60 * 1000) {
-      // It's been 24 hours, show button
-      setShowButton(true);
-    } else {
-      // Less than 24 hours, show countdown
-      setShowButton(false);
-      const secondsRemaining = Math.floor((24 * 60 * 60 * 1000 - diffMs) / 1000);
-      setBonusCountdown(secondsRemaining);
+    try {
+      const response = await axios.post("/api/newsletter/subscribe", { email });
+      setIsError(false);
+      setStatusMsg(response.data.message || "Successfully subscribed to the Daily Cyber Brief!");
+      // Clear email field on successful subscription
+      setEmail("");
+    } catch (err) {
+      setIsError(true);
+      const fallback = "Subscription failed. Please try again.";
+      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
-  // Bonus countdown logic (runs every second)
-  useEffect(() => {
-    if (!showButton && localLastClaim) {
-      function tickBonus() {
-        const now = new Date();
-        const lastClaimTime = new Date(localLastClaim).getTime();
-        const diffMs = now - lastClaimTime;
-        
-        if (diffMs >= 24 * 60 * 60 * 1000) {
-          // It's been 24 hours, show button
-          setShowButton(true);
-          setBonusCountdown(0);
-        } else {
-          // Less than 24 hours, update countdown
-          const secondsRemaining = Math.floor((24 * 60 * 60 * 1000 - diffMs) / 1000);
-          setBonusCountdown(secondsRemaining);
-        }
-      }
-      
-      tickBonus(); // Run immediately
-      const bonusInterval = setInterval(tickBonus, 1000);
-      return () => clearInterval(bonusInterval);
-    }
-  }, [localLastClaim, showButton]);
-
-  // Daily question refresh countdown logic
-  useEffect(() => {
-    function tickQuestion() {
-      const now = new Date();
-      const nextMidnightUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1));
-      const diff = Math.floor((nextMidnightUTC - now) / 1000);
-      setQuestionCountdown(diff);
-    }
-    
-    tickQuestion(); // Run immediately
-    const questionInterval = setInterval(tickQuestion, 1000);
-    return () => clearInterval(questionInterval);
-  }, []);
-
-  // Fetch daily question if user is logged in
-  useEffect(() => {
-    if (userId) {
-      fetchDailyQuestion();
-    } else {
-      setLoadingQ(false);
-    }
-  }, [userId]);
-
-  // Claim daily bonus - THIS IS THE KEY FUNCTION WE'RE FIXING
-  const handleClaimDailyBonus = async () => {
-    if (!userId) {
-      setBonusError('Please log in first.');
+  async function handleUnsubscribe() {
+    if (!email) {
+      setIsError(true);
+      setStatusMsg("Please enter your email address to unsubscribe.");
       return;
     }
-    
-    // IMMEDIATELY hide button and show countdown - this is the key fix
-    setShowButton(false);
-    setClaimInProgress(true);
-    setBonusError(null);
-    
-    // Set last claim time to now and store it both in state and localStorage
-    const now = new Date();
-    setLocalLastClaim(now);
-    localStorage.setItem(`lastClaim_${userId}`, now.toISOString());
-    
-    // Start the countdown immediately
-    setBonusCountdown(24 * 60 * 60); // 24 hours in seconds
-    
-    try {
-      // Now we make the API call
-      const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
-        method: 'POST'
-      });
-      const data = await res.json();
-      
-      setClaimInProgress(false);
-      
-      if (data.success) {
-        // Show success animation
-        setShowBonusAnimation(true);
-        setTimeout(() => setShowBonusAnimation(false), 3000);
-        setClaimed(true);
-        
-        // Update the user data in Redux
-        dispatch(fetchUserData(userId));
-      } else {
-        // Server says already claimed
-        setBonusError(data.message);
-        // Don't change UI state - keep showing countdown
-      }
-    } catch (err) {
-      setBonusError('Error: ' + err.message);
-      setClaimInProgress(false);
-      // Even if there's an error, keep showing the countdown
-    }
-  };
 
-  // Fetch daily question
-  const fetchDailyQuestion = async () => {
-    setLoadingQ(true);
-    setQError(null);
-    
-    try {
-      const res = await fetch(`/api/test/daily-question?userId=${userId}`);
-      const data = await res.json();
-      
-      if (!res.ok) {
-        setQError(data.error || 'Failed to fetch daily question');
-      } else {
-        setQuestionData(data);
-      }
-      
-      setLoadingQ(false);
-    } catch (err) {
-      setQError('Error fetching daily question: ' + err.message);
-      setLoadingQ(false);
-    }
-  };
-
-  // Submit daily answer
-  const submitDailyAnswer = async () => {
-    if (!questionData || questionData.alreadyAnswered) {
-      setQError("You've already answered today's question!");
+    if (!isValidEmail(email)) {
+      setIsError(true);
+      setStatusMsg("Please enter a valid email address.");
       return;
     }
-    
-    if (selectedAnswer === null) {
-      setQError('Please select an answer first.');
-      return;
-    }
-    
-    setQError(null);
+
+    setIsSubmitting(true);
+    setStatusMsg("");
     
     try {
-      const body = {
-        userId,
-        dayIndex: questionData.dayIndex,
-        selectedIndex: selectedAnswer
-      };
-      
-      const res = await fetch('/api/test/daily-question/answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-      
-      const ansData = await res.json();
-      
-      if (!res.ok) {
-        setQError(ansData.error || 'Error submitting answer.');
-      } else {
-        setSubmitResult(ansData);
-        
-        dispatch(
-          setXPAndCoins({
-            xp: ansData.newXP || xp,
-            coins: ansData.newCoins || coins
-          })
-        );
-        
-        setQuestionData((prev) => ({
-          ...prev,
-          alreadyAnswered: true
-        }));
-
-        if (ansData.correct) {
-          setShowCorrectAnimation(true);
-          setTimeout(() => setShowCorrectAnimation(false), 2000);
-        } else {
-          setShowWrongAnimation(true);
-          setTimeout(() => setShowWrongAnimation(false), 2000);
-        }
-      }
+      const response = await axios.post("/api/newsletter/unsubscribe", { email });
+      setIsError(false);
+      setStatusMsg(response.data.message || "Successfully unsubscribed from the Daily Cyber Brief.");
+      // Clear email field on successful unsubscription
+      setEmail("");
     } catch (err) {
-      setQError('Error: ' + err.message);
+      setIsError(true);
+      const fallback = "Unsubscribe failed. Please try again.";
+      setStatusMsg(err?.response?.data?.error || err?.response?.data?.message || fallback);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      if (activeSection === "subscribe") {
+        handleSubscribe();
+      } else {
+        handleUnsubscribe();
+      }
     }
   };
 
   return (
-    <div className="daily-station-container">
-      {/* HEADER SECTION */}
-      <div className="daily-station-header">
-        <div className="daily-station-title">
-          <h1>Daily Station</h1>
-          <p>Claim your daily rewards and answer the challenge</p>
-        </div>
-        
-        {userId && (
-          <div className="daily-station-user-stats">
-            <div className="daily-station-stat">
-              <FaCoins className="daily-station-stat-icon coins" />
-              <span className="daily-station-stat-value">{coins}</span>
+    <div className="dcb-container">
+      <div className="dcb-wrapper">
+        {/* Header Section */}
+        <div className="dcb-header">
+          <div className="dcb-header-content">
+            <div className="dcb-logo">
+              <FaNewspaper className="dcb-logo-icon" />
             </div>
-            <div className="daily-station-stat">
-              <FaStar className="daily-station-stat-icon xp" />
-              <span className="daily-station-stat-value">{xp}</span>
+            <div className="dcb-title">
+              <h1>Daily Cyber Brief</h1>
+              <p>Your essential cybersecurity intelligence, delivered daily</p>
             </div>
           </div>
-        )}
-      </div>
+        </div>
 
-      {/* MAIN CONTENT */}
-      <div className="daily-station-content">
-        {!userId ? (
-          <div className="daily-station-login-required">
-            <div className="daily-station-login-message">
-              <FaLightbulb className="daily-station-login-icon" />
-              <h2>Login Required</h2>
-              <p>Please log in to claim daily rewards and participate in daily challenges.</p>
+        {/* Main Content with Cards */}
+        <div className="dcb-main-content">
+          {/* Intro Card with Features */}
+          <div className="dcb-card dcb-intro-card">
+            <div className="dcb-card-header">
+              <FaShieldAlt className="dcb-card-icon" />
+              <h2>Stay Ahead of Cyber Threats</h2>
+            </div>
+            <div className="dcb-card-content">
+              <p>
+                The Daily Cyber Brief delivers curated, actionable cybersecurity intelligence 
+                directly to your inbox. Stay informed about emerging threats, security best 
+                practices, and industry trends.
+              </p>
+              
+              <div className="dcb-features">
+                <div className="dcb-feature">
+                  <FaLock className="dcb-feature-icon" />
+                  <h3>Threat Intelligence</h3>
+                  <p>Get the latest on emerging cyber threats and vulnerabilities</p>
+                </div>
+                <div className="dcb-feature">
+                  <FaChartLine className="dcb-feature-icon" />
+                  <h3>Industry Trends</h3>
+                  <p>Track industry trends and stay ahead of the curve</p>
+                </div>
+                <div className="dcb-feature">
+                  <FaToolbox className="dcb-feature-icon" />
+                  <h3>Security Tools</h3>
+                  <p>Practical security tools and techniques for implementation</p>
+                </div>
+                <div className="dcb-feature">
+                  <FaRegLightbulb className="dcb-feature-icon" />
+                  <h3>Expert Insights</h3>
+                  <p>Gain insights from security experts and thought leaders</p>
+                </div>
+              </div>
             </div>
           </div>
-        ) : (
-          <>
-            {/* DAILY BONUS SECTION */}
-            <div className="daily-station-card bonus-card">
-              <div className="daily-station-card-header">
-                <FaGift className="daily-station-card-icon" />
-                <h2>Daily Bonus</h2>
-              </div>
-              
-              <div className="daily-station-card-content">
-                <div className="daily-station-bonus-info">
-                  <div className="daily-station-bonus-value">
-                    <FaCoins className="daily-station-bonus-coin-icon" />
-                    <span>1000</span>
-                  </div>
-                  <p>Claim your free coins every 24 hours!</p>
-                </div>
-                
-                {/* Show error if any */}
-                {bonusError && !bonusError.includes("Next bonus in") && (
-                  <div className="daily-station-error">
-                    <p>{bonusError}</p>
-                  </div>
-                )}
-                
-                {/* Claim Button or Countdown - THIS IS THE KEY UI PART */}
-                <div className="daily-station-bonus-action">
-                  {showButton ? (
-                    <button 
-                      className="daily-station-claim-btn"
-                      onClick={handleClaimDailyBonus}
-                      disabled={claimInProgress}
-                    >
-                      {claimInProgress ? (
-                        <>
-                          <FaSyncAlt className="loading-icon" />
-                          <span>Claiming...</span>
-                        </>
-                      ) : (
-                        <>
-                          <FaCoins />
-                          <span>Claim Bonus</span>
-                        </>
-                      )}
-                    </button>
-                  ) : (
-                    <div className="daily-station-countdown">
-                      <FaHourglassHalf className="daily-station-countdown-icon" />
-                      <div className="daily-station-countdown-info">
-                        <span className="daily-station-countdown-label">Next bonus in:</span>
-                        <span className="daily-station-countdown-time">{formatCountdown(bonusCountdown)}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+
+          {/* Signup Card */}
+          <div className="dcb-card dcb-signup-card">
+            <div className="dcb-card-header">
+              <FaBell className="dcb-card-icon" />
+              <h2>Join the Cyber Brief Community</h2>
             </div>
-            
-            {/* DAILY QUESTION SECTION */}
-            <div className="daily-station-card question-card">
-              <div className="daily-station-card-header">
-                <FaLightbulb className="daily-station-card-icon" />
-                <h2>Daily Challenge</h2>
+            <div className="dcb-card-content">
+              <div className="dcb-tabs">
+                <button 
+                  className={`dcb-tab ${activeSection === "subscribe" ? "active" : ""}`}
+                  onClick={() => setActiveSection("subscribe")}
+                >
+                  <FaCheck /> Subscribe
+                </button>
+                <button 
+                  className={`dcb-tab ${activeSection === "unsubscribe" ? "active" : ""}`}
+                  onClick={() => setActiveSection("unsubscribe")}
+                >
+                  <FaTimes /> Unsubscribe
+                </button>
               </div>
-              
-              <div className="daily-station-card-content">
-                {loadingQ ? (
-                  <div className="daily-station-loading">
-                    <FaSyncAlt className="loading-icon" />
-                    <p>Loading challenge...</p>
-                  </div>
-                ) : qError ? (
-                  <div className="daily-station-error">
-                    <p>{qError}</p>
-                  </div>
-                ) : !questionData ? (
-                  <div className="daily-station-empty">
-                    <p>No challenges available today. Check back tomorrow!</p>
-                  </div>
-                ) : (
-                  <div className={`daily-station-question ${showCorrectAnimation ? 'correct-animation' : ''} ${showWrongAnimation ? 'wrong-animation' : ''}`}>
-                    <div className="daily-station-question-prompt">
-                      <p>{questionData.prompt}</p>
-                    </div>
-                    
-                    {questionData.alreadyAnswered ? (
-                      <div className="daily-station-question-answered">
-                        {submitResult && (
-                          <div className={`daily-station-result ${submitResult.correct ? 'correct' : 'incorrect'}`}>
-                            {submitResult.correct ? (
-                              <>
-                                <FaCheckCircle className="daily-station-result-icon" />
-                                <p>Correct! You earned {submitResult.awardedCoins} coins.</p>
-                              </>
-                            ) : (
-                              <>
-                                <FaTimesCircle className="daily-station-result-icon" />
-                                <p>Not quite, but you still got {submitResult.awardedCoins} coins.</p>
-                              </>
-                            )}
-                          </div>
-                        )}
-                        
-                        {/* Explanation Section - New Addition */}
-                        {(questionData.explanation || (submitResult && submitResult.explanation)) && (
-                          <div className="daily-station-explanation">
-                            <h4>Explanation:</h4>
-                            <p>{questionData.explanation || (submitResult && submitResult.explanation)}</p>
-                          </div>
-                        )}
-                        
-                        <div className="daily-station-next-question">
-                          <div className="daily-station-countdown">
-                            <FaCalendarCheck className="daily-station-countdown-icon" />
-                            <div className="daily-station-countdown-info">
-                              <span className="daily-station-countdown-label">Next challenge in:</span>
-                              <span className="daily-station-countdown-time">{formatCountdown(questionCountdown)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+
+              <div className="dcb-form">
+                <div className="dcb-input-group">
+                  <FaEnvelope className="dcb-input-icon" />
+                  <input
+                    type="email"
+                    value={email}
+                    placeholder="Enter your email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    disabled={isSubmitting}
+                    onFocus={() => setFormFocused(true)}
+                    onBlur={() => setFormFocused(false)}
+                  />
+                </div>
+
+                {activeSection === "subscribe" ? (
+                  <button 
+                    className="dcb-submit-btn"
+                    onClick={handleSubscribe}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <FaSpinner className="dcb-spinner" />
+                        <span>Subscribing...</span>
+                      </>
                     ) : (
-                      <div className="daily-station-question-options">
-                        <div className="daily-station-options-list">
-                          {questionData.options.map((option, index) => (
-                            <label 
-                              key={index} 
-                              className={`daily-station-option ${selectedAnswer === index ? 'selected' : ''}`}
-                            >
-                              <input
-                                type="radio"
-                                name="dailyQuestion"
-                                value={index}
-                                checked={selectedAnswer === index}
-                                onChange={() => setSelectedAnswer(index)}
-                                className="daily-station-option-input"
-                              />
-                              <span className="daily-station-option-text">{option}</span>
-                              {selectedAnswer === index && (
-                                <FaChevronRight className="daily-station-option-indicator" />
-                              )}
-                            </label>
-                          ))}
-                        </div>
-                        
-                        <button 
-                          className="daily-station-submit-btn"
-                          onClick={submitDailyAnswer}
-                          disabled={selectedAnswer === null}
-                        >
-                          Submit Answer
-                        </button>
-                        
-                        <div className="daily-station-next-question">
-                          <div className="daily-station-countdown">
-                            <FaCalendarCheck className="daily-station-countdown-icon" />
-                            <div className="daily-station-countdown-info">
-                              <span className="daily-station-countdown-label">Challenge refreshes in:</span>
-                              <span className="daily-station-countdown-time">{formatCountdown(questionCountdown)}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <>
+                        <FaRocket />
+                        <span>Subscribe to Daily Updates</span>
+                      </>
                     )}
-                  </div>
+                  </button>
+                ) : (
+                  <button 
+                    className="dcb-submit-btn dcb-unsubscribe-btn"
+                    onClick={handleUnsubscribe}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <FaSpinner className="dcb-spinner" />
+                        <span>Processing...</span>
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes />
+                        <span>Unsubscribe from Updates</span>
+                      </>
+                    )}
+                  </button>
                 )}
               </div>
+
+              {statusMsg && (
+                <div className={`dcb-status-msg ${isError ? "error" : "success"} ${showStatusMsg ? "show" : ""}`}>
+                  {isError ? (
+                    <FaExclamationTriangle className="dcb-status-icon" />
+                  ) : (
+                    <FaCheck className="dcb-status-icon" />
+                  )}
+                  <span>{statusMsg}</span>
+                </div>
+              )}
             </div>
-          </>
-        )}
-      </div>
-      
-      {/* BONUS CLAIM ANIMATION OVERLAY */}
-      {showBonusAnimation && (
-        <div className="daily-station-overlay">
-          <div className="daily-station-bonus-animation">
-            <FaCoins className="daily-station-bonus-icon" />
-            <div className="daily-station-bonus-text">
-              <h3>Daily Bonus Claimed!</h3>
-              <p>+1000 coins added to your account</p>
+          </div>
+
+          {/* Info Card */}
+          <div className="dcb-card dcb-info-card">
+            <div className="dcb-card-header">
+              <FaInfoCircle className="dcb-card-icon" />
+              <h2>About Our Newsletter</h2>
+            </div>
+            <div className="dcb-card-content">
+              <p>
+                The Daily Cyber Brief is sent every weekday morning. We respect your privacy
+                and will never share your email address with third parties. Each newsletter includes
+                an unsubscribe link for easy opt-out at any time.
+              </p>
+              <p>
+                Our team of security experts curates the most important cybersecurity news and
+                practical advice to help you protect your digital life and stay informed about
+                the evolving threat landscape.
+              </p>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
-};
+}
 
-export default DailyStationPage;
+export default DailyCyberBrief;
