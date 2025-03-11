@@ -706,7 +706,7 @@ Direct and conceptual (~40%)
 
 so i need you to do test *************REPLACE THIS******************* labeled *************REPLACE THIS*******************
 
-here are teh most recent tests before this oen so you know how difcult this test should be sicne they get slighly harder
+here are teh most recent tests before this oen so you know how difcult this test should be sicne they get slighly harder (ive only done test 1 and 2 but since test 1 is not on teh diffculty range thing then im just gonna give you test 2 so you know to not duplicate any questions aswell as you know the diffculty test 3 should be (a tiny bit harder than test 2)
 
 *********2 MOST RECENT TESTS HERE*************************
 
