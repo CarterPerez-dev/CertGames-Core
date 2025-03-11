@@ -1,5 +1,4 @@
 # FIX
-## fix bonus page double click button
 ----
 ## fix achivwmwnta test question counter
 ## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
