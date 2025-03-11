@@ -1,7 +1,6 @@
 # FIX
 ----
-## fix achivwmwnta test question counter
-## ACHIEVEMNT Verification [refer to](https://github.com/CarterPerez-dev/ProxyAuthRequired/blob/main/Mongo-Inputs/TestUsers.js)
+fix scenario sphere parse questions
 ---## make 300 Daily PBQ's
 --- ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
  ## Input leaderboard route and leaderboard page specifcually
