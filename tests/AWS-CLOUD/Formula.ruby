@@ -701,7 +701,26 @@ Direct and conceptual (~40%)
 💀 Unrelenting Distractor Plausibility: Every distractor is highly plausible—only microscopic technical nuances reveal the correct answer.
 ^^
 
-*******Ok so we have 10 tests with 100 questiosn each, they range in diffuclty and test 1 isnt on tyeh ficculty sca;e- its suypposed to exactly on par witht eh actual real life exam. so its labeled "normal", then test 2 starts at "very easy" and then increases in diffculty until teh hardest ets which is test 10 labeled "ultra level". so what i need you to do is give me test 1 rigth now which is average/exactly on par with the real exam difficulty.********
+*******Ok so we have 10 tests with 100 questiosn each, they range in diffuclty and test 1 isnt on tyeh ficculty sca;e- its suypposed to exactly on par witht eh actual real life exam. so its labeled "normal", then test 2 starts at "very easy" and then increases in diffculty until teh hardest ets which is test 10 labeled "ultra level". so im gonna provide you the most receent 2 tests so you know not to duplciate any questions exactly (it can be some of teh saem domains but try not to have liek too simialr of a qwuwtsion/options- so liek id say dont make a qquestions higher than 80% of the same abscially and just bacially have variety of style of questions and objective/domain coverage)
+
+
+so i need you to do test *************REPLACE THIS******************* labeled *************REPLACE THIS*******************
+
+here are teh most recent tests before this oen so you know how difcult this test should be sicne they get slighly harder
+
+*********2 MOST RECENT TESTS HERE*************************
+
+
+-
+
+
+
+
+
+
+
+
+
 
 so with all that said 
 
