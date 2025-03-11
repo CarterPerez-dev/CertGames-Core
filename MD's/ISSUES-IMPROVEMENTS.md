@@ -1,9 +1,9 @@
 # FIX
 ----
-fix scenario sphere parse questions
----## make 300 Daily PBQ's
---- ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
- ## Input leaderboard route and leaderboard page specifcually
+## fix scenario sphere parse questions
+## make 300 Daily PBQ's
+## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
+## Input leaderboard route and leaderboard page specifcually
 
 ## configure cloud fare settings
 
