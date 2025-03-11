@@ -150,37 +150,23 @@ const DailyStationPage = () => {
         return;
       }
       
+      // Always update the lastDailyClaim and show countdown immediately
+      setLocalLastDailyClaim(data.newLastDailyClaim || new Date().toISOString());
+      setCanClaim(false);
+      setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
+      
       if (data.success) {
         // Claimed successfully
         setShowBonusAnimation(true);
         setTimeout(() => setShowBonusAnimation(false), 3000);
         setBonusSuccess(true);
         
-        // Update state immediately to show countdown
-        const now = new Date();
-        setLocalLastDailyClaim(now.toISOString());
-        setCanClaim(false);
-        setBonusCountdown(86400); // Initialize with 24 hours in seconds
-        
         // Refresh user data to update coins/xp
         dispatch(fetchUserData(userId));
       } else {
-        // Already claimed case
-        setBonusError(data.message);
-        
-        // Parse seconds left from message if available
-        const match = data.message && data.message.match(/(\d+)/);
-        if (match) {
-          const secondsLeft = parseInt(match[1], 10);
-          if (!isNaN(secondsLeft) && secondsLeft > 0) {
-            // Calculate the last claim time based on seconds left
-            const nowMs = Date.now();
-            const msLeft = secondsLeft * 1000;
-            const lastClaimTime = nowMs - (86400000 - msLeft);
-            setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
-            setCanClaim(false);
-            setBonusCountdown(secondsLeft); // Set countdown to exactly what the server returned
-          }
+        // Already claimed case - only set error if not about "already claimed"
+        if (!data.message || !data.message.includes("Already claimed")) {
+          setBonusError(data.message);
         }
       }
       
@@ -354,7 +340,7 @@ const DailyStationPage = () => {
                     <div className="daily-station-countdown">
                       <FaHourglassHalf className="daily-station-countdown-icon" />
                       <div className="daily-station-countdown-info">
-                        <span className="daily-station-countdown-label">Next bonus in:</span>
+                        <span className="daily-station-countdown-label">Time until next bonus:</span>
                         <span className="daily-station-countdown-time">{formatCountdown(bonusCountdown)}</span>
                       </div>
                     </div>
