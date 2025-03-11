@@ -1043,9 +1043,266 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`kubectl get networkpolicy` lists all network policies that control pod-to-pod communication. `kubectl logs` retrieves logs but does not verify network rules. `kubectl describe node` provides node-level details but not pod communication rules. `kubectl get services` lists service endpoints but does not check network policies.",
       "examTip": "For **verifying Kubernetes network policies**, use **`kubectl get networkpolicy`.**"
+    },
+    {
+      "id": 81,
+      "question": "A cloud engineer needs to verify which specific routes are being advertised from an on-premises data center to a cloud provider over a direct connection. Which command should be used?",
+      "options": [
+        "`show ip bgp summary`",
+        "`traceroute <cloud-peer-IP>`",
+        "`netstat -r`",
+        "`dig +trace <cloud-peer-hostname>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`show ip bgp summary` displays BGP route advertisements and confirms whether specific routes are being shared with the cloud provider. `traceroute` helps diagnose network paths but does not verify advertised routes. `netstat -r` shows local routing tables but does not confirm BGP advertisements. `dig +trace` checks DNS resolution paths but does not analyze BGP routing.",
+      "examTip": "For **verifying advertised BGP routes**, use **`show ip bgp summary`.**"
+    },
+    {
+      "id": 82,
+      "question": "A Kubernetes administrator needs to confirm whether a specific pod can reach an internal DNS server. Which command should be used?",
+      "options": [
+        "`kubectl exec -it <pod-name> -- nslookup <domain>`",
+        "`kubectl get services`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl describe node <node-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl exec -it <pod-name> -- nslookup <domain>` tests DNS resolution directly from inside the pod, verifying whether it can reach the DNS server. `kubectl get services` lists services but does not test DNS resolution. `kubectl logs` retrieves logs but does not diagnose network issues. `kubectl describe node` provides node details but does not check DNS reachability.",
+      "examTip": "For **testing DNS resolution in a Kubernetes pod**, use **`kubectl exec -it -- nslookup`.**"
+    },
+    {
+      "id": 83,
+      "question": "A cloud networking engineer suspects asymmetric routing is causing packet loss between cloud regions. What should be analyzed first?",
+      "options": [
+        "Network flow logs to check for different inbound and outbound paths.",
+        "Security group rules to confirm inbound and outbound allow lists.",
+        "CPU utilization on network appliances to check for performance issues.",
+        "DNS query responses to ensure domain resolution is functioning."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Asymmetric routing occurs when inbound and outbound traffic take different network paths, leading to packet loss. Network flow logs help confirm whether this is occurring. Security group rules control access but do not affect asymmetric routing. CPU utilization affects network performance but does not diagnose asymmetric routing. DNS resolution affects hostname lookups but is unrelated to routing issues.",
+      "examTip": "For **diagnosing asymmetric routing issues**, analyze **network flow logs first.**"
+    },
+    {
+      "id": 84,
+      "question": "A cloud security team suspects an unauthorized script is exfiltrating data from a cloud storage bucket. What should be checked first?",
+      "options": [
+        "Cloud storage access logs for unusual download activity.",
+        "Firewall rules to determine if outbound traffic is restricted.",
+        "IAM policies to verify least privilege access to the bucket.",
+        "Database query logs for unusual data retrieval patterns."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Cloud storage access logs provide a record of all interactions with the bucket, making it the primary source for detecting unauthorized downloads. Firewall rules control network traffic but do not track storage activity. IAM policies define permissions but do not reveal unauthorized activity. Database query logs help detect anomalies but do not monitor cloud storage access.",
+      "examTip": "For **detecting unauthorized data exfiltration from storage**, check **access logs first.**"
+    },
+    {
+      "id": 85,
+      "question": "A cloud DevOps team needs to ensure that all infrastructure changes comply with security policies before deployment. What should they implement?",
+      "options": [
+        "A policy-as-code framework integrated into the CI/CD pipeline.",
+        "A manual approval process requiring security team review.",
+        "A network intrusion detection system (IDS) to monitor deployments.",
+        "A cloud-native firewall to filter unauthorized configuration changes."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A policy-as-code framework enforces compliance before deployment by automating security checks. A manual approval process slows down deployments and introduces human error. An IDS detects threats but does not enforce security policies in infrastructure. A firewall secures traffic but does not validate configuration changes.",
+      "examTip": "For **ensuring infrastructure compliance pre-deployment**, use **policy-as-code in CI/CD.**"
+    },
+    {
+      "id": 86,
+      "question": "A cloud administrator needs to determine why an application running in a virtual machine is experiencing excessive disk latency. What should be checked first?",
+      "options": [
+        "The storage volume's IOPS performance metrics.",
+        "The instance’s network bandwidth usage.",
+        "The CPU utilization of the application server.",
+        "The firewall rules restricting disk access."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Disk latency is primarily affected by the storage volume’s IOPS performance. Network bandwidth impacts connectivity but not storage performance. CPU utilization affects processing speed but does not directly impact disk latency. Firewall rules control traffic but do not influence disk speed.",
+      "examTip": "For **troubleshooting high disk latency**, check **storage IOPS first.**"
+    },
+    {
+      "id": 87,
+      "question": "A cloud networking team needs to troubleshoot slow responses from an application load balancer. What should be analyzed first?",
+      "options": [
+        "Backend server health check response times.",
+        "DNS resolution times for the load balancer's hostname.",
+        "Firewall rules to ensure traffic is allowed to the backend instances.",
+        "The IAM permissions assigned to the load balancer."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Slow backend server health check responses indicate that servers are not responding efficiently, leading to delayed load balancer responses. DNS resolution affects name lookups but not ongoing traffic performance. Firewall rules impact connectivity but do not cause latency once traffic is allowed. IAM permissions control access but do not affect request speed.",
+      "examTip": "For **troubleshooting slow load balancer responses**, check **backend health check response times first.**"
+    },
+    {
+      "id": 88,
+      "question": "A DevOps engineer needs to determine if a Terraform-managed infrastructure change will modify existing resources. Which command should be run?",
+      "options": [
+        "`terraform plan`",
+        "`terraform apply`",
+        "`terraform refresh`",
+        "`terraform state list`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`terraform plan` previews infrastructure changes before applying them, allowing verification of modifications. `terraform apply` executes changes but does not preview them. `terraform refresh` updates the state file but does not show proposed changes. `terraform state list` displays managed resources but does not indicate modifications.",
+      "examTip": "For **checking Terraform changes before applying**, use **`terraform plan`.**"
+    },
+    {
+      "id": 89,
+      "question": "A cloud engineer needs to determine why an instance in a private subnet cannot resolve domain names. The instance has outbound internet access via a NAT gateway. What should be checked first?",
+      "options": [
+        "The instance’s DNS resolver settings.",
+        "The NAT gateway’s outbound bandwidth usage.",
+        "The security group rules allowing UDP traffic.",
+        "The IAM role assigned to the instance."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The instance’s DNS resolver settings determine where domain name queries are sent. If incorrectly configured, DNS resolution will fail even if internet access is available. NAT gateway bandwidth affects performance but does not directly impact DNS resolution. Security groups control access but do not configure DNS resolution. IAM roles govern permissions but do not affect networking.",
+      "examTip": "For **troubleshooting DNS issues in a private subnet**, check **DNS resolver settings first.**"
+    },
+    {
+      "id": 90,
+      "question": "A Kubernetes administrator needs to verify if a pod is experiencing resource limits being enforced. Which command should be used?",
+      "options": [
+        "`kubectl describe pod <pod-name>`",
+        "`kubectl get nodes -o wide`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl get services`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl describe pod <pod-name>` provides detailed pod information, including resource requests and limits. `kubectl get nodes -o wide` provides node details but does not show pod-specific resource limits. `kubectl logs` retrieves logs but does not indicate resource limit enforcement. `kubectl get services` lists service endpoints but does not display pod resource usage.",
+      "examTip": "For **checking if a Kubernetes pod is hitting resource limits**, use **`kubectl describe pod`.**"
+    },
+    {
+      "id": 91,
+      "question": "A cloud networking team needs to verify why packets between two cloud instances are experiencing unexpected latency. Which diagnostic tool should be used?",
+      "options": [
+        "`mtr` to analyze network path latency and packet loss.",
+        "`netstat -an` to list active network connections.",
+        "`dig` to check domain name resolution.",
+        "`ps aux` to inspect running processes."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`mtr` provides a real-time view of network path latency and packet loss, making it ideal for diagnosing network performance issues. `netstat -an` lists active connections but does not measure latency. `dig` resolves domain names but does not analyze network performance. `ps aux` lists processes but is unrelated to network troubleshooting.",
+      "examTip": "For **real-time network latency analysis**, use **`mtr`.**"
+    },
+    {
+      "id": 92,
+      "question": "A cloud security engineer needs to prevent unauthorized database queries from non-approved applications. What is the most effective control?",
+      "options": [
+        "Using identity-based access control (IBAC) for database authentication.",
+        "Applying network ACLs to block unauthorized database connections.",
+        "Enabling multi-factor authentication (MFA) for database users.",
+        "Encrypting all database records to prevent unauthorized access."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Identity-based access control (IBAC) ensures that only authorized applications and users can access the database. Network ACLs restrict access but do not verify identities. MFA enhances security for user access but does not apply to application authentication. Encryption secures data but does not prevent unauthorized queries from approved connections.",
+      "examTip": "For **restricting database access to approved applications**, use **IBAC.**"
+    },
+    {
+      "id": 93,
+      "question": "A cloud engineer needs to verify if a virtual machine is correctly advertising its IP routes via BGP. Which command should be used?",
+      "options": [
+        "`show ip bgp summary`",
+        "`traceroute <destination-IP>`",
+        "`ping <destination-IP>`",
+        "`nslookup <destination-hostname>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`show ip bgp summary` displays BGP route advertisements, confirming whether a virtual machine is correctly announcing its routes. `traceroute` helps diagnose network paths but does not show BGP advertisements. `ping` checks connectivity but does not verify route announcements. `nslookup` resolves domain names but does not analyze routing.",
+      "examTip": "For **verifying BGP route advertisements**, use **`show ip bgp summary`.**"
+    },
+    {
+      "id": 94,
+      "question": "A cloud networking engineer needs to determine why an internal application cannot resolve a domain name using a custom DNS server. What should be checked first?",
+      "options": [
+        "The DNS resolver settings in `/etc/resolv.conf`.",
+        "The cloud provider’s network ACL rules.",
+        "The IAM permissions assigned to the DNS server.",
+        "The TLS certificate used by the application."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The DNS resolver settings in `/etc/resolv.conf` specify which DNS servers the system should use. If incorrect, the application will fail to resolve domain names. Network ACLs affect traffic flow but do not control DNS settings. IAM permissions control access but do not impact name resolution. TLS certificates secure communications but do not impact DNS lookups.",
+      "examTip": "For **DNS resolution issues**, check **`/etc/resolv.conf` first.**"
+    },
+    {
+      "id": 95,
+      "question": "A Kubernetes administrator needs to identify which services are forwarding traffic to backend pods. Which command should be used?",
+      "options": [
+        "`kubectl get endpoints`",
+        "`kubectl describe pod <pod-name>`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl get nodes -o wide`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl get endpoints` displays which pods are being served by a particular service. `kubectl describe pod` provides pod details but does not show service-to-pod mappings. `kubectl logs` retrieves application logs but does not verify traffic routing. `kubectl get nodes -o wide` lists node details but does not diagnose networking.",
+      "examTip": "For **checking which pods a service is forwarding traffic to**, use **`kubectl get endpoints`.**"
+    },
+    {
+      "id": 96,
+      "question": "A cloud administrator needs to determine why an instance is consuming unusually high network bandwidth. Which metric should be analyzed first?",
+      "options": [
+        "Egress traffic volume.",
+        "CPU utilization.",
+        "Disk read/write operations.",
+        "Number of active SSH sessions."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Egress traffic volume provides direct insight into how much outbound network traffic an instance is generating. CPU utilization affects performance but does not indicate high network usage. Disk operations impact storage performance but do not measure bandwidth. SSH session count affects security but not network usage.",
+      "examTip": "For **analyzing high network bandwidth usage**, check **egress traffic volume first.**"
+    },
+    {
+      "id": 97,
+      "question": "A cloud engineer needs to check if a Kubernetes pod is experiencing network connectivity issues. Which command provides the most direct way to test network reachability from within the pod?",
+      "options": [
+        "`kubectl exec -it <pod-name> -- curl <destination-IP>`",
+        "`kubectl logs <pod-name>`",
+        "`kubectl get pods -o wide`",
+        "`kubectl describe node <node-name>`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`kubectl exec -it <pod-name> -- curl <destination-IP>` allows running network tests directly from inside the pod to verify connectivity. `kubectl logs` retrieves application logs but does not diagnose network issues. `kubectl get pods -o wide` provides pod details but does not test network reachability. `kubectl describe node` provides node details but does not test network access.",
+      "examTip": "For **testing network connectivity from a Kubernetes pod**, use **`kubectl exec -it -- curl`.**"
+    },
+    {
+      "id": 98,
+      "question": "A security engineer is investigating unauthorized changes to cloud storage bucket permissions. What should be checked first?",
+      "options": [
+        "Cloud provider’s audit logs for IAM policy modifications.",
+        "Storage bucket access logs to detect unusual requests.",
+        "Network flow logs to track external connections to the bucket.",
+        "Operating system logs from instances accessing the bucket."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Audit logs track IAM policy modifications, providing a detailed history of changes to storage permissions. Storage access logs track individual read/write requests but do not reveal permission changes. Network flow logs show external traffic but do not track permission modifications. OS logs monitor instance-level activity but do not record storage permission changes.",
+      "examTip": "For **investigating unauthorized bucket permission changes**, check **audit logs first.**"
+    },
+    {
+      "id": 99,
+      "question": "A cloud networking team is troubleshooting intermittent packet loss between cloud instances in different availability zones. What should be analyzed first?",
+      "options": [
+        "Cloud provider’s network performance monitoring tool.",
+        "The route table configurations for each subnet.",
+        "The IAM policies applied to the instances.",
+        "The firewall rules for inbound and outbound traffic."
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A cloud provider’s network performance monitoring tool helps diagnose inter-AZ latency and packet loss. Route tables control traffic flow but do not diagnose packet loss. IAM policies define permissions but do not affect network connectivity. Firewall rules may impact access but do not explain intermittent loss.",
+      "examTip": "For **troubleshooting packet loss between cloud instances**, check **network performance monitoring first.**"
+    },
+    {
+      "id": 100,
+      "question": "A DevOps team needs to verify if a Terraform state file is synchronized with deployed cloud resources. Which command should be run?",
+      "options": [
+        "`terraform refresh`",
+        "`terraform validate`",
+        "`terraform state list`",
+        "`terraform destroy`"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`terraform refresh` updates the local state file to match the actual cloud infrastructure, ensuring synchronization. `terraform validate` checks syntax but does not verify resource state. `terraform state list` displays tracked resources but does not confirm synchronization. `terraform destroy` removes resources but does not check state consistency.",
+      "examTip": "For **verifying Terraform state synchronization**, use **`terraform refresh`.**"
     }
   ]
 });
-
-
-
