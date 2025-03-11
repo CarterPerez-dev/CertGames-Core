@@ -145,12 +145,15 @@ const DailyStationPage = () => {
     fetch(`/api/test/user/${userId}/daily-bonus`, {
       method: 'POST'
     })
-      .then(res => res.json())
-      .then(data => {
+      .then(res => {
         if (!res.ok) {
-          throw new Error(data.error || 'Error claiming daily bonus');
+          return res.json().then(data => {
+            throw new Error(data.error || 'Error claiming daily bonus');
+          });
         }
-        
+        return res.json();
+      })
+      .then(data => {
         if (data.success) {
           // Claimed successfully
           setShowBonusAnimation(true);
