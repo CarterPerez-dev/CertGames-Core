@@ -402,6 +402,14 @@ const DailyStationPage = () => {
                           </div>
                         )}
                         
+                        {/* Explanation Section - New Addition */}
+                        {(questionData.explanation || (submitResult && submitResult.explanation)) && (
+                          <div className="daily-station-explanation">
+                            <h4>Explanation:</h4>
+                            <p>{questionData.explanation || (submitResult && submitResult.explanation)}</p>
+                          </div>
+                        )}
+                        
                         <div className="daily-station-next-question">
                           <div className="daily-station-countdown">
                             <FaCalendarCheck className="daily-station-countdown-icon" />
