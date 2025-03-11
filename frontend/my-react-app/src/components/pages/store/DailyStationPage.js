@@ -128,68 +128,72 @@ const DailyStationPage = () => {
   }, [userId]);
 
   // Claim daily bonus
-  const handleClaimDailyBonus = () => {
+  const handleClaimDailyBonus = async () => {
     if (!userId) {
       setBonusError('Please log in first.');
       return;
     }
     
-    // FIRST - Force the button to disappear immediately
-    setCanClaim(false);
     setLoadingBonus(true);
     setBonusError(null);
-    setLocalLastDailyClaim(new Date().toISOString());
+    
+    // Immediately set canClaim to false and start the countdown
+    // This makes the button disappear on the first click
+    setCanClaim(false);
+    const now = new Date();
+    setLocalLastDailyClaim(now.toISOString());
     setBonusCountdown(24 * 3600); // Set to 24 hours in seconds
     
-    // THEN - Make the API call
-    fetch(`/api/test/user/${userId}/daily-bonus`, {
-      method: 'POST'
-    })
-      .then(res => {
-        if (!res.ok) {
-          return res.json().then(data => {
-            throw new Error(data.error || 'Error claiming daily bonus');
-          });
-        }
-        return res.json();
-      })
-      .then(data => {
-        if (data.success) {
-          // Claimed successfully
-          setShowBonusAnimation(true);
-          setTimeout(() => setShowBonusAnimation(false), 3000);
-          setBonusSuccess(true);
-          
-          // Update with the actual timestamp from server
-          if (data.newLastDailyClaim) {
-            setLocalLastDailyClaim(data.newLastDailyClaim);
-          }
-          
-          // Refresh user data to update coins/xp
-          dispatch(fetchUserData(userId));
-        } else {
-          // Already claimed case
-          if (!data.message || !data.message.includes("Already claimed")) {
-            setBonusError(data.message);
-          }
-          
-          // If we get "already claimed" message with seconds left info, update the countdown
-          const match = data.message && data.message.match(/(\d+)/);
-          if (match) {
-            const secondsLeft = parseInt(match[1], 10);
-            if (!isNaN(secondsLeft) && secondsLeft > 0) {
-              setBonusCountdown(secondsLeft);
-            }
-          }
-        }
-      })
-      .catch(err => {
-        setBonusError('Error: ' + err.message);
-        // We'll keep the countdown visible even on errors
-      })
-      .finally(() => {
-        setLoadingBonus(false);
+    try {
+      const res = await fetch(`/api/test/user/${userId}/daily-bonus`, {
+        method: 'POST'
       });
+      const data = await res.json();
+      
+      if (!res.ok) {
+        // Hard error, e.g. 404 user not found
+        setBonusError(data.error || 'Error claiming daily bonus');
+        // Revert the state changes if there was an error
+        setCanClaim(true);
+        setLocalLastDailyClaim(lastDailyClaim);
+        setLoadingBonus(false);
+        return;
+      }
+      
+      if (data.success) {
+        // Claimed successfully
+        setShowBonusAnimation(true);
+        setTimeout(() => setShowBonusAnimation(false), 3000);
+        setBonusSuccess(true);
+        
+        // Refresh user data to update coins/xp
+        dispatch(fetchUserData(userId));
+      } else {
+        // Already claimed case - set the error but keep showing countdown
+        setBonusError(data.message);
+        
+        // Parse seconds left from message if available
+        const match = data.message && data.message.match(/(\d+)/);
+        if (match) {
+          const secondsLeft = parseInt(match[1], 10);
+          if (!isNaN(secondsLeft) && secondsLeft > 0) {
+            // Calculate the last claim time based on seconds left
+            const nowMs = Date.now();
+            const msLeft = secondsLeft * 1000;
+            const lastClaimTime = nowMs - (86400000 - msLeft);
+            setLocalLastDailyClaim(new Date(lastClaimTime).toISOString());
+          }
+        }
+      }
+      
+      setLoadingBonus(false);
+    } catch (err) {
+      setBonusError('Error: ' + err.message);
+      // Revert the state changes if there was an error
+      setCanClaim(true);
+      setLocalLastDailyClaim(lastDailyClaim);
+      setLoadingBonus(false);
+    }
   };
 
   // Fetch daily question
@@ -333,24 +337,29 @@ const DailyStationPage = () => {
                 
                 {/* Claim Button or Countdown */}
                 <div className="daily-station-bonus-action">
-                  {canClaim && !loadingBonus ? (
+                  {canClaim ? (
                     <button 
                       className="daily-station-claim-btn"
                       onClick={handleClaimDailyBonus}
+                      disabled={loadingBonus}
                     >
-                      <FaCoins />
-                      <span>Claim Bonus</span>
+                      {loadingBonus ? (
+                        <>
+                          <FaSyncAlt className="loading-icon" />
+                          <span>Claiming...</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaCoins />
+                          <span>Claim Bonus</span>
+                        </>
+                      )}
                     </button>
-                  ) : loadingBonus ? (
-                    <div className="daily-station-countdown">
-                      <FaSyncAlt className="loading-icon" />
-                      <span>Claiming your bonus...</span>
-                    </div>
                   ) : (
                     <div className="daily-station-countdown">
                       <FaHourglassHalf className="daily-station-countdown-icon" />
                       <div className="daily-station-countdown-info">
-                        <span className="daily-station-countdown-label">Time until next bonus:</span>
+                        <span className="daily-station-countdown-label">Next bonus in:</span>
                         <span className="daily-station-countdown-time">{formatCountdown(bonusCountdown)}</span>
                       </div>
                     </div>
