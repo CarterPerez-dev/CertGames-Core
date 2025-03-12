@@ -497,7 +497,7 @@ def apply_daily_bonus(user_id):
         mainusers_collection.update_one(
             {"_id": user["_id"]},
             {
-                "$inc": {"coins": 1000},
+                "$inc": {"coins": 250},
                 "$set": {"lastDailyClaim": now}
             }
         )
