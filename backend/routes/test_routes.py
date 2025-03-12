@@ -1293,7 +1293,7 @@ def daily_bonus(user_id):
         }), 200
     else:
         start_db = time.time()
-        update_user_coins(user_id, 1000)
+        update_user_coins(user_id, 250)
         duration = time.time() - start_db
         if not hasattr(g, 'db_time_accumulator'):
             g.db_time_accumulator = 0.0
