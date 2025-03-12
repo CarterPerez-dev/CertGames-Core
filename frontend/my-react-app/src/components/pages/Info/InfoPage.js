@@ -164,6 +164,19 @@ const courseSchema = {
     "@type": "Organization",
     "name": "CertGames",
     "sameAs": "https://certgames.com"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "9.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://certgames.com/register"
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "courseWorkload": "PT10H",
+    "startDate": "2023-01-01"
   }
 };
 
