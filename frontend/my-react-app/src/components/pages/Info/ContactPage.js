@@ -119,6 +119,12 @@ const handleSubmit = async (e) => {
 };
 
   return (
+    <>
+      <SEOHelmet 
+        title="Contact CertGames | Support & Inquiries"
+        description="Get in touch with the CertGames team. Questions about our cybersecurity training platform? Need technical support? We're here to help."
+        canonicalUrl="/contact"
+      />
     <div className="contact-container">
       <InfoNavbar />
       
