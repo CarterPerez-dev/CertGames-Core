@@ -5,7 +5,7 @@ import InfoNavbar from './Info/InfoNavbar';
 import Footer from '../Footer';
 import SEOHelmet from '../SEOHelmet';
 import StructuredData from '../StructuredData';
-import './TermsOfService.css';
+import './LegalPages.css';
 
 const TermsOfService = () => {
   // Breadcrumb schema for SEO
