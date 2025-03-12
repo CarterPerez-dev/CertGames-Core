@@ -1,4 +1,9 @@
-  [
+db.tests.insertOne({
+  "category": "cissp",
+  "testId": 3,
+  "testName": "ISC2 CISSP Practice Test #3 (Easy)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "A risk management team has identified a potential security risk that would cost $500,000 if it occurred, with a 25% likelihood of occurrence. What would be the Annual Loss Expectancy (ALE) for this risk?",
