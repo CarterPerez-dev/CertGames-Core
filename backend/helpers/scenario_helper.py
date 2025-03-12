@@ -32,10 +32,51 @@ def generate_scenario(industry, attack_type, skill_level, threat_intensity):
         def generator():
             try:
                 for chunk in response:
-                    if chunk.choices and chunk.choices[0].delta:
-                        content = getattr(chunk.choices[0].delta, "content", None)
-                        if content:
-                            yield content
+                    if not hasattr(chunk, 'choices') or not chunk.choices:
+                        continue
+                        
+                    choice = chunk.choices[0]
+                    if not hasattr(choice, 'delta'):
+                        continue
+                    
+                    # Try multiple ways to get content
+                    delta = choice.delta
+                    content = None
+                    
+                    # Method 1: Using getattr
+                    try:
+                        content = getattr(delta, "content", None)
+                    except Exception as e:
+                        logger.debug(f"Method 1 failed: {e}")
+                    
+                    # Method 2: Dictionary-style access
+                    if content is None and hasattr(delta, "__getitem__"):
+                        try:
+                            content = delta["content"]
+                        except (KeyError, TypeError) as e:
+                            logger.debug(f"Method 2 failed: {e}")
+                    
+                    # Method 3: If delta itself is the content (string)
+                    if content is None and isinstance(delta, str):
+                        content = delta
+                    
+                    # Method 4: If delta has a method to get content
+                    if content is None and hasattr(delta, "get"):
+                        try:
+                            content = delta.get("content", None)
+                        except Exception as e:
+                            logger.debug(f"Method 4 failed: {e}")
+                    
+                    # Method 5: Convert delta to dict if possible
+                    if content is None and hasattr(delta, "__dict__"):
+                        try:
+                            delta_dict = delta.__dict__
+                            content = delta_dict.get("content", None)
+                        except Exception as e:
+                            logger.debug(f"Method 5 failed: {e}")
+                    
+                    if content:
+                        yield content
             except Exception as e:
                 logger.error(f"Error while streaming scenario: {str(e)}")
                 yield f"\n[Error occurred during streaming: {str(e)}]\n"
