@@ -1,6 +1,26 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
+Allow: /
 Disallow: /.env
 Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /create-username
+Disallow: /oauth
+Disallow: /cracked
+Disallow: /profile
+Disallow: /achievements
+Disallow: /shop
+Disallow: /daily
+Disallow: /leaderboard
+Disallow: /xploitcraft
+Disallow: /scenariosphere
+Disallow: /analogyhub
+Disallow: /grc
+Disallow: /my-support
+Disallow: /practice-tests
 
+Sitemap: https://certgames.com/sitemap.xml
 
