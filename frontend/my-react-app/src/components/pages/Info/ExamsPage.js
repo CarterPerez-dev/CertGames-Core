@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { FaSearch, FaFilter, FaChevronDown, FaChevronUp, FaCheckCircle } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
+import SEOHelmet from '../../SEOHelmet';
+import StructuredData from '../../StructuredData';
 import './ExamsPage.css';
 import aplusLogo from './images/aplus.webp';
 import awscloudLogo from './images/awscloud.webp';
