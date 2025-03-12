@@ -1,4 +1,4 @@
-{
+db.tests.insertOne({
   "category": "cissp",
   "testId": 10,
   "testName": "ISC2 CISSP Practice Test #10 (Ultra Level)",
