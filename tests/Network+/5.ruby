@@ -11,7 +11,7 @@ db.tests.insertOne({
         "Missing Layer 3 interface for inter-VLAN routing",
         "Trunk port misconfiguration on the switch",
         "Incorrect subnet mask on one of the VLANs",
-        "Disabled Spanning Tree Protocol (STP)"
+        "Disabled Spanning Tree Protocol "
       ],
       "correctAnswerIndex": 0,
       "explanation": "Inter-VLAN communication requires a Layer 3 device, such as a router or a Layer 3 switch with an SVI (Switch Virtual Interface). Without it, devices in separate VLANs cannot communicate. Trunk ports are needed between switches, not for communication on the same switch. Incorrect subnet masks would prevent communication within the same subnet but would not block VLAN-to-VLAN traffic if routing existed. STP prevents loops but does not affect inter-VLAN routing.",
@@ -87,7 +87,7 @@ db.tests.insertOne({
       "question": "A network administrator is implementing QoS to prioritize VoIP traffic. Which technique would BEST ensure low latency for voice traffic?",
       "options": [
         "Traffic shaping",
-        "Weighted Fair Queuing (WFQ)",
+        "Weighted Fair Queuing ",
         "Link aggregation",
         "Port mirroring"
       ],
@@ -138,8 +138,8 @@ db.tests.insertOne({
       "id": 11,
       "question": "A network administrator is reviewing logs and notices a device attempting to access multiple internal resources it should not have access to. Which security mechanism would BEST prevent such activity?",
       "options": [
-        "Access Control Lists (ACLs)",
-        "Spanning Tree Protocol (STP)",
+        "Access Control Lists ",
+        "Spanning Tree Protocol ",
         "Port mirroring",
         "Load balancing"
       ],
@@ -219,7 +219,7 @@ db.tests.insertOne({
         "Link aggregation",
         "Port mirroring",
         "Trunking",
-        "Spanning Tree Protocol (STP)"
+        "Spanning Tree Protocol "
       ],
       "correctAnswerIndex": 0,
       "explanation": "Link aggregation combines multiple physical connections into a single logical one for higher throughput and redundancy. Port mirroring duplicates traffic for monitoring. Trunking carries multiple VLANs. STP prevents loops in redundant topologies.",
@@ -242,8 +242,8 @@ db.tests.insertOne({
       "id": 19,
       "question": "Which tool would a technician use to determine the distance to a break in a fiber optic cable?",
       "options": [
-        "OTDR (Optical Time Domain Reflectometer)",
-        "TDR (Time Domain Reflectometer)",
+        "OTDR ",
+        "TDR ",
         "Cable certifier",
         "Light meter"
       ],
@@ -282,7 +282,7 @@ db.tests.insertOne({
       "question": "A user reports slow access to cloud applications during peak hours. Network analysis shows high bandwidth utilization on the internet link. Which solution would BEST alleviate this problem?",
       "options": [
         "Implement QoS policies prioritizing cloud traffic.",
-        "Upgrade the user's network interface card (NIC).",
+        "Upgrade the user's network interface card .",
         "Change the DNS server configuration.",
         "Replace the access switch with a Layer 3 switch."
       ],
@@ -335,7 +335,7 @@ db.tests.insertOne({
       "options": [
         "DHCP snooping",
         "Port security",
-        "Access control lists (ACLs)",
+        "Access control lists ",
         "Dynamic ARP inspection"
       ],
       "correctAnswerIndex": 0,
@@ -398,7 +398,7 @@ db.tests.insertOne({
       "id": 31,
       "question": "Which wireless standard introduced the 6GHz frequency band, improving capacity and reducing congestion in high-density environments?",
       "options": [
-        "802.11ax (Wi-Fi 6E)",
+        "802.11ax ",
         "802.11ac",
         "802.11n",
         "802.11g"
@@ -437,7 +437,7 @@ db.tests.insertOne({
       "id": 34,
       "question": "Which type of firewall inspects traffic at all seven OSI layers and can make filtering decisions based on application context?",
       "options": [
-        "Next-generation firewall (NGFW)",
+        "Next-generation firewall ",
         "Stateful firewall",
         "Packet-filtering firewall",
         "Proxy firewall"
@@ -476,10 +476,10 @@ db.tests.insertOne({
       "id": 37,
       "question": "Which technology ensures that network configuration changes are automatically deployed and consistent across multiple devices?",
       "options": [
-        "Infrastructure as Code (IaC)",
-        "Zero-touch provisioning (ZTP)",
-        "Network Access Control (NAC)",
-        "Dynamic Host Configuration Protocol (DHCP)"
+        "Infrastructure as Code ",
+        "Zero-touch provisioning ",
+        "Network Access Control ",
+        "Dynamic Host Configuration Protocol "
       ],
       "correctAnswerIndex": 0,
       "explanation": "IaC treats network configurations as code, ensuring consistency and repeatability. ZTP automates initial device provisioning. NAC manages device access based on policy. DHCP dynamically assigns IP configurations but doesn’t manage device configurations.",
@@ -502,7 +502,7 @@ db.tests.insertOne({
       "id": 39,
       "question": "A network engineer needs to ensure that DNS traffic is encrypted and protected from eavesdropping. Which protocol BEST achieves this goal?",
       "options": [
-        "DoH (DNS over HTTPS)",
+        "DoH ",
         "DNSSEC",
         "TLS",
         "NTP"
@@ -515,7 +515,7 @@ db.tests.insertOne({
       "id": 40,
       "question": "Which tool would BEST help a network technician identify physical layer issues, such as cable breaks or excessive attenuation in fiber optic cables?",
       "options": [
-        "OTDR (Optical Time Domain Reflectometer)",
+        "OTDR ",
         "Cable certifier",
         "Toner probe",
         "Light meter"
@@ -529,8 +529,8 @@ db.tests.insertOne({
       "question": "A network administrator needs to prevent a Layer 2 switch from being overwhelmed by broadcast traffic. Which technology should be implemented?",
       "options": [
         "VLAN segmentation",
-        "Spanning Tree Protocol (STP)",
-        "Access Control Lists (ACLs)",
+        "Spanning Tree Protocol ",
+        "Access Control Lists ",
         "Link aggregation"
       ],
       "correctAnswerIndex": 1,
@@ -697,8 +697,8 @@ db.tests.insertOne({
       "id": 54,
       "question": "Which type of attack involves intercepting and potentially altering communication between two parties without their knowledge?",
       "options": [
-        "Man-in-the-middle (MITM)",
-        "Denial-of-service (DoS)",
+        "Man-in-the-middle ",
+        "Denial-of-service ",
         "Phishing",
         "Spoofing"
       ],
@@ -788,8 +788,8 @@ db.tests.insertOne({
       "id": 61,
       "question": "A technician needs to ensure that internal devices can initiate outbound internet connections, but external hosts cannot initiate inbound sessions. Which technology provides this functionality?",
       "options": [
-        "Port Address Translation (PAT)",
-        "Access Control List (ACL)",
+        "Port Address Translation ",
+        "Access Control List ",
         "Stateful firewall",
         "Static NAT"
       ],
@@ -907,7 +907,7 @@ db.tests.insertOne({
       "options": [
         "Implement QoS policies prioritizing web traffic.",
         "Reboot the web server hosting the application.",
-        "Upgrade the user’s network interface card (NIC).",
+        "Upgrade the user’s network interface card .",
         "Replace the access switch with a higher-capacity model."
       ],
       "correctAnswerIndex": 0,
@@ -1009,7 +1009,7 @@ db.tests.insertOne({
       "id": 78,
       "question": "Which wireless standard provides the fastest data rates and supports MU-MIMO technology for multiple simultaneous data streams?",
       "options": [
-        "802.11ax (Wi-Fi 6)",
+        "802.11ax ",
         "802.11ac",
         "802.11n",
         "802.11g"
@@ -1048,7 +1048,7 @@ db.tests.insertOne({
       "id": 81,
       "question": "A network administrator notices high CPU utilization on a firewall due to excessive traffic. After analysis, the traffic is identified as legitimate but non-critical. What is the BEST course of action?",
       "options": [
-        "Implement Quality of Service (QoS) policies.",
+        "Implement Quality of Service  policies.",
         "Upgrade the firewall hardware.",
         "Deploy an additional firewall in parallel.",
         "Increase the bandwidth of the internet link."
@@ -1220,7 +1220,7 @@ db.tests.insertOne({
         "NetFlow analyzer",
         "Packet sniffer",
         "Syslog server",
-        "TDR (Time Domain Reflectometer)"
+        "TDR "
       ],
       "correctAnswerIndex": 0,
       "explanation": "NetFlow analyzers track and report on network traffic patterns, including real-time bandwidth usage. Packet sniffers capture detailed traffic data but aren’t optimized for high-level monitoring. Syslog servers aggregate logs. TDRs test copper cables for faults.",
