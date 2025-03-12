@@ -382,6 +382,7 @@ Direct and conceptual (~40%)
 
 *******Ok so we have 10 tests with 100 questiosn each, they range in diffuclty and test 1 isnt on tyeh ficculty sca;e- its suypposed to exactly on par witht eh actual real life exam. so its labeled "normal", then test 2 starts at "very easy" and then increases in diffculty until teh hardest ets which is test 10 labeled "ultra level". so what i need you to do is give me test 3 rigth now which is consiered "easy" but still somehwat relative to the CISSP exam difficulty******** however im just gonna give you test 2 which is "very easy" adn then gauge those questiosn diffuclty and make tets 3 slighly harder than test 2's
 
+
 so here is test 2 so you know not to duplciate any questions from test 2 and also know the difficulty of questions you shoudl make etst 3
 
 
