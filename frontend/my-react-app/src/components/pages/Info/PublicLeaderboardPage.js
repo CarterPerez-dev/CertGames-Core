@@ -17,6 +17,7 @@ import {
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
+import StructuredData from '../../StructuredData';
 import './PublicLeaderboardPage.css';
 
 // Skeleton component for loading state
@@ -48,11 +49,11 @@ const TopPlayerCard = ({ player, position }) => {
     <div className={`top-player-card ${positionClass}`}>
       <div className="position-badge">
         {position === 1 ? (
-          <FaTrophy className="position-icon" />
+          <FaTrophy className="position-icon" aria-hidden="true" />
         ) : position === 2 ? (
-          <FaMedal className="position-icon" />
+          <FaMedal className="position-icon" aria-hidden="true" />
         ) : (
-          <FaMedal className="position-icon" />
+          <FaMedal className="position-icon" aria-hidden="true" />
         )}
         <span>{position}</span>
       </div>
@@ -61,7 +62,7 @@ const TopPlayerCard = ({ player, position }) => {
         {player.avatarUrl ? (
           <img src={player.avatarUrl} alt={`${player.username}'s avatar`} />
         ) : (
-          <FaUserAlt />
+          <FaUserAlt aria-hidden="true" />
         )}
       </div>
       
@@ -91,6 +92,26 @@ const PublicLeaderboardPage = () => {
   const [codeVisible, setCodeVisible] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  // Breadcrumb schema for SEO
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://certgames.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Leaderboard",
+        "item": "https://certgames.com/public-leaderboard"
+      }
+    ]
+  };
 
   // Reference to the leaderboard container for scrolling functionality
   const leaderboardRef = useRef(null);
@@ -184,10 +205,10 @@ const PublicLeaderboardPage = () => {
 
   // Render trophy icon based on rank
   const renderRankIcon = (rank) => {
-    if (rank === 1) return <FaTrophy className="rank-icon gold" />;
-    if (rank === 2) return <FaTrophy className="rank-icon silver" />;
-    if (rank === 3) return <FaTrophy className="rank-icon bronze" />;
-    if (rank <= 10) return <FaStar className="rank-icon top-ten" />;
+    if (rank === 1) return <FaTrophy className="rank-icon gold" aria-hidden="true" />;
+    if (rank === 2) return <FaTrophy className="rank-icon silver" aria-hidden="true" />;
+    if (rank === 3) return <FaTrophy className="rank-icon bronze" aria-hidden="true" />;
+    if (rank <= 10) return <FaStar className="rank-icon top-ten" aria-hidden="true" />;
     return null;
   };
 
@@ -201,36 +222,37 @@ const PublicLeaderboardPage = () => {
         description="See who's leading the cybersecurity learning race at CertGames. Our gamified learning platform rewards knowledge with XP, levels, and achievements."
         canonicalUrl="/public-leaderboard"
       />
+      <StructuredData data={breadcrumbSchema} />
       <div className="public-leaderboard-container">
         <InfoNavbar />
         
-        <div className="public-leaderboard-content">
-          <div className="public-leaderboard-header">
+        <main className="public-leaderboard-content">
+          <header className="public-leaderboard-header">
             <h1 className="public-leaderboard-title">
-              <FaTrophy className="title-icon" />
+              <FaTrophy className="title-icon" aria-hidden="true" />
               CertGames Leaderboard
             </h1>
             <p className="public-leaderboard-subtitle">See who's leading the cybersecurity learning race!</p>
-          </div>
+          </header>
           
           {loading ? (
-            <div className="loading-container">
-              <FaSpinner className="loading-spinner" />
+            <div className="loading-container" aria-live="polite">
+              <FaSpinner className="loading-spinner" aria-hidden="true" />
               <p>Loading top cybersecurity learners...</p>
             </div>
           ) : error ? (
-            <div className="error-container">
-              <FaExclamationTriangle className="error-icon" />
+            <div className="error-container" aria-live="assertive">
+              <FaExclamationTriangle className="error-icon" aria-hidden="true" />
               <p>{error}</p>
               <button className="refresh-button" onClick={fetchLeaderboardData}>
-                <FaSyncAlt /> Refresh
+                <FaSyncAlt aria-hidden="true" /> Refresh
               </button>
             </div>
           ) : (
             <>
               {/* Top Players Podium */}
               {topPlayers.length > 0 && (
-                <div className="top-players-podium">
+                <section className="top-players-podium" aria-label="Top 3 players">
                   {topPlayers.map((player, index) => (
                     <TopPlayerCard 
                       key={player.rank} 
@@ -238,24 +260,26 @@ const PublicLeaderboardPage = () => {
                       position={index + 1} 
                     />
                   ))}
-                </div>
+                </section>
               )}
               
               {/* Search Bar */}
               <div className="leaderboard-search-container">
                 <div className="search-box">
-                  <FaSearch className="search-icon" />
+                  <FaSearch className="search-icon" aria-hidden="true" />
                   <input 
                     type="text" 
                     placeholder="Search by username..." 
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
+                    aria-label="Search leaderboard by username"
                   />
                   {searchTerm && (
                     <button 
                       className="clear-search"
                       onClick={() => setSearchTerm('')}
+                      aria-label="Clear search"
                     >
                       &times;
                     </button>
@@ -273,8 +297,8 @@ const PublicLeaderboardPage = () => {
               {/* Leaderboard List */}
               <div className="leaderboard-list-container" ref={leaderboardRef}>
                 {filteredLeaders.length === 0 ? (
-                  <div className="no-results">
-                    <FaUserAlt className="no-results-icon" />
+                  <div className="no-results" aria-live="polite">
+                    <FaUserAlt className="no-results-icon" aria-hidden="true" />
                     <p>No players found matching "{searchTerm}"</p>
                     <button 
                       className="clear-button"
@@ -285,7 +309,7 @@ const PublicLeaderboardPage = () => {
                   </div>
                 ) : (
                   <>
-                    <div className="leaderboard-list">
+                    <div className="leaderboard-list" role="list">
                       {filteredLeaders.map((player) => {
                         const rankClass = 
                           player.rank === 1 ? 'gold-rank' : 
@@ -294,7 +318,7 @@ const PublicLeaderboardPage = () => {
                           player.rank <= 10 ? 'top-rank' : '';
                         
                         return (
-                          <div key={player.rank} className={`leaderboard-item ${rankClass}`}>
+                          <div key={player.rank} className={`leaderboard-item ${rankClass}`} role="listitem">
                             <div className="leaderboard-rank">
                               <span className="rank-number">{player.rank}</span>
                               {renderRankIcon(player.rank)}
@@ -309,7 +333,7 @@ const PublicLeaderboardPage = () => {
                                 />
                               ) : (
                                 <div className="leaderboard-avatar default">
-                                  <FaUserAlt />
+                                  <FaUserAlt aria-hidden="true" />
                                 </div>
                               )}
                             </div>
@@ -338,15 +362,16 @@ const PublicLeaderboardPage = () => {
                           className="load-more-button"
                           onClick={loadMoreLeaders}
                           disabled={isLoadingMore}
+                          aria-busy={isLoadingMore ? "true" : "false"}
                         >
                           {isLoadingMore ? (
                             <>
-                              <FaSpinner className="spinner-icon" />
+                              <FaSpinner className="spinner-icon" aria-hidden="true" />
                               Loading more players...
                             </>
                           ) : (
                             <>
-                              <FaChevronDown className="down-icon" />
+                              <FaChevronDown className="down-icon" aria-hidden="true" />
                               Load More Players
                             </>
                           )}
@@ -361,14 +386,15 @@ const PublicLeaderboardPage = () => {
                     className="scroll-top-button"
                     onClick={scrollToTop}
                     title="Scroll to top"
+                    aria-label="Scroll to top"
                   >
-                    <FaChevronUp />
+                    <FaChevronUp aria-hidden="true" />
                   </button>
                 )}
               </div>
               
               {/* Join CTA */}
-              <div className="join-cta">
+              <section className="join-cta">
                 <div className="cta-content">
                   <h2>Want to be on this leaderboard?</h2>
                   <p>Create your account today and start climbing the ranks!</p>
@@ -385,8 +411,9 @@ const PublicLeaderboardPage = () => {
                     <button 
                       className="toggle-code-button"
                       onClick={() => setCodeVisible(!codeVisible)}
+                      aria-expanded={codeVisible}
                     >
-                      <FaCode />
+                      <FaCode aria-hidden="true" />
                       {codeVisible ? 'Hide Code' : 'Show Code'}
                     </button>
                   </div>
@@ -426,10 +453,10 @@ function calculateLevel(totalXP) {
                     </div>
                   )}
                 </div>
-              </div>
+              </section>
             </>
           )}
-        </div>
+        </main>
         
         <Footer />
       </div>
