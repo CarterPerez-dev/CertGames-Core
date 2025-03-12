@@ -1,5 +1,9 @@
-  
-  [
+db.tests.insertOne({
+  "category": "cissp",
+  "testId": 7,
+  "testName": "ISC2 CISSP Practice Test #7 (Challenging)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "During a forensic investigation, an analyst discovers that attackers maintained persistence on a compromised Linux server through a cron job that executes a base64-encoded command string. What action should the analyst take to fully understand the impact of this persistence mechanism?",
