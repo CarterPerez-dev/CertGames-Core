@@ -4,9 +4,30 @@ import { Link } from 'react-router-dom';
 import InfoNavbar from './Info/InfoNavbar';
 import Footer from '../Footer';
 import SEOHelmet from '../SEOHelmet';
+import StructuredData from '../StructuredData';
 import './PrivacyPolicy.css';
 
 const PrivacyPolicy = () => {
+  // Breadcrumb schema for SEO
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://certgames.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Privacy Policy",
+        "item": "https://certgames.com/privacy"
+      }
+    ]
+  };
+
   return (
     <>
       <SEOHelmet 
@@ -14,20 +35,23 @@ const PrivacyPolicy = () => {
         description="CertGames privacy policy. Learn how we protect your data while providing cybersecurity certification training."
         canonicalUrl="/privacy"
       />
+      <StructuredData data={breadcrumbSchema} />
       <div className="privacy-policy-container">
         <InfoNavbar />
         
-        <div className="privacy-content">
-          <h1>Privacy Policy</h1>
-          <p>Last Updated: February 1, 2023</p>
+        <main className="privacy-content">
+          <header>
+            <h1>Privacy Policy</h1>
+            <p>Last Updated: February 1, 2023</p>
+          </header>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>1. Introduction</h2>
             <p>Welcome to CertGames ("we," "our," or "us"). We are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.</p>
             <p>By accessing or using CertGames, you consent to the practices described in this Privacy Policy. If you do not agree with our policies and practices, please do not use our services.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>2. Information We Collect</h2>
             
             <h3>2.1 Information You Provide</h3>
@@ -48,9 +72,9 @@ const PrivacyPolicy = () => {
               <li>Performance data: interaction with questions, test scores, study patterns</li>
               <li>Cookies and similar technologies: as described in our Cookie Policy</li>
             </ul>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>3. How We Use Your Information</h2>
             <p>We use the information we collect for various purposes, including to:</p>
             <ul>
@@ -64,9 +88,9 @@ const PrivacyPolicy = () => {
               <li>Ensure the security and integrity of our platform</li>
               <li>Comply with legal obligations</li>
             </ul>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>4. Sharing of Your Information</h2>
             <p>We may share your information with third parties in the following circumstances:</p>
             <ul>
@@ -76,14 +100,14 @@ const PrivacyPolicy = () => {
               <li>Protection: To protect our rights, property, or the safety of our users or others</li>
             </ul>
             <p>We do not sell or rent your personal information to third parties for their marketing purposes without your explicit consent.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>5. Data Security</h2>
             <p>We implement appropriate technical and organizational measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure, and we cannot guarantee absolute security.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>6. Your Rights and Choices</h2>
             <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
             <ul>
@@ -95,35 +119,35 @@ const PrivacyPolicy = () => {
               <li>Object: Object to the processing of your information</li>
             </ul>
             <p>To exercise any of these rights, please contact us at <a href="mailto:privacy@certgames.com">privacy@certgames.com</a>.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>7. International Data Transfers</h2>
             <p>Your information may be transferred to and processed in countries other than the one in which you reside. These countries may have different data protection laws than your country of residence. We take appropriate measures to ensure that your personal information receives an adequate level of protection wherever it is processed.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>8. Children's Privacy</h2>
             <p>Our services are not directed to children under the age of 16. We do not knowingly collect personal information from children under 16. If you believe we might have any information from or about a child under 16, please contact us at <a href="mailto:privacy@certgames.com">privacy@certgames.com</a>.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>9. Changes to This Privacy Policy</h2>
             <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date. You are advised to review this Privacy Policy periodically for any changes.</p>
-          </div>
+          </section>
           
-          <div className="privacy-section">
+          <section className="privacy-section">
             <h2>10. Contact Us</h2>
             <p>If you have any questions or concerns about this Privacy Policy or our privacy practices, please contact us at:</p>
             <p>Email: <a href="mailto:privacy@certgames.com">privacy@certgames.com</a></p>
             <p>Address: 123 Certification Way, Suite 456, Tech City, CA 98765</p>
-          </div>
-        </div>
+          </section>
+        </main>
         
-        <div className="privacy-navigation">
+        <nav className="privacy-navigation">
           <Link to="/terms" className="privacy-nav-link">View Terms of Service</Link>
           <Link to="/contact" className="privacy-nav-link">Contact Us</Link>
-        </div>
+        </nav>
         
         <Footer />
       </div>
