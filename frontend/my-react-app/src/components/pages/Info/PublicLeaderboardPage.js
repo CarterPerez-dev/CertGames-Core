@@ -16,8 +16,8 @@ import {
 } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
-import './PublicLeaderboardPage.css';
 import SEOHelmet from '../../SEOHelmet';
+import './PublicLeaderboardPage.css';
 
 // Skeleton component for loading state
 const SkeletonItem = ({ index }) => {
@@ -195,199 +195,205 @@ const PublicLeaderboardPage = () => {
   const topPlayers = leaders.slice(0, 3);
 
   return (
-    <div className="public-leaderboard-container">
-      <InfoNavbar />
-      
-      <div className="public-leaderboard-content">
-        <div className="public-leaderboard-header">
-          <h1 className="public-leaderboard-title">
-            <FaTrophy className="title-icon" />
-            CertGames Leaderboard
-          </h1>
-          <p className="public-leaderboard-subtitle">See who's leading the cybersecurity learning race!</p>
-        </div>
+    <>
+      <SEOHelmet 
+        title="Cybersecurity Training Leaderboard | CertGames"
+        description="See who's leading the cybersecurity learning race at CertGames. Our gamified learning platform rewards knowledge with XP, levels, and achievements."
+        canonicalUrl="/public-leaderboard"
+      />
+      <div className="public-leaderboard-container">
+        <InfoNavbar />
         
-        {loading ? (
-          <div className="loading-container">
-            <FaSpinner className="loading-spinner" />
-            <p>Loading top cybersecurity learners...</p>
+        <div className="public-leaderboard-content">
+          <div className="public-leaderboard-header">
+            <h1 className="public-leaderboard-title">
+              <FaTrophy className="title-icon" />
+              CertGames Leaderboard
+            </h1>
+            <p className="public-leaderboard-subtitle">See who's leading the cybersecurity learning race!</p>
           </div>
-        ) : error ? (
-          <div className="error-container">
-            <FaExclamationTriangle className="error-icon" />
-            <p>{error}</p>
-            <button className="refresh-button" onClick={fetchLeaderboardData}>
-              <FaSyncAlt /> Refresh
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Top Players Podium */}
-            {topPlayers.length > 0 && (
-              <div className="top-players-podium">
-                {topPlayers.map((player, index) => (
-                  <TopPlayerCard 
-                    key={player.rank} 
-                    player={player} 
-                    position={index + 1} 
+          
+          {loading ? (
+            <div className="loading-container">
+              <FaSpinner className="loading-spinner" />
+              <p>Loading top cybersecurity learners...</p>
+            </div>
+          ) : error ? (
+            <div className="error-container">
+              <FaExclamationTriangle className="error-icon" />
+              <p>{error}</p>
+              <button className="refresh-button" onClick={fetchLeaderboardData}>
+                <FaSyncAlt /> Refresh
+              </button>
+            </div>
+          ) : (
+            <>
+              {/* Top Players Podium */}
+              {topPlayers.length > 0 && (
+                <div className="top-players-podium">
+                  {topPlayers.map((player, index) => (
+                    <TopPlayerCard 
+                      key={player.rank} 
+                      player={player} 
+                      position={index + 1} 
+                    />
+                  ))}
+                </div>
+              )}
+              
+              {/* Search Bar */}
+              <div className="leaderboard-search-container">
+                <div className="search-box">
+                  <FaSearch className="search-icon" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by username..." 
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="search-input"
                   />
-                ))}
+                  {searchTerm && (
+                    <button 
+                      className="clear-search"
+                      onClick={() => setSearchTerm('')}
+                    >
+                      &times;
+                    </button>
+                  )}
+                </div>
+                
+                <div className="leaderboard-stats">
+                  <div className="stat-pill">
+                    <span className="stat-value">{leaders.length}</span>
+                    <span className="stat-label">Players</span>
+                  </div>
+                </div>
               </div>
-            )}
-            
-            {/* Search Bar */}
-            <div className="leaderboard-search-container">
-              <div className="search-box">
-                <FaSearch className="search-icon" />
-                <input 
-                  type="text" 
-                  placeholder="Search by username..." 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-                />
-                {searchTerm && (
+              
+              {/* Leaderboard List */}
+              <div className="leaderboard-list-container" ref={leaderboardRef}>
+                {filteredLeaders.length === 0 ? (
+                  <div className="no-results">
+                    <FaUserAlt className="no-results-icon" />
+                    <p>No players found matching "{searchTerm}"</p>
+                    <button 
+                      className="clear-button"
+                      onClick={() => setSearchTerm('')}
+                    >
+                      Clear Search
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="leaderboard-list">
+                      {filteredLeaders.map((player) => {
+                        const rankClass = 
+                          player.rank === 1 ? 'gold-rank' : 
+                          player.rank === 2 ? 'silver-rank' : 
+                          player.rank === 3 ? 'bronze-rank' : 
+                          player.rank <= 10 ? 'top-rank' : '';
+                        
+                        return (
+                          <div key={player.rank} className={`leaderboard-item ${rankClass}`}>
+                            <div className="leaderboard-rank">
+                              <span className="rank-number">{player.rank}</span>
+                              {renderRankIcon(player.rank)}
+                            </div>
+                            
+                            <div className="leaderboard-avatar-container">
+                              {player.avatarUrl ? (
+                                <img 
+                                  src={player.avatarUrl} 
+                                  alt={`${player.username}'s avatar`} 
+                                  className="leaderboard-avatar" 
+                                />
+                              ) : (
+                                <div className="leaderboard-avatar default">
+                                  <FaUserAlt />
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="leaderboard-user-info">
+                              <h3 className="leaderboard-username">{player.username}</h3>
+                              <div className="leaderboard-user-stats">
+                                <div className="leaderboard-user-level">
+                                  <span className="level-label">Level</span>
+                                  <span className="level-value">{player.level}</span>
+                                </div>
+                                <div className="leaderboard-user-xp">
+                                  <span className="xp-label">XP</span>
+                                  <span className="xp-value">{player.xp.toLocaleString()}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {hasMore && !searchTerm && (
+                      <div className="load-more-container">
+                        <button 
+                          className="load-more-button"
+                          onClick={loadMoreLeaders}
+                          disabled={isLoadingMore}
+                        >
+                          {isLoadingMore ? (
+                            <>
+                              <FaSpinner className="spinner-icon" />
+                              Loading more players...
+                            </>
+                          ) : (
+                            <>
+                              <FaChevronDown className="down-icon" />
+                              Load More Players
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+                
+                {showScrollToTop && (
                   <button 
-                    className="clear-search"
-                    onClick={() => setSearchTerm('')}
+                    className="scroll-top-button"
+                    onClick={scrollToTop}
+                    title="Scroll to top"
                   >
-                    &times;
+                    <FaChevronUp />
                   </button>
                 )}
               </div>
               
-              <div className="leaderboard-stats">
-                <div className="stat-pill">
-                  <span className="stat-value">{leaders.length}</span>
-                  <span className="stat-label">Players</span>
-                </div>
-              </div>
-            </div>
-            
-            {/* Leaderboard List */}
-            <div className="leaderboard-list-container" ref={leaderboardRef}>
-              {filteredLeaders.length === 0 ? (
-                <div className="no-results">
-                  <FaUserAlt className="no-results-icon" />
-                  <p>No players found matching "{searchTerm}"</p>
-                  <button 
-                    className="clear-button"
-                    onClick={() => setSearchTerm('')}
-                  >
-                    Clear Search
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <div className="leaderboard-list">
-                    {filteredLeaders.map((player) => {
-                      const rankClass = 
-                        player.rank === 1 ? 'gold-rank' : 
-                        player.rank === 2 ? 'silver-rank' : 
-                        player.rank === 3 ? 'bronze-rank' : 
-                        player.rank <= 10 ? 'top-rank' : '';
-                      
-                      return (
-                        <div key={player.rank} className={`leaderboard-item ${rankClass}`}>
-                          <div className="leaderboard-rank">
-                            <span className="rank-number">{player.rank}</span>
-                            {renderRankIcon(player.rank)}
-                          </div>
-                          
-                          <div className="leaderboard-avatar-container">
-                            {player.avatarUrl ? (
-                              <img 
-                                src={player.avatarUrl} 
-                                alt={`${player.username}'s avatar`} 
-                                className="leaderboard-avatar" 
-                              />
-                            ) : (
-                              <div className="leaderboard-avatar default">
-                                <FaUserAlt />
-                              </div>
-                            )}
-                          </div>
-                          
-                          <div className="leaderboard-user-info">
-                            <h3 className="leaderboard-username">{player.username}</h3>
-                            <div className="leaderboard-user-stats">
-                              <div className="leaderboard-user-level">
-                                <span className="level-label">Level</span>
-                                <span className="level-value">{player.level}</span>
-                              </div>
-                              <div className="leaderboard-user-xp">
-                                <span className="xp-label">XP</span>
-                                <span className="xp-value">{player.xp.toLocaleString()}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+              {/* Join CTA */}
+              <div className="join-cta">
+                <div className="cta-content">
+                  <h2>Want to be on this leaderboard?</h2>
+                  <p>Create your account today and start climbing the ranks!</p>
+                  <div className="cta-buttons">
+                    <Link to="/register" className="register-button">
+                      Register Now
+                    </Link>
                   </div>
-                  
-                  {hasMore && !searchTerm && (
-                    <div className="load-more-container">
-                      <button 
-                        className="load-more-button"
-                        onClick={loadMoreLeaders}
-                        disabled={isLoadingMore}
-                      >
-                        {isLoadingMore ? (
-                          <>
-                            <FaSpinner className="spinner-icon" />
-                            Loading more players...
-                          </>
-                        ) : (
-                          <>
-                            <FaChevronDown className="down-icon" />
-                            Load More Players
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
-              
-              {showScrollToTop && (
-                <button 
-                  className="scroll-top-button"
-                  onClick={scrollToTop}
-                  title="Scroll to top"
-                >
-                  <FaChevronUp />
-                </button>
-              )}
-            </div>
-            
-            {/* Join CTA */}
-            <div className="join-cta">
-              <div className="cta-content">
-                <h2>Want to be on this leaderboard?</h2>
-                <p>Create your account today and start climbing the ranks!</p>
-                <div className="cta-buttons">
-                  <Link to="/register" className="register-button">
-                    Register Now
-                  </Link>
                 </div>
-              </div>
-              
-              <div className="code-snippet-container">
-                <div className="code-header">
-                  <span>How it works</span>
-                  <button 
-                    className="toggle-code-button"
-                    onClick={() => setCodeVisible(!codeVisible)}
-                  >
-                    <FaCode />
-                    {codeVisible ? 'Hide Code' : 'Show Code'}
-                  </button>
-                </div>
-                {codeVisible && (
-                  <div className="code-snippet">
-                    <pre>
-                      <code>
+                
+                <div className="code-snippet-container">
+                  <div className="code-header">
+                    <span>How it works</span>
+                    <button 
+                      className="toggle-code-button"
+                      onClick={() => setCodeVisible(!codeVisible)}
+                    >
+                      <FaCode />
+                      {codeVisible ? 'Hide Code' : 'Show Code'}
+                    </button>
+                  </div>
+                  {codeVisible && (
+                    <div className="code-snippet">
+                      <pre>
+                        <code>
 {`// XP System Example
 function awardXP(user, correctAnswer) {
   // Base XP for correct answer
@@ -415,18 +421,19 @@ function calculateLevel(totalXP) {
   // Simple level calculation - each level requires more XP
   return Math.floor(Math.sqrt(totalXP / 100)) + 1;
 }`}
-                      </code>
-                    </pre>
-                  </div>
-                )}
+                        </code>
+                      </pre>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
+        
+        <Footer />
       </div>
-      
-      <Footer />
-    </div>
+    </>
   );
 };
 
