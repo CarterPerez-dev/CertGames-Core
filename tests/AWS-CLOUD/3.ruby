@@ -1,5 +1,3 @@
-68,77
-
 db.tests.insertOne({
   "category": "awscloud",
   "testId": 3,
@@ -879,17 +877,16 @@ db.tests.insertOne({
     },
     {
       "id": 68,
-      "question": "Your organization operates in a regulated industry and needs to prove compliance with data residency requirements. Which AWS features or services would help address this requirement? (Select TWO.)",
+      "question": "Which of the following factors does NOT typically incur an Amazon S3 usage cost?",
       "options": [
-        "AWS Control Tower",
-        "AWS Regions selection",
-        "AWS Organizations",
-        "AWS Service Control Policies (SCPs)",
-        "Amazon VPC Flow Logs"
+        "Storage class of the objects",
+        "Data transfer out to the internet",
+        "PUT and GET requests on the objects",
+        "Data transfer into S3 from the internet"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "AWS Regions selection and AWS Service Control Policies (SCPs) would help address data residency requirements. Selecting specific AWS Regions for your resources ensures that your data is stored only in geographic locations that meet your compliance requirements. AWS SCPs can be used to explicitly deny actions that would create resources in non-approved Regions, preventing users from accidentally or intentionally creating resources in Regions that don't meet data residency requirements. AWS Control Tower provides a way to set up and govern a secure, compliant multi-account environment, but doesn't specifically address data residency without utilizing Regions and SCPs. AWS Organizations is the framework that enables the use of SCPs but doesn't directly enforce data residency by itself. Amazon VPC Flow Logs capture network traffic information but don't help control where data is stored.",
-      "examTip": "Data residency compliance involves both choosing the right Regions and preventing data from being stored in unauthorized Regions. Combine deliberate Region selection with preventative guardrails like SCPs to ensure compliance. Remember that the physical location of AWS Regions is a fundamental aspect of data residency compliance."
+      "correctAnswerIndex": 3,
+      "explanation": "While Amazon S3 charges for storing objects based on the storage class and size, as well as for data transfer out to the internet and API requests (PUT, GET, etc.), data transfer into S3 from the internet is generally free in most AWS Regions. Consequently, inbound transfer does not directly add to S3 usage costs.",
+      "examTip": "When calculating S3 costs, remember that inbound data transfer (uploading data to S3) is typically free, whereas outbound data transfer and request operations do incur charges."
     },
     {
       "id": 69,
@@ -997,17 +994,16 @@ db.tests.insertOne({
     },
     {
       "id": 77,
-      "question": "Your company is designing a new application that will store sensitive customer data in Amazon S3. Which combination of AWS features should be implemented to provide comprehensive data protection? (Select TWO.)",
+      "question": "A company wants to grant temporary security credentials to an application that runs for only a few hours. Which AWS feature enables this without sharing long-term access keys?",
       "options": [
-        "S3 Server-Side Encryption",
-        "S3 Cross-Region Replication",
-        "S3 Versioning",
-        "AWS Shield Standard",
-        "S3 Object Lock"
+        "AWS Multi-Factor Authentication (MFA)",
+        "IAM Access Advisor",
+        "IAM Roles with temporary security tokens",
+        "Resource-based policies in S3"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "S3 Server-Side Encryption and S3 Object Lock should be implemented to provide comprehensive data protection for sensitive customer data. S3 Server-Side Encryption ensures that data is encrypted at rest in S3, protecting the confidentiality of sensitive customer information. S3 Object Lock enables write-once-read-many (WORM) storage, preventing objects from being deleted or overwritten for a specified retention period, which protects data integrity and supports compliance requirements. S3 Cross-Region Replication improves data availability by copying objects to another region, but doesn't directly enhance data protection against unauthorized access or modification. S3 Versioning helps protect against accidental deletion by preserving multiple copies of objects, but doesn't provide encryption or prevent intentional deletion of all versions. AWS Shield Standard provides basic protection against DDoS attacks but doesn't directly protect the data stored in S3.",
-      "examTip": "When protecting sensitive data, implement multiple layers of security: encryption protects confidentiality, while features like Object Lock protect integrity by preventing modification. This defense-in-depth approach addresses different security aspects and compliance requirements for sensitive data."
+      "correctAnswerIndex": 2,
+      "explanation": "IAM Roles allow you to grant short-lived credentials through the AWS Security Token Service (STS). This eliminates the need to share or embed permanent credentials in your application. MFA provides an additional authentication factor, but doesn't supply temporary credentials. IAM Access Advisor only shows which services a role or user has accessed. Resource-based S3 policies apply permissions directly to a bucket or object, but don’t handle temporary credential provisioning.",
+      "examTip": "Use IAM roles instead of long-term access keys for temporary and secure application access. This approach aligns with AWS best practices for credential management."
     },
     {
       "id": 78,
