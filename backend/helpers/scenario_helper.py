@@ -142,7 +142,8 @@ Nothing else.
             try:
                 for chunk in response:
                     if chunk.choices and chunk.choices[0].delta:
-                        content = chunk.choices[0].delta.get('content')
+                        # FIX: Use getattr instead of .get() method
+                        content = getattr(chunk.choices[0].delta, "content", None)
                         if content:
                             accumulated_response += content
                             yield content
@@ -202,4 +203,3 @@ Nothing else.
             def err_gen():
                 yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
             return err_gen()
-
