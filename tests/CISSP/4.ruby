@@ -1,4 +1,9 @@
-  [
+db.tests.insertOne({
+  "category": "cissp",
+  "testId": 3,
+  "testName": "ISC2 CISSP Practice Test #3 (Easy)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "An organization's security policy requires separation of the development, testing, and production environments. Which security principle does this requirement primarily address?",
