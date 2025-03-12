@@ -86,9 +86,9 @@ db.tests.insertOne({
       "id": 7,
       "question": "A network device is designed to detect malicious activities, alert administrators, but not actively block traffic. What is this device called?",
       "options": [
-        "Intrusion Detection System (IDS)",
+        "Intrusion Detection System",
         "Firewall",
-        "Intrusion Prevention System (IPS)",
+        "Intrusion Prevention System",
         "Proxy server"
       ],
       "correctAnswerIndex": 0,
@@ -229,10 +229,10 @@ db.tests.insertOne({
       "id": 18,
       "question": "Which technology is designed to prevent switching loops in a redundant Layer 2 network?",
       "options": [
-        "Spanning Tree Protocol (STP)",
-        "Link Aggregation Control Protocol (LACP)",
-        "Virtual Router Redundancy Protocol (VRRP)",
-        "Border Gateway Protocol (BGP)"
+        "Spanning Tree Protocol",
+        "Link Aggregation Control Protocol",
+        "Virtual Router Redundancy Protocol",
+        "Border Gateway Protocol"
       ],
       "correctAnswerIndex": 0,
       "explanation": "STP prevents Layer 2 loops by blocking redundant paths. LACP aggregates links. VRRP provides router redundancy. BGP routes between autonomous systems on the internet.",
@@ -619,10 +619,10 @@ db.tests.insertOne({
       "id": 48,
       "question": "A technician observes frequent network loops causing outages. Which protocol would MOST likely prevent this issue?",
       "options": [
-        "Spanning Tree Protocol (STP)",
-        "Dynamic Host Configuration Protocol (DHCP)",
-        "Border Gateway Protocol (BGP)",
-        "Routing Information Protocol (RIP)"
+        "Spanning Tree Protocol ",
+        "Dynamic Host Configuration Protocol",
+        "Border Gateway Protocol",
+        "Routing Information Protocol"
       ],
       "correctAnswerIndex": 0,
       "explanation": "STP prevents Layer 2 network loops by placing redundant paths into a blocking state. DHCP assigns IPs. BGP and RIP are routing protocols and do not address Layer 2 loops.",
@@ -879,7 +879,7 @@ db.tests.insertOne({
       "id": 68,
       "question": "Which cable type is MOST appropriate for a 10 Gbps connection over a short distance within a data center?",
       "options": [
-        "Direct Attach Copper (DAC)",
+        "Direct Attach Copper",
         "Single-mode fiber",
         "Coaxial cable",
         "Cat 5e Ethernet"
@@ -1100,9 +1100,9 @@ db.tests.insertOne({
       "id": 85,
       "question": "A network administrator needs to ensure that specific VoIP traffic is given higher priority over other traffic. Which solution should be implemented?",
       "options": [
-        "Quality of Service (QoS)",
-        "Spanning Tree Protocol (STP)",
-        "Virtual LANs (VLANs)",
+        "Quality of Service",
+        "Spanning Tree Protocol",
+        "Virtual LANs",
         "Link Aggregation"
       ],
       "correctAnswerIndex": 0,
@@ -1129,7 +1129,7 @@ db.tests.insertOne({
         "802.1X",
         "MAC filtering",
         "Port mirroring",
-        "Network Address Translation (NAT)"
+        "Network Address Translation"
       ],
       "correctAnswerIndex": 0,
       "explanation": "802.1X provides port-based authentication using credentials. MAC filtering can be spoofed. Port mirroring is for traffic analysis. NAT translates IP addresses but doesn’t control access.",
@@ -1165,10 +1165,10 @@ db.tests.insertOne({
       "id": 90,
       "question": "Which protocol helps prevent Layer 2 loops in Ethernet networks by dynamically disabling redundant paths?",
       "options": [
-        "Spanning Tree Protocol (STP)",
-        "Link Aggregation Control Protocol (LACP)",
-        "Virtual Router Redundancy Protocol (VRRP)",
-        "Border Gateway Protocol (BGP)"
+        "Spanning Tree Protocol",
+        "Link Aggregation Control Protocol",
+        "Virtual Router Redundancy Protocol",
+        "Border Gateway Protocol"
       ],
       "correctAnswerIndex": 0,
       "explanation": "STP prevents Layer 2 loops by blocking redundant paths. LACP bundles links for redundancy and speed but doesn't prevent loops. VRRP ensures router redundancy. BGP routes between autonomous systems.",
