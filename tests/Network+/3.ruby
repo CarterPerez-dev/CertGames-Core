@@ -60,8 +60,8 @@ db.tests.insertOne({
       "id": 5,
       "question": "A server requires both high-speed performance and low latency storage access. Which solution BEST meets this need?",
       "options": [
-        "Storage Area Network (SAN)",
-        "Network Attached Storage (NAS)",
+        "Storage Area Network",
+        "Network Attached Storage",
         "External USB drive",
         "Cloud storage"
       ],
@@ -268,9 +268,9 @@ db.tests.insertOne({
       "id": 21,
       "question": "A network administrator wants to ensure that only authorized users can access a secure server by verifying both a password and a code sent to their mobile device. Which security method is being used?",
       "options": [
-        "Multifactor authentication (MFA)",
-        "Single sign-on (SSO)",
-        "Role-based access control (RBAC)",
+        "Multifactor authentication",
+        "Single sign-on",
+        "Role-based access control",
         "Least privilege access"
       ],
       "correctAnswerIndex": 0,
@@ -346,7 +346,7 @@ db.tests.insertOne({
       "id": 27,
       "question": "Which cable type is MOST appropriate for high-speed, short-distance connections between servers in a data center?",
       "options": [
-        "Direct Attach Copper (DAC)",
+        "Direct Attach Copper",
         "Single-mode fiber",
         "Coaxial cable",
         "Category 5e Ethernet"
@@ -658,10 +658,10 @@ db.tests.insertOne({
       "id": 51,
       "question": "Which cloud model provides hardware resources over the internet where customers manage the operating system and applications?",
       "options": [
-        "Infrastructure as a Service (IaaS)",
-        "Platform as a Service (PaaS)",
-        "Software as a Service (SaaS)",
-        "Function as a Service (FaaS)"
+        "Infrastructure as a Service",
+        "Platform as a Service",
+        "Software as a Service",
+        "Function as a Service"
       ],
       "correctAnswerIndex": 0,
       "explanation": "IaaS offers virtualized computing resources, where users manage the OS and applications. PaaS provides a platform for development without OS management. SaaS offers complete applications. FaaS runs functions without server management.",
@@ -723,7 +723,7 @@ db.tests.insertOne({
       "id": 56,
       "question": "Which network device would MOST likely be used to perform deep packet inspection for identifying malicious traffic patterns?",
       "options": [
-        "Next-Generation Firewall (NGFW)",
+        "NGFW",
         "Router",
         "Switch",
         "Hub"
