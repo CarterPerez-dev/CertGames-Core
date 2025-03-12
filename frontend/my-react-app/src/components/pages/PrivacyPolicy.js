@@ -1,6 +1,7 @@
 // src/components/pages/PrivacyPolicy.js
 import React, { useState, useEffect } from 'react';
 import Footer from '../Footer';
+import SEOHelmet from '../SEOHelmet';
 import './LegalPages.css';
 import { FaAngleUp, FaPrint, FaExternalLinkAlt, FaBook, FaArrowLeft, FaInfoCircle, FaLock } from 'react-icons/fa';
 
