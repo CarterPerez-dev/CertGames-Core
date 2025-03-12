@@ -21,7 +21,7 @@ db.tests.insertOne({
       "id": 2,
       "question": "A security analyst detects frequent ARP requests with spoofed MAC addresses in the network. Which security feature should be enabled to prevent this type of attack?",
       "options": [
-        "Dynamic ARP inspection (DAI)",
+        "Dynamic ARP inspection",
         "Port security",
         "802.1X authentication",
         "ACLs on Layer 3 interfaces"
@@ -34,9 +34,9 @@ db.tests.insertOne({
       "id": 3,
       "question": "An organization requires encryption for all internal DNS queries to prevent eavesdropping. Which protocol should be implemented?",
       "options": [
-        "DNS over TLS (DoT)",
+        "DNS over TLS",
         "DNSSEC",
-        "DNS over HTTPS (DoH)",
+        "DNS over HTTPS",
         "LDAPS"
       ],
       "correctAnswerIndex": 0,
@@ -74,7 +74,7 @@ db.tests.insertOne({
       "question": "Which BGP feature allows an organization to influence inbound routing by making a specific path appear less attractive to external peers?",
       "options": [
         "AS path prepending",
-        "MED (Multi-Exit Discriminator)",
+        "MED",
         "Local preference",
         "Route reflector"
       ],
@@ -86,21 +86,21 @@ db.tests.insertOne({
       "id": 7,
       "question": "Which protocol provides redundancy for IP gateways without requiring proprietary configurations, ensuring minimal downtime during failover?",
       "options": [
-        "VRRP (Virtual Router Redundancy Protocol)",
+        "VRRP",
         "HSRP",
         "GLBP",
         "BGP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "VRRP is an open-standard redundancy protocol that provides high availability for IP gateways. HSRP is Cisco-specific. GLBP adds load balancing but is also Cisco proprietary. BGP is used for inter-AS routing, not gateway redundancy.",
+      "explanation": "VRRP (Virtual Router Redundancy Protocol) is an open-standard redundancy protocol that provides high availability for IP gateways. HSRP is Cisco-specific. GLBP adds load balancing but is also Cisco proprietary. BGP is used for inter-AS routing, not gateway redundancy.",
       "examTip": "**VRRP = Vendor-neutral gateway redundancy.** Best for multi-vendor environments requiring seamless failover."
     },
     {
       "id": 8,
       "question": "Which network security solution monitors traffic for suspicious patterns and blocks malicious traffic in real-time at the network edge?",
       "options": [
-        "IPS (Intrusion Prevention System)",
-        "IDS (Intrusion Detection System)",
+        "IPS",
+        "IDS",
         "Firewall",
         "SIEM"
       ],
@@ -203,8 +203,8 @@ db.tests.insertOne({
       "id": 16,
       "question": "Which technology allows multiple physical network interfaces to operate as a single logical interface, improving redundancy and throughput?",
       "options": [
-        "Link Aggregation (LACP)",
-        "Spanning Tree Protocol (STP)",
+        "Link Aggregation",
+        "Spanning Tree Protocol",
         "VTP",
         "VRRP"
       ],
@@ -242,10 +242,10 @@ db.tests.insertOne({
       "id": 19,
       "question": "Which port is commonly used for secure file transfers using SSH for encryption?",
       "options": [
-        "22 (SFTP)",
-        "21 (FTP)",
-        "443 (HTTPS)",
-        "80 (HTTP)"
+        "22",
+        "21",
+        "443",
+        "80"
       ],
       "correctAnswerIndex": 0,
       "explanation": "SFTP uses port 22, leveraging SSH for encryption. FTP uses port 21 but lacks encryption. Ports 443 and 80 are used for web traffic, secure and insecure respectively.",
@@ -255,20 +255,20 @@ db.tests.insertOne({
       "id": 20,
       "question": "Which protocol uses port 5060 for unencrypted VoIP signaling and port 5061 for encrypted signaling?",
       "options": [
-        "SIP (Session Initiation Protocol)",
+        "SIP",
         "RTP",
         "MGCP",
         "H.323"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SIP uses port 5060 (unencrypted) and 5061 (TLS encrypted) for VoIP signaling. RTP handles media streams. MGCP and H.323 are other VoIP protocols with different port usage.",
+      "explanation": "SIP (Session Initiation Protocol) uses port 5060 (unencrypted) and 5061 (TLS encrypted) for VoIP signaling. RTP handles media streams. MGCP and H.323 are other VoIP protocols with different port usage.",
       "examTip": "**SIP = VoIP call control.** Always use port 5061 for secure VoIP communications."
     },
     {
       "id": 21,
       "question": "A company uses BGP for external routing. They want to ensure a specific path is preferred by external peers without altering AS paths. Which BGP attribute should they modify?",
       "options": [
-        "MED (Multi-Exit Discriminator)",
+        "MED",
         "Local preference",
         "Weight",
         "Community"
@@ -294,13 +294,13 @@ db.tests.insertOne({
       "id": 23,
       "question": "An enterprise requires an authentication solution that supports multi-factor authentication (MFA) and integrates with web-based applications. Which protocol BEST fits this requirement?",
       "options": [
-        "SAML (Security Assertion Markup Language)",
+        "SAML",
         "LDAP",
         "RADIUS",
         "TACACS+"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SAML facilitates web-based SSO and supports MFA. LDAP manages directory services but doesn’t provide web-based SSO. RADIUS supports authentication but lacks direct SSO capabilities. TACACS+ is focused on network device management authentication.",
+      "explanation": "SAML (Security Assertion Markup Language) facilitates web-based SSO and supports MFA. LDAP manages directory services but doesn’t provide web-based SSO. RADIUS supports authentication but lacks direct SSO capabilities. TACACS+ is focused on network device management authentication.",
       "examTip": "**SAML = Web-based SSO with MFA support.** Best for federated authentication across SaaS platforms."
     },
     {
@@ -398,13 +398,13 @@ db.tests.insertOne({
       "id": 31,
       "question": "A network engineer is tasked with identifying which switch port a rogue device is connected to. Which tool would provide this information most efficiently?",
       "options": [
-        "LLDP (Link Layer Discovery Protocol)",
+        "LLDP",
         "Nmap",
         "Wireshark",
         "NetFlow"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "LLDP provides information about directly connected devices, including switch port details. Nmap scans for open ports and services. Wireshark captures network packets but doesn’t provide port mappings. NetFlow analyzes traffic flows, not device locations.",
+      "explanation": "LLDP (Link Layer Discovery Protocol) provides information about directly connected devices, including switch port details. Nmap scans for open ports and services. Wireshark captures network packets but doesn’t provide port mappings. NetFlow analyzes traffic flows, not device locations.",
       "examTip": "**LLDP = Device discovery + port mapping.** Ideal for identifying unauthorized devices on enterprise networks."
     },
     {
@@ -515,7 +515,7 @@ db.tests.insertOne({
       "id": 40,
       "question": "Which IPv6 address type is automatically assigned to each interface and is required for certain protocols to function within the same network segment?",
       "options": [
-        "Link-local address (FE80::/10)",
+        "Link-local address",
         "Global unicast address",
         "Unique local address",
         "Anycast address"
@@ -528,9 +528,9 @@ db.tests.insertOne({
       "id": 41,
       "question": "A network administrator needs to reduce broadcast traffic while keeping Layer 2 segmentation intact. Which technology BEST achieves this?",
       "options": [
-        "VLANs (Virtual Local Area Networks)",
+        "VLANs",
         "Subnets",
-        "Spanning Tree Protocol (STP)",
+        "Spanning Tree Protocol",
         "Port mirroring"
       ],
       "correctAnswerIndex": 0,
@@ -554,65 +554,65 @@ db.tests.insertOne({
       "id": 43,
       "question": "Which security feature protects against VLAN hopping attacks in a switched network environment?",
       "options": [
-        "Disabling DTP (Dynamic Trunking Protocol)",
+        "Disabling DTP",
         "Port security",
         "802.1X authentication",
         "MAC address filtering"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "Disabling DTP prevents unauthorized dynamic trunk formation, mitigating VLAN hopping. Port security limits MAC addresses but doesn’t prevent VLAN hopping. 802.1X handles device authentication. MAC filtering is easily bypassed.",
+      "explanation": "Disabling DTP (Dynamic Trunking Protocol) prevents unauthorized dynamic trunk formation, mitigating VLAN hopping. Port security limits MAC addresses but doesn’t prevent VLAN hopping. 802.1X handles device authentication. MAC filtering is easily bypassed.",
       "examTip": "**Disable DTP = VLAN hopping defense.** Always configure trunk ports manually for enhanced security."
     },
     {
       "id": 44,
       "question": "Which routing protocol is Cisco proprietary, supports unequal cost load balancing, and converges faster than traditional distance-vector protocols?",
       "options": [
-        "EIGRP (Enhanced Interior Gateway Routing Protocol)",
+        "EIGRP",
         "OSPF",
         "RIP",
         "BGP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "EIGRP supports unequal cost load balancing and rapid convergence. OSPF doesn’t support unequal load balancing. RIP converges slowly. BGP is designed for inter-domain routing, not internal network optimization.",
+      "explanation": "EIGRP (Enhanced Interior Gateway Routing Protocol) supports unequal cost load balancing and rapid convergence. OSPF doesn’t support unequal load balancing. RIP converges slowly. BGP is designed for inter-domain routing, not internal network optimization.",
       "examTip": "**EIGRP = Cisco’s scalable, fast-converging protocol.** Perfect for Cisco-heavy environments requiring flexible routing."
     },
     {
       "id": 45,
       "question": "Which WAN technology uses labels to determine the path of traffic, providing predictable performance for latency-sensitive applications?",
       "options": [
-        "MPLS (Multiprotocol Label Switching)",
+        "MPLS",
         "IPSec VPN",
         "SD-WAN",
         "Leased line"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MPLS uses labels for efficient traffic routing, offering predictable latency. IPSec VPN secures traffic but doesn’t guarantee performance. SD-WAN dynamically selects paths but relies on underlying transport. Leased lines are expensive and less scalable.",
+      "explanation": "MPLS (Multiprotocol Label Switching) uses labels for efficient traffic routing, offering predictable latency. IPSec VPN secures traffic but doesn’t guarantee performance. SD-WAN dynamically selects paths but relies on underlying transport. Leased lines are expensive and less scalable.",
       "examTip": "**MPLS = Predictable WAN performance.** Ideal for VoIP, video conferencing, and other latency-sensitive applications."
     },
     {
       "id": 46,
       "question": "Which cloud service model allows users to deploy and manage applications without managing the underlying infrastructure, focusing on application logic?",
       "options": [
-        "PaaS (Platform as a Service)",
+        "PaaS",
         "IaaS",
         "SaaS",
         "FaaS"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PaaS offers a platform for application development without infrastructure management. IaaS provides raw infrastructure control. SaaS delivers complete applications. FaaS runs code functions without persistent infrastructure management.",
+      "explanation": "PaaS (Platform as a Service) offers a platform for application development without infrastructure management. IaaS provides raw infrastructure control. SaaS delivers complete applications. FaaS runs code functions without persistent infrastructure management.",
       "examTip": "**PaaS = Developer’s environment without server maintenance.** Perfect for rapid deployment of custom applications."
     },
     {
       "id": 47,
       "question": "Which high-availability protocol provides both redundancy and load balancing for IP gateways in Cisco networks?",
       "options": [
-        "GLBP (Gateway Load Balancing Protocol)",
+        "GLBP",
         "VRRP",
         "HSRP",
         "CARP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "GLBP provides redundancy and load balancing in Cisco environments. VRRP and HSRP offer redundancy but not load balancing. CARP is an open-source alternative used in BSD environments.",
+      "explanation": "GLBP (Gateway Load Balancing Protocol) provides redundancy and load balancing in Cisco environments. VRRP and HSRP offer redundancy but not load balancing. CARP is an open-source alternative used in BSD environments.",
       "examTip": "**GLBP = Cisco’s load-balanced redundancy.** Ideal for reducing single points of failure in gateway configurations."
     },
     {
@@ -697,7 +697,7 @@ db.tests.insertOne({
       "id": 54,
       "question": "Which IPv6 address type provides private, internal communication within an organization without exposure to the global internet?",
       "options": [
-        "Unique Local Address (ULA)",
+        "Unique Local Address",
         "Global Unicast Address",
         "Link-Local Address",
         "Anycast Address"
@@ -710,13 +710,13 @@ db.tests.insertOne({
       "id": 55,
       "question": "Which protocol uses TCP port 179 and is essential for establishing routing policies between autonomous systems on the internet?",
       "options": [
-        "BGP (Border Gateway Protocol)",
+        "BGP",
         "OSPF",
         "EIGRP",
         "RIP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BGP uses TCP port 179 and enables policy-based routing between autonomous systems. OSPF handles internal routing. EIGRP is Cisco proprietary. RIP is outdated with limited scalability.",
+      "explanation": "BGP (Border Gateway Protocol) uses TCP port 179 and enables policy-based routing between autonomous systems. OSPF handles internal routing. EIGRP is Cisco proprietary. RIP is outdated with limited scalability.",
       "examTip": "**Port 179 = BGP (Internet routing backbone).** Critical for controlling traffic flow between ISPs and large networks."
     },
     {
@@ -749,26 +749,26 @@ db.tests.insertOne({
       "id": 58,
       "question": "Which protocol uses port 1433 for SQL Server database connections?",
       "options": [
-        "TDS (Tabular Data Stream)",
+        "TDS",
         "LDAP",
         "RDP",
         "SMTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "TDS, used by Microsoft SQL Server, operates on port 1433. LDAP uses port 389. RDP uses port 3389 for remote desktop. SMTP uses port 25 for email transmission.",
+      "explanation": "TDS (Tabular Data Stream), used by Microsoft SQL Server, operates on port 1433. LDAP uses port 389. RDP uses port 3389 for remote desktop. SMTP uses port 25 for email transmission.",
       "examTip": "**Port 1433 = SQL Server database connectivity.** Always secure SQL ports to prevent unauthorized access."
     },
     {
       "id": 59,
       "question": "Which protocol provides sub-microsecond time synchronization, commonly used in financial and telecom networks?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP",
         "NTP",
         "SNMP",
         "Syslog"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PTP ensures microsecond-level time accuracy, essential for trading and telecom networks. NTP provides millisecond accuracy. SNMP manages network devices. Syslog collects system logs, not time synchronization.",
+      "explanation": "PTP (Precision Time Protocol) ensures microsecond-level time accuracy, essential for trading and telecom networks. NTP provides millisecond accuracy. SNMP manages network devices. Syslog collects system logs, not time synchronization.",
       "examTip": "**PTP = Ultra-precise time sync.** Critical for environments where timing accuracy is non-negotiable."
     },
     {
@@ -801,13 +801,13 @@ db.tests.insertOne({
       "id": 62,
       "question": "Which wireless technology allows simultaneous communication with multiple clients, improving network efficiency in dense environments?",
       "options": [
-        "MU-MIMO (Multi-User Multiple Input Multiple Output)",
+        "MU-MIMO",
         "Beamforming",
         "Band steering",
         "Roaming"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MU-MIMO enables access points to transmit data to multiple clients simultaneously, increasing network throughput. Beamforming directs signals toward specific devices. Band steering guides clients to optimal frequency bands. Roaming ensures seamless transitions between access points.",
+      "explanation": "MU-MIMO (Multi-User Multiple Input Multiple Output) enables access points to transmit data to multiple clients simultaneously, increasing network throughput. Beamforming directs signals toward specific devices. Band steering guides clients to optimal frequency bands. Roaming ensures seamless transitions between access points.",
       "examTip": "**MU-MIMO = High-efficiency Wi-Fi.** Crucial for environments with multiple concurrent users, like offices and stadiums."
     },
     {
@@ -853,13 +853,13 @@ db.tests.insertOne({
       "id": 66,
       "question": "Which protocol uses port 3389 to provide secure graphical remote desktop access over a network?",
       "options": [
-        "RDP (Remote Desktop Protocol)",
+        "RDP",
         "SSH",
         "VNC",
         "Telnet"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RDP uses port 3389 to provide secure graphical remote access. SSH provides secure CLI access over port 22. VNC offers graphical remote access but lacks native encryption. Telnet transmits data unencrypted and is insecure.",
+      "explanation": "RDP (Remote Desktop Protocol) uses port 3389 to provide secure graphical remote access. SSH provides secure CLI access over port 22. VNC offers graphical remote access but lacks native encryption. Telnet transmits data unencrypted and is insecure.",
       "examTip": "**Port 3389 = RDP secure remote access.** Always use RDP with VPN and multi-factor authentication for enhanced security."
     },
     {
@@ -905,7 +905,7 @@ db.tests.insertOne({
       "id": 70,
       "question": "Which wireless standard, operating exclusively in the 6GHz band, offers reduced latency and higher throughput for dense environments?",
       "options": [
-        "802.11ax (Wi-Fi 6E)",
+        "802.11ax",
         "802.11ac",
         "802.11n",
         "802.11g"
@@ -957,9 +957,9 @@ db.tests.insertOne({
       "id": 74,
       "question": "Which security protocol encrypts DNS queries and responses to prevent eavesdropping and tampering, using TLS for secure transport?",
       "options": [
-        "DNS over TLS (DoT)",
+        "DNS over TLS",
         "DNSSEC",
-        "DNS over HTTPS (DoH)",
+        "DNS over HTTPS",
         "LDAPS"
       ],
       "correctAnswerIndex": 0,
@@ -970,13 +970,13 @@ db.tests.insertOne({
       "id": 75,
       "question": "Which protocol synchronizes clocks across network devices, ensuring consistency for logs, timestamps, and time-sensitive applications?",
       "options": [
-        "NTP (Network Time Protocol)",
+        "NTP",
         "SNMP",
         "Syslog",
         "TFTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "NTP synchronizes time across network devices, essential for consistent logs and secure communication. SNMP manages network devices. Syslog collects event logs. TFTP transfers files without encryption or time synchronization capabilities.",
+      "explanation": "NTP (Network Time Protocol) synchronizes time across network devices, essential for consistent logs and secure communication. SNMP manages network devices. Syslog collects event logs. TFTP transfers files without encryption or time synchronization capabilities.",
       "examTip": "**NTP = Consistent time across devices.** Always configure NTP for accurate event correlation and secure operations."
     },
     {
@@ -1126,26 +1126,26 @@ db.tests.insertOne({
       "id": 87,
       "question": "Which technology enables an organization to extend its local VLANs over geographically dispersed data centers, maintaining Layer 2 adjacency?",
       "options": [
-        "VXLAN (Virtual Extensible LAN)",
+        "VXLAN",
         "VPLS",
         "MPLS",
         "SD-WAN"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "VXLAN allows Layer 2 networks to span across different geographical locations over Layer 3 infrastructure, maintaining adjacency. VPLS extends Layer 2 but typically in service provider environments. MPLS provides Layer 3 VPN services. SD-WAN focuses on dynamic WAN routing, not Layer 2 adjacency.",
+      "explanation": "VXLAN (Virtual Extensible LAN) allows Layer 2 networks to span across different geographical locations over Layer 3 infrastructure, maintaining adjacency. VPLS extends Layer 2 but typically in service provider environments. MPLS provides Layer 3 VPN services. SD-WAN focuses on dynamic WAN routing, not Layer 2 adjacency.",
       "examTip": "**VXLAN = Data center interconnect.** Best for extending Layer 2 networks across distributed data centers."
     },
     {
       "id": 88,
       "question": "Which protocol uses port 5060 for unencrypted signaling and port 5061 for encrypted signaling in VoIP communications?",
       "options": [
-        "SIP (Session Initiation Protocol)",
+        "SIP",
         "RTP",
         "MGCP",
         "H.323"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SIP uses port 5060 for unencrypted and 5061 for encrypted VoIP signaling. RTP handles media streams but not signaling. MGCP and H.323 are alternative VoIP protocols using different port ranges.",
+      "explanation": "SIP (Session Initiation Protocol) uses port 5060 for unencrypted and 5061 for encrypted VoIP signaling. RTP handles media streams but not signaling. MGCP and H.323 are alternative VoIP protocols using different port ranges.",
       "examTip": "**SIP = VoIP call setup.** Use port 5061 with TLS for secure VoIP signaling."
     },
     {
@@ -1165,7 +1165,7 @@ db.tests.insertOne({
       "id": 90,
       "question": "Which IPv6 address type is automatically generated for local communication and essential for neighbor discovery?",
       "options": [
-        "Link-local address (FE80::/10)",
+        "Link-local address",
         "Global unicast address",
         "Unique local address",
         "Anycast address"
@@ -1282,7 +1282,7 @@ db.tests.insertOne({
       "id": 99,
       "question": "Which cloud service model delivers fully functional applications over the internet without requiring local installation or infrastructure management?",
       "options": [
-        "SaaS (Software as a Service)",
+        "SaaS",
         "PaaS",
         "IaaS",
         "FaaS"
