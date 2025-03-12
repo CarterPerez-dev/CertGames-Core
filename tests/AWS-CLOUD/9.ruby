@@ -1,6 +1,3 @@
-replace 23,79,78
-
-
 db.tests.insertOne({
   "category": "awscloud",
   "testId": 9,
@@ -295,17 +292,16 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "A company is storing sensitive data in Amazon S3 and wants to implement additional security measures to protect against unauthorized access. Which combination of S3 features would provide the MOST comprehensive security for their data? (Select TWO.)",
+      "question": "A company needs a service to centrally create and manage cryptographic keys used to encrypt data in multiple AWS services. Which AWS service should they use?",
       "options": [
-        "S3 Object Lock",
-        "S3 Block Public Access",
-        "S3 Transfer Acceleration",
-        "S3 Versioning",
-        "S3 Lifecycle Policies"
+        "AWS Key Management Service (KMS)",
+        "AWS Secrets Manager",
+        "Amazon Macie",
+        "Amazon Certificate Manager"
       ],
-      "correctAnswerIndex": [1,3],
-      "explanation": "S3 Block Public Access and S3 Versioning provide the most comprehensive security for protecting sensitive data against unauthorized access. S3 Block Public Access prevents any public access to buckets and objects, regardless of how the public access might be granted, serving as a critical security layer to prevent data exposure. It creates bucket-level or account-level guardrails that override other permissions, ensuring objects cannot be accidentally made public. S3 Versioning maintains multiple variants of objects, which protects against both accidental and malicious deletion or overwrites by preserving previous versions. If an unauthorized user manages to gain access and attempts to delete or modify data, versioning ensures the original data can be recovered. S3 Object Lock (option 0) prevents objects from being deleted or overwritten for a specified retention period, which enhances data protection but is more focused on compliance and data immutability than unauthorized access prevention. S3 Transfer Acceleration (option 2) provides faster uploads to S3 buckets but doesn't address security against unauthorized access. S3 Lifecycle Policies (option 4) automate the transition of objects to different storage classes or their deletion based on defined schedules, but don't specifically enhance security against unauthorized access.",
-      "examTip": "When implementing S3 security, use multiple complementary features to create defense in depth. Block Public Access provides preventative control against accidental exposure to the public internet—a common source of data breaches. Versioning provides detective and recovery capabilities if unauthorized modifications occur despite other controls. Together, these features protect against both public exposure and potential data tampering or deletion, addressing multiple security threat vectors."
+      "correctAnswerIndex": 0,
+      "explanation": "AWS Key Management Service (KMS) is a fully managed service for creating and controlling encryption keys used by various AWS services. AWS Secrets Manager securely stores and rotates secrets (like database credentials or API keys), but does not create cryptographic keys. Amazon Macie helps discover and protect sensitive data in Amazon S3. Amazon Certificate Manager is specifically for provisioning and managing SSL/TLS certificates, not encryption keys for data at rest or in transit.",
+      "examTip": "Use AWS KMS when you need a centralized, fully managed service for creating and managing encryption keys that integrate seamlessly with many AWS services."
     },
     {
       "id": 24,
@@ -1011,32 +1007,29 @@ db.tests.insertOne({
     },
     {
       "id": 78,
-      "question": "A company needs to store data with different access patterns efficiently. They have frequently accessed data, infrequently accessed data that needs millisecond retrieval, and archival data that is rarely accessed. Which S3 storage classes should they use for these different data types? (Select THREE.)",
+      "question": "A web application is deployed across multiple Availability Zones in a region. Which AWS service should the company use to efficiently distribute incoming HTTP and HTTPS traffic across these instances?",
       "options": [
-        "S3 Standard",
-        "S3 Standard-IA",
-        "S3 One Zone-IA",
-        "S3 Glacier Instant Retrieval",
-        "S3 Glacier Flexible Retrieval",
-        "S3 Glacier Deep Archive"
+        "AWS Global Accelerator",
+        "Amazon Route 53",
+        "Elastic Load Balancing (Application Load Balancer)",
+        "Amazon CloudFront"
       ],
-      "correctAnswerIndex": [0, 3, 5],
-      "explanation": "S3 Standard, S3 Glacier Instant Retrieval, and S3 Glacier Deep Archive should be used for the different data types. S3 Standard provides high-performance access with millisecond latency and high throughput, making it ideal for frequently accessed data like active website content, distribution content, or data that's accessed multiple times per month. S3 Glacier Instant Retrieval is designed for infrequently accessed data that needs millisecond retrieval when accessed. It provides the same millisecond access performance as S3 Standard but at a lower storage cost, with a minimum storage duration of 90 days, making it suitable for data accessed quarterly. S3 Glacier Deep Archive is designed for long-term retention of data that is rarely accessed, with retrieval times of hours and the lowest storage cost in the S3 family, making it ideal for archival data with the longest minimum storage duration of 180 days. S3 Standard-IA (option 1) is designed for infrequently accessed data but has minimum size and duration requirements that may not be ideal for all infrequently accessed data. S3 One Zone-IA (option 2) stores data in a single Availability Zone, reducing availability compared to other S3 storage classes, which may not meet reliability requirements. S3 Glacier Flexible Retrieval (option 4) provides retrieval options from minutes to hours, but doesn't provide the millisecond access specified in the requirement for infrequently accessed data.",
-      "examTip": "When designing S3 storage strategies for data with varying access patterns, align the storage class with both frequency of access and retrieval time requirements. For frequently accessed data, S3 Standard provides the most cost-effective performance; for infrequently accessed data requiring rapid retrieval, Glacier Instant Retrieval offers millisecond access at lower storage cost; and for rarely accessed archival data, Glacier Deep Archive provides the lowest storage cost with longer retrieval times. This tiered approach optimizes both cost and performance across your data lifecycle."
+      "correctAnswerIndex": 2,
+      "explanation": "Elastic Load Balancing with an Application Load Balancer is tailored for distributing HTTP/HTTPS traffic across multiple targets, such as EC2 instances or containers, in multiple Availability Zones. AWS Global Accelerator provides static anycast IP addresses to improve performance globally, but does not natively handle Layer 7 balancing. Route 53 is a DNS service, and CloudFront is a CDN solution focused on caching and distributing content.",
+      "examTip": "When you see an HTTP/HTTPS load-balancing scenario across multiple AZs, the Application Load Balancer is the primary solution in AWS."
     },
     {
       "id": 79,
-      "question": "A company is planning their migration to AWS and needs to understand which tasks they remain responsible for under the AWS Shared Responsibility Model. Which of the following is a customer responsibility when using Amazon RDS? (Select TWO.)",
+      "question": "A startup is concerned about potential downtime and wants 24/7 phone support from AWS with a 1-hour response time for critical system failures. Which AWS Support plan meets this requirement at the lowest cost?",
       "options": [
-        "Database patching and upgrades",
-        "Managing the underlying infrastructure",
-        "Setting up database users and permissions",
-        "Operating system installation and maintenance",
-        "Configuring database backup retention periods"
+        "Basic Support",
+        "Developer Support",
+        "Business Support",
+        "Enterprise Support"
       ],
-      "correctAnswerIndex": [2, 4],
-      "explanation": "Setting up database users and permissions and configuring database backup retention periods are customer responsibilities when using Amazon RDS. Under the AWS Shared Responsibility Model, while AWS manages the underlying infrastructure and database engine for RDS, customers remain responsible for managing the data within the database, including user access control and permission management. Creating and managing database users, roles, and their associated permissions falls entirely under customer responsibility. Similarly, while RDS provides automated backup capabilities, customers are responsible for configuring appropriate backup retention periods based on their business requirements and compliance needs. Database patching and upgrades (option 0) are managed by AWS for RDS instances, though customers can control when these updates are applied during defined maintenance windows. Managing the underlying infrastructure (option 1) is AWS's responsibility for RDS, including hardware provisioning, maintenance, and failure recovery. Operating system installation and maintenance (option 3) is handled by AWS for RDS instances, as customers don't have direct access to the underlying operating system.",
-      "examTip": "For managed services like RDS, the Shared Responsibility Model shifts more responsibilities to AWS, but customers retain control over data-related configurations and security controls. A helpful way to understand the division is that AWS manages the infrastructure and database engine (the 'how' it runs), while customers manage the data and access (the 'what' is stored and 'who' can access it). This principle applies across most AWS managed services, where AWS handles the operational complexity while customers retain control over their data and application-level security."
+      "correctAnswerIndex": 2,
+      "explanation": "Business Support provides 24/7 phone and chat support, including a 1-hour initial response time for production system down issues. Developer Support only offers business hours email support and a slower initial response time. Basic Support is limited to account and billing questions. Enterprise Support offers all features in Business Support plus a Technical Account Manager and additional services, but it’s more expensive.",
+      "examTip": "For a 1-hour response time and 24/7 phone support, Business Support is the most cost-effective choice. Developer Support isn't sufficient for critical production issues, and Enterprise is for the most complex needs."
     },
     {
       "id": 80,
