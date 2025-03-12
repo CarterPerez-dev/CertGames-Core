@@ -1,6 +1,3 @@
-32
-
-
 db.tests.insertOne({
   "category": "awscloud",
   "testId": 5,
@@ -412,17 +409,16 @@ db.tests.insertOne({
     },
     {
       "id": 32,
-      "question": "A company wants to analyze their AWS spending and receive recommendations for cost optimization. Which TWO AWS services should they use together to achieve this goal? (Select TWO.)",
+      "question": "A startup wants to run small code snippets in response to events without provisioning or managing servers. Which AWS service best meets this requirement?",
       "options": [
-        "AWS Cost Explorer",
-        "AWS Budgets",
-        "AWS Trusted Advisor",
-        "AWS Organizations",
-        "Amazon QuickSight"
+        "AWS Lambda",
+        "Amazon EC2",
+        "AWS Fargate",
+        "Amazon Lightsail"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "AWS Cost Explorer and AWS Trusted Advisor should be used together to analyze AWS spending and receive recommendations for cost optimization. AWS Cost Explorer provides visualization and analysis of your AWS costs and usage over time, allowing you to identify trends, patterns, and anomalies in your spending. AWS Trusted Advisor offers recommendations for optimizing your AWS infrastructure, including specific cost optimization recommendations like identifying idle resources, underutilized instances, or opportunities to use Reserved Instances. AWS Budgets helps you set and track budgets for your AWS costs and usage but doesn't provide comprehensive analysis or optimization recommendations. AWS Organizations helps you centrally manage and govern multiple AWS accounts but doesn't focus on cost analysis or optimization recommendations. Amazon QuickSight is a business intelligence service that could be used to create custom visualizations of cost data but doesn't provide built-in cost optimization recommendations like Trusted Advisor.",
-      "examTip": "For comprehensive cost management, combine analytical tools like Cost Explorer with advisory services like Trusted Advisor. Cost Explorer helps you understand past spending patterns and forecast future costs, while Trusted Advisor provides actionable recommendations for immediate cost savings based on AWS best practices. This combination gives you both historical insights and practical steps for optimization."
+      "correctAnswerIndex": 0,
+      "explanation": "AWS Lambda is a serverless compute service that runs your code in response to events and automatically manages the underlying compute resources. Amazon EC2 and AWS Fargate require more active management of capacity, even if Fargate automates container orchestration. Amazon Lightsail is a simplified way to launch virtual private servers, databases, and containers, but it's not serverless for event-driven snippets.",
+      "examTip": "When you see 'serverless code execution in response to events,' AWS Lambda is almost always the answer."
     },
     {
       "id": 33,
