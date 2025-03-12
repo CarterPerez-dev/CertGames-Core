@@ -141,15 +141,63 @@ Nothing else.
             nonlocal accumulated_response
             try:
                 for chunk in response:
-                    if chunk.choices and chunk.choices[0].delta:
-                        # FIX: Use getattr instead of .get() method
-                        content = getattr(chunk.choices[0].delta, "content", None)
-                        if content:
-                            accumulated_response += content
-                            yield content
+                    # Debug: Print the structure of the chunk
+                    logger.debug(f"Chunk type: {type(chunk)}")
+                    logger.debug(f"Chunk structure: {dir(chunk)}")
+                    
+                    if not hasattr(chunk, 'choices') or not chunk.choices:
+                        continue
+                        
+                    choice = chunk.choices[0]
+                    if not hasattr(choice, 'delta'):
+                        continue
+                    
+                    # Debug the delta object
+                    delta = choice.delta
+                    logger.debug(f"Delta type: {type(delta)}")
+                    logger.debug(f"Delta structure: {dir(delta)}")
+                    
+                    # Try multiple ways to get content
+                    content = None
+                    
+                    # Method 1: Using getattr
+                    try:
+                        content = getattr(delta, "content", None)
+                    except Exception as e:
+                        logger.debug(f"Method 1 failed: {e}")
+                    
+                    # Method 2: Dictionary-style access
+                    if content is None and hasattr(delta, "__getitem__"):
+                        try:
+                            content = delta["content"]
+                        except (KeyError, TypeError) as e:
+                            logger.debug(f"Method 2 failed: {e}")
+                    
+                    # Method 3: If delta itself is the content (string)
+                    if content is None and isinstance(delta, str):
+                        content = delta
+                    
+                    # Method 4: If delta has a method to get content
+                    if content is None and hasattr(delta, "get"):
+                        try:
+                            content = delta.get("content", None)
+                        except Exception as e:
+                            logger.debug(f"Method 4 failed: {e}")
+                    
+                    # Method 5: Convert delta to dict if possible
+                    if content is None and hasattr(delta, "__dict__"):
+                        try:
+                            delta_dict = delta.__dict__
+                            content = delta_dict.get("content", None)
+                        except Exception as e:
+                            logger.debug(f"Method 5 failed: {e}")
+                    
+                    if content:
+                        accumulated_response += content
+                        yield content
+                        
             except Exception as e:
                 logger.error(f"Error streaming interactive questions: {str(e)}")
-                # Attempt retry if we haven't exceeded
                 if retry_count < 2:
                     logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
                     yield from generate_interactive_questions(scenario_text, retry_count + 1)
@@ -162,6 +210,7 @@ Nothing else.
             # This function is called after we finish streaming. We validate the final JSON.
             try:
                 cleaned = accumulated_response.strip()
+                logger.debug(f"Final accumulated response: {cleaned[:100]}...")
 
                 # Strip code fences if present
                 cleaned = re.sub(r"```[\w]*\n?", "", cleaned)
@@ -201,7 +250,5 @@ Nothing else.
             return generate_interactive_questions(scenario_text, retry_count + 1)
         else:
             def err_gen():
-                yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
-            return err_gen()
                 yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
             return err_gen()
