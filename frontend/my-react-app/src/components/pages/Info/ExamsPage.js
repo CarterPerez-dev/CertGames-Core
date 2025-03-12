@@ -52,7 +52,7 @@ const ExamsPage = () => {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "CertGames Certification Exam Prep",
-    "description": "Practice tests for 13 cybersecurity certifications with over 13,000 questions",
+    "description": "Practice tests for 13 cybersecurity and IT certifications with over 13,000 questions",
     "offers": {
       "@type": "Offer",
       "price": "14.99",
@@ -79,7 +79,7 @@ const ExamsPage = () => {
     "@type": "TechArticle",
     "headline": "Cybersecurity Certification Practice Tests",
     "description": "Comprehensive guide to cybersecurity certification preparation including CompTIA, ISC2, and AWS",
-    "keywords": "CompTIA Security+, CISSP, AWS Cloud Practitioner, cybersecurity certification, practice tests",
+    "keywords": "CompTIA Security+, CISSP, CompTIA CySa+, CompTIA A+, CompTIA Network+, CompTIA Pentest+, CompTIA CASP, AWS Cloud Practitioner, cybersecurity certification, practice tests, game",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https://certgames.com/exams"
