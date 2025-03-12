@@ -177,7 +177,7 @@ db.tests.insertOne({
       "id": 14,
       "question": "An attacker attempts to intercept and alter communications between two endpoints without either party noticing. Which attack BEST describes this scenario?",
       "options": [
-        "Man-in-the-middle (MitM)",
+        "Man-in-the-middle",
         "Session hijacking",
         "Replay attack",
         "DNS spoofing"
