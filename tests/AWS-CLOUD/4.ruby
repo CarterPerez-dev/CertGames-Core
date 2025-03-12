@@ -1,5 +1,3 @@
-65,87
-
 db.tests.insertOne({
   "category": "awscloud",
   "testId": 4,
@@ -840,17 +838,16 @@ db.tests.insertOne({
     },
     {
       "id": 65,
-      "question": "A company is using Amazon S3 to store critical data and wants to protect against accidental deletion or overwriting of objects. Which two S3 features should they enable? (Select TWO.)",
+      "question": "A media company needs to ingest continuous, real-time data streams from thousands of devices and process them with minimal latency. Which AWS service is best suited for ingesting and storing streaming data for subsequent processing?",
       "options": [
-        "S3 Versioning",
-        "S3 Object Lock",
-        "S3 Transfer Acceleration",
-        "S3 Intelligent-Tiering",
-        "S3 Cross-Region Replication"
+        "Amazon SQS",
+        "Amazon Kinesis Data Streams",
+        "Amazon S3",
+        "AWS Step Functions"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "S3 Versioning and S3 Object Lock should be enabled to protect against accidental deletion or overwriting of objects. S3 Versioning preserves multiple variants of an object in the same bucket, allowing recovery of deleted or overwritten objects. Even when an object is deleted, versioning keeps a delete marker rather than permanently removing the object. S3 Object Lock allows you to store objects using a 'write once, read many' (WORM) model, preventing objects from being deleted or overwritten for a fixed time period or indefinitely. S3 Transfer Acceleration increases transfer speeds to S3 buckets but doesn't protect against accidental deletion or overwriting. S3 Intelligent-Tiering automatically moves objects between access tiers based on changing access patterns but doesn't provide data protection features. S3 Cross-Region Replication copies objects to another region for disaster recovery but doesn't inherently protect against accidental deletion, as deletions are also replicated to the destination bucket.",
-      "examTip": "For protecting critical data in S3, think about both accident prevention and recovery options. Versioning allows you to recover from mistakes by preserving previous versions, while Object Lock prevents mistakes from happening in the first place by making objects immutable for a specified period."
+      "correctAnswerIndex": 1,
+      "explanation": "Amazon Kinesis Data Streams is built for large-scale, real-time data ingestion. It can capture gigabytes of data per second from thousands of devices, allowing subsequent analytics or processing with low latency. Amazon SQS focuses on decoupling applications via a queue, not continuous large-scale data ingestion. Amazon S3 is an object store and isn't optimized for streaming ingestion. AWS Step Functions orchestrates workflows but is not used for real-time data ingestion.",
+      "examTip": "When encountering scenarios with high-throughput, real-time data ingestion, Amazon Kinesis Data Streams is typically the best choice."
     },
     {
       "id": 66,
@@ -1127,17 +1124,16 @@ db.tests.insertOne({
     },
     {
       "id": 87,
-      "question": "A company is implementing a solution for secure web application hosting. Which of the following AWS services should be used together to create a secure and scalable architecture? (Select TWO.)",
+      "question": "Which AWS service allows you to model and provision AWS resources using templates, enabling consistent and repeatable deployments of your infrastructure?",
       "options": [
-        "Amazon VPC with security groups",
-        "Amazon EC2 with Auto Scaling",
-        "AWS Direct Connect",
-        "Amazon Route 53",
-        "AWS CloudFormation"
+        "AWS CodeCommit",
+        "AWS CloudFormation",
+        "AWS Systems Manager",
+        "AWS Elastic Beanstalk"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "Amazon VPC with security groups and Amazon EC2 with Auto Scaling should be used together to create a secure and scalable architecture for web application hosting. Amazon VPC with security groups provides network isolation and access control, allowing you to create a private network and control inbound and outbound traffic to your web servers, forming the security foundation. Amazon EC2 with Auto Scaling provides the compute resources to run your web application while automatically adjusting capacity based on demand, ensuring the application scales during traffic fluctuations. AWS Direct Connect provides dedicated network connections from on-premises to AWS, which would be beneficial for hybrid architectures but isn't essential for secure web application hosting. Amazon Route 53 provides DNS services, which would be useful for routing traffic but isn't essential for the core security and scalability of the application. AWS CloudFormation provides infrastructure as code capabilities but doesn't directly provide security or scalability features.",
-      "examTip": "A secure, scalable web architecture typically combines multiple AWS services with distinct responsibilities. VPC and security groups form the security foundation by controlling network access, while EC2 with Auto Scaling provides the elastic compute layer that adjusts to traffic demands. Together, they address both the security and scalability requirements of modern web applications."
+      "correctAnswerIndex": 1,
+      "explanation": "AWS CloudFormation lets you use templates (in JSON or YAML) to define and provision AWS resources in an orderly and predictable fashion, enabling infrastructure as code. AWS CodeCommit is a private Git repository service. AWS Systems Manager helps automate operational tasks. AWS Elastic Beanstalk helps deploy applications quickly, but does not provide the same granular infrastructure definition capabilities as CloudFormation.",
+      "examTip": "For infrastructure as code, CloudFormation is the principal AWS service. It's especially useful for creating reproducible, version-controlled, and automated deployments."
     },
     {
       "id": 88,
