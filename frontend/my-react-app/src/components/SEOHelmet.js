@@ -1,12 +1,13 @@
 // src/components/SEOHelmet.js
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import defaultOgImage from './og-default.jpg';
 
 const SEOHelmet = ({ 
   title, 
   description, 
   canonicalUrl,
-  ogImage = 'https://certgames.com/images/og-default.jpg', // Default image
+  ogImage = 'defaultOgImage', // Default image
   ogType = 'website'
 }) => {
   // Base URL - update with your actual domain
