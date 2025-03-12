@@ -616,7 +616,7 @@ db.tests.insertOne({
       "examTip": "Intermittent, unexplained shutdowns often point to subtle firmware watchdog or timer misconfigurations rather than explicit hardware faults."
     },
     {
-      "id": 16,
+      "id": 48,
       "question": "After migrating critical applications to virtual machines, administrators observe intermittent 'disk unavailable' errors, despite storage diagnostics showing no hardware issues. What subtle configuration problem is most likely?",
       "options": [
         "Intermittent LUN masking misconfigurations causing temporary unavailability",
