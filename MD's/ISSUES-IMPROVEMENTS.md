@@ -3,7 +3,8 @@
 ## make 300 Daily PBQ's
 ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
 ## Input leaderboard route and leaderboard page specifcually/only
-#Add blog posts about certification topics (great for SEO)
+# Add blog posts about certification topics (great for SEO)- Expand your FAQ schema with more questions/answers to earn rich snippets
+Create dedicated FAQ pages for each certification
 ## configure cloud fare settings
 
 ### ADD MORE RESOURCES TO RESOURCE PAGE
