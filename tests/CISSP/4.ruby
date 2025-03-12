@@ -1,7 +1,7 @@
 db.tests.insertOne({
   "category": "cissp",
-  "testId": 3,
-  "testName": "ISC2 CISSP Practice Test #3 (Easy)",
+  "testId": 4,
+  "testName": "ISC2 CISSP Practice Test #4 (Moderate)",
   "xpPerCorrect": 10,
   "questions": [
     {
