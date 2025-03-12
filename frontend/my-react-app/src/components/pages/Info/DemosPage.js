@@ -200,7 +200,7 @@ const DemosPage = () => {
     <>
       <SEOHelmet 
         title="Interactive Feature Demos | CertGames"
-        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators and practice tests, and specialized learning tools."
+        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators, practice tests, study recourses, and specialized learning tools."
         canonicalUrl="/demos"
       />
       <StructuredData data={breadcrumbSchema} />
