@@ -26,16 +26,6 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://certgames.com/login</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://certgames.com/register</loc>
-    <priority>0.5</priority>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
     <loc>https://certgames.com/privacy</loc>
     <priority>0.3</priority>
     <changefreq>yearly</changefreq>
