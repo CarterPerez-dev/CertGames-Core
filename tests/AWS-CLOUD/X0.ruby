@@ -1,7 +1,7 @@
 db.tests.insertOne({
-  "category": "aplus",
+  "category": "awscloud",
   "testId": 10,
-  "testName": "CompTIA A+ Core 1 (1101) Practice Test #10 (Ultra Level)",
+  "testName": "AWS Certified Cloud Practitioner (CLF-C02) Practice Test #10 (Ruthless)",
   "xpPerCorrect": 10,
   "questions": [
     {
