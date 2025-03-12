@@ -63,7 +63,7 @@ db.tests.insertOne({
         "VLANs not allowed on the trunk link.",
         "Native VLAN mismatch on the trunk ports.",
         "Incorrect duplex settings on the trunk interface.",
-        "Spanning Tree Protocol (STP) blocking the trunk port."
+        "Spanning Tree Protocol blocking the trunk port."
       ],
       "correctAnswerIndex": 0,
       "explanation": "If VLANs are not explicitly allowed on the trunk, they won’t be carried across. A native VLAN mismatch triggers security warnings but doesn't block VLANs. Duplex mismatches affect speed, not VLAN carriage. STP would block entire ports, not specific VLANs.",
@@ -89,7 +89,7 @@ db.tests.insertOne({
         "802.1X",
         "Port security",
         "MAC filtering",
-        "Access Control List (ACL)"
+        "Access Control List "
       ],
       "correctAnswerIndex": 0,
       "explanation": "802.1X provides robust port-based authentication using RADIUS servers. Port security limits MAC addresses but is susceptible to spoofing. MAC filtering is weaker and easier to bypass. ACLs control traffic flow but don’t handle authentication.",
@@ -193,7 +193,7 @@ db.tests.insertOne({
         "High-availability load balancer with health checks",
         "Redundant firewalls in active-passive mode",
         "Dynamic DNS failover",
-        "Spanning Tree Protocol (STP)"
+        "Spanning Tree Protocol "
       ],
       "correctAnswerIndex": 0,
       "explanation": "Load balancers with health checks detect failures and reroute traffic instantly. Redundant firewalls provide perimeter security redundancy but not traffic balancing. Dynamic DNS helps with external failover. STP prevents Layer 2 loops, not traffic rerouting.",
@@ -255,7 +255,7 @@ db.tests.insertOne({
       "id": 20,
       "question": "Which IPv6 address type allows communication with all nodes on a link and is typically used for neighbor discovery?",
       "options": [
-        "Multicast (FF02::1)",
+        "Multicast",
         "Anycast",
         "Global unicast",
         "Unique local"
@@ -281,13 +281,13 @@ db.tests.insertOne({
       "id": 22,
       "question": "An engineer needs to implement a solution that allows multiple physical links to be combined into one logical link for redundancy and increased throughput. Which technology should be used?",
       "options": [
-        "Link Aggregation Control Protocol (LACP)",
-        "Spanning Tree Protocol (STP)",
+        "Link Aggregation Control Protocol ",
+        "Spanning Tree Protocol ",
         "EtherChannel",
         "Port mirroring"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "LACP (part of IEEE 802.3ad) enables multiple links to function as a single logical link, offering redundancy and higher throughput. EtherChannel also achieves this but is vendor-specific. STP prevents loops but doesn’t aggregate links. Port mirroring is for monitoring purposes.",
+      "explanation": "LACP  enables multiple links to function as a single logical link, offering redundancy and higher throughput. EtherChannel also achieves this but is vendor-specific. STP prevents loops but doesn’t aggregate links. Port mirroring is for monitoring purposes.",
       "examTip": "**LACP = Redundancy + Bandwidth.** Use LACP for vendor-agnostic link aggregation."
     },
     {
@@ -333,10 +333,10 @@ db.tests.insertOne({
       "id": 26,
       "question": "Which protocol would be BEST for securely synchronizing time across devices in a highly secure enterprise environment?",
       "options": [
-        "NTP with NTS (Network Time Security)",
+        "NTP with NTS ",
         "SNMPv3",
         "RADIUS",
-        "PTP (Precision Time Protocol)"
+        "PTP "
       ],
       "correctAnswerIndex": 0,
       "explanation": "NTP with NTS ensures secure time synchronization by protecting against time-based attacks. SNMPv3 secures device management. RADIUS handles authentication. PTP is highly precise but typically used in specialized environments like financial trading, not general enterprise synchronization.",
@@ -346,13 +346,13 @@ db.tests.insertOne({
       "id": 27,
       "question": "A network engineer needs to prevent broadcast storms in a Layer 2 network with redundant links. Which protocol should be implemented?",
       "options": [
-        "Rapid Spanning Tree Protocol (RSTP)",
+        "Rapid Spanning Tree Protocol ",
         "LACP",
         "OSPF",
         "VTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RSTP (802.1w) quickly resolves topology changes and prevents broadcast storms caused by Layer 2 loops. LACP aggregates links. OSPF operates at Layer 3. VTP manages VLAN configurations but doesn’t prevent loops.",
+      "explanation": "RSTP  quickly resolves topology changes and prevents broadcast storms caused by Layer 2 loops. LACP aggregates links. OSPF operates at Layer 3. VTP manages VLAN configurations but doesn’t prevent loops.",
       "examTip": "**RSTP = Fast loop prevention.** Reduces downtime during topology changes compared to standard STP."
     },
     {
@@ -365,7 +365,7 @@ db.tests.insertOne({
         "RADIUS"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "LDAPS (LDAP over SSL) uses port 636 to secure directory service communications. LDAP on port 389 is unencrypted. HTTPS secures web traffic on port 443. RADIUS handles authentication, typically on ports 1812 and 1813.",
+      "explanation": "LDAPS -1 LDAP over SSL uses port 636 to secure directory service communications. LDAP on port 389 is unencrypted. HTTPS secures web traffic on port 443. RADIUS handles authentication, typically on ports 1812 and 1813.",
       "examTip": "**LDAPS = Secure directory access.** Always prefer LDAPS over LDAP for secure identity management."
     },
     {
@@ -469,7 +469,7 @@ db.tests.insertOne({
         "RIP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BGP (Border Gateway Protocol) uses TCP port 179, ensuring reliable delivery of routing information across the internet. OSPF uses IP directly (protocol 89). EIGRP uses reliable transport but not TCP. RIP uses UDP port 520 and is less scalable.",
+      "explanation": "BGP  uses TCP port 179, ensuring reliable delivery of routing information across the internet. OSPF uses IP directly (protocol 89). EIGRP uses reliable transport but not TCP. RIP uses UDP port 520 and is less scalable.",
       "examTip": "**BGP = TCP-based internet routing.** Guarantees reliability in inter-domain route exchanges."
     },
     {
@@ -659,9 +659,9 @@ db.tests.insertOne({
       "question": "Which security concept ensures that users can only access the minimum resources necessary to perform their job functions?",
       "options": [
         "Principle of least privilege",
-        "Role-based access control (RBAC)",
+        "Role-based access control ",
         "Separation of duties",
-        "Single sign-on (SSO)"
+        "Single sign-on "
       ],
       "correctAnswerIndex": 0,
       "explanation": "The principle of least privilege restricts users to only necessary resources. RBAC assigns permissions based on roles. Separation of duties prevents fraud by dividing responsibilities. SSO allows access to multiple systems with one login but doesn’t limit permissions.",
@@ -697,7 +697,7 @@ db.tests.insertOne({
       "id": 54,
       "question": "Which technology allows wireless clients to roam seamlessly between access points without losing connection?",
       "options": [
-        "Fast BSS Transition (802.11r)",
+        "Fast BSS Transition ",
         "Band steering",
         "MU-MIMO",
         "Beamforming"
@@ -710,7 +710,7 @@ db.tests.insertOne({
       "id": 55,
       "question": "Which network tool helps detect physical layer issues such as cable breaks and attenuation in fiber optic cables?",
       "options": [
-        "OTDR (Optical Time Domain Reflectometer)",
+        "OTDR ",
         "Toner probe",
         "Cable certifier",
         "Light meter"
@@ -762,7 +762,7 @@ db.tests.insertOne({
       "id": 59,
       "question": "Which component of a secure network architecture ensures that sensitive devices are separated from other parts of the network, typically using firewall rules?",
       "options": [
-        "DMZ (Demilitarized Zone)",
+        "DMZ ",
         "VLAN",
         "Subinterface",
         "Proxy server"
@@ -788,9 +788,9 @@ db.tests.insertOne({
       "id": 61,
       "question": "A network engineer needs to prevent ARP spoofing attacks on a Layer 2 network. Which solution BEST mitigates this risk?",
       "options": [
-        "Dynamic ARP inspection (DAI)",
+        "Dynamic ARP inspection ",
         "Port security with MAC filtering",
-        "Spanning Tree Protocol (STP)",
+        "Spanning Tree Protocol ",
         "VLAN segmentation"
       ],
       "correctAnswerIndex": 0,
@@ -842,7 +842,7 @@ db.tests.insertOne({
       "options": [
         "AS path prepending",
         "Local preference",
-        "MED (Multi-Exit Discriminator)",
+        "MED ",
         "Next-hop"
       ],
       "correctAnswerIndex": 0,
@@ -879,7 +879,7 @@ db.tests.insertOne({
       "id": 68,
       "question": "Which type of firewall inspects traffic at multiple layers of the OSI model and can detect application-specific threats?",
       "options": [
-        "Next-generation firewall (NGFW)",
+        "Next-generation firewall ",
         "Packet-filtering firewall",
         "Stateful inspection firewall",
         "Proxy firewall"
@@ -905,7 +905,7 @@ db.tests.insertOne({
       "id": 70,
       "question": "Which wireless feature allows a device to switch seamlessly between access points without interrupting connectivity, especially important for VoIP applications?",
       "options": [
-        "802.11r (Fast BSS Transition)",
+        "802.11r ",
         "Band steering",
         "Beamforming",
         "MU-MIMO"
@@ -970,7 +970,7 @@ db.tests.insertOne({
       "id": 75,
       "question": "A network engineer needs to ensure real-time network monitoring and alerting based on defined thresholds. Which solution would BEST fulfill this requirement?",
       "options": [
-        "SIEM (Security Information and Event Management)",
+        "SIEM ",
         "Syslog server",
         "NetFlow analyzer",
         "Packet sniffer"
@@ -983,7 +983,7 @@ db.tests.insertOne({
       "id": 76,
       "question": "Which wireless standard operates in the 6GHz frequency band and supports high throughput with low latency, enhancing dense network environments?",
       "options": [
-        "802.11ax (Wi-Fi 6E)",
+        "802.11ax ",
         "802.11ac",
         "802.11n",
         "802.11g"
@@ -1035,7 +1035,7 @@ db.tests.insertOne({
       "id": 80,
       "question": "Which type of IPv6 address is similar to IPv4 private addresses and is used for internal communication within an organization?",
       "options": [
-        "Unique local address (ULA)",
+        "Unique local address ",
         "Global unicast address",
         "Link-local address",
         "Multicast address"
@@ -1087,10 +1087,10 @@ db.tests.insertOne({
       "id": 84,
       "question": "Which security solution detects unauthorized attempts to access network resources by analyzing traffic patterns and signatures but does NOT actively block the traffic?",
       "options": [
-        "IDS (Intrusion Detection System)",
-        "IPS (Intrusion Prevention System)",
+        "IDS ",
+        "IPS ",
         "Firewall",
-        "UTM (Unified Threat Management)"
+        "UTM "
       ],
       "correctAnswerIndex": 0,
       "explanation": "An IDS monitors and alerts on malicious traffic but does not block it. IPS can detect and block malicious traffic. Firewalls control traffic based on defined rules. UTM appliances combine multiple security functions, including firewall, IPS, and antivirus.",
@@ -1243,7 +1243,7 @@ db.tests.insertOne({
       "id": 96,
       "question": "Which protocol ensures time synchronization across network devices with high accuracy, often used in financial trading systems and telecommunications?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP ",
         "NTP",
         "SNMP",
         "Syslog"
@@ -1269,7 +1269,7 @@ db.tests.insertOne({
       "id": 98,
       "question": "Which component is typically located at the network edge, providing routing, NAT, and firewall services for an enterprise network?",
       "options": [
-        "Unified Threat Management (UTM) appliance",
+        "Unified Threat Management  appliance",
         "Core switch",
         "Access point",
         "Repeater"
