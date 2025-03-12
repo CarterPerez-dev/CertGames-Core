@@ -1,5 +1,3 @@
-2,23
-
 db.tests.insertOne({
   "category": "awscloud",
   "testId": 7,
@@ -21,17 +19,16 @@ db.tests.insertOne({
     },
     {
       "id": 2,
-      "question": "A global company has large datasets stored in Amazon S3 buckets in the US East (N. Virginia) region. Their users in Asia Pacific experience high latency when accessing these objects. Which TWO solutions would most effectively address this latency issue without requiring code changes to the application? (Select TWO.)",
+      "question": "Which AWS service helps decouple the components of a microservices-based application by providing a fully managed message queue?",
       "options": [
-        "Enable S3 Transfer Acceleration for the buckets",
-        "Configure S3 Cross-Region Replication to Asia Pacific regions",
-        "Create a CloudFront distribution with the S3 bucket as the origin",
-        "Migrate the S3 buckets to use S3 Intelligent-Tiering",
-        "Implement Amazon S3 Multi-Region Access Points"
+        "Amazon S3",
+        "Amazon SNS",
+        "Amazon SQS",
+        "Amazon MQ"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "S3 Cross-Region Replication to Asia Pacific regions would be effective because it creates and maintains copies of the objects in S3 buckets located in Asia Pacific regions, allowing users in these regions to access data locally with reduced latency. Creating a CloudFront distribution with the S3 bucket as the origin would be effective because CloudFront caches content at edge locations worldwide, including throughout Asia Pacific, reducing latency by serving requests from the edge location nearest to the user. S3 Transfer Acceleration improves upload speeds to S3 buckets but doesn't help with download/access latency for existing objects. S3 Intelligent-Tiering automatically moves objects between access tiers based on usage patterns but doesn't address geographic latency issues. Amazon S3 Multi-Region Access Points simplify using S3 buckets in multiple regions but requires application code changes to utilize the new access point endpoints.",
-      "examTip": "When addressing global latency issues with S3, consider two primary approaches: replicating the data closer to users (Cross-Region Replication) or caching content at edge locations (CloudFront). Both solutions can be implemented without changing application code and provide complementary benefits—replication works best for dynamic content that changes frequently, while CloudFront excels with static content that can be cached."
+      "correctAnswerIndex": 2,
+      "explanation": "Amazon Simple Queue Service (SQS) is a fully managed message queue that enables microservices or distributed systems to communicate asynchronously. Amazon SNS is a pub/sub service better suited for broad fan-out messaging. Amazon MQ is a managed message broker that supports protocols like AMQP and MQTT, but SQS is the simpler choice for many cloud-native microservices. Amazon S3 is object storage, not a messaging service.",
+      "examTip": "Use SQS to decouple services and build highly scalable, fault-tolerant systems. SNS is for a publish/subscribe pattern, and MQ handles standard messaging protocols for legacy or hybrid environments."
     },
     {
       "id": 3,
@@ -295,17 +292,16 @@ db.tests.insertOne({
     },
     {
       "id": 23,
-      "question": "A company is using Amazon S3 to store critical data. They need to ensure that their data is protected against accidental deletion and can be recovered from unintended user actions. Which S3 features should they implement? (Select TWO.)",
+      "question": "A company wants to proactively track and alert on its AWS spending so it can avoid unexpected billing surprises. Which service allows them to set custom spend thresholds and receive notifications when these thresholds are exceeded?",
       "options": [
-        "S3 Versioning",
-        "S3 Cross-Region Replication",
-        "S3 Access Points",
-        "S3 MFA Delete",
-        "S3 Intelligent-Tiering"
+        "AWS Cost Explorer",
+        "AWS Budgets",
+        "Amazon QuickSight",
+        "AWS Trusted Advisor"
       ],
-      "correctAnswerIndex": -1,
-      "explanation": "S3 Versioning should be implemented because it keeps multiple variants of an object in the same bucket, allowing you to preserve, retrieve, and restore any version of any object. If data is accidentally deleted or overwritten, previous versions remain accessible, enabling recovery from unintended user actions. S3 MFA Delete should be implemented because it requires additional authentication using a multi-factor authentication device before permanently deleting an object version or suspending versioning on a bucket. This adds an extra layer of security against accidental or malicious deletion by requiring physical possession of an MFA device. S3 Cross-Region Replication creates copies of objects in buckets in different AWS regions, which protects against regional failures but doesn't specifically address accidental deletion or recovery from unintended actions. S3 Access Points simplify managing access to shared datasets in S3 but don't provide protection against deletion. S3 Intelligent-Tiering automatically moves objects between access tiers based on changing access patterns to optimize costs but doesn't address data protection or recovery.",
-      "examTip": "For protecting S3 data against accidental deletion or modification, implement both preventative and recovery controls. Versioning provides the recovery mechanism by maintaining previous object versions, while MFA Delete adds a preventative control by requiring additional authentication for destructive operations. This combination creates a robust defense against both accidental and intentional destructive actions."
+      "correctAnswerIndex": 1,
+      "explanation": "AWS Budgets enables you to set custom budgets for costs and usage. It provides alerts when you exceed—or are forecasted to exceed—those thresholds. AWS Cost Explorer is primarily for analyzing and visualizing historical costs and usage trends, but it doesn’t generate proactive alerts. Amazon QuickSight is for business intelligence dashboards, and AWS Trusted Advisor offers best-practice recommendations but doesn't provide custom spending alerts.",
+      "examTip": "Use AWS Budgets for proactive cost control. It complements Cost Explorer, which is more focused on visualizing and analyzing historical data."
     },
     {
       "id": 24,
