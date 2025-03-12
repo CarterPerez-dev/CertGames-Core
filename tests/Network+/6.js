@@ -8,7 +8,7 @@ db.tests.insertOne({
       "id": 1,
       "question": "A network engineer needs to configure inter-VLAN routing on a multi-layer switch. The VLANs have been created, and ports have been assigned. What is the FIRST configuration step to enable communication between the VLANs?",
       "options": [
-        "Create Switch Virtual Interfaces (SVIs) for each VLAN.",
+        "Create Switch Virtual Interfaces for each VLAN.",
         "Enable trunking on the uplink ports.",
         "Configure a static route between VLANs.",
         "Assign IP addresses to access ports."
