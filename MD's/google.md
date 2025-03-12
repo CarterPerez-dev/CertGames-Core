@@ -2,6 +2,126 @@ So i have oauth for google, and in order ot actually haev users use it aside fro
 
 
 
+here-
+Skip to main content
+Google Cloud Platform Console
+Verification requirements
+This is NOT a policy document. The Google’s API Terms of Service and Google API Services User Data Policygoverns the use of all Google API Services when you, the developer, request access to user data. For product specific API policies please refer to the respective product's policy document.
+The intent of this document is to serve as a guide to navigate Google's OAuth App verification process.
+Before you start…
+Please note that certain app scenarios are exempt from these verification requirements. Review the "When is verification not needed" section to learn more.
+
+Also, ensure that your project contact information is set up correctly for your project as we will use this to contact you about app verification requirements.  
+
+Brand verification requirements
+All apps that access Google APIs must verify that they accurately represent their identity and intent as specified by Google’s API Terms of Service, API Services User Data Policy, and product-specific Google Developer Policy. We call this step “brand verification,” which includes the following requirements:
+
+1. Homepage Requirements
+Your app homepage must meet the following requirements:
+
+The homepage must be hosted on a verified domain you own
+The homepage must accurately represent and identify your app or brand
+The homepage must describe your app’s functionality to its users. Your homepage can not be only a login page
+You must add the link of your privacy policy to your homepage and this link should match the link you added on your OAuth consent screen configuration
+2. Privacy Policy
+Your Privacy Policy and in-product privacy notifications must meet the following requirements:
+
+The Privacy Policy should be hosted within the domain that hosts your homepage
+The Privacy Policy should be linked on your homepage so that users can find this information easily
+The Privacy Policy must be linked from the OAuth consent screen on the Google API Console
+The Privacy Policy linked on your homepage and the one linked on the app’s OAuth consent screen should be same
+The Privacy Policy, together with your product-specific privacy disclosures, must disclose how your app accesses, uses, stores, and/or shares Google user data.
+Your use of Google user data must be limited to the practices disclosed in your published Privacy Policy and should conform with Google’s Limited use requirements
+In-product privacy notifications must be prominently displayed in your app interface so that users can find this information easily.
+Your Privacy Policy and in-product privacy notification must be kept up to date about how your app uses Google user data.
+3. Verify Domain Ownership
+You must verify that you own all domains listed in your Authorized domains section of the OAuth consent screen editor. 
+An account listed as a project owner or editor on your GCP account must verify ownership of the authorized domain using Google Search Console. For more information about domain verifications in Google Search Console, see Verify your site ownership.
+4. Google Branding
+Buttons or links that initiate an action on a Google product must follow the Google branding guidelines.
+For example, the clickable button in your app that initiates the user action to grant (authorize) access to their data should satisfy this requirement.
+Some products have specific branding guidelines. Your app must comply with the branding guidelines of the Google product API being requested.
+Helpful Tip: Sign-in branding guidelines are recommended for apps requesting only “profile or email” scopes.
+6. Up-to-date Project Contact Information
+Google teams use the contact listed on the Project Cloud Console to communicate any new requirements or updates regarding your app.
+You must maintain up-to-date contact information to keep you and your team members aware of any changes.
+Learn more about Project Contacts.
+How to manage Project Ownership.
+Caution: Failure to act on timely notifications about your project could result in the loss of access to Google APIs.
+Sensitive and Restricted Scope Requirements
+Apps requesting access to sensitive or restricted scopes must complete the following requirements in addition to Brand Verification Requirements:
+
+1. Scopes access is only permitted for limited app types
+Apps can request access to sensitive or restricted scopes data only for appropriate use cases
+
+During an app’s review process the functionality of an app is reviewed to determine if it can be considered an appropriate use case
+
+Here are few examples, to help understand what an appropriate use case may constitute:
+
+Gmail
+Google Drive
+Google Fit
+Google Photos
+Approved app types often use APIs for “productivity” purposes. Productivity purposes include a) purposes adding new user facing features extending beyond the core functionality of the product or service, b) purposes contributing to an identifiable user benefit, and/or c) purposes increasing the efficiency of a product or service feature or user action.
+
+2. App functionality demonstration video
+We need to gain a good understanding of your app’s functionality and your compliance with the Google API Services User Data Policy and, if applicable, the product-specific policy on the Google Developer Page. In order to do this, we ask you to provide a link to a demonstration video of your app when submitting your app for verification. The video must meet the following requirements:
+
+Must show the end-to-end flow of your app including the OAuth grant process
+Must show the same application you have submitted for verification (including app name, branding)
+Show the complete OAuth Consent Screen. The consent screen must also show the same exact scopes you are requesting (or you have already been verified for) when you submit your app for re-verification. Please ensure the language setting on the bottom-left corner of the consent screen is toggled to “English”. 
+Note: OAuth 2.0 Policies and Transparent and Accurate Notice and Control Clauses require affirmative consent and user consent. This means that your demonstration video must meet the requirement outlined here, additionally if your application transfers data for AI model training, under the approved use cases described above, your demonstration video must show the flow of the user explicitly consenting to their data used for personalized AI model training.
+Must demonstrate the app functionalities that utilize the requested OAuth scopes
+3. Data obtained through the API is subject to limited uses
+The raw data obtained through Google APIs, along with any data aggregated, anonymized, or derived from the raw data must be handled in accordance with the following requirements:
+Data must only be used to provide or improve user-facing features that are prominent in the requesting app's user interface;
+Transfers of data are not allowed, except:
+To provide or improve your appropriate access or user-facing features that are visible and prominent in the requesting app's user interface and only with the user's consent;
+For security purposes (for example, investigating abuse);
+To comply with applicable laws; or,
+As part of a merger, acquisition, or sale of assets of the developer after obtaining explicit prior consent from the user.
+Humans are not allowed to read the data, unless:
+You first obtained the user's affirmative agreement to view specific messages, files, or other data, with the limited exception of use cases approved by Google under additional terms applicable to the Nest Device Access program
+It is necessary for security purposes (for example, investigating a bug or abuse);
+It is necessary to comply with applicable law; or
+The data (including derivations) is aggregated and used for internal operations in accordance with applicable privacy and other jurisdictional legal requirements.
+All other transfers, uses, or sales of user data are prohibited, including:
+Transferring or selling user data to third parties like advertising platforms, data brokers, or any information resellers.
+Transferring, selling, or using user data for serving ads, including retargeting, personalized or interest-based advertising.
+Transferring, selling, or using user data to determine credit-worthiness or for lending purposes.
+Your employees, agents, contractors, and successors must comply with Google API Services User Data Policy.
+
+4. Request narrowest scopes
+All access to Google APIs must adhere to the principle of minimum required scopes, which requires:
+Do not request access to data you do not need
+Do not request access to data based on “future enhancements” that has not been implemented yet in your app
+You must only request the narrowest scope(s) your app needs to function
+You must provide a detailed justification for your requested scope(s) which should include 
+An explanation why narrower scopes would not work, including specifics on what functionality would not work as intended.
+We will assess your justification and seek additional clarification as required. If the requested scope(s) goes beyond the usage needed, you will be directed to request a narrower scope to proceed with verification. 
+If your justification is deemed insufficient, your app verification request may be rejected.
+
+Example of an acceptable justification: My app will use https://www.googleapis.com/auth/calendar to show a user's Google calendar data on the scheduling screen of my app, so that users can manage their schedules through my app and sync the changes with their Google calendar.
+
+5. Security Assessment ( For restricted scopes only)
+Apps requesting access to restricted scopes must meet the additional requirement of secure data handling by submitting to an annual security assessment from a Google empanelled group of security assessors. See the security assessment section to learn more.
+
+Give feedback about this article
+Was this helpful?YesNo
+Support
+OAuth App Verification Help Center
+Submitting your app for verification
+Verification requirements
+When is verification not needed
+Security Assessment
+Annual Recertification
+Changes to approved app
+Restricted Scopes
+Frequently Asked Questions
+Quick Reference Guides
+©2025 Google  Privacy Policy  Terms of Service
+Language
+
 
 
 
