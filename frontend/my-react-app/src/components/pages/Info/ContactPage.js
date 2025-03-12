@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
+import SEOHelmet from '../../SEOHelmet';
 import './ContactPage.css';
 
 const ContactPage = () => {
