@@ -203,3 +203,5 @@ Nothing else.
             def err_gen():
                 yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
             return err_gen()
+                yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
+            return err_gen()
