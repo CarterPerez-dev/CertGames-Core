@@ -312,7 +312,7 @@ const DailyStationPage = () => {
                 <div className="daily-station-bonus-info">
                   <div className="daily-station-bonus-value">
                     <FaCoins className="daily-station-bonus-coin-icon" />
-                    <span>1000</span>
+                    <span>250</span>
                   </div>
                   <p>Claim your free coins every 24 hours!</p>
                 </div>
@@ -478,7 +478,7 @@ const DailyStationPage = () => {
             <FaCoins className="daily-station-bonus-icon" />
             <div className="daily-station-bonus-text">
               <h3>Daily Bonus Claimed!</h3>
-              <p>+1000 coins added to your account</p>
+              <p>+250 coins added to your account</p>
             </div>
           </div>
         </div>
