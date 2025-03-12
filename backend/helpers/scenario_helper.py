@@ -15,16 +15,16 @@ def generate_scenario(industry, attack_type, skill_level, threat_intensity):
             f"The attack is of type {attack_type}, performed by someone with a skill level of {skill_level}, "
             f"and the threat intensity is rated as {threat_intensity} on a scale from 1-100. "
             "Provide enough details and a thorough story/scenario to explain the context/story as well as thoroughly "
-            "explain the attack in a technical way and how it works in 3 paragraphs with a minimum of 7 sentences each. "
-            "Then output actors in another paragraph (at least 5 sentences), then potential risks in another paragraph (at least 5 sentences), "
-            "then mitigation steps in another paragraph (at least 5 sentences). Use paragraph breaks (new lines '\\n') between each section, "
+            "explain the attack in a technical way and how it works in 3 paragraphs with a minimum of 5 sentences each. "
+            "Then output actors in another paragraph (at least 3 sentences), then potential risks in another paragraph (at least 5 sentences), "
+            "then mitigation steps in another paragraph (at least 3 sentences). Use paragraph breaks (new lines '\\n') between each section, "
             "so it is easy to read. Each section should be easy to understand but also in depth, technical, and educational."
         )
 
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o",
-            max_tokens=1200,
+            max_tokens=1000,
             temperature=0.6,
             stream=True
         )
@@ -138,7 +138,7 @@ Below is a detailed cyberattack scenario:
 {scenario_text}
 
 Your task:
-1) Generate exactly THREE advanced, non-trivial multiple-choice questions based on the scenario, requiring critical thinking or specialized cybersecurity knowledge beyond merely re-reading the text.
+1) Generate exactly THREE advanced, non-trivial multiple-choice questions based on the scenario, requiring critical thinking and highly plasuible ditstractors to prvent process of eliminination, or specialized cybersecurity knowledge beyond merely re-reading the text.
 2) Each question must have four options labeled 'A', 'B', 'C', and 'D' (no extra letters or symbols).
 3) Indicate the correct answer with a key 'correct_answer' whose value is a single letter (e.g., 'B').
 4) Provide a concise 'explanation' focusing on why the correct answer is correct (and relevant to the scenario or cybersecurity concepts).
@@ -171,7 +171,7 @@ Nothing else.
                 {"role": "user", "content": user_prompt},
             ],
             model="gpt-4o",
-            max_tokens=1200,
+            max_tokens=1000,
             temperature=0.3,
             stream=True
         )
