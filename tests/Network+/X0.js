@@ -1,4 +1,9 @@
-  [
+db.tests.insertOne({
+  "category": "nplus",
+  "testId": 10,
+  "testName": "CompTIA Network+ (N10-009) Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "A network administrator is configuring a new subnet with 120 hosts. After calculating subnet requirements, they choose to implement a /25 network. Later, a senior engineer points out this is insufficient. What is the correct subnet mask that would accommodate the required hosts while minimizing wasted addresses?",
