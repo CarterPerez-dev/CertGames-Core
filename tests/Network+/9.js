@@ -8,7 +8,7 @@ db.tests.insertOne({
       "id": 1,
       "question": "A multinational corporation must guarantee minimal latency and maximum redundancy for globally distributed applications. The solution must dynamically redirect users to the closest healthy instance during a regional outage. Which solution BEST meets these requirements?",
       "options": [
-        "Global Server Load Balancing (GSLB) with Geo-DNS",
+        "Global Server Load Balancing  with Geo-DNS",
         "Anycast routing with BGP",
         "Multi-region active-active cloud deployment",
         "SD-WAN with traffic steering policies"
@@ -22,7 +22,7 @@ db.tests.insertOne({
       "question": "A network engineer needs to ensure that IPv6-only hosts can access legacy IPv4-only resources without requiring dual-stack configurations. Which technology provides the MOST seamless solution?",
       "options": [
         "NAT64 with DNS64",
-        "6rd (IPv6 Rapid Deployment)",
+        "6rd ",
         "Dual stack deployment",
         "ISATAP"
       ],
@@ -34,9 +34,9 @@ db.tests.insertOne({
       "id": 3,
       "question": "An enterprise wants to prevent east-west traffic within its data center from spreading malware laterally. Which architecture enforces strict, micro-level segmentation for this purpose?",
       "options": [
-        "Zero Trust Architecture (ZTA)",
+        "Zero Trust Architecture ",
         "Spine and Leaf topology",
-        "SASE (Secure Access Service Edge)",
+        "SASE ",
         "SD-WAN"
       ],
       "correctAnswerIndex": 0,
@@ -73,7 +73,7 @@ db.tests.insertOne({
       "id": 6,
       "question": "Which security solution combines SD-WAN capabilities with cloud-native security services like CASB, SWG, and ZTNA to provide secure access regardless of user location?",
       "options": [
-        "SASE (Secure Access Service Edge)",
+        "SASE ",
         "SIEM",
         "IDS/IPS",
         "VPN concentrator"
@@ -112,9 +112,9 @@ db.tests.insertOne({
       "id": 9,
       "question": "Which infrastructure automation approach treats network configurations as source-controlled code, enabling version control, automated testing, and repeatable deployments?",
       "options": [
-        "Infrastructure as Code (IaC)",
+        "Infrastructure as Code ",
         "DevOps pipelines",
-        "Configuration management database (CMDB)",
+        "Configuration management database ",
         "Golden configuration baselines"
       ],
       "correctAnswerIndex": 0,
@@ -125,7 +125,7 @@ db.tests.insertOne({
       "id": 10,
       "question": "Which advanced time synchronization protocol provides sub-microsecond accuracy, making it suitable for financial trading platforms and high-speed networks?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP ",
         "NTP",
         "SNMP",
         "Syslog"
@@ -203,9 +203,9 @@ db.tests.insertOne({
       "id": 16,
       "question": "Which security service within a SASE framework prevents unauthorized cloud application usage by enforcing compliance and access policies?",
       "options": [
-        "CASB (Cloud Access Security Broker)",
-        "ZTNA (Zero Trust Network Access)",
-        "SWG (Secure Web Gateway)",
+        "CASB ",
+        "ZTNA ",
+        "SWG ",
         "IDS/IPS"
       ],
       "correctAnswerIndex": 0,
@@ -216,7 +216,7 @@ db.tests.insertOne({
       "id": 17,
       "question": "Which advanced routing protocol supports segment routing to simplify traffic engineering by eliminating complex MPLS control plane requirements?",
       "options": [
-        "SR-MPLS (Segment Routing over MPLS)",
+        "SR-MPLS ",
         "OSPF",
         "BGP",
         "EIGRP"
@@ -320,7 +320,7 @@ db.tests.insertOne({
       "id": 25,
       "question": "Which IPv6 mechanism provides IPv6 connectivity over an IPv4 infrastructure without requiring protocol translation or dual-stack configurations?",
       "options": [
-        "ISATAP (Intra-Site Automatic Tunnel Addressing Protocol)",
+        "ISATAP ",
         "NAT64",
         "Dual stack deployment",
         "6to4 tunneling"
@@ -398,7 +398,7 @@ db.tests.insertOne({
       "id": 31,
       "question": "Which technology within a SASE framework ensures secure, private access to applications based on user identity and context, eliminating the need for traditional VPNs?",
       "options": [
-        "ZTNA (Zero Trust Network Access)",
+        "ZTNA ",
         "CASB",
         "SWG",
         "IDS/IPS"
@@ -424,9 +424,9 @@ db.tests.insertOne({
       "id": 33,
       "question": "Which cloud security model ensures that cloud provider personnel cannot access customer data, providing encryption keys that remain solely under the customer’s control?",
       "options": [
-        "Customer-managed encryption keys (CMEK)",
+        "Customer-managed encryption keys ",
         "Provider-managed encryption keys",
-        "Public key infrastructure (PKI)",
+        "Public key infrastructure ",
         "TLS encryption"
       ],
       "correctAnswerIndex": 0,
@@ -476,7 +476,7 @@ db.tests.insertOne({
       "id": 37,
       "question": "Which type of IPv6 address starts with FC00::/7 and is used for private communications within an organization without global internet routability?",
       "options": [
-        "Unique Local Address (ULA)",
+        "Unique Local Address ",
         "Global Unicast Address",
         "Link-Local Address",
         "Anycast Address"
@@ -502,10 +502,10 @@ db.tests.insertOne({
       "id": 39,
       "question": "Which security framework requires all users, whether inside or outside the organization’s network, to be authenticated, authorized, and continuously validated before accessing applications and data?",
       "options": [
-        "Zero Trust Architecture (ZTA)",
+        "Zero Trust Architecture ",
         "Defense in Depth",
         "Perimeter-based security",
-        "NAC (Network Access Control)"
+        "NAC "
       ],
       "correctAnswerIndex": 0,
       "explanation": "ZTA mandates continuous user validation, assuming no implicit trust regardless of location. Defense in Depth layers multiple security measures but doesn’t enforce per-session validation. Perimeter-based security trusts internal users. NAC controls initial network access but doesn’t ensure ongoing validation.",
@@ -528,10 +528,10 @@ db.tests.insertOne({
       "id": 41,
       "question": "An organization is experiencing network congestion due to broadcast storms. Which protocol should be implemented to prevent these loops at Layer 2?",
       "options": [
-        "Spanning Tree Protocol (STP)",
-        "Link Aggregation Control Protocol (LACP)",
-        "Virtual Router Redundancy Protocol (VRRP)",
-        "Border Gateway Protocol (BGP)"
+        "Spanning Tree Protocol ",
+        "Link Aggregation Control Protocol ",
+        "Virtual Router Redundancy Protocol ",
+        "Border Gateway Protocol "
       ],
       "correctAnswerIndex": 0,
       "explanation": "STP prevents Layer 2 loops by disabling redundant paths, mitigating broadcast storms. LACP aggregates links but doesn’t prevent loops. VRRP provides router redundancy at Layer 3. BGP is a Layer 3 routing protocol and unrelated to Layer 2 loop prevention.",
@@ -554,7 +554,7 @@ db.tests.insertOne({
       "id": 43,
       "question": "Which cloud service model allows customers to deploy applications without managing the underlying infrastructure, focusing solely on application development and deployment?",
       "options": [
-        "PaaS (Platform as a Service)",
+        "PaaS ",
         "SaaS",
         "IaaS",
         "FaaS"
@@ -619,7 +619,7 @@ db.tests.insertOne({
       "id": 48,
       "question": "Which advanced network management solution uses automation and centralized policy management to dynamically adjust traffic flows based on real-time analytics in multi-cloud environments?",
       "options": [
-        "Software-Defined Networking (SDN)",
+        "Software-Defined Networking ",
         "Traditional MPLS",
         "Static routing",
         "Leased line connectivity"
@@ -671,7 +671,7 @@ db.tests.insertOne({
       "id": 52,
       "question": "Which security solution within a SASE framework provides protection by enforcing security policies between cloud service consumers and providers, preventing unauthorized application usage?",
       "options": [
-        "CASB (Cloud Access Security Broker)",
+        "CASB ",
         "SWG",
         "ZTNA",
         "IDS/IPS"
@@ -684,7 +684,7 @@ db.tests.insertOne({
       "id": 53,
       "question": "Which WAN optimization technique corrects packet loss by retransmitting only lost data rather than the entire stream, improving performance over unreliable connections?",
       "options": [
-        "Forward error correction (FEC)",
+        "Forward error correction ",
         "Compression",
         "Caching",
         "De-duplication"
@@ -749,7 +749,7 @@ db.tests.insertOne({
       "id": 58,
       "question": "Which cloud service model provides fully managed applications accessible via the internet, eliminating the need for local installations and infrastructure management?",
       "options": [
-        "SaaS (Software as a Service)",
+        "SaaS ",
         "PaaS",
         "IaaS",
         "FaaS"
@@ -814,7 +814,7 @@ db.tests.insertOne({
       "id": 63,
       "question": "Which BGP attribute should be adjusted to ensure that external peers prefer one route over another based on a lower metric value for inbound traffic?",
       "options": [
-        "Multi-Exit Discriminator (MED)",
+        "Multi-Exit Discriminator ",
         "Local preference",
         "AS path prepending",
         "Weight"
@@ -827,8 +827,8 @@ db.tests.insertOne({
       "id": 64,
       "question": "Which type of IPv6 address allows devices to communicate within the same local network segment without global routing?",
       "options": [
-        "Link-local address (FE80::/10)",
-        "Unique local address (FC00::/7)",
+        "Link-local address ",
+        "Unique local address ",
         "Global unicast address",
         "Anycast address"
       ],
@@ -840,9 +840,9 @@ db.tests.insertOne({
       "id": 65,
       "question": "An organization wants to ensure that all DNS queries are encrypted to prevent eavesdropping and man-in-the-middle attacks. Which protocol should be implemented?",
       "options": [
-        "DNS over HTTPS (DoH)",
+        "DNS over HTTPS ",
         "DNSSEC",
-        "DNS over TLS (DoT)",
+        "DNS over TLS ",
         "LDAPS"
       ],
       "correctAnswerIndex": 0,
@@ -892,7 +892,7 @@ db.tests.insertOne({
       "id": 69,
       "question": "Which cloud service model allows developers to deploy code without managing the underlying infrastructure, charging only for actual code execution time?",
       "options": [
-        "FaaS (Function as a Service)",
+        "FaaS ",
         "PaaS",
         "SaaS",
         "IaaS"
@@ -905,7 +905,7 @@ db.tests.insertOne({
       "id": 70,
       "question": "Which protocol provides precise, sub-microsecond time synchronization essential for time-sensitive applications like financial trading?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP ",
         "NTP",
         "SNMP",
         "Syslog"
@@ -1022,7 +1022,7 @@ db.tests.insertOne({
       "id": 79,
       "question": "Which IPv6 address type (fc00::/7) provides internal-only communication without global internet routability?",
       "options": [
-        "Unique Local Address (ULA)",
+        "Unique Local Address ",
         "Link-local address",
         "Global unicast address",
         "Anycast address"
@@ -1035,9 +1035,9 @@ db.tests.insertOne({
       "id": 80,
       "question": "Which cloud security approach ensures customer data is protected by encryption keys that remain under the customer’s control, preventing provider access?",
       "options": [
-        "Customer-managed encryption keys (CMEK)",
+        "Customer-managed encryption keys ",
         "Provider-managed encryption keys",
-        "Public key infrastructure (PKI)",
+        "Public key infrastructure",
         "TLS encryption"
       ],
       "correctAnswerIndex": 0,
@@ -1051,7 +1051,7 @@ db.tests.insertOne({
         "MPLS with QoS policies",
         "SD-WAN with dynamic path selection",
         "IPSec VPN over broadband",
-        "Direct Internet Access (DIA)"
+        "Direct Internet Access"
       ],
       "correctAnswerIndex": 0,
       "explanation": "MPLS with QoS provides guaranteed low-latency performance essential for latency-sensitive applications like trading. SD-WAN offers flexibility but lacks absolute latency guarantees. IPSec VPN over broadband is cost-effective but prone to variable latency. DIA doesn’t ensure consistent performance.",
@@ -1126,10 +1126,10 @@ db.tests.insertOne({
       "id": 87,
       "question": "Which cloud security model ensures complete data control by allowing organizations to manage their own encryption keys, preventing cloud providers from accessing their data?",
       "options": [
-        "Customer-Managed Encryption Keys (CMEK)",
+        "Customer-Managed Encryption Keys",
         "Provider-Managed Encryption Keys",
         "TLS encryption",
-        "Public Key Infrastructure (PKI)"
+        "Public Key Infrastructure"
       ],
       "correctAnswerIndex": 0,
       "explanation": "CMEK gives organizations control over encryption keys, ensuring cloud providers cannot access data. Provider-managed keys ease management but cede control. TLS encrypts data in transit. PKI provides encryption but isn’t specific to cloud data control.",
@@ -1152,10 +1152,10 @@ db.tests.insertOne({
       "id": 89,
       "question": "Which wireless standard, operating in the 6GHz spectrum, provides high throughput with reduced interference, suitable for dense enterprise environments?",
       "options": [
-        "Wi-Fi 6E (802.11ax)",
-        "Wi-Fi 6 (802.11ax)",
-        "Wi-Fi 5 (802.11ac)",
-        "Wi-Fi 4 (802.11n)"
+        "Wi-Fi 6E",
+        "Wi-Fi 6",
+        "Wi-Fi 5",
+        "Wi-Fi 4"
       ],
       "correctAnswerIndex": 0,
       "explanation": "Wi-Fi 6E extends Wi-Fi 6 capabilities to the 6GHz band, offering reduced interference and higher throughput. Wi-Fi 6 operates on 2.4GHz and 5GHz. Wi-Fi 5 and Wi-Fi 4 are older standards with lower performance capabilities.",
@@ -1178,7 +1178,7 @@ db.tests.insertOne({
       "id": 91,
       "question": "Which protocol uses port 5060 for unencrypted signaling and port 5061 for encrypted signaling in VoIP communication?",
       "options": [
-        "SIP (Session Initiation Protocol)",
+        "SIP ",
         "RTP",
         "MGCP",
         "H.323"
@@ -1217,7 +1217,7 @@ db.tests.insertOne({
       "id": 94,
       "question": "Which time synchronization protocol offers sub-microsecond accuracy, crucial for time-sensitive industries like financial trading and telecommunications?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP ",
         "NTP",
         "SNMP",
         "Syslog"
@@ -1256,7 +1256,7 @@ db.tests.insertOne({
       "id": 97,
       "question": "Which protocol synchronizes clocks across network devices using port 123, ensuring consistent timestamps for logs and secure communications?",
       "options": [
-        "NTP (Network Time Protocol)",
+        "NTP",
         "SNMP",
         "HTTPS",
         "SSH"
@@ -1282,7 +1282,7 @@ db.tests.insertOne({
       "id": 99,
       "question": "Which wireless technology enables simultaneous communication between an access point and multiple client devices, improving throughput in dense environments?",
       "options": [
-        "MU-MIMO (Multi-User Multiple Input Multiple Output)",
+        "MU-MIMO",
         "Beamforming",
         "Band steering",
         "Roaming"
