@@ -2,5 +2,5 @@
 User-agent: *
 Disallow: /.env
 Disallow: /api/
-Disallow: /private/
-Disallow: /admin/
+
+
