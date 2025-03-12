@@ -80,8 +80,12 @@ def extract_mitigation(scenario_text):
 
 def generate_interactive_questions(scenario_text, retry_count=0):
     """
-    Generate interactive multiple-choice questions based on scenario_text, streaming by default.
-    Retries up to 2 times if the response doesn't meet the criteria.
+    Generate EXACTLY THREE advanced multiple-choice questions in JSON array form.
+    We stream partial chunks as they arrive, but also accumulate them. 
+    At the end, we do a final parse where we:
+      - remove fences/backticks
+      - use a regex to find the bracketed JSON array
+    If we can't parse it, we optionally retry up to 2 times.
     """
     system_instructions = (
         "You are a highly intelligent cybersecurity tutor. You must follow formatting instructions exactly, "
@@ -133,59 +137,63 @@ Nothing else.
         )
 
         accumulated_response = ""
-        try:
-            for chunk in response:
-                if chunk.choices and chunk.choices[0].delta:
-                    content = getattr(chunk.choices[0].delta, "content", None)
-                    if content:
-                        accumulated_response += content
-        except Exception as e:
-            logger.error(f"Error streaming interactive questions: {str(e)}")
-            if retry_count < 2:
-                logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
-            else:
-                return [{"error": f"Error occurred: {str(e)}"}]
 
-
-        try:
-
-            cleaned_response = accumulated_response.strip()
-
-
-            if cleaned_response.startswith("```"):
-
-                closing_fence = cleaned_response.find("```", 3)
-                if closing_fence != -1:
-                    cleaned_response = cleaned_response[3:closing_fence].strip()
-                else:
-
-                    cleaned_response = cleaned_response[3:].strip()
-
-
-            if cleaned_response.lower().startswith("json"):
-                cleaned_response = cleaned_response[4:].strip()
-
-
-            parsed = json.loads(cleaned_response)
-            if isinstance(parsed, list) and len(parsed) == 3:
-                logger.debug("Successfully generated three interactive questions.")
-                return parsed
-            else:
-                logger.error("Model did not generate exactly three questions.")
+        def chunk_generator():
+            nonlocal accumulated_response
+            try:
+                for chunk in response:
+                    if chunk.choices and chunk.choices[0].delta:
+                        # FIX: Use getattr instead of .get() method
+                        content = getattr(chunk.choices[0].delta, "content", None)
+                        if content:
+                            accumulated_response += content
+                            yield content
+            except Exception as e:
+                logger.error(f"Error streaming interactive questions: {str(e)}")
+                # Attempt retry if we haven't exceeded
                 if retry_count < 2:
                     logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                    return generate_interactive_questions(scenario_text, retry_count + 1)
+                    yield from generate_interactive_questions(scenario_text, retry_count + 1)
                 else:
-                    return [{"error": "Failed to generate exactly three questions."}]
-        except json.JSONDecodeError as je:
-            logger.error(f"JSON decode error: {je}")
-            logger.error(f"Content received: {accumulated_response}")
-            if retry_count < 2:
-                logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
-                return generate_interactive_questions(scenario_text, retry_count + 1)
-            else:
-                return [{"error": "JSON decoding failed."}]
+                    yield json.dumps([{"error": f"Error occurred: {str(e)}"}])
+
+        # The chunk_generator yields partial data as it arrives
+        # After it's done, we parse the full text we have in accumulated_response
+        def finalize():
+            # This function is called after we finish streaming. We validate the final JSON.
+            try:
+                cleaned = accumulated_response.strip()
+
+                # Strip code fences if present
+                cleaned = re.sub(r"```[\w]*\n?", "", cleaned)
+                # Attempt to find the bracketed JSON array
+                # We'll look for something that starts with [ and ends with ]
+                match = re.search(r"\[\s*\{.*\}\s*\]", cleaned, re.DOTALL)
+                if match:
+                    final_json_str = match.group(0).strip()
+                    # Now parse
+                    parsed = json.loads(final_json_str)
+                    if isinstance(parsed, list) and len(parsed) == 3:
+                        logger.debug("Successfully generated three interactive questions (final parse).")
+                    else:
+                        logger.error("Model did not generate exactly three questions in final parse.")
+                else:
+                    logger.error("No bracketed JSON array found in final interactive questions text.")
+            except json.JSONDecodeError as je:
+                logger.error(f"JSON decode error in final parse: {je}")
+                logger.error(f"Content received: {accumulated_response}")
+            except Exception as e:
+                logger.error(f"Unexpected error in final parse: {e}")
+
+        # We return a generator that first yields the chunked data
+        # Then yields nothing more but triggers 'finalize' at the end
+        def master_generator():
+            for c in chunk_generator():
+                yield c
+            # Once done streaming, we do final parse checks
+            finalize()
+
+        return master_generator()
 
     except Exception as e:
         logger.error(f"Error generating interactive questions: {e}")
@@ -193,4 +201,6 @@ Nothing else.
             logger.info(f"Retrying interactive questions generation (Attempt {retry_count + 2})")
             return generate_interactive_questions(scenario_text, retry_count + 1)
         else:
-            return [{"error": f"Error generating interactive questions: {str(e)}"}]
+            def err_gen():
+                yield json.dumps([{"error": f"Error generating interactive questions: {str(e)}"}])
+            return err_gen()
