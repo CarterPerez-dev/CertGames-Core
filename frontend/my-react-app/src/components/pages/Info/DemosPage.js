@@ -4,13 +4,34 @@ import { Link } from 'react-router-dom';
 import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
-import './DemosPage.css';
 import SEOHelmet from '../../SEOHelmet';
+import StructuredData from '../../StructuredData';
+import './DemosPage.css';
 
 
 const DemosPage = () => {
   const [activeSection, setActiveSection] = useState('featured');
   const [activeDemo, setActiveDemo] = useState(null);
+
+  // Breadcrumb schema for SEO
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://certgames.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Demo Features",
+        "item": "https://certgames.com/demos"
+      }
+    ]
+  };
 
   // Demo data - this would be replaced with actual demo data
   const demoData = {
@@ -182,28 +203,29 @@ const DemosPage = () => {
         description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators and practice tests, and specialized learning tools."
         canonicalUrl="/demos"
       />
+      <StructuredData data={breadcrumbSchema} />
     <div className="demos-container">
       <InfoNavbar />
       
-      <div className="demos-content">
-        <div className="demos-header">
+      <main className="demos-content">
+        <header className="demos-header">
           <h1 className="demos-title">
-            <span className="demos-icon">🎬</span>
+            <span className="demos-icon" aria-hidden="true">🎬</span>
             Feature Demos
           </h1>
           <p className="demos-subtitle">Watch our interactive demos to see CertGames in action</p>
-        </div>
+        </header>
 
         {/* Demo Player Section */}
-        <div id="demo-player" className="demo-player-section">
+        <section id="demo-player" className="demo-player-section">
           {activeDemo && (
             <div className="demo-player-container">
               <div className="demo-video">
                 {/* This would be replaced with an actual video player component */}
                 <div className="demo-video-placeholder">
-                  <img src={activeDemo.thumbnail} alt={activeDemo.title} />
+                  <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
                   <div className="play-overlay">
-                    <FaPlay className="play-icon" />
+                    <FaPlay className="play-icon" aria-hidden="true" />
                     <span>Demo Video Placeholder</span>
                   </div>
                 </div>
@@ -219,83 +241,92 @@ const DemosPage = () => {
               </div>
             </div>
           )}
-        </div>
+        </section>
 
         {/* Demo Categories Navigation */}
-        <div className="demo-categories">
+        <nav className="demo-categories" aria-label="Demo categories">
           <button
             className={`category-button ${activeSection === 'featured' ? 'active' : ''}`}
             onClick={() => setActiveSection('featured')}
+            aria-pressed={activeSection === 'featured'}
           >
             Featured
           </button>
           <button
             className={`category-button ${activeSection === 'gamification' ? 'active' : ''}`}
             onClick={() => setActiveSection('gamification')}
+            aria-pressed={activeSection === 'gamification'}
           >
             Gamification
           </button>
           <button
             className={`category-button ${activeSection === 'learning' ? 'active' : ''}`}
             onClick={() => setActiveSection('learning')}
+            aria-pressed={activeSection === 'learning'}
           >
             Learning Tools
           </button>
           <button
             className={`category-button ${activeSection === 'daily' ? 'active' : ''}`}
             onClick={() => setActiveSection('daily')}
+            aria-pressed={activeSection === 'daily'}
           >
             Daily Features
           </button>
           <button
             className={`category-button ${activeSection === 'tests' ? 'active' : ''}`}
             onClick={() => setActiveSection('tests')}
+            aria-pressed={activeSection === 'tests'}
           >
             Test Experience
           </button>
           <button
             className={`category-button ${activeSection === 'support' ? 'active' : ''}`}
             onClick={() => setActiveSection('support')}
+            aria-pressed={activeSection === 'support'}
           >
             Support
           </button>
-        </div>
+        </nav>
 
         {/* Demo Thumbnails */}
-        <div className="demo-thumbnails">
+        <section className="demo-thumbnails">
           <div className="thumbnails-header">
             <h3>{activeSection.charAt(0).toUpperCase() + activeSection.slice(1)} Demos</h3>
-            <div className="thumbnails-navigation">
-              <button className="nav-button">
-                <FaChevronLeft />
+            <div className="thumbnails-navigation" aria-label="Thumbnail navigation">
+              <button className="nav-button" aria-label="Previous demos">
+                <FaChevronLeft aria-hidden="true" />
               </button>
-              <button className="nav-button">
-                <FaChevronRight />
+              <button className="nav-button" aria-label="Next demos">
+                <FaChevronRight aria-hidden="true" />
               </button>
             </div>
           </div>
           
-          <div className="thumbnails-grid">
+          <div className="thumbnails-grid" role="list">
             {getCurrentDemos().map((demo) => (
               <div 
                 key={demo.id} 
                 className={`thumbnail-item ${activeDemo && activeDemo.id === demo.id ? 'active' : ''}`}
                 onClick={() => handleDemoSelect(demo)}
+                role="listitem"
+                tabIndex="0"
+                aria-selected={activeDemo && activeDemo.id === demo.id}
               >
                 <div className="thumbnail-image">
-                  <img src={demo.thumbnail} alt={demo.title} />
+                  <img src={demo.thumbnail} alt={`Thumbnail for ${demo.title} demo`} />
                   <div className="thumbnail-overlay">
-                    <FaPlay className="thumbnail-play" />
+                    <FaPlay className="thumbnail-play" aria-hidden="true" />
                   </div>
                 </div>
                 <h4 className="thumbnail-title">{demo.title}</h4>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Register CTA Section */}
-        <div className="demos-cta-section">
+        <section className="demos-cta-section">
           <div className="demos-cta-content">
             <h2>Ready to experience all these features?</h2>
             <p>Create your free account today and start your cybersecurity journey with CertGames!</p>
@@ -303,11 +334,12 @@ const DemosPage = () => {
               Create Your Account
             </Link>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
 
       <Footer />
     </div>
+    </>
   );
 };
 
