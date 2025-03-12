@@ -170,7 +170,8 @@ const courseSchema = {
     "price": "9.99",
     "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
-    "url": "https://certgames.com/register"
+    "url": "https://certgames.com/register",
+    "category": "Education"  // Add this line
   },
   "hasCourseInstance": {
     "@type": "CourseInstance",
@@ -179,7 +180,6 @@ const courseSchema = {
     "startDate": "2023-01-01"
   }
 };
-
 // FAQ structured data
 const faqSchema = {
   "@context": "https://schema.org",
