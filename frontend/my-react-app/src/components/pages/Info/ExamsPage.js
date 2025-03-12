@@ -215,7 +215,42 @@ const ExamsPage = () => {
     }
   };
   
+
+  const examProductSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "CertGames Certification Exam Prep",
+    "description": "Practice tests for 13 cybersecurity certifications with over 13,000 questions",
+    "offers": {
+      "@type": "Offer",
+      "price": "14.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.8",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Security Professional"
+      }
+    }
+  };
+
+
   return (
+    <>
+      <SEOHelmet 
+        title="Certification Exam Practice Tests | CertGames"
+        description="Prepare for 13 top cybersecurity certifications including CompTIA, ISC2, and AWS with 13,000+ practice questions. Performance-based questions, exam simulations, and detailed explanations."
+        canonicalUrl="/exams"
+      />
+      <StructuredData data={examProductSchema} />
+          
     <div className="exams-container">
       <InfoNavbar />
       
