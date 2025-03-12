@@ -176,6 +176,12 @@ const DemosPage = () => {
   }, [activeSection]);
 
   return (
+    <>
+      <SEOHelmet 
+        title="Interactive Feature Demos | CertGames"
+        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators and practice tests, and specialized learning tools."
+        canonicalUrl="/demos"
+      />
     <div className="demos-container">
       <InfoNavbar />
       
