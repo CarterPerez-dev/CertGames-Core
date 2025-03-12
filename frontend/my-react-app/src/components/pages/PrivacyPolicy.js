@@ -5,7 +5,7 @@ import InfoNavbar from './Info/InfoNavbar';
 import Footer from '../Footer';
 import SEOHelmet from '../SEOHelmet';
 import StructuredData from '../StructuredData';
-import './PrivacyPolicy.css';
+import './LegalPages.css';
 
 const PrivacyPolicy = () => {
   // Breadcrumb schema for SEO
