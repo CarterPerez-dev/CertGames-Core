@@ -21,7 +21,7 @@ db.tests.insertOne({
       "id": 2,
       "question": "Which configuration allows dynamic load balancing between multiple default routes in an enterprise network using OSPF?",
       "options": [
-        "Equal-cost multi-path (ECMP) routing.",
+        "Equal-cost multi-path routing.",
         "Redistribution of static default routes.",
         "Increasing OSPF cost on backup links.",
         "Using BGP to manage external routes."
@@ -34,13 +34,13 @@ db.tests.insertOne({
       "id": 3,
       "question": "A cloud provider needs to ensure each customer's virtual network remains isolated while sharing the same physical infrastructure. Which technology BEST achieves this goal?",
       "options": [
-        "VXLAN (Virtual Extensible LAN).",
-        "VPN (Virtual Private Network).",
-        "GRE (Generic Routing Encapsulation).",
-        "VLAN (Virtual LAN)."
+        "VXLAN.",
+        "VPN.",
+        "GRE.",
+        "VLAN."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "VXLAN provides Layer 2 isolation across Layer 3 boundaries, allowing multiple tenants to share physical infrastructure securely. VPNs secure traffic but don’t provide Layer 2 isolation. GRE tunnels traffic without providing tenant isolation. VLANs provide segmentation but are limited in scalability compared to VXLAN.",
+      "explanation": "VXLAN (Virtual Extensible LAN) provides Layer 2 isolation across Layer 3 boundaries, allowing multiple tenants to share physical infrastructure securely. VPNs secure traffic but don’t provide Layer 2 isolation. GRE tunnels traffic without providing tenant isolation. VLANs provide segmentation but are limited in scalability compared to VXLAN.",
       "examTip": "**VXLAN = Multi-tenant isolation at scale.** Ideal for large cloud environments with overlapping networks."
     },
     {
@@ -99,13 +99,13 @@ db.tests.insertOne({
       "id": 8,
       "question": "Which cloud model provides access to virtualized computing resources such as servers and storage while allowing customers full control over the operating systems and applications?",
       "options": [
-        "IaaS (Infrastructure as a Service).",
-        "SaaS (Software as a Service).",
-        "PaaS (Platform as a Service).",
-        "FaaS (Function as a Service)."
+        "IaaS.",
+        "SaaS.",
+        "PaaS.",
+        "FaaS."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IaaS provides virtualized infrastructure, giving customers control over OS and applications. SaaS provides fully managed applications. PaaS offers a platform for development without OS control. FaaS allows code execution without server management.",
+      "explanation": "IaaS (Infrastructure as a Service) provides virtualized infrastructure, giving customers control over OS and applications. SaaS provides fully managed applications. PaaS offers a platform for development without OS control. FaaS allows code execution without server management.",
       "examTip": "**IaaS = Full infrastructure control.** Best for organizations needing granular management of systems."
     },
     {
@@ -125,10 +125,10 @@ db.tests.insertOne({
       "id": 10,
       "question": "A company plans to deploy a high-performance wireless network in a dense office environment. Which wireless standard provides the BEST performance with support for the 6GHz band?",
       "options": [
-        "802.11ax (Wi-Fi 6E).",
-        "802.11ac (Wi-Fi 5).",
-        "802.11n (Wi-Fi 4).",
-        "802.11g (Wi-Fi 3)."
+        "802.11ax.",
+        "802.11ac.",
+        "802.11n.",
+        "802.11g."
       ],
       "correctAnswerIndex": 0,
       "explanation": "802.11ax (Wi-Fi 6E) extends Wi-Fi 6 capabilities into the 6GHz band, offering less interference, higher throughput, and lower latency. 802.11ac uses 5GHz only. 802.11n and 802.11g are older and offer lower throughput.",
@@ -203,7 +203,7 @@ db.tests.insertOne({
       "id": 16,
       "question": "Which addressing scheme is used by IPv6 to send a packet to all nodes on a local network segment?",
       "options": [
-        "Multicast (FF02::1).",
+        "Multicast.",
         "Unicast.",
         "Anycast.",
         "Global unicast."
@@ -218,7 +218,7 @@ db.tests.insertOne({
       "options": [
         "AS path prepending.",
         "Local preference.",
-        "MED (Multi-Exit Discriminator).",
+        "MED.",
         "Next-hop."
       ],
       "correctAnswerIndex": 0,
@@ -320,7 +320,7 @@ db.tests.insertOne({
       "id": 25,
       "question": "Which BGP attribute is considered when an ISP wants to influence the route their customers take to reach a particular destination network?",
       "options": [
-        "MED (Multi-Exit Discriminator)",
+        "MED",
         "Local preference",
         "AS path",
         "Weight"
@@ -333,7 +333,7 @@ db.tests.insertOne({
       "id": 26,
       "question": "Which IPv6 address type is designed for private communication within a site and is not routable on the global internet?",
       "options": [
-        "Unique Local Address (ULA)",
+        "Unique Local Address",
         "Global Unicast Address",
         "Link-Local Address",
         "Multicast Address"
@@ -359,10 +359,10 @@ db.tests.insertOne({
       "id": 28,
       "question": "Which cloud service model provides developers with a platform including operating systems, development tools, and database management without managing the underlying infrastructure?",
       "options": [
-        "PaaS (Platform as a Service)",
-        "IaaS (Infrastructure as a Service)",
-        "SaaS (Software as a Service)",
-        "FaaS (Function as a Service)"
+        "PaaS",
+        "IaaS",
+        "SaaS",
+        "FaaS"
       ],
       "correctAnswerIndex": 0,
       "explanation": "PaaS provides a complete development platform without infrastructure management. IaaS offers infrastructure control. SaaS delivers software applications. FaaS enables execution of code functions without managing servers.",
@@ -424,7 +424,7 @@ db.tests.insertOne({
       "id": 33,
       "question": "Which protocol provides end-to-end secure communications for web applications using encryption, digital certificates, and secure handshakes?",
       "options": [
-        "TLS (Transport Layer Security)",
+        "TLS",
         "SSL",
         "IPSec",
         "SSH"
@@ -450,23 +450,23 @@ db.tests.insertOne({
       "id": 35,
       "question": "Which WAN technology provides predictable, private, and high-performance connectivity for enterprise applications without using the public internet?",
       "options": [
-        "MPLS (Multiprotocol Label Switching)",
+        "MPLS",
         "IPSec VPN",
         "Direct Internet Access",
         "SD-WAN"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MPLS offers private, predictable performance suitable for critical applications. IPSec VPNs operate over the public internet. Direct Internet Access lacks private routing. SD-WAN optimizes WAN usage but typically includes internet-based links.",
+      "explanation": "MPLS (Multiprotocol Label Switching) offers private, predictable performance suitable for critical applications. IPSec VPNs operate over the public internet. Direct Internet Access lacks private routing. SD-WAN optimizes WAN usage but typically includes internet-based links.",
       "examTip": "**MPLS = Consistent private WAN performance.** Ideal for latency-sensitive enterprise applications."
     },
     {
       "id": 36,
       "question": "Which layer of the OSI model is responsible for establishing, maintaining, and terminating communication sessions between applications?",
       "options": [
-        "Session layer (Layer 5)",
-        "Presentation layer (Layer 6)",
-        "Transport layer (Layer 4)",
-        "Application layer (Layer 7)"
+        "Session layer",
+        "Presentation layer",
+        "Transport layer",
+        "Application layer"
       ],
       "correctAnswerIndex": 0,
       "explanation": "The session layer manages communication sessions between applications. The presentation layer formats and encrypts data. The transport layer ensures reliable data delivery. The application layer interfaces with user applications.",
@@ -476,26 +476,26 @@ db.tests.insertOne({
       "id": 37,
       "question": "Which protocol allows secure, encrypted remote graphical access to desktop environments over a network?",
       "options": [
-        "RDP (Remote Desktop Protocol)",
+        "RDP",
         "VNC",
         "SSH",
         "Telnet"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RDP provides secure, encrypted graphical access, commonly used in Windows environments. VNC offers similar functionality but may lack encryption. SSH secures command-line access. Telnet is insecure and transmits data in plaintext.",
+      "explanation": "RDP (Remote Desktop Protocol) provides secure, encrypted graphical access, commonly used in Windows environments. VNC offers similar functionality but may lack encryption. SSH secures command-line access. Telnet is insecure and transmits data in plaintext.",
       "examTip": "**RDP = Secure remote GUI access.** Always secure RDP connections with strong credentials and network controls."
     },
     {
       "id": 38,
       "question": "Which security solution combines multiple functions such as firewall, antivirus, and content filtering into a single integrated platform?",
       "options": [
-        "UTM (Unified Threat Management)",
-        "IDS (Intrusion Detection System)",
-        "IPS (Intrusion Prevention System)",
-        "SIEM (Security Information and Event Management)"
+        "UTM",
+        "IDS",
+        "IPS",
+        "SIEM"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "UTM devices integrate multiple security functions into a single appliance. IDS detects threats but doesn’t prevent them. IPS prevents threats but doesn’t handle antivirus or content filtering. SIEM focuses on event correlation and logging.",
+      "explanation": "UTM (Unified Threat Management) devices integrate multiple security functions into a single appliance. IDS detects threats but doesn’t prevent them. IPS prevents threats but doesn’t handle antivirus or content filtering. SIEM focuses on event correlation and logging.",
       "examTip": "**UTM = All-in-one security solution.** Ideal for simplifying security management in small to mid-sized networks."
     },
     {
@@ -541,26 +541,26 @@ db.tests.insertOne({
       "id": 42,
       "question": "Which protocol enables dynamic distribution of VLAN information to switches in a Cisco environment, simplifying VLAN configuration?",
       "options": [
-        "VTP (VLAN Trunking Protocol)",
-        "STP (Spanning Tree Protocol)",
-        "LACP (Link Aggregation Control Protocol)",
-        "RSTP (Rapid Spanning Tree Protocol)"
+        "VTP",
+        "STP",
+        "LACP",
+        "RSTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "VTP distributes VLAN information to switches automatically in Cisco networks. STP and RSTP prevent switching loops but don’t distribute VLAN configurations. LACP aggregates multiple links but doesn’t handle VLANs.",
+      "explanation": "VTP (VLAN Trunking Protocol) distributes VLAN information to switches automatically in Cisco networks. STP and RSTP prevent switching loops but don’t distribute VLAN configurations. LACP aggregates multiple links but doesn’t handle VLANs.",
       "examTip": "**VTP = Simplified VLAN management.** Ensure proper VTP configuration to avoid unintended VLAN changes."
     },
     {
       "id": 43,
       "question": "Which tool allows network administrators to identify which devices are connected to which switch ports by querying network devices?",
       "options": [
-        "LLDP (Link Layer Discovery Protocol)",
+        "LLDP",
         "Nmap",
         "NetFlow analyzer",
         "Wireshark"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "LLDP provides device discovery by sharing information between connected Layer 2 devices. Nmap scans for open ports. NetFlow analyzes traffic patterns. Wireshark captures and analyzes packet data but doesn’t map switch port connections.",
+      "explanation": "LLDP (Link Layer Discovery Protocol) provides device discovery by sharing information between connected Layer 2 devices. Nmap scans for open ports. NetFlow analyzes traffic patterns. Wireshark captures and analyzes packet data but doesn’t map switch port connections.",
       "examTip": "**LLDP = Network topology mapping.** Use LLDP for multi-vendor environments to visualize Layer 2 connections."
     },
     {
@@ -606,39 +606,39 @@ db.tests.insertOne({
       "id": 47,
       "question": "Which routing protocol uses hop count as its primary metric and is considered outdated due to slow convergence and lack of scalability?",
       "options": [
-        "RIP (Routing Information Protocol)",
+        "RIP",
         "OSPF",
         "EIGRP",
         "BGP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RIP uses hop count as its primary metric, but it is limited to 15 hops and converges slowly. OSPF uses cost based on bandwidth. EIGRP uses multiple metrics like bandwidth and delay. BGP handles routing between autonomous systems and uses path vector metrics.",
+      "explanation": "RIP (Routing Information Protocol) uses hop count as its primary metric, but it is limited to 15 hops and converges slowly. OSPF uses cost based on bandwidth. EIGRP uses multiple metrics like bandwidth and delay. BGP handles routing between autonomous systems and uses path vector metrics.",
       "examTip": "**RIP = Legacy routing protocol.** Avoid using RIP for modern, large-scale networks due to performance limitations."
     },
     {
       "id": 48,
       "question": "Which tool helps detect physical cable faults, such as breaks or significant signal attenuation, by measuring the time for a signal reflection?",
       "options": [
-        "OTDR (Optical Time Domain Reflectometer)",
+        "OTDR",
         "Cable tester",
         "Toner probe",
         "Multimeter"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "OTDR tests fiber optic cables by sending pulses and measuring reflected signals to detect faults. Cable testers verify wiring correctness. Toner probes trace cables. Multimeters measure electrical properties but don’t detect signal attenuation in fiber.",
+      "explanation": "OTDR (Optical Time Domain Reflectometer) tests fiber optic cables by sending pulses and measuring reflected signals to detect faults. Cable testers verify wiring correctness. Toner probes trace cables. Multimeters measure electrical properties but don’t detect signal attenuation in fiber.",
       "examTip": "**OTDR = Fiber optic diagnostics.** Essential for pinpointing cable faults and performance issues in optical networks."
     },
     {
       "id": 49,
       "question": "A network administrator needs to prevent loops in a Layer 2 network with redundant links. Which protocol should be configured for faster convergence?",
       "options": [
-        "RSTP (Rapid Spanning Tree Protocol)",
-        "STP (Spanning Tree Protocol)",
+        "RSTP",
+        "STP",
         "LACP",
         "VTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "RSTP (802.1w) provides faster convergence compared to STP, reducing downtime during topology changes. LACP aggregates links but doesn’t prevent loops. VTP distributes VLAN configurations but isn’t related to loop prevention.",
+      "explanation": "RSTP (Rapid Spanning Tree Protocol) (802.1w) provides faster convergence compared to STP, reducing downtime during topology changes. LACP aggregates links but doesn’t prevent loops. VTP distributes VLAN configurations but isn’t related to loop prevention.",
       "examTip": "**RSTP = Quick loop prevention.** Use RSTP over STP for reduced convergence times in modern networks."
     },
     {
@@ -658,8 +658,8 @@ db.tests.insertOne({
       "id": 51,
       "question": "Which network protocol operates at the transport layer and provides connection-oriented services ensuring reliable data delivery?",
       "options": [
-        "TCP (Transmission Control Protocol)",
-        "UDP (User Datagram Protocol)",
+        "TCP",
+        "UDP",
         "ICMP",
         "GRE"
       ],
@@ -671,26 +671,26 @@ db.tests.insertOne({
       "id": 52,
       "question": "Which wireless technology provides simultaneous communication with multiple clients using spatial streams, improving throughput in dense environments?",
       "options": [
-        "MU-MIMO (Multi-User MIMO)",
+        "MU-MIMO",
         "Beamforming",
         "Band steering",
         "Roaming"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "MU-MIMO allows multiple devices to receive data simultaneously, increasing network efficiency in dense environments. Beamforming focuses signals toward devices. Band steering directs clients to optimal frequencies. Roaming enables seamless transitions between access points.",
+      "explanation": "MU-MIMO (Multi-User MIMO) allows multiple devices to receive data simultaneously, increasing network efficiency in dense environments. Beamforming focuses signals toward devices. Band steering directs clients to optimal frequencies. Roaming enables seamless transitions between access points.",
       "examTip": "**MU-MIMO = Efficient multi-user Wi-Fi.** Key for high-density networks with multiple concurrent users."
     },
     {
       "id": 53,
       "question": "Which protocol uses port 123 and synchronizes time across network devices, critical for log consistency and network security?",
       "options": [
-        "NTP (Network Time Protocol)",
+        "NTP",
         "SNMP",
         "SSH",
         "Telnet"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "NTP uses port 123 to synchronize time across devices, ensuring accurate log timestamps and time-sensitive operations. SNMP manages network devices. SSH secures command-line sessions. Telnet is insecure and transmits data in plaintext.",
+      "explanation": "NTP (Network Time Protocol) uses port 123 to synchronize time across devices, ensuring accurate log timestamps and time-sensitive operations. SNMP manages network devices. SSH secures command-line sessions. Telnet is insecure and transmits data in plaintext.",
       "examTip": "**Port 123 = NTP time sync.** Always configure NTP for consistent logs and accurate time across network systems."
     },
     {
@@ -723,7 +723,7 @@ db.tests.insertOne({
       "id": 56,
       "question": "Which IPv6 address type is automatically assigned and used for communication between nodes on the same link without requiring manual configuration?",
       "options": [
-        "Link-local address (FE80::/10)",
+        "Link-local address",
         "Global unicast address",
         "Unique local address",
         "Anycast address"
@@ -749,8 +749,8 @@ db.tests.insertOne({
       "id": 58,
       "question": "Which wireless standard, operating exclusively in the 5GHz band, supports high throughput and multi-user communication for modern enterprise networks?",
       "options": [
-        "802.11ac (Wi-Fi 5)",
-        "802.11n (Wi-Fi 4)",
+        "802.11ac",
+        "802.11n",
         "802.11g",
         "802.11b"
       ],
@@ -788,7 +788,7 @@ db.tests.insertOne({
       "id": 61,
       "question": "A network engineer needs to ensure that latency-sensitive applications like VoIP have guaranteed bandwidth during peak hours. Which solution BEST addresses this requirement?",
       "options": [
-        "Configure Quality of Service (QoS) with traffic prioritization.",
+        "Configure Quality of Service with traffic prioritization.",
         "Increase the available WAN bandwidth.",
         "Implement VLAN segmentation for VoIP traffic.",
         "Deploy additional switches to reduce congestion."
@@ -840,7 +840,7 @@ db.tests.insertOne({
       "id": 65,
       "question": "Which protocol dynamically resolves IP addresses to MAC addresses on a local network?",
       "options": [
-        "ARP (Address Resolution Protocol)",
+        "ARP",
         "DNS",
         "DHCP",
         "NTP"
@@ -866,26 +866,26 @@ db.tests.insertOne({
       "id": 67,
       "question": "Which IPv6 mechanism allows devices to automatically configure their own addresses using router advertisements without manual intervention?",
       "options": [
-        "SLAAC (Stateless Address Autoconfiguration)",
+        "SLAAC",
         "EUI-64",
         "DHCPv6",
         "NAT64"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SLAAC allows devices to auto-configure IPv6 addresses based on router advertisements. EUI-64 generates unique host identifiers. DHCPv6 provides centralized address management. NAT64 translates IPv6 to IPv4 addresses.",
+      "explanation": "SLAAC (Stateless Address Autoconfiguration) allows devices to auto-configure IPv6 addresses based on router advertisements. EUI-64 generates unique host identifiers. DHCPv6 provides centralized address management. NAT64 translates IPv6 to IPv4 addresses.",
       "examTip": "**SLAAC = Plug-and-play IPv6.** Simplifies IPv6 deployments with minimal configuration."
     },
     {
       "id": 68,
       "question": "Which protocol is used by email clients to retrieve messages from a mail server while leaving the original message on the server?",
       "options": [
-        "IMAP (Internet Message Access Protocol)",
+        "IMAP",
         "POP3",
         "SMTP",
         "FTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "IMAP retrieves emails while leaving them on the server for multi-device access. POP3 downloads and deletes emails by default. SMTP sends emails. FTP transfers files, unrelated to email retrieval.",
+      "explanation": "IMAP (Internet Message Access Protocol) retrieves emails while leaving them on the server for multi-device access. POP3 downloads and deletes emails by default. SMTP sends emails. FTP transfers files, unrelated to email retrieval.",
       "examTip": "**IMAP = Email sync across devices.** Best for multi-device email access needs."
     },
     {
@@ -918,13 +918,13 @@ db.tests.insertOne({
       "id": 71,
       "question": "Which high-availability solution provides both redundancy and load balancing among multiple routers, ensuring efficient resource usage and failover?",
       "options": [
-        "GLBP (Gateway Load Balancing Protocol)",
+        "GLBP",
         "HSRP",
         "VRRP",
         "CARP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "GLBP provides load balancing and redundancy among multiple routers. HSRP and VRRP provide redundancy but not load balancing. CARP is an open-source alternative similar to VRRP.",
+      "explanation": "GLBP (Gateway Load Balancing Protocol) provides load balancing and redundancy among multiple routers. HSRP and VRRP provide redundancy but not load balancing. CARP is an open-source alternative similar to VRRP.",
       "examTip": "**GLBP = Load balancing + Redundancy.** Ideal for multi-router environments needing efficient traffic distribution."
     },
     {
@@ -944,39 +944,39 @@ db.tests.insertOne({
       "id": 73,
       "question": "Which authentication protocol supports single sign-on (SSO) by exchanging authentication and authorization data securely between parties using XML?",
       "options": [
-        "SAML (Security Assertion Markup Language)",
+        "SAML",
         "RADIUS",
         "TACACS+",
         "LDAP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SAML enables SSO by securely exchanging authentication data using XML. RADIUS and TACACS+ provide centralized authentication but aren’t primarily used for SSO. LDAP manages directory services but doesn’t handle SSO across different systems.",
+      "explanation": "SAML (Security Assertion Markup Language) enables SSO by securely exchanging authentication data using XML. RADIUS and TACACS+ provide centralized authentication but aren’t primarily used for SSO. LDAP manages directory services but doesn’t handle SSO across different systems.",
       "examTip": "**SAML = Web-based SSO.** Best for federated authentication across cloud services and web applications."
     },
     {
       "id": 74,
       "question": "Which protocol uses port 67 and port 68 to provide dynamic IP address configuration to devices in a network?",
       "options": [
-        "DHCP (Dynamic Host Configuration Protocol)",
+        "DHCP",
         "DNS",
         "TFTP",
         "NTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DHCP uses ports 67 (server) and 68 (client) to dynamically assign IP configurations. DNS resolves domain names to IP addresses. TFTP handles basic file transfers. NTP synchronizes time across network devices.",
+      "explanation": "DHCP (Dynamic Host Configuration Protocol) uses ports 67 (server) and 68 (client) to dynamically assign IP configurations. DNS resolves domain names to IP addresses. TFTP handles basic file transfers. NTP synchronizes time across network devices.",
       "examTip": "**Ports 67/68 = DHCP dynamic IP assignment.** Critical for automating IP distribution in large networks."
     },
     {
       "id": 75,
       "question": "Which routing protocol uses TCP port 179 and is essential for inter-domain routing decisions across the internet?",
       "options": [
-        "BGP (Border Gateway Protocol)",
+        "BGP",
         "OSPF",
         "EIGRP",
         "RIP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "BGP uses TCP port 179 for reliable inter-domain routing, forming the backbone of internet routing. OSPF handles internal routing using a link-state algorithm. EIGRP is Cisco-proprietary. RIP uses hop count but is outdated.",
+      "explanation": "BGP (Border Gateway Protocol) uses TCP port 179 for reliable inter-domain routing, forming the backbone of internet routing. OSPF handles internal routing using a link-state algorithm. EIGRP is Cisco-proprietary. RIP uses hop count but is outdated.",
       "examTip": "**BGP = Internet’s routing backbone.** Always associated with port 179 and policy-based routing."
     },
     {
@@ -996,7 +996,7 @@ db.tests.insertOne({
       "id": 77,
       "question": "Which IPv6 address type is automatically assigned for communication on a local network segment and is required for neighbor discovery protocols?",
       "options": [
-        "Link-local (FE80::/10)",
+        "Link-local",
         "Global unicast",
         "Anycast",
         "Unique local"
@@ -1126,13 +1126,13 @@ db.tests.insertOne({
       "id": 87,
       "question": "Which cloud service model allows developers to deploy applications without managing underlying infrastructure, focusing solely on the application logic?",
       "options": [
-        "PaaS (Platform as a Service)",
-        "IaaS (Infrastructure as a Service)",
-        "SaaS (Software as a Service)",
-        "FaaS (Function as a Service)"
+        "PaaS",
+        "IaaS",
+        "SaaS",
+        "FaaS"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PaaS provides developers with an environment to develop and deploy applications without managing infrastructure. IaaS requires infrastructure management. SaaS delivers complete applications. FaaS executes code without persistent application management.",
+      "explanation": "PaaS (Platform as a Service) provides developers with an environment to develop and deploy applications without managing infrastructure. IaaS requires infrastructure management. SaaS delivers complete applications. FaaS executes code without persistent application management.",
       "examTip": "**PaaS = Development without infrastructure headaches.** Perfect for rapid deployment and scaling of applications."
     },
     {
@@ -1152,23 +1152,23 @@ db.tests.insertOne({
       "id": 89,
       "question": "Which protocol uses port 5060 for unencrypted communication and port 5061 for encrypted communication in VoIP networks?",
       "options": [
-        "SIP (Session Initiation Protocol)",
+        "SIP",
         "RTP",
         "MGCP",
         "H.323"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SIP uses port 5060 for unencrypted and port 5061 for encrypted (TLS) VoIP signaling. RTP handles media streams, not signaling. MGCP and H.323 are older VoIP protocols with different port assignments.",
+      "explanation": "SIP (Session Initiation Protocol) uses port 5060 for unencrypted and port 5061 for encrypted (TLS) VoIP signaling. RTP handles media streams, not signaling. MGCP and H.323 are older VoIP protocols with different port assignments.",
       "examTip": "**SIP = VoIP signaling.** Remember: 5060 (unencrypted), 5061 (encrypted with TLS)."
     },
     {
       "id": 90,
       "question": "Which layer of the OSI model is responsible for translating data formats, such as encryption and compression?",
       "options": [
-        "Presentation layer (Layer 6)",
-        "Session layer (Layer 5)",
-        "Application layer (Layer 7)",
-        "Transport layer (Layer 4)"
+        "Presentation layer",
+        "Session layer",
+        "Application layer",
+        "Transport layer"
       ],
       "correctAnswerIndex": 0,
       "explanation": "The presentation layer formats data for the application layer, handling encryption, compression, and translation. The session layer manages sessions. The application layer provides user services. The transport layer manages end-to-end communication.",
@@ -1180,7 +1180,7 @@ db.tests.insertOne({
       "options": [
         "AS path prepending",
         "Local preference",
-        "MED (Multi-Exit Discriminator)",
+        "MED",
         "Next-hop"
       ],
       "correctAnswerIndex": 0,
@@ -1191,7 +1191,7 @@ db.tests.insertOne({
       "id": 92,
       "question": "Which IPv6 address type is designed to provide communication between nodes in the same organization but not routable on the public internet?",
       "options": [
-        "Unique local address (ULA)",
+        "Unique local address",
         "Global unicast address",
         "Link-local address",
         "Anycast address"
@@ -1217,7 +1217,7 @@ db.tests.insertOne({
       "id": 94,
       "question": "Which protocol uses port 1433 by default and enables database connectivity for SQL servers?",
       "options": [
-        "TDS (Tabular Data Stream) for SQL Server",
+        "TDS for SQL Server",
         "LDAP",
         "RDP",
         "SMTP"
@@ -1243,26 +1243,26 @@ db.tests.insertOne({
       "id": 96,
       "question": "Which protocol ensures precise time synchronization across devices with microsecond-level accuracy, often used in financial and telecommunications systems?",
       "options": [
-        "PTP (Precision Time Protocol)",
+        "PTP",
         "NTP",
         "SNMP",
         "Syslog"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "PTP offers sub-microsecond synchronization, essential for time-sensitive operations. NTP provides millisecond-level accuracy. SNMP manages network devices. Syslog collects event logs but doesn’t synchronize time.",
+      "explanation": "PTP (Precision Time Protocol) offers sub-microsecond synchronization, essential for time-sensitive operations. NTP provides millisecond-level accuracy. SNMP manages network devices. Syslog collects event logs but doesn’t synchronize time.",
       "examTip": "**PTP = Precision timing.** Critical for high-frequency trading and telecom networks."
     },
     {
       "id": 97,
       "question": "Which protocol enables secure email transmission by encrypting SMTP connections on port 587?",
       "options": [
-        "SMTPS (SMTP Secure)",
+        "SMTPS",
         "POP3S",
         "IMAPS",
         "SFTP"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "SMTPS encrypts email transmissions via SMTP on port 587. POP3S and IMAPS secure email retrieval. SFTP secures file transfers, unrelated to email.",
+      "explanation": "SMTPS (SMTP Secure) encrypts email transmissions via SMTP on port 587. POP3S and IMAPS secure email retrieval. SFTP secures file transfers, unrelated to email.",
       "examTip": "**Port 587 + SMTPS = Secure email sending.** Always use SMTPS to protect outbound email communications."
     },
     {
@@ -1295,7 +1295,7 @@ db.tests.insertOne({
       "id": 100,
       "question": "Which wireless standard, operating in the 6GHz band, offers reduced latency and higher throughput for dense environments with minimal interference?",
       "options": [
-        "802.11ax (Wi-Fi 6E)",
+        "802.11ax",
         "802.11ac",
         "802.11n",
         "802.11g"
