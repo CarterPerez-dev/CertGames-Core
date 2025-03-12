@@ -653,9 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Port security with maximum 3 addresses, sticky learning, and shutdown violation mode would accomplish this requirement. The maximum of 3 addresses allows exactly three devices per port as required. Sticky learning automatically learns and saves the MAC addresses of connected devices to the running configuration, ensuring that the same devices can reconnect after a switch reboot. Shutdown violation mode disables the port if additional devices attempt to connect, precisely matching the requirement. Port security with maximum 3 addresses, dynamic learning, and restrict violation mode would allow three devices but would only drop packets from additional devices rather than disabling the port as required. Port security with maximum 3 addresses, sticky learning, and protect violation mode would silently drop packets from additional devices rather than disabling the port. Port security with maximum 3 addresses, dynamic learning, and shutdown violation mode would disable the port as required but wouldn't save the learned MAC addresses across switch reboots, potentially causing legitimate devices to trigger violations after a switch restart.",
       "examTip": "When configuring port security, match the violation mode to the specific security response needed - use 'shutdown' when you want to completely disable ports with violations, 'restrict' when you want to drop traffic and send notifications, and 'protect' when you want to silently drop traffic without alerts."
-    }
-  ]
-  [
+    },
     {
       "id": 51,
       "question": "A network engineer is implementing a solution to automate network device configuration across a large enterprise. The solution must support version control, track configuration changes, and enable rapid rollback to previous configurations. Which approach is MOST suitable for this requirement?",
