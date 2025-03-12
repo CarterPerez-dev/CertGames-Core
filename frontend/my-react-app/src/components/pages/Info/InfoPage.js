@@ -203,6 +203,23 @@ const faqSchema = {
   ]
 };
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CertGames",
+    "url": "https://certgames.com",
+    "logo": "https://certgames.com/logo.png",
+    "sameAs": [
+      "https://www.linkedin.com/company/certgames/?viewAsMember=true",
+      "https://x.com/CertsGamified",
+      "https://www.instagram.com/certsgamified/",
+      "https://www.reddit.com/user/Hopeful_Beat7161/",
+      "https://www.facebook.com/people/CertGames/61574087485497/"
+    ]
+  };
+
+
+
   return (
     <>
       <SEOHelmet 
@@ -213,6 +230,7 @@ const faqSchema = {
       <StructuredData data={websiteSchema} />
       <StructuredData data={courseSchema} />
       <StructuredData data={faqSchema} />
+      <StructuredData data={organizationSchema} />
       <div className="info-container">
         {/* Navbar */}
         <InfoNavbar />
