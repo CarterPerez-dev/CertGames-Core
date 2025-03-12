@@ -1,4 +1,9 @@
-  [
+db.tests.insertOne({
+  "category": "cissp",
+  "testId": 2,
+  "testName": "ISC2 CISSP Practice Test 2 (Very Easy)",
+  "xpPerCorrect": 10,
+  "questions": [
     {
       "id": 1,
       "question": "An organization has implemented a new data classification policy. What is the first step that should be taken to ensure the policy is properly followed?",
