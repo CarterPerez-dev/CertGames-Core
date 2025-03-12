@@ -27,6 +27,65 @@ const ExamsPage = () => {
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [expandedCert, setExpandedCert] = useState(null);
 
+  // Breadcrumb schema for SEO
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://certgames.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Certification Exams",
+        "item": "https://certgames.com/exams"
+      }
+    ]
+  };
+
+  // Product schema for SEO
+  const examProductSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "CertGames Certification Exam Prep",
+    "description": "Practice tests for 13 cybersecurity certifications with over 13,000 questions",
+    "offers": {
+      "@type": "Offer",
+      "price": "14.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "review": {
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "4.8",
+        "bestRating": "5"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Security Professional"
+      }
+    }
+  };
+
+  // TechArticle schema for SEO
+  const securityArticleSchema = {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Cybersecurity Certification Practice Tests",
+    "description": "Comprehensive guide to cybersecurity certification preparation including CompTIA, ISC2, and AWS",
+    "keywords": "CompTIA Security+, CISSP, AWS Cloud Practitioner, cybersecurity certification, practice tests",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://certgames.com/exams"
+    }
+  };
+
   // Mock data for certifications
   const certifications = [
     {
@@ -215,33 +274,6 @@ const ExamsPage = () => {
     }
   };
   
-
-  const examProductSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "CertGames Certification Exam Prep",
-    "description": "Practice tests for 13 cybersecurity certifications with over 13,000 questions",
-    "offers": {
-      "@type": "Offer",
-      "price": "14.99",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    },
-    "review": {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4.8",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Security Professional"
-      }
-    }
-  };
-
-
   return (
     <>
       <SEOHelmet 
@@ -250,14 +282,16 @@ const ExamsPage = () => {
         canonicalUrl="/exams"
       />
       <StructuredData data={examProductSchema} />
+      <StructuredData data={breadcrumbSchema} />
+      <StructuredData data={securityArticleSchema} />
           
     <div className="exams-container">
       <InfoNavbar />
       
-      <div className="exams-content">
-        <div className="exams-header">
+      <main className="exams-content">
+        <header className="exams-header">
           <h1 className="exams-title">
-            <span className="exams-icon">🎓</span>
+            <span className="exams-icon" aria-hidden="true">🎓</span>
             Certification Exam Prep
           </h1>
           <p className="exams-subtitle">
@@ -265,21 +299,22 @@ const ExamsPage = () => {
           </p>
           
           <div className="exams-access-notice">
-            <FaCheckCircle className="notice-icon" />
+            <FaCheckCircle className="notice-icon" aria-hidden="true" />
             <p>Your subscription includes unlimited access to all certification practice tests</p>
           </div>
-        </div>
+        </header>
         
         {/* Search and Filter */}
-        <div className="exams-search-filters">
+        <section className="exams-search-filters">
           <div className="exams-search">
-            <FaSearch className="search-icon" />
+            <FaSearch className="search-icon" aria-hidden="true" />
             <input
               type="text"
               placeholder="Search certifications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-input"
+              aria-label="Search certifications"
             />
           </div>
           
@@ -287,38 +322,49 @@ const ExamsPage = () => {
             <div 
               className="filters-toggle" 
               onClick={() => setFiltersOpen(!filtersOpen)}
+              role="button"
+              aria-expanded={filtersOpen}
+              tabIndex="0"
             >
-              <FaFilter className="filter-icon" />
+              <FaFilter className="filter-icon" aria-hidden="true" />
               <span>Filter</span>
-              {filtersOpen ? <FaChevronUp /> : <FaChevronDown />}
+              {filtersOpen ? <FaChevronUp aria-hidden="true" /> : <FaChevronDown aria-hidden="true" />}
             </div>
             
             {filtersOpen && (
               <div className="filters-dropdown">
                 <div className="filter-group">
                   <h4>Vendor</h4>
-                  <div className="filter-options">
+                  <div className="filter-options" role="radiogroup" aria-label="Filter by vendor">
                     <button 
                       className={`filter-option ${activeCategory === 'all' ? 'active' : ''}`}
                       onClick={() => setActiveCategory('all')}
+                      aria-checked={activeCategory === 'all'}
+                      role="radio"
                     >
                       All
                     </button>
                     <button 
                       className={`filter-option ${activeCategory === 'comptia' ? 'active' : ''}`}
                       onClick={() => setActiveCategory('comptia')}
+                      aria-checked={activeCategory === 'comptia'}
+                      role="radio"
                     >
                       CompTIA
                     </button>
                     <button 
                       className={`filter-option ${activeCategory === 'isc2' ? 'active' : ''}`}
                       onClick={() => setActiveCategory('isc2')}
+                      aria-checked={activeCategory === 'isc2'}
+                      role="radio"
                     >
                       ISC2
                     </button>
                     <button 
                       className={`filter-option ${activeCategory === 'aws' ? 'active' : ''}`}
                       onClick={() => setActiveCategory('aws')}
+                      aria-checked={activeCategory === 'aws'}
+                      role="radio"
                     >
                       AWS
                     </button>
@@ -327,13 +373,13 @@ const ExamsPage = () => {
               </div>
             )}
           </div>
-        </div>
+        </section>
         
         {/* Certifications Grid */}
-        <div className="exams-grid">
+        <section className="exams-grid" aria-label="Available certification exams">
           {filteredCerts.length > 0 ? (
             filteredCerts.map((cert) => (
-              <div 
+              <article 
                 key={cert.id} 
                 className={`cert-card ${expandedCert === cert.id ? 'expanded' : ''} ${cert.popular ? 'popular' : ''}`}
               >
@@ -341,7 +387,7 @@ const ExamsPage = () => {
                 
                 <div className="cert-header">
                   <div className="cert-logo">
-                    <img src={cert.logo} alt={`${cert.title} logo`} />
+                    <img src={cert.logo} alt={`${cert.title} certification logo`} />
                   </div>
                   <div className="cert-title-info">
                     <h3>{cert.title}</h3>
@@ -355,8 +401,10 @@ const ExamsPage = () => {
                   <button 
                     className="expand-button"
                     onClick={() => toggleExpand(cert.id)}
+                    aria-expanded={expandedCert === cert.id}
+                    aria-label={expandedCert === cert.id ? `Collapse ${cert.title} details` : `Expand ${cert.title} details`}
                   >
-                    {expandedCert === cert.id ? <FaChevronUp /> : <FaChevronDown />}
+                    {expandedCert === cert.id ? <FaChevronUp aria-hidden="true" /> : <FaChevronDown aria-hidden="true" />}
                   </button>
                 </div>
                 
@@ -391,19 +439,19 @@ const ExamsPage = () => {
                       
                       <div className="cert-features">
                         <div className="feature-item">
-                          <FaCheckCircle className="feature-icon" />
+                          <FaCheckCircle className="feature-icon" aria-hidden="true" />
                           <span>Performance-based Questions</span>
                         </div>
                         <div className="feature-item">
-                          <FaCheckCircle className="feature-icon" />
+                          <FaCheckCircle className="feature-icon" aria-hidden="true" />
                           <span>Detailed Explanations</span>
                         </div>
                         <div className="feature-item">
-                          <FaCheckCircle className="feature-icon" />
+                          <FaCheckCircle className="feature-icon" aria-hidden="true" />
                           <span>Progress Tracking</span>
                         </div>
                         <div className="feature-item">
-                          <FaCheckCircle className="feature-icon" />
+                          <FaCheckCircle className="feature-icon" aria-hidden="true" />
                           <span>Exam Simulation Mode</span>
                         </div>
                       </div>
@@ -414,10 +462,10 @@ const ExamsPage = () => {
                     <Link to="/register" className="try-cert-button">Try This Exam</Link>
                   </div>
                 </div>
-              </div>
+              </article>
             ))
           ) : (
-            <div className="no-results">
+            <div className="no-results" role="alert">
               <h3>No certifications found</h3>
               <p>Try adjusting your search or filters</p>
               <button 
@@ -431,10 +479,10 @@ const ExamsPage = () => {
               </button>
             </div>
           )}
-        </div>
+        </section>
         
         {/* Subscribe CTA */}
-        <div className="exams-subscribe-cta">
+        <section className="exams-subscribe-cta">
           <div className="subscribe-card">
             <div className="subscribe-content">
               <h2>Ready to pass your certification exams?</h2>
@@ -455,32 +503,33 @@ const ExamsPage = () => {
             
             <div className="subscribe-features">
               <div className="feature">
-                <FaCheckCircle className="feature-icon" />
+                <FaCheckCircle className="feature-icon" aria-hidden="true" />
                 <span>13 Certification Paths</span>
               </div>
               <div className="feature">
-                <FaCheckCircle className="feature-icon" />
+                <FaCheckCircle className="feature-icon" aria-hidden="true" />
                 <span>13,000+ Practice Questions</span>
               </div>
               <div className="feature">
-                <FaCheckCircle className="feature-icon" />
+                <FaCheckCircle className="feature-icon" aria-hidden="true" />
                 <span>All Learning Tools Included</span>
               </div>
               <div className="feature">
-                <FaCheckCircle className="feature-icon" />
+                <FaCheckCircle className="feature-icon" aria-hidden="true" />
                 <span>24/7 Support</span>
               </div>
               <div className="feature">
-                <FaCheckCircle className="feature-icon" />
+                <FaCheckCircle className="feature-icon" aria-hidden="true" />
                 <span>Gamified Learning Experience</span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
       
       <Footer />
     </div>
+    </>
   );
 };
 
