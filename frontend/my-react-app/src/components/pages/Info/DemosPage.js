@@ -5,6 +5,8 @@ import { FaPlay, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import './DemosPage.css';
+import SEOHelmet from '../../SEOHelmet';
+
 
 const DemosPage = () => {
   const [activeSection, setActiveSection] = useState('featured');
