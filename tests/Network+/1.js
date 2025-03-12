@@ -190,7 +190,7 @@ db.tests.insertOne({
       "id": 15,
       "question": "A network engineer wants to ensure that certain applications receive higher priority over others. Which feature should be configured?",
       "options": [
-        "Quality of Service (QoS)",
+        "Quality of Service",
         "VLAN",
         "NAT",
         "Port mirroring"
@@ -541,7 +541,7 @@ db.tests.insertOne({
       "id": 42,
       "question": "Which network architecture uses a centralized controller to manage forwarding devices through open protocols like OpenFlow?",
       "options": [
-        "Software-defined networking (SDN)",
+        "Software-defined networking",
         "Spine and leaf architecture",
         "Collapsed core architecture",
         "Three-tier architecture"
@@ -1022,13 +1022,13 @@ db.tests.insertOne({
       "id": 79,
       "question": "Which cable type is MOST suitable for 10Gbps speeds over short distances, such as connections between network devices in the same rack?",
       "options": [
-        "Direct attach copper (DAC)",
+        "Direct attach copper",
         "Single-mode fiber",
         "Multimode fiber",
         "Coaxial cable"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "DAC cables provide high-speed (up to 10Gbps) connectivity over short distances (typically within racks). Single-mode fiber supports longer distances but at higher cost. Multimode fiber supports high speeds but over moderate distances. Coaxial cables are not used for high-speed, short-distance networking between devices.",
+      "explanation": "DAC (Direct attach copper) cables provide high-speed (up to 10Gbps) connectivity over short distances (typically within racks). Single-mode fiber supports longer distances but at higher cost. Multimode fiber supports high speeds but over moderate distances. Coaxial cables are not used for high-speed, short-distance networking between devices.",
       "examTip": "DAC cables are cost-effective for short, high-speed connections within data centers."
     },
     {
@@ -1048,13 +1048,13 @@ db.tests.insertOne({
       "id": 81,
       "question": "Which technology uses port security by limiting access to a switch port based on MAC address?",
       "options": [
-        "Network Access Control (NAC)",
+        "Network Access Control",
         "802.1X",
         "Port mirroring",
-        "Spanning Tree Protocol (STP)"
+        "Spanning Tree Protocol"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "NAC enforces security policies by restricting access based on device properties like MAC addresses. 802.1X provides port-based authentication. Port mirroring duplicates traffic for monitoring. STP prevents Layer 2 loops but does not handle port security.",
+      "explanation": "NAC (Network Access Control) enforces security policies by restricting access based on device properties like MAC addresses. 802.1X provides port-based authentication. Port mirroring duplicates traffic for monitoring. STP prevents Layer 2 loops but does not handle port security.",
       "examTip": "Use NAC for endpoint compliance, ensuring only authorized devices access network resources."
     },
     {
