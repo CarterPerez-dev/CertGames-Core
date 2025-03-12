@@ -653,21 +653,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 1,
       "explanation": "Auth errors stem from client key mismatches. Server keys, firewalls, or zones cause other issues. NTP authentication uses symmetric keys or autokey protocols to verify time source legitimacy. The error specifically indicates an authentication problem rather than connectivity, pointing to client-side configuration. Common issues include incorrect key IDs, mismatched keys, or authentication being enabled on the client but not supported by the server.",
       "examTip": "NTP auth fails? Client key."
-    }
-  ]
-})
-
-
-
-
-
-    
-db.tests.insertOne({
-  "category": "serverplus",
-  "testId": 6,
-  "testName": "Server+ Practice Test #6 (Formidable)",
-  "xpPerCorrect": 10,
-  "questions": [
+    },
     {
       "id": 51,
       "question": "A server's RAID 10 array with six drives experiences two drive failures in different mirror sets. What is the array's status?",
