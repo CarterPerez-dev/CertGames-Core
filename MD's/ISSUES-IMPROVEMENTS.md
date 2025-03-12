@@ -1,6 +1,6 @@
 # FIX
 ----
-## fix scenario sphere parse questions
+#make teh daily bonus 250 coins
 ## make 300 Daily PBQ's
 ## input userslice, achiveemnt slice, test routes, tesy.py, databse.py. and find imporvemnts
 ## Input leaderboard route and leaderboard page specifcually
