@@ -12,7 +12,9 @@ import {
   FaPlay, 
   FaArrowRight, 
   FaInfoCircle, 
-  FaExternalLinkAlt 
+  FaExternalLinkAlt,
+  FaLock,
+  FaFileAlt
 } from 'react-icons/fa';
 import './InfoPage.css';
 
@@ -281,6 +283,17 @@ const faqSchema = {
                   Log In
                 </Link>
               </div>
+              
+              {/* Added Privacy Policy and Terms of Service links */}
+              <div className="info-legal-links" style={{ marginTop: '15px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
+                <Link to="/privacy" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', textDecoration: 'none' }}>
+                  <FaLock style={{ marginRight: '5px' }} /> Privacy Policy
+                </Link>
+                <Link to="/terms" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', textDecoration: 'none' }}>
+                  <FaFileAlt style={{ marginRight: '5px' }} /> Terms of Service
+                </Link>
+              </div>
+              
               <nav className="info-quick-links" aria-label="Quick section navigation">
                 <button onClick={() => scrollToSection(featuresRef)} className="info-quick-link">
                   <span>Features</span>
@@ -1117,6 +1130,17 @@ const faqSchema = {
                 Log In
               </Link>
             </div>
+            
+            {/* Additional Privacy and Terms links */}
+            <div className="info-legal-links" style={{ margin: '15px 0', display: 'flex', gap: '20px', justifyContent: 'center' }}>
+              <Link to="/privacy" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', textDecoration: 'none' }}>
+                <FaLock style={{ marginRight: '5px' }} /> Privacy Policy
+              </Link>
+              <Link to="/terms" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', textDecoration: 'none' }}>
+                <FaFileAlt style={{ marginRight: '5px' }} /> Terms of Service
+              </Link>
+            </div>
+            
             <div className="info-oauth-options">
               <span>Quick sign-up with:</span>
               <div className="info-oauth-buttons">
