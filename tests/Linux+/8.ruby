@@ -19,7 +19,7 @@ db.tests.insertOne({
     },
     {
       "id": 2,
-      "question": "A server’s boot process halts with a `Kernel Panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)`. What is the MOST likely cause?",
+      "question": "A server's boot process halts with a `Kernel Panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)`. What is the MOST likely cause?",
       "options": [
         "The initramfs/initrd image is missing or corrupted.",
         "GRUB is misconfigured and pointing to an invalid kernel.",
@@ -366,7 +366,7 @@ db.tests.insertOne({
       ],
       "correctAnswerIndex": 0,
       "explanation": "Setting `umask 027` in `/etc/profile` ensures a system-wide default for new file permissions. `limits.conf` manages resource limits, `pam.d/common-session` is used for authentication settings, and `sudoers` manages privilege escalation.",
-      "examTip": "Use `umask` in a user’s `~/.bashrc` for per-user umask settings."
+      "examTip": "Use `umask` in a user's `~/.bashrc` for per-user umask settings."
     },
     {
       "id": 29,
@@ -732,12 +732,6 @@ db.tests.insertOne({
       "explanation": "`Restart=on-failure` ensures the service restarts only when it crashes, while allowing manual stops to persist. `Restart=always` restarts the service under all conditions, `RestartSec=10` sets a delay but does not control restart behavior, and `ExecStartPre` delays startup but does not affect restart policy.",
       "examTip": "Use `systemctl show <service> | grep Restart` to check the current restart policy."
     },
-db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
-  "testId": 8,
-  "testName": "Practice Test #8 (Formidable)",
-  "xpPerCorrect": 40,
-  "questions": [
     {
       "id": 57,
       "question": "A Linux administrator needs to verify if a remote server supports TLS 1.3. Which command should they use?",
@@ -774,8 +768,8 @@ db.tests.insertOne({
         "1) tail -f /var/log/auth.log 2) at -l 3) pkill -9 crond"
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The best approach is (1) listing the user’s cron jobs, (2) checking logs for suspicious activity, and (3) removing unauthorized cron jobs. Other sequences disable cron entirely or take actions without identifying the root cause.",
-      "examTip": "Use `crontab -e -u <user>` to review and modify a user’s scheduled jobs."
+      "explanation": "The best approach is (1) listing the user's cron jobs, (2) checking logs for suspicious activity, and (3) removing unauthorized cron jobs. Other sequences disable cron entirely or take actions without identifying the root cause.",
+      "examTip": "Use `crontab -e -u <user>` to review and modify a user's scheduled jobs."
     },
     {
       "id": 60,
@@ -945,14 +939,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "Adding `vm.overcommit_memory=1` to `/etc/sysctl.conf` ensures the change persists across reboots. `/etc/default/grub` configures bootloader options but does not manage runtime kernel parameters, `/etc/security/limits.conf` applies user limits, and `/etc/fstab` configures filesystem mounts.",
       "examTip": "Run `sysctl -p` to apply changes immediately after modifying `/etc/sysctl.conf`."
-    }
-
-db.tests.insertOne({
-  "category": "CompTIA Linux+ XK0-005",
-  "testId": 8,
-  "testName": "Practice Test #8 (Formidable)",
-  "xpPerCorrect": 40,
-  "questions": [
+    },
     {
       "id": 73,
       "question": "A Linux administrator needs to determine which users have an active SSH session on a remote server. Which command should they use?",
@@ -1056,7 +1043,266 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`find / -perm -4000 -o -perm -2000 -type f` searches for files with the setuid (`4000`) or setgid (`2000`) bit set. `ls -l` lists file attributes but does not search recursively, `stat` provides metadata but does not filter by setuid/setgid, and `getfacl` retrieves ACLs but not file permission bits.",
       "examTip": "Use `chmod u-s <file>` to remove the setuid bit from a file."
+    },
+    {
+      "id": 81,
+      "question": "A Linux administrator is troubleshooting an SELinux-related issue that prevents a web server from accessing files in `/var/www/html/uploads`. Which command should they use to diagnose the issue?",
+      "options": [
+        "ausearch -m AVC --start recent",
+        "setenforce 0",
+        "restorecon -Rv /var/www/html",
+        "sealert -a /var/log/audit/audit.log"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ausearch -m AVC --start recent` searches for recent SELinux Access Vector Cache (AVC) denials, which indicate permission issues. `setenforce 0` disables SELinux enforcement without diagnosing the issue, `restorecon` resets file contexts but doesn't identify problems, and `sealert` analyzes logs but requires an existing file.",
+      "examTip": "Use `sealert -b` to view automatically generated solutions for SELinux issues."
+    },
+    {
+      "id": 82,
+      "question": "A Linux administrator needs to set up LUKS encryption with automatic unlocking during boot using a key file. After creating the encrypted volume, which file should they modify to enable automatic unlocking?",
+      "options": [
+        "/etc/crypttab",
+        "/etc/fstab",
+        "/etc/cryptsetup.conf",
+        "/etc/lvm/lvm.conf"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`/etc/crypttab` configures how encrypted volumes are unlocked during boot, including automatic unlocking with key files. `/etc/fstab` handles mounting but not encryption unlocking, `/etc/cryptsetup.conf` is a configuration file for the cryptsetup utility but doesn't handle boot-time unlocking, and `/etc/lvm/lvm.conf` manages LVM but not encryption.",
+      "examTip": "Store key files in a secure location like `/etc/keys/` and restrict permissions with `chmod 0400`."
+    },
+    {
+      "id": 83,
+      "question": "A Linux administrator wants to create a shell script that operates differently based on whether it's running as root. Which command should they use to check the user's privileges?",
+      "options": [
+        "if [ \"$(id -u)\" -eq 0 ]; then # root actions; else # non-root actions; fi",
+        "if [ \"$USER\" == \"root\" ]; then # root actions; else # non-root actions; fi",
+        "if [ -w /etc ]; then # root actions; else # non-root actions; fi",
+        "if sudo -v; then # root actions; else # non-root actions; fi"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Checking the user ID with `id -u` is the most reliable method, as it returns 0 for root and non-zero for other users. Checking `$USER` variable can be unreliable as it might be unset or modified, testing write access to `/etc` doesn't guarantee root privileges, and `sudo -v` only verifies sudo privileges, not whether the script is currently running as root.",
+      "examTip": "Combine with `#!/bin/bash -e` to make your script exit immediately if any command fails."
+    },
+    {
+      "id": 84,
+      "question": "A Linux administrator wants to configure a systemd timer to execute a service weekly on Sundays at 2 AM. Which directive should they add to the timer unit file?",
+      "options": [
+        "OnCalendar=Sun *-*-* 02:00:00",
+        "OnBootSec=1w",
+        "OnUnitActiveSec=604800",
+        "OnActiveSec=7d"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`OnCalendar=Sun *-*-* 02:00:00` schedules execution every Sunday at 2 AM using systemd calendar time specifications. `OnBootSec=1w` runs once a week after boot, not on a specific day/time, `OnUnitActiveSec=604800` runs weekly from when the service was last activated, and `OnActiveSec=7d` runs 7 days after the timer was activated.",
+      "examTip": "Use `systemd-analyze calendar 'Sun *-*-* 02:00:00'` to validate calendar expressions."
+    },
+    {
+      "id": 85,
+      "question": "**(PBQ)** A Linux administrator is troubleshooting network connectivity issues on a system where ping works but DNS resolution fails. What is the correct sequence of actions?",
+      "options": [
+        "1) cat /etc/resolv.conf 2) dig @8.8.8.8 example.com 3) systemctl restart systemd-resolved",
+        "1) systemctl restart networking 2) service network restart 3) reboot",
+        "1) ifconfig -a 2) route -n 3) restart browser",
+        "1) systemctl stop firewalld 2) iptables -F 3) ping 8.8.8.8"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) examining DNS configuration in `/etc/resolv.conf`, (2) testing DNS resolution with a specific server like Google's 8.8.8.8, and (3) restarting the DNS resolver service. Other sequences involve unnecessarily restarting networking or rebooting without properly diagnosing the issue.",
+      "examTip": "Use `resolvectl status` to check systemd-resolved DNS resolver configuration details."
+    },
+    {
+      "id": 86,
+      "question": "A Linux administrator needs to add a new disk to an existing RAID 5 array to expand its capacity. Which command should they use?",
+      "options": [
+        "mdadm --grow /dev/md0 --raid-devices=4 --add /dev/sdd1",
+        "mdadm --add /dev/md0 /dev/sdd1",
+        "mdadm --create /dev/md0 --level=5 --raid-devices=4 /dev/sda1 /dev/sdb1 /dev/sdc1 /dev/sdd1",
+        "pvcreate /dev/sdd1 && vgextend vg0 /dev/sdd1"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`mdadm --grow` with `--raid-devices` and `--add` expands an existing RAID array by adding a new disk. `mdadm --add` only adds a device as a spare but doesn't grow the array, `mdadm --create` creates a new array (destroying the existing one), and the LVM commands are unrelated to MD RAID management.",
+      "examTip": "Monitor the reshape progress with `cat /proc/mdstat` after growing the array."
+    },
+    {
+      "id": 87,
+      "question": "A Linux administrator needs to configure a Docker container with enhanced security. Which option should they use to run the container with reduced privileges?",
+      "options": [
+        "docker run --security-opt=no-new-privileges --cap-drop=ALL --cap-add=NET_BIND_SERVICE image_name",
+        "docker run --privileged image_name",
+        "docker run --user root image_name",
+        "docker run --restart=always image_name"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`--security-opt=no-new-privileges` prevents privilege escalation, and dropping all capabilities (`--cap-drop=ALL`) with selectively adding only required ones (`--cap-add=NET_BIND_SERVICE`) follows the principle of least privilege. `--privileged` grants extended privileges, `--user root` runs as root, and `--restart=always` only handles container restart policy, not security.",
+      "examTip": "Use container security scanning tools like Trivy to detect vulnerabilities in container images."
+    },
+    {
+      "id": 88,
+      "question": "A Linux administrator needs to identify and blacklist a problematic kernel module that's causing system instability. Which files should they modify?",
+      "options": [
+        "Create /etc/modprobe.d/blacklist.conf with 'blacklist module_name'",
+        "Edit /etc/modules and remove the module name",
+        "Edit /boot/grub/grub.cfg and add 'module_name.blacklist=yes'",
+        "Create /proc/modules/blacklist with the module name"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Creating a file in `/etc/modprobe.d/` with a `blacklist module_name` directive prevents the module from being loaded. Editing `/etc/modules` only affects modules that are explicitly loaded, modifying `grub.cfg` directly is not recommended as it gets overwritten, and `/proc/modules/blacklist` is not a valid path.",
+      "examTip": "Use `modprobe -r module_name` to unload a module immediately before blacklisting it."
+    },
+    {
+      "id": 89,
+      "question": "A Linux administrator needs to configure fine-grained access control for a specific directory. Which access control mechanism should they use if they need to grant different permissions to multiple users and groups?",
+      "options": [
+        "setfacl -m u:user1:rwx,g:group1:rx,u:user2:r /path/to/directory",
+        "chmod 750 /path/to/directory",
+        "chown user1:group1 /path/to/directory",
+        "umask 027 && mkdir /path/to/directory"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`setfacl` configures Access Control Lists (ACLs) that enable fine-grained permission control beyond the standard owner/group/others model. `chmod` sets basic permissions that cannot differentiate between multiple users, `chown` only changes ownership, and `umask` sets default permissions for newly created files and directories.",
+      "examTip": "Use `getfacl /path/to/directory` to view existing ACLs on a file or directory."
+    },
+    {
+      "id": 90,
+      "question": "A Linux administrator needs to optimize a system for database workloads by adjusting virtual memory parameters. Which setting should they modify to reduce disk swapping for database performance?",
+      "options": [
+        "vm.swappiness=10",
+        "vm.dirty_ratio=60",
+        "vm.vfs_cache_pressure=50",
+        "vm.overcommit_memory=2"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Setting `vm.swappiness` to a low value like 10 reduces the kernel's tendency to swap memory pages to disk, which is beneficial for database workloads that rely on memory-resident data. `vm.dirty_ratio` controls when to flush dirty pages, `vm.vfs_cache_pressure` affects inode and dentry caching, and `vm.overcommit_memory=2` enables strict overcommit accounting.",
+      "examTip": "Set permanent VM tuning parameters in `/etc/sysctl.conf` or under `/etc/sysctl.d/`."
+    },
+    {
+      "id": 91,
+      "question": "A Linux administrator needs to configure log rotation for a custom application log that grows rapidly. Which directive in `/etc/logrotate.d/custom-app` ensures logs get rotated when they exceed 100MB regardless of time?",
+      "options": [
+        "size 100M",
+        "daily",
+        "rotate 7",
+        "maxage 7"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The `size 100M` directive rotates logs when they reach 100MB, regardless of time. `daily` rotates logs based on time not size, `rotate 7` keeps 7 rotated logs before deletion, and `maxage 7` deletes rotated logs older than 7 days but doesn't trigger rotation based on size.",
+      "examTip": "Use `logrotate -d /etc/logrotate.d/custom-app` to test your configuration without actually rotating logs."
+    },
+    {
+      "id": 92,
+      "question": "**(PBQ)** A Linux administrator needs to implement a reliable database backup strategy. What is the correct sequence of actions?",
+      "options": [
+        "1) Create a consistent snapshot using LVM 2) Export database data 3) Compress and encrypt the backup 4) Transfer to offsite storage",
+        "1) Stop the database service 2) Copy data files 3) Start the database service",
+        "1) Delete old backups 2) Run pg_dump 3) Store on local disk",
+        "1) Run rsync -a 2) Email the backup 3) Delete original data"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best backup strategy is (1) creating a consistent point-in-time snapshot, (2) exporting data while minimizing downtime, (3) securing the data with compression and encryption, and (4) storing backups offsite for disaster recovery. Other sequences either involve unnecessary downtime or lack important backup principles like encryption or offsite storage.",
+      "examTip": "Test backup restoration processes regularly in a staging environment to validate your backup strategy."
+    },
+    {
+      "id": 93,
+      "question": "A Linux administrator needs to configure IPv6 addressing on a network interface. Which command ensures that the configuration persists after reboot on an Ubuntu system?",
+      "options": [
+        "Edit /etc/netplan/*.yaml and add 'addresses: [2001:db8::1/64]' under ethernets",
+        "ip -6 addr add 2001:db8::1/64 dev eth0",
+        "ifconfig eth0 inet6 add 2001:db8::1/64",
+        "echo 'IPV6ADDR=2001:db8::1/64' >> /etc/sysconfig/network-scripts/ifcfg-eth0"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Editing Netplan configuration files in `/etc/netplan/` is the correct method for persistent IPv6 configuration on Ubuntu systems. `ip -6 addr add` sets an address temporarily, `ifconfig` is deprecated and temporary, and `/etc/sysconfig/network-scripts/` is used in Red Hat-based systems, not Ubuntu.",
+      "examTip": "Apply Netplan changes with `netplan apply` to activate them without reboot."
+    },
+    {
+      "id": 94,
+      "question": "A Linux administrator wants to configure nftables to perform port forwarding from external port 80 to an internal web server at 192.168.1.10:8080. Which command should they use?",
+      "options": [
+        "nft add rule nat prerouting ip daddr 203.0.113.2 tcp dport 80 dnat to 192.168.1.10:8080",
+        "iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to 192.168.1.10:8080",
+        "nft add chain filter forward { type filter hook forward priority 0 \\; }",
+        "firewall-cmd --add-forward-port=port=80:proto=tcp:toport=8080:toaddr=192.168.1.10"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The `nft add rule` command configures a prerouting DNAT (Destination NAT) rule in nftables to forward incoming traffic on port 80 to the internal server. The `iptables` command is for the legacy iptables system, not nftables. The second nftables command only creates a chain without rules, and `firewall-cmd` is for firewalld, not direct nftables configuration.",
+      "examTip": "Remember to enable IP forwarding with `sysctl -w net.ipv4.ip_forward=1` and make it persistent in `/etc/sysctl.conf`."
+    },
+    {
+      "id": 95,
+      "question": "A Linux administrator needs to set default ACLs on a directory so that all new files created within it inherit specific permissions. Which command should they use?",
+      "options": [
+        "setfacl -d -m u:user1:rwx,g:group1:rx /path/to/directory",
+        "chmod g+s /path/to/directory",
+        "chattr +a /path/to/directory",
+        "umask 027"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Using `setfacl` with the `-d` flag sets default ACLs that are inherited by newly created files and directories. `chmod g+s` sets the setgid bit which only ensures new files inherit the group, not permissions, `chattr +a` makes a file appendable only, and `umask` sets default permissions but cannot implement complex ACL rules.",
+      "examTip": "Default ACLs apply to all newly created files and directories within the target directory, but do not modify existing files."
+    },
+    {
+      "id": 96,
+      "question": "A Linux administrator needs to troubleshoot slow performance on a high-traffic web server. Which tool should they use to analyze network socket statistics over time?",
+      "options": [
+        "ss -s --tcp 1",
+        "netstat -an",
+        "lsof -i:80",
+        "ip -s link"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`ss -s --tcp 1` provides ongoing socket statistics summaries every second, showing connection rates and states for TCP sockets. `netstat -an` shows a static snapshot of connections, `lsof -i:80` shows processes using port 80 but doesn't provide statistics over time, and `ip -s link` shows interface-level statistics but not socket information.",
+      "examTip": "Look for high numbers in TIME-WAIT and SYN-RECV states which may indicate connection problems."
+    },
+    {
+      "id": 97,
+      "question": "A Linux administrator wants to implement CPU throttling for a resource-intensive containerized application. Which cgroup v2 controller should they use?",
+      "options": [
+        "cpu.max",
+        "cpuset.cpus",
+        "blkio.weight",
+        "memory.limit_in_bytes"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`cpu.max` is the cgroup v2 controller for limiting CPU usage with throttling (in microseconds per period). `cpuset.cpus` controls which CPU cores a process can use but doesn't throttle them, `blkio.weight` manages I/O priority, and `memory.limit_in_bytes` restricts memory usage but doesn't affect CPU.",
+      "examTip": "Set `cpu.max` to `100000 1000000` to limit a process to 10% of CPU time (100,000 microseconds per 1,000,000 microsecond period)."
+    },
+    {
+      "id": 98,
+      "question": "**(PBQ)** A Linux administrator needs to implement system auditing to track changes to critical configuration files. What is the correct sequence of actions?",
+      "options": [
+        "1) Configure auditd rules in /etc/audit/rules.d/ 2) Restart the auditd service 3) Verify with auditctl -l 4) Test with ausearch",
+        "1) Install rsyslog 2) Edit /etc/rsyslog.conf 3) Send logs to remote server",
+        "1) Enable process accounting 2) Use lastcomm to check commands 3) Archive the logs",
+        "1) Run chattr +a on config files 2) Monitor changes with stat 3) Set up cron job for checks"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The best approach is (1) defining audit rules that specify which files to monitor, (2) restarting auditd to apply the rules, (3) verifying the rules are active with `auditctl -l`, and (4) testing the setup with `ausearch` to confirm events are being recorded. Other sequences use different logging mechanisms that aren't as suitable for detailed file change auditing.",
+      "examTip": "Include `-k` key markers in your audit rules to make searching for specific types of events easier with `ausearch -k keyname`."
+    },
+    {
+      "id": 99,
+      "question": "A Linux administrator needs to implement disk quota enforcement on an ext4 filesystem. After enabling quotas in /etc/fstab, which command should they run to create the quota database files?",
+      "options": [
+        "quotacheck -cum /mount/point",
+        "edquota -u username",
+        "repquota -a",
+        "quotaon -av"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "`quotacheck -cum /mount/point` scans the filesystem and creates the quota database files (aquota.user and aquota.group). `-c` creates new files, `-u` checks user quotas, and `-m` performs a remount. `edquota` edits quotas for a user but requires existing quota files, `repquota` reports quota usage, and `quotaon` enables quotas but doesn't create the database files.",
+      "examTip": "Run `quotacheck` with the filesystem unmounted for maximum reliability, or use the `-f` flag to force checking a mounted filesystem."
+    },
+    {
+      "id": 100,
+      "question": "A Linux administrator needs to optimize NVMe SSD performance for database workloads. Which parameter should they adjust to reduce write latency?",
+      "options": [
+        "echo 2 > /sys/block/nvme0n1/queue/io_poll_delay",
+        "hdparm -W1 /dev/nvme0n1",
+        "blockdev --setra 4096 /dev/nvme0n1",
+        "echo noop > /sys/block/nvme0n1/queue/scheduler"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Setting NVMe polling mode with a low delay value (2 microseconds) through `/sys/block/nvme0n1/queue/io_poll_delay` reduces interrupt overhead and improves latency for database workloads. `hdparm -W1` enables write caching but doesn't apply to NVMe devices, `blockdev --setra` adjusts read-ahead which affects sequential reads not database writes, and the `noop` scheduler has less impact on NVMe devices which have their own optimized controller.",
+      "examTip": "For NVMe drives, also consider adjusting the `nr_requests` queue depth parameter to match your workload characteristics."
     }
   ]
 });
-
