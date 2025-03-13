@@ -123,6 +123,9 @@ function App() {
           {/* The default route depends on whether the user is logged in */}
           <Route path="/" element={<HomeOrProfile />} />
           
+          {/* Added additional home route that always shows InfoPage */}
+          <Route path="/home" element={<InfoPage />} />
+          
           {/* New public marketing routes */}
           <Route path="/demos" element={<DemosPage />} />
           <Route path="/exams" element={<ExamsPage />} />
