@@ -45,7 +45,7 @@ class Xploits:
             prompt += (
                 "Please follow this specific format for your response: "
                 "1. First, present three separate code examples that demonstrate the chosen vulnerability and/or evasion technique. "
-                "2. Each code example should be clearly marked with '```example code languange eg. sql, python, javascript etc' at the start and '```' at the end. "
+                "2. Each code example should be clearly marked with '```python' at the start and '```' at the end. "
                 "3. Label each code block with a header like 'Example 1:', 'Example 2:', etc. before the code block. "
                 "4. After all three code examples, provide explanations in plain text (not in code blocks). "
                 "5. For explanations, start with 'EXPLANATIONS:' on its own line, then explain each example with a heading 'Explanation for Example 1:' etc. "
