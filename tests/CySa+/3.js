@@ -1267,7 +1267,7 @@ db.tests.insertOne({
     },
     {
       "id": 98,
-      "question": "What is the primary purpose of 'data loss prevention (DLP)' software?",
+      "question": "What is the primary purpose of data loss prevention (DLP) software?",
       "options": [
         "Transforming all at-rest information into ciphertext automatically.",
         "To prevent sensitive data from leaving an organization's control without authorization.",
@@ -1280,7 +1280,7 @@ db.tests.insertOne({
     },
     {
       "id": 99,
-      "question": "Which of the following is a key benefit of using 'security information and event management (SIEM)' systems?",
+      "question": "Which of the following is a key benefit of using security information and event management (SIEM) systems?",
       "options": [
         "SIEMs eliminate the need for firewalls and intrusion detection systems.",
         "SIEMs provide centralized log management, real-time monitoring, correlation of events, and alerting.",
