@@ -237,7 +237,7 @@ db.tests.insertOne({
       "correctAnswerIndex": 0,
       "explanation": "`taskset -c 1,3 <command>` assigns a process to specific CPU cores. `nice` and `renice` modify process priority, while `schedtool` is an alternative but less common method.",
       "examTip": "Use `taskset -p <PID>` to check the CPU affinity of an existing process."
-    }
+    },
     {
       "id": 19,
       "question": "A Linux administrator needs to expand the root Logical Volume (LV) by 20GB on a server running a mission-critical database. The existing Volume Group (VG) has unallocated space, and the root LV uses an ext4 filesystem. Which sequence of steps would correctly expand the LV and the ext4 filesystem without downtime?",
