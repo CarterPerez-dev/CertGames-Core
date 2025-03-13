@@ -123,7 +123,7 @@ db.tests.insertOne({
     },
     {
       "id": 10,
-      "question": "An attacker is attempting a brute-force attack against a web application's login form. The attacker is using a list of common usernames and passwords. However, after a few attempts, the attacker's IP address is blocked, and they can no longer access the login form. Which of the following security controls MOST likely prevented the attack?`,
+      "question": "An attacker is attempting a brute-force attack against a web application's login form. The attacker is using a list of common usernames and passwords. However, after a few attempts, the attacker's IP address is blocked, and they can no longer access the login form. Which of the following security controls MOST likely prevented the attack?",
       "options": [
         "Cross-site scripting (XSS) protection",
         "Rate limiting and/or account lockout",
