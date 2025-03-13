@@ -1272,7 +1272,7 @@ db.tests.insertOne({
         "Transforming all at-rest information into ciphertext automatically.",
         "To prevent sensitive data from leaving an organization's control without authorization.",
         "Ensuring all backups are stored in a physically secure, offsite location.",
-        "Executing continuous malware scans
+        "Executing continuous malware scans"
       ],
       "correctAnswerIndex": 1,
       "explanation": "DLP may use encryption, but that's not its primary goal. It's not primarily for backup or malware removal. DLP systems are designed to *detect* and *prevent* sensitive data (PII, financial information, intellectual property) from being leaked or exfiltrated from an organization's control, whether intentionally or accidentally. This includes monitoring emails, web traffic, removable storage, and other channels.",
