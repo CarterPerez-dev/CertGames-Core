@@ -27,10 +27,14 @@ CONTEXT: The user has selected:
 - Difficulty: {difficulty} (e.g., 'Easy', 'Medium', 'Hard')
 
 REQUIREMENTS
-1. Four options (0, 1, 2, 3) total, one correct answer. Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
+1. Four options (0, 1, 2, 3) total, one correct answer. The incorrect options should be very plausible but not correct, requiring the test-taker to carefully differentiate.
 
 2. Explanations:
-   - Explain why the correct answer is correct with 2-3 sentences.
+   - For the correct answer: Provide multiple sentences detailing exactly why it's correct, clearly tying it back to the question's scenario or concept. Show how it fulfills the requirements asked in the question as well as why the other answer choices are incorrect/not the correct answer..
+   - For each incorrect answer: Provide multiple sentences detailing why it is NOT correct aswell as why the other incorrect answer choices are incorrect, and why then tell the user what the correct answer is and why it is correct using advanced multi-layered reasoning. 
+     Do not just say it's incorrect; fully explain why it falls short. 
+     Highlight conceptual differences, limitations, or focus areas that differ from the question's criteria.
+   - Regardless of user choice, the generated output must contain full explanations for all answer choices provided. The explanations are produced in advance as part of the JSON object. Each explanation should be at least 3 sentences, rich in detail and conceptual clarity using advanced multi-layered reasoning.
 
 3. Include an "exam_tip" field that provides a short, memorable takeaway or mnemonic to help differentiate the correct concept from the others. The exam tip should help the user recall why the correct answer stands out using advanced multi-layered reasoning.
 
@@ -38,14 +42,22 @@ REQUIREMENTS
    "question", "options", "correct_answer_index", "explanations", and "exam_tip"
    No extra text, no Markdown, no commentary outside the JSON.
 
-EXAMPLE FORMAT:
+5. For each explanation (correct and incorrect):
+   - At minimum of 3 sentences for the correct answer.
+   - if the user gets the answer correct provide minium 3 senetence answer as to why it is correct, but also why the other answer choices listed are not the correct answer using advanced multi-layered reasoning.
+   - Substantial detail.
+   - Clearly articulate conceptual reasons, not just factual statements using advanced multi-layered reasoning.
 
+EXAMPLE FORMAT (this is not real content, just structure, make sure to use all topics not just the topic provided in this example):
 {{
   "question": "The question",
-  "options": ["highly plausible distractor 0","highly plausible distractor 1","highly plausible distractor 2","highly plausible distractor 3"],
+  "options": ["Option 0","Option 1","Option 2","Option 3"],
   "correct_answer_index": 2,
   "explanations": {{
-    2-3 sentence explanation
+    "0": "Explain thoroughly why option 0 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning.",
+    "1": "Explain thoroughly why option 1 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning.",
+    "2": "Explain thoroughly why option 2 is correct, linking its characteristics to the question scenario and why the other answer choices are incorrect using advanced multi-layered reasoning",
+    "3": "Explain thoroughly why option 3 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning."
   }},
   "exam_tip": "A short, memorable hint or mnemonic that differentiates the correct approach from others using advanced multi-layered reasoning."
 }}
@@ -57,7 +69,7 @@ Now generate the JSON object following these instructions.
         response = client.chat.completions.create(
             model="gpt-4o",  
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=750,
+            max_tokens=900,
             temperature=0.6,
         )
 
@@ -97,7 +109,7 @@ def generate_grc_questions_stream(category, difficulty):
 You are an expert in concepts found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. 
 Your role is to generate a challenging and diverse test question related to governance, risk management, risk thresholds, types of risk, 
 Audit, Management, Policy, Cyber Security Ethics, Threat Assessment, Leadership, Business Continuity, compliance, regulations, 
-incident response, and more, focusing on preparing for exams like CISSP and CompTIA certifications. Make sure Extreme Distractor Plausibility: Every distractor is technically valid in some context—only minuscule details distinguish the correct answer.
+incident response, and more, focusing on preparing for exams like CISSP and CompTIA certifications.
 
 CONTEXT: The user has selected:
 - Category: {category}
@@ -108,17 +120,20 @@ REQUIREMENTS:
    - "question": string,
    - "options": array of exactly 4 strings (indexes 0,1,2,3),
    - "correct_answer_index": integer (0,1,2,3),
-   - "explanations": object with 2-3 sentences
+   - "explanations": object with keys "0","1","2","3" (multi-sentence detail),
    - "exam_tip": short mnemonic/hint.
 
-2. The correct answer's explanation has at least 2 sentences describing precisely why it is correct, 
+2. The correct answer's explanation has at least 3 sentences describing precisely why it is correct, 
    and also clarifies why the others are incorrect.
 
-3. Eplanantion should be 2-3 sentences
+3. Each incorrect answer's explanation has multiple sentences explaining why it is wrong, 
+   plus clarifies what the correct choice is and why the other answer choices are also incorrect or less suitable.
 
 4. Provide an "exam_tip" as a short, memorable mnemonic or hint to help the test-taker recall the correct concept.
 
 5. Return ONLY the JSON object. No extra text, disclaimers, or preludes.
+
+6. Each explanation must be at least 3 sentences, offering substantial detail and conceptual clarity.
 
 Now generate the JSON object following these instructions. 
 Remember: Provide ONLY valid JSON, nothing else.
@@ -129,7 +144,7 @@ Remember: Provide ONLY valid JSON, nothing else.
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=750,
+            max_tokens=900,
             temperature=0.6,
             stream=True
         )
