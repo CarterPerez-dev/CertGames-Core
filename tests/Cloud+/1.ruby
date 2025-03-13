@@ -1154,7 +1154,7 @@ db.tests.insertOne({
       "options": [
         "Complete elimination of cluster provisioning costs",
         "Automatic OS patching and control plane management by the provider",
-        "Full control over the underlying hardware"
+        "Full control over the underlying hardware",
         "Ability to run containers with no compute costs"
       ],
       "correctAnswerIndex": 1,
