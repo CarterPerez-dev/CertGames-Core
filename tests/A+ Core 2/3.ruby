@@ -1304,4 +1304,5 @@ db.tests.insertOne({
       "explanation": "Incremental backups back up only files that have changed since the last backup of any type (whether full, differential, or incremental), making them the most space-efficient but requiring all previous backups for restoration. Full backups back up all data on the system regardless of when it was last changed, creating complete but storage-intensive backup sets. Differential backups back up only files that have changed since the last full backup, not since the last backup of any type. Synthetic full backups combine existing backup sets to create a new full backup without accessing the original source data, which is a different backup strategy.",
       "examTip": "When explaining backup strategies to clients, emphasize that while incremental backups use the least storage and are fastest to create, they require the most files during restoration (the last full backup plus all subsequent incrementals), which increases restoration time and complexity."
     }
-  
+  ]
+});
