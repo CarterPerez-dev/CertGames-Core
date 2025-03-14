@@ -14,6 +14,7 @@ import { showAchievementToast } from "./pages/store/AchievementToast";
 import "./test.css";
 import iconMapping from "./iconMapping";
 import colorMapping from "./colorMapping";
+import FormattedQuestion from './FormattedQuestion';
 import {
   FaTrophy,
   FaMedal,
