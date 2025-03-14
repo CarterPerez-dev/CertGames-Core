@@ -1,13 +1,13 @@
 import React from 'react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-bash';
-import 'prismjs/components/prism-yaml';
-import 'prismjs/components/prism-json';
-import 'prismjs/components/prism-sql';
-import 'prismjs/components/prism-hcl';
+import hljs from 'highlight.js';
+import 'highlight.js/styles/atom-one-dark.css';  // Choose a theme that matches your preferences
+// Import language support you need
+import 'highlight.js/lib/languages/python';
+import 'highlight.js/lib/languages/javascript';
+import 'highlight.js/lib/languages/bash';
+import 'highlight.js/lib/languages/yaml';
+import 'highlight.js/lib/languages/json';
+import 'highlight.js/lib/languages/sql';
 
 const FormattedQuestion = ({ questionText }) => {
   // Process the question text to handle formatting
@@ -18,8 +18,6 @@ const FormattedQuestion = ({ questionText }) => {
     // Split the content by code blocks first
     const parts = [];
     let lastIndex = 0;
-    let inCodeBlock = false;
-    let currentLanguage = '';
     
     // Find all code blocks (both triple backtick and single backtick)
     const codeBlockRegex = /```(\w*)\n([\s\S]*?)```|`([^`]+)`/g;
@@ -90,14 +88,17 @@ const FormattedQuestion = ({ questionText }) => {
     return processedParts;
   }, [questionText]);
 
-  // Function to highlight code using Prism
+  // Function to highlight code using highlight.js
   const highlightCode = (code, language) => {
     try {
-      if (Prism.languages[language]) {
-        return Prism.highlight(code, Prism.languages[language], language);
+      // If language is specified and supported
+      if (language && language !== 'plaintext') {
+        return hljs.highlight(code, { language }).value;
       }
-      return Prism.highlight(code, Prism.languages.javascript, 'javascript');
+      // Auto-detect language
+      return hljs.highlightAuto(code).value;
     } catch (error) {
+      console.warn('Failed to highlight code:', error);
       return code;
     }
   };
@@ -162,10 +163,13 @@ const FormattedQuestion = ({ questionText }) => {
         switch (part.type) {
           case 'code-block':
             return (
-              <pre key={index} className={`language-${part.language} formatted-code-block`}>
-                <code dangerouslySetInnerHTML={{ 
-                  __html: highlightCode(part.content, part.language) 
-                }} />
+              <pre key={index} className={`hljs language-${part.language} formatted-code-block`}>
+                <code 
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightCode(part.content, part.language) 
+                  }}
+                  className="wrap-long-lines" // Add a class for line wrapping
+                />
               </pre>
             );
           
