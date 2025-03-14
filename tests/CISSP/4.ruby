@@ -495,7 +495,7 @@ db.tests.insertOne({
         "Network segmentation"
       ],
       "correctAnswerIndex": 2,
-      "explanation": "Zero trust architecture is specifically designed to eliminate the concept of a trusted internal network by requiring verification of every access request regardless of source location. Zero trust follows the principle of "never trust, always verify" and assumes breach of the network perimeter. Software-defined perimeter implements aspects of zero trust but doesn't fully describe the architectural approach. Defense in depth implements multiple layers of security but may still rely on trusted zones. Network segmentation divides networks into zones of different trust levels, still maintaining the concept of more-trusted internal segments.",
+      "explanation": "Zero trust architecture is specifically designed to eliminate the concept of a trusted internal network by requiring verification of every access request regardless of source location. Zero trust follows the principle of never trust, always verify and assumes breach of the network perimeter. Software-defined perimeter implements aspects of zero trust but doesn't fully describe the architectural approach. Defense in depth implements multiple layers of security but may still rely on trusted zones. Network segmentation divides networks into zones of different trust levels, still maintaining the concept of more-trusted internal segments.",
       "examTip": "Zero trust eliminates location-based trust, requiring verification of every access request regardless of source."
     },
     {
