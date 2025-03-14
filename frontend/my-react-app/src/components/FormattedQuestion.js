@@ -1,6 +1,6 @@
 import React from 'react';
 import hljs from 'highlight.js/lib/core';
-import 'highlight.js/styles/atom-one-dark.css';  // Choose a theme that matches your preferences
+import 'highlight.js/styles/xt256.css';  // Choose a theme that matches your preferences
 
 // Import and register language modules
 import javascript from 'highlight.js/lib/languages/javascript';
