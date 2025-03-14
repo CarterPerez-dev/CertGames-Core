@@ -13,7 +13,7 @@
   --test-error: #ff4e4e;
   --test-warning: #ffc107;
   --test-text: #fff;
-  --test-text-secondary: #fff;
+  --test-text-secondary: #b3b3b3;
   --test-border: #2a2c3d;
   --test-input-bg: rgba(0, 0, 0, 0.2);
   --test-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
@@ -1000,7 +1000,7 @@
 .explanation strong {
   display: block;
   margin-bottom: 10px;
-  font-size: 17px;
+  font-size: 20px;
   color: var(--test-success);
   font-family: 'Open Sans', sans-serif
 }
@@ -1011,10 +1011,11 @@
 
 .explanation p {
   margin: 0;
-  font-size: 17px;
-  line-height: 1.6;
+  font-size: 19px;
+  line-height: 1.8;
   color: var(--test-text-secondary);
-  font-family: 'Open Sans', sans-serif
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
 }
 
 /* Bottom Control Bar */
@@ -1537,7 +1538,7 @@
 
 /* Code block formatting */
 .formatted-code-block {
-  background-color: #1e1e2e !important;
+  background-color: #1a1a1a !important;
   border-radius: 6px;
   padding: 1rem !important;
   margin: 1rem 0 !important;
@@ -1548,7 +1549,7 @@
   line-height: 1.5;
   tab-size: 4;
   -moz-tab-size: 4;
-  border: 1px solid #2d2d3a;
+  border: 1px solid #595959;
   position: relative;
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
@@ -1597,16 +1598,18 @@
 
 /* ASCII diagram formatting */
 .formatted-ascii-diagram {
-  background-color: #1e1e2e;
+  background-color: #1a1a1a;
   border-radius: 6px;
   padding: 1rem;
   margin: 1rem 0;
   overflow-x: auto;
   white-space: pre;
   font-family: "Consolas", "Monaco", "Courier New", monospace;
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.4;
-  border: 1px solid #2d2d3a;
+  border: 1px solid #2d2d3a;  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
 }
 
 /* General preformatted text */
@@ -1707,7 +1710,7 @@
 
 .exam-tip p {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.6;
   color: var(--test-text-secondary);
   font-family: 'Open Sans', sans-serif;
@@ -1813,6 +1816,11 @@
   .exam-tip p {
     font-size: 15px;
     line-height: 1.5;
+  }  
+  
+  .progress-fill {
+    font-size: 12px;
+
   }
 }
 
@@ -1820,8 +1828,9 @@
   .formatted-code-block,
   .formatted-ascii-diagram,
   .formatted-pre {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     padding: 0.5rem;
+    line-height: 1.9;
   }
    
   .aplus-test-container,
@@ -1834,7 +1843,7 @@
   }
   
   .question-text {
-    font-size: 16px;
+    font-size: 18px;
   }
   
   .option-button {
@@ -1893,8 +1902,12 @@
   }
   
   .exam-tip p {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+    
+  .progress-fill {
+    font-size: 12px;
   }
 }
 /* Special Fixes for very small screens */
