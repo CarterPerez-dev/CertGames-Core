@@ -1085,7 +1085,7 @@ const GlobalTestPage = ({
                       <span className="question-number">Question {idx + 1}</span>
                       {isFlagged && <span className="flagged-icon">🚩</span>}
                     </div>
-                    <h3>{q.question}</h3>
+                    <h3><FormattedQuestion questionText={q.question} /></h3>
                     <div className="review-answer-section unanswered">
                       <p className="review-status-label">
                         <FaExclamationTriangle className="status-icon warning" />
@@ -1112,7 +1112,7 @@ const GlobalTestPage = ({
                     <span className="question-number">Question {idx + 1}</span>
                     {isFlagged && <span className="flagged-icon">🚩</span>}
                   </div>
-                  <h3>{q.question}</h3>
+                  <h3><FormattedQuestion questionText={q.question} /></h3>
                   <div className={`review-answer-section ${isSkipped ? 'skipped' : isCorrect ? 'correct' : 'incorrect'}`}>
                     <p className="review-status-label">
                       {isSkipped ? (
@@ -1451,7 +1451,7 @@ const GlobalTestPage = ({
       {!showScoreOverlay && !showReviewMode && !isFinished && (
         <div className="question-card">
           <div className="question-text">
-            {questionObject && questionObject.question}
+            {questionObject && <FormattedQuestion questionText={questionObject.question} />}
           </div>
 
           <ul className="options-list">
