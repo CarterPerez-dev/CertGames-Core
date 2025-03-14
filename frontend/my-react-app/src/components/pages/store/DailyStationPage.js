@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { claimDailyBonus, setXPAndCoins, fetchUserData } from './userSlice';
 import './DailyStation.css';
+import FormattedQuestion from '../../FormattedQuestion'; // Import FormattedQuestion component
 
 // Icon imports
 import {
@@ -381,7 +382,8 @@ const DailyStationPage = () => {
                 ) : (
                   <div className={`daily-station-question ${showCorrectAnimation ? 'correct-animation' : ''} ${showWrongAnimation ? 'wrong-animation' : ''}`}>
                     <div className="daily-station-question-prompt">
-                      <p>{questionData.prompt}</p>
+                      {/* Replace direct paragraph with FormattedQuestion component */}
+                      <FormattedQuestion questionText={questionData.prompt} />
                     </div>
                     
                     {questionData.alreadyAnswered ? (
@@ -402,11 +404,12 @@ const DailyStationPage = () => {
                           </div>
                         )}
                         
-                        {/* Explanation Section - New Addition */}
+                        {/* Explanation Section - Now using FormattedQuestion */}
                         {(questionData.explanation || (submitResult && submitResult.explanation)) && (
                           <div className="daily-station-explanation">
                             <h4>Explanation:</h4>
-                            <p>{questionData.explanation || (submitResult && submitResult.explanation)}</p>
+                            {/* Replace direct paragraph with FormattedQuestion component */}
+                            <FormattedQuestion questionText={questionData.explanation || (submitResult && submitResult.explanation)} />
                           </div>
                         )}
                         
