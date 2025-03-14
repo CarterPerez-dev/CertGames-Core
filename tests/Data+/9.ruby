@@ -885,7 +885,7 @@ db.tests.insertOne({
         "The failure_type field contains inconsistent categorization with similar failures labeled differently, requiring standardization before analysis."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The key issue is class imbalance, where normal operations greatly outnumber failure events in the dataset. This imbalance would cause most predictive models to default to predicting "no failure" in almost all cases, achieving high accuracy but failing to identify actual failures. Rebalancing techniques such as oversampling, undersampling, or synthetic sample generation are needed before modeling.",
+      "explanation": "The key issue is class imbalance, where normal operations greatly outnumber failure events in the dataset. This imbalance would cause most predictive models to default to predicting no failure in almost all cases, achieving high accuracy but failing to identify actual failures. Rebalancing techniques such as oversampling, undersampling, or synthetic sample generation are needed before modeling.",
       "examTip": "When building predictive models for rare events like equipment failures, address class imbalance first; even a model with high overall accuracy will be ineffective if it rarely predicts the minority class."
     },
     {
@@ -1262,7 +1262,7 @@ db.tests.insertOne({
         "The precision-recall tradeoff shows the model has serious performance issues that should be addressed through additional feature engineering before deployment."
       ],
       "correctAnswerIndex": 0,
-      "explanation": "The visualization shows the classic precision-recall tradeoff across different threshold values, where increasing the threshold improves precision (fewer false positives) but reduces recall (more false negatives). The optimal threshold depends entirely on the business context and the relative costs associated with each type of error, not on a standardized "best" threshold.",
+      "explanation": "The visualization shows the classic precision-recall tradeoff across different threshold values, where increasing the threshold improves precision (fewer false positives) but reduces recall (more false negatives). The optimal threshold depends entirely on the business context and the relative costs associated with each type of error, not on a standardized best threshold.",
       "examTip": "The optimal threshold for a predictive model should be determined by business context and the relative costs of different error types, not by mathematical optimization alone or standard values like 0.5."
     },
     {
