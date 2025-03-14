@@ -1542,7 +1542,7 @@
   padding: 1rem !important;
   margin: 1rem 0 !important;
   overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap !important;
   font-family: "Consolas", "Monaco", "Courier New", monospace;
   font-size: 0.9rem;
   line-height: 1.5;
@@ -1550,6 +1550,8 @@
   -moz-tab-size: 4;
   border: 1px solid #2d2d3a;
   position: relative;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 /* Inline code formatting */
@@ -1657,6 +1659,12 @@
 .formatted-table-container::-webkit-scrollbar-thumb:hover {
   background-color: #4d4d5d;
 }
+
+.wrap-long-lines {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;      /* Use break-word instead of break-all for better readability */
+}
+
 
 /* Level Up Overlay Animation for Confetti */
 @keyframes fadeInUp {
