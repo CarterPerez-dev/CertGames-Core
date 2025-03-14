@@ -9,13 +9,12 @@ import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-sql';
 import 'prismjs/components/prism-hcl';
 
-
-
 const FormattedQuestion = ({ questionText }) => {
-  if (!questionText) return null;
-
   // Process the question text to handle formatting
   const processedContent = React.useMemo(() => {
+    // Return empty array if no question text
+    if (!questionText) return [];
+    
     // Split the content by code blocks first
     const parts = [];
     let lastIndex = 0;
@@ -152,6 +151,9 @@ const FormattedQuestion = ({ questionText }) => {
       </table>
     );
   };
+
+  // Early return after hooks are called
+  if (!questionText) return null;
 
   // Render the content based on the processed parts
   return (
