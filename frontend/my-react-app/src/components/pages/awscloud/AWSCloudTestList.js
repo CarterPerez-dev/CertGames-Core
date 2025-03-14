@@ -191,7 +191,7 @@ const AWSCloudTestList = () => {
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
     if (existingAttempt && !doRestart) {
       // Resume test
-      navigate(`/practice-tests/awscloud/${testNumber}`);
+      navigate(`/practice-tests/aws-cloud/${testNumber}`);
     } else {
       // New or forced restart
       const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
@@ -212,7 +212,7 @@ const AWSCloudTestList = () => {
         })
       })
         .then(() => {
-          navigate(`/practice-tests/awscloud/${testNumber}`, {
+          navigate(`/practice-tests/aws-cloud/${testNumber}`, {
             state: { examMode }
           });
         })
@@ -228,7 +228,7 @@ const AWSCloudTestList = () => {
     <div className="testlist-container">
       <div className="testlist-header">
         <div className="testlist-title-section">
-          <h1 className="testlist-title">AWS Cloud</h1>
+          <h1 className="testlist-title">AWS Cloud Practitioner</h1>
           <p className="testlist-subtitle">Practice Test Collection</p>
         </div>
         
@@ -368,7 +368,7 @@ const AWSCloudTestList = () => {
                       <button
                         className="testlist-action-button testlist-review-button"
                         onClick={() => 
-                          navigate(`/practice-tests/awscloud/${testNumber}`, {
+                          navigate(`/practice-tests/aws-cloud/${testNumber}`, {
                             state: { review: true }
                           })
                         }
