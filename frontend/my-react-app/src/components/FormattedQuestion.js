@@ -1,18 +1,23 @@
 import React from 'react';
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
 import 'highlight.js/styles/atom-one-dark.css';  // Choose a theme that matches your preferences
-// Import language support you need
-import 'highlight.js/lib/languages/python';
-import 'highlight.js/lib/languages/javascript';
-import 'highlight.js/lib/languages/bash';
-import 'highlight.js/lib/languages/yaml';
-import 'highlight.js/lib/languages/json';
-import 'highlight.js/lib/languages/sql';
 
-// Register HCL language support
-// Note: highlight.js doesn't have built-in HCL support, 
-// but we can use Terraform which is similar
-import 'highlight.js/lib/languages/terraform';
+// Import and register language modules
+import javascript from 'highlight.js/lib/languages/javascript';
+import python from 'highlight.js/lib/languages/python';
+import bash from 'highlight.js/lib/languages/bash';
+import yaml from 'highlight.js/lib/languages/yaml';
+import json from 'highlight.js/lib/languages/json';
+import sql from 'highlight.js/lib/languages/sql';
+// Note: For HCL, we'll use a more generic approach since it doesn't have direct support
+
+// Register languages
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('python', python);
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('yaml', yaml);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('sql', sql);
 
 const FormattedQuestion = ({ questionText }) => {
   // Process the question text to handle formatting
@@ -96,13 +101,14 @@ const FormattedQuestion = ({ questionText }) => {
   // Function to highlight code using highlight.js
   const highlightCode = (code, language) => {
     try {
-      // Map HCL to terraform for highlighting
+      // For HCL code, we can try using an alternative language for highlighting
       if (language === 'hcl') {
-        language = 'terraform';
+        // Try to use yaml as it has somewhat similar syntax highlighting
+        language = 'yaml';
       }
       
       // If language is specified and supported
-      if (language && language !== 'plaintext') {
+      if (language && hljs.getLanguage(language)) {
         return hljs.highlight(code, { language }).value;
       }
       // Auto-detect language
