@@ -9,6 +9,11 @@ import 'highlight.js/lib/languages/yaml';
 import 'highlight.js/lib/languages/json';
 import 'highlight.js/lib/languages/sql';
 
+// Register HCL language support
+// Note: highlight.js doesn't have built-in HCL support, 
+// but we can use Terraform which is similar
+import 'highlight.js/lib/languages/terraform';
+
 const FormattedQuestion = ({ questionText }) => {
   // Process the question text to handle formatting
   const processedContent = React.useMemo(() => {
@@ -91,6 +96,11 @@ const FormattedQuestion = ({ questionText }) => {
   // Function to highlight code using highlight.js
   const highlightCode = (code, language) => {
     try {
+      // Map HCL to terraform for highlighting
+      if (language === 'hcl') {
+        language = 'terraform';
+      }
+      
       // If language is specified and supported
       if (language && language !== 'plaintext') {
         return hljs.highlight(code, { language }).value;
