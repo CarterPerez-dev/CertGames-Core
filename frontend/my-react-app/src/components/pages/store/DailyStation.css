@@ -669,6 +669,96 @@
   margin: 0;
 }
 
+.daily-station-question-prompt .formatted-question,
+.daily-station-explanation .formatted-question {
+  font-family: 'Trebuchet MS', Arial, sans-serif;
+  line-height: 1.5;
+  max-width: 100%;
+}
+
+/* Ensure code blocks wrap long lines */
+.daily-station-question-prompt .formatted-code-block,
+.daily-station-explanation .formatted-code-block {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  width: 100%;
+  max-width: 100%;
+  background-color: #1e1e2e !important;
+  border-radius: 6px;
+  padding: 1rem !important;
+  margin: 1rem 0 !important;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.9rem;
+  border: 1px solid #2d2d3a;
+  overflow-x: auto;
+}
+
+/* Additional class for the code element */
+.daily-station-question-prompt .wrap-long-lines,
+.daily-station-explanation .wrap-long-lines {
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+/* Style for inline code in the daily station */
+.daily-station-question-prompt .formatted-inline-code,
+.daily-station-explanation .formatted-inline-code {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  padding: 0.15rem 0.4rem;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Style for tables in the daily station */
+.daily-station-question-prompt .formatted-table-container,
+.daily-station-explanation .formatted-table-container {
+  overflow-x: auto;
+  max-width: 100%;
+  margin: 1rem 0;
+}
+
+.daily-station-question-prompt .formatted-table,
+.daily-station-explanation .formatted-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.daily-station-question-prompt .formatted-table th,
+.daily-station-question-prompt .formatted-table td,
+.daily-station-explanation .formatted-table th,
+.daily-station-explanation .formatted-table td {
+  border: 1px solid #2d2d3a;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.daily-station-question-prompt .formatted-table th,
+.daily-station-explanation .formatted-table th {
+  background-color: rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+}
+
+/* ASCII diagram formatting */
+.daily-station-question-prompt .formatted-ascii-diagram,
+.daily-station-explanation .formatted-ascii-diagram {
+  background-color: #1e1e2e;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border: 1px solid #2d2d3a;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
 
 /* =================== */
 /* RESPONSIVE STYLES   */
@@ -676,6 +766,34 @@
 
 /* Tablet Styles */
 @media (max-width: 992px) {
+  .daily-station-question-prompt .formatted-question,
+  .daily-station-explanation .formatted-question {
+    font-size: 15px;
+  }
+  
+  .daily-station-question-prompt .formatted-code-block,
+  .daily-station-explanation .formatted-code-block {
+    padding: 0.8rem !important;
+    margin: 0.8rem 0 !important;
+    font-size: 0.85rem;
+  }
+  
+  .daily-station-question-prompt .formatted-inline-code,
+  .daily-station-explanation .formatted-inline-code {
+    font-size: 0.85em;
+  }
+  
+  .daily-station-question-prompt .formatted-table,
+  .daily-station-explanation .formatted-table {
+    font-size: 0.85rem;
+  }
+  
+  .daily-station-question-prompt .formatted-ascii-diagram,
+  .daily-station-explanation .formatted-ascii-diagram {
+    padding: 0.8rem;
+    margin: 0.8rem 0;
+    font-size: 0.85rem;
+  }
   .daily-station-container {
     padding: 15px;
   }
@@ -792,6 +910,45 @@
   
   .daily-station-bonus-text p {
     font-size: 16px;
+
+  }
+  
+  .daily-station-question-prompt .formatted-question,
+  .daily-station-explanation .formatted-question {
+    font-size: 14px;
+  }
+  
+    .daily-station-question-prompt .formatted-question,
+  .daily-station-explanation .formatted-question {
+    font-size: 14px;
+  }
+  
+  .daily-station-question-prompt .formatted-code-block,
+  .daily-station-explanation .formatted-code-block {
+    padding: 0.7rem !important;
+    margin: 0.7rem 0 !important;
+    font-size: 0.8rem;
+    border-radius: 5px;
+  }
+  
+  .daily-station-question-prompt .formatted-inline-code,
+  .daily-station-explanation .formatted-inline-code {
+    padding: 0.1rem 0.3rem;
+    font-size: 0.8em;
+  }
+  
+  .daily-station-question-prompt .formatted-table th,
+  .daily-station-question-prompt .formatted-table td,
+  .daily-station-explanation .formatted-table th,
+  .daily-station-explanation .formatted-table td {
+    padding: 0.4rem;
+  }
+  
+  .daily-station-question-prompt .formatted-ascii-diagram,
+  .daily-station-explanation .formatted-ascii-diagram {
+    padding: 0.7rem;
+    margin: 0.7rem 0;
+    font-size: 0.8rem;
   }
 }
 
@@ -876,6 +1033,43 @@
   
   .daily-station-bonus-text p {
     font-size: 14px;
+
+  }
+  .daily-station-question-prompt .formatted-question,
+  .daily-station-explanation .formatted-question {
+    font-size: 13px;
+  }
+  
+  .daily-station-question-prompt .formatted-code-block,
+  .daily-station-explanation .formatted-code-block {
+    padding: 0.6rem !important;
+    margin: 0.6rem 0 !important;
+    font-size: 0.75rem;
+  }
+  
+  .daily-station-question-prompt .formatted-inline-code,
+  .daily-station-explanation .formatted-inline-code {
+    padding: 0.1rem 0.25rem;
+    font-size: 0.75em;
+  }
+  
+  .daily-station-question-prompt .formatted-table,
+  .daily-station-explanation .formatted-table {
+    font-size: 0.75rem;
+  }
+  
+  .daily-station-question-prompt .formatted-table th,
+  .daily-station-question-prompt .formatted-table td,
+  .daily-station-explanation .formatted-table th,
+  .daily-station-explanation .formatted-table td {
+    padding: 0.3rem;
+  }
+  
+  .daily-station-question-prompt .formatted-ascii-diagram,
+  .daily-station-explanation .formatted-ascii-diagram {
+    padding: 0.6rem;
+    margin: 0.6rem 0;
+    font-size: 0.75rem;
   }
 }
 
@@ -911,5 +1105,42 @@
   
   .daily-station-bonus-text p {
     font-size: 13px;
+  }
+  
+   .daily-station-question-prompt .formatted-question,
+  .daily-station-explanation .formatted-question {
+    font-size: 12px;
+  }
+  
+  .daily-station-question-prompt .formatted-code-block,
+  .daily-station-explanation .formatted-code-block {
+    padding: 0.5rem !important;
+    margin: 0.5rem 0 !important;
+    font-size: 0.7rem;
+  }
+  
+  .daily-station-question-prompt .formatted-inline-code,
+  .daily-station-explanation .formatted-inline-code {
+    font-size: 0.7em;
+  }
+  
+  .daily-station-question-prompt .formatted-table th,
+  .daily-station-question-prompt .formatted-table td,
+  .daily-station-explanation .formatted-table th,
+  .daily-station-explanation .formatted-table td {
+    padding: 0.25rem;
+  }
+  
+  .daily-station-question-prompt .formatted-ascii-diagram,
+  .daily-station-explanation .formatted-ascii-diagram {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    font-size: 0.7rem;
+  }
+  
+  /* Adjust horizontal scrollbar for very small screens */
+  .daily-station-question-prompt ::-webkit-scrollbar,
+  .daily-station-explanation ::-webkit-scrollbar {
+    height: 6px;
   }
 }
