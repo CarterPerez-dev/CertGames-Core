@@ -928,32 +928,6 @@ const GlobalTestPage = ({
             </div>
           </div>
 
-          {/* Test Length selection after finishing */}
-          <div className="length-selection">
-            <p>Select Length for Next Attempt:</p>
-            <div className="length-selector-options">
-              {allowedTestLengths.map((length) => (
-                <label
-                  key={length}
-                  className={`length-option ${selectedLength === length ? 'selected' : ''}`}
-                >
-                  <input
-                    type="radio"
-                    name="finishedTestLength"
-                    value={length}
-                    checked={selectedLength === length}
-                    onChange={(e) => {
-                      const newLen = Number(e.target.value);
-                      setSelectedLength(newLen);
-                      setActiveTestLength(newLen);
-                    }}
-                  />
-                  <span>{length}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
           <div className="overlay-buttons">
             <button
               className="restart-button"
@@ -978,21 +952,6 @@ const GlobalTestPage = ({
               <FaArrowLeft className="button-icon" />
               <span>Back to List</span>
             </button>
-            
-            {Number(testId) < 9999 && (
-              <button
-                className="next-test-button"
-                onClick={() => {
-                  // Set a flag in the navigation state to prevent showing the score overlay on the next test
-                  navigate(`${backToListPath}/${Number(testId) + 1}`, {
-                    state: { fromNextTest: true, selectedLength }
-                  });
-                }}
-              >
-                <FaArrowRight className="button-icon" />
-                <span>Next Test</span>
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -1005,13 +964,23 @@ const GlobalTestPage = ({
       <div className="score-overlay review-overlay">
         <div className="score-content review-content">
           {isFinished ? (
-            <button
-              className="back-to-list-btn"
-              onClick={() => navigate(backToListPath)}
-            >
-              <FaArrowLeft className="button-icon" />
-              <span>Back to Test List</span>
-            </button>
+            <>
+              <button
+                className="back-to-list-btn"
+                onClick={() => navigate(backToListPath)}
+              >
+                <FaArrowLeft className="button-icon" />
+                <span>Back to Test List</span>
+              </button>
+              {/* Additional fixed back to list button outside the container */}
+              <button
+                className="back-to-list-btn fixed-top-right"
+                onClick={() => navigate(backToListPath)}
+              >
+                <FaArrowLeft className="button-icon" />
+                <span>Back to Test List</span>
+              </button>
+            </>
           ) : (
             <button className="close-review-x" onClick={handleCloseReview}>
               <FaTimes />
