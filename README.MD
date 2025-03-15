@@ -8696,10 +8696,1715 @@ Run or deploy your iOS app. It now talks to the same Dockerized server you alrea
 ok so anwyay
 
  
-ok so thats a breif oevrvie wof my web application taht will hoepfyklly give yiouy enogh context to help me build my IOS APP
+ive started already and heres what weve done
+
+CertGames iOS App Project Overview
+What We've Done So Far
+
+Project Architecture Planning
+
+Decided on React Native as the framework for cross-platform compatibility
+Established folder structure and organization
+Set up Redux for state management
 
 
-so how shoudl we start?
+API Configuration
+
+Created apiConfig.js with comprehensive mapping of all backend endpoints
+Implemented apiClient.js with authentication handling and error interceptors
+Created specialized service files for backend features:
+
+Authentication service
+Analogy service
+GRC service
+Scenario service
+Xploit service
+Newsletter service
+Password reset service
+
+
+
+
+Backend Integration Understanding
+
+Analyzed Python backend code to understand API functionality
+Learned about streaming responses from AI endpoints
+Mapped backend routes to React Native API calls
+
+
+
+Our Next Steps (Immediate Focus)
+
+Tool Features Implementation
+
+Implement the special tools first (Analogy Hub, Scenario Sphere, GRC, Xploitcraft)
+Create UI components for each tool
+Connect to backend streaming APIs
+
+
+User Profile Features
+
+Implement profile screens
+Achievement system
+Shop interface
+Leaderboard
+
+
+Support & Info Features
+
+Q&A support interface
+Newsletter subscription
+Daily Cyber Brief
+Resources page
+
+
+
+Future Steps (Later Focus)
+
+Test-Taking System
+
+Implement the 13 different test category pages
+Create test-taking interface
+Implement scoring and progress tracking
+
+
+Authentication & Payments
+
+iOS-specific login/registration
+Apple Pay integration
+App Store subscription handling
+Combining database subscription tracking between web and iOS
+
+
+Deployment & Publishing
+
+App Store submission preparation
+Testing across iOS devices
+Marketing materials
+
+
+
+Project Goals
+
+Create a seamless mobile experience matching the web application
+Implement iOS-specific features like Apple Pay and App Store subscriptions
+Maintain a single backend serving both web and mobile clients
+Ensure data synchronization between platforms
+
+Technical Context
+
+Backend: Flask API with OpenAI integration for AI features
+Database: MongoDB for user data, tests, achievements
+Authentication: Session-based + OAuth providers (Google, Apple)
+Streaming: Several endpoints provide streaming responses for real-time content
+Special Features: Advanced AI tools (Analogy, Scenario, GRC, Xploitcraft)
+
+Files Created So Far
+
+API Configuration:
+
+src/api/apiConfig.js - Maps all backend endpoints
+src/api/apiClient.js - Configures Axios for API calls
+
+
+Service Files:
+
+src/api/authService.js
+src/api/analogyService.js
+src/api/grcService.js
+src/api/scenarioService.js
+src/api/xploitService.js
+src/api/newsletterService.js
+src/api/passwordResetService.js
+
+
+Navigation:
+
+Basic navigation structure planned but not fully implemented
+
+
+
+Our implementation approach is to create the mobile app as a client to the existing backend, focusing on maintaining feature parity while adapting the UI for mobile experiences. The most complex part will be implementing the test-taking system and handling iOS-specific subscriptions.
+
+
+
+
+here is my project strutcure so far
+
+
+refer to images i provied (tehy are teh prject stuture)
+
+
+
+and ill provide you all teh files we have doen so far
+
+// src/api/apiConfig.js
+import Constants from 'expo-constants';
+
+// Use different URLs based on environment
+const DEV_URL = 'http://192.168.1.X:8080/api'; // Replace with your local IP
+const PROD_URL = 'https://certgames.com/api';
+
+// Determine which URL to use
+const isProduction = !__DEV__;
+export const BASE_URL = isProduction ? PROD_URL : DEV_URL;
+
+export const API = {
+  // Auth endpoints
+  AUTH: {
+    LOGIN: `${BASE_URL}/test/login`,
+    REGISTER: `${BASE_URL}/test/user`,
+    FORGOT_PASSWORD: `${BASE_URL}/password-reset/request-reset`,
+    RESET_PASSWORD: `${BASE_URL}/password-reset/reset-password`,
+    VERIFY_TOKEN: (token) => `${BASE_URL}/password-reset/verify-token/${token}`,
+    OAUTH_GOOGLE: `${BASE_URL}/oauth/login/google`,
+    OAUTH_APPLE: `${BASE_URL}/oauth/login/apple`,
+  },
+  
+  // User endpoints
+  USER: {
+    DETAILS: (userId) => `${BASE_URL}/test/user/${userId}`,
+    DAILY_BONUS: (userId) => `${BASE_URL}/test/user/${userId}/daily-bonus`,
+    ADD_COINS: (userId) => `${BASE_URL}/test/user/${userId}/add-coins`,
+    ADD_XP: (userId) => `${BASE_URL}/test/user/${userId}/add-xp`,
+    CHANGE_USERNAME: `${BASE_URL}/test/user/change-username`,
+    CHANGE_EMAIL: `${BASE_URL}/test/user/change-email`,
+    CHANGE_PASSWORD: `${BASE_URL}/test/user/change-password`,
+  },
+  
+  // Test endpoints
+  TESTS: {
+    LIST: (category) => `${BASE_URL}/tests/${category}`,
+    DETAILS: (category, testId) => `${BASE_URL}/tests/${category}/${testId}`,
+    ATTEMPT: (userId, testId) => `${BASE_URL}/attempts/${userId}/${testId}`,
+    FINISH: (userId, testId) => `${BASE_URL}/attempts/${userId}/${testId}/finish`,
+    SUBMIT_ANSWER: (userId) => `${BASE_URL}/user/${userId}/submit-answer`,
+    UPDATE_ANSWER: (userId, testId) => `${BASE_URL}/attempts/${userId}/${testId}/answer`,
+    UPDATE_POSITION: (userId, testId) => `${BASE_URL}/attempts/${userId}/${testId}/position`,
+    LIST_ATTEMPTS: (userId) => `${BASE_URL}/attempts/${userId}/list`,
+  },
+  
+  // Analogy Tool
+  ANALOGY: {
+    STREAM: `${BASE_URL}/analogy/stream_analogy`,
+    GENERATE: `${BASE_URL}/analogy/generate_analogy`, // Legacy endpoint
+  },
+  
+  // Scenario Tool
+  SCENARIO: {
+    STREAM_SCENARIO: `${BASE_URL}/scenario/stream_scenario`,
+    STREAM_QUESTIONS: `${BASE_URL}/scenario/stream_questions`,
+  },
+  
+  // GRC Tool
+  GRC: {
+    STREAM_QUESTION: `${BASE_URL}/grc/stream_question`,
+    GENERATE_QUESTION: `${BASE_URL}/grc/generate_question`, // Legacy endpoint
+  },
+  
+  // Xploitcraft Tool
+  XPLOIT: {
+    GENERATE_PAYLOAD: `${BASE_URL}/payload/generate_payload`,
+  },
+  
+  // Daily Question
+  DAILY: {
+    GET_QUESTION: `${BASE_URL}/test/daily-question`,
+    SUBMIT_ANSWER: `${BASE_URL}/test/daily-question/answer`,
+  },
+  
+  // Achievements and shop
+  ACHIEVEMENTS: `${BASE_URL}/test/achievements`,
+  SHOP: {
+    ITEMS: `${BASE_URL}/test/shop`,
+    PURCHASE: (itemId) => `${BASE_URL}/test/shop/purchase/${itemId}`,
+    EQUIP: `${BASE_URL}/test/shop/equip`,
+  },
+  
+  // Support
+  SUPPORT: {
+    THREADS: `${BASE_URL}/support/my-chat`,
+    THREAD: (threadId) => `${BASE_URL}/support/my-chat/${threadId}`,
+    CLOSE_THREAD: (threadId) => `${BASE_URL}/support/my-chat/${threadId}/close`,
+  },
+  
+  // Newsletter
+  NEWSLETTER: {
+    SUBSCRIBE: `${BASE_URL}/newsletter/subscribe`,
+    UNSUBSCRIBE: `${BASE_URL}/newsletter/unsubscribe`,
+    UNSUBSCRIBE_BY_TOKEN: (token) => `${BASE_URL}/newsletter/unsubscribe/${token}`,
+  },
+  
+  // Leaderboard
+  LEADERBOARD: {
+    PUBLIC: `${BASE_URL}/public-leaderboard/board`,
+    USER: `${BASE_URL}/test/leaderboard`,
+  },
+  
+  // Contact Form
+  CONTACT: `${BASE_URL}/contact-form`,
+};
+
+// src/api/apiClient.js
+import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+
+// Create an axios instance
+const apiClient = axios.create({
+  timeout: 30000, // 30 seconds
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  },
+});
+
+// Request interceptor to include auth info and cookies
+apiClient.interceptors.request.use(
+  async (config) => {
+    try {
+      const userId = await SecureStore.getItemAsync('userId');
+      
+      if (userId) {
+        // For API calls that expect the userId
+        if (config.method === 'post') {
+          if (!config.data) {
+            config.data = {};
+          }
+          
+          // Only add userId if it's not already in the data
+          if (typeof config.data === 'object' && !config.data.userId) {
+            config.data.userId = userId;
+          }
+        }
+        
+        // Handle cookie-based auth for your backend
+        config.withCredentials = true;
+        
+        // Some APIs might need userId in headers
+        config.headers.userId = userId;
+      }
+      
+      return config;
+    } catch (error) {
+      console.error('API interceptor error:', error);
+      return config;
+    }
+  },
+  (error) => Promise.reject(error)
+);
+
+// Add response interceptor to handle errors
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    // Handle 401 Unauthorized errors
+    if (error.response && error.response.status === 401) {
+      // Clear stored credentials
+      await SecureStore.deleteItemAsync('userId');
+      
+      // You could dispatch a logout action here if needed
+      // Or redirect to login screen
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+export default apiClient;
+
+// src/api/authService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+import * as SecureStore from 'expo-secure-store';
+
+export const loginUser = async (credentials) => {
+  try {
+    const response = await apiClient.post(API.AUTH.LOGIN, credentials);
+    
+    if (response.data && response.data.user_id) {
+      // Store user ID securely
+      await SecureStore.setItemAsync('userId', response.data.user_id);
+    }
+    
+    return response.data;
+  } catch (error) {
+    console.error('Login error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const registerUser = async (userData) => {
+  try {
+    const response = await apiClient.post(API.AUTH.REGISTER, userData);
+    return response.data;
+  } catch (error) {
+    console.error('Registration error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const fetchUserData = async (userId) => {
+  try {
+    const response = await apiClient.get(API.USER.DETAILS(userId));
+    return response.data;
+  } catch (error) {
+    console.error('Fetch user error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    await SecureStore.deleteItemAsync('userId');
+    // No need to call backend logout endpoint if you're using stateless JWT auth
+    // If you want to invalidate server-side session, uncomment:
+    // await apiClient.post('/api/logout');
+    return { success: true };
+  } catch (error) {
+    console.error('Logout error:', error);
+    throw error;
+  }
+};
+
+export const claimDailyBonus = async (userId) => {
+  try {
+    const response = await apiClient.post(API.USER.DAILY_BONUS(userId));
+    return response.data;
+  } catch (error) {
+    console.error('Daily bonus error:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+// src/store/slices/userSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import * as AuthService from '../../api/authService';
+import * as SecureStore from 'expo-secure-store';
+
+// Async thunks
+export const loginUser = createAsyncThunk(
+  'user/loginUser',
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await AuthService.loginUser(credentials);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || 'Login failed');
+    }
+  }
+);
+
+export const fetchUserData = createAsyncThunk(
+  'user/fetchUserData',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await AuthService.fetchUserData(userId);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.error || 'Failed to fetch user data');
+    }
+  }
+);
+
+export const claimDailyBonus = createAsyncThunk(
+  'user/claimDailyBonus',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await AuthService.claimDailyBonus(userId);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to claim daily bonus');
+    }
+  }
+);
+
+// Initial state
+const initialState = {
+  userId: null,
+  username: '',
+  email: '',
+  xp: 0,
+  level: 1,
+  coins: 0,
+  achievements: [],
+  xpBoost: 1.0,
+  currentAvatar: null,
+  nameColor: null,
+  purchasedItems: [],
+  subscriptionActive: false,
+  lastDailyClaim: null,
+  
+  // Status flags
+  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  error: null,
+};
+
+// Slice
+const userSlice = createSlice({
+  name: 'user',
+  initialState,
+  reducers: {
+    // Synchronous reducers
+    setUser: (state, action) => {
+      const userData = action.payload;
+      state.userId = userData.user_id || userData._id;
+      state.username = userData.username;
+      state.email = userData.email || '';
+      state.xp = userData.xp || 0;
+      state.level = userData.level || 1;
+      state.coins = userData.coins || 0;
+      state.achievements = userData.achievements || [];
+      state.xpBoost = userData.xpBoost || 1.0;
+      state.currentAvatar = userData.currentAvatar;
+      state.nameColor = userData.nameColor;
+      state.purchasedItems = userData.purchasedItems || [];
+      state.subscriptionActive = userData.subscriptionActive || false;
+    },
+    
+    logout: (state) => {
+      // Reset to initial state
+      Object.assign(state, initialState);
+      // Clear storage
+      SecureStore.deleteItemAsync('userId');
+    },
+    
+    updateCoins: (state, action) => {
+      state.coins = action.payload;
+    },
+    
+    updateXp: (state, action) => {
+      state.xp = action.payload;
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      // LOGIN
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.userId = action.payload.user_id;
+        state.username = action.payload.username;
+        state.email = action.payload.email || '';
+        state.coins = action.payload.coins || 0;
+        state.xp = action.payload.xp || 0;
+        state.level = action.payload.level || 1;
+        state.achievements = action.payload.achievements || [];
+        state.xpBoost = action.payload.xpBoost || 1.0;
+        state.currentAvatar = action.payload.currentAvatar;
+        state.nameColor = action.payload.nameColor;
+        state.purchasedItems = action.payload.purchasedItems || [];
+        state.subscriptionActive = action.payload.subscriptionActive || false;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      
+      // FETCH USER DATA
+      .addCase(fetchUserData.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const userData = action.payload;
+        state.userId = userData._id;
+        state.username = userData.username;
+        state.email = userData.email || '';
+        state.xp = userData.xp || 0;
+        state.level = userData.level || 1;
+        state.coins = userData.coins || 0;
+        state.achievements = userData.achievements || [];
+        state.xpBoost = userData.xpBoost || 1.0;
+        state.currentAvatar = userData.currentAvatar;
+        state.nameColor = userData.nameColor;
+        state.purchasedItems = userData.purchasedItems || [];
+        state.subscriptionActive = userData.subscriptionActive || false;
+        state.lastDailyClaim = userData.lastDailyClaim;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      
+      // DAILY BONUS
+      .addCase(claimDailyBonus.fulfilled, (state, action) => {
+        if (action.payload.success) {
+          state.coins = action.payload.newCoins;
+          state.xp = action.payload.newXP;
+          state.lastDailyClaim = action.payload.newLastDailyClaim;
+          
+          // If there are newly unlocked achievements
+          if (action.payload.newlyUnlocked && action.payload.newlyUnlocked.length > 0) {
+            // Add the new achievements to the array if they don't already exist
+            action.payload.newlyUnlocked.forEach(achievementId => {
+              if (!state.achievements.includes(achievementId)) {
+                state.achievements.push(achievementId);
+              }
+            });
+          }
+        }
+      });
+  },
+});
+
+// Export actions and reducer
+export const { setUser, logout, updateCoins, updateXp } = userSlice.actions;
+export default userSlice.reducer;
+
+// src/store/index.js
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './slices/userSlice';
+// Import other reducers as you create them
+// import testReducer from './slices/testSlice';
+// import achievementsReducer from './slices/achievementsSlice';
+
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+    // Add other reducers here
+    // tests: testReducer,
+    // achievements: achievementsReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these paths in the Redux state
+        ignoredActions: ['user/fetchUserData/fulfilled'],
+        ignoredPaths: ['user.lastDailyClaim'],
+      },
+    }),
+});
+
+export default store;
+
+// src/navigation/AuthNavigator.js
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+
+// Import auth screens
+import LoginScreen from '../screens/auth/LoginScreen';
+import RegisterScreen from '../screens/auth/RegisterScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import CreateUsernameScreen from '../screens/auth/CreateUsernameScreen';
+
+const Stack = createStackNavigator();
+
+const AuthNavigator = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+        cardStyle: { backgroundColor: '#121212' }
+      }}
+    >
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+      <Stack.Screen name="CreateUsername" component={CreateUsernameScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export default AuthNavigator;
+
+// src/navigation/MainNavigator.js
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
+
+// Import screens
+import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/profile/ProfileScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
+import ShopScreen from '../screens/shop/ShopScreen';
+import TestListScreen from '../screens/tests/TestListScreen';
+import TestScreen from '../screens/tests/TestScreen';
+import AnalogyHubScreen from '../screens/tools/AnalogyHubScreen';
+import ScenarioSphereScreen from '../screens/tools/ScenarioSphereScreen';
+import GRCScreen from '../screens/tools/GRCScreen';
+import AchievementsScreen from '../screens/profile/AchievementsScreen';
+import SupportScreen from '../screens/profile/SupportScreen';
+
+// Create Navigators
+const Tab = createBottomTabNavigator();
+const HomeStack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const LeaderboardStack = createStackNavigator();
+const ShopStack = createStackNavigator();
+
+// Home Stack
+const HomeStackNavigator = () => (
+  <HomeStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#1E1E1E',
+        elevation: 0, // Android
+        shadowOpacity: 0, // iOS
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <HomeStack.Screen 
+      name="HomeScreen" 
+      component={HomeScreen} 
+      options={{ title: 'Dashboard' }}
+    />
+    <HomeStack.Screen 
+      name="TestList" 
+      component={TestListScreen} 
+      options={({ route }) => ({ title: route.params?.title || 'Practice Tests' })}
+    />
+    <HomeStack.Screen 
+      name="Test" 
+      component={TestScreen} 
+      options={({ route }) => ({ title: route.params?.title || 'Test' })}
+    />
+    <HomeStack.Screen 
+      name="AnalogyHub" 
+      component={AnalogyHubScreen} 
+      options={{ title: 'Analogy Hub' }}
+    />
+    <HomeStack.Screen 
+      name="ScenarioSphere" 
+      component={ScenarioSphereScreen} 
+      options={{ title: 'Scenario Sphere' }}
+    />
+    <HomeStack.Screen 
+      name="GRC" 
+      component={GRCScreen} 
+      options={{ title: 'GRC Questions' }}
+    />
+  </HomeStack.Navigator>
+);
+
+// Profile Stack
+const ProfileStackNavigator = () => (
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#1E1E1E',
+        elevation: 0,
+        shadowOpacity: 0,
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <ProfileStack.Screen 
+      name="ProfileScreen" 
+      component={ProfileScreen} 
+      options={{ title: 'My Profile' }}
+    />
+    <ProfileStack.Screen 
+      name="Achievements" 
+      component={AchievementsScreen} 
+      options={{ title: 'Achievements' }}
+    />
+    <ProfileStack.Screen 
+      name="Support" 
+      component={SupportScreen} 
+      options={{ title: 'Support' }}
+    />
+  </ProfileStack.Navigator>
+);
+
+// Leaderboard Stack
+const LeaderboardStackNavigator = () => (
+  <LeaderboardStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#1E1E1E',
+        elevation: 0,
+        shadowOpacity: 0,
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <LeaderboardStack.Screen 
+      name="LeaderboardScreen" 
+      component={LeaderboardScreen} 
+      options={{ title: 'Leaderboard' }}
+    />
+  </LeaderboardStack.Navigator>
+);
+
+// Shop Stack
+const ShopStackNavigator = () => (
+  <ShopStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#1E1E1E',
+        elevation: 0,
+        shadowOpacity: 0,
+      },
+      headerTintColor: '#FFFFFF',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    }}
+  >
+    <ShopStack.Screen 
+      name="ShopScreen" 
+      component={ShopScreen} 
+      options={{ title: 'Shop' }}
+    />
+  </ShopStack.Navigator>
+);
+
+// Main Tab Navigator
+const MainNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === 'Home') {
+            iconName = focused ? 'home' : 'home-outline';
+          } else if (route.name === 'Profile') {
+            iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'Leaderboard') {
+            iconName = focused ? 'trophy' : 'trophy-outline';
+          } else if (route.name === 'Shop') {
+            iconName = focused ? 'cart' : 'cart-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#6543CC',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: '#1A1A1A',
+          borderTopColor: '#333333',
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeStackNavigator} />
+      <Tab.Screen name="Leaderboard" component={LeaderboardStackNavigator} />
+      <Tab.Screen name="Shop" component={ShopStackNavigator} />
+      <Tab.Screen name="Profile" component={ProfileStackNavigator} />
+    </Tab.Navigator>
+  );
+};
+
+export default MainNavigator;
+
+// src/navigation/AppNavigator.js
+import React, { useEffect, useState } from 'react';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Import navigators
+import AuthNavigator from './AuthNavigator';
+import MainNavigator from './MainNavigator';
+
+// Import actions
+import { fetchUserData } from '../store/slices/userSlice';
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
+
+// Custom theme
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: '#121212',
+    text: '#FFFFFF',
+    primary: '#6543CC',
+    card: '#1E1E1E',
+    border: '#333333',
+  },
+};
+
+const AppNavigator = () => {
+  const dispatch = useDispatch();
+  const { userId, status } = useSelector((state) => state.user);
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        // Check if user is already logged in
+        const storedUserId = await SecureStore.getItemAsync('userId');
+        
+        if (storedUserId) {
+          // Fetch user data
+          await dispatch(fetchUserData(storedUserId));
+        }
+      } catch (e) {
+        console.warn('Error preparing app:', e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+        await SplashScreen.hideAsync();
+      }
+    }
+
+    prepare();
+  }, [dispatch]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
+  return (
+    <NavigationContainer theme={MyTheme}>
+      {userId ? <MainNavigator /> : <AuthNavigator />}
+    </NavigationContainer>
+  );
+};
+
+export default AppNavigator;
+
+// src/screens/auth/LoginScreen.js
+import React, { useState } from 'react';
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  TouchableOpacity, 
+  StyleSheet, 
+  KeyboardAvoidingView, 
+  Platform,
+  ActivityIndicator,
+  Alert,
+  ScrollView,
+  Image
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+import { loginUser } from '../../store/slices/userSlice';
+
+const LoginScreen = ({ navigation }) => {
+  const [usernameOrEmail, setUsernameOrEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.user);
+  const isLoading = status === 'loading';
+  
+  const handleLogin = async () => {
+    if (!usernameOrEmail || !password) {
+      Alert.alert('Error', 'Please enter both username/email and password');
+      return;
+    }
+    
+    try {
+      await dispatch(loginUser({ usernameOrEmail, password })).unwrap();
+      // Success is handled by the AppNavigator
+    } catch (err) {
+      Alert.alert('Login Failed', err || 'Could not log in. Please try again.');
+    }
+  };
+  
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.logoContainer}>
+          <Image 
+            source={require('../../assets/logo.png')} 
+            style={styles.logo}
+            resizeMode="contain"
+          />
+          <Text style={styles.appName}>CertGames</Text>
+        </View>
+        
+        <Text style={styles.welcomeText}>Welcome Back</Text>
+        <Text style={styles.subtitleText}>Sign in to continue your journey</Text>
+        
+        {error && (
+          <View style={styles.errorContainer}>
+            <Ionicons name="alert-circle" size={20} color="#FF4C8B" />
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
+        
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <Ionicons name="person-outline" size={20} color="#AAAAAA" style={styles.inputIcon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Username or Email"
+              placeholderTextColor="#AAAAAA"
+              value={usernameOrEmail}
+              onChangeText={setUsernameOrEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+              editable={!isLoading}
+            />
+          </View>
+          
+          <View style={styles.inputContainer}>
+            <Ionicons name="lock-closed-outline" size={20} color="#AAAAAA" style={styles.inputIcon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#AAAAAA"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              returnKeyType="done"
+              editable={!isLoading}
+            />
+            <TouchableOpacity 
+              style={styles.passwordToggle}
+              onPress={() => setShowPassword(!showPassword)}
+            >
+              <Ionicons 
+                name={showPassword ? "eye-off-outline" : "eye-outline"} 
+                size={20} 
+                color="#AAAAAA" 
+              />
+            </TouchableOpacity>
+          </View>
+          
+          <TouchableOpacity 
+            style={styles.forgotPasswordContainer}
+            onPress={() => navigation.navigate('ForgotPassword')}
+          >
+            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={[styles.loginButton, isLoading && styles.disabledButton]}
+            onPress={handleLogin}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <Text style={styles.loginButtonText}>Sign In</Text>
+            )}
+          </TouchableOpacity>
+          
+          <View style={styles.dividerContainer}>
+            <View style={styles.divider} />
+            <Text style={styles.dividerText}>OR</Text>
+            <View style={styles.divider} />
+          </View>
+          
+          <View style={styles.socialButtonsContainer}>
+            <TouchableOpacity style={styles.socialButton}>
+              <Ionicons name="logo-google" size={20} color="#FFFFFF" />
+              <Text style={styles.socialButtonText}>Google</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.socialButton}>
+              <Ionicons name="logo-apple" size={20} color="#FFFFFF" />
+              <Text style={styles.socialButtonText}>Apple</Text>
+            </TouchableOpacity>
+          </View>
+          
+          <View style={styles.registerContainer}>
+            <Text style={styles.registerText}>Don't have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <Text style={styles.registerLink}>Create Account</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+  },
+  appName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginTop: 10,
+  },
+  welcomeText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+  },
+  subtitleText: {
+    fontSize: 16,
+    color: '#AAAAAA',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 76, 139, 0.1)',
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+  },
+  errorText: {
+    color: '#FF4C8B',
+    marginLeft: 10,
+    flex: 1,
+  },
+  form: {
+    width: '100%',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2A2A2A',
+    borderRadius: 8,
+    marginBottom: 16,
+    height: 50,
+  },
+  inputIcon: {
+    marginHorizontal: 15,
+  },
+  input: {
+    flex: 1,
+    height: 50,
+    color: '#FFFFFF',
+    paddingRight: 15,
+  },
+  passwordToggle: {
+    padding: 15,
+  },
+  forgotPasswordContainer: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: '#6543CC',
+    fontSize: 14,
+  },
+  loginButton: {
+    backgroundColor: '#6543CC',
+    height: 50,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#4F4F4F',
+  },
+  loginButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  divider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#333333',
+  },
+  dividerText: {
+    color: '#AAAAAA',
+    paddingHorizontal: 10,
+    fontSize: 14,
+  },
+  socialButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  socialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#2A2A2A',
+    height: 50,
+    borderRadius: 8,
+    flex: 0.48,
+  },
+  socialButtonText: {
+    color: '#FFFFFF',
+    marginLeft: 10,
+    fontWeight: 'bold',
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  registerText: {
+    color: '#AAAAAA',
+  },
+  registerLink: {
+    color: '#6543CC',
+    fontWeight: 'bold',
+  },
+});
+
+export default LoginScreen;
+
+// src/screens/HomeScreen.js
+import React, { useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  ScrollView, 
+  StyleSheet, 
+  TouchableOpacity, 
+  Image,
+  RefreshControl
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { Ionicons } from '@expo/vector-icons';
+import { fetchUserData, claimDailyBonus } from '../store/slices/userSlice';
+
+const HomeScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const { userId, username, level, xp, coins, status, lastDailyClaim } = useSelector((state) => state.user);
+  const isLoading = status === 'loading';
+  
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  }, [dispatch, userId]);
+  
+  const onRefresh = () => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  };
+  
+  const handleClaimDailyBonus = () => {
+    if (userId) {
+      dispatch(claimDailyBonus(userId));
+    }
+  };
+  
+  // Check if daily bonus is available
+  const canClaimDaily = () => {
+    if (!lastDailyClaim) return true;
+    
+    const lastClaim = new Date(lastDailyClaim);
+    const now = new Date();
+    
+    // Check if last claim was more than 24 hours ago
+    return now - lastClaim > 24 * 60 * 60 * 1000;
+  };
+  
+  const certOptions = [
+    { id: 'aplus', name: 'A+ Certification', color: '#6543CC', icon: 'desktop-outline' },
+    { id: 'nplus', name: 'Network+', color: '#FF4C8B', icon: 'wifi-outline' },
+    { id: 'secplus', name: 'Security+', color: '#2ECC71', icon: 'shield-checkmark-outline' },
+    { id: 'cysa', name: 'CySA+', color: '#3498DB', icon: 'analytics-outline' },
+    { id: 'penplus', name: 'PenTest+', color: '#E67E22', icon: 'bug-outline' },
+    { id: 'linuxplus', name: 'Linux+', color: '#9B59B6', icon: 'terminal-outline' }
+  ];
+  
+  const navigateToTests = (certId, title) => {
+    navigation.navigate('TestList', { category: certId, title });
+  };
+  
+  return (
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
+      }
+    >
+      <View style={styles.header}>
+        <Text style={styles.welcomeText}>Welcome back, {username}!</Text>
+        
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>Level {level}</Text>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="trophy-outline" size={16} color="#6543CC" />
+            </View>
+          </View>
+          
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{xp} XP</Text>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="flash-outline" size={16} color="#FF4C8B" />
+            </View>
+          </View>
+          
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{coins}</Text>
+            <View style={styles.statIconContainer}>
+              <Ionicons name="cash-outline" size={16} color="#2ECC71" />
+            </View>
+          </View>
+        </View>
+      </View>
+      
+      {canClaimDaily() && (
+        <TouchableOpacity 
+          style={styles.dailyBonusCard}
+          onPress={handleClaimDailyBonus}
+        >
+          <View style={styles.dailyBonusContent}>
+            <Ionicons name="calendar-outline" size={24} color="#FFFFFF" />
+            <View style={styles.dailyBonusTextContainer}>
+              <Text style={styles.dailyBonusTitle}>Daily Bonus Available!</Text>
+              <Text style={styles.dailyBonusSubtitle}>Claim 250 coins and XP</Text>
+            </View>
+          </View>
+          <Ionicons name="chevron-forward" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      )}
+      
+      <Text style={styles.sectionTitle}>Practice Tests</Text>
+      <View style={styles.certGrid}>
+        {certOptions.map((cert) => (
+          <TouchableOpacity
+            key={cert.id}
+            style={[styles.certCard, { backgroundColor: cert.color }]}
+            onPress={() => navigateToTests(cert.id, cert.name)}
+          >
+            <Ionicons name={cert.icon} size={28} color="#FFFFFF" />
+            <Text style={styles.certName}>{cert.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      
+      <Text style={styles.sectionTitle}>Training Tools</Text>
+      <View style={styles.toolsContainer}>
+        <TouchableOpacity 
+          style={styles.toolButton}
+          onPress={() => navigation.navigate('AnalogyHub')}
+        >
+          <Ionicons name="bulb-outline" size={24} color="#FF4C8B" />
+          <View style={styles.toolTextContainer}>
+            <Text style={styles.toolTitle}>Analogy Hub</Text>
+            <Text style={styles.toolSubtitle}>Learn complex concepts with analogies</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.toolButton}
+          onPress={() => navigation.navigate('ScenarioSphere')}
+        >
+          <Ionicons name="document-text-outline" size={24} color="#2ECC71" />
+          <View style={styles.toolTextContainer}>
+            <Text style={styles.toolTitle}>Scenario Sphere</Text>
+            <Text style={styles.toolSubtitle}>Practice with real-world scenarios</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.toolButton}
+          onPress={() => navigation.navigate('GRC')}
+        >
+          <Ionicons name="shield-outline" size={24} color="#3498DB" />
+          <View style={styles.toolTextContainer}>
+            <Text style={styles.toolTitle}>GRC Questions</Text>
+            <Text style={styles.toolSubtitle}>Governance, Risk & Compliance</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
+  header: {
+    padding: 20,
+    backgroundColor: '#1E1E1E',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 20,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  statItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2A2A2A',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 8,
+    minWidth: 100,
+  },
+  statValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginRight: 8,
+  },
+  statIconContainer: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  dailyBonusCard: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#6543CC',
+    margin: 20,
+    marginTop: 15,
+    padding: 15,
+    borderRadius: 10,
+  },
+  dailyBonusContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dailyBonusTextContainer: {
+    marginLeft: 15,
+  },
+  dailyBonusTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  dailyBonusSubtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    margin: 20,
+    marginBottom: 10,
+  },
+  certGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 10,
+  },
+  certCard: {
+    width: '45%',
+    height: 100,
+    margin: '2.5%',
+    borderRadius: 10,
+    padding: 15,
+    justifyContent: 'space-between',
+  },
+  certName: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  toolsContainer: {
+    padding: 10,
+    paddingBottom: 30, // Extra padding at bottom
+  },
+  toolButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#2A2A2A',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  toolTextContainer: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  toolTitle: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  toolSubtitle: {
+    color: '#AAAAAA',
+    fontSize: 14,
+  },
+});
+
+export default HomeScreen;
+
+// App.js
+import React from 'react';
+import { StatusBar } from 'react-native';
+import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import store from './src/store';
+import AppNavigator from './src/navigation/AppNavigator';
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <StatusBar barStyle="light-content" backgroundColor="#121212" />
+        <AppNavigator />
+      </SafeAreaProvider>
+    </Provider>
+  );
+}
+
+// src/api/analogyService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const streamAnalogy = async (analogyType, concept1, concept2 = '', concept3 = '', category = 'real-world') => {
+  try {
+    const response = await apiClient.post(
+      API.ANALOGY.STREAM,
+      {
+        analogy_type: analogyType,
+        concept1,
+        concept2,
+        concept3,
+        category
+      },
+      {
+        responseType: 'text',
+        // For streaming responses
+        onDownloadProgress: progressEvent => {
+          const text = progressEvent.currentTarget.response;
+          // You can implement a callback here to handle partial text
+          // Or return a promise that resolves with chunks
+        }
+      }
+    );
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error streaming analogy:', error);
+    throw error;
+  }
+};
+
+// src/api/grcService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const streamGRCQuestion = async (category = 'Random', difficulty = 'Easy') => {
+  try {
+    const response = await apiClient.post(
+      API.GRC.STREAM_QUESTION,
+      { category, difficulty },
+      {
+        responseType: 'json',
+        onDownloadProgress: progressEvent => {
+          const jsonChunks = progressEvent.currentTarget.response;
+          // Process JSON chunks here
+        }
+      }
+    );
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error streaming GRC question:', error);
+    throw error;
+  }
+};
+
+// src/api/scenarioService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const streamScenario = async (industry, attackType, skillLevel, threatIntensity) => {
+  try {
+    const response = await apiClient.post(
+      API.SCENARIO.STREAM_SCENARIO,
+      {
+        industry,
+        attack_type: attackType,
+        skill_level: skillLevel,
+        threat_intensity: threatIntensity
+      },
+      {
+        responseType: 'text',
+        onDownloadProgress: progressEvent => {
+          const text = progressEvent.currentTarget.response;
+          // Process text chunks here
+        }
+      }
+    );
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error streaming scenario:', error);
+    throw error;
+  }
+};
+
+export const streamScenarioQuestions = async (scenarioText) => {
+  try {
+    const response = await apiClient.post(
+      API.SCENARIO.STREAM_QUESTIONS,
+      { scenario_text: scenarioText },
+      {
+        responseType: 'json',
+        onDownloadProgress: progressEvent => {
+          const jsonChunks = progressEvent.currentTarget.response;
+          // Process JSON chunks here
+        }
+      }
+    );
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error streaming scenario questions:', error);
+    throw error;
+  }
+};
+
+// src/api/xploitService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const generatePayload = async (vulnerability, evasionTechnique, stream = true) => {
+  try {
+    const response = await apiClient.post(
+      API.XPLOIT.GENERATE_PAYLOAD,
+      {
+        vulnerability,
+        evasion_technique: evasionTechnique,
+        stream
+      },
+      {
+        responseType: stream ? 'text' : 'json',
+        onDownloadProgress: stream ? (progressEvent => {
+          const text = progressEvent.currentTarget.response;
+          // Process text chunks here
+        }) : undefined
+      }
+    );
+    
+    return response.data;
+  } catch (error) {
+    console.error('Error generating payload:', error);
+    throw error;
+  }
+};
+
+// src/api/newsletterService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const subscribeToNewsletter = async (email) => {
+  try {
+    const response = await apiClient.post(API.NEWSLETTER.SUBSCRIBE, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error subscribing to newsletter:', error);
+    throw error;
+  }
+};
+
+export const unsubscribeFromNewsletter = async (email) => {
+  try {
+    const response = await apiClient.post(API.NEWSLETTER.UNSUBSCRIBE, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error unsubscribing from newsletter:', error);
+    throw error;
+  }
+};
+
+export const unsubscribeByToken = async (token) => {
+  try {
+    const response = await apiClient.get(API.NEWSLETTER.UNSUBSCRIBE_BY_TOKEN(token));
+    return response.data;
+  } catch (error) {
+    console.error('Error unsubscribing by token:', error);
+    throw error;
+  }
+};
+
+// src/api/passwordResetService.js
+import apiClient from './apiClient';
+import { API } from './apiConfig';
+
+export const requestPasswordReset = async (email) => {
+  try {
+    const response = await apiClient.post(API.AUTH.FORGOT_PASSWORD, { email });
+    return response.data;
+  } catch (error) {
+    console.error('Error requesting password reset:', error);
+    throw error;
+  }
+};
+
+export const verifyResetToken = async (token) => {
+  try {
+    const response = await apiClient.get(API.AUTH.VERIFY_TOKEN(token));
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying reset token:', error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (token, newPassword, confirmPassword) => {
+  try {
+    const response = await apiClient.post(API.AUTH.RESET_PASSWORD, {
+      token,
+      newPassword,
+      confirmPassword
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+};
+
+
+
+ok so tahts all of them so far- so refer back to out next steps- im gonna provide you my frotned files now starting with the naviagtion actuallly we haev in my webapplcition, then ill proide you my tools frotnend files liek teh analogy hub, grc, scenerio, and xploit stuff
+
+then we move onto the next steps and so on ok? cool? they will be in teh pormpt i giev you directly
+
+
+tehn well continue on with my next files and so on. adn at teh evry end of eveyrthing ill test the app with expo on iphone (i dont have mac access at the moment) and udpate all UI to my liking but still try your best we want teh ebst mobniel app on teh app stoire, coolest/ bets fucnitoning etc etc. simialr to my web app obviolsya dn ahs to integrate well with it so all user data is replciate don teh ios app adn web app adn you already know, you this this, you are the best! ok lets goo!!
+
+
 
 
 
