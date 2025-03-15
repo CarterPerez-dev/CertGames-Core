@@ -1,7 +1,3 @@
-# ================================
-# test_routes.py
-# ================================
-
 from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
@@ -607,6 +603,11 @@ def update_test_attempt(user_id, test_id):
             "examMode": exam_mode_val
         }
     }
+    
+    # Add examTimerSeconds if it's provided
+    if "examTimerSeconds" in data:
+        update_doc["$set"]["examTimerSeconds"] = data["examTimerSeconds"]
+        
     if update_doc["$set"]["finished"] is True:
         update_doc["$set"]["finishedAt"] = datetime.utcnow()
 
@@ -646,6 +647,10 @@ def finish_test_attempt(user_id, test_id):
             "totalQuestions": data.get("totalQuestions", 0)
         }
     }
+    
+    # Add examTimerSeconds if it's provided
+    if "examTimerSeconds" in data:
+        update_doc["$set"]["examTimerSeconds"] = data["examTimerSeconds"]
 
     start_db = time.time()
     testAttempts_collection.update_one(filter_, update_doc)
@@ -1245,6 +1250,15 @@ def update_position(user_id, test_id):
     except:
         return jsonify({"error": "Invalid user ID or test ID"}), 400
 
+    update_set = {
+        "currentQuestionIndex": current_index,
+        "finished": data.get("finished", False)
+    }
+    
+    # Add examTimerSeconds if it's provided
+    if "examTimerSeconds" in data:
+        update_set["examTimerSeconds"] = data["examTimerSeconds"]
+
     start_db = time.time()
     testAttempts_collection.update_one(
         {
@@ -1252,10 +1266,7 @@ def update_position(user_id, test_id):
             "finished": False,
             "$or": [{"testId": test_id_int}, {"testId": test_id}]
         },
-        {"$set": {
-            "currentQuestionIndex": current_index,
-            "finished": data.get("finished", False)
-        }}
+        {"$set": update_set}
     )
     duration = time.time() - start_db
     if not hasattr(g, 'db_time_accumulator'):
