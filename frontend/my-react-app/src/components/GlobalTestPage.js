@@ -65,13 +65,6 @@ function shuffleIndices(length) {
   return shuffleArray(indices);
 }
 
-// Format seconds into MM:SS display
-function formatTime(totalSeconds) {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-}
-
 // Reusable QuestionDropdown component
 const QuestionDropdown = ({
   totalQuestions,
@@ -190,12 +183,6 @@ const GlobalTestPage = ({
   const [selectedOptionIndex, setSelectedOptionIndex] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
 
-  // Timer states
-  const [examTimer, setExamTimer] = useState(0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
-  const timerIntervalRef = useRef(null);
-  const examTimerRef = useRef(0); // Additional ref to track current timer value
-
   // Overlays
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
   const [showReviewMode, setShowReviewMode] = useState(false);
@@ -227,106 +214,58 @@ const GlobalTestPage = ({
     }
   }, [shopStatus, dispatch]);
 
-  // Timer functions
-  const startTimer = useCallback(() => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current); // Clear any existing interval first
-    }
-    
-    setIsTimerRunning(true);
-    examTimerRef.current = examTimer; // Sync the ref with current state
-    
-    timerIntervalRef.current = setInterval(() => {
-      setExamTimer(prev => {
-        const newValue = prev + 1;
-        examTimerRef.current = newValue; // Keep ref in sync
-        return newValue;
-      });
-    }, 1000);
-  }, [examTimer]);
-
-  const pauseTimer = useCallback(() => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-      timerIntervalRef.current = null;
-      setIsTimerRunning(false);
-    }
-  }, []);
-
-  const resetTimer = useCallback(() => {
-    if (timerIntervalRef.current) {
-      clearInterval(timerIntervalRef.current);
-      timerIntervalRef.current = null;
-    }
-    setExamTimer(0);
-    examTimerRef.current = 0; // Reset ref as well
-    setIsTimerRunning(false);
-  }, []);
-
-  const updateTimerInDB = useCallback(async () => {
-    if (!userId || !testId) return;
-    
-    try {
-      await fetch(`/api/test/attempts/${userId}/${testId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          examTimerSeconds: examTimerRef.current, // Use ref for most up-to-date value
-          examMode: examMode,
-          category: category,
-          currentQuestionIndex: currentQuestionIndex,
-          shuffleOrder: shuffleOrder,
-          answerOrder: answerOrder,
-          answers: answers,
-          score: score,
-          finished: isFinished
-        })
-      });
-    } catch (err) {
-      console.error("Failed to update timer in database", err);
-    }
-  }, [userId, testId, examMode, category, currentQuestionIndex, shuffleOrder, answerOrder, answers, score, isFinished]);
-
-  // Save timer value to database every 10 seconds
-  useEffect(() => {
-    if (examMode && isTimerRunning && examTimer % 10 === 0 && examTimer > 0) {
-      updateTimerInDB();
-    }
-  }, [examMode, isTimerRunning, examTimer, updateTimerInDB]);
-
-  // Clean up timer interval on unmount and save progress
+  // Clean up on unmount and save progress
   useEffect(() => {
     return () => {
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
-      
-      // Save timer and progress when leaving the component
-      if (userId && testId && !isFinished) {
-        // Always save progress when navigating away from the test
-        updateTimerInDB();
+      // IMPORTANT FIX: Always save progress when leaving the component
+      if (userId && testId && testData && !loadingTest) {
+        const saveProgressOnExit = async () => {
+          try {
+            await fetch(`/api/test/attempts/${userId}/${testId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                category,
+                answers,
+                score,
+                totalQuestions: testData?.questions?.length || 0,
+                selectedLength: activeTestLength,
+                currentQuestionIndex,
+                shuffleOrder,
+                answerOrder,
+                finished: isFinished,
+                examMode
+              })
+            });
+          } catch (err) {
+            console.error("Failed to save progress on exit", err);
+          }
+        };
+        
+        saveProgressOnExit();
       }
     };
-  }, [userId, testId, isFinished, updateTimerInDB]);
-
-  // Start the timer if in exam mode and not finished when dependencies change
-  useEffect(() => {
-    if (examMode && !isFinished && !loadingTest && activeTestLength) {
-      if (!isTimerRunning) {
-        startTimer();
-      }
-    }
-  }, [examMode, isFinished, loadingTest, activeTestLength, isTimerRunning, startTimer]);
+  }, [userId, testId, testData, loadingTest, category, answers, score, activeTestLength, currentQuestionIndex, shuffleOrder, answerOrder, isFinished, examMode]);
 
   const fetchTestAndAttempt = async () => {
     setLoadingTest(true);
     try {
       let attemptDoc = null;
       if (userId) {
-        const attemptRes = await fetch(`/api/test/attempts/${userId}/${testId}`);
-        const attemptData = await attemptRes.json();
-        attemptDoc = attemptData.attempt || null;
+        // IMPORTANT CHANGE: First check for unfinished attempts
+        const unfinishedRes = await fetch(`/api/test/attempts/${userId}/${testId}?status=unfinished`);
+        const unfinishedData = await unfinishedRes.json();
+        
+        if (unfinishedData.attempt) {
+          attemptDoc = unfinishedData.attempt;
+        } else {
+          // If no unfinished attempt, check for finished attempts
+          const finishedRes = await fetch(`/api/test/attempts/${userId}/${testId}?status=finished`);
+          const finishedData = await finishedRes.json();
+          attemptDoc = finishedData.attempt;
+        }
       }
+      
       const testRes = await fetch(`/api/test/tests/${category}/${testId}`);
       if (!testRes.ok) {
         const errData = await testRes.json().catch(() => ({}));
@@ -344,38 +283,55 @@ const GlobalTestPage = ({
         setScore(attemptDoc.score || 0);
         setIsFinished(attemptDoc.finished === true);
 
-        const attemptExam = attemptDoc.examMode || false;
+        // IMPORTANT FIX: Always use the exam mode from the attempt doc
+        // This ensures exam mode doesn't change when resuming
+        const attemptExam = attemptDoc.examMode === true;
         setExamMode(attemptExam);
-
-        // Load exam timer if available - this is a key fix for the timer issue
-        if (attemptExam) {
-          const savedTimer = attemptDoc.examTimerSeconds || 0;
-          setExamTimer(savedTimer);
-          examTimerRef.current = savedTimer; // Sync ref with loaded value
-          
-          // Only start the timer if the test is not finished
-          if (!attemptDoc.finished) {
-            // We'll start the timer after all state is set
-            // Instead of calling startTimer() here directly
-          }
-        }
+        
+        // Also update the localStorage to match this value to maintain consistency
+        localStorage.setItem("examMode", attemptExam ? "true" : "false");
 
         // Use the chosen length if available
         const chosenLength = attemptDoc.selectedLength || totalQ;
         setActiveTestLength(chosenLength);
 
+        // IMPORTANT FIX: Only use saved shuffleOrder if it exists AND matches the chosen length
+        // Otherwise, keep using the existing shuffleOrder (don't create a new one)
         if (
           attemptDoc.shuffleOrder &&
+          Array.isArray(attemptDoc.shuffleOrder) &&
           attemptDoc.shuffleOrder.length === chosenLength
         ) {
           setShuffleOrder(attemptDoc.shuffleOrder);
         } else {
+          // If we don't have a valid shuffle order, create a new one
           const newQOrder = shuffleIndices(chosenLength);
           setShuffleOrder(newQOrder);
+          
+          // Immediately save this new shuffle order to the backend
+          // to ensure it's preserved for future sessions
+          await fetch(`/api/test/attempts/${userId}/${testId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              category,
+              answers: attemptDoc.answers || [],
+              score: attemptDoc.score || 0,
+              totalQuestions: totalQ,
+              selectedLength: chosenLength,
+              currentQuestionIndex: attemptDoc.currentQuestionIndex || 0,
+              shuffleOrder: newQOrder,
+              answerOrder: attemptDoc.answerOrder || [],
+              finished: attemptDoc.finished === true,
+              examMode: attemptExam
+            })
+          });
         }
 
+        // Same logic for answerOrder
         if (
           attemptDoc.answerOrder &&
+          Array.isArray(attemptDoc.answerOrder) &&
           attemptDoc.answerOrder.length === chosenLength
         ) {
           setAnswerOrder(attemptDoc.answerOrder);
@@ -387,6 +343,24 @@ const GlobalTestPage = ({
               return shuffleArray([...Array(numOptions).keys()]);
             });
           setAnswerOrder(generatedAnswerOrder);
+          
+          // Immediately save the new answer order
+          await fetch(`/api/test/attempts/${userId}/${testId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              category,
+              answers: attemptDoc.answers || [],
+              score: attemptDoc.score || 0,
+              totalQuestions: totalQ,
+              selectedLength: chosenLength,
+              currentQuestionIndex: attemptDoc.currentQuestionIndex || 0,
+              shuffleOrder: attemptDoc.shuffleOrder || [],
+              answerOrder: generatedAnswerOrder,
+              finished: attemptDoc.finished === true,
+              examMode: attemptExam
+            })
+          });
         }
 
         setCurrentQuestionIndex(attemptDoc.currentQuestionIndex || 0);
@@ -493,6 +467,28 @@ const GlobalTestPage = ({
             })
           });
           const data = await res.json();
+          
+          // IMPORTANT FIX: For exam mode, also update the full attempt
+          // This ensures answer choices are saved in exam mode
+          if (examMode) {
+            await fetch(`/api/test/attempts/${userId}/${testId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                category,
+                answers: updatedAnswers,
+                score: updatedScore,
+                totalQuestions: testData?.questions?.length || 0,
+                selectedLength: activeTestLength,
+                currentQuestionIndex,
+                shuffleOrder,
+                answerOrder,
+                finished,
+                examMode
+              })
+            });
+          }
+          
           return data;
         }
         
@@ -502,13 +498,11 @@ const GlobalTestPage = ({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             currentQuestionIndex,
-            finished,
-            examTimerSeconds: examTimerRef.current // Use ref for most up-to-date value
+            finished
           })
         });
 
         // Also save the full attempt data to ensure nothing is lost
-        // This is a key fix for the progress saving issue
         await fetch(`/api/test/attempts/${userId}/${testId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -522,8 +516,7 @@ const GlobalTestPage = ({
             shuffleOrder,
             answerOrder,
             finished,
-            examMode,
-            examTimerSeconds: examTimerRef.current // Use ref for most up-to-date value
+            examMode
           })
         });
       } catch (err) {
@@ -544,7 +537,11 @@ const GlobalTestPage = ({
       // For non–exam mode, lock the answer; for exam mode, allow changes.
       if (!examMode) {
         setIsAnswered(true);
+      } else {
+        // IMPORTANT FIX: For exam mode, still mark as answered but allow changing
+        setIsAnswered(true);
       }
+      
       try {
         const newAnswerObj = {
           questionId: questionObject.id,
@@ -568,6 +565,7 @@ const GlobalTestPage = ({
           false,
           newAnswerObj
         );
+        
         if (!examMode && awardData && awardData.examMode === false) {
           if (awardData.isCorrect) {
             setScore((prev) => prev + 1);
@@ -603,10 +601,6 @@ const GlobalTestPage = ({
   );
 
   const finishTestProcess = useCallback(async () => {
-    if (examMode) {
-      pauseTimer(); // Stop the timer when finishing the test
-    }
-    
     let finalScore = 0;
     answers.forEach((ans) => {
       if (ans.userAnswerIndex === ans.correctAnswerIndex) {
@@ -614,14 +608,18 @@ const GlobalTestPage = ({
       }
     });
     setScore(finalScore);
+    setIsFinished(true); // Mark as finished immediately in the UI
+    
     try {
+      // IMPORTANT CHANGE: Use specific testId in the finish endpoint
       const res = await fetch(`/api/test/attempts/${userId}/${testId}/finish`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           score: finalScore,
           totalQuestions: effectiveTotal,
-          examTimerSeconds: examTimerRef.current // Use ref for most up-to-date value
+          testId: testId, // Explicitly pass testId
+          category: category // Also include category
         })
       });
       const finishData = await res.json();
@@ -658,10 +656,10 @@ const GlobalTestPage = ({
     } catch (err) {
       console.error("Failed to finish test attempt:", err);
     }
-    setIsFinished(true);
+    
     setShowScoreOverlay(true);
     setShowReviewMode(false);
-  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, examMode, pauseTimer]);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, category]);
 
   const handleNextQuestion = useCallback(() => {
     if (!isAnswered && !examMode) {
@@ -741,11 +739,6 @@ const GlobalTestPage = ({
     setIsFinished(false);
     setShowReviewMode(false);
     setShowScoreOverlay(false);
-    
-    // Reset the timer for exam mode
-    if (examMode) {
-      resetTimer();
-    }
 
     if (testData?.questions?.length && activeTestLength) {
       const newQOrder = shuffleIndices(activeTestLength);
@@ -772,8 +765,7 @@ const GlobalTestPage = ({
             shuffleOrder: newQOrder,
             answerOrder: newAnswerOrder,
             finished: false,
-            examMode,
-            examTimerSeconds: 0 // Reset timer on restart
+            examMode
           })
         });
       }
@@ -784,8 +776,7 @@ const GlobalTestPage = ({
     testId,
     category,
     examMode,
-    activeTestLength,
-    resetTimer
+    activeTestLength
   ]);
 
   const handleFinishTest = () => {
@@ -824,14 +815,6 @@ const GlobalTestPage = ({
       return false;
     });
   }, [testData, answers, flaggedQuestions, reviewFilter, effectiveTotal]);
-
-  const handleTimerToggle = () => {
-    if (isTimerRunning) {
-      pauseTimer();
-    } else {
-      startTimer();
-    }
-  };
 
   const NextQuestionAlert = ({ message, onOk }) => (
     <div className="confirm-popup-overlay">
@@ -960,10 +943,6 @@ const GlobalTestPage = ({
                 <div className="exam-mode-note">
                   <FaTrophy className="exam-icon" />
                   <p>You completed this test in exam mode!</p>
-                  <div className="exam-timer-result">
-                    <FaClock className="timer-icon" />
-                    <span>Time: {formatTime(examTimer)}</span>
-                  </div>
                 </div>
               )}
             </div>
@@ -1036,9 +1015,9 @@ const GlobalTestPage = ({
                 %)
               </p>
               {examMode && (
-                <div className="review-timer">
-                  <FaClock className="timer-icon" />
-                  <span>Time taken: {formatTime(examTimer)}</span>
+                <div className="review-mode-indicator">
+                  <FaTrophy className="exam-icon" />
+                  <span>Exam Mode</span>
                 </div>
               )}
             </div>
@@ -1241,8 +1220,7 @@ const GlobalTestPage = ({
                       shuffleOrder: newQOrder,
                       answerOrder: newAnswerOrder,
                       finished: false,
-                      examMode: location.state?.examMode || false,
-                      examTimerSeconds: 0 // Initialize timer at 0
+                      examMode: location.state?.examMode || false
                     })
                   });
                   setShowTestLengthSelector(false);
@@ -1422,22 +1400,6 @@ const GlobalTestPage = ({
           <FaCoins className="coins-icon" />
           <span>{coins}</span>
         </div>
-        
-        {/* Exam Mode Timer */}
-        {examMode && (
-          <div className="exam-timer">
-            <div className="timer-display">
-              <FaClock className="timer-icon" />
-              <span>{formatTime(examTimer)}</span>
-            </div>
-            <button 
-              className="timer-toggle-btn"
-              onClick={handleTimerToggle}
-            >
-              {isTimerRunning ? <FaPause /> : <FaPlay />}
-            </button>
-          </div>
-        )}
       </div>
 
       <div className="exam-mode-indicator">
