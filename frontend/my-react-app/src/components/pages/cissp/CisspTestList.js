@@ -1,3 +1,4 @@
+// src/components/pages/casp/CaspPlusTestList.js
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,11 +18,11 @@ import {
   FaExclamationTriangle
 } from "react-icons/fa";
 
-const CisspTestList = () => {
+const CaspPlusTestList = () => {
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.user);
   const totalQuestionsPerTest = 100;
-  const category = "cissp";
+  const category = "caspplus";
 
   const [attemptData, setAttemptData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -59,23 +60,32 @@ const CisspTestList = () => {
         // Filter attempts for this category
         const relevant = attemptList.filter((a) => a.category === category);
 
-        // For each testId, pick the best attempt doc:
+        // IMPORTANT FIX: Improved handling of attempts per test
         const bestAttempts = {};
         for (let att of relevant) {
           const testKey = att.testId;
+          
+          // Skip attempts that don't have a valid testId
+          if (testKey === undefined || testKey === null) continue;
+          
           if (!bestAttempts[testKey]) {
             bestAttempts[testKey] = att;
           } else {
             const existing = bestAttempts[testKey];
-            // Prefer an unfinished attempt if it exists; otherwise latest finished
-            if (!existing.finished && att.finished) {
-              // Keep existing
-            } else if (existing.finished && !att.finished) {
+            
+            // If existing is finished and new is unfinished, keep finished
+            if (existing.finished && !att.finished) {
+              // Keep existing (finished beats unfinished)
+            } 
+            // If existing is unfinished and new is finished, use new
+            else if (!existing.finished && att.finished) {
               bestAttempts[testKey] = att;
-            } else {
-              // Both finished or both unfinished => pick newest
-              const existingTime = new Date(existing.finishedAt || 0).getTime();
-              const newTime = new Date(att.finishedAt || 0).getTime();
+            }
+            // If both are finished or both are unfinished, pick newest
+            else {
+              const existingTime = new Date(existing.finishedAt || existing.updatedAt || 0).getTime();
+              const newTime = new Date(att.finishedAt || att.updatedAt || 0).getTime();
+              
               if (newTime > existingTime) {
                 bestAttempts[testKey] = att;
               }
@@ -153,74 +163,102 @@ const CisspTestList = () => {
   const getProgressDisplay = (attemptDoc) => {
     if (!attemptDoc) return { text: "Not started", percentage: 0 };
     
-    const { finished, score, totalQuestions, currentQuestionIndex } = attemptDoc;
+    const { finished, score, totalQuestions, currentQuestionIndex, examMode } = attemptDoc;
     
-    if (finished) {
+    // Improved display of exam mode tests in the list
+    if (finished === true) {
       const pct = Math.round((score / (totalQuestions || totalQuestionsPerTest)) * 100);
       return { 
-        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)`, 
+        text: `Score: ${score}/${totalQuestions || totalQuestionsPerTest} (${pct}%)${examMode ? ' (Exam Mode)' : ''}`, 
         percentage: pct,
-        isFinished: true
+        isFinished: true,
+        isExamMode: examMode === true
       };
     } else {
       if (typeof currentQuestionIndex === "number") {
         const progressPct = Math.round(((currentQuestionIndex + 1) / (totalQuestions || totalQuestionsPerTest)) * 100);
         return { 
-          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}`, 
+          text: `Progress: ${currentQuestionIndex + 1}/${totalQuestions || totalQuestionsPerTest}${examMode ? ' (Exam Mode)' : ''}`, 
           percentage: progressPct,
-          isFinished: false
+          isFinished: false,
+          isExamMode: examMode === true
         };
       }
       return { text: "Not started", percentage: 0 };
     }
   };
 
-  const difficultyCategories = [
-    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             
-    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          
-    { label: "Easy", color: "#87cefa", textColor: "#000000" },               
-    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           
-    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       
-    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         
-    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        
-    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   
-    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           
-    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         
-  ];
-
   const startTest = (testNumber, doRestart = false, existingAttempt = null) => {
     if (existingAttempt && !doRestart) {
-      // Resume test
-      navigate(`/practice-tests/cissp/${testNumber}`);
+      // When resuming a test, preserve its original exam mode setting
+      const attemptExamMode = existingAttempt.examMode === true;
+      
+      // Store the current exam mode from the attempt in localStorage
+      localStorage.setItem("examMode", attemptExamMode ? "true" : "false");
+      
+      // Navigate with clear indication that we're resuming
+      navigate(`/practice-tests/casp-plus/${testNumber}`, {
+        state: { 
+          examMode: attemptExamMode,
+          resuming: true // Add flag to indicate we're resuming
+        }
+      });
     } else {
-      // New or forced restart
+      // New test or forced restart
       const lengthToUse = selectedLengths[testNumber] || totalQuestionsPerTest;
-      fetch(`/api/test/attempts/${userId}/${testNumber}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          answers: [],
-          score: 0,
-          totalQuestions: totalQuestionsPerTest,
-          selectedLength: lengthToUse,
-          currentQuestionIndex: 0,
-          shuffleOrder: [],
-          answerOrder: [],
-          finished: false,
-          examMode
-        })
-      })
-        .then(() => {
-          navigate(`/practice-tests/cissp/${testNumber}`, {
-            state: { examMode }
+      
+      // IMPORTANT FIX: For restart, ensure we create a completely new attempt
+      const createNewAttempt = async () => {
+        try {
+          const response = await fetch(`/api/test/attempts/${userId}/${testNumber}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              category,
+              answers: [],
+              score: 0,
+              totalQuestions: totalQuestionsPerTest,
+              selectedLength: lengthToUse,
+              currentQuestionIndex: 0,
+              shuffleOrder: [], // Let the test page generate this
+              answerOrder: [],  // Let the test page generate this
+              finished: false,
+              examMode,
+            })
           });
-        })
-        .catch((err) => {
+          
+          if (!response.ok) {
+            throw new Error("Failed to create attempt document");
+          }
+          
+          // Navigate to test page with fresh state
+          navigate(`/practice-tests/casp-plus/${testNumber}`, {
+            state: { 
+              examMode,
+              restarting: true // Add flag to indicate we're starting fresh
+            }
+          });
+        } catch (err) {
           console.error("Failed to create new attempt doc:", err);
-        });
+        }
+      };
+      
+      createNewAttempt();
     }
   };
+
+  const difficultyCategories = [
+    { label: "Normal", color: "#fff9e6", textColor: "#4a4a4a" },             // Cream
+    { label: "Very Easy", color: "#adebad", textColor: "#0b3800" },          // Soft green
+    { label: "Easy", color: "#87cefa", textColor: "#000000" },               // Light sky blue
+    { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
+    { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
+    { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
+    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
+    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
+    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
+    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
+  ];
 
   const examInfoText = "Exam Mode simulates a real certification exam environment by hiding answer feedback and explanations until after you complete the entire test. This helps you prepare for the pressure and pace of an actual exam.";
 
@@ -228,7 +266,7 @@ const CisspTestList = () => {
     <div className="testlist-container">
       <div className="testlist-header">
         <div className="testlist-title-section">
-          <h1 className="testlist-title">(ISC)² CISSP</h1>
+          <h1 className="testlist-title">CompTIA CASP+</h1>
           <p className="testlist-subtitle">Practice Test Collection</p>
         </div>
         
@@ -350,7 +388,7 @@ const CisspTestList = () => {
                         onClick={() => startTest(testNumber, false, attemptDoc)}
                       >
                         <FaPlay className="testlist-action-icon" />
-                        <span>Resume</span>
+                        <span>{attemptDoc?.examMode ? "Resume Exam" : "Resume"}</span>
                       </button>
                       
                       <button
@@ -368,7 +406,7 @@ const CisspTestList = () => {
                       <button
                         className="testlist-action-button testlist-review-button"
                         onClick={() => 
-                          navigate(`/practice-tests/cissp/${testNumber}`, {
+                          navigate(`/practice-tests/casp-plus/${testNumber}`, {
                             state: { review: true }
                           })
                         }
@@ -402,43 +440,43 @@ const CisspTestList = () => {
       {/* Restart Confirmation Popup */}
       {restartPopupTest !== null && (
         <div className="testlist-popup-overlay">
-        <div className="testlist-popup">
-          <div className="testlist-popup-header">
-            <FaExclamationTriangle className="testlist-popup-icon" />
-            <h3>Confirm Restart</h3>
-          </div>
-          
-          <div className="testlist-popup-content">
-            <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
-            <p>All current progress will be lost, and your test will begin with your selected length.</p>
-          </div>
-          
-          <div className="testlist-popup-actions">
-            <button
-              className="testlist-popup-button testlist-popup-confirm"
-              onClick={() => {
-                const attemptDoc = getAttemptDoc(restartPopupTest);
-                startTest(restartPopupTest, true, attemptDoc);
-                setRestartPopupTest(null);
-              }}
-            >
-              <FaCheck className="testlist-popup-button-icon" />
-              <span>Yes, Restart</span>
-            </button>
+          <div className="testlist-popup">
+            <div className="testlist-popup-header">
+              <FaExclamationTriangle className="testlist-popup-icon" />
+              <h3>Confirm Restart</h3>
+            </div>
             
-            <button 
-              className="testlist-popup-button testlist-popup-cancel"
-              onClick={() => setRestartPopupTest(null)}
-            >
-              <FaTimes className="testlist-popup-button-icon" />
-              <span>Cancel</span>
-            </button>
+            <div className="testlist-popup-content">
+              <p>You're currently in progress on Test {restartPopupTest}. Are you sure you want to restart?</p>
+              <p>All current progress will be lost, and your test will begin with your selected length.</p>
+            </div>
+            
+            <div className="testlist-popup-actions">
+              <button
+                className="testlist-popup-button testlist-popup-confirm"
+                onClick={() => {
+                  const attemptDoc = getAttemptDoc(restartPopupTest);
+                  startTest(restartPopupTest, true, attemptDoc);
+                  setRestartPopupTest(null);
+                }}
+              >
+                <FaCheck className="testlist-popup-button-icon" />
+                <span>Yes, Restart</span>
+              </button>
+              
+              <button 
+                className="testlist-popup-button testlist-popup-cancel"
+                onClick={() => setRestartPopupTest(null)}
+              >
+                <FaTimes className="testlist-popup-button-icon" />
+                <span>Cancel</span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
       )}
     </div>
   );
 };
 
-export default CisspTestList;
+export default CaspPlusTestList;
