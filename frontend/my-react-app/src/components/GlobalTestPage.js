@@ -194,6 +194,7 @@ const GlobalTestPage = ({
   const [examTimer, setExamTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const timerIntervalRef = useRef(null);
+  const examTimerRef = useRef(0); // Additional ref to track current timer value
 
   // Overlays
   const [showScoreOverlay, setShowScoreOverlay] = useState(false);
