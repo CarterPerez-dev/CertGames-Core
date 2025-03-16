@@ -8,6 +8,29 @@ import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
 import './DemosPage.css';
 
+// Video imports
+import analogy from './videos/anal.mp4';
+import bonus from './videos/bonus.mp4';
+import exam from './videos/exam.mp4';
+import grc from './videos/grcc.mp4';
+import scenario from './videos/sc.mp4';
+import recourse from './videos/rec.mp4';
+import profile from './videos/prof.mp4';
+import xploit from './videos/xploit.mp4';
+import leader from './videos/leader.mp4';
+import news from './videos/newsletter.mp4';
+
+// Thumbnail imports
+import colorsThumbnail from './images/colors.webp';
+import testThumbnail from './images/test.webp';
+import recThumbnail from './images/rec.webp';
+import leaderThumbnail from './images/leader.webp';
+import xploitThumbnail from './images/xploit.webp';
+import newsThumbnail from './images/news.webp';
+import grcThumbnail from './images/grc.webp';
+import analogyThumbnail from './images/analogy.webp';
+import scenThumbnail from './images/scen.webp';
+import bonusThumbnail from './images/bonus.webp';
 
 const DemosPage = () => {
   const [activeSection, setActiveSection] = useState('featured');
@@ -33,36 +56,36 @@ const DemosPage = () => {
     ]
   };
 
-  // Demo data - this would be replaced with actual demo data
+  // Demo data with all videos and thumbnails
   const demoData = {
     gamification: [
       {
         id: 'xp-system',
         title: 'XP & Leveling System',
         description: 'See how completing tests and answering questions correctly earns you XP to level up your profile.',
-        videoUrl: '/demos/xp-system.mp4', // Placeholder - will be replaced
-        thumbnail: 'https://via.placeholder.com/600x338?text=XP+System+Demo'
+        videoUrl: '/demos/coins-system.mp4', // Placeholder 
+        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       },
       {
         id: 'coins-system',
         title: 'Coins & Shop System',
         description: 'Watch how to earn coins and spend them in the shop to unlock unique avatars and boosts.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder
+        videoUrl: '/demos/coins-system.mp4', // Placeholder // Updated to use imported video
         thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       },
       {
         id: 'achievements',
         title: 'Achievement System',
         description: 'Discover the various achievements you can unlock as you progress through your certification journey.',
-        videoUrl: '/demos/achievements.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Achievements+Demo'
+        videoUrl: '/demos/coins-system.mp4', // Placeholder // Placeholder until real video available
+        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       },
       {
         id: 'leaderboards',
         title: 'Leaderboards',
         description: 'See how you stack up against other cybersecurity enthusiasts on our global leaderboards.',
-        videoUrl: '/demos/leaderboards.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Leaderboards+Demo'
+        videoUrl: leader,
+        thumbnail: leaderThumbnail
       }
     ],
     learning: [
@@ -70,29 +93,29 @@ const DemosPage = () => {
         id: 'scenario-sphere',
         title: 'ScenarioSphere',
         description: 'Experience realistic security scenarios with detailed storylines to build your incident response skills.',
-        videoUrl: '/demos/scenario-sphere.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=ScenarioSphere+Demo'
+        videoUrl: scenario,
+        thumbnail: scenThumbnail
       },
       {
         id: 'analogy-hub',
         title: 'Analogy Hub',
         description: 'See how complex security concepts are broken down using memorable analogies to enhance understanding.',
-        videoUrl: '/demos/analogy-hub.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Analogy+Hub+Demo'
+        videoUrl: analogy,
+        thumbnail: analogyThumbnail
       },
       {
         id: 'grc-wizard',
         title: 'GRC Wizard',
         description: 'Watch how our GRC Wizard helps you master governance, risk, and compliance topics with custom-generated questions.',
-        videoUrl: '/demos/grc-wizard.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=GRC+Wizard+Demo'
+        videoUrl: grc,
+        thumbnail: grcThumbnail
       },
       {
         id: 'xploitcraft',
         title: 'XploitCraft',
         description: 'Learn about exploitation techniques through educational code examples with detailed explanations.',
-        videoUrl: '/demos/xploitcraft.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=XploitCraft+Demo'
+        videoUrl: xploit,
+        thumbnail: xploitThumbnail
       }
     ],
     daily: [
@@ -100,22 +123,22 @@ const DemosPage = () => {
         id: 'daily-bonus',
         title: 'Daily Bonus',
         description: 'See how to claim your daily free coins to spend in the shop.',
-        videoUrl: '/demos/daily-bonus.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Daily+Bonus+Demo'
+        videoUrl: bonus, 
+        thumbnail: bonusThumbnail
       },
       {
         id: 'pbq-challenge',
         title: 'Daily PBQ Challenge',
         description: 'Watch how the daily performance-based question challenges work and how to solve them.',
-        videoUrl: '/demos/pbq-challenge.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=PBQ+Challenge+Demo'
+        videoUrl: bonus, 
+        thumbnail: bonusThumbnail
       },
       {
         id: 'cyber-brief',
         title: 'Cyber Brief',
         description: 'Check out our daily cybersecurity news and study tips feature.',
-        videoUrl: '/demos/cyber-brief.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Cyber+Brief+Demo'
+        videoUrl: news,
+        thumbnail: newsThumbnail
       }
     ],
     tests: [
@@ -123,22 +146,22 @@ const DemosPage = () => {
         id: 'test-interface',
         title: 'Test Interface',
         description: 'See how our intuitive test interface makes studying for your certification exams a breeze.',
-        videoUrl: '/demos/test-interface.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Test+Interface+Demo'
+        videoUrl: '/demos/coins-system.mp4', // Placeholder
+        thumbnail: testThumbnail
       },
       {
         id: 'exam-mode',
         title: 'Exam Mode',
         description: 'Experience our realistic exam simulation mode to prepare for the real thing.',
-        videoUrl: '/demos/exam-mode.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Exam+Mode+Demo'
+        videoUrl: exam,
+        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       },
       {
         id: 'review-answers',
         title: 'Review & Analytics',
         description: 'See how our detailed review and analytics help you identify and improve your weak areas.',
-        videoUrl: '/demos/review-analytics.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Review+Analytics+Demo'
+        videoUrl: '/demos/coins-system.mp4', // Placeholder // Using exam video as placeholder
+        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       }
     ],
     support: [
@@ -146,19 +169,39 @@ const DemosPage = () => {
         id: 'ask-anything',
         title: 'Ask Anything',
         description: 'Watch how our 24/7 support system works to help you with any questions or issues.',
-        videoUrl: '/demos/ask-anything.mp4', // Placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Ask+Anything+Demo'
+        videoUrl: '/demos/coins-system.mp4', // Placeholder, // Using news video as placeholder
+        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+      }
+    ],
+    profile: [
+      {
+        id: 'profile-colors',
+        title: 'Profile Color Scheme',
+        description: 'See how you can personalize your learning experience by switching between different color schemes.',
+        videoUrl: profile,
+        thumbnail: colorsThumbnail
+      }
+    ],
+    resources: [
+      {
+        id: 'resource-hub',
+        title: 'Resource Hub',
+        description: 'Explore our comprehensive collection of study materials, guides, and references to boost your learning.',
+        videoUrl: recourse,
+        thumbnail: recThumbnail
       }
     ]
   };
 
-  // Create a featured demos array with 1 demo from each category
+  // Create a featured demos array with demos from each category
   const featuredDemos = [
     demoData.gamification[0],
     demoData.learning[0],
     demoData.daily[0],
     demoData.tests[0],
-    demoData.support[0]
+    demoData.support[0],
+    demoData.profile[0],
+    demoData.resources[0]
   ];
 
   // Handle demo selection
@@ -183,6 +226,10 @@ const DemosPage = () => {
         return demoData.tests;
       case 'support':
         return demoData.support;
+      case 'profile':
+        return demoData.profile;
+      case 'resources':
+        return demoData.resources;
       default:
         return featuredDemos;
     }
@@ -200,7 +247,7 @@ const DemosPage = () => {
     <>
       <SEOHelmet 
         title="Interactive Feature Demos | CertGames"
-        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators, practice tests, study recourses, and specialized learning tools."
+        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators, practice tests, study resources, and specialized learning tools."
         canonicalUrl="/demos"
       />
       <StructuredData data={breadcrumbSchema} />
@@ -221,13 +268,23 @@ const DemosPage = () => {
           {activeDemo && (
             <div className="demo-player-container">
               <div className="demo-video">
-                {/* This would be replaced with an actual video player component */}
+                {/* Updated video player component */}
                 <div className="demo-video-placeholder">
-                  <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
-                  <div className="play-overlay">
-                    <FaPlay className="play-icon" aria-hidden="true" />
-                    <span>Demo Video Placeholder</span>
-                  </div>
+                  {activeDemo.videoUrl ? (
+                    <video 
+                      src={activeDemo.videoUrl} 
+                      poster={typeof activeDemo.thumbnail === 'string' ? activeDemo.thumbnail : undefined}
+                      controls
+                    />
+                  ) : (
+                    <>
+                      <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
+                      <div className="play-overlay">
+                        <FaPlay className="play-icon" aria-hidden="true" />
+                        <span>Demo Video Placeholder</span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="demo-info">
@@ -281,6 +338,20 @@ const DemosPage = () => {
             Test Experience
           </button>
           <button
+            className={`category-button ${activeSection === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveSection('profile')}
+            aria-pressed={activeSection === 'profile'}
+          >
+            Profile
+          </button>
+          <button
+            className={`category-button ${activeSection === 'resources' ? 'active' : ''}`}
+            onClick={() => setActiveSection('resources')}
+            aria-pressed={activeSection === 'resources'}
+          >
+            Resources
+          </button>
+          <button
             className={`category-button ${activeSection === 'support' ? 'active' : ''}`}
             onClick={() => setActiveSection('support')}
             aria-pressed={activeSection === 'support'}
@@ -313,6 +384,7 @@ const DemosPage = () => {
                 tabIndex="0"
                 aria-selected={activeDemo && activeDemo.id === demo.id}
               >
+                {/* Updated thumbnail component */}
                 <div className="thumbnail-image">
                   <img src={demo.thumbnail} alt={`Thumbnail for ${demo.title} demo`} />
                   <div className="thumbnail-overlay">
