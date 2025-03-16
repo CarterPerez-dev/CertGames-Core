@@ -41,4 +41,4 @@ RUN chmod +x /app/app.py
 
 EXPOSE 5000
 
-CMD ["/venv/bin/gunicorn", "-k", "gevent", "-b", "0.0.0.0:5000", "app:app", "--timeout", "120"]
+CMD ["/venv/bin/gunicorn", "-k", "gevent", "-w", "4", "--threads", "2", "--worker-connections", "1000", "-b", "0.0.0.0:5000", "--timeout", "120", "--keep-alive", "5", "app:app"]

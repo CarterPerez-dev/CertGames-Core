@@ -268,6 +268,10 @@ def create_user(user_data):
     if existing_user:
         raise ValueError("Username or email is already taken")
 
+    if "password" in user_data:
+        user_data["password"] = hash_password(user_data["password"])
+
+
     # Default fields
     user_data.setdefault("coins", 0)
     user_data.setdefault("xp", 0)
@@ -332,7 +336,16 @@ def update_user_coins(user_id, amount):
         oid = ObjectId(user_id)
     except Exception:
         return None
-    mainusers_collection.update_one({"_id": oid}, {"$inc": {"coins": amount}})
+        
+    result = mainusers_collection.find_one_and_update(
+        {"_id": oid},
+        {"$inc": {"coins": amount}},
+        return_document=True
+    )
+    
+    if result:
+        return result.get("coins")
+    return None
 
 ##############################################
 # Leveling System
@@ -365,26 +378,41 @@ def xp_required_for_level(level):
 
 def update_user_xp(user_id, xp_to_add):
     """
-    Adds xp_to_add to the user's XP. Then, while the new XP total
-    is >= XP required for the next level, increments the level.
+    Uses atomic operations to safely add XP and handle level ups.
     """
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+    
+    # Get current user state to calculate level
     user = get_user_by_id(user_id)
     if not user:
         return None
-
-    old_xp = user.get("xp", 0)
+    
+    # Calculate the current level and the potential new level
     old_level = user.get("level", 1)
+    old_xp = user.get("xp", 0)
     new_xp = old_xp + xp_to_add
+    
+    # Determine what level the user should be at with new XP
     new_level = old_level
-
     while new_xp >= xp_required_for_level(new_level + 1):
         new_level += 1
-
-    mainusers_collection.update_one(
-        {"_id": user["_id"]},
-        {"$set": {"xp": new_xp, "level": new_level}}
+    
+    # Atomic update using $inc and $set
+    result = mainusers_collection.find_one_and_update(
+        {"_id": oid},
+        {
+            "$inc": {"xp": xp_to_add},
+            "$set": {"level": new_level}
+        },
+        return_document=True
     )
-    return {"xp": new_xp, "level": new_level}
+    
+    if result:
+        return {"xp": result.get("xp"), "level": result.get("level")}
+    return None
 
 
 
@@ -569,4 +597,18 @@ def measure_db_operation(func):
 
         return result
     return wrapper
+
+
+
+def hash_password(password):
+    """Hash a password using bcrypt."""
+    import bcrypt
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hashed.decode('utf-8')
+
+def check_password(plain_password, hashed_password):
+    """Verify a password against its hash."""
+    import bcrypt
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 

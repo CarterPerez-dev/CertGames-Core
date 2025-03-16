@@ -155,7 +155,8 @@ const QuestionDropdown = ({
 const GlobalTestPage = ({
   testId,
   category,
-  backToListPath
+  backToListPath,
+  navigateBackAfterCompletion = false
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -653,13 +654,23 @@ const GlobalTestPage = ({
           })
         );
       }
+      
+      // When navigating back to the list after a test, include a state flag
+      if (navigateBackAfterCompletion) {
+        navigate(backToListPath, { 
+          state: { 
+            testJustCompleted: testId,
+            completedAt: new Date().toISOString() 
+          } 
+        });
+      }
     } catch (err) {
       console.error("Failed to finish test attempt:", err);
     }
     
     setShowScoreOverlay(true);
     setShowReviewMode(false);
-  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, category]);
+  }, [answers, userId, testId, effectiveTotal, achievements, dispatch, category, navigate, backToListPath, navigateBackAfterCompletion]);
 
   const handleNextQuestion = useCallback(() => {
     if (!isAnswered && !examMode) {
@@ -967,7 +978,12 @@ const GlobalTestPage = ({
             
             <button 
               className="back-btn" 
-              onClick={() => navigate(backToListPath)}
+              onClick={() => navigate(backToListPath, {
+                state: { 
+                  testJustCompleted: testId,
+                  completedAt: new Date().toISOString() 
+                }
+              })}
             >
               <FaArrowLeft className="button-icon" />
               <span>Back to List</span>
@@ -987,7 +1003,12 @@ const GlobalTestPage = ({
             <>
               <button
                 className="back-to-list-btn"
-                onClick={() => navigate(backToListPath)}
+                onClick={() => navigate(backToListPath, {
+                  state: { 
+                    testJustCompleted: testId,
+                    completedAt: new Date().toISOString() 
+                  }
+                })}
               >
                 <FaArrowLeft className="button-icon" />
                 <span>Back to Test List</span>
@@ -995,7 +1016,12 @@ const GlobalTestPage = ({
               {/* Additional fixed back to list button outside the container */}
               <button
                 className="back-to-list-btn fixed-top-right"
-                onClick={() => navigate(backToListPath)}
+                onClick={() => navigate(backToListPath, {
+                  state: { 
+                    testJustCompleted: testId,
+                    completedAt: new Date().toISOString() 
+                  }
+                })}
               >
                 <FaArrowLeft className="button-icon" />
                 <span>Back to Test List</span>
@@ -1236,7 +1262,9 @@ const GlobalTestPage = ({
           </button>
           <button 
             className="back-to-list-btn"
-            onClick={() => navigate(backToListPath)}
+            onClick={() => navigate(backToListPath, {
+              state: { fromError: true }
+            })}
           >
             <FaArrowLeft className="button-icon" />
             <span>Back to Test List</span>
@@ -1258,7 +1286,9 @@ const GlobalTestPage = ({
               <FaRedoAlt className="button-icon" />
               <span>Try Again</span>
             </button>
-            <button onClick={() => navigate(backToListPath)}>
+            <button onClick={() => navigate(backToListPath, {
+              state: { fromError: true }
+            })}>
               <FaArrowLeft className="button-icon" />
               <span>Back to Test List</span>
             </button>
@@ -1288,7 +1318,9 @@ const GlobalTestPage = ({
           <FaExclamationTriangle className="test-error-icon" />
           <h2>No Questions Found</h2>
           <p>This test doesn't have any questions yet.</p>
-          <button onClick={() => navigate(backToListPath)}>
+          <button onClick={() => navigate(backToListPath, {
+            state: { fromError: true }
+          })}>
             <FaArrowLeft className="button-icon" />
             <span>Back to Test List</span>
           </button>

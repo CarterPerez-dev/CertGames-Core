@@ -34,6 +34,8 @@ from models.test import (
     validate_password,
     update_user_fields,
     get_user_by_id,
+    hash_password,  
+    check_password,
     award_correct_answers_in_bulk
 )
 
@@ -290,7 +292,8 @@ def login():
         g.db_time_accumulator = 0.0
     g.db_time_accumulator += duration
 
-    if not user or user.get("password") != password:
+    # Using check_password instead of direct comparison
+    if not user or not check_password(password, user.get("password", "")):
         start_db = time.time()
         db.auditLogs.insert_one({
             "timestamp": datetime.utcnow(),
@@ -322,6 +325,7 @@ def login():
 
     user = serialize_user(user)
 
+    # Important security best practice: don't return password in response
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -335,9 +339,10 @@ def login():
         "nameColor": user.get("nameColor"),
         "purchasedItems": user.get("purchasedItems", []),
         "subscriptionActive": user.get("subscriptionActive", False),
-        "password": user.get("password")
+        "oauth_provider": user.get("oauth_provider", None)
     }), 200
-
+    
+    
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
     data = request.json or {}

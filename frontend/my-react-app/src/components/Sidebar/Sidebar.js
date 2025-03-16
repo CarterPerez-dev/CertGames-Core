@@ -239,7 +239,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <NavLink to="/practice-tests/casp-plus" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
-                      <span className="sidebar-link-text">CASP+</span>
+                      <span className="sidebar-link-text">Security-X</span>
                     </NavLink>
                   </li>
                   <li>
