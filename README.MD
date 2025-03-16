@@ -10397,12 +10397,2651 @@ export const resetPassword = async (token, newPassword, confirmPassword) => {
 
 
 
-ok so tahts all of them so far- so refer back to out next steps- im gonna provide you my frotned files now starting with the naviagtion actuallly we haev in my webapplcition, then ill proide you my tools frotnend files liek teh analogy hub, grc, scenerio, and xploit stuff
+ok so tahts all of them so far- so refer back to out next steps- 
 
-then we move onto the next steps and so on ok? cool? they will be in teh pormpt i giev you directly
+
+
+ok so update- we made more files based on my web applciation again and im here to update you/ get you up tp speed now on teh new files we made aswell for my ios app
+
+
+// src/screens/tools/AnalogyHubScreen.js
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  Keyboard,
+  Platform,
+  SafeAreaView,
+  Dimensions
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
+import { streamAnalogy } from '../../api/analogyService';
+import { useToast } from 'react-native-toast-notifications';
+
+const AnalogyHubScreen = () => {
+  const [analogyType, setAnalogyType] = useState('single');
+  const [inputValues, setInputValues] = useState(['']);
+  const [analogyCategory, setAnalogyCategory] = useState('real-world');
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [generatedAnalogy, setGeneratedAnalogy] = useState('');
+  
+  const toast = useToast();
+  const scrollViewRef = useRef();
+
+  // Update input fields based on analogy type
+  useEffect(() => {
+    switch (analogyType) {
+      case 'comparison':
+        setInputValues(['', '']);
+        break;
+      case 'triple':
+        setInputValues(['', '', '']);
+        break;
+      default:
+        setInputValues(['']);
+    }
+  }, [analogyType]);
+
+  const handleInputChange = (index, value) => {
+    const newValues = [...inputValues];
+    newValues[index] = value;
+    setInputValues(newValues);
+  };
+
+  const handleGenerateAnalogy = async () => {
+    Keyboard.dismiss();
+    setIsStreaming(true);
+    setGeneratedAnalogy('');
+
+    try {
+      const data = {
+        analogy_type: analogyType,
+        category: analogyCategory,
+        concept1: inputValues[0] || '',
+        concept2: inputValues[1] || '',
+        concept3: inputValues[2] || ''
+      };
+      
+      // Use the service to stream the analogy
+      const textChunks = await streamAnalogy(
+        analogyType,
+        inputValues[0],
+        inputValues[1] || '',
+        inputValues[2] || '',
+        analogyCategory
+      );
+      
+      let accumulatedText = '';
+      
+      // Simulate streaming by updating the text in chunks
+      for (const chunk of textChunks.split('\n')) {
+        accumulatedText += chunk + '\n';
+        setGeneratedAnalogy(accumulatedText);
+        
+        // Scroll to bottom as text comes in
+        if (scrollViewRef.current) {
+          scrollViewRef.current.scrollToEnd({ animated: true });
+        }
+        
+        // Add a small delay to simulate streaming
+        await new Promise(resolve => setTimeout(resolve, 50));
+      }
+    } catch (error) {
+      console.error('Error generating analogy:', error);
+      toast.show('An error occurred while generating the analogy', {
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
+  const copyToClipboard = async () => {
+    if (generatedAnalogy) {
+      await Clipboard.setStringAsync(generatedAnalogy);
+      toast.show('Copied to clipboard!', {
+        type: 'success',
+        duration: 2000,
+      });
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>Analogy Hub</Text>
+        <Text style={styles.subtitle}>runtime-error.r00</Text>
+      </View>
+      
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.formContainer}>
+          {/* Analogy Type Picker */}
+          <View style={styles.pickerContainer}>
+            <Text style={styles.label}>Analogy Type</Text>
+            <View style={styles.pickerWrapper}>
+              <Picker
+                selectedValue={analogyType}
+                onValueChange={(value) => setAnalogyType(value)}
+                style={styles.picker}
+                dropdownIconColor="#00ffea"
+                itemStyle={styles.pickerItem}
+                enabled={!isStreaming}
+              >
+                <Picker.Item label="Single" value="single" />
+                <Picker.Item label="Comparison" value="comparison" />
+                <Picker.Item label="Triple Comparison" value="triple" />
+              </Picker>
+            </View>
+          </View>
+          
+          {/* Input Fields */}
+          <View style={styles.inputFields}>
+            {inputValues.map((value, index) => (
+              <TextInput
+                key={index}
+                style={styles.input}
+                placeholder={`Enter concept ${index + 1}`}
+                placeholderTextColor="#666"
+                value={value}
+                onChangeText={(text) => handleInputChange(index, text)}
+                editable={!isStreaming}
+              />
+            ))}
+          </View>
+          
+          {/* Category Picker */}
+          <View style={styles.pickerContainer}>
+            <Text style={styles.label}>Category</Text>
+            <View style={styles.pickerWrapper}>
+              <Picker
+                selectedValue={analogyCategory}
+                onValueChange={(value) => setAnalogyCategory(value)}
+                style={styles.picker}
+                dropdownIconColor="#00ffea"
+                itemStyle={styles.pickerItem}
+                enabled={!isStreaming}
+              >
+                <Picker.Item label="Real World Analogy" value="real-world" />
+                <Picker.Item label="Video Games" value="video-games" />
+                <Picker.Item label="TV Show" value="tv-show" />
+                <Picker.Item label="Sports" value="sports" />
+                <Picker.Item label="Fiction" value="fiction" />
+                <Picker.Item label="Food & Cooking" value="food" />
+                <Picker.Item label="Relationships" value="relationships" />
+                <Picker.Item label="Music & Instruments" value="music" />
+                <Picker.Item label="Animals" value="animals" />
+                <Picker.Item label="Nature & Environment" value="nature" />
+                <Picker.Item label="Travel & Exploration" value="travel" />
+                <Picker.Item label="Historical Events" value="history" />
+                <Picker.Item label="Technology" value="technology" />
+                <Picker.Item label="Mythology" value="mythology" />
+                <Picker.Item label="Business & Economics" value="business" />
+                <Picker.Item label="Art & Creativity" value="art" />
+                <Picker.Item label="School & Education" value="school" />
+                <Picker.Item label="Construction & Engineering" value="construction" />
+                <Picker.Item label="Space & Astronomy" value="space" />
+                <Picker.Item label="Superheroes & Comic Books" value="superheroes" />
+                <Picker.Item label="Medieval Times" value="medieval" />
+                <Picker.Item label="Movies & Cinema" value="movies" />
+                <Picker.Item label="Everyday Life" value="everyday-life" />
+                <Picker.Item label="Gardening" value="gardening" />
+                <Picker.Item label="Mr Robot" value="mr-robot" />
+              </Picker>
+            </View>
+          </View>
+          
+          {/* Generate Button */}
+          <TouchableOpacity 
+            style={[styles.generateButton, isStreaming && styles.generateButtonDisabled]} 
+            onPress={handleGenerateAnalogy}
+            disabled={isStreaming}
+          >
+            {isStreaming ? (
+              <View style={styles.buttonContent}>
+                <ActivityIndicator color="#fff" size="small" />
+                <Text style={styles.buttonText}>Streaming...</Text>
+              </View>
+            ) : (
+              <Text style={styles.buttonText}>Generate Analogy</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+        
+        {/* Output Area */}
+        {(generatedAnalogy || isStreaming) && (
+          <View style={styles.outputContainer}>
+            {generatedAnalogy ? (
+              <>
+                <View style={styles.outputHeader}>
+                  <Text style={styles.outputTitle}>Generated Analogy</Text>
+                  <TouchableOpacity 
+                    style={styles.copyButton}
+                    onPress={copyToClipboard}
+                  >
+                    <Ionicons name="copy-outline" size={16} color="#fff" />
+                    <Text style={styles.copyText}>Copy</Text>
+                  </TouchableOpacity>
+                </View>
+                <ScrollView 
+                  ref={scrollViewRef}
+                  style={styles.analogyTextContainer}
+                  contentContainerStyle={styles.analogyTextContent}
+                >
+                  <Text style={styles.analogyText}>{generatedAnalogy}</Text>
+                </ScrollView>
+              </>
+            ) : (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator color="#00ffea" size="large" />
+                <Text style={styles.loadingText}>Generating analogy...</Text>
+              </View>
+            )}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#121212',
+  },
+  headerContainer: {
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderBottomWidth: 2,
+    borderBottomColor: '#8B0000',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#ff4c8b',
+    textShadowColor: 'rgba(255,0,0,0.7)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#00ffea',
+    textShadowColor: 'rgba(0,0,0,0.7)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    padding: 20,
+  },
+  formContainer: {
+    marginBottom: 20,
+  },
+  pickerContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 16,
+    color: '#00ffea',
+    marginBottom: 8,
+  },
+  pickerWrapper: {
+    borderWidth: 2,
+    borderColor: '#8B0000',
+    borderRadius: 10,
+    backgroundColor: '#222',
+    overflow: 'hidden',
+  },
+  picker: {
+    color: '#00ffea',
+    backgroundColor: '#222',
+    height: 50,
+  },
+  pickerItem: {
+    fontSize: 16,
+    color: '#00ffea',
+  },
+  inputFields: {
+    gap: 16,
+    marginBottom: 16,
+  },
+  input: {
+    backgroundColor: '#222',
+    borderWidth: 2,
+    borderColor: '#8B0000',
+    borderRadius: 10,
+    color: '#00ffea',
+    padding: 12,
+    fontSize: 16,
+  },
+  generateButton: {
+    backgroundColor: '#8B0000',
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#000',
+    marginTop: 10,
+  },
+  generateButtonDisabled: {
+    backgroundColor: '#550000',
+    opacity: 0.7,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  outputContainer: {
+    backgroundColor: 'rgba(17, 17, 17, 0.95)',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#8B0000',
+    padding: 15,
+    marginTop: 20,
+  },
+  outputHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 0, 0, 0.2)',
+    paddingBottom: 10,
+    marginBottom: 10,
+  },
+  outputTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ff0000',
+  },
+  copyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  copyText: {
+    color: '#fff',
+    fontSize: 12,
+    marginLeft: 5,
+  },
+  analogyTextContainer: {
+    maxHeight: 300,
+  },
+  analogyTextContent: {
+    paddingVertical: 10,
+  },
+  analogyText: {
+    color: '#00ffea',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    color: '#00ffea',
+    marginTop: 10,
+    fontSize: 16,
+  },
+});
+
+export default AnalogyHubScreen;
+
+
+// src/screens/tools/GRCScreen.js
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  SafeAreaView,
+  Dimensions
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
+import { StatusBar } from 'expo-status-bar';
+import { useToast } from 'react-native-toast-notifications';
+import { streamGRCQuestion } from '../../api/grcService';
+
+const GRCScreen = () => {
+  const [category, setCategory] = useState('Random');
+  const [difficulty, setDifficulty] = useState('Easy');
+  const [loading, setLoading] = useState(false);
+  const [questionData, setQuestionData] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [showExplanation, setShowExplanation] = useState(false);
+  const [copiedToClipboard, setCopiedToClipboard] = useState(false);
+  
+  const toast = useToast();
+  
+  // Categories and difficulties arrays
+  const categories = [
+    "Regulation",
+    "Risk Management",
+    "Compliance",
+    "Audit",
+    "Governance",
+    "Management",
+    "Policy",
+    "Ethics",
+    "Threat Assessment",
+    "Leadership",
+    "Business Continuity",
+    "Random"
+  ];
+  
+  const difficulties = ["Easy", "Medium", "Hard"];
+  
+  // Map difficulty to colors
+  const difficultyColors = {
+    "Easy": "#2ebb77",
+    "Medium": "#ffc107",
+    "Hard": "#ff4c8b"
+  };
+  
+  // Reset copy status after 2 seconds
+  useEffect(() => {
+    if (copiedToClipboard) {
+      const timer = setTimeout(() => {
+        setCopiedToClipboard(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copiedToClipboard]);
+  
+  const fetchQuestion = async () => {
+    setLoading(true);
+    setQuestionData(null);
+    setSelectedOption(null);
+    setShowExplanation(false);
+
+    try {
+      const data = await streamGRCQuestion(category, difficulty);
+      setQuestionData(data);
+    } catch (error) {
+      console.error('Error fetching question:', error);
+      toast.show('Error fetching question. Please try again.', {
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleAnswer = (optionIndex) => {
+    if (!questionData) return;
+    
+    setSelectedOption(optionIndex);
+    setShowExplanation(true);
+  };
+  
+  const handleCopy = async () => {
+    if (!questionData || !showExplanation) return;
+    
+    const correctIndex = questionData.correct_answer_index;
+    const correctExplanation = questionData.explanations[correctIndex.toString()];
+    const examTip = questionData.exam_tip;
+    
+    const textToCopy = `Question: ${questionData.question}\n\nOptions:\n${questionData.options.map((opt, i) => `${i + 1}. ${opt}`).join('\n')}\n\nCorrect Answer: ${questionData.options[correctIndex]}\n\nExplanation: ${correctExplanation}\n\nExam Tip: ${examTip}`;
+    
+    await Clipboard.setStringAsync(textToCopy);
+    setCopiedToClipboard(true);
+    toast.show('Copied to clipboard!', {
+      type: 'success',
+      duration: 2000,
+    });
+  };
+  
+  const getNewQuestion = () => {
+    fetchQuestion();
+  };
+  
+  // Get the letter representation (A, B, C, D) from index
+  const getLetterFromIndex = (index) => {
+    return String.fromCharCode(65 + index);
+  };
+  
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      
+      <View style={styles.header}>
+        <Text style={styles.title}>GRC Wizard</Text>
+        <Text style={styles.subtitle}>Master the art of Governance, Risk, and Compliance</Text>
+      </View>
+      
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.wizardCard}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Generate a Question</Text>
+            <Text style={styles.cardSubtitle}>Select a category and difficulty level</Text>
+          </View>
+          
+          <View style={styles.controls}>
+            {/* Category Picker */}
+            <View style={styles.controlGroup}>
+              <Text style={styles.label}>Category</Text>
+              <View style={styles.pickerWrapper}>
+                <Picker
+                  selectedValue={category}
+                  onValueChange={(value) => setCategory(value)}
+                  style={styles.picker}
+                  dropdownIconColor="#6543cc"
+                  itemStyle={styles.pickerItem}
+                  enabled={!loading}
+                >
+                  {categories.map((cat) => (
+                    <Picker.Item key={cat} label={cat} value={cat} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+            
+            {/* Difficulty Picker */}
+            <View style={styles.controlGroup}>
+              <Text style={styles.label}>Difficulty</Text>
+              <View style={styles.pickerWrapper}>
+                <Picker
+                  selectedValue={difficulty}
+                  onValueChange={(value) => setDifficulty(value)}
+                  style={styles.picker}
+                  dropdownIconColor={difficultyColors[difficulty]}
+                  itemStyle={styles.pickerItem}
+                  enabled={!loading}
+                >
+                  {difficulties.map((level) => (
+                    <Picker.Item key={level} label={level} value={level} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+            
+            {/* Generate Button */}
+            <TouchableOpacity
+              style={styles.generateButton}
+              onPress={fetchQuestion}
+              disabled={loading}
+            >
+              {loading ? (
+                <View style={styles.buttonContent}>
+                  <ActivityIndicator color="#fff" size="small" />
+                  <Text style={styles.buttonText}>Generating</Text>
+                </View>
+              ) : questionData ? (
+                <View style={styles.buttonContent}>
+                  <Ionicons name="sync" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>New Question</Text>
+                </View>
+              ) : (
+                <View style={styles.buttonContent}>
+                  <Ionicons name="book" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Generate Question</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+        
+        {questionData && (
+          <View style={styles.questionCard}>
+            <View style={styles.questionHeader}>
+              <View style={styles.questionMeta}>
+                <Text style={styles.questionCategory}>
+                  <Ionicons name={category === 'Random' ? 'shuffle' : 'shield-checkmark'} size={16} color="#AAAAAA" /> {category}
+                </Text>
+                <Text style={[styles.questionDifficulty, {color: difficultyColors[difficulty]}]}>
+                  <Ionicons 
+                    name={difficulty === 'Easy' ? 'bulb-outline' : difficulty === 'Medium' ? 'rocket' : 'trophy'} 
+                    size={16} 
+                    color={difficultyColors[difficulty]} 
+                  /> {difficulty}
+                </Text>
+              </View>
+              <Text style={styles.questionTitle}>Question</Text>
+            </View>
+            
+            <View style={styles.questionContent}>
+              <Text style={styles.questionText}>{questionData.question}</Text>
+              
+              <View style={styles.optionsContainer}>
+                {questionData.options.map((option, index) => {
+                  const isCorrect = index === questionData.correct_answer_index;
+                  const isSelected = selectedOption === index;
+                  
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.option,
+                        isSelected && styles.selectedOption,
+                        showExplanation && isCorrect && styles.correctOption,
+                        showExplanation && isSelected && !isCorrect && styles.incorrectOption
+                      ]}
+                      onPress={() => handleAnswer(index)}
+                      disabled={selectedOption !== null}
+                    >
+                      <View style={[
+                        styles.optionLetter,
+                        showExplanation && isCorrect && styles.correctLetter,
+                        showExplanation && isSelected && !isCorrect && styles.incorrectLetter
+                      ]}>
+                        <Text style={styles.optionLetterText}>{getLetterFromIndex(index)}</Text>
+                      </View>
+                      <Text style={styles.optionText}>{option}</Text>
+                      {showExplanation && isCorrect && (
+                        <Ionicons name="checkmark" size={20} color="#2ebb77" style={styles.statusIcon} />
+                      )}
+                      {showExplanation && isSelected && !isCorrect && (
+                        <Ionicons name="close" size={20} color="#ff4e4e" style={styles.statusIcon} />
+                      )}
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+            
+            {showExplanation && (
+              <View style={styles.explanationContainer}>
+                <View style={styles.explanationHeader}>
+                  <Text style={styles.explanationTitle}>
+                    {selectedOption === questionData.correct_answer_index ? (
+                      <><Ionicons name="checkmark" size={20} color="#2ebb77" /> Correct Answer</>
+                    ) : (
+                      <><Ionicons name="close" size={20} color="#ff4e4e" /> Incorrect Answer</>
+                    )}
+                  </Text>
+                  <TouchableOpacity 
+                    style={[styles.copyButton, copiedToClipboard && styles.copiedButton]}
+                    onPress={handleCopy}
+                  >
+                    {copiedToClipboard ? (
+                      <><Ionicons name="checkmark" size={16} color="#fff" /> Copied</>
+                    ) : (
+                      <><Ionicons name="copy" size={16} color="#fff" /> Copy</>
+                    )}
+                  </TouchableOpacity>
+                </View>
+                
+                <View style={styles.explanationContent}>
+                  <View style={styles.explanationSection}>
+                    <Text style={styles.explanationSectionTitle}>Explanation</Text>
+                    <Text style={styles.explanationText}>{questionData.explanations[selectedOption.toString()]}</Text>
+                  </View>
+                  
+                  <View style={styles.explanationSection}>
+                    <Text style={styles.explanationSectionTitle}>
+                      <Ionicons name="bulb" size={18} color="#ffc107" /> Exam Tip
+                    </Text>
+                    <Text style={styles.tipText}>{questionData.exam_tip}</Text>
+                  </View>
+                </View>
+                
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity 
+                    style={styles.nextButton} 
+                    onPress={getNewQuestion}
+                  >
+                    <Ionicons name="sync" size={20} color="#fff" />
+                    <Text style={styles.nextButtonText}>New Question</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0b0c15',
+  },
+  header: {
+    backgroundColor: '#171a23',
+    padding: 20,
+    borderRadius: 15,
+    margin: 15,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderTopWidth: 4,
+    borderTopColor: '#6543cc',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#6543cc',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#9da8b9',
+    textAlign: 'center',
+  },
+  scrollView: {
+    flex: 1,
+    padding: 15,
+  },
+  wizardCard: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 5,
+  },
+  cardHeader: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  cardTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+    marginBottom: 5,
+  },
+  cardSubtitle: {
+    fontSize: 14,
+    color: '#9da8b9',
+  },
+  controls: {
+    gap: 15,
+  },
+  controlGroup: {
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 14,
+    color: '#9da8b9',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 8,
+    backgroundColor: '#333333',
+    overflow: 'hidden',
+  },
+  picker: {
+    color: '#e2e2e2',
+    height: 50,
+  },
+  pickerItem: {
+    fontSize: 16,
+  },
+  generateButton: {
+    backgroundColor: '#6543cc',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: 'rgba(101, 67, 204, 0.3)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 5,
+    marginTop: 5,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  questionCard: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 5,
+    marginBottom: 20,
+  },
+  questionHeader: {
+    padding: 20,
+    backgroundColor: '#333333',
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a2c3d',
+  },
+  questionMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  questionCategory: {
+    fontSize: 14,
+    color: '#9da8b9',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  questionDifficulty: {
+    fontSize: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  questionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+  },
+  questionContent: {
+    padding: 20,
+  },
+  questionText: {
+    fontSize: 18,
+    color: '#e2e2e2',
+    lineHeight: 26,
+    marginBottom: 25,
+  },
+  optionsContainer: {
+    gap: 15,
+  },
+  option: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#333333',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 10,
+    padding: 15,
+  },
+  selectedOption: {
+    borderColor: '#6543cc',
+    backgroundColor: 'rgba(101, 67, 204, 0.1)',
+  },
+  correctOption: {
+    borderColor: '#2ebb77',
+    backgroundColor: 'rgba(46, 187, 119, 0.1)',
+  },
+  incorrectOption: {
+    borderColor: '#ff4e4e',
+    backgroundColor: 'rgba(255, 78, 78, 0.1)',
+  },
+  optionLetter: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#0b0c15',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 15,
+  },
+  correctLetter: {
+    backgroundColor: '#2ebb77',
+  },
+  incorrectLetter: {
+    backgroundColor: '#ff4e4e',
+  },
+  optionLetterText: {
+    color: '#e2e2e2',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  optionText: {
+    flex: 1,
+    color: '#e2e2e2',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  statusIcon: {
+    marginLeft: 10,
+  },
+  explanationContainer: {
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: '#2a2c3d',
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+  },
+  explanationHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  explanationTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  copyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#333333',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    gap: 6,
+  },
+  copiedButton: {
+    backgroundColor: '#2ebb77',
+    borderColor: 'transparent',
+  },
+  explanationContent: {
+    gap: 20,
+  },
+  explanationSection: {
+    backgroundColor: '#333333',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 10,
+    padding: 15,
+  },
+  explanationSectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  explanationText: {
+    fontSize: 15,
+    color: '#9da8b9',
+    lineHeight: 22,
+  },
+  tipText: {
+    fontSize: 15,
+    color: '#9da8b9',
+    lineHeight: 22,
+    fontStyle: 'italic',
+    borderLeftWidth: 3,
+    borderLeftColor: '#ffc107',
+    paddingLeft: 10,
+  },
+  actionButtons: {
+    alignItems: 'center',
+    marginTop: 25,
+  },
+  nextButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ff4c8b',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    shadowColor: 'rgba(255, 76, 139, 0.3)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 5,
+    gap: 10,
+  },
+  nextButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default GRCScreen;
+
+
+// src/screens/tools/ScenarioSphereScreen.js
+import React, { useState, useRef, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  ActivityIndicator,
+  FlatList,
+  Modal,
+  SafeAreaView,
+  Dimensions
+} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import Slider from '@react-native-community/slider';
+import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import { useToast } from 'react-native-toast-notifications';
+import { streamScenario, streamScenarioQuestions } from '../../api/scenarioService';
+
+// Sample attack types - in a real app, you'd import this from a separate file
+const ATTACK_TYPES = [
+  "AI Activation Exploit",
+  "AI Algorithm Manipulation",
+  "AI Data Leakage",
+  "AI Data Poisoning",
+  "Backdoor",
+  "Brute Force",
+  "Buffer Overflow",
+  "Business Email Compromise",
+  "Cloud Service Abuse",
+  "Command Injection",
+  "Cross-Site Request Forgery",
+  "Cross-Site Scripting",
+  "Cryptojacking",
+  "DDoS Attack",
+  "DNS Hijacking",
+  "DNS Spoofing",
+  "Data Exfiltration",
+  "Deepfake",
+  "Drive-by Download",
+  "Eavesdropping",
+  "Evil Twin Attack",
+  "File Inclusion",
+  "Firmware Attack",
+  "GDPR Violation",
+  "Honey Trap",
+  "IMSI Catcher",
+  "Identity Theft",
+  "Insider Threat",
+  "IoT Botnet",
+  "Keylogger",
+  "LDAP Injection",
+  "LLM Prompt Injection",
+  "Logic Bomb",
+  "MFA Bypass",
+  "MitM Attack",
+  "OAuth Token Theft",
+  "Password Spraying",
+  "Phishing",
+  "Ping of Death",
+  "Privilege Escalation",
+  "Ransomware",
+  "Remote Code Execution",
+  "Reverse Shell",
+  "Rootkit",
+  "SAML Attack",
+  "SQL Injection",
+  "Sandbox Escape",
+  "Session Hijacking",
+  "Side-Channel Attack",
+  "Social Engineering",
+  "Software Supply Chain",
+  "Spear Phishing",
+  "Spyware",
+  "Typosquatting",
+  "USB Drop Attack",
+  "Vishing",
+  "Virtual Host Confusion",
+  "Watering Hole",
+  "Web Shell",
+  "Zero-Day Exploit"
+];
+
+const ScenarioSphereScreen = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [industry, setIndustry] = useState("Finance");
+  const [attackType, setAttackType] = useState("");
+  const [skillLevel, setSkillLevel] = useState("Script Kiddie");
+  const [threatIntensity, setThreatIntensity] = useState(50);
+
+  const [scenarioText, setScenarioText] = useState("");
+  const [interactiveQuestions, setInteractiveQuestions] = useState([]);
+  const [userAnswers, setUserAnswers] = useState({});
+  const [feedback, setFeedback] = useState({});
+
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showAllSuggestions, setShowAllSuggestions] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [scoreCounter, setScoreCounter] = useState(0);
+
+  const [outputExpanded, setOutputExpanded] = useState(true);
+  const [questionsExpanded, setQuestionsExpanded] = useState(true);
+  const [generationComplete, setGenerationComplete] = useState(false);
+  const [scenarioGenerated, setScenarioGenerated] = useState(false);
+
+  const toast = useToast();
+  const scrollViewRef = useRef();
+  const scenarioOutputRef = useRef();
+
+  const handleAttackTypeChange = (text) => {
+    setAttackType(text);
+    setShowAllSuggestions(false);
+    setErrorMessage("");
+
+    if (text.length > 0) {
+      const filteredSuggestions = ATTACK_TYPES.filter(
+        (attack) => attack.toLowerCase().includes(text.toLowerCase())
+      );
+      setSuggestions(filteredSuggestions);
+      setShowSuggestions(true);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectSuggestion = (suggestion) => {
+    setAttackType(suggestion);
+    setShowSuggestions(false);
+  };
+
+  const handleGenerateScenario = async () => {
+    if (!attackType.trim()) {
+      setErrorMessage("Please enter the Type of Attack");
+      toast.show("Please enter the Type of Attack", {
+        type: 'danger',
+        duration: 3000,
+      });
+      return;
+    }
+
+    setErrorMessage("");
+    setIsGenerating(true);
+    setScenarioText("");
+    setInteractiveQuestions([]);
+    setUserAnswers({});
+    setFeedback({});
+    setScoreCounter(0);
+    setScenarioGenerated(true);
+    setGenerationComplete(false);
+
+    try {
+      // Start streaming the scenario
+      const response = await streamScenario(
+        industry,
+        attackType,
+        skillLevel,
+        threatIntensity
+      );
+
+      let accumulatedText = '';
+      
+      // Simulate streaming by updating the text in chunks
+      const paragraphs = response.split('\n\n');
+      
+      for (const paragraph of paragraphs) {
+        accumulatedText += paragraph + '\n\n';
+        setScenarioText(accumulatedText);
+        
+        // Simulate delay for streaming effect
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Scroll to bottom as text comes in
+        if (scenarioOutputRef.current) {
+          scenarioOutputRef.current.scrollToEnd({ animated: true });
+        }
+      }
+      
+      setGenerationComplete(true);
+      
+      // Now fetch the questions based on the scenario
+      fetchQuestions(accumulatedText);
+    } catch (error) {
+      console.error('Error generating scenario:', error);
+      setErrorMessage("An error occurred while generating the scenario");
+      toast.show("Error generating scenario. Please try again.", {
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const fetchQuestions = async (finalScenarioText) => {
+    if (!finalScenarioText) return;
+
+    try {
+      const questions = await streamScenarioQuestions(finalScenarioText);
+      
+      if (Array.isArray(questions)) {
+        const errorObj = questions.find(q => q.error);
+        if (errorObj) {
+          console.error("Error in questions generation:", errorObj.error);
+          setErrorMessage(`Error generating questions: ${errorObj.error}`);
+          toast.show(`Error generating questions: ${errorObj.error}`, {
+            type: 'danger',
+            duration: 3000,
+          });
+        } else if (questions.length === 3) {
+          setInteractiveQuestions(questions);
+        } else {
+          console.error("Expected exactly 3 questions, but received:", questions);
+          setErrorMessage("Unexpected number of questions received");
+        }
+      } else {
+        console.error("Parsed questions are not in an array format.");
+        setErrorMessage("Invalid format for interactive questions");
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      setErrorMessage("Error fetching questions");
+      toast.show("Error fetching questions. Please try again.", {
+        type: 'danger',
+        duration: 3000,
+      });
+    }
+  };
+
+  const handleAnswerSelect = (questionIndex, selectedOption) => {
+    // Already answered? do nothing
+    if (Object.prototype.hasOwnProperty.call(userAnswers, questionIndex)) {
+      return;
+    }
+    
+    const question = interactiveQuestions[questionIndex];
+    const isCorrect = selectedOption === question.correct_answer;
+
+    setUserAnswers((prevAnswers) => ({
+      ...prevAnswers,
+      [questionIndex]: selectedOption,
+    }));
+
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [questionIndex]: {
+        isCorrect,
+        explanation: question.explanation,
+      },
+    }));
+    
+    if (isCorrect) {
+      setScoreCounter(prev => prev + 1);
+      toast.show("Correct answer!", {
+        type: 'success',
+        duration: 2000,
+      });
+    } else {
+      toast.show("Incorrect answer.", {
+        type: 'danger',
+        duration: 2000,
+      });
+    }
+  };
+
+  // Calculate a rough progress percentage based on paragraph count
+  const calculateStreamProgress = () => {
+    if (!scenarioText) return 0;
+    const paragraphs = scenarioText.split('\n\n').filter(p => p.trim().length > 0);
+    return Math.min(Math.ceil((paragraphs.length / 5) * 100), 90);
+  };
+
+  const streamProgress = calculateStreamProgress();
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      
+      <View style={styles.header}>
+        <Text style={styles.title}>
+          <Ionicons name="shield" size={24} color="#6543cc" /> Scenario Sphere
+        </Text>
+        <Text style={styles.subtitle}>
+          Immerse yourself in realistic cybersecurity scenarios and test your knowledge
+        </Text>
+        
+        {errorMessage ? (
+          <View style={styles.errorContainer}>
+            <Ionicons name="warning" size={20} color="#ff4e4e" />
+            <Text style={styles.errorText}>{errorMessage}</Text>
+            <TouchableOpacity 
+              style={styles.errorCloseButton}
+              onPress={() => setErrorMessage("")}
+            >
+              <Ionicons name="close" size={18} color="#9da8b9" />
+            </TouchableOpacity>
+          </View>
+        ) : null}
+      </View>
+      
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.content}>
+          <View style={styles.paramsCard}>
+            <View style={styles.paramsHeader}>
+              <View style={styles.paramsHeaderLeft}>
+                <Ionicons name="settings" size={20} color="#6543cc" />
+                <Text style={styles.paramsTitle}>Generation Parameters</Text>
+              </View>
+              
+              <View style={styles.scoreCounter}>
+                <Text style={styles.scoreValue}>
+                  <Text style={styles.scoreHighlight}>{scoreCounter}</Text>/3
+                </Text>
+                <Text style={styles.scoreLabel}>Correct</Text>
+              </View>
+            </View>
+            
+            <View style={styles.paramsContent}>
+              {/* Industry Picker */}
+              <View style={styles.paramGroup}>
+                <Text style={styles.paramLabel}>
+                  <Ionicons name="business" size={16} color="#6543cc" /> Industry
+                </Text>
+                <View style={styles.pickerWrapper}>
+                  <Picker
+                    selectedValue={industry}
+                    onValueChange={(value) => setIndustry(value)}
+                    style={styles.picker}
+                    dropdownIconColor="#6543cc"
+                    itemStyle={styles.pickerItem}
+                    enabled={!isGenerating}
+                  >
+                    <Picker.Item label="Finance" value="Finance" />
+                    <Picker.Item label="Healthcare" value="Healthcare" />
+                    <Picker.Item label="Retail" value="Retail" />
+                    <Picker.Item label="Technology" value="Technology" />
+                    <Picker.Item label="Energy" value="Energy" />
+                    <Picker.Item label="Education" value="Education" />
+                    <Picker.Item label="Supply Chain" value="Supply Chain" />
+                    <Picker.Item label="Telecommunications" value="Telecommunications" />
+                    <Picker.Item label="Pharmaceutical" value="Pharmaceutical" />
+                    <Picker.Item label="Transportation" value="Transportation" />
+                    <Picker.Item label="Cybersecurity Company" value="Cybersecurity Company" />
+                    <Picker.Item label="Manufacturing" value="Manufacturing" />
+                    <Picker.Item label="CYBERPUNK2077" value="CYBERPUNK2077" />
+                  </Picker>
+                </View>
+              </View>
+              
+              {/* Attack Type Input */}
+              <View style={styles.paramGroup}>
+                <Text style={styles.paramLabel}>
+                  <Ionicons name="skull" size={16} color="#6543cc" /> Attack Type
+                </Text>
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="search" size={20} color="#6543cc" style={styles.inputIcon} />
+                  <TextInput
+                    style={styles.textInput}
+                    placeholder="Search or enter attack type..."
+                    placeholderTextColor="#9da8b9"
+                    value={attackType}
+                    onChangeText={handleAttackTypeChange}
+                    editable={!isGenerating}
+                  />
+                </View>
+                
+                {showSuggestions && suggestions.length > 0 && (
+                  <View style={styles.suggestionsContainer}>
+                    <FlatList
+                      data={showAllSuggestions ? suggestions : suggestions.slice(0, 5)}
+                      keyExtractor={(item) => item}
+                      renderItem={({ item }) => (
+                        <TouchableOpacity
+                          style={styles.suggestionItem}
+                          onPress={() => selectSuggestion(item)}
+                        >
+                          <Text style={styles.suggestionText}>{item}</Text>
+                        </TouchableOpacity>
+                      )}
+                      style={styles.suggestionsList}
+                    />
+                    
+                    {!showAllSuggestions && suggestions.length > 5 && (
+                      <TouchableOpacity 
+                        style={styles.showAllButton}
+                        onPress={() => setShowAllSuggestions(true)}
+                      >
+                        <Ionicons name="chevron-down" size={16} color="#6543cc" />
+                        <Text style={styles.showAllText}>
+                          Show all options ({suggestions.length})
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
+              </View>
+              
+              {/* Skill Level Picker */}
+              <View style={styles.paramGroup}>
+                <Text style={styles.paramLabel}>
+                  <Ionicons name="person" size={16} color="#6543cc" /> Attacker Skill Level
+                </Text>
+                <View style={styles.pickerWrapper}>
+                  <Picker
+                    selectedValue={skillLevel}
+                    onValueChange={(value) => setSkillLevel(value)}
+                    style={styles.picker}
+                    dropdownIconColor="#6543cc"
+                    itemStyle={styles.pickerItem}
+                    enabled={!isGenerating}
+                  >
+                    <Picker.Item label="Script Kiddie" value="Script Kiddie" />
+                    <Picker.Item label="Intermediate" value="Intermediate" />
+                    <Picker.Item label="Advanced" value="Advanced" />
+                    <Picker.Item label="APT" value="APT" />
+                  </Picker>
+                </View>
+              </View>
+              
+              {/* Threat Intensity Slider */}
+              <View style={styles.paramGroup}>
+                <View style={styles.sliderLabelContainer}>
+                  <Text style={styles.paramLabel}>
+                    <Ionicons name="thermometer" size={16} color="#6543cc" /> Threat Intensity
+                  </Text>
+                  <View style={styles.intensityBadge}>
+                    <Text style={styles.intensityValue}>{threatIntensity}</Text>
+                  </View>
+                </View>
+                
+                <Slider
+                  style={styles.slider}
+                  minimumValue={1}
+                  maximumValue={100}
+                  step={1}
+                  value={threatIntensity}
+                  onValueChange={(value) => setThreatIntensity(value)}
+                  minimumTrackTintColor="#6543cc"
+                  maximumTrackTintColor="#333333"
+                  thumbTintColor="#6543cc"
+                  disabled={isGenerating}
+                />
+                
+                <View style={styles.sliderMarkers}>
+                  <Text style={styles.sliderMarker}>Low</Text>
+                  <Text style={styles.sliderMarker}>Medium</Text>
+                  <Text style={styles.sliderMarker}>High</Text>
+                </View>
+              </View>
+              
+              {/* Generate Button */}
+              <TouchableOpacity
+                style={[styles.generateButton, isGenerating && styles.generateButtonDisabled]}
+                onPress={handleGenerateScenario}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <View style={styles.buttonContent}>
+                    <ActivityIndicator color="#fff" size="small" />
+                    <Text style={styles.buttonText}>Generating...</Text>
+                  </View>
+                ) : (
+                  <View style={styles.buttonContent}>
+                    <Ionicons name="play" size={20} color="#fff" />
+                    <Text style={styles.buttonText}>Generate Scenario</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+          
+          {scenarioGenerated && (
+            <View style={styles.results}>
+              {/* Scenario Output Card */}
+              <View style={styles.outputCard}>
+                <TouchableOpacity 
+                  style={styles.outputHeader}
+                  onPress={() => setOutputExpanded(!outputExpanded)}
+                >
+                  <View style={styles.outputHeaderLeft}>
+                    <Ionicons name="lock-closed" size={20} color="#6543cc" />
+                    <Text style={styles.outputTitle}>Generated Scenario</Text>
+                  </View>
+                  
+                  <View style={styles.outputControls}>
+                    {!generationComplete && isGenerating && (
+                      <View style={styles.progressContainer}>
+                        <View style={styles.progressBar}>
+                          <View 
+                            style={[styles.progressFill, { width: `${streamProgress}%` }]}
+                          />
+                        </View>
+                        <Text style={styles.progressLabel}>Generating...</Text>
+                      </View>
+                    )}
+                    
+                    <TouchableOpacity style={styles.toggleButton}>
+                      <Ionicons 
+                        name={outputExpanded ? "chevron-up" : "chevron-down"} 
+                        size={20} 
+                        color="#9da8b9" 
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+                
+                {outputExpanded && (
+                  <ScrollView 
+                    style={styles.outputContent}
+                    ref={scenarioOutputRef}
+                  >
+                    {scenarioText ? (
+                      <Text style={styles.scenarioText}>
+                        {scenarioText}
+                        {isGenerating && <Text style={styles.cursor}>|</Text>}
+                      </Text>
+                    ) : (
+                      <View style={styles.placeholderContainer}>
+                        <ActivityIndicator 
+                          color="#6543cc" 
+                          size="large"
+                          animating={isGenerating}
+                        />
+                        <Text style={styles.placeholderText}>
+                          Scenario will appear here...
+                        </Text>
+                      </View>
+                    )}
+                  </ScrollView>
+                )}
+              </View>
+              
+              {/* Questions Card */}
+              {interactiveQuestions.length > 0 && (
+                <View style={styles.questionsCard}>
+                  <TouchableOpacity 
+                    style={styles.questionsHeader}
+                    onPress={() => setQuestionsExpanded(!questionsExpanded)}
+                  >
+                    <View style={styles.questionsHeaderLeft}>
+                      <Ionicons name="help-circle" size={20} color="#6543cc" />
+                      <Text style={styles.questionsTitle}>Knowledge Assessment</Text>
+                    </View>
+                    
+                    <TouchableOpacity style={styles.toggleButton}>
+                      <Ionicons 
+                        name={questionsExpanded ? "chevron-up" : "chevron-down"} 
+                        size={20} 
+                        color="#9da8b9" 
+                      />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                  
+                  {questionsExpanded && (
+                    <View style={styles.questionsContent}>
+                      {Object.keys(feedback).length === interactiveQuestions.length && (
+                        <View style={styles.assessmentComplete}>
+                          <Ionicons name="checkmark-circle" size={24} color="#2ebb77" />
+                          <View style={styles.assessmentResults}>
+                            <Text style={styles.completionMessage}>Assessment Complete</Text>
+                            <Text style={styles.scoreMessage}>
+                              You scored {scoreCounter} out of {interactiveQuestions.length} correct
+                            </Text>
+                          </View>
+                        </View>
+                      )}
+                      
+                      {interactiveQuestions.map((question, index) => {
+                        const questionFeedback = feedback[index];
+                        const isCorrect = questionFeedback?.isCorrect;
+                        
+                        return (
+                          <View key={index} style={styles.questionCard}>
+                            <View style={styles.questionHeader}>
+                              <Text style={styles.questionNumber}>Question {index + 1}</Text>
+                              {questionFeedback && (
+                                <View style={[
+                                  styles.questionStatus,
+                                  isCorrect ? styles.correctStatus : styles.incorrectStatus
+                                ]}>
+                                  <Ionicons 
+                                    name={isCorrect ? "checkmark" : "close"} 
+                                    size={16} 
+                                    color={isCorrect ? "#2ebb77" : "#ff4e4e"} 
+                                  />
+                                  <Text style={[
+                                    styles.statusText,
+                                    isCorrect ? styles.correctText : styles.incorrectText
+                                  ]}>
+                                    {isCorrect ? "Correct" : "Incorrect"}
+                                  </Text>
+                                </View>
+                              )}
+                            </View>
+                            
+                            <Text style={styles.questionText}>{question.question}</Text>
+                            
+                            <View style={styles.optionsContainer}>
+                              {Object.entries(question.options).map(([optionLetter, optionText]) => {
+                                const isSelected = userAnswers[index] === optionLetter;
+                                const showCorrect = questionFeedback && question.correct_answer === optionLetter;
+                                const showIncorrect = questionFeedback && isSelected && !isCorrect;
+                                
+                                return (
+                                  <TouchableOpacity
+                                    key={optionLetter}
+                                    style={[
+                                      styles.optionButton,
+                                      isSelected && styles.selectedOption,
+                                      showCorrect && styles.correctOption,
+                                      showIncorrect && styles.incorrectOption
+                                    ]}
+                                    onPress={() => handleAnswerSelect(index, optionLetter)}
+                                    disabled={Object.prototype.hasOwnProperty.call(userAnswers, index)}
+                                  >
+                                    <View style={[
+                                      styles.optionLetter,
+                                      showCorrect && styles.correctLetter,
+                                      showIncorrect && styles.incorrectLetter
+                                    ]}>
+                                      <Text style={styles.optionLetterText}>{optionLetter}</Text>
+                                    </View>
+                                    
+                                    <Text style={styles.optionText}>{optionText}</Text>
+                                    
+                                    {showCorrect && (
+                                      <Ionicons name="checkmark" size={20} color="#2ebb77" style={styles.optionIcon} />
+                                    )}
+                                    {showIncorrect && (
+                                      <Ionicons name="close" size={20} color="#ff4e4e" style={styles.optionIcon} />
+                                    )}
+                                  </TouchableOpacity>
+                                );
+                              })}
+                            </View>
+                            
+                            {questionFeedback && (
+                              <View style={styles.feedbackContainer}>
+                                <Ionicons name="bulb" size={20} color="#ffc107" style={styles.feedbackIcon} />
+                                <Text style={styles.feedbackExplanation}>
+                                  {questionFeedback.explanation}
+                                </Text>
+                              </View>
+                            )}
+                          </View>
+                        );
+                      })}
+                    </View>
+                  )}
+                </View>
+              )}
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#0b0c15',
+  },
+  header: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    margin: 15,
+    marginBottom: 10,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    position: 'relative',
+    overflow: 'hidden',
+    borderTopWidth: 4,
+    borderTopColor: '#6543cc',
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+    textAlign: 'center',
+    marginBottom: 5,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#9da8b9',
+    textAlign: 'center',
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 78, 78, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 78, 78, 0.3)',
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 15,
+  },
+  errorText: {
+    color: '#ff4e4e',
+    marginLeft: 10,
+    flex: 1,
+    fontSize: 14,
+  },
+  errorCloseButton: {
+    padding: 5,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  content: {
+    padding: 15,
+    paddingTop: 0,
+  },
+  paramsCard: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 5,
+    marginBottom: 20,
+  },
+  paramsHeader: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a2c3d',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  paramsHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  paramsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+  },
+  scoreCounter: {
+    alignItems: 'center',
+  },
+  scoreValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+  },
+  scoreHighlight: {
+    color: '#6543cc',
+  },
+  scoreLabel: {
+    fontSize: 12,
+    color: '#9da8b9',
+  },
+  paramsContent: {
+    padding: 15,
+  },
+  paramGroup: {
+    marginBottom: 15,
+  },
+  paramLabel: {
+    fontSize: 14,
+    color: '#9da8b9',
+    marginBottom: 8,
+    fontWeight: '500',
+  },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    overflow: 'hidden',
+  },
+  picker: {
+    color: '#e2e2e2',
+    height: 50,
+  },
+  pickerItem: {
+    fontSize: 16,
+    color: '#e2e2e2',
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    paddingHorizontal: 15,
+  },
+  inputIcon: {
+    marginRight: 10,
+  },
+  textInput: {
+    flex: 1,
+    color: '#e2e2e2',
+    height: 50,
+    fontSize: 16,
+  },
+  suggestionsContainer: {
+    backgroundColor: '#171a23',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 8,
+    marginTop: 5,
+    maxHeight: 200,
+    zIndex: 1,
+  },
+  suggestionsList: {
+    padding: 5,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderRadius: 5,
+  },
+  suggestionText: {
+    color: '#e2e2e2',
+    fontSize: 14,
+  },
+  showAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#2a2c3d',
+    gap: 5,
+  },
+  showAllText: {
+    color: '#6543cc',
+    fontSize: 14,
+  },
+  sliderLabelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  intensityBadge: {
+    backgroundColor: '#6543cc',
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  intensityValue: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  slider: {
+    width: '100%',
+    height: 40,
+  },
+  sliderMarkers: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  sliderMarker: {
+    fontSize: 12,
+    color: '#9da8b9',
+  },
+  generateButton: {
+    backgroundColor: '#6543cc',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    shadowColor: 'rgba(101, 67, 204, 0.3)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+  generateButtonDisabled: {
+    backgroundColor: 'rgba(101, 67, 204, 0.5)',
+    opacity: 0.7,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  results: {
+    gap: 20,
+  },
+  outputCard: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 5,
+  },
+  outputHeader: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a2c3d',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  outputHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  outputTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+  },
+  outputControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  progressBar: {
+    width: 100,
+    height: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#6543cc',
+  },
+  progressLabel: {
+    fontSize: 12,
+    color: '#9da8b9',
+  },
+  toggleButton: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  outputContent: {
+    padding: 15,
+    maxHeight: 300,
+  },
+  scenarioText: {
+    color: '#e2e2e2',
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  cursor: {
+    color: '#6543cc',
+    fontWeight: 'bold',
+  },
+  placeholderContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 30,
+    gap: 15,
+  },
+  placeholderText: {
+    color: '#9da8b9',
+    fontSize: 16,
+  },
+  questionsCard: {
+    backgroundColor: '#171a23',
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 24,
+    elevation: 5,
+    marginBottom: 20,
+  },
+  questionsHeader: {
+    padding: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a2c3d',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  questionsHeaderLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  questionsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+  },
+  questionsContent: {
+    padding: 15,
+  },
+  assessmentComplete: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(46, 187, 119, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(46, 187, 119, 0.3)',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    gap: 15,
+  },
+  assessmentResults: {
+    flex: 1,
+  },
+  completionMessage: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#e2e2e2',
+    marginBottom: 5,
+  },
+  scoreMessage: {
+    fontSize: 14,
+    color: '#9da8b9',
+  },
+  questionCard: {
+    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 20,
+  },
+  questionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  questionNumber: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#6543cc',
+  },
+  questionStatus: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 20,
+    gap: 5,
+  },
+  correctStatus: {
+    backgroundColor: 'rgba(46, 187, 119, 0.1)',
+  },
+  incorrectStatus: {
+    backgroundColor: 'rgba(255, 78, 78, 0.1)',
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  correctText: {
+    color: '#2ebb77',
+  },
+  incorrectText: {
+    color: '#ff4e4e',
+  },
+  questionText: {
+    fontSize: 16,
+    color: '#e2e2e2',
+    lineHeight: 24,
+    marginBottom: 20,
+  },
+  optionsContainer: {
+    gap: 10,
+  },
+  optionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderWidth: 1,
+    borderColor: '#2a2c3d',
+    borderRadius: 10,
+    padding: 12,
+  },
+  selectedOption: {
+    borderColor: '#6543cc',
+    backgroundColor: 'rgba(101, 67, 204, 0.1)',
+  },
+  correctOption: {
+    borderColor: '#2ebb77',
+    backgroundColor: 'rgba(46, 187, 119, 0.1)',
+  },
+  incorrectOption: {
+    borderColor: '#ff4e4e',
+    backgroundColor: 'rgba(255, 78, 78, 0.1)',
+  },
+  optionLetter: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#0b0c15',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  correctLetter: {
+    backgroundColor: '#2ebb77',
+  },
+  incorrectLetter: {
+    backgroundColor: '#ff4e4e',
+  },
+  optionLetterText: {
+    color: '#e2e2e2',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  optionText: {
+    flex: 1,
+    color: '#e2e2e2',
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  optionIcon: {
+    marginLeft: 10,
+  },
+  feedbackContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 193, 7, 0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 193, 7, 0.2)',
+    borderRadius: 10,
+    padding: 12,
+    marginTop: 15,
+    gap: 12,
+  },
+  feedbackIcon: {
+    marginTop: 2,
+  },
+  feedbackExplanation: {
+    flex: 1,
+    fontSize: 14,
+    color: '#9da8b9',
+    lineHeight: 22,
+  },
+});
+
+export default ScenarioSphereScreen;
+
+// src/screens/tools/XploitCraftScreen.js
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  SafeAreaView,
+  Image
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import * as Clipboard from 'expo-clipboard';
+import { useToast } from 'react-native-toast-notifications';
+import { generatePayload } from '../../api/xploitService';
+
+const XploitCraftScreen = () => {
+  const [vulnerability, setVulnerability] = useState('');
+  const [evasionTechnique, setEvasionTechnique] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [generatedPayload, setGeneratedPayload] = useState(null);
+  
+  const scrollViewRef = useRef();
+  const toast = useToast();
+
+  const handleGeneratePayload = async () => {
+    if (!vulnerability.trim()) {
+      toast.show('Please enter a vulnerability', {
+        type: 'danger',
+        duration: 3000,
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    setGeneratedPayload(null);
+
+    try {
+      const result = await generatePayload(vulnerability, evasionTechnique, true);
+      
+      // Parse the result if it's in a usable format
+      if (typeof result === 'string') {
+        // If the API just returns a string
+        setGeneratedPayload({
+          code_examples: [
+            { 
+              title: 'Payload', 
+              code: result 
+            }
+          ],
+          explanations: [
+            {
+              title: 'Explanation',
+              content: 'Payload generated successfully.'
+            }
+          ]
+        });
+      } else if (typeof result === 'object') {
+        // If the API returns a structured object
+        setGeneratedPayload(result);
+      }
+      
+      // Scroll to bottom to show results
+      setTimeout(() => {
+        if (scrollViewRef.current) {
+          scrollViewRef.current.scrollToEnd({ animated: true });
+        }
+      }, 300);
+      
+    } catch (error) {
+      console.error('Error generating payload:', error);
+      toast.show('Error generating payload. Please try again.', {
+        type: 'danger',
+        duration: 3000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const copyToClipboard = async (text) => {
+    try {
+      await Clipboard.setStringAsync(text);
+      toast.show('Copied to clipboard!', {
+        type: 'success',
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error('Failed to copy:', error);
+      toast.show('Failed to copy to clipboard', {
+        type: 'danger',
+        duration: 3000,
+      });
+    }
+  };
+
+  const copyAllToClipboard = async () => {
+    if (!generatedPayload) return;
+    
+    try {
+      let allText = '';
+      
+      // Add code examples
+      if (generatedPayload.code_examples && generatedPayload.code_examples.length > 0) {
+        generatedPayload.code_examples.forEach(example => {
+          allText += `### ${example.title} ###\n\n${example.code}\n\n`;
+        });
+      }
+      
+      // Add explanations
+      if (generatedPayload.explanations && generatedPayload.explanations.length > 0) {
+        generatedPayload.explanations.forEach(explanation => {
+          allText += `### ${explanation.title} ###\n\n${explanation.content}\n\n`;
+        });
+      }
+      
+      await Clipboard.setStringAsync(allText);
+      toast.show('All content copied to clipboard!', {
+        type: 'success',
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error('Failed to copy all:', error);
+      toast.show('Failed to copy content', {
+        type: 'danger',
+        duration: 3000,
+      });
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+      
+      {/* Logo and Title */}
+      <View style={styles.headerContainer}>
+        <Text style={styles.title}>XploitCraft</Text>
+      </View>
+      
+      <ScrollView 
+        style={styles.scrollView}
+        ref={scrollViewRef}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        {/* Input Fields */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Vulnerability or Exploit"
+            placeholderTextColor="#888"
+            value={vulnerability}
+            onChangeText={setVulnerability}
+            editable={!isLoading}
+          />
+          
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Evasion Technique or Delivery Method"
+            placeholderTextColor="#888"
+            value={evasionTechnique}
+            onChangeText={setEvasionTechnique}
+            editable={!isLoading}
+          />
+        </View>
+        
+        {/* Generate Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.generateButton, isLoading && styles.generateButtonDisabled]}
+            onPress={handleGeneratePayload}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <View style={styles.buttonContent}>
+                <ActivityIndicator color="#fff" size="small" />
+                <Text style={styles.buttonText}>Generating...</Text>
+              </View>
+            ) : (
+              <Text style={styles.buttonText}>Generate Payload</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+        
+        {/* Results Container */}
+        {generatedPayload && (
+          <View style={styles.resultsContainer}>
+            {/* Code Examples Section */}
+            {generatedPayload.code_examples && generatedPayload.code_examples.length > 0 && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.sectionTitle}>Code Examples</Text>
+                
+                {generatedPayload.code_examples.map((example, index) => (
+                  <View key={`code-${index}`} style={styles.codeBlock}>
+                    <View style={styles.codeHeader}>
+                      <Text style={styles.codeTitle}>{example.title}</Text>
+                      <TouchableOpacity
+                        style={styles.copyButton}
+                        onPress={() => copyToClipboard(example.code)}
+                      >
+                        <Ionicons name="copy-outline" size={16} color="#fff" />
+                        <Text style={styles.copyText}>Copy</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <ScrollView style={styles.codeContent}>
+                      <Text style={styles.codeText}>{example.code}</Text>
+                    </ScrollView>
+                  </View>
+                ))}
+              </View>
+            )}
+            
+            {/* Explanations Section */}
+            {generatedPayload.explanations && generatedPayload.explanations.length > 0 && (
+              <View style={styles.sectionContainer}>
+                <Text style={styles.sectionTitle}>Explanations</Text>
+                
+                {generatedPayload.explanations.map((explanation, index) => (
+                  <View key={`exp-${index}`} style={styles.explanationBlock}>
+                    <Text style={styles.explanationTitle}>{explanation.title}</Text>
+                    <Text style={styles.explanationText}>{explanation.content}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
+            
+            {/* Copy All Button */}
+            <TouchableOpacity
+              style={styles.copyAllButton}
+              onPress={copyAllToClipboard}
+            >
+              <Ionicons name="copy-outline" size={20} color="#fff" />
+              <Text style={styles.copyAllText}>Copy All Content</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  headerContainer: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderBottomWidth: 3,
+    borderBottomColor: '#660000',
+  },
+  title: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#fff',
+    textShadowColor: '#ff0000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollViewContent: {
+    padding: 20,
+  },
+  inputContainer: {
+    gap: 15,
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: 'rgba(51, 51, 51, 0.8)',
+    borderWidth: 2,
+    borderColor: '#660000',
+    borderRadius: 10,
+    color: '#fff',
+    padding: 15,
+    fontSize: 16,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  generateButton: {
+    backgroundColor: '#660000',
+    borderRadius: 10,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: '#000',
+    minWidth: 200,
+  },
+  generateButtonDisabled: {
+    backgroundColor: '#330000',
+    opacity: 0.7,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+  },
+  resultsContainer: {
+    backgroundColor: 'rgba(30, 30, 30, 0.92)',
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#660000',
+    padding: 20,
+    gap: 20,
+  },
+  sectionContainer: {
+    gap: 15,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#ff0000',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 0, 0, 0.3)',
+    paddingBottom: 5,
+  },
+  codeBlock: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 0, 0, 0.2)',
+    overflow: 'hidden',
+  },
+  codeHeader: {
+    backgroundColor: 'rgba(102, 0, 0, 0.7)',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  codeTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  copyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    gap: 5,
+  },
+  copyText: {
+    fontSize: 12,
+    color: '#fff',
+  },
+  codeContent: {
+    padding: 15,
+    maxHeight: 250,
+  },
+  codeText: {
+    fontFamily: 'monospace',
+    fontSize: 14,
+    color: '#e0e0e0',
+  },
+  explanationBlock: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 10,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 0, 0, 0.2)',
+  },
+  explanationTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#ff6666',
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 0, 0, 0.2)',
+    paddingBottom: 5,
+  },
+  explanationText: {
+    fontSize: 15,
+    color: '#e0e0e0',
+    lineHeight: 22,
+  },
+  copyAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#660000',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: '#000',
+    alignSelf: 'center',
+    marginTop: 10,
+    gap: 10,
+  },
+  copyAllText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+});
+
+export default XploitCraftScreen;
+
+ok so we made the Ui files now fro the tools nwo what do we do next??
+
+so i guess then we move onto the next steps and so on ok? cool? they will be in teh pormpt i giev you directly
 
 
 tehn well continue on with my next files and so on. adn at teh evry end of eveyrthing ill test the app with expo on iphone (i dont have mac access at the moment) and udpate all UI to my liking but still try your best we want teh ebst mobniel app on teh app stoire, coolest/ bets fucnitoning etc etc. simialr to my web app obviolsya dn ahs to integrate well with it so all user data is replciate don teh ios app adn web app adn you already know, you this this, you are the best! ok lets goo!!
+
+
 
 
 
