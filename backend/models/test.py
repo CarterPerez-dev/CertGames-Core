@@ -608,7 +608,19 @@ def hash_password(password):
     return hashed.decode('utf-8')
 
 def check_password(plain_password, hashed_password):
-    """Verify a password against its hash."""
+    """
+    Verify a password against its hash or plain text (for legacy users).
+    Also handles the transition from plain text to hashed passwords.
+    """
     import bcrypt
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    
+    # First, check if this looks like a bcrypt hash (starts with $2b$ or $2a$)
+    if hashed_password.startswith(('$2b$', '$2a$')):
+        # It's a bcrypt hash, use bcrypt to check
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
+    else:
+        # It's a legacy plain text password, do direct comparison
+        # This is for backward compatibility with existing accounts
+        return plain_password == hashed_password
+        
 
