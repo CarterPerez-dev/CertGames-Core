@@ -650,7 +650,8 @@ const GlobalTestPage = ({
         dispatch(
           setXPAndCoins({
             xp: finishData.newXP,
-            coins: finishData.newCoins
+            coins: finishData.newCoins,
+            newlyUnlocked: finishData.newlyUnlocked || []
           })
         );
       }

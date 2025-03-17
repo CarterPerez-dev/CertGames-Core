@@ -8,22 +8,9 @@ import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
 import './DemosPage.css';
 
-// Video imports
-import analogy from './videos/anal.mp4';
-import bonus from './videos/bonus.mp4';
-import grc from './videos/grcc.mp4';
-import scenario from './videos/sc.mp4';
-import recourse from './videos/rec.mp4';
-import profile from './videos/prof.mp4';
-import xploit from './videos/xploit.mp4';
-import leader from './videos/leader.mp4';
-import testinterface from './videos/testinterface.mp4';
-import xp from './videos/xp.mp4';
-import support from './videos/support.mp4';
-import coin from './videos/coin.mp4';
-import review from './videos/review.mp4';
-import ach from './videos/achievements.mp4';
-import shop from './videos/shop.mp4';
+// Import the YouTube component and configuration
+import { videoConfig } from './videoConfig';
+import YouTubeEmbed from './YouTubeEmbed';
 
 // Thumbnail imports
 import colorsThumbnail from './images/colors.webp';
@@ -73,28 +60,24 @@ const DemosPage = () => {
         id: 'xp-system',
         title: 'XP & Leveling System',
         description: 'See how completing tests and answering questions correctly earns you XP to level up your profile.',
-        videoUrl: xp, 
         thumbnail: xpThumbnail
       },
       {
         id: 'coins-system',
         title: 'Coins & Shop System',
         description: 'Watch how to earn coins and spend them in the shop to unlock unique avatars and boosts.',
-        videoUrl: shop,
         thumbnail: shopThumbnail
       },
       {
         id: 'achievements',
         title: 'Achievement System',
         description: 'Discover the various achievements you can unlock as you progress through your certification journey.',
-        videoUrl: ach, 
         thumbnail: achi
       },
       {
         id: 'leaderboards',
         title: 'Leaderboards',
         description: 'See how you stack up against other cybersecurity enthusiasts on our global leaderboards.',
-        videoUrl: leader,
         thumbnail: leaderThumbnail
       }
     ],
@@ -103,38 +86,33 @@ const DemosPage = () => {
         id: 'scenario-sphere',
         title: 'ScenarioSphere',
         description: 'Experience realistic security scenarios with detailed storylines to build your incident response skills.',
-        videoUrl: scenario,
         thumbnail: scenThumbnail
       },
       {
         id: 'analogy-hub',
         title: 'Analogy Hub',
         description: 'See how complex security concepts are broken down using memorable analogies to enhance understanding.',
-        videoUrl: analogy,
         thumbnail: analogyThumbnail
       },
       {
         id: 'grc-wizard',
         title: 'GRC Wizard',
         description: 'Watch how our GRC Wizard helps you master governance, risk, and compliance topics with custom-generated questions.',
-        videoUrl: grc,
         thumbnail: grcThumbnail
       },
       {
         id: 'xploitcraft',
         title: 'XploitCraft',
         description: 'Learn about exploitation techniques through educational code examples with detailed explanations.',
-        videoUrl: xploit,
         thumbnail: xploitThumbnail
       }
     ],
     daily: [
       {
         id: 'pbq-challenge',
-        title: 'Daily PBQ Challenge',
+        title: 'Daily PBQ Challenge & Bonus',
         description: 'Watch how the daily performance-based question challenges work and how to solve them.',
-        videoUrl: bonus, 
-        thumbnail: bonusThumbnail
+        thumbnail: pbqThumbnail
       }
     ],
     tests: [
@@ -142,14 +120,12 @@ const DemosPage = () => {
         id: 'test-interface',
         title: 'Test Interface',
         description: 'See how our intuitive test interface makes studying for your certification exams a breeze.',
-        videoUrl: testinterface, 
         thumbnail: testThumbnail
       },
       {
         id: 'review-answers',
         title: 'Review & Analytics',
         description: 'See how our detailed review and analytics help you identify and improve your weak areas.',
-        videoUrl: review,
         thumbnail: reviewThumbnail
       }
     ],
@@ -158,7 +134,6 @@ const DemosPage = () => {
         id: 'ask-anything',
         title: 'Ask Anything',
         description: 'Watch how our 24/7 support system works to help you with any questions or issues.',
-        videoUrl: support, 
         thumbnail: supportThumbnail
       }
     ],
@@ -167,7 +142,6 @@ const DemosPage = () => {
         id: 'profile-colors',
         title: 'Color Scheme Options',
         description: 'See how you can personalize your learning experience by switching between different color schemes.',
-        videoUrl: profile,
         thumbnail: colorsThumbnail
       }
     ],
@@ -176,13 +150,12 @@ const DemosPage = () => {
         id: 'resource-hub',
         title: 'Resource Hub',
         description: 'Explore our comprehensive collection of study materials, guides, and references to boost your learning.',
-        videoUrl: recourse,
         thumbnail: recThumbnail
       }
     ]
   };
 
-  // Create a featured demos array with demos from each category
+
   const featuredDemos = [
     demoData.gamification[0],
     demoData.learning[0],
@@ -257,24 +230,20 @@ const DemosPage = () => {
           {activeDemo && (
             <div className="demo-player-container">
               <div className="demo-video">
-                {/* Updated video player component */}
-                <div className="demo-video-placeholder">
-                  {activeDemo.videoUrl ? (
-                    <video 
-                      src={activeDemo.videoUrl} 
-                      poster={typeof activeDemo.thumbnail === 'string' ? activeDemo.thumbnail : undefined}
-                      controls
-                    />
-                  ) : (
-                    <>
-                      <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
-                      <div className="play-overlay">
-                        <FaPlay className="play-icon" aria-hidden="true" />
-                        <span>Demo Video Placeholder</span>
-                      </div>
-                    </>
-                  )}
-                </div>
+                {videoConfig[activeDemo.id] && videoConfig[activeDemo.id].youtubeId ? (
+                  <YouTubeEmbed 
+                    videoId={videoConfig[activeDemo.id].youtubeId}
+                    title={`${activeDemo.title} demo`}
+                  />
+                ) : (
+                  <div className="demo-video-placeholder">
+                    <img src={activeDemo.thumbnail} alt={`Demonstration of ${activeDemo.title} feature`} />
+                    <div className="play-overlay">
+                      <FaPlay className="play-icon" aria-hidden="true" />
+                      <span>Demo Video Placeholder</span>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="demo-info">
                 <h2>{activeDemo.title}</h2>

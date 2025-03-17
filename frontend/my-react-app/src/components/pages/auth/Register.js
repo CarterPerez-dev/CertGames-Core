@@ -239,7 +239,7 @@ const Register = () => {
                       setShowPasswordRequirements(false);
                     }
                   }}
-                  placeholder="Create a strong password"
+                  placeholder="Create a strong password (please 👉👈🥹)"
                   disabled={loading}
                   className={password && !passwordIsValid() ? "register-input-error" : ""}
                 />
@@ -308,7 +308,7 @@ const Register = () => {
             </div>
             
             <div className="register-input-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">Confirm Password </label>
               <div className="register-input-wrapper">
                 <FaLock className="register-input-icon" />
                 <input

@@ -52,10 +52,10 @@ const ExamsPage = () => {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "CertGames Certification Exam Prep",
-    "description": "Practice tests for 13 cybersecurity and IT certifications with over 13,000 questions",
+    "description": "Practice tests for 12 cybersecurity and IT certifications with over 13,000 questions",
     "offers": {
       "@type": "Offer",
-      "price": "14.99",
+      "price": "9.99",
       "priceCurrency": "USD",
       "availability": "https://schema.org/InStock"
     },
@@ -295,7 +295,7 @@ const ExamsPage = () => {
             Certification Exam Prep
           </h1>
           <p className="exams-subtitle">
-            Access to all exams with a single subscription — 13,000+ practice questions across 13 certifications
+            Access to all exams with a single subscription — 13,000+ practice questions across 12 certifications
           </p>
           
           <div className="exams-access-notice">
@@ -486,11 +486,11 @@ const ExamsPage = () => {
           <div className="subscribe-card">
             <div className="subscribe-content">
               <h2>Ready to pass your certification exams?</h2>
-              <p>Get unlimited access to all 13 certification paths with 13,000+ practice questions</p>
+              <p>Get unlimited access to all 12 certification paths with 13,000+ practice questions</p>
               <div className="price-section">
                 <div className="price">
                   <span className="currency">$</span>
-                  <span className="amount">14</span>
+                  <span className="amount">9</span>
                   <span className="decimal">.99</span>
                   <span className="period">/month</span>
                 </div>
@@ -504,7 +504,7 @@ const ExamsPage = () => {
             <div className="subscribe-features">
               <div className="feature">
                 <FaCheckCircle className="feature-icon" aria-hidden="true" />
-                <span>13 Certification Paths</span>
+                <span>12 Certification Paths</span>
               </div>
               <div className="feature">
                 <FaCheckCircle className="feature-icon" aria-hidden="true" />

@@ -246,9 +246,18 @@ const userSlice = createSlice({
       localStorage.removeItem('userId');
     },
     setXPAndCoins(state, action) {
-      const { xp, coins } = action.payload;
+      const { xp, coins, newlyUnlocked } = action.payload;
       state.xp = xp;
       state.coins = coins;
+      
+      // Add any new achievements to the array
+      if (newlyUnlocked && Array.isArray(newlyUnlocked) && newlyUnlocked.length > 0) {
+        newlyUnlocked.forEach(achievementId => {
+          if (!state.achievements.includes(achievementId)) {
+            state.achievements.push(achievementId);
+          }
+        });
+      }
     },
     // Add this new action:
     clearAuthErrors(state) {
@@ -356,6 +365,15 @@ const userSlice = createSlice({
         if (action.payload.success) {
           state.coins = action.payload.newCoins;
           state.xp = action.payload.newXP;
+          
+          // Update achievements if any were unlocked
+          if (action.payload.newlyUnlocked && action.payload.newlyUnlocked.length > 0) {
+            action.payload.newlyUnlocked.forEach(achievementId => {
+              if (!state.achievements.includes(achievementId)) {
+                state.achievements.push(achievementId);
+              }
+            });
+          }
         }
       })
       .addCase(claimDailyBonus.rejected, (state, action) => {
@@ -365,9 +383,16 @@ const userSlice = createSlice({
 
       // ADD COINS
       .addCase(addCoins.fulfilled, (state, action) => {
-        // If route succeeded, you could do local updates here or re-fetch user
-        // For example:
-        // state.coins += ...
+        // If the payload includes new achievements, add them
+        if (action.payload && action.payload.newlyUnlocked) {
+          if (Array.isArray(action.payload.newlyUnlocked) && action.payload.newlyUnlocked.length > 0) {
+            action.payload.newlyUnlocked.forEach(achievementId => {
+              if (!state.achievements.includes(achievementId)) {
+                state.achievements.push(achievementId);
+              }
+            });
+          }
+        }
       });
   },
 });
