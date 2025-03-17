@@ -11,14 +11,19 @@ import './DemosPage.css';
 // Video imports
 import analogy from './videos/anal.mp4';
 import bonus from './videos/bonus.mp4';
-import exam from './videos/exam.mp4';
 import grc from './videos/grcc.mp4';
 import scenario from './videos/sc.mp4';
 import recourse from './videos/rec.mp4';
 import profile from './videos/prof.mp4';
 import xploit from './videos/xploit.mp4';
 import leader from './videos/leader.mp4';
-import news from './videos/newsletter.mp4';
+import testinterface from './videos/testinterface.mp4';
+import xp from './videos/xp.mp4';
+import support from './videos/support.mp4';
+import coin from './videos/coin.mp4';
+import review from './videos/review.mp4';
+import ach from './videos/achievements.mp4';
+import shop from './videos/shop.mp4';
 
 // Thumbnail imports
 import colorsThumbnail from './images/colors.webp';
@@ -26,11 +31,16 @@ import testThumbnail from './images/test.webp';
 import recThumbnail from './images/rec.webp';
 import leaderThumbnail from './images/leader.webp';
 import xploitThumbnail from './images/xploit.webp';
-import newsThumbnail from './images/news.webp';
 import grcThumbnail from './images/grc.webp';
 import analogyThumbnail from './images/analogy.webp';
 import scenThumbnail from './images/scen.webp';
 import bonusThumbnail from './images/bonus.webp';
+import pbqThumbnail from './images/pbqs.webp';
+import reviewThumbnail from './images/review.webp';
+import shopThumbnail from './images/shop.webp';
+import supportThumbnail from './images/support.webp';
+import xpThumbnail from './images/xboost.webp';
+import achi from './images/achi.webp';
 
 const DemosPage = () => {
   const [activeSection, setActiveSection] = useState('featured');
@@ -63,22 +73,22 @@ const DemosPage = () => {
         id: 'xp-system',
         title: 'XP & Leveling System',
         description: 'See how completing tests and answering questions correctly earns you XP to level up your profile.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder 
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+        videoUrl: xp, 
+        thumbnail: xpThumbnail
       },
       {
         id: 'coins-system',
         title: 'Coins & Shop System',
         description: 'Watch how to earn coins and spend them in the shop to unlock unique avatars and boosts.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder // Updated to use imported video
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+        videoUrl: shop,
+        thumbnail: shopThumbnail
       },
       {
         id: 'achievements',
         title: 'Achievement System',
         description: 'Discover the various achievements you can unlock as you progress through your certification journey.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder // Placeholder until real video available
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+        videoUrl: ach, 
+        thumbnail: achi
       },
       {
         id: 'leaderboards',
@@ -120,25 +130,11 @@ const DemosPage = () => {
     ],
     daily: [
       {
-        id: 'daily-bonus',
-        title: 'Daily Bonus',
-        description: 'See how to claim your daily free coins to spend in the shop.',
-        videoUrl: bonus, 
-        thumbnail: bonusThumbnail
-      },
-      {
         id: 'pbq-challenge',
         title: 'Daily PBQ Challenge',
         description: 'Watch how the daily performance-based question challenges work and how to solve them.',
         videoUrl: bonus, 
         thumbnail: bonusThumbnail
-      },
-      {
-        id: 'cyber-brief',
-        title: 'Cyber Brief',
-        description: 'Check out our daily cybersecurity news and study tips feature.',
-        videoUrl: news,
-        thumbnail: newsThumbnail
       }
     ],
     tests: [
@@ -146,22 +142,15 @@ const DemosPage = () => {
         id: 'test-interface',
         title: 'Test Interface',
         description: 'See how our intuitive test interface makes studying for your certification exams a breeze.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder
+        videoUrl: testinterface, 
         thumbnail: testThumbnail
-      },
-      {
-        id: 'exam-mode',
-        title: 'Exam Mode',
-        description: 'Experience our realistic exam simulation mode to prepare for the real thing.',
-        videoUrl: exam,
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
       },
       {
         id: 'review-answers',
         title: 'Review & Analytics',
         description: 'See how our detailed review and analytics help you identify and improve your weak areas.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder // Using exam video as placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+        videoUrl: review,
+        thumbnail: reviewThumbnail
       }
     ],
     support: [
@@ -169,14 +158,14 @@ const DemosPage = () => {
         id: 'ask-anything',
         title: 'Ask Anything',
         description: 'Watch how our 24/7 support system works to help you with any questions or issues.',
-        videoUrl: '/demos/coins-system.mp4', // Placeholder, // Using news video as placeholder
-        thumbnail: 'https://via.placeholder.com/600x338?text=Coins+System+Demo'
+        videoUrl: support, 
+        thumbnail: supportThumbnail
       }
     ],
     profile: [
       {
         id: 'profile-colors',
-        title: 'Profile Color Scheme',
+        title: 'Color Scheme Options',
         description: 'See how you can personalize your learning experience by switching between different color schemes.',
         videoUrl: profile,
         thumbnail: colorsThumbnail
