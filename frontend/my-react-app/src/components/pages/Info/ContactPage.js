@@ -305,7 +305,7 @@ const handleSubmit = async (e) => {
               
               <article className="faq-item">
                 <h4>Can I access CertGames on my mobile device?</h4>
-                <p>Yes! CertGames is fully responsive and works on all devices, including mobile phones and tablets.</p>
+                <p>Yes! CertGames is fully responsive and works on all devices, including mobile phones and tablets with our dedicated IOS app.</p>
               </article>
             </section>
           </section>

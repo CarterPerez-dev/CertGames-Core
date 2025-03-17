@@ -147,7 +147,7 @@ const PublicLeaderboardPage = () => {
     
     try {
       // Using the new public leaderboard endpoint with longer cache time
-      const response = await fetch('/api/public-leaderboard/board?skip=0&limit=50');
+      const response = await fetch('/api/public-leaderboard/board?skip=0&limit=1000');
       
       if (!response.ok) {
         throw new Error('Failed to fetch leaderboard data');

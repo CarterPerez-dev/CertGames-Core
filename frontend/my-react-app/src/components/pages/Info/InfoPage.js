@@ -99,8 +99,8 @@ const InfoPage = () => {
   // Counting animation
   useEffect(() => {
     const questionsTarget = 13000;
-    const certsTarget = 13;
-    const resourcesTarget = 600;
+    const certsTarget = 12;
+    const resourcesTarget = 500;
     const duration = 2000; // ms
     const steps = 50;
     
@@ -284,15 +284,6 @@ const faqSchema = {
                 </Link>
               </div>
               
-              {/* Added Privacy Policy and Terms of Service links */}
-              <div className="info-legal-links" style={{ marginTop: '15px', display: 'flex', gap: '20px', justifyContent: 'center' }}>
-                <Link to="/privacy" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', textDecoration: 'none' }}>
-                  <FaLock style={{ marginRight: '5px' }} /> Privacy Policy
-                </Link>
-                <Link to="/terms" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px', textDecoration: 'none' }}>
-                  <FaFileAlt style={{ marginRight: '5px' }} /> Terms of Service
-                </Link>
-              </div>
               
               <nav className="info-quick-links" aria-label="Quick section navigation">
                 <button onClick={() => scrollToSection(featuresRef)} className="info-quick-link">
@@ -492,7 +483,7 @@ const faqSchema = {
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">📝</span>
-              Master 13 Certification Paths
+              Master 12 Certification Paths
             </h2>
             <p>13,000 practice questions across the most in-demand certifications</p>
           </header>
@@ -929,7 +920,7 @@ const faqSchema = {
               role="button"
               aria-label="Daily PBQ challenge feature - click to see demo"
             >
-              <div className="info-daily-icon" aria-hidden="true">🧩</div>
+              <div className="info-daily-icon" aria-hidden="true">🕵️‍♂️</div>
               <h3>Daily PBQ Challenge</h3>
               <p>Tackle a new performance-based question each day to earn bonus coins</p>
               <div className="info-card-flip">
@@ -967,8 +958,8 @@ const faqSchema = {
         <section ref={pricingRef} className="info-pricing-section">
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">💎</span>
-              Unlock Your Full Potential
+              <span className="info-section-icon" aria-hidden="true">🧙‍♂️</span>
+              Unlock Your Full Potential 
             </h2>
             <p>Affordable access to premium cybersecurity training</p>
           </header>
@@ -989,7 +980,7 @@ const faqSchema = {
               </li>
               <li>
                 <span className="info-check-icon" aria-hidden="true">✓</span>
-                <span>13 Certification Paths</span>
+                <span>12 Certification Paths</span>
               </li>
               <li>
                 <span className="info-check-icon" aria-hidden="true">✓</span>
@@ -1014,7 +1005,7 @@ const faqSchema = {
             </ul>
             
             <Link to="/register" className="info-button info-cta-button">
-              Get Started Now
+              Get Started Now 😎
             </Link>
             <p className="info-pricing-note">Cancel anytime. No long-term commitment.</p>
           </div>
