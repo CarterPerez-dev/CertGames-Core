@@ -21,6 +21,9 @@ import ResetPassword from './components/pages/auth/ResetPassword';
 import PrivacyPolicy from './components/pages/PrivacyPolicy';
 import TermsOfService from './components/pages/TermsOfService';
 import CreateUsernameForm from './components/pages/auth/CreateUsernameForm';
+import BlogPage from './components/pages/Info/BlogPage';
+import BlogPostPage from './components/pages/Info/BlogPostPage';
+
 
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
@@ -131,6 +134,8 @@ function App() {
           <Route path="/exams" element={<ExamsPage />} />
           <Route path="/public-leaderboard" element={<PublicLeaderboardPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:postId" element={<BlogPostPage />} />
           
           {/* Authentication routes */}
           <Route path="/login" element={<Login />} />

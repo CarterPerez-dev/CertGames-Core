@@ -167,13 +167,24 @@ const courseSchema = {
     "name": "CertGames",
     "sameAs": "https://certgames.com"
   },
+  // Use an existing image from your site
+  "image": "https://certgames.com/logo.png", // This assumes you have a logo image
   "offers": {
     "@type": "Offer",
     "price": "9.99",
     "priceCurrency": "USD",
     "availability": "https://schema.org/InStock",
     "url": "https://certgames.com/register",
-    "category": "Education"  // Add this line
+    "category": "Education",
+    "priceValidUntil": "2025-12-31",
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "US",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 30,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
+    }
   },
   "hasCourseInstance": {
     "@type": "CourseInstance",
@@ -226,6 +237,46 @@ const faqSchema = {
         "@type": "Answer",
         "text": "Our 24/7 \"Ask Anything\" support feature allows you to ask any certification-related question and receive a thorough, personalized answer from our expert team, typically within 3 hours."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "How many practice questions do you have for CompTIA certifications?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We have over 7,000 practice questions covering CompTIA certifications including Security+, Network+, A+, CySA+, PenTest+, Security X (formerly CASP+), Linux+, Data+, Server+, and Cloud+."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you offer practice tests for CISSP certification?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! Our CISSP practice test includes over 1,000 questions covering all eight domains, including performance-based questions and scenarios that mirror the actual exam."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What makes CertGames different from other certification prep platforms?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CertGames applies gamification principles to certification preparation, adding elements like XP, levels, achievements, and leaderboards to increase engagement and motivation. Our users report studying 35% longer and enjoying the process more than with traditional methods."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I track my certification exam readiness?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our platform provides detailed analytics that track your performance across all exam domains, identify knowledge gaps, and generate personalized study plans. You'll also receive a readiness score that accurately predicts your exam success based on our data from thousands of successful certification candidates."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I use CertGames for team or enterprise training?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we offer enterprise solutions for teams and organizations. Our enterprise platform includes team management features, progress reporting, and custom learning paths. Contact us for enterprise pricing and options."
+      }
     }
   ]
 };
@@ -250,7 +301,7 @@ const faqSchema = {
   return (
     <>
       <SEOHelmet 
-        title="CertGames - Gamified Cybersecurity Training & Certification Prep"
+        title="CertGames - Gamified Cybersecurity Certification Training | CompTIA, ISC2, AWS"
         description="Level up your cybersecurity skills with CertGames. Practice for CompTIA, ISC2, and AWS certifications with 13,000+ questions in a fun, gamified learning environment."
         canonicalUrl="/"
       />

@@ -208,8 +208,8 @@ const DemosPage = () => {
   return (
     <>
       <SEOHelmet 
-        title="Interactive Feature Demos | CertGames"
-        description="See CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity training features, exam simulators, practice tests, study resources, and specialized learning tools."
+        title="Interactive Cybersecurity Training Demos | Gamified Learning | CertGames"
+        description="Experience CertGames' interactive learning tools in action. Watch demos of our gamified cybersecurity certification training features, practice tests, study resources, and XP progression system."
         canonicalUrl="/demos"
       />
       <StructuredData data={breadcrumbSchema} />

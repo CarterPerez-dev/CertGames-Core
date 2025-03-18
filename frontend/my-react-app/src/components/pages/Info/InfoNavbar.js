@@ -1,7 +1,7 @@
 // src/components/pages/Info/InfoNavbar.js
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes, FaBook } from 'react-icons/fa';
 import { setupScrollListener } from './navbarScrollUtils';
 import './InfoNavbar.css';
 
@@ -43,6 +43,8 @@ const InfoNavbar = () => {
       setActiveTab('register');
     } else if (path === '/login') {
       setActiveTab('login');
+    } else if (path === '/blog') {
+      setActiveTab('blog');
     }
   }, [location]);
 
@@ -110,6 +112,12 @@ const InfoNavbar = () => {
               <Link to="/public-leaderboard" onClick={() => handleTabClick('leaderboard')}>
                 <FaTrophy className="nav-icon" />
                 <span>Leaderboard</span>
+              </Link>
+            </li>
+            <li className={activeTab === 'blog' ? 'active' : ''}>
+              <Link to="/blog" onClick={() => handleTabClick('blog')}>
+                <FaBook className="nav-icon" />
+                <span>Blog</span>
               </Link>
             </li>
             <li className={activeTab === 'contact' ? 'active' : ''}>
