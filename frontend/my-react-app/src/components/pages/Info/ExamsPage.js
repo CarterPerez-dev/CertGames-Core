@@ -48,30 +48,52 @@ const ExamsPage = () => {
   };
 
   // Product schema for SEO
-  const examProductSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "CertGames Certification Exam Prep",
-    "description": "Practice tests for 12 cybersecurity and IT certifications with over 13,000 questions",
-    "offers": {
-      "@type": "Offer",
-      "price": "9.99",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/InStock"
-    },
-    "review": {
-      "@type": "Review",
-      "reviewRating": {
-        "@type": "Rating",
-        "ratingValue": "4.8",
-        "bestRating": "5"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Security Professional"
-      }
+const examProductSchema = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "CertGames Certification Exam Prep",
+  "description": "Practice tests for 12 cybersecurity and IT certifications with over 13,000 questions",
+  "provider": {
+    "@type": "Organization",
+    "name": "CertGames",
+    "sameAs": "https://certgames.com"
+  },
+  "image": "https://certgames.com/images/certification-exam-prep.webp", // Add image field
+  "offers": {
+    "@type": "Offer",
+    "price": "9.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://certgames.com/register",
+    "priceValidUntil": "2025-12-31",  // Fix missing priceValidUntil
+    "hasMerchantReturnPolicy": {      // Fix missing hasMerchantReturnPolicy
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "US",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 30,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
     }
-  };
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "courseWorkload": "PT10H",
+    "startDate": "2023-01-01"
+  },
+  "review": {
+    "@type": "Review",
+    "reviewRating": {
+      "@type": "Rating",
+      "ratingValue": "4.8",
+      "bestRating": "5"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Security Professional"
+    }
+  }
+};
 
   // TechArticle schema for SEO
   const securityArticleSchema = {
@@ -85,6 +107,48 @@ const ExamsPage = () => {
       "@id": "https://certgames.com/exams"
     }
   };
+
+
+const generateCertSchema = (cert) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": `${cert.title} Certification Training`,
+    "description": cert.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "CertGames",
+      "sameAs": "https://certgames.com"
+    },
+    // Use the certification logo images you already have in your app
+    "image": cert.logo, // This uses the logo property that's already in your certification data
+    "offers": {
+      // Other offer properties remain the same...
+      "price": "9.99",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock",
+      "url": `https://certgames.com/register?cert=${cert.id}`,
+      "priceValidUntil": "2025-12-31",
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 30,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
+    },
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": "PT10H",
+      "startDate": "2023-01-01"
+    }
+  };
+};
+
+
+
 
   // Mock data for certifications
   const certifications = [
@@ -277,13 +341,16 @@ const ExamsPage = () => {
   return (
     <>
       <SEOHelmet 
-        title="Certification Exam Practice Tests | CertGames"
-        description="Prepare for 13 top cybersecurity certifications including CompTIA, ISC2, and AWS with 13,000+ practice questions. Performance-based questions, exam simulations, and detailed explanations."
+        title="CompTIA, CISSP & AWS Certification Practice Tests | CertGames"
+        description="Prepare for 13 top cybersecurity certifications including CompTIA Security+, Network+, CISSP and AWS with 13,000+ gamified practice questions. Performance-based challenges and detailed explanations."
         canonicalUrl="/exams"
       />
       <StructuredData data={examProductSchema} />
       <StructuredData data={breadcrumbSchema} />
       <StructuredData data={securityArticleSchema} />
+      {certifications.map(cert => (
+        <StructuredData key={cert.id} data={generateCertSchema(cert)} />
+      ))}
           
     <div className="exams-container">
       <InfoNavbar />

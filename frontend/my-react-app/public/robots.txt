@@ -1,6 +1,11 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Allow: /exams
+Allow: /blog
+Allow: /public-leaderboard
+Allow: /demos
+
 Disallow: /.env
 Disallow: /api/
 Disallow: /login
