@@ -4,7 +4,7 @@ import time
 import pytz
 import redis
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app
+from flask import Flask, g, request, jsonify, current_app, send_from_directory
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -93,7 +93,12 @@ app.register_blueprint(public_leaderboard_bp, url_prefix='/public-leaderboard')
 app.register_blueprint(contact_bp, url_prefix='/contact-form')
 
 
-
+@app.route('/avatars/<path:filename>')
+def serve_avatars(filename):
+    # Points to: frontend/my-react-app/public/avatars
+    # Adjust if you keep your files somewhere else:
+    avatar_folder = os.path.join('frontend', 'my-react-app', 'public', 'avatars')
+    return send_from_directory(avatar_folder, filename)
 ###########################
 # BEFORE REQUEST
 ###########################
