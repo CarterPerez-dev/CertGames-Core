@@ -4,7 +4,7 @@ import time
 import pytz
 import redis
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app, send_from_directory
+from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -145,10 +145,21 @@ def handle_connect():
     socketio.emit('message', {'data': 'Connected to server'})
 
 @socketio.on('join_thread')
-def on_join_thread(data):
-    thread_id = str(data.get('threadId'))  # Ensure string
-    join_room(thread_id)
-    app.logger.info(f"Client joined thread room: {thread_id}")
+def handle_join_thread(data):
+    thread_id = data.get("threadId")
+    if not thread_id:
+        return
+
+    user_id = session.get('userId')
+    if not user_id:
+        alt_id = data.get("userId")
+        if alt_id:
+            user_id = alt_id
+
+    # Optionally you can check if user is allowed in that thread
+    # For brevity, just join
+    join_room(str(thread_id))
+    print(f"[Socket.IO] user={user_id} joined thread {thread_id}")
 
 @socketio.on('leave_thread')
 def on_leave_thread(data):
@@ -214,11 +225,21 @@ def on_user_stop_typing(data):
 
 @socketio.on('join_user_room')
 def handle_join_user_room(data):
-    user_id = data.get('userId')
-    if user_id:
-        room_name = f"user_{user_id}"
-        join_room(room_name)
-        app.logger.info(f"User {user_id} joined personal room: {room_name}")
+    user_id = session.get('userId')
+
+    # Fallback to data["userId"]
+    if not user_id:
+        alt_id = data.get("userId")
+        if alt_id:
+            user_id = alt_id
+
+    if not user_id:
+        print("[Socket.IO] join_user_room failed: no userId")
+        return
+
+    room_name = f"user_{user_id}"
+    join_room(room_name)
+    print(f"[Socket.IO] user={user_id} joined room {room_name}")
 
 if __name__ == '__main__':
     # For local dev, run the SocketIO server
