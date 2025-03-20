@@ -214,7 +214,15 @@ def on_user_stop_typing(data):
 
 @socketio.on('join_user_room')
 def handle_join_user_room(data):
-    user_id = data.get('userId')
+    # Try to get user_id from session first, then fall back to data
+    user_id = session.get('userId')
+    if not user_id:
+        user_id = data.get('userId')  # Get userId from the event data
+        
+    if user_id:
+        room_name = f"user_{user_id}"
+        join_room(room_name)
+        app.logger.info(f"User {user_id} joined personal room: {room_name}")
     if user_id:
         room_name = f"user_{user_id}"
         join_room(room_name)

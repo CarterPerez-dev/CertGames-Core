@@ -19,20 +19,10 @@ my-react-app/build/
 # Oracle key
 ssh-key-2025-02-12.key
 
-# All these files I edit on remote repo/ web browser
-IOS.MD
 
-# .md files
-MD's/
 
-# All my practice tests
-tests/
 
-# Mongosh Data
-Mongo-Inputs/
 
-# Trees/strcuture of my project
-Trees/
 
 # these are just images-- no need to always push/pull
 avatars/

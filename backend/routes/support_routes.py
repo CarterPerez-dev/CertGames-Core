@@ -6,18 +6,29 @@ from mongodb.database import db
 
 support_bp = Blueprint('support', __name__, url_prefix='/support')
 
-def require_user_logged_in():
-    return bool(session.get('userId'))
+def get_user_id():
+    """Helper to get userId from session or request headers/body"""
+    # Try to get userId from session first
+    user_id = session.get('userId')
+    
+    # If no userId in session, try from headers or request body
+    if not user_id:
+        user_id = request.headers.get('X-User-Id') or (request.json or {}).get('userId')
+        
+    return user_id
 
 @support_bp.route('/my-chat', methods=['GET'])
 def list_user_threads():
-    # Remove the login check to make it public
-    # Get user_id from session if available, otherwise use None
-    user_id = session.get('userId')
+    # Get user_id using the helper function
+    user_id = get_user_id()
+    
     if not user_id:
         return jsonify([]), 200  # Return empty list for non-logged in users
-        
-    user_obj_id = ObjectId(user_id)
+    
+    try:
+        user_obj_id = ObjectId(user_id)
+    except:
+        return jsonify([]), 200
 
     start_db = time.time()
     # Return newest first
@@ -50,8 +61,8 @@ def create_user_thread():
     
     For non-logged in users, we'll create anonymous threads.
     """
-    # Get user_id from session if available
-    user_id = session.get('userId')
+    # Get user_id from session or fallback
+    user_id = get_user_id()
     user_obj_id = ObjectId(user_id) if user_id else None
     
     data = request.json or {}
@@ -100,7 +111,7 @@ def create_user_thread():
 
 @support_bp.route('/my-chat/<thread_id>', methods=['GET'])
 def get_single_thread(thread_id):
-    user_id = session.get('userId')
+    user_id = get_user_id()
     
     try:
         obj_id = ObjectId(thread_id)
@@ -134,7 +145,7 @@ def get_single_thread(thread_id):
 
 @support_bp.route('/my-chat/<thread_id>', methods=['POST'])
 def post_message_to_thread(thread_id):
-    user_id = session.get('userId')
+    user_id = get_user_id()
     
     data = request.json or {}
     content = data.get('content', '').strip()
@@ -215,7 +226,7 @@ def post_message_to_thread(thread_id):
 
 @support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
 def user_close_specific_thread(thread_id):
-    user_id = session.get('userId')
+    user_id = get_user_id()
     
     data = request.json or {}
     content = data.get("content", "User closed the thread")
