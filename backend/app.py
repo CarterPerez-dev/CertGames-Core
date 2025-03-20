@@ -142,6 +142,17 @@ def log_request_end(response):
 @socketio.on('connect')
 def handle_connect():
     app.logger.info(f"Client connected: {request.sid}")
+    
+    # Get userId from query parameters
+    user_id = request.args.get('userId')
+    
+    # If userId provided, join the user's personal room
+    if user_id:
+        room_name = f"user_{user_id}"
+        join_room(room_name)
+        app.logger.info(f"Client {request.sid} joined user room: {room_name}")
+    
+    # Send a welcome message to the client
     socketio.emit('message', {'data': 'Connected to server'})
 
 @socketio.on('join_thread')

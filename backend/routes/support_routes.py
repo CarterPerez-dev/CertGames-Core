@@ -1,3 +1,4 @@
+# backend/routes/support_routes.py
 from flask import Blueprint, request, session, jsonify, g, current_app
 from datetime import datetime
 import time
