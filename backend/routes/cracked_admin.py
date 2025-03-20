@@ -430,20 +430,14 @@ def admin_reply_to_thread(thread_id):
     socketio = current_app.extensions['socketio']
     thread_id_str = str(thread_id)
 
-    message_data = {
+    socketio.emit('new_message', {
         "threadId": thread_id_str,
         "message": {
             "sender": "admin",
             "content": content,
             "timestamp": now.isoformat()
         }
-    }
-    
-    # Detailed logging
-    current_app.logger.info(f"Admin emitting new_message event to room {thread_id_str}")
-    
-    # Emit to the thread room
-    socketio.emit('new_message', message_data, room=thread_id_str)
+    }, room=thread_id_str)
 
     return jsonify({"message": "Reply sent"}), 200
 

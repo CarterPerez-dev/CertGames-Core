@@ -4,7 +4,7 @@ import time
 import pytz
 import redis
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
+from flask import Flask, g, request, jsonify, current_app, send_from_directory
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -140,75 +140,87 @@ def log_request_end(response):
 # Socket.IO event handlers
 ########################################################################
 @socketio.on('connect')
-def handle_connect(auth=None):
+def handle_connect():
     app.logger.info(f"Client connected: {request.sid}")
-    
-    # No need to manually join rooms here - let the clients explicitly join rooms
-    # This prevents interference between web and mobile clients
-    socketio.emit('message', {'data': 'Connected to server'}, room=request.sid)
+    socketio.emit('message', {'data': 'Connected to server'})
+
+@socketio.on('join_thread')
+def on_join_thread(data):
+    thread_id = str(data.get('threadId'))  # Ensure string
+    join_room(thread_id)
+    app.logger.info(f"Client joined thread room: {thread_id}")
+
+@socketio.on('leave_thread')
+def on_leave_thread(data):
+    """
+    data = { "threadId": "abc123" }
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        leave_room(thread_id)
+        app.logger.info(f"Client left thread room: {thread_id}")
+
+@socketio.on('admin_typing')
+def on_admin_typing(data):
+    """
+    Broadcast to that thread's room that admin is typing
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"Admin started typing in thread room: {thread_id}")
+        socketio.emit('admin_typing', {"threadId": thread_id}, room=thread_id)
+
+@socketio.on('admin_stop_typing')
+def on_admin_stop_typing(data):
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"Admin stopped typing in thread room: {thread_id}")
+        socketio.emit('admin_stop_typing', {"threadId": thread_id}, room=thread_id)
+
+
+@socketio.on('admin_new_message')
+def on_admin_new_message(data):
+    thread_id = data.get('threadId')
+    message = data.get('message')
+    if thread_id and message:
+        thread_id = str(thread_id)  # Ensure string
+        app.logger.info(f"Admin sending message to thread room: {thread_id}")
+        socketio.emit('new_message', {
+            "threadId": thread_id,
+            "message": message
+        }, room=thread_id)
+
+@socketio.on('user_typing')
+def on_user_typing(data):
+    """
+    data = { "threadId": "..." }
+    Let the admin see "User is typing..."
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"User started typing in thread room: {thread_id}")
+        socketio.emit('user_typing', {"threadId": thread_id}, room=thread_id)
+
+@socketio.on('user_stop_typing')
+def on_user_stop_typing(data):
+    """
+    data = { "threadId": "..." }
+    Let the admin see the user is no longer typing
+    """
+    thread_id = data.get('threadId')
+    if thread_id:
+        app.logger.info(f"User stopped typing in thread room: {thread_id}")
+        socketio.emit('user_stop_typing', {"threadId": thread_id}, room=thread_id)
 
 @socketio.on('join_user_room')
 def handle_join_user_room(data):
-    # This handler is called explicitly by clients after connecting
-    
-    # Try to get userId from session first (for web app)
-    user_id = None
-    try:
-        user_id = session.get('userId')
-    except:
-        pass
-    
-    # If no userId in session, use the one from the event data (for mobile app)
-    if not user_id:
-        user_id = data.get('userId')
-        
+    user_id = data.get('userId')
     if user_id:
         room_name = f"user_{user_id}"
         join_room(room_name)
         app.logger.info(f"User {user_id} joined personal room: {room_name}")
 
-@socketio.on('join_thread')
-def on_join_thread(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        join_room(thread_id)
-        app.logger.info(f"Client {request.sid} joined thread room: {thread_id}")
+if __name__ == '__main__':
+    # For local dev, run the SocketIO server
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
 
-@socketio.on('leave_thread')
-def on_leave_thread(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        leave_room(thread_id)
-        app.logger.info(f"Client {request.sid} left thread room: {thread_id}")
-
-@socketio.on('user_typing')
-def on_user_typing(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        app.logger.info(f"User started typing in thread room: {thread_id}")
-        # Forward this event to all clients in the thread room (including admins)
-        socketio.emit('user_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('user_stop_typing')
-def on_user_stop_typing(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        app.logger.info(f"User stopped typing in thread room: {thread_id}")
-        # Forward this event to all clients in the thread room (including admins)
-        socketio.emit('user_stop_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('admin_typing')
-def on_admin_typing(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        app.logger.info(f"Admin started typing in thread room: {thread_id}")
-        # Forward this event to all clients in the thread room (including users)
-        socketio.emit('admin_typing', {"threadId": thread_id}, room=thread_id)
-
-@socketio.on('admin_stop_typing')
-def on_admin_stop_typing(data):
-    thread_id = str(data.get('threadId', ''))
-    if thread_id:
-        app.logger.info(f"Admin stopped typing in thread room: {thread_id}")
-        # Forward this event to all clients in the thread room (including users)
-        socketio.emit('admin_stop_typing', {"threadId": thread_id}, room=thread_id)

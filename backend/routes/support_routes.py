@@ -1,4 +1,3 @@
-# backend/routes/support_routes.py
 from flask import Blueprint, request, session, jsonify, g, current_app
 from datetime import datetime
 import time
@@ -7,29 +6,18 @@ from mongodb.database import db
 
 support_bp = Blueprint('support', __name__, url_prefix='/support')
 
-def get_user_id():
-    """Helper to get userId from session or request headers/body"""
-    # Try to get userId from session first
-    user_id = session.get('userId')
-    
-    # If no userId in session, try from headers or request body
-    if not user_id:
-        user_id = request.headers.get('X-User-Id') or (request.json or {}).get('userId')
-        
-    return user_id
+def require_user_logged_in():
+    return bool(session.get('userId'))
 
 @support_bp.route('/my-chat', methods=['GET'])
 def list_user_threads():
-    # Get user_id using the helper function
-    user_id = get_user_id()
-    
+    # Remove the login check to make it public
+    # Get user_id from session if available, otherwise use None
+    user_id = session.get('userId')
     if not user_id:
         return jsonify([]), 200  # Return empty list for non-logged in users
-    
-    try:
-        user_obj_id = ObjectId(user_id)
-    except:
-        return jsonify([]), 200
+        
+    user_obj_id = ObjectId(user_id)
 
     start_db = time.time()
     # Return newest first
@@ -62,8 +50,8 @@ def create_user_thread():
     
     For non-logged in users, we'll create anonymous threads.
     """
-    # Get user_id from session or fallback
-    user_id = get_user_id()
+    # Get user_id from session if available
+    user_id = session.get('userId')
     user_obj_id = ObjectId(user_id) if user_id else None
     
     data = request.json or {}
@@ -110,9 +98,43 @@ def create_user_thread():
     else:
         return jsonify({"error": "Failed to create thread"}), 500
 
+@support_bp.route('/my-chat/<thread_id>', methods=['GET'])
+def get_single_thread(thread_id):
+    user_id = session.get('userId')
+    
+    try:
+        obj_id = ObjectId(thread_id)
+    except:
+        return jsonify({"error": "Invalid thread ID"}), 400
+
+    start_db = time.time()
+    # If user is logged in, only show their threads
+    if user_id:
+        user_obj_id = ObjectId(user_id)
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
+    else:
+        # For non-logged in users, check if it's an anonymous thread
+        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
+        
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
+
+    if not thread:
+        return jsonify({"error": "Thread not found"}), 404
+
+    thread['_id'] = str(thread['_id'])
+    if thread.get('userId'):
+        thread['userId'] = str(thread['userId'])
+    for m in thread.get("messages", []):
+        if "timestamp" in m and isinstance(m["timestamp"], datetime):
+            m["timestamp"] = m["timestamp"].isoformat()
+    return jsonify(thread), 200
+
 @support_bp.route('/my-chat/<thread_id>', methods=['POST'])
 def post_message_to_thread(thread_id):
-    user_id = get_user_id()
+    user_id = session.get('userId')
     
     data = request.json or {}
     content = data.get('content', '').strip()
@@ -178,29 +200,22 @@ def post_message_to_thread(thread_id):
         )
         msg_response = "Message posted"
 
-    # Emit to the thread's room with enhanced logging
+    # Emit to the thread's room only
     socketio = current_app.extensions['socketio']
-    message_data = {
+    socketio.emit('new_message', {
         "threadId": str(thread["_id"]),
         "message": {
             "sender": "user",
             "content": content,
             "timestamp": now.isoformat()
         }
-    }
-    
-    # Detailed logging
-    current_app.logger.info(f"Emitting new_message event to room {str(thread['_id'])}")
-    
-    # Make sure to emit to the string version of the thread ID
-    room_id = str(thread["_id"])
-    socketio.emit('new_message', message_data, room=room_id)
+    }, room=str(thread["_id"]))
 
     return jsonify({"message": msg_response}), 200
 
 @support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
 def user_close_specific_thread(thread_id):
-    user_id = get_user_id()
+    user_id = session.get('userId')
     
     data = request.json or {}
     content = data.get("content", "User closed the thread")
