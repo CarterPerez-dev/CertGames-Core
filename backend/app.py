@@ -4,7 +4,7 @@ import time
 import pytz
 import redis
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app, send_from_directory
+from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -140,11 +140,18 @@ def log_request_end(response):
 # Socket.IO event handlers
 ########################################################################
 @socketio.on('connect')
-def handle_connect():
+def handle_connect(auth=None):
     app.logger.info(f"Client connected: {request.sid}")
     
     # Get userId from either session (web) OR query parameters (mobile)
-    user_id = session.get('userId')
+    user_id = None
+    try:
+        # Try to get from session (web)
+        user_id = session.get('userId')
+    except:
+        pass
+        
+    # If not in session, try query params (mobile)
     if not user_id:
         user_id = request.args.get('userId')
     
