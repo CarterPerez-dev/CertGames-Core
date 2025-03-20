@@ -1,38 +1,55 @@
-from flask import Blueprint, request, session, jsonify, g, current_app
+import pytz
 from datetime import datetime
-import time
 from bson import ObjectId
+from flask import Blueprint, request, session, jsonify, g, current_app
+import time
+
 from mongodb.database import db
 
 support_bp = Blueprint('support', __name__, url_prefix='/support')
 
-def require_user_logged_in():
-    return bool(session.get('userId'))
+################################################################
+# HELPER: Get userId from session or fallback "X-User-Id"
+################################################################
+def get_user_id_fallback():
+    """
+    Returns the userId from Flask session if available,
+    otherwise falls back to the 'X-User-Id' header (or JSON).
+    """
+    user_id = session.get("userId")
+    if not user_id:
+        # ## ADDED: Fallback to X-User-Id
+        alt_id = request.headers.get("X-User-Id")
+        # If you also want to check JSON body, uncomment:
+        # alt_id = alt_id or (request.json or {}).get("userId")
 
+        if alt_id:
+            user_id = alt_id
+    return user_id
+
+################################################################
+# LIST THREADS: GET /support/my-chat
+################################################################
 @support_bp.route('/my-chat', methods=['GET'])
 def list_user_threads():
-    # Remove the login check to make it public
-    # Get user_id from session if available, otherwise use None
-    user_id = session.get('userId')
+    user_id = get_user_id_fallback()  # NEW function
     if not user_id:
-        return jsonify([]), 200  # Return empty list for non-logged in users
-        
-    user_obj_id = ObjectId(user_id)
+        return jsonify([]), 200  # No recognized user => empty list
 
-    start_db = time.time()
-    # Return newest first
+    try:
+        user_obj_id = ObjectId(user_id)
+    except:
+        return jsonify([]), 200
+
+    # Query threads
     threads_cursor = db.supportThreads.find({"userId": user_obj_id}).sort("updatedAt", -1)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
     threads = []
     for t in threads_cursor:
         t_id = str(t['_id'])
         subject = t.get("subject", "")
         status = t.get("status", "open")
         updated_at = t.get("updatedAt")
+
         threads.append({
             "_id": t_id,
             "subject": subject if subject else "Untitled Thread",
@@ -41,28 +58,29 @@ def list_user_threads():
         })
     return jsonify(threads), 200
 
+################################################################
+# CREATE THREAD: POST /support/my-chat
+################################################################
 @support_bp.route('/my-chat', methods=['POST'])
 def create_user_thread():
-    """
-    User creates a new support thread.
-    Must return the FULL THREAD object to avoid parse errors on front end.
-    Emits 'new_thread' to admin room only.
-    
-    For non-logged in users, we'll create anonymous threads.
-    """
-    # Get user_id from session if available
-    user_id = session.get('userId')
-    user_obj_id = ObjectId(user_id) if user_id else None
-    
+    user_id = get_user_id_fallback()  # fallback
+    if not user_id:
+        # If you allow anonymous creation, handle it. Otherwise:
+        return jsonify({"error": "Not authenticated"}), 401
+
     data = request.json or {}
     subject = data.get('subject', '').strip()
     if not subject:
         subject = "Untitled Thread"
 
-    now = datetime.utcnow()
+    try:
+        user_obj_id = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user ID"}), 400
 
+    now = datetime.utcnow()
     new_thread = {
-        "userId": user_obj_id,  # Will be None for anonymous users
+        "userId": user_obj_id,
         "subject": subject,
         "messages": [],
         "status": "open",
@@ -70,97 +88,83 @@ def create_user_thread():
         "updatedAt": now
     }
 
-    start_db = time.time()
     result = db.supportThreads.insert_one(new_thread)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
-    if result.inserted_id:
-        socketio = current_app.extensions['socketio']
-
-        thread_data = {
-            "_id": str(result.inserted_id),
-            "userId": str(user_obj_id) if user_obj_id else None,
-            "subject": subject,
-            "status": "open",
-            "createdAt": now.isoformat(),
-            "updatedAt": now.isoformat(),
-            "messages": []
-        }
-
-        # Only emit to "admin" room so admins see new threads
-        socketio.emit('new_thread', thread_data, room='admin')
-
-        # Return full thread data to user
-        return jsonify(thread_data), 201
-    else:
+    if not result.inserted_id:
         return jsonify({"error": "Failed to create thread"}), 500
 
+    # Prepare response
+    inserted_id_str = str(result.inserted_id)
+    thread_data = {
+        "_id": inserted_id_str,
+        "userId": user_id,
+        "subject": subject,
+        "status": "open",
+        "createdAt": now.isoformat(),
+        "updatedAt": now.isoformat(),
+        "messages": []
+    }
+
+    # Emit 'new_thread' to admin room, or wherever your admin listens
+    socketio = current_app.extensions['socketio']
+    socketio.emit('new_thread', thread_data, room='admin')
+
+    return jsonify(thread_data), 201
+
+
+################################################################
+# GET THREAD MESSAGES: GET /support/my-chat/<thread_id>
+################################################################
 @support_bp.route('/my-chat/<thread_id>', methods=['GET'])
 def get_single_thread(thread_id):
-    user_id = session.get('userId')
-    
+    user_id = get_user_id_fallback()
+    if not user_id:
+        return jsonify({"error": "Not authenticated"}), 401
+
     try:
         obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread ID"}), 400
-
-    start_db = time.time()
-    # If user is logged in, only show their threads
-    if user_id:
         user_obj_id = ObjectId(user_id)
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    else:
-        # For non-logged in users, check if it's an anonymous thread
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
-        
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
+    except:
+        return jsonify({"error": "Invalid ID"}), 400
 
+    # Find thread belonging to user
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
         return jsonify({"error": "Thread not found"}), 404
 
+    # Convert timestamps to iso
     thread['_id'] = str(thread['_id'])
     if thread.get('userId'):
         thread['userId'] = str(thread['userId'])
     for m in thread.get("messages", []):
-        if "timestamp" in m and isinstance(m["timestamp"], datetime):
-            m["timestamp"] = m["timestamp"].isoformat()
+        if "timestamp" in m:
+            if isinstance(m["timestamp"], datetime):
+                m["timestamp"] = m["timestamp"].isoformat()
+
     return jsonify(thread), 200
 
+
+################################################################
+# SEND MESSAGE: POST /support/my-chat/<thread_id>
+################################################################
 @support_bp.route('/my-chat/<thread_id>', methods=['POST'])
 def post_message_to_thread(thread_id):
-    user_id = session.get('userId')
-    
+    user_id = get_user_id_fallback()
+    if not user_id:
+        return jsonify({"error": "Not authenticated"}), 401
+
     data = request.json or {}
     content = data.get('content', '').strip()
     if not content:
         return jsonify({"error": "No content"}), 400
 
     now = datetime.utcnow()
-
     try:
         obj_id = ObjectId(thread_id)
-    except:
-        return jsonify({"error": "Invalid thread ID"}), 400
-
-    start_db = time.time()
-    # Query based on whether user is logged in
-    if user_id:
         user_obj_id = ObjectId(user_id)
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    else:
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
-        
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
+    except:
+        return jsonify({"error": "Invalid ID"}), 400
 
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
         return jsonify({"error": "Thread not found"}), 404
 
@@ -200,7 +204,7 @@ def post_message_to_thread(thread_id):
         )
         msg_response = "Message posted"
 
-    # Emit to the thread's room only
+    # Emit to the thread's room
     socketio = current_app.extensions['socketio']
     socketio.emit('new_message', {
         "threadId": str(thread["_id"]),
@@ -213,32 +217,27 @@ def post_message_to_thread(thread_id):
 
     return jsonify({"message": msg_response}), 200
 
+
+################################################################
+# CLOSE THREAD: POST /support/my-chat/<thread_id>/close
+################################################################
 @support_bp.route('/my-chat/<thread_id>/close', methods=['POST'])
 def user_close_specific_thread(thread_id):
-    user_id = session.get('userId')
-    
+    user_id = get_user_id_fallback()
+    if not user_id:
+        return jsonify({"error": "Not authenticated"}), 401
+
     data = request.json or {}
     content = data.get("content", "User closed the thread")
     now = datetime.utcnow()
 
     try:
         obj_id = ObjectId(thread_id)
+        user_obj_id = ObjectId(user_id)
     except:
         return jsonify({"error": "Invalid thread ID"}), 400
 
-    start_db = time.time()
-    # Query based on whether user is logged in
-    if user_id:
-        user_obj_id = ObjectId(user_id)
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
-    else:
-        thread = db.supportThreads.find_one({"_id": obj_id, "userId": None})
-        
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
-
+    thread = db.supportThreads.find_one({"_id": obj_id, "userId": user_obj_id})
     if not thread:
         return jsonify({"error": "Thread not found"}), 404
 
@@ -262,10 +261,7 @@ def user_close_specific_thread(thread_id):
         }
     )
 
-    # Get socketio from the current app's extensions
     socketio = current_app.extensions['socketio']
-
-    # Let admin know user closed
     socketio.emit('new_message', {
         "threadId": str(thread["_id"]),
         "message": {
@@ -276,3 +272,5 @@ def user_close_specific_thread(thread_id):
     }, room=str(thread["_id"]))
 
     return jsonify({"message": "Thread closed"}), 200
+
+
