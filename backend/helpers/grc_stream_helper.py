@@ -107,7 +107,7 @@ def generate_grc_questions_stream(category, difficulty):
     """
     prompt = f"""
 You are an expert in concepts found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. 
-Your role is to generate a challenging and diverse test question related to governance, risk management, risk thresholds, types of risk, 
+Your role is to generate very diverse with alot of variation in concepts test question with highly plausible distractors related to governance, risk management, risk thresholds, types of risk, 
 Audit, Management, Policy, Cyber Security Ethics, Threat Assessment, Leadership, Business Continuity, compliance, regulations, 
 incident response, and more, focusing on preparing for exams like CISSP and CompTIA certifications.
 
@@ -118,7 +118,7 @@ CONTEXT: The user has selected:
 REQUIREMENTS:
 1. Generate ONE question in valid JSON format with:
    - "question": string,
-   - "options": array of exactly 4 strings (indexes 0,1,2,3),
+   - "options": array of exactly 4 strings with highly plasuible distractors (indexes 0,1,2,3),
    - "correct_answer_index": integer (0,1,2,3),
    - "explanations": object with keys "0","1","2","3" (multi-sentence detail),
    - "exam_tip": short mnemonic/hint.
