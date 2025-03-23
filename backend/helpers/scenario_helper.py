@@ -23,8 +23,8 @@ def generate_scenario(industry, attack_type, skill_level, threat_intensity):
 
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
-            model="gpt-4o",
-            max_tokens=1000,
+            model="gpt-4o-latest",
+            max_tokens=1100,
             temperature=0.6,
             stream=True
         )
@@ -170,8 +170,8 @@ Nothing else.
                 {"role": "system", "content": system_instructions},
                 {"role": "user", "content": user_prompt},
             ],
-            model="gpt-4o",
-            max_tokens=1000,
+            model="gpt-4o-latest",
+            max_tokens=1200,
             temperature=0.3,
             stream=True
         )
