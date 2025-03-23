@@ -268,10 +268,10 @@ const GlobalTestList = ({
     { label: "Moderate", color: "#ffc765", textColor: "#4a2700" },           // Warm orange
     { label: "Intermediate", color: "#ff5959", textColor: "#ffffff" },       // Coral red
     { label: "Formidable", color: "#dc3545", textColor: "#ffffff" },         // Bootstrap red
-    { label: "Challenging", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
-    { label: "Very Challenging", color: "#4b0082", textColor: "#ffffff" },   // Indigo
-    { label: "Ruthless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
-    { label: "Ultra Level", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
+    { label: "Merciless", color: "#b108f6", textColor: "#ffffff" },        // Bright purple
+    { label: "Ruthless", color: "#4b0082", textColor: "#ffffff" },   // Indigo
+    { label: "Relentless", color: "#370031", textColor: "#ffffff" },           // Very dark purple
+    { label: "Nuclear", color: "#000000", textColor: "#00ffff" }         // Black with neon cyan text
   ];
 
   const examInfoText = "Simulates a real exam🕵️‍♂️🧙"
