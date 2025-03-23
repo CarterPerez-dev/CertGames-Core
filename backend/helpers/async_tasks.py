@@ -149,13 +149,13 @@ def generate_grc_question_task(self, category, difficulty):
 @shared_task
 def aggregate_performance_metrics():
     """
-    Runs every 3 minutes to gather perfSamples from the past 3 minutes,
+    Runs every 3 minutes to gather perfSamples from the past 5 minutes,
     compute average request time, DB query time, data transfer rate, throughput, etc.
     Then store in 'performanceMetrics'. We'll keep the last 20 records in the front end.
     """
 
     now = datetime.utcnow()
-    three_min_ago = now - timedelta(minutes=3)
+    three_min_ago = now - timedelta(minutes=5)
 
     samples = list(db.perfSamples.find({"timestamp": {"$gte": three_min_ago}}))
     total_requests = len(samples)
