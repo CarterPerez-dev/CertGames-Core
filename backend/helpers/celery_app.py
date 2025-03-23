@@ -41,12 +41,12 @@ app.conf.update({
 app.conf.beat_schedule = {
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 180.0,  # 3 minutes
+        'schedule': 300.0,  # 5 minutes
     },
-    # New: API health checks every 5 minutes
+    # New: API health checks every 10 minutes
     'check-api-endpoints-every-5-min': {
         'task': 'helpers.async_tasks.check_api_endpoints',
-        'schedule': crontab(minute='*/5')
+        'schedule': crontab(minute='*/10')
     },
     # ADDITION: Log cleanup daily at 2 AM
     'cleanup-logs-daily': {
