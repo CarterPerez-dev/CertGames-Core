@@ -75,7 +75,7 @@ class Xploits:
             try:
                 chat_completion = client.chat.completions.create(
                     messages=[{"role": "user", "content": prompt}],
-                    model="gpt-4o",
+                    model="gpt-4o-latest",
                     max_tokens=max_tokens,
                     temperature=temperature
                 )
@@ -101,7 +101,7 @@ class Xploits:
         try:
             response = client.chat.completions.create(
                 messages=[{"role": "user", "content": prompt}],
-                model="gpt-4o",
+                model="gpt-4o-latest",
                 max_tokens=max_tokens,
                 temperature=temperature,
                 stream=True  
