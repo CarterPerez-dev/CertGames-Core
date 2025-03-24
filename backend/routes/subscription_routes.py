@@ -27,8 +27,8 @@ def create_checkout_session():
                 'quantity': 1,
             }],
             mode='subscription',
-            success_url=os.getenv('FRONTEND_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=os.getenv('FRONTEND_URL') + '/subscription/cancel',
+            success_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}', # change to FRONTEND_URL
+            cancel_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/cancel', # change to FRONTEND_URL
             client_reference_id=user_id,
         )
         
@@ -56,8 +56,8 @@ def webhook():
         user_id = session.get('client_reference_id')
         
         if user_id:
-            # Update user's subscription status
-            update_user_fields(user_id, {
+            # Use your helper function instead of update_user_fields
+            update_user_subscription(user_id, {
                 "subscriptionActive": True,
                 "stripeCustomerId": session.get('customer'),
                 "stripeSubscriptionId": session.get('subscription'),
@@ -67,13 +67,26 @@ def webhook():
     
     elif event['type'] == 'customer.subscription.updated':
         subscription = event['data']['object']
-        # Find user by Stripe customer ID and update subscription status
-        # This will need a custom function to look up by stripeCustomerId
+        # Find user by Stripe customer ID
+        customer_id = subscription.get('customer')
+        user = mainusers_collection.find_one({"stripeCustomerId": customer_id})
         
+        if user:
+            update_user_subscription(str(user['_id']), {
+                "subscriptionStatus": subscription.get('status')
+            })
+    
     elif event['type'] == 'customer.subscription.deleted':
         subscription = event['data']['object']
-        # Find user by Stripe customer ID and update subscription status
+        customer_id = subscription.get('customer')
+        user = mainusers_collection.find_one({"stripeCustomerId": customer_id})
         
+        if user:
+            update_user_subscription(str(user['_id']), {
+                "subscriptionActive": False,
+                "subscriptionStatus": "canceled"
+            })
+    
     return jsonify({"status": "success"})
 
 @subscription_bp.route('/verify-receipt', methods=['POST'])
@@ -117,17 +130,4 @@ def check_subscription_status():
     })
 
 
-@subscription_bp.route('/webhook', methods=['POST'])
-def webhook():
-    # Process webhook data...
-    
-    # Update user subscription IMPORTANT- CLAUDE-CLAUDE- WHAT ELSE NEEDS TO BE DONE REGARDING THIS ROUTE???
-    update_user_subscription(user_id, {
-        "subscriptionActive": True,
-        "subscriptionStatus": "active",
-        "subscriptionPlatform": "web",
-        "stripeCustomerId": customer_id,
-        "stripeSubscriptionId": subscription_id
-    })
-    
-    return jsonify({"status": "success"})
+

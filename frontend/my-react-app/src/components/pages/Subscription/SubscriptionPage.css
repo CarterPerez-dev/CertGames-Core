@@ -1,0 +1,161 @@
+/* src/components/pages/Subscription/SubscriptionPage.css */
+.subscription-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.subscription-card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.subscription-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.subscription-price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.subscription-amount {
+  font-size: 48px;
+  font-weight: bold;
+  color: #6543cc;
+}
+
+.subscription-period {
+  font-size: 18px;
+  color: #666;
+  margin-left: 5px;
+}
+
+.subscription-features {
+  margin-bottom: 30px;
+}
+
+.subscription-features h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.subscription-features ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.subscription-features li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+
+.subscription-features li:before {
+  content: "✓";
+  color: #2ebb77;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.subscription-error {
+  background-color: rgba(255, 76, 139, 0.1);
+  color: #ff4c8b;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.subscription-button {
+  background-color: #6543cc;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  display: block;
+  transition: background-color 0.3s;
+}
+
+.subscription-button:hover {
+  background-color: #5034b8;
+}
+
+.subscription-button:disabled {
+  background-color: #a8a8a8;
+  cursor: not-allowed;
+}
+
+.subscription-info {
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Success Page */
+.subscription-success {
+  max-width: 600px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background-color: #2ebb77;
+  color: white;
+  font-size: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 30px;
+}
+
+.navigate-button {
+  background-color: #6543cc;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 25px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 30px;
+  transition: background-color 0.3s;
+}
+
+.navigate-button:hover {
+  background-color: #5034b8;
+}
+
+/* Cancel Page */
+.subscription-cancel {
+  max-width: 600px;
+  margin: 80px auto;
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
