@@ -27,6 +27,7 @@ from routes.password_reset_routes import password_reset_bp
 from routes.oauth_routes import oauth_bp, oauth
 from routes.test_routes import public_leaderboard_bp 
 from routes.contact_form import contact_bp
+from routes.subscription_routes import subscription_bp
 
 
 load_dotenv()
@@ -91,6 +92,7 @@ app.register_blueprint(password_reset_bp, url_prefix='/password-reset')
 app.register_blueprint(oauth_bp, url_prefix='/oauth')
 app.register_blueprint(public_leaderboard_bp, url_prefix='/public-leaderboard')
 app.register_blueprint(contact_bp, url_prefix='/contact-form')
+app.register_blueprint(subscription_bp, url_prefix+'/subscription')
 
 
 @app.route('/avatars/<path:filename>')
