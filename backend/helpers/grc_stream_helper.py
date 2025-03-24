@@ -67,7 +67,7 @@ Now generate the JSON object following these instructions.
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4o-latest",  
+            model="gpt-4o",  
             messages=[{"role": "user", "content": prompt}],
             max_tokens=1200,
             temperature=0.7,
@@ -142,7 +142,7 @@ Remember: Provide ONLY valid JSON, nothing else.
     try:
         # Make the streaming request
         response = client.chat.completions.create(
-            model="gpt-4o-latest",
+            model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=1200,
             temperature=0.7,
