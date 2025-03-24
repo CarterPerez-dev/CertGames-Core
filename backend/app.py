@@ -37,7 +37,7 @@ mongo_uri = os.getenv("MONGO_URI")
 CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
 REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 SECRET_KEY = os.getenv('SECRET_KEY', 'supersecret')
-
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)

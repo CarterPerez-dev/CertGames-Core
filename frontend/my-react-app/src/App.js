@@ -23,7 +23,9 @@ import TermsOfService from './components/pages/TermsOfService';
 import CreateUsernameForm from './components/pages/auth/CreateUsernameForm';
 import BlogPage from './components/pages/Info/BlogPage';
 import BlogPostPage from './components/pages/Info/BlogPostPage';
-
+import SubscriptionCancel from './components/pages/subscription/SubscriptionCancel';
+import SubscriptionPage from './components/pages/subscription/SubscriptionPage';
+import SubscriptionSuccess from './components/pages/subscription/SubscriptionSuccess';
 
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
@@ -144,6 +146,9 @@ function App() {
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/create-username" element={<CreateUsernameForm />} />
           <Route path="/oauth/success" element={<OAuthSuccess />} />
+          <Route path="/subscription" element={<SubscriptionPage />} />
+          <Route path="/subscription/success" element={<SubscriptionSuccess />} />
+          <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
           
           {/* Admin routes */}
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
