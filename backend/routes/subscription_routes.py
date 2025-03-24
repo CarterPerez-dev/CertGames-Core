@@ -1,6 +1,6 @@
 # New routes to add to backend/routes/subscription_routes.py
 from flask import Blueprint, request, jsonify, session
-from models.test import get_user_by_id, update_user_fields
+from models.test import get_user_by_id, update_user_fields, update_user_subscription
 import stripe
 import json
 import os
@@ -115,3 +115,19 @@ def check_subscription_status():
         "subscriptionStatus": user.get("subscriptionStatus"),
         "subscriptionPlatform": user.get("subscriptionPlatform")
     })
+
+
+@subscription_bp.route('/webhook', methods=['POST'])
+def webhook():
+    # Process webhook data...
+    
+    # Update user subscription IMPORTANT- CLAUDE-CLAUDE- WHAT ELSE NEEDS TO BE DONE REGARDING THIS ROUTE???
+    update_user_subscription(user_id, {
+        "subscriptionActive": True,
+        "subscriptionStatus": "active",
+        "subscriptionPlatform": "web",
+        "stripeCustomerId": customer_id,
+        "stripeSubscriptionId": subscription_id
+    })
+    
+    return jsonify({"status": "success"})
