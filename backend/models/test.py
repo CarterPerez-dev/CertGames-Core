@@ -284,6 +284,13 @@ def create_user(user_data):
     user_data.setdefault("xpBoost", 1.0)
     user_data.setdefault("currentAvatar", None)
     user_data.setdefault("nameColor", None)
+    user_data.setdefault("subscriptionActive", False)
+    user_data.setdefault("subscriptionStatus", None)
+    user_data.setdefault("subscriptionPlatform", None)
+    user_data.setdefault("stripeCustomerId", None)
+    user_data.setdefault("stripeSubscriptionId", None)
+    user_data.setdefault("appleTransactionId", None)
+    user_data.setdefault("subscriptionPlan", None)
 
     # If you want to ensure new users have the 'achievement_counters'
     # from Day 1, do it here:
