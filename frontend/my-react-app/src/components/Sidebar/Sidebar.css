@@ -378,7 +378,7 @@ body, html {
   .sidebar-toggle {
     width: 36px;
     height: 36px;
-    font-size: 18px;
+    font-size: 20px;
     top: 10px;
     left: 10px;
   }
@@ -436,7 +436,7 @@ body, html {
   .sidebar-toggle {
     width: 32px;
     height: 32px;
-    font-size: 16px;
+    font-size: 18px;
   }
   
   .sidebar-logo {
