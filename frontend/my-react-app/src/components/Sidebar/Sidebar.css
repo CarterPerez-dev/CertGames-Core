@@ -313,6 +313,7 @@ body, html {
   
   .sidebar-link, .sidebar-group .group-header {
     padding: 8px;
+    font-size: 0.8em;
   }
   
   .sidebar-icon {
@@ -364,7 +365,7 @@ body, html {
   
   .sidebar-link, .sidebar-group .group-header {
     padding: 8px 5px;
-    font-size: 0.9em;
+    font-size: 0.7em;
   }
   
   .sidebar-icon {

@@ -1527,7 +1527,7 @@
   
   .profile-tab {
     padding: 10px 15px;
-    font-size: 13px;
+    font-size: 12px;
     min-width: 80px;
     flex: 1;
   }
@@ -1596,6 +1596,10 @@
     font-size: 24px;
   }
   
+  .profile-tab {
+    font-size: 8px;
+  }
+  
   .profile-achievement-emoji {
     font-size: 22px;
   }
@@ -1627,7 +1631,7 @@
   
   .profile-tab {
     padding: 8px 12px;
-    font-size: 12px;
+    font-size: 7px;
     min-width: 70px;
   }
   
