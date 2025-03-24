@@ -631,3 +631,29 @@ def check_password(plain_password, hashed_password):
         return plain_password == hashed_password
         
 
+def update_user_subscription(user_id, subscription_data):
+    """
+    Update a user's subscription information:
+    - subscriptionActive: Boolean
+    - subscriptionStatus: String
+    - subscriptionPlatform: String
+    - stripeCustomerId: String 
+    - stripeSubscriptionId: String
+    - appleTransactionId: String
+    """
+    try:
+        oid = ObjectId(user_id)
+    except:
+        return None
+        
+    # Filter out None values to avoid overwriting existing values with None
+    update_fields = {k: v for k, v in subscription_data.items() if v is not None}
+    
+    result = mainusers_collection.update_one(
+        {"_id": oid},
+        {"$set": update_fields}
+    )
+    
+    if result.modified_count > 0:
+        return get_user_by_id(user_id)
+    return None
