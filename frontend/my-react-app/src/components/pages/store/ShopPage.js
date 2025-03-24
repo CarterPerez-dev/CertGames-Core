@@ -233,7 +233,8 @@ const ShopPage = () => {
             // Avatar logic
             if (!unlocked) {
               buttonText = 'Purchase';
-              buttonDisabled = !userCanAfford || level < item.unlockLevel;
+              // Key change: Only disable if user can't afford (allow purchase even if level req not met)
+              buttonDisabled = !userCanAfford;
               onClickAction = () => handlePurchase(item._id);
               
               // Add locked class if level requirement not met
@@ -257,7 +258,7 @@ const ShopPage = () => {
               }
             }
           } else {
-            // XP Boost logic
+            // XP Boost logic - unchanged
             const isActiveBoost = xpBoost === item.effectValue;
             
             if (isActiveBoost) {
