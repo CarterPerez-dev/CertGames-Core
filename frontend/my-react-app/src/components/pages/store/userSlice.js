@@ -348,6 +348,11 @@ const userSlice = createSlice({
         state.nameColor = userDoc.nameColor || null;
         state.purchasedItems = userDoc.purchasedItems || [];
         state.subscriptionActive = userDoc.subscriptionActive || false;
+        state.subscriptionStatus = userDoc.subscriptionStatus || null;
+        state.subscriptionPlatform = userDoc.subscriptionPlatform || null;
+        state.stripeCustomerId = userDoc.stripeCustomerId || null;
+        state.stripeSubscriptionId = userDoc.stripeSubscriptionId || null;
+        state.appleTransactionId = userDoc.appleTransactionId || null;
         state.oauth_provider = userDoc.oauth_provider || null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
