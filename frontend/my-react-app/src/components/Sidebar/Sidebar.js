@@ -86,7 +86,7 @@ const Sidebar = () => {
         onClick={toggleSidebar}
         aria-label={collapsed ? "Open sidebar" : "Close sidebar"}
       >
-        {collapsed ? <FaBars /> : <FaTimes />}
+        {collapsed ? "☰" : "✕"}
       </button>
 
       <div ref={sidebarRef} className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
