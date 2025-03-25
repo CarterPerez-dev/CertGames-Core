@@ -1633,7 +1633,7 @@ def get_public_leaderboard():
 
 # IF NEEDED (CURRENLY THSI CANCEL ROUTE IS NOT IN USE)
 @api_bp.route('/subscription/cancel', methods=['POST'])
-def cancel_subscription():
+def test_route_cancel_subscription():  # Renamed function to avoid conflict
     # Redirect to the proper subscription cancellation endpoint
     data = request.json or {}
     user_id = data.get("userId")
