@@ -91,59 +91,41 @@ function App() {
   const { userId } = useSelector((state) => state.user);
   const location = useLocation();
 
-  useEffect(() => {
-    const initializeTheme = () => {
-      const savedTheme = localStorage.getItem('selectedTheme') || 'default';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-    };
-
-    initializeTheme();
-  }, []); 
-  
-  // Fetch user data on initial load
-  useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserData(userId));
-    }
-  }, [dispatch, userId]);
-  
-  // Periodically check subscription status
-  useEffect(() => {
-    if (!userId) return;
-    
-    // Check on route change (less frequent than interval checking)
-    const checkSubscription = async () => {
-      try {
-        const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
-        
-        if (response.ok) {
-          const data = await response.json();
+    useEffect(() => {
+      if (!userId) return;
+      
+      // Check on route change (less frequent than interval checking)
+      const checkSubscription = async () => {
+        try {
+          const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
           
-          // If subscription is no longer active, log the user out
-          if (!data.subscriptionActive) {
-            console.log('Subscription no longer active, logging out');
-            dispatch(logout());
-            // Redirect to login page
-            window.location.href = '/login?reason=subscription_ended';
+          if (response.ok) {
+            const data = await response.json();
+            
+            // If subscription is no longer active, log the user out
+            if (!data.subscriptionActive) {
+              console.log('Subscription no longer active, logging out');
+              dispatch({ type: 'user/logout' });
+              // Redirect to login page
+              window.location.href = '/login?reason=subscription_ended';
+            }
           }
+        } catch (error) {
+          console.error('Error checking subscription status:', error);
         }
-      } catch (error) {
-        console.error('Error checking subscription status:', error);
-      }
-    };
-    
-    // Check whenever location changes (user navigates to a different page)
-    checkSubscription();
-    
-    // Also set up a less frequent interval check (every 6 hours)
-    const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
-    const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
-    
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [dispatch, userId, location]);
-  
+      };
+      
+      // Check whenever location changes (user navigates to a different page)
+      checkSubscription();
+      
+      // Also set up a less frequent interval check (every 6 hours)
+      const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
+      const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
+      
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, [dispatch, userId, location]);
   
   return (
     <div className="App">
