@@ -17,11 +17,14 @@ const SubscriptionSuccess = () => {
   const verificationAttempted = useRef(false);
   
   useEffect(() => {
-    // Only run this once per component mount
+    // Prevent multiple verification attempts
     if (verificationAttempted.current) {
       return;
     }
-  
+    
+    // Mark that we've attempted verification
+    verificationAttempted.current = true;
+    
     const searchParams = new URLSearchParams(location.search);
     const sessionId = searchParams.get('session_id');
     
@@ -41,13 +44,10 @@ const SubscriptionSuccess = () => {
       return;
     }
     
-    // Mark that we've attempted verification
-    verificationAttempted.current = true;
-    console.log('Session ID received:', sessionId);
+    console.log('Verifying session:', sessionId);
     
-    // Add a delay before verification to avoid race conditions
-    const timeoutId = setTimeout(() => {
-      // Verify the session with the backend
+    // Verify the session with the backend - use setTimeout to prevent race conditions
+    setTimeout(() => {
       axios.post('/api/subscription/verify-session', { sessionId })
         .then(response => {
           console.log('Verification response:', response.data);
@@ -67,25 +67,29 @@ const SubscriptionSuccess = () => {
             
             // Clean up the pending registration data
             localStorage.removeItem('pendingRegistration');
+            localStorage.removeItem('tempUserId');
             
             setLoading(false);
             
             // Determine where to navigate based on registration type
             if (regData) {
               const regDataObj = JSON.parse(regData);
+              
+              // For OAuth registrations that need username
               if (regDataObj.registrationType === 'oauth' && needsUsername) {
-                // Delay before redirecting to username creation
                 setTimeout(() => {
                   navigate('/create-username', { 
                     state: { userId, provider: regDataObj.provider }
                   });
-                }, 3000);
-              } else if (regDataObj.registrationType === 'renewal') {
-                // User renewed subscription, go to profile
+                }, 2000);
+              } 
+              // For subscription renewals
+              else if (regDataObj.registrationType === 'renewal') {
                 setTimeout(() => {
                   navigate('/profile');
-                }, 3000);
+                }, 2000);
               }
+              // For standard registrations, stay on success page (user will click login)
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
@@ -94,16 +98,12 @@ const SubscriptionSuccess = () => {
         })
         .catch(err => {
           console.error('Error verifying session:', err);
-          setError('Error connecting to the server. Please try refreshing the page or contact support if the issue persists.');
+          setError('Error connecting to the server. Please try refreshing the page or contact support.');
           setLoading(false);
         });
-    }, 1000); // 1 second delay
+    }, 1500);
     
-    // Cleanup function
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [location.search, dispatch, navigate]); // Remove error and pendingRegistration from dependencies
+  }, [location.search, dispatch, navigate]);
   
   return (
     <div className="subscription-success-container">
@@ -163,8 +163,7 @@ const SubscriptionSuccess = () => {
                 </p>
               )}
               
-              {(pendingRegistration?.registrationType === 'renewal' || 
-                (pendingRegistration?.registrationType === 'oauth' && !pendingRegistration?.needsUsername)) && (
+              {pendingRegistration?.registrationType === 'renewal' && (
                 <p className="subscription-next-steps">
                   Redirecting to your profile...
                 </p>

@@ -273,64 +273,18 @@ def register_user():
 def login():
     data = request.json
     if not data:
-        # Error handling for missing JSON data
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "No JSON data provided"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
         return jsonify({"error": "No JSON data provided"}), 400
 
     identifier = data.get("usernameOrEmail")
     password = data.get("password")
     if not identifier or not password:
-        # Error handling for missing credentials
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "Missing username/password"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
         return jsonify({"error": "Username (or Email) and password are required"}), 400
 
     # First, get the user
-    start_db = time.time()
     user = get_user_by_identifier(identifier)
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
 
     # Check if user exists and password is correct
     if not user or not check_password(password, user.get("password", "")):
-        start_db = time.time()
-        db.auditLogs.insert_one({
-            "timestamp": datetime.utcnow(),
-            "userId": None,
-            "ip": request.remote_addr or "unknown",
-            "success": False,
-            "reason": "Invalid username or password"
-        })
-        duration = time.time() - start_db
-        if not hasattr(g, 'db_time_accumulator'):
-            g.db_time_accumulator = 0.0
-        g.db_time_accumulator += duration
-
         return jsonify({"error": "Invalid username or password"}), 401
     
     # Now check subscription status - after verifying credentials
@@ -351,17 +305,13 @@ def login():
     # Regular login flow for active subscribers
     session['userId'] = str(user["_id"])
 
-    start_db = time.time()
+    # Log the successful login
     db.auditLogs.insert_one({
         "timestamp": datetime.utcnow(),
         "userId": user["_id"],
         "ip": request.remote_addr or "unknown",
         "success": True
     })
-    duration = time.time() - start_db
-    if not hasattr(g, 'db_time_accumulator'):
-        g.db_time_accumulator = 0.0
-    g.db_time_accumulator += duration
 
     user = serialize_user(user)
 
@@ -380,6 +330,7 @@ def login():
         "subscriptionActive": user.get("subscriptionActive", False),
         "oauth_provider": user.get("oauth_provider", None)
     }), 200
+    
     
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
