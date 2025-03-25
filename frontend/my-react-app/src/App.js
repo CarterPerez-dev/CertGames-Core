@@ -94,7 +94,9 @@ function App() {
     useEffect(() => {
       if (!userId) return;
       
-      // Check on route change (less frequent than interval checking)
+      // Only run subscription check periodically, not on every route change
+      const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
+      
       const checkSubscription = async () => {
         try {
           const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
@@ -115,18 +117,18 @@ function App() {
         }
       };
       
-      // Check whenever location changes (user navigates to a different page)
+      // Initial check when component mounts
       checkSubscription();
       
-      // Also set up a less frequent interval check (every 6 hours)
-      const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
+      // Set up interval for periodic checks
       const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
       
       return () => {
         clearInterval(intervalId);
       };
-    }, [dispatch, userId, location]);
-  
+    }, [dispatch, userId]);
+    
+    
   return (
     <div className="App">
       {userId && <Sidebar />}

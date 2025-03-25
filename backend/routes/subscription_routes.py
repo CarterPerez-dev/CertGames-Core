@@ -4,7 +4,7 @@ import json
 from flask import Blueprint, request, jsonify, session, redirect, current_app
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
-from models.test import get_user_by_id, update_user_subscription, create_user  # Add create_user here
+from models.test import get_user_by_id, update_user_subscription, create_user
 from mongodb.database import db
 
 subscription_bp = Blueprint('subscription', __name__)
@@ -46,7 +46,8 @@ def create_checkout_session():
             mode='subscription',
             success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}&user_id={user_id or 'new'}",
             cancel_url=f"{cancel_url}?user_id={user_id or 'new'}",
-            client_reference_id=user_id,  # To identify the user in webhook events
+            # FIX: Always set a client_reference_id, even for new users
+            client_reference_id=user_id or "new_registration",
             metadata={
                 'user_id': user_id or 'new_registration',
                 'is_new_user': 'true' if registration_data else 'false',
@@ -65,7 +66,10 @@ def create_checkout_session():
                 'registration_data': registration_data,
                 'is_oauth_flow': data.get('isOauthFlow', False),
                 'created_at': datetime.utcnow(),
-                'expires_at': datetime.utcnow() + timedelta(hours=24)  # Expire after 24 hours
+                'expires_at': datetime.utcnow() + timedelta(hours=24),  # Expire after 24 hours
+                'metadata': {
+                    'customer_id': None  # Will be updated when we know the customer ID
+                }
             })
         
         # Store checkout session ID in flask session
@@ -97,10 +101,17 @@ def get_subscription_status():
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
+        # Add explicit logging for debugging
+        is_active = user.get('subscriptionActive', False)
+        status = user.get('subscriptionStatus')
+        platform = user.get('subscriptionPlatform')
+        
+        current_app.logger.info(f"Subscription check for user {user_id}: active={is_active}, status={status}, platform={platform}")
+        
         return jsonify({
-            'subscriptionActive': user.get('subscriptionActive', False),
-            'subscriptionStatus': user.get('subscriptionStatus'),
-            'subscriptionPlatform': user.get('subscriptionPlatform')
+            'subscriptionActive': is_active,
+            'subscriptionStatus': status,
+            'subscriptionPlatform': platform
         })
     except Exception as e:
         current_app.logger.error(f"Error getting subscription status: {str(e)}")
@@ -173,10 +184,16 @@ def fulfill_subscription(session):
     """
     client_reference_id = session.get('client_reference_id')
     metadata = session.get('metadata', {})
+    
+    # FIX: If client_reference_id is missing, try to get it from metadata
+    if not client_reference_id and metadata:
+        client_reference_id = metadata.get('user_id')
+    
     is_new_user = metadata.get('is_new_user') == 'true'
     is_oauth_flow = metadata.get('is_oauth_flow') == 'true'
     customer_id = session.get('customer')
     subscription_id = session.get('subscription')
+    session_id = session.get('id')
     
     try:
         # For existing users, just update their subscription status
@@ -207,19 +224,32 @@ def fulfill_subscription(session):
             temp_registration_data = None
             
             # Check if we have registration data in session
-            current_app.logger.info(f"Checking for registration data for session ID {session.id}")
+            current_app.logger.info(f"Checking for registration data for session ID {session_id}")
             
             # First try to get from Flask session
             if 'temp_registration_data' in session:
                 temp_registration_data = session.get('temp_registration_data')
-                current_app.logger.info(f"Retrieved registration data from session for session ID {session.id}")
+                current_app.logger.info(f"Retrieved registration data from session")
             
             # If no data in session, check if we stored it in database
             if not temp_registration_data:
-                temp_doc = db.tempRegistrations.find_one({'checkout_session_id': session.id})
+                # Try with both session ID and checkout session ID
+                temp_doc = db.tempRegistrations.find_one({
+                    '$or': [
+                        {'checkout_session_id': session_id},
+                        {'checkout_session_id': session.get('id')}
+                    ]
+                })
+                
+                if not temp_doc:
+                    # If still not found, try to find by customer ID
+                    temp_doc = db.tempRegistrations.find_one({
+                        'metadata.customer_id': customer_id
+                    })
+                
                 if temp_doc:
                     temp_registration_data = temp_doc.get('registration_data')
-                    current_app.logger.info(f"Retrieved registration data from database for session ID {session.id}")
+                    current_app.logger.info(f"Retrieved registration data from database")
             
             if temp_registration_data:
                 # Add subscription details to the user data
@@ -253,16 +283,28 @@ def fulfill_subscription(session):
                         session.pop('temp_registration_data')
                     
                     # Also remove from database if it exists
-                    db.tempRegistrations.delete_one({'checkout_session_id': session.id})
+                    db.tempRegistrations.delete_one({'checkout_session_id': session_id})
                     
                 except Exception as create_err:
                     current_app.logger.error(f"Error creating user: {str(create_err)}")
                     raise  # Re-raise to be caught by the outer try/except
             else:
-                current_app.logger.error(f"No registration data found for session ID {session.id}")
-                # Add more debug info
-                current_app.logger.error(f"Session contents: {dict(session)}")
-                current_app.logger.error(f"Database check: {db.tempRegistrations.find_one({'checkout_session_id': session.id})}")
+                current_app.logger.error(f"No registration data found for session ID {session_id}")
+                # Try to find any user with this stripe customer ID, in case user was created but subscription not updated
+                existing_user = db.mainusers_collection.find_one({'stripeCustomerId': customer_id})
+                if existing_user:
+                    current_app.logger.info(f"Found existing user with stripe customer ID {customer_id}, updating subscription")
+                    update_user_subscription(str(existing_user['_id']), {
+                        'subscriptionActive': True,
+                        'subscriptionStatus': 'active',
+                        'subscriptionPlatform': 'stripe',
+                        'stripeSubscriptionId': subscription_id,
+                        'subscriptionStartDate': datetime.utcnow(),
+                    })
+                else:
+                    # Add more debug info
+                    current_app.logger.error(f"Session contents: {dict(session)}")
+                    current_app.logger.error(f"Database check: {db.tempRegistrations.find_one({'checkout_session_id': session_id})}")
         
     except Exception as e:
         current_app.logger.error(f"Error fulfilling subscription: {str(e)}")
@@ -319,10 +361,11 @@ def cancel_subscription(subscription):
             return
         
         # Update the user's subscription status
+        user_id = str(user['_id'])  # Fix: use user_id variable instead of undefined variable
         update_user_subscription(user_id, {
             'subscriptionStatus': 'canceling',
             'subscriptionCanceledAt': datetime.utcnow(),
-            'subscriptionEndDate': datetime.fromtimestamp(stripe.Subscription.retrieve(subscription_id).current_period_end)
+            'subscriptionEndDate': datetime.fromtimestamp(subscription.current_period_end)
         })
 
         # Log this subscription event

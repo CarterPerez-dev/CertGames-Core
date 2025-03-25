@@ -14,10 +14,17 @@ const ProtectedRoute = ({ children }) => {
     const verifySubscription = async () => {
       if (userId) {
         try {
-          await dispatch(checkSubscription(userId)).unwrap();
+          // Only check subscription if we don't already know it's active
+          // This prevents unnecessary checks on every route change
+          if (subscriptionActive === undefined || subscriptionActive === false) {
+            console.log('Checking subscription status for user', userId);
+            await dispatch(checkSubscription(userId)).unwrap();
+          }
           setIsChecking(false);
         } catch (err) {
           console.error('Error checking subscription:', err);
+          // Log more detailed error information
+          console.error('Error details:', err.stack || JSON.stringify(err));
           setIsChecking(false);
         }
       } else {
@@ -26,7 +33,7 @@ const ProtectedRoute = ({ children }) => {
     };
     
     verifySubscription();
-  }, [userId, dispatch]);
+  }, [userId, dispatch, subscriptionActive]);
   
   if (isChecking || status === 'loading') {
     // Show loading state

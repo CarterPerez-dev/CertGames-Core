@@ -385,13 +385,14 @@ const userSlice = createSlice({
         state.currentAvatar = userDoc.currentAvatar || null;
         state.nameColor = userDoc.nameColor || null;
         state.purchasedItems = userDoc.purchasedItems || [];
-        state.subscriptionActive = userDoc.subscriptionActive || false;
+        
+        // IMPORTANT FIX: Be explicit about subscription status
+        state.subscriptionActive = userDoc.subscriptionActive === true;
         state.subscriptionStatus = userDoc.subscriptionStatus || null;
         state.subscriptionPlatform = userDoc.subscriptionPlatform || null;
         state.stripeCustomerId = userDoc.stripeCustomerId || null;
         state.stripeSubscriptionId = userDoc.stripeSubscriptionId || null;
         state.appleTransactionId = userDoc.appleTransactionId || null;
-        state.oauth_provider = userDoc.oauth_provider || null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.status = 'failed';
@@ -436,6 +437,26 @@ const userSlice = createSlice({
             });
           }
         }
+      })
+      
+      // SUBSCRIPTION CHECK - NEW HANDLERS
+      .addCase(checkSubscription.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(checkSubscription.fulfilled, (state, action) => {
+        state.subscriptionActive = action.payload.subscriptionActive;
+        state.subscriptionStatus = action.payload.subscriptionStatus;
+        state.subscriptionPlatform = action.payload.subscriptionPlatform;
+        state.status = 'idle';
+      })
+      .addCase(checkSubscription.rejected, (state, action) => {
+        state.error = action.payload;
+        state.status = 'failed';
+      })
+      
+      // CANCEL SUBSCRIPTION
+      .addCase(cancelSubscription.fulfilled, (state, action) => {
+        state.subscriptionStatus = 'canceling';
       });
   },
 });
