@@ -34,8 +34,11 @@ const OAuthSuccess = () => {
       registrationType: 'oauth'
     }));
     
-    // Redirect to subscription page instead of logging in directly
-    navigate('/subscription');
+    // Add a short delay before redirecting
+    setTimeout(() => {
+      // Redirect to subscription page instead of logging in directly
+      navigate('/subscription');
+    }, 1000);
     
   }, [dispatch, navigate, location.search]);
   
@@ -71,7 +74,9 @@ const OAuthSuccess = () => {
               </div>
             ) : (
               <div className="oauth-loading">
-                <div className="oauth-spinner"></div>
+                <div className="oauth-spinner">
+                  <FaSpinner className="fa-spin" />
+                </div>
                 <p>Please wait while we complete your authentication...</p>
               </div>
             )}

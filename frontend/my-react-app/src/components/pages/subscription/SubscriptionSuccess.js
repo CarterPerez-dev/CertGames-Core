@@ -53,7 +53,13 @@ const SubscriptionSuccess = () => {
     
     // Verify the session with a slight delay to prevent race conditions
     const timeoutId = setTimeout(() => {
-      axios.post('/api/subscription/verify-session', { sessionId })
+      axios.post('/api/subscription/verify-session', { sessionId }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        timeout: 30000 // 30 second timeout
+      })
         .then(response => {
           console.log('Verification succeeded:', response.data);
           
@@ -95,7 +101,21 @@ const SubscriptionSuccess = () => {
                 setTimeout(() => {
                   navigate('/profile');
                 }, 2000);
+              } else {
+                // This is for standard registration
+                setTimeout(() => {
+                  navigate('/login', {
+                    state: { message: 'Registration and subscription successful! Please log in.' }
+                  });
+                }, 2000);
               }
+            } else {
+              // Default redirect if no registration data
+              setTimeout(() => {
+                navigate('/login', {
+                  state: { message: 'Registration and subscription successful! Please log in.' }
+                });
+              }, 2000);
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
