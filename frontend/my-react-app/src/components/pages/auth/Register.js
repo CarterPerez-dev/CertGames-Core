@@ -123,10 +123,11 @@ const Register = () => {
       });
       
       if (response.data.isValid) {
-        // Store the registration data in localStorage
+        // Store the registration data in localStorage with password for later use
         localStorage.setItem('pendingRegistration', JSON.stringify({
           email,
           username,
+          password, // Include password for account creation
           registrationType: 'standard'
         }));
         

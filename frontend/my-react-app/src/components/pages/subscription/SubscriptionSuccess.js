@@ -1,10 +1,9 @@
-// frontend/my-react-app/src/components/pages/subscription/SubscriptionSuccess.js
-import React, { useEffect, useState } from 'react';
+// src/components/pages/subscription/SubscriptionSuccess.js
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCurrentUserId, fetchUserData } from '../store/userSlice';
 import { FaCheckCircle, FaSpinner, FaExclamationCircle } from 'react-icons/fa';
-import axios from 'axios';
 import './SubscriptionPage.css';
 
 const SubscriptionSuccess = () => {
@@ -13,75 +12,127 @@ const SubscriptionSuccess = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [logs, setLogs] = useState([]);
   const [pendingRegistration, setPendingRegistration] = useState(null);
   
+  const addLog = (message) => {
+    console.log(message);
+    setLogs(prev => [...prev, `${new Date().toISOString().substring(11, 23)}: ${message}`]);
+  };
+
   useEffect(() => {
-    // Extract session_id from URL
-    const searchParams = new URLSearchParams(location.search);
-    const sessionId = searchParams.get('session_id');
+    const params = new URLSearchParams(location.search);
+    const sessionId = params.get('session_id');
     
-    // Retrieve pending registration data
-    const regData = localStorage.getItem('pendingRegistration');
-    if (regData) {
-      setPendingRegistration(JSON.parse(regData));
-    }
-    
-    if (sessionId) {
-      // Verify the session with the backend
-      axios.post('/api/subscription/verify-session', { sessionId })
-        .then(response => {
-          if (response.data.success) {
-            const userId = response.data.userId;
-            const needsUsername = response.data.needsUsername;
-            
-            // Save userId to localStorage
-            localStorage.setItem('userId', userId);
-            
-            // Update Redux store
-            dispatch(setCurrentUserId(userId));
-            
-            // Fetch the user data
-            dispatch(fetchUserData(userId));
-            
-            // Clean up the pending registration data
-            localStorage.removeItem('pendingRegistration');
-            
-            setLoading(false);
-            
-            // Determine where to navigate based on registration type
-            if (pendingRegistration) {
-              if (pendingRegistration.registrationType === 'oauth' && needsUsername) {
-                // Delay before redirecting to username creation
-                setTimeout(() => {
-                  navigate('/create-username', { 
-                    state: { userId, provider: pendingRegistration.provider }
-                  });
-                }, 3000);
-              } else if (pendingRegistration.registrationType === 'renewal') {
-                // User renewed subscription, go to profile
-                setTimeout(() => {
-                  navigate('/profile');
-                }, 3000);
-              } else if (pendingRegistration.registrationType === 'standard') {
-                // Standard new user, they need to login
-                // Don't redirect automatically
-              }
-            }
-          } else {
-            setError(response.data.error || 'Failed to verify subscription');
-            setLoading(false);
-          }
-        })
-        .catch(err => {
-          console.error('Error verifying session:', err);
-          setError('An error occurred while verifying your subscription');
-          setLoading(false);
-        });
-    } else {
-      setError('No session ID found');
+    if (!sessionId) {
+      setError('No session ID found in the URL');
       setLoading(false);
+      return;
     }
-  }, [location, dispatch, navigate, pendingRegistration]);
+    
+    addLog(`Starting with session ID: ${sessionId}`);
+    
+    // Load registration data from localStorage
+    try {
+      const regData = localStorage.getItem('pendingRegistration');
+      if (regData) {
+        const parsedData = JSON.parse(regData);
+        setPendingRegistration(parsedData);
+        addLog(`Loaded registration data: ${regData}`);
+      } else {
+        addLog('No pendingRegistration found in localStorage');
+      }
+    } catch (e) {
+      addLog(`Failed to parse registration data: ${e.message}`);
+      console.error('Failed to parse registration data', e);
+    }
+    
+    // Proceed directly to verification
+    verifySession(sessionId);
+  }, [location.search]);
+  
+  const verifySession = (sessionId) => {
+    addLog('Starting session verification...');
+    
+    // Use plain fetch API for maximum compatibility
+    fetch('/api/subscription/verify-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ sessionId })
+    })
+    .then(response => {
+      addLog(`Received response: status ${response.status}`);
+      if (!response.ok) {
+        return response.text().then(text => {
+          throw new Error(`Server responded with ${response.status}: ${text}`);
+        });
+      }
+      return response.json();
+    })
+    .then(data => {
+      addLog(`Verification succeeded: ${JSON.stringify(data)}`);
+      
+      if (data.success) {
+        const userId = data.userId;
+        const needsUsername = data.needsUsername;
+        
+        // Store in localStorage and cleanup
+        localStorage.setItem('userId', userId);
+        localStorage.removeItem('pendingRegistration');
+        localStorage.removeItem('tempUserId');
+        
+        // Update Redux
+        dispatch(setCurrentUserId(userId));
+        dispatch(fetchUserData(userId));
+        
+        // Show success state
+        setLoading(false);
+        
+        // Handle redirects based on registration type
+        if (pendingRegistration) {
+          if (pendingRegistration.registrationType === 'oauth' && needsUsername) {
+            addLog('Redirecting to create username page');
+            setTimeout(() => {
+              navigate('/create-username', { 
+                state: { userId, provider: pendingRegistration.provider }
+              });
+            }, 2000);
+          } else if (pendingRegistration.registrationType === 'renewal') {
+            addLog('Redirecting to profile after renewal');
+            setTimeout(() => {
+              navigate('/profile');
+            }, 2000);
+          } else {
+            // Standard registration
+            addLog('Redirecting to login after standard registration');
+            setTimeout(() => {
+              navigate('/login', {
+                state: { message: 'Registration and subscription successful! Please log in.' }
+              });
+            }, 2000);
+          }
+        } else {
+          // Default redirect
+          addLog('Using default redirect to login page');
+          setTimeout(() => {
+            navigate('/login', {
+              state: { message: 'Subscription successful! Please log in.' }
+            });
+          }, 2000);
+        }
+      } else {
+        setError(data.error || 'Unknown error in verification');
+        setLoading(false);
+      }
+    })
+    .catch(err => {
+      addLog(`Error during verification: ${err.message}`);
+      setError(`Verification failed: ${err.message}`);
+      setLoading(false);
+    });
+  };
   
   return (
     <div className="subscription-success-container">
@@ -96,21 +147,47 @@ const SubscriptionSuccess = () => {
             <div className="subscription-loading">
               <FaSpinner className="subscription-spinner" />
               <p>Verifying your subscription...</p>
+              <p className="subscription-small-text">This may take a few moments</p>
+              
+              {/* Show logs for debugging */}
+              <div className="subscription-debug-logs">
+                <p>Debug logs:</p>
+                <pre>
+                  {logs.map((log, i) => <div key={i}>{log}</div>)}
+                </pre>
+              </div>
             </div>
           ) : error ? (
             <div className="subscription-error">
               <FaExclamationCircle className="subscription-error-icon" />
-              <h2>Something went wrong</h2>
+              <h2>Verification Error</h2>
               <p>{error}</p>
-              <button
-                className="subscription-button"
-                onClick={() => navigate('/subscription')}
-              >
-                Try Again
-              </button>
+              
+              <div className="subscription-error-actions">
+                <button
+                  className="subscription-button"
+                  onClick={() => window.location.reload()}
+                >
+                  Try Again
+                </button>
+                
+                <button
+                  className="subscription-button subscription-button-secondary"
+                  onClick={() => navigate('/subscription')}
+                >
+                  Back to Subscription
+                </button>
+              </div>
+              
+              <div className="subscription-debug-logs">
+                <p>Debug logs:</p>
+                <pre>
+                  {logs.map((log, i) => <div key={i}>{log}</div>)}
+                </pre>
+              </div>
             </div>
           ) : (
-            <>
+            <div className="subscription-success">
               <div className="subscription-success-icon">
                 <FaCheckCircle />
               </div>
@@ -141,13 +218,12 @@ const SubscriptionSuccess = () => {
                 </p>
               )}
               
-              {(pendingRegistration?.registrationType === 'renewal' || 
-                (pendingRegistration?.registrationType === 'oauth' && !pendingRegistration?.needsUsername)) && (
+              {pendingRegistration?.registrationType === 'renewal' && (
                 <p className="subscription-next-steps">
                   Redirecting to your profile...
                 </p>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>
