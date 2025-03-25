@@ -142,31 +142,35 @@ function App() {
             localStorage.setItem('lastSubscriptionCheck', Date.now().toString());
             
             // Check with API directly
-            const response = await axios.get(`/api/subscription/check-status?userId=${userId}`);
-            
-            if (response.data && !response.data.subscriptionActive) {
-              console.log('Subscription inactive, redirecting to subscription page');
+            try {
+              const response = await axios.get(`/api/subscription/check-status?userId=${userId}`);
               
-              // Store userId for renewal
-              localStorage.setItem('tempUserId', userId);
-              
-              // Store renewal info
-              localStorage.setItem('pendingRegistration', JSON.stringify({
-                userId: userId,
-                registrationType: 'renewal'
-              }));
-              
-              // Log out
-              dispatch(logout());
-              
-              // Navigate to subscription page
-              navigate('/subscription', { 
-                state: { renewSubscription: true, userId }
-              });
+              if (response.data && !response.data.subscriptionActive) {
+                console.log('Subscription inactive, redirecting to subscription page');
+                
+                // Store userId for renewal
+                localStorage.setItem('tempUserId', userId);
+                
+                // Store renewal info
+                localStorage.setItem('pendingRegistration', JSON.stringify({
+                  userId: userId,
+                  registrationType: 'renewal'
+                }));
+                
+                // Log out
+                dispatch(logout());
+                
+                // Navigate to subscription page
+                navigate('/subscription', { 
+                  state: { renewSubscription: true, userId }
+                });
+              }
+            } catch (err) {
+              console.error('Error checking subscription status:', err);
             }
           }
         } catch (error) {
-          console.error('Error checking subscription status:', error);
+          console.error('Error in subscription check flow:', error);
         } finally {
           setIsCheckingSubscription(false);
         }
@@ -184,7 +188,6 @@ function App() {
       clearInterval(interval);
     };
   }, [userId, dispatch, navigate, location.pathname, isCheckingSubscription]);
-  
   return (
     <div className="App">
       {userId && <Sidebar />}

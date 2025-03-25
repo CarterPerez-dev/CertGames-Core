@@ -1,5 +1,5 @@
 # routes/subscription_routes.py
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, current_app
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import json
@@ -8,7 +8,7 @@ import stripe
 import time
 import traceback
 from mongodb.database import db, mainusers_collection
-from models.test import get_user_by_id, update_user_fields, update_user_subscription, create_user
+from models.test import get_user_by_id, update_user_fields, update_user_subscription, create_user, hash_password
 
 subscription_bp = Blueprint('subscription', __name__)
 
@@ -64,7 +64,7 @@ def create_checkout_session():
         
         return jsonify({"url": session.url, "session_id": session.id})
     except Exception as e:
-        print(f"Checkout session error: {str(e)}")
+        current_app.logger.error(f"Checkout session error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @subscription_bp.route('/verify-session', methods=['POST'])
@@ -73,15 +73,16 @@ def verify_session():
     session_id = data.get('sessionId')
     
     if not session_id:
+        current_app.logger.error("No session ID provided in verify-session request")
         return jsonify({"success": False, "error": "Session ID is required"}), 400
     
-    print(f"Processing verification for session: {session_id}")
+    current_app.logger.info(f"Processing verification for session: {session_id}")
     
     try:
         # Check if already verified to prevent duplicate processing
         existing = db.verified_sessions.find_one({"session_id": session_id})
         if existing:
-            print(f"Session {session_id} already verified, returning cached result")
+            current_app.logger.info(f"Session {session_id} already verified, returning cached result")
             return jsonify({
                 "success": True,
                 "userId": existing.get("user_id"),
@@ -92,12 +93,12 @@ def verify_session():
         try:
             session = stripe.checkout.Session.retrieve(session_id)
         except stripe.error.StripeError as e:
-            print(f"Stripe error retrieving session: {str(e)}")
+            current_app.logger.error(f"Stripe error retrieving session: {str(e)}")
             return jsonify({"success": False, "error": f"Stripe error: {str(e)}"}), 500
         
         # Check if the session was successfully paid
         if session.payment_status != 'paid':
-            print(f"Payment not completed. Status: {session.payment_status}")
+            current_app.logger.error(f"Payment not completed. Status: {session.payment_status}")
             return jsonify({
                 "success": False, 
                 "error": f"Payment not completed. Status: {session.payment_status}"
@@ -109,12 +110,12 @@ def verify_session():
         metadata = session.get('metadata', {})
         subscription_id = session.get('subscription')
         
-        print(f"Extracted session data: customer_id={customer_id}, user_id={user_id}, subscription_id={subscription_id}")
-        print(f"Session metadata: {metadata}")
+        current_app.logger.info(f"Extracted session data: customer_id={customer_id}, user_id={user_id}, subscription_id={subscription_id}")
+        current_app.logger.info(f"Session metadata: {metadata}")
         
         # If there's a client_reference_id, this is an existing user upgrading
         if user_id:
-            print(f"Updating existing user: {user_id}")
+            current_app.logger.info(f"Updating existing user: {user_id}")
             try:
                 # Update the user's subscription status
                 mainusers_collection.update_one(
@@ -142,7 +143,7 @@ def verify_session():
                     "needsUsername": False
                 })
             except Exception as e:
-                print(f"Error updating user: {str(e)}")
+                current_app.logger.error(f"Error updating user: {str(e)}")
                 traceback.print_exc()
                 return jsonify({"success": False, "error": f"Database error: {str(e)}"}), 500
         
@@ -153,8 +154,8 @@ def verify_session():
                 registration_data = json.loads(metadata['pendingRegistration'])
                 reg_type = registration_data.get('registrationType', 'standard')
                 
-                print(f"Registration type: {reg_type}")
-                print(f"Registration data: {registration_data}")
+                current_app.logger.info(f"Registration type: {reg_type}")
+                current_app.logger.info(f"Registration data: {registration_data}")
                 
                 # For standard registration (non-OAuth)
                 if reg_type == 'standard':
@@ -173,7 +174,7 @@ def verify_session():
                             ]
                         })
                     except Exception as e:
-                        print(f"Error checking existing user: {str(e)}")
+                        current_app.logger.error(f"Error checking existing user: {str(e)}")
                         return jsonify({"success": False, "error": "Database error"}), 500
                     
                     if existing_user:
@@ -191,7 +192,7 @@ def verify_session():
                                 }}
                             )
                         except Exception as e:
-                            print(f"Error updating existing user: {str(e)}")
+                            current_app.logger.error(f"Error updating existing user: {str(e)}")
                             return jsonify({"success": False, "error": "Database error"}), 500
                     else:
                         # Create user with minimal required data
@@ -218,16 +219,21 @@ def verify_session():
                             
                             if temp_reg and 'password' in temp_reg:
                                 user_data['password'] = temp_reg['password']
+                            elif 'password' in registration_data:
+                                # Fallback to password in registration data if available
+                                password = registration_data.get('password')
+                                if password:
+                                    user_data['password'] = hash_password(password)
                         except Exception as e:
-                            print(f"Error getting temp registration: {str(e)}")
+                            current_app.logger.error(f"Error getting temp registration: {str(e)}")
                         
                         # Create the user
                         try:
                             result = create_user(user_data)
                             user_id = str(result)
-                            print(f"Created new user: {user_id}")
+                            current_app.logger.info(f"Created new user: {user_id}")
                         except Exception as e:
-                            print(f"Error creating user: {str(e)}")
+                            current_app.logger.error(f"Error creating user: {str(e)}")
                             traceback.print_exc()
                             return jsonify({"success": False, "error": f"Error creating user: {str(e)}"}), 500
                     
@@ -240,7 +246,7 @@ def verify_session():
                             "created_at": datetime.utcnow()
                         })
                     except Exception as e:
-                        print(f"Error storing verification: {str(e)}")
+                        current_app.logger.error(f"Error storing verification: {str(e)}")
                     
                     return jsonify({
                         "success": True,
@@ -271,14 +277,15 @@ def verify_session():
                         'xp': 0,
                         'level': 1,
                         'achievements': [],
-                        'username': f"user_{int(time.time())}" # Temporary username
+                        'username': f"user_{int(time.time())}", # Temporary username
+                        'needs_username': True
                     }
                     
                     try:
                         # Create the user
                         result = create_user(user_data)
                         user_id = str(result)
-                        print(f"Created new OAuth user: {user_id}")
+                        current_app.logger.info(f"Created new OAuth user: {user_id}")
                         
                         # Store verification record
                         db.verified_sessions.insert_one({
@@ -294,7 +301,7 @@ def verify_session():
                             "needsUsername": needs_username
                         })
                     except Exception as e:
-                        print(f"Error creating OAuth user: {str(e)}")
+                        current_app.logger.error(f"Error creating OAuth user: {str(e)}")
                         traceback.print_exc()
                         return jsonify({"success": False, "error": f"Error creating user: {str(e)}"}), 500
                 
@@ -336,7 +343,7 @@ def verify_session():
                             "isRenewal": True
                         })
                     except Exception as e:
-                        print(f"Error processing renewal: {str(e)}")
+                        current_app.logger.error(f"Error processing renewal: {str(e)}")
                         traceback.print_exc()
                         return jsonify({"success": False, "error": f"Database error: {str(e)}"}), 500
                 
@@ -347,13 +354,13 @@ def verify_session():
                     }), 400
                 
             except json.JSONDecodeError as e:
-                print(f"Error decoding registration data: {str(e)}")
+                current_app.logger.error(f"Error decoding registration data: {str(e)}")
                 return jsonify({
                     "success": False,
                     "error": f"Invalid registration data: {str(e)}"
                 }), 400
             except Exception as e:
-                print(f"Unexpected error processing registration: {str(e)}")
+                current_app.logger.error(f"Unexpected error processing registration: {str(e)}")
                 traceback.print_exc()
                 return jsonify({
                     "success": False,
@@ -362,19 +369,20 @@ def verify_session():
         
         # No user ID or registration data
         else:
+            current_app.logger.error("No user ID or registration data found in session")
             return jsonify({
                 "success": False,
                 "error": "No user ID or registration data found in session"
             }), 400
             
     except stripe.error.StripeError as e:
-        print(f"Stripe error: {str(e)}")
+        current_app.logger.error(f"Stripe error: {str(e)}")
         return jsonify({
             "success": False,
             "error": f"Stripe error: {str(e)}"
         }), 500
     except Exception as e:
-        print(f"Server error: {str(e)}")
+        current_app.logger.error(f"Server error: {str(e)}")
         traceback.print_exc()
         return jsonify({
             "success": False,
@@ -391,25 +399,25 @@ def webhook():
         webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
         
         # Log for debugging
-        print(f"Webhook signature: {sig_header[:10]}..." if sig_header else "No signature")
-        print(f"Webhook secret length: {len(webhook_secret) if webhook_secret else 'None'}")
+        current_app.logger.info(f"Webhook signature: {sig_header[:10]}..." if sig_header else "No signature")
+        current_app.logger.info(f"Webhook secret length: {len(webhook_secret) if webhook_secret else 'None'}")
         
         # Construct the event
         event = stripe.Webhook.construct_event(
             payload, sig_header, webhook_secret
         )
     except ValueError:
-        print("Invalid payload")
+        current_app.logger.error("Invalid payload")
         return jsonify({"error": "Invalid payload"}), 400
     except stripe.error.SignatureVerificationError as e:
-        print(f"Invalid signature: {str(e)}")
+        current_app.logger.error(f"Invalid signature: {str(e)}")
         return jsonify({"error": "Invalid signature"}), 400
     
     # Handle the event
     event_type = event['type']
     data = event['data']['object']
     
-    print(f"Webhook received: {event_type}")
+    current_app.logger.info(f"Webhook received: {event_type}")
     
     if event_type == 'customer.subscription.updated':
         subscription = data
@@ -426,7 +434,7 @@ def webhook():
                 "subscriptionActive": subscription_active,
                 "subscriptionStatus": subscription_status
             })
-            print(f"Updated subscription for user {user['_id']} to {subscription_status}")
+            current_app.logger.info(f"Updated subscription for user {user['_id']} to {subscription_status}")
     
     elif event_type == 'customer.subscription.deleted':
         subscription = data
@@ -441,7 +449,7 @@ def webhook():
                 "subscriptionActive": False,
                 "subscriptionStatus": "canceled"
             })
-            print(f"Deactivated subscription for user {user['_id']}")
+            current_app.logger.info(f"Deactivated subscription for user {user['_id']}")
     
     # Always return success
     return jsonify({"status": "success"})
@@ -465,5 +473,5 @@ def check_subscription_status():
             "subscriptionPlatform": user.get("subscriptionPlatform")
         })
     except Exception as e:
-        print(f"Error checking subscription status: {str(e)}")
+        current_app.logger.error(f"Error checking subscription status: {str(e)}")
         return jsonify({"error": str(e)}), 500
