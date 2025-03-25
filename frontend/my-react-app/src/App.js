@@ -122,20 +122,31 @@ function App() {
         setIsCheckingSubscription(true);
         
         try {
-          // Only check if user is logged in
-          const resultAction = await dispatch(fetchUserData(userId));
+          // Add path check to prevent subscription checks on certain pages
+          const isSubscriptionRelatedPage = [
+            '/subscription', 
+            '/subscription/success', 
+            '/subscription/cancel',
+            '/create-username',
+            '/oauth/success'
+          ].includes(location.pathname);
           
-          if (fetchUserData.fulfilled.match(resultAction)) {
-            const userData = resultAction.payload;
+          // Check if we recently checked (avoid rapid re-checks)
+          const lastCheck = localStorage.getItem('lastSubscriptionCheck');
+          const checkThrottleMs = 30000; // 30 seconds
+          const shouldSkipCheck = isSubscriptionRelatedPage || 
+            (lastCheck && (Date.now() - parseInt(lastCheck)) < checkThrottleMs);
+          
+          if (!shouldSkipCheck) {
+            // Set last check timestamp
+            localStorage.setItem('lastSubscriptionCheck', Date.now().toString());
             
-            // If subscription is not active and not already on subscription-related pages
-            const isSubscriptionPage = [
-              '/subscription', 
-              '/subscription/success', 
-              '/subscription/cancel'
-            ].includes(location.pathname);
+            // Check with API directly instead of fetching all user data
+            const response = await axios.get(`/api/subscription/check-status?userId=${userId}`);
             
-            if (!userData.subscriptionActive && !isSubscriptionPage) {
+            if (response.data && !response.data.subscriptionActive) {
+              console.log('Subscription inactive, redirecting to subscription page');
+              
               // Store userId for renewal
               localStorage.setItem('tempUserId', userId);
               
@@ -162,13 +173,17 @@ function App() {
       }
     };
     
-    // Check on initial load and then every hour (to not spam the API)
-    checkSubscriptionStatus();
-    const interval = setInterval(checkSubscriptionStatus, 3600000); // 1 hour
+    // Check on initial load, but with a delay to prevent immediate redirect loops
+    const initialTimer = setTimeout(checkSubscriptionStatus, 3000);
     
-    return () => clearInterval(interval);
+    // Normal interval check hourly
+    const interval = setInterval(checkSubscriptionStatus, 36000000); // 1 hour
+    
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(interval);
+    };
   }, [userId, dispatch, navigate, location.pathname, isCheckingSubscription]);
-
   return (
     <div className="App">
       {userId && <Sidebar />}

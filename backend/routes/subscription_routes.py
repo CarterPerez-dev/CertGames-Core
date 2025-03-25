@@ -83,8 +83,9 @@ def webhook():
     
     if event_type == 'checkout.session.completed':
         session = data
+        # Process the session if needed
+        print(f"Checkout session completed: {session.id}")
         # This is handled by the verify-session endpoint
-        # Optionally do additional processing here
         
     elif event_type == 'customer.subscription.updated':
         subscription = data
@@ -197,17 +198,34 @@ def check_subscription_status():
     if not user_id:
         return jsonify({"error": "User ID is required"}), 400
     
-    user = get_user_by_id(user_id)
-    
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    
-    return jsonify({
-        "subscriptionActive": user.get("subscriptionActive", False),
-        "subscriptionStatus": user.get("subscriptionStatus"),
-        "subscriptionPlatform": user.get("subscriptionPlatform")
-    })
-
+    try:
+        user = get_user_by_id(user_id)
+        
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        # Check if there's a valid session in the last 5 minutes
+        recent_session = db.verified_sessions.find_one({
+            "user_id": user_id,
+            "created_at": {"$gt": datetime.utcnow() - timedelta(minutes=5)}
+        })
+        
+        # If there's a recent verification, consider subscription active
+        if recent_session:
+            return jsonify({
+                "subscriptionActive": True,
+                "subscriptionStatus": "active",
+                "recentlyVerified": True
+            })
+        
+        return jsonify({
+            "subscriptionActive": user.get("subscriptionActive", False),
+            "subscriptionStatus": user.get("subscriptionStatus"),
+            "subscriptionPlatform": user.get("subscriptionPlatform")
+        })
+    except Exception as e:
+        print(f"Error checking subscription status: {e}")
+        return jsonify({"error": str(e)}), 500
 
 # Add to backend/routes/subscription_routes.py
 
@@ -224,6 +242,16 @@ def verify_session():
     try:
         # Add logging for debugging
         print(f"Verifying session: {session_id}")
+        
+        # Check if session was already processed successfully
+        verified_session = db.verified_sessions.find_one({"session_id": session_id})
+        if verified_session:
+            # Already verified this session, return previous result
+            return jsonify({
+                "success": True,
+                "userId": verified_session.get("user_id"),
+                "needsUsername": verified_session.get("needs_username", False)
+            })
         
         # Retrieve the session from Stripe
         session = stripe.checkout.Session.retrieve(session_id)
@@ -271,9 +299,18 @@ def verify_session():
                     "error": "User not found"
                 }), 404
             
+            # Store verification record to prevent duplicate processing
+            db.verified_sessions.insert_one({
+                "session_id": session_id,
+                "user_id": user_id,
+                "needs_username": False,
+                "created_at": datetime.utcnow()
+            })
+            
             return jsonify({
                 "success": True,
-                "userId": user_id
+                "userId": user_id,
+                "needsUsername": False
             })
         
         # Handle new user registration
@@ -309,6 +346,14 @@ def verify_session():
                             "subscriptionPlatform": "web"
                         })
                         
+                        # Store verification record
+                        db.verified_sessions.insert_one({
+                            "session_id": session_id,
+                            "user_id": user_id,
+                            "needs_username": False,
+                            "created_at": datetime.utcnow()
+                        })
+                        
                         return jsonify({
                             "success": True,
                             "userId": user_id,
@@ -341,18 +386,121 @@ def verify_session():
                         }
                     }
                     
+                    # Get password from temp registration if available
+                    temp_reg = db.temp_registrations.find_one({
+                        "username": username,
+                        "email": email
+                    })
+                    if temp_reg and 'password' in temp_reg:
+                        user_data['password'] = temp_reg['password']
+                    
                     # Create the user
                     user_id = create_user(user_data)
                     print(f"Created new user: {user_id}")
+                    
+                    # Store verification record
+                    db.verified_sessions.insert_one({
+                        "session_id": session_id,
+                        "user_id": str(user_id),
+                        "needs_username": False,
+                        "created_at": datetime.utcnow()
+                    })
                     
                     return jsonify({
                         "success": True,
                         "userId": str(user_id),
                         "isNewUser": True
                     })
+                
+                # For OAuth registration
+                elif registration_type == 'oauth':
+                    provider = registration_data.get('provider')
+                    needs_username = registration_data.get('needsUsername', True)
                     
-                # For OAuth and renewal cases (include the rest of your handler)...
-                # [Rest of your function for handling OAuth and renewal]
+                    # Create a minimal user record for OAuth
+                    user_data = {
+                        'email': email,
+                        'oauth_provider': provider.lower() if provider else None,
+                        'subscriptionActive': True,
+                        'stripeCustomerId': customer_id,
+                        'stripeSubscriptionId': subscription_id,
+                        'subscriptionStatus': 'active',
+                        'subscriptionPlatform': 'web',
+                        'coins': 0,
+                        'xp': 0,
+                        'level': 1,
+                        'achievements': [],
+                        'xpBoost': 1.0,
+                        'purchasedItems': [],
+                        'needs_username': needs_username,
+                        'achievement_counters': {
+                            'total_tests_completed': 0,
+                            'perfect_tests_count': 0,
+                            'perfect_tests_by_category': {},
+                            'highest_score_ever': 0.0,
+                            'lowest_score_ever': 100.0,
+                            'total_questions_answered': 0,
+                        }
+                    }
+                    
+                    # If username is provided and not needing to create one
+                    if username and not needs_username:
+                        user_data['username'] = username
+                    else:
+                        # Temporary username
+                        user_data['username'] = f"user_{int(time.time())}"
+                    
+                    # Create the user
+                    user_id = create_user(user_data)
+                    
+                    # Store verification record
+                    db.verified_sessions.insert_one({
+                        "session_id": session_id,
+                        "user_id": str(user_id),
+                        "needs_username": needs_username,
+                        "created_at": datetime.utcnow()
+                    })
+                    
+                    return jsonify({
+                        "success": True,
+                        "userId": str(user_id),
+                        "needsUsername": needs_username,
+                        "isNewUser": True
+                    })
+                
+                # For subscription renewal
+                elif registration_type == 'renewal':
+                    # Get the user ID to renew
+                    renewal_user_id = registration_data.get('userId')
+                    
+                    if not renewal_user_id:
+                        return jsonify({
+                            "success": False,
+                            "error": "No user ID provided for renewal"
+                        }), 400
+                    
+                    # Update subscription status
+                    update_user_subscription(renewal_user_id, {
+                        "subscriptionActive": True,
+                        "stripeCustomerId": customer_id,
+                        "stripeSubscriptionId": subscription_id,
+                        "subscriptionStatus": "active",
+                        "subscriptionPlatform": "web"
+                    })
+                    
+                    # Store verification record
+                    db.verified_sessions.insert_one({
+                        "session_id": session_id,
+                        "user_id": renewal_user_id,
+                        "needs_username": False,
+                        "created_at": datetime.utcnow()
+                    })
+                    
+                    return jsonify({
+                        "success": True,
+                        "userId": renewal_user_id,
+                        "isRenewal": True
+                    })
                 
             except json.JSONDecodeError as e:
                 print(f"Error decoding metadata: {e}")
@@ -380,6 +528,3 @@ def verify_session():
             "success": False,
             "error": f"Server error: {str(e)}"
         }), 500
-        
-        
-        

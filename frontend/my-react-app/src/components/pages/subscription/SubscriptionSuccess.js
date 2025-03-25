@@ -16,7 +16,8 @@ const SubscriptionSuccess = () => {
   const [pendingRegistration, setPendingRegistration] = useState(null);
   
   useEffect(() => {
-    // Extract session_id from URL
+    // Add this verification flag in localStorage to prevent duplicate requests
+    const alreadyVerified = localStorage.getItem('stripeSessionVerified');
     const searchParams = new URLSearchParams(location.search);
     const sessionId = searchParams.get('session_id');
     
@@ -30,7 +31,10 @@ const SubscriptionSuccess = () => {
       }
     }
     
-    if (sessionId) {
+    if (sessionId && !alreadyVerified) {
+      // Set flag immediately to prevent concurrent requests
+      localStorage.setItem('stripeSessionVerified', sessionId);
+      
       console.log('Session ID received:', sessionId); // Debug log
       
       // Verify the session with the backend
@@ -76,19 +80,33 @@ const SubscriptionSuccess = () => {
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
+            localStorage.removeItem('stripeSessionVerified'); // Remove flag on error to allow retry
             setLoading(false);
           }
         })
         .catch(err => {
           console.error('Error verifying session:', err);
+          localStorage.removeItem('stripeSessionVerified'); // Remove flag on error to allow retry
           setError('An error occurred while verifying your subscription. Please contact support if the issue persists.');
           setLoading(false);
         });
+    } else if (alreadyVerified === sessionId) {
+      // Already verified this session, just get user data
+      if (pendingRegistration && pendingRegistration.userId) {
+        dispatch(fetchUserData(pendingRegistration.userId));
+      }
+      setLoading(false);
     } else {
       setError('No session ID found in the URL');
       setLoading(false);
     }
-  }, [location, dispatch, navigate, pendingRegistration]);
+    
+    // Cleanup function to remove verification flag when component unmounts
+    return () => {
+      // Only clean up if we're navigating away successfully
+      if (!error) localStorage.removeItem('stripeSessionVerified');
+    };
+  }, [location, dispatch, navigate, pendingRegistration, error]);
   
   return (
     <div className="subscription-success-container">
