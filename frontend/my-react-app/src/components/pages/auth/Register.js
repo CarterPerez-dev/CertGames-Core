@@ -1,8 +1,8 @@
-// src/components/pages/auth/Register.js
+// src/components/auth/Register.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { clearAuthErrors } from '../store/userSlice';
+import { registerUser, clearAuthErrors } from '../store/userSlice';
 import {
   FaUser,
   FaLock,
@@ -18,7 +18,7 @@ import {
   FaInfoCircle,
   FaTimes
 } from 'react-icons/fa';
-import axios from 'axios';
+import PasswordRequirements from './PasswordRequirements';
 import Footer from '../../Footer';
 import './Register.css';
 
@@ -114,38 +114,39 @@ const Register = () => {
     }
     
     try {
-      // Instead of creating a user directly, validate the registration data
-      const response = await axios.post('/api/test/validate-registration', {
+      const resultAction = await dispatch(registerUser({
         username,
         email,
         password,
-        confirmPassword
-      });
+        confirmPassword: confirmPassword
+      }));
       
-      if (response.data.isValid) {
-        // Store the registration data in localStorage with password for later use
-        localStorage.setItem('pendingRegistration', JSON.stringify({
-          email,
-          username,
-          password, // Include password for account creation
-          registrationType: 'standard'
-        }));
-        
-        // Navigate to subscription page
-        navigate('/subscription');
+      if (registerUser.fulfilled.match(resultAction)) {
+        // Registration successful, now login
+        navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
       } else {
-        setFormError(response.data.error || 'Registration validation failed');
-      }
-    } catch (err) {
-      // Handle error from the action
-      if (err.response && err.response.data && err.response.data.error) {
-        if (err.response.data.error.includes("Email is already taken") || 
-            err.response.data.error.includes("Username or email is already taken") ||
-            err.response.data.error.includes("already taken")) {
+        // Handle error from the action
+        const errorMessage = resultAction.payload || resultAction.error?.message;
+        
+        // Check for email already taken message
+        if (errorMessage && (
+            errorMessage.includes("Email is already taken") || 
+            errorMessage.includes("Username or email is already taken") ||
+            errorMessage.includes("already taken")
+        )) {
           setFormError('Email address is already registered. Please use a different email or login.');
         } else {
-          setFormError(err.response.data.error);
+          setFormError(errorMessage || 'Registration failed. Please try again.');
         }
+      }
+    } catch (err) {
+      // Handle other errors
+      if (err.message && (
+          err.message.includes("Email is already taken") ||
+          err.message.includes("Username or email is already taken") ||
+          err.message.includes("already taken")
+      )) {
+        setFormError('Email address is already registered. Please use a different email or login.');
       } else {
         setFormError('An error occurred. Please try again.');
       }
@@ -156,13 +157,6 @@ const Register = () => {
     setFormError('');
     
     try {
-      // Store OAuth intent in localStorage
-      localStorage.setItem('pendingRegistration', JSON.stringify({
-        provider,
-        registrationType: 'oauth',
-        needsUsername: true
-      }));
-      
       // Redirect to the backend OAuth route
       window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
     } catch (err) {
@@ -196,10 +190,7 @@ const Register = () => {
           
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-input-group">
-              <label htmlFor="username">
-                <span>Username</span>
-                <div className="register-label-badge">Required</div>
-              </label>
+              <label htmlFor="username">Username</label>
               <div className="register-input-wrapper">
                 <FaUser className="register-input-icon" />
                 <input
@@ -209,13 +200,7 @@ const Register = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Choose a unique username"
                   disabled={loading}
-                  required
-                  autoFocus
                 />
-                {username && username.length >= 3 && /^[A-Za-z0-9._-]+$/.test(username) && 
-                 !/^[._-]|[._-]$/.test(username) && !/(.)\1{2,}/.test(username) && (
-                  <FaCheck className="register-input-valid" />
-                )}
               </div>
               <div className="register-input-hint">
                 <FaInfoCircle className="register-hint-icon" />
@@ -254,7 +239,7 @@ const Register = () => {
                       setShowPasswordRequirements(false);
                     }
                   }}
-                  placeholder="Create a strong password"
+                  placeholder="Create a strong password (please 👉👈🥹)"
                   disabled={loading}
                   className={password && !passwordIsValid() ? "register-input-error" : ""}
                 />
@@ -382,7 +367,7 @@ const Register = () => {
               {loading ? (
                 <span className="register-button-loading">
                   <span className="register-spinner"></span>
-                  Processing...
+                  Creating Account...
                 </span>
               ) : (
                 <span className="register-button-text">

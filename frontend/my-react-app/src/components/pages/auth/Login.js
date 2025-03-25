@@ -1,4 +1,4 @@
-// src/components/pages/auth/Login.js
+// src/components/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -37,7 +37,7 @@ const Login = () => {
   useEffect(() => {
     dispatch(clearAuthErrors());
     
-    // Check for success message from registration or other redirects
+    // Check for success message from registration
     if (location.state && location.state.message) {
       setSuccessMessage(location.state.message);
       // Clear the location state after reading
@@ -69,29 +69,8 @@ const Login = () => {
 
     try {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
-      
       if (loginUser.fulfilled.match(resultAction)) {
-        // If login was successful
-        const userData = resultAction.payload;
-        
-        // Check if user needs to renew subscription
-        if (!userData.subscriptionActive) {
-          // Store temporary auth
-          localStorage.setItem('tempUserId', userData.user_id);
-          
-          // Store renewal info in localStorage
-          localStorage.setItem('pendingRegistration', JSON.stringify({
-            userId: userData.user_id,
-            registrationType: 'renewal'
-          }));
-          
-          // Redirect to subscription page
-          navigate('/subscription', { 
-            state: { renewSubscription: true, userId: userData.user_id }
-          });
-        } else {
-          // Normal login flow - navigation will happen through useEffect
-        }
+        // Login successful, navigation will happen through useEffect
       } else {
         // Handle error from the action
         setFormError(resultAction.payload || 'Login failed. Please try again.');
@@ -106,13 +85,6 @@ const Login = () => {
     setSuccessMessage('');
     
     try {
-      // Store OAuth intent in localStorage
-      localStorage.setItem('pendingRegistration', JSON.stringify({
-        provider,
-        registrationType: 'oauth',
-        needsUsername: true
-      }));
-      
       // Redirect to the backend OAuth route
       window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
     } catch (err) {

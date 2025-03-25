@@ -1,8 +1,8 @@
-// src/components/pages/auth/OAuthSuccess.js
+// src/components/auth/OAuthSuccess.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { setCurrentUserId } from '../store/userSlice';
+import { setCurrentUserId, fetchUserData } from '../store/userSlice';
 import { FaShieldAlt, FaSpinner } from 'react-icons/fa';
 import './Login.css';
 
@@ -18,7 +18,6 @@ const OAuthSuccess = () => {
     const searchParams = new URLSearchParams(location.search);
     const userId = searchParams.get('userId');
     const provider = searchParams.get('provider');
-    const needsUsername = searchParams.get('needsUsername') === 'true';
     
     if (!userId) {
       setError('Authentication failed. Please try again.');
@@ -26,20 +25,32 @@ const OAuthSuccess = () => {
       return;
     }
     
-    // Store OAuth data in localStorage for subscription flow
-    localStorage.setItem('pendingRegistration', JSON.stringify({
-      userId,
-      provider,
-      needsUsername,
-      registrationType: 'oauth'
-    }));
+    // Handle successful login
+    const handleSuccess = async () => {
+      try {
+        // Save userId to localStorage
+        localStorage.setItem('userId', userId);
+        
+        // Update Redux state
+        dispatch(setCurrentUserId(userId));
+        
+        // Fetch user data
+        await dispatch(fetchUserData(userId)).unwrap();
+        
+        // Navigate to profile page
+        navigate('/profile', { 
+          state: { 
+            message: `Successfully signed in with ${provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'OAuth'}`
+          }
+        });
+      } catch (err) {
+        console.error('Error during OAuth completion:', err);
+        setError('Failed to complete authentication. Please try again.');
+        setLoading(false);
+      }
+    };
     
-    // Add a short delay before redirecting
-    setTimeout(() => {
-      // Redirect to subscription page instead of logging in directly
-      navigate('/subscription');
-    }, 1000);
-    
+    handleSuccess();
   }, [dispatch, navigate, location.search]);
   
   return (
@@ -74,9 +85,7 @@ const OAuthSuccess = () => {
               </div>
             ) : (
               <div className="oauth-loading">
-                <div className="oauth-spinner">
-                  <FaSpinner className="fa-spin" />
-                </div>
+                <div className="oauth-spinner"></div>
                 <p>Please wait while we complete your authentication...</p>
               </div>
             )}
