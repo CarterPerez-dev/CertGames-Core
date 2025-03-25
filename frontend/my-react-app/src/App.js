@@ -133,7 +133,7 @@ function App() {
           
           // Check if we recently checked (avoid rapid re-checks)
           const lastCheck = localStorage.getItem('lastSubscriptionCheck');
-          const checkThrottleMs = 30000; // 30 seconds
+          const checkThrottleMs = 60000; // 1 minute
           const shouldSkipCheck = isSubscriptionRelatedPage || 
             (lastCheck && (Date.now() - parseInt(lastCheck)) < checkThrottleMs);
           
@@ -141,7 +141,7 @@ function App() {
             // Set last check timestamp
             localStorage.setItem('lastSubscriptionCheck', Date.now().toString());
             
-            // Check with API directly instead of fetching all user data
+            // Check with API directly
             const response = await axios.get(`/api/subscription/check-status?userId=${userId}`);
             
             if (response.data && !response.data.subscriptionActive) {
@@ -174,16 +174,17 @@ function App() {
     };
     
     // Check on initial load, but with a delay to prevent immediate redirect loops
-    const initialTimer = setTimeout(checkSubscriptionStatus, 3000);
+    const initialTimer = setTimeout(checkSubscriptionStatus, 5000);
     
     // Normal interval check hourly
-    const interval = setInterval(checkSubscriptionStatus, 36000000); // 1 hour
+    const interval = setInterval(checkSubscriptionStatus, 3600000); // 1 hour
     
     return () => {
       clearTimeout(initialTimer);
       clearInterval(interval);
     };
   }, [userId, dispatch, navigate, location.pathname, isCheckingSubscription]);
+  
   return (
     <div className="App">
       {userId && <Sidebar />}

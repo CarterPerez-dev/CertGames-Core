@@ -66,7 +66,7 @@ const Login = () => {
       setFormError('Please enter both username/email and password');
       return;
     }
-
+  
     try {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
       
@@ -75,7 +75,7 @@ const Login = () => {
         const userData = resultAction.payload;
         
         // Check if user needs to renew subscription
-        if (!userData.subscriptionActive) {
+        if (userData.requiresSubscription) {
           // Store temporary auth
           localStorage.setItem('tempUserId', userData.user_id);
           
