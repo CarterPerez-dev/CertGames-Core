@@ -1002,6 +1002,60 @@
   gap: 8px;
 }
 
+
+.profile-setting-subscription-details {
+  margin-bottom: 1.5rem;
+}
+
+.profile-setting-subscription-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.profile-setting-subscription-row:last-child {
+  border-bottom: none;
+}
+
+.profile-setting-subscription-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.profile-setting-subscription-value {
+  font-weight: 600;
+}
+
+.profile-setting-subscription-value.subscription-active {
+  color: #10b981;
+}
+
+.profile-setting-subscription-value.subscription-inactive {
+  color: #ef4444;
+}
+
+.profile-setting-subscription-canceling {
+  background-color: var(--bg-highlight);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.profile-setting-danger-btn {
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2);
+}
+
+.profile-setting-danger-btn:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
+
 /* Global theme variables - Add this to the top of your CSS file, before or after your existing :root styles */
 
 /* Default theme (purple) - This is already your current theme */
@@ -1648,3 +1702,6 @@
     font-size: 13px;
   }
 }
+
+
+

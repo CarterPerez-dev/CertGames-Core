@@ -377,7 +377,9 @@ const UserProfile = () => {
     achievements = [],
     currentAvatar,
     purchasedItems,
-    subscriptionActive
+    subscriptionActive,
+    subscriptionPlatform,
+    subscriptionStatus
   } = useSelector((state) => state.user);
 
   // Get achievements and shop items data
@@ -1269,14 +1271,41 @@ const UserProfile = () => {
                   </div>
                   
                   <div className="profile-setting-content">
-                    <p className="profile-setting-current">
-                      Status: 
-                      <span className={subscriptionActive ? "subscription-active" : "subscription-inactive"}>
-                        {subscriptionActive ? "Active" : "Inactive"}
-                      </span>
-                    </p>
+                    <div className="profile-setting-subscription-details">
+                      <div className="profile-setting-subscription-row">
+                        <span className="profile-setting-subscription-label">Status:</span>
+                        <span className={`profile-setting-subscription-value ${subscriptionActive ? "subscription-active" : "subscription-inactive"}`}>
+                          {subscriptionActive ? "Active" : "Inactive"}
+                        </span>
+                      </div>
+                      
+                      {subscriptionActive && (
+                        <>
+                          <div className="profile-setting-subscription-row">
+                            <span className="profile-setting-subscription-label">Plan:</span>
+                            <span className="profile-setting-subscription-value">
+                              Premium
+                            </span>
+                          </div>
+                          
+                          <div className="profile-setting-subscription-row">
+                            <span className="profile-setting-subscription-label">Platform:</span>
+                            <span className="profile-setting-subscription-value">
+                              {subscriptionPlatform ? subscriptionPlatform.charAt(0).toUpperCase() + subscriptionPlatform.slice(1) : 'N/A'}
+                            </span>
+                          </div>
+                          
+                          <div className="profile-setting-subscription-row">
+                            <span className="profile-setting-subscription-label">Status:</span>
+                            <span className="profile-setting-subscription-value">
+                              {subscriptionStatus ? subscriptionStatus.charAt(0).toUpperCase() + subscriptionStatus.slice(1) : 'N/A'}
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
                     
-                    {subscriptionActive && (
+                    {subscriptionActive && subscriptionStatus !== 'canceling' && (
                       <button 
                         className="profile-setting-action-btn profile-setting-danger-btn"
                         onClick={handleCancelSubscription}
@@ -1284,6 +1313,12 @@ const UserProfile = () => {
                         <FaTimes />
                         <span>Cancel Subscription</span>
                       </button>
+                    )}
+                    
+                    {subscriptionActive && subscriptionStatus === 'canceling' && (
+                      <div className="profile-setting-subscription-canceling">
+                        <p>Your subscription will remain active until the end of the current billing period.</p>
+                      </div>
                     )}
                     
                     {!subscriptionActive && (

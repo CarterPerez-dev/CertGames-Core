@@ -66,11 +66,24 @@ const Login = () => {
       setFormError('Please enter both username/email and password');
       return;
     }
-
     try {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
       if (loginUser.fulfilled.match(resultAction)) {
-        // Login successful, navigation will happen through useEffect
+        // Check subscription status
+        const userId = resultAction.payload.user_id;
+        const isSubscriptionActive = resultAction.payload.subscriptionActive;
+        
+        if (!isSubscriptionActive) {
+          // If subscription is not active, redirect to subscription page
+          navigate('/subscription', { 
+            state: { 
+              userId: userId 
+            } 
+          });
+        } else {
+          // Subscription is active, navigate to profile
+          navigate('/profile');
+        }
       } else {
         // Handle error from the action
         setFormError(resultAction.payload || 'Login failed. Please try again.');

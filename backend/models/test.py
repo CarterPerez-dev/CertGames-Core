@@ -271,26 +271,29 @@ def create_user(user_data):
     if "password" in user_data:
         user_data["password"] = hash_password(user_data["password"])
 
-
     # Default fields
     user_data.setdefault("coins", 0)
     user_data.setdefault("xp", 0)
     user_data.setdefault("level", 1)
     user_data.setdefault("achievements", [])
     user_data.setdefault("subscriptionActive", False)
-    user_data.setdefault("subscriptionPlan", None)
+    user_data.setdefault("subscriptionPlan", "premium")  # Default plan name
     user_data.setdefault("lastDailyClaim", None)
     user_data.setdefault("purchasedItems", [])
     user_data.setdefault("xpBoost", 1.0)
     user_data.setdefault("currentAvatar", None)
     user_data.setdefault("nameColor", None)
+    
+    # Subscription fields
     user_data.setdefault("subscriptionActive", False)
     user_data.setdefault("subscriptionStatus", None)
     user_data.setdefault("subscriptionPlatform", None)
     user_data.setdefault("stripeCustomerId", None)
     user_data.setdefault("stripeSubscriptionId", None)
     user_data.setdefault("appleTransactionId", None)
-    user_data.setdefault("subscriptionPlan", None)
+    user_data.setdefault("subscriptionStartDate", None)
+    user_data.setdefault("subscriptionEndDate", None)
+    user_data.setdefault("subscriptionCanceledAt", None)
 
     # If you want to ensure new users have the 'achievement_counters'
     # from Day 1, do it here:

@@ -1,85 +1,110 @@
 // src/components/pages/subscription/SubscriptionPage.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setCurrentUserId } from '../store/userSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { FaShieldAlt, FaCheck, FaSpinner } from 'react-icons/fa';
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaShieldAlt,
+  FaLock,
+  FaCreditCard,
+  FaInfoCircle,
+  FaSpinner,
+  FaArrowLeft,
+  FaArrowRight
+} from 'react-icons/fa';
 import './SubscriptionPage.css';
 
 const SubscriptionPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [pendingRegistration, setPendingRegistration] = useState(null);
+  const [stripeConfig, setStripeConfig] = useState({});
+  const [redirecting, setRedirecting] = useState(false);
   
-  const navigate = useNavigate();
   const location = useLocation();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { userId } = useSelector((state) => state.user);
+  
+  // Check if there's registration data in the location state
+  const registrationData = location.state?.registrationData;
+  const isOauthFlow = location.state?.isOauthFlow || false;
   
   useEffect(() => {
-    // Load pending registration data
-    const regData = localStorage.getItem('pendingRegistration');
+    // Fetch Stripe configuration
+    const fetchStripeConfig = async () => {
+      try {
+        const response = await axios.get('/api/subscription/config');
+        setStripeConfig(response.data);
+      } catch (err) {
+        console.error('Error fetching Stripe configuration:', err);
+        setError('Error loading payment configuration. Please try again.');
+      }
+    };
     
-    // Check if coming from login with expired subscription
-    const renewalState = location.state?.renewSubscription;
-    const renewUserId = location.state?.userId || localStorage.getItem('tempUserId');
-    
-    if (renewalState && renewUserId) {
-      // Set up for subscription renewal
-      setPendingRegistration({
-        userId: renewUserId,
-        registrationType: 'renewal'
-      });
-    } else if (regData) {
-      setPendingRegistration(JSON.parse(regData));
-    } else {
-      // No pending registration, redirect to register page
-      navigate('/register');
-    }
-  }, [navigate, location]);
+    fetchStripeConfig();
+  }, []);
   
   const handleSubscribe = async () => {
-    if (!pendingRegistration) {
-      setError('Registration data not found');
-      return;
-    }
-    
     setLoading(true);
     setError('');
     
     try {
-      // If OAuth registration, use the userId directly
-      const userId = pendingRegistration.userId || null;
-      
-      console.log('Sending data to checkout:', {
-        userId,
-        email: pendingRegistration.email,
-        pendingRegistration: JSON.stringify(pendingRegistration)
-      });
-      
+      // Create a Stripe checkout session
       const response = await axios.post('/api/subscription/create-checkout-session', {
-        userId,
-        email: pendingRegistration.email,
-        pendingRegistration: JSON.stringify(pendingRegistration)
+        userId: userId || null,
+        registrationData: registrationData || null,
+        isOauthFlow: isOauthFlow
       });
       
-      console.log('Checkout response:', response.data);
+      // Set redirecting state to show feedback
+      setRedirecting(true);
       
-      // Check the exact structure of the response
-      if (response.data && response.data.url) {
-        // Redirect to Stripe Checkout
-        window.location.href = response.data.url;
-      } else {
-        console.error('Missing URL in response:', response.data);
-        setError('Invalid response from server. Please try again.');
-      }
+      // Redirect to Stripe Checkout page
+      window.location.href = response.data.url;
     } catch (err) {
-      console.error('Checkout error details:', err.response?.data || err.message || err);
-      setError('Failed to start checkout process. Please try again.');
-    } finally {
+      console.error('Error creating checkout session:', err);
+      setError('Error starting the subscription process. Please try again.');
       setLoading(false);
     }
   };
+  
+  const handleGoBack = () => {
+    if (registrationData) {
+      // Go back to registration
+      navigate('/register');
+    } else if (userId) {
+      // Go back to profile for existing users
+      navigate('/profile');
+    } else {
+      // Default fallback
+      navigate('/');
+    }
+  };
+  
+  // Benefits array for display
+  const benefits = [
+    {
+      title: 'Premium Features',
+      description: 'Get access to all premium features and practice exams',
+      icon: <FaCheckCircle className="benefit-icon" />
+    },
+    {
+      title: 'Regular Updates',
+      description: 'Receive the latest exam questions and study materials',
+      icon: <FaCheckCircle className="benefit-icon" />
+    },
+    {
+      title: 'Unlimited Attempts',
+      description: 'Take unlimited practice tests and track your progress',
+      icon: <FaCheckCircle className="benefit-icon" />
+    },
+    {
+      title: 'Cross-Platform Access',
+      description: 'Use on web and iOS app with a single subscription',
+      icon: <FaCheckCircle className="benefit-icon" />
+    }
+  ];
   
   return (
     <div className="subscription-container">
@@ -90,82 +115,92 @@ const SubscriptionPage = () => {
       
       <div className="subscription-content">
         <div className="subscription-card">
-          <div className="subscription-card-accent"></div>
-          
           <div className="subscription-header">
             <div className="subscription-logo">
               <FaShieldAlt className="subscription-logo-icon" />
             </div>
-            <h1 className="subscription-title">Premium Membership</h1>
+            <h1 className="subscription-title">Start Your Premium Journey</h1>
             <p className="subscription-subtitle">
-              {pendingRegistration?.registrationType === 'renewal' 
-                ? 'Renew your premium access' 
-                : 'Subscribe to unlock all features'}
+              Unlock all features with a CertGames subscription
             </p>
-          </div>
-          
-          <div className="subscription-price-container">
-            <span className="subscription-price">$9.99</span>
-            <span className="subscription-period">/month</span>
-          </div>
-          
-          <div className="subscription-features">
-            <h3>Premium Features</h3>
-            <ul className="subscription-features-list">
-              <li>
-                <FaCheck className="subscription-check" />
-                <span>Unlimited access to all practice tests</span>
-              </li>
-              <li>
-                <FaCheck className="subscription-check" />
-                <span>Advanced analytics and progress tracking</span>
-              </li>
-              <li>
-                <FaCheck className="subscription-check" />
-                <span>Personalized study recommendations</span>
-              </li>
-              <li>
-                <FaCheck className="subscription-check" />
-                <span>Additional practice materials</span>
-              </li>
-              <li>
-                <FaCheck className="subscription-check" />
-                <span>Access across web and mobile</span>
-              </li>
-            </ul>
           </div>
           
           {error && (
             <div className="subscription-error">
-              <p>{error}</p>
+              <FaTimesCircle />
+              <span>{error}</span>
             </div>
           )}
           
-          <button 
-            className="subscription-button"
-            onClick={handleSubscribe}
-            disabled={loading || !pendingRegistration}
-          >
-            {loading ? (
-              <span className="subscription-button-loading">
-                <FaSpinner className="subscription-spinner" />
-                <span>Processing...</span>
-              </span>
-            ) : (
-              <span className="subscription-button-text">
-                {pendingRegistration?.registrationType === 'renewal' 
-                  ? 'Renew Subscription' 
-                  : 'Subscribe Now'}
-              </span>
-            )}
-          </button>
-          
-          <div className="subscription-cancel">
-            <p>Cancel anytime. No hidden fees.</p>
+          <div className="subscription-pricing">
+            <div className="subscription-price">
+              <span className="subscription-price-currency">$</span>
+              <span className="subscription-price-value">9.99</span>
+              <span className="subscription-price-period">/month</span>
+            </div>
+            <div className="subscription-price-description">
+              <p>Billed monthly. Cancel anytime.</p>
+              <p>Access on all devices with a single account</p>
+            </div>
           </div>
           
-          <div className="subscription-secure">
-            <p>Secure payment powered by Stripe</p>
+          <div className="subscription-benefits">
+            <h3 className="subscription-benefits-title">What You'll Get</h3>
+            <ul className="subscription-benefits-list">
+              {benefits.map((benefit, index) => (
+                <li key={index} className="subscription-benefit-item">
+                  {benefit.icon}
+                  <div className="subscription-benefit-text">
+                    <h4>{benefit.title}</h4>
+                    <p>{benefit.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          
+          <div className="subscription-security">
+            <FaLock className="subscription-security-icon" />
+            <p>Secure payments powered by Stripe. Your payment information is never stored on our servers.</p>
+          </div>
+          
+          <div className="subscription-actions">
+            <button
+              className="subscription-back-button"
+              onClick={handleGoBack}
+              disabled={loading || redirecting}
+            >
+              <FaArrowLeft className="subscription-button-icon" />
+              <span>Go Back</span>
+            </button>
+            
+            <button
+              className="subscription-button"
+              onClick={handleSubscribe}
+              disabled={loading || redirecting}
+            >
+              {loading || redirecting ? (
+                <span className="subscription-button-loading">
+                  <FaSpinner className="subscription-spinner" />
+                  {redirecting ? 'Redirecting...' : 'Processing...'}
+                </span>
+              ) : (
+                <span className="subscription-button-text">
+                  <FaCreditCard className="subscription-button-icon" />
+                  <span>Subscribe Now</span>
+                  <FaArrowRight className="subscription-button-icon-right" />
+                </span>
+              )}
+            </button>
+          </div>
+          
+          <div className="subscription-note">
+            <FaInfoCircle className="subscription-note-icon" />
+            <p>
+              By subscribing, you agree to our <a href="/terms">Terms of Service</a> and 
+              <a href="/privacy">Privacy Policy</a>. You can cancel your subscription at any time
+              from your profile page.
+            </p>
           </div>
         </div>
       </div>

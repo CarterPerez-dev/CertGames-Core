@@ -1,0 +1,102 @@
+/* src/components/pages/subscription/StripeCheckout.css */
+.stripe-checkout-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stripe-checkout-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.stripe-checkout-spinner {
+  font-size: 3rem;
+  color: var(--accent-color);
+  animation: spin 1.5s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.stripe-checkout-loading p {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+.stripe-checkout-security {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--bg-highlight);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.stripe-checkout-security-icon {
+  color: var(--accent-color);
+}
+
+.stripe-checkout-security span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.stripe-checkout-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.stripe-checkout-error-icon {
+  font-size: 3rem;
+  color: var(--error-color);
+  margin-bottom: 1.5rem;
+}
+
+.stripe-checkout-error p {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+.stripe-checkout-retry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.stripe-checkout-retry:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .stripe-checkout-container {
+    padding: 1.5rem;
+  }
+}
