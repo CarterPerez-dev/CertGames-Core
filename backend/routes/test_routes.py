@@ -221,33 +221,54 @@ def get_user(user_id):
 def register_user():
     """
     Registration: /api/user
-    Expects {username, email, password, confirmPassword} in JSON
-    Calls create_user, returns {message, user_id} or error.
+    Now only stores registration data temporarily, without creating a user
     """
     user_data = request.json or {}
     try:
-        user_data.setdefault("achievement_counters", {
-            "total_tests_completed": 0,
-            "perfect_tests_count": 0,
-            "perfect_tests_by_category": {},
-            "highest_score_ever": 0.0,
-            "lowest_score_ever": 100.0,
-            "total_questions_answered": 0,
+        # Validate the input data
+        username = user_data.get("username")
+        email = user_data.get("email")
+        password = user_data.get("password")
+        
+        if not username or not email or not password:
+            return jsonify({"error": "Username, email, and password are required"}), 400
+            
+        # Check if username or email already exists
+        existing_user = mainusers_collection.find_one({
+            "$or": [
+                {"username": username},
+                {"email": email}
+            ]
         })
-
+        
+        if existing_user:
+            return jsonify({"error": "Username or email is already taken"}), 400
+            
+        # Store in temporary registrations collection
+        temp_registration = {
+            "username": username,
+            "email": email,
+            "password": hash_password(password) if "password" in user_data else None,
+            "registration_type": "standard",
+            "created_at": datetime.utcnow(),
+            # Store any other relevant registration data but DON'T create the user yet
+        }
+        
         start_db = time.time()
-        user_id = create_user(user_data)
+        result = db.temp_registrations.insert_one(temp_registration)
         duration = time.time() - start_db
         if not hasattr(g, 'db_time_accumulator'):
             g.db_time_accumulator = 0.0
         g.db_time_accumulator += duration
 
-        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
+        return jsonify({
+            "message": "Registration data saved",
+            "temp_id": str(result.inserted_id)
+        }), 201
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
-
 @api_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
@@ -1645,3 +1666,46 @@ def get_public_leaderboard():
         "cached_at": public_leaderboard_cache_timestamp,
         "cache_duration_ms": PUBLIC_LEADERBOARD_CACHE_DURATION_MS
     }), 200
+
+
+
+@api_bp.route('/validate-registration', methods=['POST'])
+def validate_registration():
+    """
+    Validates registration data without creating a user account
+    """
+    data = request.json or {}
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
+    
+    if not username or not email or not password:
+        return jsonify({"isValid": False, "error": "All fields are required"}), 400
+    
+    # Validate username
+    valid_username, username_errors = validate_username(username)
+    if not valid_username:
+        return jsonify({"isValid": False, "error": username_errors[0]}), 400
+    
+    # Validate email
+    valid_email, email_errors = validate_email(email)
+    if not valid_email:
+        return jsonify({"isValid": False, "error": email_errors[0]}), 400
+    
+    # Validate password
+    valid_password, password_errors = validate_password(password, username, email)
+    if not valid_password:
+        return jsonify({"isValid": False, "error": password_errors[0]}), 400
+    
+    # Check if username or email already exists
+    existing_user = mainusers_collection.find_one({
+        "$or": [
+            {"username": username},
+            {"email": email}
+        ]
+    })
+    
+    if existing_user:
+        return jsonify({"isValid": False, "error": "Username or email is already taken"}), 400
+    
+    return jsonify({"isValid": True}), 200
