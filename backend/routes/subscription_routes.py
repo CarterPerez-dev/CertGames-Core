@@ -33,11 +33,6 @@ def create_checkout_session():
     if not user_id and not registration_data:
         return jsonify({'error': 'Either userId or registrationData must be provided'}), 400
     
-    # Store registration data in session if it's a new user
-    if registration_data:
-        session['temp_registration_data'] = registration_data
-        session['is_oauth_flow'] = data.get('isOauthFlow', False)
-    
     try:
         # Create Stripe checkout session
         checkout_session = stripe.checkout.Session.create(
@@ -58,6 +53,20 @@ def create_checkout_session():
                 'is_oauth_flow': 'true' if data.get('isOauthFlow') else 'false'
             }
         )
+        
+        # Store registration data in session if it's a new user
+        if registration_data:
+            session['temp_registration_data'] = registration_data
+            session['is_oauth_flow'] = data.get('isOauthFlow', False)
+            
+            # Also store in database as backup (sessions can expire)
+            db.tempRegistrations.insert_one({
+                'checkout_session_id': checkout_session.id,
+                'registration_data': registration_data,
+                'is_oauth_flow': data.get('isOauthFlow', False),
+                'created_at': datetime.utcnow(),
+                'expires_at': datetime.utcnow() + timedelta(hours=24)  # Expire after 24 hours
+            })
         
         # Store checkout session ID in flask session
         session['checkout_session_id'] = checkout_session.id
@@ -438,59 +447,4 @@ def handle_apple_subscription():
 
 
 
-@subscription_bp.route('/create-checkout-session', methods=['POST'])
-def create_checkout_session():
-    """
-    Create a Stripe Checkout session for a new subscription
-    """
-    data = request.json
-    user_id = data.get('userId')
-    registration_data = data.get('registrationData')  # For new user registrations
-    
-    # Validate inputs
-    if not user_id and not registration_data:
-        return jsonify({'error': 'Either userId or registrationData must be provided'}), 400
-    
-    try:
-        # Create Stripe checkout session
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[
-                {
-                    'price': stripe_price_id,
-                    'quantity': 1,
-                },
-            ],
-            mode='subscription',
-            success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}&user_id={user_id or 'new'}",
-            cancel_url=f"{cancel_url}?user_id={user_id or 'new'}",
-            client_reference_id=user_id,  # To identify the user in webhook events
-            metadata={
-                'user_id': user_id or 'new_registration',
-                'is_new_user': 'true' if registration_data else 'false',
-                'is_oauth_flow': 'true' if data.get('isOauthFlow') else 'false'
-            }
-        )
-        
-        # Store registration data in session if it's a new user
-        if registration_data:
-            session['temp_registration_data'] = registration_data
-            session['is_oauth_flow'] = data.get('isOauthFlow', False)
-            
-            # Also store in database as backup (sessions can expire)
-            db.tempRegistrations.insert_one({
-                'checkout_session_id': checkout_session.id,
-                'registration_data': registration_data,
-                'is_oauth_flow': data.get('isOauthFlow', False),
-                'created_at': datetime.utcnow(),
-                'expires_at': datetime.utcnow() + timedelta(hours=24)  # Expire after 24 hours
-            })
-        
-        # Store checkout session ID in flask session
-        session['checkout_session_id'] = checkout_session.id
-        
-        return jsonify({'sessionId': checkout_session.id, 'url': checkout_session.url})
-    
-    except Exception as e:
-        current_app.logger.error(f"Error creating checkout session: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+
