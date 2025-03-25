@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { checkSubscription } from './pages/store/userSlice';
 
 const ProtectedRoute = ({ children }) => {
-  const { userId, subscriptionActive, status } = useSelector((state) => state.user);
+  const { userId, subscriptionActive, subscriptionStatus, status } = useSelector((state) => state.user);
   const [isChecking, setIsChecking] = useState(true);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -43,9 +43,27 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
   
+  // Handle different subscription states
   if (!subscriptionActive) {
-    // Subscription inactive, redirect to subscription page
-    return <Navigate to="/subscription" state={{ userId, from: location }} replace />;
+    // Check if subscription is canceled but still has access
+    if (subscriptionStatus === 'canceling') {
+      // Show children with a renewal banner instead of redirecting
+      return (
+        <>
+          <div className="subscription-banner">
+            <div className="subscription-banner-content">
+              <p>Your subscription will end at the end of your current billing period. <a href="/subscription">Renew now</a> to maintain access.</p>
+            </div>
+          </div>
+          {children}
+        </>
+      );
+    }
+    
+    // No active subscription, redirect to subscription page
+    // Add renewal=true parameter if subscription was previously canceled
+    const renewalMode = subscriptionStatus === 'canceled' ? '?renewal=true' : '';
+    return <Navigate to={`/subscription${renewalMode}`} state={{ userId, from: location }} replace />;
   }
   
   // User is logged in and has active subscription
