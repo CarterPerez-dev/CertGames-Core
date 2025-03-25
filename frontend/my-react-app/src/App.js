@@ -91,42 +91,50 @@ function App() {
   const { userId } = useSelector((state) => state.user);
   const location = useLocation();
 
-    useEffect(() => {
-      if (!userId) return;
-      
-      // Only run subscription check periodically, not on every route change
-      const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
-      
-      const checkSubscription = async () => {
-        try {
-          const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
+  // CRITICAL FIX: Add this back to fetch user data when userId is available
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  }, [dispatch, userId]);
+
+  // Subscription check effect - only run periodically
+  useEffect(() => {
+    if (!userId) return;
+    
+    // Only run subscription check periodically, not on every route change
+    const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
+    
+    const checkSubscription = async () => {
+      try {
+        const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
+        
+        if (response.ok) {
+          const data = await response.json();
           
-          if (response.ok) {
-            const data = await response.json();
-            
-            // If subscription is no longer active, log the user out
-            if (!data.subscriptionActive) {
-              console.log('Subscription no longer active, logging out');
-              dispatch({ type: 'user/logout' });
-              // Redirect to login page
-              window.location.href = '/login?reason=subscription_ended';
-            }
+          // If subscription is no longer active, log the user out
+          if (!data.subscriptionActive) {
+            console.log('Subscription no longer active, logging out');
+            dispatch({ type: 'user/logout' });
+            // Redirect to login page
+            window.location.href = '/login?reason=subscription_ended';
           }
-        } catch (error) {
-          console.error('Error checking subscription status:', error);
         }
-      };
-      
-      // Initial check when component mounts
-      checkSubscription();
-      
-      // Set up interval for periodic checks
-      const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
-      
-      return () => {
-        clearInterval(intervalId);
-      };
-    }, [dispatch, userId]);
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+      }
+    };
+    
+    // Initial check when component mounts
+    checkSubscription();
+    
+    // Set up interval for periodic checks
+    const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
+    
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch, userId]);
     
     
   return (
