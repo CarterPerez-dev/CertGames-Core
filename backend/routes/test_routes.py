@@ -221,100 +221,111 @@ def get_user(user_id):
 def register_user():
     """
     Registration: /api/user
-    Now only stores registration data temporarily, without creating a user
+    Expects {username, email, password, confirmPassword} in JSON
+    Calls create_user, returns {message, user_id} or error.
     """
     user_data = request.json or {}
     try:
-        # Validate the input data
-        username = user_data.get("username")
-        email = user_data.get("email")
-        password = user_data.get("password")
-        
-        if not username or not email or not password:
-            return jsonify({"error": "Username, email, and password are required"}), 400
-            
-        # Check if username or email already exists
-        existing_user = mainusers_collection.find_one({
-            "$or": [
-                {"username": username},
-                {"email": email}
-            ]
+        user_data.setdefault("achievement_counters", {
+            "total_tests_completed": 0,
+            "perfect_tests_count": 0,
+            "perfect_tests_by_category": {},
+            "highest_score_ever": 0.0,
+            "lowest_score_ever": 100.0,
+            "total_questions_answered": 0,
         })
-        
-        if existing_user:
-            return jsonify({"error": "Username or email is already taken"}), 400
-            
-        # Store in temporary registrations collection
-        temp_registration = {
-            "username": username,
-            "email": email,
-            "password": hash_password(password) if "password" in user_data else None,
-            "registration_type": "standard",
-            "created_at": datetime.utcnow(),
-            # Store any other relevant registration data but DON'T create the user yet
-        }
-        
+
         start_db = time.time()
-        result = db.temp_registrations.insert_one(temp_registration)
+        user_id = create_user(user_data)
         duration = time.time() - start_db
         if not hasattr(g, 'db_time_accumulator'):
             g.db_time_accumulator = 0.0
         g.db_time_accumulator += duration
 
-        return jsonify({
-            "message": "Registration data saved",
-            "temp_id": str(result.inserted_id)
-        }), 201
+        return jsonify({"message": "User created", "user_id": str(user_id)}), 201
     except ValueError as ve:
         return jsonify({"error": str(ve)}), 400
     except Exception as e:
         return jsonify({"error": "Internal server error", "details": str(e)}), 500
+
 @api_bp.route('/login', methods=['POST'])
 def login():
     data = request.json
     if not data:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "No JSON data provided"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"error": "No JSON data provided"}), 400
 
     identifier = data.get("usernameOrEmail")
     password = data.get("password")
     if not identifier or not password:
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Missing username/password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
+
         return jsonify({"error": "Username (or Email) and password are required"}), 400
 
-    # First, get the user
+    start_db = time.time()
     user = get_user_by_identifier(identifier)
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
-    # Check if user exists and password is correct
+    # Using check_password instead of direct comparison
     if not user or not check_password(password, user.get("password", "")):
-        return jsonify({"error": "Invalid username or password"}), 401
-    
-    # Now check subscription status - after verifying credentials
-    subscription_active = user.get("subscriptionActive", False)
-    subscription_status = user.get("subscriptionStatus")
-    
-    if not subscription_active or subscription_status in ["canceled", "past_due", "unpaid"]:
-        # Subscription inactive, but still return user info with a flag
-        return jsonify({
-            "user_id": str(user["_id"]),
-            "username": user["username"],
-            "email": user.get("email", ""),
-            "subscriptionActive": False,
-            "subscriptionStatus": subscription_status,
-            "requiresSubscription": True
-        }), 200
+        start_db = time.time()
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": None,
+            "ip": request.remote_addr or "unknown",
+            "success": False,
+            "reason": "Invalid username or password"
+        })
+        duration = time.time() - start_db
+        if not hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator = 0.0
+        g.db_time_accumulator += duration
 
-    # Regular login flow for active subscribers
+        return jsonify({"error": "Invalid username or password"}), 401
+
     session['userId'] = str(user["_id"])
 
-    # Log the successful login
+    start_db = time.time()
     db.auditLogs.insert_one({
         "timestamp": datetime.utcnow(),
         "userId": user["_id"],
         "ip": request.remote_addr or "unknown",
         "success": True
     })
+    duration = time.time() - start_db
+    if not hasattr(g, 'db_time_accumulator'):
+        g.db_time_accumulator = 0.0
+    g.db_time_accumulator += duration
 
     user = serialize_user(user)
 
+    # Important security best practice: don't return password in response
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -1617,46 +1628,3 @@ def get_public_leaderboard():
         "cached_at": public_leaderboard_cache_timestamp,
         "cache_duration_ms": PUBLIC_LEADERBOARD_CACHE_DURATION_MS
     }), 200
-
-
-
-@api_bp.route('/validate-registration', methods=['POST'])
-def validate_registration():
-    """
-    Validates registration data without creating a user account
-    """
-    data = request.json or {}
-    username = data.get('username')
-    email = data.get('email')
-    password = data.get('password')
-    
-    if not username or not email or not password:
-        return jsonify({"isValid": False, "error": "All fields are required"}), 400
-    
-    # Validate username
-    valid_username, username_errors = validate_username(username)
-    if not valid_username:
-        return jsonify({"isValid": False, "error": username_errors[0]}), 400
-    
-    # Validate email
-    valid_email, email_errors = validate_email(email)
-    if not valid_email:
-        return jsonify({"isValid": False, "error": email_errors[0]}), 400
-    
-    # Validate password
-    valid_password, password_errors = validate_password(password, username, email)
-    if not valid_password:
-        return jsonify({"isValid": False, "error": password_errors[0]}), 400
-    
-    # Check if username or email already exists
-    existing_user = mainusers_collection.find_one({
-        "$or": [
-            {"username": username},
-            {"email": email}
-        ]
-    })
-    
-    if existing_user:
-        return jsonify({"isValid": False, "error": "Username or email is already taken"}), 400
-    
-    return jsonify({"isValid": True}), 200

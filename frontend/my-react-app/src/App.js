@@ -1,9 +1,9 @@
 // src/App.js
-import React, { useEffect, useState } from 'react';
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserData, logout } from './components/pages/store/userSlice';
-import axios from 'axios';
+import { fetchUserData } from './components/pages/store/userSlice';
+
 // Import ToastContainer from react-toastify
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,7 +35,6 @@ import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar/Sidebar';
 
-// Your components imports (Xploitcraft, etc.)
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
 import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
@@ -51,7 +50,7 @@ import LeaderboardPage from './components/pages/store/LeaderboardPage';
 import AchievementPage from './components/pages/store/AchievementPage';
 import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
 
-// Practice test pages
+// Unique Test Pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
 import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
 import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
@@ -89,105 +88,26 @@ function HomeOrProfile() {
 
 function App() {
   const dispatch = useDispatch();
-  const { userId, subscriptionActive } = useSelector((state) => state.user);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isCheckingSubscription, setIsCheckingSubscription] = useState(false);
+  const { userId } = useSelector((state) => state.user);
 
-  // Initialize theme
+
   useEffect(() => {
     const initializeTheme = () => {
       const savedTheme = localStorage.getItem('selectedTheme') || 'default';
       document.documentElement.setAttribute('data-theme', savedTheme);
     };
 
+
     initializeTheme();
   }, []); 
   
-  // Check user authentication and fetch data
+  
   useEffect(() => {
     if (userId) {
-      // Fetch user data
-      dispatch(fetchUserData(userId))
-        .catch((error) => {
-          console.error('Error fetching user data:', error);
-        });
+      dispatch(fetchUserData(userId));
     }
   }, [dispatch, userId]);
-  
-  // Check subscription status
-  useEffect(() => {
-    const checkSubscriptionStatus = async () => {
-      if (userId && !isCheckingSubscription) {
-        setIsCheckingSubscription(true);
-        
-        try {
-          // Add path check to prevent subscription checks on certain pages
-          const isSubscriptionRelatedPage = [
-            '/subscription', 
-            '/subscription/success', 
-            '/subscription/cancel',
-            '/create-username',
-            '/oauth/success'
-          ].includes(location.pathname);
-          
-          // Check if we recently checked (avoid rapid re-checks)
-          const lastCheck = localStorage.getItem('lastSubscriptionCheck');
-          const checkThrottleMs = 60000; // 1 minute
-          const shouldSkipCheck = isSubscriptionRelatedPage || 
-            (lastCheck && (Date.now() - parseInt(lastCheck)) < checkThrottleMs);
-          
-          if (!shouldSkipCheck) {
-            // Set last check timestamp
-            localStorage.setItem('lastSubscriptionCheck', Date.now().toString());
-            
-            // Check with API directly
-            try {
-              const response = await axios.get(`/api/subscription/check-status?userId=${userId}`);
-              
-              if (response.data && !response.data.subscriptionActive) {
-                console.log('Subscription inactive, redirecting to subscription page');
-                
-                // Store userId for renewal
-                localStorage.setItem('tempUserId', userId);
-                
-                // Store renewal info
-                localStorage.setItem('pendingRegistration', JSON.stringify({
-                  userId: userId,
-                  registrationType: 'renewal'
-                }));
-                
-                // Log out
-                dispatch(logout());
-                
-                // Navigate to subscription page
-                navigate('/subscription', { 
-                  state: { renewSubscription: true, userId }
-                });
-              }
-            } catch (err) {
-              console.error('Error checking subscription status:', err);
-            }
-          }
-        } catch (error) {
-          console.error('Error in subscription check flow:', error);
-        } finally {
-          setIsCheckingSubscription(false);
-        }
-      }
-    };
-    
-    // Check on initial load, but with a delay to prevent immediate redirect loops
-    const initialTimer = setTimeout(checkSubscriptionStatus, 5000);
-    
-    // Normal interval check hourly
-    const interval = setInterval(checkSubscriptionStatus, 3600000); // 1 hour
-    
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(interval);
-    };
-  }, [userId, dispatch, navigate, location.pathname, isCheckingSubscription]);
+
   return (
     <div className="App">
       {userId && <Sidebar />}

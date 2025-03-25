@@ -5,7 +5,7 @@ import pytz
 import redis
 import stripe  
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app, send_from_directory, session, make_response
+from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -93,7 +93,7 @@ app.register_blueprint(password_reset_bp, url_prefix='/password-reset')
 app.register_blueprint(oauth_bp, url_prefix='/oauth')
 app.register_blueprint(public_leaderboard_bp, url_prefix='/public-leaderboard')
 app.register_blueprint(contact_bp, url_prefix='/contact-form')
-app.register_blueprint(subscription_bp, url_prefix='/subscription')
+app.register_blueprint(subscription_bp, url_prefix+'/subscription')
 
 
 @app.route('/avatars/<path:filename>')
@@ -138,28 +138,6 @@ def log_request_end(response):
     except Exception as e:
         logger.warning(f"Failed to insert perfSample: {e}")
     return response
-
-@app.after_request
-def add_cors_headers(response):
-    # Allow requests from any origin
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    # Allow the content type header
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    # Allow all methods
-    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
-    return response
-
-
-
-@app.route('/api/subscription/verify-session', methods=['OPTIONS'])
-def handle_preflight():
-    response = make_response()
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'POST')
-    return response
-
-
 
 ########################################################################
 # Socket.IO event handlers
