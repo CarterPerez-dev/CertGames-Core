@@ -1,5 +1,5 @@
 // src/components/pages/subscription/SubscriptionSuccess.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCurrentUserId, fetchUserData } from '../store/userSlice';
@@ -14,10 +14,14 @@ const SubscriptionSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [pendingRegistration, setPendingRegistration] = useState(null);
+  const verificationAttempted = useRef(false);
   
   useEffect(() => {
-    // Add this verification flag in localStorage to prevent duplicate requests
-    const alreadyVerified = localStorage.getItem('stripeSessionVerified');
+    // Only run this once per component mount
+    if (verificationAttempted.current) {
+      return;
+    }
+  
     const searchParams = new URLSearchParams(location.search);
     const sessionId = searchParams.get('session_id');
     
@@ -31,16 +35,22 @@ const SubscriptionSuccess = () => {
       }
     }
     
-    if (sessionId && !alreadyVerified) {
-      // Set flag immediately to prevent concurrent requests
-      localStorage.setItem('stripeSessionVerified', sessionId);
-      
-      console.log('Session ID received:', sessionId); // Debug log
-      
+    if (!sessionId) {
+      setError('No session ID found in the URL');
+      setLoading(false);
+      return;
+    }
+    
+    // Mark that we've attempted verification
+    verificationAttempted.current = true;
+    console.log('Session ID received:', sessionId);
+    
+    // Add a delay before verification to avoid race conditions
+    const timeoutId = setTimeout(() => {
       // Verify the session with the backend
       axios.post('/api/subscription/verify-session', { sessionId })
         .then(response => {
-          console.log('Verification response:', response.data); // Debug log
+          console.log('Verification response:', response.data);
           
           if (response.data.success) {
             const userId = response.data.userId;
@@ -61,52 +71,39 @@ const SubscriptionSuccess = () => {
             setLoading(false);
             
             // Determine where to navigate based on registration type
-            if (pendingRegistration) {
-              if (pendingRegistration.registrationType === 'oauth' && needsUsername) {
+            if (regData) {
+              const regDataObj = JSON.parse(regData);
+              if (regDataObj.registrationType === 'oauth' && needsUsername) {
                 // Delay before redirecting to username creation
                 setTimeout(() => {
                   navigate('/create-username', { 
-                    state: { userId, provider: pendingRegistration.provider }
+                    state: { userId, provider: regDataObj.provider }
                   });
                 }, 3000);
-              } else if (pendingRegistration.registrationType === 'renewal') {
+              } else if (regDataObj.registrationType === 'renewal') {
                 // User renewed subscription, go to profile
                 setTimeout(() => {
                   navigate('/profile');
                 }, 3000);
-              } else {
-                // For standard registration, we'll stay on the success page with a login button
               }
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
-            localStorage.removeItem('stripeSessionVerified'); // Remove flag on error to allow retry
             setLoading(false);
           }
         })
         .catch(err => {
           console.error('Error verifying session:', err);
-          localStorage.removeItem('stripeSessionVerified'); // Remove flag on error to allow retry
-          setError('An error occurred while verifying your subscription. Please contact support if the issue persists.');
+          setError('Error connecting to the server. Please try refreshing the page or contact support if the issue persists.');
           setLoading(false);
         });
-    } else if (alreadyVerified === sessionId) {
-      // Already verified this session, just get user data
-      if (pendingRegistration && pendingRegistration.userId) {
-        dispatch(fetchUserData(pendingRegistration.userId));
-      }
-      setLoading(false);
-    } else {
-      setError('No session ID found in the URL');
-      setLoading(false);
-    }
+    }, 1000); // 1 second delay
     
-    // Cleanup function to remove verification flag when component unmounts
+    // Cleanup function
     return () => {
-      // Only clean up if we're navigating away successfully
-      if (!error) localStorage.removeItem('stripeSessionVerified');
+      clearTimeout(timeoutId);
     };
-  }, [location, dispatch, navigate, pendingRegistration, error]);
+  }, [location.search, dispatch, navigate]); // Remove error and pendingRegistration from dependencies
   
   return (
     <div className="subscription-success-container">
