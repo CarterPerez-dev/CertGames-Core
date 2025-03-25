@@ -281,12 +281,13 @@ def update_subscription_status(subscription):
             current_app.logger.error(f"No user found with Stripe customer ID: {customer_id}")
             return
         
-        subscription_active = status == 'active' or status == 'trialing'
+        subscription_active = (status == 'active' or status == 'trialing' or 
+                          (status == 'active' and subscription.get('cancel_at_period_end') == True))
         
         # Update the user's subscription status
         update_user_subscription(str(user['_id']), {
             'subscriptionActive': subscription_active,
-            'subscriptionStatus': status,
+            'subscriptionStatus': 'canceling' if subscription.get('cancel_at_period_end') else status,
             'stripeSubscriptionId': subscription_id,
         })
         
@@ -318,11 +319,12 @@ def cancel_subscription(subscription):
             return
         
         # Update the user's subscription status
-        update_user_subscription(str(user['_id']), {
-            'subscriptionActive': False,
-            'subscriptionStatus': 'canceled',
+        update_user_subscription(user_id, {
+            'subscriptionStatus': 'canceling',
+            'subscriptionCanceledAt': datetime.utcnow(),
+            'subscriptionEndDate': datetime.fromtimestamp(stripe.Subscription.retrieve(subscription_id).current_period_end)
         })
-        
+
         # Log this subscription event
         db.subscriptionEvents.insert_one({
             'userId': user['_id'],

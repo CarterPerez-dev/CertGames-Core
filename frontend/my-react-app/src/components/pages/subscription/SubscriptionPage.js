@@ -1,6 +1,6 @@
 // src/components/pages/subscription/SubscriptionPage.js
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import {
@@ -12,7 +12,8 @@ import {
   FaInfoCircle,
   FaSpinner,
   FaArrowLeft,
-  FaArrowRight
+  FaArrowRight,
+  FaRedo
 } from 'react-icons/fa';
 import './SubscriptionPage.css';
 
@@ -21,6 +22,8 @@ const SubscriptionPage = () => {
   const [error, setError] = useState('');
   const [stripeConfig, setStripeConfig] = useState({});
   const [redirecting, setRedirecting] = useState(false);
+  const [searchParams] = useSearchParams();
+  const isRenewal = searchParams.get('renewal') === 'true';
   
   const location = useLocation();
   const navigate = useNavigate();
@@ -119,9 +122,13 @@ const SubscriptionPage = () => {
             <div className="subscription-logo">
               <FaShieldAlt className="subscription-logo-icon" />
             </div>
-            <h1 className="subscription-title">Start Your Premium Journey</h1>
+            <h1 className="subscription-title">
+              {isRenewal ? 'Renew Your Premium Access' : 'Start Your Premium Journey'}
+            </h1>
             <p className="subscription-subtitle">
-              Unlock all features with a CertGames subscription
+              {isRenewal 
+                ? 'Reactivate your subscription to continue your learning path' 
+                : 'Unlock all features with a CertGames subscription'}
             </p>
           </div>
           
@@ -144,8 +151,17 @@ const SubscriptionPage = () => {
             </div>
           </div>
           
+          {isRenewal && (
+            <div className="subscription-renewal-message">
+              <FaInfoCircle className="subscription-renewal-icon" />
+              <p>Your previous subscription has been canceled or expired. Renewing will give you immediate access to all premium content.</p>
+            </div>
+          )}
+          
           <div className="subscription-benefits">
-            <h3 className="subscription-benefits-title">What You'll Get</h3>
+            <h3 className="subscription-benefits-title">
+              {isRenewal ? 'What You\'ll Get Back' : 'What You\'ll Get'}
+            </h3>
             <ul className="subscription-benefits-list">
               {benefits.map((benefit, index) => (
                 <li key={index} className="subscription-benefit-item">
@@ -187,8 +203,10 @@ const SubscriptionPage = () => {
               ) : (
                 <span className="subscription-button-text">
                   <FaCreditCard className="subscription-button-icon" />
-                  <span>Subscribe Now</span>
-                  <FaArrowRight className="subscription-button-icon-right" />
+                  <span>{isRenewal ? 'Renew Subscription' : 'Subscribe Now'}</span>
+                  {isRenewal ? 
+                    <FaRedo className="subscription-button-icon-right" /> : 
+                    <FaArrowRight className="subscription-button-icon-right" />}
                 </span>
               )}
             </button>
