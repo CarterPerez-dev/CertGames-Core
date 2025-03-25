@@ -4,7 +4,7 @@ import json
 from flask import Blueprint, request, jsonify, session, redirect, current_app
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
-from models.test import get_user_by_id, update_user_subscription
+from models.test import get_user_by_id, update_user_subscription, create_user  # Add create_user here
 from mongodb.database import db
 
 subscription_bp = Blueprint('subscription', __name__)
@@ -152,7 +152,11 @@ def webhook():
     
     # Handle specific event types
     if event['type'] == 'checkout.session.completed':
-        fulfill_subscription(event['data']['object'])
+        try:
+            fulfill_subscription(event['data']['object'])
+        except Exception as e:
+            current_app.logger.error(f"Error in fulfill_subscription: {str(e)}")
+            # Continue processing to return 200 to Stripe
     elif event['type'] == 'customer.subscription.updated':
         update_subscription_status(event['data']['object'])
     elif event['type'] == 'customer.subscription.deleted':
@@ -198,11 +202,14 @@ def fulfill_subscription(session):
             })
         
         # For new users, create the account using the stored registration data
-        elif is_new_user and session.id:
+        elif is_new_user:
             # Retrieve the registration data from Flask session or database
             temp_registration_data = None
             
             # Check if we have registration data in session
+            current_app.logger.info(f"Checking for registration data for session ID {session.id}")
+            
+            # First try to get from Flask session
             if 'temp_registration_data' in session:
                 temp_registration_data = session.get('temp_registration_data')
                 current_app.logger.info(f"Retrieved registration data from session for session ID {session.id}")
@@ -224,6 +231,9 @@ def fulfill_subscription(session):
                 temp_registration_data['subscriptionStartDate'] = datetime.utcnow()
                 
                 try:
+                    # Log what we're about to do
+                    current_app.logger.info(f"Creating new user with data: {temp_registration_data}")
+                    
                     # Create the user
                     user_id = create_user(temp_registration_data)
                     current_app.logger.info(f"Created new user {user_id} after subscription payment")
@@ -247,11 +257,16 @@ def fulfill_subscription(session):
                     
                 except Exception as create_err:
                     current_app.logger.error(f"Error creating user: {str(create_err)}")
+                    raise  # Re-raise to be caught by the outer try/except
             else:
                 current_app.logger.error(f"No registration data found for session ID {session.id}")
+                # Add more debug info
+                current_app.logger.error(f"Session contents: {dict(session)}")
+                current_app.logger.error(f"Database check: {db.tempRegistrations.find_one({'checkout_session_id': session.id})}")
         
     except Exception as e:
         current_app.logger.error(f"Error fulfilling subscription: {str(e)}")
+        raise  # Re-raise to be caught by the webhook handler
 
 def update_subscription_status(subscription):
     """Update a user's subscription status based on Stripe subscription updates"""
@@ -398,6 +413,26 @@ def cancel_user_subscription():
         current_app.logger.error(f"Error canceling subscription: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@subscription_bp.route('/check-flow', methods=['GET'])
+def check_oauth_flow():
+    """Check if current session is in OAuth flow"""
+    is_oauth_flow = session.get('is_oauth_flow', False)
+    return jsonify({"isOauthFlow": is_oauth_flow})
+
+@subscription_bp.route('/clear-temp-data', methods=['POST'])
+def clear_temp_data():
+    """Clear temporary registration data from session"""
+    if 'temp_registration_data' in session:
+        session.pop('temp_registration_data')
+    if 'is_oauth_flow' in session:
+        session.pop('is_oauth_flow')
+    if 'checkout_session_id' in session:
+        checkout_session_id = session.pop('checkout_session_id')
+        # Also remove from database
+        db.tempRegistrations.delete_one({'checkout_session_id': checkout_session_id})
+    
+    return jsonify({'success': True})
+
 @subscription_bp.route('/apple-subscription', methods=['POST'])
 def handle_apple_subscription():
     """
@@ -444,7 +479,3 @@ def handle_apple_subscription():
     except Exception as e:
         current_app.logger.error(f"Error verifying Apple subscription: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
-
-
-
