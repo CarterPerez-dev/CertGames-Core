@@ -33,8 +33,8 @@ def create_checkout_session():
                     'quantity': 1,
                 }],
                 mode='subscription',
-                success_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/cancel',
+                success_url=os.getenv('FRONTEND_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=os.getenv('FRONTEND_URL') + '/subscription/cancel',
                 customer_email=email,  # Pre-fill the email field
                 metadata=metadata  # Store registration data for later
             )
@@ -51,8 +51,8 @@ def create_checkout_session():
                     'quantity': 1,
                 }],
                 mode='subscription',
-                success_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=os.getenv('FRONTEND_DEV_URL') + '/subscription/cancel',
+                success_url=os.getenv('FRONTEND_URL') + '/subscription/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=os.getenv('FRONTEND_URL') + '/subscription/cancel',
                 client_reference_id=user_id,
                 metadata=metadata
             )
