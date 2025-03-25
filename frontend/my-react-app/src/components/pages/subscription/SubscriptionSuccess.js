@@ -1,4 +1,4 @@
-// frontend/my-react-app/src/components/pages/subscription/SubscriptionSuccess.js
+// src/components/pages/subscription/SubscriptionSuccess.js
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -23,13 +23,21 @@ const SubscriptionSuccess = () => {
     // Retrieve pending registration data
     const regData = localStorage.getItem('pendingRegistration');
     if (regData) {
-      setPendingRegistration(JSON.parse(regData));
+      try {
+        setPendingRegistration(JSON.parse(regData));
+      } catch (e) {
+        console.error('Failed to parse pendingRegistration:', e);
+      }
     }
     
     if (sessionId) {
+      console.log('Session ID received:', sessionId); // Debug log
+      
       // Verify the session with the backend
       axios.post('/api/subscription/verify-session', { sessionId })
         .then(response => {
+          console.log('Verification response:', response.data); // Debug log
+          
           if (response.data.success) {
             const userId = response.data.userId;
             const needsUsername = response.data.needsUsername;
@@ -62,10 +70,8 @@ const SubscriptionSuccess = () => {
                 setTimeout(() => {
                   navigate('/profile');
                 }, 3000);
-              } else if (pendingRegistration.registrationType === 'standard') {
-                // Standard new user, they need to login
-                // Don't redirect automatically
               }
+              // For standard registration, we'll stay on the success page with a login button
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
@@ -74,14 +80,14 @@ const SubscriptionSuccess = () => {
         })
         .catch(err => {
           console.error('Error verifying session:', err);
-          setError('An error occurred while verifying your subscription');
+          setError('An error occurred while verifying your subscription. Please contact support if the issue persists.');
           setLoading(false);
         });
     } else {
-      setError('No session ID found');
+      setError('No session ID found in the URL');
       setLoading(false);
     }
-  }, [location, dispatch, navigate, pendingRegistration]);
+  }, [location, dispatch, navigate]);
   
   return (
     <div className="subscription-success-container">
