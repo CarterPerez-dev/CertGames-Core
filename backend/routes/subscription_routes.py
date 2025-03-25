@@ -383,7 +383,3 @@ def verify_session():
         
         
         
-@subscription_bp.route('/web', methods=['POST'])
-def web_webhook():
-    # This can just call your existing webhook handler
-    return webhook()
