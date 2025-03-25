@@ -188,8 +188,58 @@ def fulfill_subscription(session):
                 'timestamp': datetime.utcnow()
             })
         
-        # For new users, the user will be created when they complete registration
-        # The subscription status will be checked during login
+        # For new users, create the account using the stored registration data
+        elif is_new_user and session.id:
+            # Retrieve the registration data from Flask session or database
+            temp_registration_data = None
+            
+            # Check if we have registration data in session
+            if 'temp_registration_data' in session:
+                temp_registration_data = session.get('temp_registration_data')
+                current_app.logger.info(f"Retrieved registration data from session for session ID {session.id}")
+            
+            # If no data in session, check if we stored it in database
+            if not temp_registration_data:
+                temp_doc = db.tempRegistrations.find_one({'checkout_session_id': session.id})
+                if temp_doc:
+                    temp_registration_data = temp_doc.get('registration_data')
+                    current_app.logger.info(f"Retrieved registration data from database for session ID {session.id}")
+            
+            if temp_registration_data:
+                # Add subscription details to the user data
+                temp_registration_data['subscriptionActive'] = True
+                temp_registration_data['subscriptionStatus'] = 'active'
+                temp_registration_data['subscriptionPlatform'] = 'stripe'
+                temp_registration_data['stripeCustomerId'] = customer_id
+                temp_registration_data['stripeSubscriptionId'] = subscription_id
+                temp_registration_data['subscriptionStartDate'] = datetime.utcnow()
+                
+                try:
+                    # Create the user
+                    user_id = create_user(temp_registration_data)
+                    current_app.logger.info(f"Created new user {user_id} after subscription payment")
+                    
+                    # Log the subscription event
+                    db.subscriptionEvents.insert_one({
+                        'userId': user_id,
+                        'event': 'subscription_created',
+                        'platform': 'stripe',
+                        'stripeCustomerId': customer_id,
+                        'stripeSubscriptionId': subscription_id,
+                        'timestamp': datetime.utcnow()
+                    })
+                    
+                    # Clear the temporary registration data
+                    if 'temp_registration_data' in session:
+                        session.pop('temp_registration_data')
+                    
+                    # Also remove from database if it exists
+                    db.tempRegistrations.delete_one({'checkout_session_id': session.id})
+                    
+                except Exception as create_err:
+                    current_app.logger.error(f"Error creating user: {str(create_err)}")
+            else:
+                current_app.logger.error(f"No registration data found for session ID {session.id}")
         
     except Exception as e:
         current_app.logger.error(f"Error fulfilling subscription: {str(e)}")
@@ -384,4 +434,63 @@ def handle_apple_subscription():
         
     except Exception as e:
         current_app.logger.error(f"Error verifying Apple subscription: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+
+@subscription_bp.route('/create-checkout-session', methods=['POST'])
+def create_checkout_session():
+    """
+    Create a Stripe Checkout session for a new subscription
+    """
+    data = request.json
+    user_id = data.get('userId')
+    registration_data = data.get('registrationData')  # For new user registrations
+    
+    # Validate inputs
+    if not user_id and not registration_data:
+        return jsonify({'error': 'Either userId or registrationData must be provided'}), 400
+    
+    try:
+        # Create Stripe checkout session
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[
+                {
+                    'price': stripe_price_id,
+                    'quantity': 1,
+                },
+            ],
+            mode='subscription',
+            success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}&user_id={user_id or 'new'}",
+            cancel_url=f"{cancel_url}?user_id={user_id or 'new'}",
+            client_reference_id=user_id,  # To identify the user in webhook events
+            metadata={
+                'user_id': user_id or 'new_registration',
+                'is_new_user': 'true' if registration_data else 'false',
+                'is_oauth_flow': 'true' if data.get('isOauthFlow') else 'false'
+            }
+        )
+        
+        # Store registration data in session if it's a new user
+        if registration_data:
+            session['temp_registration_data'] = registration_data
+            session['is_oauth_flow'] = data.get('isOauthFlow', False)
+            
+            # Also store in database as backup (sessions can expire)
+            db.tempRegistrations.insert_one({
+                'checkout_session_id': checkout_session.id,
+                'registration_data': registration_data,
+                'is_oauth_flow': data.get('isOauthFlow', False),
+                'created_at': datetime.utcnow(),
+                'expires_at': datetime.utcnow() + timedelta(hours=24)  # Expire after 24 hours
+            })
+        
+        # Store checkout session ID in flask session
+        session['checkout_session_id'] = checkout_session.id
+        
+        return jsonify({'sessionId': checkout_session.id, 'url': checkout_session.url})
+    
+    except Exception as e:
+        current_app.logger.error(f"Error creating checkout session: {str(e)}")
         return jsonify({'error': str(e)}), 500

@@ -410,6 +410,9 @@ const UserProfile = () => {
 
   const [showRequirements, setShowRequirements] = useState(false);
 
+  // Loading state for async operations
+  const [loading, setLoading] = useState(false);
+
   // Status message
   const [statusMessage, setStatusMessage] = useState('');
   const [statusType, setStatusType] = useState(''); // 'success', 'error'
@@ -654,23 +657,45 @@ const UserProfile = () => {
     }
   };
 
-  // CANCEL SUBSCRIPTION (placeholder)
+  // Handle subscription cancellation
   const handleCancelSubscription = async () => {
     try {
-      const res = await fetch('/api/test/subscription/cancel', {
+      const confirmed = window.confirm(
+        "Are you sure you want to cancel your subscription? You will still have access until the end of your current billing period."
+      );
+      
+      if (!confirmed) return;
+      
+      setLoading(true);
+      
+      // Use the correct endpoint for cancellation
+      const response = await fetch('/api/subscription/cancel-subscription', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId })
       });
-      const data = await res.json();
-      if (!res.ok) {
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
         throw new Error(data.error || 'Failed to cancel subscription');
       }
-      setStatusMessage('Subscription cancelled successfully');
+      
+      setStatusMessage('Subscription cancellation request submitted. Your subscription will remain active until the end of the current billing period.');
       setStatusType('success');
-      refetchUser();
+      
+      // Refresh user data to update subscription status
+      setTimeout(() => {
+        refetchUser();
+      }, 1000);
     } catch (err) {
+      console.error('Error canceling subscription:', err);
       setStatusMessage('Error: ' + err.message);
       setStatusType('error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1309,9 +1334,10 @@ const UserProfile = () => {
                       <button 
                         className="profile-setting-action-btn profile-setting-danger-btn"
                         onClick={handleCancelSubscription}
+                        disabled={loading}
                       >
                         <FaTimes />
-                        <span>Cancel Subscription</span>
+                        <span>{loading ? 'Processing...' : 'Cancel Subscription'}</span>
                       </button>
                     )}
                     

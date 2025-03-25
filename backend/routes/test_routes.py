@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, g  # <-- Added g here for DB time measurement
+from flask import Blueprint, request, jsonify, session, g  
 from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 import pytz
@@ -1628,3 +1628,52 @@ def get_public_leaderboard():
         "cached_at": public_leaderboard_cache_timestamp,
         "cache_duration_ms": PUBLIC_LEADERBOARD_CACHE_DURATION_MS
     }), 200
+    
+    
+
+# IF NEEDED (CURRENLY THSI CANCEL ROUTE IS NOT IN USE)
+@api_bp.route('/subscription/cancel', methods=['POST'])
+def cancel_subscription():
+    # Redirect to the proper subscription cancellation endpoint
+    data = request.json or {}
+    user_id = data.get("userId")
+    
+    if not user_id:
+        return jsonify({"error": "userId is required"}), 400
+    
+    try:
+        user = get_user_by_id(user_id)
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+        
+        subscription_id = user.get('stripeSubscriptionId')
+        if not subscription_id:
+            return jsonify({"error": "No active subscription found"}), 400
+        
+        # Cancel the subscription in Stripe
+        import stripe
+        stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+        
+        stripe.Subscription.modify(
+            subscription_id,
+            cancel_at_period_end=True
+        )
+        
+        # Update user's subscription status
+        update_user_subscription(user_id, {
+            'subscriptionStatus': 'canceling'
+        })
+        
+        # Log this subscription event
+        db.subscriptionEvents.insert_one({
+            'userId': ObjectId(user_id),
+            'event': 'subscription_cancellation_requested',
+            'platform': 'stripe',
+            'stripeSubscriptionId': subscription_id,
+            'timestamp': datetime.utcnow()
+        })
+        
+        return jsonify({'success': True, 'message': 'Subscription will be canceled at the end of the billing period'})
+    
+    except Exception as e:
+        return jsonify({"error": f"Error canceling subscription: {str(e)}"}), 500
