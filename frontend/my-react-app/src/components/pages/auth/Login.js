@@ -1,4 +1,4 @@
-// src/components/auth/Login.js
+// src/components/pages/auth/Login.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
@@ -69,8 +69,20 @@ const Login = () => {
 
     try {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
+      
       if (loginUser.fulfilled.match(resultAction)) {
-        // Login successful, navigation will happen through useEffect
+        // Check if user needs to renew subscription
+        if (resultAction.payload.requiresSubscription) {
+          // Store temporary auth
+          localStorage.setItem('tempUserId', resultAction.payload.user_id);
+          
+          // Redirect to subscription page with renewal flag
+          navigate('/subscription', { 
+            state: { renewSubscription: true, userId: resultAction.payload.user_id }
+          });
+        } else {
+          // Normal login flow - navigation will happen through useEffect
+        }
       } else {
         // Handle error from the action
         setFormError(resultAction.payload || 'Login failed. Please try again.');

@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from './components/pages/store/userSlice';
 
@@ -89,6 +89,7 @@ function HomeOrProfile() {
 function App() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -104,9 +105,26 @@ function App() {
   
   useEffect(() => {
     if (userId) {
-      dispatch(fetchUserData(userId));
+      // Fetch user data
+      dispatch(fetchUserData(userId))
+        .then((resultAction) => {
+          if (fetchUserData.fulfilled.match(resultAction)) {
+            const userData = resultAction.payload;
+          
+            // Check if subscription is active
+            if (!userData.subscriptionActive) {
+              // Redirect to subscription page
+              navigate('/subscription', { 
+                state: { renewSubscription: true, userId }
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+        });
     }
-  }, [dispatch, userId]);
+  }, [dispatch, userId, navigate]);
 
   return (
     <div className="App">

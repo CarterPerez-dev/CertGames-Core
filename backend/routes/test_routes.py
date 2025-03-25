@@ -252,6 +252,7 @@ def register_user():
 def login():
     data = request.json
     if not data:
+        # Error handling for missing JSON data
         start_db = time.time()
         db.auditLogs.insert_one({
             "timestamp": datetime.utcnow(),
@@ -270,6 +271,7 @@ def login():
     identifier = data.get("usernameOrEmail")
     password = data.get("password")
     if not identifier or not password:
+        # Error handling for missing credentials
         start_db = time.time()
         db.auditLogs.insert_one({
             "timestamp": datetime.utcnow(),
@@ -285,6 +287,7 @@ def login():
 
         return jsonify({"error": "Username (or Email) and password are required"}), 400
 
+    # First, get the user
     start_db = time.time()
     user = get_user_by_identifier(identifier)
     duration = time.time() - start_db
@@ -292,7 +295,7 @@ def login():
         g.db_time_accumulator = 0.0
     g.db_time_accumulator += duration
 
-    # Using check_password instead of direct comparison
+    # Check if user exists and password is correct
     if not user or not check_password(password, user.get("password", "")):
         start_db = time.time()
         db.auditLogs.insert_one({
@@ -308,7 +311,23 @@ def login():
         g.db_time_accumulator += duration
 
         return jsonify({"error": "Invalid username or password"}), 401
+    
+    # Now check subscription status - after verifying credentials
+    subscription_active = user.get("subscriptionActive", False)
+    subscription_status = user.get("subscriptionStatus")
+    
+    if not subscription_active or subscription_status in ["canceled", "past_due", "unpaid"]:
+        # Subscription inactive, but still return user info with a flag
+        return jsonify({
+            "user_id": str(user["_id"]),
+            "username": user["username"],
+            "email": user.get("email", ""),
+            "subscriptionActive": False,
+            "subscriptionStatus": subscription_status,
+            "requiresSubscription": True
+        }), 200
 
+    # Regular login flow for active subscribers
     session['userId'] = str(user["_id"])
 
     start_db = time.time()
@@ -325,7 +344,6 @@ def login():
 
     user = serialize_user(user)
 
-    # Important security best practice: don't return password in response
     return jsonify({
         "user_id": user["_id"],
         "username": user["username"],
@@ -341,7 +359,6 @@ def login():
         "subscriptionActive": user.get("subscriptionActive", False),
         "oauth_provider": user.get("oauth_provider", None)
     }), 200
-    
     
 @api_bp.route('/user/<user_id>/add-xp', methods=['POST'])
 def add_xp_route(user_id):
