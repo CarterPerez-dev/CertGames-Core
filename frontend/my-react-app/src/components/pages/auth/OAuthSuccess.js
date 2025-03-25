@@ -25,24 +25,45 @@ const OAuthSuccess = () => {
       return;
     }
     
+    // Check if this is a new user registration flow
+    const isOauthFlow = sessionStorage.getItem('isOauthFlow') === 'true';
+    
     // Handle successful login
     const handleSuccess = async () => {
       try {
-        // Save userId to localStorage
-        localStorage.setItem('userId', userId);
-        
-        // Update Redux state
-        dispatch(setCurrentUserId(userId));
-        
-        // Fetch user data
-        await dispatch(fetchUserData(userId)).unwrap();
-        
-        // Navigate to profile page
-        navigate('/profile', { 
-          state: { 
-            message: `Successfully signed in with ${provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'OAuth'}`
-          }
-        });
+        // For new registrations, redirect to subscription page
+        if (isOauthFlow) {
+          // Clear the OAuth flow flag
+          sessionStorage.removeItem('isOauthFlow');
+          
+          // Save user ID temporarily
+          sessionStorage.setItem('tempUserId', userId);
+          
+          // Navigate to subscription page
+          navigate('/subscription', { 
+            state: { 
+              userId: userId,
+              isOauthFlow: true 
+            } 
+          });
+        } else {
+          // For existing users, proceed normally
+          // Save userId to localStorage
+          localStorage.setItem('userId', userId);
+          
+          // Update Redux state
+          dispatch(setCurrentUserId(userId));
+          
+          // Fetch user data
+          await dispatch(fetchUserData(userId)).unwrap();
+          
+          // Navigate to profile page
+          navigate('/profile', { 
+            state: { 
+              message: `Successfully signed in with ${provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'OAuth'}`
+            }
+          });
+        }
       } catch (err) {
         console.error('Error during OAuth completion:', err);
         setError('Failed to complete authentication. Please try again.');

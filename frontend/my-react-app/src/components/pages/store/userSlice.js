@@ -222,6 +222,44 @@ export const addCoins = createAsyncThunk(
   }
 );
 
+// Check subscription status
+export const checkSubscription = createAsyncThunk(
+  'user/checkSubscription',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to check subscription status');
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// Cancel subscription
+export const cancelSubscription = createAsyncThunk(
+  'user/cancelSubscription',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const res = await fetch('/api/subscription/cancel-subscription', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to cancel subscription');
+      }
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: 'user',
   initialState,

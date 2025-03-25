@@ -113,44 +113,21 @@ const Register = () => {
       return;
     }
     
-    try {
-      const resultAction = await dispatch(registerUser({
-        username,
-        email,
-        password,
-        confirmPassword: confirmPassword
-      }));
-      
-      if (registerUser.fulfilled.match(resultAction)) {
-        // Registration successful, now login
-        navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
-      } else {
-        // Handle error from the action
-        const errorMessage = resultAction.payload || resultAction.error?.message;
-        
-        // Check for email already taken message
-        if (errorMessage && (
-            errorMessage.includes("Email is already taken") || 
-            errorMessage.includes("Username or email is already taken") ||
-            errorMessage.includes("already taken")
-        )) {
-          setFormError('Email address is already registered. Please use a different email or login.');
-        } else {
-          setFormError(errorMessage || 'Registration failed. Please try again.');
-        }
-      }
-    } catch (err) {
-      // Handle other errors
-      if (err.message && (
-          err.message.includes("Email is already taken") ||
-          err.message.includes("Username or email is already taken") ||
-          err.message.includes("already taken")
-      )) {
-        setFormError('Email address is already registered. Please use a different email or login.');
-      } else {
-        setFormError('An error occurred. Please try again.');
-      }
-    }
+    // Instead of registering immediately, navigate to subscription page with form data
+    const registrationData = {
+      username,
+      email,
+      password,
+      confirmPassword: confirmPassword
+    };
+    
+    // Navigate to subscription page with form data
+    navigate('/subscription', { 
+      state: { 
+        registrationData, 
+        isOauthFlow: false 
+      } 
+    });
   };
   
   const handleSocialSignUp = (provider) => {

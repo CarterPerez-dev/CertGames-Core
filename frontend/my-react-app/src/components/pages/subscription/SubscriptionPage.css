@@ -1,229 +1,382 @@
-/* src/components/pages/Subscription/SubscriptionPage.css */
+/* src/components/pages/subscription/SubscriptionPage.css */
 .subscription-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.subscription-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background-color: var(--bg-primary);
+}
+
+.subscription-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+.subscription-glow {
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+  opacity: 0.1;
+  filter: blur(100px);
+}
+
+.subscription-content {
+  width: 100%;
   max-width: 800px;
-  margin: 40px auto;
-  padding: 20px;
+  z-index: 1;
 }
 
 .subscription-card {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  position: relative;
+}
+
+.subscription-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.subscription-logo {
+  width: 80px;
+  height: 80px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.subscription-logo-icon {
+  font-size: 36px;
+  color: white;
 }
 
 .subscription-title {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.subscription-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.subscription-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--error-bg);
+  color: var(--error-color);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.subscription-pricing {
   text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: var(--bg-darker);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .subscription-price {
   display: flex;
-  align-items: baseline;
   justify-content: center;
-  margin-bottom: 30px;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  font-weight: 700;
 }
 
-.subscription-amount {
-  font-size: 48px;
-  font-weight: bold;
-  color: #6543cc;
+.subscription-price-currency {
+  font-size: 1.5rem;
+  margin-right: 0.25rem;
+  color: var(--accent-color);
 }
 
-.subscription-period {
-  font-size: 18px;
-  color: #666;
-  margin-left: 5px;
+.subscription-price-value {
+  font-size: 3.5rem;
+  line-height: 1;
+  color: var(--accent-color);
 }
 
-.subscription-features {
-  margin-bottom: 30px;
+.subscription-price-period {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-left: 0.5rem;
 }
 
-.subscription-features h2 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #333;
+.subscription-price-description {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
 }
 
-.subscription-features ul {
-  list-style-type: none;
+.subscription-price-description p {
+  margin-bottom: 0.5rem;
+}
+
+.subscription-benefits {
+  margin-bottom: 2rem;
+}
+
+.subscription-benefits-title {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+  color: var(--text-color);
+}
+
+.subscription-benefits-list {
+  list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
-.subscription-features li {
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+.subscription-benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--bg-highlight);
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.subscription-benefit-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-icon {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.subscription-benefit-text h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.subscription-benefit-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.subscription-security {
   display: flex;
   align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-darker);
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
 }
 
-.subscription-features li:before {
-  content: "✓";
-  color: #2ebb77;
-  font-weight: bold;
-  margin-right: 10px;
+.subscription-security-icon {
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  flex-shrink: 0;
 }
 
-.subscription-error {
-  background-color: rgba(255, 76, 139, 0.1);
-  color: #ff4c8b;
-  padding: 12px 16px;
-  border-radius: 6px;
-  margin-bottom: 20px;
+.subscription-security p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.subscription-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.subscription-back-button {
   display: flex;
   align-items: center;
-}
-
-.subscription-button {
-  background-color: #6543cc;
-  color: white;
-  border: none;
-  border-radius: 30px;
-  padding: 15px 30px;
-  font-size: 16px;
-  font-weight: bold;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   cursor: pointer;
-  width: 100%;
-  display: block;
-  transition: background-color 0.3s;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
 }
 
-.subscription-button:hover {
-  background-color: #5034b8;
+.subscription-back-button:hover:not(:disabled) {
+  background-color: var(--bg-highlight);
 }
 
-.subscription-button:disabled {
-  background-color: #a8a8a8;
+.subscription-back-button:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.subscription-info {
-  margin-top: 20px;
-  text-align: center;
-  color: #666;
-  font-size: 14px;
-}
-
-/* Success Page */
-.subscription-success {
-  max-width: 600px;
-  margin: 80px auto;
-  text-align: center;
-  padding: 40px 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.success-icon {
-  width: 80px;
-  height: 80px;
-  background-color: #2ebb77;
-  color: white;
-  font-size: 40px;
-  border-radius: 50%;
+.subscription-button {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 30px;
-}
-
-.navigate-button {
-  background-color: #6543cc;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  background-color: var(--accent-color);
   color: white;
   border: none;
-  border-radius: 30px;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: bold;
   cursor: pointer;
-  margin-top: 30px;
-  transition: background-color 0.3s;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
-.navigate-button:hover {
-  background-color: #5034b8;
+.subscription-button:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
 }
 
-/* Cancel Page */
-.subscription-cancel {
-  max-width: 600px;
-  margin: 80px auto;
-  text-align: center;
-  padding: 40px 20px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.subscription-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-
-.subscription-spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.oauth-spinner .fa-spin {
-  animation: spin 1s linear infinite;
-}
-
-
-
-/* Add to src/components/pages/subscription/SubscriptionPage.css */
-.subscription-spinner {
-  animation: spin 1s linear infinite;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #6543cc;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.subscription-timeout-text {
-  font-size: 0.85rem;
-  color: #666;
-  margin-top: 0.5rem;
-}
-
-.subscription-error-actions {
+.subscription-button-loading {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
-  margin-top: 1.5rem;
-  width: 100%;
 }
 
-.subscription-button-secondary {
-  background-color: #f0f0f0;
-  color: #333;
+.subscription-spinner {
+  animation: spin 1s linear infinite;
 }
 
-.subscription-button-secondary:hover {
-  background-color: #e0e0e0;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.subscription-debug-info {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  overflow: auto;
-  max-height: 200px;
+.subscription-button-text {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
 }
 
-.subscription-debug-info pre {
-  font-family: monospace;
-  font-size: 0.8rem;
-  white-space: pre-wrap;
-  word-break: break-all;
+.subscription-button-icon-right {
+  margin-left: 0.5rem;
+}
+
+.subscription-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.subscription-note-icon {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.subscription-note p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.subscription-note a {
+  color: var(--accent-color);
+  text-decoration: none;
+  margin: 0 0.25rem;
+}
+
+.subscription-note a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .subscription-container {
+    padding: 1rem;
+  }
+  
+  .subscription-card {
+    padding: 1.5rem;
+  }
+  
+  .subscription-title {
+    font-size: 1.8rem;
+  }
+  
+  .subscription-benefits-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .subscription-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .subscription-back-button,
+  .subscription-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .subscription-pricing {
+    padding: 1.5rem 1rem;
+  }
+  
+  .subscription-price-value {
+    font-size: 3rem;
+  }
 }

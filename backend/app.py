@@ -39,6 +39,10 @@ CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
 REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 SECRET_KEY = os.getenv('SECRET_KEY', 'supersecret')
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+stripe_publishable_key = os.getenv('STRIPE_PUBLISHABLE_KEY')
+stripe_price_id = os.getenv('STRIPE_PRICE_ID')
+webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
