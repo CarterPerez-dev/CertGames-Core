@@ -1,8 +1,8 @@
 // src/App.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserData } from './components/pages/store/userSlice';
+import { fetchUserData, logout } from './components/pages/store/userSlice';
 
 // Import ToastContainer from react-toastify
 import { ToastContainer } from 'react-toastify';
@@ -35,6 +35,7 @@ import CrackedAdminDashboard from './components/cracked/CrackedAdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Sidebar from './components/Sidebar/Sidebar';
 
+// Your components imports (Xploitcraft, etc.)
 import Xploitcraft from './components/pages/XploitcraftPage/Xploitcraft';
 import ScenarioSphere from './components/pages/ScenarioPage/ScenarioSphere';
 import AnalogyHub from './components/pages/AnalogyPage/AnalogyHub';
@@ -50,7 +51,7 @@ import LeaderboardPage from './components/pages/store/LeaderboardPage';
 import AchievementPage from './components/pages/store/AchievementPage';
 import SupportAskAnythingPage from './components/pages/store/SupportAskAnythingPage';
 
-// Unique Test Pages
+// Practice test pages
 import APlusTestPage from './components/pages/aplus/APlusTestPage';
 import APlusCore2TestPage from './components/pages/aplus2/APlusCore2TestPage';
 import NetworkPlusTestPage from './components/pages/nplus/NetworkPlusTestPage';
@@ -88,43 +89,85 @@ function HomeOrProfile() {
 
 function App() {
   const dispatch = useDispatch();
-  const { userId } = useSelector((state) => state.user);
+  const { userId, subscriptionActive } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isCheckingSubscription, setIsCheckingSubscription] = useState(false);
 
-
+  // Initialize theme
   useEffect(() => {
     const initializeTheme = () => {
       const savedTheme = localStorage.getItem('selectedTheme') || 'default';
       document.documentElement.setAttribute('data-theme', savedTheme);
     };
 
-
     initializeTheme();
   }, []); 
   
-  
+  // Check user authentication and fetch data
   useEffect(() => {
     if (userId) {
       // Fetch user data
       dispatch(fetchUserData(userId))
-        .then((resultAction) => {
+        .catch((error) => {
+          console.error('Error fetching user data:', error);
+        });
+    }
+  }, [dispatch, userId]);
+  
+  // Check subscription status
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      if (userId && !isCheckingSubscription) {
+        setIsCheckingSubscription(true);
+        
+        try {
+          // Only check if user is logged in
+          const resultAction = await dispatch(fetchUserData(userId));
+          
           if (fetchUserData.fulfilled.match(resultAction)) {
             const userData = resultAction.payload;
-          
-            // Check if subscription is active
-            if (!userData.subscriptionActive) {
-              // Redirect to subscription page
+            
+            // If subscription is not active and not already on subscription-related pages
+            const isSubscriptionPage = [
+              '/subscription', 
+              '/subscription/success', 
+              '/subscription/cancel'
+            ].includes(location.pathname);
+            
+            if (!userData.subscriptionActive && !isSubscriptionPage) {
+              // Store userId for renewal
+              localStorage.setItem('tempUserId', userId);
+              
+              // Store renewal info
+              localStorage.setItem('pendingRegistration', JSON.stringify({
+                userId: userId,
+                registrationType: 'renewal'
+              }));
+              
+              // Log out
+              dispatch(logout());
+              
+              // Navigate to subscription page
               navigate('/subscription', { 
                 state: { renewSubscription: true, userId }
               });
             }
           }
-        })
-        .catch((error) => {
-          console.error('Error fetching user data:', error);
-        });
-    }
-  }, [dispatch, userId, navigate]);
+        } catch (error) {
+          console.error('Error checking subscription status:', error);
+        } finally {
+          setIsCheckingSubscription(false);
+        }
+      }
+    };
+    
+    // Check on initial load and then every hour (to not spam the API)
+    checkSubscriptionStatus();
+    const interval = setInterval(checkSubscriptionStatus, 3600000); // 1 hour
+    
+    return () => clearInterval(interval);
+  }, [userId, dispatch, navigate, location.pathname, isCheckingSubscription]);
 
   return (
     <div className="App">

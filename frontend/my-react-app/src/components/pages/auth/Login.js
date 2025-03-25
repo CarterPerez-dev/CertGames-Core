@@ -37,7 +37,7 @@ const Login = () => {
   useEffect(() => {
     dispatch(clearAuthErrors());
     
-    // Check for success message from registration
+    // Check for success message from registration or other redirects
     if (location.state && location.state.message) {
       setSuccessMessage(location.state.message);
       // Clear the location state after reading
@@ -71,14 +71,23 @@ const Login = () => {
       const resultAction = await dispatch(loginUser({ usernameOrEmail, password }));
       
       if (loginUser.fulfilled.match(resultAction)) {
+        // If login was successful
+        const userData = resultAction.payload;
+        
         // Check if user needs to renew subscription
-        if (resultAction.payload.requiresSubscription) {
+        if (!userData.subscriptionActive) {
           // Store temporary auth
-          localStorage.setItem('tempUserId', resultAction.payload.user_id);
+          localStorage.setItem('tempUserId', userData.user_id);
           
-          // Redirect to subscription page with renewal flag
+          // Store renewal info in localStorage
+          localStorage.setItem('pendingRegistration', JSON.stringify({
+            userId: userData.user_id,
+            registrationType: 'renewal'
+          }));
+          
+          // Redirect to subscription page
           navigate('/subscription', { 
-            state: { renewSubscription: true, userId: resultAction.payload.user_id }
+            state: { renewSubscription: true, userId: userData.user_id }
           });
         } else {
           // Normal login flow - navigation will happen through useEffect
@@ -97,6 +106,13 @@ const Login = () => {
     setSuccessMessage('');
     
     try {
+      // Store OAuth intent in localStorage
+      localStorage.setItem('pendingRegistration', JSON.stringify({
+        provider,
+        registrationType: 'oauth',
+        needsUsername: true
+      }));
+      
       // Redirect to the backend OAuth route
       window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
     } catch (err) {

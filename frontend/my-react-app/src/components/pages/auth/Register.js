@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser, clearAuthErrors } from '../store/userSlice';
+import { clearAuthErrors } from '../store/userSlice';
 import {
   FaUser,
   FaLock,
@@ -18,7 +18,7 @@ import {
   FaInfoCircle,
   FaTimes
 } from 'react-icons/fa';
-import PasswordRequirements from './PasswordRequirements';
+import axios from 'axios';
 import Footer from '../../Footer';
 import './Register.css';
 
@@ -114,15 +114,16 @@ const Register = () => {
     }
     
     try {
-      const resultAction = await dispatch(registerUser({
+      // Instead of creating a user directly, validate the registration data
+      const response = await axios.post('/api/test/validate-registration', {
         username,
         email,
         password,
-        confirmPassword: confirmPassword
-      }));
+        confirmPassword
+      });
       
-      if (registerUser.fulfilled.match(resultAction)) {
-        // Store registration data in localStorage and redirect to subscription
+      if (response.data.isValid) {
+        // Store the registration data in localStorage
         localStorage.setItem('pendingRegistration', JSON.stringify({
           email,
           username,
@@ -132,28 +133,18 @@ const Register = () => {
         // Navigate to subscription page
         navigate('/subscription');
       } else {
-        // Handle error from the action
-        const errorMessage = resultAction.payload || resultAction.error?.message;
-        
-        // Check for email already taken message
-        if (errorMessage && (
-            errorMessage.includes("Email is already taken") || 
-            errorMessage.includes("Username or email is already taken") ||
-            errorMessage.includes("already taken")
-        )) {
-          setFormError('Email address is already registered. Please use a different email or login.');
-        } else {
-          setFormError(errorMessage || 'Registration failed. Please try again.');
-        }
+        setFormError(response.data.error || 'Registration validation failed');
       }
     } catch (err) {
-      // Handle other errors
-      if (err.message && (
-          err.message.includes("Email is already taken") ||
-          err.message.includes("Username or email is already taken") ||
-          err.message.includes("already taken")
-      )) {
-        setFormError('Email address is already registered. Please use a different email or login.');
+      // Handle error from the action
+      if (err.response && err.response.data && err.response.data.error) {
+        if (err.response.data.error.includes("Email is already taken") || 
+            err.response.data.error.includes("Username or email is already taken") ||
+            err.response.data.error.includes("already taken")) {
+          setFormError('Email address is already registered. Please use a different email or login.');
+        } else {
+          setFormError(err.response.data.error);
+        }
       } else {
         setFormError('An error occurred. Please try again.');
       }
@@ -164,6 +155,13 @@ const Register = () => {
     setFormError('');
     
     try {
+      // Store OAuth intent in localStorage
+      localStorage.setItem('pendingRegistration', JSON.stringify({
+        provider,
+        registrationType: 'oauth',
+        needsUsername: true
+      }));
+      
       // Redirect to the backend OAuth route
       window.location.href = `/api/oauth/login/${provider.toLowerCase()}`;
     } catch (err) {
@@ -383,7 +381,7 @@ const Register = () => {
               {loading ? (
                 <span className="register-button-loading">
                   <span className="register-spinner"></span>
-                  Creating Account...
+                  Processing...
                 </span>
               ) : (
                 <span className="register-button-text">

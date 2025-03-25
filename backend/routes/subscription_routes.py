@@ -76,47 +76,49 @@ def webhook():
         return jsonify({"error": "Invalid signature"}), 400
     
     # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        user_id = session.get('client_reference_id')
-        
-        if user_id:
-            update_user_subscription(user_id, {
-                "subscriptionActive": True,
-                "stripeCustomerId": session.get('customer'),
-                "stripeSubscriptionId": session.get('subscription'),
-                "subscriptionStatus": "active",
-                "subscriptionPlatform": "web"
-            })
+    event_type = event['type']
+    data = event['data']['object']
     
-    elif event['type'] == 'customer.subscription.updated':
-        subscription = event['data']['object']
-        status = subscription.get('status')
+    print(f"Processing webhook event: {event_type}")
+    
+    if event_type == 'checkout.session.completed':
+        session = data
+        # This is handled by the verify-session endpoint
+        # Optionally do additional processing here
+        
+    elif event_type == 'customer.subscription.updated':
+        subscription = data
+        subscription_status = subscription.get('status')
         customer_id = subscription.get('customer')
         
         # Find user by Stripe customer ID
         user = mainusers_collection.find_one({"stripeCustomerId": customer_id})
         
         if user:
-            subscription_active = status in ["active", "trialing"]
+            # Update subscription status
+            subscription_active = subscription_status in ["active", "trialing"]
             update_user_subscription(str(user['_id']), {
                 "subscriptionActive": subscription_active,
-                "subscriptionStatus": status
+                "subscriptionStatus": subscription_status
             })
+            print(f"Updated subscription for user {user['_id']} to {subscription_status}")
     
-    elif event['type'] == 'customer.subscription.deleted':
-        subscription = event['data']['object']
+    elif event_type == 'customer.subscription.deleted':
+        subscription = data
         customer_id = subscription.get('customer')
         
         # Find user by Stripe customer ID
         user = mainusers_collection.find_one({"stripeCustomerId": customer_id})
         
         if user:
+            # Deactivate subscription
             update_user_subscription(str(user['_id']), {
                 "subscriptionActive": False,
                 "subscriptionStatus": "canceled"
             })
+            print(f"Deactivated subscription for user {user['_id']}")
     
+    # Always return success, even if we don't handle this event type
     return jsonify({"status": "success"})
 
 @subscription_bp.route('/verify-receipt', methods=['POST'])
@@ -209,6 +211,8 @@ def check_subscription_status():
 
 # Add to backend/routes/subscription_routes.py
 
+# routes/subscription_routes.py
+
 @subscription_bp.route('/verify-session', methods=['POST'])
 def verify_session():
     data = request.json
@@ -229,13 +233,19 @@ def verify_session():
         # If there's a client_reference_id, this is an existing user upgrading
         if user_id:
             # Update the user's subscription status
-            update_user_subscription(user_id, {
+            user = update_user_subscription(user_id, {
                 "subscriptionActive": True,
                 "stripeCustomerId": customer_id,
                 "stripeSubscriptionId": session.get('subscription'),
                 "subscriptionStatus": "active",
                 "subscriptionPlatform": "web"
             })
+            
+            if not user:
+                return jsonify({
+                    "success": False,
+                    "error": "User not found"
+                }), 404
             
             return jsonify({
                 "success": True,
@@ -255,25 +265,46 @@ def verify_session():
                 
                 # For standard registration (non-OAuth)
                 if registration_type == 'standard':
-                    # The password should have been sent during the initial registration
-                    # and stored temporarily, or the user will need to set it via a special link
+                    # Find the temporary registration record
+                    temp_reg = db.temp_registrations.find_one({"email": email, "username": username})
+                    
+                    if not temp_reg:
+                        return jsonify({
+                            "success": False,
+                            "error": "Registration data not found"
+                        }), 400
                     
                     # Create user with subscription active
                     user_data = {
                         'username': username,
                         'email': email,
+                        'password': temp_reg.get('password'),  # Already hashed
                         'subscriptionActive': True,
                         'stripeCustomerId': customer_id,
                         'stripeSubscriptionId': session.get('subscription'),
                         'subscriptionStatus': 'active',
                         'subscriptionPlatform': 'web',
-                        # You'll need to have stored the password securely somewhere temporarily
-                        # or implement a "set password" flow
-                        'password': None  # Handle this according to your security requirements
+                        'coins': 0,
+                        'xp': 0,
+                        'level': 1,
+                        'achievements': [],
+                        'xpBoost': 1.0,
+                        'purchasedItems': [],
+                        'achievement_counters': {
+                            'total_tests_completed': 0,
+                            'perfect_tests_count': 0,
+                            'perfect_tests_by_category': {},
+                            'highest_score_ever': 0.0,
+                            'lowest_score_ever': 100.0,
+                            'total_questions_answered': 0,
+                        }
                     }
                     
                     # Create the user
                     user_id = create_user(user_data)
+                    
+                    # Delete the temporary registration
+                    db.temp_registrations.delete_one({"_id": temp_reg["_id"]})
                     
                     return jsonify({
                         "success": True,
@@ -289,13 +320,19 @@ def verify_session():
                     
                     # If we have an OAuth user ID, update that user
                     if oauth_user_id:
-                        update_user_subscription(oauth_user_id, {
+                        user = update_user_subscription(oauth_user_id, {
                             "subscriptionActive": True,
                             "stripeCustomerId": customer_id,
                             "stripeSubscriptionId": session.get('subscription'),
                             "subscriptionStatus": "active",
                             "subscriptionPlatform": "web"
                         })
+                        
+                        if not user:
+                            return jsonify({
+                                "success": False,
+                                "error": "User not found"
+                            }), 404
                         
                         return jsonify({
                             "success": True,
@@ -314,13 +351,19 @@ def verify_session():
                     renewal_user_id = registration_data.get('userId')
                     
                     if renewal_user_id:
-                        update_user_subscription(renewal_user_id, {
+                        user = update_user_subscription(renewal_user_id, {
                             "subscriptionActive": True,
                             "stripeCustomerId": customer_id,
                             "stripeSubscriptionId": session.get('subscription'),
                             "subscriptionStatus": "active",
                             "subscriptionPlatform": "web"
                         })
+                        
+                        if not user:
+                            return jsonify({
+                                "success": False,
+                                "error": "User not found"
+                            }), 404
                         
                         return jsonify({
                             "success": True,
