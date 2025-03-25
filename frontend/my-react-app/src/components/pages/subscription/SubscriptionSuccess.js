@@ -70,8 +70,9 @@ const SubscriptionSuccess = () => {
                 setTimeout(() => {
                   navigate('/profile');
                 }, 3000);
+              } else {
+                // For standard registration, we'll stay on the success page with a login button
               }
-              // For standard registration, we'll stay on the success page with a login button
             }
           } else {
             setError(response.data.error || 'Failed to verify subscription');
@@ -87,7 +88,7 @@ const SubscriptionSuccess = () => {
       setError('No session ID found in the URL');
       setLoading(false);
     }
-  }, [location, dispatch, navigate]);
+  }, [location, dispatch, navigate, pendingRegistration]);
   
   return (
     <div className="subscription-success-container">
