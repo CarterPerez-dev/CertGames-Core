@@ -1,4 +1,4 @@
-// src/components/auth/Register.js
+// src/components/pages/auth/Register.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
@@ -122,8 +122,15 @@ const Register = () => {
       }));
       
       if (registerUser.fulfilled.match(resultAction)) {
-        // Registration successful, now login
-        navigate('/login', { state: { message: 'Registration successful! Please log in.' } });
+        // Store registration data in localStorage and redirect to subscription
+        localStorage.setItem('pendingRegistration', JSON.stringify({
+          email,
+          username,
+          registrationType: 'standard'
+        }));
+        
+        // Navigate to subscription page
+        navigate('/subscription');
       } else {
         // Handle error from the action
         const errorMessage = resultAction.payload || resultAction.error?.message;
@@ -190,7 +197,10 @@ const Register = () => {
           
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-input-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">
+                <span>Username</span>
+                <div className="register-label-badge">Required</div>
+              </label>
               <div className="register-input-wrapper">
                 <FaUser className="register-input-icon" />
                 <input
@@ -200,7 +210,13 @@ const Register = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Choose a unique username"
                   disabled={loading}
+                  required
+                  autoFocus
                 />
+                {username && username.length >= 3 && /^[A-Za-z0-9._-]+$/.test(username) && 
+                 !/^[._-]|[._-]$/.test(username) && !/(.)\1{2,}/.test(username) && (
+                  <FaCheck className="register-input-valid" />
+                )}
               </div>
               <div className="register-input-hint">
                 <FaInfoCircle className="register-hint-icon" />
@@ -239,7 +255,7 @@ const Register = () => {
                       setShowPasswordRequirements(false);
                     }
                   }}
-                  placeholder="Create a strong password (please 👉👈🥹)"
+                  placeholder="Create a strong password"
                   disabled={loading}
                   className={password && !passwordIsValid() ? "register-input-error" : ""}
                 />
