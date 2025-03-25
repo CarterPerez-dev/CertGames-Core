@@ -95,11 +95,9 @@ def verify_session():
             print(f"Stripe error retrieving session: {str(e)}")
             return jsonify({"success": False, "error": f"Stripe error: {str(e)}"}), 500
         
-        # Print session info for debugging
-        print(f"Session data: payment_status={session.payment_status}, mode={session.mode}")
-        
         # Check if the session was successfully paid
         if session.payment_status != 'paid':
+            print(f"Payment not completed. Status: {session.payment_status}")
             return jsonify({
                 "success": False, 
                 "error": f"Payment not completed. Status: {session.payment_status}"
@@ -111,6 +109,7 @@ def verify_session():
         metadata = session.get('metadata', {})
         subscription_id = session.get('subscription')
         
+        print(f"Extracted session data: customer_id={customer_id}, user_id={user_id}, subscription_id={subscription_id}")
         print(f"Session metadata: {metadata}")
         
         # If there's a client_reference_id, this is an existing user upgrading
@@ -388,14 +387,22 @@ def webhook():
     sig_header = request.headers.get('Stripe-Signature')
     
     try:
+        # Get the webhook secret from environment
+        webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+        
+        # Log for debugging
+        print(f"Webhook signature: {sig_header[:10]}..." if sig_header else "No signature")
+        print(f"Webhook secret length: {len(webhook_secret) if webhook_secret else 'None'}")
+        
+        # Construct the event
         event = stripe.Webhook.construct_event(
-            payload, sig_header, os.getenv('STRIPE_WEBHOOK_SECRET')
+            payload, sig_header, webhook_secret
         )
     except ValueError:
         print("Invalid payload")
         return jsonify({"error": "Invalid payload"}), 400
-    except stripe.error.SignatureVerificationError:
-        print("Invalid signature")
+    except stripe.error.SignatureVerificationError as e:
+        print(f"Invalid signature: {str(e)}")
         return jsonify({"error": "Invalid signature"}), 400
     
     # Handle the event
