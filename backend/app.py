@@ -5,7 +5,7 @@ import pytz
 import redis
 import stripe  
 from datetime import datetime
-from flask import Flask, g, request, jsonify, current_app, send_from_directory, session
+from flask import Flask, g, request, jsonify, current_app, send_from_directory, session, make_response
 from flask_cors import CORS
 from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -138,6 +138,28 @@ def log_request_end(response):
     except Exception as e:
         logger.warning(f"Failed to insert perfSample: {e}")
     return response
+
+@app.after_request
+def add_cors_headers(response):
+    # Allow requests from any origin
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    # Allow the content type header
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    # Allow all methods
+    response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+    return response
+
+
+
+@app.route('/api/subscription/verify-session', methods=['OPTIONS'])
+def handle_preflight():
+    response = make_response()
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'POST')
+    return response
+
+
 
 ########################################################################
 # Socket.IO event handlers

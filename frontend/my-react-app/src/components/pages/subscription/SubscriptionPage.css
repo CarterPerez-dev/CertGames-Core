@@ -173,3 +173,57 @@
 .oauth-spinner .fa-spin {
   animation: spin 1s linear infinite;
 }
+
+
+
+/* Add to src/components/pages/subscription/SubscriptionPage.css */
+.subscription-spinner {
+  animation: spin 1s linear infinite;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #6543cc;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.subscription-timeout-text {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.subscription-error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  width: 100%;
+}
+
+.subscription-button-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.subscription-button-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.subscription-debug-info {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 200px;
+}
+
+.subscription-debug-info pre {
+  font-family: monospace;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
