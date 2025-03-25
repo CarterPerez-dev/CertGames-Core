@@ -14,19 +14,19 @@ const SubscriptionSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [pendingRegistration, setPendingRegistration] = useState(null);
+  const [verificationComplete, setVerificationComplete] = useState(false);
   
   // Use a ref to ensure the verification only happens ONCE per component lifecycle
   const verificationStarted = useRef(false);
   
   useEffect(() => {
-    // THE ROOT PROBLEM FIX: Prevent verification from happening multiple times
-    // by using a ref that persists between renders
+    // Prevent verification from happening multiple times
     if (verificationStarted.current) {
       console.log('Verification already started, skipping');
       return;
     }
     
-    // Parse the query parameter once
+    // Get session ID from URL
     const params = new URLSearchParams(location.search);
     const sessionId = params.get('session_id');
     
@@ -39,7 +39,7 @@ const SubscriptionSuccess = () => {
     // Mark verification as started
     verificationStarted.current = true;
     
-    // Get registration data
+    // Load registration data from localStorage
     try {
       const regData = localStorage.getItem('pendingRegistration');
       if (regData) {
@@ -49,49 +49,52 @@ const SubscriptionSuccess = () => {
       console.error('Failed to parse registration data', e);
     }
     
-    // Simple timeout to allow the state to update and prevent race conditions
+    console.log('Starting verification for session:', sessionId);
+    
+    // Verify the session with a slight delay to prevent race conditions
     const timeoutId = setTimeout(() => {
-      // ONE single request to verify the session
-      console.log('Verifying session ID:', sessionId);
-      
       axios.post('/api/subscription/verify-session', { sessionId })
         .then(response => {
-          console.log('Verification response:', response.data);
+          console.log('Verification succeeded:', response.data);
           
           if (response.data.success) {
             const userId = response.data.userId;
             const needsUsername = response.data.needsUsername;
             
-            // Update storage and state
+            // Update localStorage and Redux
             localStorage.setItem('userId', userId);
             localStorage.removeItem('pendingRegistration');
             localStorage.removeItem('tempUserId');
             
-            // Update Redux
             dispatch(setCurrentUserId(userId));
             dispatch(fetchUserData(userId));
             
+            setVerificationComplete(true);
             setLoading(false);
             
-            // Handle redirect based on registration type
-            const regData = localStorage.getItem('pendingRegistration');
-            if (regData) {
-              try {
-                const parsedData = JSON.parse(regData);
-                
-                if (parsedData.registrationType === 'oauth' && needsUsername) {
-                  setTimeout(() => {
-                    navigate('/create-username', { 
-                      state: { userId, provider: parsedData.provider }
-                    });
-                  }, 1500);
-                } else if (parsedData.registrationType === 'renewal') {
-                  setTimeout(() => {
-                    navigate('/profile');
-                  }, 1500);
-                }
-              } catch (e) {
-                console.error('Error parsing registration data', e);
+            // Get registration data for redirects
+            let regDataObj = null;
+            try {
+              const regData = localStorage.getItem('pendingRegistration');
+              if (regData) {
+                regDataObj = JSON.parse(regData);
+              }
+            } catch (e) {
+              console.error('Error parsing registration data for redirect', e);
+            }
+            
+            // Handle redirects based on registration type
+            if (regDataObj) {
+              if (regDataObj.registrationType === 'oauth' && needsUsername) {
+                setTimeout(() => {
+                  navigate('/create-username', { 
+                    state: { userId, provider: regDataObj.provider }
+                  });
+                }, 2000);
+              } else if (regDataObj.registrationType === 'renewal') {
+                setTimeout(() => {
+                  navigate('/profile');
+                }, 2000);
               }
             }
           } else {
@@ -101,16 +104,16 @@ const SubscriptionSuccess = () => {
         })
         .catch(err => {
           console.error('Error verifying session:', err);
-          if (err.response && err.response.data) {
-            console.error('Error details:', err.response.data);
+          if (err.response) {
+            console.error('Error response:', err.response.status, err.response.data);
           }
           setError('Error connecting to the server. Please try again later.');
           setLoading(false);
         });
-    }, 1000);
+    }, 1500);
     
     return () => clearTimeout(timeoutId);
-  }, []); // Empty dependency array crucial for this fix
+  }, [location.search, dispatch, navigate]);
   
   return (
     <div className="subscription-success-container">
