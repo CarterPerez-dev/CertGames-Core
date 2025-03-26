@@ -1,18 +1,18 @@
 /* src/components/pages/subscription/SubscriptionPage.css */
 :root {
-  --subscription-bg-dark: #0e0a0c;
-  --subscription-bg-card: #1a1218;
-  --subscription-bg-input: #120d0f;
-  --subscription-primary: #cc3843;
-  --subscription-primary-glow: rgba(204, 56, 67, 0.5);
-  --subscription-primary-hover: #e4404c;
-  --subscription-secondary: #ff965b;
-  --subscription-secondary-glow: rgba(255, 150, 91, 0.5);
-  --subscription-gradient-primary: linear-gradient(135deg, #cc3843, #ff4e4e);
-  --subscription-gradient-secondary: linear-gradient(135deg, #ff985b, #ffbc5b);
+  --subscription-bg-dark: #0b0c15;
+  --subscription-bg-card: #171a23;
+  --subscription-bg-input: #0f101a;
+  --subscription-primary: #6543cc;
+  --subscription-primary-glow: rgba(101, 67, 204, 0.5);
+  --subscription-primary-hover: #7a5cda;
+  --subscription-secondary: #ff4c8b;
+  --subscription-secondary-glow: rgba(255, 76, 139, 0.5);
+  --subscription-gradient-primary: linear-gradient(135deg, #6543cc, #8a58fc);
+  --subscription-gradient-secondary: linear-gradient(135deg, #ff4c8b, #ff7950);
   --subscription-text: #e2e2e2;
-  --subscription-text-muted: #b6a8ae;
-  --subscription-border: #352229;
+  --subscription-text-muted: #9da8b9;
+  --subscription-border: #2a2c3d;
   --subscription-success: #2ebb77;
   --subscription-error: #ff4e4e;
   --subscription-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -42,8 +42,8 @@
   bottom: 0;
   background-color: var(--subscription-bg-dark);
   background-image: 
-    radial-gradient(circle at 15% 25%, rgba(64, 26, 30, 0.4) 0%, transparent 45%),
-    radial-gradient(circle at 85% 65%, rgba(89, 36, 42, 0.3) 0%, transparent 40%);
+    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%);
   z-index: -2;
   overflow: hidden;
 }
@@ -55,8 +55,8 @@
   right: 0;
   bottom: 0;
   background-image: 
-    linear-gradient(rgba(204, 56, 67, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(204, 56, 67, 0.1) 1px, transparent 1px);
+    linear-gradient(rgba(101, 67, 204, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(101, 67, 204, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
   z-index: -1;
   opacity: 0.4;
@@ -506,7 +506,7 @@
   font-size: 1.2rem;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  background-image: linear-gradient(135deg, #cc3843, #ff4e4e, #cc3843);
+  background-image: linear-gradient(135deg, #6543cc, #8a58fc, #6543cc);
   background-size: 200% 100%;
   animation: subscription-button-gradient 3s ease infinite;
 }
