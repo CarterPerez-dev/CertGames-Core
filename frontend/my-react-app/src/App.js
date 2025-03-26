@@ -93,50 +93,58 @@ function App() {
 
   // CRITICAL FIX: Add this back to fetch user data when userId is available
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchUserData(userId));
-    }
-  }, [dispatch, userId]);
-
-  // Subscription check effect - only run periodically
-    useEffect(() => {
-      if (!userId) return;
-      
-      // Only run subscription check periodically, not on every route change
-      const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
-      
-      const checkSubscription = async () => {
-        try {
-          const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
-          
-          if (response.ok) {
-            const data = await response.json();
-            
-            // If subscription is no longer active, only log out if not already on subscription or login pages
-            if (!data.subscriptionActive && 
-                !window.location.pathname.includes('/subscription') && 
-                !window.location.pathname.includes('/login')) {
-              console.log('Subscription no longer active, logging out');
-              dispatch({ type: 'user/logout' });
-              // Redirect to login page
-              window.location.href = '/login?reason=subscription_ended';
-            }
-          }
-        } catch (error) {
-          console.error('Error checking subscription status:', error);
+    if (!userId) return;
+    
+    // Check if this is an OAuth flow or coming from username creation
+    const isOAuthFlow = sessionStorage.getItem('isOauthFlow') === 'true';
+    const isComingFromCreateUsername = window.location.pathname.includes('/create-username');
+    
+    // Only run subscription check periodically, not on every route change
+    const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
+    
+    const checkSubscription = async () => {
+      try {
+        // Skip check for OAuth flow or if coming from username creation
+        if (isOAuthFlow || isComingFromCreateUsername) {
+          console.log('Skipping subscription check for OAuth flow');
+          return;
         }
-      };
-      
-      // Initial check when component mounts
+        
+        const response = await fetch(`/api/subscription/subscription-status?userId=${userId}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          
+          // If subscription is no longer active, only log out if not already on subscription or login pages
+          if (!data.subscriptionActive && 
+              !window.location.pathname.includes('/subscription') && 
+              !window.location.pathname.includes('/login')) {
+            console.log('Subscription no longer active, logging out');
+            dispatch({ type: 'user/logout' });
+            // Redirect to login page
+            window.location.href = '/login?reason=subscription_ended';
+          }
+        }
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+      }
+    };
+    
+    // Initial check when component mounts (with special handling for OAuth flow)
+    if (isOAuthFlow || isComingFromCreateUsername) {
+      // Skip or delay initial check for OAuth flow
+      setTimeout(checkSubscription, 3000); // Check after redirect has time to happen
+    } else {
       checkSubscription();
-      
-      // Set up interval for periodic checks
-      const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
-      
-      return () => {
-        clearInterval(intervalId);
-      };
-    }, [dispatch, userId]);
+    }
+    
+    // Set up interval for periodic checks
+    const intervalId = setInterval(checkSubscription, SUBSCRIPTION_CHECK_INTERVAL);
+    
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [dispatch, userId]);
     
     
   return (
