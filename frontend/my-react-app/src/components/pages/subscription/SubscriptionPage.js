@@ -17,7 +17,7 @@ import {
   FaTrophy,
   FaMedal,
   FaGraduationCap,
-  FaRocket,
+  FaFighterJet,
   FaUserSecret
 } from 'react-icons/fa';
 import './SubscriptionPage.css';
@@ -72,7 +72,7 @@ const SubscriptionPage = () => {
       window.location.href = response.data.url;
     } catch (err) {
       console.error('Error creating checkout session:', err);
-      setError('Error starting the subscription process. Please try again.');
+      setError('Please navigate to certgames.com/register and create an account before attempting to susbcribe.');
       setLoading(false);
     }
   };
@@ -100,7 +100,7 @@ const SubscriptionPage = () => {
     {
       title: 'Exclusive Learning Tools',
       description: 'Access ScenarioSphere, AnalogyHub, GRC Wizard, and XploitCraft',
-      icon: <FaRocket className="benefit-icon" />
+      icon: <FaFighterJet className="benefit-icon" />
     },
     {
       title: 'Gamified Learning Experience',
