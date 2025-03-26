@@ -1,159 +1,267 @@
+// src/components/pages/subscription/SubscriptionPage.js
 import React, { useState, useEffect } from 'react';
-import './SubscriptionPage.css';
-import header from './header.png';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {
+  FaCheckCircle,
+  FaTimesCircle,
+  FaShieldAlt,
+  FaLock,
+  FaCreditCard,
+  FaInfoCircle,
+  FaSpinner,
+  FaArrowLeft,
+  FaArrowRight,
+  FaRedo,
+  FaTrophy,
+  FaMedal,
+  FaGraduationCap,
+  FaRocket,
+  FaUserSecret
+} from 'react-icons/fa';
+import './SubscriptionPage.css';
 
-function Subscription() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [processingPayment, setProcessingPayment] = useState(false);
+const SubscriptionPage = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [stripeConfig, setStripeConfig] = useState({});
+  const [redirecting, setRedirecting] = useState(false);
+  const [searchParams] = useSearchParams();
+  const isRenewal = searchParams.get('renewal') === 'true';
+  
+  const location = useLocation();
   const navigate = useNavigate();
-
+  const { userId } = useSelector((state) => state.user);
+  
+  // Check if there's registration data in the location state
+  const registrationData = location.state?.registrationData;
+  const isOauthFlow = location.state?.isOauthFlow || false;
+  
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-      return;
-    }
-
-    async function fetchUserData() {
+    // Fetch Stripe configuration
+    const fetchStripeConfig = async () => {
       try {
-        const response = await axios.get('/api/user', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUser(response.data);
-        setLoading(false);
+        const response = await axios.get('/api/subscription/config');
+        setStripeConfig(response.data);
       } catch (err) {
-        setError('Failed to fetch user data');
-        setLoading(false);
+        console.error('Error fetching Stripe configuration:', err);
+        setError('Error loading payment configuration. Please try again.');
       }
-    }
-
-    fetchUserData();
-  }, [navigate]);
-
+    };
+    
+    fetchStripeConfig();
+  }, []);
+  
   const handleSubscribe = async () => {
-    setProcessingPayment(true);
+    setLoading(true);
+    setError('');
+    
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('/api/subscribe', {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+      // Create a Stripe checkout session
+      const response = await axios.post('/api/subscription/create-checkout-session', {
+        userId: userId || null,
+        registrationData: registrationData || null,
+        isOauthFlow: isOauthFlow
       });
       
-      if (response.data.success) {
-        setShowModal(true);
-        // Update user data
-        const userResponse = await axios.get('/api/user', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUser(userResponse.data);
-      } else {
-        setError('Subscription failed. Please try again.');
-      }
+      // Set redirecting state to show feedback
+      setRedirecting(true);
+      
+      // Redirect to Stripe Checkout page
+      window.location.href = response.data.url;
     } catch (err) {
-      setError('An error occurred while processing your subscription.');
-    } finally {
-      setProcessingPayment(false);
+      console.error('Error creating checkout session:', err);
+      setError('Error starting the subscription process. Please try again.');
+      setLoading(false);
     }
   };
-
-  const closeModal = () => {
-    setShowModal(false);
+  
+  const handleGoBack = () => {
+    if (registrationData) {
+      // Go back to registration
+      navigate('/register');
+    } else if (userId) {
+      // Go back to profile for existing users
+      navigate('/profile');
+    } else {
+      // Default fallback
+      navigate('/');
+    }
   };
-
-  if (loading) {
-    return (
-      <div className="subscription-container">
-        <div className="loading-spinner">Loading...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="subscription-container">
-        <div className="error-message">{error}</div>
-      </div>
-    );
-  }
-
+  
+  // Benefits array for display
+  const benefits = [
+    {
+      title: 'Comprehensive Practice Exams',
+      description: '13,000+ questions covering CompTIA, ISC2, and AWS certifications',
+      icon: <FaGraduationCap className="benefit-icon" />
+    },
+    {
+      title: 'Exclusive Learning Tools',
+      description: 'Access ScenarioSphere, AnalogyHub, GRC Wizard, and XploitCraft',
+      icon: <FaRocket className="benefit-icon" />
+    },
+    {
+      title: 'Gamified Learning Experience',
+      description: 'Earn XP, unlock achievements, and compete on leaderboards',
+      icon: <FaTrophy className="benefit-icon" />
+    },
+    {
+      title: '24/7 Expert Support',
+      description: 'Get answers to your cybersecurity questions any time',
+      icon: <FaUserSecret className="benefit-icon" />
+    }
+  ];
+  
   return (
     <div className="subscription-container">
-      <div className="subscription-card">
-        <div className="header-container">
-          <img src={header} alt="Cert Games Logo" className="logo-header" />
+      <div className="subscription-background">
+        <div className="subscription-grid"></div>
+        <div className="subscription-particles">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="subscription-particle"></div>
+          ))}
         </div>
-        
-        <div className="content-wrapper">
-          <h1 className="subscription-title">Unlock Premium Certification Training</h1>
+        <div className="subscription-glow"></div>
+      </div>
+      
+      <div className="subscription-content">
+        <div className="subscription-card">
+          <div className="subscription-card-accent"></div>
           
-          <div className="benefits-container">
-            <div className="benefit-item">
-              <div className="benefit-icon">🎯</div>
-              <div className="benefit-text">
-                <h3>Exam-Ready Practice</h3>
-                <p>Access realistic certification questions updated regularly</p>
+          <div className="subscription-header">
+            <div className="subscription-logo">
+              <FaShieldAlt className="subscription-logo-icon" />
+            </div>
+            <h1 className="subscription-title">
+              {isRenewal ? 'Reactivate Premium Access' : 'Level Up Your Cybersecurity Skills'}
+            </h1>
+            <p className="subscription-subtitle">
+              {isRenewal 
+                ? 'Continue your learning journey with unlimited access' 
+                : 'Join thousands of professionals excelling in their certification exams'}
+            </p>
+          </div>
+          
+          {error && (
+            <div className="subscription-error">
+              <FaTimesCircle />
+              <span>{error}</span>
+            </div>
+          )}
+          
+          <div className="subscription-pricing">
+            <div className="subscription-price">
+              <span className="subscription-price-badge">Premium</span>
+              <div className="subscription-price-amount">
+                <span className="subscription-price-currency">$</span>
+                <span className="subscription-price-value">9</span>
+                <span className="subscription-price-decimal">.99</span>
+                <span className="subscription-price-period">/month</span>
               </div>
             </div>
-            
-            <div className="benefit-item">
-              <div className="benefit-icon">🚀</div>
-              <div className="benefit-text">
-                <h3>Career Advancement</h3>
-                <p>95% of our users report promotions within 6 months</p>
+            <div className="subscription-price-features">
+              <div className="subscription-price-feature">
+                <FaCheckCircle />
+                <span>Cancel anytime</span>
               </div>
-            </div>
-            
-            <div className="benefit-item">
-              <div className="benefit-icon">🔒</div>
-              <div className="benefit-text">
-                <h3>Pass Guarantee</h3>
-                <p>Free extension if you don't pass on your first attempt</p>
+              <div className="subscription-price-feature">
+                <FaCheckCircle />
+                <span>Immediate access to all premium content</span>
+              </div>
+              <div className="subscription-price-feature">
+                <FaCheckCircle />
+                <span>Access on web and iOS app</span>
               </div>
             </div>
           </div>
-
-          <div className="pricing-container">
-            <div className="price-tag">
-              <span className="price-amount">$29.99</span>
-              <span className="price-period">/month</span>
+          
+          {isRenewal && (
+            <div className="subscription-renewal-message">
+              <FaInfoCircle className="subscription-renewal-icon" />
+              <p>Your previous subscription has expired. Renewing now will immediately restore access to all premium features and your saved progress.</p>
             </div>
-            <div className="price-guarantee">30-day money back guarantee</div>
+          )}
+          
+          <div className="subscription-benefits">
+            <h3 className="subscription-benefits-title">
+              {isRenewal ? 'What You\'ll Get Back' : 'What You\'ll Get'}
+            </h3>
+            <div className="subscription-benefits-list">
+              {benefits.map((benefit, index) => (
+                <div key={index} className="subscription-benefit-item">
+                  {benefit.icon}
+                  <div className="subscription-benefit-text">
+                    <h4>{benefit.title}</h4>
+                    <p>{benefit.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-
-          <div className="action-container">
-            <button 
-              className="subscribe-button" 
-              onClick={handleSubscribe}
-              disabled={processingPayment}
+          
+          <div className="subscription-testimonial">
+            <div className="subscription-testimonial-quote">
+              <p>"CertGames transformed my study routine. The gamified approach kept me engaged for longer periods, and I passed my Security+ exam on the first try!"</p>
+            </div>
+            <div className="subscription-testimonial-author">
+              <div className="subscription-testimonial-avatar">
+                <FaMedal />
+              </div>
+              <p>— Alex K., Security Analyst</p>
+            </div>
+          </div>
+          
+          <div className="subscription-security">
+            <FaLock className="subscription-security-icon" />
+            <p>Secure payments powered by Stripe. Your payment information is never stored on our servers.</p>
+          </div>
+          
+          <div className="subscription-actions">
+            <button
+              className="subscription-back-button"
+              onClick={handleGoBack}
+              disabled={loading || redirecting}
             >
-              {processingPayment ? 'Processing...' : 'Subscribe Now'}
+              <FaArrowLeft className="subscription-button-icon" />
+              <span>Go Back</span>
             </button>
-            <p className="subscription-note">Join 50,000+ IT professionals who've accelerated their careers</p>
+            
+            <button
+              className="subscription-button"
+              onClick={handleSubscribe}
+              disabled={loading || redirecting}
+            >
+              {loading || redirecting ? (
+                <span className="subscription-button-loading">
+                  <div className="subscription-spinner"></div>
+                  <span>{redirecting ? 'Redirecting...' : 'Processing...'}</span>
+                </span>
+              ) : (
+                <span className="subscription-button-text">
+                  <FaCreditCard className="subscription-button-icon" />
+                  <span>{isRenewal ? 'Renew Subscription' : 'Subscribe Now'}</span>
+                  {isRenewal ? 
+                    <FaRedo className="subscription-button-icon-right" /> : 
+                    <FaArrowRight className="subscription-button-icon-right" />}
+                </span>
+              )}
+            </button>
+          </div>
+          
+          <div className="subscription-note">
+            <FaInfoCircle className="subscription-note-icon" />
+            <p>
+              By subscribing, you agree to our <a href="/terms">Terms of Service</a> and 
+              <a href="/privacy">Privacy Policy</a>. You can cancel your subscription at any time
+              from your profile page.
+            </p>
           </div>
         </div>
       </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Subscription Successful!</h2>
-            <p>Thank you for subscribing to Cert Games Premium. Your account has been upgraded.</p>
-            <button className="modal-close-button" onClick={closeModal}>Continue</button>
-          </div>
-        </div>
-      )}
     </div>
   );
-}
+};
 
-export default Subscription;
+export default SubscriptionPage;
