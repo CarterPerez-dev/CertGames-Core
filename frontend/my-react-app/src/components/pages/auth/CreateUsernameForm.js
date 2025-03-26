@@ -1,233 +1,123 @@
-// src/components/auth/CreateUsernameForm.js
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// src/components/auth/OAuthSuccess.js
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchUserData, setCurrentUserId } from '../store/userSlice';
-import { 
-  FaUser, 
-  FaCheck, 
-  FaTimes, 
-  FaShieldAlt, 
-  FaInfoCircle, 
-  FaExclamationCircle, 
-  FaGamepad,
-  FaTrophy 
-} from 'react-icons/fa';
-import './CreateUsernameForm.css';
+import { setCurrentUserId, fetchUserData } from '../store/userSlice';
+import { FaShieldAlt, FaSpinner } from 'react-icons/fa';
+import './Login.css';
 
-const CreateUsernameForm = () => {
-  const [username, setUsername] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [submitted, setSubmitted] = useState(false);
-  
+const OAuthSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Get userId and provider from URL params
-  const searchParams = new URLSearchParams(location.search);
-  const userId = searchParams.get('userId');
-  const provider = searchParams.get('provider');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
+    // Parse query parameters
+    const searchParams = new URLSearchParams(location.search);
+    const userId = searchParams.get('userId');
+    const provider = searchParams.get('provider');
+    
     if (!userId) {
-      navigate('/login');
-    }
-  }, [userId, navigate]);
-  
-  const validateUsername = (username) => {
-    // Basic frontend validation
-    if (!username || username.length < 3) {
-      return "Username must be at least 3 characters long";
-    }
-    
-    if (username.length > 30) {
-      return "Username must be no more than 30 characters long";
-    }
-    
-    // Letters, numbers, underscores, dots, and dashes only
-    if (!/^[A-Za-z0-9._-]+$/.test(username)) {
-      return "Username can only contain letters, numbers, dots, underscores, and dashes";
-    }
-    
-    // No leading/trailing dots, underscores, or dashes
-    if (/^[._-]|[._-]$/.test(username)) {
-      return "Username cannot start or end with dots, underscores, or dashes";
-    }
-    
-    // No triple repeats
-    if (/(.)\1{2,}/.test(username)) {
-      return "Username cannot contain three identical consecutive characters";
-    }
-    
-    return null; // No errors
-  };
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validate username
-    const validationError = validateUsername(username);
-    if (validationError) {
-      setError(validationError);
+      setError('Authentication failed. Please try again.');
+      setLoading(false);
       return;
     }
     
-    setLoading(true);
-    setError('');
+    // Check if this is a new user registration flow
+    const isOauthFlow = sessionStorage.getItem('isOauthFlow') === 'true';
     
-    try {
-      // Update username via API
-      const response = await fetch('/api/test/user/change-username', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: userId,
-          newUsername: username,
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to set username');
+    // Handle successful login
+    const handleSuccess = async () => {
+      try {
+        // Save userId to localStorage regardless of flow
+        localStorage.setItem('userId', userId);
+        
+        // Update Redux state
+        dispatch(setCurrentUserId(userId));
+        
+        // For new registrations, check if needs_username is true
+        await dispatch(fetchUserData(userId)).unwrap();
+        
+        // Get the current user state
+        const userState = await dispatch(fetchUserData(userId)).unwrap();
+        
+        if (userState.needs_username) {
+          // If user needs to set username, direct to username creation form
+          navigate('/create-username', { 
+            state: { 
+              provider: provider || 'oauth'
+            },
+            search: `?userId=${userId}&provider=${provider || 'oauth'}`
+          });
+        } else if (!userState.subscriptionActive) {
+          // If user doesn't have an active subscription, direct to subscription page
+          navigate('/subscription', { 
+            state: { 
+              userId: userId,
+              isOauthFlow: true 
+            } 
+          });
+        } else {
+          // For existing users with active subscription, proceed to profile
+          navigate('/profile', { 
+            state: { 
+              message: `Successfully signed in with ${provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'OAuth'}`
+            }
+          });
+        }
+      } catch (err) {
+        console.error('Error during OAuth completion:', err);
+        setError('Failed to complete authentication. Please try again.');
+        setLoading(false);
       }
-      
-      // Success! Mark as submitted
-      setSubmitted(true);
-      
-      // Save userId to localStorage
-      localStorage.setItem('userId', userId);
-      
-      // Update Redux state
-      dispatch(setCurrentUserId(userId));
-      
-      // Fetch the updated user data
-      await dispatch(fetchUserData(userId));
-      
-      // Navigate to profile page after a brief delay (to show success message)
-      setTimeout(() => {
-        navigate('/profile', {
-          state: {
-            message: `Welcome! You've successfully created your account with ${
-              provider.charAt(0).toUpperCase() + provider.slice(1)
-            }`
-          }
-        });
-      }, 1500);
-    } catch (err) {
-      console.error('Error setting username:', err);
-      setError(err.message || 'Failed to set username. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    
+    handleSuccess();
+  }, [dispatch, navigate, location.search]);
   
   return (
-    <div className="create-username-container">
-      <div className="create-username-background">
-        <div className="create-username-grid"></div>
-        <div className="create-username-particles">
-          {[...Array(20)].map((_, i) => (
-            <div key={i} className="create-username-particle"></div>
-          ))}
-        </div>
-        <div className="create-username-glow"></div>
+    <div className="login-container">
+      <div className="login-background">
+        <div className="login-grid"></div>
+        <div className="login-glow"></div>
       </div>
       
-      <div className="create-username-content">
-        <div className="create-username-card">
-          <div className="create-username-card-accent"></div>
-          
-          <div className="create-username-header">
-            <div className="create-username-logo">
-              <FaGamepad className="create-username-logo-icon-secondary" />
-              <FaShieldAlt className="create-username-logo-icon-primary" />
+      <div className="login-content">
+        <div className="login-card">
+          <div className="login-header">
+            <div className="login-logo">
+              <FaShieldAlt className="login-logo-icon" />
             </div>
-            <h1 className="create-username-title">Choose Your Gamer Tag</h1>
-            <p className="create-username-subtitle">
-              Pick a unique username for your journey
+            <h1 className="login-title">Authentication</h1>
+            <p className="login-subtitle">
+              {error ? 'Authentication Error' : 'Completing your sign-in...'}
             </p>
           </div>
           
-          {error && (
-            <div className="create-username-error">
-              <FaExclamationCircle />
-              <span>{error}</span>
-            </div>
-          )}
-          
-          {submitted ? (
-            <div className="create-username-success">
-              <div className="create-username-success-icon">
-                <FaCheck />
+          <div className="oauth-loading-container">
+            {error ? (
+              <div className="oauth-error">
+                <p>{error}</p>
+                <button 
+                  className="login-button"
+                  onClick={() => navigate('/login')}
+                >
+                  Return to Login
+                </button>
               </div>
-              <h3>Username Set Successfully!</h3>
-              <p>Preparing your dashboard...</p>
-              <div className="create-username-progress">
-                <div className="create-username-progress-bar"></div>
+            ) : (
+              <div className="oauth-loading">
+                <div className="oauth-spinner"></div>
+                <p>Please wait while we complete your authentication...</p>
               </div>
-            </div>
-          ) : (
-            <form className="create-username-form" onSubmit={handleSubmit}>
-              <div className="create-username-input-group">
-                <label htmlFor="username">
-                  <span>Username</span>
-                  <div className="create-username-label-badge">Required</div>
-                </label>
-                <div className="create-username-input-wrapper">
-                  <FaUser className="create-username-input-icon" />
-                  <input
-                    type="text"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Choose a unique username"
-                    disabled={loading}
-                    required
-                    autoFocus
-                  />
-                  {username && !validateUsername(username) && (
-                    <FaCheck className="create-username-input-valid" />
-                  )}
-                </div>
-                <div className="create-username-input-hint">
-                  <FaInfoCircle className="create-username-hint-icon" />
-                  <span>3-30 characters, letters, numbers, dots, underscores, dashes</span>
-                </div>
-              </div>
-              
-              <button
-                type="submit"
-                className="create-username-button"
-                disabled={loading}
-              >
-                {loading ? (
-                  <span className="create-username-button-loading">
-                    <div className="create-username-spinner"></div>
-                    <span>Setting Username...</span>
-                  </span>
-                ) : (
-                  <span className="create-username-button-text">
-                    <FaTrophy className="create-username-button-icon" />
-                    <span>Set Username & Continue</span>
-                  </span>
-                )}
-              </button>
-              
-              <div className="create-username-note">
-                <FaInfoCircle />
-                <span>You can change your username later from your profile settings</span>
-              </div>
-            </form>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default CreateUsernameForm;
+export default OAuthSuccess;
