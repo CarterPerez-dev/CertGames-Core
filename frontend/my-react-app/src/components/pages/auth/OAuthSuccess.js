@@ -31,15 +31,28 @@ const OAuthSuccess = () => {
     // Handle successful login
     const handleSuccess = async () => {
       try {
-        // For new registrations, redirect to subscription page
-        if (isOauthFlow) {
-          // Clear the OAuth flow flag
-          sessionStorage.removeItem('isOauthFlow');
-          
-          // Save user ID temporarily
-          sessionStorage.setItem('tempUserId', userId);
-          
-          // Navigate to subscription page
+        // Save userId to localStorage regardless of flow
+        localStorage.setItem('userId', userId);
+        
+        // Update Redux state
+        dispatch(setCurrentUserId(userId));
+        
+        // For new registrations, check if needs_username is true
+        await dispatch(fetchUserData(userId)).unwrap();
+        
+        // Get the current user state
+        const userState = await dispatch(fetchUserData(userId)).unwrap();
+        
+        if (userState.needs_username) {
+          // If user needs to set username, direct to username creation form
+          navigate('/create-username', { 
+            state: { 
+              provider: provider || 'oauth'
+            },
+            search: `?userId=${userId}&provider=${provider || 'oauth'}`
+          });
+        } else if (!userState.subscriptionActive) {
+          // If user doesn't have an active subscription, direct to subscription page
           navigate('/subscription', { 
             state: { 
               userId: userId,
@@ -47,17 +60,7 @@ const OAuthSuccess = () => {
             } 
           });
         } else {
-          // For existing users, proceed normally
-          // Save userId to localStorage
-          localStorage.setItem('userId', userId);
-          
-          // Update Redux state
-          dispatch(setCurrentUserId(userId));
-          
-          // Fetch user data
-          await dispatch(fetchUserData(userId)).unwrap();
-          
-          // Navigate to profile page
+          // For existing users with active subscription, proceed to profile
           navigate('/profile', { 
             state: { 
               message: `Successfully signed in with ${provider ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'OAuth'}`
