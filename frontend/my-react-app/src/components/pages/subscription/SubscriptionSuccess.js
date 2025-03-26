@@ -12,7 +12,7 @@ import {
   FaUser,
   FaArrowRight,
   FaShieldAlt,
-  FaRocket
+  FaFighterJet
 } from 'react-icons/fa';
 import './SubscriptionSuccess.css';
 
@@ -154,13 +154,13 @@ const SubscriptionSuccess = () => {
                 </div>
                 <h1 className="success-title">Subscription Successful!</h1>
                 <p className="success-subtitle">
-                  Thank you for subscribing to CertGames Premium! Your account is now activated with full access to all premium features.
+                  Thank you for subscribing to CertGames Your account is now activated with full access to all features.
                 </p>
               </div>
               
               <div className="success-benefits">
                 <h3>
-                  <FaRocket className="success-section-icon" />
+                  <FaFighterJet className="success-section-icon" />
                   <span>What You've Unlocked</span>
                 </h3>
                 <ul className="success-benefits-list">

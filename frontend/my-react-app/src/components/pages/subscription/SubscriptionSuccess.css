@@ -446,9 +446,10 @@
 
 .success-next-steps p {
   margin: 0;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--success-text-muted);
   line-height: 1.5;
+  font-family: 'Exo 2', 'Roboto', sans-serif;
 }
 
 /* Button Styles */
@@ -458,7 +459,7 @@
   justify-content: center;
   gap: 10px;
   border-radius: 30px;
-  padding: 0;
+  padding: 20px;
   height: 60px;
   font-family: inherit;
   font-size: 16px;
@@ -585,7 +586,8 @@
   }
   
   .success-benefits-list li {
-    font-size: 14px;
+    font-size: 16px;
+    font-family: 'Exo 2', 'Roboto', sans-serif;   
   }
   
   .success-button {

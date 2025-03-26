@@ -2,30 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaLock, FaSpinner, FaExclamationCircle, FaCreditCard, FaPaypal, FaApplePay, FaGooglePay } from 'react-icons/fa';
+import { FaLock, FaSpinner, FaExclamationCircle, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
 import './StripeCheckout.css';
 
 const StripeCheckout = ({ userId, registrationData, isOauthFlow }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [clientSecret, setClientSecret] = useState('');
-  const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
-
-  // Simulate progress for better user experience
-  useEffect(() => {
-    if (loading) {
-      const interval = setInterval(() => {
-        setProgress(prevProgress => {
-          // Cap progress at 70% while waiting for redirect
-          // The real redirect will happen before it reaches 100%
-          return prevProgress < 70 ? prevProgress + 5 : prevProgress;
-        });
-      }, 500);
-      
-      return () => clearInterval(interval);
-    }
-  }, [loading]);
 
   useEffect(() => {
     // Create a Stripe checkout session when component mounts
@@ -51,52 +35,54 @@ const StripeCheckout = ({ userId, registrationData, isOauthFlow }) => {
   }, [userId, registrationData, isOauthFlow]);
 
   return (
-    <div className="stripe-checkout-container">
-      {/* Animated glow effects */}
-      <div className="glow-effect"></div>
-      <div className="glow-effect"></div>
-      <div className="glow-effect"></div>
+    <div className="checkout-container">
+      <div className="checkout-background">
+        <div className="checkout-grid"></div>
+        <div className="checkout-particles">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="checkout-particle"></div>
+          ))}
+        </div>
+        <div className="checkout-glow"></div>
+      </div>
       
-      {loading ? (
-        <div className="stripe-checkout-loading">
-          <img 
-            src="/logo-light.png" 
-            alt="Company Logo" 
-            className="stripe-checkout-brand-logo"
-          />
+      <div className="checkout-content">
+        <div className="checkout-card">
+          <div className="checkout-card-accent"></div>
           
-          <FaSpinner className="stripe-checkout-spinner" />
-          <p>Preparing secure payment environment...</p>
-          
-          {/* Progress indicator */}
-          <div className="stripe-checkout-progress">
-            <div className="stripe-checkout-progress-bar"></div>
-          </div>
-          
-          <div className="stripe-checkout-security">
-            <FaLock className="stripe-checkout-security-icon" />
-            <span>Secure transaction powered by Stripe</span>
-          </div>
-          
-          <div className="stripe-checkout-payment-logos">
-            <FaCreditCard className="stripe-checkout-payment-logo" />
-            <FaPaypal className="stripe-checkout-payment-logo" />
-            <FaApplePay className="stripe-checkout-payment-logo" />
-            <FaGooglePay className="stripe-checkout-payment-logo" />
-          </div>
+          {loading ? (
+            <div className="checkout-loading">
+              <div className="checkout-logo">
+                <FaCreditCard className="checkout-logo-icon-primary" />
+                <FaShieldAlt className="checkout-logo-icon-secondary" />
+              </div>
+              <h2>Preparing Secure Payment</h2>
+              <p>You'll be redirected to Stripe's secure payment platform in a moment...</p>
+              <div className="checkout-spinner-container">
+                <FaSpinner className="checkout-spinner" />
+              </div>
+              <div className="checkout-security">
+                <FaLock className="checkout-security-icon" />
+                <span>Secure transaction powered by Stripe</span>
+              </div>
+            </div>
+          ) : error ? (
+            <div className="checkout-error">
+              <div className="checkout-error-icon">
+                <FaExclamationCircle />
+              </div>
+              <h2>Payment Error</h2>
+              <p>{error}</p>
+              <button 
+                className="checkout-retry-button"
+                onClick={() => window.location.reload()}
+              >
+                Try Again
+              </button>
+            </div>
+          ) : null}
         </div>
-      ) : error ? (
-        <div className="stripe-checkout-error">
-          <FaExclamationCircle className="stripe-checkout-error-icon" />
-          <p>{error}</p>
-          <button 
-            className="stripe-checkout-retry"
-            onClick={() => window.location.reload()}
-          >
-            Try Again
-          </button>
-        </div>
-      ) : null}
+      </div>
     </div>
   );
 };
