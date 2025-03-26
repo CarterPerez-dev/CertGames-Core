@@ -75,32 +75,6 @@ import OAuthSuccess from './components/pages/auth/OAuthSuccess';
 import './global.css';
 
 
-function HomeOrProfile() {
-  const { userId, status } = useSelector((state) => state.user);
-  if (status === 'loading') {
-    return <div>Loading...</div>;
-  }
-  if (userId) {
-    return <Navigate to="/profile" replace />;
-  }
-  return <InfoPage />;
-}
-
-You're absolutely right, and I apologize for that oversight. Those useEffect hooks are critical to the functionality of your app. Here's the full App.js with all the important useEffects intact, including my fix for the OAuth issue:
-javascriptCopy// src/App.js
-import React, { useEffect } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserData } from './components/pages/store/userSlice';
-
-// Import ToastContainer from react-toastify
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-// Component imports would be here...
-
-// Global CSS import
-import './global.css';
 
 function HomeOrProfile() {
   const { userId, status } = useSelector((state) => state.user);
