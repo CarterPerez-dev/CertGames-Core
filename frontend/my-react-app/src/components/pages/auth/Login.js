@@ -125,6 +125,11 @@ const Login = () => {
     <div className="login-container">
       <div className="login-background">
         <div className="login-grid"></div>
+        <div className="login-particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="login-particle"></div>
+          ))}
+        </div>
         <div className="login-glow"></div>
       </div>
       

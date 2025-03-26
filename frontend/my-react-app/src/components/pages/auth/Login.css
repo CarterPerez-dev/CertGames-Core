@@ -39,6 +39,11 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  background-color: var(--login-bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%);
+  overflow: hidden;
 }
 
 .login-grid {
@@ -48,32 +53,103 @@
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 15% 25%, rgba(26, 20, 64, 0.4) 0%, transparent 45%),
-    radial-gradient(circle at 75% 65%, rgba(42, 26, 89, 0.3) 0%, transparent 40%),
-    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
-  opacity: 0.8;
+    linear-gradient(rgba(101, 67, 204, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(101, 67, 204, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  opacity: 0.4;
+  animation: login-grid-fade 3s ease-in-out infinite alternate;
+}
+
+@keyframes login-grid-fade {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0.6;
+  }
 }
 
 .login-glow {
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  width: 60%;
-  height: 60%;
-  background: radial-gradient(ellipse at center, rgba(101, 67, 204, 0.15) 0%, transparent 70%);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(101, 67, 204, 0.5) 0%, transparent 70%);
   transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: pulse 6s ease-in-out infinite alternate;
+  filter: blur(100px);
+  opacity: 0.6;
+  z-index: -1;
+  animation: login-glow-pulse 4s ease-in-out infinite alternate;
 }
 
-@keyframes pulse {
+@keyframes login-glow-pulse {
   0% {
-    opacity: 0.5;
-    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0.4;
+    transform: translate(-50%, -50%) scale(1);
   }
   100% {
-    opacity: 0.8;
+    opacity: 0.7;
     transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+/* Add particles system */
+.login-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.login-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--login-primary);
+  border-radius: 50%;
+  animation: login-float 8s infinite linear;
+  opacity: 0.6;
+}
+
+.login-particle:nth-child(odd) {
+  background: var(--login-secondary);
+}
+
+.login-particle:nth-child(1) { top: 10%; left: 10%; animation-duration: 15s; }
+.login-particle:nth-child(2) { top: 20%; left: 80%; animation-duration: 18s; }
+.login-particle:nth-child(3) { top: 30%; left: 20%; animation-duration: 12s; }
+.login-particle:nth-child(4) { top: 40%; left: 90%; animation-duration: 20s; }
+.login-particle:nth-child(5) { top: 50%; left: 30%; animation-duration: 14s; }
+.login-particle:nth-child(6) { top: 60%; left: 70%; animation-duration: 19s; }
+.login-particle:nth-child(7) { top: 70%; left: 40%; animation-duration: 16s; }
+.login-particle:nth-child(8) { top: 80%; left: 60%; animation-duration: 13s; }
+.login-particle:nth-child(9) { top: 90%; left: 50%; animation-duration: 17s; }
+.login-particle:nth-child(10) { top: 15%; left: 35%; animation-duration: 22s; }
+.login-particle:nth-child(11) { top: 25%; left: 75%; animation-duration: 19s; }
+.login-particle:nth-child(12) { top: 35%; left: 15%; animation-duration: 14s; }
+.login-particle:nth-child(13) { top: 45%; left: 85%; animation-duration: 21s; }
+.login-particle:nth-child(14) { top: 55%; left: 25%; animation-duration: 13s; }
+.login-particle:nth-child(15) { top: 65%; left: 65%; animation-duration: 18s; }
+.login-particle:nth-child(16) { top: 75%; left: 45%; animation-duration: 15s; }
+.login-particle:nth-child(17) { top: 85%; left: 55%; animation-duration: 12s; }
+.login-particle:nth-child(18) { top: 5%; left: 95%; animation-duration: 23s; }
+.login-particle:nth-child(19) { top: 95%; left: 5%; animation-duration: 24s; }
+.login-particle:nth-child(20) { top: 50%; left: 50%; animation-duration: 20s; }
+
+@keyframes login-float {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-40px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
   }
 }
 

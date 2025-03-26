@@ -145,6 +145,11 @@ const Register = () => {
     <div className="register-container">
       <div className="register-background">
         <div className="register-grid"></div>
+        <div className="register-particles">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className="register-particle"></div>
+          ))}
+        </div>
         <div className="register-glow"></div>
       </div>
       
@@ -216,7 +221,7 @@ const Register = () => {
                       setShowPasswordRequirements(false);
                     }
                   }}
-                  placeholder="Create a strong password (please 👉👈🥹)"
+                  placeholder="Create a strong password"
                   disabled={loading}
                   className={password && !passwordIsValid() ? "register-input-error" : ""}
                 />
