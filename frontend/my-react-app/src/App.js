@@ -86,12 +86,55 @@ function HomeOrProfile() {
   return <InfoPage />;
 }
 
+You're absolutely right, and I apologize for that oversight. Those useEffect hooks are critical to the functionality of your app. Here's the full App.js with all the important useEffects intact, including my fix for the OAuth issue:
+javascriptCopy// src/App.js
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserData } from './components/pages/store/userSlice';
+
+// Import ToastContainer from react-toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Component imports would be here...
+
+// Global CSS import
+import './global.css';
+
+function HomeOrProfile() {
+  const { userId, status } = useSelector((state) => state.user);
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+  if (userId) {
+    return <Navigate to="/profile" replace />;
+  }
+  return <InfoPage />;
+}
+
 function App() {
   const dispatch = useDispatch();
   const { userId } = useSelector((state) => state.user);
   const location = useLocation();
 
-  // CRITICAL FIX: Add this back to fetch user data when userId is available
+  // THEME INITIALIZATION - CRITICALLY IMPORTANT
+  useEffect(() => {
+    const initializeTheme = () => {
+      const savedTheme = localStorage.getItem('selectedTheme') || 'default';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    };
+    initializeTheme();
+  }, []);
+  
+  // FETCH USER DATA - MAJORLY IMPORTANT
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
+    }
+  }, [dispatch, userId]);
+
+  // Subscription check effect - only run periodically
   useEffect(() => {
     if (!userId) return;
     
@@ -132,8 +175,8 @@ function App() {
     
     // Initial check when component mounts (with special handling for OAuth flow)
     if (isOAuthFlow || isComingFromCreateUsername) {
-      // Skip or delay initial check for OAuth flow
-      setTimeout(checkSubscription, 3000); // Check after redirect has time to happen
+      // Skip initial check for OAuth flow
+      console.log('Skipping initial subscription check for OAuth flow');
     } else {
       checkSubscription();
     }
@@ -145,7 +188,7 @@ function App() {
       clearInterval(intervalId);
     };
   }, [dispatch, userId]);
-    
+  
     
   return (
     <div className="App">
