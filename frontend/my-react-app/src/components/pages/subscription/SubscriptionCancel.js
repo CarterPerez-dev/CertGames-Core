@@ -5,7 +5,11 @@ import {
   FaTimesCircle, 
   FaArrowLeft, 
   FaHome,
-  FaSignInAlt
+  FaSignInAlt,
+  FaCreditCard,
+  FaInfoCircle,
+  FaQuestionCircle,
+  FaShieldAlt
 } from 'react-icons/fa';
 import './SubscriptionCancel.css';
 
@@ -39,59 +43,79 @@ const SubscriptionCancel = () => {
   }, []);
   
   return (
-    <div className="subscription-cancel-container">
-      <div className="subscription-cancel-background">
-        <div className="subscription-cancel-grid"></div>
-        <div className="subscription-cancel-glow"></div>
+    <div className="cancel-container">
+      <div className="cancel-background">
+        <div className="cancel-grid"></div>
+        <div className="cancel-particles">
+          {Array.from({ length: 20 }).map((_, i) => (
+            <div key={i} className="cancel-particle"></div>
+          ))}
+        </div>
+        <div className="cancel-glow"></div>
       </div>
       
-      <div className="subscription-cancel-content">
-        <div className="subscription-cancel-card">
-          <div className="subscription-cancel-icon-container">
-            <FaTimesCircle className="subscription-cancel-icon" />
+      <div className="cancel-content">
+        <div className="cancel-card">
+          <div className="cancel-card-accent"></div>
+          
+          <div className="cancel-header">
+            <div className="cancel-logo">
+              <FaTimesCircle className="cancel-logo-icon" />
+              <div className="cancel-logo-pulse"></div>
+            </div>
+            <h1 className="cancel-title">Subscription Cancelled</h1>
+            <p className="cancel-subtitle">
+              Your subscription process was cancelled. No charges have been made to your account.
+            </p>
           </div>
           
-          <h1 className="subscription-cancel-title">Subscription Cancelled</h1>
-          <p className="subscription-cancel-message">
-            Your subscription process was cancelled. No charges have been made to your account.
-          </p>
-          
-          <div className="subscription-cancel-options">
-            <h3>What would you like to do?</h3>
-            
-            <div className="subscription-cancel-buttons">
-              <Link 
-                to={isNewUser ? "/register" : "/subscription"} 
-                className="subscription-cancel-button subscription-cancel-try-again"
-              >
-                <FaArrowLeft className="subscription-cancel-button-icon" />
-                <span>{isNewUser ? "Back to Registration" : "Try Again"}</span>
-              </Link>
-              
-              {isNewUser ? (
-                <Link 
-                  to="/login" 
-                  className="subscription-cancel-button subscription-cancel-login"
-                >
-                  <FaSignInAlt className="subscription-cancel-button-icon" />
-                  <span>Sign In Instead</span>
-                </Link>
-              ) : (
-                <Link 
-                  to="/" 
-                  className="subscription-cancel-button subscription-cancel-home"
-                >
-                  <FaHome className="subscription-cancel-button-icon" />
-                  <span>Go to Home Page</span>
-                </Link>
-              )}
+          <div className="cancel-info-box">
+            <FaInfoCircle className="cancel-info-icon" />
+            <div>
+              <h3>What would you like to do next?</h3>
+              <p>You can try again or return to where you were.</p>
             </div>
           </div>
           
-          <div className="subscription-cancel-note">
+          <div className="cancel-actions">
+            <Link 
+              to={isNewUser ? "/register" : "/subscription"} 
+              className="cancel-button cancel-button-primary"
+            >
+              <span className="cancel-button-text">
+                <FaCreditCard className="cancel-button-icon" />
+                <span>{isNewUser ? "Back to Registration" : "Try Subscribing Again"}</span>
+              </span>
+            </Link>
+            
+            {isNewUser ? (
+              <Link 
+                to="/login" 
+                className="cancel-button cancel-button-secondary"
+              >
+                <span className="cancel-button-text">
+                  <FaSignInAlt className="cancel-button-icon" />
+                  <span>Sign In Instead</span>
+                </span>
+              </Link>
+            ) : (
+              <Link 
+                to="/" 
+                className="cancel-button cancel-button-secondary"
+              >
+                <span className="cancel-button-text">
+                  <FaHome className="cancel-button-icon" />
+                  <span>Go to Home Page</span>
+                </span>
+              </Link>
+            )}
+          </div>
+          
+          <div className="cancel-help">
+            <FaQuestionCircle className="cancel-help-icon" />
             <p>
               If you have any questions or need assistance, please don't hesitate to {' '}
-              <Link to="/contact" className="subscription-cancel-contact-link">
+              <Link to="/contact" className="cancel-contact-link">
                 contact our support team
               </Link>.
             </p>
