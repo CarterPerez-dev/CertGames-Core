@@ -201,18 +201,6 @@ const SubscriptionPage = () => {
             </div>
           </div>
           
-          <div className="subscription-testimonial">
-            <div className="subscription-testimonial-quote">
-              <p>"CertGames transformed my study routine. The gamified approach kept me engaged for longer periods, and I passed my Security+ exam on the first try!"</p>
-            </div>
-            <div className="subscription-testimonial-author">
-              <div className="subscription-testimonial-avatar">
-                <FaMedal />
-              </div>
-              <p>— Alex K., Security Analyst</p>
-            </div>
-          </div>
-          
           <div className="subscription-security">
             <FaLock className="subscription-security-icon" />
             <p>Secure payments powered by Stripe. Your payment information is never stored on our servers.</p>
@@ -220,16 +208,7 @@ const SubscriptionPage = () => {
           
           <div className="subscription-actions">
             <button
-              className="subscription-back-button"
-              onClick={handleGoBack}
-              disabled={loading || redirecting}
-            >
-              <FaArrowLeft className="subscription-button-icon" />
-              <span>Go Back</span>
-            </button>
-            
-            <button
-              className="subscription-button"
+              className="subscription-button subscription-button-large"
               onClick={handleSubscribe}
               disabled={loading || redirecting}
             >
@@ -241,12 +220,21 @@ const SubscriptionPage = () => {
               ) : (
                 <span className="subscription-button-text">
                   <FaCreditCard className="subscription-button-icon" />
-                  <span>{isRenewal ? 'Renew Subscription' : 'Subscribe Now'}</span>
+                  <span>{isRenewal ? 'RENEW SUBSCRIPTION' : 'SUBSCRIBE NOW'}</span>
                   {isRenewal ? 
                     <FaRedo className="subscription-button-icon-right" /> : 
                     <FaArrowRight className="subscription-button-icon-right" />}
                 </span>
               )}
+            </button>
+            
+            <button
+              className="subscription-back-button"
+              onClick={handleGoBack}
+              disabled={loading || redirecting}
+            >
+              <FaArrowLeft className="subscription-button-icon" />
+              <span>Go Back</span>
             </button>
           </div>
           

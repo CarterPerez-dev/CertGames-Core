@@ -423,55 +423,7 @@
   line-height: 1.5;
 }
 
-/* Testimonial Section */
-.subscription-testimonial {
-  margin-bottom: 25px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 12px;
-  position: relative;
-}
-
-.subscription-testimonial::before {
-  content: '"';
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  font-size: 40px;
-  color: var(--subscription-primary);
-  opacity: 0.5;
-  font-family: Georgia, serif;
-}
-
-.subscription-testimonial-quote p {
-  margin: 0 0 15px;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  font-style: italic;
-}
-
-.subscription-testimonial-author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.subscription-testimonial-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--subscription-gradient-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.subscription-testimonial-author p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--subscription-text-muted);
-}
+/* Removed testimonial section */
 
 /* Security Message */
 .subscription-security {
@@ -495,25 +447,27 @@
 /* Action Buttons */
 .subscription-actions {
   display: flex;
+  flex-direction: column;
   gap: 15px;
   margin-bottom: 25px;
 }
 
 .subscription-back-button {
-  flex: 0 0 auto;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--subscription-border);
   color: var(--subscription-text);
   border-radius: 30px;
   padding: 0 20px;
-  height: 54px;
+  height: 50px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   font-family: inherit;
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
 }
 
 .subscription-back-button:hover {
@@ -530,21 +484,31 @@
 }
 
 .subscription-button {
-  flex: 1;
   background: var(--subscription-gradient-primary);
   color: white;
   border: none;
   border-radius: 30px;
   padding: 0;
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  height: 54px;
+  height: 60px;
   transition: all 0.3s;
   box-shadow: 0 4px 15px rgba(204, 56, 67, 0.4);
+  width: 100%;
+}
+
+.subscription-button-large {
+  height: 70px;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background-image: linear-gradient(135deg, #cc3843, #ff4e4e, #cc3843);
+  background-size: 200% 100%;
+  animation: subscription-button-gradient 3s ease infinite;
 }
 
 .subscription-button::after {
@@ -638,10 +602,29 @@
   text-decoration: underline;
 }
 
+/* Add button gradient animation */
+@keyframes subscription-button-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 /* Responsive styles */
 @media (min-width: 768px) {
   .subscription-benefits-list {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .subscription-button-large {
+    height: 80px;
+    font-size: 1.3rem;
+    margin: 10px 0;
   }
 }
 
@@ -663,32 +646,84 @@
     font-size: 20px;
   }
   
-  .subscription-actions {
-    flex-direction: column;
-  }
-  
-  .subscription-back-button,
-  .subscription-button {
-    width: 100%;
+  .subscription-button-large {
+    height: 70px;
   }
 }
 
 @media (max-width: 480px) {
-  .subscription-pricing {
-    padding: 20px 15px;
-  }
-  
-  .subscription-benefit-item {
+  .subscription-content {
     padding: 15px;
   }
   
+  .subscription-card {
+    padding: 20px 15px;
+  }
+  
+  .subscription-pricing {
+    padding: 15px;
+  }
+  
+  .subscription-benefit-item {
+    padding: 10px 0;
+  }
+  
+  .subscription-benefit-item svg {
+    font-size: 1.5rem;
+    padding: 8px;
+  }
+  
   .subscription-logo {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
   }
   
   .subscription-logo-icon {
-    font-size: 2rem;
+    font-size: 1.8rem;
+  }
+  
+  .subscription-price-value {
+    font-size: 40px;
+  }
+  
+  .subscription-price-currency,
+  .subscription-price-decimal {
+    font-size: 18px;
+  }
+  
+  .subscription-button-large {
+    height: 60px;
+    font-size: 1.1rem;
+  }
+  
+  .subscription-benefits-title {
+    font-size: 1.2rem;
+  }
+  
+  .subscription-benefit-text h4 {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .subscription-content {
+    padding: 10px;
+  }
+  
+  .subscription-card {
+    padding: 15px 12px;
+  }
+  
+  .subscription-title {
+    font-size: 20px;
+  }
+  
+  .subscription-subtitle {
+    font-size: 14px;
+  }
+  
+  .subscription-button-text span {
+    font-size: 16px;
   }
 }
 
