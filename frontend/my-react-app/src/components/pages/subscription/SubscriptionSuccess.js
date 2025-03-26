@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchUserData } from '../store/userSlice';
-import Confetti from 'react-confetti';
+import { fetchUserData } from '../../store/userSlice';
 import './SubscriptionSuccess.css';
 
 // Icons import
@@ -50,9 +49,6 @@ const SubscriptionSuccess = () => {
     platform: formatPlatform(platform)
   });
   
-  // Controls confetti animation
-  const [showConfetti, setShowConfetti] = useState(true);
-  
   // Format payment method for display
   function formatPaymentMethod(method) {
     if (!method) return 'Credit Card';
@@ -75,8 +71,8 @@ const SubscriptionSuccess = () => {
     
     const platformMap = {
       'web': 'Website',
-      'ios': 'iOS App',
-      'android': 'Android App'
+      'ios': 'iOS App'
+      // Removed Android since you don't have an Android app
     };
     
     return platformMap[platform.toLowerCase()] || platform;
@@ -87,13 +83,6 @@ const SubscriptionSuccess = () => {
     if (userId) {
       dispatch(fetchUserData(userId));
     }
-    
-    // Disable confetti after 5 seconds
-    const timer = setTimeout(() => {
-      setShowConfetti(false);
-    }, 5000);
-    
-    return () => clearTimeout(timer);
   }, [dispatch, userId]);
   
   // Keep checking for subscriptionActive if it's not set yet
@@ -119,8 +108,6 @@ const SubscriptionSuccess = () => {
   
   return (
     <div className="subscription-success-container">
-      {showConfetti && <Confetti colors={['#81c784', '#66bb6a', '#4caf50', '#43a047', '#388e3c']} recycle={false} />}
-      
       {/* Animated glow effects */}
       <div className="glow-effect"></div>
       <div className="glow-effect"></div>
