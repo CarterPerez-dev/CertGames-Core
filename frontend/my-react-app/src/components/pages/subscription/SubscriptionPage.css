@@ -157,7 +157,7 @@
 /* Content and Card */
 .subscription-content {
   width: 100%;
-  max-width: 550px;
+  max-width: 700px;
   padding: 20px;
   z-index: 1;
 }
@@ -328,6 +328,7 @@
   align-items: center;
   gap: 10px;
   font-size: 0.9rem;
+  font-family: 'Exo 2', 'Roboto', sans-serif;
 }
 
 .subscription-price-feature svg {
@@ -419,7 +420,7 @@
 .subscription-benefit-text p {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--subscription-text-muted);
+  font-family: 'Exo 2', 'Roboto', sans-serif;
   line-height: 1.5;
 }
 
@@ -582,6 +583,7 @@
   font-size: 0.8rem;
   color: var(--subscription-text-muted);
   line-height: 1.5;
+  font-style: italic;
 }
 
 .subscription-note-icon {

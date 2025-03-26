@@ -6,7 +6,7 @@ import axios from 'axios';
 import {
   FaCheckCircle,
   FaTimesCircle,
-  FaShieldAlt,
+  FaDragon,
   FaLock,
   FaCreditCard,
   FaInfoCircle,
@@ -104,12 +104,12 @@ const SubscriptionPage = () => {
     },
     {
       title: 'Gamified Learning Experience',
-      description: 'Earn XP, unlock achievements, and compete on leaderboards',
+      description: 'Earn XP, avatars, unlock achievements, and compete on leaderboards',
       icon: <FaTrophy className="benefit-icon" />
     },
     {
       title: '24/7 Expert Support',
-      description: 'Get answers to your cybersecurity questions any time',
+      description: 'Get answers or support for your upcoming exam at any time',
       icon: <FaUserSecret className="benefit-icon" />
     }
   ];
@@ -132,15 +132,15 @@ const SubscriptionPage = () => {
           
           <div className="subscription-header">
             <div className="subscription-logo">
-              <FaShieldAlt className="subscription-logo-icon" />
+              <FaDragon className="subscription-logo-icon" />
             </div>
             <h1 className="subscription-title">
-              {isRenewal ? 'Reactivate Premium Access' : 'Level Up Your Cybersecurity Skills'}
+              {isRenewal ? 'Reactivate Unlimited Access' : 'Level Up Your Cybersecurity Skills'}
             </h1>
             <p className="subscription-subtitle">
               {isRenewal 
                 ? 'Continue your learning journey with unlimited access' 
-                : 'Join thousands of professionals excelling in their certification exams'}
+                : 'Join other professionals excelling in their certification exams'}
             </p>
           </div>
           
@@ -153,7 +153,7 @@ const SubscriptionPage = () => {
           
           <div className="subscription-pricing">
             <div className="subscription-price">
-              <span className="subscription-price-badge">Premium</span>
+              <span className="subscription-price-badge">Unlimited</span>
               <div className="subscription-price-amount">
                 <span className="subscription-price-currency">$</span>
                 <span className="subscription-price-value">9</span>
@@ -168,11 +168,11 @@ const SubscriptionPage = () => {
               </div>
               <div className="subscription-price-feature">
                 <FaCheckCircle />
-                <span>Immediate access to all premium content</span>
+                <span>Immediate access to all content</span>
               </div>
               <div className="subscription-price-feature">
                 <FaCheckCircle />
-                <span>Access on web and iOS app</span>
+                <span>Access to web and iOS app</span>
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ const SubscriptionPage = () => {
           {isRenewal && (
             <div className="subscription-renewal-message">
               <FaInfoCircle className="subscription-renewal-icon" />
-              <p>Your previous subscription has expired. Renewing now will immediately restore access to all premium features and your saved progress.</p>
+              <p>Your previous subscription has expired. Renewing now will immediately restore access to all features and your saved progress.</p>
             </div>
           )}
           
