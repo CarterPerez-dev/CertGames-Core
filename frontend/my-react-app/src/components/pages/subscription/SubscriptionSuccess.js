@@ -1,170 +1,214 @@
-// src/components/pages/subscription/SubscriptionSuccess.js
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import axios from 'axios';
-import { 
-  FaCheckCircle, 
-  FaSpinner, 
-  FaTimesCircle, 
-  FaTrophy, 
-  FaSignInAlt,
-  FaUser
-} from 'react-icons/fa';
+// src/components/subscription/SubscriptionSuccess.js
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { fetchUserData } from '../../store/userSlice';
+import Confetti from 'react-confetti';
 import './SubscriptionSuccess.css';
 
+// Icons import
+import {
+  FaCheckCircle,
+  FaUserShield,
+  FaCrown,
+  FaUnlockAlt,
+  FaHome,
+  FaCoins,
+  FaRocket,
+  FaInfo,
+  FaTrophy,
+  FaCalendarAlt,
+  FaCreditCard,
+  FaRegClock
+} from 'react-icons/fa';
+
 const SubscriptionSuccess = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [isNewUser, setIsNewUser] = useState(false);
-  const [isOauthFlow, setIsOauthFlow] = useState(false);
-  
-  const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   
-  // Get session ID and user ID from URL parameters
-  const searchParams = new URLSearchParams(location.search);
-  const sessionId = searchParams.get('session_id');
-  const userId = searchParams.get('user_id');
+  // Get subscription data from URL params or state
+  const urlParams = new URLSearchParams(location.search);
+  const subscriptionId = urlParams.get('subscriptionId') || (location.state && location.state.subscriptionId);
+  const paymentMethod = urlParams.get('paymentMethod') || (location.state && location.state.paymentMethod);
+  const platform = urlParams.get('platform') || (location.state && location.state.platform) || 'website';
   
-  useEffect(() => {
-    const verifySession = async () => {
-      if (!sessionId) {
-        setError('Missing session information');
-        setLoading(false);
-        return;
-      }
-      
-      try {
-        // Verify the checkout session status
-        const response = await axios.get(`/api/subscription/session-status?sessionId=${sessionId}`);
-        
-        if (response.data.status === 'complete' || response.data.paymentStatus === 'paid') {
-          // Payment was successful
-          
-          // Determine if this is a new user registration or an existing user
-          if (userId === 'new') {
-            setIsNewUser(true);
-            
-            // Check if this is an OAuth flow
-            // We'll use a flag from the session to determine this
-            try {
-              const checkOauth = await axios.get('/api/subscription/check-flow');
-              setIsOauthFlow(checkOauth.data.isOauthFlow || false);
-            } catch (err) {
-              console.error('Error checking OAuth flow:', err);
-              // Default to standard flow if we can't determine
-              setIsOauthFlow(false);
-            }
-          }
-          
-          setLoading(false);
-        } else {
-          // Payment is still processing or failed
-          setError('Your payment is still processing or could not be completed. Please check your payment details.');
-          setLoading(false);
-        }
-      } catch (err) {
-        console.error('Error verifying checkout session:', err);
-        setError('Error verifying your subscription. Please contact support if your subscription is not active.');
-        setLoading(false);
-      }
+  // Get user data from Redux store
+  const { userId, username, email, subscriptionActive } = useSelector((state) => state.user);
+  
+  // Generate display-friendly subscription data
+  const [subData, setSubData] = useState({
+    plan: 'Premium',
+    price: '$9.99/month',
+    startDate: new Date().toLocaleDateString(),
+    nextBillingDate: (() => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + 1);
+      return date.toLocaleDateString();
+    })(),
+    paymentMethod: formatPaymentMethod(paymentMethod),
+    platform: formatPlatform(platform)
+  });
+  
+  // Controls confetti animation
+  const [showConfetti, setShowConfetti] = useState(true);
+  
+  // Format payment method for display
+  function formatPaymentMethod(method) {
+    if (!method) return 'Credit Card';
+    
+    const methodMap = {
+      'cc': 'Credit Card',
+      'credit_card': 'Credit Card',
+      'paypal': 'PayPal',
+      'apple': 'Apple Pay',
+      'google': 'Google Pay',
+      'stripe': 'Stripe'
     };
     
-    verifySession();
-  }, [sessionId, userId]);
+    return methodMap[method.toLowerCase()] || method;
+  }
   
-  // Handle the next steps based on user status
-  const handleContinue = () => {
-    if (isNewUser) {
-      if (isOauthFlow) {
-        // OAuth flow - needs to create username
-        navigate('/create-username');
-      } else {
-        // Regular flow - proceed to login
-        navigate('/login', { 
-          state: { 
-            message: 'Your account has been created! Please sign in with your credentials.'
-          }
-        });
-      }
-    } else {
-      // Existing user - proceed to profile
-      navigate('/profile', {
-        state: {
-          message: 'Your subscription has been activated successfully!'
-        }
-      });
+  // Format platform for display
+  function formatPlatform(platform) {
+    if (!platform) return 'Website';
+    
+    const platformMap = {
+      'web': 'Website',
+      'ios': 'iOS App',
+      'android': 'Android App'
+    };
+    
+    return platformMap[platform.toLowerCase()] || platform;
+  }
+  
+  // Refresh user data to update subscription status
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchUserData(userId));
     }
+    
+    // Disable confetti after 5 seconds
+    const timer = setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+    
+    return () => clearTimeout(timer);
+  }, [dispatch, userId]);
+  
+  // Keep checking for subscriptionActive if it's not set yet
+  useEffect(() => {
+    if (!subscriptionActive) {
+      const checkSubscription = setInterval(() => {
+        dispatch(fetchUserData(userId));
+      }, 3000);
+      
+      return () => clearInterval(checkSubscription);
+    }
+  }, [dispatch, userId, subscriptionActive]);
+  
+  // Navigate to home or dashboard
+  const handleGoHome = () => {
+    navigate('/');
+  };
+  
+  // Navigate to user profile
+  const handleGoToProfile = () => {
+    navigate('/profile');
   };
   
   return (
     <div className="subscription-success-container">
-      <div className="subscription-success-background">
-        <div className="subscription-success-grid"></div>
-        <div className="subscription-success-glow"></div>
-      </div>
+      {showConfetti && <Confetti colors={['#81c784', '#66bb6a', '#4caf50', '#43a047', '#388e3c']} recycle={false} />}
       
-      <div className="subscription-success-content">
-        <div className="subscription-success-card">
-          {loading ? (
-            <div className="subscription-success-loading">
-              <FaSpinner className="subscription-success-spinner" />
-              <h2>Verifying your subscription...</h2>
-              <p>Please wait while we complete your registration.</p>
+      {/* Animated glow effects */}
+      <div className="glow-effect"></div>
+      <div className="glow-effect"></div>
+      <div className="glow-effect"></div>
+      
+      <div className="subscription-success-wrapper">
+        <div className="subscription-success-header">
+          <h1 className="subscription-success-title">
+            <FaCheckCircle className="subscription-success-icon" />
+            Subscription Activated!
+          </h1>
+        </div>
+        
+        <div className="subscription-success-content">
+          <div className="subscription-success-message">
+            <p>Thank you for subscribing to our Premium plan! Your account has been successfully upgraded, and you now have full access to all premium features and content.</p>
+          </div>
+          
+          <div className="subscription-success-details">
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Plan:</span>
+              <span className="subscription-detail-value">{subData.plan}</span>
             </div>
-          ) : error ? (
-            <div className="subscription-success-error">
-              <FaTimesCircle className="subscription-success-error-icon" />
-              <h2>Subscription Error</h2>
-              <p>{error}</p>
-              <div className="subscription-success-actions">
-                <Link to="/subscription" className="subscription-success-button subscription-success-try-again">
-                  Try Again
-                </Link>
-                <Link to="/contact" className="subscription-success-contact-link">
-                  Contact Support
-                </Link>
-              </div>
+            
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Price:</span>
+              <span className="subscription-detail-value">{subData.price}</span>
             </div>
-          ) : (
-            <div className="subscription-success-confirmed">
-              <div className="subscription-success-icon-container">
-                <FaCheckCircle className="subscription-success-check-icon" />
-                <FaTrophy className="subscription-success-trophy-icon" />
-              </div>
-              
-              <h1 className="subscription-success-title">Subscription Successful!</h1>
-              <p className="subscription-success-message">
-                Thank you for subscribing to CertGames Premium! Your account is now activated with full access to all premium features.
-              </p>
-              
-              <div className="subscription-success-info">
-                <h3>What's Next?</h3>
-                <p>
-                  {isNewUser 
-                    ? isOauthFlow
-                      ? "You'll need to set up your username to complete your account setup."
-                      : "You can now sign in to your new account using the credentials you provided during registration."
-                    : "You can now access all premium features in your account."
-                  }
-                </p>
-              </div>
-              
-              <button
-                className="subscription-success-button"
-                onClick={handleContinue}
-              >
-                {isNewUser 
-                  ? isOauthFlow
-                    ? <><FaUser /> Complete Account Setup</>
-                    : <><FaSignInAlt /> Sign In to Your Account</>
-                  : <><FaTrophy /> Continue to Your Account</>
-                }
-              </button>
+            
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Start Date:</span>
+              <span className="subscription-detail-value">{subData.startDate}</span>
             </div>
-          )}
+            
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Next Billing Date:</span>
+              <span className="subscription-detail-value">{subData.nextBillingDate}</span>
+            </div>
+            
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Payment Method:</span>
+              <span className="subscription-detail-value">{subData.paymentMethod}</span>
+            </div>
+            
+            <div className="subscription-detail-row">
+              <span className="subscription-detail-label">Platform:</span>
+              <span className="subscription-detail-value">{subData.platform}</span>
+            </div>
+            
+            {subscriptionId && (
+              <div className="subscription-detail-row">
+                <span className="subscription-detail-label">Subscription ID:</span>
+                <span className="subscription-detail-value">{subscriptionId}</span>
+              </div>
+            )}
+          </div>
+          
+          <div className="subscription-features">
+            <div className="subscription-feature-card">
+              <FaUnlockAlt className="subscription-feature-icon" />
+              <h3 className="subscription-feature-title">Unlimited Access</h3>
+              <p className="subscription-feature-description">Enjoy unlimited access to all premium content and features without restrictions.</p>
+            </div>
+            
+            <div className="subscription-feature-card">
+              <FaCoins className="subscription-feature-icon" />
+              <h3 className="subscription-feature-title">Bonus Points</h3>
+              <p className="subscription-feature-description">Earn 2x coins for all completed tests and activities.</p>
+            </div>
+            
+            <div className="subscription-feature-card">
+              <FaTrophy className="subscription-feature-icon" />
+              <h3 className="subscription-feature-title">Special Achievements</h3>
+              <p className="subscription-feature-description">Unlock exclusive premium achievements and rewards.</p>
+            </div>
+          </div>
+          
+          <div className="subscription-success-actions">
+            <button onClick={handleGoToProfile} className="subscription-success-btn subscription-primary-btn">
+              <FaUserShield />
+              <span>Go to Profile</span>
+            </button>
+            
+            <button onClick={handleGoHome} className="subscription-success-btn subscription-secondary-btn">
+              <FaHome />
+              <span>Back to Dashboard</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
