@@ -67,9 +67,14 @@ const ProtectedRoute = ({ children }) => {
       );
     }
     
+    // Special case: if we're already on the subscription page, allow access
+    if (location.pathname === '/subscription') {
+      return children;
+    }
+    
     // No active subscription, redirect to subscription page
-    // Add renewal=true parameter if subscription was previously canceled
-    const renewalMode = subscriptionStatus === 'canceled' ? '?renewal=true' : '';
+    // Add renewal=true parameter if subscription was previously canceled or is known to be inactive
+    const renewalMode = subscriptionStatus === 'canceled' || !subscriptionActive ? '?renewal=true' : '';
     return <Navigate to={`/subscription${renewalMode}`} state={{ userId, from: location }} replace />;
   }
   

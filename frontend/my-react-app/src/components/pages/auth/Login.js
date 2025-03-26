@@ -44,6 +44,16 @@ const Login = () => {
       window.history.replaceState({}, document.title);
     }
     
+    // Check for subscription_ended reason
+    const searchParams = new URLSearchParams(location.search);
+    const reason = searchParams.get('reason');
+    if (reason === 'subscription_ended') {
+      setFormError('Your subscription has ended. Please log in to renew your subscription.');
+      // Clear the reason param to prevent showing the message again on refresh
+      const newUrl = window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+    }
+    
     return () => {
       dispatch(clearAuthErrors());
     };
@@ -72,12 +82,18 @@ const Login = () => {
         // Check subscription status
         const userId = resultAction.payload.user_id;
         const isSubscriptionActive = resultAction.payload.subscriptionActive;
+        const subscriptionStatus = resultAction.payload.subscriptionStatus;
+        
+        // Save userId regardless of subscription status
+        localStorage.setItem('userId', userId);
         
         if (!isSubscriptionActive) {
-          // If subscription is not active, redirect to subscription page
-          navigate('/subscription', { 
+          // If subscription is not active, redirect to subscription page with renewal flag
+          const renewalMode = subscriptionStatus === 'canceled' || !isSubscriptionActive ? '?renewal=true' : '';
+          navigate(`/subscription${renewalMode}`, { 
             state: { 
-              userId: userId 
+              userId: userId,
+              from: '/login'
             } 
           });
         } else {
