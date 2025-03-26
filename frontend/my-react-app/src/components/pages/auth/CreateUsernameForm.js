@@ -115,6 +115,9 @@ const CreateUsernameForm = () => {
       // Navigate to subscription page instead of profile
       // This ensures new OAuth users are properly directed to subscribe
       setTimeout(() => {
+        // Clear the OAuth flow flag after directing to subscription page
+        sessionStorage.removeItem('isOauthFlow');
+        
         navigate('/subscription', {
           state: {
             userId: userId,

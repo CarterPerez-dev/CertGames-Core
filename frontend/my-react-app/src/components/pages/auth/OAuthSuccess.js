@@ -19,6 +19,9 @@ const OAuthSuccess = () => {
     const userId = searchParams.get('userId');
     const provider = searchParams.get('provider');
     
+    // Set OAuth flow flag
+    sessionStorage.setItem('isOauthFlow', 'true');
+    
     if (!userId) {
       setError('Authentication failed. Please try again.');
       setLoading(false);
