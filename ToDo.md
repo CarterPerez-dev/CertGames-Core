@@ -67,4 +67,6 @@ Then register it in app.py and add it to protected_prefixes.
 This approach ensures that even if someone bypasses your frontend protection, they still can't access the actual resources data without a valid subscription.
 
 ----
-#Implment rate limiting for login, register, and contact form
+# Implment rate limiting for login, register, and contact form
+------
+# Figure out the discrepancy in the support page and how it gathers a user id or whatver idk
