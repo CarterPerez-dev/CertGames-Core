@@ -66,6 +66,11 @@ Then register it in app.py and add it to protected_prefixes.
 
 This approach ensures that even if someone bypasses your frontend protection, they still can't access the actual resources data without a valid subscription.
 
+
+-----
+
+Fix theme iniliation being the same for the browser and anything else liek that
+
 ----
 # Implment rate limiting for login, register, and contact form
 ------
