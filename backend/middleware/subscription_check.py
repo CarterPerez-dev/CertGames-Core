@@ -64,7 +64,7 @@ def check_subscription_middleware():
             '/payload',
             '/scenario',
             '/analogy',
-            '/grc'
+            '/grc',
             '/profile'
         ]
         
