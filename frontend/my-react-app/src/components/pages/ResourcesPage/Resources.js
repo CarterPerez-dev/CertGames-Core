@@ -33,7 +33,9 @@ import {
   FaList,
   FaTable,
   FaChevronDown,
-  FaChevronUp
+  FaChevronUp,
+  FaAws,
+  FaUserShield
 } from 'react-icons/fa';
 
 
@@ -95,6 +97,17 @@ const cyberSecurityTools = [
   { name: 'Sublist3r', url: 'https://github.com/aboul3la/Sublist3r' },
   { name: 'EyeWitness', url: 'https://github.com/FortyNorthSecurity/EyeWitness' },
   { name: 'RouterSploit', url: 'https://github.com/threat9/routersploit' },
+  // Additional Security Tools
+  { name: 'Nuclei', url: 'https://github.com/projectdiscovery/nuclei' },
+  { name: 'Snyk', url: 'https://snyk.io/' },
+  { name: 'OWASP Dependency-Check', url: 'https://github.com/jeremylong/DependencyCheck' },
+  { name: 'Offensive Security Exploit Database', url: 'https://www.exploit-db.com/' },
+  { name: 'Shodan', url: 'https://www.shodan.io/' },
+  { name: 'Cuckoo Malware Analysis', url: 'https://cuckoosandbox.org/' },
+  { name: 'OSSEC HIDS', url: 'https://www.ossec.net/' },
+  { name: 'Greenbone Vulnerability Manager', url: 'https://www.greenbone.net/en/' },
+  { name: 'Semgrep', url: 'https://semgrep.dev/' },
+  { name: 'Detectify', url: 'https://detectify.com/' },
 ];
 
 
@@ -158,6 +171,17 @@ const youtubeChannels = [
   { name: 'Mad Hat', url: 'https://www.youtube.com/@madhatistaken' },
   { name: 'SomeOrdinaryGamers', url: 'https://www.youtube.com/@SomeOrdinaryGamers' },
   { name: 'TheBeardedITDad', url: 'https://www.youtube.com/@TheBeardedITDad' },
+  // Additional top cybersecurity YouTube channels
+  { name: 'David Bombal', url: 'https://www.youtube.com/@davidbombal' },
+  { name: 'John Hammond', url: 'https://www.youtube.com/@_JohnHammond' },
+  { name: 'InsiderPHD', url: 'https://www.youtube.com/@InsiderPhD' },
+  { name: 'SecurityFWD', url: 'https://www.youtube.com/@SecurityFWD' },
+  { name: 'Security Weekly', url: 'https://www.youtube.com/@SecurityWeekly' },
+  { name: 'BlackHat', url: 'https://www.youtube.com/@BlackHatOfficialYT' },
+  { name: 'DEFCONConference', url: 'https://www.youtube.com/@DEFCONConference' },
+  { name: 'TheCyberMentor', url: 'https://www.youtube.com/@TCMSecurityAcademy' },
+  { name: 'PwnFunction', url: 'https://www.youtube.com/@PwnFunction' },
+  { name: 'LiveOverflow', url: 'https://www.youtube.com/@LiveOverflow' },
 ];
 
 
@@ -198,7 +222,16 @@ const youtubeVideos = [
   { title: 'CompTIA Network+ PBQ', url: 'https://www.youtube.com/live/9cdL214y-u0?si=lCSxriFy636PbOnR' },
   { title: 'CASP+ course', url: 'https://www.youtube.com/watch?v=vwNjLVpXNzk&list=PLCNmoXT8zexnJtDOdd8Owa8TAdSVVWF-J' },
   { title: 'NMAP Full Guide', url: 'https://www.youtube.com/watch?v=JHAMj2vN2oU&t=33s' },
+  // AWS Cloud YouTube Resources
+  { title: 'AWS Certified Cloud Practitioner Certification Course (CLF-C02) - Pass the Exam!', url: 'https://www.youtube.com/watch?v=SOTamWNgDKc' },
+  { title: 'AWS Certified Cloud Practitioner CLF-C02 [15 Hour Course] FreeCodeCamp', url: 'https://www.youtube.com/watch?v=NhDYbskXRgc' },
+  { title: 'AWS Cloud Practitioner Essentials Day 1 (Full Course) | AWS Training', url: 'https://www.youtube.com/watch?v=uQBPLesIGss' },
+  // CISSP YouTube Resources
+  { title: 'CISSP Course 2024 - PASS the Certified Information Security Professional Exam!', url: 'https://www.youtube.com/watch?v=M1_v5HBVHWo' },
+  { title: 'CISSP MasterClass 2024 - Mike Chapple (Official) Full Course', url: 'https://www.youtube.com/watch?v=v8furUCfuaY' },
+  { title: 'Inside CISSP with Kelly Handerhan - YouTube Playlist', url: 'https://www.youtube.com/playlist?list=PL7XJSuT7Dq_XPLpbZOrNXA-lsQbvx3YeQ' },
 ];
+
 
 const udemyCourses = [
   { title: 'CompTIA Security+ (SY0-701) Complete Course & Exam', url: 'https://www.udemy.com/course/securityplus' },
@@ -248,7 +281,14 @@ const udemyCourses = [
   { title: 'Complete Ethical Hacking & Cyber Security Masterclass Course', url: 'https://www.udemy.com/course/ethicalhackingcourse/' },
   { title: 'Implementing the NIST Cybersecurity Framework (CSF)', url: 'https://www.udemy.com/course/nist-cybersecurity-framework/' },
   { title: 'Notes!! - CompTIA A+, Network+ and Security+ (Mike Meyers)', url: 'https://www.udemy.com/course/comptia-a-1001-1002-study-notes/' },
-  
+  // AWS Cloud Udemy Courses
+  { title: 'Ultimate AWS Certified Cloud Practitioner CLF-C02 2025', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-new/' },
+  { title: 'AWS Certified Cloud Practitioner Practice Exams CLF-C02', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-practice-tests-clf-c02/' },
+  { title: 'AWS Certified Cloud Practitioner CLF-C02 - Complete Course', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-clf-c02-complete-course/' },
+  // CISSP Udemy Courses
+  { title: 'CISSP Certification: CISSP Complete Training Course 2025', url: 'https://www.udemy.com/course/cissp-certification-cissp-training/' },
+  { title: 'CISSP Practice Exams 2025 - 750+ Questions with Explanations', url: 'https://www.udemy.com/course/cissp-practice-exams-2020/' },
+  { title: 'CISSP Full Course 2025 - Complete CISSP Certification Training', url: 'https://www.udemy.com/course/cissp-certification-training-cissp-online-training/' },
 ];
 
 
@@ -269,6 +309,17 @@ const linkedInPeople = [
   { name: 'SANS', url: 'https://www.linkedin.com/company/sans-institute/' },
   { name: 'Chuck Brooks', url: 'https://www.linkedin.com/in/chuckbrooks/' },
   { name: 'Steve Morgan', url: 'https://www.linkedin.com/in/cybersecuritysf/' },
+  // Additional LinkedIn professionals to follow
+  { name: 'Jane Frankland', url: 'https://www.linkedin.com/in/janefrankland/' },
+  { name: 'Chuck Brooks', url: 'https://www.linkedin.com/in/chuckbrooks/' },
+  { name: 'Troy Hunt', url: 'https://www.linkedin.com/in/troyhunt/' },
+  { name: 'Rinki Sethi', url: 'https://www.linkedin.com/in/rinkisethi/' },
+  { name: 'Kevin Mitnick', url: 'https://www.linkedin.com/in/kevinmitnick/' },
+  { name: 'Jeff Kellum', url: 'https://www.linkedin.com/in/jeffkellum/' },
+  { name: 'Aron Lange', url: 'https://www.linkedin.com/in/aronlange/' },
+  { name: 'Tyler Cohen Wood', url: 'https://www.linkedin.com/in/tylercohenwood/' },
+  { name: 'Jeff Peters', url: 'https://www.linkedin.com/in/jeffreytpeters/' },
+  { name: 'Mark Dodds', url: 'https://www.linkedin.com/in/mark-dodds-compex/' },
 ];
 
 
@@ -308,6 +359,17 @@ const otherResources = [
   { name: 'TestOut', url: 'https://testoutce.com/' },
   { name: 'ExamDigest', url: 'https://examsdigest.com/' },
   { name: 'ExamCompass', url: 'https://www.examcompass.com/' },
+  // Additional Online Learning Platforms
+  { name: 'TryHackMe', url: 'https://tryhackme.com/' },
+  { name: 'HackTheBox Academy', url: 'https://academy.hackthebox.com/' },
+  { name: 'Codecademy Cybersecurity Courses', url: 'https://www.codecademy.com/catalog/subject/cybersecurity' },
+  { name: 'INE Security Courses', url: 'https://ine.com/learning/areas/security' },
+  { name: 'Infosec Skills', url: 'https://www.infosecinstitute.com/skills/' },
+  { name: 'Pluralsight Cybersecurity Path', url: 'https://www.pluralsight.com/paths/cybersecurity' },
+  { name: 'Cybrary', url: 'https://www.cybrary.it/' },
+  { name: 'edX Cybersecurity Programs', url: 'https://www.edx.org/professional-certificate/cybersecurity' },
+  { name: 'SANS Cyber Aces Online', url: 'https://www.cyberaces.org/' },
+  { name: 'EC-Council CodeRed', url: 'https://codered.eccouncil.org/' },
 ];
 
 
@@ -330,6 +392,17 @@ const comptiaObjectives = [
   { cert: 'ITF', url: 'https://www.comptia.jp/pdf/CompTIA%20IT%20Fundamentals%20FC0-U61%20Exam%20Objectives.pdf' },
   { cert: 'Tech+', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-tech-fc0-u71-exam-objectives-(1-2)' },
   { cert: 'SecurityX (CASP 005)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-securityx-cas-005-exam-objectives-(3-0)' },
+  // Updated CompTIA Objectives
+  { cert: 'A+ Core 1 (220-1101)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1101-exam-objectives-(3-0)' },
+  { cert: 'A+ Core 2 (220-1102)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1102-exam-objectives-(3-0)' },
+  { cert: 'Network+ (N10-009)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-network-n10-009-exam-objectives-(4-0)' },
+  { cert: 'Security+ (SY0-701)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-security-sy0-701-exam-objectives-(1-0)' },
+  { cert: 'CySA+ (CS0-003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-cysa-cs0-003-exam-objectives-(2-0)' },
+  { cert: 'SecurityX (CAS-005)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-securityx-cas-005-exam-objectives-(3-0)' },
+  { cert: 'PenTest+ (PT0-003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-pentest-pt0-003-exam-objectives-(1-0)' },
+  { cert: 'Cloud+ (CV0-003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-cloud-cv0-003-exam-objectives-(1-0)' },
+  { cert: 'Data+ (DA0-001)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-data-da0-001-exam-objectives-(2-0)' },
+  { cert: 'Server+ (SK0-005)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-server-sk0-005-exam-objectives-(1-0)' },
 ];
 
 
@@ -447,6 +520,60 @@ const securityFrameworks = [
   { name: 'NIST Cybersecurity Workforce Framework', url: 'https://www.nist.gov/cyberframework/workforce' },
 ];
 
+// New AWS Cloud Resources
+const awsCloudResources = [
+  { name: 'AWS Certified Cloud Practitioner (CLF-C02) Exam Guide', url: 'https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf' },
+  { name: 'AWS Cloud Practitioner Essentials Course (Free)', url: 'https://aws.amazon.com/training/learn-about/cloud-practitioner/' },
+  { name: 'AWS Cloud Quest: Cloud Practitioner (Free Game-Based Learning)', url: 'https://aws.amazon.com/training/digital/aws-cloud-quest/' },
+  { name: 'AWS Skill Builder - Cloud Practitioner Learning Path (Free)', url: 'https://explore.skillbuilder.aws/learn/public/learning_plan/view/1/cloud-foundations-learning-plan' },
+  { name: 'Tutorials Dojo AWS Cloud Practitioner Practice Exams', url: 'https://tutorialsdojo.com/courses/aws-certified-cloud-practitioner-practice-exams/' },
+  { name: 'Whizlabs AWS Cloud Practitioner CLF-C02 Practice Tests', url: 'https://www.whizlabs.com/aws-certified-cloud-practitioner/' },
+  { name: 'AWS Cloud Practitioner CLF-C02 Exam Guide Study Path', url: 'https://tutorialsdojo.com/aws-cloud-practitioner-clf-c02-exam-guide/' },
+  { name: 'AWS Certified Cloud Practitioner Official Study Guide', url: 'https://www.amazon.com/Certified-Cloud-Practitioner-Study-Guide/dp/1119742099/' },
+  { name: 'Digital Cloud Training AWS Cheat Sheets', url: 'https://digitalcloud.training/aws-cheat-sheets/' },
+  { name: 'Ultimate AWS Certified Cloud Practitioner CLF-C02 2025', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-new/' },
+  { name: 'AWS Certified Cloud Practitioner Practice Exams CLF-C02', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-practice-tests-clf-c02/' },
+  { name: 'AWS Certified Cloud Practitioner CLF-C02 - Complete Course', url: 'https://www.udemy.com/course/aws-certified-cloud-practitioner-clf-c02-complete-course/' },
+  { name: 'AWS Certified Cloud Practitioner Certification Course (CLF-C02) - Pass the Exam!', url: 'https://www.youtube.com/watch?v=SOTamWNgDKc' },
+  { name: 'AWS Certified Cloud Practitioner CLF-C02 [15 Hour Course] FreeCodeCamp', url: 'https://www.youtube.com/watch?v=NhDYbskXRgc' },
+  { name: 'AWS Cloud Practitioner Essentials Day 1 (Full Course) | AWS Training', url: 'https://www.youtube.com/watch?v=uQBPLesIGss' },
+];
+
+// New CISSP Resources
+const cisspResources = [
+  { name: 'CISSP Exam Outline', url: 'https://www.isc2.org/-/media/ISC2/Certifications/Exam-Outlines/CISSP-Exam-Outline-English-April-2021.ashx' },
+  { name: 'ISC2 Official CISSP Training', url: 'https://www.isc2.org/Training/Self-Study-Resources' },
+  { name: 'ISC2 CISSP Certification Details', url: 'https://www.isc2.org/Certifications/CISSP' },
+  { name: 'Official ISC2 CISSP Study Guide - 9th Edition', url: 'https://www.amazon.com/Certified-Information-Security-Professional-Official/dp/1119786231/' },
+  { name: 'CISSP Study Guide 2025-2026: All in One CISSP Exam Prep', url: 'https://www.amazon.com/CISSP-Study-Guide-2025-2026-Certification/dp/B0DRHZG41M' },
+  { name: 'CISSP For Dummies - 7th Edition', url: 'https://www.amazon.com/CISSP-Dummies-Computer-Tech/dp/1119806836/' },
+  { name: 'Boson CISSP Practice Exams', url: 'https://www.boson.com/practice-exam/cissp-isc2-practice-exam' },
+  { name: 'CISSP Official Practice Tests - 3rd Edition', url: 'https://www.amazon.com/CISSP-Official-ISC-Practice-Tests/dp/1119787637/' },
+  { name: 'TotalTester CISSP Practice Exams', url: 'https://www.totalsem.com/cissp-practice-tests/' },
+  { name: 'CISSP Pocket Prep Mobile App', url: 'https://pocketprep.com/exam-bank/isc2-cissp/' },
+  { name: 'Study Notes and Theory CISSP Blog', url: 'https://www.studynotesandtheory.com/' },
+  { name: 'Cybrary CISSP Course (Free)', url: 'https://www.cybrary.it/course/cissp/' },
+  { name: 'CISSP Certification: CISSP Complete Training Course 2025', url: 'https://www.udemy.com/course/cissp-certification-cissp-training/' },
+  { name: 'CISSP Practice Exams 2025 - 750+ Questions with Explanations', url: 'https://www.udemy.com/course/cissp-practice-exams-2020/' },
+  { name: 'CISSP Full Course 2025 - Complete CISSP Certification Training', url: 'https://www.udemy.com/course/cissp-certification-training-cissp-online-training/' },
+  { name: 'CISSP Course 2024 - PASS the Certified Information Security Professional Exam!', url: 'https://www.youtube.com/watch?v=M1_v5HBVHWo' },
+  { name: 'CISSP MasterClass 2024 - Mike Chapple (Official) Full Course', url: 'https://www.youtube.com/watch?v=v8furUCfuaY' },
+  { name: 'Inside CISSP with Kelly Handerhan - YouTube Playlist', url: 'https://www.youtube.com/playlist?list=PL7XJSuT7Dq_XPLpbZOrNXA-lsQbvx3YeQ' },
+];
+
+// Cloud Certification Resources
+const cloudCertResources = [
+  { name: 'Microsoft Azure Fundamentals (AZ-900) Training', url: 'https://learn.microsoft.com/en-us/training/paths/az-900-describe-cloud-concepts/' },
+  { name: 'Google Cloud Digital Leader Certification', url: 'https://cloud.google.com/certification/cloud-digital-leader' },
+  { name: 'Oracle Cloud Infrastructure Foundations', url: 'https://education.oracle.com/oracle-cloud-infrastructure-foundations-2023-associate/pexam_1Z0-1085-23' },
+  { name: 'Cloud Security Alliance Guidance', url: 'https://cloudsecurityalliance.org/research/guidance/' },
+  { name: 'IBM Cloud Essentials', url: 'https://www.ibm.com/training/badge/cloud-essentials' },
+  { name: 'Cloud Security Alliance CCSK', url: 'https://cloudsecurityalliance.org/education/ccsk/' },
+  { name: 'CompTIA Cloud Essentials+', url: 'https://www.comptia.org/certifications/cloud-essentials' },
+  { name: 'Google Professional Cloud Security Engineer', url: 'https://cloud.google.com/certification/cloud-security-engineer' },
+  { name: 'Azure Security Engineer Associate', url: 'https://learn.microsoft.com/en-us/certifications/azure-security-engineer/' },
+  { name: 'AWS Security Specialty', url: 'https://aws.amazon.com/certification/certified-security-specialty/' },
+];
 
 const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -498,6 +625,9 @@ const baseResourcesData = {
     name: obj.cert,
     url: obj.url,
   })),
+  'AWS Cloud': [...awsCloudResources],
+  'CISSP': [...cisspResources],
+  'Cloud Certifications': [...cloudCertResources],
 };
 
 
@@ -686,6 +816,26 @@ const keywordMap = {
       'a+',
     ],
   },
+  'AWS Cloud': {
+    include: ['aws', 'amazon web services', 'clf-c02', 'cloud practitioner', 'amazon cloud'],
+    exclude: [
+      'azure',
+      'gcp',
+      'google cloud',
+      'microsoft',
+      'oracle',
+      'ibm cloud',
+    ],
+  },
+  'CISSP': {
+    include: ['cissp', 'isc2', 'certified information systems security professional'],
+    exclude: [
+      'comptia',
+      'aws',
+      'azure',
+      'gcp',
+    ],
+  },
 };
 
 
@@ -740,6 +890,15 @@ securityFrameworks.forEach((fw) => {
 });
 comptiaObjectives.forEach((obj) => {
   allResources.push({ name: obj.cert, url: obj.url });
+});
+awsCloudResources.forEach((res) => {
+  allResources.push({ name: res.name, url: res.url });
+});
+cisspResources.forEach((res) => {
+  allResources.push({ name: res.name, url: res.url });
+});
+cloudCertResources.forEach((res) => {
+  allResources.push({ name: res.name, url: res.url });
 });
 
 
@@ -930,6 +1089,18 @@ const resourcesData = {
 
     ...getAllMatchesForCategory('ITF/TECH+'),
   ],
+
+  // New resource categories
+  'AWS Cloud': [
+    ...awsCloudResources,
+    ...cloudCertResources.filter(res => res.name.toLowerCase().includes('aws')),
+    ...getAllMatchesForCategory('AWS Cloud'),
+  ],
+
+  'CISSP': [
+    ...cisspResources,
+    ...getAllMatchesForCategory('CISSP'),
+  ],
 };
 
 // Main resource categories with icons
@@ -959,6 +1130,8 @@ const certCategories = [
   { id: 'Server+', name: 'Server+', icon: <FaServer /> },
   { id: 'Project+', name: 'Project+', icon: <FaProjectDiagram /> },
   { id: 'ITF/TECH+', name: 'ITF/TECH+', icon: <FaLaptopCode /> },
+  { id: 'AWS Cloud', name: 'AWS Cloud', icon: <FaAws /> },
+  { id: 'CISSP', name: 'CISSP', icon: <FaUserShield /> },
 ];
 
 function Resources() {
@@ -1079,6 +1252,8 @@ function Resources() {
     if (url.includes('linkedin.com')) return <FaLinkedin className="resource-source-icon linkedin" />;
     if (url.includes('github.com')) return <FaCode className="resource-source-icon github" />;
     if (url.includes('comptia.org') || name.includes('CompTIA')) return <FaFileAlt className="resource-source-icon comptia" />;
+    if (url.includes('aws.amazon.com') || name.toLowerCase().includes('aws')) return <FaAws className="resource-source-icon aws" />;
+    if (url.includes('isc2.org') || name.toLowerCase().includes('cissp')) return <FaUserShield className="resource-source-icon cissp" />;
     if (name.toLowerCase().includes('pentest') || 
         name.toLowerCase().includes('nmap') || 
         name.toLowerCase().includes('kali')) return <FaToolbox className="resource-source-icon security" />;

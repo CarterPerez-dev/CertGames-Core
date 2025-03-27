@@ -60,11 +60,12 @@ def check_subscription_middleware():
     def check_subscription():
         # Only check certain routes (protected routes)
         protected_prefixes = [
-            '/api/test',
-            '/api/payload',
-            '/api/scenario',
-            '/api/analogy',
-            '/api/grc'
+            '/test',
+            '/payload',
+            '/scenario',
+            '/analogy',
+            '/grc'
+            '/profile'
         ]
         
         if any(request.path.startswith(prefix) for prefix in protected_prefixes):
