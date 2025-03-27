@@ -131,3 +131,67 @@ class AppleReceiptVerifier:
         except Exception as e:
             logger.error(f"Error parsing Apple verification result: {str(e)}")
             return {"valid": False, "error": str(e)}
+            
+    def verify_and_validate_receipt(self, receipt_data, expected_bundle_id=None):
+        """
+        Comprehensive receipt verification and validation
+        
+        Args:
+            receipt_data (str): The base64 encoded receipt data
+            expected_bundle_id (str, optional): Bundle ID to verify against
+            
+        Returns:
+            dict: Full validation results with subscription details
+        """
+        try:
+            # First verify the receipt with Apple
+            verification_result = self.verify_receipt(receipt_data)
+            
+            # Then parse the verification result
+            parsed_result = self.parse_verification_result(verification_result)
+            
+            # If not valid, return the error
+            if not parsed_result.get("valid"):
+                return parsed_result
+                
+            # Check bundle ID if provided
+            if expected_bundle_id and parsed_result.get("bundle_id") != expected_bundle_id:
+                return {
+                    "valid": False,
+                    "error": f"Bundle ID mismatch: expected {expected_bundle_id}, got {parsed_result.get('bundle_id')}"
+                }
+                
+            # Include the original receipt data for reference
+            if verification_result.get("latest_receipt"):
+                parsed_result["latest_receipt"] = verification_result.get("latest_receipt")
+                
+            # Enhanced subscription details
+            if verification_result.get("latest_receipt_info"):
+                latest_receipt_info = verification_result.get("latest_receipt_info")
+                
+                if isinstance(latest_receipt_info, list) and latest_receipt_info:
+                    # Get the most recent transaction
+                    latest_info = latest_receipt_info[0]
+                    
+                    # Add additional useful fields
+                    parsed_result["auto_renew_status"] = verification_result.get("pending_renewal_info", [{}])[0].get("auto_renew_status") == "1"
+                    parsed_result["is_in_intro_offer_period"] = latest_info.get("is_in_intro_offer_period") == "true"
+                    parsed_result["is_trial_period"] = latest_info.get("is_trial_period") == "true"
+                    
+                    # Calculate renewal date
+                    if parsed_result.get("expires_date"):
+                        parsed_result["renewal_date"] = parsed_result.get("expires_date").isoformat()
+                    
+                    # Add cancellation date if available
+                    cancellation_date = latest_info.get("cancellation_date_ms")
+                    if cancellation_date:
+                        parsed_result["cancellation_date"] = datetime.fromtimestamp(int(cancellation_date) / 1000).isoformat()
+                        parsed_result["is_canceled"] = True
+                    else:
+                        parsed_result["is_canceled"] = False
+                        
+            return parsed_result
+                
+        except Exception as e:
+            logger.error(f"Error in comprehensive receipt verification: {str(e)}")
+            return {"valid": False, "error": str(e)}

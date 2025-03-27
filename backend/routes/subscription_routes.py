@@ -6,6 +6,7 @@ from bson.objectid import ObjectId
 from datetime import datetime, timedelta
 from models.test import get_user_by_id, update_user_subscription, create_user
 from mongodb.database import db
+from utils.apple_iap_verification import AppleReceiptVerifier
 
 subscription_bp = Blueprint('subscription', __name__)
 
@@ -14,6 +15,13 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 stripe_publishable_key = os.getenv('STRIPE_PUBLISHABLE_KEY')
 stripe_price_id = os.getenv('STRIPE_PRICE_ID')
 webhook_secret = os.getenv('STRIPE_WEBHOOK_SECRET')
+
+# Apple App-Specific Shared Secret (get this from App Store Connect)
+apple_shared_secret = os.getenv('APPLE_APP_SHARED_SECRET', '')
+apple_bundle_id = os.getenv('APPLE_BUNDLE_ID', 'com.certgames.app')
+
+# Initialize Apple Receipt Verifier
+apple_receipt_verifier = AppleReceiptVerifier(shared_secret=apple_shared_secret)
 
 # Front-end URLs
 frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
@@ -428,32 +436,48 @@ def cancel_user_subscription():
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
-        subscription_id = user.get('stripeSubscriptionId')
-        if not subscription_id:
-            return jsonify({'error': 'No active subscription found'}), 400
+        # Check subscription platform (Stripe or Apple)
+        subscription_platform = user.get('subscriptionPlatform')
         
-        # Cancel subscription at period end to allow user to use service until the end of the billing period
-        stripe.Subscription.modify(
-            subscription_id,
-            cancel_at_period_end=True
-        )
+        # For Stripe subscriptions
+        if subscription_platform == 'stripe':
+            subscription_id = user.get('stripeSubscriptionId')
+            if not subscription_id:
+                return jsonify({'error': 'No active Stripe subscription found'}), 400
+            
+            # Cancel subscription at period end to allow user to use service until the end of the billing period
+            stripe.Subscription.modify(
+                subscription_id,
+                cancel_at_period_end=True
+            )
+            
+            # Update user's subscription status
+            update_user_subscription(user_id, {
+                'subscriptionStatus': 'canceling'
+            })
+            
+            # Log this subscription event
+            db.subscriptionEvents.insert_one({
+                'userId': ObjectId(user_id),
+                'event': 'subscription_cancellation_requested',
+                'platform': 'stripe',
+                'stripeSubscriptionId': subscription_id,
+                'timestamp': datetime.utcnow()
+            })
+            
+            return jsonify({'success': True, 'message': 'Subscription will be canceled at the end of the billing period'})
         
-        # Update user's subscription status
-        update_user_subscription(user_id, {
-            'subscriptionStatus': 'canceling'
-        })
+        # For Apple subscriptions - inform user to cancel via App Store
+        elif subscription_platform == 'apple':
+            return jsonify({
+                'success': False, 
+                'message': 'Please cancel your Apple subscription through the App Store Settings.',
+                'cancellation_type': 'apple'
+            }), 400
         
-        # Log this subscription event
-        db.subscriptionEvents.insert_one({
-            'userId': ObjectId(user_id),
-            'event': 'subscription_cancellation_requested',
-            'platform': 'stripe',
-            'stripeSubscriptionId': subscription_id,
-            'timestamp': datetime.utcnow()
-        })
+        else:
+            return jsonify({'error': 'Unknown subscription platform'}), 400
         
-        return jsonify({'success': True, 'message': 'Subscription will be canceled at the end of the billing period'})
-    
     except Exception as e:
         current_app.logger.error(f"Error canceling subscription: {str(e)}")
         return jsonify({'error': str(e)}), 500
@@ -478,11 +502,94 @@ def clear_temp_data():
     
     return jsonify({'success': True})
 
+@subscription_bp.route('/verify-receipt', methods=['POST'])
+def verify_receipt():
+    """
+    Handle subscription verification from iOS app
+    Process Apple receipts and update the user's subscription status
+    """
+    data = request.json
+    user_id = data.get('userId')
+    receipt_data = data.get('receiptData')
+    platform = data.get('platform', 'apple')
+    
+    if not user_id or not receipt_data:
+        return jsonify({'error': 'userId and receiptData are required'}), 400
+    
+    try:
+        # Verify user exists
+        user = get_user_by_id(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        # Verify Apple receipt
+        if platform == 'apple':
+            # Comprehensive receipt verification
+            verification_result = apple_receipt_verifier.verify_and_validate_receipt(
+                receipt_data, 
+                expected_bundle_id=apple_bundle_id
+            )
+            
+            if not verification_result.get('valid'):
+                return jsonify({
+                    'success': False,
+                    'error': verification_result.get('error', 'Receipt validation failed')
+                }), 400
+            
+            # Check subscription status
+            is_active = verification_result.get('subscription_active', False)
+            product_id = verification_result.get('product_id')
+            transaction_id = verification_result.get('transaction_id')
+            original_transaction_id = verification_result.get('original_transaction_id')
+            expires_date = verification_result.get('expires_date')
+            
+            # Update user's subscription status
+            subscription_data = {
+                'subscriptionActive': is_active,
+                'subscriptionStatus': 'active' if is_active else 'expired',
+                'subscriptionPlatform': 'apple',
+                'appleProductId': product_id,
+                'appleTransactionId': transaction_id,
+                'appleOriginalTransactionId': original_transaction_id,
+                'subscriptionStartDate': datetime.utcnow(),
+            }
+            
+            if expires_date:
+                subscription_data['subscriptionEndDate'] = expires_date
+            
+            update_user_subscription(user_id, subscription_data)
+            
+            # Log this subscription event
+            db.subscriptionEvents.insert_one({
+                'userId': ObjectId(user_id),
+                'event': 'subscription_verified',
+                'platform': 'apple',
+                'appleTransactionId': transaction_id,
+                'appleProductId': product_id,
+                'timestamp': datetime.utcnow()
+            })
+            
+            return jsonify({
+                'success': True,
+                'subscriptionActive': is_active,
+                'subscriptionStatus': 'active' if is_active else 'expired',
+                'product_id': product_id,
+                'transaction_id': transaction_id,
+                'expires_date': expires_date.isoformat() if expires_date else None
+            })
+        
+        else:
+            return jsonify({'error': f'Unsupported platform: {platform}'}), 400
+        
+    except Exception as e:
+        current_app.logger.error(f"Error verifying receipt: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 @subscription_bp.route('/apple-subscription', methods=['POST'])
 def handle_apple_subscription():
     """
-    Handle subscription verification from iOS app
-    This is a placeholder for future implementation of Apple IAP verification
+    Handle new subscription from iOS app
+    Process Apple receipt and update user subscription status
     """
     data = request.json
     user_id = data.get('userId')
@@ -492,35 +599,136 @@ def handle_apple_subscription():
         return jsonify({'error': 'userId and receiptData are required'}), 400
     
     try:
-        # TODO: Implement actual Apple receipt verification here
-        # For now, we'll just update the user's subscription status
+        # Verify the Apple receipt
+        verification_result = apple_receipt_verifier.verify_and_validate_receipt(
+            receipt_data,
+            expected_bundle_id=apple_bundle_id
+        )
         
-        # Placeholder for Apple verification result
-        is_valid = True
+        if not verification_result.get('valid'):
+            return jsonify({
+                'success': False,
+                'error': verification_result.get('error', 'Receipt validation failed')
+            }), 400
         
-        if is_valid:
-            # Update user subscription status
-            update_user_subscription(user_id, {
-                'subscriptionActive': True,
-                'subscriptionStatus': 'active',
-                'subscriptionPlatform': 'apple',
-                'appleTransactionId': data.get('transactionId'),
-                'subscriptionStartDate': datetime.utcnow(),
-            })
-            
-            # Log this subscription event
-            db.subscriptionEvents.insert_one({
-                'userId': ObjectId(user_id),
-                'event': 'subscription_created',
-                'platform': 'apple',
-                'appleTransactionId': data.get('transactionId'),
-                'timestamp': datetime.utcnow()
-            })
-            
-            return jsonify({'success': True, 'message': 'Apple subscription verified'})
-        else:
-            return jsonify({'error': 'Invalid receipt data'}), 400
+        # Check if this is a subscription
+        is_active = verification_result.get('subscription_active', False)
+        product_id = verification_result.get('product_id')
+        transaction_id = verification_result.get('transaction_id')
+        original_transaction_id = verification_result.get('original_transaction_id')
+        expires_date = verification_result.get('expires_date')
+        
+        # Update user subscription status
+        subscription_data = {
+            'subscriptionActive': is_active,
+            'subscriptionStatus': 'active' if is_active else 'expired',
+            'subscriptionPlatform': 'apple',
+            'appleProductId': product_id,
+            'appleTransactionId': transaction_id,
+            'appleOriginalTransactionId': original_transaction_id,
+            'subscriptionStartDate': datetime.utcnow(),
+        }
+        
+        if expires_date:
+            subscription_data['subscriptionEndDate'] = expires_date
+        
+        update_user_subscription(user_id, subscription_data)
+        
+        # Log this subscription event
+        db.subscriptionEvents.insert_one({
+            'userId': ObjectId(user_id),
+            'event': 'subscription_created',
+            'platform': 'apple',
+            'appleTransactionId': transaction_id,
+            'appleProductId': product_id,
+            'timestamp': datetime.utcnow()
+        })
+        
+        return jsonify({
+            'success': True,
+            'message': 'Apple subscription processed successfully',
+            'subscriptionActive': is_active,
+            'subscriptionStatus': 'active' if is_active else 'expired',
+            'expiresDate': expires_date.isoformat() if expires_date else None
+        })
         
     except Exception as e:
-        current_app.logger.error(f"Error verifying Apple subscription: {str(e)}")
+        current_app.logger.error(f"Error processing Apple subscription: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@subscription_bp.route('/restore-purchases', methods=['POST'])
+def restore_purchases():
+    """
+    Restore purchases for iOS app
+    Verify receipt and update user subscription status
+    """
+    data = request.json
+    user_id = data.get('userId')
+    receipt_data = data.get('receiptData')
+    
+    if not user_id or not receipt_data:
+        return jsonify({'error': 'userId and receiptData are required'}), 400
+    
+    try:
+        # Verify the Apple receipt
+        verification_result = apple_receipt_verifier.verify_and_validate_receipt(
+            receipt_data,
+            expected_bundle_id=apple_bundle_id
+        )
+        
+        if not verification_result.get('valid'):
+            return jsonify({
+                'success': False,
+                'error': verification_result.get('error', 'Receipt validation failed')
+            }), 400
+        
+        # Check if there's an active subscription
+        is_active = verification_result.get('subscription_active', False)
+        
+        if not is_active:
+            return jsonify({
+                'success': False,
+                'message': 'No active subscription found to restore'
+            }), 404
+        
+        # Get subscription details
+        product_id = verification_result.get('product_id')
+        transaction_id = verification_result.get('transaction_id')
+        original_transaction_id = verification_result.get('original_transaction_id')
+        expires_date = verification_result.get('expires_date')
+        
+        # Update user subscription status
+        subscription_data = {
+            'subscriptionActive': True,
+            'subscriptionStatus': 'active',
+            'subscriptionPlatform': 'apple',
+            'appleProductId': product_id,
+            'appleTransactionId': transaction_id,
+            'appleOriginalTransactionId': original_transaction_id,
+            'subscriptionStartDate': datetime.utcnow(),
+        }
+        
+        if expires_date:
+            subscription_data['subscriptionEndDate'] = expires_date
+        
+        update_user_subscription(user_id, subscription_data)
+        
+        # Log this subscription event
+        db.subscriptionEvents.insert_one({
+            'userId': ObjectId(user_id),
+            'event': 'subscription_restored',
+            'platform': 'apple',
+            'appleTransactionId': transaction_id,
+            'appleProductId': product_id,
+            'timestamp': datetime.utcnow()
+        })
+        
+        return jsonify({
+            'success': True,
+            'message': 'Subscription restored successfully',
+            'expiresDate': expires_date.isoformat() if expires_date else None
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Error restoring purchases: {str(e)}")
         return jsonify({'error': str(e)}), 500

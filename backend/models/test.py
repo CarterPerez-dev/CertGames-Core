@@ -643,6 +643,11 @@ def update_user_subscription(user_id, subscription_data):
     - stripeCustomerId: String 
     - stripeSubscriptionId: String
     - appleTransactionId: String
+    - appleOriginalTransactionId: String
+    - appleProductId: String
+    - subscriptionStartDate: DateTime
+    - subscriptionEndDate: DateTime
+    - subscriptionCanceledAt: DateTime
     """
     try:
         oid = ObjectId(user_id)
