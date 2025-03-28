@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "9L6WVD6452.com.certgames.app",
+        "paths": ["/oauth-callback*", "/oauth/*"]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": ["9L6WVD6452.com.certgames.app"]
+  }
+}
