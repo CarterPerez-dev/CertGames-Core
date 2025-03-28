@@ -424,4 +424,201 @@ def apple_auth():
     
     except Exception as e:
         current_app.logger.error(f"Error in Apple auth: {str(e)}")
+
+
+
+
+# Add these routes to your oauth_routes.py file
+
+# Special route for mobile Google OAuth
+@oauth_bp.route('/login/google/mobile')
+def google_login_mobile():
+    # Generate and store a state parameter
+    state = secrets.token_urlsafe(16)
+    session['oauth_state'] = state
+    
+    # Get redirect URI from query parameter
+    redirect_uri = request.args.get('redirect_uri')
+    platform = request.args.get('platform', 'unknown')
+    
+    if not redirect_uri:
+        return jsonify({"error": "redirect_uri is required"}), 400
+    
+    # Log the request for debugging
+    current_app.logger.info(f"Mobile OAuth request: platform={platform}, redirect_uri={redirect_uri}")
+    
+    # Manual authorize redirect with state parameter
+    params = {
+        'client_id': google.client_id,
+        'redirect_uri': redirect_uri,
+        'scope': 'openid email profile',
+        'state': state,
+        'response_type': 'code'
+    }
+    
+    auth_url = google.authorize_url
+    separator = '?' if '?' not in auth_url else '&'
+    
+    # Build the query string
+    query = '&'.join([f"{key}={value}" for key, value in params.items()])
+    
+    # Full authorization URL
+    full_url = f"{auth_url}{separator}{query}"
+    
+    return redirect(full_url)
+
+# Add a modified version of the Google auth endpoint for mobile
+@oauth_bp.route('/auth/google/mobile')
+def google_auth_mobile():
+    try:
+        # Check state parameter to prevent CSRF
+        expected_state = session.pop('oauth_state', None)
+        received_state = request.args.get('state')
+        
+        if not expected_state or expected_state != received_state:
+            current_app.logger.error(f"Mobile OAuth state mismatch: expected={expected_state}, received={received_state}")
+            return redirect(f"{redirect_uri}?error=invalid_state")
+        
+        # Get the redirect URI that was passed in the initial request
+        redirect_uri = request.args.get('redirect_uri')
+        if not redirect_uri:
+            return jsonify({"error": "Missing redirect_uri"}), 400
+        
+        # Exchange code for token
+        code = request.args.get('code')
+        if not code:
+            return redirect(f"{redirect_uri}?error=no_code")
+        
+        token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+        if not token_data or 'access_token' not in token_data:
+            return redirect(f"{redirect_uri}?error=token_exchange_failed")
+        
+        # Get user info
+        userinfo_response = requests.get(
+            'https://www.googleapis.com/oauth2/v1/userinfo',
+            headers={'Authorization': f"Bearer {token_data['access_token']}"}
+        )
+        
+        if not userinfo_response.ok:
+            return redirect(f"{redirect_uri}?error=failed_to_get_user_info")
+            
+        user_info = userinfo_response.json()
+        
+        email = user_info.get('email')
+        name = user_info.get('name', '')
+        google_id = user_info.get('id')
+        
+        if not email:
+            return redirect(f"{redirect_uri}?error=email_required")
+        
+        # Process OAuth user and get user_id and is_new_user flag
+        user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
+        
+        # Store in session
+        session['userId'] = user_id
+        
+        # Log the login
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "ip": request.remote_addr or "unknown",
+            "success": True,
+            "provider": "google",
+            "platform": "mobile"
+        })
+        
+        # Check if the user needs to set a username
+        user = get_user_by_id(user_id)
+        needs_username = user.get('needs_username', False)
+        
+        # Check for subscription status
+        has_subscription = user.get('subscriptionActive', False)
+        
+        # Redirect back to app with user data
+        redirect_params = {
+            'userId': user_id,
+            'provider': 'google',
+            'needsUsername': 'true' if needs_username else 'false',
+            'isNewUser': 'true' if is_new_user else 'false',
+            'hasSubscription': 'true' if has_subscription else 'false',
+            'state': received_state  # Include state for verification on client side
+        }
+        
+        # Build redirect URL with params
+        param_string = '&'.join([f"{key}={value}" for key, value in redirect_params.items()])
+        final_redirect = f"{redirect_uri}?{param_string}"
+        
+        current_app.logger.info(f"Redirecting to mobile app: {final_redirect}")
+        return redirect(final_redirect)
+        
+    except Exception as e:
+        current_app.logger.error(f"Error in Google mobile auth: {str(e)}")
+        return redirect(f"{redirect_uri}?error={str(e)}")
+
+# Add a route to handle Apple authentication from mobile
+@oauth_bp.route('/login/apple/mobile', methods=['POST'])
+def apple_auth_mobile():
+    try:
+        data = request.json
+        identity_token = data.get('identityToken')
+        full_name = data.get('fullName')
+        email = data.get('email')
+        platform = data.get('platform', 'ios')
+        
+        if not identity_token:
+            return jsonify({"error": "identityToken is required"}), 400
+        
+        # Validate the token
+        user_info = decode_apple_id_token(identity_token)
+        if not user_info:
+            return jsonify({"error": "Invalid Apple identity token"}), 400
+        
+        # Use email from token if not provided directly
+        if not email and 'email' in user_info:
+            email = user_info.get('email')
+            
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
+            
+        # Get name from parameters or construct from components
+        name = ""
+        if full_name:
+            if isinstance(full_name, dict):
+                first_name = full_name.get('givenName', '')
+                last_name = full_name.get('familyName', '')
+                name = f"{first_name} {last_name}".strip()
+            else:
+                name = full_name
+        
+        apple_id = user_info.get('sub')  # Apple's unique user ID
+        
+        # Process OAuth user
+        user_id, is_new_user = process_oauth_user(email, name, 'apple', apple_id)
+        
+        # Get user info
+        user = get_user_by_id(user_id)
+        needs_username = user.get('needs_username', False)
+        has_subscription = user.get('subscriptionActive', False)
+        
+        # Log the login
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "ip": request.remote_addr or "unknown",
+            "success": True,
+            "provider": "apple",
+            "platform": platform
+        })
+        
+        return jsonify({
+            "success": True,
+            "userId": user_id,
+            "needsUsername": needs_username,
+            "isNewUser": is_new_user,
+            "hasSubscription": has_subscription
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Error in Apple mobile auth: {str(e)}")
+        return jsonify({"error": str(e)}), 500
         return jsonify({"error": f"Authentication error: {str(e)}"}), 500

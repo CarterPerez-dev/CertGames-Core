@@ -100,6 +100,13 @@ app.register_blueprint(contact_bp, url_prefix='/contact-form')
 app.register_blueprint(subscription_bp, url_prefix='/subscription')
 
 
+
+# AASA
+@app.route('/.well-known/apple-app-site-association')
+def apple_app_site_association():
+    return send_from_directory('.well-known', 'apple-app-site-association', 
+                              mimetype='application/json')
+
 @app.route('/avatars/<path:filename>')
 def serve_avatars(filename):
     # Points to: frontend/my-react-app/public/avatars
