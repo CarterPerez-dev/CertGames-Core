@@ -1,6 +1,7 @@
 # routes/oauth_routes.py
 from flask import Blueprint, request, redirect, session, jsonify, current_app, url_for
 from bson.objectid import ObjectId
+import traceback
 import os
 import time
 import jwt
@@ -544,7 +545,12 @@ def google_auth_mobile():
             return redirect(f"{redirect_uri}?error=email_required")
         
         # Process OAuth user and get user_id and is_new_user flag
-        user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
+        try:
+            user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
+            current_app.logger.info(f"Processed OAuth user: user_id={user_id}, is_new_user={is_new_user}")
+        except Exception as process_error:
+            current_app.logger.error(f"Error processing OAuth user: {str(process_error)}")
+            return redirect(f"{redirect_uri}?error=user_processing_error")
         
         # Store in session
         session['userId'] = user_id
@@ -591,6 +597,7 @@ def google_auth_mobile():
         
     except Exception as e:
         current_app.logger.error(f"Error in Google mobile auth: {str(e)}")
+        current_app.logger.error(f"Error traceback: {traceback.format_exc()}")
         # Make sure we have redirect_uri defined before using it in the exception handler
         try:
             if redirect_uri:
@@ -599,7 +606,6 @@ def google_auth_mobile():
                 return jsonify({"error": f"Authentication error: {str(e)}"}), 500
         except:
             return jsonify({"error": f"Authentication error: {str(e)}"}), 500
-            
             
 # Add a route to handle Apple authentication from mobile
 @oauth_bp.route('/login/apple/mobile', methods=['POST'])
