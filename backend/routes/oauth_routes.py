@@ -768,10 +768,7 @@ def exchange_oauth_code():
 
 @oauth_bp.route('/google-callback-mobile', methods=['POST'])
 def google_callback_mobile():
-    """
-    Direct callback for mobile OAuth without redirects
-    Gets a code from the app and returns user data as JSON
-    """
+    """Mobile Google OAuth callback that handles token exchange manually"""
     try:
         data = request.json
         if not data:
@@ -783,15 +780,15 @@ def google_callback_mobile():
         if not code or not redirect_uri:
             return jsonify({"error": "Missing required parameters"}), 400
             
-        current_app.logger.info(f"Processing mobile callback with code: {code[:10]}...")
+        current_app.logger.info(f"Processing mobile callback with code")
         
-        # Use the client ID registered for your iOS app
-        client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
-        client_secret = os.getenv('GOOGLE_CLIENT_SECRET') 
+        # Get credentials from environment
+        client_id = os.getenv('GOOGLE_CLIENT_ID')
+        client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
         
-        # Exchange the authorization code directly with Google
+        # First, exchange the code for a token using requests library
         token_url = 'https://oauth2.googleapis.com/token'
-        token_data = {
+        payload = {
             'client_id': client_id,
             'client_secret': client_secret,
             'code': code,
@@ -799,49 +796,49 @@ def google_callback_mobile():
             'grant_type': 'authorization_code'
         }
         
-        current_app.logger.info(f"Exchanging code with parameters: client_id={client_id}, redirect_uri={redirect_uri}")
-        
-        token_response = requests.post(token_url, data=token_data)
+        current_app.logger.info(f"Exchanging code with client_id: {client_id}")
+        token_response = requests.post(token_url, data=payload)
         
         if not token_response.ok:
-            error_text = token_response.text
-            current_app.logger.error(f"Token exchange failed: {error_text}")
-            return jsonify({"error": f"Token exchange failed: {error_text}"}), 400
+            current_app.logger.error(f"Token exchange failed: {token_response.text}")
+            return jsonify({"error": f"Token exchange failed: {token_response.text}"}), 400
             
-        token_json = token_response.json()
-        access_token = token_json.get('access_token')
+        token_data = token_response.json()
+        access_token = token_data.get('access_token')
         
         if not access_token:
-            return jsonify({"error": "No access token received"}), 400
+            return jsonify({"error": "No access token in response"}), 400
             
-        # Use the access token to get user info
+        # Then use the access token to get user info directly
         userinfo_url = 'https://www.googleapis.com/oauth2/v3/userinfo'
-        userinfo_response = requests.get(
-            userinfo_url,
-            headers={'Authorization': f"Bearer {access_token}"}
-        )
+        headers = {'Authorization': f'Bearer {access_token}'}
+        
+        userinfo_response = requests.get(userinfo_url, headers=headers)
         
         if not userinfo_response.ok:
-            return jsonify({"error": f"Failed to get user info: {userinfo_response.status_code}"}), 400
+            current_app.logger.error(f"Failed to get user info: {userinfo_response.text}")
+            return jsonify({"error": f"Failed to get user info: {userinfo_response.text}"}), 400
             
-        user_info = userinfo_response.json()
+        userinfo = userinfo_response.json()
         
-        email = user_info.get('email')
-        name = user_info.get('name', '')
-        google_id = user_info.get('sub')  # This is the user's Google ID
+        # Extract user data
+        email = userinfo.get('email')
+        name = userinfo.get('name', '')
+        google_id = userinfo.get('sub')  # Note: Google uses 'sub' for the user ID
         
         if not email:
             return jsonify({"error": "Email not provided by Google"}), 400
-        
-        # Process the OAuth user data
+            
+        # Process user
+        current_app.logger.info(f"Processing user with email: {email}")
         user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
         
-        # Check user details
+        # Get user details
         user = get_user_by_id(user_id)
         needs_username = user.get('needs_username', False)
         has_subscription = user.get('subscriptionActive', False)
         
-        # Log the login
+        # Log success
         db.auditLogs.insert_one({
             "timestamp": datetime.utcnow(),
             "userId": ObjectId(user_id),
@@ -853,6 +850,7 @@ def google_callback_mobile():
         
         # Return user data
         return jsonify({
+            "success": True,
             "userId": user_id,
             "isNewUser": is_new_user,
             "needsUsername": needs_username,
