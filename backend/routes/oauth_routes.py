@@ -589,7 +589,7 @@ def google_auth_mobile():
         param_string = '&'.join([f"{key}={value}" for key, value in redirect_params.items()])
         final_redirect = f"{redirect_uri}{separator}{param_string}"
         
-        current_app.logger.info(f"Redirecting to mobile app: {final_redirect}")
+        current_app.logger.info(f"Final redirect URL: {final_redirect}")
         return redirect(final_redirect)
         
     except Exception as e:
@@ -602,7 +602,8 @@ def google_auth_mobile():
                 return jsonify({"error": f"Authentication error: {str(e)}"}), 500
         except:
             return jsonify({"error": f"Authentication error: {str(e)}"}), 500
-
+            
+            
 # Add a route to handle Apple authentication from mobile
 @oauth_bp.route('/login/apple/mobile', methods=['POST'])
 def apple_auth_mobile():
