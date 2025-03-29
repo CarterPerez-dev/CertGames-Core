@@ -431,6 +431,7 @@ def apple_auth():
 # Add these routes to your oauth_routes.py file
 
 # Special route for mobile Google OAuth
+# Special route for mobile Google OAuth
 @oauth_bp.route('/login/google/mobile')
 def google_login_mobile():
     # Generate and store a state parameter
@@ -447,6 +448,15 @@ def google_login_mobile():
     # Use iOS client ID when platform is iOS
     if platform.lower() == 'ios':
         client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
+        
+        # For iOS, add logging about expected redirect URI format
+        expected_prefix = f"com.googleusercontent.apps.{client_id.split('-')[0]}"
+        current_app.logger.info(f"iOS Platform Detected - Expected redirect URI format: {expected_prefix}:/oauth2redirect")
+        
+        # Accept both Google format and custom scheme for maximum compatibility
+        is_custom_scheme = redirect_uri.startswith("certgamesapp://")
+        if is_custom_scheme:
+            current_app.logger.info(f"Using custom URI scheme: {redirect_uri}")
     else:
         client_id = google.client_id  # Fall back to web client ID
     
@@ -470,6 +480,7 @@ def google_login_mobile():
     
     # Full authorization URL
     full_url = f"{auth_url}{separator}{query}"
+    current_app.logger.info(f"Redirecting to Google auth URL: {full_url}")
     
     return redirect(full_url)
 
@@ -486,6 +497,9 @@ def google_auth_mobile():
         if not redirect_uri:
             return jsonify({"error": "Missing redirect_uri"}), 400
         
+        # Log detailed info for debugging
+        current_app.logger.info(f"Auth mobile callback received: state={received_state}, redirect_uri={redirect_uri}")
+        
         if not expected_state or expected_state != received_state:
             current_app.logger.error(f"Mobile OAuth state mismatch: expected={expected_state}, received={received_state}")
             return redirect(f"{redirect_uri}?error=invalid_state")
@@ -493,22 +507,37 @@ def google_auth_mobile():
         # Exchange code for token
         code = request.args.get('code')
         if not code:
+            current_app.logger.error("No authorization code received")
             return redirect(f"{redirect_uri}?error=no_code")
         
-        token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+        current_app.logger.info(f"Exchanging code for token with redirect_uri: {redirect_uri}")
+        
+        try:
+            # Add better error handling for token exchange
+            token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+            current_app.logger.info("Token exchange successful")
+        except Exception as token_error:
+            current_app.logger.error(f"Token exchange failed: {str(token_error)}")
+            return redirect(f"{redirect_uri}?error=token_exchange_failed")
+            
         if not token_data or 'access_token' not in token_data:
             return redirect(f"{redirect_uri}?error=token_exchange_failed")
         
-        # Get user info
-        userinfo_response = requests.get(
-            'https://www.googleapis.com/oauth2/v1/userinfo',
-            headers={'Authorization': f"Bearer {token_data['access_token']}"}
-        )
-        
-        if not userinfo_response.ok:
-            return redirect(f"{redirect_uri}?error=failed_to_get_user_info")
+        # Get user info with better error handling
+        try:
+            userinfo_response = requests.get(
+                'https://www.googleapis.com/oauth2/v1/userinfo',
+                headers={'Authorization': f"Bearer {token_data['access_token']}"}
+            )
             
-        user_info = userinfo_response.json()
+            if not userinfo_response.ok:
+                current_app.logger.error(f"Failed to get user info: {userinfo_response.status_code}")
+                return redirect(f"{redirect_uri}?error=failed_to_get_user_info")
+                
+            user_info = userinfo_response.json()
+        except Exception as userinfo_error:
+            current_app.logger.error(f"Error fetching user info: {str(userinfo_error)}")
+            return redirect(f"{redirect_uri}?error=user_info_error")
         
         email = user_info.get('email')
         name = user_info.get('name', '')
@@ -550,9 +579,15 @@ def google_auth_mobile():
             'state': received_state  # Include state for verification on client side
         }
         
-        # Build redirect URL with params
+        # Build redirect URL with params - FIXED logic for URI handling
+        if '?' in redirect_uri:
+            separator = '&'
+        else:
+            # For custom URI schemes like certgamesapp:// or Google schemes
+            separator = '?'
+            
         param_string = '&'.join([f"{key}={value}" for key, value in redirect_params.items()])
-        final_redirect = f"{redirect_uri}?{param_string}"
+        final_redirect = f"{redirect_uri}{separator}{param_string}"
         
         current_app.logger.info(f"Redirecting to mobile app: {final_redirect}")
         return redirect(final_redirect)
@@ -561,7 +596,10 @@ def google_auth_mobile():
         current_app.logger.error(f"Error in Google mobile auth: {str(e)}")
         # Make sure we have redirect_uri defined before using it in the exception handler
         try:
-            return redirect(f"{redirect_uri}?error={str(e)}")
+            if redirect_uri:
+                return redirect(f"{redirect_uri}?error={str(e)}")
+            else:
+                return jsonify({"error": f"Authentication error: {str(e)}"}), 500
         except:
             return jsonify({"error": f"Authentication error: {str(e)}"}), 500
 
