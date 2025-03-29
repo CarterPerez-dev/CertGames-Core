@@ -437,19 +437,25 @@ def google_login_mobile():
     state = secrets.token_urlsafe(16)
     session['oauth_state'] = state
     
-    # Get redirect URI from query parameter
+    # Get redirect URI and platform from query parameter
     redirect_uri = request.args.get('redirect_uri')
     platform = request.args.get('platform', 'unknown')
     
     if not redirect_uri:
         return jsonify({"error": "redirect_uri is required"}), 400
     
+    # Use iOS client ID when platform is iOS
+    if platform.lower() == 'ios':
+        client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
+    else:
+        client_id = google.client_id  # Fall back to web client ID
+    
     # Log the request for debugging
-    current_app.logger.info(f"Mobile OAuth request: platform={platform}, redirect_uri={redirect_uri}")
+    current_app.logger.info(f"Mobile OAuth request: platform={platform}, redirect_uri={redirect_uri}, client_id={client_id}")
     
     # Manual authorize redirect with state parameter
     params = {
-        'client_id': google.client_id,
+        'client_id': client_id,
         'redirect_uri': redirect_uri,
         'scope': 'openid email profile',
         'state': state,
@@ -475,14 +481,14 @@ def google_auth_mobile():
         expected_state = session.pop('oauth_state', None)
         received_state = request.args.get('state')
         
-        if not expected_state or expected_state != received_state:
-            current_app.logger.error(f"Mobile OAuth state mismatch: expected={expected_state}, received={received_state}")
-            return redirect(f"{redirect_uri}?error=invalid_state")
-        
         # Get the redirect URI that was passed in the initial request
         redirect_uri = request.args.get('redirect_uri')
         if not redirect_uri:
             return jsonify({"error": "Missing redirect_uri"}), 400
+        
+        if not expected_state or expected_state != received_state:
+            current_app.logger.error(f"Mobile OAuth state mismatch: expected={expected_state}, received={received_state}")
+            return redirect(f"{redirect_uri}?error=invalid_state")
         
         # Exchange code for token
         code = request.args.get('code')
@@ -553,7 +559,11 @@ def google_auth_mobile():
         
     except Exception as e:
         current_app.logger.error(f"Error in Google mobile auth: {str(e)}")
-        return redirect(f"{redirect_uri}?error={str(e)}")
+        # Make sure we have redirect_uri defined before using it in the exception handler
+        try:
+            return redirect(f"{redirect_uri}?error={str(e)}")
+        except:
+            return jsonify({"error": f"Authentication error: {str(e)}"}), 500
 
 # Add a route to handle Apple authentication from mobile
 @oauth_bp.route('/login/apple/mobile', methods=['POST'])
