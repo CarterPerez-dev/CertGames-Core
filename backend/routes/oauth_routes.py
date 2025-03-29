@@ -430,15 +430,20 @@ def apple_auth():
 
 # Add these routes to your oauth_routes.py file
 
-# Special route for mobile Google OAuth
-# Special route for mobile Google OAuth
+# In oauth_routes.py - modify the google_login_mobile function
 @oauth_bp.route('/login/google/mobile')
 def google_login_mobile():
-    # Generate and store a state parameter
-    state = secrets.token_urlsafe(16)
+    # Get the state parameter from the request instead of generating a new one
+    state = request.args.get('state')
+    # If no state is provided, generate one (fallback)
+    if not state:
+        state = secrets.token_urlsafe(16)
+    
+    # Store it in session
     session['oauth_state'] = state
     
-    # Get redirect URI and platform from query parameter
+    # Use the external URL with /api prefix for your reverse proxy
+    base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
     redirect_uri = request.args.get('redirect_uri')
     platform = request.args.get('platform', 'unknown')
     
@@ -448,27 +453,18 @@ def google_login_mobile():
     # Use iOS client ID when platform is iOS
     if platform.lower() == 'ios':
         client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
-        
-        # For iOS, add logging about expected redirect URI format
-        expected_prefix = f"com.googleusercontent.apps.{client_id.split('-')[0]}"
-        current_app.logger.info(f"iOS Platform Detected - Expected redirect URI format: {expected_prefix}:/oauth2redirect")
-        
-        # Accept both Google format and custom scheme for maximum compatibility
-        is_custom_scheme = redirect_uri.startswith("certgamesapp://")
-        if is_custom_scheme:
-            current_app.logger.info(f"Using custom URI scheme: {redirect_uri}")
     else:
         client_id = google.client_id  # Fall back to web client ID
     
     # Log the request for debugging
-    current_app.logger.info(f"Mobile OAuth request: platform={platform}, redirect_uri={redirect_uri}, client_id={client_id}")
+    current_app.logger.info(f"Mobile OAuth request with client state: {state}")
     
     # Manual authorize redirect with state parameter
     params = {
         'client_id': client_id,
         'redirect_uri': redirect_uri,
         'scope': 'openid email profile',
-        'state': state,
+        'state': state,  # Use the client's state
         'response_type': 'code'
     }
     
@@ -480,10 +476,11 @@ def google_login_mobile():
     
     # Full authorization URL
     full_url = f"{auth_url}{separator}{query}"
-    current_app.logger.info(f"Redirecting to Google auth URL: {full_url}")
+    current_app.logger.info(f"Redirecting to Google auth URL with client state: {state}")
     
     return redirect(full_url)
-
+    
+    
 # Add a modified version of the Google auth endpoint for mobile
 @oauth_bp.route('/auth/google/mobile')
 def google_auth_mobile():
