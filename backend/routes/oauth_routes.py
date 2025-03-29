@@ -674,3 +674,92 @@ def apple_auth_mobile():
         current_app.logger.error(f"Error in Apple mobile auth: {str(e)}")
         return jsonify({"error": str(e)}), 500
         return jsonify({"error": f"Authentication error: {str(e)}"}), 500
+
+
+
+
+@oauth_bp.route('/exchange-code', methods=['POST'])
+def exchange_oauth_code():
+    """
+    Exchange an OAuth authorization code for user data
+    This endpoint is used by the mobile app to complete the OAuth flow
+    """
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+            
+        code = data.get('code')
+        redirect_uri = data.get('redirect_uri')
+        state = data.get('state')
+        platform = data.get('platform', 'unknown')
+        
+        if not code or not redirect_uri:
+            return jsonify({"error": "Missing required parameters"}), 400
+            
+        current_app.logger.info(f"Exchanging code for user data: code={code[:10]}..., redirect_uri={redirect_uri}")
+        
+        # For Google OAuth
+        try:
+            # Exchange code for token
+            token_data = google.fetch_access_token(code=code, redirect_uri=redirect_uri)
+            
+            if not token_data or 'access_token' not in token_data:
+                return jsonify({"error": "Failed to exchange code for token"}), 400
+                
+            # Get user info
+            userinfo_response = requests.get(
+                'https://www.googleapis.com/oauth2/v1/userinfo',
+                headers={'Authorization': f"Bearer {token_data['access_token']}"}
+            )
+            
+            if not userinfo_response.ok:
+                return jsonify({"error": f"Failed to get user info: {userinfo_response.status_code}"}), 400
+                
+            user_info = userinfo_response.json()
+            
+            email = user_info.get('email')
+            name = user_info.get('name', '')
+            google_id = user_info.get('id')
+            
+            if not email:
+                return jsonify({"error": "Email not provided by Google"}), 400
+            
+            # Process OAuth user
+            user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
+            
+            # Store in session
+            session['userId'] = user_id
+            
+            # Get user details
+            user = get_user_by_id(user_id)
+            needs_username = user.get('needs_username', False)
+            has_subscription = user.get('subscriptionActive', False)
+            
+            # Log the login
+            db.auditLogs.insert_one({
+                "timestamp": datetime.utcnow(),
+                "userId": ObjectId(user_id),
+                "ip": request.remote_addr or "unknown",
+                "success": True,
+                "provider": "google",
+                "platform": platform
+            })
+            
+            # Return user data
+            return jsonify({
+                "userId": user_id,
+                "isNewUser": is_new_user,
+                "needsUsername": needs_username,
+                "hasSubscription": has_subscription
+            })
+            
+        except Exception as e:
+            current_app.logger.error(f"Error exchanging code: {str(e)}")
+            current_app.logger.error(traceback.format_exc())
+            return jsonify({"error": f"Code exchange error: {str(e)}"}), 500
+    
+    except Exception as e:
+        current_app.logger.error(f"General error in exchange-code: {str(e)}")
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
