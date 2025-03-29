@@ -776,21 +776,16 @@ def google_callback_mobile():
             
         code = data.get('code')
         redirect_uri = data.get('redirect_uri')
-        platform = data.get('platform', 'unknown')  # Get platform parameter
         
         if not code or not redirect_uri:
             return jsonify({"error": "Missing required parameters"}), 400
             
-        current_app.logger.info(f"Processing mobile callback with code for platform: {platform}")
+        current_app.logger.info(f"Processing mobile callback with code")
         
-        # Select the appropriate client ID based on platform
-        if platform.lower() == 'ios':
-            client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
-            current_app.logger.info(f"Using iOS client ID for token exchange: {client_id}")
-        else:
-            client_id = os.getenv('GOOGLE_CLIENT_ID')
-            current_app.logger.info(f"Using web client ID for token exchange: {client_id}")
-            
+        # IMPORTANT FIX: Always use iOS client ID for this mobile-specific endpoint
+        client_id = os.getenv('GOOGLE_IOS_CLIENT_ID')
+        current_app.logger.info(f"Using iOS client ID for token exchange: {client_id}")
+        
         # Get credentials from environment
         client_secret = os.getenv('GOOGLE_CLIENT_SECRET')
         
@@ -804,7 +799,7 @@ def google_callback_mobile():
             'grant_type': 'authorization_code'
         }
         
-        current_app.logger.info(f"Token exchange payload: {payload}")
+        current_app.logger.info(f"Token exchange payload client_id: {client_id}")
         token_response = requests.post(token_url, data=payload)
         
         if not token_response.ok:
@@ -853,7 +848,7 @@ def google_callback_mobile():
             "ip": request.remote_addr or "unknown",
             "success": True,
             "provider": "google",
-            "platform": platform
+            "platform": "mobile"
         })
         
         # Return user data
