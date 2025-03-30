@@ -1128,7 +1128,10 @@ def change_username():
         return jsonify({"error": "User not found"}), 404
 
     start_db = time.time()
-    update_user_fields(user_id, {"username": new_username})
+    update_user_fields(user_id, {
+        "username": new_username,
+        "needs_username": False
+    })
     duration = time.time() - start_db
     if not hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator = 0.0

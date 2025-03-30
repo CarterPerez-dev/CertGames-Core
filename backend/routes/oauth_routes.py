@@ -150,6 +150,7 @@ def process_oauth_user(email, name, oauth_provider, oauth_id):
                 {'$set': {
                     oauth_field: oauth_id,
                     'oauth_provider': oauth_provider
+                    'needs_username': False
                 }}
             )
         
