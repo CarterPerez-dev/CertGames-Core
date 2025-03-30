@@ -12,6 +12,8 @@ const OAuthSuccess = () => {
   const location = useLocation();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  // Add this new state
+  const [initializing, setInitializing] = useState(true);
   
   useEffect(() => {
     // Parse query parameters
@@ -25,6 +27,7 @@ const OAuthSuccess = () => {
     if (!userId) {
       setError('Authentication failed. Please try again.');
       setLoading(false);
+      setInitializing(false);
       return;
     }
     
@@ -45,6 +48,9 @@ const OAuthSuccess = () => {
         
         // Get the current user state
         const userState = await dispatch(fetchUserData(userId)).unwrap();
+        
+        // Done initializing, we can now safely navigate
+        setInitializing(false);
         
         if (userState.needs_username) {
           // If user needs to set username, direct to username creation form
@@ -74,6 +80,7 @@ const OAuthSuccess = () => {
         console.error('Error during OAuth completion:', err);
         setError('Failed to complete authentication. Please try again.');
         setLoading(false);
+        setInitializing(false);
       }
     };
     
@@ -88,6 +95,15 @@ const OAuthSuccess = () => {
       </div>
       
       <div className="login-content">
+        {/* Show loading overlay while initializing to prevent flash */}
+        {initializing && (
+          <div className="oauth-initializing-overlay">
+            <div className="oauth-initializing-spinner">
+              <FaSpinner className="oauth-spinner-icon" />
+            </div>
+          </div>
+        )}
+        
         <div className="login-card">
           <div className="login-header">
             <div className="login-logo">
