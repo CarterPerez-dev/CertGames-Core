@@ -621,6 +621,46 @@
   }
 }
 
+/* Add these styles to Login.css */
+
+.oauth-initializing-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(11, 12, 21, 0.9);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.oauth-initializing-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6543cc, #8a58fc);
+  box-shadow: 0 0 30px rgba(101, 67, 204, 0.5);
+}
+
+.oauth-spinner-icon {
+  color: white;
+  font-size: 40px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 
 /* Responsive Styles */
