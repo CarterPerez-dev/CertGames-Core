@@ -61,7 +61,7 @@ socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
 
 # Setup Redis-based sessions
 app.config['SESSION_TYPE'] = 'redis'
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_KEY_PREFIX'] = 'flask_session:'
 app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, password=REDIS_PASSWORD)

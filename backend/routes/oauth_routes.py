@@ -328,19 +328,22 @@ def apple_login():
     
     return redirect(full_url)
 
-@oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
+auth_bp.route('/auth/apple', methods=['GET', 'POST'])
 def apple_auth():
     if request.method == 'GET':
         return redirect(url_for('oauth.apple_login'))
     
     try:
-        # Check state parameter
-        expected_state = session.pop('apple_oauth_state', None)
+        # Check state parameter - don't pop immediately
+        expected_state = session.get('apple_oauth_state')  # Use get() instead of pop()
         received_state = request.form.get('state') or request.args.get('state')
         
         if not expected_state or expected_state != received_state:
             current_app.logger.error(f"Apple state mismatch: expected={expected_state}, received={received_state}")
             return jsonify({"error": "Invalid state parameter"}), 400
+        
+        # Only remove after successful validation - add this line here
+        session.pop('apple_oauth_state', None)
         
         # Use the external URL with /api prefix for your reverse proxy
         base_url = os.getenv('EXTERNAL_URL', 'https://certgames.com')
@@ -351,6 +354,7 @@ def apple_auth():
         if not code:
             return jsonify({"error": "No authorization code received from Apple"}), 400
         
+        # Rest of your function remains unchanged...
         # Get the id_token directly from the form post (if available)
         id_token = request.form.get('id_token') or request.args.get('id_token')
         
@@ -425,8 +429,8 @@ def apple_auth():
     
     except Exception as e:
         current_app.logger.error(f"Error in Apple auth: {str(e)}")
-
-
+    # Add a return for the exception case
+    return jsonify({"error": "Authentication failed"}), 500
 
             
 # Add a route to handle Apple authentication from mobile
