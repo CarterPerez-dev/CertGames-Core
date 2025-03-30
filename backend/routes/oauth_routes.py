@@ -336,7 +336,7 @@ def apple_login():
     
     return redirect(full_url)
 
-pythonCopy@oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
+@oauth_bp.route('/auth/apple', methods=['GET', 'POST'])
 def apple_auth():
     if request.method == 'GET':
         return redirect(url_for('oauth.apple_login'))
