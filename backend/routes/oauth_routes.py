@@ -864,3 +864,77 @@ def google_callback_mobile():
         current_app.logger.error(f"Error in mobile callback: {str(e)}")
         current_app.logger.error(traceback.format_exc())
         return jsonify({"error": str(e)}), 500
+
+
+
+@oauth_bp.route('/verify-google-token', methods=['POST'])
+def verify_google_token():
+    """
+    Verify a Google access token directly.
+    This endpoint is used by the mobile app when using @react-native-google-signin/google-signin
+    """
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "No JSON data provided"}), 400
+            
+        token = data.get('token')
+        user_data = data.get('userData', {})
+        
+        if not token:
+            return jsonify({"error": "No token provided"}), 400
+            
+        # Log information for debugging
+        current_app.logger.info(f"Verifying Google token for user email: {user_data.get('email')}")
+        
+        # Verify token with Google's userinfo endpoint
+        response = requests.get(
+            'https://www.googleapis.com/oauth2/v3/userinfo',
+            headers={'Authorization': f'Bearer {token}'}
+        )
+        
+        if not response.ok:
+            current_app.logger.error(f"Token verification failed: {response.text}")
+            return jsonify({"error": f"Invalid token: {response.text}"}), 400
+            
+        google_user_info = response.json()
+        
+        # Extract user info from Google's response
+        email = google_user_info.get('email')
+        name = google_user_info.get('name', '')
+        google_id = google_user_info.get('sub')  # Google's unique user ID
+        
+        if not email:
+            return jsonify({"error": "Email not provided by Google"}), 400
+            
+        # Process user to create or get existing user
+        user_id, is_new_user = process_oauth_user(email, name, 'google', google_id)
+        
+        # Get user details
+        user = get_user_by_id(user_id)
+        needs_username = user.get('needs_username', False)
+        has_subscription = user.get('subscriptionActive', False)
+        
+        # Log success
+        db.auditLogs.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "ip": request.remote_addr or "unknown",
+            "success": True,
+            "provider": "google",
+            "platform": data.get('platform', 'unknown')
+        })
+        
+        # Return user data
+        return jsonify({
+            "success": True,
+            "userId": user_id,
+            "isNewUser": is_new_user,
+            "needsUsername": needs_username,
+            "hasSubscription": has_subscription
+        })
+        
+    except Exception as e:
+        current_app.logger.error(f"Error verifying Google token: {str(e)}")
+        current_app.logger.error(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
