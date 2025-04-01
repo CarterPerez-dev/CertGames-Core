@@ -7,8 +7,8 @@ import React, {
 } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setXPAndCoins } from "./pages/store/userSlice";
-import { fetchShopItems } from "./pages/store/shopSlice";
+import { setXPAndCoins } from "./pages/store/slice/userSlice";
+import { fetchShopItems } from "./pages/store/slice/shopSlice";
 import ConfettiAnimation from "./ConfettiAnimation";
 import { showAchievementToast } from "./pages/store/AchievementToast";
 import "./test.css";

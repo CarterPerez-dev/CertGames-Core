@@ -1,6 +1,6 @@
 // src/components/pages/store/LeaderboardPage.js
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import './LeaderboardPage.css';
+import './css/LeaderboardPage.css';
 import { 
   FaTrophy, 
   FaMedal, 

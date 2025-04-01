@@ -14,7 +14,7 @@ import {
   FaShieldAlt,
   FaFighterJet
 } from 'react-icons/fa';
-import './SubscriptionSuccess.css';
+import './css/SubscriptionSuccess.css';
 
 const SubscriptionSuccess = () => {
   const [loading, setLoading] = useState(true);

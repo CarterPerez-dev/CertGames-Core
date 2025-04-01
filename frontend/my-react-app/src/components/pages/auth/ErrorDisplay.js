@@ -1,7 +1,7 @@
 // ErrorDisplay.js
 import React from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import './ErrorDisplay.css';
+import './css/ErrorDisplay.css';
 
 const ErrorDisplay = ({ errors }) => {
   if (!errors || errors.length === 0) return null;

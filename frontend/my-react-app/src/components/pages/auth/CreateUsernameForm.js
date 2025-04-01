@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { fetchUserData, setCurrentUserId } from '../store/userSlice';
+import { fetchUserData, setCurrentUserId } from '../store/slice/userSlice';
 import { 
   FaUser, 
   FaCheck, 
@@ -13,7 +13,7 @@ import {
   FaGamepad,
   FaTrophy 
 } from 'react-icons/fa';
-import './CreateUsernameForm.css';
+import './css/CreateUsernameForm.css';
 
 const CreateUsernameForm = () => {
   const [username, setUsername] = useState('');

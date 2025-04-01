@@ -6,7 +6,7 @@ import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
-import './DemosPage.css';
+import './css/DemosPage.css';
 
 // Import the YouTube component and configuration
 import { videoConfig } from './videoConfig';

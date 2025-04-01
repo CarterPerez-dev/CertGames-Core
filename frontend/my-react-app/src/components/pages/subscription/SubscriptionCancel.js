@@ -11,7 +11,7 @@ import {
   FaQuestionCircle,
   FaShieldAlt
 } from 'react-icons/fa';
-import './SubscriptionCancel.css';
+import './css/SubscriptionCancel.css';
 
 const SubscriptionCancel = () => {
   const location = useLocation();

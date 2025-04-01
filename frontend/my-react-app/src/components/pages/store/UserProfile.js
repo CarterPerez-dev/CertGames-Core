@@ -1,9 +1,9 @@
 // src/components/pages/store/UserProfile.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, fetchUserData } from '../store/userSlice';
+import { logout, fetchUserData } from './slice/userSlice';
 import { useNavigate } from 'react-router-dom';
-import './UserProfile.css';
+import './css/UserProfile.css';
 
 // Icons import
 import {
@@ -35,6 +35,10 @@ import {
   FaLevelUpAlt,
   FaPalette
 } from 'react-icons/fa';
+
+
+import iconMapping from "../../iconMapping";
+import colorMapping from "../../colorMapping";
 
 // Requirements component for password validation
 import PasswordRequirements from '../auth/PasswordRequirements';
@@ -305,61 +309,6 @@ function frontValidatePassword(password, username, email) {
   return errors;
 }
 
-// ============================
-// ACHIEVEMENT ICON MAPPING
-// ============================
-const iconMapping = {
-  "test_rookie": FaTrophy,
-  "accuracy_king": FaMedal,
-  "bronze_grinder": FaBook,
-  "silver_scholar": FaStar,
-  "gold_god": FaCrown,
-  "platinum_pro": FaMagic,
-  "walking_encyclopedia": FaBrain,
-  "redemption_arc": FaBolt,
-  "coin_collector_5000": FaBook,
-  "coin_hoarder_10000": FaBook,
-  "coin_tycoon_50000": FaBook,
-  "perfectionist_1": FaCheckCircle,
-  "double_trouble_2": FaCheckCircle,
-  "error404_failure_not_found": FaCheckCircle,
-  "level_up_5": FaTrophy,
-  "mid_tier_grinder_25": FaMedal,
-  "elite_scholar_50": FaStar,
-  "ultimate_master_100": FaCrown,
-  "answer_machine_1000": FaBook,
-  "knowledge_beast_5000": FaBrain,
-  "question_terminator": FaBrain,
-  "test_finisher": FaCheckCircle
-};
-
-// ============================
-// COLOR MAPPING FOR ACHIEVEMENTS
-// ============================
-const colorMapping = {
-  "test_rookie": "#ff5555",
-  "accuracy_king": "#ffa500",
-  "bronze_grinder": "#cd7f32",
-  "silver_scholar": "#c0c0c0",
-  "gold_god": "#ffd700",
-  "platinum_pro": "#e5e4e2",
-  "walking_encyclopedia": "#00fa9a",
-  "redemption_arc": "#ff4500",
-  "coin_collector_5000": "#ff69b4",
-  "coin_hoarder_10000": "#ff1493",
-  "coin_tycoon_50000": "#ff0000",
-  "perfectionist_1": "#adff2f",
-  "double_trouble_2": "#7fff00",
-  "error404_failure_not_found": "#00ffff",
-  "level_up_5": "#f08080",
-  "mid_tier_grinder_25": "#ff8c00",
-  "elite_scholar_50": "#ffd700",
-  "ultimate_master_100": "#ff4500",
-  "answer_machine_1000": "#ff69b4",
-  "knowledge_beast_5000": "#00fa9a",
-  "question_terminator": "#ff1493",
-  "test_finisher": "#adff2f"
-};
 
 // Main UserProfile Component
 const UserProfile = () => {

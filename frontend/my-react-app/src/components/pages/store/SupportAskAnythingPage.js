@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { io } from 'socket.io-client';
-import './SupportAskAnythingPage.css';
+import './css/SupportAskAnythingPage.css';
 import { 
   FaPaperPlane, 
   FaPlus, 

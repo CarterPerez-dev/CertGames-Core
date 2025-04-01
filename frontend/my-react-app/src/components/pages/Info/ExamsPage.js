@@ -6,7 +6,7 @@ import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
-import './ExamsPage.css';
+import './css/ExamsPage.css';
 import aplusLogo from './images/aplus.webp';
 import awscloudLogo from './images/awscloud.webp';
 import cisspLogo from './images/cissp.webp';

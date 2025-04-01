@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaUserPlus, FaPlayCircle, FaList, FaTrophy, FaEnvelope, FaSignInAlt, FaBars, FaTimes, FaBook } from 'react-icons/fa';
 import { setupScrollListener } from './navbarScrollUtils';
-import './InfoNavbar.css';
+import './css/InfoNavbar.css';
 
 const InfoNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

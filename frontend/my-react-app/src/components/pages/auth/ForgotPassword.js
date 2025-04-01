@@ -8,7 +8,7 @@ import {
   FaCheckCircle,
   FaExclamationCircle
 } from 'react-icons/fa';
-import './ForgotPassword.css';
+import './css/ForgotPassword.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
