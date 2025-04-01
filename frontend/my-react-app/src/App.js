@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Public pages
-import PerformanceDashboard from './PerformanceDashboard';
+
 
 import InfoPage from './components/pages/Info/InfoPage';
 import DemosPage from './components/pages/Info/DemosPage';
@@ -211,8 +211,6 @@ function App() {
           {/* Admin routes */}
           <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
-          <Route path="/the-super-secret-password-database-that-only-the-developer-who-takes-too-much-amphe-would-ever-find/please-do-not-attempt-to-access-this-route-unless-you-enjoy-typing-really-long-urls/seriously-this-is-a-highly-secretive-top-secret-confidential-page/please-do-not-access-pretty-please-if-someone-accessed-this-they-would-get-full-access-to-my-database-userinfo-and-so-so-so-so-so-so-much-more/im-just-a-wittle-developer-who-doesnt-know-anything-so-pwease-dont-access-sad-face-emoji/top-secret-password-data-topsecret-very-sensitive" element={<PerformanceDashboard />} />
-          
           {/* Legal pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
