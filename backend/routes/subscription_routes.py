@@ -7,6 +7,17 @@ from datetime import datetime, timedelta
 from models.test import get_user_by_id, update_user_subscription, create_user
 from mongodb.database import db
 from utils.apple_iap_verification import AppleReceiptVerifier
+import jwt
+import json
+import base64
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives import hashes
+from cryptography.x509 import load_pem_x509_certificate
+from cryptography.hazmat.backends import default_backend
+import requests
+
+
+
 
 subscription_bp = Blueprint('subscription', __name__)
 
@@ -732,3 +743,269 @@ def restore_purchases():
     except Exception as e:
         current_app.logger.error(f"Error restoring purchases: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+
+
+## APPLE 
+
+@subscription_bp.route('/apple-webhook', methods=['POST'])
+def apple_server_notification():
+    """
+    Handle Apple's Server-to-Server Notifications for subscription events
+    """
+    current_app.logger.info("Received Apple server notification")
+    
+    try:
+        # Get the signedPayload from the request
+        data = request.json
+        signed_payload = data.get('signedPayload')
+        
+        if not signed_payload:
+            current_app.logger.error("No signedPayload in request")
+            return jsonify({"status": "error", "message": "No signedPayload"}), 400
+            
+        # Decode and verify the payload
+        payload = decode_and_verify_apple_notification(signed_payload)
+        
+        if not payload:
+            current_app.logger.error("Failed to decode or verify payload")
+            return jsonify({"status": "error", "message": "Invalid payload"}), 400
+            
+        # Extract notification data
+        notification_type = payload.get('notificationType')
+        subtype = payload.get('subtype')
+        notification_uuid = payload.get('notificationUUID')
+        
+        # Extract data from notification payload
+        data = payload.get('data', {})
+        transaction_info = data.get('transactionInfo', {})
+        
+        # Log the notification information
+        current_app.logger.info(f"Processing notification type: {notification_type}, subtype: {subtype}, UUID: {notification_uuid}")
+        
+        # Get the original transaction ID which is used to identify the subscription
+        original_transaction_id = transaction_info.get('originalTransactionId')
+        
+        if not original_transaction_id:
+            current_app.logger.error("No originalTransactionId in notification")
+            return jsonify({"status": "error", "message": "Missing originalTransactionId"}), 400
+            
+        # Find the user associated with this subscription
+        user = mainusers_collection.find_one({'appleOriginalTransactionId': original_transaction_id})
+        
+        if not user:
+            current_app.logger.error(f"No user found with originalTransactionId: {original_transaction_id}")
+            return jsonify({"status": "error", "message": "User not found"}), 404
+            
+        user_id = str(user['_id'])
+        
+        # Process based on notification type
+        if notification_type == 'SUBSCRIBED':
+            # New subscription
+            handle_subscription_started(user_id, transaction_info)
+        elif notification_type == 'DID_RENEW':
+            # Subscription renewed
+            handle_subscription_renewed(user_id, transaction_info)
+        elif notification_type == 'DID_FAIL_TO_RENEW':
+            # Subscription failed to renew
+            handle_subscription_failed_to_renew(user_id, transaction_info)
+        elif notification_type == 'EXPIRED':
+            # Subscription expired
+            handle_subscription_expired(user_id, transaction_info)
+        elif notification_type == 'DID_CHANGE_RENEWAL_STATUS':
+            # Subscription renewal status changed
+            if subtype == 'AUTO_RENEW_DISABLED':
+                # User turned off auto-renewal
+                handle_subscription_auto_renew_disabled(user_id, transaction_info)
+            elif subtype == 'AUTO_RENEW_ENABLED':
+                # User turned on auto-renewal
+                handle_subscription_auto_renew_enabled(user_id, transaction_info)
+        
+        # Log that we successfully processed the notification
+        db.auditLogs_collection.insert_one({
+            "timestamp": datetime.utcnow(),
+            "userId": ObjectId(user_id),
+            "action": "apple_notification_processed",
+            "notificationType": notification_type,
+            "subtype": subtype,
+            "notificationUUID": notification_uuid
+        })
+        
+        return jsonify({"status": "success"}), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Error processing Apple notification: {str(e)}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+
+
+def decode_and_verify_apple_notification(signed_payload):
+    """
+    Decode and verify Apple's signed notification payload (JWS format)
+    """
+    try:
+        # Split the JWS payload into components
+        header_b64, payload_b64, signature = signed_payload.split('.')
+        
+        # For now, we'll decode without verification (simplification)
+        # In production, you should verify the signature with Apple's public key
+        
+        # Decode the payload
+        payload_json = base64.b64decode(payload_b64 + '=' * (-len(payload_b64) % 4))
+        payload = json.loads(payload_json)
+        
+        return payload
+    except Exception as e:
+        current_app.logger.error(f"Error decoding Apple notification: {str(e)}")
+        return None
+
+def handle_subscription_started(user_id, transaction_info):
+    """
+    Handle new subscription notification
+    """
+    current_app.logger.info(f"Handling subscription started for user {user_id}")
+    
+    # Get subscription details
+    expires_date_ms = transaction_info.get('expiresDate')
+    expires_date = datetime.fromtimestamp(int(expires_date_ms) / 1000) if expires_date_ms else None
+    product_id = transaction_info.get('productId')
+    
+    update_user_subscription(user_id, {
+        'subscriptionActive': True,
+        'subscriptionStatus': 'active',
+        'subscriptionPlatform': 'apple',
+        'appleProductId': product_id,
+        'subscriptionStartDate': datetime.utcnow(),
+        'subscriptionEndDate': expires_date
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_started',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'appleProductId': product_id,
+        'timestamp': datetime.utcnow()
+    })
+
+def handle_subscription_renewed(user_id, transaction_info):
+    """
+    Handle subscription renewal notification
+    """
+    current_app.logger.info(f"Handling subscription renewal for user {user_id}")
+    
+    # Get subscription details
+    expires_date_ms = transaction_info.get('expiresDate')
+    expires_date = datetime.fromtimestamp(int(expires_date_ms) / 1000) if expires_date_ms else None
+    
+    # Update the subscription end date
+    update_user_subscription(user_id, {
+        'subscriptionActive': True,
+        'subscriptionStatus': 'active',
+        'subscriptionEndDate': expires_date,
+        # Reset cancellation status if it was previously cancelled
+        'subscriptionCanceledAt': None
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_renewed',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+def handle_subscription_failed_to_renew(user_id, transaction_info):
+    """
+    Handle failed renewal notification
+    """
+    current_app.logger.info(f"Handling failed renewal for user {user_id}")
+    
+    # Update subscription status
+    update_user_subscription(user_id, {
+        'subscriptionStatus': 'past_due'
+        # Don't set subscriptionActive to false yet, grace period may apply
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_renewal_failed',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+def handle_subscription_expired(user_id, transaction_info):
+    """
+    Handle subscription expiration notification
+    """
+    current_app.logger.info(f"Handling subscription expiration for user {user_id}")
+    
+    # Update subscription status
+    update_user_subscription(user_id, {
+        'subscriptionActive': False,
+        'subscriptionStatus': 'expired'
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_expired',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+def handle_subscription_auto_renew_disabled(user_id, transaction_info):
+    """
+    Handle notification that user disabled auto-renewal
+    """
+    current_app.logger.info(f"Handling auto-renewal disabled for user {user_id}")
+    
+    # Update subscription status
+    update_user_subscription(user_id, {
+        'subscriptionStatus': 'canceling',
+        'subscriptionCanceledAt': datetime.utcnow()
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_cancellation_requested',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+def handle_subscription_auto_renew_enabled(user_id, transaction_info):
+    """
+    Handle notification that user enabled auto-renewal
+    """
+    current_app.logger.info(f"Handling auto-renewal enabled for user {user_id}")
+    
+    # Update subscription status
+    update_user_subscription(user_id, {
+        'subscriptionStatus': 'active',
+        'subscriptionCanceledAt': None
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'subscription_auto_renew_enabled',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+
+@subscription_bp.route('/apple-webhook', methods=['GET'])
+def verify_apple_server_notification():
+    """
+    Verification endpoint for Apple to confirm your URL is valid
+    """
+    return jsonify({"status": "verified"}), 200

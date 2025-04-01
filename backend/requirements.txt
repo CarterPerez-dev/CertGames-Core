@@ -44,3 +44,4 @@ itsdangerous>=2.0.0
 PyJWT
 bcrypt
 stripe
+cryptography
