@@ -30,3 +30,30 @@ to do list
 # set up mongo, sendgrid, admin dashbaord (i liek ouath for admin dashbaord) and maueb eevn seperate logic in admin dashbaord etc
 
 # performance dashbaord-- links to all tools, ouath, more uses- accurat eubscriptions etc tec
+
+# delete databse colelctiosn that arent used to reduce clutrter an confusiuoin
+
+
+
+# make an EVNTUALLY file wehre we do optionla imporvemnst down the line- such as 
+
+```python
+# Install the official Apple library
+# pip install appstoreserverlibrary
+
+from appstoreserverlibrary.signed_data_verifier import SignedDataVerifier
+
+# In your webhook handler
+def apple_server_notification():
+    try:
+        signed_data_verifier = SignedDataVerifier()
+        signed_payload = request.json.get("signedPayload")
+        
+        decoded_payload = signed_data_verifier.verify_and_decode_notification(signed_payload)
+        
+        # Continue processing based on notification type
+        # ...
+        
+    except Exception as e:
+        current_app.logger.error(f"Error processing Apple notification: {str(e)}")
+```
