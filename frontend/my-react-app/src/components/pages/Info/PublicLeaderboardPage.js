@@ -18,7 +18,7 @@ import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
-import './PublicLeaderboardPage.css';
+import './css/PublicLeaderboardPage.css';
 
 // Skeleton component for loading state
 const SkeletonItem = ({ index }) => {

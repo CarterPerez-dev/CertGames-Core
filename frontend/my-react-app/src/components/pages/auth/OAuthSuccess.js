@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { setCurrentUserId, fetchUserData } from '../store/userSlice';
+import { setCurrentUserId, fetchUserData } from '../store/slice/userSlice';
 import { FaShieldAlt, FaSpinner } from 'react-icons/fa';
-import './Login.css';
+import './css/Login.css';
 
 const OAuthSuccess = () => {
   const dispatch = useDispatch();

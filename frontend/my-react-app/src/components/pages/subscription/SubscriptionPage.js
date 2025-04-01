@@ -20,7 +20,7 @@ import {
   FaFighterJet,
   FaUserSecret
 } from 'react-icons/fa';
-import './SubscriptionPage.css';
+import './css/SubscriptionPage.css';
 
 const SubscriptionPage = () => {
   const [loading, setLoading] = useState(false);

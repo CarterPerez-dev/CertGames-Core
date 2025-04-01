@@ -11,7 +11,7 @@ import {
   FaEyeSlash
 } from 'react-icons/fa';
 import PasswordRequirements from './PasswordRequirements';
-import './ResetPassword.css';
+import './css/ResetPassword.css';
 
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');

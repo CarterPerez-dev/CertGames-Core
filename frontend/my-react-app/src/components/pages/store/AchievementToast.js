@@ -2,7 +2,7 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './AchievementToast.css';
+import './css/AchievementToast.css';
 
 export const showAchievementToast = (achievement) => {
   toast.info(

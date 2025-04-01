@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { registerUser, clearAuthErrors } from '../store/userSlice';
+import { registerUser, clearAuthErrors } from '../store/slice/userSlice';
 import {
   FaUser,
   FaLock,
@@ -20,7 +20,7 @@ import {
 } from 'react-icons/fa';
 import PasswordRequirements from './PasswordRequirements';
 import Footer from '../../Footer';
-import './Register.css';
+import './css/Register.css';
 
 const Register = () => {
   const [username, setUsername] = useState('');

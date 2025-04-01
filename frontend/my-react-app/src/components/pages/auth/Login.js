@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { loginUser, clearAuthErrors } from '../store/userSlice';
+import { loginUser, clearAuthErrors } from '../store/slice/userSlice';
 import { 
   FaUser, 
   FaLock, 
@@ -17,7 +17,7 @@ import {
   FaCheckCircle
 } from 'react-icons/fa';
 import Footer from '../../Footer';
-import './Login.css';
+import './css/Login.css';
 
 const Login = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');

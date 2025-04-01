@@ -1,9 +1,9 @@
 // src/components/pages/store/ShopPage.js
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchShopItems } from '../store/shopSlice';
-import { fetchUserData } from '../store/userSlice';
-import './ShopPage.css';
+import { fetchShopItems } from './slice/shopSlice';
+import { fetchUserData } from './slice/userSlice';
+import './css/ShopPage.css';
 import { 
   FaCoins, 
   FaShoppingCart,

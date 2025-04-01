@@ -15,7 +15,7 @@ import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
-import './ContactPage.css';
+import './css/ContactPage.css';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({

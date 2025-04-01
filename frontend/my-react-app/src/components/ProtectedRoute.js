@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { checkSubscription } from './pages/store/userSlice';
+import { checkSubscription } from './pages/store/slice/userSlice';
 
 const ProtectedRoute = ({ children }) => {
   const { userId, subscriptionActive, subscriptionStatus, status } = useSelector((state) => state.user);

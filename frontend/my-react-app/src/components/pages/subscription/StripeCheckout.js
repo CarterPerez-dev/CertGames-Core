@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaLock, FaSpinner, FaExclamationCircle, FaCreditCard, FaShieldAlt } from 'react-icons/fa';
-import './StripeCheckout.css';
+import './css/StripeCheckout.css';
 
 const StripeCheckout = ({ userId, registrationData, isOauthFlow }) => {
   const [loading, setLoading] = useState(false);

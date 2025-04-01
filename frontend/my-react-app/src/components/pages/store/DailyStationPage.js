@@ -1,9 +1,9 @@
 // src/components/pages/store/DailyStationPage.js
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { claimDailyBonus, setXPAndCoins, fetchUserData } from './userSlice';
-import './DailyStation.css';
-import FormattedQuestion from '../../FormattedQuestion'; // Import FormattedQuestion component
+import { claimDailyBonus, setXPAndCoins, fetchUserData } from './slice/userSlice';
+import './css/DailyStation.css';
+import FormattedQuestion from '../../FormattedQuestion'; 
 
 // Icon imports
 import {

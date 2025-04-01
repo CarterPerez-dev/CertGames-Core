@@ -9,7 +9,7 @@ import InfoNavbar from './InfoNavbar';
 import Footer from '../../Footer';
 import SEOHelmet from '../../SEOHelmet';
 import StructuredData from '../../StructuredData';
-import './BlogPage.css';
+import './css/BlogPage.css';
 import security from './images/securityplus.webp';
 import cloudsec from './images/cloudsec.webp';
 import ciss from './images/CISS.webp';

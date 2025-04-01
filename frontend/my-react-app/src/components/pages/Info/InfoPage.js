@@ -16,7 +16,7 @@ import {
   FaLock,
   FaFileAlt
 } from 'react-icons/fa';
-import './InfoPage.css';
+import './css/InfoPage.css';
 
 const InfoPage = () => {
   // For tab switching functionality

@@ -1,7 +1,7 @@
 // src/components/auth/PasswordRequirements.js
 import React from 'react';
 import { FaCheck, FaTimes } from 'react-icons/fa';
-import './PasswordRequirements.css';
+import './css/PasswordRequirements.css';
 
 const PasswordRequirements = ({ password }) => {
   // Length check
