@@ -778,10 +778,21 @@ def apple_server_notification():
         
         # Extract data from notification payload
         data = payload.get('data', {})
-        transaction_info = data.get('transactionInfo', {})
         
         # Log the notification information
         current_app.logger.info(f"Processing notification type: {notification_type}, subtype: {subtype}, UUID: {notification_uuid}")
+        
+        # FIXED: Properly decode the signed transaction info
+        signed_transaction_info = data.get('signedTransactionInfo')
+        if not signed_transaction_info:
+            current_app.logger.error("No signedTransactionInfo in notification")
+            return jsonify({"status": "error", "message": "Missing signedTransactionInfo"}), 400
+            
+        # Decode the nested signedTransactionInfo
+        transaction_info = decode_and_verify_apple_notification(signed_transaction_info)
+        if not transaction_info:
+            current_app.logger.error("Failed to decode signedTransactionInfo")
+            return jsonify({"status": "error", "message": "Invalid signedTransactionInfo"}), 400
         
         # Get the original transaction ID which is used to identify the subscription
         original_transaction_id = transaction_info.get('originalTransactionId')
@@ -838,24 +849,33 @@ def apple_server_notification():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-
-
 def decode_and_verify_apple_notification(signed_payload):
     """
     Decode and verify Apple's signed notification payload (JWS format)
+    Can handle both the main notification and nested signed objects
     """
     try:
         # Split the JWS payload into components
-        header_b64, payload_b64, signature = signed_payload.split('.')
+        parts = signed_payload.split('.')
+        if len(parts) != 3:
+            current_app.logger.error(f"Invalid JWS format, expected 3 parts but got {len(parts)}")
+            return None
+            
+        header_b64, payload_b64, signature = parts
         
-        # For now, we'll decode without verification (simplification)
-        # In production, you should verify the signature with Apple's public key
+        # Handle padding for base64 decoding
+        # Add padding if needed (Apple may omit the padding)
+        payload_b64_padded = payload_b64 + '=' * (-len(payload_b64) % 4)
         
         # Decode the payload
-        payload_json = base64.b64decode(payload_b64 + '=' * (-len(payload_b64) % 4))
-        payload = json.loads(payload_json)
-        
-        return payload
+        try:
+            payload_json = base64.b64decode(payload_b64_padded)
+            payload = json.loads(payload_json)
+            return payload
+        except Exception as decode_error:
+            current_app.logger.error(f"Error decoding base64 payload: {str(decode_error)}")
+            return None
+            
     except Exception as e:
         current_app.logger.error(f"Error decoding Apple notification: {str(e)}")
         return None
