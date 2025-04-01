@@ -25,4 +25,8 @@ to do list
 
 # fix npm vulnerabilties
 
+#oracle, mondodb, google search, 
+
 # set up mongo, sendgrid, admin dashbaord (i liek ouath for admin dashbaord) and maueb eevn seperate logic in admin dashbaord etc
+
+# performance dashbaord-- links to all tools, ouath, more uses- accurat eubscriptions etc tec
