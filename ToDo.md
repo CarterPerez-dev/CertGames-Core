@@ -20,20 +20,25 @@ to do list
 ## undsertadn core abailty/use of each backedn file and frotnend file
 ## delete anything not used
 ## delete all unused images liek with tools
-
+--
 # fix expired susbciptrion redirect loop issue
-
+--
 # fix npm vulnerabilties
-
-#oracle, mondodb, google search, 
-
+--
+# oracle, mondodb, google search, 
+--
 # set up mongo, sendgrid, admin dashbaord (i liek ouath for admin dashbaord) and maueb eevn seperate logic in admin dashbaord etc
-
+--
 # performance dashbaord-- links to all tools, ouath, more uses- accurat eubscriptions etc tec
-
+##  ouath
+##  have a real time handling request logs make sure to rate limit just in case of ddos and data deleition after xyz amoutn fo time
+## susbcription management and data on like when a user sucbribed etc
+## check datasbe fro useful info
+## web viutals condensed into one giant average of speed/vitals
+## have links to all your tools liek mongobd, sendgrid, oracle etc
+-- 
 # delete databse colelctiosn that arent used to reduce clutrter an confusiuoin
-
-
+--
 
 # make an EVNTUALLY file wehre we do optionla imporvemnst down the line- such as 
 
