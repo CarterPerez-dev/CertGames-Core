@@ -40,6 +40,21 @@ to do list
 # delete databse colelctiosn that arent used to reduce clutrter an confusiuoin
 --
 
+----
+# About Your Temporary Registration Scenario
+Yes, your understanding is correct! This is indeed a potential race condition in your system:
+
+User1 enters registration info (stored temporarily) and sits on the subscription page
+User2 enters identical registration info on another device
+User2 subscribes, creating a permanent account with those credentials
+User1 finally tries to subscribe, but now gets "username or email already taken"
+
+This could theoretically happen because your registration screen likely only validates against permanent records in the database, not temporary registration data.
+Standard solutions to this problem would be:
+
+Adding a short expiration time for temporary registration data (24 hours is common)
+Adding a session identifier to temporary data so it's tied to the specific device/browser
+-----
 # make an EVNTUALLY file wehre we do optionla imporvemnst down the line- such as 
 
 ```python
