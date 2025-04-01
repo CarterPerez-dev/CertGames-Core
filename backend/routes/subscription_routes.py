@@ -920,20 +920,27 @@ def handle_subscription_renewed(user_id, transaction_info):
 
 def handle_subscription_failed_to_renew(user_id, transaction_info):
     """
-    Handle failed renewal notification
+    Handle failed renewal notification with better grace period handling
     """
     current_app.logger.info(f"Handling failed renewal for user {user_id}")
     
+
+    subtype = transaction_info.get('subtype')
+    
     # Update subscription status
-    update_user_subscription(user_id, {
-        'subscriptionStatus': 'past_due'
-        # Don't set subscriptionActive to false yet, grace period may apply
-    })
+    update_data = {
+        'subscriptionStatus': 'grace_period' if subtype == 'GRACE_PERIOD' else 'past_due',
+        # Keep subscription active during grace period, inactive otherwise
+        'subscriptionActive': subtype == 'GRACE_PERIOD'
+    }
+    
+    update_user_subscription(user_id, update_data)
     
     # Log subscription event
     db.subscriptionEvents.insert_one({
         'userId': ObjectId(user_id),
         'event': 'subscription_renewal_failed',
+        'inGracePeriod': subtype == 'GRACE_PERIOD',
         'platform': 'apple',
         'appleTransactionId': transaction_info.get('transactionId'),
         'timestamp': datetime.utcnow()
@@ -1003,9 +1010,40 @@ def handle_subscription_auto_renew_enabled(user_id, transaction_info):
     })
 
 
+
+def handle_grace_period_expired(user_id, transaction_info):
+    """
+    Handle notification that grace period has expired
+    """
+    current_app.logger.info(f"Handling grace period expiration for user {user_id}")
+    
+    # Update subscription status
+    update_user_subscription(user_id, {
+        'subscriptionActive': False,
+        'subscriptionStatus': 'grace_period_expired'
+    })
+    
+    # Log subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': ObjectId(user_id),
+        'event': 'grace_period_expired',
+        'platform': 'apple',
+        'appleTransactionId': transaction_info.get('transactionId'),
+        'timestamp': datetime.utcnow()
+    })
+
+
+
+
 @subscription_bp.route('/apple-webhook', methods=['GET'])
 def verify_apple_server_notification():
     """
     Verification endpoint for Apple to confirm your URL is valid
     """
     return jsonify({"status": "verified"}), 200
+    
+    
+    
+    
+    
+  
