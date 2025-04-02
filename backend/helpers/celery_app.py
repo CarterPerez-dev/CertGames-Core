@@ -55,7 +55,7 @@ app.conf.beat_schedule = {
     },
     # subscription checks
     'update-expired-subscriptions': {
-        'task': 'tasks.celery_tasks.update_expired_subscriptions',
+        'task': 'helpers.async_tasks.update_expired_subscriptions',
         'schedule': crontab(hour='*/6'),  # Run every 6 hours to be safe
     },          
 }
