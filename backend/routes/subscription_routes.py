@@ -120,12 +120,29 @@ def get_subscription_status():
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
-        # Add explicit logging for debugging
-        is_active = user.get('subscriptionActive', False)
-        status = user.get('subscriptionStatus')
-        platform = user.get('subscriptionPlatform')
-        
-        current_app.logger.info(f"Subscription check for user {user_id}: active={is_active}, status={status}, platform={platform}")
+        # Add time check for canceled subscriptions that reached end date
+        if user.get('subscriptionStatus') == 'canceling' and user.get('subscriptionEndDate'):
+            if datetime.utcnow() > user.get('subscriptionEndDate'):
+                # Update in database
+                update_user_subscription(user_id, {
+                    'subscriptionActive': False,
+                    'subscriptionStatus': 'expired'
+                })
+                # Update local variables for response
+                is_active = False
+                status = 'expired'
+                
+                # Log the event
+                db.subscriptionEvents.insert_one({
+                    'userId': ObjectId(user_id),
+                    'event': 'subscription_expired',
+                    'platform': user.get('subscriptionPlatform', 'unknown'),
+                    'timestamp': datetime.utcnow()
+                })
+        else:
+            is_active = user.get('subscriptionActive', False)
+            status = user.get('subscriptionStatus')
+            platform = user.get('subscriptionPlatform')
         
         return jsonify({
             'subscriptionActive': is_active,
@@ -133,9 +150,9 @@ def get_subscription_status():
             'subscriptionPlatform': platform
         })
     except Exception as e:
-        current_app.logger.error(f"Error getting subscription status: {str(e)}")
         return jsonify({'error': str(e)}), 500
-
+        
+        
 @subscription_bp.route('/session-status', methods=['GET'])
 def check_session_status():
     """Check the status of a checkout session"""

@@ -256,3 +256,45 @@ def cleanup_logs():
                 f"apiHealth: {deleted_health.deleted_count}")
 
     return f"Cleanup complete: auditLogs={deleted_audit.deleted_count}, apiHealth={deleted_health.deleted_count}"
+
+
+
+@shared_task
+def update_expired_subscriptions():
+    """
+    Daily task to find and update subscriptions that have reached their end date.
+    """
+    now = datetime.utcnow()
+    
+    # Find users with "canceling" status whose end date has passed
+    expired_users = db.mainusers_collection.find({
+        "subscriptionStatus": "canceling",
+        "subscriptionEndDate": {"$lt": now},
+        "subscriptionActive": True
+    })
+    
+    updated_count = 0
+    for user in expired_users:
+        user_id = str(user["_id"])
+        
+        # Update subscription status to expired and set active to false
+        db.mainusers_collection.update_one(
+            {"_id": user["_id"]},
+            {"$set": {
+                "subscriptionActive": False,
+                "subscriptionStatus": "expired"
+            }}
+        )
+        
+        # Log the event
+        db.subscriptionEvents.insert_one({
+            "userId": user["_id"],
+            "event": "subscription_expired",
+            "platform": user.get("subscriptionPlatform", "unknown"),
+            "timestamp": now
+        })
+        
+        updated_count += 1
+    
+    logger.info(f"Updated {updated_count} expired subscriptions")
+    return f"Updated {updated_count} expired subscriptions"

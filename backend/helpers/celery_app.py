@@ -53,7 +53,17 @@ app.conf.beat_schedule = {
         'task': 'helpers.async_tasks.cleanup_logs',
         'schedule': crontab(hour=2, minute=0),
     },
+    # subscription checks
+    'update-expired-subscriptions': {
+        'task': 'tasks.celery_tasks.update_expired_subscriptions',
+        'schedule': timedelta(hours=6),  # Run every 6 hours to be safe
+    },          
 }
+
+
+
+
+
 
 app.autodiscover_tasks(['helpers'])
 
