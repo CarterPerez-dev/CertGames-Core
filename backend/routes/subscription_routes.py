@@ -794,6 +794,11 @@ def apple_server_notification():
             current_app.logger.error("Failed to decode signedTransactionInfo")
             return jsonify({"status": "error", "message": "Invalid signedTransactionInfo"}), 400
         
+        # NEW: Log expiration intent if it exists
+        expiration_intent = transaction_info.get('expirationIntent')
+        if expiration_intent is not None:
+            current_app.logger.info(f"Expiration Intent: {expiration_intent}")
+        
         # Get the original transaction ID which is used to identify the subscription
         original_transaction_id = transaction_info.get('originalTransactionId')
         
@@ -801,6 +806,8 @@ def apple_server_notification():
             current_app.logger.error("No originalTransactionId in notification")
             return jsonify({"status": "error", "message": "Missing originalTransactionId"}), 400
             
+        # Rest of the existing code remains exactly the same...
+        
         # Find the user associated with this subscription
         user = mainusers_collection.find_one({'appleOriginalTransactionId': original_transaction_id})
         
@@ -847,7 +854,6 @@ def apple_server_notification():
     except Exception as e:
         current_app.logger.error(f"Error processing Apple notification: {str(e)}")
         return jsonify({"status": "error", "message": str(e)}), 500
-
 
 def decode_and_verify_apple_notification(signed_payload):
     """
