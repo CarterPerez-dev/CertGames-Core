@@ -1680,3 +1680,33 @@ def test_route_cancel_subscription():  # Renamed function to avoid conflict
     
     except Exception as e:
         return jsonify({"error": f"Error canceling subscription: {str(e)}"}), 500
+
+
+
+
+@api_bp.route('/user/<user_id>/delete', methods=['DELETE'])
+def delete_user_account(user_id):
+    try:
+        user_oid = ObjectId(user_id)
+    except Exception:
+        return jsonify({"error": "Invalid user ID"}), 400
+
+    try:
+        # Optional: Add additional authentication checks here
+        # For example, check if the user is deleting their own account
+
+        # Delete user from mainusers collection
+        result = mainusers_collection.delete_one({"_id": user_oid})
+        
+        # Optional: Delete related collections (test attempts, achievements, etc.)
+        testAttempts_collection.delete_many({"userId": user_oid})
+        achievements_collection.delete_many({"userId": user_oid})
+        # Add more collection deletions as needed
+
+        if result.deleted_count > 0:
+            return jsonify({"message": "Account deleted successfully"}), 200
+        else:
+            return jsonify({"error": "User not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": f"Error deleting account: {str(e)}"}), 500
