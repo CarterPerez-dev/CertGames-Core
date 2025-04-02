@@ -41,14 +41,14 @@ app.conf.update({
 app.conf.beat_schedule = {
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 300.0,  # 5 minutes
+        'schedule': 300.0,  # 5 minutes actually lol
     },
-    # New: API health checks every 10 minutes
+    # API health checks every 10 minutes
     'check-api-endpoints-every-5-min': {
         'task': 'helpers.async_tasks.check_api_endpoints',
         'schedule': crontab(minute='*/10')
     },
-    # ADDITION: Log cleanup daily at 2 AM
+    #Log cleanup daily at 2 AM
     'cleanup-logs-daily': {
         'task': 'helpers.async_tasks.cleanup_logs',
         'schedule': crontab(hour=2, minute=0),
@@ -56,7 +56,7 @@ app.conf.beat_schedule = {
     # subscription checks
     'update-expired-subscriptions': {
         'task': 'tasks.celery_tasks.update_expired_subscriptions',
-        'schedule': timedelta(hours=6),  # Run every 6 hours to be safe
+        'schedule': crontab(hour='*/6'),  # Run every 6 hours to be safe
     },          
 }
 
