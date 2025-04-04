@@ -28,6 +28,8 @@ import BlogPostPage from './components/pages/Info/BlogPostPage';
 import SubscriptionCancel from './components/pages/subscription/SubscriptionCancel';
 import SubscriptionPage from './components/pages/subscription/SubscriptionPage';
 import SubscriptionSuccess from './components/pages/subscription/SubscriptionSuccess';
+import PrivacyPolicyIOS from './components/pages/ios/PrivacyPolicyIOS';
+import TermsOfServiceIOS from './components/pages/ios/TermsOfServiceIOS';
 
 // Admin 
 import CrackedAdminLoginPage from './components/cracked/CrackedAdminLoginPage';
@@ -214,6 +216,8 @@ function App() {
           {/* Legal pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy-ios" element={<PrivacyPolicyIOS />} />
+          <Route path="/terms-ios" element={<TermsOfServiceIOS />} />
           
           {/* Support route */}
           <Route path="/my-support" element={<SupportAskAnythingPage />} />
