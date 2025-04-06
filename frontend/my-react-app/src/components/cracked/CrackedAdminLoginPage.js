@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CrackedAdminLogin.css";
+import "./styles/CrackedAdminLogin.css";
 
 function CrackedAdminLoginPage() {
   const navigate = useNavigate();
