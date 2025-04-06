@@ -1051,7 +1051,8 @@ def admin_activity_logs():
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated"}), 401
 
-    logs = db.auditLogs.find().sort("timestamp", -1).limit(200)
+    # Filter to only get unsuccessful login attempts (success: false)
+    logs = db.auditLogs.find({"success": False}).sort("timestamp", -1).limit(200)
     results = []
     est_tz = pytz.timezone('America/New_York')
 
@@ -1059,22 +1060,17 @@ def admin_activity_logs():
         # Convert _id => str
         l['_id'] = str(l['_id'])
 
-        # Also convert userId => str if it's an ObjectId
-        if 'userId' in l and isinstance(l['userId'], ObjectId):
-            l['userId'] = str(l['userId'])
+        # Also convert userId => str if it's an ObjectId and only keep last 5 digits
+        if 'userId' in l and l['userId']:
+            user_id_str = str(l['userId'])
+            l['userId'] = user_id_str[-5:] if len(user_id_str) >= 5 else user_id_str
 
-        # Convert timestamp => EST ISO
+        # Format timestamp to MM-DD HH:MM:SS
         if isinstance(l.get('timestamp'), datetime):
-            l['timestamp'] = l['timestamp'].astimezone(est_tz).isoformat()
-
-        # The rest is unchanged
-        ip = l.get('ip', 'unknown')
-        success = l.get('success', True)
+            timestamp_est = l['timestamp'].astimezone(est_tz)
+            l['timestamp'] = timestamp_est.strftime("%m-%d %H:%M:%S")
 
         results.append(l)
-
-    # You already do suspicious IP checks if you want…
-    # (the main cause was the leftover ObjectId in userId)
 
     return jsonify({"logs": results}), 200
     

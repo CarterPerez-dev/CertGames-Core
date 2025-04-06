@@ -1,4 +1,4 @@
-// src/components/cracked/tabs/ActivityLogsTab.js
+// Updated ActivityLogsTab.js
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FaHistory, FaSync, FaSpinner, FaExclamationTriangle
@@ -35,7 +35,7 @@ const ActivityLogsTab = () => {
   return (
     <div className="admin-tab-content activity-tab">
       <div className="admin-content-header">
-        <h2><FaHistory /> Activity & Audit Logs</h2>
+        <h2><FaHistory /> Failed Login Attempts</h2>
         <button className="admin-refresh-btn" onClick={fetchActivityLogs}>
           <FaSync /> Refresh Logs
         </button>
@@ -58,27 +58,27 @@ const ActivityLogsTab = () => {
         <table className="admin-data-table">
           <thead>
             <tr>
-              <th>Timestamp (EST)</th>
+              <th>Time</th>
               <th>IP</th>
-              <th>User ID</th>
-              <th>Success</th>
+              <th>User ID (last 5)</th>
               <th>Reason</th>
             </tr>
           </thead>
           <tbody>
-            {activityLogs.map((log) => (
-              <tr key={log._id} className={log.success ? "" : "error-row"}>
-                <td>{log.timestamp}</td>
-                <td>{log.ip}</td>
-                <td>{log.userId || ""}</td>
-                <td>
-                  <span className={log.success ? "status-success" : "status-error"}>
-                    {log.success ? "Yes" : "No"}
-                  </span>
-                </td>
-                <td>{log.reason || ""}</td>
+            {activityLogs.length > 0 ? (
+              activityLogs.map((log) => (
+                <tr key={log._id} className="error-row">
+                  <td>{log.timestamp}</td>
+                  <td>{log.ip}</td>
+                  <td>{log.userId || ""}</td>
+                  <td>{log.reason || "Unknown reason"}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="admin-no-data">No failed login attempts found</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
