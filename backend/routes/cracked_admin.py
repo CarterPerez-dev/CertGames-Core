@@ -209,16 +209,22 @@ def admin_list_users():
         if cached_data:
             return jsonify(cached_data), 200
 
+    # Enhanced query - search across more fields
     query = {}
     if search:
         query = {
             "$or": [
                 {"username": {"$regex": search, "$options": "i"}},
-                {"email": {"$regex": search, "$options": "i"}}
+                {"email": {"$regex": search, "$options": "i"}},
+                {"ip": {"$regex": search, "$options": "i"}},
+                {"subscriptionPlatform": {"$regex": search, "$options": "i"}},
+                {"oauth_provider": {"$regex": search, "$options": "i"}},
+                {"_id": {"$regex": search, "$options": "i"} if search.isalnum() else {"$exists": True}}
             ]
         }
     skip_count = (page - 1) * limit
 
+    # Enhanced projection with more user information
     projection = {
         "_id": 1,
         "username": 1,
@@ -228,26 +234,76 @@ def admin_list_users():
         "level": 1,
         "achievements": 1,
         "subscriptionActive": 1,
+        "subscriptionStatus": 1,
+        "subscriptionPlatform": 1,
+        "subscriptionStartDate": 1,
+        "subscriptionEndDate": 1,
+        "subscriptionCanceledAt": 1,
+        "oauth_provider": 1,
         "suspended": 1,
         "achievement_counters": 1,
-        "currentAvatar": 1
+        "currentAvatar": 1,
+        "ip": 1,
+        "lastLoginAt": 1,
     }
 
-    cursor = db.mainusers.find(query, projection).skip(skip_count).limit(limit)
+    cursor = db.mainusers_collection.find(query, projection).skip(skip_count).limit(limit)
     results = []
+    
+    # Current timestamp for active session calculation
+    now = datetime.utcnow()
+    active_threshold = now - timedelta(minutes=15)  # Consider users active in last 15 min
+    
     for u in cursor:
         u['_id'] = str(u['_id'])
+        
+        # Format as short ID for display purposes
+        u['shortId'] = u['_id'][-5:] 
+        
         if 'currentAvatar' in u and isinstance(u['currentAvatar'], ObjectId):
             u['currentAvatar'] = str(u['currentAvatar'])
         if 'achievements' in u and isinstance(u['achievements'], list):
             u['achievements'] = [str(a) for a in u['achievements']]
 
+        # Get test statistics
         counters = u.get('achievement_counters', {})
         u['totalQuestionsAnswered'] = counters.get('total_questions_answered', 0)
         u['perfectTestsCount'] = counters.get('perfect_tests_count', 0)
+        
+        # Check if currently active
+        recent_activity = db.auditLogs.find_one({
+            "userId": ObjectId(u['_id']),
+            "timestamp": {"$gte": active_threshold}
+        })
+        u['isActive'] = True if recent_activity else False
+        
+        # Get additional information
+        test_attempts = db.testAttempts_collection.count_documents({
+            "userId": ObjectId(u['_id'])
+        })
+        u['testAttempts'] = test_attempts
+        
+        # Format timestamps
+        if 'subscriptionStartDate' in u and u['subscriptionStartDate']:
+            u['subscriptionStartDate'] = u['subscriptionStartDate'].isoformat()
+        if 'subscriptionEndDate' in u and u['subscriptionEndDate']:
+            u['subscriptionEndDate'] = u['subscriptionEndDate'].isoformat()
+        if 'subscriptionCanceledAt' in u and u['subscriptionCanceledAt']:
+            u['subscriptionCanceledAt'] = u['subscriptionCanceledAt'].isoformat()
+        if 'lastLoginAt' in u and u['lastLoginAt']:
+            u['lastLoginAt'] = u['lastLoginAt'].isoformat()
+            
+        # Identify signup source (iOS or Web)
+        if u.get('appleTransactionId'):
+            u['signupSource'] = 'iOS'
+        elif u.get('stripeSubscriptionId'):
+            u['signupSource'] = 'Web'
+        else:
+            u['signupSource'] = 'Unknown'
+            
         results.append(u)
 
-    total_count = db.mainusers.count_documents(query)
+    total_count = db.mainusers_collection.count_documents(query)
     resp_data = {
         "users": results,
         "total": total_count,
@@ -259,34 +315,57 @@ def admin_list_users():
         cache_set("admin_users_list_page1_limit20", resp_data, 60)
 
     return jsonify(resp_data), 200
+    
 
-@cracked_bp.route('/users/export', methods=['GET'])
-def admin_export_users_csv():
-    if not require_cracked_admin(required_role="superadmin"):
+
+@cracked_bp.route('/users/<user_id>/toggle-subscription', methods=['POST'])
+def admin_toggle_subscription(user_id):
+    if not require_cracked_admin(required_role="supervisor"):
         return jsonify({"error": "Insufficient admin privileges"}), 403
 
-    users = db.mainusers.find({}, {
-        "username": 1, "email": 1, "coins": 1, "xp": 1, "level": 1
+    try:
+        obj_id = ObjectId(user_id)
+    except:
+        return jsonify({"error": "Invalid user id"}), 400
+
+    data = request.json or {}
+    active = data.get("active", False)  # Whether to activate or deactivate
+
+    user = db.mainusers_collection.find_one({"_id": obj_id})
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    update_fields = {
+        "subscriptionActive": active
+    }
+    
+    # If activating, set status to active
+    if active:
+        update_fields["subscriptionStatus"] = "active"
+    else:
+        update_fields["subscriptionStatus"] = "inactive"
+        
+    result = db.mainusers_collection.update_one(
+        {"_id": obj_id},
+        {"$set": update_fields}
+    )
+    
+    # Log this subscription event
+    db.subscriptionEvents.insert_one({
+        'userId': obj_id,
+        'event': 'subscription_toggled_by_admin',
+        'platform': user.get('subscriptionPlatform', 'unknown'),
+        'action': 'activated' if active else 'deactivated',
+        'timestamp': datetime.utcnow()
     })
-
-    output = io.StringIO()
-    writer = csv.writer(output)
-    writer.writerow(["username", "email", "coins", "xp", "level"])
-    for u in users:
-        writer.writerow([
-            u.get("username", ""),
-            u.get("email", ""),
-            u.get("coins", 0),
-            u.get("xp", 0),
-            u.get("level", 1)
-        ])
-    output.seek(0)
-
-    response = make_response(output.read())
-    response.headers["Content-Disposition"] = "attachment; filename=users_export.csv"
-    response.headers["Content-Type"] = "text/csv"
-    return response
-
+    
+    return jsonify({
+        "message": f"User subscription {'activated' if active else 'deactivated'} successfully",
+        "subscriptionActive": active
+    }), 200    
+    
+     
+    
 @cracked_bp.route('/users/<user_id>', methods=['PUT'])
 def admin_update_user(user_id):
     if not require_cracked_admin():
