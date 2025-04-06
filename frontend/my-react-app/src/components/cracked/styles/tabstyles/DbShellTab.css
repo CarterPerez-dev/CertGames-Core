@@ -1,0 +1,46 @@
+/* DbShellTab.css - Styles for Database Shell Tab */
+
+.db-shell-tab .admin-shell-results {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.db-shell-tab .admin-shell-results h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+.db-shell-tab .admin-shell-results pre {
+  background: var(--admin-input-bg);
+  border-radius: 8px;
+  padding: 15px;
+  overflow-x: auto;
+  color: var(--admin-text);
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-accent) var(--admin-bg-card);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.db-shell-tab .admin-shell-results pre::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.db-shell-tab .admin-shell-results pre::-webkit-scrollbar-track {
+  background: var(--admin-bg-card);
+}
+
+.db-shell-tab .admin-shell-results pre::-webkit-scrollbar-thumb {
+  background-color: var(--admin-accent);
+  border-radius: 6px;
+}
+
+.db-shell-tab .admin-form-group input[type="number"] {
+  width: 80px;
+}

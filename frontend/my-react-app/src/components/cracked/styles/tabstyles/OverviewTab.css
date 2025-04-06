@@ -1,0 +1,190 @@
+/* OverviewTab.css - Styles for Dashboard Overview Tab */
+
+.overview-tab .admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.overview-tab .admin-stat-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid var(--admin-border);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.overview-tab .admin-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--admin-shadow);
+}
+
+.overview-tab .admin-stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.overview-tab .admin-stat-content {
+  flex: 1;
+}
+
+.overview-tab .admin-stat-content h3 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.overview-tab .admin-stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  background: var(--admin-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.overview-tab .users-icon {
+  background: rgba(52, 152, 219, 0.1);
+  color: var(--admin-users-icon);
+}
+
+.overview-tab .tests-icon {
+  background: rgba(243, 156, 18, 0.1);
+  color: var(--admin-tests-icon);
+}
+
+.overview-tab .bonus-icon {
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--admin-daily-icon);
+}
+
+.overview-tab .score-icon {
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--admin-performance-icon);
+}
+
+.overview-tab .admin-charts-section {
+  margin-bottom: 30px;
+}
+
+.overview-tab .admin-chart-container {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+  margin-bottom: 20px;
+}
+
+.overview-tab .admin-chart-container h3 {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.overview-tab .admin-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.overview-tab .admin-metrics-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+}
+
+.overview-tab .admin-metrics-card h3 {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 10px;
+}
+
+.overview-tab .admin-metrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overview-tab .admin-metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overview-tab .admin-metric-label {
+  color: var(--admin-text-secondary);
+}
+
+.overview-tab .admin-metric-value {
+  color: var(--admin-text);
+  font-weight: 500;
+}
+
+.overview-tab .admin-status-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.overview-tab .admin-status-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.overview-tab .admin-status-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.overview-tab .admin-status-icon.green {
+  background: rgba(46, 204, 113, 0.1);
+  color: var(--admin-success);
+}
+
+.overview-tab .admin-status-icon.red {
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--admin-error);
+}
+
+.overview-tab .admin-status-icon.yellow {
+  background: rgba(243, 156, 18, 0.1);
+  color: var(--admin-warning);
+}
+
+.overview-tab .admin-status-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.overview-tab .admin-status-name {
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+}
+
+.overview-tab .admin-status-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--admin-text);
+}

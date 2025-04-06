@@ -1,0 +1,37 @@
+/* HealthCheckTab.css - Styles for Health Checks Tab */
+
+.health-checks-tab .admin-stat-card {
+  transition: transform 0.3s ease;
+}
+
+.health-checks-tab .admin-stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.health-checks-tab .health-icon {
+  background: rgba(39, 174, 96, 0.1);
+  color: var(--admin-health-icon);
+}
+
+.health-checks-tab .db-icon {
+  background: rgba(230, 126, 34, 0.1);
+  color: var(--admin-db-icon);
+}
+
+.health-checks-tab .endpoints-icon {
+  background: rgba(52, 152, 219, 0.1);
+  color: var(--admin-info);
+}
+
+.health-checks-tab .time-icon {
+  background: rgba(155, 89, 182, 0.1);
+  color: var(--admin-support-icon);
+}
+
+.health-checks-tab .admin-data-table td:nth-child(4) {
+  text-align: center;
+}
+
+.health-checks-tab .error-row {
+  background-color: rgba(231, 76, 60, 0.05);
+}

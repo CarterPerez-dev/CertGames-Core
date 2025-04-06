@@ -1,0 +1,32 @@
+/* UsersTab.css - Styles for User Management Tab */
+
+.users-tab .admin-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.users-tab .admin-edit-input {
+  max-width: 120px;
+}
+
+.users-tab .admin-data-table td:nth-child(3),
+.users-tab .admin-data-table td:nth-child(4),
+.users-tab .admin-data-table td:nth-child(5) {
+  text-align: right;
+}
+
+.users-tab .admin-data-table td:nth-child(6) {
+  text-align: center;
+}
+
+.users-tab .admin-checkbox-wrap {
+  justify-content: center;
+}
+
+.users-tab .admin-data-table tr.editing-row {
+  background: rgba(101, 67, 204, 0.05);
+}

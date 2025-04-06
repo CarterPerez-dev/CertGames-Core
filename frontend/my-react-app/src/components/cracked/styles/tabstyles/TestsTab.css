@@ -1,0 +1,18 @@
+/* TestsTab.css - Styles for Test Management Tab */
+
+.tests-tab .admin-data-table td:first-child {
+  font-weight: 500;
+}
+
+.tests-tab .admin-data-table td:nth-child(2),
+.tests-tab .admin-data-table td:nth-child(4) {
+  text-align: center;
+}
+
+.tests-tab .admin-form-group input[type="text"] {
+  width: 100%;
+}
+
+.tests-tab .admin-data-table tr:hover {
+  cursor: pointer;
+}
