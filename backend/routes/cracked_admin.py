@@ -12,7 +12,11 @@ import os
 import time
 import pickle
 from dotenv import load_dotenv
-
+import re
+import subprocess
+from collections import deque
+import threading
+import time
 from mongodb.database import db
 
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
@@ -53,6 +57,129 @@ def require_cracked_admin(required_role=None):
         have = priority_map.get(current_role, 1)
         return have >= needed
     return True
+
+
+
+
+class LogBuffer:
+    def __init__(self, max_size):
+        self.logs = deque(maxlen=max_size)
+        self.lock = threading.Lock()
+    
+    def add(self, log):
+        with self.lock:
+            self.logs.append(log)
+    
+    def get_all(self):
+        with self.lock:
+            return list(self.logs)
+
+# Create buffers: 30 minutes worth of nginx logs and 1 hour of API logs
+# Assuming avg 10 req/min, that's 300 entries for nginx and 600 for API
+nginx_logs = LogBuffer(300)
+api_logs = LogBuffer(600)
+
+# Function to read nginx logs from file
+def read_nginx_logs():
+    try:
+        # Using subprocess to read the last 100 lines of the nginx access log
+        # Adjust the path to your actual nginx log location
+        result = subprocess.run(
+            ["tail", "-n", "100", "/var/log/nginx/access.log"], 
+            capture_output=True, text=True, timeout=5
+        )
+        lines = result.stdout.strip().split('\n')
+        
+        for line in lines:
+            if line:
+                # Parse the line to extract relevant information
+                # This regex pattern matches common nginx log format
+                pattern = r'([\d\.]+) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)"'
+                match = re.match(pattern, line)
+                
+                if match:
+                    ip, timestamp, request, status, bytes_sent, referer, user_agent = match.groups()
+                    method, path = request.split(' ')[:2] if ' ' in request else (request, "")
+                    
+                    log_entry = {
+                        "type": "nginx",
+                        "timestamp": timestamp,
+                        "ip": ip,
+                        "method": method,
+                        "path": path,
+                        "status": status,
+                        "bytes": bytes_sent,
+                        "user_agent": user_agent
+                    }
+                    nginx_logs.add(log_entry)
+                    
+        return {"success": True, "count": len(lines)}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+@cracked_bp.route('/request-logs/nginx', methods=['GET'])
+def admin_nginx_logs():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    # Optionally trigger a refresh of the logs
+    if request.args.get('refresh', 'false').lower() == 'true':
+        read_result = read_nginx_logs()
+        if not read_result['success']:
+            return jsonify({"error": f"Failed to read nginx logs: {read_result['error']}"}), 500
+    
+    # Apply filtering if provided
+    filter_text = request.args.get('filter', '').lower()
+    
+    if filter_text:
+        filtered_logs = [
+            log for log in nginx_logs.get_all() 
+            if filter_text in log.get('path', '').lower() or 
+               filter_text in log.get('ip', '').lower() or
+               filter_text in log.get('method', '').lower()
+        ]
+        return jsonify(filtered_logs), 200
+    
+    return jsonify(nginx_logs.get_all()), 200
+
+@cracked_bp.route('/request-logs/api', methods=['GET'])
+def admin_api_logs():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+    
+    # Apply filtering if provided
+    filter_text = request.args.get('filter', '').lower()
+    
+    if filter_text:
+        filtered_logs = [
+            log for log in api_logs.get_all() 
+            if filter_text in log.get('path', '').lower() or 
+               filter_text in log.get('method', '').lower()
+        ]
+        return jsonify(filtered_logs), 200
+    
+    return jsonify(api_logs.get_all()), 200
+
+# Add a before_request handler to log API requests to our buffer
+@app.before_request
+def log_api_request():
+    # Skip logging static files and certain endpoints
+    if request.path.startswith('/static/') or request.path == '/health':
+        return
+    
+    # Create a log entry
+    log_entry = {
+        "type": "api",
+        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "path": request.path,
+        "method": request.method,
+        "ip": request.remote_addr,
+        "user_agent": request.headers.get('User-Agent', 'Unknown')
+    }
+    
+    # Add to our log buffer
+    api_logs.add(log_entry)
+
 
 
 ##################################################################

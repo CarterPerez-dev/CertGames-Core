@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import "./styles/CrackedAdminDashboard.css";
 import "./styles/tabstyles/DailyTab.css";
-import "./styles/tabstyles/DbLogsTab.css";
+import "./styles/tabstyles/RequestLogsTab.css";
 import "./styles/tabstyles/DbShellTab.css";
 import "./styles/tabstyles/NewsletterTab.css";
 import "./styles/tabstyles/PerformanceTab.css";
@@ -35,7 +35,7 @@ import SupportTab from "./tabs/SupportTab";
 import NewsletterTab from "./tabs/NewsletterTab";
 import PerformanceTab from "./tabs/PerformanceTab";
 import ActivityLogsTab from "./tabs/ActivityLogsTab";
-import DbLogsTab from "./tabs/DbLogsTab";
+import RequestLogsTab from "./tabs/RequestLogsTab";
 import DbShellTab from "./tabs/DbShellTab";
 import HealthChecksTab from "./tabs/HealthChecksTab";
 import RevenueTab from "./tabs/RevenueTab"; // Added for Revenue Tab
@@ -80,7 +80,7 @@ function CrackedAdminDashboard() {
       case 'revenue': return <RevenueTab />; // Added for Revenue Tab
       case 'performance': return <PerformanceTab />;
       case 'activity': return <ActivityLogsTab />;
-      case 'dbLogs': return <DbLogsTab />;
+      case 'dbLogs': return <RequestLogsTab />;
       case 'dbShell': return <DbShellTab />;
       case 'healthChecks': return <HealthChecksTab />;
       default: return <OverviewTab />;
@@ -254,7 +254,7 @@ function CrackedAdminDashboard() {
             </li>
             <li>
               <button onClick={() => switchTab("dbLogs")}>
-                <FaDatabase /> DB Logs
+                <FaDatabase /> Request Logs
               </button>
             </li>
             <li>

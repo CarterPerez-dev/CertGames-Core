@@ -1,0 +1,234 @@
+/* RequestLogsTab.css - Styles for Request Logs Tab */
+
+.request-logs-tab .admin-logs-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.request-logs-tab .admin-logs-tab-btn {
+  padding: 10px 15px;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.request-logs-tab .admin-logs-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.request-logs-tab .admin-logs-tab-btn.active {
+  background: var(--admin-accent);
+  color: white;
+  border-color: var(--admin-accent);
+}
+
+.request-logs-tab .admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.request-logs-tab .admin-section-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+}
+
+.request-logs-tab .admin-filter-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.request-logs-tab .admin-filter-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.request-logs-tab .admin-filter-icon {
+  position: absolute;
+  left: 10px;
+  color: var(--admin-text-secondary);
+}
+
+.request-logs-tab .admin-filter-input {
+  padding: 8px 10px 8px 35px;
+  background: var(--admin-input-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text);
+  font-family: inherit;
+  font-size: 14px;
+  min-width: 250px;
+}
+
+.request-logs-tab .admin-filter-input:focus {
+  outline: none;
+  border-color: var(--admin-accent);
+}
+
+.request-logs-tab .admin-clear-filter-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  padding: 0;
+}
+
+.request-logs-tab .admin-clear-filter-btn:hover {
+  color: var(--admin-text);
+}
+
+.request-logs-tab .admin-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 15px;
+  background: var(--admin-accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.request-logs-tab .admin-filter-btn:hover {
+  background: var(--admin-accent-hover);
+  transform: translateY(-2px);
+}
+
+.request-logs-tab .admin-logs-section {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.request-logs-tab .admin-logs-section:last-child {
+  margin-bottom: 0;
+}
+
+.request-logs-tab .admin-data-table td {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.request-logs-tab .admin-data-table td.user-agent-cell {
+  max-width: 200px;
+}
+
+.request-logs-tab .method-get {
+  background-color: rgba(52, 152, 219, 0.2);
+  color: #3498db;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.request-logs-tab .method-post {
+  background-color: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.request-logs-tab .method-put {
+  background-color: rgba(241, 196, 15, 0.2);
+  color: #f1c40f;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.request-logs-tab .method-delete {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.request-logs-tab .status-2xx {
+  color: #2ecc71;
+  font-weight: 500;
+  text-align: center;
+}
+
+.request-logs-tab .status-3xx {
+  color: #3498db;
+  font-weight: 500;
+  text-align: center;
+}
+
+.request-logs-tab .status-4xx {
+  color: #f39c12;
+  font-weight: 500;
+  text-align: center;
+}
+
+.request-logs-tab .status-5xx {
+  color: #e74c3c;
+  font-weight: 500;
+  text-align: center;
+}
+
+.request-logs-tab .admin-no-data {
+  text-align: center;
+  padding: 15px;
+  color: var(--admin-text-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .request-logs-tab .admin-filter-input {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 992px) {
+  .request-logs-tab .admin-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .request-logs-tab .admin-filter-container {
+    width: 100%;
+  }
+  
+  .request-logs-tab .admin-filter-input-group {
+    flex: 1;
+  }
+  
+  .request-logs-tab .admin-filter-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .request-logs-tab .admin-logs-tabs {
+    flex-direction: column;
+  }
+}
