@@ -29,7 +29,7 @@ from routes.oauth_routes import oauth_bp, oauth
 from routes.test_routes import public_leaderboard_bp 
 from routes.contact_form import contact_bp
 from routes.subscription_routes import subscription_bp
-
+from routes.cracked_admin import api_logs
 
 load_dotenv()
 
@@ -82,6 +82,27 @@ def home():
 @app.before_request
 def log_request_info():
     logger.info(f"Handling request to {request.path} with method {request.method}")
+
+
+@app.before_request
+def log_api_request():
+    # Skip logging static files and certain endpoints
+    if request.path.startswith('/static/') or request.path == '/health':
+        return
+    
+    # Create a log entry
+    log_entry = {
+        "type": "api",
+        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "path": request.path,
+        "method": request.method,
+        "ip": request.remote_addr,
+        "user_agent": request.headers.get('User-Agent', 'Unknown')
+    }
+    
+    # Add to our log buffer
+    api_logs.add(log_entry)
+
 
 # Register blueprints
 app.register_blueprint(xploit_bp, url_prefix='/payload')
