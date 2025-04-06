@@ -44,3 +44,11 @@
 .db-shell-tab .admin-form-group input[type="number"] {
   width: 80px;
 }
+
+
+.db-shell-tab .admin-filter-help {
+  display: block;
+  font-size: 12px;
+  color: var(--admin-text-secondary);
+  margin-top: 5px;
+}

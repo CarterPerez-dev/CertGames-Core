@@ -209,33 +209,32 @@ def aggregate_performance_metrics():
     return f"Aggregated {total_requests} samples into performanceMetrics."
 
 @app.task(bind=True, max_retries=3, default_retry_delay=10)
-def check_api_endpoints(self):
+def check_api_health(self):
     """
-    Ping a small set of always-GET-friendly endpoints to confirm the Flask app is up.
+    Simple check if the API is up by calling the health endpoint.
+    Runs every 10 minutes.
     """
-    endpoints = [
-        "http://backend:5000/health",
-        "http://backend:5000/test/achievements",
-        "http://backend:5000/test/leaderboard"
-    ]
-
-    results = []
-    now = datetime.utcnow()
-    for ep in endpoints:
-        try:
-            r = requests.get(ep, timeout=5)
-            status = r.status_code
-            ok = (status < 400)
-            results.append({"endpoint": ep, "status": status, "ok": ok})
-        except Exception as e:
-            results.append({"endpoint": ep, "status": "error", "ok": False, "error": str(e)})
-
-    doc = {
-        "checkedAt": now,
-        "results": results
-    }
-    db.apiHealth.insert_one(doc)
-    return True
+    try:
+        response = requests.get("http://backend:5000/health", timeout=5)
+        status = response.status_code
+        healthy = status < 400
+        
+        # Save the result to the database
+        db.apiHealth.insert_one({
+            "checkedAt": datetime.utcnow(),
+            "healthy": healthy,
+            "status": status
+        })
+        
+        return True
+    except Exception as e:
+        # Log the failure and still save to DB
+        db.apiHealth.insert_one({
+            "checkedAt": datetime.utcnow(),
+            "healthy": False,
+            "error": str(e)
+        })
+        return False
 
 # -----------------------------
 # Cleanup logs for auditLogs & apiHealth

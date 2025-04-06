@@ -1,37 +1,104 @@
-/* HealthCheckTab.css - Styles for Health Checks Tab */
-
-.health-checks-tab .admin-stat-card {
-  transition: transform 0.3s ease;
+/* Add to HealthCheckTab.css */
+.health-checks-tab .admin-health-overview {
+  margin-bottom: 30px;
 }
 
-.health-checks-tab .admin-stat-card:hover {
-  transform: translateY(-5px);
+.health-checks-tab .admin-health-card {
+  display: flex;
+  padding: 30px;
+  background: var(--admin-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  transition: all 0.3s ease;
 }
 
-.health-checks-tab .health-icon {
-  background: rgba(39, 174, 96, 0.1);
-  color: var(--admin-health-icon);
+.health-checks-tab .admin-health-card.healthy {
+  border-left: 6px solid var(--admin-success);
 }
 
-.health-checks-tab .db-icon {
-  background: rgba(230, 126, 34, 0.1);
-  color: var(--admin-db-icon);
+.health-checks-tab .admin-health-card.unhealthy {
+  border-left: 6px solid var(--admin-error);
 }
 
-.health-checks-tab .endpoints-icon {
-  background: rgba(52, 152, 219, 0.1);
-  color: var(--admin-info);
+.health-checks-tab .admin-health-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-right: 20px;
+  flex-shrink: 0;
 }
 
-.health-checks-tab .time-icon {
-  background: rgba(155, 89, 182, 0.1);
-  color: var(--admin-support-icon);
+.health-checks-tab .status-icon {
+  font-size: 40px;
 }
 
-.health-checks-tab .admin-data-table td:nth-child(4) {
-  text-align: center;
+.health-checks-tab .status-icon.healthy {
+  color: var(--admin-success);
 }
 
-.health-checks-tab .error-row {
-  background-color: rgba(231, 76, 60, 0.05);
+.health-checks-tab .status-icon.unhealthy {
+  color: var(--admin-error);
+}
+
+.health-checks-tab .admin-health-details {
+  flex: 1;
+}
+
+.health-checks-tab .admin-health-details h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: var(--admin-text);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.health-checks-tab .admin-health-status {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.health-checks-tab .admin-health-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.health-checks-tab .admin-health-meta-item {
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+}
+
+.health-checks-tab .admin-health-meta-item .label {
+  margin-right: 5px;
+}
+
+.health-checks-tab .admin-health-meta-item .value {
+  color: var(--admin-text);
+  font-weight: 500;
+}
+
+.health-checks-tab .admin-info-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  border: 1px solid var(--admin-border);
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.health-checks-tab .admin-info-card h3 {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 10px;
+}
+
+.health-checks-tab .admin-info-card p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: var(--admin-text);
 }

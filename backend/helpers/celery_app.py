@@ -39,24 +39,23 @@ app.conf.update({
 })
 
 app.conf.beat_schedule = {
+    # Change scheduling from every 5 minutes to every 10 minutes
+    'check-api-health-every-10-min': {
+        'task': 'helpers.async_tasks.check_api_health',
+        'schedule': crontab(minute='*/10')  # Every 10 minutes
+    },
+    # Other tasks remain the same
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
-        'schedule': 300.0,  # 5 minutes actually lol
+        'schedule': 300.0,
     },
-    # API health checks every 10 minutes
-    'check-api-endpoints-every-5-min': {
-        'task': 'helpers.async_tasks.check_api_endpoints',
-        'schedule': crontab(minute='*/10')
-    },
-    #Log cleanup daily at 2 AM
     'cleanup-logs-daily': {
         'task': 'helpers.async_tasks.cleanup_logs',
         'schedule': crontab(hour=2, minute=0),
     },
-    # subscription checks
     'update-expired-subscriptions': {
         'task': 'helpers.async_tasks.update_expired_subscriptions',
-        'schedule': crontab(hour='*/6'),  # Run every 6 hours to be safe
+        'schedule': crontab(hour='*/6'),
     },          
 }
 
