@@ -1,0 +1,18 @@
+/* DailyTab.css - Styles for Daily PBQ Tab */
+
+.daily-tab .admin-form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.daily-tab .admin-data-table td:first-child {
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.daily-tab .admin-data-table td:nth-child(2),
+.daily-tab .admin-data-table td:nth-child(3) {
+  text-align: center;
+}

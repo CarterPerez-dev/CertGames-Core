@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { io } from "socket.io-client";
 import {
   FaHeadset, FaSearch, FaTimes, FaCommentDots, 
-  FaPaperPlane, FaPlus, FaSpinner, FaExclamationTriangle
+  FaPaperPlane, FaPlus, FaSpinner, FaExclamationTriangle, FaTrash
 } from "react-icons/fa";
 
 // We keep this as a top-level variable to maintain socket connection across component instances
