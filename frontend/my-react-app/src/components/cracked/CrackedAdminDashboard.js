@@ -1,7 +1,6 @@
 // src/components/cracked/CrackedAdminDashboard.js
 import React, { useState, useEffect, useCallback } from "react";
 
-
 import "./styles/CrackedAdminDashboard.css";
 import "./styles/tabstyles/DailyTab.css";
 import "./styles/tabstyles/RequestLogsTab.css";
@@ -17,16 +16,15 @@ import "./styles/tabstyles/HealthCheckTab.css";
 import "./styles/tabstyles/RevenueTab.css"; 
 import "./styles/tabstyles/RateLimitsTab.css";
 import "./styles/tabstyles/ServerMetricsTab.css"; 
-
-
+import "./styles/tabstyles/ToolsTab.css"; // Add import for Tools Tab CSS
 
 import { 
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
-  FaSignOutAlt, FaMoneyBillWave, FaServer, FaThermometerThreeQuarters 
+  FaSignOutAlt, FaMoneyBillWave, FaServer, FaThermometerThreeQuarters, 
+  FaTools // Add Tools icon import
 } from "react-icons/fa";
-
 
 // Import tab components
 import OverviewTab from "./tabs/OverviewTab";
@@ -43,6 +41,7 @@ import HealthChecksTab from "./tabs/HealthChecksTab";
 import RevenueTab from "./tabs/RevenueTab"; 
 import RateLimitsTab from "./tabs/RateLimitsTab";
 import ServerMetricsTab from "./tabs/ServerMetricsTab";
+import ToolsTab from "./tabs/ToolsTab"; // Import the Tools Tab component
 
 function CrackedAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -81,7 +80,7 @@ function CrackedAdminDashboard() {
       case 'daily': return <DailyTab />;
       case 'support': return <SupportTab />;
       case 'newsletter': return <NewsletterTab />;
-      case 'revenue': return <RevenueTab />; // Added for Revenue Tab
+      case 'revenue': return <RevenueTab />; 
       case 'performance': return <PerformanceTab />;
       case 'activity': return <ActivityLogsTab />;
       case 'dbLogs': return <RequestLogsTab />;
@@ -89,6 +88,7 @@ function CrackedAdminDashboard() {
       case 'healthChecks': return <HealthChecksTab />;
       case 'serverMetrics': return <ServerMetricsTab />;
       case 'rateLimits': return <RateLimitsTab />;
+      case 'tools': return <ToolsTab />; // Add case for Tools tab
       default: return <OverviewTab />;
     }
   };
@@ -152,6 +152,12 @@ function CrackedAdminDashboard() {
               <button onClick={() => switchTab("revenue")}>
                 <FaMoneyBillWave />
                 <span>Revenue</span>
+              </button>
+            </li>
+            <li className={activeTab === "tools" ? "active" : ""}>
+              <button onClick={() => switchTab("tools")}>
+                <FaTools />
+                <span>Tools</span>
               </button>
             </li>
             <li className={activeTab === "performance" ? "active" : ""}>
@@ -261,6 +267,11 @@ function CrackedAdminDashboard() {
               </button>
             </li>
             <li>
+              <button onClick={() => switchTab("tools")}>
+                <FaTools /> Tools
+              </button>
+            </li>
+            <li>
               <button onClick={() => switchTab("performance")}>
                 <FaChartLine /> Performance
               </button>
@@ -286,11 +297,6 @@ function CrackedAdminDashboard() {
               </button>
             </li>
             <li>
-              <button onClick={handleLogout} className="mobile-logout-btn">
-                <FaSignOutAlt /> Logout
-              </button>
-            </li>
-            <li>
               <button onClick={() => switchTab("serverMetrics")}>
                 <FaServer /> Server Metrics
               </button>
@@ -299,7 +305,12 @@ function CrackedAdminDashboard() {
               <button onClick={() => switchTab("rateLimits")}>
                 <FaThermometerThreeQuarters /> Rate Limits
               </button>
-            </li>            
+            </li>
+            <li>
+              <button onClick={handleLogout} className="mobile-logout-btn">
+                <FaSignOutAlt /> Logout
+              </button>
+            </li>         
           </ul>
         </nav>
       </div>

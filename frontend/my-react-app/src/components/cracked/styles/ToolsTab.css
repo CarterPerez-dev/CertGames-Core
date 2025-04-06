@@ -1,0 +1,169 @@
+/* src/components/cracked/styles/tabstyles/ToolsTab.css */
+.tools-tab .tools-tab-intro {
+  margin-bottom: 30px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+}
+
+.tools-tab .tools-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.tools-tab .tools-category-section {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid var(--admin-border);
+  transition: all 0.3s ease;
+}
+
+.tools-tab .tools-category-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 15px;
+}
+
+.tools-tab .tools-category-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--admin-accent);
+  color: white;
+  font-size: 18px;
+}
+
+.tools-tab .tools-category-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--admin-text);
+}
+
+.tools-tab .tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.tools-tab .tool-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+  padding: 20px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 150px;
+}
+
+.tools-tab .tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-color: var(--admin-accent);
+}
+
+.tools-tab .tool-card:hover .tool-icon {
+  transform: scale(1.1);
+}
+
+.tools-tab .tool-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin-bottom: 15px;
+  color: var(--admin-accent);
+  transition: transform 0.3s ease;
+  flex: 1;
+}
+
+.tools-tab .tool-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tools-tab .tool-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--admin-text);
+}
+
+.tools-tab .tool-link {
+  color: var(--admin-text-secondary);
+  font-size: 12px;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.tools-tab .tool-card:hover .tool-link {
+  color: var(--admin-accent);
+  opacity: 1;
+}
+
+/* Social Media Category Special Styling */
+.tools-tab .tools-category-section[key="social"] .tools-category-icon {
+  background: var(--admin-secondary);
+}
+
+.tools-tab .tools-category-section[key="social"] .tool-icon {
+  color: var(--admin-secondary);
+}
+
+/* AI Tools Category Special Styling */
+.tools-tab .tools-category-section[key="ai"] .tool-icon {
+  background: linear-gradient(135deg, var(--admin-accent), var(--admin-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .tools-tab .tools-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  
+  .tools-tab .tool-card {
+    height: 130px;
+    padding: 15px;
+  }
+  
+  .tools-tab .tool-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+  
+  .tools-tab .tool-name {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tools-tab .tools-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+  
+  .tools-tab .tool-card {
+    height: 120px;
+    padding: 12px;
+  }
+  
+  .tools-tab .tool-icon {
+    font-size: 24px;
+  }
+  
+  .tools-tab .tool-name {
+    font-size: 12px;
+  }
+}
