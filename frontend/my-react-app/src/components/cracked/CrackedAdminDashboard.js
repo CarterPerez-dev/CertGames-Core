@@ -1,5 +1,5 @@
 // src/components/cracked/CrackedAdminDashboard.js
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 
 import "./styles/CrackedAdminDashboard.css";
@@ -14,6 +14,7 @@ import "./styles/tabstyles/UsersTab.css";
 import "./styles/tabstyles/ActivityLogsTab.css";
 import "./styles/tabstyles/OverviewTab.css";
 import "./styles/tabstyles/HealthCheckTab.css";
+import "./styles/tabstyles/RevenueTab.css"; // Added for Revenue Tab
 
 
 
@@ -22,7 +23,7 @@ import {
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
-  FaSignOutAlt
+  FaSignOutAlt, FaMoneyBillWave // Added for Revenue Tab
 } from "react-icons/fa";
 
 // Import tab components
@@ -37,6 +38,7 @@ import ActivityLogsTab from "./tabs/ActivityLogsTab";
 import DbLogsTab from "./tabs/DbLogsTab";
 import DbShellTab from "./tabs/DbShellTab";
 import HealthChecksTab from "./tabs/HealthChecksTab";
+import RevenueTab from "./tabs/RevenueTab"; // Added for Revenue Tab
 
 function CrackedAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -75,6 +77,7 @@ function CrackedAdminDashboard() {
       case 'daily': return <DailyTab />;
       case 'support': return <SupportTab />;
       case 'newsletter': return <NewsletterTab />;
+      case 'revenue': return <RevenueTab />; // Added for Revenue Tab
       case 'performance': return <PerformanceTab />;
       case 'activity': return <ActivityLogsTab />;
       case 'dbLogs': return <DbLogsTab />;
@@ -137,6 +140,12 @@ function CrackedAdminDashboard() {
               <button onClick={() => switchTab("newsletter")}>
                 <FaEnvelope />
                 <span>Newsletter</span>
+              </button>
+            </li>
+            <li className={activeTab === "revenue" ? "active" : ""}>
+              <button onClick={() => switchTab("revenue")}>
+                <FaMoneyBillWave />
+                <span>Revenue</span>
               </button>
             </li>
             <li className={activeTab === "performance" ? "active" : ""}>
@@ -226,6 +235,11 @@ function CrackedAdminDashboard() {
             <li>
               <button onClick={() => switchTab("newsletter")}>
                 <FaEnvelope /> Newsletter
+              </button>
+            </li>
+            <li>
+              <button onClick={() => switchTab("revenue")}>
+                <FaMoneyBillWave /> Revenue
               </button>
             </li>
             <li>

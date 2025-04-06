@@ -980,3 +980,287 @@ def admin_health_checks():
         return jsonify({"error": "Error retrieving health checks", "details": str(e)}), 500
         
 
+##################################################################
+# REVENUE & SUBSCRIPTION ANALYTICS
+##################################################################
+@cracked_bp.route('/revenue/overview', methods=['GET'])
+def admin_revenue_overview():
+    """
+    Returns revenue overview data including:
+    - Total revenue to date
+    - Revenue in past 7 days
+    - Revenue in past 30 days
+    - Stripe vs Apple breakdown
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Subscription price - $9.99 per month
+        SUBSCRIPTION_PRICE = 9.99
+        
+        # Get all active subscribers
+        active_subscribers = db.mainusers_collection.count_documents({"subscriptionActive": True})
+        total_active_revenue = active_subscribers * SUBSCRIPTION_PRICE
+        
+        # Calculate active subscribers by platform
+        stripe_subscribers = db.mainusers_collection.count_documents({
+            "subscriptionActive": True, 
+            "subscriptionPlatform": "stripe"
+        })
+        
+        apple_subscribers = db.mainusers_collection.count_documents({
+            "subscriptionActive": True, 
+            "subscriptionPlatform": "apple"
+        })
+        
+        # Get revenue from past 7 days and 30 days
+        now = datetime.utcnow()
+        seven_days_ago = now - timedelta(days=7)
+        thirty_days_ago = now - timedelta(days=30)
+        
+        # Count subscribers who started in the last 7 days
+        new_subs_7_days = db.mainusers_collection.count_documents({
+            "subscriptionStartDate": {"$gte": seven_days_ago},
+            "subscriptionActive": True
+        })
+        
+        # Count subscribers who started in the last 30 days
+        new_subs_30_days = db.mainusers_collection.count_documents({
+            "subscriptionStartDate": {"$gte": thirty_days_ago},
+            "subscriptionActive": True
+        })
+        
+        # Revenue from new subscribers
+        new_revenue_7_days = new_subs_7_days * SUBSCRIPTION_PRICE
+        new_revenue_30_days = new_subs_30_days * SUBSCRIPTION_PRICE
+        
+        # Get all-time subscription count (including canceled)
+        all_time_subs = db.mainusers_collection.count_documents({
+            "$or": [
+                {"subscriptionActive": True},
+                {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
+            ]
+        })
+        
+        # Calculate estimated total lifetime revenue
+        all_time_revenue = all_time_subs * SUBSCRIPTION_PRICE
+        
+        return jsonify({
+            "active_subscribers": active_subscribers,
+            "total_active_revenue": round(total_active_revenue, 2),
+            "stripe_subscribers": stripe_subscribers,
+            "apple_subscribers": apple_subscribers,
+            "stripe_revenue": round(stripe_subscribers * SUBSCRIPTION_PRICE, 2),
+            "apple_revenue": round(apple_subscribers * SUBSCRIPTION_PRICE, 2),
+            "new_subscribers_7d": new_subs_7_days,
+            "new_revenue_7d": round(new_revenue_7_days, 2),
+            "new_subscribers_30d": new_subs_30_days,
+            "new_revenue_30d": round(new_revenue_30_days, 2),
+            "all_time_subscribers": all_time_subs,
+            "all_time_revenue": round(all_time_revenue, 2)
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@cracked_bp.route('/revenue/signups', methods=['GET'])
+def admin_signup_metrics():
+    """
+    Returns daily signups for the past 7 days, broken down by platform (Stripe/Apple)
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        now = datetime.utcnow()
+        daily_data = []
+        
+        # Get signups for each of the past 7 days
+        for i in range(7):
+            day_start = (now - timedelta(days=i)).replace(hour=0, minute=0, second=0, microsecond=0)
+            day_end = day_start + timedelta(days=1)
+            day_label = day_start.strftime("%a %b %d")  # e.g. "Mon Apr 05"
+            
+            # Count total signups for this day
+            total_signups = db.mainusers_collection.count_documents({
+                "subscriptionStartDate": {"$gte": day_start, "$lt": day_end}
+            })
+            
+            # Count Stripe signups
+            stripe_signups = db.mainusers_collection.count_documents({
+                "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
+                "subscriptionPlatform": "stripe"
+            })
+            
+            # Count Apple signups
+            apple_signups = db.mainusers_collection.count_documents({
+                "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
+                "subscriptionPlatform": "apple"
+            })
+            
+            daily_data.append({
+                "date": day_label,
+                "timestamp": day_start.isoformat(),
+                "total": total_signups,
+                "stripe": stripe_signups,
+                "apple": apple_signups
+            })
+        
+        # Reverse so oldest is first
+        daily_data.reverse()
+        
+        return jsonify(daily_data), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@cracked_bp.route('/revenue/cancellation', methods=['GET'])
+def admin_cancellation_metrics():
+    """
+    Returns metrics about subscription cancellations and retention
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Aggregate events from subscriptionEvents collection
+        pipeline = [
+            {
+                "$match": {
+                    "event": {"$in": ["subscription_expired", "subscription_cancellation_requested"]}
+                }
+            },
+            {
+                "$lookup": {
+                    "from": "mainusers",
+                    "localField": "userId",
+                    "foreignField": "_id",
+                    "as": "user"
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$user",
+                    "preserveNullAndEmptyArrays": True
+                }
+            },
+            {
+                "$project": {
+                    "event": 1,
+                    "timestamp": 1,
+                    "platform": 1,
+                    "subscriptionStartDate": "$user.subscriptionStartDate",
+                    "subscriptionEndDate": "$user.subscriptionEndDate",
+                    "duration_days": {
+                        "$cond": [
+                            {"$and": [
+                                {"$isArray": ["$user.subscriptionStartDate"]}, 
+                                {"$isArray": ["$user.subscriptionEndDate"]}
+                            ]},
+                            {
+                                "$divide": [
+                                    {"$subtract": ["$user.subscriptionEndDate", "$user.subscriptionStartDate"]},
+                                    1000 * 60 * 60 * 24  # Convert milliseconds to days
+                                ]
+                            },
+                            null
+                        ]
+                    }
+                }
+            }
+        ]
+        
+        cancellation_data = list(db.subscriptionEvents.aggregate(pipeline))
+        
+        # Count total number of cancellations
+        total_cancellations = len(cancellation_data)
+        
+        # Calculate average subscription duration
+        valid_durations = [item["duration_days"] for item in cancellation_data if item.get("duration_days") is not None]
+        avg_duration = sum(valid_durations) / len(valid_durations) if valid_durations else 0
+        
+        # Count cancellations by platform
+        cancellations_by_platform = {}
+        for item in cancellation_data:
+            platform = item.get("platform", "unknown")
+            cancellations_by_platform[platform] = cancellations_by_platform.get(platform, 0) + 1
+        
+        # Calculate cancellation rate
+        total_subscribers = db.mainusers_collection.count_documents({
+            "$or": [
+                {"subscriptionActive": True},
+                {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
+            ]
+        })
+        
+        cancellation_rate = (total_cancellations / total_subscribers) if total_subscribers > 0 else 0
+        
+        # Get recent cancellations
+        recent_cancellations = db.subscriptionEvents.find(
+            {"event": {"$in": ["subscription_expired", "subscription_cancellation_requested"]}},
+            {"userId": 1, "platform": 1, "timestamp": 1}
+        ).sort("timestamp", -1).limit(10)
+        
+        recent_data = []
+        for cancel in recent_cancellations:
+            user_id = cancel.get("userId")
+            user = db.mainusers_collection.find_one({"_id": user_id}) if user_id else None
+            
+            if user:
+                recent_data.append({
+                    "username": user.get("username", "Unknown"),
+                    "platform": cancel.get("platform", "unknown"),
+                    "timestamp": cancel.get("timestamp").isoformat() if isinstance(cancel.get("timestamp"), datetime) else str(cancel.get("timestamp"))
+                })
+        
+        return jsonify({
+            "total_cancellations": total_cancellations,
+            "average_duration_days": round(avg_duration, 1),
+            "cancellation_rate": round(cancellation_rate * 100, 1),  # As percentage
+            "cancellations_by_platform": cancellations_by_platform,
+            "recent_cancellations": recent_data
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@cracked_bp.route('/revenue/recent-signups', methods=['GET'])
+def admin_recent_signups():
+    """
+    Returns the most recent user signups with subscription data
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        limit = int(request.args.get("limit", 10))
+        
+        # Get recent subscribers
+        recent_subscribers = db.mainusers_collection.find(
+            {"subscriptionStartDate": {"$exists": True}},
+            {
+                "username": 1, 
+                "email": 1,
+                "subscriptionStartDate": 1,
+                "subscriptionPlatform": 1,
+                "subscriptionStatus": 1
+            }
+        ).sort("subscriptionStartDate", -1).limit(limit)
+        
+        result = []
+        for user in recent_subscribers:
+            result.append({
+                "userId": str(user["_id"]),
+                "username": user.get("username", "Unknown"),
+                "email": user.get("email", ""),
+                "platform": user.get("subscriptionPlatform", "unknown"),
+                "status": user.get("subscriptionStatus", "unknown"),
+                "signupDate": user.get("subscriptionStartDate").isoformat() if isinstance(user.get("subscriptionStartDate"), datetime) else str(user.get("subscriptionStartDate"))
+            })
+            
+        return jsonify(result), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+

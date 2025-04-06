@@ -1,0 +1,293 @@
+/* RevenueTab.css - Styles for Revenue Dashboard Tab */
+
+.revenue-tab .admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.revenue-tab .admin-stat-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid var(--admin-border);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.revenue-tab .admin-stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--admin-shadow);
+}
+
+.revenue-tab .admin-stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.revenue-tab .admin-stat-content {
+  flex: 1;
+}
+
+.revenue-tab .admin-stat-content h3 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.revenue-tab .admin-stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  background: var(--admin-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.revenue-tab .admin-stat-subtext {
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+  margin-top: 5px;
+}
+
+.revenue-tab .revenue-icon {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+}
+
+.revenue-tab .new-revenue-icon {
+  background: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+}
+
+.revenue-tab .all-time-icon {
+  background: rgba(101, 67, 204, 0.1);
+  color: var(--admin-accent);
+}
+
+.revenue-tab .retention-icon {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+}
+
+.revenue-tab .admin-revenue-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.revenue-tab .admin-chart-container {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+  margin-bottom: 20px;
+}
+
+.revenue-tab .admin-chart-container h3 {
+  font-size: 16px;
+  margin: 0 0 15px 0;
+  color: var(--admin-text-secondary);
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.revenue-tab .admin-chart-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.revenue-tab .admin-platform-chart {
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-tab .admin-platform-stats {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.revenue-tab .admin-platform-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.revenue-tab .admin-platform-icon {
+  font-size: 24px;
+}
+
+.revenue-tab .stripe-icon {
+  color: #6543cc;
+}
+
+.revenue-tab .apple-icon {
+  color: #4285F4;
+}
+
+.revenue-tab .admin-platform-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.revenue-tab .admin-platform-name {
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+}
+
+.revenue-tab .admin-platform-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--admin-text);
+}
+
+.revenue-tab .admin-chart-tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  padding: 10px;
+  border: 1px solid var(--admin-border);
+  color: white;
+}
+
+.revenue-tab .admin-chart-tooltip-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.revenue-tab .admin-revenue-feed {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.revenue-tab .admin-feed-container {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--admin-accent) var(--admin-bg-card);
+}
+
+.revenue-tab .admin-feed-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.revenue-tab .admin-feed-container::-webkit-scrollbar-track {
+  background: var(--admin-bg-card);
+}
+
+.revenue-tab .admin-feed-container::-webkit-scrollbar-thumb {
+  background-color: var(--admin-accent);
+  border-radius: 6px;
+}
+
+.revenue-tab .admin-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.revenue-tab .admin-feed-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--admin-input-bg);
+  gap: 15px;
+}
+
+.revenue-tab .admin-feed-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.revenue-tab .admin-feed-platform-icon {
+  font-size: 20px;
+}
+
+.revenue-tab .admin-feed-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.revenue-tab .admin-feed-title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.revenue-tab .admin-feed-email {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--admin-text-secondary);
+}
+
+.revenue-tab .admin-feed-time {
+  font-size: 12px;
+  color: var(--admin-text-secondary);
+}
+
+.revenue-tab .admin-feed-status {
+  flex-shrink: 0;
+}
+
+.revenue-tab .admin-feed-status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.revenue-tab .admin-feed-status-badge.status-active {
+  background: rgba(46, 204, 113, 0.1);
+  color: #2ecc71;
+}
+
+.revenue-tab .admin-feed-status-badge.status-canceled,
+.revenue-tab .admin-feed-status-badge.status-expired {
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+}
+
+.revenue-tab .admin-feed-status-badge.status-canceling {
+  background: rgba(243, 156, 18, 0.1);
+  color: #f39c12;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .revenue-tab .admin-revenue-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .revenue-tab .admin-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .revenue-tab .admin-revenue-feed {
+    grid-template-columns: 1fr;
+  }
+}
