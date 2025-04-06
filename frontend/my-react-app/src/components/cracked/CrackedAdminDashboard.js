@@ -14,8 +14,9 @@ import "./styles/tabstyles/UsersTab.css";
 import "./styles/tabstyles/ActivityLogsTab.css";
 import "./styles/tabstyles/OverviewTab.css";
 import "./styles/tabstyles/HealthCheckTab.css";
-import "./styles/tabstyles/RevenueTab.css"; // Added for Revenue Tab
-
+import "./styles/tabstyles/RevenueTab.css"; 
+import "./styles/tabstyles/RateLimitsTab.css";
+import "./styles/tabstyles/ServerMetricsTab.css"; 
 
 
 
@@ -23,8 +24,9 @@ import {
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
   FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
   FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
-  FaSignOutAlt, FaMoneyBillWave // Added for Revenue Tab
+  FaSignOutAlt, FaMoneyBillWave, FaServer, FaThermometerThreeQuarters 
 } from "react-icons/fa";
+
 
 // Import tab components
 import OverviewTab from "./tabs/OverviewTab";
@@ -38,7 +40,9 @@ import ActivityLogsTab from "./tabs/ActivityLogsTab";
 import RequestLogsTab from "./tabs/RequestLogsTab";
 import DbShellTab from "./tabs/DbShellTab";
 import HealthChecksTab from "./tabs/HealthChecksTab";
-import RevenueTab from "./tabs/RevenueTab"; // Added for Revenue Tab
+import RevenueTab from "./tabs/RevenueTab"; 
+import RateLimitsTab from "./tabs/RateLimitsTab";
+import ServerMetricsTab from "./tabs/ServerMetricsTab";
 
 function CrackedAdminDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -83,6 +87,8 @@ function CrackedAdminDashboard() {
       case 'dbLogs': return <RequestLogsTab />;
       case 'dbShell': return <DbShellTab />;
       case 'healthChecks': return <HealthChecksTab />;
+      case 'serverMetrics': return <ServerMetricsTab />;
+      case 'rateLimits': return <RateLimitsTab />;
       default: return <OverviewTab />;
     }
   };
@@ -178,6 +184,18 @@ function CrackedAdminDashboard() {
                 <span>Health Checks</span>
               </button>
             </li>
+            <li className={activeTab === "serverMetrics" ? "active" : ""}>
+              <button onClick={() => switchTab("serverMetrics")}>
+                <FaServer />
+                <span>Server Metrics</span>
+              </button>
+            </li>
+            <li className={activeTab === "rateLimits" ? "active" : ""}>
+              <button onClick={() => switchTab("rateLimits")}>
+                <FaThermometerThreeQuarters />
+                <span>Rate Limits</span>
+              </button>
+            </li>            
           </ul>
         </nav>
         
@@ -272,6 +290,16 @@ function CrackedAdminDashboard() {
                 <FaSignOutAlt /> Logout
               </button>
             </li>
+            <li>
+              <button onClick={() => switchTab("serverMetrics")}>
+                <FaServer /> Server Metrics
+              </button>
+            </li>
+            <li>
+              <button onClick={() => switchTab("rateLimits")}>
+                <FaThermometerThreeQuarters /> Rate Limits
+              </button>
+            </li>            
           </ul>
         </nav>
       </div>

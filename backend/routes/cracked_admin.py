@@ -18,7 +18,8 @@ from collections import deque
 import threading
 import time
 from mongodb.database import db
-
+import psutil
+import socket
 cracked_bp = Blueprint('cracked', __name__, url_prefix='/cracked')
 ADMIN_PASS = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
 
@@ -1681,3 +1682,198 @@ def admin_api_health_check():
             "error": str(e),
             "timestamp": datetime.utcnow().isoformat()
         }), 500
+        
+       
+
+@cracked_bp.route('/server-metrics', methods=['GET'])
+def admin_server_metrics():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get CPU metrics
+        cpu_percent = psutil.cpu_percent(interval=1)
+        cpu_count = psutil.cpu_count(logical=True)
+        cpu_stats = psutil.cpu_stats()
+        
+        # Get memory metrics
+        memory = psutil.virtual_memory()
+        memory_total_gb = round(memory.total / (1024**3), 2)
+        memory_used_gb = round(memory.used / (1024**3), 2)
+        memory_percent = memory.percent
+        
+        # Get disk metrics
+        disk = psutil.disk_usage('/')
+        disk_total_gb = round(disk.total / (1024**3), 2)
+        disk_used_gb = round(disk.used / (1024**3), 2)
+        disk_percent = disk.percent
+        
+        # Get network metrics
+        net_io = psutil.net_io_counters()
+        net_bytes_sent = net_io.bytes_sent
+        net_bytes_recv = net_io.bytes_recv
+        
+        # Get hostname and uptime
+        hostname = socket.gethostname()
+        boot_time = datetime.fromtimestamp(psutil.boot_time())
+        uptime = datetime.utcnow() - boot_time
+        uptime_days = uptime.days
+        uptime_hours, remainder = divmod(uptime.seconds, 3600)
+        uptime_minutes, uptime_seconds = divmod(remainder, 60)
+        
+        # Get top processes by CPU usage
+        top_processes = []
+        for proc in sorted(psutil.process_iter(['pid', 'name', 'username', 'cpu_percent', 'memory_percent']), 
+                          key=lambda p: p.info['cpu_percent'] or 0, reverse=True)[:10]:
+            try:
+                proc_info = proc.info
+                top_processes.append({
+                    'pid': proc_info['pid'],
+                    'name': proc_info['name'],
+                    'username': proc_info['username'],
+                    'cpu_percent': proc_info['cpu_percent'],
+                    'memory_percent': proc_info['memory_percent']
+                })
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+        
+        return jsonify({
+            'cpu': {
+                'percent': cpu_percent,
+                'count': cpu_count,
+                'ctx_switches': cpu_stats.ctx_switches,
+                'interrupts': cpu_stats.interrupts,
+                'soft_interrupts': cpu_stats.soft_interrupts
+            },
+            'memory': {
+                'total_gb': memory_total_gb,
+                'used_gb': memory_used_gb,
+                'percent': memory_percent,
+                'available_gb': round((memory.total - memory.used) / (1024**3), 2)
+            },
+            'disk': {
+                'total_gb': disk_total_gb,
+                'used_gb': disk_used_gb,
+                'percent': disk_percent,
+                'free_gb': round((disk.total - disk.used) / (1024**3), 2)
+            },
+            'network': {
+                'bytes_sent': net_bytes_sent,
+                'bytes_recv': net_bytes_recv,
+                'packets_sent': net_io.packets_sent,
+                'packets_recv': net_io.packets_recv
+            },
+            'system': {
+                'hostname': hostname,
+                'uptime_days': uptime_days,
+                'uptime_hours': uptime_hours,
+                'uptime_minutes': uptime_minutes,
+                'uptime_seconds': uptime_seconds,
+                'boot_time': boot_time.isoformat()
+            },
+            'top_processes': top_processes,
+            'timestamp': datetime.utcnow().isoformat()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve server metrics: {str(e)}"}), 500 
+       
+
+
+
+@cracked_bp.route('/rate-limits', methods=['GET'])
+def admin_rate_limits():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get all rate limit records from the database
+        rate_limits = list(db.rateLimits.find({}, {
+            "userId": 1, 
+            "endpoint": 1, 
+            "calls": 1, 
+            "updatedAt": 1
+        }).sort("updatedAt", -1).limit(200))
+        
+        # Process rate limits
+        processed_limits = []
+        for limit in rate_limits:
+            # Convert ObjectId to string
+            limit["_id"] = str(limit["_id"])
+            
+            # Count calls within the last hour
+            calls = limit.get("calls", [])
+            now = datetime.utcnow()
+            hour_ago = now - timedelta(hours=1)
+            recent_calls = [call for call in calls if call >= hour_ago]
+            
+            # Get endpoint type limits
+            endpoint = limit.get("endpoint")
+            from helpers.rate_limiter import RateLimiter
+            limiter = RateLimiter(endpoint)
+            max_calls = limiter.limits.get("calls", 0)
+            period_sec = limiter.limits.get("period", 3600)
+            
+            # Format user ID (could be IP or actual user ID)
+            user_id = limit.get("userId", "unknown")
+            user_display = user_id
+            if user_id.startswith("ip_"):
+                user_display = user_id  # It's an IP address
+            else:
+                # Try to get username if it's a user ID
+                try:
+                    user_obj = db.mainusers.find_one({"_id": ObjectId(user_id)})
+                    if user_obj:
+                        user_display = f"{user_obj.get('username', 'unknown')} ({str(user_id)[-5:]})"
+                except:
+                    # If conversion fails, just use the ID as is
+                    user_display = str(user_id)
+            
+            processed_limits.append({
+                "userId": user_display,
+                "endpoint": endpoint,
+                "total_calls": len(calls),
+                "recent_calls": len(recent_calls),
+                "limit": max_calls,
+                "period_minutes": period_sec / 60,
+                "usage_percent": (len(recent_calls) / max_calls * 100) if max_calls > 0 else 0,
+                "last_used": limit.get("updatedAt").isoformat() if isinstance(limit.get("updatedAt"), datetime) else None
+            })
+        
+        # Get summary stats
+        endpoint_stats = {}
+        for limit in processed_limits:
+            endpoint = limit.get("endpoint")
+            if endpoint not in endpoint_stats:
+                endpoint_stats[endpoint] = {
+                    "total_users": 0,
+                    "total_calls": 0,
+                    "recent_calls": 0,
+                    "max_calls": limit.get("limit", 0)
+                }
+            
+            endpoint_stats[endpoint]["total_users"] += 1
+            endpoint_stats[endpoint]["total_calls"] += limit.get("total_calls", 0)
+            endpoint_stats[endpoint]["recent_calls"] += limit.get("recent_calls", 0)
+        
+        # Convert to list for response
+        endpoint_summary = [
+            {
+                "endpoint": endpoint,
+                "total_users": stats["total_users"],
+                "total_calls": stats["total_calls"],
+                "recent_calls": stats["recent_calls"],
+                "max_calls": stats["max_calls"],
+                "usage_percent": (stats["recent_calls"] / (stats["total_users"] * stats["max_calls"]) * 100) 
+                                if stats["total_users"] * stats["max_calls"] > 0 else 0
+            }
+            for endpoint, stats in endpoint_stats.items()
+        ]
+        
+        return jsonify({
+            "rate_limits": processed_limits,
+            "endpoint_summary": endpoint_summary
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": f"Failed to retrieve rate limits: {str(e)}"}), 500
