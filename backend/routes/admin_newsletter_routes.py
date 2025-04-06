@@ -137,3 +137,26 @@ def get_campaigns():
     except Exception as e:
         current_app.logger.exception(f"Failed to fetch campaigns: {str(e)}")
         return jsonify({"error": f"Failed to fetch campaigns: {str(e)}"}), 500
+
+
+
+
+@admin_news_bp.route('/newsletter/<campaign_id>', methods=['DELETE'])
+def admin_delete_newsletter(campaign_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+        
+    try:
+        campaign_oid = ObjectId(campaign_id)
+    except:
+        return jsonify({"error": "Invalid campaign ID"}), 400
+        
+    # Find the campaign first to check if it exists
+    campaign = get_campaign_by_id(campaign_id)
+    if not campaign:
+        return jsonify({"error": "Campaign not found"}), 404
+        
+    # Delete the campaign
+    newsletter_campaigns_collection.delete_one({"_id": campaign_oid})
+    
+    return jsonify({"message": "Campaign deleted successfully"}), 200

@@ -78,3 +78,49 @@
   min-height: 200px;
   resize: vertical;
 }
+
+.newsletter-tab .admin-warning-text {
+  color: var(--admin-error);
+  font-weight: 500;
+  margin: 10px 0;
+}
+
+.newsletter-tab .admin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.newsletter-tab .admin-confirmation-dialog {
+  background: var(--admin-bg-card);
+  border-radius: 12px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.newsletter-tab .admin-confirmation-dialog h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.newsletter-tab .admin-confirmation-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .newsletter-tab .admin-campaign-details {
+    grid-template-columns: 1fr;
+  }
+}

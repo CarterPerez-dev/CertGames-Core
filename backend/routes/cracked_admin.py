@@ -732,6 +732,8 @@ def admin_list_daily_questions():
         d['_id'] = str(d['_id'])
     return jsonify(docs), 200
 
+# In backend/routes/cracked_admin.py - Update the admin_create_daily_question function
+
 @cracked_bp.route('/daily', methods=['POST'])
 def admin_create_daily_question():
     if not require_cracked_admin(required_role="supervisor"):
@@ -741,9 +743,17 @@ def admin_create_daily_question():
     if "prompt" not in data:
         return jsonify({"error": "Missing prompt"}), 400
 
+    # Add the exam tip field to the data being stored
     data["createdAt"] = datetime.utcnow()
+    # Make sure options and examTip fields exist in the database
+    if "options" not in data:
+        data["options"] = ["", "", "", ""]
+    if "examTip" not in data:
+        data["examTip"] = ""
+        
     db.dailyQuestions.insert_one(data)
     return jsonify({"message": "Daily PBQ created"}), 201
+    
 
 @cracked_bp.route('/daily/<obj_id>', methods=['PUT'])
 def admin_update_daily_question(obj_id):
@@ -1263,4 +1273,36 @@ def admin_recent_signups():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
+@cracked_bp.route('/tests/<test_id>/update-name', methods=['PUT'])
+def admin_update_test_name(test_id):
+    if not require_cracked_admin(required_role="supervisor"):
+        return jsonify({"error": "Insufficient admin privileges"}), 403
+
+    data = request.json or {}
+    test_name = data.get("testName")
+    
+    if not test_name:
+        return jsonify({"error": "Missing testName field"}), 400
+        
+    try:
+        obj_id = ObjectId(test_id)
+    except:
+        return jsonify({"error": "Invalid test id"}), 400
+
+    update_result = db.tests.update_one(
+        {"_id": obj_id}, 
+        {"$set": {"testName": test_name}}
+    )
+    
+    if update_result.matched_count == 0:
+        return jsonify({"error": "Test not found"}), 404
+        
+    return jsonify({"message": "Test name updated successfully"}), 200
+
+
+
+
 
