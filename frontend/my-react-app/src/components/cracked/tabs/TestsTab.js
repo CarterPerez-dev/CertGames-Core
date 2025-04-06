@@ -1,8 +1,8 @@
 // src/components/cracked/tabs/TestsTab.js
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  FaClipboardList, FaSearch, FaTrash, FaPlus,
-  FaSpinner, FaExclamationTriangle
+  FaClipboardList, FaSearch, FaTrash, FaPlus, FaEdit,
+  FaSpinner, FaExclamationTriangle, FaSave, FaTimes
 } from "react-icons/fa";
 
 const TestsTab = () => {
@@ -10,7 +10,10 @@ const TestsTab = () => {
   const [testCategory, setTestCategory] = useState("");
   const [testsLoading, setTestsLoading] = useState(false);
   const [testsError, setTestsError] = useState(null);
+  const [editingTestId, setEditingTestId] = useState(null);
+  const [editingTestName, setEditingTestName] = useState("");
 
+  // Keep existing state for new test data
   const [newTestData, setNewTestData] = useState({
     category: "",
     testId: "",
@@ -91,6 +94,43 @@ const TestsTab = () => {
     }
   };
 
+  // New function to handle editing a test name
+  const handleEditTestName = (test) => {
+    setEditingTestId(test._id);
+    setEditingTestName(test.testName || "");
+  };
+
+  // New function to save the edited test name
+  const handleSaveTestName = async () => {
+    if (!editingTestId) return;
+    
+    try {
+      const res = await fetch(`/api/cracked/tests/${editingTestId}/update-name`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ testName: editingTestName })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to update test name");
+        return;
+      }
+      alert("Test name updated successfully!");
+      setEditingTestId(null);
+      setEditingTestName("");
+      fetchTests();
+    } catch (err) {
+      console.error("Update test name error:", err);
+    }
+  };
+
+  // Function to cancel editing
+  const cancelEditing = () => {
+    setEditingTestId(null);
+    setEditingTestName("");
+  };
+
   return (
     <div className="admin-tab-content tests-tab">
       <div className="admin-content-header">
@@ -109,7 +149,8 @@ const TestsTab = () => {
         </div>
       </div>
 
-      <div className="admin-card">
+      {/* Keeping the create test functionality for reference but it's not needed */}
+      <div className="admin-card" style={{ display: 'none' }}>
         <h3><FaPlus /> Create New Test</h3>
         <div className="admin-form-grid">
           <div className="admin-form-group">
@@ -176,17 +217,56 @@ const TestsTab = () => {
               <tr key={t._id}>
                 <td>{t.category}</td>
                 <td>{t.testId}</td>
-                <td>{t.testName || "(Unnamed)"}</td>
+                <td>
+                  {editingTestId === t._id ? (
+                    <input
+                      type="text"
+                      value={editingTestName}
+                      onChange={(e) => setEditingTestName(e.target.value)}
+                      className="admin-edit-input"
+                    />
+                  ) : (
+                    t.testName || "(Unnamed)"
+                  )}
+                </td>
                 <td>{t.questions ? t.questions.length : 0}</td>
                 <td>
                   <div className="admin-action-buttons">
-                    <button 
-                      onClick={() => handleDeleteTest(t)}
-                      className="admin-btn delete-btn"
-                      title="Delete test"
-                    >
-                      <FaTrash />
-                    </button>
+                    {editingTestId === t._id ? (
+                      <>
+                        <button 
+                          onClick={handleSaveTestName}
+                          className="admin-btn save-btn"
+                          title="Save test name"
+                        >
+                          <FaSave />
+                        </button>
+                        <button 
+                          onClick={cancelEditing}
+                          className="admin-btn cancel-btn"
+                          title="Cancel editing"
+                        >
+                          <FaTimes />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button 
+                          onClick={() => handleEditTestName(t)}
+                          className="admin-btn edit-btn"
+                          title="Edit test name"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteTest(t)}
+                          className="admin-btn delete-btn"
+                          title="Delete test"
+                        >
+                          <FaTrash />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>

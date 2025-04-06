@@ -2,19 +2,24 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FaCalendarDay, FaPlus, FaTrash, FaSync,
-  FaSpinner, FaExclamationTriangle
+  FaSpinner, FaExclamationTriangle, FaEye, FaTimes
 } from "react-icons/fa";
+import FormattedQuestion from "../../FormattedQuestion";
 
 const DailyTab = () => {
   const [dailyList, setDailyList] = useState([]);
   const [dailyLoading, setDailyLoading] = useState(false);
   const [dailyError, setDailyError] = useState(null);
+  const [previewQuestion, setPreviewQuestion] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const [newDaily, setNewDaily] = useState({
     prompt: "",
     dayIndex: "",
     correctIndex: "",
-    explanation: ""
+    explanation: "",
+    options: ["","","",""],  // Added an array of 4 empty strings for options
+    examTip: ""  // Added exam tip field
   });
 
   const fetchDailyPBQs = useCallback(async () => {
@@ -44,7 +49,9 @@ const DailyTab = () => {
         prompt: newDaily.prompt,
         dayIndex: Number(newDaily.dayIndex) || 0,
         correctIndex: Number(newDaily.correctIndex) || 0,
-        explanation: newDaily.explanation
+        explanation: newDaily.explanation,
+        options: newDaily.options,
+        examTip: newDaily.examTip || "" // Include exam tip in the request
       };
       const res = await fetch("/api/cracked/daily", {
         method: "POST",
@@ -59,7 +66,14 @@ const DailyTab = () => {
       }
       alert("Daily PBQ created!");
       fetchDailyPBQs();
-      setNewDaily({ prompt: "", dayIndex: "", correctIndex: "", explanation: "" });
+      setNewDaily({ 
+        prompt: "", 
+        dayIndex: "", 
+        correctIndex: "", 
+        explanation: "",
+        options: ["","","",""],
+        examTip: ""
+      });
     } catch (err) {
       console.error("Create daily PBQ error:", err);
     }
@@ -83,6 +97,32 @@ const DailyTab = () => {
       console.error("Delete daily PBQ error:", err);
     }
   };
+
+  // Handle updating the options array
+  const handleOptionChange = (index, value) => {
+    const newOptions = [...newDaily.options];
+    newOptions[index] = value;
+    setNewDaily({...newDaily, options: newOptions});
+  };
+
+
+  const handlePreviewQuestion = () => {
+
+    const formattedQuestion = `## ${newDaily.prompt}
+
+  ${newDaily.options.map((option, index) => `${index + 1}. ${option}`).join('\n')}
+
+  ${ 
+    newDaily.examTip
+    ? `\n**Exam Tip:** ${newDaily.examTip}`
+    : ''
+  }
+  `; 
+
+  setPreviewQuestion(formattedQuestion);
+  setShowPreview(true);
+  }; 
+
 
   return (
     <div className="admin-tab-content daily-tab">
@@ -120,10 +160,29 @@ const DailyTab = () => {
               type="text"
               value={newDaily.correctIndex}
               onChange={(e) => setNewDaily((prev) => ({ ...prev, correctIndex: e.target.value }))}
-              placeholder="Correct answer index"
+              placeholder="Correct answer index (0-3)"
             />
           </div>
         </div>
+        
+        {/* Options section */}
+        <div className="admin-form-group full-width">
+          <label>Options:</label>
+          <div className="admin-options-grid">
+            {newDaily.options.map((option, index) => (
+              <div key={index} className="admin-option-input">
+                <label>Option {index + 1}:</label>
+                <input
+                  type="text"
+                  value={option}
+                  onChange={(e) => handleOptionChange(index, e.target.value)}
+                  placeholder={`Option ${index + 1}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        
         <div className="admin-form-group full-width">
           <label>Explanation:</label>
           <textarea
@@ -133,12 +192,46 @@ const DailyTab = () => {
             rows={4}
           ></textarea>
         </div>
+        
+        {/* New exam tip field */}
+        <div className="admin-form-group full-width">
+          <label>Exam Tip:</label>
+          <textarea
+            value={newDaily.examTip}
+            onChange={(e) => setNewDaily((prev) => ({ ...prev, examTip: e.target.value }))}
+            placeholder="Optional exam tip to display"
+            rows={2}
+          ></textarea>
+        </div>
+        
         <div className="admin-form-actions">
+          <button className="admin-preview-btn" onClick={handlePreviewQuestion}>
+            <FaEye /> Preview Question
+          </button>
           <button className="admin-submit-btn" onClick={handleCreateDaily}>
             Create Daily PBQ
           </button>
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {showPreview && (
+        <div className="admin-modal-overlay">
+          <div className="admin-preview-modal">
+            <div className="admin-modal-header">
+              <h3>Question Preview</h3>
+              <button className="admin-close-btn" onClick={() => setShowPreview(false)}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="admin-preview-content">
+              <div className="admin-preview-wrapper">
+                <FormattedQuestion questionText={previewQuestion} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {dailyLoading && (
         <div className="admin-loading">
@@ -160,6 +253,7 @@ const DailyTab = () => {
               <th>Prompt</th>
               <th>Day Index</th>
               <th>Correct Index</th>
+              <th>Has Exam Tip</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -169,6 +263,7 @@ const DailyTab = () => {
                 <td>{d.prompt}</td>
                 <td>{d.dayIndex}</td>
                 <td>{d.correctIndex}</td>
+                <td>{d.examTip ? "Yes" : "No"}</td>
                 <td>
                   <div className="admin-action-buttons">
                     <button 

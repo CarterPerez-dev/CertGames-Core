@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from './components/pages/store/slice/userSlice';
-
 // Import ToastContainer from react-toastify
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
