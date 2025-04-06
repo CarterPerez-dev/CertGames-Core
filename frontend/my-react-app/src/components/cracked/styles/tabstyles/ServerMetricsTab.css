@@ -1,0 +1,173 @@
+/* src/components/cracked/styles/tabstyles/ServerMetricsTab.css */
+.server-metrics-tab .admin-refresh-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.server-metrics-tab .admin-auto-refresh-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+}
+
+.server-metrics-tab .admin-auto-refresh-toggle input {
+  margin: 0;
+}
+
+.server-metrics-tab .admin-server-overview {
+  margin-bottom: 20px;
+}
+
+.server-metrics-tab .admin-system-info-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+}
+
+.server-metrics-tab .admin-system-info-card h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: var(--admin-text-secondary);
+  border-bottom: 1px solid var(--admin-border);
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.server-metrics-tab .admin-server-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+}
+
+.server-metrics-tab .admin-server-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.server-metrics-tab .admin-detail-label {
+  font-size: 12px;
+  color: var(--admin-text-secondary);
+}
+
+.server-metrics-tab .admin-detail-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--admin-text);
+}
+
+.server-metrics-tab .admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.server-metrics-tab .admin-metric-card {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+  transition: transform 0.3s ease;
+}
+
+.server-metrics-tab .admin-metric-card:hover {
+  transform: translateY(-5px);
+}
+
+.server-metrics-tab .admin-metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.server-metrics-tab .admin-metric-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--admin-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.server-metrics-tab .admin-metric-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--admin-text);
+}
+
+.server-metrics-tab .admin-metric-chart {
+  margin-bottom: 15px;
+}
+
+.server-metrics-tab .admin-metric-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.server-metrics-tab .admin-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.server-metrics-tab .admin-charts-section {
+  margin-bottom: 30px;
+}
+
+.server-metrics-tab .admin-charts-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: var(--admin-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.server-metrics-tab .admin-resource-chart {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--admin-border);
+}
+
+.server-metrics-tab .admin-processes-section {
+  margin-bottom: 30px;
+}
+
+.server-metrics-tab .admin-processes-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: var(--admin-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .server-metrics-tab .admin-metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .server-metrics-tab .admin-content-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .server-metrics-tab .admin-server-details {
+    grid-template-columns: 1fr;
+  }
+}
