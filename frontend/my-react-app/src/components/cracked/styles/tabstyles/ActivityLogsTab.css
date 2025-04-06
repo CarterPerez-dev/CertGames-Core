@@ -1,14 +1,19 @@
-/* ActivityLogsTab.css - Styles for Activity Logs Tab */
-
-.activity-tab .admin-data-table td:nth-child(4) {
-  text-align: center;
-}
-
-.activity-tab .error-row {
-  background-color: rgba(231, 76, 60, 0.05);
-}
-
-.activity-tab .admin-data-table th:first-child,
+/* Updates to ActivityLogsTab.css */
 .activity-tab .admin-data-table td:first-child {
-  min-width: 180px;
+  font-family: monospace;
+  white-space: nowrap;
+}
+
+.activity-tab .admin-data-table td:nth-child(3) {
+  font-family: monospace;
+  text-align: center;
+  background: rgba(52, 152, 219, 0.1);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.activity-tab .admin-no-data {
+  text-align: center;
+  padding: 20px;
+  color: var(--admin-text-secondary);
 }
