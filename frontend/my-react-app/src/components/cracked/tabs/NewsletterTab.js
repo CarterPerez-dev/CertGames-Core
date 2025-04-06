@@ -2,7 +2,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FaEnvelope, FaUsers, FaSync, FaInfoCircle, 
-  FaPaperPlane, FaPlus, FaTimes, FaSpinner, FaExclamationTriangle
+  FaPaperPlane, FaPlus, FaTimes, FaSpinner, FaExclamationTriangle,
+  FaTrash // Added for delete functionality
 } from "react-icons/fa";
 
 const NewsletterTab = () => {
@@ -20,6 +21,10 @@ const NewsletterTab = () => {
   
   // Current campaign being viewed/edited
   const [currentCampaign, setCurrentCampaign] = useState(null);
+
+  // Delete confirmation modal
+  const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
+  const [campaignToDelete, setCampaignToDelete] = useState(null);
 
   const fetchSubscribers = async () => {
     setNewsletterLoading(true);
@@ -131,6 +136,41 @@ const NewsletterTab = () => {
       alert("Error sending campaign: " + err.message);
     } finally {
       setNewsletterLoading(false);
+    }
+  };
+
+  // New function to prompt for campaign deletion
+  const promptDeleteCampaign = (campaign) => {
+    setCampaignToDelete(campaign);
+    setDeleteConfirmVisible(true);
+  };
+
+  // New function to handle campaign deletion
+  const handleDeleteCampaign = async () => {
+    if (!campaignToDelete) return;
+    
+    setNewsletterLoading(true);
+    try {
+      const res = await fetch(`/api/cracked/newsletter/${campaignToDelete._id}`, {
+        method: "DELETE",
+        credentials: "include"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to delete campaign");
+      }
+      alert("Newsletter campaign deleted successfully!");
+      fetchCampaigns();
+      if (currentCampaign && currentCampaign._id === campaignToDelete._id) {
+        setCurrentCampaign(null);
+      }
+    } catch (err) {
+      setNewsletterError(err.message);
+      alert("Error deleting campaign: " + err.message);
+    } finally {
+      setNewsletterLoading(false);
+      setDeleteConfirmVisible(false);
+      setCampaignToDelete(null);
     }
   };
 
@@ -282,6 +322,14 @@ const NewsletterTab = () => {
                                 <FaPaperPlane />
                               </button>
                             )}
+                            {/* Add delete button for all campaigns */}
+                            <button 
+                              onClick={() => promptDeleteCampaign(campaign)}
+                              className="admin-btn delete-btn"
+                              title="Delete campaign"
+                            >
+                              <FaTrash />
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -361,6 +409,42 @@ const NewsletterTab = () => {
                 ) : (
                   <>Create Campaign</>
                 )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirmVisible && campaignToDelete && (
+        <div className="admin-modal-overlay">
+          <div className="admin-confirmation-dialog">
+            <h3>Confirm Campaign Deletion</h3>
+            <p>Are you sure you want to delete the campaign "{campaignToDelete.title}"?</p>
+            {campaignToDelete.status === "sent" && (
+              <p className="admin-warning-text">
+                Warning: This campaign has already been sent to subscribers.
+              </p>
+            )}
+            <div className="admin-confirmation-buttons">
+              <button 
+                onClick={handleDeleteCampaign}
+                className="admin-danger-btn"
+              >
+                {newsletterLoading ? (
+                  <><FaSpinner className="admin-spinner" /> Deleting...</>
+                ) : (
+                  <>Delete Campaign</>
+                )}
+              </button>
+              <button 
+                onClick={() => {
+                  setDeleteConfirmVisible(false);
+                  setCampaignToDelete(null);
+                }}
+                className="admin-cancel-btn"
+              >
+                Cancel
               </button>
             </div>
           </div>

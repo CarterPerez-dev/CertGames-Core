@@ -799,6 +799,7 @@ def admin_performance_metrics():
         return jsonify({"error": "Not authenticated"}), 401
 
     try:
+        # Get the latest performance metrics
         perf_metrics = db.performanceMetrics.find_one({}, sort=[("timestamp", -1)])
         if not perf_metrics:
             # Return a dummy doc so front end won't break
@@ -825,32 +826,221 @@ def admin_performance_metrics():
             est_tz = pytz.timezone('America/New_York')
             perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
 
-        # Example: If you want a history array for charting:
-        # (pull last 10 performanceMetrics docs and transform them)
-        history_cursor = db.performanceMetrics.find().sort("timestamp", -1).limit(10)
+        # Get history for charts (last 60 records)
+        history_cursor = db.performanceMetrics.find().sort("timestamp", -1).limit(60)
         history_list = []
         est_tz = pytz.timezone('America/New_York')
+        
         for doc in history_cursor:
             doc_id = str(doc['_id'])
             doc_time = doc['timestamp'].astimezone(est_tz).isoformat() if isinstance(doc['timestamp'], datetime) else None
-            # convert numeric to ms
+            
+            # Convert numeric to ms
+            db_time_ms = None
             if 'avg_db_query_time' in doc:
-                doc['avg_db_query_time_ms'] = round(doc['avg_db_query_time'] * 1000, 2)
-                del doc['avg_db_query_time']
+                db_time_ms = round(doc['avg_db_query_time'] * 1000, 2)
+            elif 'avg_db_query_time_ms' in doc:
+                db_time_ms = doc['avg_db_query_time_ms']
+                
+            request_time_ms = None
+            if 'avg_request_time' in doc:
+                request_time_ms = round(doc['avg_request_time'] * 1000, 2)
 
             history_list.append({
                 "_id": doc_id,
                 "timestamp": doc_time,
-                "requestTime": doc.get("avg_request_time", 0),
-                "dbTime": doc.get("avg_db_query_time_ms", 0.0)
+                "requestTime": request_time_ms,
+                "dbTime": db_time_ms,
+                "throughput": doc.get("throughput", 0),
+                "errorRate": doc.get("error_rate", 0)
             })
-        # Attach the reversed list so it's earliest to latest if you want:
+            
+        # Reverse the list so it's chronological
         perf_metrics['history'] = list(reversed(history_list))
+        
+        # Get route statistics for the database section
+        # Sample the last 100 entries from perfSamples to see which routes are most commonly used
+        recent_samples = list(db.perfSamples.find({}, 
+                                               {"route": 1, "method": 1, "duration_sec": 1, "response_bytes": 1})
+                                       .sort("timestamp", -1)
+                                       .limit(100))
+        
+        # Count request by route
+        route_stats = {}
+        requests_data = []
+        
+        for sample in recent_samples:
+            route = sample.get("route", "/unknown")
+            route_stats[route] = route_stats.get(route, 0) + 1
+            
+            # Also collect data for the scatter plot
+            if "duration_sec" in sample and "response_bytes" in sample:
+                requests_data.append({
+                    "route": route,
+                    "requestTime": round(sample["duration_sec"] * 1000, 2),
+                    "responseBytes": sample.get("response_bytes", 0)
+                })
+        
+        # Convert to list for the chart
+        route_stats_list = [{"route": k, "count": v} for k, v in route_stats.items()]
+        # Sort by count descending and take top 10
+        route_stats_list = sorted(route_stats_list, key=lambda x: x["count"], reverse=True)[:10]
+        
+        perf_metrics['routeStats'] = route_stats_list
+        perf_metrics['requests'] = requests_data
+        
+        # Add mock cache hit rate (you can replace with real data if available)
+        perf_metrics['cache_hit_rate'] = 0.75  # 75% cache hit rate
+        
+        # Add mock active connections (you can replace with real data if available)
+        perf_metrics['active_connections'] = 8  # 8 active DB connections
 
         return jsonify(perf_metrics), 200
 
     except Exception as e:
         return jsonify({"error": "Failed to retrieve performance metrics", "details": str(e)}), 500
+
+
+@cracked_bp.route('/web-vitals', methods=['GET'])
+def admin_web_vitals():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get the latest web vitals from the database
+        # We'll mock this data for now, but you can replace with actual DB queries
+        web_vitals = {
+            "lcp": {"value": 2800, "status": "needs-improvement"},
+            "fcp": {"value": 1500, "status": "good"},
+            "cls": {"value": 0.08, "status": "good"},
+            "ttfb": {"value": 850, "status": "needs-improvement"},
+            "inp": {"value": 180, "status": "good"},
+            "history": []
+        }
+        
+        # Generate some mock history data
+        now = datetime.utcnow()
+        est_tz = pytz.timezone('America/New_York')
+        
+        history = []
+        for i in range(24):  # Last 24 hours
+            timestamp = now - timedelta(hours=i)
+            timestamp_str = timestamp.astimezone(est_tz).isoformat()
+            
+            # Add some variation to the metrics
+            lcp_variation = random.uniform(0.9, 1.1)
+            fcp_variation = random.uniform(0.9, 1.1)
+            cls_variation = random.uniform(0.9, 1.1)
+            ttfb_variation = random.uniform(0.9, 1.1)
+            inp_variation = random.uniform(0.9, 1.1)
+            
+            history.append({
+                "timestamp": timestamp_str,
+                "lcp": round(web_vitals["lcp"]["value"] * lcp_variation),
+                "fcp": round(web_vitals["fcp"]["value"] * fcp_variation),
+                "cls": round(web_vitals["cls"]["value"] * cls_variation, 3),
+                "ttfb": round(web_vitals["ttfb"]["value"] * ttfb_variation),
+                "inp": round(web_vitals["inp"]["value"] * inp_variation)
+            })
+        
+        # Sort by timestamp (oldest first)
+        history = sorted(history, key=lambda x: x["timestamp"])
+        web_vitals["history"] = history
+        
+        return jsonify(web_vitals), 200
+        
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve web vitals metrics", "details": str(e)}), 500
+
+
+@cracked_bp.route('/recent-errors', methods=['GET'])
+def admin_recent_errors():
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Get recent errors from perfSamples (HTTP status >= 400)
+        one_hour_ago = datetime.utcnow() - timedelta(hours=1)
+        error_samples = list(db.perfSamples.find({
+                "http_status": {"$gte": 400},
+                "timestamp": {"$gte": one_hour_ago}
+            })
+            .sort("timestamp", -1)
+            .limit(50))
+            
+        errors = []
+        est_tz = pytz.timezone('America/New_York')
+        
+        for error in error_samples:
+            timestamp = error.get("timestamp")
+            if isinstance(timestamp, datetime):
+                timestamp = timestamp.astimezone(est_tz).isoformat()
+                
+            errors.append({
+                "timestamp": timestamp,
+                "path": error.get("route", "/unknown"),
+                "method": error.get("method", "GET"),
+                "status": error.get("http_status", 500),
+                "message": get_status_message(error.get("http_status", 500))
+            })
+            
+        return jsonify({"errors": errors}), 200
+        
+    except Exception as e:
+        return jsonify({"error": "Failed to retrieve recent errors", "details": str(e)}), 500
+
+# Helper function to get status message for HTTP status codes
+def get_status_message(status_code):
+    status_messages = {
+        400: "Bad Request",
+        401: "Unauthorized",
+        403: "Forbidden",
+        404: "Not Found",
+        405: "Method Not Allowed",
+        408: "Request Timeout",
+        429: "Too Many Requests",
+        500: "Internal Server Error",
+        502: "Bad Gateway",
+        503: "Service Unavailable",
+        504: "Gateway Timeout"
+    }
+    return status_messages.get(status_code, "Unknown Error")
+
+
+
+
+##################################################################
+# REPORT WEB VITALS
+##################################################################
+@cracked_bp.route('/report-web-vitals', methods=['POST'])
+def report_web_vitals():
+    data = request.json or {}
+    
+    # Extract metrics
+    metrics = data.get('metrics', {})
+    page = data.get('page', 'unknown')
+    user_id = data.get('userId')
+    timestamp = data.get('timestamp')
+    
+    # Convert to datetime if string
+    if isinstance(timestamp, str):
+        try:
+            timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
+        except:
+            timestamp = datetime.utcnow()
+    else:
+        timestamp = datetime.utcnow()
+    
+    # Store in database
+    db.webVitals.insert_one({
+        'metrics': metrics,
+        'page': page,
+        'userId': user_id,
+        'timestamp': timestamp,
+        'userAgent': request.headers.get('User-Agent', 'unknown')
+    })
+    
+    return jsonify({"success": True}), 200
 
 
 ##################################################################
