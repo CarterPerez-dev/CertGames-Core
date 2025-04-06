@@ -1,8 +1,9 @@
 // src/components/cracked/tabs/UsersTab.js
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  FaUsers, FaSearch, FaUserEdit, FaTrash, FaKey,
-  FaSave, FaTimes, FaSpinner, FaExclamationTriangle
+  FaUsers, FaSearch, FaUserEdit, FaTrash, FaKey, FaSave, FaTimes, 
+  FaSpinner, FaExclamationTriangle, FaToggleOn, FaToggleOff, FaCircle,
+  FaApple, FaGoogle, FaFacebook, FaWindowMaximize, FaMobileAlt, FaInfo
 } from "react-icons/fa";
 
 const UsersTab = () => {
@@ -16,6 +17,17 @@ const UsersTab = () => {
 
   const [editUserId, setEditUserId] = useState(null);
   const [editUserData, setEditUserData] = useState({});
+
+  // State for viewing detailed information
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  // Double confirmation states
+  const [deleteConfirmStep, setDeleteConfirmStep] = useState(0);
+  const [deleteUserId, setDeleteUserId] = useState(null);
+  const [subscriptionConfirmStep, setSubscriptionConfirmStep] = useState(0);
+  const [toggleSubscriptionId, setToggleSubscriptionId] = useState(null);
+  const [toggleSubscriptionAction, setToggleSubscriptionAction] = useState("");
 
   const fetchUsers = useCallback(async () => {
     setUsersLoading(true);
@@ -85,23 +97,105 @@ const UsersTab = () => {
     }
   };
 
-  const handleUserDelete = async (userId) => {
-    if (!window.confirm("Are you sure you want to DELETE this user?")) return;
+  // Start the deletion process with confirmation steps
+  const startUserDeleteProcess = (userId, username) => {
+    setDeleteUserId(userId);
+    setDeleteConfirmStep(1);
+  };
+
+  // Handle confirmation steps for user deletion
+  const handleUserDeleteConfirm = async () => {
+    if (!deleteUserId) return;
+    
+    if (deleteConfirmStep === 1) {
+      // Move to second confirmation
+      setDeleteConfirmStep(2);
+      return;
+    }
+    
+    if (deleteConfirmStep === 2) {
+      // Proceed with deletion
+      try {
+        const res = await fetch(`/api/cracked/users/${deleteUserId}`, {
+          method: "DELETE",
+          credentials: "include"
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          alert(data.error || "Failed to delete user");
+          return;
+        }
+        alert("User deleted successfully.");
+        fetchUsers();
+      } catch (err) {
+        console.error("User delete error:", err);
+      } finally {
+        // Reset confirmation state
+        setDeleteUserId(null);
+        setDeleteConfirmStep(0);
+      }
+    }
+  };
+
+  // Cancel the delete operation
+  const cancelDeleteProcess = () => {
+    setDeleteUserId(null);
+    setDeleteConfirmStep(0);
+  };
+
+  // Start the subscription toggle process
+  const startToggleSubscription = (userId, username, currentlyActive) => {
+    const action = currentlyActive ? "deactivate" : "activate";
+    setToggleSubscriptionId(userId);
+    setToggleSubscriptionAction(action);
+    setSubscriptionConfirmStep(1);
+  };
+
+  // Handle confirmation for subscription toggle
+  const handleToggleSubscriptionConfirm = async () => {
+    if (!toggleSubscriptionId) return;
+    
+    // For deactivation, we need double confirmation
+    if (toggleSubscriptionAction === "deactivate") {
+      if (subscriptionConfirmStep === 1) {
+        // Move to second confirmation for deactivation
+        setSubscriptionConfirmStep(2);
+        return;
+      }
+    }
+    
+    // Proceed with the action
     try {
-      const res = await fetch(`/api/cracked/users/${userId}`, {
-        method: "DELETE",
-        credentials: "include"
+      const res = await fetch(`/api/cracked/users/${toggleSubscriptionId}/toggle-subscription`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          active: toggleSubscriptionAction === "activate" 
+        })
       });
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error || "Failed to delete user");
+        alert(data.error || "Failed to update subscription");
         return;
       }
-      alert("User deleted successfully.");
+      alert(`Subscription ${toggleSubscriptionAction}d successfully!`);
       fetchUsers();
     } catch (err) {
-      console.error("User delete error:", err);
+      console.error("Subscription toggle error:", err);
+    } finally {
+      // Reset confirmation state
+      setToggleSubscriptionId(null);
+      setSubscriptionConfirmStep(0);
+      setToggleSubscriptionAction("");
     }
+  };
+
+  // Cancel the subscription toggle operation
+  const cancelToggleSubscription = () => {
+    setToggleSubscriptionId(null);
+    setSubscriptionConfirmStep(0);
+    setToggleSubscriptionAction("");
   };
 
   const handleResetPassword = async (userId) => {
@@ -124,6 +218,50 @@ const UsersTab = () => {
     }
   };
 
+  // View user details
+  const handleViewUserDetails = (user) => {
+    setSelectedUser(user);
+    setShowDetails(true);
+  };
+
+  // Close user details modal
+  const closeUserDetails = () => {
+    setShowDetails(false);
+    setSelectedUser(null);
+  };
+
+  // Format date for display
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
+  // Helper to determine signup source icon
+  const renderSignupSourceIcon = (user) => {
+    if (user.signupSource === 'iOS') {
+      return <FaMobileAlt className="admin-user-icon ios-icon" title="iOS signup" />;
+    } else if (user.signupSource === 'Web') {
+      return <FaWindowMaximize className="admin-user-icon web-icon" title="Web signup" />;
+    }
+    return null;
+  };
+
+  // Helper to render OAuth provider icon
+  const renderOAuthIcon = (provider) => {
+    if (!provider) return null;
+    
+    if (provider.toLowerCase().includes('google')) {
+      return <FaGoogle className="admin-user-icon google-icon" title="Google OAuth" />;
+    } else if (provider.toLowerCase().includes('apple')) {
+      return <FaApple className="admin-user-icon apple-icon" title="Apple OAuth" />;
+    } else if (provider.toLowerCase().includes('facebook')) {
+      return <FaFacebook className="admin-user-icon facebook-icon" title="Facebook OAuth" />;
+    }
+    
+    return null;
+  };
+
   return (
     <div className="admin-tab-content users-tab">
       <div className="admin-content-header">
@@ -133,7 +271,7 @@ const UsersTab = () => {
             <FaSearch />
             <input
               type="text"
-              placeholder="Search by username or email"
+              placeholder="Search by username, email, ID, IP..."
               value={userSearch}
               onChange={(e) => setUserSearch(e.target.value)}
             />
@@ -184,8 +322,9 @@ const UsersTab = () => {
               <th>Username</th>
               <th>Email</th>
               <th>Coins</th>
-              <th>XP</th>
               <th>Level</th>
+              <th>Subscription</th>
+              <th>Source</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -204,7 +343,12 @@ const UsersTab = () => {
                         className="admin-edit-input"
                       />
                     ) : (
-                      u.username
+                      <div className="admin-user-name-cell">
+                        {u.username}
+                        {u.isActive && (
+                          <FaCircle className="admin-user-active-indicator" title="Currently active" />
+                        )}
+                      </div>
                     )}
                   </td>
                   <td>{u.email}</td>
@@ -224,18 +368,6 @@ const UsersTab = () => {
                     {isEditing ? (
                       <input
                         type="number"
-                        value={editUserData.xp}
-                        onChange={(e) => handleUpdateUserField("xp", e.target.value)}
-                        className="admin-edit-input"
-                      />
-                    ) : (
-                      u.xp
-                    )}
-                  </td>
-                  <td>
-                    {isEditing ? (
-                      <input
-                        type="number"
                         value={editUserData.level}
                         onChange={(e) => handleUpdateUserField("level", e.target.value)}
                         className="admin-edit-input"
@@ -243,6 +375,16 @@ const UsersTab = () => {
                     ) : (
                       u.level
                     )}
+                  </td>
+                  <td>
+                    <span className={u.subscriptionActive ? "status-active" : "status-inactive"}>
+                      {u.subscriptionActive ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td className="admin-user-source-cell">
+                    {renderOAuthIcon(u.oauth_provider)}
+                    {renderSignupSourceIcon(u)}
+                    <span className="admin-user-id">#{u.shortId}</span>
                   </td>
                   <td>
                     {isEditing ? (
@@ -297,7 +439,21 @@ const UsersTab = () => {
                           <FaKey />
                         </button>
                         <button 
-                          onClick={() => handleUserDelete(u._id)}
+                          onClick={() => handleViewUserDetails(u)}
+                          className="admin-btn view-btn"
+                          title="View details"
+                        >
+                          <FaInfo />
+                        </button>
+                        <button 
+                          onClick={() => startToggleSubscription(u._id, u.username, u.subscriptionActive)}
+                          className={`admin-btn ${u.subscriptionActive ? "deactivate-btn" : "activate-btn"}`}
+                          title={u.subscriptionActive ? "Deactivate subscription" : "Activate subscription"}
+                        >
+                          {u.subscriptionActive ? <FaToggleOff /> : <FaToggleOn />}
+                        </button>
+                        <button 
+                          onClick={() => startUserDeleteProcess(u._id, u.username)}
                           className="admin-btn delete-btn"
                           title="Delete user"
                         >
@@ -312,6 +468,179 @@ const UsersTab = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmStep > 0 && (
+        <div className="admin-modal-overlay">
+          <div className="admin-confirmation-dialog">
+            <h3>Confirm User Deletion</h3>
+            {deleteConfirmStep === 1 ? (
+              <p>Are you sure you want to delete this user?</p>
+            ) : (
+              <p className="admin-warning-text">You are about to PERMANENTLY delete this user's account! This action cannot be undone. Proceed?</p>
+            )}
+            <div className="admin-confirmation-buttons">
+              <button 
+                className="admin-danger-btn" 
+                onClick={handleUserDeleteConfirm}
+              >
+                {deleteConfirmStep === 1 ? "Confirm" : "Yes, Delete Permanently"}
+              </button>
+              <button 
+                className="admin-cancel-btn" 
+                onClick={cancelDeleteProcess}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Toggle Confirmation Dialog */}
+      {subscriptionConfirmStep > 0 && (
+        <div className="admin-modal-overlay">
+          <div className="admin-confirmation-dialog">
+            <h3>Confirm Subscription {toggleSubscriptionAction === "activate" ? "Activation" : "Deactivation"}</h3>
+            {toggleSubscriptionAction === "activate" || subscriptionConfirmStep === 1 ? (
+              <p>Are you sure you want to {toggleSubscriptionAction} this user's subscription?</p>
+            ) : (
+              <p className="admin-warning-text">Warning: Deactivating this subscription will revoke the user's premium access! Proceed?</p>
+            )}
+            <div className="admin-confirmation-buttons">
+              <button 
+                className={toggleSubscriptionAction === "activate" ? "admin-submit-btn" : "admin-danger-btn"} 
+                onClick={handleToggleSubscriptionConfirm}
+              >
+                {subscriptionConfirmStep === 1 ? "Confirm" : "Yes, Deactivate"}
+              </button>
+              <button 
+                className="admin-cancel-btn" 
+                onClick={cancelToggleSubscription}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* User Details Modal */}
+      {showDetails && selectedUser && (
+        <div className="admin-modal-overlay">
+          <div className="admin-details-modal">
+            <div className="admin-modal-header">
+              <h3>User Details: {selectedUser.username}</h3>
+              <button className="admin-close-modal-btn" onClick={closeUserDetails}>
+                <FaTimes />
+              </button>
+            </div>
+            <div className="admin-user-details-content">
+              <div className="admin-user-details-section">
+                <h4>Basic Information</h4>
+                <div className="admin-details-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">User ID:</span>
+                    <span className="admin-detail-value">{selectedUser._id}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Username:</span>
+                    <span className="admin-detail-value">{selectedUser.username}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Email:</span>
+                    <span className="admin-detail-value">{selectedUser.email}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">IP Address:</span>
+                    <span className="admin-detail-value">{selectedUser.ip || "N/A"}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Last Login:</span>
+                    <span className="admin-detail-value">{formatDate(selectedUser.lastLoginAt)}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Status:</span>
+                    <span className={`admin-detail-value ${selectedUser.isActive ? "status-active" : "status-inactive"}`}>
+                      {selectedUser.isActive ? "Currently Active" : "Inactive"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-user-details-section">
+                <h4>Account Statistics</h4>
+                <div className="admin-details-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Coins:</span>
+                    <span className="admin-detail-value">{selectedUser.coins}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">XP:</span>
+                    <span className="admin-detail-value">{selectedUser.xp}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Level:</span>
+                    <span className="admin-detail-value">{selectedUser.level}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Test Attempts:</span>
+                    <span className="admin-detail-value">{selectedUser.testAttempts || 0}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Perfect Tests:</span>
+                    <span className="admin-detail-value">{selectedUser.perfectTestsCount || 0}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Questions Answered:</span>
+                    <span className="admin-detail-value">{selectedUser.totalQuestionsAnswered || 0}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-user-details-section">
+                <h4>Subscription Information</h4>
+                <div className="admin-details-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Status:</span>
+                    <span className={`admin-detail-value ${selectedUser.subscriptionActive ? "status-active" : "status-inactive"}`}>
+                      {selectedUser.subscriptionActive ? "Active" : "Inactive"}
+                    </span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">State:</span>
+                    <span className="admin-detail-value">{selectedUser.subscriptionStatus || "N/A"}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Platform:</span>
+                    <span className="admin-detail-value">{selectedUser.subscriptionPlatform || "N/A"}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Sign-up Source:</span>
+                    <span className="admin-detail-value">{selectedUser.signupSource || "Unknown"}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">OAuth Provider:</span>
+                    <span className="admin-detail-value">{selectedUser.oauth_provider || "None"}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Start Date:</span>
+                    <span className="admin-detail-value">{formatDate(selectedUser.subscriptionStartDate)}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">End Date:</span>
+                    <span className="admin-detail-value">{formatDate(selectedUser.subscriptionEndDate)}</span>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Canceled At:</span>
+                    <span className="admin-detail-value">{formatDate(selectedUser.subscriptionCanceledAt)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
