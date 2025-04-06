@@ -6,7 +6,7 @@ import {
 
 const DbShellTab = () => {
   const [dbShellCollection, setDbShellCollection] = useState("");
-  const [dbShellFilter, setDbShellFilter] = useState("{}");
+  const [dbShellFilter, setDbShellFilter] = useState("");
   const [dbShellLimit, setDbShellLimit] = useState(5);
   const [dbShellResults, setDbShellResults] = useState([]);
   const [dbShellLoading, setDbShellLoading] = useState(false);
@@ -16,10 +16,10 @@ const DbShellTab = () => {
     setDbShellLoading(true);
     setDbShellError(null);
     try {
-      const parsedFilter = JSON.parse(dbShellFilter);
+      // We'll just pass the text filter directly
       const body = {
         collection: dbShellCollection,
-        filter: parsedFilter,
+        filterText: dbShellFilter,
         limit: dbShellLimit
       };
       const res = await fetch("/api/cracked/db-shell/read", {
@@ -38,7 +38,7 @@ const DbShellTab = () => {
         setDbShellError(data.error || "Error reading DB");
       }
     } catch (err) {
-      setDbShellError(err.message || "JSON filter is invalid or error occurred");
+      setDbShellError(err.message || "Error occurred while querying the database");
     } finally {
       setDbShellLoading(false);
     }
@@ -59,17 +59,20 @@ const DbShellTab = () => {
               type="text"
               value={dbShellCollection}
               onChange={(e) => setDbShellCollection(e.target.value)}
-              placeholder="Collection name"
+              placeholder="Collection name (e.g. mainusers)"
             />
           </div>
           <div className="admin-form-group">
-            <label>Filter (JSON):</label>
+            <label>Filter Text:</label>
             <input
               type="text"
               value={dbShellFilter}
               onChange={(e) => setDbShellFilter(e.target.value)}
-              placeholder='e.g. {"username": "test"}'
+              placeholder='e.g. username:john or email:example.com'
             />
+            <small className="admin-filter-help">
+              Simple filter format: field:value (e.g. username:john)
+            </small>
           </div>
           <div className="admin-form-group">
             <label>Limit:</label>

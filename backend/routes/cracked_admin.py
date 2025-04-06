@@ -1244,8 +1244,12 @@ def admin_db_logs():
 @cracked_bp.route('/db-shell/read', methods=['POST'])
 def admin_db_shell_read():
     """
-    Body: { "collection": "mainusers", "filter": {}, "limit": 5 }
+    Body: { "collection": "mainusers", "filterText": "username:john", "limit": 5 }
     Only performs a find() with a limit, returns JSON docs.
+    
+    filterText format:
+    - field:value -> performs "field": {"$regex": value, "$options": "i"}
+    - empty/null -> {}
     """
     if not require_cracked_admin(required_role="superadmin"):
         return jsonify({"error": "Insufficient admin privileges"}), 403
@@ -1258,11 +1262,32 @@ def admin_db_shell_read():
     if coll_name not in db.list_collection_names():
         return jsonify({"error": f"Invalid or unknown collection: {coll_name}"}), 400
 
-    filt = body.get("filter", {})
+    # Handle the new filter text format
+    filter_text = body.get("filterText", "").strip()
+    filter_query = {}
+    
+    # Parse simple filter format: field:value
+    if filter_text:
+        if ":" in filter_text:
+            field, value = filter_text.split(":", 1)
+            # Create a regex search (case-insensitive)
+            filter_query = {field.strip(): {"$regex": value.strip(), "$options": "i"}}
+        else:
+            # If no colon, search common fields
+            common_fields = ["username", "email", "_id", "name", "title"]
+            or_conditions = []
+            for field in common_fields:
+                or_conditions.append({field: {"$regex": filter_text, "$options": "i"}})
+            filter_query = {"$or": or_conditions}
+
+    # If there was a filter parameter in JSON format (legacy support)
+    if "filter" in body and isinstance(body["filter"], dict):
+        filter_query = body["filter"]
+
     limit_val = int(body.get("limit", 10))
 
     try:
-        cursor = db[coll_name].find(filt).limit(limit_val)
+        cursor = db[coll_name].find(filter_query).limit(limit_val)
         results = []
         for c in cursor:
             c['_id'] = str(c['_id'])
@@ -1618,4 +1643,41 @@ def admin_update_test_name(test_id):
 
 
 
-
+@cracked_bp.route('/api-health-check', methods=['GET'])
+def admin_api_health_check():
+    """
+    Simple health check that verifies:
+    1. API is responding (implicit)
+    2. Database is connected (by performing a simple query)
+    """
+    if not require_cracked_admin():
+        return jsonify({"error": "Not authenticated"}), 401
+        
+    try:
+        # Check database connectivity
+        db_health = True
+        try:
+            # Just try to get one document from any collection
+            db.mainusers_collection.find_one({}, {"_id": 1})
+        except Exception:
+            db_health = False
+            
+        # Overall health status
+        health_status = db_health
+        
+        # Add health check to the database
+        db.apiHealth.insert_one({
+            "checkedAt": datetime.utcnow(),
+            "healthy": health_status
+        })
+        
+        return jsonify({
+            "healthy": health_status,
+            "timestamp": datetime.utcnow().isoformat()
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "healthy": False,
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }), 500
