@@ -31,9 +31,13 @@ app = Celery(
 )
 
 app.conf.update({
-    'worker_prefetch_multiplier': 1,
+    'worker_prefetch_multiplier': 3,
     'task_acks_late': True,
-    'worker_concurrency': 8,
+    'worker_concurrency': 10,  # Match hyperthreaded core count
+    'task_time_limit': 1000,    # 1 hour max task runtime
+    'task_soft_time_limit': 800,  # 55 minutes soft limit
+    'worker_max_tasks_per_child': 1000,  # Restart worker after 1000 tasks to prevent memory leaks
+    'worker_max_memory_per_child': 400000,  # Restart if using more than 400MB
     'timezone': 'America/New_York',
     'enable_utc': True,
 })

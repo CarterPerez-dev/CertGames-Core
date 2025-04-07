@@ -57,7 +57,7 @@ function CrackedAdminDashboard() {
         method: "POST",
         credentials: "include"
       });
-      window.location.href = "/cracked/login";
+      window.location.href = "/cracked";
     } catch (err) {
       console.error("Logout error:", err);
     }

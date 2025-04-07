@@ -210,7 +210,7 @@ function App() {
           <Route path="/subscription/cancel" element={<SubscriptionCancel />} />
           
           {/* Admin routes */}
-          <Route path="/cracked/login" element={<CrackedAdminLoginPage />} />
+          <Route path="/cracked" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
           {/* Legal pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
