@@ -30,6 +30,9 @@ from routes.test_routes import public_leaderboard_bp
 from routes.contact_form import contact_bp
 from routes.subscription_routes import subscription_bp
 from routes.cracked_admin import api_logs
+from helpers.global_rate_limiter import apply_global_rate_limiting, setup_rate_limit_headers
+from middleware.subscription_check import check_subscription_middleware
+
 
 load_dotenv()
 
@@ -104,6 +107,23 @@ def log_api_request():
     api_logs.add(log_entry)
 
 
+@app.before_request
+def check_global_rate_limits():
+    """Apply global rate limiting to public API endpoints"""
+    return apply_global_rate_limiting()()
+
+# Add this after your other @app.after_request handlers
+@app.after_request
+def add_rate_limit_headers(response):
+    """Add rate limit headers to responses"""
+    return setup_rate_limit_headers(response)
+
+
+@app.before_request
+def check_user_subscription():
+    return check_subscription_middleware()()
+
+
 # Register blueprints
 app.register_blueprint(xploit_bp, url_prefix='/payload')
 app.register_blueprint(scenario_bp, url_prefix='/scenario')
@@ -136,25 +156,7 @@ def serve_avatars(filename):
     return send_from_directory(avatar_folder, filename)
     
     
-    
-@app.before_request
-def log_api_request():
-    # Skip logging static files and certain endpoints
-    if request.path.startswith('/static/') or request.path == '/health':
-        return
-    
-    # Create a log entry
-    log_entry = {
-        "type": "api",
-        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-        "path": request.path,
-        "method": request.method,
-        "ip": request.remote_addr,
-        "user_agent": request.headers.get('User-Agent', 'Unknown')
-    }
-    
-    # Add to our log buffer
-    api_logs.add(log_entry)
+
     
 
 ###########################

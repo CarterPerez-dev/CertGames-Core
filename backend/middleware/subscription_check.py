@@ -37,15 +37,11 @@ def subscription_required(f):
         # Check subscription status
         subscription_active = user.get('subscriptionActive', False)
         if not subscription_active:
-            # If API request, return error
-            if request.path.startswith('/api/'):
-                return jsonify({
-                    "error": "Subscription required", 
-                    "status": "subscription_required"
-                }), 403
-            else:
-                # For web routes, redirect to subscription page
-                return redirect('/subscription')
+            # Always return JSON error instead of conditionally redirecting
+            return jsonify({
+                "error": "Subscription required", 
+                "status": "subscription_required"
+            }), 403
                 
         # User has an active subscription, proceed
         return f(*args, **kwargs)
@@ -60,12 +56,14 @@ def check_subscription_middleware():
     def check_subscription():
         # Only check certain routes (protected routes)
         protected_prefixes = [
-            '/test',
+            '/test/shop',
+            '/test/daily-question',
+            '/test/daily-question/answer',
             '/payload',
             '/scenario',
             '/analogy',
             '/grc',
-            '/profile'
+            '/test/profile'
         ]
         
         if any(request.path.startswith(prefix) for prefix in protected_prefixes):
