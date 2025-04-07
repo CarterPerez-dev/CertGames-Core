@@ -4,7 +4,7 @@ import {
   FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaChartLine, FaBolt,
   FaDatabase, FaHeartbeat, FaBell, FaSync, FaSpinner, FaExclamationTriangle,
   FaServer, FaNetworkWired, FaMoneyBillWave, FaUserCheck, FaUserPlus,
-  FaStopwatch, FaClock, FaChartPie, FaLaptopCode, FaRocket, FaCog
+  FaStopwatch, FaClock, FaChartPie, FaLaptopCode, FaRocket, FaCog, FaSpider
 } from "react-icons/fa";
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
@@ -344,14 +344,14 @@ const OverviewTab = () => {
   return (
     <div className="admin-tab-content overview-dashboard-tab">
       <div className="admin-content-header">
-        <h2><FaHome /> Dashboard Overview</h2>
+        <h2><FaSpider /> Dashboard Overview</h2>
         <div className="overview-dashboard-actions">
           <div className="overview-dashboard-panel-buttons">
             <button 
               className={`overview-dashboard-panel-btn ${activePanel === "main" ? "active" : ""}`}
               onClick={() => setActivePanel("main")}
             >
-              <FaHome /> Main
+              <FaSpider /> Main
             </button>
             <button 
               className={`overview-dashboard-panel-btn ${activePanel === "performance" ? "active" : ""}`}
