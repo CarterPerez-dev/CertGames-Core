@@ -1,3 +1,9 @@
+
+# ROUTES
+
+----
+----
+```python
 # TEST routes
 
 
@@ -176,3 +182,4 @@ POST /xploit/generate_payload: Generates a conceptual exploit payload based on a
 
 POST /analogy/generate_analogy: Generates an analogy comparing cybersecurity concepts based on type and input concepts (uses Celery, non-streaming, likely legacy).
 POST /analogy/stream_analogy: Generates an analogy comparing cybersecurity concepts and streams the output text chunk by chunk.
+```
