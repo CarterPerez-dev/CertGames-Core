@@ -1,326 +1,191 @@
-// src/components/cracked/CrackedAdminDashboard.js
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaLock, FaGoogle, FaShieldAlt, FaKey, FaUserSecret, FaEye, FaEyeSlash, FaExclamationCircle, FaLaptopCode } from "react-icons/fa";
+import "./styles/CrackedAdminLogin.css";
 
-import "./styles/CrackedAdminDashboard.css";
-import "./styles/tabstyles/DailyTab.css";
-import "./styles/tabstyles/RequestLogsTab.css";
-import "./styles/tabstyles/DbShellTab.css";
-import "./styles/tabstyles/NewsletterTab.css";
-import "./styles/tabstyles/PerformanceTab.css";
-import "./styles/tabstyles/SupportTab.css";
-import "./styles/tabstyles/TestsTab.css";
-import "./styles/tabstyles/UsersTab.css";
-import "./styles/tabstyles/ActivityLogsTab.css";
-import "./styles/tabstyles/OverviewTab.css";
-import "./styles/tabstyles/HealthCheckTab.css";
-import "./styles/tabstyles/RevenueTab.css"; 
-import "./styles/tabstyles/RateLimitsTab.css";
-import "./styles/tabstyles/ServerMetricsTab.css"; 
-import "./styles/tabstyles/ToolsTab.css"; // Add import for Tools Tab CSS
+function CrackedAdminLoginPage() {
+  const navigate = useNavigate();
 
-import { 
-  FaHome, FaUsers, FaClipboardList, FaCalendarDay, FaHeadset, 
-  FaChartLine, FaHistory, FaDatabase, FaTerminal, FaHeartbeat, 
-  FaEnvelope, FaChevronRight, FaChevronDown, FaBars, FaTimes, 
-  FaSignOutAlt, FaMoneyBillWave, FaChessKnight, FaSpider, 
-  FaHatWizard, FaEye, FaLinux, FaFingerprint, FaTools, FaDragon, FaFighterJet
-} from "react-icons/fa";
+  const [adminKey, setAdminKey] = useState("");
+  const [role, setRole] = useState("basic");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
 
-// Import tab components
-import OverviewTab from "./tabs/OverviewTab";
-import UsersTab from "./tabs/UsersTab";
-import TestsTab from "./tabs/TestsTab";
-import DailyTab from "./tabs/DailyTab";
-import SupportTab from "./tabs/SupportTab";
-import NewsletterTab from "./tabs/NewsletterTab";
-import PerformanceTab from "./tabs/PerformanceTab";
-import ActivityLogsTab from "./tabs/ActivityLogsTab";
-import RequestLogsTab from "./tabs/RequestLogsTab";
-import DbShellTab from "./tabs/DbShellTab";
-import HealthChecksTab from "./tabs/HealthChecksTab";
-import RevenueTab from "./tabs/RevenueTab"; 
-import RateLimitsTab from "./tabs/RateLimitsTab";
-import ServerMetricsTab from "./tabs/ServerMetricsTab";
-import ToolsTab from "./tabs/ToolsTab"; // Import the Tools Tab component
+  useEffect(() => {
+    // Easter egg - show funny message after 3 failed attempts
+    if (loginAttempts >= 3) {
+      setShowEasterEgg(true);
+    }
+  }, [loginAttempts]);
 
-function CrackedAdminDashboard() {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [isNavCollapsed, setIsNavCollapsed] = useState(false);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-  /*****************************************
-   * LOGOUT 
-   *****************************************/
-  const handleLogout = async () => {
     try {
-      await fetch("/api/cracked/logout", {
+      const response = await fetch("/api/cracked/login", {
         method: "POST",
-        credentials: "include"
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ adminKey, role }),
+        credentials: "include",
       });
-      window.location.href = "/cracked/login";
+
+      const data = await response.json();
+      if (!response.ok) {
+        setLoginAttempts(prev => prev + 1);
+        setError(data.error || "Unable to log in");
+      } else {
+        // On success, navigate to the admin dashboard
+        navigate("/cracked/dashboard");
+      }
     } catch (err) {
-      console.error("Logout error:", err);
+      console.error("Admin login error:", err);
+      setLoginAttempts(prev => prev + 1);
+      setError("Network error or server unavailable");
+    } finally {
+      setLoading(false);
     }
   };
 
-  /*****************************************
-   * TAB SWITCH
-   *****************************************/
-  const switchTab = (tabName) => {
-    setActiveTab(tabName);
-    setMobileNavOpen(false);
-  };
-
-  // Render the appropriate tab component based on activeTab
-  const renderTabContent = () => {
-    switch(activeTab) {
-      case 'overview': return <OverviewTab />;
-      case 'users': return <UsersTab />;
-      case 'tests': return <TestsTab />;
-      case 'daily': return <DailyTab />;
-      case 'support': return <SupportTab />;
-      case 'newsletter': return <NewsletterTab />;
-      case 'revenue': return <RevenueTab />; 
-      case 'performance': return <PerformanceTab />;
-      case 'activity': return <ActivityLogsTab />;
-      case 'dbLogs': return <RequestLogsTab />;
-      case 'dbShell': return <DbShellTab />;
-      case 'healthChecks': return <HealthChecksTab />;
-      case 'serverMetrics': return <ServerMetricsTab />;
-      case 'rateLimits': return <RateLimitsTab />;
-      case 'tools': return <ToolsTab />; // Add case for Tools tab
-      default: return <OverviewTab />;
-    }
+  const handleGoogleLogin = () => {
+    setOauthLoading(true);
+    setError(null);
+    // Redirect to Google OAuth for admin
+    window.location.href = "/api/oauth/admin-login/google";
   };
 
   return (
-    <div className={`admin-dashboard ${isNavCollapsed ? 'nav-collapsed' : ''}`}>
-      <div className="admin-sidebar">
-        <div className="admin-sidebar-header">
-          <div className="admin-logo">
-            <FaChessKnight />
-            <h1>Admin</h1>
+    <div className="cracked-admin-login-wrapper">
+      <div className="cracked-admin-login-container">
+        <div className="admin-login-background">
+          <div className="admin-login-grid"></div>
+          <div className="admin-login-particles">
+            {[...Array(15)].map((_, i) => (
+              <div key={i} className="admin-login-particle"></div>
+            ))}
           </div>
-          <button 
-            className="admin-collapse-btn"
-            onClick={() => setIsNavCollapsed(!isNavCollapsed)}
-            title={isNavCollapsed ? "Expand Navigation" : "Collapse Navigation"}
-          >
-            {isNavCollapsed ? <FaChevronRight /> : <FaChevronDown />}
-          </button>
         </div>
-        
-        <nav className="admin-nav">
-          <ul className="admin-nav-list">
-            <li className={activeTab === "overview" ? "active" : ""}>
-              <button onClick={() => switchTab("overview")}>
-                <FaSpider />
-                <span>Dashboard</span>
+
+        <div className="cracked-admin-login-card">
+          <div className="admin-login-logo">
+            <FaUserSecret className="admin-login-logo-icon" />
+          </div>
+          <h1 className="cracked-admin-login-title">Admin Access</h1>
+          <p className="admin-login-subtitle">
+            Authorized personnel only
+          </p>
+
+          {error && (
+            <div className="admin-error-message">
+              <FaExclamationCircle />
+              <span>{error}</span>
+            </div>
+          )}
+
+          {showEasterEgg && (
+            <div className="admin-easter-egg">
+              <p>👾 Nice try! But this isn't where you upload SQL injections...</p>
+              <p>Maybe try "hunter2" as the password? Everyone knows that works!</p>
+            </div>
+          )}
+
+          <form className="cracked-admin-login-form" onSubmit={handleLogin}>
+            <div className="admin-input-row">
+              <label htmlFor="adminKey">
+                <FaKey className="admin-input-icon" /> Admin Key:
+              </label>
+              <div className="admin-password-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="adminKey"
+                  value={adminKey}
+                  onChange={(e) => setAdminKey(e.target.value)}
+                  placeholder="Enter admin key"
+                />
+                <button 
+                  type="button" 
+                  className="admin-toggle-password"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
+
+            <div className="admin-input-row">
+              <label htmlFor="role">
+                <FaLaptopCode className="admin-input-icon" /> Role:
+              </label>
+              <select
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="basic">Basic</option>
+                <option value="supervisor">Supervisor</option>
+                <option value="superadmin">Superadmin</option>
+              </select>
+            </div>
+
+            <div className="admin-login-buttons">
+              <button
+                type="submit"
+                className="cracked-admin-login-button"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="admin-spinner"></span>
+                    <span>Verifying...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaLock /> Login with Key
+                  </>
+                )}
               </button>
-            </li>
-            <li className={activeTab === "users" ? "active" : ""}>
-              <button onClick={() => switchTab("users")}>
-                <FaUsers />
-                <span>Users</span>
+
+              <div className="admin-separator">
+                <span>or</span>
+              </div>
+
+              <button
+                type="button"
+                className="admin-google-button"
+                onClick={handleGoogleLogin}
+                disabled={oauthLoading}
+              >
+                {oauthLoading ? (
+                  <>
+                    <span className="admin-spinner"></span>
+                    <span>Connecting...</span>
+                  </>
+                ) : (
+                  <>
+                    <FaGoogle /> Sign in with Google
+                  </>
+                )}
               </button>
-            </li>
-            <li className={activeTab === "tests" ? "active" : ""}>
-              <button onClick={() => switchTab("tests")}>
-                <FaClipboardList />
-                <span>Tests</span>
-              </button>
-            </li>
-            <li className={activeTab === "daily" ? "active" : ""}>
-              <button onClick={() => switchTab("daily")}>
-                <FaCalendarDay />
-                <span>Daily PBQs</span>
-              </button>
-            </li>
-            <li className={activeTab === "support" ? "active" : ""}>
-              <button onClick={() => switchTab("support")}>
-                <FaHeadset />
-                <span>Support</span>
-              </button>
-            </li>
-            <li className={activeTab === "newsletter" ? "active" : ""}>
-              <button onClick={() => switchTab("newsletter")}>
-                <FaEnvelope />
-                <span>Newsletter</span>
-              </button>
-            </li>
-            <li className={activeTab === "revenue" ? "active" : ""}>
-              <button onClick={() => switchTab("revenue")}>
-                <FaMoneyBillWave />
-                <span>Revenue</span>
-              </button>
-            </li>
-            <li className={activeTab === "tools" ? "active" : ""}>
-              <button onClick={() => switchTab("tools")}>
-                <FaHatWizard />
-                <span>Tools</span>
-              </button>
-            </li>
-            <li className={activeTab === "performance" ? "active" : ""}>
-              <button onClick={() => switchTab("performance")}>
-                <FaChartLine />
-                <span>Performance</span>
-              </button>
-            </li>
-            <li className={activeTab === "activity" ? "active" : ""}>
-              <button onClick={() => switchTab("activity")}>
-                <FaDragon />
-                <span>Security</span>
-              </button>
-            </li>
-            <li className={activeTab === "dbLogs" ? "active" : ""}>
-              <button onClick={() => switchTab("dbLogs")}>
-                <FaEye />
-                <span>Requests</span>
-              </button>
-            </li>
-            <li className={activeTab === "dbShell" ? "active" : ""}>
-              <button onClick={() => switchTab("dbShell")}>
-                <FaTerminal />
-                <span>DB Shell</span>
-              </button>
-            </li>
-            <li className={activeTab === "healthChecks" ? "active" : ""}>
-              <button onClick={() => switchTab("healthChecks")}>
-                <FaHeartbeat />
-                <span>Health Checks</span>
-              </button>
-            </li>
-            <li className={activeTab === "serverMetrics" ? "active" : ""}>
-              <button onClick={() => switchTab("serverMetrics")}>
-                <FaLinux />
-                <span>Server Metrics</span>
-              </button>
-            </li>
-            <li className={activeTab === "rateLimits" ? "active" : ""}>
-              <button onClick={() => switchTab("rateLimits")}>
-                <FaFingerprint />
-                <span>Rate Limits</span>
-              </button>
-            </li>            
-          </ul>
-        </nav>
-        
-        <div className="admin-sidebar-footer">
-          <button className="admin-logout-btn" onClick={handleLogout}>
-            <FaFighterJet />
-            <span>Logout</span>
-          </button>
+            </div>
+          </form>
+
+          <div className="admin-login-footer">
+            <p>
+              This area is restricted to authorized personnel. Unauthorized access attempts are logged.
+            </p>
+            <div className="admin-protected-badge">
+              <FaShieldAlt /> Protected Area
+            </div>
+          </div>
         </div>
-      </div>
-      
-      {/* Mobile Header with menu toggle */}
-      <div className="admin-mobile-header">
-        <button 
-          className="admin-mobile-menu-toggle"
-          onClick={() => setMobileNavOpen(!mobileNavOpen)}
-        >
-          {mobileNavOpen ? <FaTimes /> : <FaBars />}
-        </button>
-        <div className="admin-mobile-logo">
-          <FaDatabase />
-          <h1>Admin Dashboard</h1>
-        </div>
-      </div>
-      
-      {/* Mobile Navigation Overlay */}
-      <div className={`admin-mobile-nav ${mobileNavOpen ? 'active' : ''}`}>
-        <nav>
-          <ul>
-            <li>
-              <button onClick={() => switchTab("overview")}>
-                <FaSpider /> Dashboard
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("users")}>
-                <FaUsers /> Users
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("tests")}>
-                <FaClipboardList /> Tests
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("daily")}>
-                <FaCalendarDay /> Daily PBQs
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("support")}>
-                <FaHeadset /> Support
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("newsletter")}>
-                <FaEnvelope /> Newsletter
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("revenue")}>
-                <FaMoneyBillWave /> Revenue
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("tools")}>
-                <FaHatWizard /> Tools
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("performance")}>
-                <FaChartLine /> Performance
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("activity")}>
-                <FaDragon /> Activity
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("dbLogs")}>
-                <FaEye /> Request Logs
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("dbShell")}>
-                <FaTerminal /> DB Shell
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("healthChecks")}>
-                <FaHeartbeat /> Health Checks
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("serverMetrics")}>
-                <FaLinux /> Server Metrics
-              </button>
-            </li>
-            <li>
-              <button onClick={() => switchTab("rateLimits")}>
-                <FaFingerprint /> Rate Limits
-              </button>
-            </li>
-            <li>
-              <button onClick={handleLogout} className="mobile-logout-btn">
-                <FaFighterJet /> Logout
-              </button>
-            </li>         
-          </ul>
-        </nav>
-      </div>
-      
-      {/* Main Content Area */}
-      <div className="admin-main-content">
-        {renderTabContent()}
       </div>
     </div>
   );
 }
 
-export default CrackedAdminDashboard;
+export default CrackedAdminLoginPage;

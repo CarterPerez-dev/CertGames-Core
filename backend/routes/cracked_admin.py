@@ -46,18 +46,34 @@ def cache_get(key):
 
 def require_cracked_admin(required_role=None):
     """
-    Checks if session['cracked_admin_logged_in'] is True.
+    Checks if user is authenticated as admin via password or OAuth.
     Optionally enforces roles: basic=1, supervisor=2, superadmin=3.
+    
+    Returns:
+        bool: True if properly authenticated with sufficient role permissions
     """
-    if not session.get('cracked_admin_logged_in'):
+    # First check if user is authenticated as admin
+    is_authenticated = session.get('cracked_admin_logged_in', False)
+    
+    if not is_authenticated:
         return False
-    if required_role:
-        current_role = session.get('cracked_admin_role', 'basic')
-        priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
-        needed = priority_map.get(required_role, 1)
-        have = priority_map.get(current_role, 1)
-        return have >= needed
-    return True
+        
+    # If no specific role is required, basic authentication is enough
+    if not required_role:
+        return True
+        
+    # Get the user's current role
+    current_role = session.get('cracked_admin_role', 'basic')
+    
+    # Role priority mapping
+    priority_map = {"basic": 1, "supervisor": 2, "superadmin": 3}
+    
+    # Get numeric values for required role and current role
+    needed_priority = priority_map.get(required_role, 1)
+    current_priority = priority_map.get(current_role, 1)
+    
+    # Check if current role has sufficient priority
+    return current_priority >= needed_priority
 
 
 
