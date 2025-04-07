@@ -29,7 +29,7 @@
 /test/daily-question/answer (POST) - Submits answer for daily question
 /test/public-leaderboard/board (GET) - Gets public leaderboard with longer cache duration
 /test/user/<user_id>/delete (DELETE) - Deletes a user account and related data
-```
+
 --------------
 
 # OAuth Routes (oauth_bp, assumed prefix /oauth)
