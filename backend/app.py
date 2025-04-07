@@ -11,7 +11,8 @@ from flask_session import Session
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from pymongo import MongoClient
 from dotenv import load_dotenv
-
+import psutil
+from werkzeug.middleware.proxy_fix import ProxyFix
 # routes
 from routes.xploit_routes import xploit_bp
 from routes.scenario_routes import scenario_bp
@@ -73,6 +74,13 @@ Session(app)
 
 oauth.init_app(app) #CHECK -is this the correct location/order of where I put this?
 
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
+
+
+app.config['JSON_SORT_KEYS'] = False  # Better JSON performance
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
 # Make socketio accessible from other files (avoids circular imports)
 # so in support_routes.py you can do:
 #   socketio = current_app.extensions['socketio']

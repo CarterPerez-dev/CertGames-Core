@@ -14,9 +14,34 @@ import {
   FaInfoCircle, 
   FaExternalLinkAlt,
   FaLock,
-  FaFileAlt
+  FaFileAlt,
+  FaShieldAlt,
+  FaUsers,
+  FaStar,
+  FaChevronRight,
+  FaCheck,
+  FaMedal,
+  FaBriefcase,
+  FaGraduationCap,
+  FaChessKnight,
+  FaAngleDoubleRight,
+  FaYoutube, 
+  FaSpider, 
+  FaUserGraduate, 
+  FaHatWizard, 
+  FaAtlas, 
+  FaUserSecret,
+  FaPlus,
+  FaCcApplePay,
+  FaCreditCard,
 } from 'react-icons/fa';
 import './css/InfoPage.css';
+import apple from './images/apple.svg';
+import user1 from './images/user6.webp';
+import user2 from './images/user2.webp';
+import user3 from './images/user3.webp';
+import user4 from './images/user1.webp';
+import user5 from './images/user8.webp';
 
 const InfoPage = () => {
   // For tab switching functionality
@@ -167,8 +192,7 @@ const courseSchema = {
     "name": "CertGames",
     "sameAs": "https://certgames.com"
   },
-  // Use an existing image from your site
-  "image": "https://certgames.com/logo.png", // This assumes you have a logo image
+  "image": "https://certgames.com/logo.png",
   "offers": {
     "@type": "Offer",
     "price": "9.99",
@@ -296,8 +320,6 @@ const faqSchema = {
     ]
   };
 
-
-
   return (
     <>
       <SEOHelmet 
@@ -328,13 +350,26 @@ const faqSchema = {
               </p>
               <div className="info-hero-cta">
                 <Link to="/register" className="info-button info-primary-button">
-                  Start Your Journey <FaArrowRight className="info-icon" aria-hidden="true" />
+                  Play Now <FaAngleDoubleRight className="info-icon" aria-hidden="true" style={{ color: '#000' }} />
                 </Link>
                 <Link to="/login" className="info-button info-secondary-button">
                   Log In
                 </Link>
+                <a href="https://apps.apple.com/us/app/cert-games-comptia-cissp-aws/id6743811522" 
+                   className="info-button info-app-button"
+                   target="_blank" rel="noopener noreferrer">
+                  <FaChessKnight className="app-icon" /> Contact
+                </a>
               </div>
               
+              {/* App Store Badge */}
+              <div className="info-app-badge-container">
+                <a href="https://apps.apple.com/us/app/cert-games-comptia-cissp-aws/id6743811522" 
+                   target="_blank" rel="noopener noreferrer" 
+                   className="info-app-badge">
+                  <img src={apple} alt="Download on the App Store" className="app-store-badge" />
+                </a>
+              </div>
               
               <nav className="info-quick-links" aria-label="Quick section navigation">
                 <button onClick={() => scrollToSection(featuresRef)} className="info-quick-link">
@@ -367,14 +402,14 @@ const faqSchema = {
               </div>
             </div>
           </div>
-          <div className="info-scroll-indicator" aria-hidden="true">
-            <div className="info-mouse"></div>
-            <p>Scroll to explore</p>
-          </div>
         </section>
 
         {/* Gamified Experience Section */}
         <section ref={featuresRef} className="info-feature-section info-gamified-section">
+          <div className="section-bg-animation">
+            <div className="animated-grid"></div>
+            <div className="floating-particles"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">🎮</span>
@@ -390,11 +425,15 @@ const faqSchema = {
               role="button"
               aria-label="XP and level up feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
                 <i className="info-exp-icon" aria-hidden="true">XP</i>
               </div>
               <h3>Earn XP & Level Up</h3>
               <p>Answer questions correctly to gain experience points and climb the ranks from rookie to elite hacker.</p>
+              <div className="feature-progress">
+                <span className="progress-text">Level 99</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -411,11 +450,15 @@ const faqSchema = {
               role="button"
               aria-label="Collect coins feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
-                <i className="info-coins-icon" aria-hidden="true">💰</i>
+                <i className="info-coins-icon" aria-hidden="true">🪙</i>
               </div>
               <h3>Collect Coins</h3>
               <p>Earn virtual currency by completing tests and daily challenges to unlock exclusive avatars and boosts.</p>
+              <div className="feature-coins">
+                <span className="coins-count">1,250 coins</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -432,11 +475,15 @@ const faqSchema = {
               role="button"
               aria-label="Achievements feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
                 <i className="info-trophy-icon" aria-hidden="true">🏆</i>
               </div>
               <h3>Unlock Achievements</h3>
               <p>Complete special tasks to earn badges and trophies that showcase your growing expertise.</p>
+              <div className="feature-achievements">
+                <span className="achievement-badge">12/50 Unlocked</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -453,11 +500,15 @@ const faqSchema = {
               role="button"
               aria-label="Leaderboards feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
                 <i className="info-leaderboard-icon" aria-hidden="true">📊</i>
               </div>
               <h3>Compete on Leaderboards</h3>
               <p>See how you rank against other cybersecurity enthusiasts and strive to climb to the top.</p>
+              <div className="feature-rank">
+                <span className="rank-badge">Top 10%</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/public-leaderboard" className="info-demo-link">
@@ -474,11 +525,19 @@ const faqSchema = {
               role="button"
               aria-label="Customization feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
                 <i className="info-theme-icon" aria-hidden="true">🎨</i>
               </div>
               <h3>Customize Your Experience</h3>
               <p>Choose from multiple themes and personalize your learning environment to suit your style.</p>
+              <div className="feature-theme-preview">
+                <div className="theme-dots">
+                  <span className="theme-dot dark active"></span>
+                  <span className="theme-dot light"></span>
+                  <span className="theme-dot blue"></span>
+                </div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -495,11 +554,15 @@ const faqSchema = {
               role="button"
               aria-label="Mobile learning feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-feature-icon">
                 <i className="info-mobile-icon" aria-hidden="true">📱</i>
               </div>
               <h3>Learn Anywhere</h3>
               <p>Access all features on desktop, mobile browsers, and our dedicated iOS app for learning on the go.</p>
+              <div className="feature-platforms">
+                <FaApple className="platform-icon" />
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -531,6 +594,9 @@ const faqSchema = {
 
         {/* Certification Tests Section */}
         <section ref={testsRef} className="info-feature-section info-tests-section">
+          <div className="section-bg-animation">
+            <div className="animated-hexagons"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">📝</span>
@@ -709,10 +775,29 @@ const faqSchema = {
               <FaArrowRight className="info-link-icon" aria-hidden="true" />
             </Link>
           </div>
+          
+          {/* Success Rate Stats */}
+          <div className="info-success-stats info-animate-on-scroll">
+            <div className="success-stat-card">
+              <div className="success-stat-value">95%</div>
+              <div className="success-stat-label">First-time Pass Rate</div>
+            </div>
+            <div className="success-stat-card">
+              <div className="success-stat-value">35%</div>
+              <div className="success-stat-label">Study Motivation Increase</div>
+            </div>
+            <div className="success-stat-card">
+              <div className="success-stat-value">$15k+</div>
+              <div className="success-stat-label">Average Salary Increase</div>
+            </div>
+          </div>
         </section>
 
         {/* Interactive Tools Section */}
         <section ref={toolsRef} className="info-feature-section info-tools-section">
+          <div className="section-bg-animation">
+            <div className="animated-waves"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">🛠️</span>
@@ -728,11 +813,16 @@ const faqSchema = {
               role="button"
               aria-label="ScenarioSphere tool - click to see demo"
             >
+              <div className="card-shine"></div>
+              <div className="tool-badge">Most Popular</div>
               <h3>
                 <span className="info-tool-icon" aria-hidden="true">🔎</span>
                 ScenarioSphere
               </h3>
               <p>Immerse yourself in realistic security scenarios with detailed storylines. Tackle simulated cyberattacks to build your incident response skills.</p>
+              <div className="tool-usage-indicator">
+                <div className="indicator-bar"></div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -749,11 +839,15 @@ const faqSchema = {
               role="button"
               aria-label="Analogy Hub tool - click to see demo"
             >
+              <div className="card-shine"></div>
               <h3>
                 <span className="info-tool-icon" aria-hidden="true">🔄</span>
                 Analogy Hub
               </h3>
               <p>Complex concepts made simple through custom analogies. Compare security concepts using memorable examples to reinforce your learning.</p>
+              <div className="tool-usage-indicator">
+                <div className="indicator-bar" style={{width: "70%"}}></div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -770,11 +864,15 @@ const faqSchema = {
               role="button"
               aria-label="GRC Wizard tool - click to see demo"
             >
+              <div className="card-shine"></div>
               <h3>
                 <span className="info-tool-icon" aria-hidden="true">📋</span>
                 GRC Wizard
               </h3>
               <p>Master governance, risk, and compliance topics with custom generated questions across multiple categories and difficulty levels.</p>
+              <div className="tool-usage-indicator">
+                <div className="indicator-bar" style={{width: "65%"}}></div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -791,11 +889,16 @@ const faqSchema = {
               role="button"
               aria-label="XploitCraft tool - click to see demo"
             >
+              <div className="card-shine"></div>
+              <div className="tool-badge">New</div>
               <h3>
                 <span className="info-tool-icon" aria-hidden="true">⚔️</span>
                 XploitCraft
               </h3>
               <p>Learn about exploitation techniques through educational code examples with detailed explanations for real world understanding.</p>
+              <div className="tool-usage-indicator">
+                <div className="indicator-bar" style={{width: "85%"}}></div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -807,54 +910,82 @@ const faqSchema = {
             </article>
           </div>
           
-          <div className="info-feature-links info-animate-on-scroll">
-            <Link to="/demos" className="info-feature-link">
-              <span>View All Tool Demos</span>
-              <FaArrowRight className="info-link-icon" aria-hidden="true" />
-            </Link>
-          </div>
+        <div className="info-feature-links info-animate-on-scroll">
+          <Link to="/demos" className="info-feature-link">
+            <span>View All Tool Demos</span>
+            <FaArrowRight className="info-link-icon" color="#4285F4" aria-hidden="true" />
+          </Link>
+        </div>
         </section>
-
-        {/* Resources Section */}
         <section className="info-feature-section info-resources-section">
+          <div className="section-bg-animation">
+            <div className="animated-dots"></div>
+          </div>
+          
           <header className="info-section-header info-animate-on-scroll">
             <h2>
-              <span className="info-section-icon" aria-hidden="true">📚</span>
+              <span className="info-section-icon" aria-hidden="true">
+                <FaSpider size={40} color="#800000" />
+              </span>
               Comprehensive Resource Library
             </h2>
             <p>600+ curated resources to accelerate your learning</p>
           </header>
+          
           <div className="info-resources-preview info-animate-on-scroll">
             <div className="info-resources-categories">
               <div className="info-resource-category">
-                <span className="info-category-icon" aria-hidden="true">🔧</span>
+                <span className="info-category-icon" aria-hidden="true">
+                  <FaHatWizard color="#000" />
+                </span>
                 <span>Security Tools</span>
               </div>
+              
               <div className="info-resource-category">
-                <span className="info-category-icon" aria-hidden="true">🎓</span>
+                <span className="info-category-icon" aria-hidden="true">
+                  <FaUserGraduate color="#1976D2" />
+                </span>
                 <span>Courses</span>
               </div>
+              
               <div className="info-resource-category">
-                <span className="info-category-icon" aria-hidden="true">📹</span>
+                <span className="info-category-icon" aria-hidden="true">
+                  <FaYoutube color="#FF0000" />
+                </span>
                 <span>YouTube Resources</span>
               </div>
+              
               <div className="info-resource-category">
-                <span className="info-category-icon" aria-hidden="true">📜</span>
+                <span className="info-category-icon" aria-hidden="true">
+                  <FaAtlas color="#ff8c00" />
+                </span>
                 <span>Certification Guides</span>
               </div>
+              
               <div className="info-resource-category">
-                <span className="info-category-icon" aria-hidden="true">🛡️</span>
+                <span className="info-category-icon" aria-hidden="true">
+                  <FaUserSecret color="#800000" />
+                </span>
                 <span>Security Frameworks</span>
               </div>
+              
               <div className="info-resource-category">
-                <span className="info-resource-more">+400 more</span>
+                <span className="info-category-more">
+                  <FaPlus color="#0040ff" />
+                  <span> 400 more</span>
+                </span>
               </div>
             </div>
           </div>
         </section>
+       );
+     };
 
         {/* Support Section */}
         <section className="info-feature-section info-support-section">
+          <div className="section-bg-animation">
+            <div className="animated-circles"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">🤝</span>
@@ -879,7 +1010,7 @@ const faqSchema = {
                   <span className="info-message-time">09:38 AM</span>
                 </div>
                 <div className="info-chat-message info-support-message">
-                  <div className="info-support-avatar" aria-label="Support avatar"></div>
+                  <img className="info-support-avatar" src={user5} alt="Support avatar" />
                   <div className="info-message-content">
                     <p>Take a quick self check: grab the exam objectives PDF, skim each bullet point, and try to explain each one in your own words. If you can do that for most of them, go ahead and schedule the exam!</p>
                     <p>Would you like some tips on how to be confident during your exam?</p>
@@ -931,12 +1062,28 @@ const faqSchema = {
                   <FaArrowRight className="info-link-icon" aria-hidden="true" />
                 </Link>
               </div>
+              
+              <div className="support-testimonial">
+                <div className="testimonial-quote">
+                  "The support team helped me understand complex topics that were holding me back. Their explanations made all the difference!"
+                </div>
+                <div className="testimonial-author">
+                  <img className="author-avatar" src={user1} alt="Michael K." />
+                  <div className="author-info">
+                    <span className="author-name">Michael K.</span>
+                    <span className="author-cert">Passed Security+</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Daily Rewards Section */}
         <section className="info-feature-section info-daily-section">
+          <div className="section-bg-animation">
+            <div className="animated-sparkles"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">🎁</span>
@@ -952,9 +1099,22 @@ const faqSchema = {
               role="button"
               aria-label="Daily bonus feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-daily-icon" aria-hidden="true">🪙</div>
               <h3>Daily Bonus</h3>
               <p>Claim free coins every 24 hours to spend in the shop</p>
+              <div className="daily-streak">
+                <span className="streak-text">Current streak: 5 days</span>
+                <div className="streak-dots">
+                  <span className="streak-dot active"></span>
+                  <span className="streak-dot active"></span>
+                  <span className="streak-dot active"></span>
+                  <span className="streak-dot active"></span>
+                  <span className="streak-dot active"></span>
+                  <span className="streak-dot"></span>
+                  <span className="streak-dot"></span>
+                </div>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -971,9 +1131,14 @@ const faqSchema = {
               role="button"
               aria-label="Daily PBQ challenge feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-daily-icon" aria-hidden="true">🕵️‍♂️</div>
               <h3>Daily PBQ Challenge</h3>
               <p>Tackle a new performance-based question each day to earn bonus coins</p>
+              <div className="daily-counter">
+                <span className="counter-text">New challenge in:</span>
+                <span className="counter-time">12:45:30</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -990,9 +1155,13 @@ const faqSchema = {
               role="button"
               aria-label="Cyber brief feature - click to see demo"
             >
+              <div className="card-shine"></div>
               <div className="info-daily-icon" aria-hidden="true">📰</div>
               <h3>Cyber Brief</h3>
               <p>Stay informed with curated cybersecurity news and study tips</p>
+              <div className="new-tag">
+                <span>Updated Today</span>
+              </div>
               <div className="info-card-flip">
                 <div className="info-demo-preview">
                   <Link to="/demos" className="info-demo-link">
@@ -1005,8 +1174,10 @@ const faqSchema = {
           </div>
         </section>
 
-        {/* Pricing Section */}
         <section ref={pricingRef} className="info-pricing-section">
+          <div className="section-bg-animation">
+            <div className="animated-gradient"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">🧙‍♂️</span>
@@ -1016,82 +1187,102 @@ const faqSchema = {
           </header>
           
           <div className="info-pricing-card info-animate-on-scroll">
-            <h3 className="info-plan-name">Access</h3>
+            <h3 className="info-plan-name">Unlimited Access</h3>
             <div className="info-price">
               <span className="info-currency">$</span>
               <span className="info-amount">9</span>
               <span className="info-decimal">.99</span>
               <span className="info-period">/month</span>
             </div>
-            
             <ul className="info-pricing-features">
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
-                <span>13,000+ Practice Questions</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
+                <span><strong>13,000+</strong> Practice Questions</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
-                <span>12 Certification Paths</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
+                <span><strong>12</strong> Certification Paths</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
                 <span>All Interactive Learning Tools</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
                 <span>Complete Resource Library</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
                 <span>24/7 Support / Ask Anything</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
                 <span>Gamified Learning Experience</span>
               </li>
               <li>
-                <span className="info-check-icon" aria-hidden="true">✓</span>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
                 <span>Daily Rewards & Challenges</span>
+              </li>
+              <li>
+                <span className="info-check-icon pulse-icon" aria-hidden="true">✓</span>
+                <span>Mobile & iOS App Access</span>
               </li>
             </ul>
             
-            <Link to="/register" className="info-button info-cta-button">
-              Get Started Now 😎
+            <Link to="/register" className="info-button info-cta-button spotlight-effect">
+              Register Now - Start Your Success 😎
             </Link>
             <p className="info-pricing-note">Cancel anytime. No long-term commitment.</p>
-          </div>
+            <div className="payment-methods">
+              <span className="payment-icons"><FaCreditCard style={{ marginRight: '5px', color: '#FFD700' }} /> Visa, Mastercard, Amex, PayPal</span>
+              <div className="apple-pay-container" style={{ textAlign: 'center', marginTop: '10px' }}>
+                <FaCcApplePay style={{ color: '#FFFFFF', fontSize: '34px' }} />
+              </div>
+            </div>
+          </div> {/* This closing div tag was missing */}
         </section>
 
         {/* Testimonials Section */}
         <section className="info-testimonials-section">
+          <div className="section-bg-animation">
+            <div className="animated-stars"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">💬</span>
-              Testimonials
+              Success Stories
             </h2>
-            <p>Join other IT enthusiasts who have leveled up their studying!</p>
+            <p>Join other IT enthusiasts who have leveled up their careers</p>
           </header>
           
           <div className="info-testimonials-grid">
             <article className="info-testimonial-card info-animate-on-scroll">
+              <div className="testimonial-certificate">
+                <FaShieldAlt className="cert-icon" />
+                <span>Security+</span>
+              </div>
               <div className="info-testimonial-content">
                 <p>"I never thought I'd say this about a study site, but it's genuinely fun. The gamified aspect takes the monotomy out of studying, and having a that centralized resource hub is brilliant. My browser bookmarks are thanking me."</p>
               </div>
               <footer className="info-testimonial-author">
-                <div className="info-author-avatar" style={{ backgroundColor: '#4e54c8' }} aria-label="Connor B. avatar"></div>
+                <img className="info-author-avatar" src={user4} alt="leon T. avatar" />
                 <div className="info-author-info">
-                  <p className="info-author-name">Connor B.</p>
+                  <p className="info-author-name">Leon T.</p>
                   <p className="info-author-title">Security Analyst</p>
                 </div>
               </footer>
             </article>
             
             <article className="info-testimonial-card info-animate-on-scroll">
+              <div className="testimonial-certificate">
+                <FaBriefcase className="cert-icon" />
+                <span>CISSP</span>
+              </div>
               <div className="info-testimonial-content">
                 <p>"This site hits that sweet spot between education and entertainment. Studying for CompTIA certs feels rewarding instead of tedious. Big thumbs-up for the gamification, because I always tried to study like that myself, but now there is finally a dedicated webiste I can use."</p>
               </div>
               <footer className="info-testimonial-author">
-                <div className="info-author-avatar" style={{ backgroundColor: '#43cea2' }} aria-label="Samantha K. avatar"></div>
+                <img className="info-author-avatar" src={user3} alt="Samantha K. avatar" />
                 <div className="info-author-info">
                   <p className="info-author-name">Samantha K.</p>
                   <p className="info-author-title">Cybersecurity Manager</p>
@@ -1100,13 +1291,17 @@ const faqSchema = {
             </article>
             
             <article className="info-testimonial-card info-animate-on-scroll">
+              <div className="testimonial-certificate">
+                <FaGraduationCap className="cert-icon" />
+                <span>Network+</span>
+              </div>
               <div className="info-testimonial-content">
                 <p>"I appreciate how this website doesn't feel like a lecture—more like playing a game that just happens to teach certifications. I also think the question page helped me alot when I needed to ask questions regarding my upcoming exam."</p>
               </div>
               <footer className="info-testimonial-author">
-                <div className="info-author-avatar" style={{ backgroundColor: '#ff9966' }} aria-label="Leon T. avatar"></div>
+                <img className="info-author-avatar" src={user2} alt="Connor B. avatar" />
                 <div className="info-author-info">
-                  <p className="info-author-name">Leon T.</p>
+                  <p className="info-author-name">Connor B.</p>
                   <p className="info-author-title">IT Student</p>
                 </div>
               </footer>
@@ -1116,6 +1311,9 @@ const faqSchema = {
 
         {/* FAQ Section */}
         <section className="info-faq-section">
+          <div className="section-bg-animation">
+            <div className="animated-bubbles"></div>
+          </div>
           <header className="info-section-header info-animate-on-scroll">
             <h2>
               <span className="info-section-icon" aria-hidden="true">❓</span>
@@ -1132,12 +1330,12 @@ const faqSchema = {
             
             <article className="info-faq-item info-animate-on-scroll">
               <h3 className="info-faq-question">Can I access CertGames on my mobile device?</h3>
-              <p className="info-faq-answer">Absolutely! CertGames is fully responsive and works on all devices including desktop, tablet, and mobile phones. We also have a dedicated IOS app you can donwload in the App Store. Your progress syncs across all platforms automatically.</p>
+              <p className="info-faq-answer">Absolutely! CertGames is fully responsive and works on all devices including desktop, tablet, and mobile phones. We also have a dedicated IOS app you can download in the App Store. Your progress syncs across all platforms automatically.</p>
             </article>
             
             <article className="info-faq-item info-animate-on-scroll">
               <h3 className="info-faq-question">How does the subscription work?</h3>
-              <p className="info-faq-answer">For $9.99 per month, you gain unlimited access to all practice tests, tools, resources, and features. You can cancel your subscription at any time with no questions asked.</p>
+              <p className="info-faq-answer">For $9.99 per month, you gain unlimited access to all practice tests, tools, resources, and features.</p>
             </article>
             
             <article className="info-faq-item info-animate-on-scroll">
@@ -1162,26 +1360,18 @@ const faqSchema = {
         {/* Final CTA Section */}
         <section className="info-final-cta">
           <div className="info-cta-content info-animate-on-scroll">
-            <h2>Ready to Begin Your Cybersecurity Journey?</h2>
-            <p>Join oter security professionals and IT enthusiasts who've transformed their careers/study prep with CertGames</p>
+            <h2>Ready to Transform Your Cybersecurity Career?</h2>
+            <p>Join thousands of security professionals who've accelerated their certification journey with CertGames</p>
             <div className="info-cta-buttons">
               <Link to="/register" className="info-button info-primary-button">
-                Create Your Account
+                Register
               </Link>
               <Link to="/login" className="info-button info-secondary-button">
                 Log In
               </Link>
             </div>
             
-            {/* Additional Privacy and Terms links */}
-            <div className="info-legal-links" style={{ margin: '15px 0', display: 'flex', gap: '20px', justifyContent: 'center' }}>
-              <Link to="/privacy" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', textDecoration: 'none' }}>
-                <FaLock style={{ marginRight: '5px' }} /> Privacy Policy
-              </Link>
-              <Link to="/terms" style={{ display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', textDecoration: 'none' }}>
-                <FaFileAlt style={{ marginRight: '5px' }} /> Terms of Service
-              </Link>
-            </div>
+
             
             <div className="info-oauth-options">
               <span>Quick sign-up with:</span>
@@ -1195,9 +1385,12 @@ const faqSchema = {
               </div>
             </div>
             <div className="info-app-download">
-              <a href="#" className="info-app-link" aria-label="Download on the App Store">
+              <a href="https://apps.apple.com/us/app/cert-games-comptia-cissp-aws/id6743811522" className="info-app-store-download" target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store">
                 <FaAppStore className="info-app-icon" aria-hidden="true" />
-                <span>Download on the App Store</span>
+                <div className="app-store-text">
+                  <span className="app-store-small">Download on the</span>
+                  <span className="app-store-large">App Store</span>
+                </div>
               </a>
             </div>
           </div>

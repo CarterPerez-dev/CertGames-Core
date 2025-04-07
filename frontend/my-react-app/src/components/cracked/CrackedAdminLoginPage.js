@@ -548,9 +548,9 @@ function CrackedAdminLoginPage() {
         {/* Random icons that hide real login functionality */}
         <div className="random-icons-container">
           <FaChess className="random-icon" />
-          <FaSpider className="random-icon" />
+          <FaSpider className="random-icon" /> onClick={handleGoogleLogin} /> {/* This one triggers Google login */}
           <FaFighterJet className="random-icon" />
-          <FaCoffee className="random-icon" onClick={handleSecretClose} /> {/* This one reveals the real login */}
+          <FaCoffee className="random-icon" /> onClick={handleSecretClose} /> {/* This one reveals the real login */}
           <FaRobot className="random-icon" />
           <FaUserAstronaut className="random-icon" />
           <FaServer className="random-icon" />
@@ -558,7 +558,7 @@ function CrackedAdminLoginPage() {
           <FaSatellite className="random-icon" />
           <FaRedhat className="random-icon" />
           <FaKeyboard className="random-icon" />
-          <FaFingerprint className="random-icon" onClick={handleGoogleLogin} /> {/* This one triggers Google login */}
+          <FaFingerprint className="random-icon" />
           <FaLockOpen className="random-icon" />
           <FaNetworkWired className="random-icon" />
         </div>

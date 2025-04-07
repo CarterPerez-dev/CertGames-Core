@@ -1,6 +1,6 @@
 FROM node:23-alpine
 RUN apk add --no-cache bash curl
-RUN npm install -g npm@10.9.2
+RUN npm install -g npm@11.2.0
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
