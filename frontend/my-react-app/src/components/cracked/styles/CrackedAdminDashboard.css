@@ -1,8 +1,8 @@
 /* CrackedAdminDashboard.css - Gamified Admin Dashboard */
 
 :root {
-  --admin-bg-dark: #0b0c15;
-  --admin-bg-card: #171a23;
+  --admin-bg-dark: #000;
+  --admin-bg-card: #000;
   --admin-accent: #6543cc;
   --admin-accent-hover: #7b54e8;
   --admin-accent-glow: #8a58fc;
@@ -43,7 +43,7 @@
 
 /* Main Layout */
 .admin-dashboard {
-  font-family: 'Orbitron', 'Roboto', sans-serif;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
   color: var(--admin-text);
   margin: 0;
   padding: 0;

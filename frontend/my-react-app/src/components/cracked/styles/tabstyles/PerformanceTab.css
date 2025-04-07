@@ -84,7 +84,7 @@
 }
 
 .performance-tab .admin-health-indicator {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: bold;
   background: var(--admin-gradient-primary);
   -webkit-background-clip: text;
