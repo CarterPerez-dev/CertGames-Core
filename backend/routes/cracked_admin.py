@@ -152,6 +152,7 @@ def admin_api_logs():
     filter_text = request.args.get('filter', '').lower()
     
     if filter_text:
+        filtered_logs = [
             log for log in api_logs.get_all() 
             if filter_text in log.get('path', '').lower() or 
                filter_text in log.get('method', '').lower()
@@ -159,6 +160,7 @@ def admin_api_logs():
         return jsonify(filtered_logs), 200
     
     return jsonify(api_logs.get_all()), 200
+
 
 
 
@@ -355,7 +357,7 @@ def admin_list_users():
         "lastLoginAt": 1,
     }
 
-    cursor = db.mainusers_collection.find(query, projection).skip(skip_count).limit(limit)
+    cursor = db.mainusers.find(query, projection).skip(skip_count).limit(limit)
     results = []
     
     # Current timestamp for active session calculation
@@ -411,7 +413,7 @@ def admin_list_users():
             
         results.append(u)
 
-    total_count = db.mainusers_collection.count_documents(query)
+    total_count = db.mainusers.count_documents(query)
     resp_data = {
         "users": results,
         "total": total_count,
@@ -439,7 +441,7 @@ def admin_toggle_subscription(user_id):
     data = request.json or {}
     active = data.get("active", False)  # Whether to activate or deactivate
 
-    user = db.mainusers_collection.find_one({"_id": obj_id})
+    user = db.mainusers.find_one({"_id": obj_id})
     if not user:
         return jsonify({"error": "User not found"}), 404
 
@@ -453,7 +455,7 @@ def admin_toggle_subscription(user_id):
     else:
         update_fields["subscriptionStatus"] = "inactive"
         
-    result = db.mainusers_collection.update_one(
+    result = db.mainusers.update_one(
         {"_id": obj_id},
         {"$set": update_fields}
     )
@@ -1328,16 +1330,16 @@ def admin_revenue_overview():
         SUBSCRIPTION_PRICE = 9.99
         
         # Get all active subscribers
-        active_subscribers = db.mainusers_collection.count_documents({"subscriptionActive": True})
+        active_subscribers = db.mainusers.count_documents({"subscriptionActive": True})
         total_active_revenue = active_subscribers * SUBSCRIPTION_PRICE
         
         # Calculate active subscribers by platform
-        stripe_subscribers = db.mainusers_collection.count_documents({
+        stripe_subscribers = db.mainusers.count_documents({
             "subscriptionActive": True, 
             "subscriptionPlatform": "stripe"
         })
         
-        apple_subscribers = db.mainusers_collection.count_documents({
+        apple_subscribers = db.mainusers.count_documents({
             "subscriptionActive": True, 
             "subscriptionPlatform": "apple"
         })
@@ -1348,13 +1350,13 @@ def admin_revenue_overview():
         thirty_days_ago = now - timedelta(days=30)
         
         # Count subscribers who started in the last 7 days
-        new_subs_7_days = db.mainusers_collection.count_documents({
+        new_subs_7_days = db.mainusers.count_documents({
             "subscriptionStartDate": {"$gte": seven_days_ago},
             "subscriptionActive": True
         })
         
         # Count subscribers who started in the last 30 days
-        new_subs_30_days = db.mainusers_collection.count_documents({
+        new_subs_30_days = db.mainusers.count_documents({
             "subscriptionStartDate": {"$gte": thirty_days_ago},
             "subscriptionActive": True
         })
@@ -1364,7 +1366,7 @@ def admin_revenue_overview():
         new_revenue_30_days = new_subs_30_days * SUBSCRIPTION_PRICE
         
         # Get all-time subscription count (including canceled)
-        all_time_subs = db.mainusers_collection.count_documents({
+        all_time_subs = db.mainusers.count_documents({
             "$or": [
                 {"subscriptionActive": True},
                 {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
@@ -1411,18 +1413,18 @@ def admin_signup_metrics():
             day_label = day_start.strftime("%a %b %d")  # e.g. "Mon Apr 05"
             
             # Count total signups for this day
-            total_signups = db.mainusers_collection.count_documents({
+            total_signups = db.mainusers.count_documents({
                 "subscriptionStartDate": {"$gte": day_start, "$lt": day_end}
             })
             
             # Count Stripe signups
-            stripe_signups = db.mainusers_collection.count_documents({
+            stripe_signups = db.mainusers.count_documents({
                 "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
                 "subscriptionPlatform": "stripe"
             })
             
             # Count Apple signups
-            apple_signups = db.mainusers_collection.count_documents({
+            apple_signups = db.mainusers.count_documents({
                 "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
                 "subscriptionPlatform": "apple"
             })
@@ -1515,7 +1517,7 @@ def admin_cancellation_metrics():
             cancellations_by_platform[platform] = cancellations_by_platform.get(platform, 0) + 1
         
         # Calculate cancellation rate
-        total_subscribers = db.mainusers_collection.count_documents({
+        total_subscribers = db.mainusers.count_documents({
             "$or": [
                 {"subscriptionActive": True},
                 {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
@@ -1533,7 +1535,7 @@ def admin_cancellation_metrics():
         recent_data = []
         for cancel in recent_cancellations:
             user_id = cancel.get("userId")
-            user = db.mainusers_collection.find_one({"_id": user_id}) if user_id else None
+            user = db.mainusers.find_one({"_id": user_id}) if user_id else None
             
             if user:
                 recent_data.append({
@@ -1565,7 +1567,7 @@ def admin_recent_signups():
         limit = int(request.args.get("limit", 10))
         
         # Get recent subscribers
-        recent_subscribers = db.mainusers_collection.find(
+        recent_subscribers = db.mainusers.find(
             {"subscriptionStartDate": {"$exists": True}},
             {
                 "username": 1, 
@@ -1638,7 +1640,7 @@ def admin_api_health_check():
         db_health = True
         try:
             # Just try to get one document from any collection
-            db.mainusers_collection.find_one({}, {"_id": 1})
+            db.mainusers.find_one({}, {"_id": 1})
         except Exception:
             db_health = False
             
