@@ -711,10 +711,10 @@ def admin_google_auth():
     
             # Redirect to login page with error
             frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-            return redirect(f"{frontend_url}/cracked/login?error=unauthorized")        
+            return redirect(f"{frontend_url}/cracked?error=unauthorized")        
         
         
     except Exception as e:
         current_app.logger.error(f"Error in admin Google auth: {str(e)}")
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-        return redirect(f"{frontend_url}/cracked/login?error=authentication_failed")
+        return redirect(f"{frontend_url}/cracked?error=authentication_failed")
