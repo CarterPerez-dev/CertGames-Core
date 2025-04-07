@@ -1551,105 +1551,71 @@ def admin_cancellation_metrics():
         return jsonify({"error": "Not authenticated"}), 401
         
     try:
-        # Aggregate events from subscriptionEvents collection
-        pipeline = [
-            {
-                "$match": {
-                    "event": {"$in": ["subscription_expired", "subscription_cancellation_requested"]}
-                }
-            },
-            {
-                "$lookup": {
-                    "from": "mainusers",
-                    "localField": "userId",
-                    "foreignField": "_id",
-                    "as": "user"
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$user",
-                    "preserveNullAndEmptyArrays": True
-                }
-            },
-            {
-                "$project": {
-                    "event": 1,
-                    "timestamp": 1,
-                    "platform": 1,
-                    "subscriptionStartDate": "$user.subscriptionStartDate",
-                    "subscriptionEndDate": "$user.subscriptionEndDate",
-                    "duration_days": {
-                        "$cond": [
-                            {"$and": [
-                                {"$isArray": ["$user.subscriptionStartDate"]}, 
-                                {"$isArray": ["$user.subscriptionEndDate"]}
-                            ]},
-                            {
-                                "$divide": [
-                                    {"$subtract": ["$user.subscriptionEndDate", "$user.subscriptionStartDate"]},
-                                    1000 * 60 * 60 * 24  # Convert milliseconds to days
-                                ]
-                            },
-                            null
-                        ]
-                    }
-                }
-            }
-        ]
+        # Find users with canceled or expired subscriptions
+        canceled_users = list(db.mainusers.find({
+            "subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]},
+            "email": {"$not": {"$regex": "@example.com$"}}
+        }))
         
-        cancellation_data = list(db.subscriptionEvents.aggregate(pipeline))
+        total_cancellations = len(canceled_users)
         
-        # Count total number of cancellations
-        total_cancellations = len(cancellation_data)
-        
-        # Calculate average subscription duration
-        valid_durations = [item["duration_days"] for item in cancellation_data if item.get("duration_days") is not None]
-        avg_duration = sum(valid_durations) / len(valid_durations) if valid_durations else 0
-        
-        # Count cancellations by platform
+        # Calculate durations directly in Python
+        durations = []
         cancellations_by_platform = {}
-        for item in cancellation_data:
-            platform = item.get("platform", "unknown")
+        recent_cancellations = []
+        
+        for user in canceled_users:
+            platform = user.get("subscriptionPlatform", "unknown")
+            # Count by platform
             cancellations_by_platform[platform] = cancellations_by_platform.get(platform, 0) + 1
+            
+            # Calculate duration if dates exist
+            start_date = user.get("subscriptionStartDate")
+            end_date = user.get("subscriptionEndDate")
+            
+            if start_date and end_date and isinstance(start_date, datetime) and isinstance(end_date, datetime):
+                duration_days = (end_date - start_date).total_seconds() / (24 * 3600)
+                durations.append(duration_days)
+                
+                # Add to recent cancellations
+                recent_cancellations.append({
+                    "username": user.get("username", "Unknown"),
+                    "platform": platform,
+                    "timestamp": user.get("subscriptionCanceledAt", end_date).isoformat() 
+                        if isinstance(user.get("subscriptionCanceledAt", end_date), datetime) 
+                        else str(user.get("subscriptionCanceledAt", end_date))
+                })
+        
+        # Calculate average duration
+        avg_duration = sum(durations) / len(durations) if durations else 0
         
         # Calculate cancellation rate
         total_subscribers = db.mainusers.count_documents({
             "$or": [
                 {"subscriptionActive": True},
                 {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
-            ]
+            ],
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
         cancellation_rate = (total_cancellations / total_subscribers) if total_subscribers > 0 else 0
         
-        # Get recent cancellations
-        recent_cancellations = db.subscriptionEvents.find(
-            {"event": {"$in": ["subscription_expired", "subscription_cancellation_requested"]}},
-            {"userId": 1, "platform": 1, "timestamp": 1}
-        ).sort("timestamp", -1).limit(10)
-        
-        recent_data = []
-        for cancel in recent_cancellations:
-            user_id = cancel.get("userId")
-            user = db.mainusers.find_one({"_id": user_id}) if user_id else None
-            
-            if user:
-                recent_data.append({
-                    "username": user.get("username", "Unknown"),
-                    "subscriptionPlatform": cancel.get("subscriptionPlatform", "unknown"),
-                    "timestamp": cancel.get("timestamp").isoformat() if isinstance(cancel.get("timestamp"), datetime) else str(cancel.get("timestamp"))
-                })
+        # Sort recent cancellations by timestamp descending and get top 10
+        recent_cancellations.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+        recent_cancellations = recent_cancellations[:10]
         
         return jsonify({
             "total_cancellations": total_cancellations,
             "average_duration_days": round(avg_duration, 1),
             "cancellation_rate": round(cancellation_rate * 100, 1),  # As percentage
             "cancellations_by_platform": cancellations_by_platform,
-            "recent_cancellations": recent_data
+            "recent_cancellations": recent_cancellations
         }), 200
         
     except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error in cancellation metrics: {error_details}")
         return jsonify({"error": str(e)}), 500
 
 @cracked_bp.route('/revenue/recent-signups', methods=['GET'])
