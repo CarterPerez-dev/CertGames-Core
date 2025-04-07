@@ -73,7 +73,7 @@ class Xploits:
         attempts = 0
         while attempts < retry_attempts:
             try:
-                chat_completion = client.chat.completions.create(
+                chat_completion = client.chat .completions.create(
                     messages=[{"role": "user", "content": prompt}],
                     model="chatgpt-4o-latest",
                     max_tokens=max_tokens,
