@@ -118,6 +118,34 @@ def read_nginx_logs():
     except Exception as e:
         return {"success": False, "error": str(e)}
 
+
+
+def filter_out_example_accounts(query=None):
+    """
+    Add a filter to exclude @example.com email addresses from MongoDB queries.
+    If a query dict is provided, it adds the filter to it. Otherwise, creates a new query.
+    
+    Args:
+        query (dict, optional): Existing MongoDB query. Defaults to None.
+        
+    Returns:
+        dict: MongoDB query with @example.com filter added
+    """
+    if query is None:
+        query = {}
+    
+    # Only add email filter if it doesn't already exist
+    if "email" not in query:
+        query["email"] = {"$not": {"$regex": "@example.com$"}}
+        
+    return query
+
+# Example usage:
+# users = db.mainusers.find(filter_out_example_accounts())
+# user_count = db.mainusers.count_documents(filter_out_example_accounts())
+
+
+
 @cracked_bp.route('/request-logs/nginx', methods=['GET'])
 def admin_nginx_logs():
     if not require_cracked_admin():
@@ -203,17 +231,26 @@ def admin_dashboard():
         return jsonify(cached_data), 200
 
     try:
-        # 1) Basic counts & stats
-        user_count = db.mainusers.count_documents({})
-        test_attempts_count = db.testAttempts.count_documents({})
+  
+        user_query = filter_out_example_accounts()
+        user_count = db.mainusers.count_documents(user_query)
+        
+        # Only count test attempts by real users
+        real_user_ids = [doc["_id"] for doc in db.mainusers.find(user_query, {"_id": 1})]
+        test_attempts_count = db.testAttempts.count_documents({"userId": {"$in": real_user_ids}})
 
         start_of_day = now_utc.replace(hour=0, minute=0, second=0, microsecond=0)
         daily_bonus_claims = db.mainusers.count_documents({
-            "lastDailyClaim": {"$gte": start_of_day}
+            "lastDailyClaim": {"$gte": start_of_day},
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
 
+        # Only consider real users for test score calculation
         pipeline = [
-            {"$match": {"finished": True}},
+            {"$match": {
+                "finished": True,
+                "userId": {"$in": real_user_ids}
+            }},
             {"$group": {
                 "_id": None,
                 "avgScorePercent": {
@@ -258,7 +295,7 @@ def admin_dashboard():
                 est_tz = pytz.timezone('America/New_York')
                 perf_metrics['timestamp'] = perf_metrics['timestamp'].astimezone(est_tz).isoformat()
 
-        # 3) Build "recentStats" for the last 7 days
+        # 3) Build "recentStats" for the last 7 days - FILTERED
         import pytz
         est_tz = pytz.timezone('America/New_York')
         recentStats = []
@@ -267,13 +304,19 @@ def admin_dashboard():
             day_end = day_start + timedelta(days=1)
             label_str = day_start.strftime("%Y-%m-%d")
 
+            # Filter out example.com accounts
             day_bonus_count = db.mainusers.count_documents({
-                "lastDailyClaim": {"$gte": day_start, "$lt": day_end}
+                "lastDailyClaim": {"$gte": day_start, "$lt": day_end},
+                "email": {"$not": {"$regex": "@example.com$"}}
             })
+            
+            # Only count test attempts by real users
             day_test_attempts = db.testAttempts.count_documents({
                 "finished": True,
-                "finishedAt": {"$gte": day_start, "$lt": day_end}
+                "finishedAt": {"$gte": day_start, "$lt": day_end},
+                "userId": {"$in": real_user_ids}
             })
+            
             recentStats.append({
                 "label": label_str,
                 "dailyBonus": day_bonus_count,
@@ -311,9 +354,12 @@ def admin_list_users():
     search = request.args.get('search', '').strip()
     page = int(request.args.get('page', 1))
     limit = int(request.args.get('limit', 20))
+    
+    # Get the value of a new "include_example" query parameter (default: False)
+    include_example = request.args.get('include_example', 'false').lower() == 'true'
 
     # Optional: Cache page1 limit20 w/no search
-    if not search and page == 1 and limit == 20:
+    if not search and page == 1 and limit == 20 and not include_example:
         cache_key = "admin_users_list_page1_limit20"
         cached_data = cache_get(cache_key)
         if cached_data:
@@ -332,6 +378,24 @@ def admin_list_users():
                 {"_id": {"$regex": search, "$options": "i"} if search.isalnum() else {"$exists": True}}
             ]
         }
+    
+    # Unless explicitly included, exclude @example.com accounts
+    if not include_example:
+        # Add condition to filter out example.com emails
+        # We need to add this to the query differently depending on
+        # whether it already has conditions
+        if query and "$or" in query:
+            # There's an $or condition, need to wrap it with $and to add email filter
+            query = {
+                "$and": [
+                    {"email": {"$not": {"$regex": "@example.com$"}}},
+                    query
+                ]
+            }
+        else:
+            # Just add the email filter directly
+            query["email"] = {"$not": {"$regex": "@example.com$"}}
+    
     skip_count = (page - 1) * limit
 
     # Enhanced projection with more user information
@@ -411,21 +475,26 @@ def admin_list_users():
         else:
             u['signupSource'] = 'Unknown'
             
+        # Add flag to indicate if this is an example account
+        u['isExampleAccount'] = '@example.com' in u.get('email', '')
+            
         results.append(u)
 
+    # Get total count (also respecting the example.com filter)
     total_count = db.mainusers.count_documents(query)
+    
     resp_data = {
         "users": results,
         "total": total_count,
         "page": page,
-        "limit": limit
+        "limit": limit,
+        "includeExample": include_example
     }
 
-    if not search and page == 1 and limit == 20:
+    if not search and page == 1 and limit == 20 and not include_example:
         cache_set("admin_users_list_page1_limit20", resp_data, 60)
 
     return jsonify(resp_data), 200
-    
 
 
 @cracked_bp.route('/users/<user_id>/toggle-subscription', methods=['POST'])
@@ -1321,6 +1390,8 @@ def admin_revenue_overview():
     - Revenue in past 7 days
     - Revenue in past 30 days
     - Stripe vs Apple breakdown
+    
+    All calculations exclude @example.com accounts
     """
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated"}), 401
@@ -1329,19 +1400,28 @@ def admin_revenue_overview():
         # Subscription price - $9.99 per month
         SUBSCRIPTION_PRICE = 9.99
         
-        # Get all active subscribers
-        active_subscribers = db.mainusers.count_documents({"subscriptionActive": True})
+        # Filter to exclude example.com accounts
+        real_user_query = {"email": {"$not": {"$regex": "@example.com$"}}}
+        
+        # Get all active subscribers (excluding example.com accounts)
+        active_subscribers = db.mainusers.count_documents({
+            "subscriptionActive": True, 
+            "email": {"$not": {"$regex": "@example.com$"}}
+        })
+        
         total_active_revenue = active_subscribers * SUBSCRIPTION_PRICE
         
-        # Calculate active subscribers by platform
+        # Calculate active subscribers by platform (excluding example.com accounts)
         stripe_subscribers = db.mainusers.count_documents({
             "subscriptionActive": True, 
-            "subscriptionPlatform": "stripe"
+            "subscriptionPlatform": "stripe",
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
         apple_subscribers = db.mainusers.count_documents({
             "subscriptionActive": True, 
-            "subscriptionPlatform": "apple"
+            "subscriptionPlatform": "apple",
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
         # Get revenue from past 7 days and 30 days
@@ -1349,28 +1429,31 @@ def admin_revenue_overview():
         seven_days_ago = now - timedelta(days=7)
         thirty_days_ago = now - timedelta(days=30)
         
-        # Count subscribers who started in the last 7 days
+        # Count subscribers who started in the last 7 days (excluding example.com accounts)
         new_subs_7_days = db.mainusers.count_documents({
             "subscriptionStartDate": {"$gte": seven_days_ago},
-            "subscriptionActive": True
+            "subscriptionActive": True,
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
-        # Count subscribers who started in the last 30 days
+        # Count subscribers who started in the last 30 days (excluding example.com accounts)
         new_subs_30_days = db.mainusers.count_documents({
             "subscriptionStartDate": {"$gte": thirty_days_ago},
-            "subscriptionActive": True
+            "subscriptionActive": True,
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
         # Revenue from new subscribers
         new_revenue_7_days = new_subs_7_days * SUBSCRIPTION_PRICE
         new_revenue_30_days = new_subs_30_days * SUBSCRIPTION_PRICE
         
-        # Get all-time subscription count (including canceled)
+        # Get all-time subscription count (including canceled, excluding example.com accounts)
         all_time_subs = db.mainusers.count_documents({
             "$or": [
                 {"subscriptionActive": True},
                 {"subscriptionStatus": {"$in": ["expired", "canceling", "canceled"]}}
-            ]
+            ],
+            "email": {"$not": {"$regex": "@example.com$"}}
         })
         
         # Calculate estimated total lifetime revenue
@@ -1398,13 +1481,20 @@ def admin_revenue_overview():
 def admin_signup_metrics():
     """
     Returns daily signups for the past 7 days, broken down by platform (Stripe/Apple)
+    Excludes @example.com accounts by default
     """
     if not require_cracked_admin():
         return jsonify({"error": "Not authenticated"}), 401
         
+    # Get the value of "include_example" query parameter (default: False)
+    include_example = request.args.get('include_example', 'false').lower() == 'true'
+        
     try:
         now = datetime.utcnow()
         daily_data = []
+        
+        # Create email filter query
+        email_filter = {} if include_example else {"email": {"$not": {"$regex": "@example.com$"}}}
         
         # Get signups for each of the past 7 days
         for i in range(7):
@@ -1412,22 +1502,27 @@ def admin_signup_metrics():
             day_end = day_start + timedelta(days=1)
             day_label = day_start.strftime("%a %b %d")  # e.g. "Mon Apr 05"
             
-            # Count total signups for this day
-            total_signups = db.mainusers.count_documents({
+            # Base query for this day's timeframe
+            base_query = {
                 "subscriptionStartDate": {"$gte": day_start, "$lt": day_end}
-            })
+            }
+            
+            # Add example.com filter if not including them
+            if not include_example:
+                base_query["email"] = {"$not": {"$regex": "@example.com$"}}
+            
+            # Count total signups for this day
+            total_signups = db.mainusers.count_documents(base_query)
             
             # Count Stripe signups
-            stripe_signups = db.mainusers.count_documents({
-                "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
-                "subscriptionPlatform": "stripe"
-            })
+            stripe_query = base_query.copy()
+            stripe_query["subscriptionPlatform"] = "stripe"
+            stripe_signups = db.mainusers.count_documents(stripe_query)
             
             # Count Apple signups
-            apple_signups = db.mainusers.count_documents({
-                "subscriptionStartDate": {"$gte": day_start, "$lt": day_end},
-                "subscriptionPlatform": "apple"
-            })
+            apple_query = base_query.copy()
+            apple_query["subscriptionPlatform"] = "apple"
+            apple_signups = db.mainusers.count_documents(apple_query)
             
             daily_data.append({
                 "date": day_label,
@@ -1444,6 +1539,8 @@ def admin_signup_metrics():
         
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+        
+        
 
 @cracked_bp.route('/revenue/cancellation', methods=['GET'])
 def admin_cancellation_metrics():
