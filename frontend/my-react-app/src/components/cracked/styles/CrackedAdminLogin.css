@@ -1,4 +1,4 @@
-/* Enhanced Admin Login CSS */
+/* Enhanced Admin Login CSS with Honeypot Features */
 :root {
   --admin-bg-primary: #0f1218;
   --admin-bg-secondary: #171e2b;
@@ -16,6 +16,7 @@
   --admin-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Base Styling */
 .cracked-admin-login-wrapper {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -31,6 +32,43 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
+}
+
+/* Theme variations */
+.cracked-admin-login-wrapper.neon-theme {
+  --admin-bg-primary: #120030;
+  --admin-bg-secondary: #240046;
+  --admin-accent: #ff00ff;
+  --admin-accent-light: #ff77ff;
+  --admin-text: #00ffff;
+  --admin-text-muted: #77ffff;
+  --admin-card-bg: rgba(36, 0, 70, 0.95);
+  --admin-border: rgba(255, 0, 255, 0.3);
+  font-family: "Comic Sans MS", cursive;
+}
+
+.cracked-admin-login-wrapper.corporate-theme {
+  --admin-bg-primary: #f5f5f5;
+  --admin-bg-secondary: #eaeaea;
+  --admin-accent: #0066cc;
+  --admin-accent-light: #3399ff;
+  --admin-text: #333333;
+  --admin-text-muted: #666666;
+  --admin-card-bg: rgba(255, 255, 255, 0.95);
+  --admin-border: rgba(204, 204, 204, 0.7);
+  font-family: "Arial", sans-serif;
+}
+
+.cracked-admin-login-wrapper.retro-theme {
+  --admin-bg-primary: #008080;
+  --admin-bg-secondary: #006666;
+  --admin-accent: #ff9900;
+  --admin-accent-light: #ffcc00;
+  --admin-text: #ffffff;
+  --admin-text-muted: #cccccc;
+  --admin-card-bg: rgba(0, 102, 102, 0.95);
+  --admin-border: rgba(255, 204, 0, 0.5);
+  font-family: "Courier New", monospace;
 }
 
 .admin-login-background {
@@ -417,6 +455,360 @@
   border-radius: 20px;
 }
 
+/* Honeypot features */
+
+/* Dramatic loading overlay */
+.dramatic-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--admin-bg-primary);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  border: 6px solid rgba(66, 153, 225, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--admin-accent);
+  animation: loadingSpin 1.5s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes loadingSpin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-message {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  color: var(--admin-text);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-progress {
+  width: 100%;
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.loading-bar {
+  height: 100%;
+  width: 30%;
+  background-color: var(--admin-accent);
+  border-radius: 4px;
+  position: relative;
+  animation: loadingProgress 3s ease-in-out infinite;
+}
+
+@keyframes loadingProgress {
+  0% { left: -30%; }
+  100% { left: 100%; }
+}
+
+/* Secret close button (invisible) */
+.secret-close-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.01; /* Nearly invisible */
+}
+
+.speed-up-button {
+  position: relative;
+  padding: 10px 20px;
+  background-color: #4a4a4a;
+  color: #ffffff;
+  border: 2px solid #6a6a6a;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.speed-up-button:hover {
+  background-color: #5a5a5a;
+  border-color: #7a7a7a;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.speed-up-button:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.speed-up-button:disabled {
+  background-color: #3a3a3a;
+  color: #888;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
+.speed-up-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    115deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.1), 
+    transparent
+  );
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+  opacity: 0;
+}
+
+.speed-up-button:hover::before {
+  opacity: 1;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.speed-up-button:not(:disabled) {
+  animation: pulse 2s infinite;
+}
+
+
+/* Wobbling inputs */
+.wobble-input {
+  animation: wobble 0.1s ease-in-out;
+}
+
+.wobble-input:focus {
+  animation: wobble 0.1s ease-in-out infinite;
+}
+
+@keyframes wobble {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-20px); }
+  75% { transform: translateX(-20px); }
+}
+
+/* Wobbling buttons */
+.wobble-button {
+  animation: wobble 2s ease-in-out infinite;
+}
+
+/* Blinking text */
+.blink-text {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Wobbling text */
+.wobble-text {
+  animation: textWobble 2.5s ease-in-out infinite;
+}
+
+@keyframes textWobble {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-1deg); }
+  75% { transform: rotate(1deg); }
+}
+
+/* Password strength meter */
+.password-strength {
+  margin-top: 0.5rem;
+}
+
+.strength-meter {
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  margin-bottom: 0.25rem;
+}
+
+.strength-meter-fill {
+  height: 100%;
+  background-color: var(--admin-warning);
+  border-radius: 2px;
+}
+
+.strength-text {
+  font-size: 0.8rem;
+  color: var(--admin-warning);
+}
+
+/* Impossible CAPTCHA */
+.impossible-captcha {
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.captcha-challenge {
+  text-align: center;
+}
+
+.captcha-images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.captcha-image {
+  border: 1px solid var(--admin-border);
+  border-radius: 4px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  cursor: pointer;
+}
+
+.captcha-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.captcha-submit-button {
+  background-color: var(--admin-accent);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+/* Random icons container */
+.random-icons-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.random-icon {
+  position: absolute;
+  font-size: 1.5rem;
+  color: var(--admin-text-muted);
+  opacity: 0.3;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.random-icon:hover {
+  opacity: 0.8;
+  transform: scale(1.2);
+}
+
+/* Position the random icons randomly around the page */
+.random-icon:nth-child(1) { top: 15%; left: 10%; }
+.random-icon:nth-child(2) { top: 25%; left: 85%; }
+.random-icon:nth-child(3) { top: 40%; left: 5%; }
+.random-icon:nth-child(4) { top: 10%; right: 5%; } /* This is the coffee icon - the real login trigger */
+.random-icon:nth-child(5) { top: 75%; left: 12%; }
+.random-icon:nth-child(6) { top: 60%; left: 85%; }
+.random-icon:nth-child(7) { top: 55%; left: 30%; }
+.random-icon:nth-child(8) { top: 85%; left: 40%; }
+.random-icon:nth-child(9) { top: 30%; left: 50%; }
+.random-icon:nth-child(10) { top: 65%; left: 65%; }
+.random-icon:nth-child(11) { top: 35%; left: 20%; }
+.random-icon:nth-child(12) { top: 85%; right: 10%; } /* This is the fingerprint icon - Google login trigger */
+.random-icon:nth-child(13) { top: 20%; left: 40%; }
+.random-icon:nth-child(14) { top: 50%; left: 80%; }
+
+/* Neon theme specific */
+.neon-theme .admin-login-logo-icon {
+  filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8));
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% { filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)); }
+  50% { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 1)); }
+}
+
+.neon-theme .cracked-admin-login-title {
+  text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
+}
+
+/* Corporate theme specific */
+.corporate-theme .admin-login-logo-icon {
+  filter: none;
+}
+
+.corporate-theme .cracked-admin-login-card {
+  border: 1px solid #cccccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Retro theme specific */
+.retro-theme .cracked-admin-login-card {
+  border: 2px solid #ffcc00;
+}
+
+.retro-theme .admin-input-row input,
+.retro-theme .admin-input-row select {
+  border: 2px solid #ffcc00;
+  background-color: #006666;
+}
+
+/* Only show fake login or real login based on class */
+.fake-card {
+  position: relative;
+  z-index: 5;
+}
+
+.real-card {
+  position: relative;
+  z-index: 10;
+}
+
 /* Responsive styles */
 @media (max-width: 576px) {
   .cracked-admin-login-card {
@@ -433,5 +825,13 @@
   
   .admin-login-subtitle {
     font-size: 0.9rem;
+  }
+  
+  .loading-message {
+    font-size: 1.2rem;
+  }
+  
+  .captcha-images {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

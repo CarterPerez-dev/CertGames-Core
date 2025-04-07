@@ -6,7 +6,7 @@ const AWSCloudTestList = () => {
   return (
     <GlobalTestList
       category="awscloud"
-      title="AWS Cloud Practitioner (CLE-002) 🌥️"
+      title="AWS Cloud Practitioner (CLE-C02) 🌥️"
       subtitle="Practice Test Collection"
       testPath="/practice-tests/aws-cloud"
     />
