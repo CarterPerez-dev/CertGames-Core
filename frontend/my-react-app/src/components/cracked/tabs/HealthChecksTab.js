@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FaHeartbeat, FaDatabase, FaCheckCircle, FaSync,
-  FaSpinner, FaExclamationTriangle, FaServer
+  FaSpinner, FaExclamationTriangle, FaServer, FaBolt
 } from "react-icons/fa";
 
 const HealthChecksTab = () => {

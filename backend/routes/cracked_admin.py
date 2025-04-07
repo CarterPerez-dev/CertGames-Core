@@ -152,7 +152,6 @@ def admin_api_logs():
     filter_text = request.args.get('filter', '').lower()
     
     if filter_text:
-        filtered_logs = [
             log for log in api_logs.get_all() 
             if filter_text in log.get('path', '').lower() or 
                filter_text in log.get('method', '').lower()
@@ -161,25 +160,6 @@ def admin_api_logs():
     
     return jsonify(api_logs.get_all()), 200
 
-# Add a before_request handler to log API requests to our buffer
-@app.before_request
-def log_api_request():
-    # Skip logging static files and certain endpoints
-    if request.path.startswith('/static/') or request.path == '/health':
-        return
-    
-    # Create a log entry
-    log_entry = {
-        "type": "api",
-        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
-        "path": request.path,
-        "method": request.method,
-        "ip": request.remote_addr,
-        "user_agent": request.headers.get('User-Agent', 'Unknown')
-    }
-    
-    # Add to our log buffer
-    api_logs.add(log_entry)
 
 
 
@@ -510,7 +490,6 @@ def admin_update_user(user_id):
     for field in ["username", "coins", "xp", "level", "subscriptionActive", "suspended"]:
         if field in data:
             update_fields[field] = data[field]
-
     if update_fields:
         db.mainusers.update_one({"_id": obj_id}, {"$set": update_fields})
         return jsonify({"message": "User updated"}), 200
@@ -1559,7 +1538,7 @@ def admin_cancellation_metrics():
             if user:
                 recent_data.append({
                     "username": user.get("username", "Unknown"),
-                    "platform": cancel.get("platform", "unknown"),
+                    "subscriptionPlatform": cancel.get("subscriptionPlatform", "unknown"),
                     "timestamp": cancel.get("timestamp").isoformat() if isinstance(cancel.get("timestamp"), datetime) else str(cancel.get("timestamp"))
                 })
         

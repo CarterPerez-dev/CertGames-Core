@@ -134,6 +134,29 @@ def serve_avatars(filename):
     # Adjust if you keep your files somewhere else:
     avatar_folder = os.path.join('frontend', 'my-react-app', 'public', 'avatars')
     return send_from_directory(avatar_folder, filename)
+    
+    
+    
+@app.before_request
+def log_api_request():
+    # Skip logging static files and certain endpoints
+    if request.path.startswith('/static/') or request.path == '/health':
+        return
+    
+    # Create a log entry
+    log_entry = {
+        "type": "api",
+        "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "path": request.path,
+        "method": request.method,
+        "ip": request.remote_addr,
+        "user_agent": request.headers.get('User-Agent', 'Unknown')
+    }
+    
+    # Add to our log buffer
+    api_logs.add(log_entry)
+    
+
 ###########################
 # BEFORE REQUEST
 ###########################

@@ -2,14 +2,14 @@
 import React from "react";
 import {
   FaTools, FaDatabase, FaEnvelope, FaCloud, FaGoogle, FaApple, 
-  FaCreditCard, FaServer, FaPaintBrush, FaRobot, FaGithub,
+  FaCreditCard, FaServer, FaPaintBrush, FaGithub,
   FaFacebook, FaReddit, FaLinkedin, FaTwitter, FaInstagram, FaTiktok,
   FaLink, FaShieldAlt, FaExternalLinkAlt, FaBrain, FaComments, 
   FaPalette, FaCode
 } from "react-icons/fa";
 import { SiMongodb, SiSendgrid, SiCloudflare, SiGooglecloud, SiGoogleadsense, 
   SiAppstore, SiOpenai, SiStripe, SiOracle, SiExpo, SiCanva, SiChatbot, 
-  SiGemini, SiX } from "react-icons/si";
+  SiGnometerminal, SiX, SiClaude } from "react-icons/si";
 
 const ToolsTab = () => {
   // Tool categories with their respective tools
@@ -54,10 +54,10 @@ const ToolsTab = () => {
       name: "AI Tools",
       icon: <FaBrain />,
       tools: [
-        { name: "Claude", url: "https://claude.ai/chat/", icon: <FaRobot /> },
+        { name: "Claude", url: "https://claude.ai/chat/", icon: <SiClaude /> },
         { name: "ChatGPT", url: "https://chatgpt.com/", icon: <SiChatbot /> },
         { name: "OpenAI Admin", url: "https://platform.openai.com/logs", icon: <SiOpenai /> },
-        { name: "Gemini AI Studio", url: "https://aistudio.google.com/", icon: <SiGemini /> },
+        { name: "Gemini AI Studio", url: "https://aistudio.google.com/", icon: <SiGnometerminal /> },
         { name: "Grok 3", url: "https://grok.com/?referrer=website", icon: <FaBrain /> },
         { name: "DeepSeek", url: "https://chat.deepseek.com/", icon: <FaComments /> }
       ]

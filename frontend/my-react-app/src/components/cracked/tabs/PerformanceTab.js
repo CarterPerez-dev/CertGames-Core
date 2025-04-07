@@ -2,12 +2,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
   FaChartLine, FaSync, FaSpinner, FaExclamationTriangle, FaDatabase,
-  FaBolt, FaGlobe, FaExclamation, FaServer, FaInfoCircle, FaQuestionCircle
+  FaBolt, FaGlobe, FaExclamation, FaServer, FaInfoCircle, FaQuestionCircle, FaHome
 } from "react-icons/fa";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, 
   Tooltip, Legend, ResponsiveContainer, BarChart, Bar,
-  LineChart, Line, PieChart, Pie, Cell
+  LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter
 } from "recharts";
 
 const PerformanceTab = () => {
