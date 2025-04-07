@@ -383,8 +383,7 @@ def get_limiter_type_for_path(path):
         if path.startswith(protected_path):
             return None  # Skip rate limiting for these
     
-    # General public endpoints that aren't in the special categories above
-    # but still need basic rate limiting
+
     general_paths = [
         '/test/public-leaderboard',
         '/newsletter/',

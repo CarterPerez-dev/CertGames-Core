@@ -56,7 +56,6 @@ def check_subscription_middleware():
     def check_subscription():
         # Only check certain routes (protected routes)
         protected_prefixes = [
-            '/test/shop',
             '/test/daily-question',
             '/test/daily-question/answer',
             '/payload',
@@ -64,6 +63,14 @@ def check_subscription_middleware():
             '/analogy',
             '/grc',
             '/test/profile'
+            '/test/attempts',
+            '/test/user/*/add-xp',
+            '/test/user/*/add-coins',
+            '/test/user/*/submit-answer',
+            '/test/user/*/daily-bonus',
+            '/test/shop/purchase',
+            '/test/shop/equip',
+            '/test/shop',
         ]
         
         if any(request.path.startswith(prefix) for prefix in protected_prefixes):
