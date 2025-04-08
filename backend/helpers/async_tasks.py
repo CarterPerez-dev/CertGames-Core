@@ -242,20 +242,51 @@ def check_api_health(self):
 @shared_task
 def cleanup_logs():
     """
-    Removes old audit logs and apiHealth docs older than 3 days.
+    Removes old audit logs, apiHealth docs, and NGINX logs.
+    - Mongo collections: Removes docs older than 3 days.
+    - NGINX logs: Truncates logs to keep file size manageable.
     Runs daily (per the schedule in celery_app).
     """
     now = datetime.utcnow()
     cutoff = now - timedelta(days=3)
 
+    # Cleanup MongoDB collections
     deleted_audit = db.auditLogs.delete_many({"timestamp": {"$lt": cutoff}})
     deleted_health = db.apiHealth.delete_many({"checkedAt": {"$lt": cutoff}})
 
+    # Clean up NGINX logs
+    nginx_cleanup_message = "No NGINX log cleanup attempted"
+    try:
+        # Try multiple possible paths
+        possible_paths = [
+            "/var/log/nginx/access.log",
+            "./nginx/logs/access.log",
+            "../nginx/logs/access.log",
+        ]
+        
+        for access_path in possible_paths:
+            error_path = access_path.replace("access.log", "error.log")
+            try:
+                # Truncate the logs instead of deleting them
+                # This keeps the files but makes them empty
+                result_access = subprocess.run(["truncate", "-s", "0", access_path], 
+                                              capture_output=True, text=True, timeout=5)
+                result_error = subprocess.run(["truncate", "-s", "0", error_path], 
+                                             capture_output=True, text=True, timeout=5)
+                
+                if result_access.returncode == 0 and result_error.returncode == 0:
+                    nginx_cleanup_message = f"NGINX logs truncated successfully at {access_path} and {error_path}"
+                    break
+            except Exception as e:
+                continue
+        
+    except Exception as e:
+        nginx_cleanup_message = f"Error cleaning up NGINX logs: {str(e)}"
+    
     logger.info(f"Cleaned logs older than 3 days => auditLogs: {deleted_audit.deleted_count}, "
-                f"apiHealth: {deleted_health.deleted_count}")
+                f"apiHealth: {deleted_health.deleted_count}. {nginx_cleanup_message}")
 
-    return f"Cleanup complete: auditLogs={deleted_audit.deleted_count}, apiHealth={deleted_health.deleted_count}"
-
+    return f"Cleanup complete: auditLogs={deleted_audit.deleted_count}, apiHealth={deleted_health.deleted_count}, {nginx_cleanup_message}"
 
 
 @shared_task

@@ -52,12 +52,21 @@ const RequestLogsTab = () => {
     try {
       const url = `/api/cracked/request-logs/nginx${appliedNginxFilter ? `?filter=${encodeURIComponent(appliedNginxFilter)}` : ''}${refresh ? '&refresh=true' : ''}`;
       const res = await fetch(url, { credentials: "include" });
+      
+      // Check content type first
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}...`);
+      }
+      
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to fetch NGINX logs");
       }
       setNginxLogs(data);
     } catch (err) {
+      console.error("Error fetching nginx logs:", err);
       setNginxLogsError(err.message);
     } finally {
       setNginxLogsLoading(false);
