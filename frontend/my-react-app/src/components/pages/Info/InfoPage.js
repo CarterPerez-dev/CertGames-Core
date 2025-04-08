@@ -355,7 +355,7 @@ const faqSchema = {
                 <Link to="/login" className="info-button info-secondary-button">
                   Log In
                 </Link>
-                <a href="https://apps.apple.com/us/app/cert-games-comptia-cissp-aws/id6743811522" 
+                <a href="https://certgames.com/contact 
                    className="info-button info-app-button"
                    target="_blank" rel="noopener noreferrer">
                   <FaChessKnight className="app-icon" /> Contact
