@@ -99,12 +99,27 @@ api_logs = LogBuffer(600)
 # Function to read nginx logs from file
 def read_nginx_logs():
     try:
-        # Using subprocess to read the last 100 lines of the nginx access log
-        # Adjust the path to your actual nginx log location
-        result = subprocess.run(
-            ["tail", "-n", "100", "/var/log/nginx/access.log"], 
-            capture_output=True, text=True, timeout=5
-        )
+        # Try multiple possible paths
+        possible_paths = [
+            "/var/log/nginx/access.log",
+            "./nginx/logs/access.log",
+            "../nginx/logs/access.log",
+        ]
+        
+        for path in possible_paths:
+            try:
+                result = subprocess.run(
+                    ["tail", "-n", "100", path], 
+                    capture_output=True, text=True, timeout=5
+                )
+                if result.returncode == 0 and result.stdout:
+                    break
+            except Exception:
+                continue
+        
+        if result.returncode != 0:
+            return {"success": False, "error": "Could not access any nginx log files"}
+            
         lines = result.stdout.strip().split('\n')
         
         for line in lines:

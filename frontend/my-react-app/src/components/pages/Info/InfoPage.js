@@ -978,8 +978,6 @@ const faqSchema = {
             </div>
           </div>
         </section>
-       );
-     };
 
         {/* Support Section */}
         <section className="info-feature-section info-support-section">

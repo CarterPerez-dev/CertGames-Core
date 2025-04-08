@@ -10,6 +10,7 @@ services:
       - "5000:5000"
     volumes:
       - ./backend:/app
+      - ./nginx/logs:/var/log/nginx
     env_file:
       - .env
     networks:
@@ -186,6 +187,9 @@ services:
       - redis
     networks:
       - xploitcraft_network
+    volumes:
+      - ./backend:/app  
+      - ./nginx/logs:/var/log/nginx   
     restart: always
 
 networks:

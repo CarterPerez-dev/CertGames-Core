@@ -671,9 +671,26 @@ def admin_google_auth():
             return jsonify({"error": "Email not provided by Google"}), 400
         
         # List of authorized admin emails
-        # In a real app, store this in environment variables or database
         AUTHORIZED_ADMIN_EMAILS = ['support@certgames.com']
         
+        # Check if email is authorized
+        if email not in AUTHORIZED_ADMIN_EMAILS:
+            # Log the unauthorized attempt
+            current_app.logger.warning(f"Unauthorized admin login attempt from: {email}")
+    
+            # Log to database as well
+            db.auditLogs.insert_one({
+                "timestamp": datetime.utcnow(),
+                "email": email,
+                "ip": request.remote_addr or "unknown",
+                "success": False,
+                "adminLogin": True,
+                "reason": "unauthorized_email"
+            })
+    
+            # Redirect to login page with error
+            frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
+            return redirect(f"{frontend_url}/cracked?error=unauthorized")
         
         # Email is authorized, set admin session
         session['cracked_admin_logged_in'] = True
@@ -693,26 +710,6 @@ def admin_google_auth():
         # Redirect to admin dashboard
         frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
         return redirect(f"{frontend_url}/cracked/dashboard")
-        
-        
-        if email not in AUTHORIZED_ADMIN_EMAILS:
-            # Log the unauthorized attempt to application logs
-            current_app.logger.warning(f"Unauthorized admin login attempt from: {email}")
-    
-            # Log to database as well
-            db.auditLogs.insert_one({
-                "timestamp": datetime.utcnow(),
-                "email": email,
-                "ip": request.remote_addr or "unknown",
-                "success": False,
-                "adminLogin": True,
-                "reason": "unauthorized_email"
-            })
-    
-            # Redirect to login page with error
-            frontend_url = os.getenv('FRONTEND_URL', 'https://certgames.com')
-            return redirect(f"{frontend_url}/cracked?error=unauthorized")        
-        
         
     except Exception as e:
         current_app.logger.error(f"Error in admin Google auth: {str(e)}")
