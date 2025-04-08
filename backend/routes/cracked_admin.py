@@ -106,31 +106,32 @@ def read_nginx_logs():
             "../nginx/logs/access.log",
         ]
         
+        lines = None
+        error_msg = "Could not access any nginx log files"
+        
         for path in possible_paths:
             try:
-                result = subprocess.run(
-                    ["tail", "-n", "100", path], 
-                    capture_output=True, text=True, timeout=5
-                )
-                if result.returncode == 0 and result.stdout:
+                with open(path, "r") as f:
+                    lines = f.readlines()[-100:]  # Get last 100 lines
+                if lines:
                     break
-            except Exception:
+            except Exception as e:
                 continue
         
-        if result.returncode != 0:
-            return {"success": False, "error": "Could not access any nginx log files"}
+        if not lines:
+            return {"success": False, "error": error_msg}
             
-        lines = result.stdout.strip().split('\n')
-        
+        # Parse the lines and create log entries
+        log_entries = []
         for line in lines:
             if line:
                 # Parse the line to extract relevant information
                 # This regex pattern matches common nginx log format
-                pattern = r'([\d\.]+) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)"'
+                pattern = r'([\d\.]+) - - \[(.*?)\] "(.*?)" (\d+) (\d+) "(.*?)" "(.*?)" "(.*?)"'
                 match = re.match(pattern, line)
                 
                 if match:
-                    ip, timestamp, request, status, bytes_sent, referer, user_agent = match.groups()
+                    ip, timestamp, request, status, bytes_sent, referer, user_agent, extra = match.groups()
                     method, path = request.split(' ')[:2] if ' ' in request else (request, "")
                     
                     log_entry = {
@@ -148,8 +149,6 @@ def read_nginx_logs():
         return {"success": True, "count": len(lines)}
     except Exception as e:
         return {"success": False, "error": str(e)}
-
-
 
 def filter_out_example_accounts(query=None):
     """
