@@ -18,7 +18,8 @@ import {
   FaMedal,
   FaGraduationCap,
   FaFighterJet,
-  FaUserSecret
+  FaUserSecret,
+  FaHome
 } from 'react-icons/fa';
 import './css/SubscriptionPage.css';
 
@@ -88,6 +89,14 @@ const SubscriptionPage = () => {
       // Default fallback
       navigate('/');
     }
+  };
+  
+  // New function to handle escaping the subscription flow
+  const handleEscapeRenewal = () => {
+    // Set the escape flag in session storage
+    sessionStorage.setItem('escapeSubscriptionRenewal', 'true');
+    // Navigate to home page
+    navigate('/home');
   };
   
   // Benefits array for display
@@ -232,6 +241,18 @@ const SubscriptionPage = () => {
               )}
             </button>
             
+            {/* Add escape button when in renewal mode */}
+            {isRenewal && (
+              <button
+                className="subscription-escape-button"
+                onClick={handleEscapeRenewal}
+                disabled={loading || redirecting}
+              >
+                <FaHome className="subscription-button-icon" />
+                <span>GO TO HOME PAGE</span>
+              </button>
+            )}
+            
             <button
               className="subscription-back-button"
               onClick={handleGoBack}
@@ -241,6 +262,16 @@ const SubscriptionPage = () => {
               <span>Go Back</span>
             </button>
           </div>
+          
+          {/* Add additional escape notice */}
+          {isRenewal && (
+            <div className="subscription-escape-notice">
+              <FaInfoCircle className="subscription-note-icon" />
+              <p>
+                Need to explore other sections first? Click "Go to Home Page" to temporarily bypass the subscription reminder.
+              </p>
+            </div>
+          )}
           
           <div className="subscription-note">
             <FaInfoCircle className="subscription-note-icon" />
@@ -252,6 +283,45 @@ const SubscriptionPage = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add this CSS block at the end of the component */}
+      <style jsx>{`
+        .subscription-escape-button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 1rem;
+          padding: 0.75rem 1.5rem;
+          background-color: #2e3856;
+          color: #ffffff;
+          border: none;
+          border-radius: 8px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          width: 100%;
+        }
+        
+        .subscription-escape-button:hover {
+          background-color: #3a4675;
+        }
+        
+        .subscription-escape-notice {
+          margin-top: 1rem;
+          padding: 0.75rem;
+          background-color: rgba(46, 56, 86, 0.1);
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          font-size: 0.9rem;
+        }
+        
+        .subscription-escape-notice .subscription-note-icon {
+          color: #4a90e2;
+          margin-right: 0.5rem;
+          flex-shrink: 0;
+        }
+      `}</style>
     </div>
   );
 };

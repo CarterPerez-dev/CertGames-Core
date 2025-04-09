@@ -119,14 +119,30 @@ function App() {
     const isOAuthFlow = sessionStorage.getItem('isOauthFlow') === 'true';
     const isComingFromCreateUsername = window.location.pathname.includes('/create-username');
     
+    // Add a new check for users trying to escape the renewal loop
+    const isEscapingRenewal = sessionStorage.getItem('escapeSubscriptionRenewal') === 'true';
+    
     // Only run subscription check periodically, not on every route change
     const SUBSCRIPTION_CHECK_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
     
     const checkSubscription = async () => {
       try {
-        // Skip check for OAuth flow or if coming from username creation
-        if (isOAuthFlow || isComingFromCreateUsername) {
-          console.log('Skipping subscription check for OAuth flow');
+        // Skip check for OAuth flow, username creation, or when user is explicitly trying to escape
+        if (isOAuthFlow || isComingFromCreateUsername || isEscapingRenewal) {
+          console.log('Skipping subscription check for special flow');
+          return;
+        }
+        
+        // Add check for navigation to non-subscription pages that should be allowed
+        const allowedPaths = ['/home', '/login', '/register', '/contact', '/blog', '/exams', '/demos', '/public-leaderboard'];
+        if (allowedPaths.some(path => window.location.pathname.includes(path))) {
+          console.log('User navigating to allowed path, skipping subscription redirect');
+          // Set a temporary session flag to allow escape
+          sessionStorage.setItem('escapeSubscriptionRenewal', 'true');
+          // Clear this flag after 5 minutes
+          setTimeout(() => {
+            sessionStorage.removeItem('escapeSubscriptionRenewal');
+          }, 5 * 60 * 1000);
           return;
         }
         
@@ -135,14 +151,14 @@ function App() {
         if (response.ok) {
           const data = await response.json();
           
-          // If subscription is no longer active, only log out if not already on subscription or login pages
+          // If subscription is no longer active AND we're not on an allowed page
           if (!data.subscriptionActive && 
               !window.location.pathname.includes('/subscription') && 
-              !window.location.pathname.includes('/login')) {
-            console.log('Subscription no longer active, logging out');
-            dispatch({ type: 'user/logout' });
-            // Redirect to login page
-            window.location.href = '/login?reason=subscription_ended';
+              !window.location.pathname.includes('/login') &&
+              !allowedPaths.some(path => window.location.pathname.includes(path))) {
+            console.log('Subscription no longer active, redirecting');
+            // Instead of immediately logging out, redirect to subscription page
+            window.location.href = '/subscription?renewal=true';
           }
         }
       } catch (error) {
