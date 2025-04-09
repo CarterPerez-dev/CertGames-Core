@@ -361,7 +361,7 @@ const DemosPage = () => {
             <h2>Ready to experience all these features?</h2>
             <p>Create your free account today and start your cybersecurity journey with CertGames!</p>
             <Link to="/register" className="cta-button">
-              Create Your Account
+              Create Free Account
             </Link>
           </div>
         </section>

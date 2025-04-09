@@ -400,7 +400,7 @@ const PublicLeaderboardPage = () => {
                   <p>Create your account today and start climbing the ranks!</p>
                   <div className="cta-buttons">
                     <Link to="/register" className="register-button">
-                      Register Now
+                      Start Your Free Trial
                     </Link>
                   </div>
                 </div>

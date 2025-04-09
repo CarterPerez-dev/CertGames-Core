@@ -564,7 +564,7 @@ const generateCertSchema = (cert) => {
                 <p className="price-note">Cancel anytime. No long-term commitment.</p>
               </div>
               <Link to="/register" className="subscribe-button">
-                Start Your Journey
+                Start Your Free Trial
               </Link>
             </div>
             

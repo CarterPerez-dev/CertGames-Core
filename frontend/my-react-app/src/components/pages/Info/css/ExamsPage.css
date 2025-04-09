@@ -6,6 +6,7 @@
   background-color: #0a0a14;
   color: rgba(255, 255, 255, 0.9);
   overflow-x: hidden;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 .exams-content {
@@ -39,6 +40,7 @@
   opacity: 0.8;
   max-width: 800px;
   margin: 0 auto 1.5rem;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 .exams-access-notice {
@@ -52,6 +54,7 @@
   border-radius: 8px;
   max-width: 600px;
   margin: 0 auto;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 .notice-icon {

@@ -49,6 +49,7 @@
   opacity: 0.8;
   max-width: 800px;
   margin: 0 auto;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 /* Search and Filter */
@@ -136,6 +137,7 @@
   margin-bottom: 3rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 .featured-article:hover {
@@ -148,6 +150,7 @@
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
+  font-family: 'Helvetica', 'Roboto', sans-serif;
 }
 
 .featured-meta {

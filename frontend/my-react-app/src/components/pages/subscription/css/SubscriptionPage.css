@@ -289,7 +289,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .subscription-price-currency {
@@ -547,6 +547,7 @@
   width: 100%;
   height: 100%;
   padding: 0 25px;
+   white-space: nowrap;
 }
 
 .subscription-button-icon,
@@ -603,6 +604,50 @@
   color: var(--subscription-primary-hover);
   text-decoration: underline;
 }
+
+.subscription-trial-badge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.subscription-trial-text {
+  background: var(--subscription-gradient-secondary);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 6px 16px;
+  border-radius: 30px;
+  display: inline-block;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(255, 76, 139, 0.3);
+  animation: pulse-badge 4s infinite;
+}
+
+.subscription-price-then {
+  font-size: 18px;
+  font-weight: normal;
+  color: var(--subscription-text-muted);
+  margin-right: 8px;
+  align-self: center;
+}
+
+/* Add animation for the badge */
+@keyframes pulse-badge {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(255, 76, 139, 0.3);
+  }
+  50% {
+    transform: scale(1.01);
+    box-shadow: 0 4px 16px rgba(255, 76, 139, 0.5);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(255, 76, 139, 0.3);
+  }
+}
+
 
 /* Add button gradient animation */
 @keyframes subscription-button-gradient {

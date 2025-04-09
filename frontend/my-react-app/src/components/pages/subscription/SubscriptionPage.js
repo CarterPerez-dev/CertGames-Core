@@ -154,7 +154,11 @@ const SubscriptionPage = () => {
           <div className="subscription-pricing">
             <div className="subscription-price">
               <span className="subscription-price-badge">Unlimited</span>
+              <div className="subscription-trial-badge">
+                <span className="subscription-trial-text">3-Day Free Trial</span>
+              </div>
               <div className="subscription-price-amount">
+                <span className="subscription-price-then">then</span>
                 <span className="subscription-price-currency">$</span>
                 <span className="subscription-price-value">9</span>
                 <span className="subscription-price-decimal">.99</span>
@@ -220,7 +224,7 @@ const SubscriptionPage = () => {
               ) : (
                 <span className="subscription-button-text">
                   <FaCreditCard className="subscription-button-icon" />
-                  <span>{isRenewal ? 'RENEW SUBSCRIPTION' : 'SUBSCRIBE NOW'}</span>
+                  <span>{isRenewal ? 'RENEW SUBSCRIPTION' : 'START FREE TRIAL'}</span>
                   {isRenewal ? 
                     <FaRedo className="subscription-button-icon-right" /> : 
                     <FaArrowRight className="subscription-button-icon-right" />}
