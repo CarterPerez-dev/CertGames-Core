@@ -53,7 +53,7 @@ def create_checkout_session():
         return jsonify({'error': 'Either userId or registrationData must be provided'}), 400
     
     try:
-        # Create Stripe checkout session
+        # Create Stripe checkout session with 3-day trial
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[
@@ -65,8 +65,10 @@ def create_checkout_session():
             mode='subscription',
             success_url=f"{success_url}?session_id={{CHECKOUT_SESSION_ID}}&user_id={user_id or 'new'}",
             cancel_url=f"{cancel_url}?user_id={user_id or 'new'}",
-            # FIX: Always set a client_reference_id, even for new users
             client_reference_id=user_id or "new_registration",
+            subscription_data={
+                "trial_period_days": 3  # Add 3-day free trial
+            },
             metadata={
                 'user_id': user_id or 'new_registration',
                 'is_new_user': 'true' if registration_data else 'false',
@@ -203,15 +205,44 @@ def webhook():
             fulfill_subscription(event['data']['object'])
         except Exception as e:
             current_app.logger.error(f"Error in fulfill_subscription: {str(e)}")
-            # Continue processing to return 200 to Stripe
     elif event['type'] == 'customer.subscription.updated':
         update_subscription_status(event['data']['object'])
     elif event['type'] == 'customer.subscription.deleted':
         cancel_subscription(event['data']['object'])
     elif event['type'] == 'invoice.payment_failed':
         handle_failed_payment(event['data']['object'])
+    elif event['type'] == 'customer.subscription.trial_will_end':
+        # Handle trial ending notification
+        handle_trial_ending(event['data']['object'])
     
     return jsonify({'status': 'success'})
+
+def handle_trial_ending(subscription):
+    """Handle notification that a subscription's trial is about to end"""
+    customer_id = subscription.get('customer')
+    subscription_id = subscription.get('id')
+    
+    try:
+        # Find user by stripe customer ID
+        user = db.mainusers_collection.find_one({'stripeCustomerId': customer_id})
+        if not user:
+            current_app.logger.error(f"No user found with Stripe customer ID: {customer_id}")
+            return
+        
+        # Log the event
+        db.subscriptionEvents.insert_one({
+            'userId': user['_id'],
+            'event': 'trial_ending',
+            'platform': 'stripe',
+            'stripeSubscriptionId': subscription_id,
+            'timestamp': datetime.utcnow()
+        })
+        
+        
+        current_app.logger.info(f"Trial ending for user {user['_id']}")
+        
+    except Exception as e:
+        current_app.logger.error(f"Error handling trial ending: {str(e)}")
 
 def fulfill_subscription(session):
     """
@@ -819,7 +850,7 @@ def apple_server_notification():
             return jsonify({"status": "error", "message": "Missing originalTransactionId"}), 400
             
         # Find the user associated with this subscription
-        user = mainusers_collection.find_one({'appleOriginalTransactionId': original_transaction_id})
+        user = db.mainusers_collection.find_one({'appleOriginalTransactionId': original_transaction_id})
         
         if not user:
             current_app.logger.error(f"No user found with originalTransactionId: {original_transaction_id}")
