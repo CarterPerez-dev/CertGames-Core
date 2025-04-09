@@ -350,7 +350,7 @@ const faqSchema = {
               </p>
               <div className="info-hero-cta">
                 <Link to="/register" className="info-button info-primary-button">
-                  Play Now <FaAngleDoubleRight className="info-icon" aria-hidden="true" style={{ color: '#000' }} />
+                  Free Trial <FaAngleDoubleRight className="info-icon" aria-hidden="true" style={{ color: '#000' }} />
                 </Link>
                 <Link to="/login" className="info-button info-secondary-button">
                   Log In
@@ -1185,7 +1185,7 @@ const faqSchema = {
           </header>
           
           <div className="info-pricing-card info-animate-on-scroll">
-            <h3 className="info-plan-name">Unlimited Access</h3>
+            <h3 className="info-plan-name">Free Trial</h3>
             <div className="info-price">
               <span className="info-currency">$</span>
               <span className="info-amount">9</span>
@@ -1228,7 +1228,7 @@ const faqSchema = {
             </ul>
             
             <Link to="/register" className="info-button info-cta-button spotlight-effect">
-              Register Now - Start Your Success 😎
+              Register Now - 3 Day Free Trial 😎
             </Link>
             <p className="info-pricing-note">Cancel anytime. No long-term commitment.</p>
             <div className="payment-methods">
