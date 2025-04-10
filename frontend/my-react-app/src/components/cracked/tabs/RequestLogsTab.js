@@ -24,7 +24,7 @@ const RequestLogsTab = () => {
   const [activeLogType, setActiveLogType] = useState("api");
   
   // Polling interval for auto-refresh (in milliseconds)
-  const POLLING_INTERVAL = 10000; // 10 seconds
+  const POLLING_INTERVAL = 80000; // 10 seconds
   
   // Fetch API logs
   const fetchApiLogs = useCallback(async () => {
