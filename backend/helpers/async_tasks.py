@@ -248,7 +248,7 @@ def cleanup_logs():
     Runs daily (per the schedule in celery_app).
     """
     now = datetime.utcnow()
-    cutoff = now - timedelta(days=3)
+    cutoff = now - timedelta(days=1)
 
     # Cleanup MongoDB collections
     deleted_audit = db.auditLogs.delete_many({"timestamp": {"$lt": cutoff}})

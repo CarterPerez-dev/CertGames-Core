@@ -109,14 +109,20 @@ def read_nginx_logs():
         lines = None
         error_msg = "Could not access any nginx log files"
         
-        for path in possible_paths:
-            try:
-                with open(path, "r") as f:
-                    lines = f.readlines()[-100:]  # Get last 100 lines
-                if lines:
-                    break
-            except Exception as e:
-                continue
+        try:
+            # Use subprocess directly instead of trying to open files
+            output = subprocess.check_output(["sudo", "tail", "-n", "100", "nginx/logs/access.log"], text=True)
+            lines = output.splitlines()
+        except Exception as e:
+            # If subprocess fails, fall back to the original method
+            for path in possible_paths:
+                try:
+                    with open(path, "r") as f:
+                        lines = f.readlines()[-100:]  # Get last 100 lines
+                    if lines:
+                        break
+                except Exception as e:
+                    continue
         
         if not lines:
             return {"success": False, "error": error_msg}
