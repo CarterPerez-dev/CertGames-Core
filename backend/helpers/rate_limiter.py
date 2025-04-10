@@ -16,8 +16,8 @@ class RateLimiter:
     # Default limits for different generator types
     DEFAULT_LIMITS = {
         'analogy': {'calls': 25, 'period': 3600},  # 15 calls per hour
-        'scenario': {'calls': 15, 'period': 3600},  # 10 calls per hour
-        'grc': {'calls': 25, 'period': 3600},      # 20 calls per hour
+        'scenario': {'calls': 18, 'period': 3600},  # 10 calls per hour
+        'grc': {'calls': 30, 'period': 3600},      # 20 calls per hour
     }
     
     def __init__(self, limiter_type=None):
@@ -29,7 +29,7 @@ class RateLimiter:
                           ('analogy', 'scenario', 'grc')
         """
         self.limiter_type = limiter_type
-        self.limits = self.DEFAULT_LIMITS.get(limiter_type, {'calls': 10, 'period': 3600})
+        self.limits = self.DEFAULT_LIMITS.get(limiter_type, {'calls': 25, 'period': 3600})
     
     def is_rate_limited(self, user_id=None):
         """

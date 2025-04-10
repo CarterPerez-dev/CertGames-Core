@@ -249,6 +249,7 @@
   outline: none;
   border-color: var(--scenario-accent);
   box-shadow: var(--scenario-glow);
+  background: #262626
 }
 
 .select-wrapper select:disabled {
