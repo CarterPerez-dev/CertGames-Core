@@ -1,6 +1,4 @@
-input code base into ai and ask how si should go about this in cloudfare etc etc
 
-Using page rules to bypass caching for dynamic routes like your /api endpoints is a very effective approach. It lets you clearly define which parts of your site should always fetch fresh data, without relying on more complex header logic. For example:
 
 - **Dynamic Endpoints (e.g., /api, /leaderboard):**  
   Create a page rule that matches these URLs and sets “Cache Level: Bypass” to ensure that requests always go to your origin server for the most current data.
