@@ -377,7 +377,6 @@ const comptiaObjectives = [
   { cert: 'A+ Core 1', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1101-exam-objectives-(3-0)' },
   { cert: 'A+ Core 2', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1102-exam-objectives-(3-0)' },
   { cert: 'Network+ (N10-009)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-network-n10-009-exam-objectives-(4-0)' },
-  { cert: 'Security+ (701)', url: 'https://certblaster.com/wp-content/uploads/2023/11/CompTIA-Security-SY0-701-Exam-Objectives-1.pdf' },
   { cert: 'CySA+ (003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-cysa-cs0-003-exam-objectives-2-0.pdf' },
   { cert: 'CASP+ (004)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-casp-cas-004-exam-objectives-(4-0)' },
   { cert: 'PenTest+ (002)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-pentest-pt0-002-exam-objectives-(4-0)' },
@@ -396,7 +395,7 @@ const comptiaObjectives = [
   { cert: 'A+ Core 1 (220-1101)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1101-exam-objectives-(3-0)' },
   { cert: 'A+ Core 2 (220-1102)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-a-220-1102-exam-objectives-(3-0)' },
   { cert: 'Network+ (N10-009)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-network-n10-009-exam-objectives-(4-0)' },
-  { cert: 'Security+ (SY0-701)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-security-sy0-701-exam-objectives-(1-0)' },
+  { cert: 'Security+ (SY0-701)', url: 'https://assets.ctfassets.net/82ripq7fjls2/6TYWUym0Nudqa8nGEnegjG/0f9b974d3b1837fe85ab8e6553f4d623/CompTIA-Security-Plus-SY0-701-Exam-Objectives.pdf' },
   { cert: 'CySA+ (CS0-003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-cysa-cs0-003-exam-objectives-(2-0)' },
   { cert: 'SecurityX (CAS-005)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-securityx-cas-005-exam-objectives-(3-0)' },
   { cert: 'PenTest+ (PT0-003)', url: 'https://partners.comptia.org/docs/default-source/resources/comptia-pentest-pt0-003-exam-objectives-(1-0)' },
@@ -633,7 +632,7 @@ const baseResourcesData = {
 
 const keywordMap = {
   'A+': {
-    include: ['a+', 'a plus', '220-1101', '1101', '220-1102', '1102', 'A+', 'aplus', 'APLUS', 'A PLUS', 'A plus'],
+    include: ['a+', 'a plus', '220-1101', '1101', '220-1102', '1102', 'A+', 'aplus', 'APLUS', 'A PLUS', 'A plus', 'core 1', 'core 2'],
     exclude: [
       'network+',
       'net+',
@@ -650,7 +649,7 @@ const keywordMap = {
     ],
   },
   'Network+': {
-    include: ['network+', 'n10-008', 'n10-009', 'network plus', 'networking', 'Net Plus', 'NetPlus', 'Networkplus', 'Networking', 'Net Plus', 'net plus', 'Net+', 'net+' ],
+    include: ['network+', 'n10-008', 'n10-009', 'network plus', 'networking', 'Net Plus', 'NetPlus', 'Networkplus', 'Networking', 'Net Plus', 'net plus', 'Net+', 'net+', '009', 'n10', 'N10', 'subnetting', 'subnet'],
     exclude: [
       'a+',
       'security+',
@@ -665,7 +664,7 @@ const keywordMap = {
     ],
   },
   'Security+': {
-    include: ['security+', 'syo-701', '701', 'sec+', 'SY0', 'SY0-701', 'sy0-701', 'sy0'],
+    include: ['security+', 'syo-701', '701', 'sec+', 'SY0', 'SY0-701', 'sy0-701', 'sy0', 'ISO/IEC 27001',],
     exclude: [
       'network+',
       'n10-009',

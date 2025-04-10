@@ -57,13 +57,19 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.16",
+    "cross-env": "^7.0.3",
+    "css-minimizer-webpack-plugin": "^7.0.2",
     "cssnano": "^7.0.6",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.3",
     "eslint-plugin-react-hooks": "^5.1.0",
+    "mini-css-extract-plugin": "^2.9.2",
     "patch-package": "^8.0.0",
     "postinstall-postinstall": "^2.1.0",
+    "react-refresh": "^0.17.0",
     "strip-comments": "^2.0.1",
-    "webpack-dev-server": "^5.2.0"
+    "terser-webpack-plugin": "^5.3.14",
+    "webpack-dev-server": "^5.2.1"
   }
 }
