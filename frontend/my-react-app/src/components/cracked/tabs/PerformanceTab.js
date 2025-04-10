@@ -1,5 +1,5 @@
 // src/components/cracked/tabs/PerformanceTab.js
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   FaChartLine, FaSync, FaSpinner, FaExclamationTriangle, FaDatabase,
   FaBolt, FaGlobe, FaExclamation, FaServer, FaInfoCircle, FaQuestionCircle, FaHome
@@ -17,6 +17,8 @@ const PerformanceTab = () => {
   const [perfLoading, setPerfLoading] = useState(false);
   const [perfError, setPerfError] = useState(null);
   const [activeSection, setActiveSection] = useState("overview");
+  // Add a ref to track scroll position
+  const scrollPositionRef = useRef(0);
 
   // Colors for chart elements
   const COLORS = {
@@ -50,8 +52,18 @@ const PerformanceTab = () => {
     }
   };
 
+  // Functions to save and restore scroll position
+  const saveScrollPosition = () => {
+    scrollPositionRef.current = window.scrollY;
+  };
+
+  const restoreScrollPosition = () => {
+    window.scrollTo(0, scrollPositionRef.current);
+  };
+
   // Fetch performance data
   const fetchPerformance = useCallback(async () => {
+    saveScrollPosition(); // Save scroll position before loading
     setPerfLoading(true);
     setPerfError(null);
     try {
@@ -80,6 +92,7 @@ const PerformanceTab = () => {
       setPerfError(err.message);
     } finally {
       setPerfLoading(false);
+      setTimeout(restoreScrollPosition, 0); // Restore scroll position after data is loaded
     }
   }, []);
 
