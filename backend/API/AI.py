@@ -3,6 +3,10 @@ import logging
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# OPENAI KEY = sk-Z97lA2Xj058o561VERVumY457C5T3vN4nD2r8JE5qbbt8W42mD168vkllSo7xE4Eh49g3A2L3b5Elgqv9ynW4IHzh0P8jE6m
+
+
+# KIDDDDDING, YOU REALLY THOUGHT I WAS THAT DUMB???
 
 load_dotenv()
 
