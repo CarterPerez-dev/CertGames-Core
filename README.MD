@@ -1,6 +1,4 @@
 ```ruby
-┌──(yoshi㉿kali)-[~/ProxyAuthRequired]
-└─$ tree -I "$(grep -Ev '^#|^$' .gitignore | tr '\n' '|' | sed 's/|$//')"
 .
 ├── MD's
 │   ├── IMPORTANT_NOTES.md
