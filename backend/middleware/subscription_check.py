@@ -54,7 +54,7 @@ def check_subscription_middleware():
     that checks subscription status for certain routes
     """
     def check_subscription():
-        # Only check certain routes (protected routes)
+        # UNHACKABLE AND UNBYPASSABLE, PUBLIC ROUTES ARE RATE LIMITED AS WELL. IM UNHACKABLE!!!!
         protected_prefixes = [
             '/test/daily-question',
             '/test/daily-question/answer',
