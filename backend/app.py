@@ -13,6 +13,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 import psutil
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+
 # routes
 from routes.xploit_routes import xploit_bp
 from routes.scenario_routes import scenario_bp
@@ -36,7 +38,7 @@ from middleware.subscription_check import check_subscription_middleware
 
 
 load_dotenv()
-
+# You aint gettin shii
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 mongo_uri = os.getenv("MONGO_URI")
 CRACKED_ADMIN_PASSWORD = os.getenv('CRACKED_ADMIN_PASSWORD', 'authkey')
@@ -63,7 +65,7 @@ CORS(app, supports_credentials=True)
 # Setup SocketIO
 socketio = SocketIO(app, cors_allowed_origins="*", path="/api/socket.io")
 
-# Setup Redis-based sessions
+# Setup Redis-based sessions. Password for my session is Password123!.....KIDDDDDING YOU AINT HACKIN SHITTTT
 app.config['SESSION_TYPE'] = 'redis'
 app.config['SESSION_PERMANENT'] = True
 app.config['SESSION_USE_SIGNER'] = True
@@ -72,7 +74,7 @@ app.config['SESSION_REDIS'] = redis.StrictRedis(host='redis', port=6379, db=0, p
 
 Session(app)
 
-oauth.init_app(app) #CHECK -is this the correct location/order of where I put this?
+oauth.init_app(app) 
 
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
@@ -81,9 +83,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
 app.config['JSON_SORT_KEYS'] = False  # Better JSON performance
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = False
-# Make socketio accessible from other files (avoids circular imports)
-# so in support_routes.py you can do:
-#   socketio = current_app.extensions['socketio']
+# Make socketio accessible from other files (avoiding circular imports)
 app.extensions['socketio'] = socketio
 
 @app.route('/health')
@@ -96,12 +96,10 @@ def log_request_info():
 
 
 @app.before_request
-def log_api_request():
-    # Skip logging static files and certain endpoints
+def log_api_request():s
     if request.path.startswith('/static/') or request.path == '/health':
         return
     
-    # Create a log entry
     log_entry = {
         "type": "api",
         "timestamp": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
@@ -111,7 +109,6 @@ def log_api_request():
         "user_agent": request.headers.get('User-Agent', 'Unknown')
     }
     
-    # Add to our log buffer
     api_logs.add(log_entry)
 
 
@@ -120,7 +117,6 @@ def check_global_rate_limits():
     """Apply global rate limiting to public API endpoints"""
     return apply_global_rate_limiting()()
 
-# Add this after your other @app.after_request handlers
 @app.after_request
 def add_rate_limit_headers(response):
     """Add rate limit headers to responses"""
@@ -132,7 +128,7 @@ def check_user_subscription():
     return check_subscription_middleware()()
 
 
-# Register blueprints
+# blueprints
 app.register_blueprint(xploit_bp, url_prefix='/payload')
 app.register_blueprint(scenario_bp, url_prefix='/scenario')
 app.register_blueprint(analogy_bp, url_prefix='/analogy')
@@ -158,8 +154,6 @@ def apple_app_site_association():
 
 @app.route('/avatars/<path:filename>')
 def serve_avatars(filename):
-    # Points to: frontend/my-react-app/public/avatars
-    # Adjust if you keep your files somewhere else:
     avatar_folder = os.path.join('frontend', 'my-react-app', 'public', 'avatars')
     return send_from_directory(avatar_folder, filename)
     
@@ -224,8 +218,6 @@ def handle_join_thread(data):
         if alt_id:
             user_id = alt_id
 
-    # Optionally you can check if user is allowed in that thread
-    # For brevity, just join
     join_room(str(thread_id))
     print(f"[Socket.IO] user={user_id} joined thread {thread_id}")
 
@@ -262,7 +254,7 @@ def on_admin_new_message(data):
     thread_id = data.get('threadId')
     message = data.get('message')
     if thread_id and message:
-        thread_id = str(thread_id)  # Ensure string
+        thread_id = str(thread_id) 
         app.logger.info(f"Admin sending message to thread room: {thread_id}")
         socketio.emit('new_message', {
             "threadId": thread_id,
@@ -295,7 +287,7 @@ def on_user_stop_typing(data):
 def handle_join_user_room(data):
     user_id = session.get('userId')
 
-    # Fallback to data["userId"]
+    # Fallback
     if not user_id:
         alt_id = data.get("userId")
         if alt_id:
@@ -310,6 +302,6 @@ def handle_join_user_room(data):
     print(f"[Socket.IO] user={user_id} joined room {room_name}")
 
 if __name__ == '__main__':
-    # For local dev, run the SocketIO server
+    # For local dev
     socketio.run(app, host='0.0.0.0', port=5000, debug=True, allow_unsafe_werkzeug=True)
 
