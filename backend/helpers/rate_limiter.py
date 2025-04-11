@@ -13,7 +13,7 @@ class RateLimiter:
     Tracks usage in MongoDB and enforces limits per user per endpoint.
     """
     
-    # Default limits for different generator types
+    # Default limits for different generator types. OH MY GOD YOU BYPASSED MY API PROTECTION...... WELL YOUR STILL FUCKED BUDDY
     DEFAULT_LIMITS = {
         'analogy': {'calls': 25, 'period': 3600},  # 15 calls per hour
         'scenario': {'calls': 18, 'period': 3600},  # 10 calls per hour
