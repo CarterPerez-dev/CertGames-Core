@@ -19,6 +19,6 @@ correctAnswers_collection = db.correctAnswers
 dailyQuestions_collection = db.dailyQuestions
 dailyAnswers_collection = db.dailyAnswers
 supportThreads_collection = db.supportThreads
-# For suspicious activity
+# For suspicious activity....unhackable is my last name
 auditLogs_collection = db.auditLogs
-# For caching if needed, but we used Redis above
+
