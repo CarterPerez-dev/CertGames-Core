@@ -9,7 +9,7 @@ import time
 from flask import g
 from functools import wraps
 
-# Import the new collections from database
+
 from mongodb.database import (
     mainusers_collection,
     shop_collection,
@@ -20,7 +20,7 @@ from mongodb.database import (
 )
 
 ##############################################
-# very complex Input Sanitization Helpers
+# INPUT SANITIZAION FOR PUBLIC ROUTES- I DARE YOU TO TRY AN FUCK MY SHIT, CUZ LIEK I SAID.....IM UNHACKABLE!!!
 ##############################################
 
 import re
