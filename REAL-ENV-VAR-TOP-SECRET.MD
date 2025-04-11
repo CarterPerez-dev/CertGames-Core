@@ -1,0 +1,36 @@
+
+# REAL .ENV VARIABLES AND API KEYS LISTED BELOW
+
+
+
+[.env](https://i.pinimg.com/736x/94/79/82/94798298d9c7aa8f785582bb2860ec5e.jpg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+KIDDDING, I JUST WANTED TO LET ANYOEN KNOW WHO MIGHT SEE THIS THAT IM COMPLETLY UNHACKABLE, UNDDOSABLED, AND A GENIUS.....but good luck
+
+
+
