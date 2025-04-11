@@ -10,9 +10,7 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* Redux store to the entire app */}
     <Provider store={store}>
-      {/* React Router context */}
       <BrowserRouter>
         <App />
       </BrowserRouter>
@@ -20,5 +18,5 @@ root.render(
   </React.StrictMode>
 );
 
-// Measure performance with web-vitals
-reportWebVitals(console.log); // In production, this will send metrics to our API
+// web-vitals
+reportWebVitals(console.log); 
