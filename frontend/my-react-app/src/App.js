@@ -3,13 +3,11 @@ import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserData } from './components/pages/store/slice/userSlice';
-// Import ToastContainer from react-toastify
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Public pages
-
-
 import InfoPage from './components/pages/Info/InfoPage';
 import DemosPage from './components/pages/Info/DemosPage';
 import ExamsPage from './components/pages/Info/ExamsPage';
@@ -137,9 +135,8 @@ function App() {
         const allowedPaths = ['/home', '/login', '/register', '/contact', '/blog', '/exams', '/demos', '/public-leaderboard'];
         if (allowedPaths.some(path => window.location.pathname.includes(path))) {
           console.log('User navigating to allowed path, skipping subscription redirect');
-          // Set a temporary session flag to allow escape
           sessionStorage.setItem('escapeSubscriptionRenewal', 'true');
-          // Clear this flag after 5 minutes
+          
           setTimeout(() => {
             sessionStorage.removeItem('escapeSubscriptionRenewal');
           }, 5 * 60 * 1000);
@@ -186,7 +183,6 @@ function App() {
   return (
     <div className="App">
       {userId && <Sidebar />}
-      {/* React Toastify container for notifications */}
       <ToastContainer 
         position="top-right"
         autoClose={7000}
@@ -206,7 +202,7 @@ function App() {
           {/* Added additional home route that always shows InfoPage */}
           <Route path="/home" element={<InfoPage />} />
           
-          {/* New public marketing routes */}
+          {/* public marketing routes */}
           <Route path="/demos" element={<DemosPage />} />
           <Route path="/exams" element={<ExamsPage />} />
           <Route path="/public-leaderboard" element={<PublicLeaderboardPage />} />
@@ -228,6 +224,7 @@ function App() {
           {/* Admin routes */}
           <Route path="/cracked" element={<CrackedAdminLoginPage />} />
           <Route path="/cracked/dashboard" element={<CrackedAdminDashboard />} />
+
           {/* Legal pages */}
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
