@@ -1,3 +1,4 @@
+// DEFENSE IN DEPTH, IF THIS IS BYPASSED WE STILL HAVE API PROTECTION ANYWAY. IF THEY BYPASS THAT SOMEHOW THEN THEY HONESTLY DESERVE A FREE SUBSCRIPTION AT THAT POINT
 // src/components/ProtectedRoute.js
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
