@@ -12,7 +12,7 @@ class AppleReceiptVerifier:
     Utility class for verifying Apple In-App Purchase receipts
     """
     
-    # Sandbox and production URLs
+    
     SANDBOX_URL = "https://sandbox.itunes.apple.com/verifyReceipt"
     PRODUCTION_URL = "https://buy.itunes.apple.com/verifyReceipt"
     
@@ -33,8 +33,7 @@ class AppleReceiptVerifier:
         Returns:
             dict: The verification result with status and receipt info
         """
-        try:
-            # First try production environment
+        try
             verification_url = self.PRODUCTION_URL if not sandbox_mode else self.SANDBOX_URL
             
             # Prepare request data
@@ -42,7 +41,7 @@ class AppleReceiptVerifier:
             if self.shared_secret:
                 request_data["password"] = self.shared_secret
                 
-            # Send verification request
+            # Send verification
             response = requests.post(
                 verification_url,
                 json=request_data,
