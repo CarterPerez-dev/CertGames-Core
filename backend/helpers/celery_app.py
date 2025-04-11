@@ -43,12 +43,10 @@ app.conf.update({
 })
 
 app.conf.beat_schedule = {
-    # Change scheduling from every 5 minutes to every 10 minutes
     'check-api-health-every-10-min': {
         'task': 'helpers.async_tasks.check_api_health',
-        'schedule': crontab(minute='*/10')  # Every 10 minutes
+        'schedule': crontab(minute='*/10')  
     },
-    # Other tasks remain the same
     'aggregate-performance-every-3-mins': {
         'task': 'helpers.async_tasks.aggregate_performance_metrics',
         'schedule': 300.0,
@@ -63,7 +61,7 @@ app.conf.beat_schedule = {
     },          
     'cleanup-logs-every-2-days': {
         'task': 'helpers.async_tasks.cleanup_logs',
-        'schedule': crontab(hour=2, minute=0, day_of_month='*/2'),  # Every 2 days at 2:00 AM
+        'schedule': crontab(hour=2, minute=0, day_of_month='*/2'), 
     },
 }
 
