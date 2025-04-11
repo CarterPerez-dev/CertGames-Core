@@ -61,7 +61,7 @@ def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None
         response = client.chat.completions.create(
             messages=[{"role": "user", "content": prompt}],
             model="gpt-4o",
-            max_tokens=1200,  # Adjust based on analogy type
+            max_tokens=1200, 
             temperature=0.7,
             stream=True
         )
