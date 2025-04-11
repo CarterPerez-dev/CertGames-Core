@@ -49,7 +49,6 @@ def generate_comparison_analogy_task(self, concept1, concept2, category):
     Uses the unified analogy_stream_helper for generation.
     """
     try:
-        # Use the streaming generator but join the results into a single string
         stream_gen = generate_analogy_stream("comparison", concept1, concept2, category=category)
         analogy_text = "".join(stream_gen)
         return analogy_text
@@ -65,7 +64,6 @@ def generate_triple_comparison_analogy_task(self, concept1, concept2, concept3, 
     Uses the unified analogy_stream_helper for generation.
     """
     try:
-        # Use the streaming generator but join the results into a single string
         stream_gen = generate_analogy_stream("triple", concept1, concept2, concept3, category=category)
         analogy_text = "".join(stream_gen)
         return analogy_text
@@ -160,7 +158,7 @@ def aggregate_performance_metrics():
     samples = list(db.perfSamples.find({"timestamp": {"$gte": three_min_ago}}))
     total_requests = len(samples)
     if total_requests == 0:
-        return  # No aggregator doc if no data
+        return  # No aggregator doc if no data baby
 
     total_duration = 0.0
     total_db_time = 0.0
@@ -184,7 +182,7 @@ def aggregate_performance_metrics():
         data_transfer_rate_mb_s = (total_bytes / (1024.0 * 1024.0)) / total_duration
 
     # throughput => requests / 3min => convert to requests/min
-    # total_requests / 3.0 => requests per minute if we polled 3-min block.
+    # total_requests / 3.0 => requests per minute if I polled 3-min block.
     throughput = (total_requests / 3.0)
 
     doc = {
@@ -197,12 +195,11 @@ def aggregate_performance_metrics():
     }
     db.performanceMetrics.insert_one(doc)
 
-    # Optionally remove older perfSamples beyond X minutes to save space
-    # e.g. keep only 60 minutes in raw samples:
+    # SPACE
     sixty_min_ago = now - timedelta(minutes=60)
     db.perfSamples.delete_many({"timestamp": {"$lt": sixty_min_ago}})
 
-    # (Optional) Also remove old performanceMetrics older than 2 hours, if desired:
+    # SPACE
     two_hours_ago = now - timedelta(hours=2)
     db.performanceMetrics.delete_many({"timestamp": {"$lt": two_hours_ago}})
 
@@ -219,7 +216,7 @@ def check_api_health(self):
         status = response.status_code
         healthy = status < 400
         
-        # Save the result to the database
+        # Log DB
         db.apiHealth.insert_one({
             "checkedAt": datetime.utcnow(),
             "healthy": healthy,
@@ -250,7 +247,7 @@ def cleanup_logs():
     now = datetime.utcnow()
     cutoff = now - timedelta(days=1)
 
-    # Cleanup MongoDB collections
+    # Cleanup DB collections
     deleted_audit = db.auditLogs.delete_many({"timestamp": {"$lt": cutoff}})
     deleted_health = db.apiHealth.delete_many({"checkedAt": {"$lt": cutoff}})
 
@@ -268,7 +265,6 @@ def cleanup_logs():
             error_path = access_path.replace("access.log", "error.log")
             try:
                 # Truncate the logs instead of deleting them
-                # This keeps the files but makes them empty
                 result_access = subprocess.run(["truncate", "-s", "0", access_path], 
                                               capture_output=True, text=True, timeout=5)
                 result_error = subprocess.run(["truncate", "-s", "0", error_path], 
@@ -316,7 +312,7 @@ def update_expired_subscriptions():
             }}
         )
         
-        # Log the event
+        # Log 
         db.subscriptionEvents.insert_one({
             "userId": user["_id"],
             "event": "subscription_expired",
