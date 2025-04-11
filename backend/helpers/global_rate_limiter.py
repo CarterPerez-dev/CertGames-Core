@@ -17,7 +17,7 @@ class GlobalRateLimiter:
     Implements progressive rate limits (stricter limits after repeated violations).
     """
     
-    # Default limits for different categories
+    # Default limits for different categories, AINT NOBODY SPAMMIN MY SHIT IM UNHACKABLE!!!!
     DEFAULT_LIMITS = {
         'auth': {'calls': 15, 'period': 60},         # 10 calls per minute for authentication
         'password_reset': {'calls': 10, 'period': 300},  # 5 calls per 5 minutes for password reset
