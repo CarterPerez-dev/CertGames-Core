@@ -103,7 +103,6 @@ class GlobalRateLimiter:
             
             return False
         except ValueError:
-            # If IP parsing fails, don't whitelist
             return False
     
     def is_rate_limited(self):
@@ -119,7 +118,7 @@ class GlobalRateLimiter:
         # Extract IP part for whitelist checking
         ip = client_id.split('_')[0] if '_' in client_id else client_id
         
-        # Allow whitelisted IPs to bypass rate limiting
+        # Allow whitelisted IPs to bypass rate limiting (TRY TO SPOOF IT I DARE YOU)
         if self._check_ip_whitelist(ip):
             return False, self.limits['calls'], None, 0
         
