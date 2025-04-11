@@ -1,27 +1,5 @@
 ```ruby
 .
-├── MD's
-│   ├── IMPORTANT_NOTES.md
-│   ├── IOS.APP.MD
-│   ├── ISSUES-IMPROVEMENTS.md
-│   ├── MarketingPlan.md
-│   ├── QUESTIONS.md
-│   ├── Regexp.md
-│   ├── SEO.md
-│   ├── TestPageDesign.md
-│   ├── admin-support.md
-│   ├── stripe_implementation.md
-│   └── 🌲TREEEEEEE🌲.md
-├── Mongo-Inputs
-│   ├── Achievments.js
-│   ├── FakeUsers.js
-│   ├── ShopItems.js
-│   └── TestUsers.js
-├── README.MD
-├── Trees
-│   ├── Root.md
-│   ├── backend.md
-│   └── frontend.md
 ├── apache
 │   ├── Dockerfile.apache
 │   ├── apache_server.conf
