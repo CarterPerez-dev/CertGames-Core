@@ -15,7 +15,7 @@ from models.newsletter import (
 )
 
 ########## ADMIN BLUEPRINT ##########
-admin_news_bp = Blueprint('admin_news_bp', __name__)  # Fixed the __name__ parameter
+admin_news_bp = Blueprint('admin_news_bp', __name__) 
 
 def require_cracked_admin(required_role=None):
     """
