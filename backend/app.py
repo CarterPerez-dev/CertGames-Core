@@ -35,6 +35,7 @@ from routes.admin.cracked_admin import cracked_bp, api_logs
 from routes.games.cipher_routes import cipher_bp
 from routes.games.incident_routes import incident_bp
 from routes.games.phishing_routes import phishing_bp
+from routes.games.threat_hunter_routes import threat_hunter_bp
 
 # Info Blueprints
 from routes.info.contact_form import contact_bp
@@ -184,6 +185,7 @@ app.register_blueprint(subscription_bp, url_prefix='/subscription')
 app.register_blueprint(cipher_bp, url_prefix='/cipher')
 app.register_blueprint(incident_bp, url_prefix='/incident')
 app.register_blueprint(phishing_bp, url_prefix='/phishing')
+app.register_blueprint(threat_hunter_bp, url_prefix='/threat_hunter')
 
 
 

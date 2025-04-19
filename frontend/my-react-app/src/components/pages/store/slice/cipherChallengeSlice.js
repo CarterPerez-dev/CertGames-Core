@@ -7,7 +7,7 @@ export const fetchCipherChallenges = createAsyncThunk(
   'cipherChallenge/fetchChallenges',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/cipher/challenges');
+      const response = await fetch('/api/cipher/challenges');
       if (!response.ok) {
         throw new Error('Failed to fetch cipher challenges');
       }
@@ -23,7 +23,7 @@ export const submitSolution = createAsyncThunk(
   'cipherChallenge/submitSolution',
   async ({ userId, challengeId, levelId, hintUsed, timeSpent }, { dispatch, rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/cipher/submit', {
+      const response = await fetch('/api/cipher/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export const unlockHint = createAsyncThunk(
   'cipherChallenge/unlockHint',
   async ({ userId, challengeId, hintIndex, cost }, { dispatch, rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/cipher/unlock-hint', {
+      const response = await fetch('/api/cipher/unlock-hint', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

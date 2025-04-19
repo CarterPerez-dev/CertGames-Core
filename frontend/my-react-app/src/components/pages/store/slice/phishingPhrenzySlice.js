@@ -6,7 +6,7 @@ export const fetchPhishingData = createAsyncThunk(
   'phishingPhrenzy/fetchPhishingData',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/phishing/examples');
+      const response = await fetch('/api/phishing/examples');
       if (!response.ok) {
         throw new Error('Failed to fetch phishing examples');
       }
@@ -23,7 +23,7 @@ export const submitGameResults = createAsyncThunk(
   'phishingPhrenzy/submitGameResults',
   async ({ userId, score, timestamp }, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/phishing/submit-score', {
+      const response = await fetch('/api/phishing/submit-score', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

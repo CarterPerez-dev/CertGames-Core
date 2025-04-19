@@ -845,3 +845,295 @@ def generate_default_scenarios():
                     "situation": "One week after the incident, security monitoring detects suspicious activity from a service account that wasn't identified in the initial phishing campaign. Investigation shows an attacker is attempting to use this account, which has elevated privileges, to access financial systems. This appears to be a continuation of the campaign that wasn't fully contained.",
                     "actions": [
                         {
+                            "id": "action5_1",
+                            "text": "Immediately disable the compromised service account and all other service accounts as a precaution",
+                            "outcome": "Disabling all service accounts stops the attacker but also breaks multiple critical business applications that rely on these accounts, causing significant disruption.",
+                            "explanation": "This approach stops the attack but causes disproportionate business impact by disabling many accounts without evidence of compromise.",
+                            "bestPractice": "Incident response should be proportionate, disabling confirmed compromised accounts immediately while investigating others before taking disruptive action.",
+                            "points": 30
+                        },
+                        {
+                            "id": "action5_2",
+                            "text": "Reset the compromised account's credentials and investigate how it was compromised before taking further action",
+                            "outcome": "You stop the immediate attack but analysis reveals the account's credentials were stored in a document accessed during the earlier phishing compromise. Other similarly stored credentials remain at risk.",
+                            "explanation": "While this addresses the immediate issue, the focus on just this account misses the opportunity to identify and address the broader systemic issue of inappropriately stored credentials.",
+                            "bestPractice": "Incident response should identify and address root causes and systemic issues, not just individual compromised accounts.",
+                            "points": 60
+                        },
+                        {
+                            "id": "action5_3",
+                            "text": "Implement a comprehensive privileged account security review, including credential rotation, access auditing, and secure storage practices",
+                            "outcome": "Your review identifies multiple service account credentials stored insecurely. Comprehensive remediation secures all privileged accounts and implements improved management practices.",
+                            "explanation": "This approach addresses not just the immediate compromise but the underlying systemic issues with privileged account management that enabled the compromise.",
+                            "bestPractice": "Effective security response addresses root causes and systemic issues, using incidents as opportunities to implement broader security improvements.",
+                            "points": 100
+                        },
+                        {
+                            "id": "action5_4",
+                            "text": "Focus on implementing additional monitoring and alerting for service account activities",
+                            "outcome": "Enhanced monitoring helps detect future compromises more quickly, but doesn't address the current security gaps that allowed the credential compromise in the first place.",
+                            "explanation": "While improved detection is valuable, it doesn't address the preventive controls and practices needed to secure privileged credentials.",
+                            "bestPractice": "Defense in depth requires both preventive and detective controls, with preventive measures addressing root causes of vulnerabilities.",
+                            "points": 50
+                        }
+                    ]
+                }
+            ],
+            "key_lessons": [
+                "Phishing response requires both technical controls and user awareness",
+                "Credential compromise remediation should include password resets and additional monitoring",
+                "Multi-factor authentication is a critical defense against credential-based attacks",
+                "Incident response should address root causes and systemic issues, not just immediate compromises"
+            ]
+        },
+        {
+            "id": "3",
+            "title": "Web Application Breach",
+            "type": "breach",
+            "shortDescription": "Respond to a breach of customer data from your public-facing web application.",
+            "description": "A security researcher has disclosed a vulnerability in your organization's public-facing web application that has potentially exposed customer data. Initial investigation confirms the vulnerability exists and logs show indicators of exploitation. You need to respond to this breach, secure the application, and manage the incident's impact on customers and your organization's reputation.",
+            "organization": "E-commerce Platform",
+            "industry": "Retail Technology",
+            "organizationSize": "Medium (200-500 employees)",
+            "playerRole": "Security Operations Manager",
+            "roleDescription": "You manage the security operations team responsible for monitoring, detecting, and responding to security incidents across the organization's technology infrastructure.",
+            "responsibilities": [
+                "Lead incident response activities",
+                "Coordinate with application development, IT, legal, and communications teams",
+                "Determine appropriate technical remediation steps",
+                "Ensure proper documentation and reporting of security incidents"
+            ],
+            "alertMessage": "VULNERABILITY DISCLOSURE: CUSTOMER DATA EXPOSED IN WEB APPLICATION",
+            "objectivesDescription": "Your goal is to contain the breach, remediate the vulnerability, determine the scope of affected data, and manage notification and remediation for affected customers.",
+            "objectives": [
+                "Contain the data breach to prevent further exposure",
+                "Identify and fix the vulnerability in the web application",
+                "Determine what customer data was accessed and by whom",
+                "Notify affected customers and regulatory authorities as required",
+                "Implement preventive measures to avoid similar breaches"
+            ],
+            "tips": [
+                "Balance the need to keep the application available with security requirements",
+                "Maintain clear documentation of your investigation findings for potential regulatory reporting",
+                "Consider both short-term fixes and longer-term security improvements",
+                "Communication timing and tone with customers is critical to maintaining trust"
+            ],
+            "difficulty": 3,
+            "maxScore": 500,
+            "stages": [
+                {
+                    "id": "breach_stage1",
+                    "order": 1,
+                    "totalSteps": 5,
+                    "timeLimit": 90,
+                    "situation": "A security researcher has reported a SQL injection vulnerability in your e-commerce platform's product search function. The researcher provided proof of concept showing they could access customer data including names, email addresses, and order history. Your application logs show patterns consistent with potential exploitation beyond the researcher's testing.",
+                    "additionalInfo": "The vulnerable application handles approximately 10,000 customer transactions daily and contains data for 500,000 customers including personal information and purchase history. The application is critical to your business operations.",
+                    "actions": [
+                        {
+                            "id": "action1_1",
+                            "text": "Take the entire web application offline immediately until the vulnerability is patched",
+                            "outcome": "You've prevented further data access, but completely disrupted business operations. The company is losing approximately $50,000 per hour in sales, and customers are expressing frustration on social media.",
+                            "explanation": "While this action effectively contains the breach, it causes disproportionate business impact for an e-commerce platform where availability directly affects revenue.",
+                            "bestPractice": "When responding to vulnerabilities in business-critical applications, consider containment options that balance security needs with business continuity.",
+                            "points": 30
+                        },
+                        {
+                            "id": "action1_2",
+                            "text": "Implement an emergency configuration change to disable only the vulnerable search functionality",
+                            "outcome": "The vulnerable feature is disabled, preventing further exploitation while keeping the rest of the application functional. Some user experience is impacted, but core purchasing functions remain available.",
+                            "explanation": "This targeted approach effectively contains the vulnerability while minimizing business impact, demonstrating good balance between security and operations.",
+                            "bestPractice": "When possible, isolate and disable only the vulnerable component rather than the entire application to balance security and business needs.",
+                            "points": 100
+                        },
+                        {
+                            "id": "action1_3",
+                            "text": "Keep the application fully operational while developers work on an emergency patch",
+                            "outcome": "While maintaining full business operations, logs show continued exploitation of the vulnerability during the development time, expanding the scope of data exposure.",
+                            "explanation": "Prioritizing availability over security for a known, actively exploited vulnerability results in expanded breach scope and ultimately greater impact.",
+                            "bestPractice": "Active exploitation of a vulnerability requires immediate containment action, not just remediation planning.",
+                            "points": 10
+                        },
+                        {
+                            "id": "action1_4",
+                            "text": "Implement a web application firewall rule to block SQL injection patterns while keeping the application online",
+                            "outcome": "The WAF rule blocks most exploitation attempts, but sophisticated attack patterns still succeed occasionally due to the fundamental application vulnerability remaining.",
+                            "explanation": "This approach attempts to balance security and availability but relies on detection/blocking rather than eliminating the vulnerability, which is only partially effective.",
+                            "bestPractice": "WAF rules can be a useful supplementary control but shouldn't be the primary protection against known, exploitable vulnerabilities when other options exist.",
+                            "points": 60
+                        }
+                    ]
+                },
+                {
+                    "id": "breach_stage2",
+                    "order": 2,
+                    "totalSteps": 5,
+                    "situation": "You've contained the immediate vulnerability. Log analysis confirms exploitation activity from multiple IP addresses over the past two weeks. The development team has created a patch, but you need to plan the vulnerability remediation process.",
+                    "actions": [
+                        {
+                            "id": "action2_1",
+                            "text": "Apply the emergency patch directly to production after minimal testing to fix the vulnerability as quickly as possible",
+                            "outcome": "The patch is deployed quickly but causes an unexpected compatibility issue with your payment processing system, resulting in failed transactions for about 15% of customers.",
+                            "explanation": "Rushing a patch to production without adequate testing creates a new business-impacting issue, trading one problem for another.",
+                            "bestPractice": "Even emergency patches need appropriate testing, especially for business-critical functions like e-commerce applications.",
+                            "points": 30
+                        },
+                        {
+                            "id": "action2_2",
+                            "text": "Conduct thorough testing of the patch in a staging environment that mirrors production, then deploy during a scheduled maintenance window",
+                            "outcome": "Testing identifies and resolves potential issues before deployment. The patch is successfully implemented with minimal customer impact, though it extends the timeframe the application runs with alternative controls.",
+                            "explanation": "This balanced approach ensures proper testing while still moving quickly, demonstrating good risk management between security and operational stability.",
+                            "bestPractice": "Proper testing balanced with efficient deployment timeframes is essential for critical security patches.",
+                            "points": 90
+                        },
+                        {
+                            "id": "action2_3",
+                            "text": "Keep temporary containment measures in place and include the fix in the next regular release cycle to ensure full regression testing",
+                            "outcome": "The extended timeline with temporary controls in place increases organizational risk exposure and complicates the eventual deployment with more code changes.",
+                            "explanation": "Treating a confirmed, exploited vulnerability as a regular code change rather than a security emergency demonstrates poor risk prioritization.",
+                            "bestPractice": "Critical security vulnerabilities warrant expedited but careful remediation outside regular release cycles.",
+                            "points": 20
+                        },
+                        {
+                            "id": "action2_4",
+                            "text": "Deploy the patch to a small percentage of production traffic first, monitor for issues, then gradually roll out to all users",
+                            "outcome": "The gradual deployment successfully identifies and resolves a minor issue early, leading to a smooth full deployment with minimal business impact.",
+                            "explanation": "This approach balances the need for rapid remediation with operational risk management through controlled, monitored deployment.",
+                            "bestPractice": "For web applications, canary or percentage-based deployments can effectively balance security urgency with operational risk.",
+                            "points": 100
+                        }
+                    ]
+                },
+                {
+                    "id": "breach_stage3",
+                    "order": 3,
+                    "totalSteps": 5,
+                    "situation": "The vulnerability has been patched. Forensic analysis of logs shows that attackers accessed personal data (names, email addresses, phone numbers) for approximately 50,000 customers and partial credit card information (last 4 digits + expiration date) for about 5,000 customers. Full credit card numbers were not exposed due to proper encryption. You need to determine your notification and communication strategy.",
+                    "actions": [
+                        {
+                            "id": "action3_1",
+                            "text": "Notify only the 5,000 customers whose partial payment information was exposed, as they face the highest risk",
+                            "outcome": "Limited notification saves resources but fails to meet regulatory requirements for personal data breach reporting. Several customers whose data was accessed but weren't notified later complain to regulators.",
+                            "explanation": "This approach incorrectly assumes that only payment data requires notification, ignoring regulatory requirements around personal data protection.",
+                            "bestPractice": "Breach notification requirements typically cover various types of personal data, not just financial information.",
+                            "points": 20
+                        },
+                        {
+                            "id": "action3_2",
+                            "text": "Notify all affected customers with a detailed explanation of exactly what happened and what data was exposed for each individual",
+                            "outcome": "Your transparent, personalized approach is appreciated by customers and regulators, though it requires significant resources to implement correctly.",
+                            "explanation": "This approach demonstrates transparency and provides customers with specific information relevant to their situation, building trust while meeting regulatory requirements.",
+                            "bestPractice": "Clear, specific communication about what happened and what data was affected helps customers assess their own risk and demonstrates organizational integrity.",
+                            "points": 100
+                        },
+                        {
+                            "id": "action3_3",
+                            "text": "Issue a public statement on your website but don't directly contact affected customers to avoid causing unnecessary alarm",
+                            "outcome": "Your passive approach fails to meet regulatory requirements for direct notification and leads to customer confusion and media criticism for inadequate response.",
+                            "explanation": "This approach fails to meet both regulatory requirements and customer expectations for direct notification of security incidents affecting their data.",
+                            "bestPractice": "Direct notification to affected individuals is typically required by regulations and expected by customers in data breach situations.",
+                            "points": 10
+                        },
+                        {
+                            "id": "action3_4",
+                            "text": "Notify all 500,000 customers about a potential data breach without specifying who was actually affected",
+                            "outcome": "The overly broad notification causes unnecessary concern for many customers whose data wasn't affected, leading to a surge in support inquiries and some customer attrition.",
+                            "explanation": "While this approach ensures compliance with notification requirements, it creates unnecessary alarm and confusion by not differentiating between affected and unaffected customers.",
+                            "bestPractice": "Breach notifications should be sent to affected individuals with clear information about what happened, while avoiding unnecessarily alarming unaffected customers.",
+                            "points": 50
+                        }
+                    ]
+                },
+                {
+                    "id": "breach_stage4",
+                    "order": 4,
+                    "totalSteps": 5,
+                    "situation": "Customer notifications are underway. The security team has conducted a root cause analysis and found that the vulnerable code was introduced during a recent feature update. The development team followed standard processes, but the vulnerability wasn't caught in code review or security testing. You need to recommend process improvements to prevent similar issues in the future.",
+                    "actions": [
+                        {
+                            "id": "action4_1",
+                            "text": "Implement mandatory security training for all developers focusing on secure coding practices",
+                            "outcome": "Developer awareness of security vulnerabilities improves, but without changes to development processes and tooling, similar issues still occur occasionally.",
+                            "explanation": "While training developers is valuable, relying solely on human knowledge and vigilance without systemic changes to process and tooling is insufficient.",
+                            "bestPractice": "Security training should be part of a comprehensive approach that includes process and tooling improvements, not the only solution.",
+                            "points": 40
+                        },
+                        {
+                            "id": "action4_2",
+                            "text": "Add an additional manual security review step to the release process for all code changes",
+                            "outcome": "The additional review step catches some vulnerabilities but significantly slows development velocity and creates resource constraints. Some teams begin seeking exceptions to the process.",
+                            "explanation": "Manual reviews are resource-intensive and difficult to scale, creating tension between security and development velocity that leads to inconsistent application.",
+                            "bestPractice": "While security reviews are important, they should be risk-based and supported by automated tools to be sustainable at scale.",
+                            "points": 50
+                        },
+                        {
+                            "id": "action4_3",
+                            "text": "Implement automated security scanning tools in the CI/CD pipeline with automated testing for common vulnerabilities",
+                            "outcome": "Automated scanning catches many common vulnerabilities early in the development process with minimal impact on development velocity. Teams receive immediate feedback on security issues.",
+                            "explanation": "This approach integrates security testing directly into development workflows, making it consistent and sustainable while providing immediate feedback to developers.",
+                            "bestPractice": "Automated security testing integrated into development pipelines helps scale security practices efficiently across development teams.",
+                            "points": 100
+                        },
+                        {
+                            "id": "action4_4",
+                            "text": "Create a separate security team responsible for reviewing and approving all code changes before deployment",
+                            "outcome": "The centralized approach creates significant bottlenecks in the development process and tensions between teams. Security becomes viewed as an impediment rather than an enabler.",
+                            "explanation": "Centralizing security responsibility in a separate team rather than integrating it into development processes creates organizational friction and scales poorly.",
+                            "bestPractice": "Modern security practices favor embedding security into development processes rather than creating separate security checkpoints.",
+                            "points": 30
+                        }
+                    ]
+                },
+                {
+                    "id": "breach_stage5",
+                    "order": 5,
+                    "totalSteps": 5,
+                    "situation": "It's been two weeks since the incident. Most immediate actions have been completed, but you need to conduct a broader security assessment and develop longer-term security improvements for the web application and supporting infrastructure.",
+                    "actions": [
+                        {
+                            "id": "action5_1",
+                            "text": "Focus primarily on implementing rigorous penetration testing of the application on a quarterly basis",
+                            "outcome": "Penetration testing identifies various vulnerabilities, but the infrequent schedule and lack of changes to development practices means new vulnerabilities continue to be introduced between tests.",
+                            "explanation": "While penetration testing is valuable, periodic testing without changes to day-to-day development and deployment practices is insufficient for ongoing security.",
+                            "bestPractice": "Penetration testing should complement, not replace, security practices integrated into regular development and deployment processes.",
+                            "points": 40
+                        },
+                        {
+                            "id": "action5_2",
+                            "text": "Develop a comprehensive application security program including secure SDLC practices, developer training, and automated scanning",
+                            "outcome": "The holistic approach addresses security throughout the application lifecycle, significantly reducing the introduction of new vulnerabilities while effectively identifying existing ones.",
+                            "explanation": "This comprehensive approach addresses security as an ongoing concern throughout the application lifecycle rather than a point-in-time activity.",
+                            "bestPractice": "Effective application security requires a programmatic approach that addresses people, process, and technology across the software development lifecycle.",
+                            "points": 100
+                        },
+                        {
+                            "id": "action5_3",
+                            "text": "Focus primarily on implementing additional security technologies like WAF, RASP, and next-gen firewalls",
+                            "outcome": "New security technologies provide additional layers of protection but don't address the root cause of vulnerabilities being introduced during development.",
+                            "explanation": "While security technologies can provide important protections, they don't solve the fundamental issue of secure development practices.",
+                            "bestPractice": "Defense in depth should include both secure development practices and security technologies, not rely primarily on the latter.",
+                            "points": 60
+                        },
+                        {
+                            "id": "action5_4",
+                            "text": "Implement an annual security audit and compliance review process",
+                            "outcome": "The annual process satisfies basic compliance requirements but doesn't effectively address ongoing security needs in a rapidly evolving application.",
+                            "explanation": "Infrequent point-in-time assessments are insufficient for applications that change frequently, as they leave long windows where new vulnerabilities may exist undiscovered.",
+                            "bestPractice": "Application security needs to be continuous, not periodic, especially for applications under active development.",
+                            "points": 30
+                        }
+                    ]
+                }
+            ],
+            "key_lessons": [
+                "Balance security containment with business continuity when responding to vulnerabilities in critical applications",
+                "Verify security patches with appropriate testing before deployment to production",
+                "Provide clear, specific communication to affected customers in breach scenarios",
+                "Develop comprehensive application security programs that integrate security throughout the development lifecycle"
+            ]
+        }
+    ]
+    
+    return scenarios
+
+if __name__ == '__main__':
+    pass

@@ -1,129 +1,98 @@
 // src/components/pages/store/slice/threatHunterSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addCoins, fetchUserData } from './userSlice';
 
-// Async thunk to fetch log scenarios
+// Async thunks
 export const fetchLogScenarios = createAsyncThunk(
   'threatHunter/fetchLogScenarios',
   async (_, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/threat-hunter/scenarios');
       if (!response.ok) {
-        throw new Error('Failed to fetch log scenarios');
+        throw new Error('Failed to fetch scenarios');
       }
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Async thunk to start a scenario
 export const startScenario = createAsyncThunk(
   'threatHunter/startScenario',
-  async ({ scenarioId, userId, difficulty }, { rejectWithValue }) => {
+  async (scenarioData, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/threat-hunter/start-scenario', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          scenarioId,
-          userId,
-          difficulty
-        }),
+        body: JSON.stringify(scenarioData),
       });
-      
       if (!response.ok) {
         throw new Error('Failed to start scenario');
       }
-      
-      return await response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
-// Async thunk to submit analysis
 export const submitAnalysis = createAsyncThunk(
   'threatHunter/submitAnalysis',
-  async ({ userId, scenarioId, flaggedLines, detectedThreats, timeLeft }, { dispatch, rejectWithValue }) => {
+  async (analysisData, { rejectWithValue }) => {
     try {
       const response = await fetch('/api/threat-hunter/submit-analysis', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          userId,
-          scenarioId,
-          flaggedLines,
-          detectedThreats,
-          timeLeft
-        }),
+        body: JSON.stringify(analysisData),
       });
-      
       if (!response.ok) {
         throw new Error('Failed to submit analysis');
       }
-      
-      const results = await response.json();
-      
-      // If the backend awarded coins, update user state
-      if (results.coinsAwarded > 0) {
-        dispatch(addCoins({ 
-          userId, 
-          amount: results.coinsAwarded 
-        }));
-      }
-      
-      // Fetch updated user data (for XP, etc.)
-      dispatch(fetchUserData(userId));
-      
-      return results;
+      const data = await response.json();
+      return data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
   }
 );
 
+// Initial state
 const initialState = {
-  scenarios: [],
+  scenarios: [], // This is the key property that's missing
   currentScenario: null,
-  selectedLog: null,
   gameStatus: 'selecting', // 'selecting', 'playing', 'completed'
+  selectedLog: null,
   timeLeft: null,
   score: 0,
   results: null,
   loading: false,
-  error: null,
+  error: null
 };
 
+// Slice
 const threatHunterSlice = createSlice({
   name: 'threatHunter',
   initialState,
   reducers: {
     resetGame: (state) => {
+      state.gameStatus = 'selecting';
       state.currentScenario = null;
       state.selectedLog = null;
-      state.gameStatus = 'selecting';
       state.timeLeft = null;
       state.score = 0;
       state.results = null;
-      state.error = null;
     },
-    selectLog: (state, action) => {
-      state.selectedLog = action.payload;
-    },
-    updateTimer: (state, action) => {
-      state.timeLeft = action.payload;
-    }
+    // Add other reducers as needed
   },
   extraReducers: (builder) => {
     builder
-      // Fetch log scenarios
+      // fetchLogScenarios
       .addCase(fetchLogScenarios.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -137,7 +106,7 @@ const threatHunterSlice = createSlice({
         state.error = action.payload;
       })
       
-      // Start scenario
+      // startScenario
       .addCase(startScenario.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -145,26 +114,23 @@ const threatHunterSlice = createSlice({
       .addCase(startScenario.fulfilled, (state, action) => {
         state.loading = false;
         state.currentScenario = action.payload.scenario;
-        state.gameStatus = 'playing';
         state.timeLeft = action.payload.timeLimit;
-        state.selectedLog = action.payload.scenario.logs.length > 0 ? action.payload.scenario.logs[0].id : null;
-        state.score = 0;
+        state.gameStatus = 'playing';
       })
       .addCase(startScenario.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
       
-      // Submit analysis
+      // submitAnalysis
       .addCase(submitAnalysis.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(submitAnalysis.fulfilled, (state, action) => {
         state.loading = false;
-        state.gameStatus = 'completed';
         state.results = action.payload;
-        state.score = action.payload.score;
+        state.gameStatus = 'completed';
       })
       .addCase(submitAnalysis.rejected, (state, action) => {
         state.loading = false;
@@ -173,5 +139,5 @@ const threatHunterSlice = createSlice({
   },
 });
 
-export const { resetGame, selectLog, updateTimer } = threatHunterSlice.actions;
+export const { resetGame } = threatHunterSlice.actions;
 export default threatHunterSlice.reducer;

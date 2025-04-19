@@ -10,7 +10,8 @@ from . import (
     leaderboard_routes,
     daily_question_routes,
     test_attempt_routes,
-    cancel_routes
+    cancel_routes,
+    newsletter_routes
 )
 
 # Export the blueprint

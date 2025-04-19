@@ -135,7 +135,7 @@ const Sidebar = () => {
                   </li>
                   <li>
                     <NavLink to="/games/incident-responder" className={({ isActive }) => `sidebar-sublink ${isActive ? 'active-subtab' : ''}`}>
-                      <span className="sidebar-link-text">Incident Responder</span>
+                      <span className="sidebar-link-text">Xploit Responder</span>
                     </NavLink>
                   </li>
                   <li>

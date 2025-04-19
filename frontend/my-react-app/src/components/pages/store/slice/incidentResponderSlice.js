@@ -7,7 +7,7 @@ export const fetchScenarios = createAsyncThunk(
   'incidentResponder/fetchScenarios',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/incident/scenarios');
+      const response = await fetch('/api/incident/scenarios');
       if (!response.ok) {
         throw new Error('Failed to fetch incident scenarios');
       }
@@ -23,7 +23,7 @@ export const startScenario = createAsyncThunk(
   'incidentResponder/startScenario',
   async ({ scenarioId, userId, difficulty }, { rejectWithValue }) => {
     try {
-      const response = await fetch('/api/games/incident/start', {
+      const response = await fetch('/api/incident/start', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ export const selectAction = createAsyncThunk(
       if (isLastStage) {
         // Scenario is complete, submit results
         try {
-          const response = await fetch('/api/games/incident/complete', {
+          const response = await fetch('/api/incident/complete', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ export const selectAction = createAsyncThunk(
     try {
       const { currentStage, currentScenario } = getState().incidentResponder;
       
-      const response = await fetch('/api/games/incident/action', {
+      const response = await fetch('/api/incident/action', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
