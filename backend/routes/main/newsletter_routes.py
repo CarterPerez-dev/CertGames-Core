@@ -5,7 +5,7 @@ from models.newsletter import (
     unsubscribe_by_token
 )
 
-newsletter_bp = Blueprint('newsletter_bp', __name__)  # Fixed the __name__ parameter
+newsletter_bp = Blueprint('newsletter_bp', __name__)  
 
 @newsletter_bp.route('/subscribe', methods=['POST'])
 def newsletter_subscribe():
