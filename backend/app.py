@@ -185,7 +185,7 @@ app.register_blueprint(subscription_bp, url_prefix='/subscription')
 app.register_blueprint(cipher_bp, url_prefix='/cipher')
 app.register_blueprint(incident_bp, url_prefix='/incident')
 app.register_blueprint(phishing_bp, url_prefix='/phishing')
-app.register_blueprint(threat_hunter_bp, url_prefix='/threat_hunter')
+app.register_blueprint(threat_hunter_bp, url_prefix='/threat-hunter')
 
 
 

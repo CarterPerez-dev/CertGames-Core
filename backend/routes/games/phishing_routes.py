@@ -186,7 +186,7 @@ def generate_default_examples():
         "body": "Dear Valued Customer,\n\nWe have detected suspicious activity on your account. Your account has been temporarily limited.\n\nTo remove the limitation, please verify your information by clicking the link below:\n\nhttps://secure-bankofamerica.com.verify-identity.net/login\n\nIgnoring this message will result in permanent account suspension.\n\nSincerely,\nBank of America Security Team",
         "links": ["https://secure-bankofamerica.com.verify-identity.net/login"],
         "date": "2025-03-15",
-        "isPhishing": true
+        "isPhishing": True
     })
     
     examples.append({
@@ -196,7 +196,7 @@ def generate_default_examples():
         "body": "Dear Netflix Customer,\n\nWe were unable to process your payment for your Netflix subscription. To avoid service interruption, please update your payment information immediately.\n\nUpdate Payment Method: https://netflix-account-verify.com/update-payment\n\nIf you do not update your payment information within 24 hours, your account will be suspended.\n\nThank you,\nNetflix Billing Team",
         "links": ["https://netflix-account-verify.com/update-payment"],
         "date": "2025-03-17",
-        "isPhishing": true
+        "isPhishing": True
     })
     
     examples.append({
@@ -206,7 +206,7 @@ def generate_default_examples():
         "body": "Your Microsoft 365 subscription has expired.\n\nTo continue using Microsoft Office 365 services, you must verify your account information. Otherwise, your account will be deleted within 24 hours.\n\nVerify Account: https://office365-verification-center.com/verify\n\nThank you,\nMicrosoft Support Team",
         "links": ["https://office365-verification-center.com/verify"],
         "date": "2025-03-12",
-        "isPhishing": true
+        "isPhishing": True
     })
     
     # Legitimate emails
@@ -217,7 +217,7 @@ def generate_default_examples():
         "body": "Hello John Doe,\n\nThank you for your order. We'll send a confirmation when your item ships.\n\nDetails:\nOrder #112-3426789-9214568\nPlaced on March 16, 2025\n\nEcho Dot (4th Gen) - Smart speaker with Alexa - Charcoal\nPrice: $29.99\nQuantity: 1\nShipping: FREE Prime Shipping\nEstimated delivery: March 19, 2025\n\nView or manage your order: https://www.amazon.com/orders/112-3426789-9214568\n\nThank you for shopping with us.\nAmazon.com",
         "links": ["https://www.amazon.com/orders/112-3426789-9214568"],
         "date": "2025-03-16",
-        "isPhishing": false
+        "isPhishing": False
     })
     
     examples.append({
@@ -227,7 +227,7 @@ def generate_default_examples():
         "body": "Hello username,\n\nWe noticed a new sign-in to your GitHub account.\n\nTime: March 15, 2025, 09:42 UTC\nLocation: San Francisco, CA, USA\nDevice: Chrome on Windows\n\nIf this was you, you can disregard this email.\n\nIf this wasn't you, you can secure your account here: https://github.com/settings/security\n\nThanks,\nThe GitHub Team",
         "links": ["https://github.com/settings/security"],
         "date": "2025-03-15",
-        "isPhishing": false
+        "isPhishing": False
     })
     
     # Phishing SMS
@@ -236,7 +236,7 @@ def generate_default_examples():
         "from": "+1-345-678-9012",
         "message": "ALERT: Your Amazon account has been locked due to suspicious activity. Verify your identity here: amzn-secure.com/verify",
         "links": ["amzn-secure.com/verify"],
-        "isPhishing": true
+        "isPhishing": True
     })
     
     examples.append({
@@ -244,7 +244,7 @@ def generate_default_examples():
         "from": "+1-234-567-8910",
         "message": "Apple: Your iCloud account is being deleted. Verify your information to keep your account: secure-icloud.com/verify-now",
         "links": ["secure-icloud.com/verify-now"],
-        "isPhishing": true
+        "isPhishing": True
     })
     
     # Legitimate SMS
@@ -253,7 +253,7 @@ def generate_default_examples():
         "from": "CHASE",
         "message": "Chase: A charge of $752.25 at APPLE ONLINE STORE was made on your credit card. If not you, call 800-432-3117.",
         "links": [],
-        "isPhishing": false
+        "isPhishing": False
     })
     
     examples.append({
@@ -261,7 +261,7 @@ def generate_default_examples():
         "from": "887-65",
         "message": "Your Amazon OTP is: 358942. Do not share this code with anyone.",
         "links": [],
-        "isPhishing": false
+        "isPhishing": False
     })
     
     # Phishing websites
@@ -275,7 +275,7 @@ def generate_default_examples():
             {"label": "Password", "type": "password", "placeholder": "Password"}
         ],
         "submitButton": "Log In",
-        "isPhishing": true
+        "isPhishing": True
     })
     
     examples.append({
@@ -288,7 +288,7 @@ def generate_default_examples():
             {"label": "Password", "type": "password", "placeholder": "Password"}
         ],
         "submitButton": "Log In",
-        "isPhishing": true
+        "isPhishing": True
     })
     
     # Legitimate websites
@@ -303,7 +303,7 @@ def generate_default_examples():
             {"label": "Security Code", "type": "password", "placeholder": "CVC"}
         ],
         "submitButton": "Pay Now",
-        "isPhishing": false
+        "isPhishing": False
     })
     
     examples.append({
@@ -316,7 +316,7 @@ def generate_default_examples():
             {"label": "Password", "type": "password", "placeholder": "Password"}
         ],
         "submitButton": "Sign in",
-        "isPhishing": false
+        "isPhishing": False
     })
     
     return examples

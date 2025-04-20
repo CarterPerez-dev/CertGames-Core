@@ -1,28 +1,28 @@
-/* src/components/pages/games/CipherChallenge/CongratulationsModal.css */
 .congratulations-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(3px);
-  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.5s ease;
 }
 
 .congratulations-modal {
-  background-color: #161625;
-  border-radius: 10px;
+  background-color: var(--profile-bg-card, #161625);
+  border-radius: 15px;
   width: 90%;
-  max-width: 600px;
+  max-width: 650px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(95, 75, 182, 0.4);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.5);
   animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .confetti-animation {
@@ -39,7 +39,6 @@
   position: absolute;
   width: 10px;
   height: 30px;
-  background: #7a68d4;
   top: -10%;
   opacity: 0;
 }
@@ -50,7 +49,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 182ms;
   animation-duration: 1137ms;
-  background: #5f4bb6;
+  background: var(--profile-accent, #5f4bb6);
 }
 
 .confetti-piece:nth-child(2) {
@@ -59,7 +58,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 161ms;
   animation-duration: 1012ms;
-  background: #ffd700;
+  background: var(--profile-accent-secondary, #ffd700);
 }
 
 .confetti-piece:nth-child(3) {
@@ -68,7 +67,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 481ms;
   animation-duration: 1036ms;
-  background: #4caf50;
+  background: var(--profile-success, #4caf50);
 }
 
 .confetti-piece:nth-child(4) {
@@ -77,7 +76,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 334ms;
   animation-duration: 1162ms;
-  background: #5f4bb6;
+  background: var(--profile-accent, #5f4bb6);
 }
 
 .confetti-piece:nth-child(5) {
@@ -86,7 +85,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 302ms;
   animation-duration: 1214ms;
-  background: #ffd700;
+  background: var(--profile-accent-secondary, #ffd700);
 }
 
 .confetti-piece:nth-child(6) {
@@ -95,7 +94,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 310ms;
   animation-duration: 1379ms;
-  background: #4caf50;
+  background: var(--profile-success, #4caf50);
 }
 
 .confetti-piece:nth-child(7) {
@@ -104,7 +103,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 197ms;
   animation-duration: 1032ms;
-  background: #5f4bb6;
+  background: var(--profile-accent, #5f4bb6);
 }
 
 .confetti-piece:nth-child(8) {
@@ -113,7 +112,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 84ms;
   animation-duration: 1205ms;
-  background: #ffd700;
+  background: var(--profile-accent-secondary, #ffd700);
 }
 
 .confetti-piece:nth-child(9) {
@@ -122,7 +121,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 433ms;
   animation-duration: 1077ms;
-  background: #4caf50;
+  background: var(--profile-success, #4caf50);
 }
 
 .confetti-piece:nth-child(10) {
@@ -131,7 +130,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 338ms;
   animation-duration: 1116ms;
-  background: #5f4bb6;
+  background: var(--profile-accent, #5f4bb6);
 }
 
 .confetti-piece:nth-child(11) {
@@ -140,7 +139,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 422ms;
   animation-duration: 1140ms;
-  background: #ffd700;
+  background: var(--profile-accent-secondary, #ffd700);
 }
 
 .confetti-piece:nth-child(12) {
@@ -149,7 +148,7 @@
   animation: makeItRain 1s infinite ease-out;
   animation-delay: 384ms;
   animation-duration: 1005ms;
-  background: #4caf50;
+  background: var(--profile-success, #4caf50);
 }
 
 @keyframes makeItRain {
@@ -165,8 +164,10 @@
 }
 
 .modal-content {
-  padding: 30px;
+  padding: 40px 30px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .trophy-container {
@@ -174,16 +175,21 @@
 }
 
 .trophy-icon {
-  font-size: 3.5rem;
-  color: #ffd700;
+  font-size: 4rem;
+  color: var(--profile-accent-secondary, #ffd700);
   animation: pulse 2s infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
 }
 
 .congratulations-title {
-  font-size: 2rem;
-  color: #7a68d4;
+  font-size: 2.5rem;
+  color: var(--profile-accent, #7a68d4);
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 25px;
-  text-shadow: 0 0 10px rgba(95, 75, 182, 0.7);
+  text-shadow: 0 0 10px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.7);
+  font-weight: bold;
 }
 
 .level-info {
@@ -192,7 +198,7 @@
 
 .level-info h3 {
   font-size: 1.5rem;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -202,45 +208,57 @@
 
 .level-info p {
   opacity: 0.9;
+  font-size: 1.1rem;
 }
 
 .unlocked-level {
-  background-color: #1a1a2e;
-  padding: 20px;
-  border-radius: 8px;
+  background-color: var(--profile-bg-dark, #1a1a2e);
+  padding: 30px 20px;
+  border-radius: 12px;
   margin-bottom: 30px;
-  border: 1px solid #232535;
+  border: 1px solid var(--profile-border, #232535);
   position: relative;
   animation: glow 2s infinite alternate;
+  box-shadow: 0 0 20px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4); }
+  to { box-shadow: 0 0 25px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.8); }
 }
 
 .unlock-icon {
   position: absolute;
-  top: -15px;
-  left: calc(50% - 15px);
-  width: 30px;
-  height: 30px;
-  background-color: #161625;
+  top: -20px;
+  left: calc(50% - 20px);
+  width: 40px;
+  height: 40px;
+  background-color: var(--profile-bg-card, #161625);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4caf50;
-  font-size: 1.1rem;
-  border: 1px solid #232535;
+  color: var(--profile-success, #4caf50);
+  font-size: 1.5rem;
+  border: 1px solid var(--profile-border, #232535);
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
 }
 
 .unlocked-level h3 {
   font-size: 1.3rem;
-  color: #4caf50;
-  margin-bottom: 15px;
+  color: var(--profile-success, #4caf50);
+  margin: 0 0 20px 0;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
 }
 
 .new-level-name {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: bold;
-  color: #7a68d4;
-  margin-bottom: 15px;
+  color: var(--profile-accent, #7a68d4);
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -249,7 +267,9 @@
 
 .unlocked-level p {
   opacity: 0.8;
-  font-size: 0.95rem;
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .rewards-container {
@@ -258,26 +278,37 @@
 
 .rewards-container h3 {
   font-size: 1.3rem;
-  color: #7a68d4;
-  margin-bottom: 15px;
+  color: var(--profile-accent, #7a68d4);
+  margin-bottom: 20px;
 }
 
 .rewards {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  gap: 60px;
 }
 
 .reward-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: var(--profile-bg-dark, #1a1a2e);
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 140px;
+  border: 1px solid var(--profile-border, #232535);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.reward-item:hover {
+  transform: translateY(-5px);
 }
 
 .reward-value {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #ffd700;
+  color: var(--profile-accent-secondary, #ffd700);
   margin-bottom: 5px;
   display: flex;
   align-items: center;
@@ -286,46 +317,44 @@
 
 .coins-icon {
   font-size: 1.5rem;
+  color: var(--profile-accent-secondary, #ffd700);
 }
 
 .reward-label {
-  font-size: 1rem;
+  font-size: 1.1rem;
   opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .modal-actions {
-  background-color: #1a1a2e;
+  background-color: var(--profile-bg-card, #1a1a2e);
   padding: 20px;
   text-align: center;
-  border-top: 1px solid #232535;
+  border-top: 1px solid var(--profile-border, #232535);
 }
 
 .continue-button {
-  background-color: #5f4bb6;
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 12px 30px;
-  font-size: 1.1rem;
+  border-radius: 30px;
+  padding: 14px 40px;
+  font-size: 1.2rem;
   font-family: 'Orbitron', sans-serif;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
+  font-weight: 600;
 }
 
 .continue-button:hover {
-  background-color: #7a68d4;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(95, 75, 182, 0.3);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.5);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.continue-button:active {
+  transform: translateY(-1px) scale(1.02);
 }
 
 @keyframes pulse {
@@ -334,20 +363,64 @@
   100% { transform: scale(1); }
 }
 
-@keyframes glow {
-  from { box-shadow: 0 0 5px rgba(95, 75, 182, 0.3); }
-  to { box-shadow: 0 0 20px rgba(95, 75, 182, 0.7); }
+@keyframes scaleIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .congratulations-title {
-    font-size: 1.7rem;
+    font-size: 2rem;
   }
   
   .level-info h3,
   .new-level-name {
+    font-size: 1.5rem;
+  }
+  
+  .rewards {
+    gap: 30px;
+  }
+  
+  .reward-item {
+    min-width: 120px;
+    padding: 15px;
+  }
+  
+  .reward-value {
+    font-size: 1.8rem;
+  }
+  
+  .reward-label {
+    font-size: 1rem;
+  }
+  
+  .continue-button {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 30px 20px;
+  }
+  
+  .congratulations-title {
+    font-size: 1.8rem;
+  }
+  
+  .trophy-icon {
+    font-size: 3rem;
+  }
+  
+  .level-info h3 {
     font-size: 1.3rem;
+  }
+  
+  .new-level-name {
+    font-size: 1.5rem;
   }
   
   .unlocked-level h3,
@@ -356,14 +429,29 @@
   }
   
   .rewards {
+    flex-direction: column;
     gap: 20px;
+    max-width: 200px;
+    margin: 0 auto;
   }
   
-  .reward-value {
+  .reward-item {
+    width: 100%;
+  }
+  
+  .continue-button {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .congratulations-title {
     font-size: 1.5rem;
   }
   
-  .modal-content {
-    padding: 20px;
+  .level-info p,
+  .unlocked-level p {
+    font-size: 0.9rem;
   }
 }

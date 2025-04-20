@@ -1,7 +1,7 @@
 // src/components/pages/games/IncidentResponder/DifficultySelector.js
 import React from 'react';
 import { FaRegClock, FaTachometerAlt } from 'react-icons/fa';
-import './DifficultySelector.css';
+import './IncidentResponder.css';
 
 const DifficultySelector = ({ selectedDifficulty, onDifficultyChange }) => {
   const difficulties = [

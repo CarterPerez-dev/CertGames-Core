@@ -4,7 +4,7 @@ import {
   FaTrophy, FaRedo, FaHome, FaCheck, FaTimes, 
   FaClock, FaExclamationTriangle, FaTwitter, FaLinkedin 
 } from 'react-icons/fa';
-import './ThreatResultsModal.css';
+import './ThreatHunter.css';
 
 const ThreatResultsModal = ({ results, scenario, onClose, onRestart }) => {
   if (!results || !scenario) return null;

@@ -5,7 +5,7 @@ import {
   FaBookmark, FaTwitter, FaLinkedin, FaCheck, 
   FaExclamationTriangle, FaChartLine
 } from 'react-icons/fa';
-import './ScenarioResults.css';
+import './IncidentResponder.css';
 
 const ScenarioResults = ({ results, scenario, selectedActions, score, onRestart }) => {
   if (!results || !scenario) return null;

@@ -1,25 +1,34 @@
-/* src/components/pages/games/CipherChallenge/CipherHints.css */
 .cipher-hints-container {
-  background-color: #1a1a2e;
-  border-radius: 8px;
+  background-color: var(--profile-bg-card, #1a1a2e);
+  border-radius: 10px;
   margin-bottom: 25px;
-  border: 1px solid #232535;
+  border: 1px solid var(--profile-border, #232535);
   overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease;
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
 }
 
 .hints-header {
-  background-color: #232535;
-  padding: 15px;
+  background-color: var(--profile-bg-card, #232535);
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
+}
+
+.hints-header:hover {
+  background-color: var(--profile-bg-card, #2d2d40);
 }
 
 .hints-header h3 {
   margin: 0;
   font-size: 1.2rem;
-  color: #e2e2e2;
+  color: var(--profile-text, #e2e2e2);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -34,91 +43,115 @@
 .toggle-hints-button {
   background: none;
   border: none;
-  color: #e2e2e2;
+  color: var(--profile-text, #e2e2e2);
   cursor: pointer;
   font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.hints-header:hover .toggle-hints-button {
+  transform: translateY(3px);
 }
 
 .hints-content {
   padding: 20px;
+  animation: fadeIn 0.3s ease;
 }
 
 .hint-item {
   margin-bottom: 20px;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--profile-border, #2a2c3d);
+}
+
+.hint-item:last-child {
+  margin-bottom: 0;
 }
 
 .hint-number {
-  background-color: #232535;
-  padding: 10px 15px;
+  background-color: var(--profile-bg-card, #232535);
+  padding: 12px 15px;
   font-size: 1rem;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .hint-text {
-  background-color: #161625;
-  padding: 15px;
-  line-height: 1.5;
-  border: 1px solid #232535;
+  background-color: var(--profile-bg-dark, #161625);
+  padding: 15px 20px;
+  line-height: 1.6;
   border-top: none;
   font-size: 0.95rem;
+  color: var(--profile-text, #e2e2e2);
 }
 
 .locked-hint {
-  background-color: #161625;
-  padding: 20px;
+  background-color: var(--profile-bg-dark, #161625);
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
-  border: 1px solid #232535;
   border-top: none;
+  text-align: center;
 }
 
 .lock-icon {
-  font-size: 1.5rem;
-  color: #f44336;
-  margin-bottom: 5px;
+  font-size: 2rem;
+  color: var(--profile-error, #f44336);
+  filter: drop-shadow(0 0 5px rgba(244, 67, 54, 0.4));
+  animation: pulse 2s infinite;
 }
 
 .hint-locked-message {
   font-size: 0.95rem;
   opacity: 0.8;
-  text-align: center;
+  max-width: 250px;
+  margin: 0 auto;
 }
 
 .unlock-hint-button {
-  background-color: #5f4bb6;
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 8px 15px;
+  border-radius: 20px;
+  padding: 10px 20px;
   font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.3);
 }
 
 .unlock-hint-button:hover {
-  background-color: #7a68d4;
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
+}
+
+.unlock-hint-button:active {
+  transform: translateY(-1px);
 }
 
 .unlock-hint-button:disabled {
-  background-color: #3d3d50;
+  background: #3d3d50;
   color: #a0a0a0;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 .hints-info {
-  background-color: #161625;
-  padding: 10px 15px;
-  border-radius: 5px;
-  margin-top: 15px;
+  background-color: var(--profile-bg-dark, #161625);
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-top: 20px;
+  border: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .hints-info p {

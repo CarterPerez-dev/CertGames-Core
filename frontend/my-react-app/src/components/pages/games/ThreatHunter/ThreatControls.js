@@ -1,7 +1,7 @@
 // src/components/pages/games/ThreatHunter/ThreatControls.js
 import React, { useState, useEffect } from 'react';
 import { FaFlag, FaExclamationTriangle, FaClock, FaCheck } from 'react-icons/fa';
-import './ThreatControls.css';
+import './ThreatHunter.css';
 
 const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) => {
   const [timerDisplay, setTimerDisplay] = useState('00:00');

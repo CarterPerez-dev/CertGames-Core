@@ -1,7 +1,7 @@
 // src/components/pages/games/IncidentResponder/ScenarioIntro.js
 import React, { useState } from 'react';
 import { FaPlay, FaBriefcase, FaInfoCircle, FaExclamationCircle, FaUserSecret, FaLightbulb, FaClipboardCheck } from 'react-icons/fa';
-import './ScenarioIntro.css';
+import './IncidentResponder.css';
 
 const ScenarioIntro = ({ scenario, onStart }) => {
   const [activeTab, setActiveTab] = useState('overview');

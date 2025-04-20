@@ -1,32 +1,58 @@
 /* src/components/pages/games/CipherChallenge/CipherDisplay.css */
+/* Enhanced with theme compatibility and visual improvements */
+
 .cipher-display {
-  background-color: #1a1a2e;
-  border-radius: 8px;
+  background-color: var(--profile-bg-card, #1a1a2e);
+  border-radius: 12px;
   overflow: hidden;
   margin-bottom: 25px;
-  border: 1px solid #232535;
+  border: 1px solid var(--profile-border, #2a2c3d);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.5s ease;
+  position: relative;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cipher-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  z-index: 1;
 }
 
 .cipher-display-header {
-  background-color: #232535;
-  padding: 15px;
+  background-color: var(--profile-bg-card, #232535);
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
+  position: relative;
 }
 
 .cipher-display-header h3 {
   font-size: 1.2rem;
   margin: 0;
-  color: #e2e2e2;
+  color: var(--profile-text, #e2e2e2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .copy-button {
-  background-color: #2d2d40;
-  color: #e2e2e2;
-  border: none;
-  border-radius: 5px;
-  padding: 8px 12px;
+  background-color: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.2);
+  color: var(--profile-text, #e2e2e2);
+  border: 1px solid var(--profile-border, #2a2c3d);
+  border-radius: 20px;
+  padding: 8px 14px;
   font-size: 0.85rem;
   display: flex;
   align-items: center;
@@ -36,20 +62,34 @@
 }
 
 .copy-button:hover {
-  background-color: #3d3d50;
+  background-color: var(--profile-accent, #7a68d4);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.copy-button:active {
+  transform: translateY(0);
 }
 
 .copy-button.copied {
-  background-color: #4caf50;
+  background-color: var(--profile-success, #4caf50);
   color: white;
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .cipher-text {
-  padding: 20px;
-  background-color: #0f0f18;
-  min-height: 100px;
-  max-height: 250px;
+  padding: 25px;
+  background-color: var(--profile-bg-dark, #0f0f18);
+  min-height: 120px;
+  max-height: 300px;
   overflow-y: auto;
+  position: relative;
 }
 
 .cipher-text pre {
@@ -59,56 +99,91 @@
   white-space: pre-wrap;
   word-break: break-word;
   line-height: 1.6;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   user-select: all;
+  position: relative;
+  z-index: 1;
+}
+
+.cipher-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 80% 20%, rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1) 0%, transparent 70%),
+    radial-gradient(circle at 20% 80%, rgba(var(--theme-accent-rgb, 95, 75, 182), 0.05) 0%, transparent 50%);
+  z-index: 0;
 }
 
 .symbolic-cipher {
-  padding: 20px;
+  padding: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #0f0f18;
+  background-color: var(--profile-bg-dark, #0f0f18);
 }
 
 .cipher-image {
   max-width: 100%;
   max-height: 300px;
   object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.cipher-image:hover {
+  transform: scale(1.02);
 }
 
 .morse-legend {
-  padding: 15px;
-  background-color: #161625;
-  border-top: 1px solid #232535;
+  padding: 20px;
+  background-color: var(--profile-bg-card, #161625);
+  border-top: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .morse-legend h4 {
-  font-size: 1rem;
-  color: #7a68d4;
-  margin-bottom: 10px;
+  font-size: 1.1rem;
+  color: var(--profile-accent, #7a68d4);
+  margin: 0 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .morse-guide {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .morse-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 10px;
+  justify-content: center;
 }
 
 .morse-letter {
   font-family: 'Courier New', monospace;
   font-size: 0.9rem;
-  background-color: #232535;
-  padding: 5px 8px;
-  border-radius: 4px;
-  min-width: 70px;
+  background-color: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1);
+  color: var(--profile-text, #e2e2e2);
+  padding: 7px 10px;
+  border-radius: 6px;
+  min-width: 75px;
   text-align: center;
+  border: 1px solid var(--profile-border, #2a2c3d);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.morse-letter:hover {
+  background-color: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Scrollbar styling */
@@ -117,30 +192,73 @@
 }
 
 .cipher-text::-webkit-scrollbar-track {
-  background: #161625;
+  background: var(--profile-bg-dark, #161625);
+  border-radius: 4px;
 }
 
 .cipher-text::-webkit-scrollbar-thumb {
-  background-color: #2d2d40;
-  border-radius: 10px;
+  background-color: var(--profile-accent, #2d2d40);
+  border-radius: 4px;
 }
 
 .cipher-text::-webkit-scrollbar-thumb:hover {
-  background-color: #3d3d50;
+  background-color: var(--profile-accent-glow, #3d3d50);
 }
 
 /* Responsive adjustments */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .cipher-display-header {
+    padding: 12px 15px;
+  }
+
+  .cipher-text {
+    padding: 20px;
+  }
+  
   .morse-row {
     gap: 8px;
   }
   
   .morse-letter {
+    min-width: 70px;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .morse-row {
+    gap: 6px;
+  }
+  
+  .morse-letter {
     min-width: auto;
+    width: calc(25% - 6px);
     font-size: 0.8rem;
+    padding: 5px;
   }
   
   .cipher-text pre {
     font-size: 1rem;
+  }
+  
+  .copy-button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .cipher-display-header h3 {
+    font-size: 1rem;
+  }
+  
+  .morse-letter {
+    width: calc(33.33% - 6px);
+    font-size: 0.75rem;
+  }
+  
+  .cipher-text {
+    padding: 15px;
   }
 }

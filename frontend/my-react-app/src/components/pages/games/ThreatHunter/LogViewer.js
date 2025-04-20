@@ -1,7 +1,7 @@
 // src/components/pages/games/ThreatHunter/LogViewer.js
 import React, { useState, useEffect, useRef } from 'react';
 import { FaFlag, FaRegFlag, FaExclamationTriangle, FaSearch } from 'react-icons/fa';
-import './LogViewer.css';
+import './ThreatHunter.css';
 
 const LogViewer = ({ logs, selectedLog, flaggedLines, onSelectLog, onFlagLine }) => {
   const [currentLogIndex, setCurrentLogIndex] = useState(0);

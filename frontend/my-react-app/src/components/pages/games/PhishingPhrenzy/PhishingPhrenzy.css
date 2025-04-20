@@ -1,35 +1,110 @@
-/* src/components/pages/games/PhishingPhrenzy/PhishingPhrenzy.css */
+/* Enhanced PhishingPhrenzy.css with theme compatibility */
+
+/* Map the theme variables to phishing-specific variables */
+:root,
+:root[data-theme="default"],
+:root[data-theme="blue"],
+:root[data-theme="green"],
+:root[data-theme="red"],
+:root[data-theme="teal"],
+:root[data-theme="dark"],
+:root[data-theme="orange"],
+:root[data-theme="pink"],
+:root[data-theme="gold"],
+:root[data-theme="cyan"],
+:root[data-theme="neon"],
+:root[data-theme="navy"],
+:root[data-theme="indigo"],
+:root[data-theme="violet"],
+:root[data-theme="magenta"],
+:root[data-theme="crimson"],
+:root[data-theme="amber"],
+:root[data-theme="lime"],
+:root[data-theme="emerald"],
+:root[data-theme="turquoise"],
+:root[data-theme="sky"],
+:root[data-theme="midnight"],
+:root[data-theme="chocolate"],
+:root[data-theme="silver"] {
+  /* Main phishing game variables */
+  --phishing-accent: var(--theme-accent, #6543cc);
+  --phishing-accent-glow: var(--theme-accent-glow, #8a58fc);
+  --phishing-accent-secondary: var(--theme-accent-secondary, #ff4c8b);
+  --phishing-bg-dark: var(--theme-bg-dark, #0c0e14);
+  --phishing-bg-card: var(--theme-bg-card, #171a23);
+  --phishing-bg-card-lighter: rgba(255, 255, 255, 0.03);
+  --phishing-gradient-primary: var(--theme-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  --phishing-gradient-secondary: var(--theme-gradient-secondary, linear-gradient(135deg, #ff4c8b, #ff7950));
+  --phishing-text: #e2e2e2;
+  --phishing-text-secondary: #9da8b9;
+  --phishing-border: rgba(255, 255, 255, 0.1);
+  --phishing-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --phishing-glow: 0 0 15px rgba(var(--theme-accent-rgb, 101, 67, 204), 0.5);
+  
+  /* Game-specific colors */
+  --phishing-success: #2ebb77;
+  --phishing-error: #ff4e4e;
+  --phishing-warning: #ffc107;
+  
+  /* Trophy and medal colors - consistent across themes */
+  --phishing-gold: #ffd700;
+  --phishing-silver: #c0c0c0;
+  --phishing-bronze: #cd7f32;
+}
+
 .phishingphrenzy_main_container {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Orbitron', sans-serif;
-  background-color: #0f0f18;
-  color: #e2e2e2;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  background-color: var(--phishing-bg-dark);
+  color: var(--phishing-text);
+  border-radius: 15px;
+  box-shadow: var(--phishing-shadow);
+  border: 1px solid rgba(var(--theme-accent-rgb, 101, 67, 204), 0.2);
+  position: relative;
+  overflow: hidden;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.2) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.15) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
+}
+
+.phishingphrenzy_main_container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--phishing-gradient-primary);
+  z-index: 1;
 }
 
 .phishingphrenzy_header_section {
   text-align: center;
   margin-bottom: 30px;
   padding-bottom: 15px;
-  border-bottom: 2px solid #5f4bb6;
+  border-bottom: 2px solid var(--phishing-accent);
+  position: relative;
 }
 
 .phishingphrenzy_header_section h1 {
   font-size: 2.5rem;
-  color: #7a68d4;
+  background: var(--phishing-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .phishingphrenzy_header_section p {
   font-size: 1.2rem;
-  opacity: 0.8;
+  color: var(--phishing-text-secondary);
 }
 
 /* Start Screen */
@@ -38,15 +113,31 @@
   flex-direction: column;
   align-items: center;
   padding: 30px;
-  background-color: #161625;
-  border-radius: 8px;
-  border: 1px solid #232535;
+  background-color: var(--phishing-bg-card);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--theme-accent-rgb, 101, 67, 204), 0.2);
+  box-shadow: var(--phishing-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.phishingphrenzy_start_screen::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(135deg, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.05) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 50%, rgba(var(--theme-accent-rgb, 101, 67, 204), 0.05) 100%);
+  pointer-events: none;
 }
 
 .phishingphrenzy_start_screen h2 {
   font-size: 1.8rem;
   margin-bottom: 20px;
-  color: #7a68d4;
+  color: var(--phishing-accent);
 }
 
 .phishingphrenzy_start_screen p {
@@ -54,18 +145,24 @@
   text-align: center;
   margin-bottom: 30px;
   max-width: 600px;
+  color: var(--phishing-text-secondary);
 }
 
 .phishingphrenzy_difficulty_selector {
   width: 100%;
   max-width: 500px;
   margin-bottom: 30px;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--phishing-border);
 }
 
 .phishingphrenzy_difficulty_selector h3 {
   text-align: center;
   margin-bottom: 15px;
-  color: #7a68d4;
+  color: var(--phishing-accent);
+  font-size: 1.3rem;
 }
 
 .phishingphrenzy_difficulty_buttons {
@@ -78,55 +175,84 @@
 .phishingphrenzy_difficulty_buttons button {
   padding: 10px 25px;
   border: none;
-  border-radius: 5px;
-  background-color: #232535;
-  color: #e2e2e2;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--phishing-text);
   font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  border: 1px solid var(--phishing-border);
 }
 
 .phishingphrenzy_difficulty_buttons button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(95, 75, 182, 0.3);
+  box-shadow: var(--phishing-glow);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .phishingphrenzy_difficulty_buttons button.active {
-  background-color: #5f4bb6;
+  background: var(--phishing-gradient-primary);
   color: white;
-  box-shadow: 0 0 10px rgba(95, 75, 182, 0.7);
+  box-shadow: var(--phishing-glow);
+  border: none;
 }
 
 .phishingphrenzy_difficulty_details {
-  background-color: #1a1a2e;
+  background-color: rgba(0, 0, 0, 0.2);
   padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #2a2a3d;
+  border-radius: 8px;
+  border: 1px solid var(--phishing-border);
 }
 
 .phishingphrenzy_difficulty_details p {
-  margin: 5px 0;
+  margin: 8px 0;
   font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .phishingphrenzy_start_game_button {
   padding: 15px 40px;
   font-size: 1.2rem;
-  background-color: #5f4bb6;
+  background: var(--phishing-gradient-primary);
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   margin-bottom: 20px;
   font-family: 'Orbitron', sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--phishing-shadow);
+}
+
+.phishingphrenzy_start_game_button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  transition: all 0.7s ease;
 }
 
 .phishingphrenzy_start_game_button:hover {
-  background-color: #7a68d4;
   transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(95, 75, 182, 0.7);
+  box-shadow: 0 0 20px rgba(var(--theme-accent-rgb, 101, 67, 204), 0.7);
+}
+
+.phishingphrenzy_start_game_button:hover::after {
+  left: 100%;
+  top: 100%;
 }
 
 .phishingphrenzy_high_score_display {
@@ -134,7 +260,11 @@
   align-items: center;
   gap: 10px;
   font-size: 1.1rem;
-  color: #ffd700;
+  color: var(--phishing-gold);
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
 /* Gameplay */
@@ -147,30 +277,36 @@
 .phishingphrenzy_game_stats {
   display: flex;
   justify-content: space-between;
-  background-color: #161625;
-  padding: 15px;
-  border-radius: 8px;
+  background-color: var(--phishing-bg-card);
+  padding: 15px 20px;
+  border-radius: 12px;
   font-size: 1.2rem;
-  border: 1px solid #232535;
+  border: 1px solid var(--phishing-border);
+  box-shadow: var(--phishing-shadow);
 }
 
-.phishingphrenzy_timer, .phishingphrenzy_score, .phishingphrenzy_streak {
+.phishingphrenzy_timer, 
+.phishingphrenzy_score, 
+.phishingphrenzy_streak {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 8px 15px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
 }
 
 .phishingphrenzy_timer {
-  color: #e2e2e2;
+  color: var(--phishing-text);
 }
 
 .phishingphrenzy_score {
-  color: #7a68d4;
+  color: var(--phishing-accent-glow);
   font-weight: bold;
 }
 
 .phishingphrenzy_streak {
-  color: #ff6b6b;
+  color: var(--phishing-accent-secondary);
 }
 
 .phishingphrenzy_answer_buttons {
@@ -184,34 +320,59 @@
   flex: 1;
   padding: 15px;
   font-size: 1.1rem;
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   font-family: 'Orbitron', sans-serif;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--phishing-shadow);
+}
+
+.phishingphrenzy_answer_buttons button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  transition: all 0.7s ease;
+}
+
+.phishingphrenzy_answer_buttons button:hover::after {
+  left: 100%;
+  top: 100%;
 }
 
 .phishingphrenzy_legitimate_button {
-  background-color: #4caf50;
+  background-color: var(--phishing-success);
   color: white;
 }
 
 .phishingphrenzy_legitimate_button:hover {
-  background-color: #388e3c;
+  background-color: #259962;
   transform: scale(1.03);
 }
 
 .phishingphrenzy_phishing_button {
-  background-color: #f44336;
+  background-color: var(--phishing-error);
   color: white;
 }
 
 .phishingphrenzy_phishing_button:hover {
-  background-color: #d32f2f;
+  background-color: #e23939;
   transform: scale(1.03);
 }
 
@@ -225,22 +386,23 @@
 .phishingphrenzy_feedback {
   margin-top: 20px;
   padding: 15px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1.1rem;
   text-align: center;
-  animation: fadeIn 0.3s ease;
+  animation: feedbackFadeIn 0.3s ease;
+  box-shadow: var(--phishing-shadow);
 }
 
 .phishingphrenzy_feedback.correct {
-  background-color: rgba(76, 175, 80, 0.2);
-  border: 1px solid #4caf50;
-  color: #4caf50;
+  background-color: rgba(46, 187, 119, 0.15);
+  border: 1px solid rgba(46, 187, 119, 0.5);
+  color: var(--phishing-success);
 }
 
 .phishingphrenzy_feedback.incorrect {
-  background-color: rgba(244, 67, 54, 0.2);
-  border: 1px solid #f44336;
-  color: #f44336;
+  background-color: rgba(255, 78, 78, 0.15);
+  border: 1px solid rgba(255, 78, 78, 0.5);
+  color: var(--phishing-error);
 }
 
 /* Loading and Error States */
@@ -248,18 +410,45 @@
   text-align: center;
   padding: 40px;
   font-size: 1.2rem;
+  background-color: var(--phishing-bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--phishing-border);
+  box-shadow: var(--phishing-shadow);
+}
+
+.phishingphrenzy_loading {
+  color: var(--phishing-text);
+  position: relative;
+}
+
+.phishingphrenzy_loading::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 40px;
+  margin: 20px auto 0;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--phishing-accent);
+  animation: loadingSpin 1s linear infinite;
 }
 
 .phishingphrenzy_error {
-  color: #f44336;
+  color: var(--phishing-error);
 }
 
-@keyframes fadeIn {
+/* Animations */
+@keyframes feedbackFadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
+@keyframes loadingSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
   .phishingphrenzy_header_section h1 {
     font-size: 2rem;
@@ -270,6 +459,12 @@
     gap: 10px;
   }
   
+  .phishingphrenzy_timer, 
+  .phishingphrenzy_score, 
+  .phishingphrenzy_streak {
+    width: 100%;
+  }
+  
   .phishingphrenzy_answer_buttons {
     flex-direction: column;
   }
@@ -277,5 +472,23 @@
   .phishingphrenzy_difficulty_buttons {
     flex-direction: column;
     gap: 10px;
+  }
+  
+  .phishingphrenzy_start_game_button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .phishingphrenzy_header_section h1 {
+    font-size: 1.8rem;
+  }
+  
+  .phishingphrenzy_start_screen h2 {
+    font-size: 1.5rem;
+  }
+  
+  .phishingphrenzy_difficulty_selector {
+    padding: 15px;
   }
 }

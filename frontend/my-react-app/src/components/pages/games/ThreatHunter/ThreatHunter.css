@@ -1,39 +1,129 @@
+/* ThreatHunter Theme Integration - Master File */
+
+/* Map ThreatHunter colors to the existing theme variables from UserProfile.css */
+:root,
+:root[data-theme="default"],
+:root[data-theme="blue"],
+:root[data-theme="green"],
+:root[data-theme="red"],
+:root[data-theme="teal"],
+:root[data-theme="dark"],
+:root[data-theme="orange"],
+:root[data-theme="pink"],
+:root[data-theme="gold"],
+:root[data-theme="cyan"],
+:root[data-theme="neon"],
+:root[data-theme="navy"],
+:root[data-theme="indigo"],
+:root[data-theme="violet"],
+:root[data-theme="magenta"],
+:root[data-theme="crimson"],
+:root[data-theme="amber"],
+:root[data-theme="lime"],
+:root[data-theme="emerald"],
+:root[data-theme="turquoise"],
+:root[data-theme="sky"],
+:root[data-theme="midnight"],
+:root[data-theme="chocolate"],
+:root[data-theme="silver"] {
+  /* ThreatHunter specific variables mapped to theme variables */
+  --threathunter-bg-dark: var(--theme-bg-dark, #0f0f18);
+  --threathunter-bg-card: var(--theme-bg-card, #161625);
+  --threathunter-bg-header: var(--theme-bg-card, #232535);
+  --threathunter-bg-highlight: rgba(255, 255, 255, 0.03);
+  --threathunter-border: rgba(255, 255, 255, 0.1);
+  --threathunter-border-dark: #2d2d40;
+  
+  --threathunter-accent: var(--theme-accent, #5f4bb6);
+  --threathunter-accent-glow: var(--theme-accent-glow, #7a68d4);
+  --threathunter-accent-secondary: var(--theme-accent-secondary, #ff4c8b);
+  
+  --threathunter-text: var(--profile-text, #e2e2e2);
+  --threathunter-text-secondary: var(--profile-text-secondary, #9da8b9);
+  
+  --threathunter-success: var(--profile-success, #4caf50);
+  --threathunter-error: var(--profile-error, #f44336);
+  --threathunter-warning: var(--profile-warning, #ffc107);
+  
+  --threathunter-gradient-primary: var(--profile-gradient-primary, linear-gradient(135deg, #5f4bb6, #7a68d4));
+  --threathunter-gradient-secondary: var(--profile-gradient-secondary, linear-gradient(135deg, #ff4c8b, #ff7950));
+  
+  --threathunter-shadow: var(--profile-shadow, 0 8px 24px rgba(0, 0, 0, 0.4));
+  --threathunter-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --threathunter-glow: var(--profile-glow, 0 0 15px rgba(95, 75, 182, 0.5));
+  
+  /* Transparency variants for the accent color */
+  --threathunter-accent-10: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1);
+  --threathunter-accent-20: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.2);
+  --threathunter-accent-30: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.3);
+}
+
+/*===============================*/
+/* MAIN THREAT HUNTER CONTAINER */
+/*===============================*/
+
 /* src/components/pages/games/ThreatHunter/ThreatHunter.css */
 .threat-hunter-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Orbitron', sans-serif;
-  color: #e2e2e2;
+  color: var(--threathunter-text);
+  background-color: var(--threathunter-bg-dark);
+  background-image: 
+    radial-gradient(circle at 10% 20%, var(--threathunter-accent-10) 0%, transparent 45%),
+    radial-gradient(circle at 80% 70%, var(--threathunter-accent-10) 0%, transparent 40%),
+    repeating-linear-gradient(rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 1px, transparent 1px, transparent 10px);
 }
 
 .threat-hunter-header {
   text-align: center;
   margin-bottom: 30px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #5f4bb6;
+  border-bottom: 2px solid var(--threathunter-accent);
+  position: relative;
+}
+
+.threat-hunter-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  box-shadow: 0 0 8px var(--threathunter-accent-glow);
 }
 
 .threat-hunter-header h1 {
   font-size: 2.5rem;
-  color: #7a68d4;
+  background: var(--threathunter-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.threat-hunter-header h1 svg {
+  color: var(--threathunter-accent-glow);
+  -webkit-text-fill-color: var(--threathunter-accent-glow);
 }
 
 .threat-hunter-header p {
   font-size: 1.2rem;
   opacity: 0.8;
+  color: var(--threathunter-text-secondary);
 }
 
 .threat-hunter-content {
-  background-color: #0f0f18;
+  background-color: var(--threathunter-bg-dark);
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--threathunter-shadow);
   overflow: hidden;
+  border: 1px solid var(--threathunter-border-dark);
 }
 
 /* Log Analysis Layout */
@@ -57,12 +147,33 @@
 
 .threat-hunter-loading, .threat-hunter-error {
   text-align: center;
-  padding: 50px;
+  padding: 80px 20px;
   font-size: 1.3rem;
+  border-radius: 10px;
+  background-color: var(--threathunter-bg-card);
+  border: 1px solid var(--threathunter-border-dark);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threat-hunter-loading::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  border: 4px solid var(--threathunter-accent-10);
+  border-top-color: var(--threathunter-accent);
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .threat-hunter-error {
-  color: #f44336;
+  color: var(--threathunter-error);
 }
 
 /* Responsive Design */
@@ -104,5 +215,2100 @@
   
   .threat-hunter-gameplay {
     padding: 10px;
+  }
+}
+
+/*===============================*/
+/* LOG VIEWER COMPONENT         */
+/*===============================*/
+
+/* src/components/pages/games/ThreatHunter/LogViewer.css */
+.threathunter_logviewer_main_wrapper {
+  background-color: var(--threathunter-bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_logviewer_header_bar {
+  background-color: var(--threathunter-bg-header);
+  padding: 15px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.threathunter_logviewer_tabs_container {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.threathunter_logviewer_tab_button {
+  padding: 8px 15px;
+  background-color: var(--threathunter-bg-dark);
+  border: 1px solid var(--threathunter-border-dark);
+  border-radius: 5px;
+  color: var(--threathunter-text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.threathunter_logviewer_tab_button:hover {
+  background-color: var(--threathunter-accent-10);
+  transform: translateY(-2px);
+}
+
+.threathunter_logviewer_tab_button.active {
+  background: var(--threathunter-accent);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--threathunter-glow);
+}
+
+.threathunter_logviewer_search_area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.threathunter_logviewer_search_input_box {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.threathunter_logviewer_search_input_box input {
+  padding: 9px 15px;
+  background-color: var(--threathunter-bg-dark);
+  border: 1px solid var(--threathunter-border-dark);
+  border-radius: 5px 0 0 5px;
+  color: var(--threathunter-text);
+  width: 200px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.threathunter_logviewer_search_input_box input:focus {
+  outline: none;
+  border-color: var(--threathunter-accent);
+  box-shadow: 0 0 0 1px var(--threathunter-accent-10);
+}
+
+.threathunter_logviewer_search_button {
+  background-color: var(--threathunter-accent);
+  color: white;
+  border: none;
+  border-radius: 0 5px 5px 0;
+  padding: 9px 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.threathunter_logviewer_search_button:hover {
+  background-color: var(--threathunter-accent-glow);
+}
+
+.threathunter_logviewer_search_navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--threathunter-bg-dark);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_logviewer_results_count {
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_logviewer_nav_button {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-text);
+  border: none;
+  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.threathunter_logviewer_nav_button:hover {
+  background-color: var(--threathunter-accent);
+  color: white;
+}
+
+.threathunter_logviewer_content_area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.threathunter_logviewer_info_section {
+  background-color: var(--threathunter-bg-dark);
+  padding: 15px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_logviewer_info_header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.threathunter_logviewer_log_name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--threathunter-text);
+}
+
+.threathunter_logviewer_log_type {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-accent-glow);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.threathunter_logviewer_log_meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_logviewer_log_lines {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.threathunter_logviewer_log_line {
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  border-bottom: 1px solid var(--threathunter-bg-dark);
+  transition: background-color 0.2s ease;
+}
+
+.threathunter_logviewer_log_line:hover {
+  background-color: var(--threathunter-bg-dark);
+}
+
+.threathunter_logviewer_log_line.highlighted {
+  background-color: var(--threathunter-accent-10);
+  border-top: 1px solid var(--threathunter-accent);
+  border-bottom: 1px solid var(--threathunter-accent);
+}
+
+.threathunter_logviewer_log_line.flagged {
+  background-color: rgba(var(--threathunter-error-rgb, 244, 67, 54), 0.1);
+}
+
+.threathunter_logviewer_log_line.search-match:not(.highlighted) {
+  background-color: rgba(var(--threathunter-warning-rgb, 255, 193, 7), 0.1);
+}
+
+.threathunter_logviewer_line_number {
+  padding: 8px 10px;
+  text-align: right;
+  color: var(--threathunter-accent);
+  border-right: 1px solid var(--threathunter-border-dark);
+  user-select: none;
+}
+
+.threathunter_logviewer_line_text {
+  padding: 8px 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.threathunter_logviewer_line_text pre {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+}
+
+.threathunter_logviewer_line_actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_logviewer_flag_button {
+  background: none;
+  border: none;
+  color: var(--threathunter-text);
+  opacity: 0.5;
+  cursor: pointer;
+  padding: 5px;
+  transition: all 0.3s ease;
+}
+
+.threathunter_logviewer_flag_button:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.threathunter_logviewer_flag_button.active {
+  color: var(--threathunter-error);
+  opacity: 1;
+}
+
+.threathunter_logviewer_footer {
+  background-color: var(--threathunter-bg-header);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--threathunter-border-dark);
+  font-size: 0.85rem;
+}
+
+.threathunter_logviewer_statistics {
+  display: flex;
+  gap: 15px;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_logviewer_help_text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--threathunter-text-secondary);
+  opacity: 0.7;
+}
+
+.threathunter_logviewer_empty_state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: var(--threathunter-bg-card);
+  border-radius: 8px;
+  border: 1px solid var(--threathunter-border-dark);
+  padding: 30px;
+  text-align: center;
+}
+
+.threathunter_logviewer_empty_icon {
+  font-size: 3rem;
+  color: var(--threathunter-accent);
+  margin-bottom: 20px;
+  opacity: 0.7;
+}
+
+/* Scrollbar styling */
+.threathunter_logviewer_content_area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.threathunter_logviewer_content_area::-webkit-scrollbar-track {
+  background: var(--threathunter-bg-dark);
+}
+
+.threathunter_logviewer_content_area::-webkit-scrollbar-thumb {
+  background-color: var(--threathunter-border-dark);
+  border-radius: 10px;
+}
+
+.threathunter_logviewer_content_area::-webkit-scrollbar-thumb:hover {
+  background-color: var(--threathunter-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .threathunter_logviewer_header_bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .threathunter_logviewer_tabs_container {
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+  
+  .threathunter_logviewer_search_area {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .threathunter_logviewer_search_input_box input {
+    flex: 1;
+  }
+  
+  .threathunter_logviewer_info_header, .threathunter_logviewer_log_meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .threathunter_logviewer_footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 500px) {
+  .threathunter_logviewer_log_line {
+    grid-template-columns: 30px 1fr 30px;
+  }
+  
+  .threathunter_logviewer_line_number {
+    padding: 8px 5px;
+    font-size: 0.8rem;
+  }
+  
+  .threathunter_logviewer_line_text {
+    padding: 8px 5px;
+    font-size: 0.8rem;
+  }
+  
+  .threathunter_logviewer_flag_button {
+    padding: 2px;
+    font-size: 0.8rem;
+  }
+}
+
+/*===============================*/
+/* ANALYSIS TOOLS COMPONENT     */
+/*===============================*/
+
+/* src/components/pages/games/ThreatHunter/AnalysisTools.css */
+.threathunter_analysistools_container {
+  background-color: var(--threathunter-bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_analysistools_header {
+  background-color: var(--threathunter-bg-header);
+  padding: 15px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  position: relative;
+}
+
+.threathunter_analysistools_header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  box-shadow: 0 1px 3px var(--threathunter-accent-10);
+}
+
+.threathunter_analysistools_header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--threathunter-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_analysistools_header h3::before {
+  content: '⟁'; /* Add a symbol to make it look more tech-oriented */
+  color: var(--threathunter-accent);
+  font-size: 1.4rem;
+}
+
+.threathunter_analysistools_container_inner {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.threathunter_analysistools_menu {
+  display: flex;
+  background-color: var(--threathunter-bg-dark);
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  overflow-x: auto;
+}
+
+.threathunter_analysistools_tool_button {
+  padding: 12px 15px;
+  background: none;
+  border: none;
+  color: var(--threathunter-text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.threathunter_analysistools_tool_button:hover {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-accent-glow);
+}
+
+.threathunter_analysistools_tool_button.active {
+  background-color: var(--threathunter-bg-dark);
+  border-bottom-color: var(--threathunter-accent);
+  color: var(--threathunter-accent-glow);
+}
+
+.threathunter_analysistools_tool_icon {
+  font-size: 1rem;
+  color: var(--threathunter-accent);
+}
+
+.threathunter_analysistools_tool_content {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+/* Threat Detection Tool */
+.threathunter_analysistools_threat_detection_tool {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.threathunter_analysistools_tool_actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.threathunter_analysistools_add_threat_button {
+  background: var(--threathunter-gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_analysistools_add_threat_button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow);
+}
+
+.threathunter_analysistools_threat_form {
+  background-color: var(--threathunter-bg-dark);
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid var(--threathunter-border-dark);
+  margin-bottom: 15px;
+  position: relative;
+  animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.threathunter_analysistools_threat_form h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: var(--threathunter-accent-glow);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_analysistools_threat_form h4::before {
+  content: '🔍';
+  font-size: 1.2rem;
+}
+
+.threathunter_analysistools_form_group {
+  margin-bottom: 15px;
+}
+
+.threathunter_analysistools_form_group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_analysistools_form_group select,
+.threathunter_analysistools_form_group input,
+.threathunter_analysistools_form_group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background-color: var(--threathunter-bg-header);
+  border: 1px solid var(--threathunter-border-dark);
+  border-radius: 5px;
+  color: var(--threathunter-text);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.threathunter_analysistools_form_group select:focus,
+.threathunter_analysistools_form_group input:focus,
+.threathunter_analysistools_form_group textarea:focus {
+  outline: none;
+  border-color: var(--threathunter-accent);
+  box-shadow: 0 0 0 1px var(--threathunter-accent-10);
+}
+
+.threathunter_analysistools_form_group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.threathunter_analysistools_form_actions {
+  display: flex;
+  gap: 10px;
+}
+
+.threathunter_analysistools_submit_threat_button,
+.threathunter_analysistools_cancel_button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_analysistools_submit_threat_button {
+  background-color: var(--threathunter-success);
+  color: white;
+  flex-grow: 1;
+}
+
+.threathunter_analysistools_submit_threat_button:hover:not(:disabled) {
+  background-color: var(--threathunter-success);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.threathunter_analysistools_submit_threat_button:disabled {
+  background-color: var(--threathunter-border-dark);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.threathunter_analysistools_cancel_button {
+  background-color: var(--threathunter-bg-header);
+  color: var(--threathunter-text);
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_analysistools_cancel_button:hover {
+  background-color: var(--threathunter-bg-header);
+  filter: brightness(1.1);
+}
+
+.threathunter_analysistools_detected_threats h4 {
+  font-size: 1.1rem;
+  color: var(--threathunter-text);
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_analysistools_no_threats {
+  background-color: var(--threathunter-bg-dark);
+  padding: 20px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+  text-align: center;
+  border: 1px dashed var(--threathunter-border-dark);
+}
+
+.threathunter_analysistools_threats_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.threathunter_analysistools_threat_item {
+  background-color: var(--threathunter-bg-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--threathunter-border-dark);
+  transition: all 0.2s ease;
+}
+
+.threathunter_analysistools_threat_item:hover {
+  border-color: var(--threathunter-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_analysistools_threat_header {
+  background-color: var(--threathunter-bg-header);
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.threathunter_analysistools_threat_type {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--threathunter-text);
+}
+
+.threathunter_analysistools_threat_type svg {
+  color: var(--threathunter-error);
+}
+
+.threathunter_analysistools_threat_actions {
+  display: flex;
+  gap: 8px;
+}
+
+.threathunter_analysistools_edit_threat,
+.threathunter_analysistools_remove_threat {
+  background: none;
+  border: none;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.threathunter_analysistools_edit_threat {
+  color: var(--threathunter-accent);
+  background-color: var(--threathunter-accent-10);
+}
+
+.threathunter_analysistools_edit_threat:hover {
+  background-color: var(--threathunter-accent-20);
+  color: var(--threathunter-accent-glow);
+}
+
+.threathunter_analysistools_remove_threat {
+  color: var(--threathunter-text-secondary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.threathunter_analysistools_remove_threat:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--threathunter-error);
+}
+
+.threathunter_analysistools_threat_body {
+  padding: 15px;
+}
+
+.threathunter_analysistools_threat_description {
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--threathunter-text);
+}
+
+.threathunter_analysistools_threat_source {
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+  padding-top: 8px;
+  border-top: 1px dashed var(--threathunter-border-dark);
+}
+
+/* Other analysis tools (IP Analysis, Pattern Recognition, User Activity) */
+.threathunter_analysistools_ip_analysis_tool,
+.threathunter_analysistools_pattern_recognition_tool,
+.threathunter_analysistools_user_activity_tool {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.threathunter_analysistools_ip_analysis_tool h4,
+.threathunter_analysistools_pattern_recognition_tool h4,
+.threathunter_analysistools_user_activity_tool h4 {
+  margin-top: 0;
+  color: var(--threathunter-accent-glow);
+  font-size: 1.1rem;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_analysistools_tool_instruction {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  color: var(--threathunter-text-secondary);
+  background-color: var(--threathunter-bg-dark);
+  padding: 12px 15px;
+  border-radius: 8px;
+  border-left: 3px solid var(--threathunter-accent);
+}
+
+.threathunter_analysistools_entity_accordion {
+  background-color: var(--threathunter-bg-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--threathunter-border-dark);
+  margin-bottom: 15px;
+}
+
+.threathunter_analysistools_accordion_header {
+  background-color: var(--threathunter-bg-header);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.threathunter_analysistools_accordion_header:hover {
+  background-color: var(--threathunter-accent-10);
+}
+
+.threathunter_analysistools_accordion_content {
+  padding: 15px;
+}
+
+.threathunter_analysistools_entity_list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.threathunter_analysistools_entity_item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  background-color: var(--threathunter-bg-highlight);
+  transition: all 0.2s ease;
+}
+
+.threathunter_analysistools_entity_item:hover {
+  background-color: var(--threathunter-accent-10);
+}
+
+.threathunter_analysistools_entity_value {
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  color: var(--threathunter-accent-glow);
+}
+
+.threathunter_analysistools_entity_info {
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_analysistools_ip_analysis_tips h5,
+.threathunter_analysistools_pattern_tips h5,
+.threathunter_analysistools_user_activity_tips h5 {
+  font-size: 1rem;
+  color: var(--threathunter-text);
+  margin-bottom: 10px;
+}
+
+.threathunter_analysistools_ip_analysis_tips ul,
+.threathunter_analysistools_pattern_tips ul,
+.threathunter_analysistools_user_activity_tips ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: var(--threathunter-bg-dark);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_analysistools_ip_analysis_tips li,
+.threathunter_analysistools_user_activity_tips li {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  position: relative;
+  padding-left: 25px;
+  color: var(--threathunter-text);
+}
+
+.threathunter_analysistools_ip_analysis_tips li::before,
+.threathunter_analysistools_user_activity_tips li::before {
+  content: '▹';
+  position: absolute;
+  left: 10px;
+  color: var(--threathunter-accent);
+}
+
+.threathunter_analysistools_pattern_tips li {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.threathunter_analysistools_ip_analysis_tips li:last-child,
+.threathunter_analysistools_pattern_tips li:last-child,
+.threathunter_analysistools_user_activity_tips li:last-child {
+  border-bottom: none;
+}
+
+.threathunter_analysistools_pattern_name {
+  font-weight: bold;
+  color: var(--threathunter-accent);
+}
+
+.threathunter_analysistools_pattern_desc {
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+}
+
+/* Scrollbar styling */
+.threathunter_analysistools_tool_content::-webkit-scrollbar,
+.threathunter_analysistools_threats_list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.threathunter_analysistools_tool_content::-webkit-scrollbar-track,
+.threathunter_analysistools_threats_list::-webkit-scrollbar-track {
+  background: var(--threathunter-bg-dark);
+}
+
+.threathunter_analysistools_tool_content::-webkit-scrollbar-thumb,
+.threathunter_analysistools_threats_list::-webkit-scrollbar-thumb {
+  background-color: var(--threathunter-border-dark);
+  border-radius: 10px;
+}
+
+.threathunter_analysistools_tool_content::-webkit-scrollbar-thumb:hover,
+.threathunter_analysistools_threats_list::-webkit-scrollbar-thumb:hover {
+  background-color: var(--threathunter-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .threathunter_analysistools_menu {
+    flex-wrap: wrap;
+  }
+  
+  .threathunter_analysistools_tool_button {
+    flex: 1;
+    justify-content: center;
+    min-width: 120px;
+  }
+  
+  .threathunter_analysistools_threat_header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .threathunter_analysistools_threat_actions {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 500px) {
+  .threathunter_analysistools_form_actions {
+    flex-direction: column;
+  }
+  
+  .threathunter_analysistools_entity_item {
+    flex-direction: column;
+    gap: 5px;
+  }
+}
+
+/*===============================*/
+/* THREAT CONTROLS COMPONENT    */
+/*===============================*/
+
+/* src/components/pages/games/ThreatHunter/ThreatControls.css */
+.threathunter_threatcontrols_container {
+  background-color: var(--threathunter-bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_threatcontrols_header {
+  background-color: var(--threathunter-bg-header);
+  padding: 15px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  position: relative;
+}
+
+.threathunter_threatcontrols_header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  box-shadow: 0 1px 3px var(--threathunter-accent-10);
+}
+
+.threathunter_threatcontrols_header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--threathunter-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_threatcontrols_header h3::before {
+  content: '⚙️';
+  font-size: 1.2rem;
+}
+
+.threathunter_threatcontrols_content {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.threathunter_threatcontrols_analysis_status {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.threathunter_threatcontrols_status_item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  background-color: var(--threathunter-bg-dark);
+  padding: 12px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_threatcontrols_status_item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow-sm);
+  border-color: var(--threathunter-accent-10);
+}
+
+.threathunter_threatcontrols_status_icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.threathunter_threatcontrols_flag_icon {
+  background-color: rgba(var(--threathunter-error-rgb, 244, 67, 54), 0.1);
+  color: var(--threathunter-error);
+}
+
+.threathunter_threatcontrols_threat_icon {
+  background-color: rgba(var(--threathunter-warning-rgb, 255, 193, 7), 0.1);
+  color: var(--threathunter-warning);
+}
+
+.threathunter_threatcontrols_time_icon {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-accent);
+}
+
+.threathunter_threatcontrols_time_icon.urgent {
+  background-color: rgba(var(--threathunter-error-rgb, 244, 67, 54), 0.1);
+  color: var(--threathunter-error);
+  animation: pulse 1s infinite;
+}
+
+.threathunter_threatcontrols_status_details {
+  display: flex;
+  flex-direction: column;
+}
+
+.threathunter_threatcontrols_status_value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--threathunter-text);
+}
+
+.threathunter_threatcontrols_status_value.urgent {
+  color: var(--threathunter-error);
+  animation: pulse 1s infinite;
+}
+
+.threathunter_threatcontrols_status_label {
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_threatcontrols_submission_warning {
+  background-color: rgba(var(--threathunter-warning-rgb, 255, 193, 7), 0.1);
+  border-left: 3px solid var(--threathunter-warning);
+  padding: 12px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  color: var(--threathunter-text);
+}
+
+.threathunter_threatcontrols_submission_warning svg {
+  color: var(--threathunter-warning);
+  flex-shrink: 0;
+}
+
+.threathunter_threatcontrols_submit_analysis_button {
+  background: var(--threathunter-gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_threatcontrols_submit_analysis_button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow);
+}
+
+.threathunter_threatcontrols_submit_analysis_button:disabled {
+  background: linear-gradient(135deg, #555, #777);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.threathunter_threatcontrols_submission_note {
+  background-color: var(--threathunter-bg-dark);
+  padding: 12px 15px;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+  line-height: 1.5;
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .threathunter_threatcontrols_analysis_status {
+    flex-wrap: wrap;
+  }
+  
+  .threathunter_threatcontrols_status_item {
+    min-width: 45%;
+  }
+}
+
+@media (max-width: 500px) {
+  .threathunter_threatcontrols_status_item {
+    min-width: 100%;
+  }
+}
+
+/*===============================*/
+/* SCENARIO SELECTOR COMPONENT  */
+/*===============================*/
+
+/* src/components/pages/games/ThreatHunter/ScenarioSelector.css */
+.threathunter_scenarioselector_main_container {
+  padding: 25px;
+}
+
+.threathunter_scenarioselector_header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.threathunter_scenarioselector_header h2 {
+  font-size: 1.8rem;
+  background: var(--threathunter-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.threathunter_scenarioselector_header p {
+  font-size: 1.1rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_scenarioselector_filters {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+  background-color: var(--threathunter-bg-card);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_scenarioselector_type_filter h3,
+.threathunter_scenarioselector_difficulty_selector h3 {
+  font-size: 1.3rem;
+  color: var(--threathunter-accent-glow);
+  margin-bottom: 15px;
+}
+
+.threathunter_scenarioselector_type_buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.threathunter_scenarioselector_type_buttons button {
+  background-color: var(--threathunter-bg-header);
+  color: var(--threathunter-text);
+  border: 1px solid var(--threathunter-border-dark);
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.threathunter_scenarioselector_type_buttons button:hover {
+  background-color: var(--threathunter-accent-10);
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_scenarioselector_type_buttons button.active {
+  background: var(--threathunter-gradient-primary);
+  color: white;
+  border-color: transparent;
+  box-shadow: var(--threathunter-glow);
+}
+
+.threathunter_scenarioselector_type_buttons button svg {
+  font-size: 1rem;
+  color: var(--threathunter-accent);
+}
+
+.threathunter_scenarioselector_type_buttons button.active svg {
+  color: white;
+}
+
+.threathunter_scenarioselector_difficulty_options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.threathunter_scenarioselector_difficulty_button {
+  flex: 1;
+  background-color: var(--threathunter-bg-header);
+  border: 1px solid var(--threathunter-border-dark);
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.threathunter_scenarioselector_difficulty_button:hover {
+  background-color: var(--threathunter-accent-10);
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_scenarioselector_difficulty_button.active {
+  background-color: var(--threathunter-bg-dark);
+  border-color: var(--threathunter-accent);
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow);
+}
+
+.threathunter_scenarioselector_difficulty_name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--threathunter-text);
+}
+
+.threathunter_scenarioselector_difficulty_button.active .threathunter_scenarioselector_difficulty_name {
+  color: var(--threathunter-accent-glow);
+}
+
+.threathunter_scenarioselector_difficulty_indicators {
+  display: flex;
+  gap: 15px;
+}
+
+.threathunter_scenarioselector_indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_scenarioselector_indicator svg {
+  color: var(--threathunter-accent);
+}
+
+.threathunter_scenarioselector_selected_difficulty_info {
+  background-color: var(--threathunter-bg-dark);
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--threathunter-text-secondary);
+  border-left: 3px solid var(--threathunter-accent);
+}
+
+.threathunter_scenarioselector_scenarios_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.threathunter_scenarioselector_scenario_card {
+  background-color: var(--threathunter-bg-card);
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_scenarioselector_scenario_card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--threathunter-shadow);
+  border-color: var(--threathunter-accent);
+}
+
+.threathunter_scenarioselector_scenario_icon {
+  background: var(--threathunter-gradient-primary);
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+}
+
+.threathunter_scenarioselector_scenario_info {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.threathunter_scenarioselector_scenario_info h3 {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: var(--threathunter-text);
+}
+
+.threathunter_scenarioselector_scenario_meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.threathunter_scenarioselector_scenario_type {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-accent-glow);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.threathunter_scenarioselector_scenario_difficulty {
+  color: var(--threathunter-warning);
+  font-size: 0.9rem;
+}
+
+.threathunter_scenarioselector_scenario_info p {
+  font-size: 0.95rem;
+  color: var(--threathunter-text-secondary);
+  line-height: 1.5;
+  flex-grow: 1;
+  margin-bottom: 15px;
+}
+
+.threathunter_scenarioselector_scenario_stats {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--threathunter-bg-dark);
+  padding: 12px 15px;
+  border-radius: 8px;
+}
+
+.threathunter_scenarioselector_stat_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.threathunter_scenarioselector_stat_label {
+  font-size: 0.8rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_scenarioselector_stat_value {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: var(--threathunter-text);
+}
+
+.threathunter_scenarioselector_no_scenarios {
+  grid-column: 1 / -1;
+  background-color: var(--threathunter-bg-card);
+  padding: 40px 30px;
+  text-align: center;
+  border-radius: 10px;
+  border: 1px dashed var(--threathunter-border-dark);
+  color: var(--threathunter-text-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .threathunter_scenarioselector_scenarios_grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .threathunter_scenarioselector_difficulty_options {
+    flex-direction: column;
+  }
+  
+  .threathunter_scenarioselector_difficulty_button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .threathunter_scenarioselector_header h2 {
+    font-size: 1.6rem;
+  }
+  
+  .threathunter_scenarioselector_type_buttons button {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .threathunter_scenarioselector_scenario_stats {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  
+  .threathunter_scenarioselector_stat_item {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+/*===============================*/
+/* RESULTS MODAL COMPONENT      */
+/*===============================*/
+
+/* src/components/pages/games/ThreatHunter/ThreatResultsModal.css */
+.threathunter_resultsmodal_overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.threathunter_resultsmodal_container {
+  background-color: var(--threathunter-bg-card);
+  border-radius: 15px;
+  border: 2px solid var(--threathunter-accent);
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--threathunter-shadow), 0 0 20px var(--threathunter-accent-10);
+  font-family: 'Orbitron', sans-serif;
+  color: var(--threathunter-text);
+  animation: scaleIn 0.4s ease;
+  padding: 0;
+  position: relative;
+}
+
+.threathunter_resultsmodal_container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--threathunter-gradient-primary);
+}
+
+.threathunter_resultsmodal_header {
+  background-color: var(--threathunter-bg-header);
+  padding: 25px 20px;
+  text-align: center;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  position: relative;
+}
+
+.threathunter_resultsmodal_header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  box-shadow: 0 1px 3px var(--threathunter-accent-10);
+}
+
+.threathunter_resultsmodal_header h2 {
+  font-size: 1.8rem;
+  background: var(--threathunter-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.threathunter_resultsmodal_header h3 {
+  font-size: 1.3rem;
+  margin: 0;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_overview {
+  display: flex;
+  padding: 25px;
+  gap: 30px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_score_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.threathunter_resultsmodal_score_circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid var(--threathunter-accent);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--threathunter-bg-dark);
+  box-shadow: var(--threathunter-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.threathunter_resultsmodal_score_circle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, var(--threathunter-accent-10) 0%, transparent 70%);
+  opacity: 0.6;
+}
+
+.threathunter_resultsmodal_score_percentage {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--threathunter-text);
+  position: relative;
+  z-index: 2;
+}
+
+.threathunter_resultsmodal_score_points {
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+  position: relative;
+  z-index: 2;
+}
+
+.threathunter_resultsmodal_rating_container {
+  background-color: var(--threathunter-bg-dark);
+  padding: 15px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 150px;
+  border: 2px solid;
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_resultsmodal_rating_container.expert {
+  border-color: var(--threathunter-success);
+}
+
+.threathunter_resultsmodal_rating_container.senior {
+  border-color: #8bc34a;
+}
+
+.threathunter_resultsmodal_rating_container.analyst {
+  border-color: var(--threathunter-warning);
+}
+
+.threathunter_resultsmodal_rating_container.junior {
+  border-color: #ff9800;
+}
+
+.threathunter_resultsmodal_rating_container.trainee {
+  border-color: var(--threathunter-error);
+}
+
+.threathunter_resultsmodal_rating_icon {
+  font-size: 1.8rem;
+  color: var(--threathunter-warning);
+}
+
+.threathunter_resultsmodal_rating_value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_threat_stats {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.threathunter_resultsmodal_stat_row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--threathunter-bg-dark);
+  padding: 12px 15px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_stat_row:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_resultsmodal_stat_icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.threathunter_resultsmodal_stat_row.correct .threathunter_resultsmodal_stat_icon {
+  background-color: rgba(var(--threathunter-success-rgb, 76, 175, 80), 0.1);
+  color: var(--threathunter-success);
+}
+
+.threathunter_resultsmodal_stat_row.missed .threathunter_resultsmodal_stat_icon {
+  background-color: rgba(var(--threathunter-error-rgb, 244, 67, 54), 0.1);
+  color: var(--threathunter-error);
+}
+
+.threathunter_resultsmodal_stat_row.false .threathunter_resultsmodal_stat_icon {
+  background-color: rgba(var(--threathunter-warning-rgb, 255, 193, 7), 0.1);
+  color: var(--threathunter-warning);
+}
+
+.threathunter_resultsmodal_stat_row.time .threathunter_resultsmodal_stat_icon {
+  background-color: var(--threathunter-accent-10);
+  color: var(--threathunter-accent);
+}
+
+.threathunter_resultsmodal_stat_label {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_stat_value {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_rewards_summary {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  padding: 25px;
+  background-color: var(--threathunter-bg-dark);
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_reward_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--threathunter-bg-header);
+  padding: 15px 25px;
+  border-radius: 10px;
+  min-width: 120px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--threathunter-border-dark);
+  transition: all 0.3s ease;
+}
+
+.threathunter_resultsmodal_reward_item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--threathunter-shadow);
+}
+
+.threathunter_resultsmodal_reward_item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--threathunter-gradient-primary);
+}
+
+.threathunter_resultsmodal_reward_value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--threathunter-warning);
+}
+
+.threathunter_resultsmodal_reward_label {
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_resultsmodal_new_achievements {
+  padding: 25px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_new_achievements h3 {
+  font-size: 1.3rem;
+  color: var(--threathunter-accent-glow);
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.threathunter_resultsmodal_achievements_list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.threathunter_resultsmodal_achievement_item {
+  background-color: var(--threathunter-bg-dark);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: calc(50% - 10px);
+  border: 1px solid var(--threathunter-border-dark);
+  transition: all 0.3s ease;
+}
+
+.threathunter_resultsmodal_achievement_item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow-sm);
+  border-color: var(--threathunter-accent-10);
+}
+
+.threathunter_resultsmodal_achievement_icon {
+  width: 45px;
+  height: 45px;
+  background: var(--threathunter-bg-header);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: var(--threathunter-warning);
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.threathunter_resultsmodal_achievement_details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.threathunter_resultsmodal_achievement_name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_achievement_description {
+  font-size: 0.85rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_resultsmodal_detection_details {
+  padding: 25px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.threathunter_resultsmodal_details_section h3 {
+  font-size: 1.2rem;
+  color: var(--threathunter-accent-glow);
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.threathunter_resultsmodal_threats_list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.threathunter_resultsmodal_threats_list .threathunter_resultsmodal_threat_item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  background-color: var(--threathunter-bg-dark);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark);
+  transition: all 0.2s ease;
+}
+
+.threathunter_resultsmodal_threats_list .threathunter_resultsmodal_threat_item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_resultsmodal_threat_icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.threathunter_resultsmodal_threat_icon.correct {
+  color: var(--threathunter-success);
+}
+
+.threathunter_resultsmodal_threat_icon.missed {
+  color: var(--threathunter-error);
+}
+
+.threathunter_resultsmodal_threat_info {
+  flex: 1;
+}
+
+.threathunter_resultsmodal_threat_name {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--threathunter-text);
+}
+
+.threathunter_resultsmodal_threat_description {
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+  line-height: 1.5;
+}
+
+.threathunter_resultsmodal_no_threats {
+  background-color: var(--threathunter-bg-dark);
+  padding: 20px 15px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+  text-align: center;
+  border: 1px dashed var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_feedback_section {
+  padding: 25px;
+  border-bottom: 1px solid var(--threathunter-border-dark);
+}
+
+.threathunter_resultsmodal_feedback_section h3 {
+  font-size: 1.2rem;
+  color: var(--threathunter-accent-glow);
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.threathunter_resultsmodal_feedback_section p {
+  line-height: 1.6;
+  background-color: var(--threathunter-bg-dark);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: var(--threathunter-text);
+  border-left: 3px solid var(--threathunter-accent);
+}
+
+.threathunter_resultsmodal_actions {
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.threathunter_resultsmodal_restart_button,
+.threathunter_resultsmodal_home_button {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.threathunter_resultsmodal_restart_button {
+  background: var(--threathunter-gradient-primary);
+  color: white;
+  box-shadow: var(--threathunter-shadow-sm);
+  flex: 1;
+  justify-content: center;
+}
+
+.threathunter_resultsmodal_restart_button:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow);
+}
+
+.threathunter_resultsmodal_home_button {
+  background-color: var(--threathunter-bg-header);
+  color: var(--threathunter-text);
+  border: 1px solid var(--threathunter-border-dark);
+  flex: 1;
+  justify-content: center;
+}
+
+.threathunter_resultsmodal_home_button:hover {
+  background-color: var(--threathunter-bg-dark);
+  transform: translateY(-3px);
+  box-shadow: var(--threathunter-shadow-sm);
+}
+
+.threathunter_resultsmodal_share_container {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.threathunter_resultsmodal_share_container span {
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary);
+}
+
+.threathunter_resultsmodal_twitter_share,
+.threathunter_resultsmodal_linkedin_share {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.threathunter_resultsmodal_twitter_share {
+  background-color: #1da1f2;
+  color: white;
+}
+
+.threathunter_resultsmodal_linkedin_share {
+  background-color: #0077b5;
+  color: white;
+}
+
+.threathunter_resultsmodal_twitter_share:hover,
+.threathunter_resultsmodal_linkedin_share:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Scrollbar styling */
+.threathunter_resultsmodal_container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.threathunter_resultsmodal_container::-webkit-scrollbar-track {
+  background: var(--threathunter-bg-dark);
+}
+
+.threathunter_resultsmodal_container::-webkit-scrollbar-thumb {
+  background-color: var(--threathunter-border-dark);
+  border-radius: 10px;
+}
+
+.threathunter_resultsmodal_container::-webkit-scrollbar-thumb:hover {
+  background-color: var(--threathunter-accent);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .threathunter_resultsmodal_overview {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .threathunter_resultsmodal_score_container {
+    margin-bottom: 20px;
+  }
+  
+  .threathunter_resultsmodal_achievement_item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .threathunter_resultsmodal_actions {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .threathunter_resultsmodal_share_container {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .threathunter_resultsmodal_header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .threathunter_resultsmodal_header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .threathunter_resultsmodal_rewards_summary {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .threathunter_resultsmodal_reward_item {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }

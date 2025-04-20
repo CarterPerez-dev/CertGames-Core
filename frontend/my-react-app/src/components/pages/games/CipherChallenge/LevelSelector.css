@@ -1,12 +1,17 @@
-/* src/components/pages/games/CipherChallenge/LevelSelector.css */
 .cipherchallenge_lvlselector_container {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  animation: fadeIn 0.5s ease;
 }
 
 .cipherchallenge_lvlselector_container h3 {
   font-size: 1.3rem;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .cipherchallenge_lvlselector_levels_list {
@@ -25,57 +30,84 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 15px;
-  background-color: #232535;
-  padding: 12px;
-  border-radius: 8px;
+  background-color: var(--profile-bg-card, #232535);
+  padding: 14px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  border: 1px solid var(--profile-border, #2a2c3d);
+  position: relative;
+  overflow: hidden;
 }
 
 .cipherchallenge_lvlselector_level_item:hover {
-  background-color: #2d2d40;
-  transform: translateX(3px);
+  background-color: var(--profile-bg-card, #2d2d40);
+  transform: translateX(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .cipherchallenge_lvlselector_level_item.locked {
-  background-color: #191925;
+  background-color: var(--profile-bg-dark, #191925);
   opacity: 0.7;
   cursor: not-allowed;
 }
 
 .cipherchallenge_lvlselector_level_item.active {
-  background-color: #2d2d40;
-  border-color: #5f4bb6;
-  border-radius: 8px 8px 0 0;
+  background-color: var(--profile-bg-card, #2d2d40);
+  border-color: var(--profile-accent, #5f4bb6);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 0 15px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.3);
 }
 
 .cipherchallenge_lvlselector_level_item.complete {
-  border-left: 3px solid #4caf50;
+  border-left: 3px solid var(--profile-success, #4caf50);
+}
+
+.cipherchallenge_lvlselector_level_item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cipherchallenge_lvlselector_level_item:hover::before {
+  opacity: 1;
 }
 
 .cipherchallenge_lvlselector_level_icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 35px;
-  height: 35px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: #161625;
+  background-color: var(--profile-bg-dark, #161625);
+  border: 1px solid var(--profile-border, #2a2c3d);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.cipherchallenge_lvlselector_level_item:hover .cipherchallenge_lvlselector_level_icon {
+  transform: scale(1.1);
 }
 
 .cipherchallenge_lvlselector_lock_icon {
-  color: #f44336;
+  color: var(--profile-error, #f44336);
   font-size: 1.1rem;
 }
 
 .cipherchallenge_lvlselector_unlock_icon {
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   font-size: 1.1rem;
 }
 
 .cipherchallenge_lvlselector_complete_icon {
-  color: #4caf50;
+  color: var(--profile-success, #4caf50);
   font-size: 1.1rem;
 }
 
@@ -96,7 +128,7 @@
 }
 
 .cipherchallenge_lvlselector_level_star {
-  color: #ffd700;
+  color: var(--profile-accent-secondary, #ffd700);
   font-size: 0.8rem;
 }
 
@@ -104,21 +136,23 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-  min-width: 60px;
+  min-width: 70px;
 }
 
 .cipherchallenge_lvlselector_progress_bar {
-  width: 60px;
-  height: 6px;
-  background-color: #161625;
-  border-radius: 3px;
+  width: 70px;
+  height: 8px;
+  background-color: var(--profile-bg-dark, #161625);
+  border-radius: 4px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .cipherchallenge_lvlselector_progress_fill {
   height: 100%;
-  background-color: #5f4bb6;
-  border-radius: 3px;
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
 
 .cipherchallenge_lvlselector_progress_text {
@@ -130,77 +164,83 @@
 .cipherchallenge_lvlselector_challenges_list {
   display: flex;
   flex-direction: column;
-  background-color: #161625;
-  padding: 10px;
-  border-radius: 0 0 8px 8px;
-  border: 1px solid #232535;
+  background-color: var(--profile-bg-dark, #161625);
+  padding: 15px;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid var(--profile-border, #232535);
   border-top: none;
   margin-top: -1px;
   animation: fadeIn 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .cipherchallenge_lvlselector_challenge_item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+  border: 1px solid transparent;
+}
+
+.cipherchallenge_lvlselector_challenge_item:last-child {
+  margin-bottom: 0;
 }
 
 .cipherchallenge_lvlselector_challenge_item:hover {
-  background-color: #232535;
+  background-color: var(--profile-bg-card, #232535);
+  transform: translateX(5px);
 }
 
 .cipherchallenge_lvlselector_challenge_item.selected {
-  background-color: #5f4bb6;
+  background-color: var(--profile-accent, #5f4bb6);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 3px 10px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
 }
 
 .cipherchallenge_lvlselector_challenge_item.completed {
-  border-left: 2px solid #4caf50;
+  border-left: 2px solid var(--profile-success, #4caf50);
 }
 
 .cipherchallenge_lvlselector_challenge_indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
-  height: 25px;
-  background-color: #232535;
+  width: 30px;
+  height: 30px;
+  background-color: var(--profile-bg-card, #232535);
   border-radius: 50%;
   font-size: 0.8rem;
+  border: 1px solid var(--profile-border, #2a2c3d);
+  transition: all 0.3s ease;
+}
+
+.cipherchallenge_lvlselector_challenge_item:hover .cipherchallenge_lvlselector_challenge_indicator {
+  transform: scale(1.1);
 }
 
 .cipherchallenge_lvlselector_challenge_number {
-  color: #e2e2e2;
+  color: var(--profile-text, #e2e2e2);
 }
 
 .cipherchallenge_lvlselector_completed_icon {
-  color: #4caf50;
+  color: var(--profile-success, #4caf50);
   font-size: 0.9rem;
 }
 
 .cipherchallenge_lvlselector_challenge_name {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+.cipherchallenge_lvlselector_challenge_item:hover .cipherchallenge_lvlselector_challenge_name {
+  color: var(--profile-accent, #7a68d4);
 }
 
-/* Responsive adjustments */
-@media (max-width: 400px) {
-  .cipherchallenge_lvlselector_level_item {
-    gap: 10px;
-  }
-  
-  .cipherchallenge_lvlselector_level_progress {
-    min-width: 40px;
-  }
-  
-  .cipherchallenge_lvlselector_progress_bar {
-    width: 40px;
-  }
+.cipherchallenge_lvlselector_challenge_item.selected .cipherchallenge_lvlselector_challenge_name {
+  color: white;
+  font-weight: 500;
 }

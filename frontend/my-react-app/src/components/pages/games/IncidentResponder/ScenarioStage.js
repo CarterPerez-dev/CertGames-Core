@@ -1,7 +1,7 @@
 // src/components/pages/games/IncidentResponder/ScenarioStage.js
 import React, { useState, useEffect } from 'react';
 import { FaClipboardCheck, FaExclamationCircle, FaClock, FaTrophy, FaInfoCircle } from 'react-icons/fa';
-import './ScenarioStage.css';
+import './IncidentResponder.css';
 
 const ScenarioStage = ({ 
   stage, 

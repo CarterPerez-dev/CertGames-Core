@@ -4,7 +4,7 @@ import {
   FaVirus, FaShieldAlt, FaNetworkWired, FaUserSecret, 
   FaServer, FaTachometerAlt
 } from 'react-icons/fa';
-import './ScenarioSelector.css';
+import './ThreatHunter.css';
 
 const ScenarioSelector = ({ 
   scenarios, 

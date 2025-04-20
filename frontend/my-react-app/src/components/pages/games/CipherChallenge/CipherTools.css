@@ -1,4 +1,3 @@
-/* src/components/pages/games/CipherChallenge/CipherTools.css */
 .cipher-tools {
   display: flex;
   flex-direction: column;
@@ -8,127 +7,181 @@
 .tools-menu {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .tool-button {
   display: flex;
   align-items: center;
   gap: 10px;
-  background-color: #232535;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  color: #e2e2e2;
+  background-color: var(--profile-bg-card, #232535);
+  border: 1px solid var(--profile-border, #2a2c3d);
+  border-radius: 8px;
+  padding: 12px 15px;
+  color: var(--profile-text, #e2e2e2);
   font-size: 0.9rem;
   text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.tool-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.tool-button:hover::before {
+  transform: translateX(100%);
 }
 
 .tool-button:hover {
-  background-color: #2d2d40;
-  transform: translateX(3px);
+  background-color: var(--profile-bg-card, #2d2d40);
+  transform: translateX(5px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .tool-button.active {
-  background-color: #5f4bb6;
+  background-color: var(--profile-accent, #5f4bb6);
   color: white;
-  transform: translateX(5px);
+  transform: translateX(8px);
+  box-shadow: 0 3px 15px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
 }
 
 .tool-display {
-  background-color: #1a1a2e;
-  border-radius: 8px;
-  padding: 15px;
-  border: 1px solid #232535;
+  background-color: var(--profile-bg-card, #1a1a2e);
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid var(--profile-border, #232535);
   min-height: 200px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
 }
 
 /* Frequency Analysis Tool */
 .frequency-analysis-tool h4 {
   font-size: 1.1rem;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   margin-top: 0;
   margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .frequency-table {
-  border-radius: 5px;
+  border-radius: 8px;
   overflow: hidden;
   font-size: 0.9rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .frequency-header {
   display: grid;
   grid-template-columns: 60px 60px 80px 1fr;
-  background-color: #232535;
-  padding: 8px 10px;
+  background-color: var(--profile-bg-card, #232535);
+  padding: 10px;
   font-weight: bold;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .frequency-body {
   max-height: 300px;
   overflow-y: auto;
+  background-color: var(--profile-bg-dark, #161625);
 }
 
 .frequency-row {
   display: grid;
   grid-template-columns: 60px 60px 80px 1fr;
-  padding: 8px 10px;
-  border-bottom: 1px solid #232535;
+  padding: 10px;
+  border-bottom: 1px solid var(--profile-border, #232535);
+  transition: background-color 0.2s ease;
+}
+
+.frequency-row:last-child {
+  border-bottom: none;
+}
+
+.frequency-row:hover {
+  background-color: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1);
 }
 
 .frequency-char {
   font-weight: bold;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
 }
 
 .frequency-bar-container {
   height: 12px;
-  background-color: #161625;
-  border-radius: 10px;
+  background-color: var(--profile-bg-dark, #161625);
+  border-radius: 6px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .frequency-bar {
   height: 100%;
-  background-color: #5f4bb6;
-  border-radius: 10px;
+  background: var(--profile-gradient-primary, linear-gradient(135deg, #6543cc, #8a58fc));
+  border-radius: 6px;
+  transition: width 0.5s ease;
 }
 
 .frequency-info {
   margin-top: 15px;
   font-size: 0.85rem;
   opacity: 0.8;
+  background-color: rgba(var(--theme-accent-rgb, 95, 75, 182), 0.1);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid var(--profile-border, #2a2c3d);
 }
 
 /* Caesar Shift Tool */
 .caesar-shift-tool h4 {
   font-size: 1.1rem;
-  color: #7a68d4;
+  color: var(--profile-accent, #7a68d4);
   margin-top: 0;
   margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--profile-border, #2a2c3d);
 }
 
 .shift-control {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .shift-control label {
   display: block;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  color: var(--profile-text, #e2e2e2);
 }
 
 .shift-control input {
-  width: 60px;
-  padding: 5px 10px;
-  background-color: #161625;
-  border: 1px solid #232535;
+  width: 70px;
+  padding: 8px 12px;
+  background-color: var(--profile-bg-dark, #161625);
+  border: 1px solid var(--profile-border, #232535);
   border-radius: 5px;
-  color: #e2e2e2;
-  margin-bottom: 10px;
+  color: var(--profile-text, #e2e2e2);
+  margin-bottom: 15px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.shift-control input:focus {
+  outline: none;
+  border-color: var(--profile-accent, #5f4bb6);
+  box-shadow: 0 0 8px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.3);
 }
 
 .shift-buttons {
@@ -138,23 +191,26 @@
 }
 
 .shift-buttons button {
-  background-color: #232535;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  color: #e2e2e2;
-  font-size: 0.8rem;
+  background-color: var(--profile-bg-card, #232535);
+  border: 1px solid var(--profile-border, #2a2c3d);
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: var(--profile-text, #e2e2e2);
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .shift-buttons button:hover {
-  background-color: #2d2d40;
+  background-color: var(--profile-bg-card, #2d2d40);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 .shift-buttons button.active {
-  background-color: #5f4bb6;
+  background-color: var(--profile-accent, #5f4bb6);
   color: white;
+  box-shadow: 0 3px 10px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.4);
 }
 
 .shift-result h5,
@@ -162,116 +218,105 @@
 .binary-result h5,
 .hex-result h5 {
   font-size: 1rem;
-  margin-top: 0;
-  margin-bottom: 8px;
-  color: #7a68d4;
+  margin: 0 0 8px 0;
+  color: var(--profile-accent, #7a68d4);
 }
 
 .result-text {
-  background-color: #161625;
-  padding: 10px;
-  border-radius: 5px;
+  background-color: var(--profile-bg-dark, #161625);
+  padding: 15px;
+  border-radius: 8px;
   font-family: 'Courier New', monospace;
   font-size: 0.95rem;
   max-height: 150px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
-  border: 1px solid #232535;
-}
-
-/* Atbash Tool */
-.atbash-tool h4,
-.binary-tool h4,
-.hex-tool h4,
-.wordpattern-tool h4,
-.custom-mapping-tool h4 {
-  font-size: 1.1rem;
-  color: #7a68d4;
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-
-.tool-description {
-  font-size: 0.9rem;
-  opacity: 0.8;
-  margin-bottom: 15px;
-  line-height: 1.4;
-}
-
-/* Word Pattern Tool */
-.pattern-examples {
-  background-color: #161625;
-  padding: 10px 15px;
-  border-radius: 5px;
-  margin-bottom: 15px;
-}
-
-.pattern-examples h5 {
-  font-size: 0.95rem;
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #7a68d4;
-}
-
-.pattern-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.pattern-word {
-  font-family: 'Courier New', monospace;
-  background-color: #232535;
-  padding: 3px 6px;
-  border-radius: 3px;
-  min-width: 60px;
-  text-align: center;
-}
-
-.pattern-result {
-  font-family: 'Courier New', monospace;
-  color: #7a68d4;
-}
-
-.pattern-explanation {
-  font-size: 0.8rem;
-  opacity: 0.6;
-}
-
-/* Scrollbar styling for tool results */
-.frequency-body::-webkit-scrollbar,
-.result-text::-webkit-scrollbar {
-  width: 6px;
-}
-
-.frequency-body::-webkit-scrollbar-track,
-.result-text::-webkit-scrollbar-track {
-  background: #161625;
-}
-
-.frequency-body::-webkit-scrollbar-thumb,
-.result-text::-webkit-scrollbar-thumb {
-  background-color: #2d2d40;
-  border-radius: 10px;
-}
-
-.frequency-body::-webkit-scrollbar-thumb:hover,
-.result-text::-webkit-scrollbar-thumb:hover {
-  background-color: #3d3d50;
+  border: 1px solid var(--profile-border, #232535);
+  box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.2);
+  color: var(--profile-text, #e2e2e2);
 }
 
 /* Responsive adjustments */
-@media (max-width: 400px) {
+@media (max-width: 768px) {
+  .input-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .submit-button {
+    padding: 12px;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .cipherchallenge_lvlselector_level_icon {
+    width: 35px;
+    height: 35px;
+  }
+  
   .frequency-header,
   .frequency-row {
-    grid-template-columns: 40px 40px 60px 1fr;
+    grid-template-columns: 50px 50px 70px 1fr;
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+  
+  .shift-buttons button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .solution-tips ul {
+    padding-left: 15px;
+  }
+  
+  .cipherchallenge_lvlselector_progress_bar {
+    width: 60px;
+  }
+  
+  .frequency-header,
+  .frequency-row {
+    grid-template-columns: 45px 45px 60px 1fr;
     font-size: 0.8rem;
   }
   
-  .shift-buttons {
-    justify-content: center;
+  .tool-button {
+    padding: 10px 12px;
+  }
+  
+  .tool-display {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 400px) {
+  .cipherchallenge_lvlselector_level_item {
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .cipherchallenge_lvlselector_level_icon {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .cipherchallenge_lvlselector_level_name {
+    font-size: 0.9rem;
+  }
+  
+  .cipherchallenge_lvlselector_progress_bar {
+    width: 50px;
+    height: 6px;
+  }
+  
+  .frequency-header,
+  .frequency-row {
+    grid-template-columns: 40px 40px 55px 1fr;
+    font-size: 0.75rem;
+    padding: 6px;
   }
 }
