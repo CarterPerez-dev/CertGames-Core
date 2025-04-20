@@ -1223,9 +1223,8 @@ CertGames is actively evolving with several initiatives in progress:
 ------
 -*[Privacy Policy](https://certgames.com/privacy)*
 -*[Terms of Service](https://certgames.com/terms)*
------
+----
+*"My confidence is powerful. I recognize myself as exceptional. I recognize myself as exceptional. I recognize myself as exceptional."*
+  -- One of the good ones...
 
-
-    *"My confidence is powerful. I recognize myself as exceptional. I recognize myself as exceptional. I recognize myself as exceptional."*
-    — One of the Good Ones
   
