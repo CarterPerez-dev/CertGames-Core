@@ -1220,7 +1220,7 @@ CertGames is actively evolving with several initiatives in progress:
 -
 *Last updated - @4/20/25 16:52:00*
 ------
-*[Privacy Policy](https://certgames.com/privacy)*  ---  *[Terms of Service](https://certgames.com/terms)*
+*[Privacy Policy](https://certgames.com/privacy)*  😎  *[Terms of Service](https://certgames.com/terms)*
 ----
 *"My confidence is powerful. I recognize myself as exceptional. I recognize myself as exceptional. I recognize myself as exceptional."*
      --One of the good ones...
