@@ -2,6 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { addCoins, fetchUserData } from './userSlice';
 
+
 // Fetch cipher challenges from the backend
 export const fetchCipherChallenges = createAsyncThunk(
   'cipherChallenge/fetchChallenges',
@@ -43,15 +44,7 @@ export const submitSolution = createAsyncThunk(
       
       const data = await response.json();
       
-      // If the backend awarded coins, update user state
-      if (data.coinsAwarded > 0) {
-        dispatch(addCoins({ 
-          userId, 
-          amount: data.coinsAwarded 
-        }));
-      }
-      
-      // Fetch updated user data (for XP, etc.)
+      // Update user data to refresh coins and XP
       dispatch(fetchUserData(userId));
       
       return data;

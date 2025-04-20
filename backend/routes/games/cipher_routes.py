@@ -149,9 +149,15 @@ def submit_cipher_solution():
         if challenge_id not in completed_challenges:
             completed_challenges.append(challenge_id)
         
-        # Check if this completes a level
-        level_challenges = [c for c in challenges if c.get("levelId") == level_id]
-        level_completed = all(c.get("id") in completed_challenges for c in level_challenges)
+        # Get all challenges at this level to check if level is completed
+        start_db = time.time()
+        level_challenges = list(cipher_challenges_collection.find({"levelId": level_id}))
+        duration = time.time() - start_db
+        if hasattr(g, 'db_time_accumulator'):
+            g.db_time_accumulator += duration
+        
+        # Check if all challenges in this level are completed
+        level_completed = all(c["id"] in completed_challenges for c in level_challenges)
         
         # Unlock next level if all challenges in current level are completed
         max_unlocked_level = user_progress.get("maxUnlockedLevel", 1)

@@ -1,13 +1,25 @@
 // src/components/pages/games/CipherChallenge/CipherChallenge.js
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'; // Add this import
 import { 
   fetchCipherChallenges, 
   submitSolution, 
   resetCurrentChallenge,
   unlockNextLevel
 } from '../../store/slice/cipherChallengeSlice';
-import { FaLock, FaLockOpen, FaKey, FaQuestionCircle, FaBrain, FaMedal } from 'react-icons/fa';
+import { fetchUserData } from '../../store/slice/userSlice'; // Add this import
+import { 
+  FaLock, 
+  FaLockOpen, 
+  FaKey, 
+  FaQuestionCircle, 
+  FaBrain, 
+  FaMedal,
+  FaArrowLeft, // Add this import
+  FaCoins,      // Add this import
+  FaStar        // Add this import 
+} from 'react-icons/fa';
 import CipherDisplay from './CipherDisplay';
 import CipherInput from './CipherInput';
 import CipherHints from './CipherHints';
@@ -18,6 +30,7 @@ import CongratulationsModal from './CongratulationsModal';
 import './CipherChallenge.css';
 
 const CipherChallenge = () => {
+  const navigate = useNavigate(); // Add this hook
   const dispatch = useDispatch();
   const { 
     challenges, 
@@ -28,7 +41,7 @@ const CipherChallenge = () => {
     error,
     hintUsed
   } = useSelector(state => state.cipherChallenge);
-  const { userId } = useSelector(state => state.user);
+  const { userId, coins, xp } = useSelector(state => state.user); // Add coins and xp
   
   const [userSolution, setUserSolution] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -49,6 +62,11 @@ const CipherChallenge = () => {
     setUserSolution('');
     setFeedbackMessage(null);
   }, [currentChallenge]);
+  
+  // Add back button handler
+  const handleGoBack = () => {
+    navigate('/');
+  };
   
   const handleSolutionChange = (value) => {
     setUserSolution(value);
@@ -79,6 +97,9 @@ const CipherChallenge = () => {
         timeSpent: 0, // TODO: Add timer functionality
       })).then((resultAction) => {
         if (submitSolution.fulfilled.match(resultAction)) {
+          // Fetch updated user data to refresh coins and XP
+          dispatch(fetchUserData(userId));
+          
           // Show success message
           setFeedbackMessage({
             type: 'success',
@@ -158,8 +179,34 @@ const CipherChallenge = () => {
   return (
     <div className="cipher-challenge-container">
       <div className="cipher-header">
-        <h1><FaKey /> Cipher Challenge</h1>
-        <p>Decode cryptographic messages and unlock the secrets!</p>
+        {/* Add back button */}
+        <button 
+          className="back-button"
+          onClick={handleGoBack}
+          aria-label="Go back to home"
+        >
+          <FaArrowLeft /> Back to Home
+        </button>
+        
+        <div className="cipher-header-main">
+          <h1><FaKey /> Cipher Challenge</h1>
+          <p>Decode cryptographic messages and unlock the secrets!</p>
+        </div>
+        
+        {/* Add user stats display */}
+        {userId && (
+          <div className="cipher-user-stats">
+            <div className="cipher-stat">
+              <FaCoins className="cipher-stat-icon coins" />
+              <span className="cipher-stat-value">{coins}</span>
+            </div>
+            <div className="cipher-stat">
+              <FaStar className="cipher-stat-icon xp" />
+              <span className="cipher-stat-value">{xp}</span>
+            </div>
+          </div>
+        )}
+        
         <button 
           className="cipher-info-button"
           onClick={() => setShowInfo(true)}
