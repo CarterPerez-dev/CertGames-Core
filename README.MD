@@ -1208,7 +1208,7 @@ CertGames is actively evolving with several initiatives in progress:
 
 ---
 
-## License
+# License
 
 *This codebase is Open-Source* 
 -
