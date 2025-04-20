@@ -1,6 +1,6 @@
 # MongoDB Atlas Collections
 ---
-```c#
+```ruby
 achievements
 apiHealth
 auditLogs
