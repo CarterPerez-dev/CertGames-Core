@@ -1,4 +1,4 @@
-# [![CertGames Core](https://img.shields.io/badge/CertGames%20Core-red)](https://certgames.com) [![Carter Perez](https://img.shields.io/badge/CertGames%20Core-black)](https://certgames.com)
+# [![CertGames Core](https://img.shields.io/badge/CertGames%20Core-red)](https://certgames.com) [![Carter Perez](https://img.shields.io/badge/CertGames%20Core-grey)](https://certgames.com)
 ![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&size=18&duration=3000&pause=1000&color=0DFF00&center=true&vCenter=true&width=435&lines=CertGames;Advanced+Cybersecurity+Application)
 ![CertGames Logo](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/frontend/my-react-app/public/ios.png)
 
