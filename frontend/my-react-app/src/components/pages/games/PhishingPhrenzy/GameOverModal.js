@@ -1,6 +1,10 @@
 // src/components/pages/games/PhishingPhrenzy/GameOverModal.js
 import React from 'react';
-import { FaTrophy, FaMedal, FaRedo, FaHome, FaTwitter, FaFacebook } from 'react-icons/fa';
+import { FaTrophy, FaMedal, FaRedo, FaHome, FaLinkedin } from 'react-icons/fa';
+import { 
+  FaXTwitter,  
+} from 'react-icons/fa6';
+
 import './GameOverModal.css';
 
 const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
@@ -97,10 +101,10 @@ const GameOverModal = ({ score, highScore, onClose, onPlayAgain }) => {
           <p>Share your score:</p>
           <div className="phishingphrenzy_share_buttons">
             <button className="phishingphrenzy_twitter_share">
-              <FaTwitter /> Twitter
+              <FaXTwitter /> X
             </button>
             <button className="phishingphrenzy_facebook_share">
-              <FaFacebook /> Facebook
+              <FaLinkedin /> Linkedin
             </button>
           </div>
         </div>
