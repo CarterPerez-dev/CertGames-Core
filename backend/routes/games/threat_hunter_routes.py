@@ -17,23 +17,6 @@ threat_hunter_bp = Blueprint('threat_hunter', __name__)
 log_scenarios_collection = db.logScenarios
 log_analysis_collection = db.logAnalysis
 
-from flask import Blueprint, request, jsonify, g
-from bson.objectid import ObjectId
-import time
-from datetime import datetime
-import random
-
-from mongodb.database import db
-from models.test import get_user_by_id, update_user_coins, update_user_xp
-from utils.utils import check_and_unlock_achievements
-
-# Initialize the blueprint
-threat_hunter_bp = Blueprint('threat_hunter', __name__)
-
-# Database collections
-log_scenarios_collection = db.logScenarios
-log_analysis_collection = db.logAnalysis
-
 @threat_hunter_bp.route('/scenarios', methods=['GET'])
 def get_log_scenarios():
     """
@@ -50,8 +33,8 @@ def get_log_scenarios():
     if hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator += duration
     
-    # If there are database scenarios, return those only
-    if db_scenarios:
+    # If there are database scenarios, return those only - no default scenarios
+    if len(db_scenarios) > 0:
         return jsonify(db_scenarios)
     
     # Only if no database scenarios exist, return default scenarios as fallback

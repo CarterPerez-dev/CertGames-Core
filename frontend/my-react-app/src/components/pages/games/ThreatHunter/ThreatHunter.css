@@ -550,6 +550,7 @@
   padding: 8px 10px;
   overflow-x: auto;
   white-space: nowrap;
+  font-size: 15px;
 }
 
 .threathunter_logviewer_line_text pre,
@@ -2319,9 +2320,6 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 400px;
-  overflow-y: auto;
-  padding-right: 10px;
 }
 
 .threathunter_analysistools_threat_option {
