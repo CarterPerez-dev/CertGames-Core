@@ -1,7 +1,6 @@
 // src/components/pages/store/slice/cipherChallengeSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { addCoins, fetchUserData } from './userSlice';
-
+import { fetchUserData } from './userSlice';
 
 // Fetch cipher challenges from the backend
 export const fetchCipherChallenges = createAsyncThunk(
@@ -78,7 +77,7 @@ export const unlockHint = createAsyncThunk(
       
       const data = await response.json();
       
-      // Update user coins (deducted cost)
+      // Update user data to refresh coins
       dispatch(fetchUserData(userId));
       
       return { challengeId, hintIndex };
@@ -113,6 +112,9 @@ const cipherChallengeSlice = createSlice({
         state.maxUnlockedLevel = nextLevel;
       }
     },
+    setHintUsed: (state, action) => {
+      state.hintUsed = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -162,7 +164,7 @@ const cipherChallengeSlice = createSlice({
         state.loading = false;
         
         // Add challenge to completed list if not already there
-        if (!state.completedChallenges.includes(action.meta.arg.challengeId)) {
+        if (action.payload.isNewCompletion && !state.completedChallenges.includes(action.meta.arg.challengeId)) {
           state.completedChallenges.push(action.meta.arg.challengeId);
         }
       })
@@ -202,5 +204,5 @@ const cipherChallengeSlice = createSlice({
   },
 });
 
-export const { resetCurrentChallenge, unlockNextLevel } = cipherChallengeSlice.actions;
+export const { resetCurrentChallenge, unlockNextLevel, setHintUsed } = cipherChallengeSlice.actions;
 export default cipherChallengeSlice.reducer;

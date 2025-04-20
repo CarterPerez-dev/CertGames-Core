@@ -23,6 +23,7 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(var(--theme-accent-rgb, 95, 75, 182), 0.5);
   animation: scaleIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   border: 1px solid var(--profile-border, #2a2c3d);
+  font-family: 'Arial', sans-serif;
 }
 
 .confetti-animation {

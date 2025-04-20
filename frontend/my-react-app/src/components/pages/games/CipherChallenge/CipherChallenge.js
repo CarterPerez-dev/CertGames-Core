@@ -1,14 +1,14 @@
 // src/components/pages/games/CipherChallenge/CipherChallenge.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Add this import
+import { useNavigate } from 'react-router-dom';
 import { 
   fetchCipherChallenges, 
   submitSolution, 
   resetCurrentChallenge,
   unlockNextLevel
 } from '../../store/slice/cipherChallengeSlice';
-import { fetchUserData } from '../../store/slice/userSlice'; // Add this import
+import { fetchUserData } from '../../store/slice/userSlice';
 import { 
   FaLock, 
   FaLockOpen, 
@@ -16,9 +16,9 @@ import {
   FaQuestionCircle, 
   FaBrain, 
   FaMedal,
-  FaArrowLeft, // Add this import
-  FaCoins,      // Add this import
-  FaStar        // Add this import 
+  FaArrowLeft, 
+  FaCoins,      
+  FaStar        
 } from 'react-icons/fa';
 import CipherDisplay from './CipherDisplay';
 import CipherInput from './CipherInput';
@@ -30,7 +30,7 @@ import CongratulationsModal from './CongratulationsModal';
 import './CipherChallenge.css';
 
 const CipherChallenge = () => {
-  const navigate = useNavigate(); // Add this hook
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { 
     challenges, 
@@ -41,7 +41,10 @@ const CipherChallenge = () => {
     error,
     hintUsed
   } = useSelector(state => state.cipherChallenge);
-  const { userId, coins, xp } = useSelector(state => state.user); // Add coins and xp
+  const { userId, coins, xp } = useSelector(state => state.user);
+  
+  // Ref to keep track if challenges have been loaded
+  const challengesLoaded = useRef(false);
   
   const [userSolution, setUserSolution] = useState('');
   const [feedbackMessage, setFeedbackMessage] = useState(null);
@@ -50,12 +53,16 @@ const CipherChallenge = () => {
   const [showCongratulations, setShowCongratulations] = useState(false);
   const [congratsData, setCongratsData] = useState(null);
   
-  // Load challenges when component mounts
+  // Load challenges when component mounts and ensure persistence
   useEffect(() => {
-    if (challenges.length === 0) {
-      dispatch(fetchCipherChallenges());
+    if (userId && !challengesLoaded.current) {
+      // Fetch challenges and user data to ensure everything is in sync
+      dispatch(fetchCipherChallenges()).then(() => {
+        challengesLoaded.current = true;
+      });
+      dispatch(fetchUserData(userId));
     }
-  }, [dispatch, challenges.length]);
+  }, [dispatch, userId]);
   
   // Reset user solution when current challenge changes
   useEffect(() => {
@@ -63,10 +70,40 @@ const CipherChallenge = () => {
     setFeedbackMessage(null);
   }, [currentChallenge]);
   
-  // Add back button handler
-  const handleGoBack = () => {
-    navigate('/');
+  // Select next challenge function
+  const selectNextChallenge = () => {
+    if (!currentChallenge || !challenges || challenges.length === 0) return false;
+    
+    // Get all challenges in the current level
+    const currentLevelChallenges = challenges
+      .filter(c => c.levelId === currentChallenge.levelId)
+      .sort((a, b) => a.id - b.id);
+    
+    // Find the index of the current challenge
+    const currentIndex = currentLevelChallenges.findIndex(c => c.id === currentChallenge.id);
+    
+    // If this is not the last challenge in the level, select the next one
+    if (currentIndex < currentLevelChallenges.length - 1) {
+      dispatch(resetCurrentChallenge(currentLevelChallenges[currentIndex + 1]));
+      return true;
+    }
+    
+    // If this is the last challenge in the level but not the last level
+    if (currentChallenge.levelId < maxUnlockedLevel) {
+      // Get the first challenge of the next level
+      const nextLevelChallenges = challenges
+        .filter(c => c.levelId === currentChallenge.levelId + 1)
+        .sort((a, b) => a.id - b.id);
+      
+      if (nextLevelChallenges.length > 0) {
+        dispatch(resetCurrentChallenge(nextLevelChallenges[0]));
+        return true;
+      }
+    }
+    
+    return false;
   };
+  
   
   const handleSolutionChange = (value) => {
     setUserSolution(value);
@@ -87,6 +124,15 @@ const CipherChallenge = () => {
     if (normalizedUserSolution === normalizedCorrectSolution) {
       // Solution is correct
       const wasAlreadyCompleted = completedChallenges.includes(currentChallenge.id);
+      
+      // If already completed, don't submit again
+      if (wasAlreadyCompleted) {
+        setFeedbackMessage({
+          type: 'success',
+          message: 'Challenge already completed. No additional rewards.'
+        });
+        return;
+      }
       
       // Dispatch action to mark challenge as completed
       dispatch(submitSolution({
@@ -121,11 +167,12 @@ const CipherChallenge = () => {
             setCongratsData({
               levelCompleted: currentChallenge.levelId,
               newLevelUnlocked: currentChallenge.levelId + 1,
-              xpEarned: wasAlreadyCompleted ? 10 : 50,
-              coinsEarned: wasAlreadyCompleted ? 5 : 25
+              xpEarned: wasAlreadyCompleted ? 0 : currentChallenge.levelId * 50,
+              coinsEarned: wasAlreadyCompleted ? 0 : currentChallenge.levelId * 20
             });
             setShowCongratulations(true);
-          }
+          } 
+          // Don't auto-select next challenge immediately - let the user see they've completed this one
         }
       });
     } else {
@@ -168,6 +215,15 @@ const CipherChallenge = () => {
     setActiveTool(activeTool === toolName ? null : toolName);
   };
   
+  const handleCongratulationsClose = () => {
+    setShowCongratulations(false);
+    selectNextChallenge();
+  };
+  
+  const handleNextChallenge = () => {
+    selectNextChallenge();
+  };
+  
   if (loading && challenges.length === 0) {
     return <div className="cipher-loading">Loading cipher challenges...</div>;
   }
@@ -179,14 +235,6 @@ const CipherChallenge = () => {
   return (
     <div className="cipher-challenge-container">
       <div className="cipher-header">
-        {/* Add back button */}
-        <button 
-          className="back-button"
-          onClick={handleGoBack}
-          aria-label="Go back to home"
-        >
-          <FaArrowLeft /> Back to Home
-        </button>
         
         <div className="cipher-header-main">
           <h1><FaKey /> Cipher Challenge</h1>
@@ -279,6 +327,7 @@ const CipherChallenge = () => {
                 value={userSolution}
                 onChange={handleSolutionChange}
                 onSubmit={handleSubmitSolution}
+                onNextChallenge={handleNextChallenge}
                 feedback={feedbackMessage}
                 isCompleted={completedChallenges.includes(currentChallenge.id)}
               />
@@ -317,7 +366,7 @@ const CipherChallenge = () => {
       {showCongratulations && congratsData && (
         <CongratulationsModal 
           data={congratsData}
-          onClose={() => setShowCongratulations(false)}
+          onClose={handleCongratulationsClose}
         />
       )}
     </div>

@@ -17,6 +17,7 @@ const CongratulationsModal = ({ data, onClose }) => {
     }
   };
   
+  
   return (
     <div className="congratulations-overlay">
       <div className="congratulations-modal">

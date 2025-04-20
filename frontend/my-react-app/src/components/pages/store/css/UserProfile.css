@@ -1078,7 +1078,7 @@
   --theme-accent-glow: #3b82f6;
   --theme-accent-secondary: #f472b6;
   --theme-bg-dark: #0c1220;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #2563eb, #3b82f6);
   --theme-gradient-secondary: linear-gradient(135deg, #f472b6, #ec4899);
   --theme-accent-rgb: 37, 99, 235;
@@ -1091,7 +1091,7 @@
   --theme-accent-glow: #10b981;
   --theme-accent-secondary: #f97316;
   --theme-bg-dark: #0c1a14;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #059669, #10b981);
   --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
   --theme-accent-rgb: 5, 150, 105;
@@ -1104,7 +1104,7 @@
   --theme-accent-glow: #ef4444;
   --theme-accent-secondary: #8b5cf6;
   --theme-bg-dark: #1c0e0e;
-  --theme-bg-card: #1a1a1a;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #dc2626, #ef4444);
   --theme-gradient-secondary: linear-gradient(135deg, #8b5cf6, #a78bfa);
   --theme-accent-rgb: 220, 38, 38;
@@ -1117,7 +1117,7 @@
   --theme-accent-glow: #06b6d4;
   --theme-accent-secondary: #f59e0b;
   --theme-bg-dark: #0c1819;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
   --theme-gradient-secondary: linear-gradient(135deg, #f59e0b, #fbbf24);
   --theme-accent-rgb: 8, 145, 178;
@@ -1145,7 +1145,7 @@
   --theme-accent-glow: #f97316;
   --theme-accent-secondary: #0ea5e9;
   --theme-bg-dark: #1a0f05;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #ea580c, #f97316);
   --theme-gradient-secondary: linear-gradient(135deg, #0ea5e9, #38bdf8);
   --theme-accent-rgb: 234, 88, 12;
@@ -1158,7 +1158,7 @@
   --theme-accent-glow: #ec4899;
   --theme-accent-secondary: #6366f1;
   --theme-bg-dark: #1a0a17;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #db2777, #ec4899);
   --theme-gradient-secondary: linear-gradient(135deg, #6366f1, #818cf8);
   --theme-accent-rgb: 219, 39, 119;
@@ -1171,7 +1171,7 @@
   --theme-accent-glow: #eab308;
   --theme-accent-secondary: #0369a1;
   --theme-bg-dark: #19150a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #ca8a04, #eab308);
   --theme-gradient-secondary: linear-gradient(135deg, #0369a1, #0ea5e9);
   --theme-accent-rgb: 202, 138, 4;
@@ -1184,7 +1184,7 @@
   --theme-accent-glow: #06b6d4;
   --theme-accent-secondary: #e11d48;
   --theme-bg-dark: #0c1819;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #0891b2, #06b6d4);
   --theme-gradient-secondary: linear-gradient(135deg, #e11d48, #f43f5e);
   --theme-accent-rgb: 8, 145, 178;
@@ -1197,7 +1197,7 @@
   --theme-accent-glow: #34d399;
   --theme-accent-secondary: #f472b6;
   --theme-bg-dark: #0f1613;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #10b981, #34d399);
   --theme-gradient-secondary: linear-gradient(135deg, #f472b6, #fb7185);
   --theme-accent-rgb: 16, 185, 129;
@@ -1212,7 +1212,7 @@
   --theme-accent-glow: #2563eb;
   --theme-accent-secondary: #f97316;
   --theme-bg-dark: #0c1425;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #1e3a8a, #2563eb);
   --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
   --theme-accent-rgb: 30, 58, 138;
@@ -1225,7 +1225,7 @@
   --theme-accent-glow: #6366f1;
   --theme-accent-secondary: #f59e0b;
   --theme-bg-dark: #0c0d1f;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #4f46e5, #6366f1);
   --theme-gradient-secondary: linear-gradient(135deg, #f59e0b, #fbbf24);
   --theme-accent-rgb: 79, 70, 229;
@@ -1238,7 +1238,7 @@
   --theme-accent-glow: #8b5cf6;
   --theme-accent-secondary: #ec4899;
   --theme-bg-dark: #100d1a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #7c3aed, #8b5cf6);
   --theme-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
   --theme-accent-rgb: 124, 58, 237;
@@ -1251,7 +1251,7 @@
   --theme-accent-glow: #d946ef;
   --theme-accent-secondary: #3b82f6;
   --theme-bg-dark: #140a15;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #c026d3, #d946ef);
   --theme-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
   --theme-accent-rgb: 192, 38, 211;
@@ -1264,7 +1264,7 @@
   --theme-accent-glow: #e11d48;
   --theme-accent-secondary: #6366f1;
   --theme-bg-dark: #180a11;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #be123c, #e11d48);
   --theme-gradient-secondary: linear-gradient(135deg, #6366f1, #818cf8);
   --theme-accent-rgb: 190, 18, 60;
@@ -1277,7 +1277,7 @@
   --theme-accent-glow: #f59e0b;
   --theme-accent-secondary: #0284c7;
   --theme-bg-dark: #191207;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #d97706, #f59e0b);
   --theme-gradient-secondary: linear-gradient(135deg, #0284c7, #0ea5e9);
   --theme-accent-rgb: 217, 119, 6;
@@ -1290,7 +1290,7 @@
   --theme-accent-glow: #84cc16;
   --theme-accent-secondary: #7c3aed;
   --theme-bg-dark: #10150a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #65a30d, #84cc16);
   --theme-gradient-secondary: linear-gradient(135deg, #7c3aed, #8b5cf6);
   --theme-accent-rgb: 101, 163, 13;
@@ -1303,7 +1303,7 @@
   --theme-accent-glow: #10b981;
   --theme-accent-secondary: #e11d48;
   --theme-bg-dark: #0a1511;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #047857, #10b981);
   --theme-gradient-secondary: linear-gradient(135deg, #e11d48, #f43f5e);
   --theme-accent-rgb: 4, 120, 87;
@@ -1316,7 +1316,7 @@
   --theme-accent-glow: #14b8a6;
   --theme-accent-secondary: #f43f5e;
   --theme-bg-dark: #0a1515;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #0d9488, #14b8a6);
   --theme-gradient-secondary: linear-gradient(135deg, #f43f5e, #fb7185);
   --theme-accent-rgb: 13, 148, 136;
@@ -1332,7 +1332,7 @@
   --theme-accent-glow: #0ea5e9;
   --theme-accent-secondary: #f97316;
   --theme-bg-dark: #0a141a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #0284c7, #0ea5e9);
   --theme-gradient-secondary: linear-gradient(135deg, #f97316, #fb923c);
   --theme-accent-rgb: 2, 132, 199;
@@ -1345,7 +1345,7 @@
   --theme-accent-glow: #4338ca;
   --theme-accent-secondary: #ec4899;
   --theme-bg-dark: #0c0b1a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #312e81, #4338ca);
   --theme-gradient-secondary: linear-gradient(135deg, #ec4899, #f472b6);
   --theme-accent-rgb: 49, 46, 129;
@@ -1358,7 +1358,7 @@
   --theme-accent-glow: #a16207;
   --theme-accent-secondary: #3b82f6;
   --theme-bg-dark: #14100a;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: linear-gradient(135deg, #854d0e, #a16207);
   --theme-gradient-secondary: linear-gradient(135deg, #3b82f6, #60a5fa);
   --theme-accent-rgb: 133, 77, 14;
@@ -1371,7 +1371,7 @@
   --theme-accent-glow: #94a3b8;
   --theme-accent-secondary: #c0c0c0;
   --theme-bg-dark: #121215;
-  --theme-bg-card: #1c1d21;
+  --theme-bg-card: #0d0d0d;
   --theme-gradient-primary: #c0c0c0;
   --theme-gradient-secondary: linear-gradient(135deg, #db2777, #ec4899);
   --theme-accent-rgb: 113, 113, 122;

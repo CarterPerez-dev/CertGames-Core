@@ -1,6 +1,7 @@
 .cipherchallenge_lvlselector_container {
   margin-bottom: 25px;
   animation: fadeIn 0.5s ease;
+  font-family: 'Arial', sans-serif;
 }
 
 .cipherchallenge_lvlselector_container h3 {
@@ -12,6 +13,7 @@
   gap: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--profile-border, #2a2c3d);
+  font-family: 'Arial', sans-serif;
 }
 
 .cipherchallenge_lvlselector_levels_list {
@@ -30,7 +32,7 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 15px;
-  background-color: var(--profile-bg-card, #232535);
+  background-color: var(--profile-bg-dark, #232535);
   padding: 14px;
   border-radius: 10px;
   cursor: pointer;
