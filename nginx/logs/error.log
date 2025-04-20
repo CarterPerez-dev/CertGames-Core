@@ -154,3 +154,8 @@
 2025/04/20 11:03:03 [warn] 1#1: duplicate MIME type "text/css" in /etc/nginx/nginx.conf:58
 2025/04/20 11:03:03 [warn] 1#1: duplicate MIME type "text/plain" in /etc/nginx/nginx.conf:58
 2025/04/20 11:03:03 [warn] 1#1: duplicate MIME type "text/xml" in /etc/nginx/nginx.conf:58
+2025/04/20 11:06:43 [warn] 1#1: duplicate MIME type "application/javascript" in /etc/nginx/nginx.conf:58
+2025/04/20 11:06:43 [warn] 1#1: duplicate MIME type "application/json" in /etc/nginx/nginx.conf:58
+2025/04/20 11:06:43 [warn] 1#1: duplicate MIME type "text/css" in /etc/nginx/nginx.conf:58
+2025/04/20 11:06:43 [warn] 1#1: duplicate MIME type "text/plain" in /etc/nginx/nginx.conf:58
+2025/04/20 11:06:43 [warn] 1#1: duplicate MIME type "text/xml" in /etc/nginx/nginx.conf:58
