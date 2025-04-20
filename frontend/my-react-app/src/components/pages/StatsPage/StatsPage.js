@@ -1,4 +1,3 @@
-// src/components/pages/StatsPage/StatsPage.js
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './StatsPage.css';
@@ -32,7 +31,7 @@ const StatsPage = () => {
   const [timeRange, setTimeRange] = useState('all');
   const [readinessScores, setReadinessScores] = useState({});
   const [displayMode, setDisplayMode] = useState('overview'); // 'overview', 'details', 'readiness'
-  const [leaderboardRank, setLeaderboardRank] = useState({current: 0, previous: 0, change: 0});
+  const [leaderboardRank, setLeaderboardRank] = useState(null);
   
   // Color definitions for charts
   const COLORS = {
@@ -57,6 +56,60 @@ const StatsPage = () => {
     COLORS.purple,
     COLORS.teal
   ];
+  
+  // Helper function to get username
+  const fetchUsername = async (userId) => {
+    try {
+      const response = await fetch(`/api/test/user/${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch user data');
+      }
+      const userData = await response.json();
+      return userData.username;
+    } catch (err) {
+      console.error('Error fetching username:', err);
+      return null;
+    }
+  };  
+  
+  // Fetch user's leaderboard position
+  const fetchLeaderboardRank = async () => {
+    if (!userId) return;
+    
+    try {
+      // First get the user's username
+      const username = await fetchUsername(userId);
+      if (!username) {
+        throw new Error('Could not fetch username');
+      }
+      
+      // Now fetch the leaderboard data
+      const response = await fetch(`/api/test/leaderboard?skip=0&limit=5000`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch leaderboard data');
+      }
+      
+      const data = await response.json();
+      console.log("Looking for user in leaderboard, username:", username);
+      console.log("Total leaderboard entries:", data.data?.length || 0);
+      
+      // Find user by username and get their rank
+      const userEntry = data.data.find(entry => entry.username === username);
+      
+      // If user is found, set their rank
+      if (userEntry) {
+        console.log("Found user rank:", userEntry.rank);
+        setLeaderboardRank(userEntry.rank);
+      } else {
+        // User not found in leaderboard
+        console.error("User not found in leaderboard data");
+        setLeaderboardRank(null);
+      }
+    } catch (err) {
+      console.error('Error fetching leaderboard rank:', err);
+      setLeaderboardRank(null);
+    }
+  };
   
   // Fetch test attempts when component mounts
   useEffect(() => {
@@ -88,76 +141,6 @@ const StatsPage = () => {
     
     fetchTestAttempts();
   }, [userId]);
-  
-  // Fetch user's leaderboard position
-  const fetchLeaderboardRank = async () => {
-    if (!userId) return;
-    
-    try {
-      // Attempt to get leaderboard data with a large limit to ensure we catch all users
-      const response = await fetch(`/api/test/leaderboard?skip=0&limit=5000`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch leaderboard data');
-      }
-      
-      const data = await response.json();
-      console.log("Looking for user in leaderboard, userId:", userId);
-      console.log("Total leaderboard entries:", data.data?.length || 0);
-      
-      // Find user by username (most likely the issue is in the API response data structure)
-      let userRank = -1;
-      for (let i = 0; i < data.data.length; i++) {
-        // Log the first few entries to debug
-        if (i < 5) console.log(`Entry ${i}:`, data.data[i]);
-        
-        // Try different properties that might contain user identifier
-        if (data.data[i].username === userId || 
-            data.data[i].userId === userId || 
-            data.data[i].id === userId ||
-            data.data[i]._id === userId) {
-          userRank = i;
-          break;
-        }
-      }
-      
-      // If user is found, set their rank
-      if (userRank !== -1) {
-        const currentRank = userRank + 1; // Add 1 because index is zero-based
-        
-        // For previous rank, we'll use historical data or estimate
-        // Here we'll simulate previous rank based on current (in a real app, get from DB)
-        const previousRank = Math.max(1, currentRank + (Math.random() > 0.5 ? 
-          -Math.floor(Math.random() * 3) : Math.floor(Math.random() * 3)));
-        
-        console.log("Found user rank:", currentRank, "Previous:", previousRank);
-        
-        setLeaderboardRank({
-          current: currentRank,
-          previous: previousRank,
-          change: previousRank - currentRank
-        });
-      } else {
-        // User not found in leaderboard
-        console.error("User not found in leaderboard data");
-        
-        // Don't set a default rank, leave it as "?" 
-        setLeaderboardRank({
-          current: null, 
-          previous: null,
-          change: 0
-        });
-      }
-    } catch (err) {
-      console.error('Error fetching leaderboard rank:', err);
-      
-      // Don't set a default rank on error
-      setLeaderboardRank({
-        current: null,
-        previous: null,
-        change: 0
-      });
-    }
-  };
   
   // Calculate readiness scores for different certification exams
   const calculateReadinessScores = (attempts) => {
@@ -221,7 +204,7 @@ const StatsPage = () => {
     
     setReadinessScores(scores);
   };
-  
+
   // Format certification name for better display
   const formatCertName = (name) => {
     if (!name) return 'Unknown';
@@ -668,9 +651,8 @@ const StatsPage = () => {
                 <FaStarHalfAlt className="stats-card-icon" />
                 <h3>Leaderboard Rank</h3>
               </div>
-              <div className="stats-card-value rank-value">
-                <span>{leaderboardRank.current ? `#${leaderboardRank.current}` : "?"}</span>
-                {renderRankChangeIndicator()}
+              <div className="stats-card-value">
+                {leaderboardRank ? `#${leaderboardRank}` : "?"}
               </div>
               <div className="stats-card-footer">
                 <span>Based on XP and Level</span>

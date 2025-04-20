@@ -67,7 +67,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: Geneva, sans-serif;
   color: var(--threathunter-text);
   background-color: var(--threathunter-bg-dark);
   background-image: 
@@ -95,6 +95,7 @@
 }
 
 .threat-hunter-header h1 {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
   font-size: 2.5rem;
   background: var(--threathunter-gradient-primary);
   -webkit-background-clip: text;
@@ -1038,11 +1039,13 @@
   font-weight: bold;
   font-family: 'Courier New', monospace;
   color: var(--threathunter-accent-glow);
+  margin-left: 10px;
 }
 
 .threathunter_analysistools_entity_info {
   font-size: 0.9rem;
   color: var(--threathunter-text-secondary);
+  margin-right: 10px;
 }
 
 .threathunter_analysistools_ip_analysis_tips h5,
@@ -1079,7 +1082,7 @@
 .threathunter_analysistools_user_activity_tips li::before {
   content: '▹';
   position: absolute;
-  left: 10px;
+  left: 1px;
   color: var(--threathunter-accent);
 }
 
@@ -1386,6 +1389,7 @@
 }
 
 .threathunter_scenarioselector_header h2 {
+  font-family: 'Orbitron', 'Roboto', sans-serif;
   font-size: 1.8rem;
   background: var(--threathunter-gradient-primary);
   -webkit-background-clip: text;
@@ -1415,6 +1419,7 @@
   font-size: 1.3rem;
   color: var(--threathunter-accent-glow);
   margin-bottom: 15px;
+  font-family: 'Orbitron', 'Roboto', sans-serif;
 }
 
 .threathunter_scenarioselector_type_buttons {
