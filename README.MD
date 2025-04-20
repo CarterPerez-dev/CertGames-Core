@@ -1,7 +1,14 @@
-<h1>
-  <span style="color: red;">CertGames Core</span>
-  <span style="color: black;"> - Advanced Cybersecurity Training Platform</span>
-</h1>
+# <span style="color: red;">CertGames Core</span><span style="color: black;"> - Advanced Cybersecurity Training Platform</span>
+
+![CertGames Logo](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/frontend/my-react-app/public/ios.png)
+
+[![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)](https://reactjs.org/)
+[![React Native](https://img.shields.io/badge/React_Native-0.76.7-0088CC.svg)](https://reactnative.dev/)
+...
+
+## Overview
+CertGames is a comprehensive cybersecurity training platform designed to help IT professionals prepare for certification exams through gamified learning experiences.
+...
 
 ![CertGames Logo](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/frontend/my-react-app/public/ios.png)
 
