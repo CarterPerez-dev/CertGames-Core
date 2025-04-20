@@ -1,5 +1,6 @@
 // src/components/pages/store/slice/threatHunterSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchUserData } from './userSlice';
 
 // Async thunks
 export const fetchLogScenarios = createAsyncThunk(
@@ -42,7 +43,7 @@ export const startScenario = createAsyncThunk(
 
 export const submitAnalysis = createAsyncThunk(
   'threatHunter/submitAnalysis',
-  async (analysisData, { rejectWithValue }) => {
+  async (analysisData, { dispatch, rejectWithValue }) => {
     try {
       const response = await fetch('/api/threat-hunter/submit-analysis', {
         method: 'POST',
@@ -55,6 +56,10 @@ export const submitAnalysis = createAsyncThunk(
         throw new Error('Failed to submit analysis');
       }
       const data = await response.json();
+      
+      // Dispatch fetchUserData to update XP and coins across the app
+      dispatch(fetchUserData(analysisData.userId));
+      
       return data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -64,7 +69,7 @@ export const submitAnalysis = createAsyncThunk(
 
 // Initial state
 const initialState = {
-  scenarios: [], // This is the key property that's missing
+  scenarios: [],
   currentScenario: null,
   gameStatus: 'selecting', // 'selecting', 'playing', 'completed'
   selectedLog: null,

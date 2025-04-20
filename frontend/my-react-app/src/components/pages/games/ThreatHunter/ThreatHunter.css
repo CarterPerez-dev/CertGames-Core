@@ -2292,6 +2292,29 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
+
+.threat-hunter-user-stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.threat-hunter-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.threat-hunter-stat-icon {
+  color: var(--accent-color, #6543cc);
+}
+
 /*===============================*/
 /* SCROLLBAR STYLING            */
 /*===============================*/

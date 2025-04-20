@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FaFlag, FaRegFlag, FaExclamationTriangle, FaSearch, FaInfoCircle } from 'react-icons/fa';
 import './ThreatHunter.css';
 
-const LogViewer = ({ logs, selectedLog, flaggedLines = [], onSelectLog, onFlagLine }) => {
+const LogViewer = ({ logs, selectedLog, flaggedLines = {}, onSelectLog, onFlagLine }) => {
   const [currentLogIndex, setCurrentLogIndex] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -75,8 +75,8 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = [], onSelectLog, onFlagLi
   };
   
   const handleFlagLine = (lineIndex) => {
-    if (onFlagLine) {
-      onFlagLine(lineIndex);
+    if (onFlagLine && currentLog) {
+      onFlagLine(currentLog.id, lineIndex);
     }
   };
   
@@ -164,7 +164,8 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = [], onSelectLog, onFlagLi
         <div className="log-lines">
           {currentLog && currentLog.content && Array.isArray(currentLog.content) && currentLog.content.map((line, index) => {
             const isHighlighted = index === highlightedLineIndex;
-            const isFlagged = flaggedLines.includes(index);
+            const isFlagged = currentLog && flaggedLines[currentLog.id] && 
+                              flaggedLines[currentLog.id].includes(index);
             const hasSearchMatch = searchTerm && line.text && line.text.toLowerCase().includes(searchTerm.toLowerCase());
             
             return (
@@ -202,7 +203,7 @@ const LogViewer = ({ logs, selectedLog, flaggedLines = [], onSelectLog, onFlagLi
       <div className="log-viewer-footer">
         <div className="log-statistics">
           <span>Total Lines: {currentLog && currentLog.content ? currentLog.content.length : 0}</span>
-          <span>Flagged: {flaggedLines.length}</span>
+          <span>Flagged: {currentLog && flaggedLines[currentLog.id] ? flaggedLines[currentLog.id].length : 0}</span>
         </div>
         <div className="help-text">
           <FaInfoCircle />

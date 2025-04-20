@@ -16,7 +16,9 @@ import {
   FaTrophy,
   FaArrowLeft,
   FaHourglassHalf,
-  FaTimesCircle 
+  FaTimesCircle,
+  FaCoins,
+  FaStar
 } from 'react-icons/fa';
 import LogViewer from './LogViewer';
 import AnalysisTools from './AnalysisTools';
@@ -39,13 +41,13 @@ const ThreatHunter = () => {
     loading, 
     error 
   } = useSelector(state => state.threatHunter);
-  const { userId } = useSelector(state => state.user);
+  const { userId, coins, xp } = useSelector(state => state.user);
   
   const [selectedThreatType, setSelectedThreatType] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
   const [showResults, setShowResults] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
-  const [flaggedLines, setFlaggedLines] = useState([]);
+  const [flaggedLines, setFlaggedLines] = useState({});
   const [detectedThreats, setDetectedThreats] = useState([]);
   const [currentTimeLeft, setCurrentTimeLeft] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -112,7 +114,7 @@ const ThreatHunter = () => {
     }));
     
     // Reset state for new game
-    setFlaggedLines([]);
+    setFlaggedLines({});
     setDetectedThreats([]);
     setCurrentTimeLeft(null);
   };
@@ -122,13 +124,24 @@ const ThreatHunter = () => {
     // This would be implemented in the Redux slice
   };
   
-  const handleLineFlagging = (lineNumber) => {
-    // Toggle flagging for this line
-    if (flaggedLines.includes(lineNumber)) {
-      setFlaggedLines(flaggedLines.filter(line => line !== lineNumber));
-    } else {
-      setFlaggedLines([...flaggedLines, lineNumber]);
-    }
+  const handleLineFlagging = (logId, lineNumber) => {
+    setFlaggedLines(prevState => {
+      const logLines = prevState[logId] || [];
+      
+      if (logLines.includes(lineNumber)) {
+        // Remove the line if already flagged
+        return {
+          ...prevState,
+          [logId]: logLines.filter(line => line !== lineNumber)
+        };
+      } else {
+        // Add the line if not flagged
+        return {
+          ...prevState,
+          [logId]: [...(logLines || []), lineNumber]
+        };
+      }
+    });
   };
   
   const handleThreatDetection = (threat) => {
@@ -148,14 +161,28 @@ const ThreatHunter = () => {
     setDetectedThreats(detectedThreats.filter(t => t.id !== threatId));
   };
   
+  // src/components/pages/games/ThreatHunter/ThreatHunter.js
+  // Update the handleSubmitAnalysis function with a null check
+  
   const handleSubmitAnalysis = useCallback(() => {
-    // FIXED: Remove this check to allow submission even with no threats
-    // if (detectedThreats.length === 0) return;
+    // Add null check for currentScenario
+    if (!currentScenario) {
+      console.warn('Cannot submit analysis: currentScenario is null');
+      return;
+    }
+    
+    // Create a flattened array of flagged lines with log IDs for the backend
+    const flattenedFlaggedLines = [];
+    Object.entries(flaggedLines).forEach(([logId, lines]) => {
+      lines.forEach(lineIndex => {
+        flattenedFlaggedLines.push({ logId, lineIndex });
+      });
+    });
     
     dispatch(submitAnalysis({
       userId,
       scenarioId: currentScenario.id,
-      flaggedLines,
+      flaggedLines: flattenedFlaggedLines,
       detectedThreats,
       timeLeft: currentTimeLeft
     }));
@@ -170,11 +197,13 @@ const ThreatHunter = () => {
   };
   
   const handleRestart = () => {
-    dispatch(resetGame());
-    setShowResults(false);
-    // Clear local state to ensure clean restart
-    setFlaggedLines([]);
+    // First clear local state
+    setFlaggedLines({});
     setDetectedThreats([]);
+    setShowResults(false);
+  
+    // Then reset the redux store state
+    dispatch(resetGame());
   };
   
   const handleEarlyEnd = () => {
@@ -187,7 +216,7 @@ const ThreatHunter = () => {
     if (window.confirm('Are you sure you want to return to the scenario selection? Your current progress will be lost.')) {
       dispatch(resetGame());
       // Clear local state as well
-      setFlaggedLines([]);
+      setFlaggedLines({});
       setDetectedThreats([]);
     }
   };
@@ -226,6 +255,18 @@ const ThreatHunter = () => {
               >
                 <FaInfoCircle /> How to Play
               </button>
+              
+              {/* User stats display */}
+              <div className="threat-hunter-user-stats">
+                <div className="threat-hunter-stat">
+                  <FaCoins className="threat-hunter-stat-icon" />
+                  <span>{coins}</span>
+                </div>
+                <div className="threat-hunter-stat">
+                  <FaStar className="threat-hunter-stat-icon" />
+                  <span>{xp}</span>
+                </div>
+              </div>
             </div>
             
             <ScenarioSelector 
@@ -261,6 +302,18 @@ const ThreatHunter = () => {
                 </span>
               </div>
               
+              {/* User stats display */}
+              <div className="threat-hunter-user-stats">
+                <div className="threat-hunter-stat">
+                  <FaCoins className="threat-hunter-stat-icon" />
+                  <span>{coins}</span>
+                </div>
+                <div className="threat-hunter-stat">
+                  <FaStar className="threat-hunter-stat-icon" />
+                  <span>{xp}</span>
+                </div>
+              </div>
+              
               <button 
                 className="threat-hunter-help-button"
                 onClick={() => setShowInstructions(true)}
@@ -280,7 +333,7 @@ const ThreatHunter = () => {
               <LogViewer 
                 logs={scenarioLogs || []}
                 selectedLog={selectedLog}
-                flaggedLines={flaggedLines || []}
+                flaggedLines={flaggedLines || {}}
                 onSelectLog={handleLogSelection}
                 onFlagLine={handleLineFlagging}
               />
@@ -295,7 +348,7 @@ const ThreatHunter = () => {
                 
                 <ThreatControls 
                   timeLeft={currentTimeLeft || 0}
-                  flaggedLines={flaggedLines || []}
+                  flaggedLines={Object.values(flaggedLines).flat() || []}
                   detectedThreats={detectedThreats || []}
                   onSubmit={handleSubmitAnalysis}
                 />
@@ -333,6 +386,8 @@ const ThreatHunter = () => {
           results={results}
           scenario={currentScenario}
           onClose={() => {
+            setFlaggedLines({});
+            setDetectedThreats([]);
             setShowResults(false);
             dispatch(resetGame());
           }}
