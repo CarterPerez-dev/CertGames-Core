@@ -118,17 +118,179 @@ A comprehensive Flask application serves as the backend API layer:
 
 ### Frontend (Web)
 
+```json
+{
+  "Core": {
+    "Framework": "React 18.3.1",
+    "State Management": "Redux Toolkit 2.5.1",
+    "Routing": "React Router 7.1.1"
+  },
+  "UI/UX": {
+    "Styling": "CSS Modules + CSS Variables for theming",
+    "Icons": "React Icons 5.4.0",
+    "Charts": "Recharts 2.15.1",
+    "Animations": "CSS Transitions + React Spring",
+    "Data Visualization": "D3.js (integrated via Recharts)"
+  },
+  "Performance": {
+    "Code Splitting": "Dynamic imports with React.lazy()",
+    "Bundle Optimization": "Craco + Webpack 5 custom config",
+    "Caching Strategy": "Redux persistor + Local Storage",
+    "Lazy Loading": "React Suspense + window.IntersectionObserver"
+  },
+  "Build Tools": {
+    "Package Manager": "npm",
+    "Bundler": "Webpack 5 (via Craco)",
+    "Transpiler": "Babel with custom plugins",
+    "Minification": "Terser + CSS Minimizer"
+  },
+  "DevOps": {
+    "Linting": "ESLint with custom config",
+    "Testing": "Jest + React Testing Library",
+    "CI/CD": "GitHub Actions",
+    "Monitoring": "Custom performance metrics + Web Vitals tracking"
+  }
+}
+```
+---
 ### Mobile (iOS)
 
+```json
+{
+  "Core": {
+    "Framework": "React Native 0.76.7",
+    "Expo": "Expo SDK 52.0.41",
+    "State Management": "Redux Toolkit 2.6.1",
+    "Navigation": "React Navigation 7.x"
+  },
+  "Native Features": {
+    "Authentication": "Expo Apple Authentication, Google Sign-In",
+    "Storage": "Expo SecureStore + AsyncStorage",
+    "Network": "Axios 1.8.3 with custom retry logic",
+    "In-App Purchases": "React Native IAP 12.16.2"
+  },
+  "UI/UX": {
+    "Components": "Custom components with native styling",
+    "Animations": "React Native Reanimated 3.16.7",
+    "Haptics": "Expo Haptics",
+    "Gestures": "React Native Gesture Handler 2.20.2"
+  },
+  "Device Support": {
+    "iOS Version": "iOS 14+",
+    "Form Factors": "iPhone, iPad (Universal App)",
+    "Orientation": "Portrait only (optimized experience)",
+    "Deep Linking": "Universal Links via Expo"
+  },
+  "Build System": {
+    "Development": "Expo Go + Dev Client",
+    "Production": "EAS Build with custom profile",
+    "Distribution": "App Store Connect + EAS Update"
+  }
+}
+```
+---
 ### Backend (API)
 
+```json
+{
+  "Core": {
+    "Framework": "Flask 2.3.3",
+    "WSGI Server": "Gunicorn with Gevent workers",
+    "Authentication": "JWT + OAuth 2.0",
+    "Session Management": "Flask-Session with Redis backend"
+  },
+  "Data Layer": {
+    "Database": "MongoDB Atlas (Document-oriented NoSQL)",
+    "ORM": "PyMongo with custom abstraction layer",
+    "Caching": "Redis with tiered expiration strategy",
+    "Data Validation": "Custom schema validation"
+  },
+  "Asynchronous Processing": {
+    "Task Queue": "Celery 5.3.1",
+    "Message Broker": "Redis",
+    "Scheduling": "Celery Beat for periodic tasks",
+    "Concurrency": "Gevent workers (8) with thread pool (5)"
+  },
+  "AI Integration": {
+    "LLM Provider": "OpenAI GPT-4 API",
+    "Streaming Support": "Flask response streaming + OpenAI streaming",
+    "Prompt Engineering": "Custom prompt templates with parameter injection",
+    "Rate Limiting": "Tiered per-feature limits with progressive penalties"
+  },
+  "APIs and Protocols": {
+    "REST API": "JSON with Flask Blueprints",
+    "WebSockets": "Socket.IO for real-time features",
+    "Webhooks": "For Stripe integration and Apple IAP verification",
+    "Payment Processing": "Stripe API + Apple In-App Purchase Server Notifications"
+  },
+  "Security": {
+    "Authentication": "OAuth 2.0 + JWT + Secure HTTP-only cookies",
+    "Rate Limiting": "IP-based, progressive with Redis tracking",
+    "Input Validation": "Custom sanitization and validation",
+    "Headers": "Strict security headers via NGINX"
+  }
+}
+```
+---
 ### Infrastructure
 
+```json
+{
+  "Containerization": {
+    "Platform": "Docker with docker-compose",
+    "Container Registry": "Private Docker Hub repository",
+    "Resource Limits": "Defined per-service CPU and memory constraints",
+    "Networking": "Custom bridge network with internal DNS"
+  },
+  "Web Servers": {
+    "Load Balancer": "NGINX with optimized configurations",
+    "Static Content": "Apache HTTPD 2.4 with mpm_event",
+    "SSL Termination": "Cloudflare at edge + internal self-signed certs"
+  },
+  "Message Queuing": {
+    "Primary Queue": "Redis for Celery tasks",
+    "Durability": "Redis AOF persistence with 1-second fsync",
+    "Monitoring": "Redis INFO stats collection via Celery Beat tasks"
+  },
+  "Caching": {
+    "Session Cache": "Redis with 24-hour expiry",
+    "Content Cache": "Cloudflare edge caching + Redis L2 cache",
+    "Query Cache": "MongoDB query results in Redis (30-minute TTL)"
+  },
+  "Database": {
+    "Primary DB": "MongoDB Atlas M20 cluster (3 nodes)",
+    "Replication": "Atlas automatic replication with 3 nodes",
+    "Backup": "Daily automated backups with 30-day retention",
+    "Scaling": "Auto-scaling enabled with custom triggers"
+  },
+  "CDN & DNS": {
+    "Provider": "Cloudflare Enterprise",
+    "Configuration": "Custom page rules, cache TTLs by content type",
+    "Security": "WAF with custom ruleset + Bot Management",
+    "DNS": "Cloudflare DNS with DNSSEC enabled"
+  },
+  "Monitoring": {
+    "Application Metrics": "Custom in-app telemetry with MongoDB storage",
+    "Server Monitoring": "Resource utilization tracking via Celery Beat",
+    "Scheduled Health Checks": "10-minute interval API endpoint verification",
+    "Logs": "Structured JSON logging with automatic rotation"
+  },
+  "Disaster Recovery": {
+    "Database": "Point-in-time recovery via MongoDB Atlas",
+    "Configuration": "Docker Compose templates in version control",
+    "Deployment": "Automated build and deployment pipeline",
+    "Backup Testing": "Monthly restoration tests for validation"
+  }
+}
+```
+---
 ## Reactive Multi-Platform Design
 
 CertGames employs a reactive architecture pattern to ensure consistency across web and mobile platforms while optimizing for each platform's unique capabilities.
 
 ### Shared Logic Pattern
+
+![Shared Logic Pattern Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/Shared-Logic-Pattern.png)
 
 ### Key Implementation Points:
 
@@ -144,6 +306,8 @@ CertGames employs a reactive architecture pattern to ensure consistency across w
 
 ## API Architecture
 
+![API Architecture Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/api-architecture.png)
+
 The backend API follows a modular architecture using Flask Blueprints. Each functional domain is implemented as a separate blueprint with its own routes, business logic, and middleware.
 
 ### API Documentation
@@ -158,6 +322,119 @@ The API follows RESTful principles with consistent patterns:
 
 Example endpoint structure:
 
+```json
+{
+  "Authentication": {
+    "/api/test/login": {
+      "method": "POST",
+      "description": "User login with credentials",
+      "parameters": {
+        "usernameOrEmail": "string",
+        "password": "string"
+      },
+      "response": {
+        "user_id": "string",
+        "username": "string",
+        "email": "string",
+        "coins": "integer",
+        "xp": "integer",
+        "level": "integer",
+        "achievements": "array",
+        "subscriptionActive": "boolean"
+      }
+    },
+    "/api/oauth/verify-google-token": {
+      "method": "POST",
+      "description": "Verify Google OAuth token from mobile",
+      "parameters": {
+        "token": "string",
+        "userData": "object",
+        "platform": "string"
+      },
+      "response": {
+        "success": "boolean",
+        "userId": "string"
+      }
+    }
+  },
+  "User Management": {
+    "/api/test/user/{user_id}": {
+      "method": "GET",
+      "description": "Get user details",
+      "parameters": {
+        "user_id": "path parameter"
+      },
+      "response": "User object with full details"
+    },
+    "/api/test/user/{user_id}/daily-bonus": {
+      "method": "POST",
+      "description": "Claim daily login bonus",
+      "parameters": {
+        "user_id": "path parameter"
+      },
+      "response": {
+        "success": "boolean",
+        "newCoins": "integer",
+        "newXP": "integer",
+        "newlyUnlocked": "array of achievement IDs"
+      }
+    }
+  },
+  "Test System": {
+    "/api/test/tests/{category}/{test_id}": {
+      "method": "GET",
+      "description": "Get test by category and ID",
+      "parameters": {
+        "category": "path parameter",
+        "test_id": "path parameter"
+      },
+      "response": "Complete test object with questions"
+    },
+    "/api/test/attempts/{user_id}/{test_id}/finish": {
+      "method": "POST",
+      "description": "Complete a test attempt",
+      "parameters": {
+        "user_id": "path parameter",
+        "test_id": "path parameter",
+        "score": "integer",
+        "totalQuestions": "integer"
+      },
+      "response": {
+        "message": "string",
+        "newlyUnlocked": "array of achievement IDs",
+        "newXP": "integer",
+        "newCoins": "integer"
+      }
+    }
+  },
+  "AI Generation": {
+    "/api/analogy/stream_analogy": {
+      "method": "POST",
+      "description": "Generate and stream analogy text",
+      "parameters": {
+        "analogy_type": "string (single|comparison|triple)",
+        "concept1": "string",
+        "concept2": "string (optional)",
+        "concept3": "string (optional)",
+        "category": "string"
+      },
+      "response": "Streaming text response"
+    },
+    "/api/scenario/stream_scenario": {
+      "method": "POST",
+      "description": "Generate cybersecurity scenario",
+      "parameters": {
+        "industry": "string",
+        "attack_type": "string",
+        "skill_level": "string",
+        "threat_intensity": "string"
+      },
+      "response": "Streaming text response"
+    }
+  }
+}
+```
+---
 ## AI Integration
 
 CertGames leverages AI throughout the platform to enhance the learning experience. This is primarily implemented through OpenAI's GPT-4 API with custom prompt engineering.
@@ -172,10 +449,237 @@ CertGames leverages AI throughout the platform to enhance the learning experienc
 
 ### AI Integration Architecture
 
+![AI Integration Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/AI-Integration.png)
+
 ### Prompt Engineering Example
 
+```python
+def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None, category="real-world"):
+    """
+    Generate an analogy and stream the results token by token.
+    Returns a generator that yields partial text chunks as they're generated.
+    """
+    prompt = ""
+    
+    if analogy_type == "single":
+        prompt = (
+            f"Generate an analogy for the concept '{concept1}' using the context of '{category}'. "
+            "Make it easy to understand but informative and in a teaching style, concise but in depth, "
+            "and entertaining, with one key info at the end to make sure the info is remembered. "
+            "Do not explicitly say that you will create the analogy just output the analogy/explanation only."
+        )
+    elif analogy_type == "comparison":
+        prompt = (
+            f"Compare '{concept1}' and '{concept2}' using an analogy in the context of '{category}'. "
+            "Explain how they are similar and different or how they might work in conjunction with each other, "
+            "in a teaching style, informative, concise but in depth, and entertaining, with one key info at the end "
+            "to make sure the info is remembered. Do not explicitly say that you will create the analogy just output "
+            "the analogy/explanation only."
+        )
+    elif analogy_type == "triple":
+        prompt = (
+            f"Compare '{concept1}', '{concept2}', and '{concept3}' using an analogy in the context of '{category}'. "
+            "Explain how they are similar and different or how they might work in conjunction with each other, "
+            "in a teaching style, informative, concise but in depth, and entertaining, with one key info at the end "
+            "to make sure the info is remembered. Do not explicitly say that you will create the analogy just output "
+            "the analogy/explanation only."
+        )
+    
+    try:
+        response = client.chat.completions.create(
+            messages=[{"role": "user", "content": prompt}],
+            model="gpt-4o",
+            max_tokens=1200, 
+            temperature=0.7,
+            stream=True
+        )
+        
+        def generator():
+            for chunk in response:
+                if chunk.choices and chunk.choices[0].delta:
+                    content = getattr(chunk.choices[0].delta, "content", None)
+                    if content:
+                        yield content
+        
+        return generator()
+    
+    except Exception as e:
+        logger.error(f"Error generating analogy stream: {str(e)}")
+        def error_generator():
+            yield f"[Error generating analogy: {str(e)}]"
+        return error_generator()
+```
+---
 ## Database Schema
 
+```json
+{
+  "mainusers": {
+    "indexes": ["username", "email", "subscriptionActive"],
+    "fields": {
+      "_id": "ObjectId",
+      "username": "string",
+      "email": "string",
+      "password": "string (hashed)",
+      "oauth_provider": "string (null|google|apple)",
+      "coins": "integer",
+      "xp": "integer",
+      "level": "integer",
+      "achievements": ["string (achievement IDs)"],
+      "xpBoost": "float",
+      "currentAvatar": "ObjectId (reference to shop)",
+      "nameColor": "string (null|color code)",
+      "purchasedItems": ["ObjectId (references to shop)"],
+      "subscriptionActive": "boolean",
+      "subscriptionStatus": "string (null|active|canceling|expired)",
+      "subscriptionPlatform": "string (null|stripe|apple)",
+      "lastDailyClaim": "Date",
+      "practiceQuestionsRemaining": "integer",
+      "subscriptionType": "string (free|premium)",
+      "achievement_counters": {
+        "total_tests_completed": "integer",
+        "perfect_tests_count": "integer",
+        "perfect_tests_by_category": {
+          "[category]": "integer"
+        },
+        "highest_score_ever": "float",
+        "lowest_score_ever": "float",
+        "total_questions_answered": "integer"
+      }
+    }
+  },
+  "tests": {
+    "indexes": ["testId", "category"],
+    "fields": {
+      "_id": "ObjectId",
+      "testId": "integer",
+      "testName": "string",
+      "category": "string",
+      "difficulty": "string",
+      "description": "string",
+      "questions": [{
+        "id": "string",
+        "question": "string",
+        "options": ["string"],
+        "correctAnswerIndex": "integer",
+        "explanation": "string",
+        "examTip": "string (optional)"
+      }]
+    }
+  },
+  "testAttempts": {
+    "indexes": ["userId", "testId", "finished"],
+    "fields": {
+      "_id": "ObjectId",
+      "userId": "ObjectId",
+      "testId": "integer or string",
+      "category": "string",
+      "score": "integer",
+      "totalQuestions": "integer",
+      "selectedLength": "integer",
+      "currentQuestionIndex": "integer",
+      "shuffleOrder": ["integer"],
+      "answerOrder": ["[integer]"],
+      "finished": "boolean",
+      "finishedAt": "Date (optional)",
+      "examMode": "boolean",
+      "examTimerSeconds": "integer",
+      "answers": [{
+        "questionId": "string",
+        "userAnswerIndex": "integer or null",
+        "correctAnswerIndex": "integer"
+      }]
+    }
+  },
+  "shop": {
+    "indexes": ["type", "cost"],
+    "fields": {
+      "_id": "ObjectId",
+      "title": "string",
+      "description": "string",
+      "imageUrl": "string",
+      "type": "string (avatar|nameColor|xpBoost)",
+      "cost": "integer or null",
+      "effectValue": "any (depends on type)"
+    }
+  },
+  "achievements": {
+    "indexes": ["achievementId"],
+    "fields": {
+      "_id": "ObjectId",
+      "achievementId": "string",
+      "title": "string",
+      "description": "string",
+      "icon": "string",
+      "criteria": {
+        "testCount": "integer (optional)",
+        "minScore": "float (optional)",
+        "perfectTests": "integer (optional)",
+        "coins": "integer (optional)",
+        "level": "integer (optional)",
+        "totalQuestions": "integer (optional)",
+        "perfectTestsInCategory": "integer (optional)",
+        "minScoreBefore": "float (optional)",
+        "minScoreAfter": "float (optional)",
+        "testsCompletedInCategory": "integer (optional)",
+        "allTestsCompleted": "boolean (optional)"
+      }
+    }
+  },
+  "supportThreads": {
+    "indexes": ["userId", "createdAt", "status"],
+    "fields": {
+      "_id": "ObjectId",
+      "userId": "ObjectId",
+      "title": "string",
+      "status": "string (open|closed)",
+      "createdAt": "Date",
+      "updatedAt": "Date",
+      "messages": [{
+        "sender": "string (user|admin)",
+        "content": "string",
+        "timestamp": "Date"
+      }]
+    }
+  },
+  "subscriptionEvents": {
+    "indexes": ["userId", "event", "timestamp"],
+    "fields": {
+      "_id": "ObjectId",
+      "userId": "ObjectId",
+      "event": "string (subscription_created|subscription_renewed|subscription_canceled|subscription_expired)",
+      "platform": "string (stripe|apple)",
+      "timestamp": "Date",
+      "data": "object (platform-specific data)"
+    }
+  },
+  "performanceMetrics": {
+    "indexes": ["timestamp"],
+    "fields": {
+      "_id": "ObjectId",
+      "avg_request_time": "float (seconds)",
+      "avg_db_query_time": "float (seconds)",
+      "data_transfer_rate": "float (MB/s)",
+      "throughput": "float (requests/minute)",
+      "error_rate": "float (0.0-1.0)",
+      "timestamp": "Date"
+    }
+  },
+  "globalRateLimits": {
+    "indexes": ["clientId", "endpoint", "updatedAt"],
+    "fields": {
+      "_id": "ObjectId",
+      "clientId": "string (hashed identifier)",
+      "endpoint": "string (endpoint type)",
+      "calls": ["Date (timestamps)"],
+      "violations": "integer",
+      "blockUntil": "Date (optional)",
+      "updatedAt": "Date"
+    }
+  }
+}
+```
+---
 CertGames uses MongoDB as its primary database, leveraging its document-oriented nature for flexibility and scalability. The schema is designed for performance with appropriate indexing and denormalization where beneficial.
 
 ### Core Collections
@@ -197,6 +701,8 @@ CertGames uses MongoDB as its primary database, leveraging its document-oriented
 Security is a top priority in CertGames, with multiple layers of protection throughout the system.
 
 ### Authentication System
+
+![Authentication Flow Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/Auth-flow.png)
 
 ### Security Features
 
@@ -236,6 +742,8 @@ Security is a top priority in CertGames, with multiple layers of protection thro
 
 ## Deployment Architecture
 
+![Deployment Architecture Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/Deployment.png)
+
 CertGames uses a containerized deployment architecture with Docker, orchestrated through docker-compose for simplified deployment and scaling.
 
 ### Deployment Process
@@ -251,6 +759,213 @@ CertGames uses a containerized deployment architecture with Docker, orchestrated
 
 The entire infrastructure is defined in code for reproducibility:
 
+```yml
+version: '3.8'
+
+services:
+  backend:
+    container_name: backend_service
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - ./nginx/logs:/var/log/nginx
+    env_file:
+      - .env
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: '9G'
+        reservations:
+          cpus: '2'
+          memory: '7G'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+
+  frontend:
+    container_name: frontend_service
+    build:
+      context: ./frontend/my-react-app
+      dockerfile: Dockerfile.frontend
+    volumes:
+      - ./frontend/my-react-app:/app
+      - /app/node_modules    
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '1'
+          memory: '2G'
+    restart: unless-stopped
+
+  redis:
+    container_name: redis_service
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    volumes:
+      - /mnt/storage/redis_data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+    command: >
+      redis-server /usr/local/etc/redis/redis.conf
+      --requirepass ${REDIS_PASSWORD}
+      --appendonly yes
+      --protected-mode yes
+      --bind 0.0.0.0
+    env_file:
+      - .env
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '0.5'
+          memory: '2G'
+    restart: always
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  apache:
+    container_name: apache_service
+    build:
+      context: ./apache
+      dockerfile: Dockerfile.apache
+    ports:
+      - "8080:8080"
+    networks:
+      - xploitcraft_network
+    volumes:
+      - ./apache/apache_server.conf:/usr/local/apache2/conf/extra/apache_server.conf
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '4G'
+        reservations:
+          cpus: '1'
+          memory: '2G'
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    container_name: nginx_proxy
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled
+      - ./nginx/logs:/var/log/nginx/
+    networks:
+      - xploitcraft_network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: '2G'
+        reservations:
+          cpus: '0.5'
+          memory: '1G'
+    depends_on:
+      - apache
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  celery:
+    container_name: celery_worker
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: celery -A helpers.async_tasks worker --loglevel=info --concurrency=8
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: '6G'
+        reservations:
+          cpus: '2'
+          memory: '3G'
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - xploitcraft_network
+    restart: always
+    
+  celery_beat:
+    container_name: celery_beat_service
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    command: celery -A helpers.celery_app beat --loglevel=info
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: '2G'
+        reservations:
+          cpus: '0.5'
+          memory: '1G'
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - xploitcraft_network
+    volumes:
+      - ./backend:/app  
+      - ./nginx/logs:/var/log/nginx   
+    restart: always
+
+networks:
+  xploitcraft_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+```
+---
 ## Performance Optimizations
 
 CertGames employs multiple performance optimization techniques to ensure a fast, responsive experience for users.
@@ -318,6 +1033,8 @@ CertGames employs multiple performance optimization techniques to ensure a fast,
 
 CertGames employs a comprehensive testing strategy to ensure quality and reliability:
 
+![Unit Testing Diagram](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/Stack/Architecture/Unit-Testing.png)
+
 ### Testing Tools and Frameworks
 
 - **Unit Testing**: Jest, React Testing Library, PyTest
@@ -384,526 +1101,29 @@ CertGames is actively evolving with several initiatives in progress:
 
 ## License
 
-This codebase is proprietary and confidential. © 2025 CertGames LLC. All rights reserved.
-
----
-
-*This README was generated for the CertGames Core repository by Carter Perez (https://www.linkedin.com/in/carterperez-dev/), with over 1300+ hours of development invested in the platform.*
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```ruby
-.
-# 4/20/2025
----
-```ruby
-Root.
-├── Audit
-│   └── bandit.yaml
-├── ENV
-├── Mongo-Inputs
-│   ├── Achievments.js
-│   ├── ShopItems.js
-│   └── TestUsers.js
-├── README.MD
-├── Stack
-│   ├── API
-│   │   └── routes.md
-│   ├── Architecture
-│   │   ├── DB.md
-│   │   ├── Optimized3.md
-│   │   └── stack.flow.md
-│   └── Trees
-│       ├── Flask.md
-│       ├── React.md
-│       └── Root.md
-├── apache
-│   ├── Dockerfile.apache
-│   ├── apache_server.conf
-│   └── httpd.conf
-├── backend
-│   ├── API
-│   │   └── AI.py
-│   ├── Dockerfile.backend
-│   ├── app.py
-│   ├── celerybeat-schedule
-│   ├── helpers
-│   │   ├── analogy_stream_helper.py
-│   │   ├── async_tasks.py
-│   │   ├── celery_app.py
-│   │   ├── global_rate_limiter.py
-│   │   ├── grc_stream_helper.py
-│   │   ├── rate_limiter.py
-│   │   ├── scenario_helper.py
-│   │   └── xploitcraft_helper.py
-│   ├── middleware
-│   │   └── subscription_check.py
-│   ├── models
-│   │   ├── __init__.py
-│   │   ├── newsletter.py
-│   │   ├── password_reset.py
-│   │   └── test.py
-│   ├── mongodb
-│   │   ├── __init__.py
-│   │   └── database.py
-│   ├── requirements.txt
-│   ├── routes
-│   │   ├── AI
-│   │   │   ├── analogy_routes.py
-│   │   │   ├── grc_routes.py
-│   │   │   ├── scenario_routes.py
-│   │   │   └── xploit_routes.py
-│   │   ├── SubscriptionAuth
-│   │   │   ├── oauth_routes.py
-│   │   │   ├── password_reset_routes.py
-│   │   │   ├── subscription_routes.py
-│   │   │   └── utils.py
-│   │   ├── admin
-│   │   │   ├── admin_newsletter_routes.py
-│   │   │   └── cracked_admin.py
-│   │   ├── games
-│   │   │   ├── cipher_routes.py
-│   │   │   ├── incident_routes.py
-│   │   │   ├── phishing_routes.py
-│   │   │   └── threat_hunter_routes.py
-│   │   ├── info
-│   │   │   └── contact_form.py
-│   │   └── main
-│   │       ├── __init__.py
-│   │       ├── achievements_routes.py
-│   │       ├── blueprint.py
-│   │       ├── cancel_routes.py
-│   │       ├── daily_question_routes.py
-│   │       ├── leaderboard_routes.py
-│   │       ├── newsletter_routes.py
-│   │       ├── shop_routes.py
-│   │       ├── support_routes.py
-│   │       ├── test_attempt_routes.py
-│   │       ├── test_routes.py
-│   │       ├── user_routes.py
-│   │       └── utils.py
-│   └── utils
-│       ├── __init__.py
-│       ├── apple_iap_verification.py
-│       ├── email_sender.py
-│       └── utils.py
-├── docker-compose.yml
-├── frontend
-│   └── my-react-app
-│       ├── Dockerfile.audit
-│       ├── Dockerfile.dev
-│       ├── Dockerfile.frontend
-│       ├── craco.config.js
-│       ├── eslint.config.mjs
-│       ├── package-lock.json
-│       ├── package.json
-│       ├── public
-│       │   ├── android-chrome-192x192.png
-│       │   ├── android-chrome-512x512.png
-│       │   ├── apple-touch-icon.png
-│       │   ├── favicon-16x16.png
-│       │   ├── favicon-32x32.png
-│       │   ├── favicon.ico
-│       │   ├── images
-│       │   ├── index.html
-│       │   ├── ios.png
-│       │   ├── manifest.json
-│       │   ├── robots.txt
-│       │   ├── site.webmanifest
-│       │   └── sitemap.xml
-│       └── src
-│           ├── App.js
-│           ├── components
-│           │   ├── ConfettiAnimation.js
-│           │   ├── Footer.js
-│           │   ├── FormattedQuestion.js
-│           │   ├── GlobalTestList.js
-│           │   ├── GlobalTestPage.js
-│           │   ├── PrivacyPolicyIOS.js
-│           │   ├── ProtectedRoute.js
-│           │   ├── QuestionLimitBanner.css
-│           │   ├── QuestionLimitBanner.js
-│           │   ├── SEOHelmet.js
-│           │   ├── Sidebar
-│           │   │   ├── Sidebar.css
-│           │   │   ├── Sidebar.js
-│           │   │   └── sidebarlogo.png
-│           │   ├── StructuredData.js
-│           │   ├── SubscriptionErrorHandler.js
-│           │   ├── UpgradePrompt.css
-│           │   ├── UpgradePrompt.js
-│           │   ├── colorMapping.js
-│           │   ├── cracked
-│           │   │   ├── CrackedAdminDashboard.js
-│           │   │   ├── CrackedAdminLoginPage.js
-│           │   │   ├── images
-│           │   │   │   ├── image1.jpg
-│           │   │   │   ├── image2.jpg
-│           │   │   │   ├── image3.jpg
-│           │   │   │   ├── image4.jpg
-│           │   │   │   ├── image5.jpg
-│           │   │   │   ├── image6.jpg
-│           │   │   │   ├── image7.jpg
-│           │   │   │   ├── image8.jpg
-│           │   │   │   └── image9.jpg
-│           │   │   ├── music
-│           │   │   │   └── elevator-music.mp3
-│           │   │   ├── styles
-│           │   │   │   ├── CrackedAdminDashboard.css
-│           │   │   │   ├── CrackedAdminLogin.css
-│           │   │   │   └── tabstyles
-│           │   │   │       ├── ActivityLogsTab.css
-│           │   │   │       ├── DailyTab.css
-│           │   │   │       ├── DbShellTab.css
-│           │   │   │       ├── HealthCheckTab.css
-│           │   │   │       ├── NewsletterTab.css
-│           │   │   │       ├── OverviewTab.css
-│           │   │   │       ├── PerformanceTab.css
-│           │   │   │       ├── RateLimitsTab.css
-│           │   │   │       ├── RequestLogsTab.css
-│           │   │   │       ├── RevenueTab.css
-│           │   │   │       ├── ServerMetricsTab.css
-│           │   │   │       ├── SupportTab.css
-│           │   │   │       ├── TestsTab.css
-│           │   │   │       ├── ToolsTab.css
-│           │   │   │       └── UsersTab.css
-│           │   │   └── tabs
-│           │   │       ├── ActivityLogsTab.js
-│           │   │       ├── DailyTab.js
-│           │   │       ├── DbShellTab.js
-│           │   │       ├── HealthChecksTab.js
-│           │   │       ├── NewsletterTab.js
-│           │   │       ├── OverviewTab.js
-│           │   │       ├── PerformanceTab.js
-│           │   │       ├── RateLimitsTab.js
-│           │   │       ├── RequestLogsTab.js
-│           │   │       ├── RevenueTab.js
-│           │   │       ├── ServerMetricsTab.js
-│           │   │       ├── SupportTab.js
-│           │   │       ├── TestsTab.js
-│           │   │       ├── ToolsTab.js
-│           │   │       └── UsersTab.js
-│           │   ├── footer.css
-│           │   ├── iconMapping.js
-│           │   ├── og-default.jpg
-│           │   ├── pages
-│           │   │   ├── AnalogyPage
-│           │   │   │   ├── AnalogyHub.css
-│           │   │   │   ├── AnalogyHub.js
-│           │   │   │   ├── backround1.jpg
-│           │   │   │   └── loading2.png
-│           │   │   ├── DailyPage
-│           │   │   │   ├── DailyCyberBrief.css
-│           │   │   │   ├── DailyCyberBrief.js
-│           │   │   │   └── backround7.jpg
-│           │   │   ├── GRCpage
-│           │   │   │   ├── GRC.css
-│           │   │   │   ├── GRC.js
-│           │   │   │   └── GRCbackground.jpg
-│           │   │   ├── Info
-│           │   │   │   ├── BlogPage.js
-│           │   │   │   ├── BlogPostPage.js
-│           │   │   │   ├── ContactPage.js
-│           │   │   │   ├── DemosPage.js
-│           │   │   │   ├── ExamsPage.js
-│           │   │   │   ├── InfoNavbar.js
-│           │   │   │   ├── InfoPage.js
-│           │   │   │   ├── PublicLeaderboardPage.js
-│           │   │   │   ├── YouTubeEmbed.js
-│           │   │   │   ├── css
-│           │   │   │   │   ├── BlogPage.css
-│           │   │   │   │   ├── ContactPage.css
-│           │   │   │   │   ├── DemosPage.css
-│           │   │   │   │   ├── ExamsPage.css
-│           │   │   │   │   ├── InfoNavbar.css
-│           │   │   │   │   ├── InfoPage.css
-│           │   │   │   │   └── PublicLeaderboardPage.css
-│           │   │   │   ├── images
-│           │   │   │   │   ├── 1.webp
-│           │   │   │   │   ├── 10.webp
-│           │   │   │   │   ├── 11.webp
-│           │   │   │   │   ├── 12.webp
-│           │   │   │   │   ├── 13.webp
-│           │   │   │   │   ├── 14.webp
-│           │   │   │   │   ├── 15.webp
-│           │   │   │   │   ├── 2.webp
-│           │   │   │   │   ├── 3.webp
-│           │   │   │   │   ├── 4.webp
-│           │   │   │   │   ├── 5.webp
-│           │   │   │   │   ├── 6.webp
-│           │   │   │   │   ├── 7.webp
-│           │   │   │   │   ├── 8.webp
-│           │   │   │   │   ├── 9.webp
-│           │   │   │   │   ├── CISS.webp
-│           │   │   │   │   ├── achi.webp
-│           │   │   │   │   ├── analogy.webp
-│           │   │   │   │   ├── aplus.webp
-│           │   │   │   │   ├── apple.svg
-│           │   │   │   │   ├── awscloud.webp
-│           │   │   │   │   ├── bonus.webp
-│           │   │   │   │   ├── cissp.webp
-│           │   │   │   │   ├── cloud.webp
-│           │   │   │   │   ├── cloudsec.webp
-│           │   │   │   │   ├── colors.webp
-│           │   │   │   │   ├── cysa.webp
-│           │   │   │   │   ├── data.webp
-│           │   │   │   │   ├── exammode.webp
-│           │   │   │   │   ├── gamified.webp
-│           │   │   │   │   ├── grc.webp
-│           │   │   │   │   ├── leader (copy 1).webp
-│           │   │   │   │   ├── leader.webp
-│           │   │   │   │   ├── linux.webp
-│           │   │   │   │   ├── network.webp
-│           │   │   │   │   ├── news.webp
-│           │   │   │   │   ├── pbqs.webp
-│           │   │   │   │   ├── pentest.webp
-│           │   │   │   │   ├── rec.webp
-│           │   │   │   │   ├── review.webp
-│           │   │   │   │   ├── scen.webp
-│           │   │   │   │   ├── security.webp
-│           │   │   │   │   ├── securityplus.webp
-│           │   │   │   │   ├── securityx.webp
-│           │   │   │   │   ├── server.webp
-│           │   │   │   │   ├── shop.webp
-│           │   │   │   │   ├── support.webp
-│           │   │   │   │   ├── test.webp
-│           │   │   │   │   ├── user1.webp
-│           │   │   │   │   ├── user2.webp
-│           │   │   │   │   ├── user3.webp
-│           │   │   │   │   ├── user6.webp
-│           │   │   │   │   ├── user8.webp
-│           │   │   │   │   ├── xboost.webp
-│           │   │   │   │   └── xploit.webp
-│           │   │   │   ├── navbarScrollUtils.js
-│           │   │   │   └── videoConfig.js
-│           │   │   ├── LegalPages.css
-│           │   │   ├── PrivacyPolicy.js
-│           │   │   ├── ResourcesPage
-│           │   │   │   ├── Resourcebackground.jpg
-│           │   │   │   ├── Resources.css
-│           │   │   │   └── Resources.js
-│           │   │   ├── ScenarioPage
-│           │   │   │   ├── ScenarioSphere.css
-│           │   │   │   ├── ScenarioSphere.js
-│           │   │   │   ├── attacks.js
-│           │   │   │   └── backround5.jpg
-│           │   │   ├── StatsPage
-│           │   │   │   ├── StatsPage.css
-│           │   │   │   └── StatsPage.js
-│           │   │   ├── TermsOfService.js
-│           │   │   ├── XploitcraftPage
-│           │   │   │   ├── App.css
-│           │   │   │   ├── Xploitcraft.js
-│           │   │   │   ├── backround2.jpg
-│           │   │   │   ├── loading3.png
-│           │   │   │   └── logo5.png
-│           │   │   ├── auth
-│           │   │   │   ├── CreateUsernameForm.js
-│           │   │   │   ├── ErrorDisplay.js
-│           │   │   │   ├── ForgotPassword.js
-│           │   │   │   ├── Login.js
-│           │   │   │   ├── OAuthSuccess.js
-│           │   │   │   ├── PasswordRequirements.js
-│           │   │   │   ├── Register.js
-│           │   │   │   ├── ResetPassword.js
-│           │   │   │   └── css
-│           │   │   │       ├── CreateUsernameForm.css
-│           │   │   │       ├── ErrorDisplay.css
-│           │   │   │       ├── ForgotPassword.css
-│           │   │   │       ├── Login.css
-│           │   │   │       ├── PasswordRequirements.css
-│           │   │   │       ├── Register.css
-│           │   │   │       └── ResetPassword.css
-│           │   │   ├── games
-│           │   │   │   ├── CipherChallenge
-│           │   │   │   │   ├── CipherChallenge.css
-│           │   │   │   │   ├── CipherChallenge.js
-│           │   │   │   │   ├── CipherDisplay.css
-│           │   │   │   │   ├── CipherDisplay.js
-│           │   │   │   │   ├── CipherHints.css
-│           │   │   │   │   ├── CipherHints.js
-│           │   │   │   │   ├── CipherInfoModal.css
-│           │   │   │   │   ├── CipherInfoModal.js
-│           │   │   │   │   ├── CipherInput.css
-│           │   │   │   │   ├── CipherInput.js
-│           │   │   │   │   ├── CipherTools.css
-│           │   │   │   │   ├── CipherTools.js
-│           │   │   │   │   ├── CongratulationsModal.css
-│           │   │   │   │   ├── CongratulationsModal.js
-│           │   │   │   │   ├── LevelSelector.css
-│           │   │   │   │   └── LevelSelector.js
-│           │   │   │   ├── IncidentResponder
-│           │   │   │   │   ├── DifficultySelector.js
-│           │   │   │   │   ├── IncidentResponder.css
-│           │   │   │   │   ├── IncidentResponder.js
-│           │   │   │   │   ├── ScenarioIntro.js
-│           │   │   │   │   ├── ScenarioResults.js
-│           │   │   │   │   └── ScenarioStage.js
-│           │   │   │   ├── PhishingPhrenzy
-│           │   │   │   │   ├── GameOverModal.css
-│           │   │   │   │   ├── GameOverModal.js
-│           │   │   │   │   ├── PhishingCard.css
-│           │   │   │   │   ├── PhishingCard.js
-│           │   │   │   │   ├── PhishingPhrenzy.css
-│           │   │   │   │   └── PhishingPhrenzy.js
-│           │   │   │   └── ThreatHunter
-│           │   │   │       ├── AnalysisTools.js
-│           │   │   │       ├── GameInstructions.css
-│           │   │   │       ├── GameInstructions.js
-│           │   │   │       ├── LogViewer.js
-│           │   │   │       ├── ScenarioSelector.js
-│           │   │   │       ├── ThreatControls.js
-│           │   │   │       ├── ThreatHunter.css
-│           │   │   │       ├── ThreatHunter.js
-│           │   │   │       └── ThreatResultsModal.js
-│           │   │   ├── ios
-│           │   │   │   ├── AppleLegalPages.css
-│           │   │   │   ├── PrivacyPolicyIOS.js
-│           │   │   │   └── TermsOfServiceIOS.js
-│           │   │   ├── store
-│           │   │   │   ├── AchievementPage.js
-│           │   │   │   ├── AchievementToast.js
-│           │   │   │   ├── DailyStationPage.js
-│           │   │   │   ├── LeaderboardPage.js
-│           │   │   │   ├── ShopPage.js
-│           │   │   │   ├── SupportAskAnythingPage.js
-│           │   │   │   ├── UserProfile.js
-│           │   │   │   ├── css
-│           │   │   │   │   ├── AchievementPage.css
-│           │   │   │   │   ├── AchievementToast.css
-│           │   │   │   │   ├── DailyStation.css
-│           │   │   │   │   ├── LeaderboardPage.css
-│           │   │   │   │   ├── ShopPage.css
-│           │   │   │   │   ├── SupportAskAnythingPage.css
-│           │   │   │   │   └── UserProfile.css
-│           │   │   │   ├── slice
-│           │   │   │   │   ├── achievementsSlice.js
-│           │   │   │   │   ├── cipherChallengeSlice.js
-│           │   │   │   │   ├── incidentResponderSlice.js
-│           │   │   │   │   ├── phishingPhrenzySlice.js
-│           │   │   │   │   ├── shopSlice.js
-│           │   │   │   │   ├── threatHunterSlice.js
-│           │   │   │   │   └── userSlice.js
-│           │   │   │   └── store.js
-│           │   │   ├── subscription
-│           │   │   │   ├── StripeCheckout.js
-│           │   │   │   ├── SubscriptionCancel.js
-│           │   │   │   ├── SubscriptionPage.js
-│           │   │   │   ├── SubscriptionSuccess.js
-│           │   │   │   └── css
-│           │   │   │       ├── StripeCheckout.css
-│           │   │   │       ├── SubscriptionCancel.css
-│           │   │   │       ├── SubscriptionPage.css
-│           │   │   │       └── SubscriptionSuccess.css
-│           │   │   └── tests
-│           │   │       ├── aplus
-│           │   │       │   ├── APlusTestList.js
-│           │   │       │   └── APlusTestPage.js
-│           │   │       ├── aplus2
-│           │   │       │   ├── APlusCore2TestPage.js
-│           │   │       │   └── AplusCore2TestList.js
-│           │   │       ├── awscloud
-│           │   │       │   ├── AWSCloudTestList.js
-│           │   │       │   └── AWSCloudTestPage.js
-│           │   │       ├── casp
-│           │   │       │   ├── CaspPlusTestList.js
-│           │   │       │   └── CaspPlusTestPage.js
-│           │   │       ├── cissp
-│           │   │       │   ├── CisspTestList.js
-│           │   │       │   └── CisspTestPage.js
-│           │   │       ├── cloudplus
-│           │   │       │   ├── CloudPlusTestList.js
-│           │   │       │   └── CloudPlusTestPage.js
-│           │   │       ├── cysa
-│           │   │       │   ├── CySAPlusTestList.js
-│           │   │       │   └── CySAPlusTestPage.js
-│           │   │       ├── dataplus
-│           │   │       │   ├── DataPlusTestList.js
-│           │   │       │   └── DataPlusTestPage.js
-│           │   │       ├── linuxplus
-│           │   │       │   ├── LinuxPlusTestList.js
-│           │   │       │   └── LinuxPlusTestPage.js
-│           │   │       ├── nplus
-│           │   │       │   ├── NPlusTestList.js
-│           │   │       │   └── NetworkPlusTestPage.js
-│           │   │       ├── penplus
-│           │   │       │   ├── PenPlusTestList.js
-│           │   │       │   └── PenPlusTestPage.js
-│           │   │       ├── secplus
-│           │   │       │   ├── SecurityPlusTestList.js
-│           │   │       │   └── SecurityPlusTestPage.js
-│           │   │       └── serverplus
-│           │   │           ├── ServerPlusTestList.js
-│           │   │           └── ServerPlusTestPage.js
-│           │   └── test.css
-│           ├── global.css
-│           ├── index.js
-│           └── reportWebVitals.js
-├── nginx
-│   ├── logs
-│   │   ├── access.log
-│   │   └── error.log
-│   ├── nginx.conf
-│   └── sites-enabled
-│       └── reverse_proxy.conf
-└── redis
-    └── redis.conf
-```
-77 directories, 374 files
-
+This codebase is Open-Source 
+-
+© 2025 CertGames | © 2025 AngelaMoss
+-
+Devloped and Designed  $~Carter-perez-dev
+-
+Last updated @4/20/25
+-
+1300+ hours of development*
+--
+*This README was generated for the CertGames Core repository by Carter Perez 
+- (https://www.linkedin.com/in/carterperez-dev/)
+- (inquiry@certgames.com)
+- (support@certgames.com)
+- (dev@certgames.com)
+- (443-510-0866)
+------
+[Privacy Policy](https://certgames.com/privacy)
+[Terms of Service](https://certgames.com/terms)
 -----
 
-63 directories, 320 files
-```
+
+  
+    "My confidence is powerful. I recognize myself as exceptional. I recognize myself as exceptional. I recognize myself as exceptional."
+    — One of the Good Ones
+  
