@@ -217,7 +217,7 @@ body, html {
 }
 
 .sidebar-sublink::before {
-  content: "-";
+  content: ">";
   margin-right: 5px;
   color: var(--sidebar-accent);
   transition: content 0.2s ease, color 0.2s ease;
@@ -229,7 +229,7 @@ body, html {
 }
 
 .sidebar-sublink:hover::before {
-  content: "→";
+  content: ">>";
   color: var(--sidebar-text-hover);
 }
 

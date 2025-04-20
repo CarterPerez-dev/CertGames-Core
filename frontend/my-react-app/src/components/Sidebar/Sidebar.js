@@ -7,7 +7,7 @@ import {
   FaChevronUp, 
   FaBars, 
   FaTimes,
-  FaUser,
+  FaUserSecret,
   FaTrophy, 
   FaStore, 
   FaGift, 
@@ -73,7 +73,7 @@ const Sidebar = () => {
   // Icon mapping for main menu items
   const getIcon = (path) => {
     switch(path) {
-      case '/profile': return <FaUser className="sidebar-icon" />;
+      case '/profile': return <FaUserSecret className="sidebar-icon" />;
       case '/achievements': return <FaTrophy className="sidebar-icon" />;
       case '/shop': return <FaStore className="sidebar-icon" />;
       case '/daily': return <FaGift className="sidebar-icon" />;
@@ -104,12 +104,30 @@ const Sidebar = () => {
           
           <nav className="sidebar-nav">
             <ul className="sidebar-list">
+              {/* Profile */}
               <li>
                 <NavLink to="/profile" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
                   {getIcon('/profile')}
-                  <span className="sidebar-link-text">/Profile</span>
+                  <span className="sidebar-link-text">>> Profile</span>
                 </NavLink>
               </li>
+              
+              {/* Stats/Performance Dashboard */}
+              <li>
+                <NavLink to="/performance" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/performance')}
+                  <span className="sidebar-link-text">∼Stats</span>
+                </NavLink>
+              </li>
+              
+              {/* Support (renamed from Questions) */}
+              <li>
+                <NavLink to="/my-support" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/my-support')}
+                  <span className="sidebar-link-text">-Support</span>
+                </NavLink>
+              </li>
+              
               {/* Games group */}
               <li className="sidebar-group">
                 <div
@@ -149,36 +167,6 @@ const Sidebar = () => {
                     </NavLink>
                   </li>
                 </ul>
-              </li>              
-              <li>
-                <NavLink to="/achievements" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/achievements')}
-                  <span className="sidebar-link-text">/Achievements</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/shop" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/shop')}
-                  <span className="sidebar-link-text">/Shop</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/daily" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/daily')}
-                  <span className="sidebar-link-text">/Bonus</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/leaderboard')}
-                  <span className="sidebar-link-text">/Leaderboard</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/my-support" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/my-support')}
-                  <span className="sidebar-link-text">/Questions</span>
-                </NavLink>
               </li>
               
               {/* Tools group */}
@@ -221,29 +209,7 @@ const Sidebar = () => {
                   </li>
                 </ul>
               </li>
-
-              {/* Daily CyberBrief */}
-              <li>
-                <NavLink to="/dailycyberbrief" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/dailycyberbrief')}
-                  <span className="sidebar-link-text">/Daily CyberBrief</span>
-                </NavLink>
-              </li>
-
-              {/* Study Resources */}
-              <li>
-                <NavLink to="/resources" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/resources')}
-                  <span className="sidebar-link-text">/Study Resources</span>
-                </NavLink>
-              </li>
-              {/* Stats/Performance Dashboard */}
-              <li>
-                <NavLink to="/performance" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
-                  {getIcon('/performance')}
-                  <span className="sidebar-link-text">/Stats</span>
-                </NavLink>
-              </li>
+              
               {/* Practice Tests group */}
               <li className="sidebar-group">
                 <div
@@ -328,6 +294,54 @@ const Sidebar = () => {
                     </NavLink>
                   </li>
                 </ul>
+              </li>
+              
+              {/* Shop */}
+              <li>
+                <NavLink to="/shop" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/shop')}
+                  <span className="sidebar-link-text">∼Shop</span>
+                </NavLink>
+              </li>
+              
+              {/* Achievements */}
+              <li>
+                <NavLink to="/achievements" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/achievements')}
+                  <span className="sidebar-link-text">-Achievements</span>
+                </NavLink>
+              </li>
+              
+              {/* Bonus (was Daily) */}
+              <li>
+                <NavLink to="/daily" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/daily')}
+                  <span className="sidebar-link-text">∼Bonus</span>
+                </NavLink>
+              </li>
+              
+              {/* Leaderboard */}
+              <li>
+                <NavLink to="/leaderboard" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/leaderboard')}
+                  <span className="sidebar-link-text">-Leaderboard</span>
+                </NavLink>
+              </li>
+
+              {/* Study Resources */}
+              <li>
+                <NavLink to="/resources" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/resources')}
+                  <span className="sidebar-link-text">∼Study Resources</span>
+                </NavLink>
+              </li>
+              
+              {/* Daily CyberBrief */}
+              <li>
+                <NavLink to="/dailycyberbrief" className={({ isActive }) => `sidebar-link ${isActive ? 'active-link' : ''}`}>
+                  {getIcon('/dailycyberbrief')}
+                  <span className="sidebar-link-text">-Daily CyberBrief</span>
+                </NavLink>
               </li>
             </ul>
           </nav>

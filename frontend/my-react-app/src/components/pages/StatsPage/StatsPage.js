@@ -228,18 +228,18 @@ const StatsPage = () => {
     
     // Handle typical naming patterns
     if (name === 'aplus') return 'A+ Core 1';
-    if (name === 'aplus-core2') return 'A+ Core 2';
-    if (name === 'network-plus') return 'Network+';
-    if (name === 'security-plus') return 'Security+';
-    if (name === 'cysa-plus') return 'CySA+';
-    if (name === 'pen-plus') return 'PenTest+';
-    if (name === 'casp-plus') return 'CASP+';
-    if (name === 'linux-plus') return 'Linux+';
-    if (name === 'cloud-plus') return 'Cloud+';
-    if (name === 'data-plus') return 'Data+';
-    if (name === 'server-plus') return 'Server+';
+    if (name === 'aplus2') return 'A+ Core 2';
+    if (name === 'nplus') return 'Network+';
+    if (name === 'secplus') return 'Security+';
+    if (name === 'cysa') return 'CySA+';
+    if (name === 'penplus') return 'PenTest+';
+    if (name === 'caspplus') return 'CASP+';
+    if (name === 'linuxplus') return 'Linux+';
+    if (name === 'cloudplus') return 'Cloud+';
+    if (name === 'dataplus') return 'Data+';
+    if (name === 'serverplus') return 'Server+';
     if (name === 'cissp') return 'CISSP';
-    if (name === 'aws-cloud') return 'AWS Cloud';
+    if (name === 'awscloud') return 'AWS Cloud';
     
     // General case: capitalize and replace dashes with spaces
     return name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' ');
