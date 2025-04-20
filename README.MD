@@ -56,6 +56,29 @@
 
 ```ruby
 .
+# 4/20/2025
+---
+```ruby
+Root.
+├── Audit
+│   └── bandit.yaml
+├── ENV
+├── Mongo-Inputs
+│   ├── Achievments.js
+│   ├── ShopItems.js
+│   └── TestUsers.js
+├── README.MD
+├── Stack
+│   ├── API
+│   │   └── routes.md
+│   ├── Architecture
+│   │   ├── DB.md
+│   │   ├── Optimized3.md
+│   │   └── stack.flow.md
+│   └── Trees
+│       ├── Flask.md
+│       ├── React.md
+│       └── Root.md
 ├── apache
 │   ├── Dockerfile.apache
 │   ├── apache_server.conf
@@ -78,36 +101,61 @@
 │   ├── middleware
 │   │   └── subscription_check.py
 │   ├── models
+│   │   ├── __init__.py
 │   │   ├── newsletter.py
 │   │   ├── password_reset.py
 │   │   └── test.py
 │   ├── mongodb
+│   │   ├── __init__.py
 │   │   └── database.py
 │   ├── requirements.txt
 │   ├── routes
-│   │   ├── admin_newsletter_routes.py
-│   │   ├── analogy_routes.py
-│   │   ├── contact_form.py
-│   │   ├── cracked_admin.py
-│   │   ├── grc_routes.py
-│   │   ├── newsletter_routes.py
-│   │   ├── oauth_routes.py
-│   │   ├── password_reset_routes.py
-│   │   ├── scenario_routes.py
-│   │   ├── subscription_routes.py
-│   │   ├── support_routes.py
-│   │   ├── test_routes.py
-│   │   └── xploit_routes.py
+│   │   ├── AI
+│   │   │   ├── analogy_routes.py
+│   │   │   ├── grc_routes.py
+│   │   │   ├── scenario_routes.py
+│   │   │   └── xploit_routes.py
+│   │   ├── SubscriptionAuth
+│   │   │   ├── oauth_routes.py
+│   │   │   ├── password_reset_routes.py
+│   │   │   ├── subscription_routes.py
+│   │   │   └── utils.py
+│   │   ├── admin
+│   │   │   ├── admin_newsletter_routes.py
+│   │   │   └── cracked_admin.py
+│   │   ├── games
+│   │   │   ├── cipher_routes.py
+│   │   │   ├── incident_routes.py
+│   │   │   ├── phishing_routes.py
+│   │   │   └── threat_hunter_routes.py
+│   │   ├── info
+│   │   │   └── contact_form.py
+│   │   └── main
+│   │       ├── __init__.py
+│   │       ├── achievements_routes.py
+│   │       ├── blueprint.py
+│   │       ├── cancel_routes.py
+│   │       ├── daily_question_routes.py
+│   │       ├── leaderboard_routes.py
+│   │       ├── newsletter_routes.py
+│   │       ├── shop_routes.py
+│   │       ├── support_routes.py
+│   │       ├── test_attempt_routes.py
+│   │       ├── test_routes.py
+│   │       ├── user_routes.py
+│   │       └── utils.py
 │   └── utils
+│       ├── __init__.py
 │       ├── apple_iap_verification.py
-│       └── email_sender.py
-├── bandit.yaml
+│       ├── email_sender.py
+│       └── utils.py
 ├── docker-compose.yml
 ├── frontend
 │   └── my-react-app
 │       ├── Dockerfile.audit
 │       ├── Dockerfile.dev
 │       ├── Dockerfile.frontend
+│       ├── craco.config.js
 │       ├── eslint.config.mjs
 │       ├── package-lock.json
 │       ├── package.json
@@ -124,14 +172,7 @@
 │       │   ├── manifest.json
 │       │   ├── robots.txt
 │       │   ├── site.webmanifest
-│       │   ├── sitemap.xml
-│       │   └── xp
-│       │       ├── xp10.png
-│       │       ├── xp100.png
-│       │       ├── xp200.png
-│       │       ├── xp25.png
-│       │       ├── xp50.png
-│       │       └── xp_mongo.js
+│       │   └── sitemap.xml
 │       └── src
 │           ├── App.js
 │           ├── components
@@ -142,12 +183,17 @@
 │           │   ├── GlobalTestPage.js
 │           │   ├── PrivacyPolicyIOS.js
 │           │   ├── ProtectedRoute.js
+│           │   ├── QuestionLimitBanner.css
+│           │   ├── QuestionLimitBanner.js
 │           │   ├── SEOHelmet.js
 │           │   ├── Sidebar
 │           │   │   ├── Sidebar.css
 │           │   │   ├── Sidebar.js
 │           │   │   └── sidebarlogo.png
 │           │   ├── StructuredData.js
+│           │   ├── SubscriptionErrorHandler.js
+│           │   ├── UpgradePrompt.css
+│           │   ├── UpgradePrompt.js
 │           │   ├── colorMapping.js
 │           │   ├── cracked
 │           │   │   ├── CrackedAdminDashboard.js
@@ -303,6 +349,9 @@
 │           │   │   │   ├── ScenarioSphere.js
 │           │   │   │   ├── attacks.js
 │           │   │   │   └── backround5.jpg
+│           │   │   ├── StatsPage
+│           │   │   │   ├── StatsPage.css
+│           │   │   │   └── StatsPage.js
 │           │   │   ├── TermsOfService.js
 │           │   │   ├── XploitcraftPage
 │           │   │   │   ├── App.css
@@ -327,6 +376,48 @@
 │           │   │   │       ├── PasswordRequirements.css
 │           │   │   │       ├── Register.css
 │           │   │   │       └── ResetPassword.css
+│           │   │   ├── games
+│           │   │   │   ├── CipherChallenge
+│           │   │   │   │   ├── CipherChallenge.css
+│           │   │   │   │   ├── CipherChallenge.js
+│           │   │   │   │   ├── CipherDisplay.css
+│           │   │   │   │   ├── CipherDisplay.js
+│           │   │   │   │   ├── CipherHints.css
+│           │   │   │   │   ├── CipherHints.js
+│           │   │   │   │   ├── CipherInfoModal.css
+│           │   │   │   │   ├── CipherInfoModal.js
+│           │   │   │   │   ├── CipherInput.css
+│           │   │   │   │   ├── CipherInput.js
+│           │   │   │   │   ├── CipherTools.css
+│           │   │   │   │   ├── CipherTools.js
+│           │   │   │   │   ├── CongratulationsModal.css
+│           │   │   │   │   ├── CongratulationsModal.js
+│           │   │   │   │   ├── LevelSelector.css
+│           │   │   │   │   └── LevelSelector.js
+│           │   │   │   ├── IncidentResponder
+│           │   │   │   │   ├── DifficultySelector.js
+│           │   │   │   │   ├── IncidentResponder.css
+│           │   │   │   │   ├── IncidentResponder.js
+│           │   │   │   │   ├── ScenarioIntro.js
+│           │   │   │   │   ├── ScenarioResults.js
+│           │   │   │   │   └── ScenarioStage.js
+│           │   │   │   ├── PhishingPhrenzy
+│           │   │   │   │   ├── GameOverModal.css
+│           │   │   │   │   ├── GameOverModal.js
+│           │   │   │   │   ├── PhishingCard.css
+│           │   │   │   │   ├── PhishingCard.js
+│           │   │   │   │   ├── PhishingPhrenzy.css
+│           │   │   │   │   └── PhishingPhrenzy.js
+│           │   │   │   └── ThreatHunter
+│           │   │   │       ├── AnalysisTools.js
+│           │   │   │       ├── GameInstructions.css
+│           │   │   │       ├── GameInstructions.js
+│           │   │   │       ├── LogViewer.js
+│           │   │   │       ├── ScenarioSelector.js
+│           │   │   │       ├── ThreatControls.js
+│           │   │   │       ├── ThreatHunter.css
+│           │   │   │       ├── ThreatHunter.js
+│           │   │   │       └── ThreatResultsModal.js
 │           │   │   ├── ios
 │           │   │   │   ├── AppleLegalPages.css
 │           │   │   │   ├── PrivacyPolicyIOS.js
@@ -349,7 +440,11 @@
 │           │   │   │   │   └── UserProfile.css
 │           │   │   │   ├── slice
 │           │   │   │   │   ├── achievementsSlice.js
+│           │   │   │   │   ├── cipherChallengeSlice.js
+│           │   │   │   │   ├── incidentResponderSlice.js
+│           │   │   │   │   ├── phishingPhrenzySlice.js
 │           │   │   │   │   ├── shopSlice.js
+│           │   │   │   │   ├── threatHunterSlice.js
 │           │   │   │   │   └── userSlice.js
 │           │   │   │   └── store.js
 │           │   │   ├── subscription
@@ -413,9 +508,12 @@
 │   ├── nginx.conf
 │   └── sites-enabled
 │       └── reverse_proxy.conf
-├── redis
-│   └── redis.conf
-└── routes.md
+└── redis
+    └── redis.conf
+```
+77 directories, 374 files
+
+-----
 
 63 directories, 320 files
 ```
