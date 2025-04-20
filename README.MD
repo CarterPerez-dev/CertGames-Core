@@ -1,4 +1,4 @@
-# <span style="color: red;">CertGames Core</span><span style="color: black;"> - Advanced Cybersecurity Training Platform</span>
+# [![CertGames Core](https://img.shields.io/badge/CertGames%20Core-red)](https://certgames.com) - Advanced Cybersecurity Training Platform
 
 ![CertGames Logo](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/frontend/my-react-app/public/ios.png)
 
