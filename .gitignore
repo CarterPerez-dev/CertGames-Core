@@ -37,4 +37,4 @@ ssh-key-2025-03-13.key.pub
 ssh-key-2025-04-02.key
 ssh-key-2025-04-02.key.pub
 
-nginx/logs/*.log
+nginx/logs/
