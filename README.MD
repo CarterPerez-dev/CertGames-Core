@@ -1,6 +1,6 @@
 # CertGames Core - Advanced Cybersecurity Training Platform
 
-![CertGames Logo](https://certgames.com/assets/logo-dark.png)
+![CertGames Logo](https://raw.githubusercontent.com/CarterPerez-dev/CertGames-Core/main/frontend/my-react-app/public/ios.png)
 
 [![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)](https://reactjs.org/)
 [![React Native](https://img.shields.io/badge/React_Native-0.76.7-0088CC.svg)](https://reactnative.dev/)
