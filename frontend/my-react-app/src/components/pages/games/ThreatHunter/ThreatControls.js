@@ -5,7 +5,7 @@ import './ThreatHunter.css';
 
 const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) => {
   const [timerDisplay, setTimerDisplay] = useState('00:00');
-  const [submitEnabled, setSubmitEnabled] = useState(false);
+  const [submitEnabled, setSubmitEnabled] = useState(true); // FIXED: Always enable submit
   const [warningMessage, setWarningMessage] = useState('');
   const [tooltipVisible, setTooltipVisible] = useState(false);
   
@@ -18,22 +18,19 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
     }
   }, [timeLeft]);
   
-  // Check if submission is enabled
+  // Check if submission is enabled and set warning message
   useEffect(() => {
-    // At least one threat must be detected to submit
+    // Show warning if no threats detected, but still enable submission
     if (detectedThreats.length === 0) {
-      setSubmitEnabled(false);
-      setWarningMessage('Add at least one detected threat to submit your analysis');
-      return;
+      setWarningMessage('No threats detected yet. You can still submit your analysis, but you may miss points.');
+    } else {
+      // Reset warning if conditions are met
+      setWarningMessage('');
     }
-    
-    // Reset warning if conditions are met
-    setWarningMessage('');
-    setSubmitEnabled(true);
   }, [flaggedLines, detectedThreats]);
   
   const handleSubmitAnalysis = () => {
-    if (submitEnabled && onSubmit) {
+    if (onSubmit) {
       onSubmit();
     }
   };
@@ -92,7 +89,7 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
         <button 
           className="threathunter_threatcontrols_submit_analysis_button"
           onClick={handleSubmitAnalysis}
-          disabled={!submitEnabled}
+          disabled={false} // FIXED: Never disable the button
         >
           <FaCheck />
           <span>Submit Analysis</span>

@@ -54,6 +54,7 @@
 
 .phishingphrenzy_main_container {
   max-width: 1000px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Orbitron', sans-serif;

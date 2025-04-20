@@ -3,6 +3,7 @@
 
 .cipher-challenge-container {
   max-width: 1200px;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
   font-family: 'Orbitron', sans-serif;

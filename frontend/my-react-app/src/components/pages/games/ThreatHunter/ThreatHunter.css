@@ -108,6 +108,7 @@
 
 .threat-hunter-container {
   max-width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 20px;
   font-family: Geneva, sans-serif;

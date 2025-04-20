@@ -87,6 +87,7 @@ const threatHunterSlice = createSlice({
       state.timeLeft = null;
       state.score = 0;
       state.results = null;
+      state.error = null;
     },
     // Add other reducers as needed
   },

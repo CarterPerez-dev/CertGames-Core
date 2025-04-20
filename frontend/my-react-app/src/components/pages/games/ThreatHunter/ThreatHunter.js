@@ -149,7 +149,8 @@ const ThreatHunter = () => {
   };
   
   const handleSubmitAnalysis = useCallback(() => {
-    if (detectedThreats.length === 0) return;
+    // FIXED: Remove this check to allow submission even with no threats
+    // if (detectedThreats.length === 0) return;
     
     dispatch(submitAnalysis({
       userId,
@@ -171,6 +172,9 @@ const ThreatHunter = () => {
   const handleRestart = () => {
     dispatch(resetGame());
     setShowResults(false);
+    // Clear local state to ensure clean restart
+    setFlaggedLines([]);
+    setDetectedThreats([]);
   };
   
   const handleEarlyEnd = () => {
@@ -182,6 +186,9 @@ const ThreatHunter = () => {
   const handleReturnToSelector = () => {
     if (window.confirm('Are you sure you want to return to the scenario selection? Your current progress will be lost.')) {
       dispatch(resetGame());
+      // Clear local state as well
+      setFlaggedLines([]);
+      setDetectedThreats([]);
     }
   };
   
@@ -325,7 +332,10 @@ const ThreatHunter = () => {
         <ThreatResultsModal 
           results={results}
           scenario={currentScenario}
-          onClose={() => setShowResults(false)}
+          onClose={() => {
+            setShowResults(false);
+            dispatch(resetGame());
+          }}
           onRestart={handleRestart}
         />
       )}

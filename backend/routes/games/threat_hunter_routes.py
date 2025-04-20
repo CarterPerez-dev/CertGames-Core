@@ -92,6 +92,13 @@ def start_scenario():
     base_time_limit = scenario.get('timeLimit', 300)  # Default: 5 minutes
     modified_time_limit = int(base_time_limit * time_modifiers.get(difficulty, 1.0))
     
+    # Ensure each log has a content array
+    if 'logs' in scenario:
+        for log in scenario['logs']:
+            if 'content' not in log or not log['content']:
+                # Generate some dummy content if none exists
+                log['content'] = generate_dummy_log_content(log.get('type', 'generic'), 15)
+    
     # If user_id is provided, record the start of this scenario
     if user_id:
         try:
@@ -191,29 +198,34 @@ def submit_analysis():
     missed_threats = []
     false_positives = []
     
-    # Evaluate threats detected
-    for actual_threat in actual_threats:
-        found = False
-        for detected_threat in detected_threats:
-            # Simple matching for now - could be more sophisticated
-            if detected_threat.get('type') == actual_threat.get('type'):
-                correct_threats.append(actual_threat)
-                found = True
-                break
-        
-        if not found:
-            missed_threats.append(actual_threat)
-    
-    # Check for false positives
-    for detected_threat in detected_threats:
-        found = False
+    # Evaluate threats detected - FIXED to handle no detected threats case
+    if not detected_threats:
+        # If no threats detected, all actual threats are missed
+        missed_threats = actual_threats.copy()
+    else:
+        # Evaluate the detected threats
         for actual_threat in actual_threats:
-            if detected_threat.get('type') == actual_threat.get('type'):
-                found = True
-                break
+            found = False
+            for detected_threat in detected_threats:
+                # Simple matching for now - could be more sophisticated
+                if detected_threat.get('type') == actual_threat.get('type'):
+                    correct_threats.append(actual_threat)
+                    found = True
+                    break
+            
+            if not found:
+                missed_threats.append(actual_threat)
         
-        if not found:
-            false_positives.append(detected_threat)
+        # Check for false positives
+        for detected_threat in detected_threats:
+            found = False
+            for actual_threat in actual_threats:
+                if detected_threat.get('type') == actual_threat.get('type'):
+                    found = True
+                    break
+            
+            if not found:
+                false_positives.append(detected_threat)
     
     # Calculate base score
     if len(actual_threats) > 0:
@@ -348,6 +360,73 @@ def generate_feedback(score, correct_threats, missed_threats, false_positives):
         return f"Decent effort. You found {correct_threats} threats but missed {missed_threats} and had {false_positives} false positives. Focus on recognizing threat patterns in logs and improving your accuracy."
     else:
         return f"You have room for improvement. You missed {missed_threats} threats and had {false_positives} false positives. Study common attack patterns and indicators of compromise to build your threat hunting skills."
+
+def generate_dummy_log_content(log_type, num_lines):
+    """
+    Generate dummy log content based on log type.
+    This ensures there's always something to display in the log viewer.
+    """
+    content = []
+    
+    if log_type == "auth":
+        users = ["admin", "jsmith", "alice", "bob", "system", "root"]
+        ips = ["192.168.1.50", "192.168.1.55", "10.0.0.5", "45.23.125.87", "127.0.0.1", "172.16.0.10"]
+        actions = ["logged in", "failed login attempt", "password changed", "account locked", "session expired"]
+        
+        for i in range(num_lines):
+            user = random.choice(users)
+            ip = random.choice(ips)
+            action = random.choice(actions)
+            timestamp = f"2025-04-15T{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d}Z"
+            log_line = f"{timestamp} INFO [auth.service] {user} {action} from {ip}"
+            content.append({"text": log_line})
+            
+    elif log_type == "system":
+        services = ["system.service", "cron.service", "network.service", "disk.service", "security.service"]
+        messages = [
+            "System started",
+            "Service restarted",
+            "High CPU usage detected",
+            "Low disk space warning",
+            "New device connected",
+            "User account created",
+            "File access denied",
+            "Process terminated",
+            "Unexpected outbound connection",
+            "Large file transfer detected"
+        ]
+        
+        for i in range(num_lines):
+            service = random.choice(services)
+            message = random.choice(messages)
+            level = random.choice(["INFO", "WARNING", "ERROR"])
+            timestamp = f"2025-04-15T{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d}Z"
+            log_line = f"{timestamp} {level} [{service}] {message}"
+            content.append({"text": log_line})
+            
+    elif log_type == "web":
+        paths = ["/", "/admin", "/login", "/profile", "/settings", "/api/users", "/api/data", "/search"]
+        methods = ["GET", "POST", "PUT", "DELETE"]
+        status_codes = [200, 201, 301, 302, 400, 401, 403, 404, 500]
+        
+        for i in range(num_lines):
+            ip = f"192.168.1.{random.randint(1, 254)}"
+            path = random.choice(paths)
+            method = random.choice(methods)
+            status = random.choice(status_codes)
+            size = random.randint(100, 10000)
+            timestamp = f"[17/Apr/2025:{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d} +0000]"
+            log_line = f"{ip} - - {timestamp} \"{method} {path} HTTP/1.1\" {status} {size} \"-\" \"Mozilla/5.0\""
+            content.append({"text": log_line})
+            
+    else:
+        # Generic log format
+        for i in range(num_lines):
+            timestamp = f"2025-04-15T{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d}Z"
+            log_line = f"{timestamp} INFO [generic.service] Log entry {i+1}"
+            content.append({"text": log_line})
+            
+    return content
 
 def generate_default_scenarios():
     """
