@@ -23,11 +23,8 @@ const threatTypes = [
 const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThreat }) => {
   const [activeTool, setActiveTool] = useState('threat-detection');
   const [showDetectionForm, setShowDetectionForm] = useState(false);
-  const [threatType, setThreatType] = useState('malware');
-  const [threatDescription, setThreatDescription] = useState('');
-  const [threatSource, setThreatSource] = useState('');
+  const [selectedThreatOption, setSelectedThreatOption] = useState(null);
   const [editingThreatId, setEditingThreatId] = useState(null);
-  const [showExamples, setShowExamples] = useState(false);
   
   const handleToolSelect = (toolId) => {
     setActiveTool(toolId);
@@ -35,37 +32,35 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
   
   const showAddThreatForm = () => {
     setEditingThreatId(null);
-    setThreatType('malware');
-    setThreatDescription('');
-    setThreatSource('');
+    setSelectedThreatOption(null);
     setShowDetectionForm(true);
   };
   
   const showEditThreatForm = (threat) => {
     setEditingThreatId(threat.id);
-    setThreatType(threat.type);
-    setThreatDescription(threat.description);
-    setThreatSource(threat.source);
+    
+    // Find the matching threat option
+    const matchingOption = scenario?.threatOptions?.find(option => 
+      option.type === threat.type && option.name === threat.name);
+    
+    setSelectedThreatOption(matchingOption || null);
     setShowDetectionForm(true);
   };
   
   const handleCancelForm = () => {
     setShowDetectionForm(false);
     setEditingThreatId(null);
-    setThreatType('malware');
-    setThreatDescription('');
-    setThreatSource('');
-    setShowExamples(false);
+    setSelectedThreatOption(null);
   };
   
   const handleSubmitThreat = () => {
-    if (!threatDescription.trim()) return;
+    if (!selectedThreatOption) return;
     
     const threatData = {
       id: editingThreatId || `threat-${Date.now()}`,
-      type: threatType,
-      description: threatDescription.trim(),
-      source: threatSource.trim(),
+      type: selectedThreatOption.type,
+      name: selectedThreatOption.name,
+      description: selectedThreatOption.description,
       timestamp: new Date().toISOString()
     };
     
@@ -74,10 +69,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
     // Reset form
     setShowDetectionForm(false);
     setEditingThreatId(null);
-    setThreatType('malware');
-    setThreatDescription('');
-    setThreatSource('');
-    setShowExamples(false);
+    setSelectedThreatOption(null);
   };
   
   const handleRemoveThreat = (threatId) => {
@@ -86,14 +78,8 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
     }
   };
   
-  // Handle examples for threat types
-  const toggleExamples = () => {
-    setShowExamples(!showExamples);
-  };
-  
-  const getCurrentThreatTypeInfo = () => {
-    return threatTypes.find(t => t.id === threatType) || threatTypes[0];
-  };
+  // Get the threat options from the scenario
+  const threatOptions = scenario?.threatOptions || [];
   
   // Group icon mapping
   const getToolIcon = (toolId) => {
@@ -172,75 +158,40 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
               
               {showDetectionForm && (
                 <div className="threathunter_analysistools_threat_form">
-                  <h4>{editingThreatId ? 'Edit Threat' : 'Add New Threat'}</h4>
+                  <h4>{editingThreatId ? 'Edit Threat' : 'Select Detected Threat'}</h4>
                   
                   <div className="threathunter_analysistools_form_group">
-                    <label>Threat Type:</label>
-                    <div className="threathunter_analysistools_threat_type_selector">
-                      {threatTypes.map(type => (
+                    <label>Select a Threat:</label>
+                    <div className="threathunter_analysistools_threat_options">
+                      {threatOptions.map((option, index) => (
                         <div 
-                          key={type.id}
-                          className={`threathunter_analysistools_type_option ${threatType === type.id ? 'active' : ''}`}
-                          onClick={() => setThreatType(type.id)}
+                          key={index}
+                          className={`threathunter_analysistools_threat_option ${selectedThreatOption === option ? 'active' : ''}`}
+                          onClick={() => setSelectedThreatOption(option)}
                           style={{
-                            borderColor: threatType === type.id ? type.color : 'transparent',
-                            backgroundColor: threatType === type.id ? `${type.color}15` : 'transparent'
+                            borderColor: selectedThreatOption === option ? getThreatTypeColor(option.type) : 'transparent',
+                            backgroundColor: selectedThreatOption === option ? `${getThreatTypeColor(option.type)}15` : 'transparent'
                           }}
                         >
-                          <div className="threathunter_analysistools_type_icon" style={{ color: type.color }}>
-                            {type.icon}
+                          <div className="threathunter_analysistools_threat_option_header">
+                            <div className="threathunter_analysistools_threat_option_icon" style={{ color: getThreatTypeColor(option.type) }}>
+                              {getThreatTypeIcon(option.type)}
+                            </div>
+                            <span className="threathunter_analysistools_threat_option_name">{option.name}</span>
                           </div>
-                          <span>{type.name}</span>
+                          <div className="threathunter_analysistools_threat_option_description">
+                            {option.description}
+                          </div>
                         </div>
                       ))}
                     </div>
-                    
-                    <div className="threathunter_analysistools_examples_toggle">
-                      <button onClick={toggleExamples}>
-                        {showExamples ? <FaChevronUp /> : <FaChevronDown />}
-                        <span>{showExamples ? 'Hide Examples' : 'Show Examples'}</span>
-                      </button>
-                    </div>
-                    
-                    {showExamples && (
-                      <div className="threathunter_analysistools_examples">
-                        <div className="threathunter_analysistools_examples_header">
-                          Examples of {getCurrentThreatTypeInfo().name}:
-                        </div>
-                        <ul>
-                          {getCurrentThreatTypeInfo().examples.map((example, index) => (
-                            <li key={index}>{example}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="threathunter_analysistools_form_group">
-                    <label>Description:</label>
-                    <textarea
-                      value={threatDescription}
-                      onChange={(e) => setThreatDescription(e.target.value)}
-                      placeholder="Describe the threat you've identified..."
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div className="threathunter_analysistools_form_group">
-                    <label>Source/Evidence:</label>
-                    <input
-                      type="text"
-                      value={threatSource}
-                      onChange={(e) => setThreatSource(e.target.value)}
-                      placeholder="IP, user, or log line reference"
-                    />
                   </div>
                   
                   <div className="threathunter_analysistools_form_actions">
                     <button 
                       className="threathunter_analysistools_submit_threat_button" 
                       onClick={handleSubmitThreat}
-                      disabled={!threatDescription.trim()}
+                      disabled={!selectedThreatOption}
                     >
                       <FaCheckCircle />
                       {editingThreatId ? 'Update' : 'Add'} Threat
@@ -295,10 +246,8 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                           </div>
                         </div>
                         <div className="threathunter_analysistools_threat_body">
+                          <div className="threathunter_analysistools_threat_name">{threat.name}</div>
                           <div className="threathunter_analysistools_threat_description">{threat.description}</div>
-                          {threat.source && (
-                            <div className="threathunter_analysistools_threat_source">Source: {threat.source}</div>
-                          )}
                         </div>
                       </div>
                     ))}

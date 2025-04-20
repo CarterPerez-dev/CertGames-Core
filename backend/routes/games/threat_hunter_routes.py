@@ -23,7 +23,8 @@ def get_log_scenarios():
     Returns a list of scenario objects with IDs, titles, descriptions, etc.
     """
     start_db = time.time()
-    scenarios = list(log_scenarios_collection.find({}, {
+    # Get custom scenarios from the database
+    db_scenarios = list(log_scenarios_collection.find({}, {
         '_id': 0,
         'logs.content': 0  # Exclude the actual log content for efficiency
     }))
@@ -31,30 +32,34 @@ def get_log_scenarios():
     if hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator += duration
     
-    # If there are no scenarios in the database, generate some defaults
-    if not scenarios:
-        scenarios = generate_default_scenarios()
-        
-        # Store these scenarios in the database for future use
-        if scenarios:
-            # Remove log content before storing scenarios metadata
-            scenarios_meta = []
-            for scenario in scenarios:
-                scenario_meta = scenario.copy()
-                for log in scenario_meta.get('logs', []):
-                    if 'content' in log:
-                        log['content'] = []  # Clear content for metadata storage
-                scenario_meta['logCount'] = len(scenario_meta.get('logs', []))
-                scenarios_meta.append(scenario_meta)
-                
-            start_db = time.time()
-            log_scenarios_collection.insert_many(scenarios_meta)
-            duration = time.time() - start_db
-            if hasattr(g, 'db_time_accumulator'):
-                g.db_time_accumulator += duration
+    # Get default scenarios
+    default_scenarios = generate_default_scenarios()
     
-    return jsonify(scenarios)
-
+    # Create metadata versions of default scenarios (without log content)
+    default_scenarios_meta = []
+    for scenario in default_scenarios:
+        scenario_meta = scenario.copy()
+        # Remove log content for the metadata version
+        if 'logs' in scenario_meta:
+            for log in scenario_meta['logs']:
+                if 'content' in log:
+                    log['content'] = []  # Clear content for metadata
+        scenario_meta['logCount'] = len(scenario_meta.get('logs', []))
+        scenario_meta['isDefault'] = True  # Mark as a default scenario
+        default_scenarios_meta.append(scenario_meta)
+    
+    # Check if any of the default scenarios are already in the database
+    # by comparing scenario IDs
+    db_scenario_ids = [s.get('id') for s in db_scenarios]
+    
+    # Only include default scenarios that aren't already in the database
+    filtered_default_scenarios = [s for s in default_scenarios_meta 
+                                  if s.get('id') not in db_scenario_ids]
+    
+    # Combine database scenarios with default scenarios
+    all_scenarios = db_scenarios + filtered_default_scenarios
+    
+    return jsonify(all_scenarios)
 @threat_hunter_bp.route('/start-scenario', methods=['POST'])
 def start_scenario():
     """
@@ -92,10 +97,11 @@ def start_scenario():
     base_time_limit = scenario.get('timeLimit', 300)  # Default: 5 minutes
     modified_time_limit = int(base_time_limit * time_modifiers.get(difficulty, 1.0))
     
-    # Ensure each log has a content array
+    # FIXED: More explicit check for empty content
     if 'logs' in scenario:
         for log in scenario['logs']:
-            if 'content' not in log or not log['content']:
+            # Check if content array exists and has items
+            if 'content' not in log or not isinstance(log['content'], list) or len(log['content']) == 0:
                 # Generate some dummy content if none exists
                 log['content'] = generate_dummy_log_content(log.get('type', 'generic'), 15)
     
@@ -208,7 +214,7 @@ def submit_analysis():
             found = False
             for detected_threat in detected_threats:
                 # Simple matching for now - could be more sophisticated
-                if detected_threat.get('type') == actual_threat.get('type'):
+                if detected_threat.get('type') == actual_threat.get('type') and detected_threat.get('name') == actual_threat.get('name'):
                     correct_threats.append(actual_threat)
                     found = True
                     break
@@ -220,7 +226,7 @@ def submit_analysis():
         for detected_threat in detected_threats:
             found = False
             for actual_threat in actual_threats:
-                if detected_threat.get('type') == actual_threat.get('type'):
+                if detected_threat.get('type') == actual_threat.get('type') and detected_threat.get('name') == actual_threat.get('name'):
                     found = True
                     break
             
@@ -234,12 +240,39 @@ def submit_analysis():
         threat_score = 70  # Full score if there are no actual threats to find
     
     # Check for correctly flagged suspicious lines
-    flagged_correct = sum(1 for line in flagged_lines if line in suspicious_lines)
-    flagged_incorrect = len(flagged_lines) - flagged_correct
+    # Convert suspiciousLines to a more uniform format for comparison
+    formatted_suspicious_lines = []
+    for line in suspicious_lines:
+        if isinstance(line, dict) and 'logId' in line and 'lineIndex' in line:
+            formatted_suspicious_lines.append(line)
+        else:
+            # Assuming line is just an index
+            formatted_suspicious_lines.append({'lineIndex': line})
     
-    if len(suspicious_lines) > 0:
+    flagged_correct = 0
+    flagged_incorrect = 0
+    
+    for flagged_line in flagged_lines:
+        found = False
+        for suspicious_line in formatted_suspicious_lines:
+            if 'logId' in flagged_line and 'logId' in suspicious_line:
+                if flagged_line['logId'] == suspicious_line['logId'] and flagged_line['lineIndex'] == suspicious_line['lineIndex']:
+                    found = True
+                    break
+            else:
+                # For backward compatibility
+                if flagged_line.get('lineIndex', flagged_line) == suspicious_line.get('lineIndex', suspicious_line):
+                    found = True
+                    break
+        
+        if found:
+            flagged_correct += 1
+        else:
+            flagged_incorrect += 1
+    
+    if len(formatted_suspicious_lines) > 0:
         # 20% of score from correctly flagging suspicious lines
-        flagging_score = min(20, (flagged_correct / len(suspicious_lines)) * 20)
+        flagging_score = min(20, (flagged_correct / len(formatted_suspicious_lines)) * 20)
     else:
         flagging_score = 20  # Full score if there are no suspicious lines
     
@@ -493,6 +526,53 @@ def generate_default_scenarios():
                     "description": "Large file transfers to external IP after suspicious user creation and access to sensitive files."
                 }
             ],
+            "threatOptions": [
+                {
+                    "type": "credential_theft",
+                    "name": "Brute Force Login Attack",
+                    "description": "Multiple failed login attempts followed by successful login from an unusual IP address."
+                },
+                {
+                    "type": "data_exfiltration",
+                    "name": "Unauthorized Data Exfiltration",
+                    "description": "Large file transfers to external IP after suspicious user creation and access to sensitive files."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Privilege Escalation",
+                    "description": "Normal user gained administrative access through unauthorized means."
+                },
+                {
+                    "type": "malware",
+                    "name": "Backdoor Installation",
+                    "description": "Malicious software installed to maintain persistent access to the system."
+                },
+                {
+                    "type": "credential_theft",
+                    "name": "Password Spray Attack", 
+                    "description": "Single password tried against multiple user accounts to avoid lockouts."
+                },
+                {
+                    "type": "ddos",
+                    "name": "Network Flooding",
+                    "description": "High volume of traffic from multiple sources targeting network services."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "SQL Injection",
+                    "description": "Database queries manipulated through input fields to access unauthorized data."
+                },
+                {
+                    "type": "data_exfiltration",
+                    "name": "DNS Tunneling",
+                    "description": "Data secretly transmitted through DNS queries to bypass firewalls."
+                },
+                {
+                    "type": "credential_theft", 
+                    "name": "Pass-the-Hash Attack",
+                    "description": "Stolen password hashes used directly without cracking the password."
+                }
+            ],
             "suspiciousLines": [4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 17, 18, 20, 21],
             "knownEntities": {
                 "ips": [
@@ -586,6 +666,58 @@ def generate_default_scenarios():
                     "type": "malware",
                     "name": "Ransomware Activity",
                     "description": "Multiple files encrypted and ransom note created."
+                }
+            ],
+            "threatOptions": [
+                {
+                    "type": "malware",
+                    "name": "Malicious Macro Execution",
+                    "description": "Excel document with macro spawned command processes with high privileges."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Command and Control Communication",
+                    "description": "Regular beaconing to suspicious domain and unusual data transfer patterns."
+                },
+                {
+                    "type": "malware",
+                    "name": "Ransomware Activity",
+                    "description": "Multiple files encrypted and ransom note created."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Lateral Movement",
+                    "description": "Attacker moving between systems within the network using legitimate credentials."
+                },
+                {
+                    "type": "data_exfiltration",
+                    "name": "Staged Data Collection",
+                    "description": "Gathering and compressing sensitive files before exfiltration."
+                },
+                {
+                    "type": "malware",
+                    "name": "Keylogger Installation",
+                    "description": "Software installed to record keyboard inputs and capture credentials."
+                },
+                {
+                    "type": "credential_theft",
+                    "name": "Memory Dumping",
+                    "description": "Extraction of passwords and session tokens from system memory."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Firewall Bypass",
+                    "description": "Establishing connections that circumvent network security controls."
+                },
+                {
+                    "type": "malware",
+                    "name": "Browser Extension Hijacking",
+                    "description": "Malicious extension installed to monitor browsing activity and steal information."
+                },
+                {
+                    "type": "intrusion", 
+                    "name": "Trusted Relationship Exploitation",
+                    "description": "Using legitimate applications to execute malicious commands."
                 }
             ],
             "suspiciousLines": [2, 3, 4, 5, 6, 7, 12, 13, 14, 15, 16, 19, 20, 22, 23, 24, 25, 26, 27, 28],
@@ -685,6 +817,68 @@ def generate_default_scenarios():
                     "type": "intrusion",
                     "name": "Malicious File Upload",
                     "description": "Attacker uploaded a web shell disguised as a legitimate file."
+                }
+            ],
+            "threatOptions": [
+                {
+                    "type": "intrusion",
+                    "name": "SQL Injection Attack",
+                    "description": "Attacker used SQL injection techniques to bypass authentication."
+                },
+                {
+                    "type": "data_exfiltration",
+                    "name": "Path Traversal Attack",
+                    "description": "Attacker attempted to access system files using path traversal vulnerabilities."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Malicious File Upload",
+                    "description": "Attacker uploaded a web shell disguised as a legitimate file."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "XSS Attack",
+                    "description": "Cross-site scripting attack to inject client-side scripts into web pages."
+                },
+                {
+                    "type": "ddos",
+                    "name": "HTTP Flood",
+                    "description": "Overwhelming the server with a high volume of HTTP requests."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Command Injection",
+                    "description": "Executing arbitrary commands through a web application vulnerability."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Session Hijacking",
+                    "description": "Stealing or prediction of session tokens to gain unauthorized access."
+                },
+                {
+                    "type": "credential_theft",
+                    "name": "Credential Stuffing",
+                    "description": "Automated injection of stolen username/password pairs to gain access."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "CSRF Attack",
+                    "description": "Cross-site request forgery forcing users to execute unwanted actions."
+                },
+                {
+                    "type": "malware",
+                    "name": "Drive-by Download",
+                    "description": "Unintentional download of malware from compromised web pages."
+                },
+                {
+                    "type": "data_exfiltration",
+                    "name": "Web Scraping",
+                    "description": "Automated extraction of website data at unusually high rates."
+                },
+                {
+                    "type": "intrusion",
+                    "name": "Insecure Deserialization",
+                    "description": "Exploiting application logic by manipulating serialized objects."
                 }
             ],
             "suspiciousLines": [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 17, 18, 19, 21, 22, 23, 24, 28, 29, 30, 31, 32, 33, 34, 35, 36],

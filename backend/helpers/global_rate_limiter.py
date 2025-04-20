@@ -19,14 +19,14 @@ class GlobalRateLimiter:
     
     # Default limits for different categories, AINT NOBODY SPAMMIN MY SHIT IM UNHACKABLE!!!!
     DEFAULT_LIMITS = {
-        'auth': {'calls': 15, 'period': 60},         # 10 calls per minute for authentication
-        'password_reset': {'calls': 10, 'period': 300},  # 5 calls per 5 minutes for password reset
-        'contact': {'calls': 10, 'period': 300},         # 5 calls per 5 minutes for contact form
-        'general': {'calls': 30, 'period': 60}          # 30 calls per minute for general endpoints
+        'auth': {'calls': 150, 'period': 60},         # 10 calls per minute for authentication
+        'password_reset': {'calls': 100, 'period': 300},  # 5 calls per 5 minutes for password reset
+        'contact': {'calls': 100, 'period': 300},         # 5 calls per 5 minutes for contact form
+        'general': {'calls': 150, 'period': 60}          # 30 calls per minute for general endpoints
     }
     
     # Penalty factors for repeated violations
-    PENALTY_PERIODS = [5, 15, 30, 60, 120]  # Minutes to block after consecutive violations
+    PENALTY_PERIODS = [1, 5, 15, 30, 60]  # Minutes to block after consecutive violations
     
     def __init__(self, limiter_type=None):
         """
