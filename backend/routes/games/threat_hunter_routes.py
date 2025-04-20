@@ -4,6 +4,24 @@ from bson.objectid import ObjectId
 import time
 from datetime import datetime
 import random
+import copy
+
+from mongodb.database import db
+from models.test import get_user_by_id, update_user_coins, update_user_xp
+from utils.utils import check_and_unlock_achievements
+
+# Initialize the blueprint
+threat_hunter_bp = Blueprint('threat_hunter', __name__)
+
+# Database collections
+log_scenarios_collection = db.logScenarios
+log_analysis_collection = db.logAnalysis
+
+from flask import Blueprint, request, jsonify, g
+from bson.objectid import ObjectId
+import time
+from datetime import datetime
+import random
 
 from mongodb.database import db
 from models.test import get_user_by_id, update_user_coins, update_user_xp
@@ -32,7 +50,11 @@ def get_log_scenarios():
     if hasattr(g, 'db_time_accumulator'):
         g.db_time_accumulator += duration
     
-    # Get default scenarios
+    # If there are database scenarios, return those only
+    if db_scenarios:
+        return jsonify(db_scenarios)
+    
+    # Only if no database scenarios exist, return default scenarios as fallback
     default_scenarios = generate_default_scenarios()
     
     # Create metadata versions of default scenarios (without log content)
@@ -48,18 +70,8 @@ def get_log_scenarios():
         scenario_meta['isDefault'] = True  # Mark as a default scenario
         default_scenarios_meta.append(scenario_meta)
     
-    # Check if any of the default scenarios are already in the database
-    # by comparing scenario IDs
-    db_scenario_ids = [s.get('id') for s in db_scenarios]
-    
-    # Only include default scenarios that aren't already in the database
-    filtered_default_scenarios = [s for s in default_scenarios_meta 
-                                  if s.get('id') not in db_scenario_ids]
-    
-    # Combine database scenarios with default scenarios
-    all_scenarios = db_scenarios + filtered_default_scenarios
-    
-    return jsonify(all_scenarios)
+    return jsonify(default_scenarios_meta)
+
 @threat_hunter_bp.route('/start-scenario', methods=['POST'])
 def start_scenario():
     """
@@ -97,7 +109,7 @@ def start_scenario():
     base_time_limit = scenario.get('timeLimit', 300)  # Default: 5 minutes
     modified_time_limit = int(base_time_limit * time_modifiers.get(difficulty, 1.0))
     
-    # FIXED: More explicit check for empty content
+    # Check if content exists, generate dummy content only if needed
     if 'logs' in scenario:
         for log in scenario['logs']:
             # Check if content array exists and has items
@@ -400,7 +412,6 @@ def generate_dummy_log_content(log_type, num_lines):
     This ensures there's always something to display in the log viewer.
     """
     content = []
-    
     if log_type == "auth":
         users = ["admin", "jsmith", "alice", "bob", "system", "root"]
         ips = ["192.168.1.50", "192.168.1.55", "10.0.0.5", "45.23.125.87", "127.0.0.1", "172.16.0.10"]
@@ -453,7 +464,6 @@ def generate_dummy_log_content(log_type, num_lines):
             content.append({"text": log_line})
             
     else:
-        # Generic log format
         for i in range(num_lines):
             timestamp = f"2025-04-15T{random.randint(0,23):02d}:{random.randint(0,59):02d}:{random.randint(0,59):02d}Z"
             log_line = f"{timestamp} INFO [generic.service] Log entry {i+1}"
@@ -465,6 +475,7 @@ def generate_default_scenarios():
     """
     Generate default log analysis scenarios if none exist in the database.
     """
+
     scenarios = [
         {
             "id": "scenario1",
@@ -472,7 +483,7 @@ def generate_default_scenarios():
             "description": "Analyze authentication logs for suspicious login patterns that may indicate credential theft.",
             "threatType": "credential_theft",
             "difficulty": 1,
-            "timeLimit": 300,  # 5 minutes
+            "timeLimit": 300,  
             "logs": [
                 {
                     "id": "auth_log",
@@ -594,7 +605,7 @@ def generate_default_scenarios():
             "description": "Examine system and network logs for signs of malware activity on a workstation.",
             "threatType": "malware",
             "difficulty": 2,
-            "timeLimit": 360,  # 6 minutes
+            "timeLimit": 360,  
             "logs": [
                 {
                     "id": "process_log",
@@ -737,7 +748,7 @@ def generate_default_scenarios():
             "description": "Investigate web server logs for potential security breaches or exploitation attempts.",
             "threatType": "intrusion",
             "difficulty": 3,
-            "timeLimit": 420,  # 7 minutes
+            "timeLimit": 420,  
             "logs": [
                 {
                     "id": "web_access_log",
@@ -777,10 +788,10 @@ def generate_default_scenarios():
                     "content": [
                         {"text": "[Thu Apr 17 08:37:02 2025] [error] [client 185.176.43.89] PHP Fatal error: Uncaught PDOException: SQLSTATE[42000]: Syntax error or access violation in /var/www/html/login.php:45"},
                         {"text": "[Thu Apr 17 08:37:02 2025] [error] [client 185.176.43.89] PHP Stack trace:"},
-                        {"text": "[Thu Apr 17 08:37:02 2025] [error] [client 185.176.43.89] #0 /var/www/html/login.php(45): PDO->query('SELECT * FROM users WHERE username=\\'admin\\' OR 1=1-- AND password=\\'password\\'')"},
+                        {"text": "[Thu Apr 17 08:37:02 2025] [error] [client 185.176.43.89] #0 /var/www/html/login.php(45): PDO->query(SELECT * FROM users WHERE username=\\admin\\ OR 1=1-- AND password=\\password\\)"},
                         {"text": "[Thu Apr 17 08:37:02 2025] [error] [client 185.176.43.89] #1 {main}"},
-                        {"text": "[Thu Apr 17 10:12:45 2025] [warning] [client 185.176.43.89] Path traversal attempt: '../../../etc/passwd'"},
-                        {"text": "[Thu Apr 17 10:15:22 2025] [warning] [client 185.176.43.89] Path traversal attempt: '../../../etc/shadow'"},
+                        {"text": "[Thu Apr 17 10:12:45 2025] [warning] [client 185.176.43.89] Path traversal attempt: ../../../etc/passwd"},
+                        {"text": "[Thu Apr 17 10:15:22 2025] [warning] [client 185.176.43.89] Path traversal attempt: ../../../etc/shadow"},
                         {"text": "[Thu Apr 17 10:15:22 2025] [error] [client 185.176.43.89] Access to restricted file denied: /etc/shadow"},
                         {"text": "[Thu Apr 17 10:17:15 2025] [notice] [client 185.176.43.89] File upload: shell.php disguised as settings-backup.xml"},
                         {"text": "[Thu Apr 17 10:17:15 2025] [warning] [client 185.176.43.89] Potentially malicious file uploaded: shell.php"},
