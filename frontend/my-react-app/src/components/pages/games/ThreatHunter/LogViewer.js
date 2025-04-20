@@ -1,106 +1,216 @@
-// src/components/pages/games/ThreatHunter/ThreatControls.js
-import React, { useState, useEffect } from 'react';
-import { FaFlag, FaExclamationTriangle, FaClock, FaCheck, FaInfoCircle } from 'react-icons/fa';
+// src/components/pages/games/ThreatHunter/LogViewer.js
+import React, { useState, useEffect, useRef } from 'react';
+import { FaFlag, FaRegFlag, FaExclamationTriangle, FaSearch, FaInfoCircle } from 'react-icons/fa';
 import './ThreatHunter.css';
 
-const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) => {
-  const [timerDisplay, setTimerDisplay] = useState('00:00');
-  const [submitEnabled, setSubmitEnabled] = useState(true); // FIXED: Always enable submit
-  const [warningMessage, setWarningMessage] = useState('');
-  const [tooltipVisible, setTooltipVisible] = useState(false);
+const LogViewer = ({ logs, selectedLog, flaggedLines = [], onSelectLog, onFlagLine }) => {
+  const [currentLogIndex, setCurrentLogIndex] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentSearchIndex, setCurrentSearchIndex] = useState(-1);
+  const [highlightedLineIndex, setHighlightedLineIndex] = useState(-1);
   
-  // Format time left for display
+  const logViewerRef = useRef(null);
+  
+  // Get the currently visible log
+  const currentLog = logs ? logs[currentLogIndex] : null;
+  
+  // Auto scroll to highlighted search result
   useEffect(() => {
-    if (timeLeft !== null && timeLeft !== undefined) {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      setTimerDisplay(`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    if (currentSearchIndex >= 0 && searchResults.length > 0) {
+      const lineIndex = searchResults[currentSearchIndex];
+      setHighlightedLineIndex(lineIndex);
+      
+      // Find and scroll to the element
+      const element = document.getElementById(`log-line-${lineIndex}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
-  }, [timeLeft]);
+  }, [currentSearchIndex, searchResults]);
   
-  // Check if submission is enabled and set warning message
-  useEffect(() => {
-    // Show warning if no threats detected, but still enable submission
-    if (detectedThreats.length === 0) {
-      setWarningMessage('No threats detected yet. You can still submit your analysis, but you may miss points.');
+  // Parse and handle log data
+  const handleLogSwitch = (index) => {
+    setCurrentLogIndex(index);
+    if (onSelectLog) {
+      onSelectLog(logs[index].id);
+    }
+    // Reset search when switching logs
+    setSearchTerm('');
+    setSearchResults([]);
+    setCurrentSearchIndex(-1);
+    setHighlightedLineIndex(-1);
+  };
+  
+  // Search functionality
+  const handleSearch = () => {
+    if (!searchTerm.trim() || !currentLog) {
+      setSearchResults([]);
+      setCurrentSearchIndex(-1);
+      return;
+    }
+    
+    const results = [];
+    currentLog.content.forEach((line, index) => {
+      if (line.text.toLowerCase().includes(searchTerm.toLowerCase())) {
+        results.push(index);
+      }
+    });
+    
+    setSearchResults(results);
+    setCurrentSearchIndex(results.length > 0 ? 0 : -1);
+  };
+  
+  const navigateSearch = (direction) => {
+    if (searchResults.length === 0) return;
+    
+    let newIndex;
+    if (direction === 'next') {
+      newIndex = (currentSearchIndex + 1) % searchResults.length;
     } else {
-      // Reset warning if conditions are met
-      setWarningMessage('');
+      newIndex = (currentSearchIndex - 1 + searchResults.length) % searchResults.length;
     }
-  }, [flaggedLines, detectedThreats]);
+    
+    setCurrentSearchIndex(newIndex);
+  };
   
-  const handleSubmitAnalysis = () => {
-    if (onSubmit) {
-      onSubmit();
+  const handleFlagLine = (lineIndex) => {
+    if (onFlagLine) {
+      onFlagLine(lineIndex);
     }
   };
   
-  const toggleTooltip = () => {
-    setTooltipVisible(!tooltipVisible);
-  };
+  // If no logs are available, show a message
+  if (!logs || logs.length === 0) {
+    return (
+      <div className="log-viewer-empty">
+        <FaExclamationTriangle className="empty-icon" />
+        <p>No log files available for analysis.</p>
+      </div>
+    );
+  }
+  
+  // If the current log has no content
+  if (currentLog && (!currentLog.content || currentLog.content.length === 0)) {
+    // Log for debugging
+    console.log("Current log has no content:", currentLog);
+  }
   
   return (
-    <div className="threathunter_threatcontrols_container">
-      <div className="threathunter_threatcontrols_header">
-        <h3>Investigation Controls</h3>
-        <div className="threathunter_threatcontrols_info">
-          <FaInfoCircle 
-            onMouseEnter={toggleTooltip}
-            onMouseLeave={toggleTooltip}
-          />
-          {tooltipVisible && (
-            <div className="threathunter_threatcontrols_tooltip">
-              <p>Flag suspicious log lines and identify threats, then submit your analysis for scoring.</p>
+    <div className="log-viewer">
+      <div className="log-header">
+        <div className="log-tabs">
+          {logs.map((log, index) => (
+            <button
+              key={log.id}
+              className={`log-tab ${index === currentLogIndex ? 'active' : ''}`}
+              onClick={() => handleLogSwitch(index)}
+            >
+              {log.name}
+            </button>
+          ))}
+        </div>
+        
+        <div className="log-search">
+          <div className="search-input-container">
+            <input
+              type="text"
+              placeholder="Search logs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            />
+            <button className="search-button" onClick={handleSearch}>
+              <FaSearch />
+            </button>
+          </div>
+          
+          {searchResults.length > 0 && (
+            <div className="search-navigation">
+              <span className="results-count">
+                {currentSearchIndex + 1}/{searchResults.length}
+              </span>
+              <button 
+                className="nav-button prev"
+                onClick={() => navigateSearch('prev')}
+              >
+                ↑
+              </button>
+              <button 
+                className="nav-button next"
+                onClick={() => navigateSearch('next')}
+              >
+                ↓
+              </button>
             </div>
           )}
         </div>
       </div>
       
-      <div className="threathunter_threatcontrols_content">
-        <div className="threathunter_threatcontrols_analysis_status">
-          <div className="threathunter_threatcontrols_status_item">
-            <div className="threathunter_threatcontrols_status_icon threathunter_threatcontrols_flag_icon">
-              <FaFlag />
+      <div className="log-content" ref={logViewerRef}>
+        {currentLog && (
+          <div className="log-info">
+            <div className="log-info-header">
+              <span className="log-name">{currentLog.name}</span>
+              <span className="log-type">{currentLog.type}</span>
             </div>
-            <div className="threathunter_threatcontrols_status_details">
-              <div className="threathunter_threatcontrols_status_value">{flaggedLines.length}</div>
-              <div className="threathunter_threatcontrols_status_label">Flagged Lines</div>
+            <div className="log-meta">
+              <span className="log-timestamp">Timestamp: {currentLog.timestamp}</span>
+              <span className="log-source">Source: {currentLog.source}</span>
             </div>
-          </div>
-          
-          <div className="threathunter_threatcontrols_status_item">
-            <div className="threathunter_threatcontrols_status_icon threathunter_threatcontrols_threat_icon">
-              <FaExclamationTriangle />
-            </div>
-            <div className="threathunter_threatcontrols_status_details">
-              <div className="threathunter_threatcontrols_status_value">{detectedThreats.length}</div>
-              <div className="threathunter_threatcontrols_status_label">Threats Detected</div>
-            </div>
-          </div>
-        </div>
-        
-        {warningMessage && (
-          <div className="threathunter_threatcontrols_submission_warning">
-            <FaExclamationTriangle />
-            <span>{warningMessage}</span>
           </div>
         )}
         
-        <button 
-          className="threathunter_threatcontrols_submit_analysis_button"
-          onClick={handleSubmitAnalysis}
-          disabled={false} // FIXED: Never disable the button
-        >
-          <FaCheck />
-          <span>Submit Analysis</span>
-        </button>
-        
-        <div className="threathunter_threatcontrols_submission_note">
-          <p>Submit your analysis when you've identified all threats. Your score will be based on correctly identified threats, evidence quality, and time remaining.</p>
+        <div className="log-lines">
+          {currentLog && currentLog.content && Array.isArray(currentLog.content) && currentLog.content.map((line, index) => {
+            const isHighlighted = index === highlightedLineIndex;
+            const isFlagged = flaggedLines.includes(index);
+            const hasSearchMatch = searchTerm && line.text && line.text.toLowerCase().includes(searchTerm.toLowerCase());
+            
+            return (
+              <div 
+                key={index}
+                id={`log-line-${index}`}
+                className={`log-line ${isHighlighted ? 'highlighted' : ''} ${isFlagged ? 'flagged' : ''} ${hasSearchMatch ? 'search-match' : ''}`}
+              >
+                <div className="line-number">{index + 1}</div>
+                <div className="line-text">
+                  <pre>{line.text}</pre>
+                </div>
+                <div className="line-actions">
+                  <button 
+                    className={`flag-button ${isFlagged ? 'active' : ''}`}
+                    onClick={() => handleFlagLine(index)}
+                    title={isFlagged ? "Unflag this line" : "Flag as suspicious"}
+                  >
+                    {isFlagged ? <FaFlag /> : <FaRegFlag />}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+          
+          {/* Display message if content array is empty or not defined */}
+          {currentLog && (!currentLog.content || !Array.isArray(currentLog.content) || currentLog.content.length === 0) && (
+            <div className="log-empty-message">
+              <p>This log file appears to be empty or contains no readable content.</p>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div className="log-viewer-footer">
+        <div className="log-statistics">
+          <span>Total Lines: {currentLog && currentLog.content ? currentLog.content.length : 0}</span>
+          <span>Flagged: {flaggedLines.length}</span>
+        </div>
+        <div className="help-text">
+          <FaInfoCircle />
+          <span>Click <FaRegFlag /> to flag suspicious log entries</span>
         </div>
       </div>
     </div>
   );
 };
 
-export default ThreatControls;
+export default LogViewer;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { FaFlag, FaExclamationTriangle, FaClock, FaCheck, FaInfoCircle } from 'react-icons/fa';
 import './ThreatHunter.css';
 
-const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) => {
+const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats = [], onSubmit }) => {
   const [timerDisplay, setTimerDisplay] = useState('00:00');
   const [submitEnabled, setSubmitEnabled] = useState(true); // FIXED: Always enable submit
   const [warningMessage, setWarningMessage] = useState('');
@@ -21,7 +21,7 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
   // Check if submission is enabled and set warning message
   useEffect(() => {
     // Show warning if no threats detected, but still enable submission
-    if (detectedThreats.length === 0) {
+    if (!detectedThreats || detectedThreats.length === 0) {
       setWarningMessage('No threats detected yet. You can still submit your analysis, but you may miss points.');
     } else {
       // Reset warning if conditions are met
@@ -73,7 +73,7 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
               <FaExclamationTriangle />
             </div>
             <div className="threathunter_threatcontrols_status_details">
-              <div className="threathunter_threatcontrols_status_value">{detectedThreats.length}</div>
+              <div className="threathunter_threatcontrols_status_value">{detectedThreats ? detectedThreats.length : 0}</div>
               <div className="threathunter_threatcontrols_status_label">Threats Detected</div>
             </div>
           </div>

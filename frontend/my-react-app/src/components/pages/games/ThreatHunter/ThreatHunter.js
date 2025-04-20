@@ -278,9 +278,9 @@ const ThreatHunter = () => {
             
             <div className="log-analysis-container">
               <LogViewer 
-                logs={scenarioLogs}
+                logs={scenarioLogs || []}
                 selectedLog={selectedLog}
-                flaggedLines={flaggedLines}
+                flaggedLines={flaggedLines || []}
                 onSelectLog={handleLogSelection}
                 onFlagLine={handleLineFlagging}
               />
@@ -294,9 +294,9 @@ const ThreatHunter = () => {
                 />
                 
                 <ThreatControls 
-                  timeLeft={currentTimeLeft}
-                  flaggedLines={flaggedLines}
-                  detectedThreats={detectedThreats}
+                  timeLeft={currentTimeLeft || 0}
+                  flaggedLines={flaggedLines || []}
+                  detectedThreats={detectedThreats || []}
                   onSubmit={handleSubmitAnalysis}
                 />
               </div>
