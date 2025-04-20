@@ -14,10 +14,10 @@
 
 CertGames is a comprehensive cybersecurity training platform designed to help IT professionals prepare for certification exams through gamified learning experiences. The platform integrates advanced AI-driven tools, practice tests, and interactive simulations to create an engaging learning environment.
 
-**Live Platform:** [certgames.com](https://certgames.com)  
+**Live Platform:** [CertGames.com](https://certgames.com)  
 **iOS App:** [App Store Link](https://apps.apple.com/us/app/comptia-cert-games-practice/id6743811522)  
 **LinkedIn:** [CertGames](https://www.linkedin.com/company/certgames/) | [Developer Profile](https://www.linkedin.com/in/carterperez-dev/)  
-**Portfolio:** [carterperez-dev.com](https://carterperez-dev.com/)
+**Portfolio:** [CarterPerez-dev.com](https://carterperez-dev.com/)
 
 ## Table of Contents
 
@@ -74,14 +74,14 @@ The CertGames platform consists of several interconnected components that work t
 
 ### 1. Web Application (React)
 
-The web frontend is built as a single-page application using React 18 with Redux for state management. Key features include:
+The web frontend is built as a single-page application using React with Redux for state management. Key features include:
 
 - **Redux Toolkit** implementation for efficient state management
 - **Themeable UI** with dynamic color schemes for accessibility
 - **Socket.IO** integration for real-time features
 - **Responsive design** with mobile-first approach
 - **SEO optimization** with React Helmet and structured data
-- **Protected routes** with subscription-based access control
+- **Protected routes** with subscription-based access control for Defense In Depth
 
 ### 2. Mobile Application (React Native/Expo)
 
@@ -113,6 +113,7 @@ A comprehensive Flask application serves as the backend API layer:
 - **MongoDB Atlas** as the primary database
 - **Docker** for containerization and deployment consistency
 - **Cloudflare** for CDN, DNS, and DDoS protection
+- **Git** For Version Control and CI/CD
 
 ## Tech Stack
 
@@ -121,14 +122,14 @@ A comprehensive Flask application serves as the backend API layer:
 ```json
 {
   "Core": {
-    "Framework": "React 18.3.1",
-    "State Management": "Redux Toolkit 2.5.1",
-    "Routing": "React Router 7.1.1"
+    "Framework": "React",
+    "State Management": "Redux Toolkit",
+    "Routing": "React Router"
   },
   "UI/UX": {
     "Styling": "CSS Modules + CSS Variables for theming",
-    "Icons": "React Icons 5.4.0",
-    "Charts": "Recharts 2.15.1",
+    "Icons": "React Icons",
+    "Charts": "Recharts",
     "Animations": "CSS Transitions + React Spring",
     "Data Visualization": "D3.js (integrated via Recharts)"
   },
@@ -158,22 +159,22 @@ A comprehensive Flask application serves as the backend API layer:
 ```json
 {
   "Core": {
-    "Framework": "React Native 0.76.7",
-    "Expo": "Expo SDK 52.0.41",
-    "State Management": "Redux Toolkit 2.6.1",
-    "Navigation": "React Navigation 7.x"
+    "Framework": "React Native",
+    "Expo": "Expo SDK 52",
+    "State Management": "Redux Toolkit",
+    "Navigation": "React Navigation"
   },
   "Native Features": {
     "Authentication": "Expo Apple Authentication, Google Sign-In",
     "Storage": "Expo SecureStore + AsyncStorage",
-    "Network": "Axios 1.8.3 with custom retry logic",
-    "In-App Purchases": "React Native IAP 12.16.2"
+    "Network": "Axios with custom retry logic",
+    "In-App Purchases": "React Native IAP"
   },
   "UI/UX": {
     "Components": "Custom components with native styling",
-    "Animations": "React Native Reanimated 3.16.7",
+    "Animations": "React Native Reanimated",
     "Haptics": "Expo Haptics",
-    "Gestures": "React Native Gesture Handler 2.20.2"
+    "Gestures": "React Native Gesture Handler"
   },
   "Device Support": {
     "iOS Version": "iOS 14+",
@@ -194,7 +195,7 @@ A comprehensive Flask application serves as the backend API layer:
 ```json
 {
   "Core": {
-    "Framework": "Flask 2.3.3",
+    "Framework": "Flask",
     "WSGI Server": "Gunicorn with Gevent workers",
     "Authentication": "JWT + OAuth 2.0",
     "Session Management": "Flask-Session with Redis backend"
@@ -206,13 +207,13 @@ A comprehensive Flask application serves as the backend API layer:
     "Data Validation": "Custom schema validation"
   },
   "Asynchronous Processing": {
-    "Task Queue": "Celery 5.3.1",
+    "Task Queue": "Celery",
     "Message Broker": "Redis",
     "Scheduling": "Celery Beat for periodic tasks",
     "Concurrency": "Gevent workers (8) with thread pool (5)"
   },
   "AI Integration": {
-    "LLM Provider": "OpenAI GPT-4 API",
+    "LLM Provider": "OpenAI GPT-4o API",
     "Streaming Support": "Flask response streaming + OpenAI streaming",
     "Prompt Engineering": "Custom prompt templates with parameter injection",
     "Rate Limiting": "Tiered per-feature limits with progressive penalties"
@@ -437,7 +438,7 @@ Example endpoint structure:
 ---
 ## AI Integration
 
-CertGames leverages AI throughout the platform to enhance the learning experience. This is primarily implemented through OpenAI's GPT-4 API with custom prompt engineering.
+CertGames leverages AI throughout the platform to enhance the learning experience. This is primarily implemented through OpenAI's GPT-4o API with custom prompt engineering.
 
 ### AI-Powered Features
 
@@ -445,7 +446,6 @@ CertGames leverages AI throughout the platform to enhance the learning experienc
 2. **Scenario Creation**: Generates realistic cybersecurity scenarios for hands-on training
 3. **GRC Question Generation**: Produces governance, risk, and compliance questions with adaptive difficulty
 4. **Exploit Simulation**: Demonstrates conceptual exploit generation for educational purposes
-5. **Support Assistance**: Provides AI-enhanced support responses
 
 ### AI Integration Architecture
 
@@ -454,60 +454,168 @@ CertGames leverages AI throughout the platform to enhance the learning experienc
 ### Prompt Engineering Example
 
 ```python
-def generate_analogy_stream(analogy_type, concept1, concept2=None, concept3=None, category="real-world"):
+def generate_grc_question(category, difficulty):
     """
-    Generate an analogy and stream the results token by token.
-    Returns a generator that yields partial text chunks as they're generated.
+    Generates a GRC-related multiple-choice question in JSON format.
+    The model returns a JSON object with keys:
+      question (string)
+      options (array of 4 strings)
+      correct_answer_index (int)
+      explanations (dict of strings for "0","1","2","3")
+      exam_tip (string)
     """
-    prompt = ""
-    
-    if analogy_type == "single":
-        prompt = (
-            f"Generate an analogy for the concept '{concept1}' using the context of '{category}'. "
-            "Make it easy to understand but informative and in a teaching style, concise but in depth, "
-            "and entertaining, with one key info at the end to make sure the info is remembered. "
-            "Do not explicitly say that you will create the analogy just output the analogy/explanation only."
-        )
-    elif analogy_type == "comparison":
-        prompt = (
-            f"Compare '{concept1}' and '{concept2}' using an analogy in the context of '{category}'. "
-            "Explain how they are similar and different or how they might work in conjunction with each other, "
-            "in a teaching style, informative, concise but in depth, and entertaining, with one key info at the end "
-            "to make sure the info is remembered. Do not explicitly say that you will create the analogy just output "
-            "the analogy/explanation only."
-        )
-    elif analogy_type == "triple":
-        prompt = (
-            f"Compare '{concept1}', '{concept2}', and '{concept3}' using an analogy in the context of '{category}'. "
-            "Explain how they are similar and different or how they might work in conjunction with each other, "
-            "in a teaching style, informative, concise but in depth, and entertaining, with one key info at the end "
-            "to make sure the info is remembered. Do not explicitly say that you will create the analogy just output "
-            "the analogy/explanation only."
-        )
-    
+    prompt = f""" 
+You are an expert in concepts found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. Your role is to generate 
+challenging and diverse test questions using advanced mult-layered reasoning, related to governance, risk management, risk thresholds, types of risk, Audit, Management, Policy, Cyber Security Ethics, Threat Assessment, 
+Leadership, Business Continuity, compliance, regulations, incident resposne, Incident Response and more. focusing on preparing for exams like CISSP/ISC2 and CompTIA certifications. Ensure the questions cover a wide range of scenarios,
+principles, and concepts, with multiple-choice answers that are nuanced and complex and specific, avoiding repetitive patterns or overly simplified examples.
+
+CONTEXT: The user has selected:
+- Category: {category} (e.g., 'Regulation', 'Risk Management', 'Compliance', 'Audit', 'Governance', 'Management', 'Policy', 'Ethics', 'Threat Assessment', 'Leadership', 'Business Continuity', 'Incident Response', 'Random')
+- Difficulty: {difficulty} (e.g., 'Easy', 'Medium', 'Hard')
+
+REQUIREMENTS
+1. Four options (0, 1, 2, 3) total, one correct answer. The incorrect options should be very plausible but not correct, requiring the test-taker to carefully differentiate.
+
+2. Explanations:
+   - For the correct answer: Provide multiple sentences detailing exactly why it's correct, clearly tying it back to the question's scenario or concept. Show how it fulfills the requirements asked in the question as well as why the other answer choices are incorrect/not the correct answer..
+   - For each incorrect answer: Provide multiple sentences detailing why it is NOT correct aswell as why the other incorrect answer choices are incorrect, and why then tell the user what the correct answer is and why it is correct using advanced multi-layered reasoning. 
+     Do not just say it's incorrect; fully explain why it falls short. 
+     Highlight conceptual differences, limitations, or focus areas that differ from the question's criteria.
+   - Regardless of user choice, the generated output must contain full explanations for all answer choices provided. The explanations are produced in advance as part of the JSON object. Each explanation should be at least 3 sentences, rich in detail and conceptual clarity using advanced multi-layered reasoning.
+
+3. Include an "exam_tip" field that provides a short, memorable takeaway or mnemonic to help differentiate the correct concept from the others. The exam tip should help the user recall why the correct answer stands out using advanced multi-layered reasoning.
+
+4. Return ONLY a JSON object with the fields:
+   "question", "options", "correct_answer_index", "explanations", and "exam_tip"
+   No extra text, no Markdown, no commentary outside the JSON.
+
+5. For each explanation (correct and incorrect):
+   - At minimum of 3 sentences for the correct answer.
+   - if the user gets the answer correct provide minium 3 senetence answer as to why it is correct, but also why the other answer choices listed are not the correct answer using advanced multi-layered reasoning.
+   - Substantial detail.
+   - Clearly articulate conceptual reasons, not just factual statements using advanced multi-layered reasoning.
+
+EXAMPLE FORMAT (this is not real content, just structure, make sure to use all topics not just the topic provided in this example):
+{{
+  "question": "The question",
+  "options": ["Option 0","Option 1","Option 2","Option 3"],
+  "correct_answer_index": 2,
+  "explanations": {{
+    "0": "Explain thoroughly why option 0 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning.",
+    "1": "Explain thoroughly why option 1 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning.",
+    "2": "Explain thoroughly why option 2 is correct, linking its characteristics to the question scenario and why the other answer choices are incorrect using advanced multi-layered reasoning",
+    "3": "Explain thoroughly why option 3 fails. Mention its scope, focus areas, and why that doesn't meet the question criteria and then explain what the correct answer is and why it is correct aswell as why the other answer choices are incorrect using advanced multi-layered reasoning."
+  }},
+  "exam_tip": "A short, memorable hint or mnemonic that differentiates the correct approach from others using advanced multi-layered reasoning."
+}}
+
+Now generate the JSON object following these instructions.
+"""
+
     try:
         response = client.chat.completions.create(
+            model="gpt-4o",  
             messages=[{"role": "user", "content": prompt}],
+            max_tokens=1200,
+            temperature=0.7,
+        )
+
+        content = response.choices[0].message.content.strip()
+      
+        content = re.sub(r'^```.*\n', '', content)
+        content = re.sub(r'\n```$', '', content)
+
+        try:
+            generated_question = json.loads(content)
+        except json.JSONDecodeError as e:
+            logger.error("JSON parsing error in generate_grc_question: %s", e)
+            logger.error("Model returned: %s", content)
+            raise ValueError("Model did not return valid JSON.") from e
+
+        logger.info("Generated GRC question successfully.")
+        return generated_question
+
+    except Exception as e:
+        logger.error(f"Error generating GRC question: {str(e)}")
+        raise
+
+def generate_grc_questions_stream(category, difficulty):
+    """
+    Streams the GRC question JSON response chunk by chunk.
+    Instead of returning a complete JSON object, it returns a generator
+    that yields chunks of the response as they come in.
+    
+    Args:
+        category: Question category
+        difficulty: Question difficulty level
+        
+    Returns:
+        Generator yielding chunks of JSON string
+    """
+    prompt = f"""
+You are an expert in concepts found in certifications like CISSP, CompTIA Advanced Security Practitioner (CASP+), CISM, CRISC, and others. 
+Your role is to generate very diverse with alot of variation in concepts test question with highly plausible distractors related to governance, risk management, risk thresholds, types of risk, 
+Audit, Management, Policy, Cyber Security Ethics, Threat Assessment, Leadership, Business Continuity, compliance, regulations, 
+incident response, and more, focusing on preparing for exams like CISSP and CompTIA certifications.
+
+CONTEXT: The user has selected:
+- Category: {category}
+- Difficulty: {difficulty}
+
+REQUIREMENTS:
+1. Generate ONE question in valid JSON format with:
+   - "question": string,
+   - "options": array of exactly 4 strings with highly plasuible distractors (indexes 0,1,2,3),
+   - "correct_answer_index": integer (0,1,2,3),
+   - "explanations": object with keys "0","1","2","3" (multi-sentence detail),
+   - "exam_tip": short mnemonic/hint.
+
+2. The correct answer's explanation has at least 3 sentences describing precisely why it is correct, 
+   and also clarifies why the others are incorrect.
+
+3. Each incorrect answer's explanation has multiple sentences explaining why it is wrong, 
+   plus clarifies what the correct choice is and why the other answer choices are also incorrect or less suitable.
+
+4. Provide an "exam_tip" as a short, memorable mnemonic or hint to help the test-taker recall the correct concept.
+
+5. Return ONLY the JSON object. No extra text, disclaimers, or preludes.
+
+6. Each explanation must be at least 3 sentences, offering substantial detail and conceptual clarity.
+
+Now generate the JSON object following these instructions. 
+Remember: Provide ONLY valid JSON, nothing else.
+"""
+
+    try:
+        # Make the streaming request
+        response = client.chat.completions.create(
             model="gpt-4o",
-            max_tokens=1200, 
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1200,
             temperature=0.7,
             stream=True
         )
-        
+
         def generator():
-            for chunk in response:
-                if chunk.choices and chunk.choices[0].delta:
-                    content = getattr(chunk.choices[0].delta, "content", None)
-                    if content:
-                        yield content
-        
+            try:
+                for chunk in response:
+                    delta = chunk.choices[0].delta
+                    if delta:
+                        content = getattr(delta, "content", None)
+                        if content:
+                            yield content
+            except Exception as e:
+                logger.error(f"Error streaming GRC question: {e}")
+                yield f"{{\"error\": \"Error streaming content: {str(e)}\"}}"
+
         return generator()
-    
+
     except Exception as e:
-        logger.error(f"Error generating analogy stream: {str(e)}")
-        def error_generator():
-            yield f"[Error generating analogy: {str(e)}]"
-        return error_generator()
+        logger.error(f"Error generating GRC question (stream): {e}")
+        def err_gen():
+            yield f"{{\"error\": \"Error generating question: {str(e)}\"}}"
+        return err_gen()
 ```
 ---
 ## Database Schema
@@ -1041,7 +1149,7 @@ CertGames employs a comprehensive testing strategy to ensure quality and reliabi
 - **Integration Testing**: Supertest, Redux Mock Store, MongoDB Memory Server
 - **End-to-End Testing**: Cypress, Detox (for React Native)
 - **Performance Testing**: Locust, Lighthouse, React Profiler
-- **Security Testing**: OWASP ZAP, npm audit, Snyk
+- **Security Testing**: OWASP ZAP, npm audit, Snyk, Bandit
 
 ### Test Automation
 
@@ -1059,15 +1167,15 @@ CertGames is actively evolving with several initiatives in progress:
 
 1. **Android Application**: Currently in development to expand mobile reach
 
-2. **Enhanced AI-Powered Learning Tools**:
+2. **Game-like Learning Tools**:
    - PBQ (Performance-Based Question) cybersecurity training games
    - Advanced scenario generation with adaptive difficulty
-   - AI-guided personalized learning paths
+   - Personalized learning paths
 
 3. **Expanded Content**:
-   - Resume builder with AI assistance
+   - Resume builder
    - Interactive penetration testing simulation environment
-   - Hands-on "Hack the Box"-style challenges
+   - Hands-on "Hack the Box"-style challenges using dummy websites I have created
    - Video course integration directly into the platform
 
 4. **Infrastructure Improvements**:
@@ -1080,12 +1188,13 @@ CertGames is actively evolving with several initiatives in progress:
    - Collaborative learning tools
    - Peer review system for practice assignments
    - Mentorship connections
+   - Community Forum
 
 ## Current Platform Statistics
 
 - **Total Users**: 508 (108 paid subscribers, 400 free tier)
-- **Content Library**: 130+ certification practice tests across 12 certification paths
-- **Response Time**: Average API response time under 150ms
+- **Content Library**: 130+ certification practice tests across 12 certification paths with 13,000 practice questions across all certifications
+- **Response Time**: Average API response time under 30ms
 - **Uptime**: 99.97% uptime since launch
 - **Mobile Engagement**: 65% of premium users access via both web and iOS app
 
@@ -1107,16 +1216,10 @@ This codebase is Open-Source
 -
 Devloped and Designed  $~Carter-perez-dev
 -
-Last updated @4/20/25
--
-1300+ hours of development*
+*1300+ hours of development*
 --
 *This README was generated for the CertGames Core repository by Carter Perez 
-- (https://www.linkedin.com/in/carterperez-dev/)
-- (inquiry@certgames.com)
-- (support@certgames.com)
-- (dev@certgames.com)
-- (443-510-0866)
+-Last updated @4/20/25 16:52:00
 ------
 [Privacy Policy](https://certgames.com/privacy)
 [Terms of Service](https://certgames.com/terms)
