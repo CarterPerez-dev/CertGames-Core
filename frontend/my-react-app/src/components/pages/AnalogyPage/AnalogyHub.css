@@ -126,7 +126,7 @@
   background-color: rgba(17, 17, 17, 0.95);
   border: 0.125rem solid #8B0000;
   border-radius: 0.625rem;
-  max-height: 18.75rem; 
+  max-height: 40.75rem; 
   overflow-y: auto;
   max-width: 90vw;
   margin-left: auto;
@@ -136,8 +136,9 @@
 }
 
 .generated-analogy {
-  font-size: 1.2rem;
-  line-height: 1.5em;
+  font-family: 'Arial', sans-serif; 
+  font-size: 1.3rem;
+  line-height: 1.8em;
   color: #00ffea;
   padding: 0.9375rem;
   word-wrap: break-word;

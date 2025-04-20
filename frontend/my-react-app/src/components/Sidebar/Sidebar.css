@@ -249,7 +249,7 @@ body, html {
   width: 80%;
   max-width: 180px;
   border-radius: 5px;
-  filter: brightness(2.2);
+  filter: var(--sidebar-logo-filter, brightness(2.2));
   transition: transform 0.3s ease;
 }
 
