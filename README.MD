@@ -1218,7 +1218,7 @@ CertGames is actively evolving with several initiatives in progress:
 -
 *1300+ hours of development*
 --
-*This README was generated for the CertGames Core repository by Carter Perez 
+*This README was created for the CertGames repository family,  Carter Perez 
 -*Last updated @4/20/25 16:52:00*
 ------
 -*[Privacy Policy](https://certgames.com/privacy)*
