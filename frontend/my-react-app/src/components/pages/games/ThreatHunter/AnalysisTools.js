@@ -2,16 +2,22 @@
 import React, { useState } from 'react';
 import { 
   FaNetworkWired, FaShieldAlt, FaVirus, FaUserSecret, 
-  FaTimes, FaPlus, FaChevronDown, FaChevronUp 
+  FaServer, FaTimes, FaPlus, FaChevronDown, FaChevronUp,
+  FaInfoCircle, FaEdit, FaCheckCircle
 } from 'react-icons/fa';
-import './AnalysisTools.css';
+import './ThreatHunter.css';
 
 const threatTypes = [
-  { id: 'malware', name: 'Malware Activity', icon: <FaVirus /> },
-  { id: 'intrusion', name: 'Intrusion Attempt', icon: <FaShieldAlt /> },
-  { id: 'data_exfiltration', name: 'Data Exfiltration', icon: <FaNetworkWired /> },
-  { id: 'credential_theft', name: 'Credential Theft', icon: <FaUserSecret /> },
-  { id: 'ddos', name: 'DDoS Attack', icon: <FaNetworkWired /> },
+  { id: 'malware', name: 'Malware Activity', icon: <FaVirus />, color: '#f44336', 
+    examples: ['Suspicious process execution', 'Unusual file creation', 'Encoded commands'] },
+  { id: 'intrusion', name: 'Intrusion Attempt', icon: <FaShieldAlt />, color: '#5f4bb6',
+    examples: ['SQL injection', 'Brute force login', 'Path traversal'] },
+  { id: 'data_exfiltration', name: 'Data Exfiltration', icon: <FaNetworkWired />, color: '#2196f3',
+    examples: ['Large outbound file transfers', 'Unusual external connections', 'Database dumps'] },
+  { id: 'credential_theft', name: 'Credential Theft', icon: <FaUserSecret />, color: '#ff9800',
+    examples: ['Password attacks', 'Unauthorized access', 'Privilege escalation'] },
+  { id: 'ddos', name: 'DDoS Attack', icon: <FaServer />, color: '#795548',
+    examples: ['High volume of requests', 'Traffic amplification', 'Service disruption'] },
 ];
 
 const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThreat }) => {
@@ -21,6 +27,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
   const [threatDescription, setThreatDescription] = useState('');
   const [threatSource, setThreatSource] = useState('');
   const [editingThreatId, setEditingThreatId] = useState(null);
+  const [showExamples, setShowExamples] = useState(false);
   
   const handleToolSelect = (toolId) => {
     setActiveTool(toolId);
@@ -48,6 +55,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
     setThreatType('malware');
     setThreatDescription('');
     setThreatSource('');
+    setShowExamples(false);
   };
   
   const handleSubmitThreat = () => {
@@ -69,12 +77,22 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
     setThreatType('malware');
     setThreatDescription('');
     setThreatSource('');
+    setShowExamples(false);
   };
   
   const handleRemoveThreat = (threatId) => {
     if (onRemoveThreat) {
       onRemoveThreat(threatId);
     }
+  };
+  
+  // Handle examples for threat types
+  const toggleExamples = () => {
+    setShowExamples(!showExamples);
+  };
+  
+  const getCurrentThreatTypeInfo = () => {
+    return threatTypes.find(t => t.id === threatType) || threatTypes[0];
   };
   
   // Group icon mapping
@@ -97,6 +115,12 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
   const getThreatTypeIcon = (type) => {
     const threatType = threatTypes.find(t => t.id === type);
     return threatType ? threatType.icon : <FaVirus />;
+  };
+  
+  // Get color for threat type
+  const getThreatTypeColor = (type) => {
+    const threatType = threatTypes.find(t => t.id === type);
+    return threatType ? threatType.color : '#f44336';
   };
   
   return (
@@ -152,14 +176,44 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                   
                   <div className="threathunter_analysistools_form_group">
                     <label>Threat Type:</label>
-                    <select 
-                      value={threatType}
-                      onChange={(e) => setThreatType(e.target.value)}
-                    >
+                    <div className="threathunter_analysistools_threat_type_selector">
                       {threatTypes.map(type => (
-                        <option key={type.id} value={type.id}>{type.name}</option>
+                        <div 
+                          key={type.id}
+                          className={`threathunter_analysistools_type_option ${threatType === type.id ? 'active' : ''}`}
+                          onClick={() => setThreatType(type.id)}
+                          style={{
+                            borderColor: threatType === type.id ? type.color : 'transparent',
+                            backgroundColor: threatType === type.id ? `${type.color}15` : 'transparent'
+                          }}
+                        >
+                          <div className="threathunter_analysistools_type_icon" style={{ color: type.color }}>
+                            {type.icon}
+                          </div>
+                          <span>{type.name}</span>
+                        </div>
                       ))}
-                    </select>
+                    </div>
+                    
+                    <div className="threathunter_analysistools_examples_toggle">
+                      <button onClick={toggleExamples}>
+                        {showExamples ? <FaChevronUp /> : <FaChevronDown />}
+                        <span>{showExamples ? 'Hide Examples' : 'Show Examples'}</span>
+                      </button>
+                    </div>
+                    
+                    {showExamples && (
+                      <div className="threathunter_analysistools_examples">
+                        <div className="threathunter_analysistools_examples_header">
+                          Examples of {getCurrentThreatTypeInfo().name}:
+                        </div>
+                        <ul>
+                          {getCurrentThreatTypeInfo().examples.map((example, index) => (
+                            <li key={index}>{example}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="threathunter_analysistools_form_group">
@@ -188,9 +242,11 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                       onClick={handleSubmitThreat}
                       disabled={!threatDescription.trim()}
                     >
+                      <FaCheckCircle />
                       {editingThreatId ? 'Update' : 'Add'} Threat
                     </button>
                     <button className="threathunter_analysistools_cancel_button" onClick={handleCancelForm}>
+                      <FaTimes />
                       Cancel
                     </button>
                   </div>
@@ -202,15 +258,23 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                 
                 {detectedThreats.length === 0 ? (
                   <div className="threathunter_analysistools_no_threats">
-                    <p>No threats detected yet. Use the analysis tools and flags to identify suspicious activity.</p>
+                    <p>No threats detected yet. Use the analysis tools and flag suspicious log lines to identify security threats.</p>
                   </div>
                 ) : (
                   <div className="threathunter_analysistools_threats_list">
                     {detectedThreats.map(threat => (
-                      <div key={threat.id} className="threathunter_analysistools_threat_item">
+                      <div 
+                        key={threat.id} 
+                        className="threathunter_analysistools_threat_item"
+                        style={{ 
+                          borderLeft: `3px solid ${getThreatTypeColor(threat.type)}` 
+                        }}
+                      >
                         <div className="threathunter_analysistools_threat_header">
                           <div className="threathunter_analysistools_threat_type">
-                            {getThreatTypeIcon(threat.type)}
+                            <span style={{ color: getThreatTypeColor(threat.type) }}>
+                              {getThreatTypeIcon(threat.type)}
+                            </span>
                             <span>{threatTypes.find(t => t.id === threat.type)?.name || 'Unknown Threat'}</span>
                           </div>
                           <div className="threathunter_analysistools_threat_actions">
@@ -219,7 +283,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                               onClick={() => showEditThreatForm(threat)}
                               title="Edit threat"
                             >
-                              Edit
+                              <FaEdit />
                             </button>
                             <button 
                               className="threathunter_analysistools_remove_threat" 
@@ -255,7 +319,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                     className="threathunter_analysistools_accordion_header"
                     onClick={() => {
                       const el = document.getElementById('ip-list');
-                      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+                      if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
                     }}
                   >
                     <span>Network IPs</span>
@@ -330,7 +394,7 @@ const AnalysisTools = ({ scenario, detectedThreats, onDetectThreat, onRemoveThre
                     className="threathunter_analysistools_accordion_header"
                     onClick={() => {
                       const el = document.getElementById('user-list');
-                      el.style.display = el.style.display === 'block' ? 'none' : 'block';
+                      if (el) el.style.display = el.style.display === 'block' ? 'none' : 'block';
                     }}
                   >
                     <span>Authorized Users</span>

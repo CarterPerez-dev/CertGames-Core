@@ -1,5 +1,5 @@
 // src/components/pages/games/ThreatHunter/ThreatHunter.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   fetchLogScenarios, 
@@ -7,12 +7,23 @@ import {
   submitAnalysis,
   resetGame
 } from '../../store/slice/threatHunterSlice';
-import { FaSearch, FaFileAlt, FaChartLine, FaExclamationTriangle, FaTrophy } from 'react-icons/fa';
+import { 
+  FaSearch, 
+  FaFileAlt, 
+  FaChartLine, 
+  FaExclamationTriangle, 
+  FaInfoCircle, 
+  FaTrophy,
+  FaArrowLeft,
+  FaHourglassHalf,
+  FaTimesCircle 
+} from 'react-icons/fa';
 import LogViewer from './LogViewer';
 import AnalysisTools from './AnalysisTools';
 import ThreatControls from './ThreatControls';
 import ScenarioSelector from './ScenarioSelector';
 import ThreatResultsModal from './ThreatResultsModal';
+import GameInstructions from './GameInstructions';
 import './ThreatHunter.css';
 
 const ThreatHunter = () => {
@@ -33,8 +44,18 @@ const ThreatHunter = () => {
   const [selectedThreatType, setSelectedThreatType] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('medium');
   const [showResults, setShowResults] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
   const [flaggedLines, setFlaggedLines] = useState([]);
   const [detectedThreats, setDetectedThreats] = useState([]);
+  const [currentTimeLeft, setCurrentTimeLeft] = useState(null);
+  const [timerRunning, setTimerRunning] = useState(false);
+  
+  // Debug logs - for development only
+  useEffect(() => {
+    if (currentScenario && currentScenario.logs) {
+      console.log('Current scenario logs:', currentScenario.logs);
+    }
+  }, [currentScenario]);
   
   // Fetch log scenarios when component mounts
   useEffect(() => {
@@ -47,8 +68,41 @@ const ThreatHunter = () => {
   useEffect(() => {
     if (gameStatus === 'completed' && results) {
       setShowResults(true);
+      setTimerRunning(false);
     }
   }, [gameStatus, results]);
+  
+  // Timer functionality
+  useEffect(() => {
+    if (timeLeft !== null && timeLeft !== undefined) {
+      setCurrentTimeLeft(timeLeft);
+      setTimerRunning(true);
+    }
+  }, [timeLeft]);
+  
+  // Timer countdown
+  useEffect(() => {
+    let timer;
+    if (timerRunning && currentTimeLeft > 0) {
+      timer = setTimeout(() => {
+        setCurrentTimeLeft(prevTime => {
+          if (prevTime <= 1) {
+            // Auto-submit when time runs out
+            handleSubmitAnalysis();
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+    } else if (currentTimeLeft <= 0 && timerRunning) {
+      setTimerRunning(false);
+      handleSubmitAnalysis();
+    }
+    
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [timerRunning, currentTimeLeft]);
   
   const handleStartScenario = (scenarioId) => {
     dispatch(startScenario({ 
@@ -60,6 +114,7 @@ const ThreatHunter = () => {
     // Reset state for new game
     setFlaggedLines([]);
     setDetectedThreats([]);
+    setCurrentTimeLeft(null);
   };
   
   const handleLogSelection = (logId) => {
@@ -93,15 +148,17 @@ const ThreatHunter = () => {
     setDetectedThreats(detectedThreats.filter(t => t.id !== threatId));
   };
   
-  const handleSubmitAnalysis = () => {
+  const handleSubmitAnalysis = useCallback(() => {
+    if (detectedThreats.length === 0) return;
+    
     dispatch(submitAnalysis({
       userId,
       scenarioId: currentScenario.id,
       flaggedLines,
       detectedThreats,
-      timeLeft
+      timeLeft: currentTimeLeft
     }));
-  };
+  }, [dispatch, userId, currentScenario, flaggedLines, detectedThreats, currentTimeLeft]);
   
   const handleDifficultyChange = (difficulty) => {
     setSelectedDifficulty(difficulty);
@@ -116,33 +173,105 @@ const ThreatHunter = () => {
     setShowResults(false);
   };
   
+  const handleEarlyEnd = () => {
+    if (window.confirm('Are you sure you want to end the analysis early? Your current findings will be submitted.')) {
+      handleSubmitAnalysis();
+    }
+  };
+  
+  const handleReturnToSelector = () => {
+    if (window.confirm('Are you sure you want to return to the scenario selection? Your current progress will be lost.')) {
+      dispatch(resetGame());
+    }
+  };
+  
   // Filter scenarios based on selected threat type
   const filteredScenarios = selectedThreatType === 'all' 
     ? scenarios 
     : scenarios.filter(scenario => scenario.threatType === selectedThreatType);
+  
+  // Ensure the logs have content arrays
+  const getScenarioLogs = () => {
+    if (!currentScenario || !currentScenario.logs) {
+      return [];
+    }
+    
+    // Return logs with verified content arrays
+    return currentScenario.logs.map(log => {
+      if (!log.content || !Array.isArray(log.content)) {
+        // If content is missing or not an array, create an empty array
+        return { ...log, content: [] };
+      }
+      return log;
+    });
+  };
   
   // Render different views based on game status
   const renderGameContent = () => {
     switch (gameStatus) {
       case 'selecting':
         return (
-          <ScenarioSelector 
-            scenarios={filteredScenarios}
-            selectedType={selectedThreatType}
-            selectedDifficulty={selectedDifficulty}
-            onThreatTypeChange={handleThreatTypeChange}
-            onDifficultyChange={handleDifficultyChange}
-            onSelectScenario={handleStartScenario}
-            threatTypes={['all', 'malware', 'intrusion', 'data_exfiltration', 'credential_theft', 'ddos']}
-          />
+          <>
+            <div className="threat-hunter-toolbar">
+              <button 
+                className="threat-hunter-help-button"
+                onClick={() => setShowInstructions(true)}
+              >
+                <FaInfoCircle /> How to Play
+              </button>
+            </div>
+            
+            <ScenarioSelector 
+              scenarios={filteredScenarios}
+              selectedType={selectedThreatType}
+              selectedDifficulty={selectedDifficulty}
+              onThreatTypeChange={handleThreatTypeChange}
+              onDifficultyChange={handleDifficultyChange}
+              onSelectScenario={handleStartScenario}
+              threatTypes={['all', 'malware', 'intrusion', 'data_exfiltration', 'credential_theft', 'ddos']}
+            />
+          </>
         );
         
       case 'playing':
+        const scenarioLogs = getScenarioLogs();
+        
         return (
           <div className="threat-hunter-gameplay">
+            <div className="threat-hunter-toolbar">
+              <button 
+                className="threat-hunter-back-button"
+                onClick={handleReturnToSelector}
+              >
+                <FaArrowLeft /> Back to Scenarios
+              </button>
+              
+              <div className="threat-hunter-timer">
+                <FaHourglassHalf />
+                <span className={currentTimeLeft < 60 ? 'urgent' : ''}>
+                  {Math.floor(currentTimeLeft / 60)}:
+                  {(currentTimeLeft % 60).toString().padStart(2, '0')}
+                </span>
+              </div>
+              
+              <button 
+                className="threat-hunter-help-button"
+                onClick={() => setShowInstructions(true)}
+              >
+                <FaInfoCircle /> How to Play
+              </button>
+              
+              <button 
+                className="threat-hunter-end-button"
+                onClick={handleEarlyEnd}
+              >
+                <FaTimesCircle /> End Analysis
+              </button>
+            </div>
+            
             <div className="log-analysis-container">
               <LogViewer 
-                logs={currentScenario.logs}
+                logs={scenarioLogs}
                 selectedLog={selectedLog}
                 flaggedLines={flaggedLines}
                 onSelectLog={handleLogSelection}
@@ -158,7 +287,7 @@ const ThreatHunter = () => {
                 />
                 
                 <ThreatControls 
-                  timeLeft={timeLeft}
+                  timeLeft={currentTimeLeft}
                   flaggedLines={flaggedLines}
                   detectedThreats={detectedThreats}
                   onSubmit={handleSubmitAnalysis}
@@ -198,6 +327,12 @@ const ThreatHunter = () => {
           scenario={currentScenario}
           onClose={() => setShowResults(false)}
           onRestart={handleRestart}
+        />
+      )}
+      
+      {showInstructions && (
+        <GameInstructions
+          onClose={() => setShowInstructions(false)}
         />
       )}
     </div>

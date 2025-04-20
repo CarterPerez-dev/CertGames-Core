@@ -1,0 +1,346 @@
+/* src/components/pages/games/ThreatHunter/GameInstructions.css */
+.threathunter-instructions-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.threathunter-instructions-container {
+  background-color: var(--threathunter-bg-card, #161625);
+  border-radius: 15px;
+  border: 2px solid var(--threathunter-accent, #5f4bb6);
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(95, 75, 182, 0.4);
+  color: var(--threathunter-text, #e2e2e2);
+  animation: scaleIn 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.threathunter-instructions-header {
+  background-color: var(--threathunter-bg-header, #232535);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--threathunter-border-dark, #2d2d40);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.threathunter-instructions-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, #5f4bb6, #7a68d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.threathunter-instructions-close {
+  background: none;
+  border: none;
+  color: var(--threathunter-text-secondary, #9da8b9);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.threathunter-instructions-close:hover {
+  color: var(--threathunter-text, #e2e2e2);
+  transform: scale(1.1);
+}
+
+.threathunter-instructions-content {
+  padding: 25px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.threathunter-instructions-section {
+  margin-bottom: 30px;
+}
+
+.threathunter-instructions-section h3 {
+  font-size: 1.4rem;
+  color: var(--threathunter-accent-glow, #7a68d4);
+  margin-top: 0;
+  margin-bottom: 15px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--threathunter-border-dark, #2d2d40);
+}
+
+.threathunter-instructions-section p {
+  line-height: 1.6;
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--threathunter-text, #e2e2e2);
+}
+
+.threathunter-instructions-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.threathunter-instructions-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.step-number {
+  background-color: var(--threathunter-accent, #5f4bb6);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h4 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  color: var(--threathunter-text, #e2e2e2);
+}
+
+.step-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--threathunter-text-secondary, #9da8b9);
+}
+
+.threathunter-instructions-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--threathunter-bg-dark, #1a1a2e);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark, #2d2d40);
+  transition: all 0.2s ease;
+}
+
+.tool-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-color: var(--threathunter-accent, #5f4bb6);
+}
+
+.tool-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.log-icon {
+  background-color: rgba(95, 75, 182, 0.1);
+  color: var(--threathunter-accent, #5f4bb6);
+}
+
+.analysis-icon {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.timer-icon {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.tool-description {
+  flex: 1;
+}
+
+.tool-description h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: var(--threathunter-text, #e2e2e2);
+}
+
+.tool-description p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary, #9da8b9);
+}
+
+.threathunter-instructions-threats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 15px;
+}
+
+.threat-type {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--threathunter-bg-dark, #1a1a2e);
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--threathunter-border-dark, #2d2d40);
+}
+
+.threat-icon {
+  font-size: 1.8rem;
+}
+
+.threat-icon.malware {
+  color: #f44336;
+}
+
+.threat-icon.intrusion {
+  color: #5f4bb6;
+}
+
+.threat-icon.exfiltration {
+  color: #2196f3;
+}
+
+.threat-icon.credential {
+  color: #ff9800;
+}
+
+.threat-info {
+  flex: 1;
+}
+
+.threat-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.1rem;
+  color: var(--threathunter-text, #e2e2e2);
+}
+
+.threat-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--threathunter-text-secondary, #9da8b9);
+}
+
+.scoring-list {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.scoring-list li {
+  margin-bottom: 8px;
+  color: var(--threathunter-text-secondary, #9da8b9);
+}
+
+.threathunter-instructions-footer {
+  background-color: var(--threathunter-bg-header, #232535);
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid var(--threathunter-border-dark, #2d2d40);
+  position: sticky;
+  bottom: 0;
+}
+
+.threathunter-instructions-start-button {
+  background: linear-gradient(135deg, #5f4bb6, #7a68d4);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.threathunter-instructions-start-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(95, 75, 182, 0.4);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .threathunter-instructions-threats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .threathunter-instructions-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .tool-item, .threat-type {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .tool-icon {
+    margin-bottom: 10px;
+  }
+}
+
+/* Scrollbar styling */
+.threathunter-instructions-container::-webkit-scrollbar,
+.threathunter-instructions-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.threathunter-instructions-container::-webkit-scrollbar-track,
+.threathunter-instructions-content::-webkit-scrollbar-track {
+  background: var(--threathunter-bg-dark, #1a1a2e);
+}
+
+.threathunter-instructions-container::-webkit-scrollbar-thumb,
+.threathunter-instructions-content::-webkit-scrollbar-thumb {
+  background-color: var(--threathunter-border-dark, #2d2d40);
+  border-radius: 10px;
+}
+
+.threathunter-instructions-container::-webkit-scrollbar-thumb:hover,
+.threathunter-instructions-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--threathunter-accent, #5f4bb6);
+}

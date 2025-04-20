@@ -18,7 +18,7 @@ input, textarea, select {
 
 .main-content {
   transition: all 0.1s ease; /* for a little smoothness */
-  background-color: var(--profile-bg-card, #1a1a2e);
+  background-color: var(--profile-bg-dark);
 }
 
 /* Hide scrollbars globally while preserving vertical scrolling and disabling horizontal scrolling */

@@ -1,12 +1,13 @@
 // src/components/pages/games/ThreatHunter/ThreatControls.js
 import React, { useState, useEffect } from 'react';
-import { FaFlag, FaExclamationTriangle, FaClock, FaCheck } from 'react-icons/fa';
+import { FaFlag, FaExclamationTriangle, FaClock, FaCheck, FaInfoCircle } from 'react-icons/fa';
 import './ThreatHunter.css';
 
 const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) => {
   const [timerDisplay, setTimerDisplay] = useState('00:00');
   const [submitEnabled, setSubmitEnabled] = useState(false);
   const [warningMessage, setWarningMessage] = useState('');
+  const [tooltipVisible, setTooltipVisible] = useState(false);
   
   // Format time left for display
   useEffect(() => {
@@ -37,10 +38,25 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
     }
   };
   
+  const toggleTooltip = () => {
+    setTooltipVisible(!tooltipVisible);
+  };
+  
   return (
     <div className="threathunter_threatcontrols_container">
       <div className="threathunter_threatcontrols_header">
         <h3>Investigation Controls</h3>
+        <div className="threathunter_threatcontrols_info">
+          <FaInfoCircle 
+            onMouseEnter={toggleTooltip}
+            onMouseLeave={toggleTooltip}
+          />
+          {tooltipVisible && (
+            <div className="threathunter_threatcontrols_tooltip">
+              <p>Flag suspicious log lines and identify threats, then submit your analysis for scoring.</p>
+            </div>
+          )}
+        </div>
       </div>
       
       <div className="threathunter_threatcontrols_content">
@@ -64,18 +80,6 @@ const ThreatControls = ({ timeLeft, flaggedLines, detectedThreats, onSubmit }) =
               <div className="threathunter_threatcontrols_status_label">Threats Detected</div>
             </div>
           </div>
-          
-          {timeLeft !== null && timeLeft !== undefined && (
-            <div className="threathunter_threatcontrols_status_item">
-              <div className={`threathunter_threatcontrols_status_icon threathunter_threatcontrols_time_icon ${timeLeft < 60 ? 'urgent' : ''}`}>
-                <FaClock />
-              </div>
-              <div className="threathunter_threatcontrols_status_details">
-                <div className={`threathunter_threatcontrols_status_value ${timeLeft < 60 ? 'urgent' : ''}`}>{timerDisplay}</div>
-                <div className="threathunter_threatcontrols_status_label">Time Remaining</div>
-              </div>
-            </div>
-          )}
         </div>
         
         {warningMessage && (
